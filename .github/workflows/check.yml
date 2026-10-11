@@ -31,6 +31,10 @@ jobs:
         run: python dev.py doctor
       - name: Build and run regression and loopback HTTP checks
         run: python dev.py check
+      - name: Check packaging invariants
+        run: python -m unittest discover -s tools -p 'test_*.py' -v
+      - name: Verify versioned downloads match current sources
+        run: python tools/package_downloads.py --verify
       - name: Upload verified extension
         if: success()
         uses: actions/upload-artifact@v7

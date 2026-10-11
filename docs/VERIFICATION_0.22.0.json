@@ -1,0 +1,39 @@
+{
+  "version": "0.22.0",
+  "base_commit": "747187431077fab7657af24b08f7dd24df2a08fc",
+  "branch": "account-a/0.22.0-review-and-downloads",
+  "environment": {
+    "java": "OpenJDK 17.0.20",
+    "python": "3.12.14"
+  },
+  "command": "python dev.py release",
+  "exit_code": 0,
+  "checks": {
+    "regression_api_headless_swing": 948,
+    "regression_groups": 32,
+    "new_review_conditions": 43,
+    "payload_http": 127,
+    "all_features_http": 100,
+    "all_features_requests": 199,
+    "total_functional": 1175,
+    "packaging_unittest_methods": 3
+  },
+  "jar_sha256": "d6ea2f96a288b8d19df0002c08870955aa6d249b507a17f371bafc493c310e71",
+  "rebuild_byte_identical": true,
+  "packaging_repeat_idempotent": true,
+  "download_sha256_and_source_fingerprints": "passed",
+  "loopback_18099_closed": true,
+  "uncaught_exception_lines": 0,
+  "source_retrieval": "Pinned GitHub main files; binary dependencies recovered from prior package and matched Git blob IDs. Prior WAR used only to extract runtime JARs; all 17 dependency hashes matched runtime-hashes.json. Current lab Java/resources compiled for HTTP tests. Docker ZIP uses current GitHub source and builds its WAR in Docker. Prior WAR is not uploaded.",
+  "not_executed": [
+    "Actual Burp GUI/native and long-running JS capture",
+    "Docker/Oracle/Nginx full stack",
+    "Pro Collaborator or external BApp",
+    "Browser DOM execution for 0.22.0"
+  ],
+  "earlier_attempts": [
+    "Version-specific PayloadIntegrationTest assertion updated from 0.21.0 to 0.22.0",
+    "New evidence restore test corrected to use JSON serialization rather than raw Set-backed Map; final run passed"
+  ],
+  "logs": "verification/0.22.0/release-check.log"
+}

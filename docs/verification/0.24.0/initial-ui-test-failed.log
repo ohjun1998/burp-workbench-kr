@@ -1,0 +1,1174 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/scratch/c2248659cf6c/burp-workbench-kr/project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --java /usr/bin/java --javac /workspace/scratch/c2248659cf6c/burp-workbench-kr/.dev-tools/javac --test
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/scratch/c2248659cf6c/burp-workbench-kr/project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.24.0.jar 3000655 bytes
+PASS JSON formatted without numeric conversion
+PASS XML formatted
+PASS external XML blocked
+PASS format differences normalized
+PASS insert aligns later lines
+PASS matched lines remain aligned
+PASS deletion one region
+PASS separated changes
+PASS large input bounded
+PASS HTTP body formatted
+PASS original paste preserved
+PASS both differences colored
+PASS next navigates difference
+PASS navigation wraps
+PASS raw toggle retains original
+PASS identical disables navigation
+Structured compare: 16 checks passed
+PASS UTF-8 Base64 round trip
+PASS form URL round trip
+PASS Gzip round trip
+PASS Hex round trip
+PASS Gzip expansion cap
+PASS profile cannot change destination
+PASS case-insensitive duplicate profile rejected
+PASS CR header injection rejected
+PASS CSV formula injection neutralized
+PASS HTML escaping
+PASS export strips query and fragment
+PASS JS paths deduplicated and sourcemap extracted
+PASS JWT does not claim verified signature
+PASS identical response is candidate, not confirmed vulnerability
+PASS duplicate original cookies removed
+PASS original privileged credentials removed
+PASS original request immutable
+PASS nine core tools including bounty support plus shared Settings tab
+PASS common session tab removed
+PASS imported request collected
+PASS traffic retains bounded 250-row window
+PASS unload clears traffic
+PASS unload closes extension
+WorkbenchTest: 23 checks passed
+PASS server and framework headers
+PASS framework CMS plugin resource signatures
+PASS application prefix
+PASS observed resource query redaction
+PASS external resources excluded
+PASS cookie values never retained
+PASS prefix validation //evil.test
+PASS prefix validation /../admin
+PASS prefix validation /a/./b
+PASS prefix validation /a?x=1
+PASS prefix validation /a#b
+PASS prefix validation /ab
+PASS prefix validation /%2e%2e
+PASS prefix validation /a\b
+PASS unknown stack does not fabricate candidates
+PASS Actuator candidates
+PASS origin memory bounded
+PASS multiple environment candidates >=80: 150
+PASS resource-derived application prefix
+PASS JS quoted endpoint extraction
+PASS explicit sourceMappingURL extraction
+PASS cross-profile candidates deduplicated
+PASS evidence priority descending
+PASS top 30 limit
+PASS common candidates can be excluded
+PASS unknown stack common fallback distinguished
+PASS unsubstantiated candidates ranked low
+EnvironmentTest: 27 checks passed
+PASS UI lists multiple ranked candidates
+PASS UI removes score condition and priority columns
+PASS UI top 30 selector
+PASS UI expanded limit refresh
+PASS UI common toggle
+PASS invalid prefix leaves no stale Repeater candidates
+EnvironmentPanelTest: 6 checks passed
+PASS selection previews unsent request without response
+PASS selection sends no traffic
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS one batch visits every visible candidate exactly once
+PASS timeout and redirects disabled
+PASS sorted selection resolves corresponding error packet
+PASS selected response includes actual status packet
+PASS completion restores start and stop controls
+PASS out of scope batch rejected before sending
+PASS rejected batch emits zero requests
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS first request entered
+PASS stop prevents remaining requests
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS single start sends only selected candidate
+PASS unload clears packets and stops future work
+EnvironmentBatchTest: 23 checks passed
+PASS OpenAPI base path
+PASS operation server override
+PASS templates and write-only operations excluded
+PASS external schema servers excluded
+PASS schema application prefix learned
+PASS Swagger 2 base path
+PASS Actuator captured link
+PASS renamed actuator root
+PASS templated Actuator link excluded
+PASS robots directive discovery
+PASS robots wildcard and external exclusion
+PASS sitemap query values excluded
+PASS relative swagger schema reference
+PASS wordlist normalization duplicates invalid paths: ImportResult[accepted=2, skipped=6]
+PASS wordlist category
+PASS wordlist lacks observed evidence
+PASS 404 feedback demotes candidate
+PASS access-denied remains reviewable
+PASS discovery memory bounded
+PASS FastAPI fingerprint
+PASS catalog source reference retained
+PASS Symfony header fingerprint
+PASS AEM resource fingerprint
+PASS reflected-path soft 404 comparison
+PASS different response not soft 404
+PASS 403 is access control not success
+PASS login redirect
+PASS rate limit
+PASS heavy diagnostics separated from batch
+PASS soft 404 badge is not green
+EnvironmentDiscoveryTest: 30 checks passed
+PASS two stable reference probes plus two candidates
+PASS batch excludes heavy diagnostics
+PASS SPA shell marked soft 404 in batch
+PASS verified candidates not resent by default
+PASS 429 stops remaining candidates
+EnvironmentFeedbackTest: 5 checks passed
+PASS UTF-8 bytes decoded without host string
+PASS declared EUC-KR
+PASS declared CP949
+PASS unknown charset falls back to valid UTF-8
+PASS Latin-1 mojibake display recovery
+PASS mixed normal and garbled Korean
+PASS normal Latin text preserved
+PASS structured packet displays Korean
+PASS HTTP body decoded from raw bytes even if host string is garbled
+PASS payload engine retains status
+PASS bundled fallback can draw Korean
+PASS packet viewer repairs display
+PASS original mojibake packet remains intact
+PASS packet font draws restored text
+TextEncodingTest: 14 checks passed
+PASS all categories and common paths initially shown
+PASS sorted category click filters nginx candidates and excludes other technologies
+PASS category filter reduces candidates
+PASS passive refresh preserves selected category
+PASS all environments restores full candidate list
+PASS formatter retains headers
+PASS JSON indents without rounding large integer
+PASS JSON string escaping preserved
+PASS original raw packet remains unchanged
+PASS XML pretty indentation
+PASS XML external entity document stays raw without resolving entity
+PASS malformed JSON remains raw
+PASS HTML tag boundaries become readable lines
+DisplayWorkflowTest: 13 checks passed
+PASS shared request preview indents JSON without changing integer
+PASS shared preview restores exact raw text
+PASS format toggle never edits source string
+PASS decoded response source can be formatted separately
+PASS raw response remains accessible after decoded display
+PASS status classification 200
+PASS status classification HTTP 200
+PASS status classification 302
+PASS status classification 404
+PASS status classification HTTP 503
+PASS status classification 미검증
+PASS status classification 진행 중
+PASS status classification 전송 오류
+PASS status classification 검토 필요
+PASS HTTP status badge removes redundant prefix
+PASS success badge background rendered
+PASS dark theme status has bright readable green
+PASS compressed response decoded and formatted for managed viewers
+PASS traffic request viewer uses structured formatting
+PASS traffic response viewer uses structured formatting
+PASS JS advanced actions removed from primary toolbar
+PASS payload settings and export moved off primary toolbar
+PASS payload structured preview preserves editable request bytes
+PASS payload draft and result request/response have common previews
+PacketUiTest: 24 checks passed
+PASS domain extracted from HTTP URL
+PASS invalid CLI domain rejected: example.com;id
+PASS invalid CLI domain rejected: $(id)
+PASS invalid CLI domain rejected: -x
+PASS invalid CLI domain rejected: example..com
+PASS invalid CLI domain rejected: https://user@example.com
+PASS escaped path and query preserved; fragment removed
+PASS subdomain setting enforced
+PASS unrelated hosts and non-HTTP links excluded
+PASS executable path passed without shell
+PASS gau actual flags include requested subdomains
+PASS actual subprocess stdin/stdout adapter filters output
+PASS CLI nonzero exit and stderr surfaced
+PASS two CLI sources merged with URL deduplication
+PASS collect/select sends no target requests
+PASS verification GET runs off EDT
+PASS single start sends one selected URL
+PASS selected response structured JSON
+PASS verification GET runs off EDT
+PASS verification GET runs off EDT
+PASS batch sends all visible URLs with bounded nonredirecting requests
+PASS sorted row resolves matching request/response
+PASS out-of-scope batch rejected before requests
+PASS scope rejection emits no requests
+PASS verification GET runs off EDT
+PASS transport error stored in status
+PASS verification GET runs off EDT
+PASS first batch request entered
+PASS stop prevents subsequent sends
+PASS passive URL retention bounded
+PASS unload clears data and prevents jobs
+PassiveScanTest: 31 checks passed
+PASS saved tool path reused through Burp preferences
+PASS built-in CDX parses original URLs and filters domains
+PASS built-in CDX subdomain query modes
+PASS different URL targets have separate tabs including same-host paths
+PASS traffic context action selects target and starts collection automatically
+PASS collection results remain in owning target tab
+PASS target switching isolates packet preview
+PASS switching back retains selected packet
+PASS packet and list workspace orientations switch together: 1
+PASS existing passive target follows shared Settings tab layout
+PASS layout switch preserves packets and selection
+PASS packet and list workspace orientations switch together: 0
+PASS existing passive target follows shared Settings tab layout
+PASS layout switch preserves packets and selection
+PASS target tab count bounded without overwriting earlier results
+PASS unload closes all target panels
+LayoutPassiveWorkflowTest: 16 checks passed
+PASS AST successfully parsed
+PASS constant concat fetch URL and method
+PASS header names and body keys from call options
+PASS query values excluded from results
+PASS Axios post body metadata
+PASS XHR open URL
+PASS WebSocket identified
+PASS location assignment URL
+PASS AWS access key pattern
+PASS Google key pattern
+PASS GitHub token pattern
+PASS placeholder excluded
+PASS secret results masked with fingerprints only
+PASS template unresolved value retained
+PASS dynamic concatenation marked unresolved
+PASS escaped string decoded by parser
+PASS shadowed parameter not resolved from global const
+PASS global const resolved in own scope
+PASS Axios baseURL and params metadata
+PASS HTML inline script original line location
+PASS external scripts not automatically fetched
+PASS parse failure clearly labeled with secret fallback
+PASS numeric arithmetic not incorrectly concatenated
+PASS URL credentials query and fragment excluded
+PASS source size limit explicit
+PASS endpoint result cap
+PASS JavaScript is parsed without executing throw
+PASS module compatibility retains call metadata without execution
+PASS Request constructor URL metadata
+PASS same URL in separate call sites retains code locations
+PASS window.open target not confused with XHR
+JsAnalysisTest: 31 checks passed
+PASS manual AST result tables
+PASS masked report excludes secrets and URL query values
+PASS explicit action prepares placeholder query in Repeater
+PASS out-of-scope Repeater preparation blocked
+PASS dynamic endpoint preparation blocked
+PASS passive out-of-scope response ignored
+PASS passive analysis without request or Repeater action
+PASS automatic analysis does not display raw source
+PASS changed JS source reanalyzed under same source URL
+PASS clear prevents stale async result restoration
+PASS close clears raw source and secret rows
+JsAnalysisPanelTest: 11 checks passed
+PASS all native source findings highlighted
+PASS next arrow selects first finding
+PASS arrow selects endpoint table row
+PASS next finding moves in source order
+PASS previous arrow returns to earlier finding
+PASS secret-only navigation filter
+PASS secret arrow selects masked secret row
+PASS source highlight painter
+PASS editing invalidates stale positions
+PASS explicit arrow restores captured source
+PASS sorted result selection resolves source offset
+PASS passive capture does not expose raw source automatically
+PASS arrow opens passive captured source explicitly
+PASS clear resets navigation
+JsNavigationTest: 14 checks passed
+PASS existing History automatically backfilled
+PASS late response with lower history ID not missed
+PASS unchanged history entries not reanalyzed
+PASS new History responses processed incrementally
+PASS history rescan deduplicates identical content
+PASS History source overview updated
+PASS history ID reset recovered
+PASS Proxy live response listener registered
+PASS received Proxy response preserved unchanged
+PASS sent Proxy response preserved unchanged
+PASS Proxy event analyzed immediately without history polling
+PASS Proxy listener deregistered on close
+PASS busy worker queues rapid JS responses rather than skipping
+PASS normal batch has no queue overflow
+PASS watch pause blocks new analysis
+PASS history scan pauses without advancing cursor
+PASS history accumulated during pause recovered
+PASS queue rejection retried without cursor loss
+PASS gzip response decoded without network request
+PASS history JS larger than 128 KiB traffic capture limit analyzed
+PASS bounded queue pressure explicitly counted
+PASS clear invalidates entire queued history batch
+JsHistoryTest: 22 checks passed
+PASS single Workbench suite tab; no standalone Payload Runner tab
+PASS ten tools including bounty support plus independent Settings tab
+PASS embedded runner preserves Workbench extension name
+PASS removed pages absent
+PASS engine catalog excluded from installation
+PASS loading integrated extension sends zero requests
+PASS one runner menu factory and unload listener without engine menu factory
+PASS runner component is embedded in Workbench
+PASS import navigation selects integrated runner page
+PASS Workbench selected-request action connected to runner
+PASS adaptive strategy remains default
+PASS all sixteen payload profiles preserved
+PASS both unload APIs safely close runner worker
+PASS existing Workbench unload still runs
+PayloadIntegrationTest: 14 checks passed
+PASS empty traffic disables clear/export/search reset
+PASS traffic has exactly four visible columns
+PASS NO/method/URL/status order
+PASS traffic request above response
+PASS environment left stacked lists and right stacked packets
+PASS auth credentials/history left and packets right
+PASS JS and passive packets request above response
+PASS payload editors/results left and packets right
+PASS request and response are persistent panes, not switching tabs
+PASS readable row spacing
+PASS semantic method/status renderer installed
+PASS tab 0 laid out at 1000
+PASS tab 1 laid out at 1000
+PASS tab 2 laid out at 1000
+PASS tab 3 laid out at 1000
+PASS tab 4 laid out at 1000
+PASS tab 5 laid out at 1000
+PASS tab 6 laid out at 1000
+PASS tab 7 laid out at 1000
+PASS tab 8 laid out at 1000
+PASS tab 9 laid out at 1000
+PASS tab 10 laid out at 1000
+PASS traffic identifiers retain readable column widths at 1000
+PASS both message panes usable at 1000
+PASS no right-side vertical action sidebar at 1000
+PASS tab 0 laid out at 1280
+PASS tab 1 laid out at 1280
+PASS tab 2 laid out at 1280
+PASS tab 3 laid out at 1280
+PASS tab 4 laid out at 1280
+PASS tab 5 laid out at 1280
+PASS tab 6 laid out at 1280
+PASS tab 7 laid out at 1280
+PASS tab 8 laid out at 1280
+PASS tab 9 laid out at 1280
+PASS tab 10 laid out at 1280
+PASS traffic identifiers retain readable column widths at 1280
+PASS both message panes usable at 1280
+PASS no right-side vertical action sidebar at 1280
+PASS tab 0 laid out at 1600
+PASS tab 1 laid out at 1600
+PASS tab 2 laid out at 1600
+PASS tab 3 laid out at 1600
+PASS tab 4 laid out at 1600
+PASS tab 5 laid out at 1600
+PASS tab 6 laid out at 1600
+PASS tab 7 laid out at 1600
+PASS tab 8 laid out at 1600
+PASS tab 9 laid out at 1600
+PASS tab 10 laid out at 1600
+PASS traffic identifiers retain readable column widths at 1600
+PASS both message panes usable at 1600
+PASS no right-side vertical action sidebar at 1600
+PASS stable monotonically increasing traffic NO
+PASS sorted NO selection resolves correct captured request
+PASS traffic search filters visible request fields
+PASS search reset enabled after query
+PASS search reset restores all rows and disables itself
+PASS cleared selection resets stale request
+PASS captured traffic enables file actions
+PASS clear traffic resets count and file action state
+PASS dark palette has readable foreground
+UiLayoutTest: 62 checks passed
+PASS per-account history columns
+PASS three profile packet tabs plus original
+PASS combined cookies and bearer deduplicated
+PASS repeat count preserved
+PASS CSRF rotation is auxiliary not a new identity
+PASS latest auxiliary token retained
+PASS candidate values visible and usage columns removed
+PASS right-click action assigns exact selected candidate
+PASS explicit anonymous profile
+PASS same secret isolated by Origin
+PASS cross-origin profile assignment rejected
+PASS Record OFF emits no automatic job
+PASS passive collection and assignment emit zero requests
+PASS manual comparison emits one request per profile
+PASS profile A cookie applied
+PASS profile CSRF applied instead of original
+PASS anonymous request removes all captured credentials and CSRF
+PASS one grouped history row contains all profile responses
+PASS response and credential differences highlighted
+PASS difference colors can be disabled
+PASS original comparison keeps packet text
+PASS Record freezes assigned profiles
+PASS extension replays cannot recursively enter Record
+PASS request-time Record ticket
+PASS Record ticket creates an independent history row for same URL
+PASS Stop drops outstanding Record tickets
+PASS write replay requires explicit option
+PASS out-of-scope replay rejected
+PASS Stop prevents remaining profile sends
+PASS sorted history resolves correct grouped packets
+PASS clear removes stale details
+PASS authentication/header/body distinct highlight classes
+PASS diff never inserts synthetic alignment lines
+PASS identical packets have no differences
+PASS packet preview bounded at 64K characters
+PASS candidate retention bounded at 100
+PASS unload clears credentials/history and stops worker
+AuthRecordTest: 37 checks passed
+PASS tool names include passive response recon and Settings
+PASS global layout toolbar removed
+PASS no per-tab settings buttons 0
+PASS no per-tab settings buttons 1
+PASS no per-tab settings buttons 2
+PASS no per-tab settings buttons 3
+PASS no per-tab settings buttons 4
+PASS no per-tab settings buttons 5
+PASS no per-tab settings buttons 6
+PASS no per-tab settings buttons 7
+PASS no per-tab settings buttons 8
+PASS no per-tab settings buttons 9
+PASS no per-tab settings buttons 10
+PASS codec and JWT grouped under data tools
+PASS Settings tab opens separate window
+PASS layout selector hosted in separate settings content
+PASS shared setting changes traffic orientation
+PASS shared setting changes environment orientation
+PASS common setting persisted with global key
+PASS shared settings apply to input/output of both data tools
+PASS reset restores divider proportions without changing selected layout
+PASS settings transmit no HTTP requests
+PASS slot editing controls removed from visible auth page
+PASS runner configuration fields moved out of main page
+PASS runner main page retains current configuration summary
+PASS all selected-request tasks available through context menu
+PASS selected-request task buttons removed from traffic page
+PASS Repeater context action preserves multi-row selection
+PASS convert action navigates to nested codec with selected request
+PASS JWT action navigates to nested JWT and decodes selected token
+PASS JS context action navigates to renamed tab
+PASS payload context action imports exact selected request
+PASS auth submenu assigns selected credential
+PASS auth submenu sets anonymous and displays current state
+PASS auth submenu clears slot and updates state
+PASS single-request action renamed in both tools
+PASS runner top controls compact: 134px
+PASS runner request editor has more vertical room
+UiCleanupTest: 38 checks passed
+PASS proxy observation is not completion and values omitted from URL
+PASS URL body and cookie parameter locations tracked
+PASS actual Repeater send records work, not completion
+PASS unchanged replay does not claim changed parameters
+PASS changed URL body values and removed cookie are observed
+PASS scheme port and method isolate endpoint identities
+PASS default port host and fragments canonicalized
+PASS credential-bearing URLs excluded
+PASS explicit endpoint completion works
+PASS parameter completion independent of endpoint
+PASS completion can be reopened
+PASS unknown-method discovery joins known endpoint
+PASS unvisited JS endpoint retained as gap
+PASS observed method reconciles unknown discovery
+PASS saved state contains neither parameter values nor hashes
+PASS metadata round trip restores counters and explicit status
+PASS invalid imports preserve current record
+PASS duplicate parameter value changes detected
+PASS admin classification
+PASS money classification
+PASS auth classification
+PASS file classification
+PASS object classification
+PASS dynamic IDs and query values grouped
+PASS distinct static paths never discarded
+PASS sensitive file candidate
+PASS credential parameter candidate does not expose value
+PASS encoded destructive paths identified
+PASS unrelated similar words do not block verification
+PASS JS API method query names body names extracted offline
+PASS HTML entities resolved
+PASS HTML form fields become parameter gaps
+PASS activity queue drained
+PASS Scope filtering applies to passive and JS discovery
+PASS coverage collection and analysis send no target traffic
+PASS filtered selection clears stale parameter details
+PASS activity queue drained
+PASS background activity continues independent of traffic rows
+PASS passive import filters unrelated domains
+PASS static filter preserves hidden records
+PASS category filter controls verification selection
+PASS previous database merges and marks old URLs
+PASS destructive GET path excluded before sending
+PASS excluded verification sends zero requests
+PASS rate limit stops remaining requests and retains packet
+PASS Excel strings prevent formula execution and preserve Korean XML
+PASS coverage endpoint cap explicit and bounded
+PASS large bounded records can be reloaded
+PASS unload clears metadata and stops workers
+ActivityReconTest: 49 checks passed
+PASS unconfigured scope respects Burp fallback
+PASS local URL registration authorizes exact path and descendants
+PASS path boundary prevents scope broadening
+PASS host protocol and port enforced
+PASS encoded traversal and slash ambiguity excluded
+PASS stored scope excludes query secrets
+PASS scope registration deduplicates same URL
+PASS domain rule includes paths but never implicit subdomains
+PASS legacy payload runner shares traffic scope
+PASS project scope restored after reload
+PASS deleting last local rule leaves no authorized targets
+PASS traffic right click registers selected URL in scope list
+PASS scope window preserves traffic page and selection
+PASS scope registration works without Burp Target Scope
+PASS activity queue drained
+PASS selected traffic enters coverage after scope registration
+PASS scope registration makes selected traffic available to environment discovery
+PASS activity queue drained
+PASS actual HTTP handler records Repeater using local scope
+PASS scope list deletion immediately revokes tool scope
+PASS scope changes neither mutate Burp global Scope nor send target requests
+PASS scope integration unload closes activity
+TrafficScopeTest: 22 checks passed
+PASS popup is modeless so original page remains usable
+PASS scope controls hosted in separate window
+PASS scope button keeps traffic selection and request preview
+PASS scope list no longer replaces traffic pane
+PASS popup is modeless so original page remains usable
+PASS settings controls hosted in separate window
+PASS settings opens without any temporary tab change
+PASS popup is modeless so original page remains usable
+PASS settings controls hosted in separate window
+PASS repeated settings action keeps original page
+PASS popup is modeless so original page remains usable
+PASS scope controls hosted in separate window
+PASS scope window never forces navigation to traffic
+PASS popup is modeless so original page remains usable
+PASS settings controls hosted in separate window
+PASS settings preserves nested data tool selection
+PASS popup is modeless so original page remains usable
+PASS settings controls hosted in separate window
+PASS settings preserves activity tracking screen
+PASS both popup entry points invoke correct window actions
+PASS opening popups sends no HTTP traffic
+PopupWorkflowTest: 21 checks passed
+PASS JS source URL input removed from main page
+PASS environment target selector removed from main page
+PASS URL collection target input removed from main page
+PASS activity record search remains accessible
+PASS target dialog is modeless
+PASS JS target dialog preserves selected tool
+PASS JS source URL is available inside target dialog
+PASS target dialog offers registered SCOPE
+PASS SCOPE choice populates JS relative URL base
+PASS JS summary reflects configured source
+PASS target dialog is modeless
+PASS reopened target dialog reads current SCOPE list
+PASS target dialog is modeless
+PASS environment selector opens without switching tool
+PASS environment SCOPE choice resolves observed origin
+PASS target dialog is modeless
+PASS URL target entry opens separately without navigation
+PASS choosing a target prepares tab without collecting or sending traffic
+PASS duplicate domain input removed from target result page
+PASS collector retains correct domain internally
+PASS unapplied input never changes active target summary
+PASS main collect action uses active tab rather than pending target text
+PASS target configuration and passive history selection send no target HTTP requests
+PASS unloaded target settings cannot reopen
+TargetCleanupTest: 24 checks passed
+PASS owner mapping detects foreign-object candidate
+PASS ignored field removed from comparison details only
+PASS normalized JSON equality despite field order and ignored request ID
+PASS HTTP 200 logical denial recognized
+PASS denied baseline does not create bypass candidate
+PASS HTTP denial reason retained
+PASS invalid baseline cannot establish authorization
+PASS redirect not treated as enforcement proof
+PASS all JSON fields excluded cannot establish equality
+PASS non JSON responses keep manual review
+PASS same non JSON success remains an unconfirmed candidate
+PASS numeric owner text normalized without false foreign-owner claim
+PASS literal dotted keys cannot collide with nested JSON paths
+PASS empty JSON container distinct from string
+PASS missing field differs from explicit null
+PASS array differences include index path
+PASS large object IDs compared without floating point precision loss
+PASS empty successful responses do not imply bypass
+PASS large exponent comparison does not expand huge decimal text
+PASS invalid denial syntax rejected before requests
+PASS oversized rule rejected
+PASS JS draft preserves method and body names
+PASS draft query uses names only, never captured values
+PASS unresolved dynamic endpoint blocked
+PASS unknown method cannot silently become GET
+PASS embedded credentials rejected
+PASS manual dynamic resolution supported
+PASS discovery distinct from request observation
+PASS persisted evidence strips query credentials
+PASS version 2 evidence metadata round trip
+PASS version 1 imports remain supported
+PASS observed state changes only on request
+PASS authorization finding reopens completed endpoint for review
+PASS explicit completion clears review reason
+PASS UI Repeater draft preserves POST and JSON body keys
+PASS preparing Repeater never sends or records a request
+PASS background undisplayed source immediately reaches activity tracker
+PASS background collection preserves current JS selection
+PASS recovered source-map endpoints immediately reach activity with file evidence
+PASS source-map evidence opens correct recovered file and line
+PASS JS unobserved filter includes both sources
+PASS observed request leaves JS-unobserved list
+PASS per-account result retains label/rules snapshot
+PASS JSON reasons visible with ignored fields excluded
+PASS auth suspicious result linked to activity review queue
+PASS dynamic target dialog modeless
+PASS comparison settings dialog modeless
+PASS unload clears dynamic draft and closes tracking workers
+ReviewWorkflowTest: 48 checks passed
+PASS fixed mode halts after HTTP 401
+PASS halting response retained for 401
+PASS blocked baseline never starts payloads or duplicates rows 401
+PASS fixed mode halts after HTTP 403
+PASS halting response retained for 403
+PASS blocked baseline never starts payloads or duplicates rows 403
+PASS fixed mode halts after HTTP 429
+PASS halting response retained for 429
+PASS blocked baseline never starts payloads or duplicates rows 429
+PASS fixed mode halts after HTTP 503
+PASS halting response retained for 503
+PASS blocked baseline never starts payloads or duplicates rows 503
+PASS fixed mode halts after three consecutive failures
+PASS fixed mode timeout prevents later payload requests
+PASS adaptive mode timeout also halts immediately
+PASS native transport preserves full response bytes
+PASS native transport preserves raw request, sets timeout and forbids redirects
+PASS legacy wait deadline enforced even if callback ignores interrupt
+PASS legacy in-flight request remains marked busy
+PASS legacy timeout cannot create overlapping request threads
+PASS legacy adapter becomes reusable after actual request ends
+PASS JWT expiry, not-before and future issue times explained
+PASS JWT time output has explicit timezone and trust context
+PASS JWT exp boundary treated as expired
+PASS fractional NumericDate supported
+PASS non-numeric claim is not silently interpreted
+PASS missing time claims distinguished
+PASS invalid payload reported without breaking decoder
+PASS huge numeric date exponent remains bounded
+PASS huge negative numeric scale remains bounded
+PASS configured volatile fields and JSON ordering normalize stable missing-path controls
+PASS unstable controls never suppress candidate as generic response
+PASS control scope exclusion is visible evidence
+PASS failed repeat cannot establish stable control
+PASS empty text baseline cannot suppress findings
+PASS query values and object IDs group without deleting originals
+PASS parameter-set change sorted above new paths
+PASS raw original URL values retained in memory
+PASS redacted DB retains query names and excludes values
+PASS redacted database rejects embedded URL credentials
+PASS DB default redacts and deduplicates value variants
+PASS raw DB mode requires explicit option
+PASS representative selection respects current search filter
+PASS representative filtering preserves complete originals
+PASS pattern summary is modeless
+PASS Wayback JSON above old 2MB limit works within shared 8MB bound
+PASS Wayback parser rejects beyond shared size bound
+PASS Wayback URL result count remains bounded
+PASS scope explanation selects most specific matching rule
+PASS scope overlap made visible
+PASS scope exclusion reason identifies boundary mismatch
+PASS scope import/export round trip persists sanitized rules
+PASS credential-bearing scope import rejected
+PASS invalid scope import preserves existing rules
+PASS explicit empty import cannot broaden back to Burp fallback
+PASS environment candidate settings are modeless
+OtherImprovementsTest: 56 checks passed
+PASS specific public rule wins over object template
+PASS template owner policy applies to other objects
+PASS GET policy cannot broaden write permission
+PASS policy requires full path match
+PASS policy cannot embed an external origin
+PASS explicit public policy avoids foreign-owner false candidate
+PASS owner mismatch alone cannot imply authorization violation
+PASS owner-only policy keeps genuine foreign-object candidate
+PASS public policy does not overwrite actual denial
+PASS unverified 404 remains explicitly ambiguous
+PASS owner recheck enables hidden-denial candidate
+PASS public HTML respects explicit policy
+PASS logical JSON denial outranks public policy
+PASS logical baseline denial cannot establish public success
+PASS empty public success remains pending
+PASS native and wrapped timeout types recognized
+PASS native and wrapped timeout types recognized
+PASS native and wrapped timeout types recognized
+PASS ordinary transport error is not a timeout
+PASS wrapped payload timeout stops after first failed probe
+PASS actual community modern source parses within limits
+PASS API wrapper retains POST and unresolved object path
+PASS helper path fragments never become wrong origin-root endpoints
+PASS property access and template interpolation are not domain names
+PASS async login retains method
+PASS module async wrapper preserves body metadata
+PASS dynamic import remains opaque while static fetch is parsed
+PASS raw dynamic import dependency retained
+PASS invalid source literals stay unresolved
+PASS failed literal fragments excluded from automatic coverage
+PASS compatibility leaves quoted keyword data intact
+PASS optional catch binding cannot crash AST traversal
+PASS parameter shadowing still blocks outer constants
+PASS unquoted object properties excluded from host extraction
+PASS actual URL and quoted host literals retained
+PASS encoded path-only control variation is stable
+PASS soft 404 encoded path candidate suppressed only when stable
+PASS real business content change remains unstable
+PASS numeric path ID is object-access metadata
+PASS path ID heuristic preserves stronger file classification
+PASS bounded OpenAPI methods parsed
+PASS template metadata stays origin-specific
+PASS internal reference and form body retained
+PASS OpenAPI draft uses form encoding and placeholder values
+PASS unresolved OpenAPI template cannot become request
+PASS OpenAPI draft rejects other origin
+PASS encoded unresolved template rejected
+PASS only static documented path enters URL discovery
+PASS external server metadata never broadens source origin
+PASS HTML headers and two cookie attributes observed
+PASS cookie value never persisted in passive evidence
+PASS fixed header/cookie fixture avoids same observations
+PASS JSON APIs do not inherit HTML-only header observations
+PASS SQL implementation information recognized
+PASS write/read marker connects without execution claim
+PASS flow URLs exclude query values
+PASS marker cannot link across origins
+PASS short ambiguous marker rejected
+PASS flow reset removes marker metadata
+PASS passive panel consumes observed response
+PASS passive panel rejects out-of-scope response
+PASS marker configuration keeps current screen
+PASS response worker closes on unload
+AuditRepairsTest: 63 checks passed
+PASS disabled refresh sends nothing
+PASS one explicit GET refresh per account
+PASS token and CSRF extracted into separate headers
+PASS only existing cookie names updated
+PASS original account snapshot immutable
+PASS foreign cookie Domain ignored
+PASS unrelated cookie Path ignored
+PASS implicit cookie Path constrained to refresh directory
+PASS expired session cookie removed instead of reused
+PASS redirect fragment credentials redacted
+PASS bare echoed bearer and cookie values redacted
+PASS cross-origin refresh rejected
+PASS rejected refresh emits zero HTTP
+PASS anonymous refresh rejected
+PASS wrong account identity rejected
+PASS refresh redirect rejected without retry
+PASS destination header extraction forbidden
+PASS extracted header injection rejected
+PASS exact matrix path overrides variable
+PASS method-specific policy
+PASS deny with data is candidate, not confirmed
+PASS logical deny recognized at HTTP 200
+PASS allow blocked requires session review
+PASS 404 not asserted as verified denial
+PASS empty write response not proof
+PASS unknown expected policy rejected
+PASS duplicate matrix policies rejected
+PASS separator framing newline does not change a form value
+PASS serial workflow extracts and substitutes actual response id
+PASS flow completion does not assert vulnerability
+PASS JSON scalar numeric type retained
+PASS URL substitution encodes delimiter characters
+PASS workflow value header injection rejected
+PASS flow stops after HTTP 302
+PASS flow stops after HTTP 401
+PASS flow stops after HTTP 403
+PASS flow stops after HTTP 429
+PASS flow stops after HTTP 503
+PASS cancelled workflow sends zero requests
+PASS missing extraction stops workflow
+PASS no later request after failed extraction
+PASS write workflow opt-in enforced at preflight
+PASS foreign Host rejected at preflight
+PASS duplicate Host rejected
+PASS chunked workflow rejected
+PASS forward variable dependency rejected before sending
+PASS external names parsed without copying query values to coverage
+PASS malformed bridge file rejected atomically
+PASS external header/cookie values tracked as salted changes
+PASS external coverage exports names and states only
+PASS evidence ZIP redacts headers/query/JSON secrets
+PASS non-secret JSON evidence retained when opted in
+PASS evidence report HTML escapes user text
+PASS evidence contains packet pair and coverage
+PASS response bodies excluded by default
+PASS unknown text body excluded even with JSON opt-in
+PASS auth engine integrates matrix after account refresh
+PASS role and tenant snapshotted for history
+PASS refreshed account token actually used in comparison
+PASS identity failure prevents comparison request
+PASS five support workflows available
+PASS bridge rejects mixed-scope batch atomically
+PASS support construction/import rejection send no HTTP or metadata
+PASS external OAST correlated metadata shown
+PASS duplicate OAST event suppressed
+PASS selected auth history bundled with original
+PASS unload clears refresh/evidence state and workers
+BountyFeaturesTest: 67 checks passed
+PASS ALLOW matrix is authoritative over owner heuristic
+PASS owner-only conflict remains visible as configuration warning
+PASS matrix cannot override same-credential unverified result
+PASS incorrect owner path prevents silent equality fallback
+PASS numeric path ID becomes a candidate input
+PASS new input/auth after completion reopens aggregate review
+PASS manual completion flag preserved for user undo
+PASS coverage stores neither credentials nor query values
+PASS reopened review survives save/load
+PASS unresolved dynamic API retained without request
+PASS unresolved source query credentials excluded
+PASS unresolved discoveries survive save/load
+PASS cross-origin dynamic resolution rejected
+PASS manual resolution transfers pending API to discovered coverage
+PASS selected auth cookie merges ordinary preference changes
+PASS full request cookie retained in newest session snapshot
+PASS mixed CRLF/LF/CR body preserved exactly
+PASS failed semantic expectation stops later requests
+PASS matching semantic conditions permit next step
+PASS nonexistent step assertion rejected before send
+PASS form evidence preserves duplicate ordinary keys
+PASS form secrets and known echoed cookie stripped
+PASS body remains excluded without opt-in
+PASS form draft uses actual observed encoding
+PASS multipart draft fails visibly instead of inventing JSON
+PASS activity UI handoff keeps form field names and removes values
+PASS large responses excluded by default
+PASS explicit large-file option accepts 140KB fixture
+PASS whole-body identical hashes recognized
+PASS same prefix different suffix never treated equal
+PASS large-file mode still enforces 4MiB cap
+PASS 206 partial content never claimed as full file equality
+PASS empty successful responses are inconclusive
+PASS short exact JSON credential echoes redacted
+PASS short exact form credential echoes redacted
+PASS unresolved discoveries included in Excel workbook metadata
+PASS OAST id/time exported and associated with evidence item
+PASS redacted packet metadata includes omitted-original digest
+CompletenessTest: 38 checks passed
+PASS changed actual method invalidates provenance
+PASS changed actual origin invalidates provenance
+PASS changed actual path invalidates provenance
+PASS fake Collaborator payload linked to selected request without target send
+PASS fake interaction polling associates payload id
+PASS repeated interaction polling deduplicates events
+PASS OAST export snapshot retains request provenance
+PASS URL summary preserves GET and POST discovery
+PASS method discovery remains visible independently of GET status
+PASS malformed OAST timestamp rejected atomically
+PASS invalid timestamp inserts no partial rows
+IntegrationEdgesTest: 11 checks passed
+PASS duplicate account labels require explicit existing identity
+PASS selected identity cookie distinguishes account and ignores preferences
+PASS Alice URL completion stored independently
+PASS Alice completion never propagates to Bob
+PASS Bob actual traffic does not complete the account
+PASS parameter completion independent across accounts
+PASS new discovered input reopens completed account
+PASS same new input does not turn uncompleted Bob into completion
+PASS unknown session never inherits named account
+PASS same credential cannot identify different accounts
+PASS binding across origins rejected
+PASS guest profile rejects authenticated selected session
+PASS anonymous identity requires explicit guest binding
+PASS task enumerates required accounts for same API
+PASS task cannot finish when required account untested
+PASS inspection result never implies manual completion
+PASS task requiring artifact waits for ZIP save
+PASS artifact gate enforced before task completion
+PASS saved artifact prepares task but does not complete it
+PASS explicit work completion requires all chosen account targets
+PASS undoing account completion reopens completed work
+PASS rechecking account does not silently restore work completion
+PASS adding method invalidates work completion and doubles requirements
+PASS renaming account preserves credential binding and work identity
+PASS renaming to duplicate account name rejected
+PASS account save never serializes credentials or binding hashes
+PASS accounts tasks and completion roundtrip
+PASS restored metadata does not restore credential bindings
+PASS manual completion history survives restore
+PASS Excel workbook includes account and task metadata
+PASS corrupted account references rejected atomically
+PASS failed import retains existing account work state
+PASS legacy global completion retained without assigning a fabricated account
+PASS account selector binds stable identity through UI action
+PASS activity account queue drained
+PASS auth comparison sends one request and records explicitly linked account
+PASS expected denial observation still requires manual completion
+PASS auth evidence captures stable account ID with response
+PASS evidence preparation alone is not saved artifact
+PASS activity account queue drained
+PASS actual successful ZIP writing advances artifact state
+PASS ZIP account association retained with credentials redacted
+PASS failed ZIP destination reported
+PASS activity account queue drained
+PASS failed ZIP write never increments saved state
+PASS two new activity workflow views available
+PASS account table manual completion controls correct selected operation
+PASS work target popup is modeless
+PASS changing table selection cannot replace modeless target snapshot
+PASS work target popup is modeless
+PASS work detail selection overrides hidden stale account list selection
+PASS work UI completion targets stable task ID
+PASS reassigning auth slot clears previous stable account link
+PASS activity account queue drained
+PASS failed refresh records account review without comparison send
+PASS failed refresh reopens completed account work
+PASS unload clears account identities bindings and work data
+AccountTasksTest: 57 checks passed
+PASS same: target request and owner re-query executed
+PASS same: matrix keeps only verified denial and preserves uncertainty
+PASS deleted: target request and owner re-query executed
+PASS deleted: matrix keeps only verified denial and preserves uncertainty
+PASS expired: target request and owner re-query executed
+PASS expired: matrix keeps only verified denial and preserves uncertainty
+PASS changed: target request and owner re-query executed
+PASS changed: matrix keeps only verified denial and preserves uncertainty
+PASS targetChanged: target request and owner re-query executed
+PASS targetChanged: matrix keeps only verified denial and preserves uncertainty
+PASS sessionChanged: target request and owner re-query executed
+PASS sessionChanged: matrix keeps only verified denial and preserves uncertainty
+PASS allow: target request and owner re-query executed
+PASS allow: matrix keeps only verified denial and preserves uncertainty
+PASS ALLOW retains existence evidence while requesting policy review
+PASS verified 410 keeps denial evidence
+PASS unverified 410 remains uncertain
+PASS strict work rejects unfinished inputs even with URL complete
+PASS noncritical pagination does not reopen completed work
+PASS critical input value change reopens work
+PASS changed critical input loses input completion
+PASS name-only change keeps completion
+PASS role/tenant change reopens account and task
+PASS completion retains old role/tenant and binding presence without credential
+PASS unrelated account completion unaffected
+PASS serialized metadata excludes raw credentials and value fingerprints
+PASS strict options roundtrip
+PASS historical completion conditions roundtrip
+PASS undoing input completion reopens strict completed task
+PASS important inputs require explicit location
+PASS Alice-only ZIP covers one of two required pairs
+PASS one account ZIP cannot satisfy all-account evidence gate
+PASS one valid ZIP can cover both pairs
+PASS imported file metadata is not trusted as current disk verification
+PASS explicit SHA-matching reconnect restores file gate
+PASS missing ZIP reopens completed task after verification
+PASS missing ZIP blocks strict completion
+PASS moved ZIP reconnects by SHA
+PASS tampered file loses coverage
+PASS unknown digest cannot reconnect to old evidence
+PASS invalid UI condition rejected before creation
+PASS invalid settings do not leave partially created task
+PASS UI saves strict task options
+ReviewConditionsTest: 43 checks passed
+PASS read alone cannot create stored-flow evidence
+PASS successful write is a distinct unconfirmed-storage stage
+PASS write success never claims persisted storage
+PASS same marker cannot cross origin
+PASS error HTML marker cannot advance storage/readback stages
+PASS JSON readback does not establish HTML output or execution
+PASS browser evidence requires an observed successful HTML read
+PASS raw HTML advances output stage without execution claim
+PASS readback retains exact write and separate read source identities
+PASS invalid browser artifact hash rejected
+PASS explicit browser evidence stores digest and labels manual confirmation
+PASS portable summary contains source IDs and excludes query/fragment credentials
+PASS manual execution claim can be explicitly withdrawn
+PASS new escaped observation invalidates previous browser evidence
+PASS escaped nearby text remains a candidate rather than a safety verdict
+PASS stale read-source selection cannot attach manual evidence to a new response
+PASS XHTML is an explicit HTML output stage
+PASS media type substring does not falsely establish HTML rendering
+PASS OPTIONS marker does not establish readback
+PASS failed new write clears old successful association and browser claims
+PASS old content after a failed new attempt cannot inherit successful storage stage
+PASS fresh successful attempt can establish a new readback chain
+PASS null marker rejected cleanly
+PASS credential-bearing URL is rejected before creating metadata
+PASS read observations stay bounded
+PASS cross-origin successful write associations have an independent cap
+PASS evicted write origin cannot establish a later chain
+PASS clear removes registered marker associations and flow evidence
+PASS cleared marker is not silently re-registered
+PASS actual response UI exposes separate write/read/HTML/browser stages
+PASS stored evidence uses exact original ordered write/read packets
+PASS stored evidence note preserves uncertainty and excludes original credentials
+PASS UI details expose safe source IDs without request values
+PASS grouped Passive finding displays current representative URL
+PASS sorted/grouped Passive finding sends matching current original packet
+PASS scope narrowing blocks Passive original export
+PASS scope narrowing blocks whole stored-flow source pair
+PASS oversized latest representative cannot export a stale earlier packet
+PASS raw packet cache stays bounded independently of metadata
+PASS unload releases cached and displayed source packets
+PASS optional source factory failure degrades to unavailable original
+PASS source retention failure does not suppress independent Passive observation
+PASS unavailable original cannot silently export a synthetic packet
+PASS unload race reaches pending raw packet retention
+PASS interrupted observer completes after blocked packet read is released
+PASS in-flight observation cannot repopulate sensitive packet caches after unload
+StoredFlowStagesTest: 46 checks passed
+PASS retained source keeps actual original request identity
+PASS missing response has no complete evidence source
+PASS oversized response never becomes truncated evidence
+PASS combined request and response retention is bounded
+PASS empty source batch rejected
+PASS more than 32 sources rejected
+PASS mixed in/out-of-scope batch rejected atomically
+PASS validated source batch owns immutable ordered snapshot
+PASS comparison loads original left/right responses without formatting mutation
+PASS source summary excludes query values and authentication
+PASS comparison evidence preserves ordered request-response pairs
+PASS format toggle preserves source linkage
+PASS editing one side immediately disconnects only that original
+PASS edited comparison cannot falsely claim original evidence
+PASS restoring text manually does not restore unverified original linkage
+PASS bounded comparison note discloses incomplete display instead of claiming total differences
+PASS ambiguous traffic selection rejected without replacing original
+PASS failed import preserves previous original association
+PASS scope narrowed after loading blocks original batch export
+PASS unload clears retained comparison packets and pasted data
+PASS sorted URL selection exports actual matching original instead of display preview
+PASS URL evidence note identifies GET observation and required session check with safe URL
+PASS preview-only packet does not advertise original evidence
+PASS missing or evicted original cannot be exported as a synthetic GET
+PASS representative cap keeps later denial/missing/method groups before repeated 200 URLs
+PASS one representative per status and observed method preserves distinct groups
+PASS representative selection respects active search before grouping
+PASS closing URL target releases retained originals
+PASS comparison and evidence linkage emit no target requests
+PASS GET verification retains actual sent pair through worker and sorted UI evidence callback
+PASS session-rule credentials preserve actual packet without claiming anonymous verification
+EvidenceLinkTest: 31 checks passed
+PASS preview excludes QUERY_SECRET
+PASS preview excludes COOKIE_SECRET
+PASS preview excludes CUSTOM_SECRET
+PASS preview excludes BODY_SECRET
+PASS preview excludes TOKEN_SECRET
+PASS preview excludes NEW_COOKIE
+PASS explicit JSON bodies retain nonsecret evidence
+PASS body inclusion defaults off
+PASS image not represented as automatically redacted
+PASS preview matches saved requests/1.http
+PASS preview matches saved responses/1.http
+PASS ZIP image bytes match attached proof hash
+PASS image hash recorded in evidence
+PASS changed browser proof rejected before ZIP write
+PASS changed proof leaves previous ZIP intact
+PASS scope batch rejected
+PASS mixed scope rejection leaves evidence untouched
+PASS source retained in memory for exact formatter input
+PASS connected source preview redacts credentials
+PASS over capacity rejected
+PASS over capacity rejection is atomic
+PASS different flow image rejected
+PASS image conflict adds no packets and preserves original proof
+PASS manual image replacement cannot contradict captured flow
+PASS same validated proof can be reused
+PASS current scope checked again
+PASS unload clears private evidence state
+EvidencePreviewTest: 27 checks passed
+PASS empty URL list disables selection actions
+PASS unresolved controls wait for a selected JS discovery
+PASS empty accounts disable account and operation actions
+PASS empty tasks disable task actions
+PASS URL actions and filter belong to the URL tab rather than every coverage page
+PASS account actions available before selecting an API
+PASS URL selection enables URL actions but requires an input selection separately
+PASS completed input stays selected and offers explicit undo
+PASS input undo restores the completion action
+PASS URL completion action describes its current effect
+PASS filtering away the selected URL clears unsafe selection actions
+PASS account API selection waits for an input or existing task as appropriate
+PASS account input completion preserves selection for quick undo
+PASS new task enables adding the selected account API
+PASS task selection keeps valid completion flow available and waits for a detail before removing APIs
+PASS detail selection enables the related API actions
+PASS clearing task selection clears detail action availability
+PASS clearing account API selection clears input action availability
+AssessmentUiOptimizationTest: 18 checks passed
+PASS comparison starts with input actions and no stale navigation
+PASS side-local import buttons preserve original evidence order
+PASS compact source tooltip still redacts query values
+PASS comparison result enables editing and difference navigation
+PASS returning to input disables navigation into hidden old results
+PASS changing view alone does not invalidate original evidence
+PASS loading another source clears stale result actions
+PASS reset clears evidence availability and each side source status
+PASS idle empty workflow offers no stop or missing-results export
+PASS empty evidence offers no save or preview
+PASS adding real evidence enables preview and save
+PASS human-written report fields wrap instead of requiring horizontal scrolling
+PASS clear action immediately removes stale save availability
+PASS response actions require a selected usable source
+PASS selecting retained passive evidence enables export
+PASS clearing passive selection clears its detail and disables export
+PASS expired source cannot advertise evidence export
+PASS workflow editor remains usable at 1024
+PASS selected response remains visible below results at 1024
+PASS result table retains multiple readable rows at 1024
+PASS workflow editor remains usable at 1280
+PASS selected response remains visible below results at 1280
+PASS result table retains multiple readable rows at 1280
+PASS fixture worker started
+PASS busy worker disables duplicate run and offers stop
+PASS completion restores idle action state
+UiPanelsOptimizationTest: 26 checks passed
+PASS selection actions start unavailable without a result
+java.lang.reflect.InvocationTargetException
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1371)
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1346)
+	at java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)
+	at kr.workbench.JsUiOptimizationTest.edt(JsUiOptimizationTest.java:10)
+	at kr.workbench.JsUiOptimizationTest.main(JsUiOptimizationTest.java:17)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at kr.workbench.TestLauncher.main(TestLauncher.java:4)
+Caused by: java.lang.AssertionError: editable JS source remains visible at 1004x624 (464x37)
+	at kr.workbench.JsUiOptimizationTest.check(JsUiOptimizationTest.java:9)
+	at kr.workbench.JsUiOptimizationTest.lambda$main$5(JsUiOptimizationTest.java:20)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+ERROR: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python', '/workspace/scratch/c2248659cf6c/burp-workbench-kr/project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py', '--java', '/usr/bin/java', '--javac', '/workspace/scratch/c2248659cf6c/burp-workbench-kr/.dev-tools/javac', '--test']' returned non-zero exit status 1.

@@ -48,7 +48,7 @@ final class ActivityTracker {
   }
   for(var entry:values.entrySet()){Parameter p=parameter(e,entry.getKey());if(p==null)continue;String value=hash(entry.getValue());if(p.baseline==null){if(manual&&e.observed>1)p.changed=true;p.baseline=value;}else if(manual&&!p.baseline.equals(value))p.changed=true;}
   if(manual)for(Parameter p:e.parameters.values())if(p.baseline!=null&&!values.containsKey(p.key))p.changed=true;
-  String account=assessments.match(request);if(!account.isEmpty())assessments.observed(account,e.method,e.url,e.parameters.keySet(),source);
+  String account=assessments.match(request);if(!account.isEmpty()){assessments.observed(account,e.method,e.url,e.parameters.keySet(),source);assessments.observedValues(account,e.method,e.url,values);}
   revision++;
  }
  private void add(Map<String,List<String>> values,String key,String value){if(key.length()>512||values.size()>=PARAM_LIMIT&&!values.containsKey(key))return;List<String> list=values.computeIfAbsent(key,k->new ArrayList<>());if(list.size()<64)list.add(value==null?"":value.substring(0,Math.min(value.length(),65536)));}

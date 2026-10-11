@@ -83,15 +83,26 @@ def http_test(runtime, compiler, port):
          '--javac', compiler, '--port', str(port)], cwd=WB)
 
 
+def bounty_test(runtime, compiler, port):
+    if not compiler:
+        raise RuntimeError('Community audit requires a JDK compiler.')
+    run([sys.executable, ROOT / 'audit/0.23.0/run_audit.py', '--workspace', ROOT,
+         '--java', runtime, '--javac', compiler, '--port', str(port)], cwd=ROOT)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['doctor', 'build', 'test', 'http-test', 'check'])
+    parser.add_argument('command', choices=['doctor', 'build', 'test', 'http-test', 'bounty-test', 'check', 'release'])
     parser.add_argument('--java', default='java')
     parser.add_argument('--javac')
     parser.add_argument('--port', type=int, default=18099)
+    parser.add_argument('--bounty-port', type=int, default=18399,
+                        help='Separate loopback port for the bounty stage of check/release')
     args = parser.parse_args()
-    if not 1024 <= args.port <= 65535:
-        parser.error('--port must be between 1024 and 65535')
+    if any(not 1024 <= port <= 65535 for port in (args.port, args.bounty_port)):
+        parser.error('--port and --bounty-port must be between 1024 and 65535')
+    if args.command in ('check', 'release') and args.port == args.bounty_port:
+        parser.error('check/release require distinct --port and --bounty-port values')
     try:
         runtime, compiler = toolchain(args.java, args.javac)
         if args.command == 'doctor':
@@ -100,9 +111,14 @@ def main():
             build(runtime, compiler, args.command == 'test')
         elif args.command == 'http-test':
             http_test(runtime, compiler, args.port)
+        elif args.command == 'bounty-test':
+            bounty_test(runtime, compiler, args.port)
         else:
             build(runtime, compiler, test=True)
             http_test(runtime, compiler, args.port)
+            bounty_test(runtime, compiler, args.bounty_port)
+            if args.command == 'release':
+                run([sys.executable, ROOT / 'tools/package_downloads.py'])
     except (OSError, RuntimeError, subprocess.CalledProcessError) as error:
         print('ERROR:', error, file=sys.stderr)
         return 1

@@ -1,0 +1,132 @@
+{
+  "version": "0.24.0",
+  "labVersion": "3.5.0",
+  "verifiedAtUtc": "2026-10-11T09:29:47.798356+00:00",
+  "command": "python dev.py release",
+  "exitCode": 0,
+  "checks": {
+    "regression": 1136,
+    "regressionGroups": 38,
+    "newOrExtendedRegression": 84,
+    "payloadHttpFixture": 127,
+    "allFeaturesHttp": 100,
+    "allFeaturesRequests": 199,
+    "communityBounty": 266,
+    "communityBountyRequests": 259,
+    "functionalTotal": 1629,
+    "packagingUnittest": 4
+  },
+  "runtime": {
+    "java": "OpenJDK 17.0.20",
+    "python": "3.12.14",
+    "extension": "production release JAR with Montoya API adapters and headless Swing",
+    "lab": "current Java/resources compiled; embedded Tomcat/Spring/H2 Oracle mode"
+  },
+  "integrity": {
+    "downloadsMatchSources": true,
+    "productionSourceUnchangedDuringBounty": true,
+    "labSourceFiles": 130,
+    "portsClosed": [
+      18099,
+      18399
+    ],
+    "previousDownloadsUnchanged": true
+  },
+  "pdf": {
+    "pages": 23,
+    "numberedUiFigures": 15,
+    "source": "current production JAR Swing components with bundled font and synthetic examples; six EDT layout passes",
+    "allPagesRenderedAndVisuallyReviewed": true,
+    "sameInputsReproduceSamePdf": true
+  },
+  "review": {
+    "independentCodeReview": true,
+    "resolved": [
+      "image-only browser proof retains its clear action and can be replaced after clearing",
+      "selection-dependent actions reset on tab/row/source changes",
+      "disabled primary buttons have a neutral background"
+    ]
+  },
+  "initialFailuresResolved": [
+    "initial JS source area still too short; compact controls and enlarge workspace",
+    "test-class resource path differed from the deployed JAR font; final measurements use release JAR resources",
+    "alternate JS layout collapsed source area; both orientations now retain source and packets"
+  ],
+  "notExecuted": [
+    "native Burp load/GUI",
+    "OS-specific DPI/font matrix",
+    "browser DOM or stored XSS execution",
+    "Docker/Oracle/Nginx full stack",
+    "Pro Collaborator",
+    "external BApp execution"
+  ],
+  "githubCi": "Recorded separately in this PR Checks; this file records the local release run.",
+  "files": {
+    "downloads/extensions/0.24.0/SHA256SUMS": {
+      "bytes": 197,
+      "sha256": "17447cbdd5bcf279faa0faf119e81a5bd4d63b8fe402c9b7e5488bd653580299"
+    },
+    "downloads/extensions/0.24.0/burp-workbench-kr-0.24.0-source.zip": {
+      "bytes": 2889036,
+      "sha256": "1731f5cdb038b10d5f15a9bb4ebdf8c42a7a7b7d57cff165b2919a566613ea98"
+    },
+    "downloads/extensions/0.24.0/burp-workbench-kr-0.24.0.jar": {
+      "bytes": 3000890,
+      "sha256": "9cc3f7daac2342048cdf5693f84c155d07ce8f189e805f6a8b247182273ecbfd"
+    },
+    "downloads/extensions/0.24.0/manifest.json": {
+      "bytes": 26993,
+      "sha256": "2b7294710a8ba3fe43f9bd03e2f850080b6fff9f446622f2fb3135c9af47a8dc"
+    },
+    "downloads/docker/3.5.0/SHA256SUMS": {
+      "bytes": 106,
+      "sha256": "7d477fae64190835a8b7dae533ede71f377431113f506530b193cc32394d914d"
+    },
+    "downloads/docker/3.5.0/community-security-lab-3.5.0-docker.zip": {
+      "bytes": 1116552,
+      "sha256": "68e36673d2696a2bdf437ce6d3a587bc0124de814b9aed15c1cdc169d1bbaa6b"
+    },
+    "downloads/docker/3.5.0/manifest.json": {
+      "bytes": 12805,
+      "sha256": "b370de839e27a24b10be3036199afcb42d4b066084e425128560487abcc12d5a"
+    },
+    "downloads/guides/0.24.0/Burp_Workbench_KR_0.24.0_guide.pdf": {
+      "bytes": 554555,
+      "sha256": "4e2866857c87a6531c50aa30c77d652d81f4bea80bbce211dfcc36038d72a1e5"
+    },
+    "downloads/guides/0.24.0/SHA256SUMS.txt": {
+      "bytes": 101,
+      "sha256": "682ca6f918aca43bde9bc79ed4b7e8905e1a4a4343fec47c93ee113093c4417b"
+    }
+  },
+  "ui": {
+    "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+    "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.24.0.jar",
+    "releaseJarSha256": "9cc3f7daac2342048cdf5693f84c155d07ce8f189e805f6a8b247182273ecbfd",
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "sizes": [
+      "1024x720",
+      "1280x800",
+      "1440x920"
+    ],
+    "renderedViews": 96,
+    "controlsMeasured": 918,
+    "clippedControlsOutsideScrollers": 0,
+    "smallControls": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "minimumWorkAreas": {
+      "tool-03.png:preview.js.source": 80,
+      "js-horizontal.png:preview.js.source": 80,
+      "bounty-1.png:preview.workflow.input": 80,
+      "bounty-1.png:preview.workflow.detail": 80,
+      "bounty-3.png:preview.evidence.impact": 70,
+      "bounty-3.png:preview.evidence.repro": 70
+    },
+    "failures": [],
+    "report": "docs/ui/0.24.0/after/layout-report.json",
+    "allScreensRenderedAndRepresentativeScreensVisuallyReviewed": true
+  }
+}

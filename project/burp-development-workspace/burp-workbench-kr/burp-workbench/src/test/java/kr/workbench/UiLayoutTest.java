@@ -19,6 +19,8 @@ public final class UiLayoutTest {
   SwingUtilities.invokeAndWait(()->entry.initialize((MontoyaApi)PayloadIntegrationTest.host(MontoyaApi.class)));SwingUtilities.invokeAndWait(()->{});
   WorkbenchExtension w=(WorkbenchExtension)WorkbenchTest.get(entry,"workbench");JPanel root=(JPanel)WorkbenchTest.get(w,"root");JTabbedPane tabs=(JTabbedPane)WorkbenchTest.get(w,"tabs");JTable table=(JTable)WorkbenchTest.get(w,"logTable");
   SwingUtilities.invokeAndWait(()->((PassiveScanWorkspace)unchecked(w,"passiveScan")).open("https://ui.test/",false));
+  check(!((JButton)named(root,"wb.traffic.clear")).isEnabled()&&!((JButton)named(root,"wb.traffic.export")).isEnabled()&&!((JButton)named(root,"wb.traffic.search.clear")).isEnabled(),"empty traffic disables clear/export/search reset");
+  SwingUtilities.invokeAndWait(()->{JButton action=new JButton("실행");WorkbenchUi.primary(action);WorkbenchUi.style(action);action.setEnabled(false);check(action.getBackground().equals(WorkbenchUi.surface()),"disabled primary action has neutral background");action.setEnabled(true);check(action.getBackground().equals(WorkbenchUi.accent())&&action.getForeground().equals(Color.WHITE),"ready primary action restores accent");});
   check(table.getColumnCount()==4,"traffic has exactly four visible columns");
   check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
   check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"traffic request above response");
@@ -32,6 +34,7 @@ public final class UiLayoutTest {
   for(int size:new int[]{1000,1280,1600})SwingUtilities.invokeAndWait(()->{
    root.setSize(size,900);for(int i=0;i<tabs.getTabCount();i++){tabs.setSelectedIndex(i);layout(root);check(tabs.getComponentAt(i).getWidth()>0,"tab "+i+" laid out at "+size);}
    tabs.setSelectedIndex(0);layout(root);JSplitPane outer=(JSplitPane)named(root,"wb.traffic.workspace"),messages=(JSplitPane)named(root,"wb.traffic.messages");outer.setDividerLocation(.30);messages.setDividerLocation(.5);layout(root);
+   check(table.getColumnModel().getColumn(0).getWidth()>=56&&table.getColumnModel().getColumn(1).getWidth()>=65&&table.getColumnModel().getColumn(3).getWidth()>=60,"traffic identifiers retain readable column widths at "+size);
    check(messages.getLeftComponent().getWidth()>100&&messages.getRightComponent().getWidth()>100,"both message panes usable at "+size);
    check(outer.getRightComponent()==messages.getParent(),"no right-side vertical action sidebar at "+size);
   });
@@ -40,9 +43,10 @@ public final class UiLayoutTest {
    DefaultTableModel m=(DefaultTableModel)table.getModel();check(((Number)m.getValueAt(11,0)).longValue()==12,"stable monotonically increasing traffic NO");
    ((TableRowSorter<?>)table.getRowSorter()).setSortKeys(List.of(new RowSorter.SortKey(0,SortOrder.DESCENDING)));table.setRowSelectionInterval(0,0);
    try{Object current=WorkbenchTest.get(w,"current");var f=current.getClass().getDeclaredField("request");f.setAccessible(true);check(f.get(current).toString().contains("/route/11"),"sorted NO selection resolves correct captured request");}catch(Exception e){throw new RuntimeException(e);}
-   ((JTextField)unchecked(w,"filter")).setText("/route/2");check(table.getRowCount()==1,"traffic search filters visible request fields");
+   ((JTextField)unchecked(w,"filter")).setText("/route/2");check(table.getRowCount()==1,"traffic search filters visible request fields");check(((JButton)named(root,"wb.traffic.search.clear")).isEnabled(),"search reset enabled after query");((JButton)named(root,"wb.traffic.search.clear")).doClick();check(table.getRowCount()==12&&!((JButton)named(root,"wb.traffic.search.clear")).isEnabled(),"search reset restores all rows and disables itself");
    ((JTextField)unchecked(w,"filter")).setText("");table.clearSelection();check(unchecked(w,"current")==null,"cleared selection resets stale request");
   });
+  SwingUtilities.invokeAndWait(()->{check(((JButton)named(root,"wb.traffic.clear")).isEnabled()&&((JButton)named(root,"wb.traffic.export")).isEnabled(),"captured traffic enables file actions");((JButton)named(root,"wb.traffic.clear")).doClick();check(table.getRowCount()==0&&!((JButton)named(root,"wb.traffic.clear")).isEnabled()&&!((JButton)named(root,"wb.traffic.export")).isEnabled(),"clear traffic resets count and file action state");});
   Color old=UIManager.getColor("Panel.background");UIManager.put("Panel.background",new Color(30,30,30));check(WorkbenchUi.dark()&&WorkbenchUi.ink().getRed()>200,"dark palette has readable foreground");UIManager.put("Panel.background",old);
   for(var h:PayloadIntegrationTest.modernUnloads)h.extensionUnloaded();for(var h:PayloadIntegrationTest.legacyUnloads)h.extensionUnloaded();SwingUtilities.invokeAndWait(()->{});System.out.println("UiLayoutTest: "+checks+" checks passed");
  }

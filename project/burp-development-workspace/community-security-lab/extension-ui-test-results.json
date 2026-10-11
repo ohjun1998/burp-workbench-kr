@@ -1,0 +1,43 @@
+{
+  "tests": [
+    {
+      "test": "ten extension scenario cards",
+      "passed": true
+    },
+    {
+      "test": "real login from hub",
+      "passed": true
+    },
+    {
+      "test": "request capture button sends real HTTP",
+      "passed": true
+    },
+    {
+      "test": "manual request shows response",
+      "passed": true
+    },
+    {
+      "test": "JS fixture fetched through hub",
+      "passed": true
+    },
+    {
+      "test": "protocol links present",
+      "passed": true
+    },
+    {
+      "test": "desktop no horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "mobile no horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "no unhandled UI JS errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 9,
+  "total": 9
+}

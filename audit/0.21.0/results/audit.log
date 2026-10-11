@@ -1,0 +1,83 @@
+PASS live login alice
+PASS live login bob
+PASS live login admin
+PASS live login moderator
+PASS vuln-private-post target status
+PASS vuln-private-post impact marker
+PASS vuln-private-message target status
+PASS vuln-private-message impact marker
+PASS vuln-private-file target status
+PASS vuln-private-file impact marker
+PASS vuln-anonymous-file target status
+PASS vuln-anonymous-file impact marker
+PASS vuln-admin-spoof target status
+PASS vuln-admin-spoof impact marker
+PASS vuln-public-policy target status
+PASS vuln-public-policy impact marker
+PASS vuln PUBLIC avoids owner false positive
+OBS vuln-admin-matrix 기대 ALLOW · 성공 응답 관측
+PASS vuln sql error false
+OBS vuln-boolean-detected-false true
+PASS vuln boolean returns responses false
+PASS vuln boolean candidate matches control false
+PASS vuln reflected xss false
+PASS vuln sql error true
+OBS vuln-boolean-detected-true true
+PASS vuln boolean returns responses true
+PASS vuln boolean candidate matches control true
+PASS vuln reflected xss true
+PASS vuln search private body disclosure
+OBS vuln-guest-search {privateBodyLeaked=true, status=200}
+PASS vuln create disposable post
+PASS vuln cross-account edit status
+PASS vuln edit actual state
+PASS vuln missing csrf enforcement
+PASS vuln active content upload
+PASS uploaded HTML served anonymously inline
+PASS vuln cross-account delete status
+PASS vuln deletion confirmed by owner
+PASS fixed-private-post target status
+PASS fixed-private-message target status
+PASS fixed-private-file target status
+PASS fixed-anonymous-file target status
+PASS fixed-admin-spoof target status
+PASS fixed-public-policy target status
+PASS fixed-public-policy impact marker
+PASS fixed PUBLIC avoids owner false positive
+OBS fixed-admin-matrix 기대 ALLOW · 성공 응답 관측
+PASS fixed sql error false
+OBS fixed-boolean-detected-false false
+PASS fixed boolean returns responses false
+PASS fixed boolean candidate matches control false
+PASS fixed reflected xss false
+PASS fixed sql error true
+OBS fixed-boolean-detected-true false
+PASS fixed boolean returns responses true
+PASS fixed boolean candidate matches control true
+PASS fixed reflected xss true
+PASS fixed search private body disclosure
+OBS fixed-guest-search {privateBodyLeaked=false, status=200}
+PASS fixed create disposable post
+PASS fixed cross-account edit status
+PASS fixed edit actual state
+PASS fixed missing csrf enforcement
+PASS fixed active content upload
+PASS fixed cross-account delete status
+PASS fixed deletion confirmed by owner
+PASS stored marker persists in separate read
+OBS stored-xss-single-request-detected false
+PASS actual auth panel receives fixed 404 matrix=false
+OBS auth-panel-hidden-denial-matrix-false {httpRequests=2, note=은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404}
+PASS actual auth panel receives fixed 404 matrix=true
+OBS auth-panel-hidden-denial-matrix-true {httpRequests=2, note=기대 DENY · 404/410 존재·세션 재검토}
+OBS task-before-evidence [TaskView[id=5852b234-eaf8-436a-a274-2433e6e6c806, title=Account evidence gate audit, note=local fixture, endpoints=1, accounts=2, required=2, inspected=0, completed=2, evidence=0, state=증거 저장 필요, last=2026-10-11T04:15:17.986218471Z, requiresEvidence=true]]
+OBS task-with-one-of-two-evidence [TaskView[id=5852b234-eaf8-436a-a274-2433e6e6c806, title=Account evidence gate audit, note=local fixture, endpoints=1, accounts=2, required=2, inspected=0, completed=2, evidence=1, state=업무 완료, last=2026-10-11T04:15:18.047407510Z, requiresEvidence=true]]
+OBS task-after-role-tenant-change [TaskView[id=5852b234-eaf8-436a-a274-2433e6e6c806, title=Account evidence gate audit, note=local fixture, endpoints=1, accounts=2, required=2, inspected=0, completed=2, evidence=1, state=업무 완료, last=2026-10-11T04:15:18.047407510Z, requiresEvidence=true]]
+OBS account-after-value-change OperationView[account=7b167a87-12a0-4b39-9bbf-36ce9d6fd990, method=GET, url=http://127.0.0.1:18299/api/community/fixed/posts, state=점검 완료, observed=2, inspections=0, evidence=1, result=, review=, completedAt=2026-10-11T04:15:17.986535740Z, last=2026-10-11T04:15:18.049522335Z, parameters=[ParameterView[key=URL:lab_hidden, state=미점검]]]
+OBS task-after-value-change [TaskView[id=5852b234-eaf8-436a-a274-2433e6e6c806, title=Account evidence gate audit, note=local fixture, endpoints=1, accounts=2, required=2, inspected=0, completed=2, evidence=1, state=업무 완료, last=2026-10-11T04:15:18.047407510Z, requiresEvidence=true]]
+PASS credentials not serialized
+PASS binding not restored
+OBS evidence-reference-model Model stores artifact id/name; no filesystem existence revalidation. Actual final evidence is retained.
+OBS public-private-grouping [Group[pattern=GET http://127.0.0.1:18299/api/community/fixed/posts/{ID} | , urls=[http://127.0.0.1:18299/api/community/fixed/posts/101, http://127.0.0.1:18299/api/community/fixed/posts/102], change=신규 패턴, priority=60]]
+PASS public private grouped together
+PASS saved evidence excludes live cookies

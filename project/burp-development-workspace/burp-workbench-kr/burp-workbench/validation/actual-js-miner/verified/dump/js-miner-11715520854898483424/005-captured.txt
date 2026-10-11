@@ -1,0 +1,2 @@
+fetch('/api/community/cross');
+//# sourceMappingURL=http://127.0.0.1:19111/outside.map

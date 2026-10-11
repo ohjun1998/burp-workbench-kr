@@ -1,0 +1,35 @@
+ACTUAL_BURP_VERSION Burp Suite Community Edition 2026 3.3
+PASS native production JAR created upgraded JS analysis panel
+PRODUCTION_CLASS_SOURCE file:/tmp/burp5093174839985149318.tmp/2
+PASS community fixture page fetches text without executing synthetic packages
+PASS real community JS loaded through actual Burp Proxy
+PASS Proxy History automatically analyzes JS without manual offer
+PASS all ten cloud service families shown
+PASS cloud query values removed
+PASS subdomain and host candidates recorded
+PASS NPM package and organization scope extracted
+PASS external source map reference shown
+PASS native Burp source-map fetch recovers two original files
+PASS recovered source reanalyzed for hidden POST API
+PASS recovered original cloud and dependency findings merged
+PASS synthetic Google key detected from recovered original
+PASS merged totals in status match recovered findings
+PASS secret result is masked with Shannon entropy
+PASS registry present package status
+PASS registry missing package remains unconfirmed candidate
+PASS registry rate limit is inconclusive
+PASS registry 200 soft error is not registered
+PASS registry redirect is not followed
+PASS inline base64 source map recovered via real Proxy History
+PASS inline original hidden API automatically found
+PASS common .js.map location guessed and original recovered
+PASS invalid JSON source map reported without original invention
+PASS cross-origin reference remains unrequested
+PASS source-map redirect recorded without follow
+PASS cross-origin and redirect targets received zero requests
+PASS package JSON captured and dependencies parsed
+PASS History pause and rescan resumes accumulated sources
+PASS native save dialog writes static file dump and manifest
+PASS recovered traversal filenames stay inside dump directory
+PASS native extension unload closes JS history worker
+LIVE_VALIDATION_FINISHED passed=32

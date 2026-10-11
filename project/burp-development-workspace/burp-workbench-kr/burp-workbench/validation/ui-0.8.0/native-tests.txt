@@ -1,0 +1,130 @@
+ACTUAL_BURP_VERSION Burp Suite Community Edition 2026 3.3
+PASS production JAR loaded by actual Burp
+PRODUCTION_CLASS_SOURCE file:/tmp/burp14870026723225372057.tmp/2
+PASS ten integrated tabs
+PASS visible history NO/method/URL/status
+PASS community login native HTTP API
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+DETAIL 판정: XSS 반사 후보
+근거: HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+
+REQUEST (byte view)
+GET /vuln/preview?text=%3Csvg%20onload%3Dconsole.log%28%27PR_ff0bc21bad914df1%27%29%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 324 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · vuln</h2><div><svg onload=console.log('PR_ff0bc21bad914df1')></div>
+PASS XSS candidate after UI refactor
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+DETAIL 판정: 문자열 반사
+근거: 실행 가능한 XSS 근거 아님
+
+REQUEST (byte view)
+GET /fixed/preview?text=%3Csvg%20onload%3Dconsole.log%28%27PR_e686ec7e8a3e441a%27%29%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 339 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · fixed</h2><div>&lt;svg onload=console.log(&#39;PR_e686ec7e8a3e441a&#39;)&gt;</div>
+PASS fixed XSS excluded
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SQLI 200 기준 재검증 기준 본문/상태가 동일
+ROW SQLI 500 SQL 오류 후보 org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+DETAIL 판정: SQL 오류 후보
+근거: org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+
+REQUEST (byte view)
+GET /api/community/vuln/search?q=%27 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 500 · application/json · 276 bytes
+{"error":"org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+PASS SQL error candidate after UI refactor
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SQLI 200 기준 재검증 기준 본문/상태가 동일
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/community/fixed/search?q=%27 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · application/json · 126 bytes
+[]
+PASS fixed SQL excluded
+PASS background task window is modeless while scan running
+PASS background result window shares live results
+PASS Burp Repeater tab can be selected during active scan
+PASS independent native Burp HTTP request completes while payload job runs
+PASS closing task window keeps scan running
+BACKGROUND_FINAL running=false rows=4 progress=3 status=완료 · 총 4회 / 페이로드 3개
+PASS hidden background job completes all payloads and progress
+PASS reopened task window preserves completed results
+PASS native Burp requests captured in Workbench history
+PASS native request and response concurrently visible
+PASS JS source opens with usable width
+PASS tab 트래픽 visible at 1600
+PASS tab 인가 비교 visible at 1600
+PASS tab 변환 visible at 1600
+PASS tab JWT visible at 1600
+PASS tab JS 분석 visible at 1600
+PASS tab 공통 세션 visible at 1600
+PASS tab 도구 가이드 visible at 1600
+PASS tab 환경·경로 visible at 1600
+PASS tab Payload Runner KR visible at 1600
+PASS tab 원본 엔진 visible at 1600
+PASS tab 트래픽 visible and actions unclipped at 1000
+PASS tab 인가 비교 visible and actions unclipped at 1000
+PASS tab 변환 visible and actions unclipped at 1000
+PASS tab JWT visible and actions unclipped at 1000
+PASS tab JS 분석 visible and actions unclipped at 1000
+PASS tab 공통 세션 visible and actions unclipped at 1000
+PASS tab 도구 가이드 visible and actions unclipped at 1000
+PASS tab 환경·경로 visible and actions unclipped at 1000
+PASS tab Payload Runner KR visible and actions unclipped at 1000
+PASS tab 원본 엔진 visible and actions unclipped at 1000
+PASS both native traffic editors remain visible at 1000
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+DETAIL 판정: XSS 반사 후보
+근거: HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+
+REQUEST (byte view)
+GET /vuln/preview?text=%3Csvg%20onload%3Dconsole.log%28%27PR_f0a50cda24a442ad%27%29%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 324 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · vuln</h2><div><svg onload=console.log('PR_f0a50cda24a442ad')></div>
+LIVE_VALIDATION_FINISHED passed=44

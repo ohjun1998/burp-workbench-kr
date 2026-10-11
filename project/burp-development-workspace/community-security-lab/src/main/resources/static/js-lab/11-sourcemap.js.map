@@ -1,0 +1,1 @@
+{"version": 3, "file": "11-sourcemap.js", "sources": ["src/private-reports.js"], "sourcesContent": ["fetch('/api/js-lab/recovered',{method:'POST',body:{reportId:1}});\nrequire('@community/recovered');\n"], "names": [], "mappings": ""}

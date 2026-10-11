@@ -1,0 +1,829 @@
+PASS balanced wb.traffic.workspace mode=1 width=1000 page=0 ratio=0.4
+PASS balanced wb.traffic.messages mode=1 width=1000 page=0 ratio=0.5
+PASS visible button 수집 ON at 1000 page=0
+PASS visible button Scope만 at 1000 page=0
+PASS visible button 검색 초기화 at 1000 page=0
+PASS visible button 목록 비우기 at 1000 page=0
+PASS visible button 내보내기 at 1000 page=0
+PASS visible button 데이터 정렬 at 1000 page=0
+PASS visible button 데이터 정렬 at 1000 page=0
+PASS balanced wb.auth.workspace mode=1 width=1000 page=1 ratio=0.399702823179792
+PASS balanced wb.auth.lists mode=1 width=1000 page=1 ratio=0.3991769547325103
+PASS balanced null mode=1 width=1000 page=1 ratio=0.49948293691830403
+PASS visible button Record OFF at 1000 page=1
+PASS visible button 선택 요청 비교 at 1000 page=1
+PASS visible button 중지 at 1000 page=1
+PASS visible button History 비우기 at 1000 page=1
+PASS visible button 비교 설정 at 1000 page=1
+PASS visible button 더보기 at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button 현재 패킷 → Repeater at 1000 page=1
+PASS balanced wb.codec.messages mode=1 width=1000 page=2 ratio=0.49947423764458465
+PASS visible button  at 1000 page=2
+PASS visible button 변환 at 1000 page=2
+PASS visible button 출력 → 입력 at 1000 page=2
+PASS visible button 복사 at 1000 page=2
+PASS balanced wb.js.workspace mode=1 width=1000 page=3 ratio=0.3993115318416523
+PASS balanced wb.js.lists mode=1 width=1000 page=3 ratio=0.29958677685950413
+PASS balanced wb.js.messages mode=1 width=1000 page=3 ratio=0.5
+PASS visible button History 자동 분석 at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button 선택 URL → Repeater at 1000 page=3
+PASS visible button 원본 위치 at 1000 page=3
+PASS visible button 추가 도구 at 1000 page=3
+PASS visible button 더보기 at 1000 page=3
+PASS visible button 수동 분석 at 1000 page=3
+PASS visible button 선택 응답 가져오기 at 1000 page=3
+PASS visible button ← at 1000 page=3
+PASS visible button → at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button 데이터 정렬 at 1000 page=3
+PASS visible button 데이터 정렬 at 1000 page=3
+PASS balanced wb.environment.workspace mode=1 width=1000 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.lists mode=1 width=1000 page=4 ratio=0.3993775933609959
+PASS balanced wb.environment.messages mode=1 width=1000 page=4 ratio=0.5
+PASS visible button  at 1000 page=4
+PASS visible button 전체 환경 at 1000 page=4
+PASS visible button 단일 시작 at 1000 page=4
+PASS visible button 일괄 시작 at 1000 page=4
+PASS visible button 중지 at 1000 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1000 page=4
+PASS visible button 후보 설정 at 1000 page=4
+PASS visible button 더보기 at 1000 page=4
+PASS visible button 요청·응답 정렬 at 1000 page=4
+PASS balanced wb.passive.workspace mode=1 width=1000 page=5 ratio=0.4
+PASS balanced wb.passive.messages mode=1 width=1000 page=5 ratio=0.49947423764458465
+PASS visible button 대상 수집 시작 at 1000 page=5
+PASS visible button 선택 대상 닫기 at 1000 page=5
+PASS visible button  at 1000 page=5
+PASS visible button 하위 도메인 포함 at 1000 page=5
+PASS visible button URL 수집 at 1000 page=5
+PASS visible button 도구 설정 at 1000 page=5
+PASS visible button 단일 시작 at 1000 page=5
+PASS visible button 일괄 시작 at 1000 page=5
+PASS visible button 중지 at 1000 page=5
+PASS visible button 더보기 at 1000 page=5
+PASS visible button 데이터 정렬 at 1000 page=5
+PASS visible button 데이터 정렬 at 1000 page=5
+PASS balanced wb.payload.workspace mode=1 width=1000 page=6 ratio=0.3990895295902883
+PASS balanced wb.payload.lists mode=1 width=1000 page=6 ratio=0.5495867768595041
+PASS balanced null mode=1 width=1000 page=6 ratio=0.5
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1000 page=6
+PASS visible button 정렬 미리보기 at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button 데이터 정렬 at 1000 page=6
+PASS visible button 데이터 정렬 at 1000 page=6
+PASS visible button 시작 at 1000 page=6
+PASS visible button 중지 at 1000 page=6
+PASS visible button 선택 요청 → Repeater at 1000 page=6
+PASS visible button 검사 설정 at 1000 page=6
+PASS visible button 더보기 at 1000 page=6
+PASS visible button 설정 창 열기 at 1000 page=7
+PASS balanced wb.traffic.workspace mode=1 width=1280 page=0 ratio=0.399734395750332
+PASS balanced wb.traffic.messages mode=1 width=1280 page=0 ratio=0.5
+PASS visible button 수집 ON at 1280 page=0
+PASS visible button Scope만 at 1280 page=0
+PASS visible button 검색 초기화 at 1280 page=0
+PASS visible button 목록 비우기 at 1280 page=0
+PASS visible button 내보내기 at 1280 page=0
+PASS visible button 데이터 정렬 at 1280 page=0
+PASS visible button 데이터 정렬 at 1280 page=0
+PASS balanced wb.auth.workspace mode=1 width=1280 page=1 ratio=0.399702823179792
+PASS balanced wb.auth.lists mode=1 width=1280 page=1 ratio=0.3993610223642173
+PASS balanced null mode=1 width=1280 page=1 ratio=0.4995990376904571
+PASS visible button Record OFF at 1280 page=1
+PASS visible button 선택 요청 비교 at 1280 page=1
+PASS visible button 중지 at 1280 page=1
+PASS visible button History 비우기 at 1280 page=1
+PASS visible button 비교 설정 at 1280 page=1
+PASS visible button 더보기 at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button 현재 패킷 → Repeater at 1280 page=1
+PASS balanced wb.codec.messages mode=1 width=1280 page=2 ratio=0.49959382615759546
+PASS visible button  at 1280 page=2
+PASS visible button 변환 at 1280 page=2
+PASS visible button 출력 → 입력 at 1280 page=2
+PASS visible button 복사 at 1280 page=2
+PASS balanced wb.js.workspace mode=1 width=1280 page=3 ratio=0.3993115318416523
+PASS balanced wb.js.lists mode=1 width=1280 page=3 ratio=0.29967948717948717
+PASS balanced wb.js.messages mode=1 width=1280 page=3 ratio=0.5
+PASS visible button History 자동 분석 at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button 선택 URL → Repeater at 1280 page=3
+PASS visible button 원본 위치 at 1280 page=3
+PASS visible button 추가 도구 at 1280 page=3
+PASS visible button 더보기 at 1280 page=3
+PASS visible button 수동 분석 at 1280 page=3
+PASS visible button 선택 응답 가져오기 at 1280 page=3
+PASS visible button ← at 1280 page=3
+PASS visible button → at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button 데이터 정렬 at 1280 page=3
+PASS visible button 데이터 정렬 at 1280 page=3
+PASS balanced wb.environment.workspace mode=1 width=1280 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.lists mode=1 width=1280 page=4 ratio=0.3995176848874598
+PASS balanced wb.environment.messages mode=1 width=1280 page=4 ratio=0.5
+PASS visible button  at 1280 page=4
+PASS visible button 전체 환경 at 1280 page=4
+PASS visible button 단일 시작 at 1280 page=4
+PASS visible button 일괄 시작 at 1280 page=4
+PASS visible button 중지 at 1280 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1280 page=4
+PASS visible button 후보 설정 at 1280 page=4
+PASS visible button 더보기 at 1280 page=4
+PASS visible button 요청·응답 정렬 at 1280 page=4
+PASS balanced wb.passive.workspace mode=1 width=1280 page=5 ratio=0.4
+PASS balanced wb.passive.messages mode=1 width=1280 page=5 ratio=0.49959382615759546
+PASS visible button 대상 수집 시작 at 1280 page=5
+PASS visible button 선택 대상 닫기 at 1280 page=5
+PASS visible button  at 1280 page=5
+PASS visible button 하위 도메인 포함 at 1280 page=5
+PASS visible button URL 수집 at 1280 page=5
+PASS visible button 도구 설정 at 1280 page=5
+PASS visible button 단일 시작 at 1280 page=5
+PASS visible button 일괄 시작 at 1280 page=5
+PASS visible button 중지 at 1280 page=5
+PASS visible button 더보기 at 1280 page=5
+PASS visible button 데이터 정렬 at 1280 page=5
+PASS visible button 데이터 정렬 at 1280 page=5
+PASS balanced wb.payload.workspace mode=1 width=1280 page=6 ratio=0.3990895295902883
+PASS balanced wb.payload.lists mode=1 width=1280 page=6 ratio=0.5496794871794872
+PASS balanced null mode=1 width=1280 page=6 ratio=0.5
+PASS visible button  at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1280 page=6
+PASS visible button 정렬 미리보기 at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button 데이터 정렬 at 1280 page=6
+PASS visible button 데이터 정렬 at 1280 page=6
+PASS visible button 시작 at 1280 page=6
+PASS visible button 중지 at 1280 page=6
+PASS visible button 선택 요청 → Repeater at 1280 page=6
+PASS visible button 검사 설정 at 1280 page=6
+PASS visible button 더보기 at 1280 page=6
+PASS visible button 설정 창 열기 at 1280 page=7
+PASS balanced wb.traffic.workspace mode=1 width=1600 page=0 ratio=0.399734395750332
+PASS balanced wb.traffic.messages mode=1 width=1600 page=0 ratio=0.5
+PASS visible button 수집 ON at 1600 page=0
+PASS visible button Scope만 at 1600 page=0
+PASS visible button 검색 초기화 at 1600 page=0
+PASS visible button 목록 비우기 at 1600 page=0
+PASS visible button 내보내기 at 1600 page=0
+PASS visible button 데이터 정렬 at 1600 page=0
+PASS visible button 데이터 정렬 at 1600 page=0
+PASS balanced wb.auth.workspace mode=1 width=1600 page=1 ratio=0.399702823179792
+PASS balanced wb.auth.lists mode=1 width=1600 page=1 ratio=0.3994910941475827
+PASS balanced null mode=1 width=1600 page=1 ratio=0.49968091895341415
+PASS visible button Record OFF at 1600 page=1
+PASS visible button 선택 요청 비교 at 1600 page=1
+PASS visible button 중지 at 1600 page=1
+PASS visible button History 비우기 at 1600 page=1
+PASS visible button 비교 설정 at 1600 page=1
+PASS visible button 더보기 at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button 현재 패킷 → Repeater at 1600 page=1
+PASS balanced wb.codec.messages mode=1 width=1600 page=2 ratio=0.4996776273372018
+PASS visible button  at 1600 page=2
+PASS visible button 변환 at 1600 page=2
+PASS visible button 출력 → 입력 at 1600 page=2
+PASS visible button 복사 at 1600 page=2
+PASS balanced wb.js.workspace mode=1 width=1600 page=3 ratio=0.3993115318416523
+PASS balanced wb.js.lists mode=1 width=1600 page=3 ratio=0.2997448979591837
+PASS balanced wb.js.messages mode=1 width=1600 page=3 ratio=0.5
+PASS visible button History 자동 분석 at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button 선택 URL → Repeater at 1600 page=3
+PASS visible button 원본 위치 at 1600 page=3
+PASS visible button 추가 도구 at 1600 page=3
+PASS visible button 더보기 at 1600 page=3
+PASS visible button 수동 분석 at 1600 page=3
+PASS visible button 선택 응답 가져오기 at 1600 page=3
+PASS visible button ← at 1600 page=3
+PASS visible button → at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button 데이터 정렬 at 1600 page=3
+PASS visible button 데이터 정렬 at 1600 page=3
+PASS balanced wb.environment.workspace mode=1 width=1600 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.lists mode=1 width=1600 page=4 ratio=0.39961636828644503
+PASS balanced wb.environment.messages mode=1 width=1600 page=4 ratio=0.5
+PASS visible button  at 1600 page=4
+PASS visible button 전체 환경 at 1600 page=4
+PASS visible button 단일 시작 at 1600 page=4
+PASS visible button 일괄 시작 at 1600 page=4
+PASS visible button 중지 at 1600 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1600 page=4
+PASS visible button 후보 설정 at 1600 page=4
+PASS visible button 더보기 at 1600 page=4
+PASS visible button 요청·응답 정렬 at 1600 page=4
+PASS balanced wb.passive.workspace mode=1 width=1600 page=5 ratio=0.4
+PASS balanced wb.passive.messages mode=1 width=1600 page=5 ratio=0.4996776273372018
+PASS visible button 대상 수집 시작 at 1600 page=5
+PASS visible button 선택 대상 닫기 at 1600 page=5
+PASS visible button  at 1600 page=5
+PASS visible button 하위 도메인 포함 at 1600 page=5
+PASS visible button URL 수집 at 1600 page=5
+PASS visible button 도구 설정 at 1600 page=5
+PASS visible button 단일 시작 at 1600 page=5
+PASS visible button 일괄 시작 at 1600 page=5
+PASS visible button 중지 at 1600 page=5
+PASS visible button 더보기 at 1600 page=5
+PASS visible button 데이터 정렬 at 1600 page=5
+PASS visible button 데이터 정렬 at 1600 page=5
+PASS balanced wb.payload.workspace mode=1 width=1600 page=6 ratio=0.3990895295902883
+PASS balanced wb.payload.lists mode=1 width=1600 page=6 ratio=0.5497448979591837
+PASS balanced null mode=1 width=1600 page=6 ratio=0.5
+PASS visible button  at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1600 page=6
+PASS visible button 정렬 미리보기 at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button 데이터 정렬 at 1600 page=6
+PASS visible button 데이터 정렬 at 1600 page=6
+PASS visible button 시작 at 1600 page=6
+PASS visible button 중지 at 1600 page=6
+PASS visible button 선택 요청 → Repeater at 1600 page=6
+PASS visible button 검사 설정 at 1600 page=6
+PASS visible button 더보기 at 1600 page=6
+PASS visible button 설정 창 열기 at 1600 page=7
+PASS balanced wb.traffic.workspace mode=0 width=1000 page=0 ratio=0.3497942386831276
+PASS balanced wb.traffic.messages mode=0 width=1000 page=0 ratio=0.5
+PASS visible button 수집 ON at 1000 page=0
+PASS visible button Scope만 at 1000 page=0
+PASS visible button 검색 초기화 at 1000 page=0
+PASS visible button 목록 비우기 at 1000 page=0
+PASS visible button 내보내기 at 1000 page=0
+PASS visible button 데이터 정렬 at 1000 page=0
+PASS visible button 데이터 정렬 at 1000 page=0
+PASS balanced wb.auth.workspace mode=0 width=1000 page=1 ratio=0.4495884773662551
+PASS balanced wb.auth.lists mode=0 width=1000 page=1 ratio=0.399702823179792
+PASS balanced null mode=0 width=1000 page=1 ratio=0.5
+PASS visible button Record OFF at 1000 page=1
+PASS visible button 선택 요청 비교 at 1000 page=1
+PASS visible button 중지 at 1000 page=1
+PASS visible button History 비우기 at 1000 page=1
+PASS visible button 비교 설정 at 1000 page=1
+PASS visible button 더보기 at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button 현재 패킷 → Repeater at 1000 page=1
+PASS balanced wb.codec.messages mode=0 width=1000 page=2 ratio=0.4992343032159265
+PASS visible button  at 1000 page=2
+PASS visible button 변환 at 1000 page=2
+PASS visible button 출력 → 입력 at 1000 page=2
+PASS visible button 복사 at 1000 page=2
+PASS balanced wb.js.workspace mode=0 width=1000 page=3 ratio=0.4493801652892562
+PASS balanced wb.js.lists mode=0 width=1000 page=3 ratio=0.29948364888123924
+PASS balanced wb.js.messages mode=0 width=1000 page=3 ratio=0.4991394148020654
+PASS visible button History 자동 분석 at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button 선택 URL → Repeater at 1000 page=3
+PASS visible button 원본 위치 at 1000 page=3
+PASS visible button 추가 도구 at 1000 page=3
+PASS visible button 더보기 at 1000 page=3
+PASS visible button 수동 분석 at 1000 page=3
+PASS visible button 선택 응답 가져오기 at 1000 page=3
+PASS visible button ← at 1000 page=3
+PASS visible button → at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button 데이터 정렬 at 1000 page=3
+PASS visible button 데이터 정렬 at 1000 page=3
+PASS balanced wb.environment.workspace mode=0 width=1000 page=4 ratio=0.4491701244813278
+PASS balanced wb.environment.lists mode=0 width=1000 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.messages mode=0 width=1000 page=4 ratio=0.499184339314845
+PASS visible button  at 1000 page=4
+PASS visible button 전체 환경 at 1000 page=4
+PASS visible button 단일 시작 at 1000 page=4
+PASS visible button 일괄 시작 at 1000 page=4
+PASS visible button 중지 at 1000 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1000 page=4
+PASS visible button 후보 설정 at 1000 page=4
+PASS visible button 더보기 at 1000 page=4
+PASS visible button 요청·응답 정렬 at 1000 page=4
+PASS balanced wb.passive.workspace mode=0 width=1000 page=5 ratio=0.4490010515247108
+PASS balanced wb.passive.messages mode=0 width=1000 page=5 ratio=0.499009900990099
+PASS visible button 대상 수집 시작 at 1000 page=5
+PASS visible button 선택 대상 닫기 at 1000 page=5
+PASS visible button  at 1000 page=5
+PASS visible button 하위 도메인 포함 at 1000 page=5
+PASS visible button URL 수집 at 1000 page=5
+PASS visible button 도구 설정 at 1000 page=5
+PASS visible button 단일 시작 at 1000 page=5
+PASS visible button 일괄 시작 at 1000 page=5
+PASS visible button 중지 at 1000 page=5
+PASS visible button 더보기 at 1000 page=5
+PASS visible button 데이터 정렬 at 1000 page=5
+PASS visible button 데이터 정렬 at 1000 page=5
+PASS visible button  at 1000 page=5
+PASS visible button  at 1000 page=5
+PASS balanced wb.payload.workspace mode=0 width=1000 page=6 ratio=0.4493801652892562
+PASS balanced wb.payload.lists mode=0 width=1000 page=6 ratio=0.5493171471927162
+PASS balanced null mode=0 width=1000 page=6 ratio=0.5
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1000 page=6
+PASS visible button 정렬 미리보기 at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button 데이터 정렬 at 1000 page=6
+PASS visible button 데이터 정렬 at 1000 page=6
+PASS visible button 시작 at 1000 page=6
+PASS visible button 중지 at 1000 page=6
+PASS visible button 선택 요청 → Repeater at 1000 page=6
+PASS visible button 검사 설정 at 1000 page=6
+PASS visible button 더보기 at 1000 page=6
+PASS visible button 설정 창 열기 at 1000 page=7
+PASS balanced wb.traffic.workspace mode=0 width=1280 page=0 ratio=0.3498402555910543
+PASS balanced wb.traffic.messages mode=0 width=1280 page=0 ratio=0.499302649930265
+PASS visible button 수집 ON at 1280 page=0
+PASS visible button Scope만 at 1280 page=0
+PASS visible button 검색 초기화 at 1280 page=0
+PASS visible button 목록 비우기 at 1280 page=0
+PASS visible button 내보내기 at 1280 page=0
+PASS visible button 데이터 정렬 at 1280 page=0
+PASS visible button 데이터 정렬 at 1280 page=0
+PASS balanced wb.auth.workspace mode=0 width=1280 page=1 ratio=0.4496805111821086
+PASS balanced wb.auth.lists mode=0 width=1280 page=1 ratio=0.399702823179792
+PASS balanced null mode=0 width=1280 page=1 ratio=0.4991568296795953
+PASS visible button Record OFF at 1280 page=1
+PASS visible button 선택 요청 비교 at 1280 page=1
+PASS visible button 중지 at 1280 page=1
+PASS visible button History 비우기 at 1280 page=1
+PASS visible button 비교 설정 at 1280 page=1
+PASS visible button 더보기 at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button 현재 패킷 → Repeater at 1280 page=1
+PASS balanced wb.codec.messages mode=0 width=1280 page=2 ratio=0.4992343032159265
+PASS visible button  at 1280 page=2
+PASS visible button 변환 at 1280 page=2
+PASS visible button 출력 → 입력 at 1280 page=2
+PASS visible button 복사 at 1280 page=2
+PASS balanced wb.js.workspace mode=0 width=1280 page=3 ratio=0.4495192307692308
+PASS balanced wb.js.lists mode=0 width=1280 page=3 ratio=0.29948364888123924
+PASS balanced wb.js.messages mode=0 width=1280 page=3 ratio=0.4991394148020654
+PASS visible button History 자동 분석 at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button 선택 URL → Repeater at 1280 page=3
+PASS visible button 원본 위치 at 1280 page=3
+PASS visible button 추가 도구 at 1280 page=3
+PASS visible button 더보기 at 1280 page=3
+PASS visible button 수동 분석 at 1280 page=3
+PASS visible button 선택 응답 가져오기 at 1280 page=3
+PASS visible button ← at 1280 page=3
+PASS visible button → at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button 데이터 정렬 at 1280 page=3
+PASS visible button 데이터 정렬 at 1280 page=3
+PASS balanced wb.environment.workspace mode=0 width=1280 page=4 ratio=0.44935691318327975
+PASS balanced wb.environment.lists mode=0 width=1280 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.messages mode=0 width=1280 page=4 ratio=0.499184339314845
+PASS visible button  at 1280 page=4
+PASS visible button 전체 환경 at 1280 page=4
+PASS visible button 단일 시작 at 1280 page=4
+PASS visible button 일괄 시작 at 1280 page=4
+PASS visible button 중지 at 1280 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1280 page=4
+PASS visible button 후보 설정 at 1280 page=4
+PASS visible button 더보기 at 1280 page=4
+PASS visible button 요청·응답 정렬 at 1280 page=4
+PASS balanced wb.passive.workspace mode=0 width=1280 page=5 ratio=0.44922826969943136
+PASS balanced wb.passive.messages mode=0 width=1280 page=5 ratio=0.499009900990099
+PASS visible button 대상 수집 시작 at 1280 page=5
+PASS visible button 선택 대상 닫기 at 1280 page=5
+PASS visible button  at 1280 page=5
+PASS visible button 하위 도메인 포함 at 1280 page=5
+PASS visible button URL 수집 at 1280 page=5
+PASS visible button 도구 설정 at 1280 page=5
+PASS visible button 단일 시작 at 1280 page=5
+PASS visible button 일괄 시작 at 1280 page=5
+PASS visible button 중지 at 1280 page=5
+PASS visible button 더보기 at 1280 page=5
+PASS visible button 데이터 정렬 at 1280 page=5
+PASS visible button 데이터 정렬 at 1280 page=5
+PASS visible button  at 1280 page=5
+PASS visible button  at 1280 page=5
+PASS balanced wb.payload.workspace mode=0 width=1280 page=6 ratio=0.4495192307692308
+PASS balanced wb.payload.lists mode=0 width=1280 page=6 ratio=0.5493171471927162
+PASS balanced null mode=0 width=1280 page=6 ratio=0.5
+PASS visible button  at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1280 page=6
+PASS visible button 정렬 미리보기 at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button 데이터 정렬 at 1280 page=6
+PASS visible button 데이터 정렬 at 1280 page=6
+PASS visible button 시작 at 1280 page=6
+PASS visible button 중지 at 1280 page=6
+PASS visible button 선택 요청 → Repeater at 1280 page=6
+PASS visible button 검사 설정 at 1280 page=6
+PASS visible button 더보기 at 1280 page=6
+PASS visible button 설정 창 열기 at 1280 page=7
+PASS balanced wb.traffic.workspace mode=0 width=1600 page=0 ratio=0.34987277353689566
+PASS balanced wb.traffic.messages mode=0 width=1600 page=0 ratio=0.499302649930265
+PASS visible button 수집 ON at 1600 page=0
+PASS visible button Scope만 at 1600 page=0
+PASS visible button 검색 초기화 at 1600 page=0
+PASS visible button 목록 비우기 at 1600 page=0
+PASS visible button 내보내기 at 1600 page=0
+PASS visible button 데이터 정렬 at 1600 page=0
+PASS visible button 데이터 정렬 at 1600 page=0
+PASS balanced wb.auth.workspace mode=0 width=1600 page=1 ratio=0.44974554707379133
+PASS balanced wb.auth.lists mode=0 width=1600 page=1 ratio=0.399702823179792
+PASS balanced null mode=0 width=1600 page=1 ratio=0.4991568296795953
+PASS visible button Record OFF at 1600 page=1
+PASS visible button 선택 요청 비교 at 1600 page=1
+PASS visible button 중지 at 1600 page=1
+PASS visible button History 비우기 at 1600 page=1
+PASS visible button 비교 설정 at 1600 page=1
+PASS visible button 더보기 at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button 현재 패킷 → Repeater at 1600 page=1
+PASS balanced wb.codec.messages mode=0 width=1600 page=2 ratio=0.4992343032159265
+PASS visible button  at 1600 page=2
+PASS visible button 변환 at 1600 page=2
+PASS visible button 출력 → 입력 at 1600 page=2
+PASS visible button 복사 at 1600 page=2
+PASS balanced wb.js.workspace mode=0 width=1600 page=3 ratio=0.44961734693877553
+PASS balanced wb.js.lists mode=0 width=1600 page=3 ratio=0.29948364888123924
+PASS balanced wb.js.messages mode=0 width=1600 page=3 ratio=0.4991394148020654
+PASS visible button History 자동 분석 at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button 선택 URL → Repeater at 1600 page=3
+PASS visible button 원본 위치 at 1600 page=3
+PASS visible button 추가 도구 at 1600 page=3
+PASS visible button 더보기 at 1600 page=3
+PASS visible button 수동 분석 at 1600 page=3
+PASS visible button 선택 응답 가져오기 at 1600 page=3
+PASS visible button ← at 1600 page=3
+PASS visible button → at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button 데이터 정렬 at 1600 page=3
+PASS visible button 데이터 정렬 at 1600 page=3
+PASS balanced wb.environment.workspace mode=0 width=1600 page=4 ratio=0.44948849104859334
+PASS balanced wb.environment.lists mode=0 width=1600 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.messages mode=0 width=1600 page=4 ratio=0.499184339314845
+PASS visible button  at 1600 page=4
+PASS visible button 전체 환경 at 1600 page=4
+PASS visible button 단일 시작 at 1600 page=4
+PASS visible button 일괄 시작 at 1600 page=4
+PASS visible button 중지 at 1600 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1600 page=4
+PASS visible button 후보 설정 at 1600 page=4
+PASS visible button 더보기 at 1600 page=4
+PASS visible button 요청·응답 정렬 at 1600 page=4
+PASS balanced wb.passive.workspace mode=0 width=1600 page=5 ratio=0.44938749194068345
+PASS balanced wb.passive.messages mode=0 width=1600 page=5 ratio=0.499009900990099
+PASS visible button 대상 수집 시작 at 1600 page=5
+PASS visible button 선택 대상 닫기 at 1600 page=5
+PASS visible button  at 1600 page=5
+PASS visible button 하위 도메인 포함 at 1600 page=5
+PASS visible button URL 수집 at 1600 page=5
+PASS visible button 도구 설정 at 1600 page=5
+PASS visible button 단일 시작 at 1600 page=5
+PASS visible button 일괄 시작 at 1600 page=5
+PASS visible button 중지 at 1600 page=5
+PASS visible button 더보기 at 1600 page=5
+PASS visible button 데이터 정렬 at 1600 page=5
+PASS visible button 데이터 정렬 at 1600 page=5
+PASS visible button  at 1600 page=5
+PASS visible button  at 1600 page=5
+PASS balanced wb.payload.workspace mode=0 width=1600 page=6 ratio=0.44961734693877553
+PASS balanced wb.payload.lists mode=0 width=1600 page=6 ratio=0.5493171471927162
+PASS balanced null mode=0 width=1600 page=6 ratio=0.5
+PASS visible button 선택 영역 → §PAYLOAD§ at 1600 page=6
+PASS visible button 정렬 미리보기 at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button 데이터 정렬 at 1600 page=6
+PASS visible button 데이터 정렬 at 1600 page=6
+PASS visible button 시작 at 1600 page=6
+PASS visible button 중지 at 1600 page=6
+PASS visible button 선택 요청 → Repeater at 1600 page=6
+PASS visible button 검사 설정 at 1600 page=6
+PASS visible button 더보기 at 1600 page=6
+PASS visible button 설정 창 열기 at 1600 page=7
+PASS balanced wb.traffic.workspace mode=1 width=1000 page=0 ratio=0.4
+PASS balanced wb.traffic.messages mode=1 width=1000 page=0 ratio=0.5
+PASS visible button 수집 ON at 1000 page=0
+PASS visible button Scope만 at 1000 page=0
+PASS visible button 검색 초기화 at 1000 page=0
+PASS visible button 목록 비우기 at 1000 page=0
+PASS visible button 내보내기 at 1000 page=0
+PASS visible button 데이터 정렬 at 1000 page=0
+PASS visible button 데이터 정렬 at 1000 page=0
+PASS balanced wb.auth.workspace mode=1 width=1000 page=1 ratio=0.399702823179792
+PASS balanced wb.auth.lists mode=1 width=1000 page=1 ratio=0.3991769547325103
+PASS balanced null mode=1 width=1000 page=1 ratio=0.49948293691830403
+PASS visible button Record OFF at 1000 page=1
+PASS visible button 선택 요청 비교 at 1000 page=1
+PASS visible button 중지 at 1000 page=1
+PASS visible button History 비우기 at 1000 page=1
+PASS visible button 비교 설정 at 1000 page=1
+PASS visible button 더보기 at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button  at 1000 page=1
+PASS visible button 현재 패킷 → Repeater at 1000 page=1
+PASS balanced wb.codec.messages mode=1 width=1000 page=2 ratio=0.49947423764458465
+PASS visible button  at 1000 page=2
+PASS visible button 변환 at 1000 page=2
+PASS visible button 출력 → 입력 at 1000 page=2
+PASS visible button 복사 at 1000 page=2
+PASS balanced wb.js.workspace mode=1 width=1000 page=3 ratio=0.3993115318416523
+PASS balanced wb.js.lists mode=1 width=1000 page=3 ratio=0.29958677685950413
+PASS balanced wb.js.messages mode=1 width=1000 page=3 ratio=0.5
+PASS visible button History 자동 분석 at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button 선택 URL → Repeater at 1000 page=3
+PASS visible button 원본 위치 at 1000 page=3
+PASS visible button 추가 도구 at 1000 page=3
+PASS visible button 더보기 at 1000 page=3
+PASS visible button 수동 분석 at 1000 page=3
+PASS visible button 선택 응답 가져오기 at 1000 page=3
+PASS visible button ← at 1000 page=3
+PASS visible button → at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button  at 1000 page=3
+PASS visible button 데이터 정렬 at 1000 page=3
+PASS visible button 데이터 정렬 at 1000 page=3
+PASS balanced wb.environment.workspace mode=1 width=1000 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.lists mode=1 width=1000 page=4 ratio=0.3993775933609959
+PASS balanced wb.environment.messages mode=1 width=1000 page=4 ratio=0.5
+PASS visible button  at 1000 page=4
+PASS visible button 전체 환경 at 1000 page=4
+PASS visible button 단일 시작 at 1000 page=4
+PASS visible button 일괄 시작 at 1000 page=4
+PASS visible button 중지 at 1000 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1000 page=4
+PASS visible button 후보 설정 at 1000 page=4
+PASS visible button 더보기 at 1000 page=4
+PASS visible button 요청·응답 정렬 at 1000 page=4
+PASS balanced wb.passive.workspace mode=1 width=1000 page=5 ratio=0.4
+PASS balanced wb.passive.messages mode=1 width=1000 page=5 ratio=0.49947423764458465
+PASS visible button 대상 수집 시작 at 1000 page=5
+PASS visible button 선택 대상 닫기 at 1000 page=5
+PASS visible button  at 1000 page=5
+PASS visible button 하위 도메인 포함 at 1000 page=5
+PASS visible button URL 수집 at 1000 page=5
+PASS visible button 도구 설정 at 1000 page=5
+PASS visible button 단일 시작 at 1000 page=5
+PASS visible button 일괄 시작 at 1000 page=5
+PASS visible button 중지 at 1000 page=5
+PASS visible button 더보기 at 1000 page=5
+PASS visible button 데이터 정렬 at 1000 page=5
+PASS visible button 데이터 정렬 at 1000 page=5
+PASS balanced wb.payload.workspace mode=1 width=1000 page=6 ratio=0.3990895295902883
+PASS balanced wb.payload.lists mode=1 width=1000 page=6 ratio=0.5495867768595041
+PASS balanced null mode=1 width=1000 page=6 ratio=0.5
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1000 page=6
+PASS visible button 정렬 미리보기 at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button  at 1000 page=6
+PASS visible button 데이터 정렬 at 1000 page=6
+PASS visible button 데이터 정렬 at 1000 page=6
+PASS visible button 시작 at 1000 page=6
+PASS visible button 중지 at 1000 page=6
+PASS visible button 선택 요청 → Repeater at 1000 page=6
+PASS visible button 검사 설정 at 1000 page=6
+PASS visible button 더보기 at 1000 page=6
+PASS visible button 설정 창 열기 at 1000 page=7
+PASS balanced wb.traffic.workspace mode=1 width=1280 page=0 ratio=0.399734395750332
+PASS balanced wb.traffic.messages mode=1 width=1280 page=0 ratio=0.5
+PASS visible button 수집 ON at 1280 page=0
+PASS visible button Scope만 at 1280 page=0
+PASS visible button 검색 초기화 at 1280 page=0
+PASS visible button 목록 비우기 at 1280 page=0
+PASS visible button 내보내기 at 1280 page=0
+PASS visible button 데이터 정렬 at 1280 page=0
+PASS visible button 데이터 정렬 at 1280 page=0
+PASS balanced wb.auth.workspace mode=1 width=1280 page=1 ratio=0.399702823179792
+PASS balanced wb.auth.lists mode=1 width=1280 page=1 ratio=0.3993610223642173
+PASS balanced null mode=1 width=1280 page=1 ratio=0.4995990376904571
+PASS visible button Record OFF at 1280 page=1
+PASS visible button 선택 요청 비교 at 1280 page=1
+PASS visible button 중지 at 1280 page=1
+PASS visible button History 비우기 at 1280 page=1
+PASS visible button 비교 설정 at 1280 page=1
+PASS visible button 더보기 at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button  at 1280 page=1
+PASS visible button 현재 패킷 → Repeater at 1280 page=1
+PASS balanced wb.codec.messages mode=1 width=1280 page=2 ratio=0.49959382615759546
+PASS visible button  at 1280 page=2
+PASS visible button 변환 at 1280 page=2
+PASS visible button 출력 → 입력 at 1280 page=2
+PASS visible button 복사 at 1280 page=2
+PASS balanced wb.js.workspace mode=1 width=1280 page=3 ratio=0.3993115318416523
+PASS balanced wb.js.lists mode=1 width=1280 page=3 ratio=0.29967948717948717
+PASS balanced wb.js.messages mode=1 width=1280 page=3 ratio=0.5
+PASS visible button History 자동 분석 at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button 선택 URL → Repeater at 1280 page=3
+PASS visible button 원본 위치 at 1280 page=3
+PASS visible button 추가 도구 at 1280 page=3
+PASS visible button 더보기 at 1280 page=3
+PASS visible button 수동 분석 at 1280 page=3
+PASS visible button 선택 응답 가져오기 at 1280 page=3
+PASS visible button ← at 1280 page=3
+PASS visible button → at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button  at 1280 page=3
+PASS visible button 데이터 정렬 at 1280 page=3
+PASS visible button 데이터 정렬 at 1280 page=3
+PASS balanced wb.environment.workspace mode=1 width=1280 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.lists mode=1 width=1280 page=4 ratio=0.3995176848874598
+PASS balanced wb.environment.messages mode=1 width=1280 page=4 ratio=0.5
+PASS visible button  at 1280 page=4
+PASS visible button 전체 환경 at 1280 page=4
+PASS visible button 단일 시작 at 1280 page=4
+PASS visible button 일괄 시작 at 1280 page=4
+PASS visible button 중지 at 1280 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1280 page=4
+PASS visible button 후보 설정 at 1280 page=4
+PASS visible button 더보기 at 1280 page=4
+PASS visible button 요청·응답 정렬 at 1280 page=4
+PASS balanced wb.passive.workspace mode=1 width=1280 page=5 ratio=0.4
+PASS balanced wb.passive.messages mode=1 width=1280 page=5 ratio=0.49959382615759546
+PASS visible button 대상 수집 시작 at 1280 page=5
+PASS visible button 선택 대상 닫기 at 1280 page=5
+PASS visible button  at 1280 page=5
+PASS visible button 하위 도메인 포함 at 1280 page=5
+PASS visible button URL 수집 at 1280 page=5
+PASS visible button 도구 설정 at 1280 page=5
+PASS visible button 단일 시작 at 1280 page=5
+PASS visible button 일괄 시작 at 1280 page=5
+PASS visible button 중지 at 1280 page=5
+PASS visible button 더보기 at 1280 page=5
+PASS visible button 데이터 정렬 at 1280 page=5
+PASS visible button 데이터 정렬 at 1280 page=5
+PASS balanced wb.payload.workspace mode=1 width=1280 page=6 ratio=0.3990895295902883
+PASS balanced wb.payload.lists mode=1 width=1280 page=6 ratio=0.5496794871794872
+PASS balanced null mode=1 width=1280 page=6 ratio=0.5
+PASS visible button  at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1280 page=6
+PASS visible button 정렬 미리보기 at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button  at 1280 page=6
+PASS visible button 데이터 정렬 at 1280 page=6
+PASS visible button 데이터 정렬 at 1280 page=6
+PASS visible button 시작 at 1280 page=6
+PASS visible button 중지 at 1280 page=6
+PASS visible button 선택 요청 → Repeater at 1280 page=6
+PASS visible button 검사 설정 at 1280 page=6
+PASS visible button 더보기 at 1280 page=6
+PASS visible button 설정 창 열기 at 1280 page=7
+PASS balanced wb.traffic.workspace mode=1 width=1600 page=0 ratio=0.399734395750332
+PASS balanced wb.traffic.messages mode=1 width=1600 page=0 ratio=0.5
+PASS visible button 수집 ON at 1600 page=0
+PASS visible button Scope만 at 1600 page=0
+PASS visible button 검색 초기화 at 1600 page=0
+PASS visible button 목록 비우기 at 1600 page=0
+PASS visible button 내보내기 at 1600 page=0
+PASS visible button 데이터 정렬 at 1600 page=0
+PASS visible button 데이터 정렬 at 1600 page=0
+PASS balanced wb.auth.workspace mode=1 width=1600 page=1 ratio=0.399702823179792
+PASS balanced wb.auth.lists mode=1 width=1600 page=1 ratio=0.3994910941475827
+PASS balanced null mode=1 width=1600 page=1 ratio=0.49968091895341415
+PASS visible button Record OFF at 1600 page=1
+PASS visible button 선택 요청 비교 at 1600 page=1
+PASS visible button 중지 at 1600 page=1
+PASS visible button History 비우기 at 1600 page=1
+PASS visible button 비교 설정 at 1600 page=1
+PASS visible button 더보기 at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button  at 1600 page=1
+PASS visible button 현재 패킷 → Repeater at 1600 page=1
+PASS balanced wb.codec.messages mode=1 width=1600 page=2 ratio=0.4996776273372018
+PASS visible button  at 1600 page=2
+PASS visible button 변환 at 1600 page=2
+PASS visible button 출력 → 입력 at 1600 page=2
+PASS visible button 복사 at 1600 page=2
+PASS balanced wb.js.workspace mode=1 width=1600 page=3 ratio=0.3993115318416523
+PASS balanced wb.js.lists mode=1 width=1600 page=3 ratio=0.2997448979591837
+PASS balanced wb.js.messages mode=1 width=1600 page=3 ratio=0.5
+PASS visible button History 자동 분석 at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button 선택 URL → Repeater at 1600 page=3
+PASS visible button 원본 위치 at 1600 page=3
+PASS visible button 추가 도구 at 1600 page=3
+PASS visible button 더보기 at 1600 page=3
+PASS visible button 수동 분석 at 1600 page=3
+PASS visible button 선택 응답 가져오기 at 1600 page=3
+PASS visible button ← at 1600 page=3
+PASS visible button → at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button  at 1600 page=3
+PASS visible button 데이터 정렬 at 1600 page=3
+PASS visible button 데이터 정렬 at 1600 page=3
+PASS balanced wb.environment.workspace mode=1 width=1600 page=4 ratio=0.399673735725938
+PASS balanced wb.environment.lists mode=1 width=1600 page=4 ratio=0.39961636828644503
+PASS balanced wb.environment.messages mode=1 width=1600 page=4 ratio=0.5
+PASS visible button  at 1600 page=4
+PASS visible button 전체 환경 at 1600 page=4
+PASS visible button 단일 시작 at 1600 page=4
+PASS visible button 일괄 시작 at 1600 page=4
+PASS visible button 중지 at 1600 page=4
+PASS visible button 선택 URL → 비로그인 GET Repeater at 1600 page=4
+PASS visible button 후보 설정 at 1600 page=4
+PASS visible button 더보기 at 1600 page=4
+PASS visible button 요청·응답 정렬 at 1600 page=4
+PASS balanced wb.passive.workspace mode=1 width=1600 page=5 ratio=0.4
+PASS balanced wb.passive.messages mode=1 width=1600 page=5 ratio=0.4996776273372018
+PASS visible button 대상 수집 시작 at 1600 page=5
+PASS visible button 선택 대상 닫기 at 1600 page=5
+PASS visible button  at 1600 page=5
+PASS visible button 하위 도메인 포함 at 1600 page=5
+PASS visible button URL 수집 at 1600 page=5
+PASS visible button 도구 설정 at 1600 page=5
+PASS visible button 단일 시작 at 1600 page=5
+PASS visible button 일괄 시작 at 1600 page=5
+PASS visible button 중지 at 1600 page=5
+PASS visible button 더보기 at 1600 page=5
+PASS visible button 데이터 정렬 at 1600 page=5
+PASS visible button 데이터 정렬 at 1600 page=5
+PASS balanced wb.payload.workspace mode=1 width=1600 page=6 ratio=0.3990895295902883
+PASS balanced wb.payload.lists mode=1 width=1600 page=6 ratio=0.5497448979591837
+PASS balanced null mode=1 width=1600 page=6 ratio=0.5
+PASS visible button  at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button 선택 영역 → §PAYLOAD§ at 1600 page=6
+PASS visible button 정렬 미리보기 at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button  at 1600 page=6
+PASS visible button 데이터 정렬 at 1600 page=6
+PASS visible button 데이터 정렬 at 1600 page=6
+PASS visible button 시작 at 1600 page=6
+PASS visible button 중지 at 1600 page=6
+PASS visible button 선택 요청 → Repeater at 1600 page=6
+PASS visible button 검사 설정 at 1600 page=6
+PASS visible button 더보기 at 1600 page=6
+PASS visible button 설정 창 열기 at 1600 page=7
+LayoutBalancePreview: 828 checks passed

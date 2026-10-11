@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "mode": "headless DOM behavior; not browser rendering",
+  "cases": 14,
+  "checks": 19,
+  "requests": [
+    {
+      "url": "/assets/js-lab/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/01-fetch.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/09-invalid.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/01-fetch.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/02-axios.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/03-xhr-navigation.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/04-constants.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/05-dynamic-scope.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/06-secrets.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/07-negative.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/08-modern-module.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/09-invalid.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/10-recon.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/11-sourcemap.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/12-inline-map.js",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/13-inline.html",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/14-package.json",
+      "method": "GET"
+    },
+    {
+      "url": "/assets/js-lab/11-sourcemap.js.map",
+      "method": "GET"
+    },
+    {
+      "url": "/api/js-lab/echo",
+      "method": "POST"
+    },
+    {
+      "url": "/api/js-lab/unauthorized",
+      "method": "GET"
+    },
+    {
+      "url": "/api/js-lab/forbidden",
+      "method": "GET"
+    },
+    {
+      "url": "/api/js-lab/rate-limit",
+      "method": "GET"
+    }
+  ]
+}

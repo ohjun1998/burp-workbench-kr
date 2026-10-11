@@ -1,0 +1,1160 @@
+ACTUAL_BURP_VERSION Burp Suite Community Edition 2026 3.3
+PASS production JAR native loader created extension tab
+PRODUCTION_CLASS_SOURCE file:/tmp/burp3025407637873662654.tmp/2
+PASS adaptive mode is default
+PASS community login through actual Burp HTTP API
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+DETAIL 판정: XSS 반사 후보
+근거: HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+
+REQUEST (byte view)
+GET /vuln/preview?text=%3Csvg%20onload%3Dconsole.log%28%27PR_0fff01ba43bb4bfe%27%29%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 324 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · vuln</h2><div><svg onload=console.log('PR_0fff01ba43bb4bfe')></div>
+PASS actual community XSS reflection candidate
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+DETAIL 판정: 문자열 반사
+근거: 실행 가능한 XSS 근거 아님
+
+REQUEST (byte view)
+GET /fixed/preview?text=%3Csvg%20onload%3Dconsole.log%28%27PR_2b4470422f2644e7%27%29%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 339 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · fixed</h2><div>&lt;svg onload=console.log(&#39;PR_2b4470422f2644e7&#39;)&gt;</div>
+PASS actual community fixed XSS route excluded
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SQLI 200 기준 재검증 기준 본문/상태가 동일
+ROW SQLI 500 SQL 오류 후보 org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+DETAIL 판정: SQL 오류 후보
+근거: org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+
+REQUEST (byte view)
+GET /api/community/vuln/search?q=%27 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 500 · application/json · 276 bytes
+{"error":"org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+PASS actual community SQL error candidate
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SQLI 200 기준 재검증 기준 본문/상태가 동일
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/community/fixed/search?q=%27 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · application/json · 126 bytes
+[]
+PASS actual community fixed SQL route excluded
+PASS Repeater contains the exact selected tested request
+CONTEXT_ITEM Explain selected text enabled=false
+CONTEXT_ITEM Scan enabled=false
+CONTEXT_ITEM Scan selected insertion point enabled=false
+CONTEXT_ITEM Send to Intruder enabled=true
+CONTEXT_ITEM Send to Repeater enabled=true
+CONTEXT_ITEM Send to Sequencer enabled=true
+CONTEXT_ITEM Send to Comparer enabled=true
+CONTEXT_ITEM Send to Decoder enabled=true
+CONTEXT_ITEM Send to Organizer enabled=true
+CONTEXT_ITEM Insert Collaborator payload enabled=false
+CONTEXT_ITEM Request in browser enabled=true
+CONTEXT_ITEM In original session enabled=true
+CONTEXT_ITEM In current browser session enabled=true
+CONTEXT_ITEM Extensions enabled=true
+CONTEXT_ITEM Burp Workbench KR 0.7.0 enabled=true
+CONTEXT_ITEM Workbench KR enabled=true
+CONTEXT_ITEM 통합 트래픽에 가져오기 enabled=true
+CONTEXT_ITEM Repeater로 보내기 enabled=true
+CONTEXT_ITEM Send to Workbench → Payload Runner KR enabled=true
+CONTEXT_ITEM Workbench → 선택한 요청 값에 Payload Runner 표시 enabled=true
+CONTEXT_IMPORT clicked=true baseline='
+PASS actual Repeater context menu imports selected bytes
+PASS DOWNLOAD Start completes
+ROW DOWNLOAD 404 기준 응답 원래 값으로 요청한 비교 기준
+ROW DOWNLOAD 200 지정 파일 내용 발견 BOB_PRIVATE_ATTACHMENT
+DETAIL 판정: 지정 파일 내용 발견
+근거: BOB_PRIVATE_ATTACHMENT
+
+REQUEST (byte view)
+GET /api/community/vuln/files/bob-private-file HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 218 bytes
+BOB_PRIVATE_ATTACHMENT: project notes
+PASS community cross-account file proof via Burp
+PASS DOWNLOAD Start completes
+ROW DOWNLOAD 404 기준 응답 원래 값으로 요청한 비교 기준
+ROW DOWNLOAD 404 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/community/fixed/files/bob-private-file HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 404 · application/json · 156 bytes
+{"error":"첨부파일 없음"}
+PASS community fixed file access rejected via Burp
+PASS UPLOAD_NAME Start completes
+ROW UPLOAD_NAME 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW UPLOAD_NAME 200 업로드 수락 후보 2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요
+DETAIL 판정: 업로드 수락 후보
+근거: 2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요
+
+REQUEST (byte view)
+POST /api/community/vuln/posts/101/files?name=native-probe.html HTTP/1.1
+Host: 127.0.0.1:19088
+Cookie: [lab session omitted]
+X-CSRF-Token: [lab session omitted]
+Connection: close
+Content-Type: text/plain
+Content-Length: 13
+
+training-only
+
+RESPONSE
+HTTP 200 · application/json · 242 bytes
+{"url":"/api/community/vuln/files/7529b860-727c-4ee0-8136-9f4bdb30ca6f","id":"7529b860-727c-4ee0-8136-9f4bdb30ca6f"}
+PASS community filename upload accepted via Burp
+PASS UPLOAD_NAME Start completes
+ROW UPLOAD_NAME 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW UPLOAD_NAME 415 응답 변화 기준 200 / 117자 → 415 / 34자
+DETAIL 판정: 응답 변화
+근거: 기준 200 / 117자 → 415 / 34자
+
+REQUEST (byte view)
+POST /api/community/fixed/posts/101/files?name=native-probe.html HTTP/1.1
+Host: 127.0.0.1:19088
+Cookie: [lab session omitted]
+X-CSRF-Token: [lab session omitted]
+Connection: close
+Content-Type: text/plain
+Content-Length: 13
+
+training-only
+
+RESPONSE
+HTTP 415 · application/json · 187 bytes
+{"error":"수정 실습은 다운로드 전용 TXT만 허용"}
+PASS community fixed HTML filename upload rejected via Burp
+PASS UPLOAD_BODY Start completes
+ROW UPLOAD_BODY 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW UPLOAD_BODY 200 업로드 수락 후보 2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요
+DETAIL 판정: 업로드 수락 후보
+근거: 2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요
+
+REQUEST (byte view)
+POST /api/community/vuln/posts/101/files?name=native-content.txt HTTP/1.1
+Host: 127.0.0.1:19088
+Cookie: [lab session omitted]
+X-CSRF-Token: [lab session omitted]
+Connection: close
+Content-Type: text/plain
+Content-Length: 26
+
+<b>PR_1086111e9eb14c77</b>
+
+RESPONSE
+HTTP 200 · application/json · 242 bytes
+{"url":"/api/community/vuln/files/d84d9171-ab3c-4f18-85e2-dd64d018c822","id":"d84d9171-ab3c-4f18-85e2-dd64d018c822"}
+PASS community RAW upload content accepted via Burp
+PROFILE_RESULT SSTI 표현식 평가 후보
+PASS SSTI actual Burp response recorded
+PASS SSTI expected evidence visible
+PROFILE_RESULT REDIRECT 리다이렉트 목적지 제어 후보
+PASS REDIRECT actual Burp response recorded
+PASS REDIRECT expected evidence visible
+PROFILE_RESULT CRLF 응답 헤더 삽입 후보
+PASS CRLF actual Burp response recorded
+PASS CRLF expected evidence visible
+PROFILE_RESULT XPATH XPath Injection 오류 후보
+PASS XPATH actual Burp response recorded
+PASS XPATH expected evidence visible
+PROFILE_RESULT LDAP LDAP Injection 오류 후보
+PASS LDAP actual Burp response recorded
+PASS LDAP expected evidence visible
+PROFILE_RESULT NOSQL NoSQL Injection 오류 후보
+PASS NOSQL actual Burp response recorded
+PASS NOSQL expected evidence visible
+PROFILE_RESULT COMMAND 명령 출력 후보
+PASS COMMAND actual Burp response recorded
+PASS COMMAND expected evidence visible
+PROFILE_RESULT TRAVERSAL 파일 내용 후보
+PASS TRAVERSAL actual Burp response recorded
+PASS TRAVERSAL expected evidence visible
+PROFILE_RESULT SSRF 지정 응답 문자열 후보
+PASS SSRF actual Burp response recorded
+PASS SSRF expected evidence visible
+PROFILE_RESULT CUSTOM 근거 없음
+PASS CUSTOM actual Burp response recorded
+PASS CUSTOM expected evidence visible
+PASS XXE RAW XML over native Burp xml
+PASS XXE RAW XML over native Burp xmlfixed
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SQLI 200 기준 재검증 기준 본문/상태가 동일
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /echo?q=SQLSTATE%5B42000%5D%3A%20reflected%20probe HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 171 bytes
+SQLSTATE[42000]: reflected probe
+PASS native Burp excludes reflected SQL error signature
+BATCH_ROW SSTI #1 status=200 verdict=표현식 평가 후보 payload=PR_6a48fe7e91a949e7_{{731*919}}_END
+BATCH_ROW SSTI #2 status=200 verdict=표현식 평가 후보 payload=PR_3a84268b9b6d4285_${731*919}_END
+BATCH_ROW SSTI #3 status=200 verdict=표현식 평가 후보 payload=PR_a7501675bb36407b_#{731*919}_END
+BATCH_ROW SSTI #4 status=200 verdict=표현식 평가 후보 payload=PR_9c57a0134ccb4e05_<%=731*919%>_END
+BATCH_ROW SSTI #5 status=200 verdict=표현식 평가 후보 payload=PR_64524d5aa749460a_{731*919}_END
+BATCH_ROW SSTI #6 status=200 verdict=표현식 평가 후보 payload=PR_d4610e1fd8a64df3_{{731*920}}_END
+BATCH_ROW SSTI #7 status=200 verdict=표현식 평가 후보 payload=PR_4f1fc50aab7b4742_${731*920}_END
+PASS ALL_DEFAULT_PAYLOADS SSTI count=7 native Burp replies
+PASS SSTI all seven presets have framed arithmetic evidence
+BATCH_ROW TRAVERSAL #1 status=200 verdict=지정 파일 내용 발견 payload=../fixtures/download-marker.txt
+BATCH_ROW TRAVERSAL #2 status=200 verdict=파일 내용 후보 payload=../../../../etc/passwd
+BATCH_ROW TRAVERSAL #3 status=200 verdict=파일 내용 후보 payload=..%2f..%2f..%2f..%2fetc%2fpasswd
+BATCH_ROW TRAVERSAL #4 status=200 verdict=파일 내용 후보 payload=..\..\..\..\Windows\win.ini
+PASS ALL_DEFAULT_PAYLOADS TRAVERSAL count=4 native Burp replies
+BATCH_ROW REDIRECT #1 status=302 verdict=리다이렉트 목적지 제어 후보 payload=https://example.invalid/probe/PR_00ed282cfb484ed9
+BATCH_ROW REDIRECT #2 status=302 verdict=리다이렉트 목적지 제어 후보 payload=//example.invalid/probe/PR_372d6a4e84cb458f
+BATCH_ROW REDIRECT #3 status=302 verdict=리다이렉트 목적지 제어 후보 payload=https://example.invalid@localhost/
+BATCH_ROW REDIRECT #4 status=302 verdict=리다이렉트 목적지 제어 후보 payload=https://localhost@example.invalid/probe/PR_339d541354ca4279
+PASS ALL_DEFAULT_PAYLOADS REDIRECT count=4 native Burp replies
+BATCH_ROW CRLF #1 status=200 verdict=응답 헤더 삽입 후보 payload=alpha\r\nX-PR-Probe: PR_0bb16129528344b5
+BATCH_ROW CRLF #2 status=200 verdict=근거 없음 payload=alpha\nX-PR-Probe: PR_13ccd7e2e809463f
+BATCH_ROW CRLF #3 status=200 verdict=근거 없음 payload=alpha%0d%0aX-PR-Probe:%20PR_57415836e0974a42
+PASS ALL_DEFAULT_PAYLOADS CRLF count=3 native Burp replies
+BATCH_ROW XXE #1 status=200 verdict=XML 엔티티 확장 관찰 payload=<!DOCTYPE r [<!ENTITY pr "PR_XML_ENTITY&#95;EXPANDED">]><r>&pr;</r>
+BATCH_ROW XXE #2 status=200 verdict=지정 파일 내용 발견 payload=<!DOCTYPE r [<!ENTITY pr SYSTEM "file:///tmp/payload-runner-fixtures/download-marker.txt">]><r>&pr;</r>
+PASS ALL_DEFAULT_PAYLOADS XXE count=2 native Burp replies
+PASS XXE default external entity resolves owned local file
+BATCH_ROW XPATH #1 status=200 verdict=XPath Injection 오류 후보 payload='
+BATCH_ROW XPATH #2 status=200 verdict=근거 없음 payload="
+BATCH_ROW XPATH #3 status=200 verdict=XPath Injection 오류 후보 payload=alpha' or '1'='1
+BATCH_ROW XPATH #4 status=200 verdict=XPath Injection 오류 후보 payload=alpha' or '1'='2
+BATCH_ROW XPATH #5 status=200 verdict=XPath Injection 오류 후보 payload=alpha'] | //*[false()] | //*['
+PASS ALL_DEFAULT_PAYLOADS XPATH count=5 native Burp replies
+BATCH_ROW LDAP #1 status=200 verdict=근거 없음 payload=*
+BATCH_ROW LDAP #2 status=200 verdict=LDAP Injection 오류 후보 payload=(
+BATCH_ROW LDAP #3 status=200 verdict=근거 없음 payload=)
+BATCH_ROW LDAP #4 status=200 verdict=LDAP Injection 오류 후보 payload=alpha*)(|(cn=*))
+BATCH_ROW LDAP #5 status=200 verdict=LDAP Injection 오류 후보 payload=alpha*)(cn=PR_LDAP_NONEXISTENT)
+PASS ALL_DEFAULT_PAYLOADS LDAP count=5 native Burp replies
+BATCH_ROW NOSQL #1 status=200 verdict=근거 없음 payload={"$eq":"PR_9093aef8926348ff"}
+BATCH_ROW NOSQL #2 status=200 verdict=근거 없음 payload={"$ne":"PR_6d425f747457446d"}
+BATCH_ROW NOSQL #3 status=200 verdict=근거 없음 payload={"$regex":"^PR_NOSQL_NONEXISTENT$"}
+BATCH_ROW NOSQL #4 status=200 verdict=NoSQL Injection 오류 후보 payload={"$pr_invalid_operator":1}
+PASS ALL_DEFAULT_PAYLOADS NOSQL count=4 native Burp replies
+PASS NoSQL RAW object presets accepted and unknown operator flagged
+PASS NoSQL all default JSON objects parse despite object baseline
+BATCH_ROW SSRF #1 status=200 verdict=지정 응답 문자열 후보 payload=http://127.0.0.1:19089/probe?m=PR_33796b03bc9742e9
+BATCH_ROW SSRF #2 status=200 verdict=지정 응답 문자열 후보 payload=http://localhost:19089/probe?m=PR_baeef37636484669
+PASS ALL_DEFAULT_PAYLOADS SSRF count=2 native Burp replies
+PASS SSRF both default owned probe URLs return expected body
+BATCH_ROW COMMAND #1 status=200 verdict=명령 출력 후보 payload=alpha;printf 'PR_CMD_%s' 'PR_df547be7398d4bba';
+BATCH_ROW COMMAND #2 status=200 verdict=명령 출력 후보 payload=alpha|printf 'PR_CMD_%s' 'PR_eed3bf9b361a4d22'
+BATCH_ROW COMMAND #3 status=200 verdict=명령 출력 후보 payload=alpha$(printf 'PR_CMD_%s' 'PR_41773ab4e84e4496')
+BATCH_ROW COMMAND #4 status=200 verdict=명령 출력 후보 payload=alpha`printf 'PR_CMD_%s' 'PR_0d9728c7df264efa'`
+PASS ALL_DEFAULT_PAYLOADS COMMAND count=4 native Burp replies
+BATCH_ROW CUSTOM #1 status=200 verdict=근거 없음 payload=PR_d3ddb6af56c946af
+PASS ALL_DEFAULT_PAYLOADS CUSTOM count=1 native Burp replies
+PASS all 41 additional default payloads tested in native Burp
+PASS background task window is modeless while scan running
+PASS background result window shares live results
+PASS Burp Repeater tab can be selected during active scan
+PASS independent native Burp HTTP request completes while payload job runs
+PASS closing task window keeps scan running
+PASS hidden background job completes all payloads and progress
+PASS reopened task window preserves completed results
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+ROW XSS 200 XSS 반사 후보 HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+DETAIL 판정: XSS 반사 후보
+근거: HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+
+REQUEST (byte view)
+GET /vuln/preview?text=%3Cb%20data-probe%3D%22PR_1ef5898a5a894b4c%22%3EPR_1ef5898a5a894b4c%3C%2Fb%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 336 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · vuln</h2><div><b data-probe="PR_1ef5898a5a894b4c">PR_1ef5898a5a894b4c</b></div>
+ADAPTIVE_STATUS /vuln/preview?text=§PAYLOAD§ mode=0 완료 · 총 8회 / 페이로드 7개
+PASS native request count available /vuln/preview?text=§PAYLOAD§ mode=0
+PASS XSS Start completes
+ROW XSS 200 기준 응답 기준 수집 · 원래 값
+ROW XSS 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XSS 200 문자열 반사 문자열 반사 탐색 · 실행 가능한 XSS 근거 아님
+ROW XSS 200 반사 위치 관찰 문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인
+ROW XSS 200 XSS 반사 후보 후보 탐색 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+ROW XSS 200 XSS 반사 후보 새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+ROW XSS 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 XSS 반사 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요 · 자동 확정 아님
+DETAIL 판정: XSS 반사 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /vuln/preview?text=%3Csvg%20onload%3Dconsole.log%28%27PR_c93b9688d80a492c%27%29%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 324 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · vuln</h2><div><svg onload=console.log('PR_c93b9688d80a492c')></div>
+ADAPTIVE_STATUS /vuln/preview?text=§PAYLOAD§ mode=1 완료 · 실제 요청 6회 · 목록 생략/중복 5개 · 유형별 증거 재현 · 나머지 변형 생략
+PASS native request count available /vuln/preview?text=§PAYLOAD§ mode=1
+PASS native evidence corroborated /vuln/preview?text=§PAYLOAD§
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+ROW XSS 200 문자열 반사 실행 가능한 XSS 근거 아님
+DETAIL 판정: 문자열 반사
+근거: 실행 가능한 XSS 근거 아님
+
+REQUEST (byte view)
+GET /fixed/preview?text=%3Cb%20data-probe%3D%22PR_66666b35f2ec49fc%22%3EPR_66666b35f2ec49fc%3C%2Fb%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 359 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · fixed</h2><div>&lt;b data-probe=&quot;PR_66666b35f2ec49fc&quot;&gt;PR_66666b35f2ec49fc&lt;/b&gt;</div>
+ADAPTIVE_STATUS /fixed/preview?text=§PAYLOAD§ mode=0 완료 · 총 8회 / 페이로드 7개
+PASS native request count available /fixed/preview?text=§PAYLOAD§ mode=0
+PASS XSS Start completes
+ROW XSS 200 기준 응답 기준 수집 · 원래 값
+ROW XSS 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XSS 200 문자열 반사 문자열 반사 탐색 · 실행 가능한 XSS 근거 아님
+ROW XSS 200 반사 위치 관찰 문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인
+ROW XSS 200 문자열 반사 후보 탐색 · 실행 가능한 XSS 근거 아님
+ROW XSS 200 메타문자 인코딩 관찰 HTML 텍스트 위치에서 전체 입력이 엔티티 인코딩됨 · 다른 컨텍스트/우회는 미검사
+DETAIL 판정: 메타문자 인코딩 관찰
+근거: HTML 텍스트 위치에서 전체 입력이 엔티티 인코딩됨 · 다른 컨텍스트/우회는 미검사
+
+REQUEST (byte view)
+GET /fixed/preview?text=%3Csvg%20onload%3Dconsole.log%28%27PR_a0053491bcc04498%27%29%3E HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/html;charset=UTF-8 · 339 bytes
+<!doctype html><meta charset='utf-8'><title>미리보기</title><h2>문서 미리보기 · fixed</h2><div>&lt;svg onload=console.log(&#39;PR_a0053491bcc04498&#39;)&gt;</div>
+ADAPTIVE_STATUS /fixed/preview?text=§PAYLOAD§ mode=1 완료 · 실제 요청 4회 · 목록 생략/중복 5개 · HTML 텍스트의 인코딩 관찰 · 남은 정형 태그 변형 생략; 우회/stored/DOM 미검사 · 전체 목록 모드로 확대 가능
+PASS native request count available /fixed/preview?text=§PAYLOAD§ mode=1
+PASS fixed endpoint never corroborated /fixed/preview?text=§PAYLOAD§
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SQLI 200 기준 재검증 기준 본문/상태가 동일
+ROW SQLI 500 SQL 오류 후보 org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 500 SQL 오류 후보 org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%alpha') AND ('1'='1%']"}
+ROW SQLI 500 SQL 오류 후보 org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%alpha') AND ('1'='2%']"}
+DETAIL 판정: SQL 오류 후보
+근거: org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%alpha') AND ('1'='2%']"}
+
+REQUEST (byte view)
+GET /api/community/vuln/search?q=alpha%27%29%20AND%20%28%271%27%3D%272 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 500 · application/json · 294 bytes
+{"error":"org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%alpha') AND ('1'='2%']"}
+ADAPTIVE_STATUS /api/community/vuln/search?q=§PAYLOAD§ mode=0 완료 · 총 10회 / 페이로드 8개
+PASS native request count available /api/community/vuln/search?q=§PAYLOAD§ mode=0
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 기준 수집 · 원래 값
+ROW SQLI 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW SQLI 500 SQL 오류 후보 SQL 구문 오류 탐색 · org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+ROW SQLI 500 SQL 오류 후보 SQL 오류 재검증 · org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+ROW SQLI 200 근거 없음 SQL 오류 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 500 SQL 오류 후보 · 재현 DB 고유 오류 2회, 기준에는 없음 · 실제 인젝션 성공은 수동 확인 필요
+DETAIL 판정: SQL 오류 후보 · 재현
+근거: DB 고유 오류 2회, 기준에는 없음 · 실제 인젝션 성공은 수동 확인 필요
+
+REQUEST (byte view)
+GET /api/community/vuln/search?q=%27 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 500 · application/json · 276 bytes
+{"error":"org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']"}
+ADAPTIVE_STATUS /api/community/vuln/search?q=§PAYLOAD§ mode=1 완료 · 실제 요청 5회 · 목록 생략/중복 7개 · SQL 오류 재현 · 조건/변형 검사 생략
+PASS native request count available /api/community/vuln/search?q=§PAYLOAD§ mode=1
+PASS native evidence corroborated /api/community/vuln/search?q=§PAYLOAD§
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SQLI 200 기준 재검증 기준 본문/상태가 동일
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/community/fixed/search?q=alpha%27%29%20AND%20%28%271%27%3D%272 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · application/json · 126 bytes
+[]
+ADAPTIVE_STATUS /api/community/fixed/search?q=§PAYLOAD§ mode=0 완료 · 총 10회 / 페이로드 8개
+PASS native request count available /api/community/fixed/search?q=§PAYLOAD§ mode=0
+PASS SQLI Start completes
+ROW SQLI 200 기준 응답 기준 수집 · 원래 값
+ROW SQLI 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW SQLI 200 근거 없음 SQL 구문 오류 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 SQL 참 조건 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 SQL 거짓 조건 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 SQL 참 조건 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 SQL 거짓 조건 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SQLI 200 근거 없음 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/community/fixed/search?q=alpha%27%29%20AND%20%28%271%27%3D%272 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · application/json · 126 bytes
+[]
+ADAPTIVE_STATUS /api/community/fixed/search?q=§PAYLOAD§ mode=1 완료 · 실제 요청 10회 · 목록 생략/중복 0개 · 검사 목록 완료 · 미탐 가능
+PASS native request count available /api/community/fixed/search?q=§PAYLOAD§ mode=1
+PASS fixed endpoint never corroborated /api/community/fixed/search?q=§PAYLOAD§
+PASS SSTI Start completes
+ROW SSTI 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW SSTI 200 표현식 평가 후보 PR_95bffda978494a05_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 PR_7a69e59f173b47aa_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 PR_7ca82b23bc8d48ea_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 PR_31e553babe534e59_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 PR_8b026ff7885040f6_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 PR_6224c5ed321047d3_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 PR_eeb0840588c6457d_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+DETAIL 판정: 표현식 평가 후보
+근거: PR_eeb0840588c6457d_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+
+REQUEST (byte view)
+GET /ssti?q=PR_eeb0840588c6457d_%24%7B731%2A920%7D_END HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 169 bytes
+PR_eeb0840588c6457d_672520_END
+ADAPTIVE_STATUS /ssti?q=§PAYLOAD§ mode=0 완료 · 총 8회 / 페이로드 7개
+PASS native request count available /ssti?q=§PAYLOAD§ mode=0
+PASS SSTI Start completes
+ROW SSTI 200 기준 응답 기준 수집 · 원래 값
+ROW SSTI 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSTI 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW SSTI 200 표현식 평가 후보 후보 탐색 · PR_69c69c767e934009_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 다른 산술식 재검증 · PR_70e04198c02c4245_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSTI 200 표현식 평가 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 다른 산술식 재검증 · PR_70e04198c02c4245_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요 · 자동 확정 아님
+DETAIL 판정: 표현식 평가 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 다른 산술식 재검증 · PR_70e04198c02c4245_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /ssti?q=PR_70e04198c02c4245_%7B%7B731%2A920%7D%7D_END HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 169 bytes
+PR_70e04198c02c4245_672520_END
+ADAPTIVE_STATUS /ssti?q=§PAYLOAD§ mode=1 완료 · 실제 요청 5회 · 목록 생략/중복 5개 · 유형별 증거 재현 · 나머지 변형 생략
+PASS native request count available /ssti?q=§PAYLOAD§ mode=1
+PASS native evidence corroborated /ssti?q=§PAYLOAD§
+PASS XSS Start completes
+ROW XSS 200 기준 응답 원래 값으로 요청한 비교 기준
+ROW XSS 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /html-noecho?q=%3Cb%20data-probe%3D%22PR_3f5b53f7f5694947%22%3EPR_3f5b53f7f5694947%3C%2Fb%3E HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/html · 159 bytes
+<html>constant</html>
+ADAPTIVE_STATUS /html-noecho?q=§PAYLOAD§ mode=0 완료 · 총 8회 / 페이로드 7개
+PASS native request count available /html-noecho?q=§PAYLOAD§ mode=0
+PASS XSS Start completes
+ROW XSS 200 기준 응답 기준 수집 · 원래 값
+ROW XSS 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XSS 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XSS 200 근거 없음 문자열 반사 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 문자열 반사 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /html-noecho?q=PR_06e1c72d0d544dd9 HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/html · 159 bytes
+<html>constant</html>
+ADAPTIVE_STATUS /html-noecho?q=§PAYLOAD§ mode=1 완료 · 실제 요청 3회 · 목록 생략/중복 6개 · 현재 응답에 마커 없음 · 반사형 XSS 후속 검사 생략; stored/DOM/다른 화면은 미검사
+PASS native request count available /html-noecho?q=§PAYLOAD§ mode=1
+PASS nonreflection pruned with DOM limitation
+PASS CUSTOM Start completes
+ROW CUSTOM 429 기준 응답 원래 값으로 요청한 비교 기준
+ROW CUSTOM 429 근거 없음 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /limited?q=PR_64e3e9de86b849e5 HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 429 · text/plain · 166 bytes
+rate limited
+ADAPTIVE_STATUS /limited?q=§PAYLOAD§ mode=0 완료 · 총 2회 / 페이로드 1개
+PASS native request count available /limited?q=§PAYLOAD§ mode=0
+PASS CUSTOM Start completes
+ROW CUSTOM 429 기준 응답 기준 수집 · 원래 값
+DETAIL 판정: 기준 응답
+근거: 기준 수집 · 원래 값
+
+REQUEST (byte view)
+GET /limited?q=alpha HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 429 · text/plain · 166 bytes
+rate limited
+ADAPTIVE_STATUS /limited?q=§PAYLOAD§ mode=1 완료 · 실제 요청 1회 · 목록 생략/중복 1개 · HTTP 429 · 인증/차단/부하 응답으로 중단; 취약점 부재를 의미하지 않음
+PASS native request count available /limited?q=§PAYLOAD§ mode=1
+PASS rate limit halts one native request
+PASS REDIRECT Start completes
+ROW REDIRECT 302 기준 응답 기준 수집 · 원래 값
+ROW REDIRECT 302 리다이렉트 기준 안정성 검사 · 자동 추적하지 않음. 로그인 이동 여부를 확인하세요
+ROW REDIRECT 302 기준 재검증 동적/잘림/오류 응답 · 조건 차이 판정 비활성화; 출력·헤더 증거 검사는 계속
+ROW REDIRECT 302 리다이렉트 목적지 제어 후보 후보 탐색 · Location: https://example.invalid/probe/PR_f34b197e3c1c4f50 · 허용된 외부 이동인지 Repeater에서 확인
+ROW REDIRECT 302 리다이렉트 목적지 제어 후보 새 마커/동일 입력 재검증 · Location: https://pr-second.invalid/probe/PR_54a17643f3cc4215 · 허용된 외부 이동인지 Repeater에서 확인
+ROW REDIRECT 302 리다이렉트 후속 기준 재확인 · 자동 추적하지 않음. 로그인 이동 여부를 확인하세요
+ROW REDIRECT 302 리다이렉트 목적지 제어 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · Location: https://pr-second.invalid/probe/PR_54a17643f3cc4215 · 허용된 외부 이동인지 Repeater에서 확인 · 자동 확정 아님
+DETAIL 판정: 리다이렉트 목적지 제어 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · Location: https://pr-second.invalid/probe/PR_54a17643f3cc4215 · 허용된 외부 이동인지 Repeater에서 확인 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /redirect?q=https%3A%2F%2Fpr-second.invalid%2Fprobe%2FPR_54a17643f3cc4215 HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 302 · text/plain · 212 bytes
+baseline
+PASS adaptive native evidence revalidated REDIRECT
+PASS CRLF Start completes
+ROW CRLF 200 기준 응답 기준 수집 · 원래 값
+ROW CRLF 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW CRLF 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW CRLF 200 응답 헤더 삽입 후보 후보 탐색 · 응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외
+ROW CRLF 200 응답 헤더 삽입 후보 새 마커/동일 입력 재검증 · 응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외
+ROW CRLF 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW CRLF 200 응답 헤더 삽입 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · 응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외 · 자동 확정 아님
+DETAIL 판정: 응답 헤더 삽입 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · 응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /crlf?q=alpha%0D%0AX-PR-Probe%3A%20PR_cdae21eed3314ef4 HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 210 bytes
+alpha
+X-PR-Probe: PR_cdae21eed3314ef4
+PASS adaptive native evidence revalidated CRLF
+PASS COMMAND Start completes
+ROW COMMAND 200 기준 응답 기준 수집 · 원래 값
+ROW COMMAND 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW COMMAND 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW COMMAND 200 명령 출력 후보 후보 탐색 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요
+ROW COMMAND 200 명령 출력 후보 새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요
+ROW COMMAND 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW COMMAND 200 근거 없음 서로 다른 출력 대조 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW COMMAND 200 출력 대조 일치 PR_CMD/PR_CTRL 서로 다른 조합 출력 확인 · 동일 입력문 반사는 제외
+ROW COMMAND 200 명령 출력 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요 · 자동 확정 아님
+DETAIL 판정: 명령 출력 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /command?q=alpha%3Bprintf%20%27PR_CMD_%25s%27%20%27PR_a7b4cb40688749b5%27%3B HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 165 bytes
+PR_CMD_PR_a7b4cb40688749b5
+PASS adaptive native evidence revalidated COMMAND
+PASS TRAVERSAL Start completes
+ROW TRAVERSAL 200 기준 응답 기준 수집 · 원래 값
+ROW TRAVERSAL 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW TRAVERSAL 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW TRAVERSAL 200 파일 내용 후보 후보 탐색 · root:x:0:0:root:/root:/bin/bash
+
+ROW TRAVERSAL 200 파일 내용 후보 새 마커/동일 입력 재검증 · root:x:0:0:root:/root:/bin/bash
+
+ROW TRAVERSAL 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW TRAVERSAL 200 근거 없음 존재하지 않는 파일 대조 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW TRAVERSAL 200 파일 내용 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · root:x:0:0:root:/root:/bin/bash
+ · 자동 확정 아님
+DETAIL 판정: 파일 내용 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · root:x:0:0:root:/root:/bin/bash
+ · 자동 확정 아님
+
+REQUEST (byte view)
+GET /file?q=..%2F..%2Fetc%2Fpasswd HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 171 bytes
+root:x:0:0:root:/root:/bin/bash
+
+PASS adaptive native evidence revalidated TRAVERSAL
+PASS XPATH Start completes
+ROW XPATH 200 기준 응답 기준 수집 · 원래 값
+ROW XPATH 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XPATH 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XPATH 200 XPath Injection 오류 후보 후보 탐색 · XPathExpressionException: Invalid XPath expression · 오류 노출이며 인젝션 성공 확정 아님
+ROW XPATH 200 XPath Injection 오류 후보 새 마커/동일 입력 재검증 · XPathExpressionException: Invalid XPath expression · 오류 노출이며 인젝션 성공 확정 아님
+ROW XPATH 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XPATH 200 XPath Injection 오류 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · XPathExpressionException: Invalid XPath expression · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+DETAIL 판정: XPath Injection 오류 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · XPathExpressionException: Invalid XPath expression · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /xpath?q=%27 HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 189 bytes
+XPathExpressionException: Invalid XPath expression
+PASS adaptive native evidence revalidated XPATH
+PASS LDAP Start completes
+ROW LDAP 200 기준 응답 기준 수집 · 원래 값
+ROW LDAP 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW LDAP 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW LDAP 200 LDAP Injection 오류 후보 후보 탐색 · LDAPException: Bad search filter · 오류 노출이며 인젝션 성공 확정 아님
+ROW LDAP 200 LDAP Injection 오류 후보 새 마커/동일 입력 재검증 · LDAPException: Bad search filter · 오류 노출이며 인젝션 성공 확정 아님
+ROW LDAP 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW LDAP 200 LDAP Injection 오류 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · LDAPException: Bad search filter · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+DETAIL 판정: LDAP Injection 오류 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · LDAPException: Bad search filter · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /ldap?q=%28 HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 171 bytes
+LDAPException: Bad search filter
+PASS adaptive native evidence revalidated LDAP
+PASS SSTI Start completes
+ROW SSTI 200 기준 응답 기준 수집 · 원래 값
+ROW SSTI 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSTI 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW SSTI 200 표현식 평가 후보 후보 탐색 · PR_8234dc5bbb9945c0_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 표현식 평가 후보 다른 산술식 재검증 · PR_70916db2548c4279_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요
+ROW SSTI 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSTI 200 표현식 평가 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 다른 산술식 재검증 · PR_70916db2548c4279_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요 · 자동 확정 아님
+DETAIL 판정: 표현식 평가 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 다른 산술식 재검증 · PR_70916db2548c4279_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /api/adaptive/vuln/expression?q=PR_70916db2548c4279_%23%7B731%2A920%7D_END HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 168 bytes
+PR_70916db2548c4279_672520_END
+PASS real Spring SpEL vuln
+PASS TRAVERSAL Start completes
+ROW TRAVERSAL 200 기준 응답 기준 수집 · 원래 값
+ROW TRAVERSAL 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW TRAVERSAL 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW TRAVERSAL 200 지정 파일 내용 발견 후보 탐색 · PR_OWNED_XML_FIXTURE
+ROW TRAVERSAL 200 지정 파일 내용 발견 새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE
+ROW TRAVERSAL 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW TRAVERSAL 404 응답 변화 존재하지 않는 파일 대조 · 기준 200 / 19자 → 404 / 14자
+ROW TRAVERSAL 200 지정 파일 내용 발견 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE · 자동 확정 아님
+DETAIL 판정: 지정 파일 내용 발견 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE · 자동 확정 아님
+
+REQUEST (byte view)
+GET /api/adaptive/vuln/file?q=..%2Fdownload-marker.txt HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 158 bytes
+PR_OWNED_XML_FIXTURE
+PASS real owned-file traversal with missing-file control vuln
+PASS COMMAND Start completes
+ROW COMMAND 200 기준 응답 기준 수집 · 원래 값
+ROW COMMAND 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW COMMAND 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW COMMAND 200 명령 출력 후보 후보 탐색 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요
+ROW COMMAND 200 명령 출력 후보 새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요
+ROW COMMAND 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW COMMAND 200 근거 없음 서로 다른 출력 대조 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW COMMAND 200 출력 대조 일치 PR_CMD/PR_CTRL 서로 다른 조합 출력 확인 · 동일 입력문 반사는 제외
+ROW COMMAND 200 명령 출력 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요 · 자동 확정 아님
+DETAIL 판정: 명령 출력 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /api/adaptive/vuln/command?q=alpha%3Bprintf%20%27PR_CMD_%25s%27%20%27PR_1c465152e4e44aba%27%3B HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 164 bytes
+PR_CMD_PR_1c465152e4e44aba
+PASS real restricted shell printf alternate output vuln
+PASS XXE Start completes
+ROW XXE 200 기준 응답 기준 수집 · 원래 값
+ROW XXE 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XXE 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XXE 200 지정 파일 내용 발견 후보 탐색 · PR_OWNED_XML_FIXTURE
+ROW XXE 200 지정 파일 내용 발견 새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE
+ROW XXE 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XXE 400 응답 변화 존재하지 않는 파일 대조 · 기준 200 / 5자 → 400 / 12자
+ROW XXE 200 지정 파일 내용 발견 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE · 자동 확정 아님
+DETAIL 판정: 지정 파일 내용 발견 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE · 자동 확정 아님
+
+REQUEST (byte view)
+POST /api/adaptive/vuln/xml HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Content-Type: application/xml
+Content-Length: 103
+
+<!DOCTYPE r [<!ENTITY pr SYSTEM "file:///tmp/payload-runner-fixtures/download-marker.txt">]><r>&pr;</r>
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 158 bytes
+PR_OWNED_XML_FIXTURE
+PASS real JDK XML owned-file plus nonexistent entity vuln
+PASS XPATH Start completes
+ROW XPATH 200 기준 응답 기준 수집 · 원래 값
+ROW XPATH 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XPATH 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XPATH 200 XPath Injection 오류 후보 후보 탐색 · XPathExpressionException: invalid predicate · 오류 노출이며 인젝션 성공 확정 아님
+ROW XPATH 200 XPath Injection 오류 후보 새 마커/동일 입력 재검증 · XPathExpressionException: invalid predicate · 오류 노출이며 인젝션 성공 확정 아님
+ROW XPATH 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XPATH 200 XPath Injection 오류 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · XPathExpressionException: invalid predicate · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+DETAIL 판정: XPath Injection 오류 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · XPathExpressionException: invalid predicate · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /api/adaptive/vuln/xpath?q=%27 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 181 bytes
+XPathExpressionException: invalid predicate
+PASS real JDK XPath syntax error vuln
+PASS UPLOAD_BODY Start completes
+ROW UPLOAD_BODY 200 기준 응답 기준 수집 · 원래 값
+ROW UPLOAD_BODY 200 업로드 수락 후보 후보 탐색 · 2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요
+ROW UPLOAD_BODY 200 후속 조회 응답 업로드 반환 URL 재조회 · 업로드 반환 URL 재조회
+ROW UPLOAD_BODY 200 업로드 활성 콘텐츠 제공 후보 업로드 응답의 상대 URL에서 내용 일치 · MIME=text/html · Content-Disposition=inline · 브라우저 실행/다른 계정 접근/서버 실행은 미검사
+DETAIL 판정: 업로드 활성 콘텐츠 제공 후보
+근거: 업로드 응답의 상대 URL에서 내용 일치 · MIME=text/html · Content-Disposition=inline · 브라우저 실행/다른 계정 접근/서버 실행은 미검사
+
+REQUEST (byte view)
+GET /api/community/vuln/files/d81a788b-9939-461b-8b14-cb8720be0cb2 HTTP/1.1
+Host: 127.0.0.1:19088
+Cookie: [lab session omitted]
+Connection: close
+Accept: */*
+
+
+
+RESPONSE
+HTTP 200 · text/html · 221 bytes
+<!doctype html><b>PR_6711861f569f4ee7</b>
+PASS real community upload exact readback vuln
+PASS SSRF Start completes
+ROW SSRF 200 기준 응답 기준 수집 · 원래 값
+ROW SSRF 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSRF 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW SSRF 200 근거 없음 전용 HTTP 콜백 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSRF 200 HTTP 콜백 관찰 후보 고유 URL로 GET 수신 · 출처 127.0.0.1 · 확장 자체는 콜백 URL에 접속하지 않음
+ROW SSRF 200 근거 없음 다른 URL의 HTTP 콜백 재검증 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSRF 200 SSRF HTTP 콜백 재현 후보 서로 다른 고유 URL 2개에 GET 수신 · 출처 127.0.0.1 · 서버/중계/보안 장비 요청 여부 추가 확인
+DETAIL 판정: SSRF HTTP 콜백 재현 후보
+근거: 서로 다른 고유 URL 2개에 GET 수신 · 출처 127.0.0.1 · 서버/중계/보안 장비 요청 여부 추가 확인
+
+REQUEST (byte view)
+GET /api/adaptive/vuln/ssrf?q=http%3A%2F%2F127.0.0.1%3A19112%2Fpr%2FPR_e1e1d50182b740f1 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 145 bytes
+accepted
+PASS callback job has actual response rows vuln
+PASS real blind HTTP SSRF identical response callback vuln
+PASS callback collector closed after job vuln
+PASS SSTI Start completes
+ROW SSTI 200 기준 응답 기준 수집 · 원래 값
+ROW SSTI 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSTI 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW SSTI 200 근거 없음 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/adaptive/fixed/expression?q=PR_d750a52a93d641d9_%23%7B731%2A919%7D_END HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 172 bytes
+PR_d750a52a93d641d9_#{731*919}_END
+PASS real Spring SpEL fixed
+PASS TRAVERSAL Start completes
+ROW TRAVERSAL 200 기준 응답 기준 수집 · 원래 값
+ROW TRAVERSAL 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW TRAVERSAL 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW TRAVERSAL 404 응답 변화 후보 탐색 · 기준 200 / 19자 → 404 / 14자
+DETAIL 판정: 응답 변화
+근거: 후보 탐색 · 기준 200 / 19자 → 404 / 14자
+
+REQUEST (byte view)
+GET /api/adaptive/fixed/file?q=..%2Fdownload-marker.txt HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 404 · text/plain;charset=ISO-8859-1 · 152 bytes
+file not found
+PASS real owned-file traversal with missing-file control fixed
+PASS COMMAND Start completes
+ROW COMMAND 200 기준 응답 기준 수집 · 원래 값
+ROW COMMAND 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW COMMAND 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW COMMAND 200 근거 없음 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/adaptive/fixed/command?q=alpha%3Bprintf%20%27PR_CMD_%25s%27%20%27PR_9a5ce552355a4496%27%3B HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 143 bytes
+normal
+PASS real restricted shell printf alternate output fixed
+PASS XXE Start completes
+ROW XXE 200 기준 응답 기준 수집 · 원래 값
+ROW XXE 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XXE 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XXE 400 응답 변화 후보 탐색 · 기준 200 / 5자 → 400 / 12자
+DETAIL 판정: 응답 변화
+근거: 후보 탐색 · 기준 200 / 5자 → 400 / 12자
+
+REQUEST (byte view)
+POST /api/adaptive/fixed/xml HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Content-Type: application/xml
+Content-Length: 103
+
+<!DOCTYPE r [<!ENTITY pr SYSTEM "file:///tmp/payload-runner-fixtures/download-marker.txt">]><r>&pr;</r>
+
+RESPONSE
+HTTP 400 · text/plain;charset=ISO-8859-1 · 150 bytes
+XML rejected
+PASS real JDK XML owned-file plus nonexistent entity fixed
+PASS XPATH Start completes
+ROW XPATH 200 기준 응답 기준 수집 · 원래 값
+ROW XPATH 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW XPATH 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW XPATH 200 근거 없음 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/adaptive/fixed/xpath?q=%27 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 143 bytes
+rows=0
+PASS real JDK XPath syntax error fixed
+PASS UPLOAD_BODY Start completes
+ROW UPLOAD_BODY 200 기준 응답 기준 수집 · 원래 값
+ROW UPLOAD_BODY 200 업로드 수락 후보 후보 탐색 · 2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요
+ROW UPLOAD_BODY 200 후속 조회 응답 업로드 반환 URL 재조회 · 업로드 반환 URL 재조회
+ROW UPLOAD_BODY 200 업로드 파일 재조회 확인 업로드 응답의 상대 URL에서 내용 일치 · MIME=application/octet-stream · Content-Disposition=attachment; filename="community-file.txt" · 브라우저 실행/다른 계정 접근/서버 실행은 미검사
+DETAIL 판정: 업로드 파일 재조회 확인
+근거: 업로드 응답의 상대 URL에서 내용 일치 · MIME=application/octet-stream · Content-Disposition=attachment; filename="community-file.txt" · 브라우저 실행/다른 계정 접근/서버 실행은 미검사
+
+REQUEST (byte view)
+GET /api/community/fixed/files/605b12af-e6da-4d97-b2da-50010a56a874 HTTP/1.1
+Host: 127.0.0.1:19088
+Cookie: [lab session omitted]
+Connection: close
+Accept: */*
+
+
+
+RESPONSE
+HTTP 200 · application/octet-stream · 271 bytes
+<!doctype html><b>PR_4e34016216fa418c</b>
+PASS real community upload exact readback fixed
+PASS fixed upload served as attachment, not active candidate
+PASS SSRF Start completes
+ROW SSRF 200 기준 응답 기준 수집 · 원래 값
+ROW SSRF 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW SSRF 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW SSRF 200 근거 없음 전용 HTTP 콜백 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+DETAIL 판정: 근거 없음
+근거: 전용 HTTP 콜백 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+
+REQUEST (byte view)
+GET /api/adaptive/fixed/ssrf?q=http%3A%2F%2F127.0.0.1%3A19112%2Fpr%2FPR_cf7bcaaced4c49e6 HTTP/1.1
+Host: 127.0.0.1:19088
+Connection: close
+Cookie: [lab session omitted]
+
+
+
+RESPONSE
+HTTP 200 · text/plain;charset=ISO-8859-1 · 145 bytes
+accepted
+PASS callback job has actual response rows fixed
+PASS real blind HTTP SSRF identical response callback fixed
+PASS callback collector closed after job fixed
+PASS CUSTOM Start completes
+ROW CUSTOM 200 기준 응답 기준 수집 · 원래 값
+ROW CUSTOM 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW CUSTOM 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW CUSTOM 200 지정 응답 문자열 후보 후보 탐색 · PR_CUSTOM_PROOF · 일반 문자열 관찰이며 취약점 확정 아님
+ROW CUSTOM 200 지정 응답 문자열 후보 새 마커/동일 입력 재검증 · PR_CUSTOM_PROOF · 일반 문자열 관찰이며 취약점 확정 아님
+ROW CUSTOM 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW CUSTOM 200 지정 응답 문자열 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · PR_CUSTOM_PROOF · 일반 문자열 관찰이며 취약점 확정 아님 · 자동 확정 아님
+DETAIL 판정: 지정 응답 문자열 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · PR_CUSTOM_PROOF · 일반 문자열 관찰이며 취약점 확정 아님 · 자동 확정 아님
+
+REQUEST (byte view)
+GET /custom-proof?q=probe HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+
+
+
+RESPONSE
+HTTP 200 · text/plain · 154 bytes
+PR_CUSTOM_PROOF
+PASS custom explicit string repeats with negative baseline
+PASS NOSQL Start completes
+ROW NOSQL 200 기준 응답 기준 수집 · 원래 값
+ROW NOSQL 200 근거 없음 기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW NOSQL 200 기준 재검증 기준 2회 동일 · 조건 차이 비교 가능
+ROW NOSQL 200 NoSQL Injection 오류 후보 후보 탐색 · MongoServerError: unknown operator · 오류 노출이며 인젝션 성공 확정 아님
+ROW NOSQL 200 NoSQL Injection 오류 후보 새 마커/동일 입력 재검증 · MongoServerError: unknown operator · 오류 노출이며 인젝션 성공 확정 아님
+ROW NOSQL 200 근거 없음 후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음
+ROW NOSQL 200 NoSQL Injection 오류 후보 · 재현 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · MongoServerError: unknown operator · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+DETAIL 판정: NoSQL Injection 오류 후보 · 재현
+근거: 같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · MongoServerError: unknown operator · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님
+
+REQUEST (byte view)
+POST /nosql HTTP/1.1
+Host: 127.0.0.1:19089
+Connection: close
+Content-Type: application/json
+Content-Length: 26
+
+{"$pr_invalid_operator":1}
+
+RESPONSE
+HTTP 200 · text/plain · 173 bytes
+MongoServerError: unknown operator
+PASS NoSQL RAW operator error corroborated in controlled fixture
+PASS native CSV save dialog writes UTF-8 result rows
+PASS actual Burp Scope rejects outside origin before Start
+PASS Stop halts future sends and restores Start
+UNLOAD_UI burp.Zixg selected=false
+UNLOAD_CONFIRM Yes
+PASS native extension unload cancels worker
+LIVE_VALIDATION_FINISHED passed=159

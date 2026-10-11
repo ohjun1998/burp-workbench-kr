@@ -1,0 +1,226 @@
+{
+  "date": "2026-10-08",
+  "runtime": "embedded Tomcat 10.1 / Spring MVC 6.2 / H2 Oracle mode (테스트용)",
+  "tests": [
+    {
+      "test": "actual DB health",
+      "passed": true
+    },
+    {
+      "test": "real HTML page",
+      "passed": true
+    },
+    {
+      "test": "static community.css",
+      "passed": true
+    },
+    {
+      "test": "static community.js",
+      "passed": true
+    },
+    {
+      "test": "static lab-endpoints.js",
+      "passed": true
+    },
+    {
+      "test": "static safe-endpoints.js",
+      "passed": true
+    },
+    {
+      "test": "orders need auth",
+      "passed": true
+    },
+    {
+      "test": "alice login",
+      "passed": true
+    },
+    {
+      "test": "bob login",
+      "passed": true
+    },
+    {
+      "test": "admin login",
+      "passed": true
+    },
+    {
+      "test": "invalid password denied",
+      "passed": true
+    },
+    {
+      "test": "auth SQL injection denied",
+      "passed": true
+    },
+    {
+      "test": "current user identity",
+      "passed": true
+    },
+    {
+      "test": "own orders only",
+      "passed": true
+    },
+    {
+      "test": "vuln IDOR exposed",
+      "passed": true
+    },
+    {
+      "test": "fixed IDOR denied",
+      "passed": true
+    },
+    {
+      "test": "fixed own order allowed",
+      "passed": true
+    },
+    {
+      "test": "vuln role spoof exposed",
+      "passed": true
+    },
+    {
+      "test": "fixed role spoof denied",
+      "passed": true
+    },
+    {
+      "test": "fixed real admin allowed",
+      "passed": true
+    },
+    {
+      "test": "vuln SQLi reproduced",
+      "passed": true
+    },
+    {
+      "test": "fixed SQLi treated as data",
+      "passed": true
+    },
+    {
+      "test": "vuln SQL error disclosed",
+      "passed": true
+    },
+    {
+      "test": "fixed quote search safe",
+      "passed": true
+    },
+    {
+      "test": "vuln CSRF token absent accepted",
+      "passed": true
+    },
+    {
+      "test": "fixed CSRF missing rejected",
+      "passed": true
+    },
+    {
+      "test": "fixed CSRF wrong rejected",
+      "passed": true
+    },
+    {
+      "test": "fixed CSRF valid accepted",
+      "passed": true
+    },
+    {
+      "test": "vuln reflected HTML raw",
+      "passed": true
+    },
+    {
+      "test": "fixed reflected HTML escaped",
+      "passed": true
+    },
+    {
+      "test": "vuln stored note accepted",
+      "passed": true
+    },
+    {
+      "test": "fixed note missing token rejected",
+      "passed": true
+    },
+    {
+      "test": "fixed note accepted with token",
+      "passed": true
+    },
+    {
+      "test": "notes persisted DB",
+      "passed": true
+    },
+    {
+      "test": "unknown mode rejected",
+      "passed": true
+    },
+    {
+      "test": "vuln HTML upload accepted",
+      "passed": true
+    },
+    {
+      "test": "vuln public inline upload",
+      "passed": true
+    },
+    {
+      "test": "fixed HTML upload rejected",
+      "passed": true
+    },
+    {
+      "test": "fixed false PNG MIME rejected",
+      "passed": true
+    },
+    {
+      "test": "fixed real PNG accepted",
+      "passed": true
+    },
+    {
+      "test": "fixed attachment and nosniff",
+      "passed": true
+    },
+    {
+      "test": "fixed download wrong owner denied",
+      "passed": true
+    },
+    {
+      "test": "fixed download anonymous denied",
+      "passed": true
+    },
+    {
+      "test": "upload 1MiB cap",
+      "passed": true
+    },
+    {
+      "test": "vuln config public",
+      "passed": true
+    },
+    {
+      "test": "fixed config anonymous denied",
+      "passed": true
+    },
+    {
+      "test": "fixed config user denied",
+      "passed": true
+    },
+    {
+      "test": "fixed config admin allowed",
+      "passed": true
+    },
+    {
+      "test": "JS fixture fake keys",
+      "passed": true
+    },
+    {
+      "test": "safe JS contains no fixture key",
+      "passed": true
+    },
+    {
+      "test": "OpenAPI schema",
+      "passed": true
+    },
+    {
+      "test": "logout csrf checked",
+      "passed": true
+    },
+    {
+      "test": "logout succeeds",
+      "passed": true
+    },
+    {
+      "test": "session invalidated",
+      "passed": true
+    }
+  ],
+  "passed": 54,
+  "total": 54,
+  "oracle_http_test_executed": false,
+  "packaging": "application"
+}

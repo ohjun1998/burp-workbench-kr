@@ -1,0 +1,75 @@
+{
+  "date_utc": "2026-10-11T01:11:50.047213+00:00",
+  "project_version": "0.21.0",
+  "lab_version": "3.4.0",
+  "environment": {
+    "java": "OpenJDK 17.0.20",
+    "python": "3.12.14",
+    "compiler": "com.sun.tools.javac.Main; local executable wrapper",
+    "burp": "not installed",
+    "docker": "not installed",
+    "gui": "not available"
+  },
+  "import_integrity": {
+    "files_checked": 428,
+    "mismatches_before_setup": 0
+  },
+  "production_source_unchanged": true,
+  "modified_original_files": [
+    "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.21.0.jar",
+    "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/JsHistoryTest.java",
+    "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/WorkbenchTest.java"
+  ],
+  "new_development_files": [
+    "dev.py",
+    "AGENTS.md",
+    ".gitignore",
+    "DEVELOPMENT_SETUP_KR.md",
+    "setup/",
+    "SETUP_MANIFEST.json"
+  ],
+  "original_release_jar_sha256": "e67bd89e68d4783d5813912b8798befc6601edeb7ee1c5d4378d71eb35629122",
+  "rebuilt_jar_sha256": "22a9c4248b272bcedea7cd7c5e1f3fbe5c9bc26924d72907fc53148408d6bbac",
+  "jar_max_class_version": 61,
+  "final_check_exit_code": 0,
+  "unit_adapter_headless_swing": {
+    "checks": 905,
+    "suites": 31,
+    "failed": 0
+  },
+  "payload_http_fixture": {
+    "checks": 127,
+    "failed": 0
+  },
+  "community_http": {
+    "checks": 100,
+    "requests": 199,
+    "profiles": 16,
+    "failed": 0
+  },
+  "total_current_checks": 1132,
+  "final_uncaught_exceptions_in_log": 0,
+  "cleanup": {
+    "lab_port_18099_closed": true
+  },
+  "initial_findings": [
+    "Initial concurrent run failed JsHistoryTest rapid-response batch assertion.",
+    "Sequential retry passed the batch assertion but failed during off-EDT clear with WrappedPlainView NullPointerException.",
+    "Fixed JsHistoryTest idle check to occur on EDT and performed clear on EDT.",
+    "Intermediate check exited 0 but exposed uncaught EDT exceptions because WorkbenchTest.request fixture returned null for body().",
+    "Fixed test fixture to return empty ByteArray and empty body string; final sequential check passed with no uncaught exceptions in log."
+  ],
+  "metadata_caveats": [
+    "Existing Maven POM says 0.18.0; official standalone packaging uses build_all.py.",
+    "Existing HTTP harness JSON reports hardcoded version 0.19.0; tested JAR was rebuilt 0.21.0, identified above by SHA-256.",
+    "PACKAGE_MANIFEST.json is preserved provenance of the input; SETUP_MANIFEST.json describes the prepared deliverable."
+  ],
+  "not_run": [
+    "actual Burp runtime/GUI",
+    "browser DOM/JS execution",
+    "Docker/Oracle/Nginx stack",
+    "live Pro Collaborator",
+    "external BApps",
+    "TLS/HTTP2"
+  ]
+}

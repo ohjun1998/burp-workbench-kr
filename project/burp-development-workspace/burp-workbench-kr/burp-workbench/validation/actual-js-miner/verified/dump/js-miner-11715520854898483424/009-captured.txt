@@ -1,0 +1,2 @@
+fetch('/api/community/redirect');
+//# sourceMappingURL=js-miner-redirect.js.map

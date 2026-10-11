@@ -1,0 +1,15 @@
+{
+  "burp-workbench-kr-0.18.0.jar": "d7cdb646c04b184514affa29ebd2dc0c93aa63167d880292870ff57ceeffa8d7",
+  "burp-development-workspace-0.18.0.zip": "7bae6830499fad74ab2b7c11aeb4bde6dbd7ed4d28366769978355fb60b93e36",
+  "community-security-lab-3.4.0.war": "4f924fe93e6eb0992264fac88c73253449c81c283cad527129023c5969c7160c",
+  "JS_구문검증_0.18.0.json": "d3fd83df3b18918809b170a4092002d6d3842fbab962a4f1b6370a36e51852ea",
+  "검증결과_0.18.0.json": "7d08869b09b3b89c12a232c47f9fad8971edb64fdcc9aa92f21ebea72585da54",
+  "검증결과_0.18.0.txt": "a125fa0c1b3886dc0470d3c13b8ace5987c442bc0db2745ec558dff5a26dfcc6",
+  "권한정책설정_0.18.0.png": "0277de9d9e77e2403e185fbc61e225fa510a843075bad8e34f38b359ebc556b2",
+  "사용안내_0.18.0.md": "ba64bea099ae26b909fa5b17912aaa8939809b4a4f97631396aaa1e571f3e538",
+  "응답분석_0.18.0.png": "2782464f0f823fe708ac7c67d5e6cb7973c62ae3012ee5cd3260dfb7e0b2fc09",
+  "전기능_변경전후_0.18.0.md": "5675e9618f72104b2b7da3587d0c68925f95d892a7a973cd8d3efb5811aed2f0",
+  "전기능_연계검증_0.18.0.json": "52b075d08cae9aacefe618977d739e50b49c1e900ddeb8c5694ecdfb55cedd26",
+  "커뮤니티_API검증_3.4.json": "ab62595355de3d415d4fb9d6292f3759c8db54885f2043aa6d86a1c16ebd9a55",
+  "테스트사이트_DOM검증_3.4.json": "2e38368e5138ac5ff45ff3ee825f2ce768c145fb980639083e9119f4737549a8"
+}

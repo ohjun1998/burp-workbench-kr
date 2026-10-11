@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-11",
+  "scope": "GitHub collaboration bootstrap",
+  "functional_source_unchanged": true,
+  "local_check_exit_code": 0,
+  "regression_checks": 905,
+  "regression_groups": 31,
+  "payload_fixture_checks": 127,
+  "all_features_http_checks": 100,
+  "http_requests": 199,
+  "total_checks": 1132,
+  "temporary_port_18099_released": true,
+  "jar_sha256": "816a52be3b533ee5a2eee3c88f216b62a8028c2bae21ec4a24dd5193f5fdc406",
+  "not_run_this_task": [
+    "native Burp",
+    "GUI",
+    "browser DOM",
+    "Docker/Oracle/Nginx",
+    "Pro Collaborator"
+  ],
+  "historical_records": "release/history/setup/reproduction retained from uploaded package; not counted above"
+}

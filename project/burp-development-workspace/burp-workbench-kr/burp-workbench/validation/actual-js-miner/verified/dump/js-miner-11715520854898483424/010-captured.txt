@@ -1,0 +1,2 @@
+fetch('/api/community/normal');
+//# sourceMappingURL=js-miner-invalid.js.map

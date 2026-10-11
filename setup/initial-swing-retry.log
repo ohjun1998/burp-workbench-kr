@@ -1,0 +1,347 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/scratch/760a1a9e67de/burp-workbench-workspace/project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --java /usr/bin/java --javac /workspace/scratch/760a1a9e67de/burp-workbench-workspace/.dev-tools/javac --test
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/scratch/760a1a9e67de/burp-workbench-workspace/project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.21.0.jar 2968136 bytes
+PASS JSON formatted without numeric conversion
+PASS XML formatted
+PASS external XML blocked
+PASS format differences normalized
+PASS insert aligns later lines
+PASS matched lines remain aligned
+PASS deletion one region
+PASS separated changes
+PASS large input bounded
+PASS HTTP body formatted
+PASS original paste preserved
+PASS both differences colored
+PASS next navigates difference
+PASS navigation wraps
+PASS raw toggle retains original
+PASS identical disables navigation
+Structured compare: 16 checks passed
+PASS UTF-8 Base64 round trip
+PASS form URL round trip
+PASS Gzip round trip
+PASS Hex round trip
+PASS Gzip expansion cap
+PASS profile cannot change destination
+PASS case-insensitive duplicate profile rejected
+PASS CR header injection rejected
+PASS CSV formula injection neutralized
+PASS HTML escaping
+PASS export strips query and fragment
+PASS JS paths deduplicated and sourcemap extracted
+PASS JWT does not claim verified signature
+PASS identical response is candidate, not confirmed vulnerability
+PASS duplicate original cookies removed
+PASS original privileged credentials removed
+PASS original request immutable
+PASS nine core tools including bounty support plus shared Settings tab
+PASS common session tab removed
+PASS imported request collected
+PASS traffic retains bounded 250-row window
+PASS unload clears traffic
+PASS unload closes extension
+WorkbenchTest: 23 checks passed
+PASS server and framework headers
+PASS framework CMS plugin resource signatures
+PASS application prefix
+PASS observed resource query redaction
+PASS external resources excluded
+PASS cookie values never retained
+PASS prefix validation //evil.test
+PASS prefix validation /../admin
+PASS prefix validation /a/./b
+PASS prefix validation /a?x=1
+PASS prefix validation /a#b
+PASS prefix validation /ab
+PASS prefix validation /%2e%2e
+PASS prefix validation /a\b
+PASS unknown stack does not fabricate candidates
+PASS Actuator candidates
+PASS origin memory bounded
+PASS multiple environment candidates >=80: 150
+PASS resource-derived application prefix
+PASS JS quoted endpoint extraction
+PASS explicit sourceMappingURL extraction
+PASS cross-profile candidates deduplicated
+PASS evidence priority descending
+PASS top 30 limit
+PASS common candidates can be excluded
+PASS unknown stack common fallback distinguished
+PASS unsubstantiated candidates ranked low
+EnvironmentTest: 27 checks passed
+PASS UI lists multiple ranked candidates
+PASS UI removes score condition and priority columns
+PASS UI top 30 selector
+PASS UI expanded limit refresh
+PASS UI common toggle
+PASS invalid prefix leaves no stale Repeater candidates
+EnvironmentPanelTest: 6 checks passed
+PASS selection previews unsent request without response
+PASS selection sends no traffic
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS one batch visits every visible candidate exactly once
+PASS timeout and redirects disabled
+PASS sorted selection resolves corresponding error packet
+PASS selected response includes actual status packet
+PASS completion restores start and stop controls
+PASS out of scope batch rejected before sending
+PASS rejected batch emits zero requests
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS first request entered
+PASS stop prevents remaining requests
+PASS batch sends outside EDT
+PASS batch uses anonymous GET
+PASS single start sends only selected candidate
+PASS unload clears packets and stops future work
+EnvironmentBatchTest: 23 checks passed
+PASS OpenAPI base path
+PASS operation server override
+PASS templates and write-only operations excluded
+PASS external schema servers excluded
+PASS schema application prefix learned
+PASS Swagger 2 base path
+PASS Actuator captured link
+PASS renamed actuator root
+PASS templated Actuator link excluded
+PASS robots directive discovery
+PASS robots wildcard and external exclusion
+PASS sitemap query values excluded
+PASS relative swagger schema reference
+PASS wordlist normalization duplicates invalid paths: ImportResult[accepted=2, skipped=6]
+PASS wordlist category
+PASS wordlist lacks observed evidence
+PASS 404 feedback demotes candidate
+PASS access-denied remains reviewable
+PASS discovery memory bounded
+PASS FastAPI fingerprint
+PASS catalog source reference retained
+PASS Symfony header fingerprint
+PASS AEM resource fingerprint
+PASS reflected-path soft 404 comparison
+PASS different response not soft 404
+PASS 403 is access control not success
+PASS login redirect
+PASS rate limit
+PASS heavy diagnostics separated from batch
+PASS soft 404 badge is not green
+EnvironmentDiscoveryTest: 30 checks passed
+PASS two stable reference probes plus two candidates
+PASS batch excludes heavy diagnostics
+PASS SPA shell marked soft 404 in batch
+PASS verified candidates not resent by default
+PASS 429 stops remaining candidates
+EnvironmentFeedbackTest: 5 checks passed
+PASS UTF-8 bytes decoded without host string
+PASS declared EUC-KR
+PASS declared CP949
+PASS unknown charset falls back to valid UTF-8
+PASS Latin-1 mojibake display recovery
+PASS mixed normal and garbled Korean
+PASS normal Latin text preserved
+PASS structured packet displays Korean
+PASS HTTP body decoded from raw bytes even if host string is garbled
+PASS payload engine retains status
+PASS bundled fallback can draw Korean
+PASS packet viewer repairs display
+PASS original mojibake packet remains intact
+PASS packet font draws restored text
+TextEncodingTest: 14 checks passed
+PASS all categories and common paths initially shown
+PASS sorted category click filters nginx candidates and excludes other technologies
+PASS category filter reduces candidates
+PASS passive refresh preserves selected category
+PASS all environments restores full candidate list
+PASS formatter retains headers
+PASS JSON indents without rounding large integer
+PASS JSON string escaping preserved
+PASS original raw packet remains unchanged
+PASS XML pretty indentation
+PASS XML external entity document stays raw without resolving entity
+PASS malformed JSON remains raw
+PASS HTML tag boundaries become readable lines
+DisplayWorkflowTest: 13 checks passed
+PASS shared request preview indents JSON without changing integer
+PASS shared preview restores exact raw text
+PASS format toggle never edits source string
+PASS decoded response source can be formatted separately
+PASS raw response remains accessible after decoded display
+PASS status classification 200
+PASS status classification HTTP 200
+PASS status classification 302
+PASS status classification 404
+PASS status classification HTTP 503
+PASS status classification 미검증
+PASS status classification 진행 중
+PASS status classification 전송 오류
+PASS status classification 검토 필요
+PASS HTTP status badge removes redundant prefix
+PASS success badge background rendered
+PASS dark theme status has bright readable green
+PASS compressed response decoded and formatted for managed viewers
+PASS traffic request viewer uses structured formatting
+PASS traffic response viewer uses structured formatting
+PASS JS advanced actions removed from primary toolbar
+PASS payload settings and export moved off primary toolbar
+PASS payload structured preview preserves editable request bytes
+PASS payload draft and result request/response have common previews
+PacketUiTest: 24 checks passed
+PASS domain extracted from HTTP URL
+PASS invalid CLI domain rejected: example.com;id
+PASS invalid CLI domain rejected: $(id)
+PASS invalid CLI domain rejected: -x
+PASS invalid CLI domain rejected: example..com
+PASS invalid CLI domain rejected: https://user@example.com
+PASS escaped path and query preserved; fragment removed
+PASS subdomain setting enforced
+PASS unrelated hosts and non-HTTP links excluded
+PASS executable path passed without shell
+PASS gau actual flags include requested subdomains
+PASS actual subprocess stdin/stdout adapter filters output
+PASS CLI nonzero exit and stderr surfaced
+PASS two CLI sources merged with URL deduplication
+PASS collect/select sends no target requests
+PASS verification GET runs off EDT
+PASS single start sends one selected URL
+PASS selected response structured JSON
+PASS verification GET runs off EDT
+PASS verification GET runs off EDT
+PASS batch sends all visible URLs with bounded nonredirecting requests
+PASS sorted row resolves matching request/response
+PASS out-of-scope batch rejected before requests
+PASS scope rejection emits no requests
+PASS verification GET runs off EDT
+PASS transport error stored in status
+PASS verification GET runs off EDT
+PASS first batch request entered
+PASS stop prevents subsequent sends
+PASS passive URL retention bounded
+PASS unload clears data and prevents jobs
+PassiveScanTest: 31 checks passed
+PASS saved tool path reused through Burp preferences
+PASS built-in CDX parses original URLs and filters domains
+PASS built-in CDX subdomain query modes
+PASS different URL targets have separate tabs including same-host paths
+PASS traffic context action selects target and starts collection automatically
+PASS collection results remain in owning target tab
+PASS target switching isolates packet preview
+PASS switching back retains selected packet
+PASS packet and list workspace orientations switch together: 1
+PASS existing passive target follows shared Settings tab layout
+PASS layout switch preserves packets and selection
+PASS packet and list workspace orientations switch together: 0
+PASS existing passive target follows shared Settings tab layout
+PASS layout switch preserves packets and selection
+PASS target tab count bounded without overwriting earlier results
+PASS unload closes all target panels
+LayoutPassiveWorkflowTest: 16 checks passed
+PASS AST successfully parsed
+PASS constant concat fetch URL and method
+PASS header names and body keys from call options
+PASS query values excluded from results
+PASS Axios post body metadata
+PASS XHR open URL
+PASS WebSocket identified
+PASS location assignment URL
+PASS AWS access key pattern
+PASS Google key pattern
+PASS GitHub token pattern
+PASS placeholder excluded
+PASS secret results masked with fingerprints only
+PASS template unresolved value retained
+PASS dynamic concatenation marked unresolved
+PASS escaped string decoded by parser
+PASS shadowed parameter not resolved from global const
+PASS global const resolved in own scope
+PASS Axios baseURL and params metadata
+PASS HTML inline script original line location
+PASS external scripts not automatically fetched
+PASS parse failure clearly labeled with secret fallback
+PASS numeric arithmetic not incorrectly concatenated
+PASS URL credentials query and fragment excluded
+PASS source size limit explicit
+PASS endpoint result cap
+PASS JavaScript is parsed without executing throw
+PASS module compatibility retains call metadata without execution
+PASS Request constructor URL metadata
+PASS same URL in separate call sites retains code locations
+PASS window.open target not confused with XHR
+JsAnalysisTest: 31 checks passed
+PASS manual AST result tables
+PASS masked report excludes secrets and URL query values
+PASS explicit action prepares placeholder query in Repeater
+PASS out-of-scope Repeater preparation blocked
+PASS dynamic endpoint preparation blocked
+PASS passive out-of-scope response ignored
+PASS passive analysis without request or Repeater action
+PASS automatic analysis does not display raw source
+PASS changed JS source reanalyzed under same source URL
+PASS clear prevents stale async result restoration
+PASS close clears raw source and secret rows
+JsAnalysisPanelTest: 11 checks passed
+PASS all native source findings highlighted
+PASS next arrow selects first finding
+PASS arrow selects endpoint table row
+PASS next finding moves in source order
+PASS previous arrow returns to earlier finding
+PASS secret-only navigation filter
+PASS secret arrow selects masked secret row
+PASS source highlight painter
+PASS editing invalidates stale positions
+PASS explicit arrow restores captured source
+PASS sorted result selection resolves source offset
+PASS passive capture does not expose raw source automatically
+PASS arrow opens passive captured source explicitly
+PASS clear resets navigation
+JsNavigationTest: 14 checks passed
+PASS existing History automatically backfilled
+PASS late response with lower history ID not missed
+PASS unchanged history entries not reanalyzed
+PASS new History responses processed incrementally
+PASS history rescan deduplicates identical content
+PASS History source overview updated
+PASS history ID reset recovered
+PASS Proxy live response listener registered
+PASS received Proxy response preserved unchanged
+PASS sent Proxy response preserved unchanged
+PASS Proxy event analyzed immediately without history polling
+PASS Proxy listener deregistered on close
+PASS busy worker queues rapid JS responses rather than skipping
+PASS normal batch has no queue overflow
+PASS watch pause blocks new analysis
+PASS history scan pauses without advancing cursor
+PASS history accumulated during pause recovered
+PASS queue rejection retried without cursor loss
+PASS gzip response decoded without network request
+PASS history JS larger than 128 KiB traffic capture limit analyzed
+PASS bounded queue pressure explicitly counted
+java.lang.NullPointerException: Cannot invoke "java.awt.Container.repaint()" because the return value of "javax.swing.text.WrappedPlainView$WrappedLine.getContainer()" is null
+	at java.desktop/javax.swing.text.WrappedPlainView$WrappedLine.update(WrappedPlainView.java:875)
+	at java.desktop/javax.swing.text.WrappedPlainView$WrappedLine.insertUpdate(WrappedPlainView.java:862)
+	at java.desktop/javax.swing.text.WrappedPlainView.insertUpdate(WrappedPlainView.java:602)
+	at java.desktop/javax.swing.plaf.basic.BasicTextUI$RootView.insertUpdate(BasicTextUI.java:1730)
+	at java.desktop/javax.swing.plaf.basic.BasicTextUI$UpdateHandler.insertUpdate(BasicTextUI.java:1997)
+	at java.desktop/javax.swing.text.AbstractDocument.fireInsertUpdate(AbstractDocument.java:226)
+	at java.desktop/javax.swing.text.AbstractDocument.handleInsertString(AbstractDocument.java:780)
+	at java.desktop/javax.swing.text.AbstractDocument.insertString(AbstractDocument.java:739)
+	at java.desktop/javax.swing.text.PlainDocument.insertString(PlainDocument.java:131)
+	at java.desktop/javax.swing.text.AbstractDocument.replace(AbstractDocument.java:698)
+	at java.desktop/javax.swing.text.JTextComponent.setText(JTextComponent.java:1729)
+	at kr.workbench.PacketView.refresh(PacketView.java:10)
+	at kr.workbench.PacketView.setPacket(PacketView.java:8)
+	at kr.workbench.PacketView.setPacket(PacketView.java:7)
+	at kr.workbench.JsAnalysisPanel.clear(JsAnalysisPanel.java:77)
+	at kr.workbench.JsHistoryTest.main(JsHistoryTest.java:34)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at kr.workbench.TestLauncher.main(TestLauncher.java:4)
+ERROR: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3', '/workspace/scratch/760a1a9e67de/burp-workbench-workspace/project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py', '--java', '/usr/bin/java', '--javac', '/workspace/scratch/760a1a9e67de/burp-workbench-workspace/.dev-tools/javac', '--test']' returned non-zero exit status 1.

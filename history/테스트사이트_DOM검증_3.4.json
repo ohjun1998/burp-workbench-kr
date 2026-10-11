@@ -1,0 +1,56 @@
+{
+  "version": "3.4.0",
+  "method": "DOM API adapter; no actual browser execution",
+  "passed": 12,
+  "failed": 0,
+  "checks": [
+    {
+      "test": "all catalogue cards render",
+      "passed": true
+    },
+    {
+      "test": "all nine feature chips render",
+      "passed": true
+    },
+    {
+      "test": "all sixteen payload profiles render",
+      "passed": true
+    },
+    {
+      "test": "page load only requests the manifest",
+      "passed": true
+    },
+    {
+      "test": "filter shows both scope boundaries",
+      "passed": true
+    },
+    {
+      "test": "GET uses same-origin credentials and manual redirect",
+      "passed": true
+    },
+    {
+      "test": "filter and buttons disabled while request pending",
+      "passed": true
+    },
+    {
+      "test": "concurrent request is ignored",
+      "passed": true
+    },
+    {
+      "test": "response markup is displayed as text",
+      "passed": true
+    },
+    {
+      "test": "controls recover after success",
+      "passed": true
+    },
+    {
+      "test": "write is explicit POST with form encoded Unicode",
+      "passed": true
+    },
+    {
+      "test": "failure shown and controls recover",
+      "passed": true
+    }
+  ]
+}

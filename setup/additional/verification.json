@@ -1,0 +1,36 @@
+{
+  "date_utc": "2026-10-11T01:40:22.151894+00:00",
+  "extension_version": "0.21.0",
+  "lab_version": "3.4.0",
+  "extension_production_source_unchanged": true,
+  "extension_jar_sha256": "22a9c4248b272bcedea7cd7c5e1f3fbe5c9bc26924d72907fc53148408d6bbac",
+  "lab_war_sha256": "6b325934133adac02ef28c1745b1cfb48a598985171ed3393f6f6df0af491301",
+  "new_functional_checks": {
+    "actual_chromium": 23,
+    "protocol_fixture": 11,
+    "actual_burp_tls_h2": 6,
+    "total": 40,
+    "failed": 0
+  },
+  "total_current_functional_checks": 1352,
+  "docker_preflight_checks": 14,
+  "docker_containers_executed": false,
+  "native_final_mode": "actual Burp GUI in isolated Xvfb; rerun avoided headless Burp UI initialization errors",
+  "extension_error_bytes": 0,
+  "initial_failures": [
+    "Mobile width 390px produced document width 414px; search input min-width corrected in source and release WAR",
+    "Burp headless UI initialization emitted ComponentUI errors and NullPointerException; final GUI run has neither"
+  ],
+  "remaining": [
+    "Docker Oracle/Nginx/Tomcat/protocol container runtime",
+    "Live Pro Collaborator",
+    "External BApp installation/execution"
+  ],
+  "cleanup_ports_closed": {
+    "18599": true,
+    "18443": true,
+    "18091": true,
+    "18092": true,
+    "6096": true
+  }
+}

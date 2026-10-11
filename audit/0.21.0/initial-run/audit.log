@@ -1,0 +1,19 @@
+PASS live login alice
+PASS live login bob
+PASS live login admin
+PASS live login moderator
+PASS vuln-private-post target status
+PASS vuln-private-post impact marker
+PASS vuln-private-message target status
+PASS vuln-private-message impact marker
+PASS vuln-private-file target status
+PASS vuln-private-file impact marker
+PASS vuln-anonymous-file target status
+PASS vuln-anonymous-file impact marker
+PASS vuln-admin-spoof target status
+FAIL vuln-admin-spoof impact marker
+java.lang.AssertionError: vuln-admin-spoof impact marker
+	at kr.workbench.CommunityExtensionAudit.verify(CommunityExtensionAudit.java:12)
+	at kr.workbench.BountyAudit.access(BountyAudit.java:10)
+	at kr.workbench.BountyAudit.main(BountyAudit.java:23)
+OBS fatal java.lang.AssertionError: vuln-admin-spoof impact marker

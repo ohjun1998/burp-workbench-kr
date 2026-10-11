@@ -1,0 +1,6 @@
+.build-deps
+.build
+.git
+__pycache__
+create_project.py
+verification-results

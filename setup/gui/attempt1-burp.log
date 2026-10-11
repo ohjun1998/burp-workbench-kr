@@ -1,0 +1,23 @@
+Your JRE appears to be version 21.0.3 from Ubuntu
+Burp has not been fully tested on this platform and you may experience problems.
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:118)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at check.GuiAuditObserver.lambda$initialize$5(GuiAuditObserver.java:21)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.NoClassDefFoundError: kr/workbench/AuthComparePanel
+	at kr.workbench.RuntimeUserAudit.run(RuntimeUserAudit.java:38)
+	at kr.workbench.RuntimeWholeAudit.run(RuntimeWholeAudit.java:27)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	... 3 more
+Caused by: java.lang.ClassNotFoundException: kr.workbench.AuthComparePanel
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	... 6 more

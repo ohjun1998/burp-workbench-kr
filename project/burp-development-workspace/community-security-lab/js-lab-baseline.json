@@ -1,0 +1,152 @@
+{
+  "01-fetch.js": {
+    "endpoints": 5,
+    "secrets": 0,
+    "domains": 2,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 5 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 2 · map 0 · 원본 0"
+  },
+  "02-axios.js": {
+    "endpoints": 10,
+    "secrets": 0,
+    "domains": 7,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 10 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 7 · map 0 · 원본 0"
+  },
+  "03-xhr-navigation.js": {
+    "endpoints": 7,
+    "secrets": 0,
+    "domains": 6,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 7 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 6 · map 0 · 원본 0"
+  },
+  "04-constants.js": {
+    "endpoints": 8,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 8 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0"
+  },
+  "05-dynamic-scope.js": {
+    "endpoints": 6,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 6 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0"
+  },
+  "06-secrets.js": {
+    "endpoints": 0,
+    "secrets": 9,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 0 · 시크릿 후보 9 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0"
+  },
+  "07-negative.js": {
+    "endpoints": 1,
+    "secrets": 0,
+    "domains": 1,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 1 · map 0 · 원본 0"
+  },
+  "08-modern-module.js": {
+    "endpoints": 1,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 3,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 0 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0"
+  },
+  "09-invalid.js": {
+    "endpoints": 1,
+    "secrets": 1,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 0 · URL/API 1 · 시크릿 후보 1 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0"
+  },
+  "10-recon.js": {
+    "endpoints": 1,
+    "secrets": 0,
+    "domains": 7,
+    "clouds": 6,
+    "dependencies": 2,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 7 · map 0 · 원본 0"
+  },
+  "11-sourcemap.js": {
+    "endpoints": 1,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 1,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 1 · 원본 0"
+  },
+  "12-inline-map.js": {
+    "endpoints": 2,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 1,
+    "maps": 1,
+    "recovered": 1,
+    "status": "AST 블록 1 · URL/API 2 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 1 · 원본 1"
+  },
+  "13-inline.html": {
+    "endpoints": 1,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 0,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0"
+  },
+  "14-package.json": {
+    "endpoints": 0,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 3,
+    "maps": 0,
+    "recovered": 0,
+    "status": "AST 블록 0 · URL/API 0 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0"
+  },
+  "11-sourcemap.js.map": {
+    "endpoints": 2,
+    "secrets": 0,
+    "domains": 0,
+    "clouds": 0,
+    "dependencies": 1,
+    "maps": 1,
+    "recovered": 1,
+    "status": "AST 블록 0 · URL/API 2 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 1 · 원본 1"
+  }
+}

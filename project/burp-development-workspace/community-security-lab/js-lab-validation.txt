@@ -1,0 +1,5 @@
+Workbench KR 0.15.0 engine: 62 checks passed; 15 fixture responses.
+Controller direct invocation: 11 checks passed.
+Headless DOM UI behavior: 19 checks passed.
+WAR byte verification: 21 updated entries match source; no duplicate ZIP entries.
+Not performed: Burp GUI integration, browser rendering, Docker/Tomcat/Oracle stack startup.

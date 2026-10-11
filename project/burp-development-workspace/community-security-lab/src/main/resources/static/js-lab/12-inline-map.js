@@ -1,0 +1,3 @@
+// TRAINING ONLY: fake values; fetched as text, never executed.
+fetch('/api/js-lab/inline');
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjogMywgImZpbGUiOiAiMTEtc291cmNlbWFwLmpzIiwgInNvdXJjZXMiOiBbInNyYy9wcml2YXRlLXJlcG9ydHMuanMiXSwgInNvdXJjZXNDb250ZW50IjogWyJmZXRjaCgnL2FwaS9qcy1sYWIvcmVjb3ZlcmVkJyx7bWV0aG9kOidQT1NUJyxib2R5OntyZXBvcnRJZDoxfX0pO1xucmVxdWlyZSgnQGNvbW11bml0eS9yZWNvdmVyZWQnKTtcbiJdLCAibmFtZXMiOiBbXSwgIm1hcHBpbmdzIjogIiJ9

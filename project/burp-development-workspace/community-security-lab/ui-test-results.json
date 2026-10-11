@@ -1,0 +1,59 @@
+{
+  "tests": [
+    {
+      "test": "page loads real DB status",
+      "passed": true
+    },
+    {
+      "test": "login form hidden after login",
+      "passed": true
+    },
+    {
+      "test": "order table renders",
+      "passed": true
+    },
+    {
+      "test": "fixed IDOR rejected in UI",
+      "passed": true
+    },
+    {
+      "test": "stored XSS executes in vulnerable browser view",
+      "passed": true
+    },
+    {
+      "test": "fixed stored HTML rendered as text",
+      "passed": true
+    },
+    {
+      "test": "fixed upload works through browser",
+      "passed": true
+    },
+    {
+      "test": "fixed UI sends valid CSRF token",
+      "passed": true
+    },
+    {
+      "test": "fixed JS fixture fetched",
+      "passed": true
+    },
+    {
+      "test": "vulnerable JS fixture fetched",
+      "passed": true
+    },
+    {
+      "test": "desktop no horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "mobile no horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "no unhandled JS errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 13,
+  "total": 13
+}

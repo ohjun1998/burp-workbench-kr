@@ -1,0 +1,55 @@
+name: loop-community-lab
+services:
+  web:
+    image: nginx:1.28-alpine
+    ports: ["127.0.0.1:8088:80"]
+    volumes: ["./infra/nginx.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on:
+      was:
+        condition: service_healthy
+    networks: [lab]
+  was:
+    image: enterprise-lab-was:3.0
+    build: .
+    environment:
+      DB_URL: jdbc:oracle:thin:@//db:1521/FREEPDB1
+      DB_USER: LABAPP
+      DB_PASSWORD: LabDatabaseOnly2026
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "java", "/opt/HealthCheck.java"]
+      interval: 10s
+      timeout: 8s
+      retries: 30
+      start_period: 30s
+    networks: [lab]
+  protocols:
+    build: ./protocols
+    ports: ["127.0.0.1:8443:8443", "127.0.0.1:8091:8091", "127.0.0.1:8092:8092"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; [socket.create_connection(('127.0.0.1',p),2).close() for p in (8443,8091,8092)]"]
+      interval: 10s
+      timeout: 8s
+      retries: 12
+    networks: [lab]
+  db:
+    image: gvenzl/oracle-free:23-slim
+    environment:
+      ORACLE_PASSWORD: LabAdminOnly2026
+      APP_USER: LABAPP
+      APP_USER_PASSWORD: LabDatabaseOnly2026
+    volumes: ["oracle-data:/opt/oracle/oradata"]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 60
+      start_period: 60s
+    networks: [lab]
+networks:
+  lab:
+    internal: true
+volumes:
+  oracle-data:

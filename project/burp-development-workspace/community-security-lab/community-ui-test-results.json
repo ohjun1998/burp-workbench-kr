@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "test": "community homepage and navigation render",
+      "passed": true
+    },
+    {
+      "test": "login UI reflects active user role",
+      "passed": true
+    },
+    {
+      "test": "stored comment XSS executes in learning mode",
+      "passed": true
+    },
+    {
+      "test": "fixed comment view displays the payload as text",
+      "passed": true
+    },
+    {
+      "test": "account switching updates role display",
+      "passed": true
+    },
+    {
+      "test": "mobile layout avoids horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "desktop layout avoids horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "no unhandled browser errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 8,
+  "total": 8
+}

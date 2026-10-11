@@ -1,0 +1,21 @@
+{
+  "h2-2.3.232.jar": "8dae62d22db8982c3dcb3826edb9c727c5d302063a67eef7d63d82de401f07d3",
+  "jackson-annotations-2.19.4.jar": "ab26383fa3c10c0df1ffd1bb035d81161c059b1af71927d73c24473c058baa16",
+  "jackson-core-2.19.4.jar": "466ae4dc4f7054f51525f4211df411d9a64d65cc169995d32bf49e20e6f586e5",
+  "jackson-databind-2.19.4.jar": "b781c431be870deb0bf84421e99e774c256a701f4ba678df80248f55cd16ff74",
+  "jakarta.annotation-api-2.1.1.jar": "5f65fdaf424eee2b55e1d882ba9bb376be93fb09b37b808be6e22e8851c909fe",
+  "micrometer-commons-1.14.10.jar": "1fe0d9b1caf0caf142a6dd5d0f81a4014b4934a038c8837f089731cc6d3cafbb",
+  "micrometer-observation-1.14.10.jar": "b37d0247bce7aa00d5bab543c385a3ca392a1a988fec0a66e040666212e3bd6e",
+  "ojdbc11-23.26.3.0.0.jar": "764cc3f88454d1be117e155d01ed617467b984c9c68f13090dd6083799d2bb8c",
+  "spring-aop-6.2.19.jar": "a11b93539d80b02caf76171db2da96df39abebbfef49a2fadd6dda0779f2e20b",
+  "spring-beans-6.2.19.jar": "846dc8f30a639a36eb551ee99a30469be4d11bd285ca9daf164d98321571b404",
+  "spring-context-6.2.19.jar": "ead4b645f94a7f665f00093eaafde634e97b34524294de653b51e43e0b3fc4a4",
+  "spring-core-6.2.19.jar": "52146689e71a911c92bac26677d73c692512a739893a57710cc233591756bff6",
+  "spring-expression-6.2.19.jar": "d710a44417d890353895b341a722d7d08199e2b7da52f0a11c0e92571e1d6e19",
+  "spring-jcl-6.2.19.jar": "9994478bcea1423b8892d4eb0db942c94da0090167c3c684050c1eaef04491d0",
+  "spring-jdbc-6.2.19.jar": "c81fd8aca952aac243d9327af12596c2058012c9d3784f1313477a6d2cc56306",
+  "spring-tx-6.2.19.jar": "34a1b6f5d87ef4cca6849e1bc70a0f965eec6476737b3cae73ff2561a266ef73",
+  "spring-web-6.2.19.jar": "ca88e364ecebee61163e2260e8a20584138eca74e28a050d6a2ef6302bad2f2d",
+  "spring-webmvc-6.2.19.jar": "134f42320cedd31f54f683d2ca9936a4e015c011fb1882a31fa7213e2d8c7e94",
+  "tomcat-embed-core-10.1.60.jar": "daa3f968c393485b7a5ee05a0b671112d78a071841a902a55466353c89ca7bef"
+}

@@ -1,0 +1,1 @@
+{"status":"PASSED","passed":6,"failed":0,"checks":["actual Burp TLS response status HTTP_1","actual Burp protocol-specific response body HTTP_1","actual Burp response version HTTP_1 = HTTP/1.1","actual Burp TLS response status HTTP_2","actual Burp protocol-specific response body HTTP_2","actual Burp response version HTTP_2 = HTTP/2"]}

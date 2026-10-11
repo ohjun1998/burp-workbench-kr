@@ -1,0 +1,14 @@
+Oct 11, 2026 12:15:14 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-127.0.0.1-18299"]
+Oct 11, 2026 12:15:14 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 11, 2026 12:15:14 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/10.1.60]
+Oct 11, 2026 12:15:14 AM org.apache.catalina.core.ApplicationContext log
+INFO: Initializing Spring DispatcherServlet 'mvc'
+Oct 11, 2026 12:15:14 AM org.springframework.web.servlet.FrameworkServlet initServletBean
+INFO: Initializing Servlet 'mvc'
+Oct 11, 2026 12:15:15 AM org.springframework.web.servlet.FrameworkServlet initServletBean
+INFO: Completed initialization in 1396 ms
+Oct 11, 2026 12:15:15 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-127.0.0.1-18299"]

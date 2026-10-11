@@ -1,0 +1,192 @@
+{
+  "runtime": "Spring MVC/Tomcat + integrated protocol services",
+  "target": "http://127.0.0.1:18088",
+  "tests": [
+    {
+      "test": "hub HTML served",
+      "passed": true
+    },
+    {
+      "test": "all nine engines listed",
+      "passed": true
+    },
+    {
+      "test": "asset extensions-hub.js",
+      "passed": true
+    },
+    {
+      "test": "asset extensions-catalog.json",
+      "passed": true
+    },
+    {
+      "test": "asset extensions-fixtures.js",
+      "passed": true
+    },
+    {
+      "test": "asset extensions-fixtures.js.map",
+      "passed": true
+    },
+    {
+      "test": "asset param-miner-wordlist.txt",
+      "passed": true
+    },
+    {
+      "test": "source map includes original synthetic source",
+      "passed": true
+    },
+    {
+      "test": "hidden baseline stable",
+      "passed": true
+    },
+    {
+      "test": "hidden query changes response",
+      "passed": true
+    },
+    {
+      "test": "hidden header changes response",
+      "passed": true
+    },
+    {
+      "test": "hidden cookie changes response",
+      "passed": true
+    },
+    {
+      "test": "marker roundtrip",
+      "passed": true
+    },
+    {
+      "test": "base64 JSON conversion",
+      "passed": true
+    },
+    {
+      "test": "invalid conversion rejected",
+      "passed": true
+    },
+    {
+      "test": "CSRF needs login",
+      "passed": true
+    },
+    {
+      "test": "alice login",
+      "passed": true
+    },
+    {
+      "test": "bob login",
+      "passed": true
+    },
+    {
+      "test": "admin login",
+      "passed": true
+    },
+    {
+      "test": "CSRF foreign session rejected",
+      "passed": true
+    },
+    {
+      "test": "CSRF fresh token accepted",
+      "passed": true
+    },
+    {
+      "test": "CSRF replay rejected",
+      "passed": true
+    },
+    {
+      "test": "CSRF rotates and old token denied",
+      "passed": true
+    },
+    {
+      "test": "JWT issuance needs login",
+      "passed": true
+    },
+    {
+      "test": "JWT valid ordinary user cannot admin",
+      "passed": true
+    },
+    {
+      "test": "JWT vulnerable accepts unsigned role change",
+      "passed": true
+    },
+    {
+      "test": "JWT fixed rejects bad signature",
+      "passed": true
+    },
+    {
+      "test": "JWT fixed checks account despite re-sign",
+      "passed": true
+    },
+    {
+      "test": "JWT real admin accepted",
+      "passed": true
+    },
+    {
+      "test": "JWT algorithm none denied",
+      "passed": true
+    },
+    {
+      "test": "JWT expiration enforced",
+      "passed": true
+    },
+    {
+      "test": "JWT malformed returns controlled status",
+      "passed": true
+    },
+    {
+      "test": "counter needs login",
+      "passed": true
+    },
+    {
+      "test": "counter reset",
+      "passed": true
+    },
+    {
+      "test": "parallel vuln requests succeed",
+      "passed": true
+    },
+    {
+      "test": "vuln lost update reproduced",
+      "passed": true
+    },
+    {
+      "test": "fixed preserves all increments",
+      "passed": true
+    },
+    {
+      "test": "vuln duplicate redeem accepted",
+      "passed": true
+    },
+    {
+      "test": "fixed first redeem accepted",
+      "passed": true
+    },
+    {
+      "test": "fixed duplicate redeem blocked",
+      "passed": true
+    },
+    {
+      "test": "redeem isolated between accounts",
+      "passed": true
+    },
+    {
+      "test": "actual TLS HTTP1 response",
+      "passed": true
+    },
+    {
+      "test": "TLS ALPN negotiates H2",
+      "passed": true
+    },
+    {
+      "test": "actual H2 request response",
+      "passed": true
+    },
+    {
+      "test": "CSD vulnerable two responses",
+      "passed": true
+    },
+    {
+      "test": "CSD fixed consumes body",
+      "passed": true
+    }
+  ],
+  "passed": 46,
+  "total": 46
+}

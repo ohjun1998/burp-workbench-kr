@@ -1,0 +1,2 @@
+Burp Workbench KR loaded. 인증/인가 재전송은 선택 실행 또는 명시적인 Record ON에서 실행합니다.
+Workbench: Payload Runner KR 1.3.0 initialized. No requests sent until Start.

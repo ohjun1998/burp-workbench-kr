@@ -1,0 +1,50 @@
+package kr.workbench;
+import burp.*;
+import burp.api.montoya.MontoyaApi;
+import javax.swing.*;
+import javax.swing.table.*;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+/** Layout/selection regressions, not a mock claim of native Burp execution. */
+public final class UiLayoutTest {
+ static int checks;
+ static void check(boolean b,String name){if(!b)throw new AssertionError(name);checks++;System.out.println("PASS "+name);}
+ static Component named(Component c,String name){if(name.equals(c.getName()))return c;if(c instanceof Container co)for(Component x:co.getComponents()){Component found=named(x,name);if(found!=null)return found;}return null;}
+ static int requestResponseTabs(Component c){int n=0;if(c instanceof JTabbedPane p)for(int i=0;i<p.getTabCount();i++)if(Set.of("요청","응답","원본 요청","원본 응답","비교 요청","비교 응답").contains(p.getTitleAt(i)))n++;if(c instanceof Container co)for(Component x:co.getComponents())n+=requestResponseTabs(x);return n;}
+ static void layout(Container c){c.doLayout();for(Component child:c.getComponents())if(child instanceof Container co)layout(co);}
+ public static void main(String[] args)throws Exception{
+  BurpExtender entry=new BurpExtender();entry.registerExtenderCallbacks((IBurpExtenderCallbacks)PayloadIntegrationTest.host(IBurpExtenderCallbacks.class));
+  SwingUtilities.invokeAndWait(()->entry.initialize((MontoyaApi)PayloadIntegrationTest.host(MontoyaApi.class)));SwingUtilities.invokeAndWait(()->{});
+  WorkbenchExtension w=(WorkbenchExtension)WorkbenchTest.get(entry,"workbench");JPanel root=(JPanel)WorkbenchTest.get(w,"root");JTabbedPane tabs=(JTabbedPane)WorkbenchTest.get(w,"tabs");JTable table=(JTable)WorkbenchTest.get(w,"logTable");
+  SwingUtilities.invokeAndWait(()->((PassiveScanWorkspace)unchecked(w,"passiveScan")).open("https://ui.test/",false));
+  check(table.getColumnCount()==4,"traffic has exactly four visible columns");
+  check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
+  check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"traffic request above response");
+  check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.environment.lists")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"environment left stacked lists and right stacked packets");
+  check(((JSplitPane)named(root,"wb.auth.workspace")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.auth.lists")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"auth credentials/history left and packets right");
+  check(((JSplitPane)named(root,"wb.js.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"JS and passive packets request above response");
+  check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"payload editors/results left and packets right");
+  check(requestResponseTabs(root)==0,"request and response are persistent panes, not switching tabs");
+  check(table.getRowHeight()>=30,"readable row spacing");
+  check(table.getDefaultRenderer(Object.class) instanceof WorkbenchUi.Cells,"semantic method/status renderer installed");
+  for(int size:new int[]{1000,1280,1600})SwingUtilities.invokeAndWait(()->{
+   root.setSize(size,900);for(int i=0;i<tabs.getTabCount();i++){tabs.setSelectedIndex(i);layout(root);check(tabs.getComponentAt(i).getWidth()>0,"tab "+i+" laid out at "+size);}
+   tabs.setSelectedIndex(0);layout(root);JSplitPane outer=(JSplitPane)named(root,"wb.traffic.workspace"),messages=(JSplitPane)named(root,"wb.traffic.messages");outer.setDividerLocation(.30);messages.setDividerLocation(.5);layout(root);
+   check(messages.getLeftComponent().getWidth()>100&&messages.getRightComponent().getWidth()>100,"both message panes usable at "+size);
+   check(outer.getRightComponent()==messages.getParent(),"no right-side vertical action sidebar at "+size);
+  });
+  for(int i=0;i<12;i++)WorkbenchTest.importTraffic(w,WorkbenchTest.request("https://ui.test/route/"+i,i%2==0?"GET":"POST",true,List.of()),WorkbenchTest.response(i%3==0?403:200,"body"));
+  SwingUtilities.invokeAndWait(()->{
+   DefaultTableModel m=(DefaultTableModel)table.getModel();check(((Number)m.getValueAt(11,0)).longValue()==12,"stable monotonically increasing traffic NO");
+   ((TableRowSorter<?>)table.getRowSorter()).setSortKeys(List.of(new RowSorter.SortKey(0,SortOrder.DESCENDING)));table.setRowSelectionInterval(0,0);
+   try{Object current=WorkbenchTest.get(w,"current");var f=current.getClass().getDeclaredField("request");f.setAccessible(true);check(f.get(current).toString().contains("/route/11"),"sorted NO selection resolves correct captured request");}catch(Exception e){throw new RuntimeException(e);}
+   ((JTextField)unchecked(w,"filter")).setText("/route/2");check(table.getRowCount()==1,"traffic search filters visible request fields");
+   ((JTextField)unchecked(w,"filter")).setText("");table.clearSelection();check(unchecked(w,"current")==null,"cleared selection resets stale request");
+  });
+  Color old=UIManager.getColor("Panel.background");UIManager.put("Panel.background",new Color(30,30,30));check(WorkbenchUi.dark()&&WorkbenchUi.ink().getRed()>200,"dark palette has readable foreground");UIManager.put("Panel.background",old);
+  for(var h:PayloadIntegrationTest.modernUnloads)h.extensionUnloaded();for(var h:PayloadIntegrationTest.legacyUnloads)h.extensionUnloaded();SwingUtilities.invokeAndWait(()->{});System.out.println("UiLayoutTest: "+checks+" checks passed");
+ }
+ static Object unchecked(Object o,String n){try{return WorkbenchTest.get(o,n);}catch(Exception e){throw new RuntimeException(e);}}
+}

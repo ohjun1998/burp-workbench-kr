@@ -1,0 +1,5 @@
+package check;
+import burp.api.montoya.*;import java.nio.file.*;import java.util.*;
+public final class WholeAuditObserver implements BurpExtension {
+ public void initialize(MontoyaApi api){api.extension().setName("Owned community user-flow audit");Thread t=new Thread(()->{try{Thread.sleep(5000);Path out=Path.of(System.getProperty("test.run.root"));api.scope().includeInScope("http://127.0.0.1:18299/");try(var loader=new java.net.URLClassLoader(new java.net.URL[]{Path.of(System.getProperty("test.release.jar")).toUri().toURL(),Path.of(System.getProperty("test.audit.classes")).toUri().toURL()},getClass().getClassLoader())){Class.forName("kr.workbench.RuntimeWholeAudit",true,loader).getMethod("run",MontoyaApi.class,Path.class).invoke(null,api,out);}Files.writeString(out.resolve("native-user-options.json"),api.burpSuite().exportUserOptionsAsJson());Files.writeString(out.resolve("native-project-options.json"),api.burpSuite().exportProjectOptionsAsJson());Files.writeString(out.resolve("native-ready.txt"),api.burpSuite().version().toString());}catch(Throwable e){e.printStackTrace();}},"community-audit");t.setDaemon(true);t.start();}
+}

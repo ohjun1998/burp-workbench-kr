@@ -1,0 +1,203 @@
+{
+  "tests": [
+    {
+      "test": "alice authenticates",
+      "passed": true
+    },
+    {
+      "test": "bob authenticates",
+      "passed": true
+    },
+    {
+      "test": "moderator authenticates",
+      "passed": true
+    },
+    {
+      "test": "admin authenticates",
+      "passed": true
+    },
+    {
+      "test": "community homepage is rendered",
+      "passed": true
+    },
+    {
+      "test": "community static community.css",
+      "passed": true
+    },
+    {
+      "test": "community static community.js",
+      "passed": true
+    },
+    {
+      "test": "fixed input marker absent from listing",
+      "passed": true
+    },
+    {
+      "test": "vulnerable hidden query is reflected",
+      "passed": true
+    },
+    {
+      "test": "public post readable without login",
+      "passed": true
+    },
+    {
+      "test": "guest cannot read members-only fixed post",
+      "passed": true
+    },
+    {
+      "test": "guest cannot read private fixed post",
+      "passed": true
+    },
+    {
+      "test": "A/B IDOR exposes private post in learning mode",
+      "passed": true
+    },
+    {
+      "test": "A cannot read B private post in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "B reads own private post in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "member post visible after login",
+      "passed": true
+    },
+    {
+      "test": "moderator can read security board",
+      "passed": true
+    },
+    {
+      "test": "moderator cannot read a private note",
+      "passed": true
+    },
+    {
+      "test": "modifier parameter spoof opens admin list in learning mode",
+      "passed": true
+    },
+    {
+      "test": "server session role blocks spoofed admin list",
+      "passed": true
+    },
+    {
+      "test": "actual administrator can access admin list",
+      "passed": true
+    },
+    {
+      "test": "Alice creates private post",
+      "passed": true
+    },
+    {
+      "test": "B changes Alice post in learning mode",
+      "passed": true
+    },
+    {
+      "test": "B cannot change Alice post in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "Alice fixed update requires her CSRF",
+      "passed": true
+    },
+    {
+      "test": "comment write requires login",
+      "passed": true
+    },
+    {
+      "test": "stored XSS payload accepted for A post",
+      "passed": true
+    },
+    {
+      "test": "comment retained in post response",
+      "passed": true
+    },
+    {
+      "test": "fixed comment rejects missing token",
+      "passed": true
+    },
+    {
+      "test": "fixed comment accepts session token",
+      "passed": true
+    },
+    {
+      "test": "private attachment IDOR in learning mode",
+      "passed": true
+    },
+    {
+      "test": "private attachment blocked in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "anonymous private attachment blocked in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "A reads B note in learning mode",
+      "passed": true
+    },
+    {
+      "test": "A cannot read B note in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "B can read own note in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "role modifier spoof accepted in learning mode",
+      "passed": true
+    },
+    {
+      "test": "role modifier rejected in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "search SQL injection exposes seeded posts in learning mode",
+      "passed": true
+    },
+    {
+      "test": "search SQL injection treated as text in fixed mode",
+      "passed": true
+    },
+    {
+      "test": "initial Bob post linked to private attachment",
+      "passed": true
+    },
+    {
+      "test": "CSRF prevents unauthenticated fixed post create",
+      "passed": true
+    },
+    {
+      "test": "Alice fixed private file upload accepted",
+      "passed": true
+    },
+    {
+      "test": "fixed upload rejects HTML extension",
+      "passed": true
+    },
+    {
+      "test": "learning upload preserves attacker MIME",
+      "passed": true
+    },
+    {
+      "test": "member signup creates ordinary user",
+      "passed": true
+    },
+    {
+      "test": "duplicate nickname blocked by signup validation",
+      "passed": true
+    },
+    {
+      "test": "reset protected from regular member",
+      "passed": true
+    },
+    {
+      "test": "admin reset restores seeded community",
+      "passed": true
+    }
+  ],
+  "passed": 49,
+  "total": 49,
+  "runtime": "Spring/Tomcat/H2"
+}

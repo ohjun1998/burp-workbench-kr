@@ -1,0 +1,51 @@
+{
+  "tests": [
+    {
+      "test": "TLS certificate validated against isolated fixture certificate",
+      "passed": true
+    },
+    {
+      "test": "TLS ALPN selects HTTP/1.1",
+      "passed": true
+    },
+    {
+      "test": "TLS HTTP/1.1 returns real fixture response",
+      "passed": true
+    },
+    {
+      "test": "TLS ALPN selects HTTP/2",
+      "passed": true
+    },
+    {
+      "test": "HTTP/2 stream returns 200",
+      "passed": true
+    },
+    {
+      "test": "HTTP/2 stream body reconstructed",
+      "passed": true
+    },
+    {
+      "test": "CSD vulnerable body becomes second request",
+      "passed": true
+    },
+    {
+      "test": "CSD fixed body consumed as declared",
+      "passed": true
+    },
+    {
+      "test": "one-use CSRF rejects foreign session",
+      "passed": true
+    },
+    {
+      "test": "one-use CSRF accepts owner token",
+      "passed": true
+    },
+    {
+      "test": "one-use CSRF rejects replay",
+      "passed": true
+    }
+  ],
+  "passed": 11,
+  "failed": 0,
+  "method": "actual Python TLS/H2/socket HTTP against project protocol fixtures"
+}

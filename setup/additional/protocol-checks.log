@@ -1,0 +1,11 @@
+PASS TLS certificate validated against isolated fixture certificate
+PASS TLS ALPN selects HTTP/1.1
+PASS TLS HTTP/1.1 returns real fixture response
+PASS TLS ALPN selects HTTP/2
+PASS HTTP/2 stream returns 200
+PASS HTTP/2 stream body reconstructed
+PASS CSD vulnerable body becomes second request
+PASS CSD fixed body consumed as declared
+PASS one-use CSRF rejects foreign session
+PASS one-use CSRF accepts owner token
+PASS one-use CSRF rejects replay

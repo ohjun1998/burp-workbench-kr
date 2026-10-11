@@ -1,0 +1,182 @@
+PASS UTF-8 Base64 round trip
+PASS form URL round trip
+PASS Gzip round trip
+PASS Hex round trip
+PASS Gzip expansion cap
+PASS profile cannot change destination
+PASS case-insensitive duplicate profile rejected
+PASS CR header injection rejected
+PASS CSV formula injection neutralized
+PASS HTML escaping
+PASS export strips query and fragment
+PASS JS paths deduplicated and sourcemap extracted
+PASS JWT does not claim verified signature
+PASS identical response is candidate, not confirmed vulnerability
+PASS duplicate original cookies removed
+PASS original privileged credentials removed
+PASS original request immutable
+PASS eight-tab optimized UI initialization
+PASS passive capture sends no requests
+PASS one request per selected profile (A and anonymous)
+PASS user session transmitted
+PASS anonymous request stripped cookies
+PASS comparison results rendered
+PASS report contains no query tokens or response bodies
+PASS cross-origin credential send blocked
+PASS write requests require explicit option
+PASS out-of-scope send blocked
+PASS rejected operations send zero requests
+PASS ten-second response timeout and redirects disabled
+PASS query/body credential requires manual preparation
+PASS stop prevents remaining profile requests
+PASS traffic retains bounded 250-row window
+PASS diff highlights changed line
+PASS diff aligns inserted line and common suffix
+PASS identical bodies have no changed-line targets
+PASS missing response has no synthetic comparison
+PASS binary body not shown as text diff
+PASS large body diff is bounded
+PASS named session reapplies credential headers
+PASS session application clears other-origin drafts
+PASS unload clears profile fields
+PASS unload clears saved sessions
+PASS unload shuts down workers
+ALL 43 CHECKS PASSED (mock host; no real Burp runtime)
+
+PASS server and framework headers
+PASS framework CMS plugin resource signatures
+PASS application prefix
+PASS observed resource query redaction
+PASS external resources excluded
+PASS cookie values never retained
+PASS prefix validation //evil.test
+PASS prefix validation /../admin
+PASS prefix validation /a/./b
+PASS prefix validation /a?x=1
+PASS prefix validation /a#b
+PASS prefix validation /ab
+PASS prefix validation /%2e%2e
+PASS prefix validation /a\b
+PASS unknown stack does not fabricate candidates
+PASS Actuator candidates
+PASS origin memory bounded
+PASS multiple environment candidates >=80: 144
+PASS resource-derived application prefix
+PASS JS quoted endpoint extraction
+PASS explicit sourceMappingURL extraction
+PASS cross-profile candidates deduplicated
+PASS evidence priority descending
+PASS top 30 limit
+PASS common candidates can be excluded
+PASS unknown stack common fallback distinguished
+PASS unsubstantiated candidates ranked low
+EnvironmentTest: 27 checks passed
+
+PASS UI lists multiple ranked candidates
+PASS UI score condition and priority columns
+PASS UI top 30 selector
+PASS UI expanded limit refresh
+PASS UI common toggle
+PASS invalid prefix leaves no stale Repeater candidates
+EnvironmentPanelTest: 6 checks passed
+
+PASS AST successfully parsed
+PASS constant concat fetch URL and method
+PASS header names and body keys from call options
+PASS query values excluded from results
+PASS Axios post body metadata
+PASS XHR open URL
+PASS WebSocket identified
+PASS location assignment URL
+PASS AWS access key pattern
+PASS Google key pattern
+PASS GitHub token pattern
+PASS placeholder excluded
+PASS secret results masked with fingerprints only
+PASS template unresolved value retained
+PASS dynamic concatenation marked unresolved
+PASS escaped string decoded by parser
+PASS shadowed parameter not resolved from global const
+PASS global const resolved in own scope
+PASS Axios baseURL and params metadata
+PASS HTML inline script original line location
+PASS external scripts not automatically fetched
+PASS parse failure clearly labeled with secret fallback
+PASS numeric arithmetic not incorrectly concatenated
+PASS URL credentials query and fragment excluded
+PASS source size limit explicit
+PASS endpoint result cap
+PASS JavaScript is parsed without executing throw
+PASS unsupported module syntax labeled with URL fallback
+PASS Request constructor URL metadata
+PASS same URL in separate call sites retains code locations
+PASS window.open target not confused with XHR
+JsAnalysisTest: 31 checks passed
+
+PASS manual AST result tables
+PASS masked report excludes secrets and URL query values
+PASS explicit action prepares query-free GET in Repeater
+PASS out-of-scope Repeater preparation blocked
+PASS dynamic endpoint preparation blocked
+PASS passive out-of-scope response ignored
+PASS passive analysis without request or Repeater action
+PASS automatic analysis does not display raw source
+PASS changed JS source reanalyzed under same source URL
+PASS clear prevents stale async result restoration
+PASS close clears raw source and secret rows
+JsAnalysisPanelTest: 11 checks passed
+
+PASS existing History automatically backfilled
+PASS late response with lower history ID not missed
+PASS unchanged history entries not reanalyzed
+PASS new History responses processed incrementally
+PASS history rescan deduplicates identical content
+PASS History source overview updated
+PASS history ID reset recovered
+PASS Proxy live response listener registered
+PASS received Proxy response preserved unchanged
+PASS sent Proxy response preserved unchanged
+PASS Proxy event analyzed immediately without history polling
+PASS Proxy listener deregistered on close
+PASS busy worker queues rapid JS responses rather than skipping
+PASS normal batch has no queue overflow
+PASS watch pause blocks new analysis
+PASS history scan pauses without advancing cursor
+PASS history accumulated during pause recovered
+PASS queue rejection retried without cursor loss
+PASS gzip response decoded without network request
+PASS history JS larger than 128 KiB traffic capture limit analyzed
+PASS bounded queue pressure explicitly counted
+PASS clear invalidates entire queued history batch
+JsHistoryTest: 22 checks passed
+
+PASS inline source map decodes and recovers exact source
+PASS recovered original automatically adds API and method
+PASS recovered result totals reflect merged API rows
+PASS recovered source domain cloud and dependency findings merge
+PASS indexed map embedded sections recovered
+PASS source map without embedded contents does not invent original
+PASS malformed source map rejected
+PASS unsupported map version rejected
+PASS duplicate JSON keys rejected
+PASS same origin reference and bounded guesses
+PASS external map not requested
+PASS different port map excluded
+PASS percent encoded inline map decoded
+PASS all ten cloud provider families classified
+PASS cloud hostname suffix spoof excluded
+PASS cloud query strings masked
+PASS source subdomain relation explicit
+PASS imports requires dynamic literals and scopes normalized
+PASS package JSON dependencies and development dependencies
+PASS registry 200 registered
+PASS registry soft-404 HTML 200 remains inconclusive
+PASS registry 404 remains candidate not confirmed confusion
+PASS registry 429 inconclusive
+PASS registry redirect inconclusive
+PASS registry error inconclusive
+PASS dump manifest and raw captured contents
+PASS map traversal name cannot escape output directory
+PASS dump manifest source queries omitted
+PASS Shannon entropy shown with masked secret
+JsMinerTest: 29 checks passed

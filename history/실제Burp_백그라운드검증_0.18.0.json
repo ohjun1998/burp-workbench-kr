@@ -1,0 +1,67 @@
+{
+  "extensionVersion": "0.18.0",
+  "jarSha256": "d7cdb646c04b184514affa29ebd2dc0c93aa63167d880292870ff57ceeffa8d7",
+  "burpVersion": "Burp Suite Community Edition 2026.7.3-52685",
+  "apiImplementation": "burp.Zuw4",
+  "method": "Installed real Burp JAR, native file extension loader, genuine Montoya API, no mocked API or desktop input",
+  "nativeExtensionLoaded": true,
+  "nativeExtensionName": "Burp Workbench KR 0.18.0",
+  "workbenchInitialized": true,
+  "payloadRunnerInitialized": true,
+  "extensionErrorLogBytes": 0,
+  "nativeHTTPPassed": 7,
+  "nativeHTTPFailed": 0,
+  "httpChecks": [
+    {
+      "path": "/health",
+      "passed": true,
+      "detail": "HTTP 200; native bytes decoded by release JAR; content-type=application/json; parser=file:/C:/Users/kwonohjun/Documents/Codex/2026-10-10/new-chat/outputs/burp-workbench-kr-0.18.0.jar"
+    },
+    {
+      "path": "/api/diagnostics/boundary/utf8",
+      "passed": true,
+      "detail": "HTTP 200; native bytes decoded by release JAR; content-type=application/json;charset=UTF-8; parser=file:/C:/Users/kwonohjun/Documents/Codex/2026-10-10/new-chat/outputs/burp-workbench-kr-0.18.0.jar"
+    },
+    {
+      "path": "/api/diagnostics/boundary/gzip",
+      "passed": true,
+      "detail": "HTTP 200; native bytes decoded by release JAR; content-type=application/json;charset=UTF-8; parser=file:/C:/Users/kwonohjun/Documents/Codex/2026-10-10/new-chat/outputs/burp-workbench-kr-0.18.0.jar"
+    },
+    {
+      "path": "/api/diagnostics/boundary/deflate",
+      "passed": true,
+      "detail": "HTTP 200; native bytes decoded by release JAR; content-type=application/json;charset=UTF-8; parser=file:/C:/Users/kwonohjun/Documents/Codex/2026-10-10/new-chat/outputs/burp-workbench-kr-0.18.0.jar"
+    },
+    {
+      "path": "/api/diagnostics/boundary/cp949",
+      "passed": true,
+      "detail": "HTTP 200; native bytes decoded by release JAR; content-type=text/plain;charset=MS949; parser=file:/C:/Users/kwonohjun/Documents/Codex/2026-10-10/new-chat/outputs/burp-workbench-kr-0.18.0.jar"
+    },
+    {
+      "path": "/api/diagnostics/boundary/empty",
+      "passed": true,
+      "detail": "HTTP 200; native bytes decoded by release JAR; content-type=application/json;charset=UTF-8; parser=file:/C:/Users/kwonohjun/Documents/Codex/2026-10-10/new-chat/outputs/burp-workbench-kr-0.18.0.jar"
+    },
+    {
+      "path": "/api/diagnostics/boundary/redirect",
+      "passed": true,
+      "detail": "HTTP 302; native bytes decoded by release JAR; content-type=text/html; parser=file:/C:/Users/kwonohjun/Documents/Codex/2026-10-10/new-chat/outputs/burp-workbench-kr-0.18.0.jar"
+    }
+  ],
+  "burpHeadlessUIWarnings": [
+    "java.lang.Error: no ComponentUI class for: burp.Zc7w[,0,0,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=,flags=33554432,maximumSize=,minimumSize=,preferredSize=,fixedCellHeight=-1,fixedCellWidth=-1,horizontalScrollIncrement=-1,selectionBackground=,selectionForeground=,visibleRowCount=8,layoutOrientation=0]",
+    "java.lang.Error: no ComponentUI class for: burp.Zc7w[,0,0,0x0,invalid,alignmentX=0.0,alignmentY=0.0,border=,flags=33554432,maximumSize=,minimumSize=,preferredSize=,fixedCellHeight=-1,fixedCellWidth=-1,horizontalScrollIncrement=-1,selectionBackground=,selectionForeground=,visibleRowCount=8,layoutOrientation=0]",
+    "java.lang.NullPointerException"
+  ],
+  "sameWarningTypesPresentWithoutWorkbench": true,
+  "temporaryBurpStopped": true,
+  "temporaryLabStopped": true,
+  "desktopInputUsed": false,
+  "productionJarChanged": false,
+  "limitations": [
+    "Actual Burp GUI menus, popups and Proxy browser workflow not exercised",
+    "Burp itself prints headless UI warnings, including ComponentUI and NullPointerException; these also occur without this extension",
+    "Native HTTP cases use read-only loopback fixtures; full feature suite remains the earlier API-adapter tests"
+  ],
+  "verifiedAtKST": "2026-10-10T21:17:34.423591+09:00"
+}

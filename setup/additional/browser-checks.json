@@ -1,0 +1,102 @@
+{
+  "browser": "155.0.8059.39",
+  "target": "http://127.0.0.1:18599",
+  "method": "actual Chromium DOM/JavaScript execution",
+  "tests": [
+    {
+      "test": "community homepage renders in Chromium",
+      "passed": true
+    },
+    {
+      "test": "real login updates active account",
+      "passed": true
+    },
+    {
+      "test": "stored XSS actually executes in vulnerable comment view",
+      "passed": true
+    },
+    {
+      "test": "fixed comment view displays payload text",
+      "passed": true
+    },
+    {
+      "test": "session restores after reload",
+      "passed": true
+    },
+    {
+      "test": "fixed view contains no injected image",
+      "passed": true
+    },
+    {
+      "test": "fixed view did not execute stored payload",
+      "passed": true
+    },
+    {
+      "test": "account switching updates active account",
+      "passed": true
+    },
+    {
+      "test": "desktop layout avoids horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "mobile layout avoids horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "diagnostics catalogue renders all current cases",
+      "passed": true
+    },
+    {
+      "test": "diagnostics renders nine feature chips",
+      "passed": true
+    },
+    {
+      "test": "diagnostics renders sixteen payload profiles",
+      "passed": true
+    },
+    {
+      "test": "diagnostics feature filter",
+      "passed": true
+    },
+    {
+      "test": "diagnostics button sends actual HTTP",
+      "passed": true
+    },
+    {
+      "test": "diagnostics response preview treats HTML as text",
+      "passed": true
+    },
+    {
+      "test": "diagnostics controls recover after HTTP completion",
+      "passed": true
+    },
+    {
+      "test": "stored HTML executes when vulnerable endpoint is rendered",
+      "passed": true
+    },
+    {
+      "test": "fixed stored endpoint renders escaped payload",
+      "passed": true
+    },
+    {
+      "test": "fixed stored endpoint does not execute payload",
+      "passed": true
+    },
+    {
+      "test": "JS lab renders fourteen syntax fixtures",
+      "passed": true
+    },
+    {
+      "test": "JS lab fetches all syntax fixtures in actual browser",
+      "passed": true
+    },
+    {
+      "test": "no unhandled page JavaScript errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": 23,
+  "failed": 0
+}

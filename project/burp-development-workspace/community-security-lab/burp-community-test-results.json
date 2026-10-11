@@ -1,0 +1,51 @@
+{
+  "burpVersion": "Burp Suite Community Edition 2026 9.1",
+  "target": "http://127.0.0.1:8088 (local H2 Spring/Tomcat app)",
+  "communityIntegration": {
+    "passed": 9,
+    "failed": 0,
+    "checks": [
+      "community public listing via Burp HTTP API",
+      "A/B private post IDOR reproduced in learning route",
+      "private post blocked cross-account in fixed route",
+      "private attachment IDOR reproduced then blocked",
+      "private message IDOR reproduced then blocked",
+      "role parameter spoof reproduced then blocked",
+      "moderator board scope and global-admin boundary",
+      "community frontend routes fetched through Burp API",
+      "native Param Miner discovers lab_hidden on community endpoint"
+    ]
+  },
+  "engineLoad": {
+    "loaded": 8,
+    "total": 9,
+    "proOnly": [
+      "JS Miner"
+    ],
+    "engines": [
+      "Autorize",
+      "Auth Analyzer",
+      "Logger++",
+      "Hackvertor",
+      "Param Miner",
+      "JWT Editor",
+      "Turbo Intruder",
+      "HTTP Request Smuggler"
+    ]
+  },
+  "nativeFunctions": [
+    "Autorize manual authorization replay produced result row",
+    "Auth Analyzer session-header replacement returned 401 as expected",
+    "Logger++ received live HTTP row",
+    "Hackvertor Base64 encode/decode round trip",
+    "Param Miner native wordlist and community hidden-parameter detection",
+    "JWT Editor JWS parse/serialize (signature verification not claimed)",
+    "Turbo Intruder native HTTP/1 engine completed 3/3 local requests",
+    "HTTP Request Smuggler default probe construction only; no desync detection claimed"
+  ],
+  "limitations": [
+    "JS Miner is Pro-only and was unavailable in Community Edition",
+    "HTTP Request Smuggler desynchronization detection was not run against the separate CSD fixture",
+    "Scanner and Collaborator were not part of this Community Edition run"
+  ]
+}

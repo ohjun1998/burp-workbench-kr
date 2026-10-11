@@ -1,0 +1,35 @@
+{
+  "version": "0.19.0",
+  "files": [
+    {
+      "name": "burp-workbench-kr-0.19.0.jar",
+      "bytes": 2908656,
+      "sha256": "5f2c85255bd0ca692306c951f5c575a484a287f1646b0937b4d13155d911fb74"
+    },
+    {
+      "name": "burp-development-workspace-0.19.0.zip",
+      "bytes": 33485938,
+      "sha256": "8ef91747053bef4a92931895df608d2fe3151bec086b2ccf8801b64d5a9aef4e"
+    },
+    {
+      "name": "Burp_Workbench_KR_0.19.0_그림_가이드북.html",
+      "bytes": 1072831,
+      "sha256": "519d7c50c94de759e01ada178e3aa29c61bb6a35da2a686dd5d769f6c7319376"
+    },
+    {
+      "name": "Burp_Workbench_KR_0.19.0_그림_가이드북.pdf",
+      "bytes": 1037549,
+      "sha256": "ed3a1cc4b64413b3914c48e2ec31852afc7f0ae01314c5e1a16acc57f4ad06d0"
+    },
+    {
+      "name": "검증결과_0.19.0.json",
+      "bytes": 112139,
+      "sha256": "70ee655ac3385ba51af256842d0aaf79288d870b7b2b4179e6e72cf52d0e0cbe"
+    },
+    {
+      "name": "변경사항_및_검증_0.19.0.md",
+      "bytes": 1373,
+      "sha256": "564f721139f7d54724a60fd9687131fb01e64c46d492daf9ea806c717c88f29c"
+    }
+  ]
+}

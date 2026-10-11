@@ -1,0 +1,26 @@
+[
+  {
+    "event": "tls",
+    "alpn": null,
+    "port": 18443
+  },
+  {
+    "event": "h1_request",
+    "method": "GET",
+    "path": "/tls?via=burp-HTTP_1",
+    "vulnerable": false,
+    "declared_length": 0,
+    "consumed_length": 0,
+    "status": 200
+  },
+  {
+    "event": "tls",
+    "alpn": "h2",
+    "port": 18443
+  },
+  {
+    "event": "h2_request",
+    "path": "/tls?via=burp-HTTP_2",
+    "stream": 1
+  }
+]

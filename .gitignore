@@ -1,0 +1,20 @@
+.dev-tools/
+__pycache__/
+*.pyc
+**/build/
+**/.run/
+**/.setup/
+**/target/
+**/node_modules/
+**/dist/*.building
+**/dist/burp-workbench-kr-*.jar
+validation-local/results/
+validation-local/additional-results/
+
+# Generated local protocol credentials and personal runtime state
+**/protocols/runtime/
+.env
+.env.*
+!.env.example
+*.burp
+*.burpproject

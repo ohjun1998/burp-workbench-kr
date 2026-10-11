@@ -1,0 +1,23 @@
+PASS community homepage renders in Chromium
+PASS real login updates active account
+PASS stored XSS actually executes in vulnerable comment view
+PASS fixed comment view displays payload text
+PASS session restores after reload
+PASS fixed view contains no injected image
+PASS fixed view did not execute stored payload
+PASS account switching updates active account
+PASS desktop layout avoids horizontal overflow
+PASS mobile layout avoids horizontal overflow
+PASS diagnostics catalogue renders all current cases
+PASS diagnostics renders nine feature chips
+PASS diagnostics renders sixteen payload profiles
+PASS diagnostics feature filter
+PASS diagnostics button sends actual HTTP
+PASS diagnostics response preview treats HTML as text
+PASS diagnostics controls recover after HTTP completion
+PASS stored HTML executes when vulnerable endpoint is rendered
+PASS fixed stored endpoint renders escaped payload
+PASS fixed stored endpoint does not execute payload
+PASS JS lab renders fourteen syntax fixtures
+PASS JS lab fetches all syntax fixtures in actual browser
+PASS no unhandled page JavaScript errors

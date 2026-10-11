@@ -1,0 +1,968 @@
+{
+  "extension": "0.19.0",
+  "burp": "Burp Suite Community Edition 2026.7.3-52685",
+  "mode": "native Montoya + temporary actual loopback Proxy + headless Swing controllers",
+  "previousUserChecks": [
+    {
+      "detail": "owned training account",
+      "passed": true,
+      "name": "login alice"
+    },
+    {
+      "detail": "owned training account",
+      "passed": true,
+      "name": "login bob"
+    },
+    {
+      "detail": "owned training account",
+      "passed": true,
+      "name": "login moderator"
+    },
+    {
+      "detail": "owned training account",
+      "passed": true,
+      "name": "login admin"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /assets/community.js"
+    },
+    {
+      "detail": "AST 블록 1 · URL/API 17 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · async/module 구문 호환 보조 1 · 도메인 0 · map 0 · 원본 0 endpoints=17",
+      "passed": true,
+      "name": "production JS analysis"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /api/community/fixed/posts"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /api/community/fixed/posts/101"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /api/community/fixed/posts/104"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /api/community/fixed/search?q=Burp"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /api/community/fixed/messages"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "normal exploration /api/community/fixed/people"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인 · 타인 객체 접근 의심 · 소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "기대 ALLOW · 성공 응답 관측 · 원본과 동일 인증 · 교차 인가 미검증",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인 · 타인 객체 접근 의심 · 소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+      "passed": true,
+      "name": "private post flaw candidate"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "기대 DENY · 404/410 존재·세션 재검토 · 은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "기대 ALLOW · 성공 응답 관측 · 원본과 동일 인증 · 교차 인가 미검증",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "기대 DENY · 404/410 존재·세션 재검토 · 은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+      "passed": true,
+      "name": "fixed private post control"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "기대 ALLOW · 성공 응답 관측 · 타인 객체 접근 의심 · 소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "기대 DENY · 404/410 존재·세션 재검토 · 은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "기대 DENY · 404/410 존재·세션 재검토 · 은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/posts/102"
+    },
+    {
+      "detail": "기대 ALLOW · 성공 응답 관측 · 타인 객체 접근 의심 · 소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+      "passed": true,
+      "name": "matrix/owner-policy conflict reproduced"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/posts/102"
+    },
+    {
+      "detail": "우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인",
+      "passed": true,
+      "name": "incorrect owner path falls back"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/vuln/messages/202"
+    },
+    {
+      "detail": "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인 · 우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/messages/202"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/messages/202"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/messages/202"
+    },
+    {
+      "detail": "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인 · 우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인",
+      "passed": true,
+      "name": "message control vuln"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/fixed/messages/202"
+    },
+    {
+      "detail": "기대 DENY · 404/410 존재·세션 재검토 · 은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/messages/202"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/messages/202"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/messages/202"
+    },
+    {
+      "detail": "기대 DENY · 404/410 존재·세션 재검토 · 은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+      "passed": true,
+      "name": "message control fixed"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/vuln/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인 · 우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/vuln/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인 · 우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인",
+      "passed": true,
+      "name": "admin role input control vuln"
+    },
+    {
+      "detail": "History 1 · 비교 작업 0 · 제외 0",
+      "passed": true,
+      "name": "comparison completed /api/community/fixed/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "기대 DENY · 차단 근거 일치 · 차단 근거 확인 · HTTP 403",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "미지정",
+      "passed": true,
+      "name": "native packet retained /api/community/fixed/admin/users?role=ADMIN"
+    },
+    {
+      "detail": "기대 DENY · 차단 근거 일치 · 차단 근거 확인 · HTTP 403",
+      "passed": true,
+      "name": "admin role input control fixed"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "owned post create"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "owned file upload"
+    },
+    {
+      "detail": "Alice vs Bob private file",
+      "passed": true,
+      "name": "fixed private file denied"
+    },
+    {
+      "detail": "actual private file response",
+      "passed": true,
+      "name": "vulnerable private file exposure"
+    },
+    {
+      "detail": "View[key=GET http://127.0.0.1:18299/api/community/fixed/search, method=GET, url=http://127.0.0.1:18299/api/community/fixed/search, state=점검 완료, observed=3, repeater=0, sources=PROXY, first=2026-10-10T16:10:56.966954600Z, last=2026-10-10T16:10:59.486242700Z, parameters=[ParameterView[key=URL:q, state=미점검], ParameterView[key=COOKIE:JSESSIONID, state=미점검], ParameterView[key=URL:page, state=미점검]], evidence=[], review=]",
+      "passed": true,
+      "name": "coverage remains complete after account/new-input change"
+    },
+    {
+      "detail": "[ParameterView[key=COOKIE:JSESSIONID, state=미점검]]",
+      "passed": true,
+      "name": "path identifier missing from parameter coverage"
+    },
+    {
+      "detail": "2",
+      "passed": true,
+      "name": "non-auth cookie expands account candidates"
+    },
+    {
+      "detail": "input bytes=13 output bytes=12",
+      "passed": true,
+      "name": "workflow CRLF body mutation reproduced"
+    },
+    {
+      "detail": "관측 완료 · 최종 상태 수동 확인",
+      "passed": true,
+      "name": "workflow no semantic assertion"
+    },
+    {
+      "detail": "application/x-www-form-urlencoded evidence",
+      "passed": true,
+      "name": "form body missing from evidence despite bodies option"
+    },
+    {
+      "detail": "id only response",
+      "passed": true,
+      "name": "create response body field recorded"
+    },
+    {
+      "detail": "50",
+      "passed": true,
+      "name": "main API inventory"
+    },
+    {
+      "detail": "400",
+      "passed": true,
+      "name": "activity generic JSON draft fails form endpoint"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "large owned file within lab limit"
+    },
+    {
+      "detail": "file body bytes=140000",
+      "passed": true,
+      "name": "valid large download excluded from authorization comparison"
+    }
+  ],
+  "previousReproducedFindings": [
+    {
+      "evidence": "기대 ALLOW · 성공 응답 관측 · 타인 객체 접근 의심 · 소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+      "title": "ALLOW 매트릭스와 소유자 전용 판정이 충돌",
+      "id": "A01",
+      "priority": "P1"
+    },
+    {
+      "evidence": "우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인; actual JSON contains OWNER_ID, configured ownerId",
+      "title": "소유 JSON 경로 설정 오류를 사전 경고하지 않음",
+      "id": "A02",
+      "priority": "P2"
+    },
+    {
+      "evidence": "Alice 완료 뒤 Bob 및 page 입력 추가: URL=점검 완료; parameters=[ParameterView[key=URL:q, state=미점검], ParameterView[key=COOKIE:JSESSIONID, state=미점검], ParameterView[key=URL:page, state=미점검]]",
+      "title": "계정별 커버리지와 새 입력의 재점검 상태가 없음",
+      "id": "A03",
+      "priority": "P1"
+    },
+    {
+      "evidence": "/posts/102 PATH:id not represented; URL rows still retained",
+      "title": "경로 객체 ID가 파라미터 점검 목록에 없음",
+      "id": "A04",
+      "priority": "P1"
+    },
+    {
+      "evidence": "same Alice JSESSIONID + extra loop_hint -> 2 candidates",
+      "title": "일반 쿠키 변화도 새 인증 후보로 분리",
+      "id": "A05",
+      "priority": "P2"
+    },
+    {
+      "evidence": "text upload body FIRST\\r\\nSECOND rebuilt FIRST\\nSECOND; no HTTP sent for this probe",
+      "title": "업무 흐름에서 본문 CRLF를 LF로 변경",
+      "id": "A06",
+      "priority": "P1"
+    },
+    {
+      "evidence": "search returns [] but state is observation complete; manual final-state verification required",
+      "title": "업무 흐름의 단계별 기대 상태·본문 검증 없음",
+      "id": "A07",
+      "priority": "P2"
+    },
+    {
+      "evidence": "JSON body opt-in still excludes form body; local original needed",
+      "title": "폼·파일 증거 원문을 ZIP에 보관할 수 없음",
+      "id": "A08",
+      "priority": "P2"
+    },
+    {
+      "evidence": "same create endpoint: captured form request 200; reconstructed JSON draft 400; OpenAPI tab draft retains content type correctly",
+      "title": "활동 추적 초안이 원본 폼 형식을 보존하지 않음",
+      "id": "A09",
+      "priority": "P2"
+    },
+    {
+      "evidence": "owned file 140000 bytes accepted by lab, native 200 download, auth combined packet limit 128KiB excludes comparison",
+      "title": "128KB보다 큰 첨부파일의 권한 비교 제한",
+      "id": "A10",
+      "priority": "P2"
+    }
+  ],
+  "journey": [
+    {
+      "state": "exercised",
+      "feature": "트래픽 · SCOPE · 설정",
+      "checks": 10
+    },
+    {
+      "state": "exercised",
+      "feature": "데이터 도구 · JWT · 구조 비교",
+      "checks": 8
+    },
+    {
+      "state": "exercised",
+      "feature": "JS 추출 · 소스맵 · 의존성 · 활동 연결",
+      "checks": 7
+    },
+    {
+      "state": "exercised",
+      "feature": "환경 탐색 · 기준 응답 · 선택 검증",
+      "checks": 4
+    },
+    {
+      "state": "exercised",
+      "feature": "URL 수집 · API 문서 · 대표 · GET 확인",
+      "checks": 5
+    },
+    {
+      "state": "exercised",
+      "feature": "응답 분석 · Passive · API · 저장/조회",
+      "checks": 5
+    },
+    {
+      "state": "exercised",
+      "feature": "페이로드 검사 · 16개 프로필 · 대조 요청",
+      "checks": 33
+    },
+    {
+      "state": "exercised",
+      "feature": "점검 지원 · 업무 흐름 · 외부 결과 · OAST · 증거",
+      "checks": 7
+    },
+    {
+      "state": "exercised",
+      "feature": "활동 추적 · 저장 복원 · 마무리",
+      "checks": 4
+    }
+  ],
+  "checks": [
+    {
+      "detail": "/",
+      "passed": true,
+      "name": "actual Burp proxy exploration /"
+    },
+    {
+      "detail": "/assets/community.js",
+      "passed": true,
+      "name": "actual Burp proxy exploration /assets/community.js"
+    },
+    {
+      "detail": "/v3/api-docs",
+      "passed": true,
+      "name": "actual Burp proxy exploration /v3/api-docs"
+    },
+    {
+      "detail": "/api/community/fixed/posts",
+      "passed": true,
+      "name": "actual Burp proxy exploration /api/community/fixed/posts"
+    },
+    {
+      "detail": "/api/community/fixed/posts/101",
+      "passed": true,
+      "name": "actual Burp proxy exploration /api/community/fixed/posts/101"
+    },
+    {
+      "detail": "/api/community/fixed/search?q=Burp",
+      "passed": true,
+      "name": "actual Burp proxy exploration /api/community/fixed/search?q=Burp"
+    },
+    {
+      "detail": "6",
+      "passed": true,
+      "name": "proxy History populated"
+    },
+    {
+      "detail": "6",
+      "passed": true,
+      "name": "traffic native capture"
+    },
+    {
+      "detail": "1",
+      "passed": true,
+      "name": "scope save restore and foreign origin excluded"
+    },
+    {
+      "detail": "2",
+      "passed": true,
+      "name": "scope and settings preserve active tab"
+    },
+    {
+      "detail": "UTF8",
+      "passed": true,
+      "name": "data roundtrip URL 인코딩 (form)"
+    },
+    {
+      "detail": "UTF8",
+      "passed": true,
+      "name": "data roundtrip Base64 인코딩"
+    },
+    {
+      "detail": "UTF8",
+      "passed": true,
+      "name": "data roundtrip Base64URL 인코딩"
+    },
+    {
+      "detail": "UTF8",
+      "passed": true,
+      "name": "data roundtrip Hex 인코딩"
+    },
+    {
+      "detail": "UTF8",
+      "passed": true,
+      "name": "data roundtrip Gzip → Base64"
+    },
+    {
+      "detail": "200",
+      "passed": true,
+      "name": "converted value used by API"
+    },
+    {
+      "detail": "issued by lab",
+      "passed": true,
+      "name": "JWT decode UTC and unverified signature"
+    },
+    {
+      "detail": "3",
+      "passed": true,
+      "name": "live objects compared with next difference"
+    },
+    {
+      "detail": "AST 블록 1 · URL/API 17 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · async/module 구문 호환 보조 1 · 도메인 0 · map 0 · 원본 0",
+      "passed": true,
+      "name": "traffic to JS production controller"
+    },
+    {
+      "detail": "dynamic=12 total=17",
+      "passed": true,
+      "name": "community dynamic URLs visible"
+    },
+    {
+      "detail": "[MapRef[url=http://127.0.0.1:18299/assets/diagnostics-modern.js.map, state=HTTP 200 · 원본 1개], MapRef[url=http://127.0.0.1:18299/assets/diagnostics-modern.map, state=HTTP 404]]",
+      "passed": true,
+      "name": "native source-map exploration"
+    },
+    {
+      "detail": "cloud=10 dependencies=6",
+      "passed": true,
+      "name": "cloud and dependency extraction"
+    },
+    {
+      "detail": "[@community/private-reports:HTTP 400 · 미판정, axios:등록됨, lab-missing-package:미등록/비공개 후보 · confusion 확정 아님, lab-rate-limited:조회 제한 · 미판정, lab-redirected:리다이렉트 · 미판정, lab-soft404:HTTP 200 응답 형식 미확인 · 미판정]",
+      "passed": true,
+      "name": "dependency names checked against owned registry"
+    },
+    {
+      "detail": "C:\\Users\\kwonohjun\\Documents\\Codex\\2026-10-10\\new-chat\\work\\burp-gui\\whole-audit-0190\\static-dump\\js-miner-8911748740669754472",
+      "passed": true,
+      "name": "collected static files saved"
+    },
+    {
+      "detail": "59",
+      "passed": true,
+      "name": "JS evidence reaches activity"
+    },
+    {
+      "detail": "2",
+      "passed": true,
+      "name": "native Tomcat observed"
+    },
+    {
+      "detail": "검증 완료 · 4 / 4 · 응답을 반영해 후보 순서 갱신",
+      "passed": true,
+      "name": "environment selected probes completed"
+    },
+    {
+      "detail": "HTTP 401 · 접근 제한 · 기준 2회 동일",
+      "passed": true,
+      "name": "protected config distinct from success"
+    },
+    {
+      "detail": "HTTP 404 · 미발견 · 기준 2회 동일",
+      "passed": true,
+      "name": "missing file not reported as found"
+    },
+    {
+      "detail": "38",
+      "passed": true,
+      "name": "actual proxy History URL collection"
+    },
+    {
+      "detail": "12",
+      "passed": true,
+      "name": "OpenAPI POST metadata retained as source"
+    },
+    {
+      "detail": "two distinct states",
+      "passed": true,
+      "name": "URL verifier retains unauthenticated 200 404"
+    },
+    {
+      "detail": "2",
+      "passed": true,
+      "name": "representatives preserve response diversity"
+    },
+    {
+      "detail": "39",
+      "passed": true,
+      "name": "URL DB query values removed"
+    },
+    {
+      "detail": "5",
+      "passed": true,
+      "name": "native passive findings observed"
+    },
+    {
+      "detail": "5",
+      "passed": true,
+      "name": "fixed header controls excluded"
+    },
+    {
+      "detail": "50",
+      "passed": true,
+      "name": "captured main OpenAPI inventory"
+    },
+    {
+      "detail": "[Flow[marker=WB_WHOLE_AUDIT01, writeUrl=http://127.0.0.1:18299/api/diagnostics/fixed/stored, readUrl=, state=쓰기 성공 응답 관측 · 저장 미확정, status=200], Flow[marker=WB_WHOLE_AUDIT01, writeUrl=http://127.0.0.1:18299/api/diagnostics/vuln/stored, readUrl=http://127.0.0.1:18299/api/diagnostics/vuln/stored, state=HTML 조회 출력 · 실행 미검증, status=200], Flow[marker=WB_WHOLE_AUDIT01, writeUrl=http://127.0.0.1:18299/api/diagnostics/fixed/stored, readUrl=http://127.0.0.1:18299/api/diagnostics/fixed/stored, state=HTML 문자 표시 후보 · 실행 미검증, status=200]]",
+      "passed": true,
+      "name": "stored flow links both encoding variants"
+    },
+    {
+      "detail": "70",
+      "passed": true,
+      "name": "response API discovery reaches activity"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 근거 없음 HTTP=200, 응답 변화 HTTP=200, 응답 변화 HTTP=200, 근거 없음 HTTP=200, 근거 없음 HTTP=200, SQL 조건 차이 재현 후보 HTTP=200]",
+      "passed": true,
+      "name": "native payload SQLI vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, XSS 반사 후보 HTTP=200]",
+      "passed": true,
+      "name": "native payload XSS vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=404, 지정 파일 내용 발견 HTTP=200]",
+      "passed": true,
+      "name": "native payload DOWNLOAD vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 표현식 평가 후보 HTTP=200, 표현식 평가 후보 HTTP=200, 근거 없음 HTTP=200, 표현식 평가 후보 · 재현 HTTP=200]",
+      "passed": true,
+      "name": "native payload SSTI vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 지정 파일 내용 발견 HTTP=200]",
+      "passed": true,
+      "name": "native payload TRAVERSAL vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, XPath Injection 오류 후보 HTTP=200]",
+      "passed": true,
+      "name": "native payload XPATH vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=302, 리다이렉트 HTTP=302, 기준 재검증 HTTP=302, 리다이렉트 목적지 제어 후보 HTTP=302, 리다이렉트 HTTP=302, 리다이렉트 HTTP=302]",
+      "passed": true,
+      "name": "native payload REDIRECT vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 응답 헤더 삽입 후보 HTTP=200, 응답 헤더 삽입 후보 HTTP=200, 근거 없음 HTTP=200, 응답 헤더 삽입 후보 · 재현 HTTP=200]",
+      "passed": true,
+      "name": "native payload CRLF vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 명령 출력 후보 HTTP=200, 명령 출력 후보 HTTP=200, 근거 없음 HTTP=200, 근거 없음 HTTP=200, 출력 대조 일치 HTTP=200, 명령 출력 후보 · 재현 HTTP=200]",
+      "passed": true,
+      "name": "native payload COMMAND vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, LDAP Injection 오류 후보 HTTP=200, LDAP Injection 오류 후보 HTTP=200, 근거 없음 HTTP=200, LDAP Injection 오류 후보 · 재현 HTTP=200]",
+      "passed": true,
+      "name": "native payload LDAP vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, NoSQL Injection 오류 후보 HTTP=200, NoSQL Injection 오류 후보 HTTP=200, 근거 없음 HTTP=200, NoSQL Injection 오류 후보 · 재현 HTTP=200]",
+      "passed": true,
+      "name": "native payload NOSQL vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 지정 응답 문자열 후보 HTTP=200, 지정 응답 문자열 후보 HTTP=200, 근거 없음 HTTP=200, 지정 응답 문자열 후보 · 재현 HTTP=200]",
+      "passed": true,
+      "name": "native payload CUSTOM vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, XML 엔티티 확장 관찰 HTTP=200]",
+      "passed": true,
+      "name": "native payload XXE vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 업로드 수락 후보 HTTP=200]",
+      "passed": true,
+      "name": "native payload UPLOAD_NAME vuln"
+    },
+    {
+      "detail": "[기준 응답, 업로드 수락 후보, 후속 조회 응답, 업로드 활성 콘텐츠 제공 후보]",
+      "passed": true,
+      "name": "native payload UPLOAD_BODY vuln"
+    },
+    {
+      "detail": "[기준 응답, 근거 없음, 기준 재검증, 근거 없음, HTTP 콜백 관찰 후보, 근거 없음, SSRF HTTP 콜백 재현 후보]",
+      "passed": true,
+      "name": "native owned callback SSRF vuln"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 응답 변화 HTTP=200, 응답 변화 HTTP=200]",
+      "passed": true,
+      "name": "native payload SQLI fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 문자열 반사 HTTP=200]",
+      "passed": true,
+      "name": "native payload XSS fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=404, 근거 없음 HTTP=404]",
+      "passed": true,
+      "name": "native payload DOWNLOAD fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 근거 없음 HTTP=200]",
+      "passed": true,
+      "name": "native payload SSTI fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 응답 변화 HTTP=404]",
+      "passed": true,
+      "name": "native payload TRAVERSAL fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200]",
+      "passed": true,
+      "name": "native payload XPATH fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=302, 리다이렉트 HTTP=302, 기준 재검증 HTTP=302, 리다이렉트 HTTP=302]",
+      "passed": true,
+      "name": "native payload REDIRECT fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 근거 없음 HTTP=200]",
+      "passed": true,
+      "name": "native payload CRLF fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 근거 없음 HTTP=200]",
+      "passed": true,
+      "name": "native payload COMMAND fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 근거 없음 HTTP=200]",
+      "passed": true,
+      "name": "native payload LDAP fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 근거 없음 HTTP=200]",
+      "passed": true,
+      "name": "native payload NOSQL fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 근거 없음 HTTP=200]",
+      "passed": true,
+      "name": "native payload CUSTOM fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 근거 없음 HTTP=200, 기준 재검증 HTTP=200, 응답 변화 HTTP=400]",
+      "passed": true,
+      "name": "native payload XXE fixed"
+    },
+    {
+      "detail": "[기준 응답 HTTP=200, 응답 변화 HTTP=415]",
+      "passed": true,
+      "name": "native payload UPLOAD_NAME fixed"
+    },
+    {
+      "detail": "[기준 응답, 근거 없음]",
+      "passed": true,
+      "name": "native payload UPLOAD_BODY fixed"
+    },
+    {
+      "detail": "[기준 응답, 근거 없음, 기준 재검증, 근거 없음]",
+      "passed": true,
+      "name": "native owned callback SSRF fixed"
+    },
+    {
+      "detail": "[COMMAND, CRLF, CUSTOM, DOWNLOAD, LDAP, NOSQL, REDIRECT, SQLI, SSRF, SSTI, TRAVERSAL, UPLOAD_BODY, UPLOAD_NAME, XPATH, XSS, XXE]",
+      "passed": true,
+      "name": "all native profiles exercised"
+    },
+    {
+      "detail": "TSV metadata only",
+      "passed": true,
+      "name": "external names reach activity"
+    },
+    {
+      "detail": "관측 완료 · 최종 상태 수동 확인",
+      "passed": true,
+      "name": "UI workflow create read delete"
+    },
+    {
+      "detail": "3",
+      "passed": true,
+      "name": "workflow evidence captured"
+    },
+    {
+      "detail": "synthetic import; not live Pro callback",
+      "passed": true,
+      "name": "manual OAST metadata visible"
+    },
+    {
+      "detail": "12",
+      "passed": true,
+      "name": "evidence ZIP packets report coverage"
+    },
+    {
+      "detail": "table id not exported",
+      "passed": true,
+      "name": "OAST detailed id omitted from evidence reproduced"
+    },
+    {
+      "detail": "manual browser execution not performed",
+      "passed": true,
+      "name": "browser handoff content available"
+    },
+    {
+      "detail": "103",
+      "passed": true,
+      "name": "full journey coverage roundtrip"
+    },
+    {
+      "detail": "names and states only",
+      "passed": true,
+      "name": "coverage excludes actual credentials"
+    },
+    {
+      "detail": "12284",
+      "passed": true,
+      "name": "coverage Excel export"
+    },
+    {
+      "detail": "discoveredOnly=36 incomplete=103",
+      "passed": true,
+      "name": "unfinished endpoints visible"
+    }
+  ],
+  "additionalGaps": [
+    {
+      "feature": "트래픽",
+      "improvement": "고정할 근거와 제외 사유를 표시하고 기능별 원문 보관 위치를 연결",
+      "observed": "최근 250행과 행당 128KiB만 유지하며 활동 목록과 원문 보관 범위가 다름",
+      "id": "W01"
+    },
+    {
+      "feature": "데이터 비교",
+      "improvement": "중요 필드 선택과 선택 차이의 증거 연결",
+      "observed": "노출·인가 확인 때 쓰는 소유/공개 필드를 별도 표로 고르거나 결과를 증거 묶음으로 바로 넘기는 연결 없음",
+      "id": "W02"
+    },
+    {
+      "feature": "JS 추출→활동 추적",
+      "improvement": "미확정 발견 후보를 별도 보존하고 공통 mode/객체 값을 일괄 확정",
+      "observed": "community.js 동적 API 12개는 JS 목록에는 있지만 미확정 URL은 활동 추적 발견 목록에 전달되지 않음",
+      "id": "W03"
+    },
+    {
+      "feature": "환경 탐색→권한 비교",
+      "improvement": "비로그인 기본값을 유지하고 명시적 계정 프로필 대조 모드 추가",
+      "observed": "환경 검증은 비로그인 GET로 고정되어 로그인 후 설정/API 노출 범위를 비교하려면 요청을 다시 준비해야 함",
+      "id": "W04"
+    },
+    {
+      "feature": "URL 수집→업무 단위 점검",
+      "improvement": "URL 요약에 미검증 메서드와 계정 조건을 함께 표시하고 POST 결과로 연결",
+      "observed": "동일 URL의 GET와 POST는 URL 수집에서 한 행으로 합쳐지고 GET 확인 결과만 표시됨; 활동 추적은 메서드별 기록을 별도 관리",
+      "id": "W05"
+    },
+    {
+      "feature": "Passive→보고서",
+      "improvement": "경고 그룹마다 영향을 받은 URL과 첫/최근 원문 근거를 보관하고 증거 묶음으로 전달",
+      "observed": "같은 Origin·규칙·근거의 경고를 합산하면서 대표 URL 하나만 보관하는 구조",
+      "id": "W06"
+    },
+    {
+      "feature": "페이로드 검사→증거·활동 추적",
+      "improvement": "검사 결과 선택→기준/공격/대조 패킷 및 판정 근거를 한 묶음으로 추가",
+      "observed": "페이로드 엔진의 결과와 대조 요청이 점검 지원 증거 묶음으로 직접 전달되는 기능이 없음",
+      "id": "W07"
+    },
+    {
+      "feature": "OAST→증거",
+      "improvement": "oast.json과 원본 요청 번호 연결 추가",
+      "observed": "표에 있던 ID·시각·원본 요청 상세가 ZIP에 포함되지 않음",
+      "id": "W08"
+    },
+    {
+      "feature": "기능 간 전체 흐름",
+      "improvement": "원본 요청/계정/기능/점검 결과/증거의 연결 상태를 보여주는 점검 작업 목록",
+      "observed": "발견·요청 관측·권한 후보·페이로드 후보·증거 보관을 한 화면에서 연결하는 업무 단위 목록이 없음",
+      "id": "W09"
+    }
+  ],
+  "payloadProfiles": [
+    "COMMAND",
+    "CRLF",
+    "CUSTOM",
+    "DOWNLOAD",
+    "LDAP",
+    "NOSQL",
+    "REDIRECT",
+    "SQLI",
+    "SSRF",
+    "SSTI",
+    "TRAVERSAL",
+    "UPLOAD_BODY",
+    "UPLOAD_NAME",
+    "XPATH",
+    "XSS",
+    "XXE"
+  ],
+  "harnessNativeCalls": 124,
+  "proxyCalls": 6,
+  "browserAttempt": {
+    "target": "owned temporary loopback lab",
+    "result": "ERR_CONNECTION_TIMED_OUT",
+    "actual_script_execution_verified": false
+  },
+  "boundaries": {
+    "actual_proxy": true,
+    "proxy_loopback_port": 18288,
+    "GUI_window_opened": false,
+    "native_checks_total": 151,
+    "new_journey_checks": 83,
+    "reexecuted_auth_workflow_checks": 68,
+    "live_pro_collaborator": false,
+    "native_extension_error_bytes": 0,
+    "temporary_listeners_stopped": true,
+    "external_bapps_executed": false,
+    "registry": "owned local fixture",
+    "jar_sha256": "5f2c85255bd0ca692306c951f5c575a484a287f1646b0937b4d13155d911fb74"
+  }
+}

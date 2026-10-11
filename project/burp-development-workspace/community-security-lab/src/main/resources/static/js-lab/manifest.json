@@ -1,0 +1,171 @@
+{
+  "version": "3.3-js-lab",
+  "cases": [
+    {
+      "file": "01-fetch.js",
+      "title": "Fetch · 요청 메타데이터",
+      "group": "정상 추출",
+      "description": "HTTP 메서드, 쿼리 이름, 헤더 이름, body 객체 키",
+      "expected": [
+        "posts: GET · page/category",
+        "comments: POST · Content-Type/X-Lab-Trace · postId/text",
+        "edit: PATCH · X-Lab-Mode · title/visibility",
+        "profile: PUT (Request 생성자)",
+        "delete: DELETE"
+      ]
+    },
+    {
+      "file": "02-axios.js",
+      "title": "Axios · 설정 객체",
+      "group": "정상 추출",
+      "description": "축약 호출, config, baseURL, params, data",
+      "expected": [
+        "search: GET · q/page",
+        "upload: POST · fileId/filename · X-Lab-Upload",
+        "settings: PUT · theme",
+        "preferences: PATCH · language",
+        "remove: DELETE",
+        "audit: POST · limit · event",
+        "export: HEAD"
+      ]
+    },
+    {
+      "file": "03-xhr-navigation.js",
+      "title": "XHR · 스트림 · 이동",
+      "group": "정상 추출",
+      "description": "XHR.open, WebSocket, EventSource, location, window.open",
+      "expected": [
+        "xhr: GET · XHR-like open",
+        "events: UPGRADE · WebSocket",
+        "events: GET · EventSource",
+        "login/redirect/logout/help: 이동 구문"
+      ]
+    },
+    {
+      "file": "04-constants.js",
+      "title": "상수 · 템플릿 · 이스케이프",
+      "group": "정상 추출",
+      "description": "const 연결, 정적 템플릿, 상대 URL, URL 설정 변수",
+      "expected": [
+        "constant/template/escaped/path: 정적 완성 URL",
+        "../relative, ./nearby: JS 응답 URL 기준으로 해석",
+        "config/object/path: 설정 구문 · 메서드 ?"
+      ]
+    },
+    {
+      "file": "05-dynamic-scope.js",
+      "title": "동적 URL · 스코프",
+      "group": "한계 확인",
+      "description": "미해결 부분, 매개변수 가림, 숫자 연산 오탐 방지",
+      "expected": [
+        "users/{dynamic}, post/{dynamic}: 미완성",
+        "현재 한계: 함수 안의 바깥 const + 템플릿 nested-users는 미추출됨",
+        "shadow는 전역 ROOT로 잘못 확정하면 안 됨",
+        "outside: 완성",
+        "숫자 1+2를 12로 연결하면 안 됨",
+        "repeated: 서로 다른 코드 위치 2건"
+      ]
+    },
+    {
+      "file": "06-secrets.js",
+      "title": "가짜 키 · 토큰",
+      "group": "시크릿 확인",
+      "description": "공급자 패턴과 이름/엔트로피 추정, 가림 확인",
+      "expected": [
+        "AWS/Google/GitHub/Slack/Stripe/JWT/Private key: 패턴 후보",
+        "secret: 이름·엔트로피 추정 후보",
+        "결과에서는 원문 대신 가림·길이·지문 표시",
+        "현재 엔진은 이스케이프된 Private key를 원문/해제 문자열로 각각 잡아 후보가 2건 보일 수 있음",
+        "전부 합성 문자열이며 키 유효성 판정 대상 아님"
+      ]
+    },
+    {
+      "file": "07-negative.js",
+      "title": "오탐 방지 · 값 제거",
+      "group": "한계 확인",
+      "description": "placeholder와 일반 문장을 제외하고 URL 비밀값을 제거",
+      "expected": [
+        "placeholder/일반 문장: 시크릿 후보 없음",
+        "URL/API 결과에서 user:password, 쿼리 값, fragment 제거",
+        "쿼리 이름 token은 남음"
+      ]
+    },
+    {
+      "file": "08-modern-module.js",
+      "title": "ES Module · 최신 문법",
+      "group": "한계 확인",
+      "description": "import/export, optional chaining, nullish coalescing, async",
+      "expected": [
+        "현재 Rhino 엔진: AST 실패 표시 + 문자열 보조 추출",
+        "modern URL은 보조 후보이며 메서드/완성도를 AST 성공과 동일하게 믿지 않기",
+        "axios, @community/private-reports, lab-dynamic-package: 의존성 후보"
+      ]
+    },
+    {
+      "file": "09-invalid.js",
+      "title": "잘못된 구문 · 복구",
+      "group": "한계 확인",
+      "description": "문법 오류와 패턴 보조 분석 상태 구분",
+      "expected": [
+        "AST 실패를 명확히 표시",
+        "broken: 문자열 보조 후보",
+        "Google API Key: 패턴 후보 1개"
+      ]
+    },
+    {
+      "file": "10-recon.js",
+      "title": "도메인 · 클라우드 · NPM",
+      "group": "정찰 확인",
+      "description": "주소와 의존성을 읽기만 하는 합성 테스트",
+      "expected": [
+        "클라우드 공급자 URL 6개",
+        "도메인 및 NPM 의존성 후보",
+        "자동 외부 요청 없음 · 유효성/등록 여부는 별도 조회"
+      ]
+    },
+    {
+      "file": "11-sourcemap.js",
+      "title": "외부 소스맵",
+      "group": "소스맵 확인",
+      "description": "별도 .map 응답을 수집하거나 같은 출처 map 조회",
+      "expected": [
+        "외부 map 참조: 발견 · 요청 전",
+        "map 조회 또는 .map 응답 분석 후 recovered: POST · reportId",
+        "원본 src/private-reports.js 1개"
+      ]
+    },
+    {
+      "file": "12-inline-map.js",
+      "title": "인라인 소스맵",
+      "group": "소스맵 확인",
+      "description": "data URL 내 sourcesContent를 네트워크 요청 없이 복원",
+      "expected": [
+        "원본 1개 자동 복원",
+        "recovered: POST · reportId · source map 출처",
+        "@community/recovered: 복원된 의존성"
+      ]
+    },
+    {
+      "file": "13-inline.html",
+      "title": "HTML · 인라인 스크립트",
+      "group": "정상 추출",
+      "description": "HTML 본문에서 JS 블록만 분석",
+      "expected": [
+        "html-inline: POST · commentId · 원본 HTML 4행",
+        "src 외부 파일을 분석기가 자동 요청하면 안 됨",
+        "application/json 블록은 JS AST 대상에서 제외"
+      ]
+    },
+    {
+      "file": "14-package.json",
+      "title": "package.json · 의존성",
+      "group": "정찰 확인",
+      "description": "패키지 의존성의 종류 구분",
+      "expected": [
+        "axios/@community/private-widget: dependencies",
+        "lab-build-tool: devDependencies",
+        "비공개/미등록은 취약점 확정 아님"
+      ]
+    }
+  ]
+}

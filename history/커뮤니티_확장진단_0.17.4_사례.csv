@@ -1,0 +1,45 @@
+﻿기능,사례,경로/프로필,계정/방식,HTTP,현재 결과,근거
+권한 판정,vuln-private-post,/api/community/vuln/posts/102,alice,200,타인 객체 접근 의심,소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인
+권한 판정,vuln-private-message,/api/community/vuln/messages/202,alice,200,타인 객체 접근 의심,소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인
+권한 판정,vuln-private-file,/api/community/vuln/files/bob-private-file,alice,200,우회 의심,동일 성공 응답 · 수동 확인
+권한 판정,vuln-admin,/api/community/vuln/admin/users?role=ADMIN,alice,200,우회 의심,비교 대상 JSON 필드 동일 · 실제 접근 확인
+권한 판정,vuln-public,/api/community/vuln/posts/101,guest,200,우회 의심,비교 대상 JSON 필드 동일 · 실제 접근 확인
+권한 판정,vuln-public-owner-rule,/api/community/vuln/posts/101,bob,200,타인 객체 접근 의심,소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인
+권한 판정,vuln-members-guest,/api/community/vuln/posts/103,guest,401,차단 근거 확인,HTTP 401
+권한 판정,vuln-moderator-private,/api/community/vuln/posts/104,moderator,200,타인 객체 접근 의심,소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인
+권한 판정,fixed-private-post,/api/community/fixed/posts/102,alice,404,판정 보류,HTTP 404
+권한 판정,fixed-private-message,/api/community/fixed/messages/202,alice,404,판정 보류,HTTP 404
+권한 판정,fixed-private-file,/api/community/fixed/files/bob-private-file,alice,404,판정 보류,HTTP 404
+권한 판정,fixed-admin,/api/community/fixed/admin/users?role=ADMIN,alice,403,차단 근거 확인,HTTP 403
+권한 판정,fixed-public,/api/community/fixed/posts/101,guest,200,우회 의심,비교 대상 JSON 필드 동일 · 실제 접근 확인
+권한 판정,fixed-public-owner-rule,/api/community/fixed/posts/101,bob,200,타인 객체 접근 의심,소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인
+권한 판정,fixed-members-guest,/api/community/fixed/posts/103,guest,404,판정 보류,HTTP 404
+권한 판정,fixed-moderator-private,/api/community/fixed/posts/104,moderator,404,판정 보류,HTTP 404
+권한 패널,vulnerable-private,실제 HTTP 재전송,headless API adapter,200,타인 객체 접근 의심 · 소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인,대상 CSRF 교체=True
+권한 패널,fixed-private,실제 HTTP 재전송,headless API adapter,404,판정 보류 · HTTP 404,대상 CSRF 교체=True
+권한 패널,fixed-public,실제 HTTP 재전송,headless API adapter,200,타인 객체 접근 의심 · 소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인,대상 CSRF 교체=True
+권한 패널,fixed-write-real-csrf,실제 HTTP 재전송,headless API adapter,403,차단 근거 확인 · HTTP 403,대상 CSRF 교체=True
+페이로드,vuln-sql-error,SQLI,고정,500,SQL 오류 후보,"org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']""}"
+페이로드,vuln-sql-boolean,SQLI,고정,200,응답 변화,기준 200 / 152자 → 200 / 2자
+페이로드,vuln-xss,XSS,고정,200,XSS 반사 후보,HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요
+페이로드,vuln-file,DOWNLOAD,고정,200,지정 파일 내용 발견,BOB_PRIVATE_ATTACHMENT
+페이로드,vuln-sql-error,SQLI,적응형,500,SQL 오류 후보 · 재현,"DB 고유 오류 2회, 기준에는 없음 · 실제 인젝션 성공은 수동 확인 필요"
+페이로드,vuln-sql-boolean,SQLI,적응형,200,응답 변화,SQL 거짓 조건 · 기준 200 / 152자 → 200 / 2자
+페이로드,vuln-xss,XSS,적응형,200,XSS 반사 후보 · 재현,같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요 · 자동 확정 아님
+페이로드,vuln-file,DOWNLOAD,적응형,200,지정 파일 내용 발견 · 재현,같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · BOB_PRIVATE_ATTACHMENT · 자동 확정 아님
+페이로드,fixed-sql-error,SQLI,고정,200,응답 변화,기준 200 / 152자 → 200 / 2자
+페이로드,fixed-sql-boolean,SQLI,고정,200,응답 변화,기준 200 / 152자 → 200 / 2자
+페이로드,fixed-xss,XSS,고정,200,문자열 반사,실행 가능한 XSS 근거 아님
+페이로드,fixed-file,DOWNLOAD,고정,404,근거 없음,검사한 응답에서 유형별 근거가 발견되지 않음
+페이로드,fixed-sql-error,SQLI,적응형,200,응답 변화,SQL 구문 오류 탐색 · 기준 200 / 152자 → 200 / 2자
+페이로드,fixed-sql-boolean,SQLI,적응형,200,응답 변화,SQL 거짓 조건 · 기준 200 / 152자 → 200 / 2자
+페이로드,fixed-xss,XSS,적응형,200,메타문자 인코딩 관찰,HTML 텍스트 위치에서 전체 입력이 엔티티 인코딩됨 · 다른 컨텍스트/우회는 미검사
+페이로드,fixed-file,DOWNLOAD,적응형,404,근거 없음,후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음
+페이로드,vuln-upload-name,UPLOAD_NAME,고정,200,업로드 수락 후보,2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요
+페이로드,fixed-upload-name,UPLOAD_NAME,고정,415,응답 변화,기준 200 / 117자 → 415 / 34자
+페이로드,stored-comment-json,XSS,고정,200,근거 없음,검사한 응답에서 유형별 근거가 발견되지 않음
+환경 탐색,/.env,/.env,비회원,404,HTTP 404 · 미발견 · 기준 응답 불안정/재검증 실패 · 수동 검토,기준 HTML 인코딩 경로 차이
+환경 탐색,/.git/config,/.git/config,비회원,404,HTTP 404 · 미발견 · 기준 응답 불안정/재검증 실패 · 수동 검토,기준 HTML 인코딩 경로 차이
+환경 탐색,/api/vuln/config,/api/vuln/config,비회원,200,HTTP 200 · 응답 검토 · 기준 응답 불안정/재검증 실패 · 수동 검토,기준 HTML 인코딩 경로 차이
+환경 탐색,/api/fixed/config,/api/fixed/config,비회원,401,HTTP 401 · 접근 제한 · 기준 응답 불안정/재검증 실패 · 수동 검토,기준 HTML 인코딩 경로 차이
+환경 탐색,/v3/api-docs,/v3/api-docs,비회원,200,HTTP 200 · 응답 검토 · 기준 응답 불안정/재검증 실패 · 수동 검토,기준 HTML 인코딩 경로 차이

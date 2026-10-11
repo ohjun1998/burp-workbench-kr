@@ -1,0 +1,13 @@
+services:
+  verify:
+    image: python:3.12-alpine
+    profiles: [verification]
+    working_dir: /lab
+    volumes:
+      - .:/lab:ro
+      - ./verification-results:/results
+    command: ["python", "verify_stack.py", "--url", "http://web", "--output", "/results"]
+    depends_on:
+      web:
+        condition: service_started
+    networks: [lab]

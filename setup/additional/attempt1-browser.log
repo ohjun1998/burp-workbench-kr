@@ -1,0 +1,13 @@
+PASS community homepage renders in Chromium
+PASS real login updates active account
+PASS stored XSS actually executes in vulnerable comment view
+PASS fixed comment view displays payload text
+PASS session restores after reload
+PASS fixed view contains no injected image
+PASS fixed view did not execute stored payload
+PASS account switching updates active account
+PASS desktop layout avoids horizontal overflow
+FAIL mobile layout avoids horizontal overflow
+Error: mobile layout avoids horizontal overflow
+    at check (/workspace/scratch/760a1a9e67de/burp-workbench-workspace/validation-local/browser-checks.cjs:12:125)
+    at /workspace/scratch/760a1a9e67de/burp-workbench-workspace/validation-local/browser-checks.cjs:36:3

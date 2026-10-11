@@ -1,0 +1,1 @@
+{"version": 3, "file": "extensions-fixtures.js", "sources": ["webpack:///src/training-client.js"], "sourcesContent": ["// synthetic source only\nconst internalTrainingRoute=\"/api/extensions/hidden\";\nconst trainingBearer=\"LAB_ONLY_NO_REAL_PRIVILEGES\";\n"], "names": ["internalTrainingRoute", "trainingBearer"], "mappings": "AAAA"}

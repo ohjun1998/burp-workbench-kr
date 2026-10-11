@@ -1,0 +1,13 @@
+index	type	source	sha256
+001-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-guess.js	d854f28244458dda69d0e2271ab76356de67b67bcaf45c4616b7368693dd3126
+002-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-package.json	0eca275cc3c262ea0f8bfa5d153128cf9dd249c41d7bce5dbd8a153922d8a25e
+003-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-lab.js	1e506fb52398396b63b8f4678c6f23532c8ab0b1c52db3d5c9b713080fa2e92d
+004-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-guess.js.map	fc3b74a5ea605a4723825f272b7dbd6f1b34245ca414f79ee2cb2338b5e92e21
+005-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-cross.js	1799db1bd512f59c75bcca1cb7ee2152b1f751f1558b399d161ba165e587909c
+006-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-inline.js	e57c998497079b6f1769acbf1faf4dd29b144c9ad2207b79936c44708833e23f
+007-captured.txt	captured	http://127.0.0.1:19088/js-miner-lab	8969f1bb0d7e1be9c1bd72a6b64c54dfccbbbc51d01df6387282af056f6d9be4
+008-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-lab.js.map	fc3b74a5ea605a4723825f272b7dbd6f1b34245ca414f79ee2cb2338b5e92e21
+009-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-redirect.js	9dc7ad5716374b8c3059f908c0f8839daa8c935a945adbb7b8e9de1b181df541
+010-captured.txt	captured	http://127.0.0.1:19088/assets/js-miner-invalid.js	38edad3b99f50258afd1c657783f7d8cfc0d58f9e95fea764c2970105e044992
+011-source-private-community.js	source-map	inline:8b29aeaeb505bf8c :: ../../outside/private-community.js	df9b1f812850d492324b8b0a3694a7d2ef72a611869d6c98ed1f31d60e4703d4
+012-source-store.js	source-map	inline:8b29aeaeb505bf8c :: src/store.js	94e2716264885bdc1d005e65e76ea7c47d96e911e278bebe0d4b0b4dfa675dcf

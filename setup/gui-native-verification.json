@@ -1,0 +1,84 @@
+{
+  "date_utc": "2026-10-11T01:24:44.628024+00:00",
+  "status": "BURP_PASSED_DOCKER_BLOCKED",
+  "burp": "Burp Suite Community Edition 2026.7.3-52685",
+  "burp_jar_sha256": "c8262dc5426f38bedc490d66c5d21b6ff77d6dc6d85cefe6a66c882690134069",
+  "extension": "0.21.0",
+  "extension_jar_sha256": "22a9c4248b272bcedea7cd7c5e1f3fbe5c9bc26924d72907fc53148408d6bbac",
+  "java": "OpenJDK 21.0.3 Ubuntu extracted runtime",
+  "java_warning": "Burp reports this JRE combination has not been fully tested; warning acknowledged in isolated GUI session.",
+  "gui": {
+    "actual_burp_window": true,
+    "display": "isolated Xvfb 1600x1000",
+    "screens": {
+      "JS 추출": "screen-JS추출.png",
+      "응답 분석": "screen-응답분석.png",
+      "활동 추적": "screen-활동추적.png",
+      "점검 지원": "screen-점검지원.png",
+      "업무별 현황": "screen-업무별현황.png",
+      "트래픽": "screen-트래픽.png",
+      "URL 수집": "screen-URL수집.png",
+      "환경 탐색": "screen-환경탐색.png",
+      "권한 비교": "screen-권한비교.png",
+      "페이로드 검사": "screen-페이로드검사.png",
+      "계정별 점검": "screen-계정별점검.png",
+      "데이터 도구": "screen-데이터도구.png"
+    },
+    "screen_count": 12,
+    "scope": "10 main feature pages, account-specific and task-specific pages; visible layout and Korean rendering checked; not every UI action."
+  },
+  "native_api": {
+    "suites": {
+      "user-audit.json": 71,
+      "whole-audit.json": 87,
+      "account-task-audit.json": 22
+    },
+    "passed": 180,
+    "failed": 0,
+    "extension_error_bytes": 0,
+    "scope": "Actual Montoya API, HTTP, production controllers; these checks are not 180 GUI clicks."
+  },
+  "existing_local_checks": 1132,
+  "total_current_checks": 1312,
+  "cleanup_ports_closed": {
+    "6098": true,
+    "18299": true,
+    "18288": true,
+    "19112": true
+  },
+  "docker": {
+    "status": "BLOCKED",
+    "executed": false,
+    "docker_cli": false,
+    "docker_socket": false,
+    "capabilities": [
+      "CapInh:\t0000000000000000",
+      "CapPrm:\t0000000000000000",
+      "CapEff:\t0000000000000000",
+      "CapBnd:\t0000000000000000",
+      "CapAmb:\t0000000000000000",
+      "NoNewPrivs:\t1",
+      "Seccomp:\t2",
+      "Seccomp_filters:\t1"
+    ],
+    "rootless_namespace_probe": "unshare -Ur true failed: write failed /proc/self/uid_map: Operation not permitted",
+    "remote_workspace_option": "DigitalOcean discovered but not installed/connected; no remote server provisioned",
+    "scope": "Nginx + Tomcat + Oracle Free + protocol fixtures; no containers started",
+    "shared_chat_review": {
+      "url": "https://chatgpt.com/s/cx_6acade346b848191b65a494004bfdbc9",
+      "title": "Burp Suite 확장 개발 준비",
+      "turns_reviewed": 32,
+      "docker_execution_evidence": false,
+      "prior_method": "isolated Java Spring/Tomcat/H2 loopback lab and native Burp; full Docker/Oracle/Nginx explicitly not exercised",
+      "shell_execution_logs_in_snapshot": false
+    }
+  },
+  "initial_attempt": "GUI succeeded; native harness classloader failed. Native sources were moved to a separate classpath; final rerun passed.",
+  "not_verified": [
+    "Docker Oracle/Nginx/Tomcat/protocol stack",
+    "browser DOM/JavaScript execution",
+    "live Pro Collaborator",
+    "third-party BApps",
+    "TLS/HTTP2"
+  ]
+}

@@ -1,0 +1,3991 @@
+{
+  "tested_at_utc": "2026-10-10T10:42:09.883299+00:00",
+  "extension_version": "0.17.4",
+  "jar_sha256": "04972f5d88889a0a402c7c29f7d12f06e0a4699d0ff4917fcaf5f8b212214349",
+  "production_source_modified": false,
+  "coverage": {
+    "site_baseline": 49,
+    "extension_linked": 76,
+    "js_fixture_checks": 62,
+    "total_checks": 187,
+    "extension_http_requests_final_run": 139,
+    "interpretation": "Checks verify observed behavior and issue reproduction; passing does not mean all vulnerabilities were detected. Basic site regression HTTP requests are additional and are not included in 139."
+  },
+  "limitations": [
+    "Actual Burp GUI/proxy integration not tested",
+    "Embedded loopback Spring/Tomcat/H2, not a cloud VM or Docker/Oracle deployment",
+    "Stored XSS browser execution not tested",
+    "Passive findings beyond URL collection are code-review proposals, not implemented detections"
+  ],
+  "findings": [
+    {
+      "id": "A01",
+      "priority": "우선",
+      "area": "SQL 조건 비교",
+      "type": "재현된 미탐",
+      "evidence": "실제 기준/참 응답 SHA256 동일, 거짓 응답 다름. 고정/적응형 모두 조건 차이 후보 없음. normalized가 기준값 Burp를 정상 데이터에서도 제거함.",
+      "proposal": "원본 본문 동일성 우선 비교, 반사 위치 확인 후 제한적 정규화, 기준/참/거짓 재검증과 행별 비교 근거"
+    },
+    {
+      "id": "A02",
+      "priority": "우선",
+      "area": "권한 비교 정책",
+      "type": "정상 공개 응답을 의심 후보로 분류",
+      "evidence": "수정된 공개 posts/101도 동일 본문이면 우회 의심. $.OWNER_ID와 Bob 소유값 2를 지정하면 타인 객체 접근 의심. 실제 AuthComparePanel에서도 재현.",
+      "proposal": "경로/메서드별 공개·공유·소유자 전용·역할별 정책, 허용된 동일 응답 분리, 정책 확정 전 소유값 불일치는 정보로 표시"
+    },
+    {
+      "id": "A03",
+      "priority": "우선",
+      "area": "JS 분석",
+      "type": "AST 실패 및 잘못된 경로 후보",
+      "evidence": "community.js AST 실패, 엔드포인트 15개 모두 메서드 ?. async/await·ES module 최소 샘플 실패. /posts 같은 apiPath 인수가 Origin 루트 경로로 발견됨.",
+      "proposal": "async/await·module 지원, 함수 래퍼/상수 전파의 제한적 분석, 문맥 미확정 문자열은 경로 조각으로 분리, 신뢰도/미해결 목록 유지"
+    },
+    {
+      "id": "A04",
+      "priority": "다음",
+      "area": "환경 탐색 기준",
+      "type": "안정 응답을 불안정으로 판단",
+      "evidence": "Tomcat 404의 유일한 차이는 &#47;audit-missing-one/two. 이 표시를 마스킹하면 본문 동일하지만 현재 서명은 다름.",
+      "proposal": "요청 URL/경로의 HTML entity·percent 표시를 좁은 범위로 정규화, 원본 유지"
+    },
+    {
+      "id": "A05",
+      "priority": "다음",
+      "area": "404 권한 차단",
+      "type": "보수적 결과로 검토량 증가",
+      "evidence": "소유자 200, 타 계정 404인 수정 비공개 글·쪽지·첨부가 판정 보류로 남음.",
+      "proposal": "소유자 재조회 200과 존재 근거를 보존해 은닉형 접근 차단 후보로 별도 분류. 404 전체를 차단으로 간주하지 않음"
+    },
+    {
+      "id": "A06",
+      "priority": "다음",
+      "area": "JS 도메인",
+      "type": "비호스트 표현식 후보",
+      "evidence": "community.js 도메인 후보 72개. user.role/window.fetch/JSON.parse 최소 샘플도 호스트로 표시됨.",
+      "proposal": "문자열·URL·호스트 문맥 중심 추출, property access 제외, 저신뢰 후보 별도 표시"
+    },
+    {
+      "id": "A07",
+      "priority": "다음",
+      "area": "URL 패턴·객체 분류",
+      "type": "대표 선택에 따른 커버리지 한계",
+      "evidence": "posts/101(public)와 posts/102(private)가 한 그룹. 비회원 200/404 정책은 다름. posts/102와 messages/202 분류는 기타.",
+      "proposal": "숫자/UUID 경로 인자를 객체 접근 후보로 표시, 상태/계정/소유 관계가 다른 대표 추가, 그룹 대표 확인과 개별 객체 완료 분리"
+    },
+    {
+      "id": "A08",
+      "priority": "다음",
+      "area": "OpenAPI 경로 수집",
+      "type": "지원 범위 공백",
+      "evidence": "실제 /v3/api-docs 응답을 ReconMetadata.discover에 넣으면 0개. 실습 문서 자체도 댓글/수정/삭제 등 일부 POST 경로를 GET으로 기록함.",
+      "proposal": "OpenAPI paths/parameters/requestBody 수집, 템플릿 변수 유지, 문서 메서드와 관측 트래픽 불일치 경고; 실습 문서도 수정"
+    },
+    {
+      "id": "A09",
+      "priority": "후속",
+      "area": "저장형 XSS",
+      "type": "후속 흐름 지원 공백",
+      "evidence": "댓글 POST JSON에는 반사형 XSS 후보 없음. 별도 GET에서 저장한 onerror 문자열 확인. frontend의 raw/escaped 렌더링은 소스에서 확인; 브라우저 실행 미검증.",
+      "proposal": "쓰기→조회 흐름 연결, 고유 마커·저장 위치·출력 문맥 기록, 브라우저 실행 전에는 저장/출력 후보로 표시"
+    },
+    {
+      "id": "A10",
+      "priority": "후속",
+      "area": "응답 Passive 분석",
+      "type": "현재 URL 수집 기능 밖의 공백",
+      "evidence": "현재 PassiveScanPanel은 URL 수집·GET 확인 중심. 실제 config/API 문서 200은 환경 탐색에서 응답 검토로 남음. 코드에서 별도 ScannerCheck 등록/응답 보안 규칙은 찾지 못함.",
+      "proposal": "기존 트래픽 응답 기반 오류·민감 정보·쿠키·헤더 관찰 규칙, 근거 위치와 중복 제거, 기능 이름과 지원 범위 명확화"
+    }
+  ],
+  "audit": {
+    "jwt": "HEADER\n{\"alg\":\"HS256\",\"typ\":\"JWT\"}\n\nPAYLOAD\n{\"role\":\"USER\",\"exp\":1791625171,\"sub\":\"1\",\"trainingOnly\":true}\n\n서명 검증: 수행하지 않음. 디코딩만으로 신뢰할 수 없습니다.\n\n시간 정보 · 서명 미검증 · 평가 시각 2026-10-10T09:09:31.831845700Z (UTC)\nexp: 2026-10-10T09:39:31Z (UTC) · 만료 전\n시간 표시만으로 서버의 토큰 수용 여부를 판단하지 않습니다.",
+    "missingPathControls": {
+      "secondBody": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 404 – Not Found</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 404 – Not Found</h1><hr class=\"line\" /><p><b>Type</b> Status Report</p><p><b>Message</b> No endpoint GET &#47;audit-missing-two.</p><p><b>Description</b> The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.</p><hr class=\"line\" /><h3>Apache Tomcat/10.1.60</h3></body></html>",
+      "firstBody": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 404 – Not Found</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 404 – Not Found</h1><hr class=\"line\" /><p><b>Type</b> Status Report</p><p><b>Message</b> No endpoint GET &#47;audit-missing-one.</p><p><b>Description</b> The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.</p><hr class=\"line\" /><h3>Apache Tomcat/10.1.60</h3></body></html>",
+      "reference": {
+        "sample": {
+          "status": 404,
+          "type": "text/html",
+          "signature": "TEXT:<!doctype html><html lang=\"en\"><head><title>HTTP Status 404 – Not Found</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 404 – Not Found</h1><hr class=\"line\" /><p><b>Type</b> Status Report</p><p><b>Message</b> No endpoint GET &#47;audit-missing-one.</p><p><b>Description</b> The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.</p><hr class=\"line\" /><h3>Apache Tomcat/10.1.60</h3></body></html>"
+        },
+        "stable": false,
+        "note": "기준 응답 불안정/재검증 실패 · 수동 검토"
+      },
+      "first": {
+        "status": 404,
+        "type": "text/html",
+        "signature": "TEXT:<!doctype html><html lang=\"en\"><head><title>HTTP Status 404 – Not Found</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 404 – Not Found</h1><hr class=\"line\" /><p><b>Type</b> Status Report</p><p><b>Message</b> No endpoint GET &#47;audit-missing-one.</p><p><b>Description</b> The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.</p><hr class=\"line\" /><h3>Apache Tomcat/10.1.60</h3></body></html>"
+      },
+      "second": {
+        "status": 404,
+        "type": "text/html",
+        "signature": "TEXT:<!doctype html><html lang=\"en\"><head><title>HTTP Status 404 – Not Found</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 404 – Not Found</h1><hr class=\"line\" /><p><b>Type</b> Status Report</p><p><b>Message</b> No endpoint GET &#47;audit-missing-two.</p><p><b>Description</b> The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.</p><hr class=\"line\" /><h3>Apache Tomcat/10.1.60</h3></body></html>"
+      }
+    },
+    "communityJs": {
+      "endpoints": [
+        {
+          "url": "http://127.0.0.1:18099/api/community/",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 1,
+          "start": 268,
+          "length": 17,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/api/auth/login",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 3,
+          "start": 1268,
+          "length": 17,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/api/auth/me",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 3,
+          "start": 1663,
+          "length": 14,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/posts",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 5,
+          "start": 2113,
+          "length": 8,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/posts/",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 6,
+          "start": 3022,
+          "length": 9,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/files/",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 6,
+          "start": 3302,
+          "length": 9,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/messages",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 8,
+          "start": 5463,
+          "length": 11,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/admin/users",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "role",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 9,
+          "start": 6234,
+          "length": 25,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/search",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "q",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 12,
+          "start": 7756,
+          "length": 12,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/posts",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 12,
+          "start": 8651,
+          "length": 8,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/messages",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 12,
+          "start": 10224,
+          "length": 11,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/messages/",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 12,
+          "start": 10523,
+          "length": 12,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/api/community/register",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 13,
+          "start": 10664,
+          "length": 25,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/api/auth/logout",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 13,
+          "start": 11062,
+          "length": 18,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        },
+        {
+          "url": "http://127.0.0.1:18099/api/community/reset",
+          "method": "?",
+          "kind": "문자열 보조 · AST 실패",
+          "parameters": "",
+          "headers": "",
+          "bodyKeys": "",
+          "line": 13,
+          "start": 11536,
+          "length": 22,
+          "complete": true,
+          "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+        }
+      ],
+      "secrets": [],
+      "status": "AST 블록 0 · URL/API 15 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 72 · map 0 · 원본 0",
+      "truncated": false,
+      "miner": {
+        "domains": [
+          {
+            "host": "document.queryselector",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "opt.headers",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "opt.write",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "opt.method",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "opt.body",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "r.text",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "r.status",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "r.ok",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "json.parse",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 1
+          },
+          {
+            "host": "style.display",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 2
+          },
+          {
+            "host": "u.id",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 2
+          },
+          {
+            "host": "u.username",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 2
+          },
+          {
+            "host": "u.role",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 2
+          },
+          {
+            "host": "u.email",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 2
+          },
+          {
+            "host": "user.username",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 2
+          },
+          {
+            "host": "user.role",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 2
+          },
+          {
+            "host": "x.ok",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "d.error",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "d.csrf",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "d.user",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "e.message",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "d.ok",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "x.csrf",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "x.user",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 3
+          },
+          {
+            "host": "rows.filter",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "x.category",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "rows.length",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "shown.length",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "p.category",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "p.visibility",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "p.username",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "p.id",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "p.title",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 5
+          },
+          {
+            "host": "p.body",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "p.comments",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "c.username",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "c.body",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "p.files",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "f.id",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "f.filename",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "p.comments.length",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "community-note.txt",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 6
+          },
+          {
+            "host": "x.id",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 8
+          },
+          {
+            "host": "x.body",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 8
+          },
+          {
+            "host": "users.length",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 9
+          },
+          {
+            "host": "x.username",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 9
+          },
+          {
+            "host": "x.role",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 9
+          },
+          {
+            "host": "x.email",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 9
+          },
+          {
+            "host": "user.id",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 10
+          },
+          {
+            "host": "v.innerhtml",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 11
+          },
+          {
+            "host": "page.startswith",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 11
+          },
+          {
+            "host": "page.slice",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 11
+          },
+          {
+            "host": "e.preventdefault",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "e.target",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "b.onclick",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "b.dataset.post",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "x.message",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "e.target.value",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "b.addeventlistener",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "b.dataset.page",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "object.fromentries",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "d.id",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "f.get",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "f.elements.title.value",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "f.elements.body.value",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "f.elements.visibility.value",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "f.elements.category.value",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "b.dataset.message",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 12
+          },
+          {
+            "host": "d.username",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 13
+          },
+          {
+            "host": "e.target.elements.password.value",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 13
+          },
+          {
+            "host": "document.queryselectorall",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 13
+          },
+          {
+            "host": "b.dataset.category",
+            "relation": "발견 호스트 · 관계 미확정",
+            "provider": "",
+            "line": 13
+          }
+        ],
+        "clouds": [],
+        "dependencies": [],
+        "maps": [],
+        "recovered": [],
+        "note": "자동 추가 요청 없음"
+      }
+    },
+    "communityJsDiscoveries": [
+      {
+        "url": "http://127.0.0.1:18099/api/community/",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/api/auth/login",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/api/auth/me",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/posts",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/posts/",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/files/",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/messages",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/admin/users",
+        "method": "?",
+        "query": [
+          "role"
+        ],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/search",
+        "method": "?",
+        "query": [
+          "q"
+        ],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/messages/",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/api/community/register",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/api/auth/logout",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/api/community/reset",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      }
+    ],
+    "jsFixtures": [
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/posts",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "page, category",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 2,
+              "start": 70,
+              "length": 44,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/comments",
+              "method": "POST",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "Content-Type, X-Lab-Trace",
+              "bodyKeys": "postId, text",
+              "line": 3,
+              "start": 130,
+              "length": 22,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/edit",
+              "method": "PATCH",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "X-Lab-Mode",
+              "bodyKeys": "title, visibility",
+              "line": 5,
+              "start": 384,
+              "length": 18,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/profile",
+              "method": "PUT",
+              "kind": "Request",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "nickname",
+              "line": 6,
+              "start": 431,
+              "length": 21,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/delete",
+              "method": "DELETE",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 7,
+              "start": 513,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 5 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 2 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [
+              {
+                "host": "window.fetch",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 3
+              },
+              {
+                "host": "globalthis.fetch",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 7
+              }
+            ],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "01-fetch.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/search",
+              "method": "GET",
+              "kind": "axios.get",
+              "parameters": "q, page",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 2,
+              "start": 74,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/upload",
+              "method": "POST",
+              "kind": "axios.post",
+              "parameters": "",
+              "headers": "X-Lab-Upload",
+              "bodyKeys": "fileId, filename",
+              "line": 3,
+              "start": 139,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/settings",
+              "method": "PUT",
+              "kind": "axios.put",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "theme",
+              "line": 4,
+              "start": 239,
+              "length": 22,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/preferences",
+              "method": "PATCH",
+              "kind": "axios.patch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "language",
+              "line": 5,
+              "start": 291,
+              "length": 25,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/remove",
+              "method": "DELETE",
+              "kind": "axios.delete",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 6,
+              "start": 348,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/audit",
+              "method": "POST",
+              "kind": "axios config",
+              "parameters": "limit",
+              "headers": "X-Lab-Audit",
+              "bodyKeys": "event",
+              "line": 7,
+              "start": 404,
+              "length": 8,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab",
+              "method": "?",
+              "kind": "config baseURL",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 7,
+              "start": 386,
+              "length": 13,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/audit",
+              "method": "?",
+              "kind": "config url",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 7,
+              "start": 404,
+              "length": 8,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/export",
+              "method": "HEAD",
+              "kind": "axios.request",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 8,
+              "start": 521,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/export",
+              "method": "?",
+              "kind": "config url",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 8,
+              "start": 521,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 10 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 7 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [
+              {
+                "host": "axios.get",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 2
+              },
+              {
+                "host": "axios.post",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 3
+              },
+              {
+                "host": "lab.txt",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 3
+              },
+              {
+                "host": "axios.put",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 4
+              },
+              {
+                "host": "axios.patch",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 5
+              },
+              {
+                "host": "axios.delete",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 6
+              },
+              {
+                "host": "axios.request",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 8
+              }
+            ],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "02-axios.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/xhr",
+              "method": "GET",
+              "kind": "XHR-like open",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 3,
+              "start": 111,
+              "length": 17,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "wss://socket.community-lab.invalid/events",
+              "method": "UPGRADE",
+              "kind": "WebSocket",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 4,
+              "start": 145,
+              "length": 43,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/events",
+              "method": "GET",
+              "kind": "EventSource",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 5,
+              "start": 207,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/login",
+              "method": "GET",
+              "kind": "location assignment",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 6,
+              "start": 251,
+              "length": 19,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/redirect",
+              "method": "GET",
+              "kind": "location.assign",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 7,
+              "start": 288,
+              "length": 22,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/logout",
+              "method": "GET",
+              "kind": "window.location.replace",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 8,
+              "start": 337,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/help",
+              "method": "GET",
+              "kind": "window.open",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 9,
+              "start": 372,
+              "length": 18,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 7 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 6 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [
+              {
+                "host": "socket.community-lab.invalid",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 4
+              },
+              {
+                "host": "xhr.open",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 3
+              },
+              {
+                "host": "window.location.href",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 6
+              },
+              {
+                "host": "location.assign",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 7
+              },
+              {
+                "host": "window.location.replace",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 8
+              },
+              {
+                "host": "window.open",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 9
+              }
+            ],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "03-xhr-navigation.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/constant",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 4,
+              "start": 119,
+              "length": 13,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/template",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 5,
+              "start": 141,
+              "length": 18,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/escaped/path",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 6,
+              "start": 168,
+              "length": 29,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/assets/relative",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 7,
+              "start": 206,
+              "length": 13,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/assets/js-lab/nearby",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 8,
+              "start": 228,
+              "length": 10,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/config",
+              "method": "?",
+              "kind": "설정 변수 apiUrl",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 9,
+              "start": 254,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/object",
+              "method": "?",
+              "kind": "config endpoint",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 10,
+              "start": 296,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/path",
+              "method": "?",
+              "kind": "config path",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 10,
+              "start": 322,
+              "length": 18,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 8 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "04-constants.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/users/{dynamic}",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 3,
+              "start": 96,
+              "length": 25,
+              "complete": false,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/post/{dynamic}",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 5,
+              "start": 225,
+              "length": 26,
+              "complete": false,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/outside",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 7,
+              "start": 311,
+              "length": 15,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/numeric/{dynamic}",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 8,
+              "start": 335,
+              "length": 28,
+              "complete": false,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/repeated",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 9,
+              "start": 372,
+              "length": 22,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/repeated",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 10,
+              "start": 403,
+              "length": 22,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 6 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "05-dynamic-scope.js"
+      },
+      {
+        "result": {
+          "endpoints": [],
+          "secrets": [
+            {
+              "rule": "AWS Access Key ID",
+              "masked": "[가림 · 20자]",
+              "length": 20,
+              "fingerprint": "1a5d44a2dca19669",
+              "line": 3,
+              "start": 82,
+              "sourceLength": 22,
+              "confidence": "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 3.68"
+            },
+            {
+              "rule": "Google API Key",
+              "masked": "[가림 · 39자]",
+              "length": 39,
+              "fingerprint": "542768ae613fc8e0",
+              "line": 4,
+              "start": 114,
+              "sourceLength": 41,
+              "confidence": "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 0.68"
+            },
+            {
+              "rule": "GitHub token",
+              "masked": "[가림 · 44자]",
+              "length": 44,
+              "fingerprint": "0fede56402a5d8b4",
+              "line": 5,
+              "start": 165,
+              "sourceLength": 46,
+              "confidence": "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 3.35"
+            },
+            {
+              "rule": "Slack token",
+              "masked": "[가림 · 47자]",
+              "length": 47,
+              "fingerprint": "f6c3a0b38f43c64a",
+              "line": 6,
+              "start": 220,
+              "sourceLength": 49,
+              "confidence": "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 4.50"
+            },
+            {
+              "rule": "Stripe secret key",
+              "masked": "[가림 · 31자]",
+              "length": 31,
+              "fingerprint": "176eab415c125425",
+              "line": 7,
+              "start": 279,
+              "sourceLength": 33,
+              "confidence": "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 4.70"
+            },
+            {
+              "rule": "JWT / JWS",
+              "masked": "[가림 · 87자]",
+              "length": 87,
+              "fingerprint": "b916956a8565a147",
+              "line": 8,
+              "start": 319,
+              "sourceLength": 89,
+              "confidence": "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 4.99"
+            },
+            {
+              "rule": "시크릿 이름: secret",
+              "masked": "[가림 · 20자]",
+              "length": 20,
+              "fingerprint": "204fea6d2418a42c",
+              "line": 9,
+              "start": 418,
+              "sourceLength": 22,
+              "confidence": "이름·엔트로피 추정 · 공개 설정값/오탐 가능 · Shannon 4.32"
+            },
+            {
+              "rule": "Private key",
+              "masked": "[가림 · 77자]",
+              "length": 77,
+              "fingerprint": "3ea517de5c3ad512",
+              "line": 10,
+              "start": 454,
+              "sourceLength": 81,
+              "confidence": "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 3.61"
+            },
+            {
+              "rule": "Private key",
+              "masked": "[가림 · 79자]",
+              "length": 79,
+              "fingerprint": "086754df6c4e6e81",
+              "line": 10,
+              "start": 455,
+              "sourceLength": 79,
+              "confidence": "패턴 일치 · 유효성 미검증 · Shannon 3.69"
+            }
+          ],
+          "status": "AST 블록 1 · URL/API 0 · 시크릿 후보 9 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "06-secrets.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "https://api.community-lab.invalid/list",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "token",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 7,
+              "start": 245,
+              "length": 94,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 1 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [
+              {
+                "host": "api.community-lab.invalid",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 7
+              }
+            ],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "07-negative.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/modern",
+              "method": "?",
+              "kind": "문자열 보조 · AST 실패",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 6,
+              "start": 231,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 0 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [
+              {
+                "name": "axios",
+                "scope": "",
+                "origin": "import/require",
+                "status": "미조회"
+              },
+              {
+                "name": "@community/private-reports",
+                "scope": "community",
+                "origin": "import/require",
+                "status": "미조회"
+              },
+              {
+                "name": "lab-dynamic-package",
+                "scope": "",
+                "origin": "import/require",
+                "status": "미조회"
+              }
+            ],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "08-modern-module.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/broken",
+              "method": "?",
+              "kind": "문자열 보조 · AST 실패",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 3,
+              "start": 126,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [
+            {
+              "rule": "Google API Key",
+              "masked": "[가림 · 39자]",
+              "length": 39,
+              "fingerprint": "4b088d79550a6de3",
+              "line": 2,
+              "start": 78,
+              "sourceLength": 39,
+              "confidence": "패턴 일치 · 유효성 미검증 · Shannon 0.68"
+            }
+          ],
+          "status": "AST 블록 0 · URL/API 1 · 시크릿 후보 1 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "09-invalid.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "https://api.community-lab.invalid/v1",
+              "method": "?",
+              "kind": "설정 변수 apiUrl",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 12,
+              "start": 465,
+              "length": 38,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 7 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [
+              {
+                "host": "training-bucket.s3.amazonaws.com",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "AWS",
+                "line": 5
+              },
+              {
+                "host": "training.blob.core.windows.net",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "Azure",
+                "line": 6
+              },
+              {
+                "host": "storage.googleapis.com",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "Google",
+                "line": 7
+              },
+              {
+                "host": "training.cloudfront.net",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "CloudFront",
+                "line": 8
+              },
+              {
+                "host": "training.digitaloceanspaces.com",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "DigitalOcean",
+                "line": 9
+              },
+              {
+                "host": "training.firebaseio.com",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "Firebase",
+                "line": 10
+              },
+              {
+                "host": "api.community-lab.invalid",
+                "relation": "발견 호스트 · 관계 미확정",
+                "provider": "",
+                "line": 12
+              }
+            ],
+            "clouds": [
+              {
+                "provider": "AWS",
+                "url": "https://training-bucket.s3.amazonaws.com/docs",
+                "line": 5
+              },
+              {
+                "provider": "Azure",
+                "url": "https://training.blob.core.windows.net/files",
+                "line": 6
+              },
+              {
+                "provider": "Google",
+                "url": "https://storage.googleapis.com/training-bucket/file",
+                "line": 7
+              },
+              {
+                "provider": "CloudFront",
+                "url": "https://training.cloudfront.net/static",
+                "line": 8
+              },
+              {
+                "provider": "DigitalOcean",
+                "url": "https://training.digitaloceanspaces.com/file",
+                "line": 9
+              },
+              {
+                "provider": "Firebase",
+                "url": "https://training.firebaseio.com/demo",
+                "line": 10
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "@community/private-widget",
+                "scope": "community",
+                "origin": "import/require",
+                "status": "미조회"
+              },
+              {
+                "name": "axios",
+                "scope": "",
+                "origin": "import/require",
+                "status": "미조회"
+              }
+            ],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "10-recon.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/bundle",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 2,
+              "start": 70,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 1 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [
+              {
+                "url": "http://127.0.0.1:18099/assets/js-lab/11-sourcemap.js.map",
+                "state": "발견 · 요청 전"
+              }
+            ],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "11-sourcemap.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/inline",
+              "method": "GET",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 2,
+              "start": 70,
+              "length": 20,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/recovered",
+              "method": "POST",
+              "kind": "source map: src/private-reports.js",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "reportId",
+              "line": 1,
+              "start": -1,
+              "length": 0,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 2 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 1 · 원본 1",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [
+              {
+                "name": "@community/recovered",
+                "scope": "community",
+                "origin": "import/require",
+                "status": "미조회"
+              }
+            ],
+            "maps": [
+              {
+                "url": "inline:e40b156a8f64fa92",
+                "state": "인라인 map · 원본 1개"
+              }
+            ],
+            "recovered": [
+              {
+                "mapUrl": "inline:e40b156a8f64fa92",
+                "name": "src/private-reports.js",
+                "content": "fetch('/api/js-lab/recovered',{method:'POST',body:{reportId:1}});\nrequire('@community/recovered');\n"
+              }
+            ],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "12-inline-map.js"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/html-inline",
+              "method": "POST",
+              "kind": "fetch",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "commentId",
+              "line": 4,
+              "start": 122,
+              "length": 25,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "13-inline.html"
+      },
+      {
+        "result": {
+          "endpoints": [],
+          "secrets": [],
+          "status": "AST 블록 0 · URL/API 0 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [
+              {
+                "name": "axios",
+                "scope": "",
+                "origin": "package.json dependencies",
+                "status": "미조회"
+              },
+              {
+                "name": "@community/private-widget",
+                "scope": "community",
+                "origin": "package.json dependencies",
+                "status": "미조회"
+              },
+              {
+                "name": "lab-build-tool",
+                "scope": "",
+                "origin": "package.json devDependencies",
+                "status": "미조회"
+              }
+            ],
+            "maps": [],
+            "recovered": [],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "14-package.json"
+      },
+      {
+        "result": {
+          "endpoints": [
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/recovered",
+              "method": "?",
+              "kind": "문자열 보조 · AST 실패",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "",
+              "line": 1,
+              "start": 107,
+              "length": 23,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            },
+            {
+              "url": "http://127.0.0.1:18099/api/js-lab/recovered",
+              "method": "POST",
+              "kind": "source map: src/private-reports.js",
+              "parameters": "",
+              "headers": "",
+              "bodyKeys": "reportId",
+              "line": 1,
+              "start": -1,
+              "length": 0,
+              "complete": true,
+              "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+            }
+          ],
+          "secrets": [],
+          "status": "AST 블록 0 · URL/API 2 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 1 · 원본 1",
+          "truncated": false,
+          "miner": {
+            "domains": [],
+            "clouds": [],
+            "dependencies": [
+              {
+                "name": "@community/recovered",
+                "scope": "community",
+                "origin": "import/require",
+                "status": "미조회"
+              }
+            ],
+            "maps": [
+              {
+                "url": "http://127.0.0.1:18099/assets/js-lab/11-sourcemap.js.map",
+                "state": "캡처 map · 원본 1개"
+              }
+            ],
+            "recovered": [
+              {
+                "mapUrl": "http://127.0.0.1:18099/assets/js-lab/11-sourcemap.js.map",
+                "name": "src/private-reports.js",
+                "content": "fetch('/api/js-lab/recovered',{method:'POST',body:{reportId:1}});\nrequire('@community/recovered');\n"
+              }
+            ],
+            "note": "자동 추가 요청 없음"
+          }
+        },
+        "file": "11-sourcemap.js.map"
+      }
+    ],
+    "openapiDiscoveryCount": 0,
+    "representativeExample": [
+      {
+        "pattern": "GET http://127.0.0.1:18099/api/community/fixed/posts/{ID} | ",
+        "urls": [
+          "http://127.0.0.1:18099/api/community/fixed/posts/101",
+          "http://127.0.0.1:18099/api/community/fixed/posts/102"
+        ],
+        "change": "신규 패턴",
+        "priority": 60
+      }
+    ],
+    "pathCategories": {
+      "privatePost": "기타",
+      "privateMessage": "기타",
+      "file": "파일 처리"
+    },
+    "activity": [
+      {
+        "key": "GET http://127.0.0.1:18099/api/community/vuln/posts",
+        "method": "GET",
+        "url": "http://127.0.0.1:18099/api/community/vuln/posts",
+        "state": "Repeater 작업",
+        "observed": 2,
+        "repeater": 1,
+        "sources": "JS + PROXY + REPEATER",
+        "first": "2026-10-10T09:09:32.261578500Z",
+        "last": "2026-10-10T09:09:32.263573600Z",
+        "parameters": [
+          {
+            "key": "URL:lab_hidden",
+            "state": "변경 관찰"
+          }
+        ],
+        "evidence": [],
+        "review": ""
+      }
+    ],
+    "version": "0.17.4",
+    "site": "LOOP Community Lab 3.3 source, embedded Spring/Tomcat/H2",
+    "mode": "actual loopback HTTP + production extension JAR; API adapters and headless Swing; no actual Burp GUI",
+    "httpRequests": 139,
+    "checks": [
+      {
+        "test": "live Spring Tomcat H2 lab healthy",
+        "passed": true
+      },
+      {
+        "test": "live login alice",
+        "passed": true
+      },
+      {
+        "test": "live login bob",
+        "passed": true
+      },
+      {
+        "test": "live login admin",
+        "passed": true
+      },
+      {
+        "test": "live login moderator",
+        "passed": true
+      },
+      {
+        "test": "vuln private post classification",
+        "passed": true
+      },
+      {
+        "test": "vuln private note classification",
+        "passed": true
+      },
+      {
+        "test": "vuln private attachment classification",
+        "passed": true
+      },
+      {
+        "test": "vuln admin spoof classification",
+        "passed": true
+      },
+      {
+        "test": "vuln public page yields generic suspicion",
+        "passed": true
+      },
+      {
+        "test": "vuln own owner rule mislabels public object",
+        "passed": true
+      },
+      {
+        "test": "vuln SQL error false",
+        "passed": true
+      },
+      {
+        "test": "vuln boolean probes return HTTP responses false",
+        "passed": true
+      },
+      {
+        "test": "SQL boolean baseline equals true and differs from false false",
+        "passed": true
+      },
+      {
+        "test": "vuln reflected XSS false",
+        "passed": true
+      },
+      {
+        "test": "vuln file evidence false",
+        "passed": true
+      },
+      {
+        "test": "vuln SQL error true",
+        "passed": true
+      },
+      {
+        "test": "vuln boolean probes return HTTP responses true",
+        "passed": true
+      },
+      {
+        "test": "SQL boolean baseline equals true and differs from false true",
+        "passed": true
+      },
+      {
+        "test": "vuln reflected XSS true",
+        "passed": true
+      },
+      {
+        "test": "vuln file evidence true",
+        "passed": true
+      },
+      {
+        "test": "fixed private post classification",
+        "passed": true
+      },
+      {
+        "test": "fixed private note classification",
+        "passed": true
+      },
+      {
+        "test": "fixed private attachment classification",
+        "passed": true
+      },
+      {
+        "test": "fixed admin spoof classification",
+        "passed": true
+      },
+      {
+        "test": "fixed public page yields generic suspicion",
+        "passed": true
+      },
+      {
+        "test": "fixed own owner rule mislabels public object",
+        "passed": true
+      },
+      {
+        "test": "fixed SQL error false",
+        "passed": true
+      },
+      {
+        "test": "fixed boolean probes return HTTP responses false",
+        "passed": true
+      },
+      {
+        "test": "fixed boolean no SQL condition candidate false",
+        "passed": true
+      },
+      {
+        "test": "fixed reflected XSS false",
+        "passed": true
+      },
+      {
+        "test": "fixed file evidence false",
+        "passed": true
+      },
+      {
+        "test": "fixed SQL error true",
+        "passed": true
+      },
+      {
+        "test": "fixed boolean probes return HTTP responses true",
+        "passed": true
+      },
+      {
+        "test": "fixed boolean no SQL condition candidate true",
+        "passed": true
+      },
+      {
+        "test": "fixed reflected XSS true",
+        "passed": true
+      },
+      {
+        "test": "fixed file evidence true",
+        "passed": true
+      },
+      {
+        "test": "live AuthComparePanel response vulnerable-private",
+        "passed": true
+      },
+      {
+        "test": "live AuthComparePanel response fixed-private",
+        "passed": true
+      },
+      {
+        "test": "live AuthComparePanel response fixed-public",
+        "passed": true
+      },
+      {
+        "test": "isolated training post created",
+        "passed": true
+      },
+      {
+        "test": "live AuthComparePanel response fixed-write-real-csrf",
+        "passed": true
+      },
+      {
+        "test": "target CSRF replaced on actual write replay",
+        "passed": true
+      },
+      {
+        "test": "vuln upload acceptance",
+        "passed": true
+      },
+      {
+        "test": "fixed upload acceptance",
+        "passed": true
+      },
+      {
+        "test": "stored marker returned by separate GET",
+        "passed": true
+      },
+      {
+        "test": "JSON storage success has no reflected HTML XSS verdict",
+        "passed": true
+      },
+      {
+        "test": "live JWT issued",
+        "passed": true
+      },
+      {
+        "test": "JWT UTC time displayed",
+        "passed": true
+      },
+      {
+        "test": "environment no automatic vulnerability verdict /.env",
+        "passed": true
+      },
+      {
+        "test": "environment no automatic vulnerability verdict /.git/config",
+        "passed": true
+      },
+      {
+        "test": "environment no automatic vulnerability verdict /api/vuln/config",
+        "passed": true
+      },
+      {
+        "test": "environment no automatic vulnerability verdict /api/fixed/config",
+        "passed": true
+      },
+      {
+        "test": "environment no automatic vulnerability verdict /v3/api-docs",
+        "passed": true
+      },
+      {
+        "test": "community JS retrieved and analyzed",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 01-fetch.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 02-axios.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 03-xhr-navigation.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 04-constants.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 05-dynamic-scope.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 06-secrets.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 07-negative.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 08-modern-module.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 09-invalid.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 10-recon.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 11-sourcemap.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 12-inline-map.js",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 13-inline.html",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 14-package.json",
+        "passed": true
+      },
+      {
+        "test": "live JS fixture 11-sourcemap.js.map",
+        "passed": true
+      },
+      {
+        "test": "public and private objects grouped together",
+        "passed": true
+      },
+      {
+        "test": "same pattern has different guest access policy",
+        "passed": true
+      },
+      {
+        "test": "activity query mutation recorded",
+        "passed": true
+      },
+      {
+        "test": "activity does not auto-complete vulnerability check",
+        "passed": true
+      },
+      {
+        "test": "public auth candidate enters review queue",
+        "passed": true
+      },
+      {
+        "test": "actual hidden query vulnerable/fixed split",
+        "passed": true
+      }
+    ],
+    "passed": 76,
+    "failed": 0,
+    "auth": [
+      {
+        "state": "타인 객체 접근 의심",
+        "account": "alice",
+        "id": "vuln-private-post",
+        "baselineAccount": "bob",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/posts/102",
+        "reason": "소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인",
+        "status": 200
+      },
+      {
+        "state": "타인 객체 접근 의심",
+        "account": "alice",
+        "id": "vuln-private-message",
+        "baselineAccount": "bob",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/messages/202",
+        "reason": "소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인",
+        "status": 200
+      },
+      {
+        "state": "우회 의심",
+        "account": "alice",
+        "id": "vuln-private-file",
+        "baselineAccount": "bob",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/files/bob-private-file",
+        "reason": "동일 성공 응답 · 수동 확인",
+        "status": 200
+      },
+      {
+        "state": "우회 의심",
+        "account": "alice",
+        "id": "vuln-admin",
+        "baselineAccount": "admin",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/admin/users?role=ADMIN",
+        "reason": "비교 대상 JSON 필드 동일 · 실제 접근 확인",
+        "status": 200
+      },
+      {
+        "state": "우회 의심",
+        "account": "guest",
+        "id": "vuln-public",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/posts/101",
+        "reason": "비교 대상 JSON 필드 동일 · 실제 접근 확인",
+        "status": 200
+      },
+      {
+        "state": "타인 객체 접근 의심",
+        "account": "bob",
+        "id": "vuln-public-owner-rule",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/posts/101",
+        "reason": "소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인",
+        "status": 200
+      },
+      {
+        "state": "차단 근거 확인",
+        "account": "guest",
+        "id": "vuln-members-guest",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/posts/103",
+        "reason": "HTTP 401",
+        "status": 401
+      },
+      {
+        "state": "타인 객체 접근 의심",
+        "account": "moderator",
+        "id": "vuln-moderator-private",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/vuln/posts/104",
+        "reason": "소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인",
+        "status": 200
+      },
+      {
+        "state": "판정 보류",
+        "account": "alice",
+        "id": "fixed-private-post",
+        "baselineAccount": "bob",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/posts/102",
+        "reason": "HTTP 404",
+        "status": 404
+      },
+      {
+        "state": "판정 보류",
+        "account": "alice",
+        "id": "fixed-private-message",
+        "baselineAccount": "bob",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/messages/202",
+        "reason": "HTTP 404",
+        "status": 404
+      },
+      {
+        "state": "판정 보류",
+        "account": "alice",
+        "id": "fixed-private-file",
+        "baselineAccount": "bob",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/files/bob-private-file",
+        "reason": "HTTP 404",
+        "status": 404
+      },
+      {
+        "state": "차단 근거 확인",
+        "account": "alice",
+        "id": "fixed-admin",
+        "baselineAccount": "admin",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/admin/users?role=ADMIN",
+        "reason": "HTTP 403",
+        "status": 403
+      },
+      {
+        "state": "우회 의심",
+        "account": "guest",
+        "id": "fixed-public",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/posts/101",
+        "reason": "비교 대상 JSON 필드 동일 · 실제 접근 확인",
+        "status": 200
+      },
+      {
+        "state": "타인 객체 접근 의심",
+        "account": "bob",
+        "id": "fixed-public-owner-rule",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/posts/101",
+        "reason": "소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인",
+        "status": 200
+      },
+      {
+        "state": "판정 보류",
+        "account": "guest",
+        "id": "fixed-members-guest",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/posts/103",
+        "reason": "HTTP 404",
+        "status": 404
+      },
+      {
+        "state": "판정 보류",
+        "account": "moderator",
+        "id": "fixed-moderator-private",
+        "baselineAccount": "alice",
+        "baselineStatus": 200,
+        "path": "/api/community/fixed/posts/104",
+        "reason": "HTTP 404",
+        "status": 404
+      }
+    ],
+    "payload": [
+      {
+        "id": "vuln-sql-error",
+        "profile": "SQLI",
+        "adaptive": false,
+        "summary": {
+          "requests": 3,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 본문/상태가 동일",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']\"}",
+            "status": 500,
+            "verdict": "SQL 오류 후보",
+            "bodyChars": 150,
+            "payload": "'",
+            "bodySha256": "4cd49a61e6ad31317e199ec27b6f57929b4772de083733cdd7d46322a5fcc389"
+          }
+        ]
+      },
+      {
+        "id": "vuln-sql-boolean",
+        "profile": "SQLI",
+        "adaptive": false,
+        "summary": {
+          "requests": 4,
+          "completed": 2,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 본문/상태가 동일",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 152,
+            "payload": "Burp%' AND 1=1 -- ",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "Burp%' AND 1=2 -- ",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "vuln-xss",
+        "profile": "XSS",
+        "adaptive": false,
+        "summary": {
+          "requests": 2,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 95,
+            "payload": "hello",
+            "bodySha256": "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+          },
+          {
+            "evidence": "HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요",
+            "status": 200,
+            "verdict": "XSS 반사 후보",
+            "bodyChars": 144,
+            "payload": "<img src=x onerror=console.log('PR_c55112a0f398407c')>",
+            "bodySha256": "cf48dbc26e45393f34307731a750042b746a2127d5da27db9f0b0adced7fe1d3"
+          }
+        ]
+      },
+      {
+        "id": "vuln-file",
+        "profile": "DOWNLOAD",
+        "adaptive": false,
+        "summary": {
+          "requests": 2,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 404,
+            "verdict": "기준 응답",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "BOB_PRIVATE_ATTACHMENT",
+            "status": 200,
+            "verdict": "지정 파일 내용 발견",
+            "bodyChars": 37,
+            "payload": "bob-private-file",
+            "bodySha256": "05d1cbe0745f19e6551c03da956e5b9cc6526eb06fc892d55f5bed264c68ab54"
+          }
+        ]
+      },
+      {
+        "id": "vuln-sql-error",
+        "profile": "SQLI",
+        "adaptive": true,
+        "summary": {
+          "requests": 5,
+          "uniquePayloads": 1,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "SQL 오류 재현 · 조건/변형 검사 생략"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 2회 동일 · 조건 차이 비교 가능",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "SQL 구문 오류 탐색 · org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']\"}",
+            "status": 500,
+            "verdict": "SQL 오류 후보",
+            "bodyChars": 150,
+            "payload": "'",
+            "bodySha256": "4cd49a61e6ad31317e199ec27b6f57929b4772de083733cdd7d46322a5fcc389"
+          },
+          {
+            "evidence": "SQL 오류 재검증 · org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT * FROM community_posts WHERE title LIKE '%'%']\"}",
+            "status": 500,
+            "verdict": "SQL 오류 후보",
+            "bodyChars": 150,
+            "payload": "'",
+            "bodySha256": "4cd49a61e6ad31317e199ec27b6f57929b4772de083733cdd7d46322a5fcc389"
+          },
+          {
+            "evidence": "SQL 오류 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "DB 고유 오류 2회, 기준에는 없음 · 실제 인젝션 성공은 수동 확인 필요",
+            "status": 500,
+            "verdict": "SQL 오류 후보 · 재현",
+            "bodyChars": 150,
+            "payload": "'",
+            "bodySha256": "4cd49a61e6ad31317e199ec27b6f57929b4772de083733cdd7d46322a5fcc389"
+          }
+        ]
+      },
+      {
+        "id": "vuln-sql-boolean",
+        "profile": "SQLI",
+        "adaptive": true,
+        "summary": {
+          "requests": 4,
+          "uniquePayloads": 2,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료 · 미탐 가능"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 2회 동일 · 조건 차이 비교 가능",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "SQL 참 조건 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 152,
+            "payload": "Burp%' AND 1=1 -- ",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "SQL 거짓 조건 · 기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "Burp%' AND 1=2 -- ",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "vuln-xss",
+        "profile": "XSS",
+        "adaptive": true,
+        "summary": {
+          "requests": 6,
+          "uniquePayloads": 1,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "유형별 증거 재현 · 나머지 변형 생략"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 95,
+            "payload": "hello",
+            "bodySha256": "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 95,
+            "payload": "hello",
+            "bodySha256": "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+          },
+          {
+            "evidence": "기준 2회 동일 · 조건 차이 비교 가능",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 95,
+            "payload": "hello",
+            "bodySha256": "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+          },
+          {
+            "evidence": "문자열 반사 탐색 · 실행 가능한 XSS 근거 아님",
+            "status": 200,
+            "verdict": "문자열 반사",
+            "bodyChars": 109,
+            "payload": "PR_fa302053223c45ae",
+            "bodySha256": "7535047b40750c2d9b14cf81014fd0d2d11b794d2bc7b9e107535a97d45459d5"
+          },
+          {
+            "evidence": "문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인",
+            "status": 200,
+            "verdict": "반사 위치 관찰",
+            "bodyChars": 109,
+            "payload": "PR_fa302053223c45ae",
+            "bodySha256": "7535047b40750c2d9b14cf81014fd0d2d11b794d2bc7b9e107535a97d45459d5"
+          },
+          {
+            "evidence": "후보 탐색 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요",
+            "status": 200,
+            "verdict": "XSS 반사 후보",
+            "bodyChars": 144,
+            "payload": "<img src=x onerror=console.log('PR_91c18fd959214e43')>",
+            "bodySha256": "a5ec2a64ad50b562b4e11448566bc0336bc19740fac40f73014bda0af7f132ae"
+          },
+          {
+            "evidence": "새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요",
+            "status": 200,
+            "verdict": "XSS 반사 후보",
+            "bodyChars": 144,
+            "payload": "<img src=x onerror=console.log('PR_3b1dcdcffa104a75')>",
+            "bodySha256": "26c223f7b5942c5699e16b89bca5c12627ffe2886c4adfa54bbce6bb902c2bc9"
+          },
+          {
+            "evidence": "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 95,
+            "payload": "hello",
+            "bodySha256": "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+          },
+          {
+            "evidence": "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요 · 자동 확정 아님",
+            "status": 200,
+            "verdict": "XSS 반사 후보 · 재현",
+            "bodyChars": 144,
+            "payload": "<img src=x onerror=console.log('PR_3b1dcdcffa104a75')>",
+            "bodySha256": "26c223f7b5942c5699e16b89bca5c12627ffe2886c4adfa54bbce6bb902c2bc9"
+          }
+        ]
+      },
+      {
+        "id": "vuln-file",
+        "profile": "DOWNLOAD",
+        "adaptive": true,
+        "summary": {
+          "requests": 6,
+          "uniquePayloads": 1,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "유형별 증거 재현 · 나머지 변형 생략"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 404,
+            "verdict": "기준 응답",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 404,
+            "verdict": "근거 없음",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "동적/잘림/오류 응답 · 조건 차이 판정 비활성화; 출력·헤더 증거 검사는 계속",
+            "status": 404,
+            "verdict": "기준 재검증",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "후보 탐색 · BOB_PRIVATE_ATTACHMENT",
+            "status": 200,
+            "verdict": "지정 파일 내용 발견",
+            "bodyChars": 37,
+            "payload": "bob-private-file",
+            "bodySha256": "05d1cbe0745f19e6551c03da956e5b9cc6526eb06fc892d55f5bed264c68ab54"
+          },
+          {
+            "evidence": "새 마커/동일 입력 재검증 · BOB_PRIVATE_ATTACHMENT",
+            "status": 200,
+            "verdict": "지정 파일 내용 발견",
+            "bodyChars": 37,
+            "payload": "bob-private-file",
+            "bodySha256": "05d1cbe0745f19e6551c03da956e5b9cc6526eb06fc892d55f5bed264c68ab54"
+          },
+          {
+            "evidence": "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 404,
+            "verdict": "근거 없음",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "존재하지 않는 파일 대조 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 404,
+            "verdict": "근거 없음",
+            "bodyChars": 19,
+            "payload": "PR_MISSING_c7f6501d-c2b2-48b3-8183-a20a848a7dfa.txt",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · BOB_PRIVATE_ATTACHMENT · 자동 확정 아님",
+            "status": 200,
+            "verdict": "지정 파일 내용 발견 · 재현",
+            "bodyChars": 37,
+            "payload": "bob-private-file",
+            "bodySha256": "05d1cbe0745f19e6551c03da956e5b9cc6526eb06fc892d55f5bed264c68ab54"
+          }
+        ]
+      },
+      {
+        "id": "fixed-sql-error",
+        "profile": "SQLI",
+        "adaptive": false,
+        "summary": {
+          "requests": 3,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 본문/상태가 동일",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "'",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "fixed-sql-boolean",
+        "profile": "SQLI",
+        "adaptive": false,
+        "summary": {
+          "requests": 4,
+          "completed": 2,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 본문/상태가 동일",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "Burp%' AND 1=1 -- ",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "evidence": "기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "Burp%' AND 1=2 -- ",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "fixed-xss",
+        "profile": "XSS",
+        "adaptive": false,
+        "summary": {
+          "requests": 2,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 96,
+            "payload": "hello",
+            "bodySha256": "1f2a7b44a7b6bf957e5b515f4c72a0983592a26a17f4d4183152f4ee1126592b"
+          },
+          {
+            "evidence": "실행 가능한 XSS 근거 아님",
+            "status": 200,
+            "verdict": "문자열 반사",
+            "bodyChars": 159,
+            "payload": "<img src=x onerror=console.log('PR_a33668f7041846ea')>",
+            "bodySha256": "8e2ebca938a7c46ae55219d6d6e0a432ffab886af981182d5748b765733222ed"
+          }
+        ]
+      },
+      {
+        "id": "fixed-file",
+        "profile": "DOWNLOAD",
+        "adaptive": false,
+        "summary": {
+          "requests": 2,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 404,
+            "verdict": "기준 응답",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 404,
+            "verdict": "근거 없음",
+            "bodyChars": 19,
+            "payload": "bob-private-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          }
+        ]
+      },
+      {
+        "id": "fixed-sql-error",
+        "profile": "SQLI",
+        "adaptive": true,
+        "summary": {
+          "requests": 3,
+          "uniquePayloads": 1,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료 · 미탐 가능"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 2회 동일 · 조건 차이 비교 가능",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "SQL 구문 오류 탐색 · 기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "'",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "fixed-sql-boolean",
+        "profile": "SQLI",
+        "adaptive": true,
+        "summary": {
+          "requests": 4,
+          "uniquePayloads": 2,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료 · 미탐 가능"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "기준 2회 동일 · 조건 차이 비교 가능",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 152,
+            "payload": "Burp",
+            "bodySha256": "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+          },
+          {
+            "evidence": "SQL 참 조건 · 기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "Burp%' AND 1=1 -- ",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "evidence": "SQL 거짓 조건 · 기준 200 / 152자 → 200 / 2자",
+            "status": 200,
+            "verdict": "응답 변화",
+            "bodyChars": 2,
+            "payload": "Burp%' AND 1=2 -- ",
+            "bodySha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ]
+      },
+      {
+        "id": "fixed-xss",
+        "profile": "XSS",
+        "adaptive": true,
+        "summary": {
+          "requests": 4,
+          "uniquePayloads": 1,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "HTML 텍스트의 인코딩 관찰 · 남은 정형 태그 변형 생략; 우회/stored/DOM 미검사 · 전체 목록 모드로 확대 가능"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 96,
+            "payload": "hello",
+            "bodySha256": "1f2a7b44a7b6bf957e5b515f4c72a0983592a26a17f4d4183152f4ee1126592b"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 96,
+            "payload": "hello",
+            "bodySha256": "1f2a7b44a7b6bf957e5b515f4c72a0983592a26a17f4d4183152f4ee1126592b"
+          },
+          {
+            "evidence": "기준 2회 동일 · 조건 차이 비교 가능",
+            "status": 200,
+            "verdict": "기준 재검증",
+            "bodyChars": 96,
+            "payload": "hello",
+            "bodySha256": "1f2a7b44a7b6bf957e5b515f4c72a0983592a26a17f4d4183152f4ee1126592b"
+          },
+          {
+            "evidence": "문자열 반사 탐색 · 실행 가능한 XSS 근거 아님",
+            "status": 200,
+            "verdict": "문자열 반사",
+            "bodyChars": 110,
+            "payload": "PR_ff439a67cb7d469c",
+            "bodySha256": "6e66adceb1710cf69e3184c91c79728f3122549ddd2b9828aad1ad43f912a7c2"
+          },
+          {
+            "evidence": "문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인",
+            "status": 200,
+            "verdict": "반사 위치 관찰",
+            "bodyChars": 110,
+            "payload": "PR_ff439a67cb7d469c",
+            "bodySha256": "6e66adceb1710cf69e3184c91c79728f3122549ddd2b9828aad1ad43f912a7c2"
+          },
+          {
+            "evidence": "후보 탐색 · 실행 가능한 XSS 근거 아님",
+            "status": 200,
+            "verdict": "문자열 반사",
+            "bodyChars": 159,
+            "payload": "<img src=x onerror=console.log('PR_99e5c371c7704a66')>",
+            "bodySha256": "4caf22b5e3c603aa98c8977af1770cbf6f63c7b00541228d77aad9a87b205207"
+          },
+          {
+            "evidence": "HTML 텍스트 위치에서 전체 입력이 엔티티 인코딩됨 · 다른 컨텍스트/우회는 미검사",
+            "status": 200,
+            "verdict": "메타문자 인코딩 관찰",
+            "bodyChars": 159,
+            "payload": "<img src=x onerror=console.log('PR_99e5c371c7704a66')>",
+            "bodySha256": "4caf22b5e3c603aa98c8977af1770cbf6f63c7b00541228d77aad9a87b205207"
+          }
+        ]
+      },
+      {
+        "id": "fixed-file",
+        "profile": "DOWNLOAD",
+        "adaptive": true,
+        "summary": {
+          "requests": 3,
+          "uniquePayloads": 1,
+          "skipped": 0,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료 · 미탐 가능"
+        },
+        "rows": [
+          {
+            "evidence": "기준 수집 · 원래 값",
+            "status": 404,
+            "verdict": "기준 응답",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 404,
+            "verdict": "근거 없음",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "동적/잘림/오류 응답 · 조건 차이 판정 비활성화; 출력·헤더 증거 검사는 계속",
+            "status": 404,
+            "verdict": "기준 재검증",
+            "bodyChars": 19,
+            "payload": "missing-training-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          },
+          {
+            "evidence": "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 404,
+            "verdict": "근거 없음",
+            "bodyChars": 19,
+            "payload": "bob-private-file",
+            "bodySha256": "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+          }
+        ]
+      },
+      {
+        "id": "vuln-upload-name",
+        "profile": "UPLOAD_NAME",
+        "adaptive": false,
+        "summary": {
+          "requests": 2,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 116,
+            "payload": "baseline.txt",
+            "bodySha256": "2df667246d7a36fcc24b3f401047dbd6f2f45852ff69a2a47f88dabcc3b70c6a"
+          },
+          {
+            "evidence": "2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요",
+            "status": 200,
+            "verdict": "업로드 수락 후보",
+            "bodyChars": 116,
+            "payload": "probe.html",
+            "bodySha256": "7421571d5ab0546a7698e1931d63d9f42ca2a4c363f0d4ad84106db242961264"
+          }
+        ]
+      },
+      {
+        "id": "fixed-upload-name",
+        "profile": "UPLOAD_NAME",
+        "adaptive": false,
+        "summary": {
+          "requests": 2,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 117,
+            "payload": "baseline.txt",
+            "bodySha256": "595db5a0694fa70ff7537141433e2ef7bf4cdcf6593b6d77f876182ca07816be"
+          },
+          {
+            "evidence": "기준 200 / 117자 → 415 / 34자",
+            "status": 415,
+            "verdict": "응답 변화",
+            "bodyChars": 34,
+            "payload": "probe.html",
+            "bodySha256": "bae53894357e369e3e75ba590c7722ae5472b6f4cda348c604632965f33ff090"
+          }
+        ]
+      },
+      {
+        "id": "stored-comment-json",
+        "profile": "XSS",
+        "adaptive": false,
+        "summary": {
+          "requests": 2,
+          "completed": 1,
+          "stopped": false,
+          "budgetReached": false,
+          "reason": "검사 목록 완료"
+        },
+        "rows": [
+          {
+            "evidence": "원래 값으로 요청한 비교 기준",
+            "status": 200,
+            "verdict": "기준 응답",
+            "bodyChars": 45,
+            "payload": "baseline-audit",
+            "bodySha256": "45003b56958ae7a2084ca4aa33126b8153c40698a9d3e3f1d5d6a924ee19f0bb"
+          },
+          {
+            "evidence": "검사한 응답에서 유형별 근거가 발견되지 않음",
+            "status": 200,
+            "verdict": "근거 없음",
+            "bodyChars": 45,
+            "payload": "<img src=x onerror=console.log('PR_867d4a0ad5ad4f55')>",
+            "bodySha256": "c1358953c20418bdf6ccf240e354d662235d9608859ba3ab5716719f380f093e"
+          }
+        ]
+      }
+    ],
+    "authPanel": [
+      {
+        "csrfReplaced": true,
+        "note": "타인 객체 접근 의심 · 소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인",
+        "id": "vulnerable-private",
+        "status": 200
+      },
+      {
+        "csrfReplaced": true,
+        "note": "판정 보류 · HTTP 404",
+        "id": "fixed-private",
+        "status": 404
+      },
+      {
+        "csrfReplaced": true,
+        "note": "타인 객체 접근 의심 · 소유 필드가 대상 계정 소유값과 다름 · 소유 설정 확인",
+        "id": "fixed-public",
+        "status": 200
+      },
+      {
+        "csrfReplaced": true,
+        "note": "차단 근거 확인 · HTTP 403",
+        "id": "fixed-write-real-csrf",
+        "status": 403
+      }
+    ],
+    "environment": [
+      {
+        "state": "HTTP 404 · 미발견 · 기준 응답 불안정/재검증 실패 · 수동 검토",
+        "path": "/.env",
+        "status": 404
+      },
+      {
+        "state": "HTTP 404 · 미발견 · 기준 응답 불안정/재검증 실패 · 수동 검토",
+        "path": "/.git/config",
+        "status": 404
+      },
+      {
+        "state": "HTTP 200 · 응답 검토 · 기준 응답 불안정/재검증 실패 · 수동 검토",
+        "path": "/api/vuln/config",
+        "status": 200
+      },
+      {
+        "state": "HTTP 401 · 접근 제한 · 기준 응답 불안정/재검증 실패 · 수동 검토",
+        "path": "/api/fixed/config",
+        "status": 401
+      },
+      {
+        "state": "HTTP 200 · 응답 검토 · 기준 응답 불안정/재검증 실패 · 수동 검토",
+        "path": "/v3/api-docs",
+        "status": 200
+      }
+    ],
+    "gaps": [
+      {
+        "adaptive": false,
+        "id": "SQL-BOOLEAN-NORMALIZATION",
+        "observed": "Stable true response same as baseline, false response differs, but no SQL condition candidate"
+      },
+      {
+        "adaptive": true,
+        "id": "SQL-BOOLEAN-NORMALIZATION",
+        "observed": "Stable true response same as baseline, false response differs, but no SQL condition candidate"
+      }
+    ]
+  },
+  "supplement": {
+    "syntaxIsolation": [
+      {
+        "case": "classic fetch",
+        "endpoints": [
+          {
+            "url": "http://127.0.0.1:18099/api/probe",
+            "method": "POST",
+            "kind": "fetch",
+            "parameters": "",
+            "headers": "",
+            "bodyKeys": "id",
+            "line": 1,
+            "start": 6,
+            "length": 12,
+            "complete": true,
+            "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+          }
+        ],
+        "source": "fetch('/api/probe',{method:'POST',body:{id:1}});",
+        "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0"
+      },
+      {
+        "case": "async wrapper",
+        "endpoints": [
+          {
+            "url": "http://127.0.0.1:18099/api/probe",
+            "method": "?",
+            "kind": "문자열 보조 · AST 실패",
+            "parameters": "",
+            "headers": "",
+            "bodyKeys": "",
+            "line": 1,
+            "start": 34,
+            "length": 12,
+            "complete": true,
+            "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+          }
+        ],
+        "source": "async function call(){await fetch('/api/probe',{method:'POST'});}",
+        "status": "AST 블록 0 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0"
+      },
+      {
+        "case": "optional chaining",
+        "endpoints": [
+          {
+            "url": "http://127.0.0.1:18099/api/probe",
+            "method": "POST",
+            "kind": "fetch",
+            "parameters": "",
+            "headers": "",
+            "bodyKeys": "",
+            "line": 1,
+            "start": 23,
+            "length": 12,
+            "complete": true,
+            "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+          }
+        ],
+        "source": "const x=user?.id;fetch('/api/probe',{method:'POST'});",
+        "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0"
+      },
+      {
+        "case": "nullish coalescing",
+        "endpoints": [
+          {
+            "url": "http://127.0.0.1:18099/api/probe",
+            "method": "POST",
+            "kind": "fetch",
+            "parameters": "",
+            "headers": "",
+            "bodyKeys": "",
+            "line": 1,
+            "start": 25,
+            "length": 12,
+            "complete": true,
+            "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+          }
+        ],
+        "source": "const x=user.id??1;fetch('/api/probe',{method:'POST'});",
+        "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 1 · map 0 · 원본 0"
+      },
+      {
+        "case": "object spread",
+        "endpoints": [
+          {
+            "url": "http://127.0.0.1:18099/api/probe",
+            "method": "POST",
+            "kind": "fetch",
+            "parameters": "",
+            "headers": "",
+            "bodyKeys": "",
+            "line": 1,
+            "start": 27,
+            "length": 12,
+            "complete": true,
+            "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+          }
+        ],
+        "source": "const x={...options};fetch('/api/probe',{method:'POST'});",
+        "status": "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0"
+      },
+      {
+        "case": "ES module",
+        "endpoints": [
+          {
+            "url": "http://127.0.0.1:18099/api/probe",
+            "method": "?",
+            "kind": "문자열 보조 · AST 실패",
+            "parameters": "",
+            "headers": "",
+            "bodyKeys": "",
+            "line": 1,
+            "start": 25,
+            "length": 12,
+            "complete": true,
+            "evidence": "구문 맥락 추정 · URL 쿼리 값 제외"
+          }
+        ],
+        "source": "export const f=()=>fetch('/api/probe',{method:'POST'});",
+        "status": "AST 블록 0 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0"
+      }
+    ],
+    "normalizationReproduction": {
+      "truePayload": "Burp%' AND 1=1 -- ",
+      "baselineValue": "Burp",
+      "normalizedTrue": "[{\"TITLE\":\"Burp Proxy 설정을 같이 공부해요\"}]",
+      "normalizedBaseline": "[{\"TITLE\":\" Proxy 설정을 같이 공부해요\"}]",
+      "incorrectMismatch": true,
+      "baselineAndTrueBody": "[{\"TITLE\":\"Burp Proxy 설정을 같이 공부해요\"}]"
+    },
+    "encodedPathReproduction": {
+      "currentSignaturesDiffer": true,
+      "onlyEncodedPathDiffers": true
+    },
+    "domainNoise": [
+      {
+        "host": "user.role",
+        "relation": "발견 호스트 · 관계 미확정",
+        "provider": "",
+        "line": 1
+      },
+      {
+        "host": "window.fetch",
+        "relation": "발견 호스트 · 관계 미확정",
+        "provider": "",
+        "line": 1
+      },
+      {
+        "host": "json.parse",
+        "relation": "발견 호스트 · 관계 미확정",
+        "provider": "",
+        "line": 1
+      }
+    ],
+    "incorrectLiteralDiscovery": [
+      {
+        "url": "http://127.0.0.1:18099/posts",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/posts/",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/files/",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/messages",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/admin/users",
+        "method": "?",
+        "query": [
+          "role"
+        ],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/search",
+        "method": "?",
+        "query": [
+          "q"
+        ],
+        "body": [],
+        "source": "JS"
+      },
+      {
+        "url": "http://127.0.0.1:18099/messages/",
+        "method": "?",
+        "query": [],
+        "body": [],
+        "source": "JS"
+      }
+    ]
+  },
+  "baseline": {
+    "tests": [
+      {
+        "test": "alice authenticates",
+        "passed": true
+      },
+      {
+        "test": "bob authenticates",
+        "passed": true
+      },
+      {
+        "test": "moderator authenticates",
+        "passed": true
+      },
+      {
+        "test": "admin authenticates",
+        "passed": true
+      },
+      {
+        "test": "community homepage is rendered",
+        "passed": true
+      },
+      {
+        "test": "community static community.css",
+        "passed": true
+      },
+      {
+        "test": "community static community.js",
+        "passed": true
+      },
+      {
+        "test": "fixed input marker absent from listing",
+        "passed": true
+      },
+      {
+        "test": "vulnerable hidden query is reflected",
+        "passed": true
+      },
+      {
+        "test": "public post readable without login",
+        "passed": true
+      },
+      {
+        "test": "guest cannot read members-only fixed post",
+        "passed": true
+      },
+      {
+        "test": "guest cannot read private fixed post",
+        "passed": true
+      },
+      {
+        "test": "A/B IDOR exposes private post in learning mode",
+        "passed": true
+      },
+      {
+        "test": "A cannot read B private post in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "B reads own private post in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "member post visible after login",
+        "passed": true
+      },
+      {
+        "test": "moderator can read security board",
+        "passed": true
+      },
+      {
+        "test": "moderator cannot read a private note",
+        "passed": true
+      },
+      {
+        "test": "modifier parameter spoof opens admin list in learning mode",
+        "passed": true
+      },
+      {
+        "test": "server session role blocks spoofed admin list",
+        "passed": true
+      },
+      {
+        "test": "actual administrator can access admin list",
+        "passed": true
+      },
+      {
+        "test": "Alice creates private post",
+        "passed": true
+      },
+      {
+        "test": "B changes Alice post in learning mode",
+        "passed": true
+      },
+      {
+        "test": "B cannot change Alice post in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "Alice fixed update requires her CSRF",
+        "passed": true
+      },
+      {
+        "test": "comment write requires login",
+        "passed": true
+      },
+      {
+        "test": "stored XSS payload accepted for A post",
+        "passed": true
+      },
+      {
+        "test": "comment retained in post response",
+        "passed": true
+      },
+      {
+        "test": "fixed comment rejects missing token",
+        "passed": true
+      },
+      {
+        "test": "fixed comment accepts session token",
+        "passed": true
+      },
+      {
+        "test": "private attachment IDOR in learning mode",
+        "passed": true
+      },
+      {
+        "test": "private attachment blocked in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "anonymous private attachment blocked in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "A reads B note in learning mode",
+        "passed": true
+      },
+      {
+        "test": "A cannot read B note in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "B can read own note in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "role modifier spoof accepted in learning mode",
+        "passed": true
+      },
+      {
+        "test": "role modifier rejected in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "search SQL injection exposes seeded posts in learning mode",
+        "passed": true
+      },
+      {
+        "test": "search SQL injection treated as text in fixed mode",
+        "passed": true
+      },
+      {
+        "test": "initial Bob post linked to private attachment",
+        "passed": true
+      },
+      {
+        "test": "CSRF prevents unauthenticated fixed post create",
+        "passed": true
+      },
+      {
+        "test": "Alice fixed private file upload accepted",
+        "passed": true
+      },
+      {
+        "test": "fixed upload rejects HTML extension",
+        "passed": true
+      },
+      {
+        "test": "learning upload preserves attacker MIME",
+        "passed": true
+      },
+      {
+        "test": "member signup creates ordinary user",
+        "passed": true
+      },
+      {
+        "test": "duplicate nickname blocked by signup validation",
+        "passed": true
+      },
+      {
+        "test": "reset protected from regular member",
+        "passed": true
+      },
+      {
+        "test": "admin reset restores seeded community",
+        "passed": true
+      }
+    ],
+    "passed": 49,
+    "total": 49,
+    "runtime": "Spring/Tomcat/H2"
+  },
+  "js_checks": {
+    "checks": 62,
+    "engine": "Workbench KR 0.17.4 JsAnalysis + JsMiner (HTTP-captured lab fixtures)"
+  }
+}

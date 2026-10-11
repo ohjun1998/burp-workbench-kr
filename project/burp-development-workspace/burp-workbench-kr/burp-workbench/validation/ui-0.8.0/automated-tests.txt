@@ -1,0 +1,373 @@
+Built /workspace/scratch/1c07a245ba11/ui-project/burp-workbench/dist/burp-workbench-kr-0.8.0.jar 178405311 bytes
+PASS UTF-8 Base64 round trip
+PASS form URL round trip
+PASS Gzip round trip
+PASS Hex round trip
+PASS Gzip expansion cap
+PASS profile cannot change destination
+PASS case-insensitive duplicate profile rejected
+PASS CR header injection rejected
+PASS CSV formula injection neutralized
+PASS HTML escaping
+PASS export strips query and fragment
+PASS JS paths deduplicated and sourcemap extracted
+PASS JWT does not claim verified signature
+PASS identical response is candidate, not confirmed vulnerability
+PASS duplicate original cookies removed
+PASS original privileged credentials removed
+PASS original request immutable
+PASS eight-tab optimized UI initialization
+PASS passive capture sends no requests
+PASS one request per selected profile (A and anonymous)
+PASS user session transmitted
+PASS anonymous request stripped cookies
+PASS comparison results rendered
+PASS report contains no query tokens or response bodies
+PASS cross-origin credential send blocked
+PASS write requests require explicit option
+PASS out-of-scope send blocked
+PASS rejected operations send zero requests
+PASS ten-second response timeout and redirects disabled
+PASS query/body credential requires manual preparation
+PASS stop prevents remaining profile requests
+PASS traffic retains bounded 250-row window
+PASS diff highlights changed line
+PASS diff aligns inserted line and common suffix
+PASS identical bodies have no changed-line targets
+PASS missing response has no synthetic comparison
+PASS binary body not shown as text diff
+PASS large body diff is bounded
+PASS named session reapplies credential headers
+PASS session application clears other-origin drafts
+PASS unload clears profile fields
+PASS unload clears saved sessions
+PASS unload shuts down workers
+ALL 43 CHECKS PASSED (mock host; no real Burp runtime)
+PASS one grouped legacy menu factory registered
+PASS autorize prepared and checksum verified
+PASS auth-analyzer prepared and checksum verified
+PASS auth-analyzer real upstream entry point shares host API
+PASS logger-plus-plus prepared and checksum verified
+PASS logger-plus-plus real upstream entry point shares host API
+PASS hackvertor prepared and checksum verified
+PASS hackvertor real upstream entry point shares host API
+PASS param-miner prepared and checksum verified
+PASS param-miner real upstream entry point shares host API
+PASS jwt-editor prepared and checksum verified
+PASS jwt-editor real upstream entry point shares host API
+PASS turbo-intruder prepared and checksum verified
+PASS turbo-intruder real upstream entry point shares host API
+PASS js-miner prepared and checksum verified
+PASS js-miner real upstream entry point shares host API
+PASS http-request-smuggler prepared and checksum verified
+PASS http-request-smuggler real upstream entry point shares host API
+PASS three burp.BurpExtender implementations are isolated
+PASS bundled Jython executes Python and bridges host API
+Thank you for installing Autorize v1.9.4 extension
+Created by Barak Tawily
+Contributors: Federico Dotta, mgeeky, Marcin Woloszyn, jpginc, Eric Harris, Joao Teles, Roy Oswaldha
+
+Github:
+https://github.com/Quitten/Autorize
+PASS autorize actual upstream initializer and UI mounted in mock host
+Autorize extension unloaded.
+PASS legacy then Montoya entry points invoked
+PASS legacy and Montoya tabs mounted inside unified engine view
+PASS legacy engine settings namespaced
+PASS HTTP listener delegated to real host contract
+PASS upstream engine action exposed through grouped menu
+PASS native engine menu item retained
+PASS engine unload cleans both API listeners and registrations
+PASS unloaded engine actions removed
+PASS engine downloads restricted to official origin
+ALL 30 ENGINE CHECKS PASSED (upstream class probes + mock host, no target traffic)
+PASS server and framework headers
+PASS framework CMS plugin resource signatures
+PASS application prefix
+PASS observed resource query redaction
+PASS external resources excluded
+PASS cookie values never retained
+PASS prefix validation //evil.test
+PASS prefix validation /../admin
+PASS prefix validation /a/./b
+PASS prefix validation /a?x=1
+PASS prefix validation /a#b
+PASS prefix validation /ab
+PASS prefix validation /%2e%2e
+PASS prefix validation /a\b
+PASS unknown stack does not fabricate candidates
+PASS Actuator candidates
+PASS origin memory bounded
+PASS multiple environment candidates >=80: 144
+PASS resource-derived application prefix
+PASS JS quoted endpoint extraction
+PASS explicit sourceMappingURL extraction
+PASS cross-profile candidates deduplicated
+PASS evidence priority descending
+PASS top 30 limit
+PASS common candidates can be excluded
+PASS unknown stack common fallback distinguished
+PASS unsubstantiated candidates ranked low
+EnvironmentTest: 27 checks passed
+PASS UI lists multiple ranked candidates
+PASS UI score condition and priority columns
+PASS UI top 30 selector
+PASS UI expanded limit refresh
+PASS UI common toggle
+PASS invalid prefix leaves no stale Repeater candidates
+EnvironmentPanelTest: 6 checks passed
+PASS AST successfully parsed
+PASS constant concat fetch URL and method
+PASS header names and body keys from call options
+PASS query values excluded from results
+PASS Axios post body metadata
+PASS XHR open URL
+PASS WebSocket identified
+PASS location assignment URL
+PASS AWS access key pattern
+PASS Google key pattern
+PASS GitHub token pattern
+PASS placeholder excluded
+PASS secret results masked with fingerprints only
+PASS template unresolved value retained
+PASS dynamic concatenation marked unresolved
+PASS escaped string decoded by parser
+PASS shadowed parameter not resolved from global const
+PASS global const resolved in own scope
+PASS Axios baseURL and params metadata
+PASS HTML inline script original line location
+PASS external scripts not automatically fetched
+PASS parse failure clearly labeled with secret fallback
+PASS numeric arithmetic not incorrectly concatenated
+PASS URL credentials query and fragment excluded
+PASS source size limit explicit
+PASS endpoint result cap
+PASS JavaScript is parsed without executing throw
+PASS unsupported module syntax labeled with URL fallback
+PASS Request constructor URL metadata
+PASS same URL in separate call sites retains code locations
+PASS window.open target not confused with XHR
+JsAnalysisTest: 31 checks passed
+PASS manual AST result tables
+PASS masked report excludes secrets and URL query values
+PASS explicit action prepares query-free GET in Repeater
+PASS out-of-scope Repeater preparation blocked
+PASS dynamic endpoint preparation blocked
+PASS passive out-of-scope response ignored
+PASS passive analysis without request or Repeater action
+PASS automatic analysis does not display raw source
+PASS changed JS source reanalyzed under same source URL
+PASS clear prevents stale async result restoration
+PASS close clears raw source and secret rows
+JsAnalysisPanelTest: 11 checks passed
+PASS existing History automatically backfilled
+PASS late response with lower history ID not missed
+PASS unchanged history entries not reanalyzed
+PASS new History responses processed incrementally
+PASS history rescan deduplicates identical content
+PASS History source overview updated
+PASS history ID reset recovered
+PASS Proxy live response listener registered
+PASS received Proxy response preserved unchanged
+PASS sent Proxy response preserved unchanged
+PASS Proxy event analyzed immediately without history polling
+PASS Proxy listener deregistered on close
+PASS busy worker queues rapid JS responses rather than skipping
+PASS normal batch has no queue overflow
+PASS watch pause blocks new analysis
+PASS history scan pauses without advancing cursor
+PASS history accumulated during pause recovered
+PASS queue rejection retried without cursor loss
+PASS gzip response decoded without network request
+PASS history JS larger than 128 KiB traffic capture limit analyzed
+PASS bounded queue pressure explicitly counted
+PASS clear invalidates entire queued history batch
+JsHistoryTest: 22 checks passed
+PASS single Workbench suite tab; no standalone Payload Runner tab
+PASS existing eight pages plus Payload Runner and original engines
+PASS embedded runner preserves Workbench extension name
+PASS loading integrated extension sends zero requests
+PASS one runner menu factory and unload listener alongside engine menu factory
+PASS runner component is embedded in Workbench
+PASS import navigation selects integrated runner page
+PASS Workbench selected-request action connected to runner
+PASS adaptive strategy remains default
+PASS all sixteen payload profiles preserved
+PASS both unload APIs safely close runner worker
+PASS existing Workbench unload still runs
+PayloadIntegrationTest: 12 checks passed
+PASS traffic has exactly four visible columns
+PASS NO/method/URL/status order
+PASS request and response are persistent panes, not switching tabs
+PASS readable row spacing
+PASS semantic method/status renderer installed
+PASS tab 0 laid out at 1000
+PASS tab 1 laid out at 1000
+PASS tab 2 laid out at 1000
+PASS tab 3 laid out at 1000
+PASS tab 4 laid out at 1000
+PASS tab 5 laid out at 1000
+PASS tab 6 laid out at 1000
+PASS tab 7 laid out at 1000
+PASS tab 8 laid out at 1000
+PASS tab 9 laid out at 1000
+PASS both message panes usable at 1000
+PASS no right-side vertical action sidebar at 1000
+PASS tab 0 laid out at 1280
+PASS tab 1 laid out at 1280
+PASS tab 2 laid out at 1280
+PASS tab 3 laid out at 1280
+PASS tab 4 laid out at 1280
+PASS tab 5 laid out at 1280
+PASS tab 6 laid out at 1280
+PASS tab 7 laid out at 1280
+PASS tab 8 laid out at 1280
+PASS tab 9 laid out at 1280
+PASS both message panes usable at 1280
+PASS no right-side vertical action sidebar at 1280
+PASS tab 0 laid out at 1600
+PASS tab 1 laid out at 1600
+PASS tab 2 laid out at 1600
+PASS tab 3 laid out at 1600
+PASS tab 4 laid out at 1600
+PASS tab 5 laid out at 1600
+PASS tab 6 laid out at 1600
+PASS tab 7 laid out at 1600
+PASS tab 8 laid out at 1600
+PASS tab 9 laid out at 1600
+PASS both message panes usable at 1600
+PASS no right-side vertical action sidebar at 1600
+PASS stable monotonically increasing traffic NO
+PASS sorted NO selection resolves correct captured request
+PASS traffic search filters visible request fields
+PASS cleared selection resets stale request
+PASS dark palette has readable foreground
+UiLayoutTest: 46 checks passed
+PASS UTF-8 payload byte length recalculated
+PASS following header survives length replacement
+PASS Content-Length last header has one boundary
+PASS URL percent encoding UTF8 and plus
+PASS JSON escaping prevents broken string
+PASS missing marker rejected
+PASS duplicate markers rejected
+PASS chunked request rejected
+PASS compressed request rejected
+PASS multipart binary byte view preserved
+PASS gzip response decoded
+PASS chunked HTTP body decoded
+PASS response analysis and raw retention bounded
+PASS real HTTP raw HTML reflection candidate
+PASS escaped HTML not reported as XSS
+PASS JSON reflection not reported as HTML XSS
+PASS generic database text is not SQL error evidence
+PASS reflected SQL error signature not treated as database error
+PASS new SQL error detected via HTTP
+PASS SQL true false differential candidate
+PASS fixed SQL route no differential candidate
+PASS reflected SQL pair not mistaken for SQL condition evidence
+PASS WAF 403 remains inconclusive rather than SQL candidate
+PASS file content signature found
+PASS custom fixture proof found
+PASS proof reflection alone not accepted as file content
+PASS 403 not interpreted as successful download
+PASS upload 2xx only indicates acceptance
+PASS Stop prevents additional request after in-flight finishes
+PASS budget includes baseline and SQL stability repeat
+PASS payload transport error recorded and next payload continues
+PASS embedded adapter provides panel without registering another suite tab
+PASS XXE profile switches RAW and XML instructions
+PASS NoSQL profile switches RAW and object instructions
+PASS SSTI profile switches URL and evaluation presets
+PASS Start sends baseline and chosen payload through Burp callback
+PASS candidate evidence visible in result model
+PASS selected tested request sent to Repeater
+PASS context selection imports and marks captured request
+PASS captured cookie preserved
+PASS CSV formula cells neutralized
+PASS extension unload stops executor
+PASS 16 profiles have defaults and labels
+PASS all SSTI preset expressions recognized
+PASS SSTI input reflection not evaluation
+PASS unframed arithmetic number not SSTI proof
+PASS redirect candidate uses actual Location host
+PASS protocol relative redirect recognized
+PASS fixed relative redirect not candidate
+PASS redirect body reflection not redirect evidence
+PASS CRLF placeholder becomes encoded control bytes
+PASS CRLF detects real response header
+PASS CRLF body reflection excluded
+PASS XPath specific error candidate
+PASS XPath normal reflection excluded
+PASS LDAP specific error candidate
+PASS LDAP normal reflection excluded
+PASS NoSQL Mongo error candidate
+PASS NoSQL JSON reflection excluded
+PASS reflected error signature itself excluded
+PASS command composed output candidate
+PASS command input reflection excluded
+PASS real XML internal entity expansion observed
+PASS DTD-disabled XML route rejected
+PASS raw XML reflection is not entity expansion
+PASS real XML owned file entity proof
+PASS XXE fixed route no file proof
+PASS path traversal file signature candidate
+PASS path traversal reflection excluded
+PASS SSRF owned receiver fetched over HTTP
+PASS SSRF URL acceptance alone is not proof
+PASS custom expectation cannot be its own reflected payload
+PASS adaptive: HTML reflection revalidated and stops after one variant
+PASS adaptive: non-reflection costs three requests and labels stored/DOM untested
+PASS adaptive: JSON reflection pruned, DOM consumption explicitly untested
+PASS adaptive: escaped reflection never called XSS
+PASS adaptive: encoded tag in HTML text prunes variants with limitation
+PASS adaptive: encoded reflection in script does not activate text-context pruning
+PASS adaptive: textarea context prioritizes closing textarea
+PASS adaptive: SQL true/false, reverse-order pair and late baseline corroborated
+PASS adaptive: SQL payload reflection alone no condition evidence
+PASS adaptive: dynamic baseline disables boolean evidence without masking fields
+PASS adaptive: pre-existing SQL errors not fresh evidence
+PASS adaptive: reflected DB error excluded
+PASS adaptive: SSTI needs different arithmetic with unique marker
+PASS adaptive: SSTI raw reflection not evaluated
+PASS adaptive: single transient evaluation never corroborated
+PASS adaptive: 429 halts after first request
+PASS adaptive: 403 pair blocked and never SQL condition evidence
+PASS adaptive: duplicate literal and baseline payload omitted
+PASS adaptive: budget 1 includes discovery/controls/repeats
+PASS adaptive: budget 2 includes discovery/controls/repeats
+PASS adaptive: budget 3 includes discovery/controls/repeats
+PASS adaptive: budget 4 includes discovery/controls/repeats
+PASS adaptive: budget 5 includes discovery/controls/repeats
+PASS adaptive: budget 6 includes discovery/controls/repeats
+PASS adaptive: budget 7 includes discovery/controls/repeats
+PASS adaptive: Stop prevents stability and discovery requests
+PASS adaptive: upload deduped, no repeat or stability mutation
+PASS adaptive: SSRF not called safe without OAST evidence
+PASS adaptive: three transport failures halt future requests
+PASS adaptive: truncated responses never prune XSS as non-reflecting
+PASS evidence: download includes missing sibling and retains two file observations
+PASS evidence: same generic content for nonexistent traversal not corroborated
+PASS evidence: blocked missing-file control cannot corroborate
+PASS evidence: redirect corroborates a distinct destination host
+PASS evidence: hardcoded destination fails second-host control
+PASS evidence: command requires different composed output control
+PASS evidence: hardcoded command output fails alternate control
+PASS evidence: XPATH semantic pair reverse-order corroborated
+PASS evidence: XPATH raw reflection is not semantic injection
+PASS evidence: LDAP semantic pair reverse-order corroborated
+PASS evidence: LDAP raw reflection is not semantic injection
+PASS evidence: NOSQL semantic pair reverse-order corroborated
+PASS evidence: NOSQL raw reflection is not semantic injection
+PASS evidence: custom explicit proof repeats and control excludes normal response
+PASS evidence: custom payload reflection still not evidence
+PASS evidence: upload reads returned relative URL and verifies exact body
+PASS evidence: upload never fetches external response URL
+PASS evidence: protocol-relative readback blocked
+PASS evidence: upload accepted but mismatched retrieval not confirmed
+PASS evidence: readback counts against same total budget
+PASS evidence: active callback listener port cannot be reused
+PASS evidence: callback listener reopens after accepted connection and close
+PASS evidence: blind SSRF identical responses verified via two distinct callback URLs
+PASS evidence: echoed SSRF URL never sends own callback or confirms SSRF
+PASS evidence: callback requests obey budget
+TEST_SUMMARY passed=127 failed=0 (HTTP fixture/API adapter; not actual Burp runtime)

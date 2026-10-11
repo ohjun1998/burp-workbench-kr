@@ -1,0 +1,2147 @@
+{
+  "version": "0.21.0",
+  "date": "2026-10-11",
+  "description": "Latest source and release, conversation handoff summary, historical documentation and validation references",
+  "files": [
+    {
+      "path": "이어가기_인수인계.md",
+      "bytes": 15061,
+      "sha256": "f08f2c14d32994b48aabf33e91fcc69aba457921401d6259434d3db3ce2b3e91"
+    },
+    {
+      "path": "새_채팅_시작문.txt",
+      "bytes": 1527,
+      "sha256": "2f70e526b52f39035124aa75bf2f0fc34f047fc7fbeecc2d23068950f08d7482"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py",
+      "bytes": 5706,
+      "sha256": "fa681f98b999dcf7906b0f62f550f1b96bfea9bea3742ad16fbabbc97d2798a3"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/deps/legacy-api.jar",
+      "bytes": 20139,
+      "sha256": "0b9b16048e1a3d10bb8f36219bb7dfa637dad2d54e116199d3506b4174518e54"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/deps/montoya-2026.jar",
+      "bytes": 181538,
+      "sha256": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/deps/rhino.jar",
+      "bytes": 1647024,
+      "sha256": "12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.21.0.jar",
+      "bytes": 2966859,
+      "sha256": "e67bd89e68d4783d5813912b8798befc6601edeb7ee1c5d4378d71eb35629122"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/docs/화면_0.17.4_environment.png",
+      "bytes": 9694,
+      "sha256": "afadf7aef2373509c65ffb33ebe8e5a249dab7d1cfff0b7f193150e9bcdcd27c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/docs/화면_0.17.4_groups.png",
+      "bytes": 12272,
+      "sha256": "dc048fd5a4ab32f06d9e4a67597c5ec28af93305e7d090f954a82628fa91fbdf"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/docs/화면_0.17.4_jwt.png",
+      "bytes": 23874,
+      "sha256": "49eabec54cae4f00989c8f93c89496873d7c3dc048681410f90d167d162a96e9"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/docs/화면_0.17.4_scope.png",
+      "bytes": 10515,
+      "sha256": "a6e8dfc62db04a4d784dc017c8bf9e12a2e3ce4e6ea66b12db3d0bc8f05376b7"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/docs/화면_0.17.4_urls.png",
+      "bytes": 33103,
+      "sha256": "1aa78461f1c245cfec6546106999deba707c365d97d2f51736946b6df45f9ac5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/engine-lock.json",
+      "bytes": 8813,
+      "sha256": "58ba75738f16948a1a4148c130e22380abba6a724d9bffa6d4f23365844af86c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/ENVIRONMENT_SOURCES_KR.md",
+      "bytes": 1298,
+      "sha256": "7a83d0d82c7f97c64240f692f8ccbc7c7e65413be87432dc98f7c9952d24383c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/LICENSE",
+      "bytes": 34499,
+      "sha256": "e7ae8b5da17709474ba25316441bc064148841cf101e7eef318c3c3ee5a0827b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/PAYLOAD_ADAPTIVE_KR.md",
+      "bytes": 8379,
+      "sha256": "5b02c7fa1c75c8e551b26202c55bfbec89a4357da3afb89c0dec99f7dbb5e39b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/PAYLOAD_RUNNER_KR.md",
+      "bytes": 16321,
+      "sha256": "527c021f65f8fc93bebd1e30c118d898ae35d2170c99c7a07dde3df88285ef69"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/pom.xml",
+      "bytes": 1667,
+      "sha256": "e51c41604088d5955013ecee3bce202c60d54f438f014070cfbf0a50b41d1ab2"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.13.0_KR.md",
+      "bytes": 4331,
+      "sha256": "3ee780504728f03e32d80c46a07ddee0883caaa0990590e1d38a19dd2388fc44"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.17.0_KR.md",
+      "bytes": 8995,
+      "sha256": "f3ea865731f781c1babb270b63ac131ca0ff61ce2a09cdec8cecc6705d6a6317"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.17.1_KR.md",
+      "bytes": 9652,
+      "sha256": "ccaee078ebe5e57e45788a1016b6f997b29d97074b8664d4dd36b02158770ec4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.17.2_KR.md",
+      "bytes": 10999,
+      "sha256": "6c747fb7ea863834582c15794ab69629d2a1f088a81aa190667f575aa60ec2dd"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.17.3_KR.md",
+      "bytes": 7718,
+      "sha256": "f97d1f4842dba24eb1c4d626b077ea8b324b035aa8d40a4a24de00901700029f"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.17.4_KR.md",
+      "bytes": 12152,
+      "sha256": "c1576a8dfc0ab41d309654095bba5c1571d25c9b8ae26060d20fdc644d2422f0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.18.0_KR.md",
+      "bytes": 6737,
+      "sha256": "ba64bea099ae26b909fa5b17912aaa8939809b4a4f97631396aaa1e571f3e538"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.19.0_KR.md",
+      "bytes": 7027,
+      "sha256": "9501a212348fdabcca199ec369d072440cc49bd1775f2228b43582e6e6ec8b7d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.20.0_KR.md",
+      "bytes": 11435,
+      "sha256": "c91e52269e579b03c0f50f60e2643688fa4eea073094a14c9b04c25df695cf40"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/README_0.21.0_KR.md",
+      "bytes": 11256,
+      "sha256": "e9edb089bc7160ee51794621ab1a9c381cb073257971044d5094afa4fb59b791"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/REVIEW_0.17.3_KR.md",
+      "bytes": 8665,
+      "sha256": "affa203980f87a696723e65a3d1270f4473643f2ec4599d04eb484bac7f5f637"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/REVIEW_0.17.4_KR.md",
+      "bytes": 5505,
+      "sha256": "66a8e47dc90ba166513faf2a7b562fd826fbfb3253566893c11722992ace67b5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/REVIEW_0.18.0_KR.md",
+      "bytes": 5762,
+      "sha256": "5675e9618f72104b2b7da3587d0c68925f95d892a7a973cd8d3efb5811aed2f0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/shade_rhino.py",
+      "bytes": 1051,
+      "sha256": "c6b057253fc000071ad0bc0da68ee6693495effad9c65cb535035b0673d758a9"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/burp/BurpExtender.java",
+      "bytes": 2221,
+      "sha256": "8af7647631ce6ce198c2c13ea332058af4e6b7e7f0c99c0c2b3023b3ec083ec3"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/payloadrunner/Adaptive.java",
+      "bytes": 20406,
+      "sha256": "30027a8049e5f90d820f383a54a86fed69aace25930a1735d8fc481c70658934"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/payloadrunner/CallbackProbe.java",
+      "bytes": 3202,
+      "sha256": "27827fe5e0d47ecd8c075c6902a6aa5e3c16412754220f28e28994dadad54069"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/payloadrunner/Engine.java",
+      "bytes": 23317,
+      "sha256": "b8275d77bc336f4fd6ecb88d5348506d4ff23ca31cac982e098618ba099a88db"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/payloadrunner/PayloadHttp.java",
+      "bytes": 2855,
+      "sha256": "c955f6ab56e80089dc6c70b6edc6c0154de7abdfaed33d194cb37525eb44a4e8"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/payloadrunner/PayloadRunnerPanel.java",
+      "bytes": 27219,
+      "sha256": "1afe91bae810d28bb73a4140730f63aab73e40d0b6a617561cf4fb32962d254c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/ActivityPanel.java",
+      "bytes": 17914,
+      "sha256": "04490f9e4c0503ea823a7b001c08ff5f40b01442deb08420250c401f0d1b169b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/ActivityTracker.java",
+      "bytes": 18521,
+      "sha256": "f3e5631fe44d01a1f50cb3a42fd70c3a0b311822b99dd7db62c999d85a29a1eb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/ApiInventory.java",
+      "bytes": 6528,
+      "sha256": "1e00c7d3f2d328117cedde4eef00d740916d2981fd50e2f17aa09ffa35dc252e"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/ArchiveUrls.java",
+      "bytes": 2726,
+      "sha256": "9f564dbc82c4637f7b4da9b0beb54d60fc01d245fa77efa11f945ef4c7b7394c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AssessmentPanel.java",
+      "bytes": 16878,
+      "sha256": "ed0c3a5582d884b9e0eaff9b8e672068d3a919d568e3421c981f8b2651f0578c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AssessmentTracker.java",
+      "bytes": 26765,
+      "sha256": "d2ee3f877adb272abc686485916eb773968be42e676e3a020d7152157cdc807b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthComparePanel.java",
+      "bytes": 44573,
+      "sha256": "2d8bb616557e19a0dab6bfcb8aa5ba88844045f16ac93db437d5399d71a626eb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthFileEvidence.java",
+      "bytes": 1570,
+      "sha256": "8af7cc4d1a207fa5d4ec14d63ad7882ef7710b629da9161ddf93555db1b4864c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthJudgement.java",
+      "bytes": 7298,
+      "sha256": "d87696eaa3ec77b44b02c7d8dc05bc98480e4e52c86fd36505430808fb94305d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthPolicy.java",
+      "bytes": 1977,
+      "sha256": "084068c1cfd6feb80af690b8bb41950541ee3a2fa1e9a3b1b172a07aa5eba0bd"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/BountyEvidence.java",
+      "bytes": 9711,
+      "sha256": "21f6ff76ce7c9f8f70278eaf2bae391067586f0fe67037ee6b6f564c5a3d3c80"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/BountyMatrix.java",
+      "bytes": 2632,
+      "sha256": "022025922759026cf94de1c7df8e79b650d3e0f5d6da173e66f5357af4c76cea"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/BountySession.java",
+      "bytes": 5944,
+      "sha256": "8e6b6bff7108a959eefbcbf3074ede86ce145a4433dda1765763fc88204b323e"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/BountySupportPanel.java",
+      "bytes": 24871,
+      "sha256": "d352b3ffc57f705d64e86ac18af400346dbd4f3ab108e08b918c45d3eb2ae51d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/BountyToolBridge.java",
+      "bytes": 1171,
+      "sha256": "11cb388bbf68a977f76c6f3b112298ba0a9e46c22fba26a8ecf0f94dfdd572ae"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/BountyWorkflow.java",
+      "bytes": 9287,
+      "sha256": "ca739296eba6bc08b4c46b2c66c198b3d014e282adbe5d0142ea0ff55bcb64b0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/Core.java",
+      "bytes": 8601,
+      "sha256": "32c8e30bfc6e8713de3d36b79d808a503f76f867c10961d7876650f1eb04085c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/EnvironmentCatalog.java",
+      "bytes": 16247,
+      "sha256": "a3ac9265f1843c2189080f4cb7e39b739dd9f644342c2d7c901753aea7d75d7d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/EnvironmentControls.java",
+      "bytes": 2123,
+      "sha256": "1d5de8045ba16da564222e2ae013dac52887b383dd508907ec7aabfe9fff5422"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/EnvironmentDiscovery.java",
+      "bytes": 6939,
+      "sha256": "fe39490d626ddc51a4000deb920dfb00415cb2103bdf7946b6a660b8adcba1fb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/EnvironmentKnowledge.java",
+      "bytes": 2892,
+      "sha256": "bb94f709fad8b96d5b02ae0b5f28a2fbfb046876317f672780926dccf87e25eb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/EnvironmentPanel.java",
+      "bytes": 22497,
+      "sha256": "98836a2c139adf847265bc27340c50dda1bc7c544ded9cb8566549d354c06f2c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/EnvironmentResponse.java",
+      "bytes": 2007,
+      "sha256": "7c71f79b3f3607962cf6be974f1b2573a2a434df3cb74cd2ec44883946604065"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/HttpText.java",
+      "bytes": 2797,
+      "sha256": "cde2151aa8055bbd760f3bf40681067aa9df8009b6459ab7bf8511d5a97a3fb1"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JsAnalysis.java",
+      "bytes": 20297,
+      "sha256": "59ef4b4195a415ac886c626a5a4888dfd1a59a0ba6364aa2be8f9c213bb995a3"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JsAnalysisPanel.java",
+      "bytes": 33886,
+      "sha256": "af287218bfa9f1f8f1880dcf9c628803c3cdf87e22d564fc2c2b2f6825f86721"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JsFindingNavigator.java",
+      "bytes": 5043,
+      "sha256": "9fc423271dbd8ca1ed15cdb8cfe6469e68a02caaf807838ffc4fecb13d8f6255"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JsHistoryMonitor.java",
+      "bytes": 3205,
+      "sha256": "d475dd44c3556cdc3fd8462072fc9eca2bef6b51e9c6884b9cfa75a65a31b37a"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JsMiner.java",
+      "bytes": 12974,
+      "sha256": "877e5ccaee4ff8a4b81e5992e41455f0f3b18d478524a860efea1578965ee277"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JsRequestDraft.java",
+      "bytes": 2803,
+      "sha256": "0c848b16c7029896bc0f7da9bd56633fc500ba6d451fbac6802efc9d09498b18"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JsSyntax.java",
+      "bytes": 3251,
+      "sha256": "e78435ef3411f08bb3ce9a5cf8e4f4dd38fe2b5b7210358fb71cf7ed51dc7969"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/JwtTimes.java",
+      "bytes": 1975,
+      "sha256": "c7b05d043fe8a407ea91c9dd041cc4837fa0f5abaf4dd69982cbffe11db706d1"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/LayoutSettings.java",
+      "bytes": 1847,
+      "sha256": "d203a032c9a7072ec272ba4b238638ef3ec949272662a3f415eb210efe11fac7"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/MetadataExport.java",
+      "bytes": 4739,
+      "sha256": "c6757fac9d87eaf4511d0725d9ae4ef8115f99624c46471fe623062c50b878f4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/MinerJson.java",
+      "bytes": 2733,
+      "sha256": "392bd375535e87b3ff13ad1cd4e34a9b2ae91bb748aeb8c409a1c59162976e37"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PacketDiff.java",
+      "bytes": 1807,
+      "sha256": "ef6341853d567217794189c9bff37b7a0e1ca7641773fc7de7c3ec391e96ac87"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PacketFormat.java",
+      "bytes": 4021,
+      "sha256": "13ce7b04c451c57a3054f9baaadd91b9cb13033973dc615dd069d5c935ab908e"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PacketView.java",
+      "bytes": 1241,
+      "sha256": "ad8518f30cddb0dec20a2c622f99245c00f912815f0fcf794bda0d2a2365c3c0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PassiveFindings.java",
+      "bytes": 2688,
+      "sha256": "9bec6ca90683d008482ae4ae0f84e62d3ce8401249750be5a540cae714ce7a42"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PassiveScanPanel.java",
+      "bytes": 25664,
+      "sha256": "c5cb913ecf42f5319942ade92d1718196f634aa6fc7d21eda56e5bed2ff563ae"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PassiveScanWorkspace.java",
+      "bytes": 3933,
+      "sha256": "f2803960bfc68b97950696bef0e1bc0cabfdbd6aa3d3529b90b5c17d9d472b16"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PassiveToolSettings.java",
+      "bytes": 1741,
+      "sha256": "5d01b14706ea73dbd82450370525c9dd1f1f5e87ccb987dffccb295c929e3d9f"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PassiveUrls.java",
+      "bytes": 4254,
+      "sha256": "370d730ee7e9f297648377fa74ae15d480844e9627917fa0e8561d2b96552c8b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/ReconMetadata.java",
+      "bytes": 6133,
+      "sha256": "b5a472cf6b7a3028d1a94f61398feee426f20b9d902115cf75f2394f5f32f54a"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/ResponseDiff.java",
+      "bytes": 3112,
+      "sha256": "64f290c80a6325aacd0dc5e09ee3bff6020a53ac140d4bda5421f955587b7d80"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/ResponseReconPanel.java",
+      "bytes": 10673,
+      "sha256": "ba9aa5afd86ed51ec3fd7b05404cf8fc5baa409f3babc1af321d55c28a482c64"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/StoredFlows.java",
+      "bytes": 2078,
+      "sha256": "6f744e047af2c11e602701cc2c3e0c21989e9a761d7f2369be521fb52e3bb1c8"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/StructuredCompare.java",
+      "bytes": 2125,
+      "sha256": "4bfc87027f17e7537761fe5f8dc1a758acbc5fe875906693bff79ba71c83c90f"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/StructuredComparePanel.java",
+      "bytes": 4084,
+      "sha256": "30ae22edb0908c061200d006a8f30b12ef47c1d2f3bdb01c185404a3f2d17c39"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/TargetWindow.java",
+      "bytes": 2476,
+      "sha256": "b24388267181528bdcc1bd041b5f88fea730149f6b443d5aeee57ebd6b718ff4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/UrlGroups.java",
+      "bytes": 1665,
+      "sha256": "0039abe37b8a4d4e72bfae859aed5adef4a73f7804464700cf582512642561e6"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/WorkbenchExtension.java",
+      "bytes": 35205,
+      "sha256": "f6542c03996c15188c4bff8ccf9a5d91d350a5ee72b073673294339cc70f3d59"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/WorkbenchScope.java",
+      "bytes": 7112,
+      "sha256": "9739e9e10fbb62325f597b551a7a5185dcfdfab1e439e5bb6f249cfb822453bf"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/WorkbenchUi.java",
+      "bytes": 20236,
+      "sha256": "7041d967cb0ede08017343b91a2e7e6b2e38b27dfab81ceea41c0a9278cf3c1f"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/fonts/NanumGothic-Regular.ttf",
+      "bytes": 2054744,
+      "sha256": "76f45ef4a6bcff344c837c95a7dcc26e017e38b5846d5ae0cdcb5b86be2e2d31"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/fonts/OFL.txt",
+      "bytes": 4630,
+      "sha256": "507bfb8b0e055d7817dde920d22a724dcadd114ca1d7aa5e095f7ca286f34ac5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/http-request-smuggler/LICENSE",
+      "bytes": 624,
+      "sha256": "eb60261db1a05ab73cf7260d400c262323fbb9203e74743bb623abef78282caf"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/js-miner/LICENSE.md",
+      "bytes": 11366,
+      "sha256": "733ecf13fd0f0ea586532b6fad265bb76a9d1e684021a2c3da3d0030d9be9b7a"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/jwt-editor/LICENSE.md",
+      "bytes": 11990,
+      "sha256": "46e84eb4a530394250fc48937db0e8a6003868c320ddd0ae0e58b823bc0aeab4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/jython/LICENSE",
+      "bytes": 25223,
+      "sha256": "3ae033da0bfd60f4609c5c99fe50c0c840685889d3b705d3f527fd7b52032f5c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/jython/META-INF/LICENSE",
+      "bytes": 11560,
+      "sha256": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/jython/META-INF/LICENSE.txt",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/jython/META-INF/NOTICE",
+      "bytes": 911,
+      "sha256": "a0c7cb70cb043224881345123591b3bbf34504990b3b3dfd9069d2be3b5331ba"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/jython/META-INF/NOTICE.txt",
+      "bytes": 178,
+      "sha256": "28a309fd415da6e802ecf85061a451f7ac4353f3610f2982f7af29e9d1529289"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/logger-plus-plus/LICENSE",
+      "bytes": 34499,
+      "sha256": "e7ae8b5da17709474ba25316441bc064148841cf101e7eef318c3c3ee5a0827b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/param-miner/LICENSE",
+      "bytes": 615,
+      "sha256": "9c44c6d30548ba5b09da50008927e6839162cf45b2cd10f25e51db5ca6620e3c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/payload-runner-LICENSE",
+      "bytes": 1207,
+      "sha256": "f1ae93c96d678e0ef08ee10be37fc99a3bab33ecdbc695644b816d5a174af6b9"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/rhino/LICENSE.txt",
+      "bytes": 16780,
+      "sha256": "ada0787f27b581e024972a18b51db92c8e8508d0f05017d104a1c70a61b59951"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/turbo-intruder/LICENSE",
+      "bytes": 34523,
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/licenses/turbo-intruder/NOTICE",
+      "bytes": 2140,
+      "sha256": "a10bcaa4412a1c1060d26ca3059e9b7de5f92202ea4541b754a34e7ca9873c4a"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/payloadrunner/AdaptiveTest.java",
+      "bytes": 7026,
+      "sha256": "a9b2d076e56020c01d6db30b332371356ef0228e6c4fea272b676569b90c955c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/payloadrunner/AdditionalTest.java",
+      "bytes": 10018,
+      "sha256": "4b933a01708194cb07f340af2f3fd5f8e2fb66808aa0a6a05e867add1a62014d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/payloadrunner/CommunityTest.java",
+      "bytes": 3401,
+      "sha256": "a78add0ed4ec8ce7c8ad0656168475d282c2f310c004859cb4b852d1f704ce57"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/payloadrunner/EngineTest.java",
+      "bytes": 10755,
+      "sha256": "82762fe35b0c8eb6b8c64f8d5ff9532fc1254f05dd2698712713ca9cc99218fd"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/payloadrunner/EvidenceTest.java",
+      "bytes": 8729,
+      "sha256": "1510ebf3fe0fd723a1d06d4f1527775f284338ce6fbbd93cc9798a251c56b2b8"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/payloadrunner/ExtenderTest.java",
+      "bytes": 5565,
+      "sha256": "2f23b374ee42206db0e5f61b828dbecf5c26eb0e24ad8c97f2735485cafd329a"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/AccountTasksTest.java",
+      "bytes": 14378,
+      "sha256": "90f6f9ef36e0ed91bfbe599247e40d7762e5c9531855a9b5aaeeec79275ec4bd"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/ActivityReconTest.java",
+      "bytes": 12466,
+      "sha256": "18ff312bf5e857908a86103a314b59ee67045723cdb9076b84ff6486cd1ac83a"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/AuditRepairsTest.java",
+      "bytes": 13657,
+      "sha256": "e7c1209c78e26b159bf21688f7d0fb2fbc713cf9c987d4c5d74f2850c3d7043f"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/AuthRecordTest.java",
+      "bytes": 8706,
+      "sha256": "13f7eb0b43bb4f61124bd9ef6e128d746dad50b393b640c64b4fa15ef23e7306"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/BountyFeaturesTest.java",
+      "bytes": 19002,
+      "sha256": "838204e74fb086b6cbd8c960e520a81b01eaf50257ff17a47e05fbc6cb42adfe"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/CompletenessTest.java",
+      "bytes": 11049,
+      "sha256": "a379e6c71f00b2893358882e28e4180d64f7188a56501edc6f2d6e45da62a24d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/DisplayWorkflowTest.java",
+      "bytes": 2671,
+      "sha256": "a2598f11f809e7ee22a46b033a041aa0099ed7606dd9c03f3f4a110eab71ed23"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/EnvironmentBatchTest.java",
+      "bytes": 4773,
+      "sha256": "da5d2b27872b9685dd6e907efaebf326fd36886901ba2fbc696c8515d400dd33"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/EnvironmentDiscoveryTest.java",
+      "bytes": 6590,
+      "sha256": "6c409ed6ff0f78b129e9ea0dc1c1102f969047f70a4a783dfbcb86301e2d5f50"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/EnvironmentFeedbackTest.java",
+      "bytes": 2321,
+      "sha256": "8328528b48e0ed06dbff74cf49ef2455d4f3559592393a11f8c58decc01c837b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/EnvironmentPanelTest.java",
+      "bytes": 1382,
+      "sha256": "816a04d0e1d24708b056fa68463316bbf02a01427e4f3aa4dd806a30a92a3ff0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/EnvironmentTest.java",
+      "bytes": 3706,
+      "sha256": "ca11235e38b776a94e142aa9e11cc703b4ccb9a3121f2c83394bb9e8425906eb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/IntegrationEdgesTest.java",
+      "bytes": 3896,
+      "sha256": "561345c9703da2f162430750f4ca38bf53a2d867e4ab9073f260661822f0292b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/JsAnalysisPanelTest.java",
+      "bytes": 4049,
+      "sha256": "5defaf7cb298f7378841ead0eede4ce55d12395b5be0ca4ec77969d9085bb0e2"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/JsAnalysisTest.java",
+      "bytes": 6052,
+      "sha256": "d4182605f6450f4754cae1db2c059e0f25b565639208f961ca2af342ab2ab3c2"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/JsHistoryTest.java",
+      "bytes": 7803,
+      "sha256": "4b3eec64bc2afca007a003d43b8e6c593c34568c0f82375a46aaa69c7e7560a6"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/JsMinerTest.java",
+      "bytes": 6867,
+      "sha256": "16fe28299edcc085ef230e4372148977c9f999667398b4cd3260d2099ff8a44c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/JsNavigationTest.java",
+      "bytes": 2876,
+      "sha256": "82aae148c2dbbc459a0018c14fd3668c201780eca64f21eef8865974ed7173d3"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/LayoutPassiveWorkflowTest.java",
+      "bytes": 5118,
+      "sha256": "2099cb15f4eb22c6ff1bd6fb910c1ecc3c1c722741bd82be0182211bbd9f935d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/NativeCliFixture.java",
+      "bytes": 1990,
+      "sha256": "452cc29588e7e83a263fb830ff04595888574146f9880f7a6ac2f2afef9f8aa7"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/OtherImprovementsTest.java",
+      "bytes": 14055,
+      "sha256": "839fcb66d7fba249c9e658c95b2dc9f2d4aeab818d26a568161c6d4776bebfab"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/PacketUiTest.java",
+      "bytes": 5760,
+      "sha256": "029bf7a37b234c2d5377cf871175d54c7189fa547a311ade78ff6992adaee437"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/PassiveScanTest.java",
+      "bytes": 6850,
+      "sha256": "ff4ac7bbaea0873cfb91c91b59eb92a3cddc212110feea421b7a2c1bd11c4b93"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/PayloadIntegrationTest.java",
+      "bytes": 5025,
+      "sha256": "ed0721de19cb23f6caaa041db0f25ccf6dccd4319f14ca1cdda65d655a3170e1"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/PopupWorkflowTest.java",
+      "bytes": 3424,
+      "sha256": "1fe3bd565ee88bf98b69d4b2d989f19cb4975e39323f8595ce27396c7e658306"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/ReviewWorkflowTest.java",
+      "bytes": 13492,
+      "sha256": "38b0cfefbe66c0b0419bee37c4815ad51c677223cc8b5f7eef6eaf114973f8c5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/StructuredCompareTest.java",
+      "bytes": 2337,
+      "sha256": "966b7a45e99652bef1ee25fdf16a860f73b89975374953b793bc36877d712178"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/TargetCleanupTest.java",
+      "bytes": 5523,
+      "sha256": "dd8a9ae908226333cab5327367a5e60e04a04a691dd3f22185e613e01e99ed38"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/TestLauncher.java",
+      "bytes": 474,
+      "sha256": "af5f43058b3bf5579c6277074900708606e501b9472dfe8659f11528eb8bd462"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/TestMain.java",
+      "bytes": 378,
+      "sha256": "2d449bcd14379b87702a52a1c54f1c7654d049b7e3120c5cb5e10d8d1c8e490c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/TextEncodingTest.java",
+      "bytes": 2461,
+      "sha256": "490f439d3991b320ec6b758f29846a40f8cb3494b5e8d4b95f60a822cda37dbe"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/TrafficScopeTest.java",
+      "bytes": 6161,
+      "sha256": "e49de0a80b714c79fe899cb0108480e106e9e30641260f46391de9982b4f2e4e"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/UiCleanupTest.java",
+      "bytes": 8923,
+      "sha256": "2b873dd174eadc36dca8c6314cfa3bfc044a0faa77e0d17106ec3b54bda8e5bb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/UiLayoutTest.java",
+      "bytes": 6034,
+      "sha256": "ee11049cb0c59549f804a30671aa4d90dc4afb9faab2ed1091213240ef6adaac"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/WorkbenchTest.java",
+      "bytes": 10628,
+      "sha256": "121b1bfb4040f7ca066198ad84f3d326ccb56dcfed63f5c5b75eb731b0f95076"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/THIRD_PARTY_NOTICES.md",
+      "bytes": 5298,
+      "sha256": "8aacdacf27bbf0d60326e8dbe4a9f6b2c80541271b29af2f73f3cdcf86e8eab8"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/actual-burp-js-miner-final.png",
+      "bytes": 69436,
+      "sha256": "790a90de0d976ff8c50bdbe290013e383f709cd67b13be1bff2f2cbfb4da526a"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/actual-burp-js-miner.png",
+      "bytes": 115873,
+      "sha256": "0b3e96633c805e4dd6f2d1ec9cb6575a2a6ace9abf262e3b92bfe3fe2e1aaba2"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/001-captured.txt",
+      "bytes": 30,
+      "sha256": "d854f28244458dda69d0e2271ab76356de67b67bcaf45c4616b7368693dd3126"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/002-captured.txt",
+      "bytes": 116,
+      "sha256": "0eca275cc3c262ea0f8bfa5d153128cf9dd249c41d7bce5dbd8a153922d8a25e"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/003-captured.txt",
+      "bytes": 737,
+      "sha256": "1e506fb52398396b63b8f4678c6f23532c8ab0b1c52db3d5c9b713080fa2e92d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/004-captured.txt",
+      "bytes": 394,
+      "sha256": "fc3b74a5ea605a4723825f272b7dbd6f1b34245ca414f79ee2cb2338b5e92e21"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/005-captured.txt",
+      "bytes": 86,
+      "sha256": "1799db1bd512f59c75bcca1cb7ee2152b1f751f1558b399d161ba165e587909c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/006-captured.txt",
+      "bytes": 610,
+      "sha256": "e57c998497079b6f1769acbf1faf4dd29b144c9ad2207b79936c44708833e23f"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/007-captured.txt",
+      "bytes": 1130,
+      "sha256": "8969f1bb0d7e1be9c1bd72a6b64c54dfccbbbc51d01df6387282af056f6d9be4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/008-captured.txt",
+      "bytes": 394,
+      "sha256": "fc3b74a5ea605a4723825f272b7dbd6f1b34245ca414f79ee2cb2338b5e92e21"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/009-captured.txt",
+      "bytes": 79,
+      "sha256": "9dc7ad5716374b8c3059f908c0f8839daa8c935a945adbb7b8e9de1b181df541"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/010-captured.txt",
+      "bytes": 76,
+      "sha256": "38edad3b99f50258afd1c657783f7d8cfc0d58f9e95fea764c2970105e044992"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/011-source-private-community.js",
+      "bytes": 220,
+      "sha256": "df9b1f812850d492324b8b0a3694a7d2ef72a611869d6c98ed1f31d60e4703d4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/012-source-store.js",
+      "bytes": 47,
+      "sha256": "94e2716264885bdc1d005e65e76ea7c47d96e911e278bebe0d4b0b4dfa675dcf"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/dump/js-miner-11715520854898483424/manifest.tsv",
+      "bytes": 1723,
+      "sha256": "ae60c4b534b81b3ff9fbafebf742148098f92787f857a5e9ab236b0051b8f0f0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/js-runtime-tests.json",
+      "bytes": 2061,
+      "sha256": "efbd08da28db94261bb1f966fb523621a99eaafa9de86d11df51cd1c5ac38e4e"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/actual-js-miner/verified/js-runtime-tests.txt",
+      "bytes": 1876,
+      "sha256": "bdfc3d1e20fdbab2c72004778d0f4d3cd80c32f09a4181c397f836c1f25ecedb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/AllFeaturesLauncher.java",
+      "bytes": 205,
+      "sha256": "c74ec9c389b3071b92913f3c48ec39d99308ea8d325ad363a6d037e382710df5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/AllFeaturesTest.java",
+      "bytes": 28138,
+      "sha256": "28b0ffa8768fe369ffea5d1b628f8471711abc74ecde40e171571dad9079dd43"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/CommunityExtensionAudit.java",
+      "bytes": 20623,
+      "sha256": "46ca2b94604a1deb32c22763d0915451ce3e72cd3f10195caedcd866c71dc36d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/ReleasePreview.java",
+      "bytes": 1740,
+      "sha256": "7c53fea9b9dafd27699d703eb1c05dfb5d330d7e046455055963cdb27ac4fb4b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/run.py",
+      "bytes": 4191,
+      "sha256": "7364696141505dfd18f555d092ffb98f1fcedc47d329b8069098c8fda5ae67de"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/runtime-hashes.json",
+      "bytes": 1897,
+      "sha256": "d00b04c6d36bef0f52b356c6ceb8df9fc1c754962a72148677fe0bddabb2687d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/AuthPreview.java",
+      "bytes": 2532,
+      "sha256": "12aa364ee6711bc25a7cc31e475d05d67139dc1761eb955fba93f012f04bf84e"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ComparePreview.java",
+      "bytes": 1212,
+      "sha256": "7ce18558498bf5ab347dae0d5573a861baead9ab0412f0fe9871c613f061f816"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/EnvironmentPreview.java",
+      "bytes": 2278,
+      "sha256": "846eeeb48fd93f60755d0ef2b76f12aafcfcacaf1c23a82d3fdcbaa5d7638b8c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-burp-adaptive.png",
+      "bytes": 122022,
+      "sha256": "114520837ddb701ded0ab1355a4b00e60ada6e4d393620b3face8b67763a67bc"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-burp-background.png",
+      "bytes": 73402,
+      "sha256": "e30f7c756d90672d1f0ba1493c81b199167236d4ba3bacc9d319bc190f4974b1"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-burp-installed.png",
+      "bytes": 41519,
+      "sha256": "142ce11371c7b42f865d915fe71e0b91a16787329930616ed6482c9087e93da4"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-burp-profiles.png",
+      "bytes": 102956,
+      "sha256": "0a0cc5d24e1466abb1f7f35208141ea69439ba3ed9a5f1d48dcc0a3242f28540"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-burp-repeater.png",
+      "bytes": 61026,
+      "sha256": "ce4e090ce75ac7fdbf4143e2d0c59deb9ff11d25ca0341a8995d670f9b9f5e5b"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-burp-unloaded.png",
+      "bytes": 44183,
+      "sha256": "ff640362822076cdee898406a559639b46e0fcdfc03f442e951808406fc2fbb5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-burp-xss.png",
+      "bytes": 96702,
+      "sha256": "d850323ccae0d513e70ce91a6e28104a242a6888388d026c5deaf5771f0ff17d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/actual-results.csv",
+      "bytes": 1207,
+      "sha256": "36e48284932ec4514e0915f2789749bec1dee7c885933a7089076a415d194526"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/adaptive-request-counts.csv",
+      "bytes": 282,
+      "sha256": "75bf138942396f7d2ed522447e58a95aece0f7be84d71d85362f17ea92f1a95c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/runtime-tests.json",
+      "bytes": 7917,
+      "sha256": "4582b9e4d91232a2548128fe10b5f21e8180842a867175d56a5152671ef49509"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/actual-burp/runtime-tests.txt",
+      "bytes": 65515,
+      "sha256": "f964411ebf3e775e3ee2aecb58aeb657c9974dbc53d68ba55f5afb4e7b9a36e0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/regression-tests.json",
+      "bytes": 15534,
+      "sha256": "baa48fd454cf203e3d1112e50116acba103843f29b540976b67c07ce5ef232d6"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/integration/regression-tests.txt",
+      "bytes": 15566,
+      "sha256": "7d8c1f2b777bd9a11542060fd88a2c71877847ccc13caad289ff0b4b38257698"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/js-miner-auto-tests.txt",
+      "bytes": 7310,
+      "sha256": "5818a4d7963c8869f7305f0fe54e00af0af87ec5e2a77a6d485ebc7b77b151dc"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/js-miner-harness/BurpHarness.java",
+      "bytes": 2727,
+      "sha256": "683bf7e6b10f8d052d41248b41c7926862794036875245f988f3993cd2ffef06"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/js-miner-harness/LiveJsMiner.java",
+      "bytes": 11970,
+      "sha256": "15e93b1558838217db6cb36b56da8fb2abee3d6f2382c853ae4d37dc3db1cba5"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/js-miner-harness/README_KR.md",
+      "bytes": 439,
+      "sha256": "4d34f5f3c0195ded5931873f29b07c3476071bf627b5c6c4d2a50429d462bbfe"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/js-miner-harness/run_js_miner.py",
+      "bytes": 3775,
+      "sha256": "bbd4e22ddeb552624820bc3f59d35544b32b8bf5fc55f6426471f935b7cb2370"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/LayoutBalancePreview.java",
+      "bytes": 3715,
+      "sha256": "d64bed67f8291b6a42f801e74907d9bf19875fc9cab4686e7ca60742681ac0c0"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/LayoutModesPreview.java",
+      "bytes": 2940,
+      "sha256": "46e9543856dbfd01cc748805c65b6af905985a5ce3dfd29bd1cde5a33a26a966"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/native/README_KR.md",
+      "bytes": 943,
+      "sha256": "0c3a23f65ef05c67ee25c78425820138e2243cf53a8e5552d1bdc373c25df6fe"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/native/RuntimeAssessmentAudit.java",
+      "bytes": 9658,
+      "sha256": "bb2e4eb955f7ee69d5d58192e8c6296f48ccc27f57a6085e0762e1f3aeb910eb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/native/RuntimeUserAudit.java",
+      "bytes": 14669,
+      "sha256": "5b5cad9b3a84f7eaa0ba0f3a0c2bc28f878112a2140c4a22669e5f2607b87905"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/native/RuntimeWholeAudit.java",
+      "bytes": 27638,
+      "sha256": "c57f2e74cb42e7506664a6b16a379f7d487ef5d0760ca555ade6af94a8fdda76"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-burp-background.png",
+      "bytes": 52495,
+      "sha256": "0ae2c643467f0285607d1a23619310b9ce5613881d8fe9a3744e4822906ca699"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-00.png",
+      "bytes": 150008,
+      "sha256": "cf51df6ca5468a92a66662280b5786bd00fe59d20620849661bcbe55000ae3bc"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-01.png",
+      "bytes": 54658,
+      "sha256": "5df3bb8540b1460051e3b8173ef4e289f63d22147537d24b0e47de7c13f3c1e6"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-02.png",
+      "bytes": 37629,
+      "sha256": "a5b8be410b423becfb50de42c07b0c761982669c1869e0729d70dbc16720e369"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-03.png",
+      "bytes": 39701,
+      "sha256": "3d53f898369d3c1b91da4f8952ca662ee10462bd8080a6fb790ce9457fcb7474"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-04.png",
+      "bytes": 87730,
+      "sha256": "e5d5ffdc819e0796fcb86b208fe5d6db1bef393d7bdd33994782ba380903a34f"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-05.png",
+      "bytes": 72270,
+      "sha256": "d0c96bedd7a5d7485bf3e27cc83808a74197f74041a01ef24090ece712093bcb"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-06.png",
+      "bytes": 56308,
+      "sha256": "3579225e797139262728246df9573aa55d3c66f1a50ac3749b142590d8168a16"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-07.png",
+      "bytes": 139404,
+      "sha256": "36799bfb14697cf602dcad62ab0b7f297bbfb4f4e3c200d7d4e7d7070bba75f8"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-08.png",
+      "bytes": 129596,
+      "sha256": "ff3a9e68fe93f2d80befeb99a7e4a569f85368976576cddd2cd66ea0d66b632d"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/actual-ui-09.png",
+      "bytes": 70788,
+      "sha256": "b60ccb9525def66615e57396a80e69446ea1e62c57b33302fd82df1d45788568"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/automated-tests.txt",
+      "bytes": 17170,
+      "sha256": "dd40bdf92329518f03ffd0a3f5291fa2e6ad447901703f8a2bb1f084864398e3"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/native-tests.txt",
+      "bytes": 5711,
+      "sha256": "7a5739b0ae2d6e98e3975d69e3d333108e914c0eb1d5cfdd394762ed07729516"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/ui-0.8.0/run_native.py",
+      "bytes": 3796,
+      "sha256": "62db36c5ef795a2342d2200354eb5ba55c9f03b5443be4b7e8f366e94adb2cc3"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/UiPolishPreview.java",
+      "bytes": 6596,
+      "sha256": "521f74effc0657b83c361a4e19abe0b01035a5622e708718619494f040f8e57c"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/verification/function-tests.txt",
+      "bytes": 25970,
+      "sha256": "2ce8f7b5733856e31163883e72a1a46731ceb50eb658345654863fc9aa13baf8"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/verification/layout-tests.txt",
+      "bytes": 43620,
+      "sha256": "c4ed5b8a8d4eb7790c3bde2aee9f2dcf7500bcfb57e3adecb2ed78b0fbd25e69"
+    },
+    {
+      "path": "project/burp-development-workspace/burp-workbench-kr/WORKBENCH_0.16.0_KR.md",
+      "bytes": 4439,
+      "sha256": "362f7bf1e3d63e53930df24fcf4671a0548baa1ec37060aebf47bcd54ba2152a"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/.dockerignore",
+      "bytes": 75,
+      "sha256": "7c32bbdee9b7245f0985083c3b3a50607182541deb55e9ac88d4f7f016e5620f"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/ADAPTIVE_VERIFICATION_KR.md",
+      "bytes": 6114,
+      "sha256": "61e8e0ea4cc65bb168c9622f01547b2b978513954844497d2baa3a31dfb59a7a"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/burp-community-engine-validation.txt",
+      "bytes": 6999,
+      "sha256": "020f5fa6bdcd6885a8223f2da76aafab9d952911a747d67830997be76aa9e27e"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/burp-community-live.png",
+      "bytes": 66726,
+      "sha256": "48dc177eb8425e1530a90db29e3206f6ee28975e96cb2808fb18758eae4bfae5"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/burp-community-test-results.json",
+      "bytes": 1869,
+      "sha256": "67b9337d6eb3210b105f1a6c4ab576f6c501cd6e599952fff6f3201c938771c1"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/community-desktop.png",
+      "bytes": 234880,
+      "sha256": "4d60336eea06513d155da526cb3c62f0d6202f67273f248d154b304990aec06d"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/community-mobile.png",
+      "bytes": 149394,
+      "sha256": "0190a8382fcd2c9a5f2fcd68ed76d54af17447a9e5d4bdb46e0d5fe84bd26ef8"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/community-test-results.json",
+      "bytes": 4439,
+      "sha256": "77364075587d8e5a3acf3d56f02ea122f4981e7975eb388743454f23abcc0e22"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/community-ui-test-results.json",
+      "bytes": 791,
+      "sha256": "6c96fd28a3b9bce8f7ea05cb56b7880af7f8f824049edbfd4da70cb46c796ce8"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/community-ui-tests.cjs",
+      "bytes": 2826,
+      "sha256": "aede02eb6e2136c6425c122b4fdbf173dae746bfcdeaa3daab1298d03c41d476"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/community_tests.py",
+      "bytes": 8107,
+      "sha256": "cd58130c936d5395c2938522357651f5d77816771946842e3f102dc46d09a5bb"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/compose.verify.yaml",
+      "bytes": 344,
+      "sha256": "5b01f0146a7287dd9d7422d31beed9eb4bea1e17c5d2acd81d576468b8c1622e"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/compose.yaml",
+      "bytes": 1447,
+      "sha256": "388ef36e04010e285e177c332dfe1f003132fefd091b40ad801ad01628d71663"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/DIAGNOSTICS_3.4_KR.md",
+      "bytes": 12503,
+      "sha256": "34fdc6a1f959bbe8c3b028c4d34fd368f5a4ce2441fece5c66dbe5ee05ea7cee"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/dist/ROOT.war",
+      "bytes": 21271267,
+      "sha256": "4f924fe93e6eb0992264fac88c73253449c81c283cad527129023c5969c7160c"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/Dockerfile",
+      "bytes": 189,
+      "sha256": "a311927afafb7d6ef64e2118c47fb34a3345e7fa46aef5642cce22b17f2d4759"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/Dockerfile.source",
+      "bytes": 330,
+      "sha256": "a47fc1d7640c74ea9f3de3cf85f5eafdfe47f05b13804fd631c2fa3336f24c61"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/extension-hub-desktop.png",
+      "bytes": 431630,
+      "sha256": "c5a4be7626a6bf868901178bcbca97c3ae6bf646b2d513d58dbaca22439c86bb"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/extension-hub-mobile.png",
+      "bytes": 468625,
+      "sha256": "81dd553c8c52629e9f95216546ee47a1247b5d844083c9564b1b86e4b02811d9"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/extension-test-results.json",
+      "bytes": 3746,
+      "sha256": "d6fdcae12fb0e0160b0cb4e3ad0be8bc6de7832e78151d5920247ae34ffac961"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/extension-ui-test-results.json",
+      "bytes": 782,
+      "sha256": "0c291bc96d936066cc0140284189ab0c03c2dc622d70c97cb56d4e3999220439"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/EXTENSION_LAB_KR.md",
+      "bytes": 8415,
+      "sha256": "93850c7a680574b12228e7f5d293c652e5010c5ab38ba27d0d59c50cc2e5bddd"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/extension_tests.py",
+      "bytes": 10424,
+      "sha256": "9791534382674719be50757e43c9f3327a1f8c6cddcf41b18ae84f19717d9433"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/extension_ui_tests.cjs",
+      "bytes": 2320,
+      "sha256": "9d4dfb592775990f7e10a88b0693c86269f07a0f9ed775b1cafff2908c05f6c5"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/fixtures/demo.html",
+      "bytes": 126,
+      "sha256": "f384c3c4206478b44921ddb1237f8a9373013bf760dadf2b7aac8092393ba3ef"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/fixtures/pixel.png",
+      "bytes": 79,
+      "sha256": "cef9a6e25a091457e8d9d92a78ea2760fe5c65f2eb4309e1c70cd32e7bb3e6ac"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/FONT-LICENSE.txt",
+      "bytes": 4388,
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/frontend.py",
+      "bytes": 22783,
+      "sha256": "c6a18137d019ffe0af2752c9caadc03d5795b14ae7f678a954f81b396ba5957f"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/http_test_client.py",
+      "bytes": 1170,
+      "sha256": "e8ac5952c182c78b0e6f62b971ffa26027058c24162034358eb242680638aa57"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/infra/HealthCheck.java",
+      "bytes": 296,
+      "sha256": "7f09fd1e2672b37be9ca31e73d37434b464458a73ee0fec5b93abceab69088cf"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/infra/nginx.conf",
+      "bytes": 294,
+      "sha256": "558bc4ebae311e8d4b39c5bc79de2b4e70df12d84fe9ec302325e383c0c591e5"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/js-lab-baseline.json",
+      "bytes": 4686,
+      "sha256": "cf247de1233d7f94b9733580d9731cb7ff1cab1f34f510ab5d2e19c578269817"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/js-lab-engine-results.json",
+      "bytes": 34367,
+      "sha256": "a32505ac36c3b08e763b24cb1815ed6377eb604c0fc2f941779a05674418888d"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/js-lab-ui-results.json",
+      "bytes": 1889,
+      "sha256": "d677c7e4a2d9ac352c8dd6679152ab7f77a0878a182ccaadf9946a8410f336e8"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/js-lab-validation.txt",
+      "bytes": 334,
+      "sha256": "919b5e531d440c9f918a4f8940102872ca4f9cf3b43f9e8e0593ccce2707d384"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/js_lab_fixtures.py",
+      "bytes": 9920,
+      "sha256": "b64eba8bac608c10d9d83e4a662f085f08cfa53b916f9329d23cb3f434f119d6"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/JS_MINER_VERIFICATION_KR.md",
+      "bytes": 6029,
+      "sha256": "a060c05b86a124ef3421e5014715e93cad11c84bf0e54e207861a2e763eee7f5"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/JS_SYNTAX_LAB_KR.md",
+      "bytes": 6477,
+      "sha256": "21eae0b7bfd3b44769dc3afa372f5baba25fd35b6e9c188dbe8940b5a0cc8dbc"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/LICENSE",
+      "bytes": 1213,
+      "sha256": "748b0a60dd729e7dcd11b2e0a471569ecc2ca5b96751cefa2f8053c34fde325d"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/package_local.py",
+      "bytes": 1105,
+      "sha256": "6f03eeaff95d99ab92205c8ced5adc356663e7977251cc396b1679146d88d663"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/pom.xml",
+      "bytes": 1955,
+      "sha256": "3edaba888d654d3b7335ccee3ad76d433067092f5a37fe5866e2ebb03d2429c1"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/protocols/Dockerfile",
+      "bytes": 293,
+      "sha256": "8e593f82306f0b04feae945df9e64154fb84eaf0b74f26f18671d5d30679ebb8"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/protocols/fixtures.py",
+      "bytes": 5489,
+      "sha256": "3b8f2aacb0b3b9581bc59efd230dc7d83e1d273baddb6ab6d1938598b769ba49"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/protocols/requirements.txt",
+      "bytes": 11,
+      "sha256": "4c949c60c64e59a3e4d1aa5af79d177748b3fec46cb1e79a7db216f6d334700e"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/protocols/run.py",
+      "bytes": 959,
+      "sha256": "4320459551bcf012f4c00d45d3f01a8320c2e39cbc2b50dd632c9ca9f4e9f22c"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/protocols/runtime/cert.pem",
+      "bytes": 1151,
+      "sha256": "bf41b1d607277a943ff91458c95953bb7f6e6da50515fcc244818be8785a6295"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/protocols/runtime/events.json",
+      "bytes": 898,
+      "sha256": "b9a7f058dde0bc75d4082e9784b5fbf0445093a504b8eaca96eaef6c49d7a3f1"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/protocols/runtime/key.pem",
+      "bytes": 1704,
+      "sha256": "20480248a216a3c835522784f4e6982b68dfc7bf5af4deb18b20201b12cc8f58"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/README_KR.md",
+      "bytes": 6136,
+      "sha256": "c53abac605e45cc91eb82e471568acf50d8a4f36ceac8287e90cc205de9fe72d"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/run_ui_local.py",
+      "bytes": 710,
+      "sha256": "79661dadd30d31827b87edc5105455196794d8db9f5c7bb129a9389e98de38c7"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/SHA256SUMS",
+      "bytes": 81,
+      "sha256": "29dc1ab05502fc4aff02beeb2d09987a52598d51a13e75d74b131f469c4cee77"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/AdaptiveLabController.java",
+      "bytes": 6123,
+      "sha256": "f64898aec45baf4c02e26db680b7ad3a58caf7f177c88b6c3a20644913a318a7"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/AppConfig.java",
+      "bytes": 978,
+      "sha256": "fa5bfb00a72aeb76cef6722570cc24f600f51037a39684360d0fc7fa76810bf7"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/BoundaryController.java",
+      "bytes": 2000,
+      "sha256": "1b320b422973b830fe24718e5c18a693aa5f37f880bcd492c9800430d65e7c91"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/CommunityController.java",
+      "bytes": 15918,
+      "sha256": "4110072eb3060f7e3dd7ca48dd33255cbef5fa388458a9af9923afcabb5e1f82"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/DevServer.java",
+      "bytes": 897,
+      "sha256": "3212d44884e61bd8554fece4be34fc1584317d29cb6dcc9c454f3853e9a0602c"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/DiagnosticsController.java",
+      "bytes": 13183,
+      "sha256": "6f3832e45651588d09ba9dcd61d8515c42f66f76da5ba4e22b2ee68891f93398"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/ExtensionController.java",
+      "bytes": 7903,
+      "sha256": "b93fccc82f2210d36b0ce9290678264015071f0267a530c7b7af44f5ab7d6ac7"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/JsMinerController.java",
+      "bytes": 5345,
+      "sha256": "58e048c76f1fe1a0870498d57564c28c231492a459eb601a7dceee44f8c48a41"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/JsSyntaxLabController.java",
+      "bytes": 1675,
+      "sha256": "a70be6adb2641ad4fc88654615265ce161dd4508077ad6d86ea009a7781fe92c"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/LabController.java",
+      "bytes": 14642,
+      "sha256": "b4520ed3be907cc5767b7268c95a861094b0a1353ae5e6097c165b36b2831374"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/WarServer.java",
+      "bytes": 548,
+      "sha256": "c25dceff2f14d5f35ec7dccce8a61672e06513a1a36852e6004063f77658e6e2"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/app.js",
+      "bytes": 11205,
+      "sha256": "4483b4a606aff10aaca8a1196ade9264760c9d74271a9478d98eb7bc96862d7d"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/community.css",
+      "bytes": 5470,
+      "sha256": "4644a98dfef17a3edde67c5020a0c75377950194b82acc45a74c603e20838bb3"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/community.html",
+      "bytes": 3581,
+      "sha256": "ea4483452d5e63f39f5f31ee394dc4709bbbbc3eec218f29b2707ca76d8af14c"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/community.js",
+      "bytes": 12931,
+      "sha256": "5f80992a4f752d05d4aff7a358e7f458f1f2f02d94aa6e0075045615e5d56a77"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/diagnostics-modern.js",
+      "bytes": 616,
+      "sha256": "5bf33c8c5c7e366a1e577261b489afa2d6279bcf581874f6d6d435c92adac602"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/diagnostics-modern.js.map",
+      "bytes": 184,
+      "sha256": "ec633841a28b28e940eef03cce79dcd03aed2a3b1aafd5abe8035f3901d29bfa"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/diagnostics.css",
+      "bytes": 1403,
+      "sha256": "4e30257414976dc7894f34ced83a09d0b824c47566e9eb932b3d3e894ba71234"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/diagnostics.html",
+      "bytes": 2426,
+      "sha256": "75332db7bf6b6442a98bfe2f03ddcc5b9bba94cf54f916505f10712e2dba14a7"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/diagnostics.js",
+      "bytes": 2954,
+      "sha256": "d62ed00ca6eb0bbdd3a7ff12669d4bfe6d6f63b9c838986b2da856c7a1b3f673"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/extensions-catalog.json",
+      "bytes": 3312,
+      "sha256": "7df14c9aaa84956c9a87df0edbb18598630a302851b1d8af07c8bc70d5c11bfa"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/extensions-fixtures.js",
+      "bytes": 605,
+      "sha256": "38c4c15cd4ef2c1e9bbcdf215c972109b6a18c8a92f5dbbe845a017d7848a9c9"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/extensions-fixtures.js.map",
+      "bytes": 334,
+      "sha256": "c67ab4f6d51580551e80d3d98fd0275282d2f6ee39b634b3358d325692913e4d"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/extensions-hub.js",
+      "bytes": 1674,
+      "sha256": "0d60cde904dc48f70a839bd75d81a3fa6d12d02d32dbfc9b41041323c60cad01"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/extensions.html",
+      "bytes": 3522,
+      "sha256": "d68a4ceed242ea326ddcafbffcffba239d8b58dbaed1e1dcc25402c41d7c2f4b"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/index.html",
+      "bytes": 3346,
+      "sha256": "9389252676f7f06220fef119055e0b23d36b4cf9d2a3a8450f8228f98975be75"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/01-fetch.js",
+      "bytes": 554,
+      "sha256": "95798824150ddc53a321e0a679eaab4fac5a8afc0396d841fe49d6d6430413ba"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/02-axios.js",
+      "bytes": 559,
+      "sha256": "c97858e9c58b60fff539d34533d079bbfda864f6e0f64c6fefc385f93de2dffc"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/03-xhr-navigation.js",
+      "bytes": 402,
+      "sha256": "ff2e1c3284886c57a692f43ed7f30a2e21de9af622e39241c4fdaba1dce0be11"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/04-constants.js",
+      "bytes": 343,
+      "sha256": "43e375b8f03a8e171b659b0e456d2be662ec5eed088ada1ad8729feea81a5b01"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/05-dynamic-scope.js",
+      "bytes": 428,
+      "sha256": "30a2425a86938955470173341796556b94ee31f9810fb4575bb61351c26ee9ac"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/06-secrets.js",
+      "bytes": 539,
+      "sha256": "1a84e56a4c1d53001b5d7537098cc8ac3d98bac5a2acef189f0c020800ed25ba"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/07-negative.js",
+      "bytes": 362,
+      "sha256": "d8a5be6a94e0fba2668596145aee902d3a34aed6604ba71f473f3be5de581f06"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/08-modern-module.js",
+      "bytes": 295,
+      "sha256": "428b58181decd2a5774d7af662cd5558ea8b29ca64468428880804cea4ea52ec"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/09-invalid.js",
+      "bytes": 150,
+      "sha256": "3bf6a3f9504a76e89fbba2d49c64a99a22ea1ac9ee397826e0198534e5d0cdae"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/10-recon.js",
+      "bytes": 505,
+      "sha256": "c17c198f10b9da95f8c320bdfa4014046a030d620096f8fb5c5e47c927fac58f"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/11-sourcemap.js",
+      "bytes": 134,
+      "sha256": "3bb74cb89cdd0469e0e80aaea321abb11775120afe6ad6d53d8c51c1148ec6ab"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/11-sourcemap.js.map",
+      "bytes": 234,
+      "sha256": "44e5ea3fd06e62c0d1b973c126852ccd7798c09e1976b4e70a0f83a20e2dd242"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/12-inline-map.js",
+      "bytes": 456,
+      "sha256": "e65dac85401ea87e23b1ac21125d47af2fb7b2e2f5fb90f9d3a8bd0549271c8a"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/13-inline.html",
+      "bytes": 407,
+      "sha256": "19c0aed55ad60c687a664c84715cdeeb18a98355310f1336fd78782b4571f7d7"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/14-package.json",
+      "bytes": 167,
+      "sha256": "3dd8c9a0040494a2741662ead7533580896fc489a6460de02808ea172f97ecc8"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab/manifest.json",
+      "bytes": 6320,
+      "sha256": "6cc5b4dfabde65c705d7d77cc3461aac8fac53850826c0da9bcf8ec513d33e68"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab-ui.js",
+      "bytes": 4427,
+      "sha256": "a62c39bb5ce7c606ba40baf88944b544434348cfe3fce70787bdd6569cfd3399"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab.css",
+      "bytes": 4318,
+      "sha256": "52f9401f236fac50e7c316f925bcf7955c2474a5fa7eedee467fa0dfb08723d3"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/js-lab.html",
+      "bytes": 3061,
+      "sha256": "ed9b5666cb1bd905c07f64d694468236ed508b9c66f57a859462cc3b90006a81"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/lab-endpoints.js",
+      "bytes": 587,
+      "sha256": "a10ad170e5a90b19d4f6922967c92c8e06f5ef970cb38de76ae8451148d5e757"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/lab-korean.woff",
+      "bytes": 1013520,
+      "sha256": "ecf4afaaba11eaf1d2b7189caef555f6c05b56d78c0f21f819deb7c49e257ffd"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/param-miner-wordlist.txt",
+      "bytes": 33,
+      "sha256": "3339d1339453e9a818875cdeb591d237a7e1d97bc32a4e5122a390f62a41bfc0"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/safe-endpoints.js",
+      "bytes": 252,
+      "sha256": "df653407b7f9b6975ce8003aa0f5954fd14f3d921cd235f73574aa7d05586d51"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/resources/static/style.css",
+      "bytes": 6892,
+      "sha256": "2aafe3160297ac294a17ffb30c5b608f0a16c10a06543a501c34d2e1fc896ec9"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/src/main/webapp/WEB-INF/web.xml",
+      "bytes": 852,
+      "sha256": "1cefc8f4401e4274a81e8443bfab9d5b708b060d75a904a1bedbfb83367b3e95"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/start.ps1",
+      "bytes": 260,
+      "sha256": "09f9b1f500e529e4865255fbe0d3ef5e355ff27bc26714bc8bbc138a4ca84d89"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/start.sh",
+      "bytes": 151,
+      "sha256": "b78ec01f6562f48bb0c89e5deb1c7daac61a73348b03d57c101d4fd93a9d96c2"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/test-results.json",
+      "bytes": 4239,
+      "sha256": "2e4e4ee023e2931f210068f4c8650bf1fbfc1b995891059d231cfaf4f3da0e82"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/tests.py",
+      "bytes": 8397,
+      "sha256": "7b131b60db0f4e54addae03c3495627d4503e3a5d6ea73ef9280ca04e4e276d0"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/ui-test-results.json",
+      "bytes": 1119,
+      "sha256": "1a870183d1cff3f4d2cb0b1e93a9af4f405dff7ebb81820f9ef7dc3c4618f730"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/ui-tests.cjs",
+      "bytes": 4330,
+      "sha256": "c334ba53bfe30bc3a314da3b128298e40690c34e7b7dac4662923643b9ea2b21"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/validation/diagnostics-ui-tests.cjs",
+      "bytes": 3626,
+      "sha256": "e0d9a2107e332db3600e631333d7c2ec95b3c7d9ead24ce7814dbfd5061c68eb"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/validation/js_lab_ui_test.cjs",
+      "bytes": 3755,
+      "sha256": "6d1c40f4475c91df4c496b8a51464649ac2ff2f92449a302623495339c3bcb8d"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/validation/JsLabControllerTest.java",
+      "bytes": 1409,
+      "sha256": "f26e1131622994f9501b259ec0440f5c34129b086f5b39f61caac402cd4f8c8a"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/validation/JsLabEngineTest.java",
+      "bytes": 5884,
+      "sha256": "4068f96c113145157590134e871c8c025172b684d417cc6c8f4888c0eda9b361"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/VERIFICATION_KR.md",
+      "bytes": 2991,
+      "sha256": "5a88c243797f1d776d0809cee0edd1bb0a75ad83604193c67eaf62f9c151f6cf"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/verify-stack.ps1",
+      "bytes": 1840,
+      "sha256": "efac05efc713c1fdb72f2641458a3f77ab0c03f92d03612366318e8423774db1"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/verify-stack.sh",
+      "bytes": 872,
+      "sha256": "ef9db2ac5307436da700becd417848121b0ff045b09d686d97fb8a1ae657b59c"
+    },
+    {
+      "path": "project/burp-development-workspace/community-security-lab/verify_stack.py",
+      "bytes": 3125,
+      "sha256": "7f0d445746d171ad07c54adf9e53dc1f9a390718f26ee4795f4ed6c91fb09870"
+    },
+    {
+      "path": "project/burp-development-workspace/README_0.18.0_KR.md",
+      "bytes": 6737,
+      "sha256": "ba64bea099ae26b909fa5b17912aaa8939809b4a4f97631396aaa1e571f3e538"
+    },
+    {
+      "path": "project/burp-development-workspace/README_0.19.0_KR.md",
+      "bytes": 7027,
+      "sha256": "9501a212348fdabcca199ec369d072440cc49bd1775f2228b43582e6e6ec8b7d"
+    },
+    {
+      "path": "project/burp-development-workspace/README_0.20.0_KR.md",
+      "bytes": 11435,
+      "sha256": "c91e52269e579b03c0f50f60e2643688fa4eea073094a14c9b04c25df695cf40"
+    },
+    {
+      "path": "project/burp-development-workspace/README_0.21.0_KR.md",
+      "bytes": 11256,
+      "sha256": "e9edb089bc7160ee51794621ab1a9c381cb073257971044d5094afa4fb59b791"
+    },
+    {
+      "path": "project/burp-development-workspace/reference/burp-workbench-kr-0.16.0-original.jar",
+      "bytes": 2719208,
+      "sha256": "dbc3fc22a8cf6bfbb2c000c5bb8c23799881e5fca9611fc52d2c9e1237b54644"
+    },
+    {
+      "path": "project/burp-development-workspace/RELEASE_VERIFICATION_0.19.0.json",
+      "bytes": 112139,
+      "sha256": "70ee655ac3385ba51af256842d0aaf79288d870b7b2b4179e6e72cf52d0e0cbe"
+    },
+    {
+      "path": "project/burp-development-workspace/RELEASE_VERIFICATION_0.20.0.json",
+      "bytes": 154670,
+      "sha256": "ae7cc5e3c8e989a63d347de809d3362df10fdbed1a08bb3d8a9ddf7547d4cd0c"
+    },
+    {
+      "path": "project/burp-development-workspace/RELEASE_VERIFICATION_0.21.0.json",
+      "bytes": 158211,
+      "sha256": "b37ee187ae9a266e1431276c9e329e53cfcf4d740e6d7afe944d698aab58731c"
+    },
+    {
+      "path": "project/burp-development-workspace/START_HERE_KR.md",
+      "bytes": 1132,
+      "sha256": "f08bc798299535066fccad57322ab3eaa6ef1ee996d88043799c11e7932022ba"
+    },
+    {
+      "path": "project/burp-development-workspace/UPLOAD_SHA256.json",
+      "bytes": 321,
+      "sha256": "a3703c8c0b43ef79cf9c358e4f608908d6b60dc0981b6616f2a757433f40eaba"
+    },
+    {
+      "path": "project/burp-development-workspace/verify.py",
+      "bytes": 2195,
+      "sha256": "bcf5cb85538859f10737cca0d3846b22a71d9d330e8332f7010ced5a4187fbb6"
+    },
+    {
+      "path": "release/burp-workbench-kr-0.21.0.jar",
+      "bytes": 2966859,
+      "sha256": "e67bd89e68d4783d5813912b8798befc6601edeb7ee1c5d4378d71eb35629122"
+    },
+    {
+      "path": "history/Burp_Workbench_KR_0.18.0_그림_가이드북.html",
+      "bytes": 825764,
+      "sha256": "6c5f7f514772f29503c5697ef15fdc8edcc1192592ec4679acfa91cfddc7f5b9"
+    },
+    {
+      "path": "history/Burp_Workbench_KR_0.18.0_그림_가이드북.pdf",
+      "bytes": 814832,
+      "sha256": "07b367c11118a95e7f3835b917c7a8126415d7e4a0eaf43a4e0b0d4a6ea6e7b0"
+    },
+    {
+      "path": "history/Burp_Workbench_KR_0.19.0_그림_가이드북.html",
+      "bytes": 1072831,
+      "sha256": "519d7c50c94de759e01ada178e3aa29c61bb6a35da2a686dd5d769f6c7319376"
+    },
+    {
+      "path": "history/Burp_Workbench_KR_0.19.0_그림_가이드북.pdf",
+      "bytes": 1037549,
+      "sha256": "ed3a1cc4b64413b3914c48e2ec31852afc7f0ae01314c5e1a16acc57f4ad06d0"
+    },
+    {
+      "path": "history/JS_구문검증_0.18.0.json",
+      "bytes": 33477,
+      "sha256": "d3fd83df3b18918809b170a4092002d6d3842fbab962a4f1b6370a36e51852ea"
+    },
+    {
+      "path": "history/SHA256_0.17.0.json",
+      "bytes": 510,
+      "sha256": "5551f9fa34fea758ae0d570b5dceb79be68a46310c86eae85e2bbc586e5077bc"
+    },
+    {
+      "path": "history/SHA256_0.17.1.json",
+      "bytes": 510,
+      "sha256": "e18d3f9b98a1f189386d74bd8ed37ccc0fefb3e9b0499c1ab3afddcd14cdfa20"
+    },
+    {
+      "path": "history/SHA256_0.17.2.json",
+      "bytes": 510,
+      "sha256": "38a4babaf2196f49683619d992623f18a3273d8bce4d2af4d7f6a2607bfbfb07"
+    },
+    {
+      "path": "history/SHA256_0.17.3.json",
+      "bytes": 1018,
+      "sha256": "7daebe9d61101070d67a526763975b14b95cb77b8141abaecb744e32619ad890"
+    },
+    {
+      "path": "history/SHA256_0.17.4.json",
+      "bytes": 1101,
+      "sha256": "104ae0933b847a4d5219be55da97e3fcd97ac83ccdc48e551ea38696e8ce545d"
+    },
+    {
+      "path": "history/SHA256_0.18.0.json",
+      "bytes": 1357,
+      "sha256": "1e35fb63f8b47cc6848ac1b8e193d5c5bed339f8dc9864c3dca2bccf1f13d0d0"
+    },
+    {
+      "path": "history/SHA256_0.19.0.json",
+      "bytes": 1120,
+      "sha256": "6c174c83dc49ef3dbe3910a8a864e9f5cec3fbd0b7dc7c1a540c3042b6a26f3e"
+    },
+    {
+      "path": "history/SHA256_0.20.0.json",
+      "bytes": 738,
+      "sha256": "27b0ac16446c19c2c01c9ac7773c630520f9c1ccc907272d69ab52792a1d0829"
+    },
+    {
+      "path": "release/SHA256_0.21.0.json",
+      "bytes": 755,
+      "sha256": "5050daa135e4d4c1588fa29d282bacc08b8d4d4dba6d4b02f7ba3459f5ac9c85"
+    },
+    {
+      "path": "history/개선사항_및_검증_0.20.0.md",
+      "bytes": 11435,
+      "sha256": "c91e52269e579b03c0f50f60e2643688fa4eea073094a14c9b04c25df695cf40"
+    },
+    {
+      "path": "history/검증결과_0.17.0.json",
+      "bytes": 1021,
+      "sha256": "81093ccac128dc7f25753842b8282c3fd2518a47503cb0287f390f640892ad4f"
+    },
+    {
+      "path": "history/검증결과_0.17.0.txt",
+      "bytes": 30501,
+      "sha256": "96b708824acf84e3acbdc269c1e60c72a3147e009955c6d27b303462d6479330"
+    },
+    {
+      "path": "history/검증결과_0.17.1.json",
+      "bytes": 1051,
+      "sha256": "20112b073079ebfbe9c0e6bd6a8fc9fe5f3325dd0b1a97e6409eae6f09de5f34"
+    },
+    {
+      "path": "history/검증결과_0.17.1.txt",
+      "bytes": 31660,
+      "sha256": "eada3315a24b85d6c33eea866b3d0e775d373e51f69bd8b102b0ccedc9b591d2"
+    },
+    {
+      "path": "history/검증결과_0.17.2.json",
+      "bytes": 1081,
+      "sha256": "97c97f574f78b13f2cc82cbd5c03057ffb49a7346145cec56e26c4aab87985a5"
+    },
+    {
+      "path": "history/검증결과_0.17.2.txt",
+      "bytes": 32951,
+      "sha256": "e51a03fe2669d282fb654ae30b21d4f3371e6bb736f53a9c77385d280b055d0d"
+    },
+    {
+      "path": "history/검증결과_0.17.3.json",
+      "bytes": 1298,
+      "sha256": "76078c5960290e98ef3c5b8c7b64ecd799832ad780aa76a033804ad370c956aa"
+    },
+    {
+      "path": "history/검증결과_0.17.3.txt",
+      "bytes": 35683,
+      "sha256": "a77c442df080883389a6d1c8c8e754d5faa8be6fe5de954b0dbeb59e4017200a"
+    },
+    {
+      "path": "history/검증결과_0.17.4.json",
+      "bytes": 1402,
+      "sha256": "521bad398ab405e9b89514394e7ea70fbce2204bba3dc54043cc3cda9b700ef6"
+    },
+    {
+      "path": "history/검증결과_0.17.4.txt",
+      "bytes": 38830,
+      "sha256": "56fed602afaaafc36270e94ee1ac7bb82cbcefd46c17686622a633316d8e8d18"
+    },
+    {
+      "path": "history/검증결과_0.18.0.json",
+      "bytes": 1899,
+      "sha256": "7d08869b09b3b89c12a232c47f9fad8971edb64fdcc9aa92f21ebea72585da54"
+    },
+    {
+      "path": "history/검증결과_0.18.0.txt",
+      "bytes": 48999,
+      "sha256": "a125fa0c1b3886dc0470d3c13b8ace5987c442bc0db2745ec558dff5a26dfcc6"
+    },
+    {
+      "path": "history/검증결과_0.19.0.json",
+      "bytes": 112139,
+      "sha256": "70ee655ac3385ba51af256842d0aaf79288d870b7b2b4179e6e72cf52d0e0cbe"
+    },
+    {
+      "path": "history/검증결과_0.20.0.json",
+      "bytes": 154670,
+      "sha256": "ae7cc5e3c8e989a63d347de809d3362df10fdbed1a08bb3d8a9ddf7547d4cd0c"
+    },
+    {
+      "path": "release/검증결과_0.21.0.json",
+      "bytes": 158211,
+      "sha256": "b37ee187ae9a266e1431276c9e329e53cfcf4d740e6d7afe944d698aab58731c"
+    },
+    {
+      "path": "release/계정별_업무별_사용법_및_검증_0.21.0.md",
+      "bytes": 11256,
+      "sha256": "e9edb089bc7160ee51794621ab1a9c381cb073257971044d5094afa4fb59b791"
+    },
+    {
+      "path": "history/권한정책설정_0.18.0.png",
+      "bytes": 18582,
+      "sha256": "0277de9d9e77e2403e185fbc61e225fa510a843075bad8e34f38b359ebc556b2"
+    },
+    {
+      "path": "history/변경사항_및_검증_0.19.0.md",
+      "bytes": 1373,
+      "sha256": "564f721139f7d54724a60fd9687131fb01e64c46d492daf9ea806c717c88f29c"
+    },
+    {
+      "path": "history/변경전후_0.17.4.md",
+      "bytes": 5795,
+      "sha256": "3d993b6f57d7e43e2d314566cd4d9a71356355318f403c4789d1bdbbc5925332"
+    },
+    {
+      "path": "history/변경전후_및_개선검토_0.17.3.md",
+      "bytes": 8665,
+      "sha256": "affa203980f87a696723e65a3d1270f4473643f2ec4599d04eb484bac7f5f637"
+    },
+    {
+      "path": "history/사용안내_0.17.0.md",
+      "bytes": 8995,
+      "sha256": "f3ea865731f781c1babb270b63ac131ca0ff61ce2a09cdec8cecc6705d6a6317"
+    },
+    {
+      "path": "history/사용안내_0.17.1.md",
+      "bytes": 9652,
+      "sha256": "ccaee078ebe5e57e45788a1016b6f997b29d97074b8664d4dd36b02158770ec4"
+    },
+    {
+      "path": "history/사용안내_0.17.2.md",
+      "bytes": 10999,
+      "sha256": "6c747fb7ea863834582c15794ab69629d2a1f088a81aa190667f575aa60ec2dd"
+    },
+    {
+      "path": "history/사용안내_0.17.3.md",
+      "bytes": 7718,
+      "sha256": "f97d1f4842dba24eb1c4d626b077ea8b324b035aa8d40a4a24de00901700029f"
+    },
+    {
+      "path": "history/사용안내_0.17.4.md",
+      "bytes": 12152,
+      "sha256": "c1576a8dfc0ab41d309654095bba5c1571d25c9b8ae26060d20fdc644d2422f0"
+    },
+    {
+      "path": "history/사용안내_0.18.0.md",
+      "bytes": 6737,
+      "sha256": "ba64bea099ae26b909fa5b17912aaa8939809b4a4f97631396aaa1e571f3e538"
+    },
+    {
+      "path": "history/실제Burp_검증_SHA256_0.18.0.json",
+      "bytes": 581,
+      "sha256": "99f47220736a8be938b71f568315b87e857e0f5e3d412cbda5ebd1d72fbb2b17"
+    },
+    {
+      "path": "history/실제Burp_백그라운드검증_0.18.0.json",
+      "bytes": 3984,
+      "sha256": "4dcca199e434f4787f9fb5c6f01ab416a04f0fd84a62899b5e8c0093ec40399a"
+    },
+    {
+      "path": "history/실제Burp_백그라운드검증_0.18.0.md",
+      "bytes": 4611,
+      "sha256": "ff16fa24ca7821c2c4bdc3670fa7d3a4d487b1a3eafbb83a1366c0cc0e664bdc"
+    },
+    {
+      "path": "history/실제Burp_백그라운드재현코드_0.18.0.zip",
+      "bytes": 10156,
+      "sha256": "20899c6a474b48143fa2cadc028182752db37f779678e1fe586bbe69d889ce2b"
+    },
+    {
+      "path": "history/실제Burp_확장오류_0.18.0.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "history/실제Burp_확장출력_0.18.0.txt",
+      "bytes": 200,
+      "sha256": "c5a7401eded30fda4f91ddddda62e8f789fffd05328b1b260d3444b3df3530c8"
+    },
+    {
+      "path": "history/응답분석_0.18.0.png",
+      "bytes": 17543,
+      "sha256": "2782464f0f823fe708ac7c67d5e6cb7973c62ae3012ee5cd3260dfb7e0b2fc09"
+    },
+    {
+      "path": "history/전기능_변경전후_0.18.0.md",
+      "bytes": 5762,
+      "sha256": "5675e9618f72104b2b7da3587d0c68925f95d892a7a973cd8d3efb5811aed2f0"
+    },
+    {
+      "path": "history/전기능_연계검증_0.18.0.json",
+      "bytes": 88310,
+      "sha256": "52b075d08cae9aacefe618977d739e50b49c1e900ddeb8c5694ecdfb55cedd26"
+    },
+    {
+      "path": "history/전체기능_연계점검_0.19.0.md",
+      "bytes": 14841,
+      "sha256": "e65f2b9f9b43221d6b82b6da559aa84ab06e1710f31fe0c368ae62b067cac4cd"
+    },
+    {
+      "path": "history/전체기능_연계점검_근거_0.19.0.json",
+      "bytes": 35263,
+      "sha256": "4686f7265086380a5a11274cf338e13ac1ae34f6f0de7f6a8411d57567d04971"
+    },
+    {
+      "path": "history/커뮤니티_API검증_3.4.json",
+      "bytes": 4641,
+      "sha256": "ab62595355de3d415d4fb9d6292f3759c8db54885f2043aa6d86a1c16ebd9a55"
+    },
+    {
+      "path": "history/커뮤니티_실사용점검_0.19.0.md",
+      "bytes": 15199,
+      "sha256": "dac847aa497e2f9a69f0ffb0e5a6aced48c7764c7b0292581dc0552e0b6572c2"
+    },
+    {
+      "path": "history/커뮤니티_실사용점검_근거_0.19.0.json",
+      "bytes": 117624,
+      "sha256": "866319e621f56bef3e66fbf59c4fd56068427ec73283c89674f1b899a3f38646"
+    },
+    {
+      "path": "history/커뮤니티_확장진단_0.17.4_SHA256.json",
+      "bytes": 484,
+      "sha256": "86d52bd07d830767c7894a9ab5899659b5ed172fbd13a235775f58dbbc68a2d7"
+    },
+    {
+      "path": "history/커뮤니티_확장진단_0.17.4_결과.json",
+      "bytes": 138722,
+      "sha256": "abe7c5fe7890f5642ee77bba7fb0fbd93ee957adf9491636d4ba1fabf392f937"
+    },
+    {
+      "path": "history/커뮤니티_확장진단_0.17.4_보고서.md",
+      "bytes": 14319,
+      "sha256": "249d7318af435ff0042c947d00019b3557e6b66d42d051a87d9f4fe877720144"
+    },
+    {
+      "path": "history/커뮤니티_확장진단_0.17.4_사례.csv",
+      "bytes": 6564,
+      "sha256": "eadb0e04e637588261bc242a7d0a9221fe225d2eae5245bac6420ad2a379585d"
+    },
+    {
+      "path": "history/커뮤니티_확장진단_0.17.4_재현코드.zip",
+      "bytes": 26874,
+      "sha256": "70aa83fcbcf9ad0de22f8d45dba8d58eb75fbc180ef9bc779b40663fce3fdef7"
+    },
+    {
+      "path": "history/테스트사이트_DOM검증_3.4.json",
+      "bytes": 1195,
+      "sha256": "2e38368e5138ac5ff45ff3ee825f2ce768c145fb980639083e9119f4737549a8"
+    },
+    {
+      "path": "history/화면_0.17.3_activity.png",
+      "bytes": 25091,
+      "sha256": "6720988f5087185a279a57489695707736f6b3bb14c183cb6f0dc6bb3844ad6e"
+    },
+    {
+      "path": "history/화면_0.17.3_auth.png",
+      "bytes": 33101,
+      "sha256": "ef28b1e29ca5ad508232be1b91ded3122b94e8c2a3a82e12b9b407bf661b2d77"
+    },
+    {
+      "path": "history/화면_0.17.3_js.png",
+      "bytes": 36188,
+      "sha256": "affb61d38ffc11851d6d684b30665e801a610db498cca3e3078c1f3fa1203513"
+    },
+    {
+      "path": "history/화면_0.17.3_settings.png",
+      "bytes": 14246,
+      "sha256": "a12ee8ff42bb9da1aac0b817d0acee0f4c85e636234b9884fd1e61731a0f1e5e"
+    },
+    {
+      "path": "history/화면_0.17.4_environment.png",
+      "bytes": 9694,
+      "sha256": "afadf7aef2373509c65ffb33ebe8e5a249dab7d1cfff0b7f193150e9bcdcd27c"
+    },
+    {
+      "path": "history/화면_0.17.4_groups.png",
+      "bytes": 12272,
+      "sha256": "dc048fd5a4ab32f06d9e4a67597c5ec28af93305e7d090f954a82628fa91fbdf"
+    },
+    {
+      "path": "history/화면_0.17.4_jwt.png",
+      "bytes": 23874,
+      "sha256": "49eabec54cae4f00989c8f93c89496873d7c3dc048681410f90d167d162a96e9"
+    },
+    {
+      "path": "history/화면_0.17.4_scope.png",
+      "bytes": 10515,
+      "sha256": "a6e8dfc62db04a4d784dc017c8bf9e12a2e3ce4e6ea66b12db3d0bc8f05376b7"
+    },
+    {
+      "path": "history/화면_0.17.4_urls.png",
+      "bytes": 33103,
+      "sha256": "1aa78461f1c245cfec6546106999deba707c365d97d2f51736946b6df45f9ac5"
+    },
+    {
+      "path": "reproduction/native-observer/AssessmentAuditObserver.java",
+      "bytes": 1285,
+      "sha256": "6f02ec342bdcc69c3f4823b154d56179f0b77b90c4f1d90a23f7c4f399b38689"
+    },
+    {
+      "path": "reproduction/native-observer/NativeBountyChecks.java",
+      "bytes": 5113,
+      "sha256": "a1de35ad71d85220f351f2a132065982ce051c16784e7c02a146f723f57272e3"
+    },
+    {
+      "path": "reproduction/native-observer/SmokeObserver.java",
+      "bytes": 3431,
+      "sha256": "3b33916603626d1e9c48305ac1dbed8cfec07f481d2c801bbad6a3e077c4cf81"
+    },
+    {
+      "path": "reproduction/native-observer/UserAuditObserver.java",
+      "bytes": 1142,
+      "sha256": "9a9706616f03d6940bfc2902c97374566056ce5d20279f2a13db70550d04509e"
+    },
+    {
+      "path": "reproduction/native-observer/WholeAuditObserver.java",
+      "bytes": 1149,
+      "sha256": "63964478dc5cd5fae5e1b8009d5c3489b871a25249552f1ddfb4db0110ffafd5"
+    },
+    {
+      "path": "reproduction/native-observer/WorkspacePreferencesFactory.java",
+      "bytes": 2006,
+      "sha256": "20a78ca2b93a3a078b145f1a8bddbfbfb78c9a7e6e3e4419387cc9d2b61426c6"
+    },
+    {
+      "path": "reproduction/run_whole021.original.py",
+      "bytes": 5180,
+      "sha256": "02d481af4405da3bdcad3deda2688364813d362f19dd611e8cc6d338565e437c"
+    },
+    {
+      "path": "reproduction/logs/build021-complete.log",
+      "bytes": 67456,
+      "sha256": "c54d42cebb53cc7eb3047528a4ccefc7c56f8e693dfda113029483f74fa0ee13"
+    },
+    {
+      "path": "reproduction/logs/allfeatures021-final.log",
+      "bytes": 5333,
+      "sha256": "4c70ddb9ad35cb344711314a2265b5e46b764adf5b59fae0356c099e73819313"
+    },
+    {
+      "path": "reproduction/logs/native021-final.log",
+      "bytes": 1211,
+      "sha256": "abd31e9d5a01fb67e45fcfabfcae5ed3d0b7294aea6fff9ed5c8c2ee43df3174"
+    },
+    {
+      "path": "reproduction/http-runtime-cache/jakarta.annotation-api-2.1.1.jar",
+      "bytes": 26141,
+      "sha256": "5f65fdaf424eee2b55e1d882ba9bb376be93fb09b37b808be6e22e8851c909fe"
+    },
+    {
+      "path": "reproduction/http-runtime-cache/tomcat-embed-core-10.1.60.jar",
+      "bytes": 3720122,
+      "sha256": "daa3f968c393485b7a5ee05a0b671112d78a071841a902a55466353c89ca7bef"
+    }
+  ]
+}

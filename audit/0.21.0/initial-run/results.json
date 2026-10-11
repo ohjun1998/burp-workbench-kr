@@ -1,0 +1,93 @@
+{
+  "extensionVersion" : "0.21.0",
+  "labVersion" : "3.4.0",
+  "mode" : "production release JAR + actual loopback Spring/Tomcat/H2 HTTP + API adapters; no native Burp or browser",
+  "httpRequests" : 19,
+  "checks" : [ {
+    "test" : "live login alice",
+    "passed" : true
+  }, {
+    "test" : "live login bob",
+    "passed" : true
+  }, {
+    "test" : "live login admin",
+    "passed" : true
+  }, {
+    "test" : "live login moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln-private-post target status",
+    "passed" : true
+  }, {
+    "test" : "vuln-private-post impact marker",
+    "passed" : true
+  }, {
+    "test" : "vuln-private-message target status",
+    "passed" : true
+  }, {
+    "test" : "vuln-private-message impact marker",
+    "passed" : true
+  }, {
+    "test" : "vuln-private-file target status",
+    "passed" : true
+  }, {
+    "test" : "vuln-private-file impact marker",
+    "passed" : true
+  }, {
+    "test" : "vuln-anonymous-file target status",
+    "passed" : true
+  }, {
+    "test" : "vuln-anonymous-file impact marker",
+    "passed" : true
+  }, {
+    "test" : "vuln-admin-spoof target status",
+    "passed" : true
+  }, {
+    "test" : "vuln-admin-spoof impact marker",
+    "passed" : false
+  } ],
+  "passed" : 13,
+  "failed" : 1,
+  "auth" : [ {
+    "state" : "타인 객체 접근 의심",
+    "account" : "alice",
+    "id" : "vuln-private-post",
+    "baselineAccount" : "bob",
+    "baselineStatus" : 200,
+    "path" : "/api/community/vuln/posts/102",
+    "reason" : "소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+    "status" : 200
+  }, {
+    "state" : "타인 객체 접근 의심",
+    "account" : "alice",
+    "id" : "vuln-private-message",
+    "baselineAccount" : "bob",
+    "baselineStatus" : 200,
+    "path" : "/api/community/vuln/messages/202",
+    "reason" : "소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+    "status" : 200
+  }, {
+    "state" : "우회 의심",
+    "account" : "alice",
+    "id" : "vuln-private-file",
+    "baselineAccount" : "bob",
+    "baselineStatus" : 200,
+    "path" : "/api/community/vuln/files/bob-private-file",
+    "reason" : "동일 성공 응답 · 수동 확인",
+    "status" : 200
+  }, {
+    "state" : "우회 의심",
+    "account" : "guest",
+    "id" : "vuln-anonymous-file",
+    "baselineAccount" : "bob",
+    "baselineStatus" : 200,
+    "path" : "/api/community/vuln/files/bob-private-file",
+    "reason" : "동일 성공 응답 · 수동 확인",
+    "status" : 200
+  } ],
+  "payload" : [ ],
+  "observations" : [ {
+    "id" : "fatal",
+    "value" : "java.lang.AssertionError: vuln-admin-spoof impact marker"
+  } ]
+}

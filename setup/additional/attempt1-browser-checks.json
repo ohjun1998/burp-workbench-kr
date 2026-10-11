@@ -1,0 +1,51 @@
+{
+  "browser": "155.0.8059.39",
+  "target": "http://127.0.0.1:18599",
+  "method": "actual Chromium DOM/JavaScript execution",
+  "tests": [
+    {
+      "test": "community homepage renders in Chromium",
+      "passed": true
+    },
+    {
+      "test": "real login updates active account",
+      "passed": true
+    },
+    {
+      "test": "stored XSS actually executes in vulnerable comment view",
+      "passed": true
+    },
+    {
+      "test": "fixed comment view displays payload text",
+      "passed": true
+    },
+    {
+      "test": "session restores after reload",
+      "passed": true
+    },
+    {
+      "test": "fixed view contains no injected image",
+      "passed": true
+    },
+    {
+      "test": "fixed view did not execute stored payload",
+      "passed": true
+    },
+    {
+      "test": "account switching updates active account",
+      "passed": true
+    },
+    {
+      "test": "desktop layout avoids horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "mobile layout avoids horizontal overflow",
+      "passed": false
+    }
+  ],
+  "errors": [],
+  "passed": 9,
+  "failed": 1,
+  "failure": "Error: mobile layout avoids horizontal overflow"
+}

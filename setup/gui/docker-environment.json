@@ -1,0 +1,33 @@
+{
+  "status": "BLOCKED",
+  "executed": false,
+  "docker_cli": false,
+  "docker_socket": false,
+  "capabilities": [
+    "CapInh:\t0000000000000000",
+    "CapPrm:\t0000000000000000",
+    "CapEff:\t0000000000000000",
+    "CapBnd:\t0000000000000000",
+    "CapAmb:\t0000000000000000",
+    "NoNewPrivs:\t1",
+    "Seccomp:\t2",
+    "Seccomp_filters:\t1"
+  ],
+  "rootless_namespace_probe": "unshare -Ur true failed: write failed /proc/self/uid_map: Operation not permitted",
+  "remote_workspace_option": "DigitalOcean discovered but not installed/connected; no remote server provisioned",
+  "scope": "Nginx + Tomcat + Oracle Free + protocol fixtures; no containers started",
+  "shared_chat_review": {
+    "url": "https://chatgpt.com/s/cx_6acade346b848191b65a494004bfdbc9",
+    "title": "Burp Suite 확장 개발 준비",
+    "turns_reviewed": 32,
+    "docker_execution_evidence": false,
+    "prior_method": "isolated Java Spring/Tomcat/H2 loopback lab and native Burp; full Docker/Oracle/Nginx explicitly not exercised",
+    "shell_execution_logs_in_snapshot": false
+  },
+  "compose_standalone_preflight": {
+    "version": "Docker Compose version v2.39.4",
+    "checks": 14,
+    "passed": true,
+    "containers_executed": false
+  }
+}

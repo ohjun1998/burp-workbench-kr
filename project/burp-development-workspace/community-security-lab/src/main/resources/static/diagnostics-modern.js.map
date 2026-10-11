@@ -1,0 +1,1 @@
+{"version":3,"sources":["src/diagnostics-api.js"],"sourcesContent":["fetch('/api/diagnostics/fixed/stored',{method:'POST',body:{value:'WB_STORE_DEMO01'}});"],"names":[],"mappings":""}

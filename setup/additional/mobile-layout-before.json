@@ -1,0 +1,41 @@
+{
+  "width": 390,
+  "scrollWidth": 414,
+  "overflow": [
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "className": "",
+      "right": 399,
+      "width": 65
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "className": "",
+      "right": 504,
+      "width": 98
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "className": "",
+      "right": 598,
+      "width": 87
+    },
+    {
+      "tag": "A",
+      "id": "",
+      "className": "",
+      "right": 688,
+      "width": 83
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "className": "secondary",
+      "right": 414,
+      "width": 39
+    }
+  ]
+}

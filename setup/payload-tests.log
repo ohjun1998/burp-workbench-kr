@@ -1,0 +1,128 @@
+PASS UTF-8 payload byte length recalculated
+PASS following header survives length replacement
+PASS Content-Length last header has one boundary
+PASS URL percent encoding UTF8 and plus
+PASS JSON escaping prevents broken string
+PASS missing marker rejected
+PASS duplicate markers rejected
+PASS chunked request rejected
+PASS compressed request rejected
+PASS multipart binary byte view preserved
+PASS gzip response decoded
+PASS chunked HTTP body decoded
+PASS response analysis and raw retention bounded
+PASS real HTTP raw HTML reflection candidate
+PASS escaped HTML not reported as XSS
+PASS JSON reflection not reported as HTML XSS
+PASS generic database text is not SQL error evidence
+PASS reflected SQL error signature not treated as database error
+PASS new SQL error detected via HTTP
+PASS SQL true false differential candidate
+PASS fixed SQL route no differential candidate
+PASS reflected SQL pair not mistaken for SQL condition evidence
+PASS WAF 403 remains inconclusive rather than SQL candidate
+PASS file content signature found
+PASS custom fixture proof found
+PASS proof reflection alone not accepted as file content
+PASS 403 not interpreted as successful download
+PASS upload 2xx only indicates acceptance
+PASS Stop prevents additional request after in-flight finishes
+PASS budget includes baseline and SQL stability repeat
+PASS payload transport error recorded and next payload continues
+PASS embedded adapter provides panel without registering another suite tab
+PASS XXE profile switches RAW and XML instructions
+PASS NoSQL profile switches RAW and object instructions
+PASS SSTI profile switches URL and evaluation presets
+PASS Start sends baseline and chosen payload through Burp callback
+PASS candidate evidence visible in result model
+PASS selected tested request sent to Repeater
+PASS context selection imports and marks captured request
+PASS captured cookie preserved
+PASS CSV formula cells neutralized
+PASS extension unload stops executor
+PASS 16 profiles have defaults and labels
+PASS all SSTI preset expressions recognized
+PASS SSTI input reflection not evaluation
+PASS unframed arithmetic number not SSTI proof
+PASS redirect candidate uses actual Location host
+PASS protocol relative redirect recognized
+PASS fixed relative redirect not candidate
+PASS redirect body reflection not redirect evidence
+PASS CRLF placeholder becomes encoded control bytes
+PASS CRLF detects real response header
+PASS CRLF body reflection excluded
+PASS XPath specific error candidate
+PASS XPath normal reflection excluded
+PASS LDAP specific error candidate
+PASS LDAP normal reflection excluded
+PASS NoSQL Mongo error candidate
+PASS NoSQL JSON reflection excluded
+PASS reflected error signature itself excluded
+PASS command composed output candidate
+PASS command input reflection excluded
+PASS real XML internal entity expansion observed
+PASS DTD-disabled XML route rejected
+PASS raw XML reflection is not entity expansion
+PASS real XML owned file entity proof
+PASS XXE fixed route no file proof
+PASS path traversal file signature candidate
+PASS path traversal reflection excluded
+PASS SSRF owned receiver fetched over HTTP
+PASS SSRF URL acceptance alone is not proof
+PASS custom expectation cannot be its own reflected payload
+PASS adaptive: HTML reflection revalidated and stops after one variant
+PASS adaptive: non-reflection costs three requests and labels stored/DOM untested
+PASS adaptive: JSON reflection pruned, DOM consumption explicitly untested
+PASS adaptive: escaped reflection never called XSS
+PASS adaptive: encoded tag in HTML text prunes variants with limitation
+PASS adaptive: encoded reflection in script does not activate text-context pruning
+PASS adaptive: textarea context prioritizes closing textarea
+PASS adaptive: SQL true/false, reverse-order pair and late baseline corroborated
+PASS adaptive: SQL payload reflection alone no condition evidence
+PASS adaptive: dynamic baseline disables boolean evidence without masking fields
+PASS adaptive: pre-existing SQL errors not fresh evidence
+PASS adaptive: reflected DB error excluded
+PASS adaptive: SSTI needs different arithmetic with unique marker
+PASS adaptive: SSTI raw reflection not evaluated
+PASS adaptive: single transient evaluation never corroborated
+PASS adaptive: 429 halts after first request
+PASS adaptive: 403 pair blocked and never SQL condition evidence
+PASS adaptive: duplicate literal and baseline payload omitted
+PASS adaptive: budget 1 includes discovery/controls/repeats
+PASS adaptive: budget 2 includes discovery/controls/repeats
+PASS adaptive: budget 3 includes discovery/controls/repeats
+PASS adaptive: budget 4 includes discovery/controls/repeats
+PASS adaptive: budget 5 includes discovery/controls/repeats
+PASS adaptive: budget 6 includes discovery/controls/repeats
+PASS adaptive: budget 7 includes discovery/controls/repeats
+PASS adaptive: Stop prevents stability and discovery requests
+PASS adaptive: upload deduped, no repeat or stability mutation
+PASS adaptive: SSRF not called safe without OAST evidence
+PASS adaptive: three transport failures halt future requests
+PASS adaptive: truncated responses never prune XSS as non-reflecting
+PASS evidence: download includes missing sibling and retains two file observations
+PASS evidence: same generic content for nonexistent traversal not corroborated
+PASS evidence: blocked missing-file control cannot corroborate
+PASS evidence: redirect corroborates a distinct destination host
+PASS evidence: hardcoded destination fails second-host control
+PASS evidence: command requires different composed output control
+PASS evidence: hardcoded command output fails alternate control
+PASS evidence: XPATH semantic pair reverse-order corroborated
+PASS evidence: XPATH raw reflection is not semantic injection
+PASS evidence: LDAP semantic pair reverse-order corroborated
+PASS evidence: LDAP raw reflection is not semantic injection
+PASS evidence: NOSQL semantic pair reverse-order corroborated
+PASS evidence: NOSQL raw reflection is not semantic injection
+PASS evidence: custom explicit proof repeats and control excludes normal response
+PASS evidence: custom payload reflection still not evidence
+PASS evidence: upload reads returned relative URL and verifies exact body
+PASS evidence: upload never fetches external response URL
+PASS evidence: protocol-relative readback blocked
+PASS evidence: upload accepted but mismatched retrieval not confirmed
+PASS evidence: readback counts against same total budget
+PASS evidence: active callback listener port cannot be reused
+PASS evidence: callback listener reopens after accepted connection and close
+PASS evidence: blind SSRF identical responses verified via two distinct callback URLs
+PASS evidence: echoed SSRF URL never sends own callback or confirms SSRF
+PASS evidence: callback requests obey budget
+TEST_SUMMARY passed=127 failed=0 (HTTP fixture/API adapter; not actual Burp runtime)

@@ -1,0 +1,5 @@
+const packages=require('@community/private-reports'); import axios from 'axios'; import absent from 'lab-missing-package'; import limited from 'lab-rate-limited'; import moved from 'lab-redirected'; import login from 'lab-soft404';
+fetch('/api/community/posts',{method:'GET'});
+const apiUrl='https://api.community-lab.invalid/v1';
+const clouds=['https://bucket.s3.amazonaws.com/private?token=hide','https://demo.blob.core.windows.net/test','https://storage.googleapis.com/lab','https://cdn.cloudfront.net/lab','https://lab.digitaloceanspaces.com/a','https://lab.oraclecloud.com/a','https://lab.aliyuncs.com/a','https://lab.firebaseio.com/a','https://lab.rackcdn.com/a','https://lab.dream.io/a'];
+//# sourceMappingURL=js-miner-lab.js.map

@@ -1,0 +1,25 @@
+{
+  "version": "0.21.0",
+  "files": [
+    {
+      "name": "burp-workbench-kr-0.21.0.jar",
+      "bytes": 2966859,
+      "sha256": "e67bd89e68d4783d5813912b8798befc6601edeb7ee1c5d4378d71eb35629122"
+    },
+    {
+      "name": "burp-development-workspace-0.21.0.zip",
+      "bytes": 33651649,
+      "sha256": "c9ed24053877ad30043ca91c475c408126e9e191e8a751f17de350eede7b657c"
+    },
+    {
+      "name": "검증결과_0.21.0.json",
+      "bytes": 158211,
+      "sha256": "b37ee187ae9a266e1431276c9e329e53cfcf4d740e6d7afe944d698aab58731c"
+    },
+    {
+      "name": "계정별_업무별_사용법_및_검증_0.21.0.md",
+      "bytes": 11256,
+      "sha256": "e9edb089bc7160ee51794621ab1a9c381cb073257971044d5094afa4fb59b791"
+    }
+  ]
+}

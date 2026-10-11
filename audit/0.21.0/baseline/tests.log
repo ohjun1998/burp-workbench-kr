@@ -1,0 +1,106 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/scratch/760a1a9e67de/project/burp-workbench-workspace/project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/run.py --java /usr/bin/java --javac /workspace/scratch/760a1a9e67de/project/burp-workbench-workspace/.dev-tools/javac --port 18199
+Note: /workspace/scratch/760a1a9e67de/project/burp-workbench-workspace/project/burp-development-workspace/community-security-lab/src/main/java/lab/enterprise/DevServer.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+PASS temporary Spring/Tomcat/H2 server healthy
+PASS live login alice
+PASS live login bob
+PASS live login admin
+PASS all nine feature families published
+PASS all sixteen payload profiles published
+PASS regression centre page served
+PASS new site asset diagnostics.js
+PASS new site asset diagnostics.css
+PASS new site asset diagnostics-modern.js
+PASS new site asset diagnostics-modern.js.map
+PASS real response imported into traffic
+PASS scope round-trip keeps target and denies other host
+PASS scope/settings keep current screen
+PASS live policy /api/diagnostics/vuln/objects/101 -> 공개/공유 허용
+PASS live policy /api/diagnostics/vuln/objects/103 -> 공개/공유 허용
+PASS live policy /api/diagnostics/vuln/objects/102 -> 타인 객체 접근 의심
+PASS live policy /api/diagnostics/fixed/objects/101 -> 공개/공유 허용
+PASS live policy /api/diagnostics/fixed/objects/103 -> 공개/공유 허용
+PASS live policy /api/diagnostics/fixed/objects/102 -> 은닉형 접근 차단 후보
+PASS live policy /api/diagnostics/fixed/objects/101 -> 소유값 불일치 · 정책 확인
+PASS data tool round-trip URL 인코딩 (form)
+PASS data tool round-trip Base64 인코딩
+PASS data tool round-trip Base64URL 인코딩
+PASS data tool round-trip Hex 인코딩
+PASS data tool round-trip Gzip → Base64
+PASS converted JSON consumed by real API
+PASS actual JWT has UTC expiration and unverified signature notice
+PASS SHA256 output stable
+PASS structured diff consumes two real objects
+PASS community async code parsed without AST failure
+PASS API wrapper path and POST retained
+PASS JS recon has no property-name domain noise
+PASS captured external sourcemap restores POST
+PASS environment detects actual Tomcat body
+PASS actual encoded HTML controls stable
+PASS dynamic JSON stable only with configured fields
+PASS default dynamic fields not implicitly ignored
+PASS real business-state change remains unstable
+PASS URL collection combines real history/JS/OpenAPI
+PASS URL collection does not execute template variables
+PASS URL verifier retains actual 200/404
+PASS pattern representative preserves response-status diversity
+PASS URL database excludes query values
+PASS activity has query mutation metadata
+PASS activity evidence round-trip excludes actual cookie
+PASS response recon sees real header/error observations
+PASS fixed fixture has no matching passive observation
+PASS OpenAPI templates/refs rendered without GET conversion
+PASS write/read connects both real stored flows
+PASS stored HTML and escaped text are distinguished as observations
+PASS SQL boolean repaired vuln adaptive=false
+PASS SQL boolean repaired vuln adaptive=true
+PASS actual vuln XSS profile
+PASS actual vuln DOWNLOAD profile
+PASS actual vuln SSTI profile
+PASS actual vuln TRAVERSAL profile
+PASS actual vuln XPATH profile
+PASS actual vuln REDIRECT profile
+PASS actual vuln CRLF profile
+PASS actual vuln COMMAND profile
+PASS actual vuln LDAP profile
+PASS actual vuln NOSQL profile
+PASS actual vuln CUSTOM profile
+PASS actual XML entity observation vuln
+PASS upload filename actual acceptance vuln
+PASS upload active MIME/content readback vuln
+PASS owned loopback SSRF callback vuln
+PASS SQL boolean repaired fixed adaptive=false
+PASS SQL boolean repaired fixed adaptive=true
+PASS actual fixed XSS profile
+PASS actual fixed DOWNLOAD profile
+PASS actual fixed SSTI profile
+PASS actual fixed TRAVERSAL profile
+PASS actual fixed XPATH profile
+PASS actual fixed REDIRECT profile
+PASS actual fixed CRLF profile
+PASS actual fixed COMMAND profile
+PASS actual fixed LDAP profile
+PASS actual fixed NOSQL profile
+PASS actual fixed CUSTOM profile
+PASS actual XML entity observation fixed
+PASS upload filename actual acceptance fixed
+PASS upload active MIME/content readback fixed
+PASS owned loopback SSRF callback fixed
+PASS actual blocking baseline prevents later payload 401
+PASS actual blocking baseline prevents later payload 403
+PASS actual blocking baseline prevents later payload 429
+PASS actual blocking baseline prevents later payload 503
+PASS actual encoding boundary utf8
+PASS actual encoding boundary gzip
+PASS actual encoding boundary deflate
+PASS actual encoding boundary cp949
+PASS empty response parsed safely
+PASS large HTTP response is bounded and flagged
+PASS malformed real JSON produces no inventory
+PASS actual redirect is retained without following
+PASS actual socket timeout halts later payloads
+PASS scope path boundaries distinguish inside/outside traffic
+PASS all sixteen payload profiles exercised
+ALL_FEATURES_SUMMARY checks=100 HTTP=199 featureFamilies=9
+
+Results: /workspace/scratch/760a1a9e67de/project/burp-workbench-workspace/project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json ; temporary server stopped.

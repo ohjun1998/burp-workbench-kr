@@ -1,0 +1,133 @@
+ACTUAL_BURP_VERSION Burp Suite Community Edition 2026 9.1
+EDITION COMMUNITY_EDITION
+WORKBENCH_SINGLE_ENTRYPOINT initialized
+ENGINE autorize loaded=true loading=false status=사용 가능 tabs=1 menus=1 hostRegistrations=2
+FIXTURE autorize status=200
+LEGACY_MENU autorize [Send request to Autorize, Send Cookie header to Autorize, Send Authorization header to Autorize]
+CORE_PASS autorize manual authorization replay produces native result rows=1
+ENGINE_POST_REQUEST_LOG autorize
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENGINE auth-analyzer loaded=true loading=false status=사용 가능 tabs=1 menus=1 hostRegistrations=2
+FIXTURE auth-analyzer status=200
+LEGACY_MENU auth-analyzer [Auth Analyzer]
+CORE_PASS auth-analyzer native session header replacement, local response=401
+ENGINE_POST_REQUEST_LOG auth-analyzer
+Auth Analyzer successfully started
+Version 1.1.14
+Created by Simon Reinhart
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENGINE logger-plus-plus loaded=true loading=false status=사용 가능 tabs=1 menus=1 hostRegistrations=2
+FIXTURE logger-plus-plus status=200
+MODERN_MENU logger-plus-plus [Logger++]
+CORE_PASS logger-plus-plus native traffic table receives live HTTP rows=1
+ENGINE_POST_REQUEST_LOG logger-plus-plus
+[Logger++ 3.20.0 by @CoreyD97.
+]
+[Please submit any bug reports or feature requests via GitHub.
+]
+[Feel free to reach out on Twitter (@CoreyD97) with any questions.
+]
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENGINE hackvertor loaded=true loading=false status=사용 가능 tabs=0 menus=1 hostRegistrations=892
+FIXTURE hackvertor status=200
+MODERN_MENU hackvertor [Hackvertor]
+CORE_PASS hackvertor native Base64 encode/decode round trip
+ENGINE_POST_REQUEST_LOG hackvertor
+[Hackvertor v2.2.67]
+[Successfully registered hotkey: Convert (Ctrl+Alt+H) for context: HTTP_MESSAGE_EDITOR]
+[Successfully registered hotkey: Find a tag (Ctrl+Alt+F) for context: HTTP_MESSAGE_EDITOR]
+[Successfully registered hotkey: Insert last tag (Ctrl+Alt+I) for context: HTTP_MESSAGE_EDITOR]
+[Successfully registered hotkey: Smart decode (Ctrl+Alt+D) for context: HTTP_MESSAGE_EDITOR]
+[Successfully registered hotkey: Smart paste (Ctrl+Shift+V) for context: HTTP_MESSAGE_EDITOR]
+[Successfully registered hotkey: Multi Encoder (Ctrl+Alt+M) for context: HTTP_MESSAGE_EDITOR]
+[Successfully registered hotkey: New custom tag (Ctrl+Alt+N) for all contexts]
+[Successfully registered hotkey: List custom tags (Ctrl+Alt+L) for all contexts]
+[Successfully registered hotkey: Global variables (Ctrl+Alt+V) for all contexts]
+[Successfully registered hotkey: Tag Automator (Ctrl+Alt+A) for all contexts]
+[Successfully registered hotkey: Settings (Ctrl+Alt+S) for all contexts]
+[Successfully registered hotkey: Show tag store (Ctrl+Alt+T) for all contexts]
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENGINE param-miner loaded=true loading=false status=사용 가능 tabs=0 menus=2 hostRegistrations=18
+FIXTURE param-miner status=200
+MODERN_MENU param-miner [Param Miner]
+MODERN_MENU param-miner [Route requests to 127.0.0.1:45045 via 127.0.0.1]
+CORE_PASS param-miner native wordlist yields candidates and terminates
+ENGINE_POST_REQUEST_LOG param-miner
+Using albinowaxUtils v1.61
+This extension should be run on the latest version of Burp Suite. Using an older version of Burp may cause impaired functionality.
+Loaded Param Miner v1.59
+Registered hotkey 'Guess headers' with binding: Ctrl+Alt+Shift+F1
+Registered hotkey 'Guess query params' with binding: Ctrl+Alt+Shift+F2
+Registered hotkey 'Guess cookies' with binding: Ctrl+Alt+Shift+F3
+Registered hotkey 'Guess body params' with binding: Ctrl+Alt+Shift+F4
+Registered hotkey 'Guess everything!' with binding: Ctrl+Alt+Shift+F5
+Registered hotkey 'Detect scoped-SSRF' with binding: Ctrl+Alt+Shift+F6
+Registered hotkey 'Exploit scoped-SSRF' with binding: Ctrl+Alt+Shift+F7
+Registered hotkey 'Detect server-side injection' with binding: Ctrl+Alt+Shift+F8
+Registered hotkey 'port-DoS' with binding: Ctrl+Alt+Shift+F9
+Registered hotkey 'Unkeyed param' with binding: Ctrl+Alt+Shift+F10
+Registered hotkey 'fat GET' with binding: Ctrl+Alt+Shift+F11
+Registered hotkey 'input transformation' with binding: Ctrl+Alt+Shift+F12
+Registered hotkey 'normalised param' with binding: Ctrl+Shift+F1
+Registered hotkey 'normalised path' with binding: Ctrl+Shift+F2
+Registered hotkey 'rails param cloaking scan' with binding: Ctrl+Shift+F3
+Registered hotkey 'identify header smuggling mutations' with binding: Ctrl+Shift+F4
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENGINE jwt-editor loaded=true loading=false status=사용 가능 tabs=1 menus=0 hostRegistrations=7
+FIXTURE jwt-editor status=200
+CORE_PASS jwt-editor native JWS parse/serialize (not signature verification)
+ENGINE_POST_REQUEST_LOG jwt-editor
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENGINE turbo-intruder loaded=true loading=false status=사용 가능 tabs=0 menus=3 hostRegistrations=2
+FIXTURE turbo-intruder status=200
+LEGACY_MENU turbo-intruder [Send to turbo intruder]
+MODERN_MENU turbo-intruder [Bulk Turbo]
+MODERN_MENU turbo-intruder []
+CORE_PASS turbo-intruder native Burp HTTP/1 engine, 1 worker, 3 requests, replies=3 success=3
+ENGINE_POST_REQUEST_LOG turbo-intruder
+Loaded Turbo Intruder v2.0.1
+Using albinowaxUtils v1.61
+This extension should be run on the latest version of Burp Suite. Using an older version of Burp may cause impaired functionality.
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENGINE js-miner loaded=false loading=false status=Pro 전용 · 내장 JS 분석 탭은 사용 가능 tabs=0 menus=0 hostRegistrations=0
+ENGINE_LOG js-miner
+
+ENGINE http-request-smuggler loaded=true loading=false status=사용 가능 tabs=0 menus=3 hostRegistrations=1
+FIXTURE http-request-smuggler status=200
+LEGACY_MENU http-request-smuggler []
+LEGACY_MENU http-request-smuggler []
+MODERN_MENU http-request-smuggler [HTTP Request Smuggler]
+CORE_PASS http-request-smuggler native default probe construction only (not desync detection)
+ENGINE_POST_REQUEST_LOG http-request-smuggler
+Using albinowaxUtils v1.61
+This extension should be run on the latest version of Burp Suite. Using an older version of Burp may cause impaired functionality.
+Loaded HTTP Request Smuggler v3.1.0
+
+[Workbench] 원본 엔진 로드 완료.
+
+ENV_LIVE sites=1 detections=2 candidates=22
+COMMUNITY_BURP_PASS community public listing via Burp HTTP API
+COMMUNITY_BURP_PASS A/B private post IDOR reproduced in learning route
+COMMUNITY_BURP_PASS private post blocked cross-account in fixed route
+COMMUNITY_BURP_PASS private attachment IDOR reproduced then blocked
+COMMUNITY_BURP_PASS private message IDOR reproduced then blocked
+COMMUNITY_BURP_PASS role parameter spoof reproduced then blocked
+COMMUNITY_BURP_PASS moderator has security-board scope but no global admin
+COMMUNITY_BURP_PASS community front-end routes captured for real extension traffic
+COMMUNITY_BURP_PASS native Param Miner discovers lab_hidden on community endpoint
+COMMUNITY_BURP_SUMMARY passed=9 failed=0 target=http://127.0.0.1:8088
+LIVE_VALIDATION_FINISHED

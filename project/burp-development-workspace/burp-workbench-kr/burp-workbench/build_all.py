@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+"""Build the standalone managed Workbench; original engine bundles are excluded."""
+from shade_rhino import relocate, rename
+import argparse, pathlib, os, hashlib, json, subprocess, shutil, zipfile, urllib.request, sys
+if hasattr(sys.stdout,"reconfigure"):sys.stdout.reconfigure(encoding="utf-8")
+root=pathlib.Path(__file__).resolve().parent
+p=argparse.ArgumentParser();p.add_argument('--compiler',type=pathlib.Path);p.add_argument('--java',default='java');p.add_argument('--javac',default=None);p.add_argument('--test-java',default=None);p.add_argument('--test',action='store_true');a=p.parse_args()
+lock=json.loads((root/'engine-lock.json').read_text());order=lock['order'].split(',')
+def sha(path):
+ h=hashlib.sha256()
+ with path.open('rb') as f:
+  for b in iter(lambda:f.read(1024*1024),b''):h.update(b)
+ return h.hexdigest()
+def download(url,destination,expected=None):
+ destination.parent.mkdir(parents=True,exist_ok=True)
+ with urllib.request.urlopen(url,timeout=60)as response:destination.write_bytes(response.read())
+ if expected and sha(destination)!=expected:destination.unlink();raise RuntimeError('checksum mismatch')
+api=root/'deps/montoya-2026.jar';legacy=root/'deps/legacy-api.jar'
+for path,url in [(api,'https://repo.maven.apache.org/maven2/net/portswigger/burp/extensions/montoya-api/2026.7/montoya-api-2026.7.jar'),(legacy,'https://repo.maven.apache.org/maven2/net/portswigger/burp/extender/burp-extender-api/2.3/burp-extender-api-2.3.jar')]:
+ if not path.exists():download(url,path)
+ expected=lock.get('build.'+path.name+'.sha')
+ if expected and sha(path)!=expected:raise RuntimeError('API checksum mismatch')
+rhino=root/'deps/rhino.jar'
+rhino_sha='12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975'
+if not rhino.exists():download('https://repo.maven.apache.org/maven2/org/mozilla/rhino/1.9.1/rhino-1.9.1.jar',rhino,rhino_sha)
+if sha(rhino)!=rhino_sha:raise RuntimeError('Rhino checksum mismatch')
+classes=root/'build/classes' ;shutil.rmtree(classes,ignore_errors=True);classes.mkdir(parents=True)
+compiler=[a.java,'-jar',str(a.compiler.resolve()),'-17','-warn:none']if a.compiler else ([a.javac or shutil.which('javac'),'--release','17'] if a.javac or shutil.which('javac') else [a.java,'com.sun.tools.javac.Main','--release','17'])
+cp=os.pathsep.join(map(str,[api,legacy,rhino]))
+subprocess.run(compiler+['-encoding','UTF-8','-cp',cp,'-d',str(classes)]+[str(p)for p in sorted((root/'src/main/java').rglob('*.java'))],check=True)
+output=root/'dist/burp-workbench-kr-0.21.0.jar';output.parent.mkdir(exist_ok=True)
+temporary_output=output.with_suffix('.building')
+with zipfile.ZipFile(temporary_output,'w',zipfile.ZIP_DEFLATED)as z:
+ z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\r\nImplementation-Title: Burp Workbench KR\r\nImplementation-Version: 0.21.0\r\n\r\n')
+ for path in classes.rglob('*.class'):z.writestr(path.relative_to(classes).as_posix(),relocate(path.read_bytes()))
+ with zipfile.ZipFile(rhino) as dependency:
+  for name in dependency.namelist():
+   if name.startswith('org/mozilla/') and not name.endswith('/'):
+    z.writestr(rename(name.encode()).decode(),relocate(dependency.read(name)))
+ for path in (root/'src/main/resources').rglob('*'):
+  if path.is_file() and "engines" not in path.relative_to(root/"src/main/resources").parts:z.write(path,path.relative_to(root/'src/main/resources').as_posix())
+ z.write(root/'LICENSE','LICENSE');z.write(root/'THIRD_PARTY_NOTICES.md','THIRD_PARTY_NOTICES.md')
+temporary_output.replace(output)
+print('Built',output,output.stat().st_size,'bytes',flush=True)
+if a.test:
+ tests=root/'build/tests';shutil.rmtree(tests,ignore_errors=True);tests.mkdir(parents=True)
+ full_cp=cp+os.pathsep+str(classes)
+ subprocess.run(compiler+['-encoding','UTF-8','-cp',full_cp,'-d',str(tests)]+[str(p)for p in sorted((root/'src/test/java').rglob('*.java'))],check=True)
+ options=[a.test_java or a.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-Dstdout.encoding=UTF-8']
+ font=os.environ.get('WORKBENCH_QA_FONT')
+ if font:options.append('-Dworkbench.qaFont='+font)
+ full_cp=cp+os.pathsep+str(output)+os.pathsep+str(tests)
+ reports=[]
+ for name in ['StructuredCompareTest','WorkbenchTest','EnvironmentTest','EnvironmentPanelTest','EnvironmentBatchTest','EnvironmentDiscoveryTest','EnvironmentFeedbackTest','TextEncodingTest','DisplayWorkflowTest','PacketUiTest','PassiveScanTest','LayoutPassiveWorkflowTest','JsAnalysisTest','JsAnalysisPanelTest','JsNavigationTest','JsHistoryTest','PayloadIntegrationTest','UiLayoutTest','AuthRecordTest','UiCleanupTest','ActivityReconTest','TrafficScopeTest','PopupWorkflowTest','TargetCleanupTest','ReviewWorkflowTest','OtherImprovementsTest','AuditRepairsTest','BountyFeaturesTest','CompletenessTest','IntegrationEdgesTest','AccountTasksTest']:
+  r=subprocess.run(options+['-cp',full_cp,'kr.workbench.TestLauncher','kr.workbench.'+name],cwd=root,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=120)
+  text=r.stdout+r.stderr;(root/'build'/('test-'+name+'.txt')).write_text(text,encoding='utf-8');print(text,end='');reports.append(text)
+  if r.returncode:raise SystemExit(r.returncode)
+ (root/'build/test-results-0.21.0.txt').write_text('\n'.join(reports),encoding='utf-8')
+
+if a.test:
+ result=subprocess.run(options+['-cp',full_cp,'kr.workbench.TestLauncher','kr.payloadrunner.EngineTest'],cwd=root,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=180)
+ report=result.stdout+result.stderr
+ (root/'build/test-PayloadRunner.txt').write_text(report,encoding='utf-8')
+ print(report,end='')
+ if result.returncode:raise SystemExit(result.returncode)

@@ -1,0 +1,2161 @@
+{
+  "catalog" : {
+    "trainingOnly" : true,
+    "payloadProfiles" : [ "XSS", "SQLI", "UPLOAD_NAME", "UPLOAD_BODY", "DOWNLOAD", "SSTI", "TRAVERSAL", "REDIRECT", "CRLF", "XXE", "XPATH", "LDAP", "NOSQL", "SSRF", "COMMAND", "CUSTOM" ],
+    "notes" : [ "vuln/fixed 결과는 기대 후보이며 취약점 확정이 아님", "LDAP/NoSQL/command/header injection은 제한된 합성 응답 fixture", "SSRF는 지정된 loopback 콜백만 허용", "쓰기 사례는 사용자가 선택 실행; 자동 브라우저 테스트 없음" ],
+    "payloadCases" : [ {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/{mode}/preview?text=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "XSS",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/community/{mode}/search?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "SQLI",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/community/{mode}/posts/101/files?name=§PAYLOAD§",
+      "method" : "POST",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "UPLOAD_NAME",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/community/{mode}/posts/101/files?name=probe.html",
+      "method" : "POST",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "UPLOAD_BODY",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/community/{mode}/files/§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "DOWNLOAD",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/adaptive/{mode}/expression?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "SSTI",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/adaptive/{mode}/file?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "TRAVERSAL",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/diagnostics/{mode}/probe/redirect?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "REDIRECT",
+      "kind" : "합성·제한 응답"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/diagnostics/{mode}/probe/crlf?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "CRLF",
+      "kind" : "합성·제한 응답"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/adaptive/{mode}/xml",
+      "method" : "POST",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "XXE",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/adaptive/{mode}/xpath?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "XPATH",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/diagnostics/{mode}/probe/ldap?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "LDAP",
+      "kind" : "합성·제한 응답"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/diagnostics/{mode}/probe/nosql?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "NOSQL",
+      "kind" : "합성·제한 응답"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/adaptive/{mode}/ssrf?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "SSRF",
+      "kind" : "실제 처리 경로"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/diagnostics/{mode}/probe/command?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "COMMAND",
+      "kind" : "합성·제한 응답"
+    }, {
+      "note" : "{mode}를 vuln/fixed로 지정하고 실제 요청과 본문을 확장으로 보내세요. 자동 실행하지 않습니다.",
+      "template" : "/api/diagnostics/{mode}/probe/custom?q=§PAYLOAD§",
+      "method" : "GET",
+      "expected" : "vuln에서 유형별 후보 / fixed에서 동일 후보 없음",
+      "profile" : "CUSTOM",
+      "kind" : "합성·제한 응답"
+    } ],
+    "version" : "3.4.0",
+    "features" : [ "트래픽/SCOPE", "권한 비교", "데이터 도구/JWT", "JS 추출", "환경 탐색", "URL 수집", "활동 추적", "페이로드 검사", "응답 분석" ],
+    "cases" : [ {
+      "method" : "GET",
+      "url" : "/api/diagnostics/vuln/objects/101",
+      "feature" : "권한 비교",
+      "kind" : "실제 세션/정책",
+      "policy" : "PUBLIC",
+      "id" : "vuln-public",
+      "expected" : "공개 글: 동일 응답은 허용 접근"
+    }, {
+      "method" : "GET",
+      "url" : "/api/diagnostics/vuln/objects/102",
+      "feature" : "권한 비교",
+      "kind" : "실제 세션/정책",
+      "policy" : "OWNER_ONLY",
+      "id" : "vuln-private",
+      "expected" : "Alice가 Bob 객체 접근 후보"
+    }, {
+      "method" : "GET",
+      "url" : "/api/diagnostics/vuln/objects/103",
+      "feature" : "권한 비교",
+      "kind" : "실제 세션/정책",
+      "policy" : "PUBLIC",
+      "id" : "vuln-shared",
+      "expected" : "Alice/Bob 공유 객체 허용"
+    }, {
+      "feature" : "페이로드 SQLI",
+      "url" : "/api/community/vuln/search?q=Burp",
+      "method" : "GET",
+      "expected" : "오류/참거짓 조건 후보",
+      "kind" : "실제 H2 SQL",
+      "id" : "vuln-sql"
+    }, {
+      "feature" : "응답 Passive",
+      "url" : "/api/diagnostics/vuln/headers",
+      "method" : "GET",
+      "expected" : "HTML 헤더/세션 쿠키 검토",
+      "kind" : "응답 fixture",
+      "id" : "vuln-headers"
+    }, {
+      "feature" : "응답 Passive",
+      "url" : "/api/diagnostics/vuln/error",
+      "method" : "GET",
+      "expected" : "구현 오류 정보 후보",
+      "kind" : "합성 오류 문자열",
+      "id" : "vuln-error"
+    }, {
+      "feature" : "저장/조회 연결",
+      "url" : "/api/diagnostics/vuln/stored",
+      "method" : "POST→GET",
+      "expected" : "고유 마커 HTML 출력 관측",
+      "kind" : "실제 세션 내 저장/HTML 렌더링",
+      "id" : "vuln-stored"
+    }, {
+      "method" : "GET",
+      "url" : "/api/diagnostics/fixed/objects/101",
+      "feature" : "권한 비교",
+      "kind" : "실제 세션/정책",
+      "policy" : "PUBLIC",
+      "id" : "fixed-public",
+      "expected" : "공개 글: 동일 응답은 허용 접근"
+    }, {
+      "method" : "GET",
+      "url" : "/api/diagnostics/fixed/objects/102",
+      "feature" : "권한 비교",
+      "kind" : "실제 세션/정책",
+      "policy" : "OWNER_ONLY",
+      "id" : "fixed-private",
+      "expected" : "Bob 200 / Alice 404 · 은닉형 차단 후보"
+    }, {
+      "method" : "GET",
+      "url" : "/api/diagnostics/fixed/objects/103",
+      "feature" : "권한 비교",
+      "kind" : "실제 세션/정책",
+      "policy" : "PUBLIC",
+      "id" : "fixed-shared",
+      "expected" : "Alice/Bob 공유 객체 허용"
+    }, {
+      "feature" : "페이로드 SQLI",
+      "url" : "/api/community/fixed/search?q=Burp",
+      "method" : "GET",
+      "expected" : "오류/조건 후보 없음",
+      "kind" : "실제 H2 SQL",
+      "id" : "fixed-sql"
+    }, {
+      "feature" : "응답 Passive",
+      "url" : "/api/diagnostics/fixed/headers",
+      "method" : "GET",
+      "expected" : "동일 규칙의 지적 없음",
+      "kind" : "응답 fixture",
+      "id" : "fixed-headers"
+    }, {
+      "feature" : "응답 Passive",
+      "url" : "/api/diagnostics/fixed/error",
+      "method" : "GET",
+      "expected" : "상세 오류 후보 없음",
+      "kind" : "합성 오류 문자열",
+      "id" : "fixed-error"
+    }, {
+      "feature" : "저장/조회 연결",
+      "url" : "/api/diagnostics/fixed/stored",
+      "method" : "POST→GET",
+      "expected" : "고유 마커 문자 표시 관측",
+      "kind" : "실제 세션 내 저장/HTML 렌더링",
+      "id" : "fixed-stored"
+    }, {
+      "feature" : "환경 탐색",
+      "url" : "/api/diagnostics/missing/one",
+      "method" : "GET",
+      "expected" : "two 기준과 경로 마스킹 후 동일",
+      "kind" : "HTML entity 경로",
+      "id" : "missing-encoded"
+    }, {
+      "feature" : "환경 탐색",
+      "url" : "/api/diagnostics/dynamic/one",
+      "method" : "GET",
+      "expected" : "requestId/timestamp 제외 설정 시만 기준 동일",
+      "kind" : "동적 JSON",
+      "id" : "missing-dynamic"
+    }, {
+      "feature" : "환경 탐색",
+      "url" : "/api/diagnostics/unstable",
+      "method" : "GET",
+      "expected" : "실제 데이터 변동은 불안정으로 유지",
+      "kind" : "교대 응답",
+      "id" : "unstable-control"
+    }, {
+      "feature" : "OpenAPI/URL 수집",
+      "url" : "/api/diagnostics/openapi",
+      "method" : "GET",
+      "expected" : "GET/POST·경로 변수·query/body/header·내부 ref 보존",
+      "kind" : "명세 fixture",
+      "id" : "api-document"
+    }, {
+      "feature" : "JS 추출/활동 추적",
+      "url" : "/assets/diagnostics-modern.js",
+      "method" : "GET",
+      "expected" : "async/module·래퍼 분석, 실행 없음, 동적 값은 미해결 유지",
+      "kind" : "정적 JS",
+      "id" : "js-modern"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/utf8",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-utf8"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/gzip",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-gzip"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/deflate",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-deflate"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/cp949",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-cp949"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/empty",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-empty"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/large",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-large"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/invalid-json",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-invalid-json"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/slow",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-slow"
+    }, {
+      "feature" : "응답 경계 조건",
+      "url" : "/api/diagnostics/boundary/redirect",
+      "method" : "GET",
+      "expected" : "압축/문자셋/본문 제한/오류/타임아웃/자동 이동 금지 검사",
+      "kind" : "제한된 응답 fixture",
+      "id" : "boundary-redirect"
+    }, {
+      "feature" : "트래픽/SCOPE",
+      "url" : "/api/diagnostics/scope/inside/item",
+      "method" : "GET",
+      "expected" : "하위 경로 SCOPE 포함/제외 규칙 확인",
+      "kind" : "실제 응답",
+      "id" : "scope-inside"
+    }, {
+      "feature" : "트래픽/SCOPE",
+      "url" : "/api/diagnostics/scope/outside/item",
+      "method" : "GET",
+      "expected" : "inside만 지정한 경우 수집 제외",
+      "kind" : "실제 응답",
+      "id" : "scope-outside"
+    }, {
+      "feature" : "데이터 도구/JWT",
+      "url" : "/api/extensions/convert?value=eyJtZXNzYWdlIjoiV0JfREFUQSJ9",
+      "method" : "GET",
+      "expected" : "변환 도구 출력과 실제 API 디코딩 비교",
+      "kind" : "실제 응답",
+      "id" : "data-convert"
+    }, {
+      "feature" : "데이터 도구/JWT",
+      "url" : "/api/extensions/jwt/issue",
+      "method" : "GET",
+      "expected" : "로그인 후 JWT UTC 표시·서명 미검증 안내",
+      "kind" : "실제 응답",
+      "id" : "data-jwt"
+    }, {
+      "feature" : "활동 추적",
+      "url" : "/api/community/vuln/posts?lab_hidden=first",
+      "method" : "GET",
+      "expected" : "Repeater에서 인자 변경 후 변경 관찰 확인",
+      "kind" : "실제 응답",
+      "id" : "activity-change"
+    } ]
+  },
+  "version" : "0.18.0",
+  "labVersion" : "3.4.0",
+  "coverage" : {
+    "트래픽/SCOPE" : "실제 응답 가져오기, Origin 규칙, 저장/가져오기, 경계 검사; 팝업/필터는 전체 UI 회귀",
+    "권한 비교" : "공개/공유/소유자 정책 실제 재전송, 소유자 재조회 404 차단; CSRF·Record·계정 스냅샷은 회귀/커뮤니티 검사",
+    "데이터 도구/JWT" : "UTF-8 5종 변환 왕복, 실제 API 소비, 실제 JWT UTC/서명 미검증, SHA256, 실제 객체 구조 비교",
+    "JS 추출" : "실제 modern/community JS, 메서드·래퍼·동적 경로·잘못된 루트 제외·도메인·captured map; 시크릿/구문 14종 회귀",
+    "환경 탐색" : "실제 Tomcat 식별, entity soft404, 동적 JSON 명시적 제외, 진짜 데이터 변동 음성 검사; 후보 전송은 회귀 검사",
+    "URL 수집" : "실제 History/JS/OpenAPI, GET 200/404, 응답별 대표, DB 값 제외; 외부 Wayback/CLI는 로컬 fixture 회귀",
+    "활동 추적" : "실제 요청/Repeater 인자 변경, OpenAPI 발견, 저장/가져오기·완료 독립; 근거 연결은 회귀",
+    "응답 분석" : "실제 Passive 양성/음성, OpenAPI/refs/변수/메서드, 세션 내 저장→조회·HTML/문자·실행 미검증",
+    "페이로드 검사" : "16개 프로필 취약/수정 쌍, 실제 SQL/HTML/파일/SpEL/XPath/XML/업로드/loopback SSRF, 제한된 LDAP/NoSQL/command/CRLF fixtures; 실제 압축·charset·큰 본문·socket timeout 검사"
+  },
+  "profiles" : [ "COMMAND", "CRLF", "CUSTOM", "DOWNLOAD", "LDAP", "NOSQL", "REDIRECT", "SQLI", "SSRF", "SSTI", "TRAVERSAL", "UPLOAD_BODY", "UPLOAD_NAME", "XPATH", "XSS", "XXE" ],
+  "httpRequests" : 199,
+  "checks" : [ {
+    "test" : "temporary Spring/Tomcat/H2 server healthy",
+    "passed" : true
+  }, {
+    "test" : "live login alice",
+    "passed" : true
+  }, {
+    "test" : "live login bob",
+    "passed" : true
+  }, {
+    "test" : "live login admin",
+    "passed" : true
+  }, {
+    "test" : "all nine feature families published",
+    "passed" : true
+  }, {
+    "test" : "all sixteen payload profiles published",
+    "passed" : true
+  }, {
+    "test" : "regression centre page served",
+    "passed" : true
+  }, {
+    "test" : "new site asset diagnostics.js",
+    "passed" : true
+  }, {
+    "test" : "new site asset diagnostics.css",
+    "passed" : true
+  }, {
+    "test" : "new site asset diagnostics-modern.js",
+    "passed" : true
+  }, {
+    "test" : "new site asset diagnostics-modern.js.map",
+    "passed" : true
+  }, {
+    "test" : "real response imported into traffic",
+    "passed" : true
+  }, {
+    "test" : "scope round-trip keeps target and denies other host",
+    "passed" : true
+  }, {
+    "test" : "scope/settings keep current screen",
+    "passed" : true
+  }, {
+    "test" : "live policy /api/diagnostics/vuln/objects/101 -> 공개/공유 허용",
+    "passed" : true
+  }, {
+    "test" : "live policy /api/diagnostics/vuln/objects/103 -> 공개/공유 허용",
+    "passed" : true
+  }, {
+    "test" : "live policy /api/diagnostics/vuln/objects/102 -> 타인 객체 접근 의심",
+    "passed" : true
+  }, {
+    "test" : "live policy /api/diagnostics/fixed/objects/101 -> 공개/공유 허용",
+    "passed" : true
+  }, {
+    "test" : "live policy /api/diagnostics/fixed/objects/103 -> 공개/공유 허용",
+    "passed" : true
+  }, {
+    "test" : "live policy /api/diagnostics/fixed/objects/102 -> 은닉형 접근 차단 후보",
+    "passed" : true
+  }, {
+    "test" : "live policy /api/diagnostics/fixed/objects/101 -> 소유값 불일치 · 정책 확인",
+    "passed" : true
+  }, {
+    "test" : "data tool round-trip URL 인코딩 (form)",
+    "passed" : true
+  }, {
+    "test" : "data tool round-trip Base64 인코딩",
+    "passed" : true
+  }, {
+    "test" : "data tool round-trip Base64URL 인코딩",
+    "passed" : true
+  }, {
+    "test" : "data tool round-trip Hex 인코딩",
+    "passed" : true
+  }, {
+    "test" : "data tool round-trip Gzip → Base64",
+    "passed" : true
+  }, {
+    "test" : "converted JSON consumed by real API",
+    "passed" : true
+  }, {
+    "test" : "actual JWT has UTC expiration and unverified signature notice",
+    "passed" : true
+  }, {
+    "test" : "SHA256 output stable",
+    "passed" : true
+  }, {
+    "test" : "structured diff consumes two real objects",
+    "passed" : true
+  }, {
+    "test" : "community async code parsed without AST failure",
+    "passed" : true
+  }, {
+    "test" : "API wrapper path and POST retained",
+    "passed" : true
+  }, {
+    "test" : "JS recon has no property-name domain noise",
+    "passed" : true
+  }, {
+    "test" : "captured external sourcemap restores POST",
+    "passed" : true
+  }, {
+    "test" : "environment detects actual Tomcat body",
+    "passed" : true
+  }, {
+    "test" : "actual encoded HTML controls stable",
+    "passed" : true
+  }, {
+    "test" : "dynamic JSON stable only with configured fields",
+    "passed" : true
+  }, {
+    "test" : "default dynamic fields not implicitly ignored",
+    "passed" : true
+  }, {
+    "test" : "real business-state change remains unstable",
+    "passed" : true
+  }, {
+    "test" : "URL collection combines real history/JS/OpenAPI",
+    "passed" : true
+  }, {
+    "test" : "URL collection does not execute template variables",
+    "passed" : true
+  }, {
+    "test" : "URL verifier retains actual 200/404",
+    "passed" : true
+  }, {
+    "test" : "pattern representative preserves response-status diversity",
+    "passed" : true
+  }, {
+    "test" : "URL database excludes query values",
+    "passed" : true
+  }, {
+    "test" : "activity has query mutation metadata",
+    "passed" : true
+  }, {
+    "test" : "activity evidence round-trip excludes actual cookie",
+    "passed" : true
+  }, {
+    "test" : "response recon sees real header/error observations",
+    "passed" : true
+  }, {
+    "test" : "fixed fixture has no matching passive observation",
+    "passed" : true
+  }, {
+    "test" : "OpenAPI templates/refs rendered without GET conversion",
+    "passed" : true
+  }, {
+    "test" : "write/read connects both real stored flows",
+    "passed" : true
+  }, {
+    "test" : "stored HTML and escaped text are distinguished as observations",
+    "passed" : true
+  }, {
+    "test" : "SQL boolean repaired vuln adaptive=false",
+    "passed" : true
+  }, {
+    "test" : "SQL boolean repaired vuln adaptive=true",
+    "passed" : true
+  }, {
+    "test" : "actual vuln XSS profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln DOWNLOAD profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln SSTI profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln TRAVERSAL profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln XPATH profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln REDIRECT profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln CRLF profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln COMMAND profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln LDAP profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln NOSQL profile",
+    "passed" : true
+  }, {
+    "test" : "actual vuln CUSTOM profile",
+    "passed" : true
+  }, {
+    "test" : "actual XML entity observation vuln",
+    "passed" : true
+  }, {
+    "test" : "upload filename actual acceptance vuln",
+    "passed" : true
+  }, {
+    "test" : "upload active MIME/content readback vuln",
+    "passed" : true
+  }, {
+    "test" : "owned loopback SSRF callback vuln",
+    "passed" : true
+  }, {
+    "test" : "SQL boolean repaired fixed adaptive=false",
+    "passed" : true
+  }, {
+    "test" : "SQL boolean repaired fixed adaptive=true",
+    "passed" : true
+  }, {
+    "test" : "actual fixed XSS profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed DOWNLOAD profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed SSTI profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed TRAVERSAL profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed XPATH profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed REDIRECT profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed CRLF profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed COMMAND profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed LDAP profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed NOSQL profile",
+    "passed" : true
+  }, {
+    "test" : "actual fixed CUSTOM profile",
+    "passed" : true
+  }, {
+    "test" : "actual XML entity observation fixed",
+    "passed" : true
+  }, {
+    "test" : "upload filename actual acceptance fixed",
+    "passed" : true
+  }, {
+    "test" : "upload active MIME/content readback fixed",
+    "passed" : true
+  }, {
+    "test" : "owned loopback SSRF callback fixed",
+    "passed" : true
+  }, {
+    "test" : "actual blocking baseline prevents later payload 401",
+    "passed" : true
+  }, {
+    "test" : "actual blocking baseline prevents later payload 403",
+    "passed" : true
+  }, {
+    "test" : "actual blocking baseline prevents later payload 429",
+    "passed" : true
+  }, {
+    "test" : "actual blocking baseline prevents later payload 503",
+    "passed" : true
+  }, {
+    "test" : "actual encoding boundary utf8",
+    "passed" : true
+  }, {
+    "test" : "actual encoding boundary gzip",
+    "passed" : true
+  }, {
+    "test" : "actual encoding boundary deflate",
+    "passed" : true
+  }, {
+    "test" : "actual encoding boundary cp949",
+    "passed" : true
+  }, {
+    "test" : "empty response parsed safely",
+    "passed" : true
+  }, {
+    "test" : "large HTTP response is bounded and flagged",
+    "passed" : true
+  }, {
+    "test" : "malformed real JSON produces no inventory",
+    "passed" : true
+  }, {
+    "test" : "actual redirect is retained without following",
+    "passed" : true
+  }, {
+    "test" : "actual socket timeout halts later payloads",
+    "passed" : true
+  }, {
+    "test" : "scope path boundaries distinguish inside/outside traffic",
+    "passed" : true
+  }, {
+    "test" : "all sixteen payload profiles exercised",
+    "passed" : true
+  } ],
+  "passed" : 100,
+  "failed" : 0,
+  "policyResults" : [ {
+    "path" : "/api/diagnostics/vuln/objects/101",
+    "note" : "공개/공유 허용 · 설정한 경로·메서드 정책 · 성공 응답 관측",
+    "status" : 200,
+    "policy" : "PUBLIC"
+  }, {
+    "path" : "/api/diagnostics/vuln/objects/103",
+    "note" : "공개/공유 허용 · 설정한 경로·메서드 정책 · 성공 응답 관측",
+    "status" : 200,
+    "policy" : "PUBLIC"
+  }, {
+    "path" : "/api/diagnostics/vuln/objects/102",
+    "note" : "타인 객체 접근 의심 · 소유자 전용 정책 · 소유 필드가 대상 계정 소유값과 다름",
+    "status" : 200,
+    "policy" : "OWNER_ONLY"
+  }, {
+    "path" : "/api/diagnostics/fixed/objects/101",
+    "note" : "공개/공유 허용 · 설정한 경로·메서드 정책 · 성공 응답 관측",
+    "status" : 200,
+    "policy" : "PUBLIC"
+  }, {
+    "path" : "/api/diagnostics/fixed/objects/103",
+    "note" : "공개/공유 허용 · 설정한 경로·메서드 정책 · 성공 응답 관측",
+    "status" : 200,
+    "policy" : "PUBLIC"
+  }, {
+    "path" : "/api/diagnostics/fixed/objects/102",
+    "note" : "은닉형 접근 차단 후보 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "status" : 404,
+    "policy" : "OWNER_ONLY"
+  }, {
+    "path" : "/api/diagnostics/fixed/objects/101",
+    "note" : "소유값 불일치 · 정책 확인 · 공개/공유/소유자 전용 정책 미설정 · 인가 위반 미확정",
+    "status" : 200,
+    "policy" : "UNSPECIFIED"
+  } ],
+  "payload" : [ {
+    "id" : "vuln-sql-condition",
+    "profile" : "SQLI",
+    "adaptive" : false,
+    "summary" : {
+      "requests" : 4,
+      "completed" : 2,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료"
+    },
+    "rows" : [ {
+      "evidence" : "원래 값으로 요청한 비교 기준",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "기준 본문/상태가 동일",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 152,
+      "payload" : "Burp%' AND 1=1 -- ",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "같은 입력의 1=1/1=2 응답 차이. 기준은 2회 동일; SQLi 확정에는 Repeater 재검증 필요",
+      "status" : 200,
+      "verdict" : "SQL 조건 차이 후보",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=2 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    } ]
+  }, {
+    "id" : "vuln-sql-condition",
+    "profile" : "SQLI",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 7,
+      "uniquePayloads" : 2,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "SQL 조건 차이 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "SQL 참 조건 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 152,
+      "payload" : "Burp%' AND 1=1 -- ",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "SQL 거짓 조건 · 기준 200 / 152자 → 200 / 2자",
+      "status" : 200,
+      "verdict" : "응답 변화",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=2 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }, {
+      "evidence" : "SQL 역순 거짓 재검증 · 기준 200 / 152자 → 200 / 2자",
+      "status" : 200,
+      "verdict" : "응답 변화",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=2 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }, {
+      "evidence" : "SQL 역순 참 재검증 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 152,
+      "payload" : "Burp%' AND 1=1 -- ",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "SQL 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "참/거짓 차이 2회, 역순 재현, 기준 재확인 · SQL 처리 여부는 수동 확인 필요",
+      "status" : 200,
+      "verdict" : "SQL 조건 차이 재현 후보",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=2 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    } ]
+  }, {
+    "id" : "vuln-XSS",
+    "profile" : "XSS",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 6,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 95,
+      "payload" : "hello",
+      "bodySha256" : "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 95,
+      "payload" : "hello",
+      "bodySha256" : "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 95,
+      "payload" : "hello",
+      "bodySha256" : "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+    }, {
+      "evidence" : "문자열 반사 탐색 · 실행 가능한 XSS 근거 아님",
+      "status" : 200,
+      "verdict" : "문자열 반사",
+      "bodyChars" : 109,
+      "payload" : "PR_4825feeb085b4454",
+      "bodySha256" : "9690ba5ab83dbe1eb554922dec5d1d1db860bb4e2840db6c21dcbfc760730477"
+    }, {
+      "evidence" : "문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인",
+      "status" : 200,
+      "verdict" : "반사 위치 관찰",
+      "bodyChars" : 109,
+      "payload" : "PR_4825feeb085b4454",
+      "bodySha256" : "9690ba5ab83dbe1eb554922dec5d1d1db860bb4e2840db6c21dcbfc760730477"
+    }, {
+      "evidence" : "후보 탐색 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요",
+      "status" : 200,
+      "verdict" : "XSS 반사 후보",
+      "bodyChars" : 144,
+      "payload" : "<img src=x onerror=console.log('PR_34f8fb5629494da2')>",
+      "bodySha256" : "9cdf849af12e81b706ad5f96b2e57d3af01fb639e2ca2e29376c03ba2aa60a69"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요",
+      "status" : 200,
+      "verdict" : "XSS 반사 후보",
+      "bodyChars" : 144,
+      "payload" : "<img src=x onerror=console.log('PR_8561908bf34e47c0')>",
+      "bodySha256" : "95f76648fd854a777ef2346b7cc561a2265649316590f8bc2de22fe5880bcab3"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 95,
+      "payload" : "hello",
+      "bodySha256" : "d4501584c8d58ec6859e7317b147975c7ed6fa1062b0378062c0fbfefa9cf1ff"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "XSS 반사 후보 · 재현",
+      "bodyChars" : 144,
+      "payload" : "<img src=x onerror=console.log('PR_8561908bf34e47c0')>",
+      "bodySha256" : "95f76648fd854a777ef2346b7cc561a2265649316590f8bc2de22fe5880bcab3"
+    } ]
+  }, {
+    "id" : "vuln-DOWNLOAD",
+    "profile" : "DOWNLOAD",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 6,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 404,
+      "verdict" : "기준 응답",
+      "bodyChars" : 19,
+      "payload" : "missing",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 404,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "missing",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "동적/잘림/오류 응답 · 조건 차이 판정 비활성화; 출력·헤더 증거 검사는 계속",
+      "status" : 404,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 19,
+      "payload" : "missing",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "후보 탐색 · BOB_PRIVATE_ATTACHMENT",
+      "status" : 200,
+      "verdict" : "지정 파일 내용 발견",
+      "bodyChars" : 37,
+      "payload" : "bob-private-file",
+      "bodySha256" : "05d1cbe0745f19e6551c03da956e5b9cc6526eb06fc892d55f5bed264c68ab54"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · BOB_PRIVATE_ATTACHMENT",
+      "status" : 200,
+      "verdict" : "지정 파일 내용 발견",
+      "bodyChars" : 37,
+      "payload" : "bob-private-file",
+      "bodySha256" : "05d1cbe0745f19e6551c03da956e5b9cc6526eb06fc892d55f5bed264c68ab54"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 404,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "missing",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "존재하지 않는 파일 대조 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 404,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "PR_MISSING_69608f30-6a01-432f-8443-4086388bfa5e.txt",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · BOB_PRIVATE_ATTACHMENT · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "지정 파일 내용 발견 · 재현",
+      "bodyChars" : 37,
+      "payload" : "bob-private-file",
+      "bodySha256" : "05d1cbe0745f19e6551c03da956e5b9cc6526eb06fc892d55f5bed264c68ab54"
+    } ]
+  }, {
+    "id" : "vuln-SSTI",
+    "profile" : "SSTI",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 5,
+      "payload" : "alpha",
+      "bodySha256" : "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 5,
+      "payload" : "alpha",
+      "bodySha256" : "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 5,
+      "payload" : "alpha",
+      "bodySha256" : "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8"
+    }, {
+      "evidence" : "후보 탐색 · PR_020e0c301962445c_671789_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요",
+      "status" : 200,
+      "verdict" : "표현식 평가 후보",
+      "bodyChars" : 30,
+      "payload" : "PR_020e0c301962445c_#{731*919}_END",
+      "bodySha256" : "6ae3ed4dae6015ace5cd97c937324813c8a5bbc4b175c677d3d44bd27a0eb46f"
+    }, {
+      "evidence" : "다른 산술식 재검증 · PR_ac32d0b1d7a2431e_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요",
+      "status" : 200,
+      "verdict" : "표현식 평가 후보",
+      "bodyChars" : 30,
+      "payload" : "PR_ac32d0b1d7a2431e_#{731*920}_END",
+      "bodySha256" : "91cde052a12ad7b89636aec253c8b07b015a57fe572583f6935559fb0fc68f3f"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 5,
+      "payload" : "alpha",
+      "bodySha256" : "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 다른 산술식 재검증 · PR_ac32d0b1d7a2431e_672520_END · 산술식이 평가됨. 엔진·서버 처리 위치 추가 확인 필요 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "표현식 평가 후보 · 재현",
+      "bodyChars" : 30,
+      "payload" : "PR_ac32d0b1d7a2431e_#{731*920}_END",
+      "bodySha256" : "91cde052a12ad7b89636aec253c8b07b015a57fe572583f6935559fb0fc68f3f"
+    } ]
+  }, {
+    "id" : "vuln-TRAVERSAL",
+    "profile" : "TRAVERSAL",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 6,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 19,
+      "payload" : "base.txt",
+      "bodySha256" : "380f144782262a9a2b005bfa54fe7c51544bc0fea71781e4b6819dabdc859b11"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "base.txt",
+      "bodySha256" : "380f144782262a9a2b005bfa54fe7c51544bc0fea71781e4b6819dabdc859b11"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 19,
+      "payload" : "base.txt",
+      "bodySha256" : "380f144782262a9a2b005bfa54fe7c51544bc0fea71781e4b6819dabdc859b11"
+    }, {
+      "evidence" : "후보 탐색 · PR_OWNED_XML_FIXTURE",
+      "status" : 200,
+      "verdict" : "지정 파일 내용 발견",
+      "bodyChars" : 20,
+      "payload" : "../download-marker.txt",
+      "bodySha256" : "a2709163b0f55875da2f330c869b2f4c9d853e6fa739b9b42cc54da55903b082"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE",
+      "status" : 200,
+      "verdict" : "지정 파일 내용 발견",
+      "bodyChars" : 20,
+      "payload" : "../download-marker.txt",
+      "bodySha256" : "a2709163b0f55875da2f330c869b2f4c9d853e6fa739b9b42cc54da55903b082"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "base.txt",
+      "bodySha256" : "380f144782262a9a2b005bfa54fe7c51544bc0fea71781e4b6819dabdc859b11"
+    }, {
+      "evidence" : "존재하지 않는 파일 대조 · 기준 200 / 19자 → 404 / 14자",
+      "status" : 404,
+      "verdict" : "응답 변화",
+      "bodyChars" : 14,
+      "payload" : "../PR_MISSING_c18592d8-e9fa-45b2-b539-40cfb108653f.txt",
+      "bodySha256" : "affcf4c8d293c17fcb845deb7f4bb1aff6697426d75bf28a2bf7403067646673"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · PR_OWNED_XML_FIXTURE · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "지정 파일 내용 발견 · 재현",
+      "bodyChars" : 20,
+      "payload" : "../download-marker.txt",
+      "bodySha256" : "a2709163b0f55875da2f330c869b2f4c9d853e6fa739b9b42cc54da55903b082"
+    } ]
+  }, {
+    "id" : "vuln-XPATH",
+    "profile" : "XPATH",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "e8387c57f95b6d9e96c300ee48434dc30ce539077c19c3d146ff5cefb667747d"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "e8387c57f95b6d9e96c300ee48434dc30ce539077c19c3d146ff5cefb667747d"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "e8387c57f95b6d9e96c300ee48434dc30ce539077c19c3d146ff5cefb667747d"
+    }, {
+      "evidence" : "후보 탐색 · XPathExpressionException: invalid predicate · 오류 노출이며 인젝션 성공 확정 아님",
+      "status" : 200,
+      "verdict" : "XPath Injection 오류 후보",
+      "bodyChars" : 43,
+      "payload" : "'",
+      "bodySha256" : "4322af8fefcfd2fed4cdeda05cd01f8d73a43b766569f24a48043caece79ebec"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · XPathExpressionException: invalid predicate · 오류 노출이며 인젝션 성공 확정 아님",
+      "status" : 200,
+      "verdict" : "XPath Injection 오류 후보",
+      "bodyChars" : 43,
+      "payload" : "'",
+      "bodySha256" : "4322af8fefcfd2fed4cdeda05cd01f8d73a43b766569f24a48043caece79ebec"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "e8387c57f95b6d9e96c300ee48434dc30ce539077c19c3d146ff5cefb667747d"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · XPathExpressionException: invalid predicate · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "XPath Injection 오류 후보 · 재현",
+      "bodyChars" : 43,
+      "payload" : "'",
+      "bodySha256" : "4322af8fefcfd2fed4cdeda05cd01f8d73a43b766569f24a48043caece79ebec"
+    } ]
+  }, {
+    "id" : "vuln-REDIRECT",
+    "profile" : "REDIRECT",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 302,
+      "verdict" : "기준 응답",
+      "bodyChars" : 16,
+      "payload" : "alpha",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "기준 안정성 검사 · 자동 추적하지 않음. 로그인 이동 여부를 확인하세요",
+      "status" : 302,
+      "verdict" : "리다이렉트",
+      "bodyChars" : 16,
+      "payload" : "alpha",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "동적/잘림/오류 응답 · 조건 차이 판정 비활성화; 출력·헤더 증거 검사는 계속",
+      "status" : 302,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 16,
+      "payload" : "alpha",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "후보 탐색 · Location: https://redirect.lab.invalid/probe/PR_ee1071b5306a481f · 허용된 외부 이동인지 Repeater에서 확인",
+      "status" : 302,
+      "verdict" : "리다이렉트 목적지 제어 후보",
+      "bodyChars" : 16,
+      "payload" : "https://redirect.lab.invalid/probe/PR_ee1071b5306a481f",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · 자동 추적하지 않음. 로그인 이동 여부를 확인하세요",
+      "status" : 302,
+      "verdict" : "리다이렉트",
+      "bodyChars" : 16,
+      "payload" : "https://pr-second.invalid/probe/PR_19f24b8ee4cb48b6",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "후속 기준 재확인 · 자동 추적하지 않음. 로그인 이동 여부를 확인하세요",
+      "status" : 302,
+      "verdict" : "리다이렉트",
+      "bodyChars" : 16,
+      "payload" : "alpha",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    } ]
+  }, {
+    "id" : "vuln-CRLF",
+    "profile" : "CRLF",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · 응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외",
+      "status" : 200,
+      "verdict" : "응답 헤더 삽입 후보",
+      "bodyChars" : 6,
+      "payload" : "alpha\r\nX-PR-Probe: PR_497604bf382a462d",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · 응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외",
+      "status" : 200,
+      "verdict" : "응답 헤더 삽입 후보",
+      "bodyChars" : 6,
+      "payload" : "alpha\r\nX-PR-Probe: PR_15c4e4397f684e4a",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · 응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "응답 헤더 삽입 후보 · 재현",
+      "bodyChars" : 6,
+      "payload" : "alpha\r\nX-PR-Probe: PR_15c4e4397f684e4a",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    } ]
+  }, {
+    "id" : "vuln-COMMAND",
+    "profile" : "COMMAND",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 6,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요",
+      "status" : 200,
+      "verdict" : "명령 출력 후보",
+      "bodyChars" : 26,
+      "payload" : "alpha;printf 'PR_CMD_%s' 'PR_3087131efc9f4ead';",
+      "bodySha256" : "bd6d9eda66f1506af7edbc6a82b91fb63355acbcf739ebf9c46c5ebf27a7c930"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요",
+      "status" : 200,
+      "verdict" : "명령 출력 후보",
+      "bodyChars" : 26,
+      "payload" : "alpha;printf 'PR_CMD_%s' 'PR_97cb0e32cc584d04';",
+      "bodySha256" : "0b9e2bd7eff619714188ae13b300554fa0f65323e54bef90e7020f405a8d776e"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "서로 다른 출력 대조 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 27,
+      "payload" : "alpha;printf 'PR_CTRL_%s' 'PR_4efd1e71a1994317';",
+      "bodySha256" : "742b3b88d11f243cb8ff107ed4e1394a10e49a1ee9dd347b23173d1af388273e"
+    }, {
+      "evidence" : "PR_CMD/PR_CTRL 서로 다른 조합 출력 확인 · 동일 입력문 반사는 제외",
+      "status" : 200,
+      "verdict" : "출력 대조 일치",
+      "bodyChars" : 27,
+      "payload" : "alpha;printf 'PR_CTRL_%s' 'PR_4efd1e71a1994317';",
+      "bodySha256" : "742b3b88d11f243cb8ff107ed4e1394a10e49a1ee9dd347b23173d1af388273e"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · printf의 조합된 출력 발견. 템플릿/일반 로직 가능성 재검증 필요 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "명령 출력 후보 · 재현",
+      "bodyChars" : 26,
+      "payload" : "alpha;printf 'PR_CMD_%s' 'PR_97cb0e32cc584d04';",
+      "bodySha256" : "0b9e2bd7eff619714188ae13b300554fa0f65323e54bef90e7020f405a8d776e"
+    } ]
+  }, {
+    "id" : "vuln-LDAP",
+    "profile" : "LDAP",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · javax.naming.directory.InvalidSearchFilterException: controlled fixture · 오류 노출이며 인젝션 성공 확정 아님",
+      "status" : 200,
+      "verdict" : "LDAP Injection 오류 후보",
+      "bodyChars" : 71,
+      "payload" : "(",
+      "bodySha256" : "8b99444f7b6a4bb7f86e480c38fd48d051c6834c6bb4a1c340c12a50ec23319a"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · javax.naming.directory.InvalidSearchFilterException: controlled fixture · 오류 노출이며 인젝션 성공 확정 아님",
+      "status" : 200,
+      "verdict" : "LDAP Injection 오류 후보",
+      "bodyChars" : 71,
+      "payload" : "(",
+      "bodySha256" : "8b99444f7b6a4bb7f86e480c38fd48d051c6834c6bb4a1c340c12a50ec23319a"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · javax.naming.directory.InvalidSearchFilterException: controlled fixture · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "LDAP Injection 오류 후보 · 재현",
+      "bodyChars" : 71,
+      "payload" : "(",
+      "bodySha256" : "8b99444f7b6a4bb7f86e480c38fd48d051c6834c6bb4a1c340c12a50ec23319a"
+    } ]
+  }, {
+    "id" : "vuln-NOSQL",
+    "profile" : "NOSQL",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · MongoServerError: controlled fixture · 오류 노출이며 인젝션 성공 확정 아님",
+      "status" : 200,
+      "verdict" : "NoSQL Injection 오류 후보",
+      "bodyChars" : 36,
+      "payload" : "{\"$pr_invalid_operator\":1}",
+      "bodySha256" : "61cff116866a0bf5bb15ae1291653adb8d6e4a65ff87e696d3f15439685e8430"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · MongoServerError: controlled fixture · 오류 노출이며 인젝션 성공 확정 아님",
+      "status" : 200,
+      "verdict" : "NoSQL Injection 오류 후보",
+      "bodyChars" : 36,
+      "payload" : "{\"$pr_invalid_operator\":1}",
+      "bodySha256" : "61cff116866a0bf5bb15ae1291653adb8d6e4a65ff87e696d3f15439685e8430"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · MongoServerError: controlled fixture · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "NoSQL Injection 오류 후보 · 재현",
+      "bodyChars" : 36,
+      "payload" : "{\"$pr_invalid_operator\":1}",
+      "bodySha256" : "61cff116866a0bf5bb15ae1291653adb8d6e4a65ff87e696d3f15439685e8430"
+    } ]
+  }, {
+    "id" : "vuln-CUSTOM",
+    "profile" : "CUSTOM",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · WB_CUSTOM_CONTROLLED_PROOF · 일반 문자열 관찰이며 취약점 확정 아님",
+      "status" : 200,
+      "verdict" : "지정 응답 문자열 후보",
+      "bodyChars" : 26,
+      "payload" : "proof",
+      "bodySha256" : "7493d98b10d006da756ed9b642e08a7b314a3289967e0ae4490c27c55cf22310"
+    }, {
+      "evidence" : "새 마커/동일 입력 재검증 · WB_CUSTOM_CONTROLLED_PROOF · 일반 문자열 관찰이며 취약점 확정 아님",
+      "status" : 200,
+      "verdict" : "지정 응답 문자열 후보",
+      "bodyChars" : 26,
+      "payload" : "proof",
+      "bodySha256" : "7493d98b10d006da756ed9b642e08a7b314a3289967e0ae4490c27c55cf22310"
+    }, {
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · WB_CUSTOM_CONTROLLED_PROOF · 일반 문자열 관찰이며 취약점 확정 아님 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "지정 응답 문자열 후보 · 재현",
+      "bodyChars" : 26,
+      "payload" : "proof",
+      "bodySha256" : "7493d98b10d006da756ed9b642e08a7b314a3289967e0ae4490c27c55cf22310"
+    } ]
+  }, {
+    "id" : "vuln-upload-name",
+    "profile" : "UPLOAD_NAME",
+    "adaptive" : false,
+    "summary" : {
+      "requests" : 2,
+      "completed" : 1,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료"
+    },
+    "rows" : [ {
+      "evidence" : "원래 값으로 요청한 비교 기준",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 116,
+      "payload" : "baseline.txt",
+      "bodySha256" : "6be04ad080b2037c7eba47f29d196f50c4b569d8e55b937ffb9b5d203268c236"
+    }, {
+      "evidence" : "2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요",
+      "status" : 200,
+      "verdict" : "업로드 수락 후보",
+      "bodyChars" : 116,
+      "payload" : "probe.html",
+      "bodySha256" : "172cda035177946aabb65ab38b9b5ec75ecb00cc483b4f220155885ebb673bdf"
+    } ]
+  }, {
+    "id" : "fixed-sql-condition",
+    "profile" : "SQLI",
+    "adaptive" : false,
+    "summary" : {
+      "requests" : 4,
+      "completed" : 2,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료"
+    },
+    "rows" : [ {
+      "evidence" : "원래 값으로 요청한 비교 기준",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "기준 본문/상태가 동일",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "기준 200 / 152자 → 200 / 2자",
+      "status" : 200,
+      "verdict" : "응답 변화",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=1 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }, {
+      "evidence" : "기준 200 / 152자 → 200 / 2자",
+      "status" : 200,
+      "verdict" : "응답 변화",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=2 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    } ]
+  }, {
+    "id" : "fixed-sql-condition",
+    "profile" : "SQLI",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 4,
+      "uniquePayloads" : 2,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 152,
+      "payload" : "Burp",
+      "bodySha256" : "9b5888936a5b6383f6ce0dd26f961137142542f25107d9de933df079cc716cfd"
+    }, {
+      "evidence" : "SQL 참 조건 · 기준 200 / 152자 → 200 / 2자",
+      "status" : 200,
+      "verdict" : "응답 변화",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=1 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }, {
+      "evidence" : "SQL 거짓 조건 · 기준 200 / 152자 → 200 / 2자",
+      "status" : 200,
+      "verdict" : "응답 변화",
+      "bodyChars" : 2,
+      "payload" : "Burp%' AND 1=2 -- ",
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    } ]
+  }, {
+    "id" : "fixed-XSS",
+    "profile" : "XSS",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 4,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "HTML 텍스트의 인코딩 관찰 · 남은 정형 태그 변형 생략; 우회/stored/DOM 미검사 · 전체 목록 모드로 확대 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 96,
+      "payload" : "hello",
+      "bodySha256" : "1f2a7b44a7b6bf957e5b515f4c72a0983592a26a17f4d4183152f4ee1126592b"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 96,
+      "payload" : "hello",
+      "bodySha256" : "1f2a7b44a7b6bf957e5b515f4c72a0983592a26a17f4d4183152f4ee1126592b"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 96,
+      "payload" : "hello",
+      "bodySha256" : "1f2a7b44a7b6bf957e5b515f4c72a0983592a26a17f4d4183152f4ee1126592b"
+    }, {
+      "evidence" : "문자열 반사 탐색 · 실행 가능한 XSS 근거 아님",
+      "status" : 200,
+      "verdict" : "문자열 반사",
+      "bodyChars" : 110,
+      "payload" : "PR_62b154f1726d4e2a",
+      "bodySha256" : "3772dc55948d69258072a65576f9043008d13c53ffd5d866433dfd5238ef7ae3"
+    }, {
+      "evidence" : "문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인",
+      "status" : 200,
+      "verdict" : "반사 위치 관찰",
+      "bodyChars" : 110,
+      "payload" : "PR_62b154f1726d4e2a",
+      "bodySha256" : "3772dc55948d69258072a65576f9043008d13c53ffd5d866433dfd5238ef7ae3"
+    }, {
+      "evidence" : "후보 탐색 · 실행 가능한 XSS 근거 아님",
+      "status" : 200,
+      "verdict" : "문자열 반사",
+      "bodyChars" : 159,
+      "payload" : "<img src=x onerror=console.log('PR_e0ed9523ee794683')>",
+      "bodySha256" : "7bd5729c6c14ef7439d27d9408461708830ce95b8fa6a294b83738af036564ec"
+    }, {
+      "evidence" : "HTML 텍스트 위치에서 전체 입력이 엔티티 인코딩됨 · 다른 컨텍스트/우회는 미검사",
+      "status" : 200,
+      "verdict" : "메타문자 인코딩 관찰",
+      "bodyChars" : 159,
+      "payload" : "<img src=x onerror=console.log('PR_e0ed9523ee794683')>",
+      "bodySha256" : "7bd5729c6c14ef7439d27d9408461708830ce95b8fa6a294b83738af036564ec"
+    } ]
+  }, {
+    "id" : "fixed-DOWNLOAD",
+    "profile" : "DOWNLOAD",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 404,
+      "verdict" : "기준 응답",
+      "bodyChars" : 19,
+      "payload" : "missing",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 404,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "missing",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "동적/잘림/오류 응답 · 조건 차이 판정 비활성화; 출력·헤더 증거 검사는 계속",
+      "status" : 404,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 19,
+      "payload" : "missing",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 404,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "bob-private-file",
+      "bodySha256" : "98c2f7caab3f3f86f0202d44749c1afaa8729b1950aee1bd08f58cdd8e1411de"
+    } ]
+  }, {
+    "id" : "fixed-SSTI",
+    "profile" : "SSTI",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 5,
+      "payload" : "alpha",
+      "bodySha256" : "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 5,
+      "payload" : "alpha",
+      "bodySha256" : "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 5,
+      "payload" : "alpha",
+      "bodySha256" : "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 34,
+      "payload" : "PR_31c481adaee84103_#{731*919}_END",
+      "bodySha256" : "5fbda03a921980dec1387d9e2eeb7df97bd2840f335aec1cb84d31f9808d05f6"
+    } ]
+  }, {
+    "id" : "fixed-TRAVERSAL",
+    "profile" : "TRAVERSAL",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 19,
+      "payload" : "base.txt",
+      "bodySha256" : "380f144782262a9a2b005bfa54fe7c51544bc0fea71781e4b6819dabdc859b11"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 19,
+      "payload" : "base.txt",
+      "bodySha256" : "380f144782262a9a2b005bfa54fe7c51544bc0fea71781e4b6819dabdc859b11"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 19,
+      "payload" : "base.txt",
+      "bodySha256" : "380f144782262a9a2b005bfa54fe7c51544bc0fea71781e4b6819dabdc859b11"
+    }, {
+      "evidence" : "후보 탐색 · 기준 200 / 19자 → 404 / 14자",
+      "status" : 404,
+      "verdict" : "응답 변화",
+      "bodyChars" : 14,
+      "payload" : "../download-marker.txt",
+      "bodySha256" : "affcf4c8d293c17fcb845deb7f4bb1aff6697426d75bf28a2bf7403067646673"
+    } ]
+  }, {
+    "id" : "fixed-XPATH",
+    "profile" : "XPATH",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "e8387c57f95b6d9e96c300ee48434dc30ce539077c19c3d146ff5cefb667747d"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "e8387c57f95b6d9e96c300ee48434dc30ce539077c19c3d146ff5cefb667747d"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "e8387c57f95b6d9e96c300ee48434dc30ce539077c19c3d146ff5cefb667747d"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "'",
+      "bodySha256" : "62871c6e4b8f67f3bb9957b12f2aca0b488415c71f2b96b732932d9b066c2ac7"
+    } ]
+  }, {
+    "id" : "fixed-REDIRECT",
+    "profile" : "REDIRECT",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 302,
+      "verdict" : "기준 응답",
+      "bodyChars" : 16,
+      "payload" : "alpha",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "기준 안정성 검사 · 자동 추적하지 않음. 로그인 이동 여부를 확인하세요",
+      "status" : 302,
+      "verdict" : "리다이렉트",
+      "bodyChars" : 16,
+      "payload" : "alpha",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "동적/잘림/오류 응답 · 조건 차이 판정 비활성화; 출력·헤더 증거 검사는 계속",
+      "status" : 302,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 16,
+      "payload" : "alpha",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    }, {
+      "evidence" : "후보 탐색 · 자동 추적하지 않음. 로그인 이동 여부를 확인하세요",
+      "status" : 302,
+      "verdict" : "리다이렉트",
+      "bodyChars" : 16,
+      "payload" : "https://redirect.lab.invalid/probe/PR_8d86646b204c4c8a",
+      "bodySha256" : "fb543c1ca171ec33b59428a68adc357b0bb5a4cb1647188577ccdd45e89e9b90"
+    } ]
+  }, {
+    "id" : "fixed-CRLF",
+    "profile" : "CRLF",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha\r\nX-PR-Probe: PR_ebe027bd4e874e66",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    } ]
+  }, {
+    "id" : "fixed-COMMAND",
+    "profile" : "COMMAND",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha;printf 'PR_CMD_%s' 'PR_6638bbb3c3444267';",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    } ]
+  }, {
+    "id" : "fixed-LDAP",
+    "profile" : "LDAP",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "(",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    } ]
+  }, {
+    "id" : "fixed-NOSQL",
+    "profile" : "NOSQL",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "{\"$pr_invalid_operator\":1}",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    } ]
+  }, {
+    "id" : "fixed-CUSTOM",
+    "profile" : "CUSTOM",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 6,
+      "payload" : "alpha",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    }, {
+      "evidence" : "후보 탐색 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 6,
+      "payload" : "proof",
+      "bodySha256" : "317b32c143692b9939c197f6a5df54f9698df9a4882fe8bf19608968662be4fa"
+    } ]
+  }, {
+    "id" : "fixed-upload-name",
+    "profile" : "UPLOAD_NAME",
+    "adaptive" : false,
+    "summary" : {
+      "requests" : 2,
+      "completed" : 1,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료"
+    },
+    "rows" : [ {
+      "evidence" : "원래 값으로 요청한 비교 기준",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 117,
+      "payload" : "baseline.txt",
+      "bodySha256" : "b6796aad5fa583055281d53aad5d5a23ef261e320f93ae635c856aa13c440ed4"
+    }, {
+      "evidence" : "기준 200 / 117자 → 415 / 34자",
+      "status" : 415,
+      "verdict" : "응답 변화",
+      "bodyChars" : 34,
+      "payload" : "probe.html",
+      "bodySha256" : "bae53894357e369e3e75ba590c7722ae5472b6f4cda348c604632965f33ff090"
+    } ]
+  } ],
+  "limitations" : [ "API adapters/headless Swing, not actual Burp GUI/proxy", "LDAP/NoSQL/command/header injection endpoints are synthetic bounded fixtures", "No browser XSS execution or external service testing" ]
+}

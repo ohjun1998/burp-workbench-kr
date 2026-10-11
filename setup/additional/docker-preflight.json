@@ -1,0 +1,69 @@
+{
+  "date_utc": "2026-10-11T01:37:55.715161+00:00",
+  "scope": "Compose parsing and packaged input inspection; no container execution",
+  "containers_executed": false,
+  "checks": [
+    {
+      "test": "actual Compose parses both configuration files",
+      "passed": true
+    },
+    {
+      "test": "all published ports bind only to loopback",
+      "passed": true
+    },
+    {
+      "test": "training network is internal",
+      "passed": true
+    },
+    {
+      "test": "no privileged or host-network service",
+      "passed": true
+    },
+    {
+      "test": "no Docker socket mounted",
+      "passed": true
+    },
+    {
+      "test": "read-only inputs exist",
+      "passed": true
+    },
+    {
+      "test": "Oracle service gates application startup",
+      "passed": true
+    },
+    {
+      "test": "application health gates Nginx startup",
+      "passed": true
+    },
+    {
+      "test": "database connection targets isolated Oracle service",
+      "passed": true
+    },
+    {
+      "test": "Oracle app credentials match WAS configuration",
+      "passed": true
+    },
+    {
+      "test": "verification service has explicit profile and output mount",
+      "passed": true
+    },
+    {
+      "test": "release WAR has valid ZIP CRC",
+      "passed": true
+    },
+    {
+      "test": "release WAR includes current diagnostics and Oracle driver",
+      "passed": true
+    },
+    {
+      "test": "release WAR includes current browser CSS",
+      "passed": true
+    }
+  ],
+  "compose_version": "Docker Compose version v2.39.4",
+  "status": "CONFIG_PASSED_RUNTIME_REQUIRED",
+  "passed": 14,
+  "failed": 0,
+  "docker_cli_available": false,
+  "daemon_accessible": false
+}

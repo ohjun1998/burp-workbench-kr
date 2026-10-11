@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "dependencies": {
+    "axios": "0.0.0",
+    "@community/private-widget": "0.0.0"
+  },
+  "devDependencies": {
+    "lab-build-tool": "0.0.0"
+  }
+}

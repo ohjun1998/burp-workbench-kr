@@ -1,0 +1,54 @@
+name: Build and verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Check development prerequisites
+        run: python dev.py doctor
+      - name: Build and run regression and loopback HTTP checks
+        run: python dev.py check
+      - name: Upload verified extension
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: burp-workbench-kr-${{ github.sha }}
+          path: project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-*.jar
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload verification logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: verification-${{ github.sha }}
+          include-hidden-files: true
+          path: |
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/test-*.txt
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/tests.txt
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/server.log
+          if-no-files-found: warn
+          retention-days: 14

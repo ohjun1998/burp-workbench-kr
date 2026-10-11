@@ -1,0 +1,1006 @@
+{
+  "engine" : "Workbench KR 0.18.0 JsAnalysis + JsMiner",
+  "checks" : 62,
+  "results" : {
+    "01-fetch.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/posts",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "page, category",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 2,
+        "start" : 70,
+        "length" : 44,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/comments",
+        "method" : "POST",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "Content-Type, X-Lab-Trace",
+        "bodyKeys" : "postId, text",
+        "line" : 3,
+        "start" : 130,
+        "length" : 22,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/edit",
+        "method" : "PATCH",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "X-Lab-Mode",
+        "bodyKeys" : "title, visibility",
+        "line" : 5,
+        "start" : 384,
+        "length" : 18,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/profile",
+        "method" : "PUT",
+        "kind" : "Request",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "nickname",
+        "line" : 6,
+        "start" : 431,
+        "length" : 21,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/delete",
+        "method" : "DELETE",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 7,
+        "start" : 513,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 5 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "02-axios.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/search",
+        "method" : "GET",
+        "kind" : "axios.get",
+        "parameters" : "q, page",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 2,
+        "start" : 74,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/upload",
+        "method" : "POST",
+        "kind" : "axios.post",
+        "parameters" : "",
+        "headers" : "X-Lab-Upload",
+        "bodyKeys" : "fileId, filename",
+        "line" : 3,
+        "start" : 139,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/settings",
+        "method" : "PUT",
+        "kind" : "axios.put",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "theme",
+        "line" : 4,
+        "start" : 239,
+        "length" : 22,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/preferences",
+        "method" : "PATCH",
+        "kind" : "axios.patch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "language",
+        "line" : 5,
+        "start" : 291,
+        "length" : 25,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/remove",
+        "method" : "DELETE",
+        "kind" : "axios.delete",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 6,
+        "start" : 348,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/audit",
+        "method" : "POST",
+        "kind" : "axios config",
+        "parameters" : "limit",
+        "headers" : "X-Lab-Audit",
+        "bodyKeys" : "event",
+        "line" : 7,
+        "start" : 404,
+        "length" : 8,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab",
+        "method" : "?",
+        "kind" : "config baseURL",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 7,
+        "start" : 386,
+        "length" : 13,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/audit",
+        "method" : "?",
+        "kind" : "config url",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 7,
+        "start" : 404,
+        "length" : 8,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/export",
+        "method" : "HEAD",
+        "kind" : "axios.request",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 8,
+        "start" : 521,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/export",
+        "method" : "?",
+        "kind" : "config url",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 8,
+        "start" : 521,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 10 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "03-xhr-navigation.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/xhr",
+        "method" : "GET",
+        "kind" : "XHR-like open",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 3,
+        "start" : 111,
+        "length" : 17,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "wss://socket.community-lab.invalid/events",
+        "method" : "UPGRADE",
+        "kind" : "WebSocket",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 4,
+        "start" : 145,
+        "length" : 43,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/events",
+        "method" : "GET",
+        "kind" : "EventSource",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 5,
+        "start" : 207,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/login",
+        "method" : "GET",
+        "kind" : "location assignment",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 6,
+        "start" : 251,
+        "length" : 19,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/redirect",
+        "method" : "GET",
+        "kind" : "location.assign",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 7,
+        "start" : 288,
+        "length" : 22,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/logout",
+        "method" : "GET",
+        "kind" : "window.location.replace",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 8,
+        "start" : 337,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/help",
+        "method" : "GET",
+        "kind" : "window.open",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 9,
+        "start" : 372,
+        "length" : 18,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 7 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 1 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ {
+          "host" : "socket.community-lab.invalid",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "",
+          "line" : 4
+        } ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "04-constants.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/constant",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 4,
+        "start" : 119,
+        "length" : 13,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/template",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 5,
+        "start" : 141,
+        "length" : 18,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/escaped/path",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 6,
+        "start" : 168,
+        "length" : 29,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/assets/relative",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 7,
+        "start" : 206,
+        "length" : 13,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/assets/js-lab/nearby",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 8,
+        "start" : 228,
+        "length" : 10,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/config",
+        "method" : "?",
+        "kind" : "설정 변수 apiUrl",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 9,
+        "start" : 254,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/object",
+        "method" : "?",
+        "kind" : "config endpoint",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 10,
+        "start" : 296,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/path",
+        "method" : "?",
+        "kind" : "config path",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 10,
+        "start" : 322,
+        "length" : 18,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 8 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "05-dynamic-scope.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/users/{dynamic}",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 3,
+        "start" : 96,
+        "length" : 25,
+        "complete" : false,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/nested-users/{dynamic}",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 4,
+        "start" : 154,
+        "length" : 32,
+        "complete" : false,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/post/{dynamic}",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 5,
+        "start" : 225,
+        "length" : 26,
+        "complete" : false,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/outside",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 7,
+        "start" : 311,
+        "length" : 15,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/numeric/{dynamic}",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 8,
+        "start" : 335,
+        "length" : 28,
+        "complete" : false,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/repeated",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 9,
+        "start" : 372,
+        "length" : 22,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/repeated",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 10,
+        "start" : 403,
+        "length" : 22,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 7 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "06-secrets.js" : {
+      "endpoints" : [ ],
+      "secrets" : [ {
+        "rule" : "AWS Access Key ID",
+        "masked" : "[가림 · 20자]",
+        "length" : 20,
+        "fingerprint" : "1a5d44a2dca19669",
+        "line" : 3,
+        "start" : 82,
+        "sourceLength" : 22,
+        "confidence" : "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 3.68"
+      }, {
+        "rule" : "Google API Key",
+        "masked" : "[가림 · 39자]",
+        "length" : 39,
+        "fingerprint" : "542768ae613fc8e0",
+        "line" : 4,
+        "start" : 114,
+        "sourceLength" : 41,
+        "confidence" : "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 0.68"
+      }, {
+        "rule" : "GitHub token",
+        "masked" : "[가림 · 44자]",
+        "length" : 44,
+        "fingerprint" : "0fede56402a5d8b4",
+        "line" : 5,
+        "start" : 165,
+        "sourceLength" : 46,
+        "confidence" : "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 3.35"
+      }, {
+        "rule" : "Slack token",
+        "masked" : "[가림 · 47자]",
+        "length" : 47,
+        "fingerprint" : "f6c3a0b38f43c64a",
+        "line" : 6,
+        "start" : 220,
+        "sourceLength" : 49,
+        "confidence" : "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 4.50"
+      }, {
+        "rule" : "Stripe secret key",
+        "masked" : "[가림 · 31자]",
+        "length" : 31,
+        "fingerprint" : "176eab415c125425",
+        "line" : 7,
+        "start" : 279,
+        "sourceLength" : 33,
+        "confidence" : "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 4.70"
+      }, {
+        "rule" : "JWT / JWS",
+        "masked" : "[가림 · 87자]",
+        "length" : 87,
+        "fingerprint" : "b916956a8565a147",
+        "line" : 8,
+        "start" : 319,
+        "sourceLength" : 89,
+        "confidence" : "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 4.99"
+      }, {
+        "rule" : "시크릿 이름: secret",
+        "masked" : "[가림 · 20자]",
+        "length" : 20,
+        "fingerprint" : "204fea6d2418a42c",
+        "line" : 9,
+        "start" : 418,
+        "sourceLength" : 22,
+        "confidence" : "이름·엔트로피 추정 · 공개 설정값/오탐 가능 · Shannon 4.32"
+      }, {
+        "rule" : "Private key",
+        "masked" : "[가림 · 77자]",
+        "length" : 77,
+        "fingerprint" : "3ea517de5c3ad512",
+        "line" : 10,
+        "start" : 454,
+        "sourceLength" : 81,
+        "confidence" : "구문 문자열 + 패턴 · 유효성 미검증 · Shannon 3.61"
+      }, {
+        "rule" : "Private key",
+        "masked" : "[가림 · 79자]",
+        "length" : 79,
+        "fingerprint" : "086754df6c4e6e81",
+        "line" : 10,
+        "start" : 455,
+        "sourceLength" : 79,
+        "confidence" : "패턴 일치 · 유효성 미검증 · Shannon 3.69"
+      } ],
+      "status" : "AST 블록 1 · URL/API 0 · 시크릿 후보 9 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "07-negative.js" : {
+      "endpoints" : [ {
+        "url" : "https://api.community-lab.invalid/list",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "token",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 7,
+        "start" : 245,
+        "length" : 94,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 1 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ {
+          "host" : "api.community-lab.invalid",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "",
+          "line" : 7
+        } ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "08-modern-module.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/modern",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 6,
+        "start" : 231,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · async/module 구문 호환 보조 1 · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ {
+          "name" : "axios",
+          "scope" : "",
+          "origin" : "import/require",
+          "status" : "미조회"
+        }, {
+          "name" : "@community/private-reports",
+          "scope" : "community",
+          "origin" : "import/require",
+          "status" : "미조회"
+        }, {
+          "name" : "lab-dynamic-package",
+          "scope" : "",
+          "origin" : "import/require",
+          "status" : "미조회"
+        } ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "09-invalid.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/broken",
+        "method" : "?",
+        "kind" : "문자열 조각 · AST 실패",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 3,
+        "start" : 126,
+        "length" : 20,
+        "complete" : false,
+        "evidence" : "문맥/메서드 미확정 · 자동 수집 제외"
+      } ],
+      "secrets" : [ {
+        "rule" : "Google API Key",
+        "masked" : "[가림 · 39자]",
+        "length" : 39,
+        "fingerprint" : "4b088d79550a6de3",
+        "line" : 2,
+        "start" : 78,
+        "sourceLength" : 39,
+        "confidence" : "패턴 일치 · 유효성 미검증 · Shannon 0.68"
+      } ],
+      "status" : "AST 블록 0 · URL/API 1 · 시크릿 후보 1 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "10-recon.js" : {
+      "endpoints" : [ {
+        "url" : "https://api.community-lab.invalid/v1",
+        "method" : "?",
+        "kind" : "설정 변수 apiUrl",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 12,
+        "start" : 465,
+        "length" : 38,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 7 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ {
+          "host" : "training-bucket.s3.amazonaws.com",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "AWS",
+          "line" : 5
+        }, {
+          "host" : "training.blob.core.windows.net",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "Azure",
+          "line" : 6
+        }, {
+          "host" : "storage.googleapis.com",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "Google",
+          "line" : 7
+        }, {
+          "host" : "training.cloudfront.net",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "CloudFront",
+          "line" : 8
+        }, {
+          "host" : "training.digitaloceanspaces.com",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "DigitalOcean",
+          "line" : 9
+        }, {
+          "host" : "training.firebaseio.com",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "Firebase",
+          "line" : 10
+        }, {
+          "host" : "api.community-lab.invalid",
+          "relation" : "발견 호스트 · 관계 미확정",
+          "provider" : "",
+          "line" : 12
+        } ],
+        "clouds" : [ {
+          "provider" : "AWS",
+          "url" : "https://training-bucket.s3.amazonaws.com/docs",
+          "line" : 5
+        }, {
+          "provider" : "Azure",
+          "url" : "https://training.blob.core.windows.net/files",
+          "line" : 6
+        }, {
+          "provider" : "Google",
+          "url" : "https://storage.googleapis.com/training-bucket/file",
+          "line" : 7
+        }, {
+          "provider" : "CloudFront",
+          "url" : "https://training.cloudfront.net/static",
+          "line" : 8
+        }, {
+          "provider" : "DigitalOcean",
+          "url" : "https://training.digitaloceanspaces.com/file",
+          "line" : 9
+        }, {
+          "provider" : "Firebase",
+          "url" : "https://training.firebaseio.com/demo",
+          "line" : 10
+        } ],
+        "dependencies" : [ {
+          "name" : "@community/private-widget",
+          "scope" : "community",
+          "origin" : "import/require",
+          "status" : "미조회"
+        }, {
+          "name" : "axios",
+          "scope" : "",
+          "origin" : "import/require",
+          "status" : "미조회"
+        } ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "11-sourcemap.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/bundle",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 2,
+        "start" : 70,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 1 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ {
+          "url" : "http://127.0.0.1:8088/assets/js-lab/11-sourcemap.js.map",
+          "state" : "발견 · 요청 전"
+        } ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "12-inline-map.js" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/inline",
+        "method" : "GET",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 2,
+        "start" : 70,
+        "length" : 20,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/recovered",
+        "method" : "POST",
+        "kind" : "source map: src/private-reports.js",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "reportId",
+        "line" : 1,
+        "start" : -1,
+        "length" : 0,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 2 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 1 · 원본 1",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ {
+          "name" : "@community/recovered",
+          "scope" : "community",
+          "origin" : "import/require",
+          "status" : "미조회"
+        } ],
+        "maps" : [ {
+          "url" : "inline:e40b156a8f64fa92",
+          "state" : "인라인 map · 원본 1개"
+        } ],
+        "recovered" : [ {
+          "mapUrl" : "inline:e40b156a8f64fa92",
+          "name" : "src/private-reports.js",
+          "content" : "fetch('/api/js-lab/recovered',{method:'POST',body:{reportId:1}});\nrequire('@community/recovered');\n"
+        } ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "13-inline.html" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/html-inline",
+        "method" : "POST",
+        "kind" : "fetch",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "commentId",
+        "line" : 4,
+        "start" : 122,
+        "length" : 25,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 1 · URL/API 1 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "14-package.json" : {
+      "endpoints" : [ ],
+      "secrets" : [ ],
+      "status" : "AST 블록 0 · URL/API 0 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 0 · 원본 0",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ {
+          "name" : "axios",
+          "scope" : "",
+          "origin" : "package.json dependencies",
+          "status" : "미조회"
+        }, {
+          "name" : "@community/private-widget",
+          "scope" : "community",
+          "origin" : "package.json dependencies",
+          "status" : "미조회"
+        }, {
+          "name" : "lab-build-tool",
+          "scope" : "",
+          "origin" : "package.json devDependencies",
+          "status" : "미조회"
+        } ],
+        "maps" : [ ],
+        "recovered" : [ ],
+        "note" : "자동 추가 요청 없음"
+      }
+    },
+    "11-sourcemap.js.map" : {
+      "endpoints" : [ {
+        "url" : "http://127.0.0.1:8088/api/js-lab/recovered",
+        "method" : "?",
+        "kind" : "문자열 조각 · AST 실패",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "",
+        "line" : 1,
+        "start" : 107,
+        "length" : 23,
+        "complete" : false,
+        "evidence" : "문맥/메서드 미확정 · 자동 수집 제외"
+      }, {
+        "url" : "http://127.0.0.1:8088/api/js-lab/recovered",
+        "method" : "POST",
+        "kind" : "source map: src/private-reports.js",
+        "parameters" : "",
+        "headers" : "",
+        "bodyKeys" : "reportId",
+        "line" : 1,
+        "start" : -1,
+        "length" : 0,
+        "complete" : true,
+        "evidence" : "구문 맥락 추정 · URL 쿼리 값 제외"
+      } ],
+      "secrets" : [ ],
+      "status" : "AST 블록 0 · URL/API 2 · 시크릿 후보 0 · 실행/요청/키 검증 없음 · AST 실패 1 (지원 문법 밖/오류; 패턴 탐지만 보조) · 도메인 0 · map 1 · 원본 1",
+      "truncated" : false,
+      "miner" : {
+        "domains" : [ ],
+        "clouds" : [ ],
+        "dependencies" : [ {
+          "name" : "@community/recovered",
+          "scope" : "community",
+          "origin" : "import/require",
+          "status" : "미조회"
+        } ],
+        "maps" : [ {
+          "url" : "http://127.0.0.1:8088/assets/js-lab/11-sourcemap.js.map",
+          "state" : "캡처 map · 원본 1개"
+        } ],
+        "recovered" : [ {
+          "mapUrl" : "http://127.0.0.1:8088/assets/js-lab/11-sourcemap.js.map",
+          "name" : "src/private-reports.js",
+          "content" : "fetch('/api/js-lab/recovered',{method:'POST',body:{reportId:1}});\nrequire('@community/recovered');\n"
+        } ],
+        "note" : "자동 추가 요청 없음"
+      }
+    }
+  }
+}

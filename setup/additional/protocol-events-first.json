@@ -1,0 +1,133 @@
+[
+  {
+    "event": "tls",
+    "alpn": "http/1.1",
+    "port": 18443
+  },
+  {
+    "event": "h1_request",
+    "method": "GET",
+    "path": "/tls?via=python-h1",
+    "vulnerable": false,
+    "declared_length": 0,
+    "consumed_length": 0,
+    "status": 200
+  },
+  {
+    "event": "tls",
+    "alpn": "h2",
+    "port": 18443
+  },
+  {
+    "event": "h2_request",
+    "path": "/tls?via=python-h2",
+    "stream": 1
+  },
+  {
+    "event": "h1_request",
+    "method": "POST",
+    "path": "/csd",
+    "vulnerable": true,
+    "declared_length": 60,
+    "consumed_length": 0,
+    "status": 200
+  },
+  {
+    "event": "h1_request",
+    "method": "GET",
+    "path": "/marker",
+    "vulnerable": true,
+    "declared_length": 0,
+    "consumed_length": 0,
+    "status": 200
+  },
+  {
+    "event": "h1_request",
+    "method": "POST",
+    "path": "/csd",
+    "vulnerable": false,
+    "declared_length": 60,
+    "consumed_length": 60,
+    "status": 200
+  },
+  {
+    "event": "csrf_issue",
+    "session": "OWNED_FIXTURE_A",
+    "token_fingerprint": "c3bb"
+  },
+  {
+    "event": "h1_request",
+    "method": "GET",
+    "path": "/csrf/form",
+    "vulnerable": false,
+    "declared_length": 0,
+    "consumed_length": 0,
+    "status": 200
+  },
+  {
+    "event": "csrf_write",
+    "session": "OWNED_FIXTURE_B",
+    "status": 403
+  },
+  {
+    "event": "h1_request",
+    "method": "POST",
+    "path": "/csrf/write",
+    "vulnerable": false,
+    "declared_length": 41,
+    "consumed_length": 41,
+    "status": 403
+  },
+  {
+    "event": "csrf_write",
+    "session": "OWNED_FIXTURE_A",
+    "status": 200
+  },
+  {
+    "event": "h1_request",
+    "method": "POST",
+    "path": "/csrf/write",
+    "vulnerable": false,
+    "declared_length": 41,
+    "consumed_length": 41,
+    "status": 200
+  },
+  {
+    "event": "csrf_write",
+    "session": "OWNED_FIXTURE_A",
+    "status": 403
+  },
+  {
+    "event": "h1_request",
+    "method": "POST",
+    "path": "/csrf/write",
+    "vulnerable": false,
+    "declared_length": 41,
+    "consumed_length": 41,
+    "status": 403
+  },
+  {
+    "event": "tls",
+    "alpn": null,
+    "port": 18443
+  },
+  {
+    "event": "h1_request",
+    "method": "GET",
+    "path": "/tls?via=burp-HTTP_1",
+    "vulnerable": false,
+    "declared_length": 0,
+    "consumed_length": 0,
+    "status": 200
+  },
+  {
+    "event": "tls",
+    "alpn": "h2",
+    "port": 18443
+  },
+  {
+    "event": "h2_request",
+    "path": "/tls?via=burp-HTTP_2",
+    "stream": 1
+  }
+]

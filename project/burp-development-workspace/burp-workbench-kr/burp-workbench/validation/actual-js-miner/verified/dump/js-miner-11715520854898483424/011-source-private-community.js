@@ -1,0 +1,1 @@
+fetch('/api/community/internal/reports',{method:'POST',body:{reportId:1}}); require('recovered-package'); const apiUrl='https://recovered.s3.amazonaws.com/private'; const apiKey='AIzaZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ';

@@ -1,0 +1,8 @@
+﻿index,payload,status,bytes,millis,verdict,evidence
+1,"{""$eq"":""alpha""}",200,150,2,"기준 응답","기준 수집 · 원래 값"
+2,"{""$eq"":""alpha""}",200,150,1,"근거 없음","기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음"
+2,"{""$eq"":""alpha""}",200,150,1,"기준 재검증","기준 2회 동일 · 조건 차이 비교 가능"
+3,"{""$pr_invalid_operator"":1}",200,173,0,"NoSQL Injection 오류 후보","후보 탐색 · MongoServerError: unknown operator · 오류 노출이며 인젝션 성공 확정 아님"
+4,"{""$pr_invalid_operator"":1}",200,173,0,"NoSQL Injection 오류 후보","새 마커/동일 입력 재검증 · MongoServerError: unknown operator · 오류 노출이며 인젝션 성공 확정 아님"
+5,"{""$eq"":""alpha""}",200,150,1,"근거 없음","후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음"
+4,"{""$pr_invalid_operator"":1}",200,173,0,"NoSQL Injection 오류 후보 · 재현","같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · MongoServerError: unknown operator · 오류 노출이며 인젝션 성공 확정 아님 · 자동 확정 아님"

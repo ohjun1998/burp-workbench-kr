@@ -1,0 +1,8 @@
+package kr.workbench;
+import burp.api.montoya.MontoyaApi;import java.nio.file.*;import java.util.*;
+final class PassiveToolSettings {
+ static String get(MontoyaApi api,String tool){try{String saved=api.persistence().preferences().getString("wb.passive.tool."+tool);if(saved!=null&&!saved.isBlank())return saved;}catch(Exception ignored){}return discover(tool);}
+ static void save(MontoyaApi api,String tool,String path){try{api.persistence().preferences().setString("wb.passive.tool."+tool,path);}catch(Exception ignored){}}
+ static void add(List<Path> paths,String text,boolean bin){try{String value=text.strip();if(value.startsWith("\"")&&value.endsWith("\""))value=value.substring(1,value.length()-1);Path path=Path.of(value);paths.add(bin?path.resolve("bin"):path);}catch(Exception ignored){}}
+ static String discover(String tool){List<Path> directories=new ArrayList<>();String path=System.getenv("PATH");if(path!=null)for(String dir:path.split(java.io.File.pathSeparator))if(!dir.isBlank())add(directories,dir,false);for(String env:List.of("GOBIN","GOPATH")){String value=System.getenv(env);if(value!=null)for(String dir:value.split(java.io.File.pathSeparator))if(!dir.isBlank())add(directories,dir,env.equals("GOPATH"));}directories.add(Path.of(System.getProperty("user.home"),"go","bin"));try{Path jar=Path.of(PassiveToolSettings.class.getProtectionDomain().getCodeSource().getLocation().toURI());directories.add(jar.getParent().resolve("tools"));}catch(Exception ignored){}for(Path dir:directories)for(String file:List.of(tool,tool+".exe")){Path candidate=dir.resolve(file);if(Files.isRegularFile(candidate)&&(file.endsWith(".exe")||Files.isExecutable(candidate)))return candidate.toAbsolutePath().toString();}return "";}
+}

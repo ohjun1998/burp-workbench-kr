@@ -1,3 +1,9 @@
+# 사이트 3.5.0 — 버그바운티 흐름 실습
+
+`/bounty-lab`에서 계정·조직별 정책, 저장/조회, 업로드/다운로드, 증거 정리와 초기화를 한 흐름으로 연습할 수 있습니다. [3.5 안내](BOUNTY_LAB_3.5_KR.md)를 먼저 확인하세요. 기존 검증 숫자는 각 버전의 실행 기록이며 새 버전의 검증으로 합산하지 않습니다.
+
+현재 `docker compose up -d --build --wait --wait-timeout 900`은 `Dockerfile.source`를 사용해 현재 소스를 Maven으로 빌드합니다. 과거 `dist/ROOT.war`를 복사하지 않습니다. 첫 실행에는 Maven 의존성과 이미지 다운로드를 위한 인터넷 연결이 필요합니다. 기본 `Dockerfile`은 과거 WAR 재현용이며 현재 버전 실행은 Compose 또는 `docker build -f Dockerfile.source`를 사용합니다.
+
 # LOOP 커뮤니티 보안 진단 실습 3.4 · 전 기능 검증 센터
 
 /diagnostics에 33개 사례와 16개 프로필을 추가했습니다. 최신 설명은 DIAGNOSTICS_3.4_KR.md를 확인하세요. 이번 검증은 임베디드 Spring/Tomcat/H2, API/DOM 어댑터를 사용합니다.

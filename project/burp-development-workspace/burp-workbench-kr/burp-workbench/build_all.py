@@ -28,16 +28,21 @@ classes=root/'build/classes' ;shutil.rmtree(classes,ignore_errors=True);classes.
 compiler=[a.java,'-jar',str(a.compiler.resolve()),'-17','-warn:none']if a.compiler else ([a.javac or shutil.which('javac'),'--release','17'] if a.javac or shutil.which('javac') else [a.java,'com.sun.tools.javac.Main','--release','17'])
 cp=os.pathsep.join(map(str,[api,legacy,rhino]))
 subprocess.run(compiler+['-encoding','UTF-8','-cp',cp,'-d',str(classes)]+[str(p)for p in sorted((root/'src/main/java').rglob('*.java'))],check=True)
-output=root/'dist/burp-workbench-kr-0.21.0.jar';output.parent.mkdir(exist_ok=True)
+output=root/'dist/burp-workbench-kr-0.23.0.jar';output.parent.mkdir(exist_ok=True)
 temporary_output=output.with_suffix('.building')
-with zipfile.ZipFile(temporary_output,'w',zipfile.ZIP_DEFLATED)as z:
- z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\r\nImplementation-Title: Burp Workbench KR\r\nImplementation-Version: 0.21.0\r\n\r\n')
- for path in classes.rglob('*.class'):z.writestr(path.relative_to(classes).as_posix(),relocate(path.read_bytes()))
+class ReleaseZip(zipfile.ZipFile):
+ def writestr(self,name,data,*args,**kwargs):
+  info=zipfile.ZipInfo(name,(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o100644<<16
+  return super().writestr(info,data)
+ def write(self,path,name):self.writestr(str(name),pathlib.Path(path).read_bytes())
+with ReleaseZip(temporary_output,'w',zipfile.ZIP_DEFLATED)as z:
+ z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\r\nImplementation-Title: Burp Workbench KR\r\nImplementation-Version: 0.23.0\r\n\r\n')
+ for path in sorted(classes.rglob('*.class')):z.writestr(path.relative_to(classes).as_posix(),relocate(path.read_bytes()))
  with zipfile.ZipFile(rhino) as dependency:
-  for name in dependency.namelist():
+  for name in sorted(dependency.namelist()):
    if name.startswith('org/mozilla/') and not name.endswith('/'):
     z.writestr(rename(name.encode()).decode(),relocate(dependency.read(name)))
- for path in (root/'src/main/resources').rglob('*'):
+ for path in sorted((root/'src/main/resources').rglob('*')):
   if path.is_file() and "engines" not in path.relative_to(root/"src/main/resources").parts:z.write(path,path.relative_to(root/'src/main/resources').as_posix())
  z.write(root/'LICENSE','LICENSE');z.write(root/'THIRD_PARTY_NOTICES.md','THIRD_PARTY_NOTICES.md')
 temporary_output.replace(output)
@@ -51,11 +56,11 @@ if a.test:
  if font:options.append('-Dworkbench.qaFont='+font)
  full_cp=cp+os.pathsep+str(output)+os.pathsep+str(tests)
  reports=[]
- for name in ['StructuredCompareTest','WorkbenchTest','EnvironmentTest','EnvironmentPanelTest','EnvironmentBatchTest','EnvironmentDiscoveryTest','EnvironmentFeedbackTest','TextEncodingTest','DisplayWorkflowTest','PacketUiTest','PassiveScanTest','LayoutPassiveWorkflowTest','JsAnalysisTest','JsAnalysisPanelTest','JsNavigationTest','JsHistoryTest','PayloadIntegrationTest','UiLayoutTest','AuthRecordTest','UiCleanupTest','ActivityReconTest','TrafficScopeTest','PopupWorkflowTest','TargetCleanupTest','ReviewWorkflowTest','OtherImprovementsTest','AuditRepairsTest','BountyFeaturesTest','CompletenessTest','IntegrationEdgesTest','AccountTasksTest']:
+ for name in ['StructuredCompareTest','WorkbenchTest','EnvironmentTest','EnvironmentPanelTest','EnvironmentBatchTest','EnvironmentDiscoveryTest','EnvironmentFeedbackTest','TextEncodingTest','DisplayWorkflowTest','PacketUiTest','PassiveScanTest','LayoutPassiveWorkflowTest','JsAnalysisTest','JsAnalysisPanelTest','JsNavigationTest','JsHistoryTest','PayloadIntegrationTest','UiLayoutTest','AuthRecordTest','UiCleanupTest','ActivityReconTest','TrafficScopeTest','PopupWorkflowTest','TargetCleanupTest','ReviewWorkflowTest','OtherImprovementsTest','AuditRepairsTest','BountyFeaturesTest','CompletenessTest','IntegrationEdgesTest','AccountTasksTest','ReviewConditionsTest','StoredFlowStagesTest','EvidenceLinkTest','EvidencePreviewTest']:
   r=subprocess.run(options+['-cp',full_cp,'kr.workbench.TestLauncher','kr.workbench.'+name],cwd=root,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=120)
   text=r.stdout+r.stderr;(root/'build'/('test-'+name+'.txt')).write_text(text,encoding='utf-8');print(text,end='');reports.append(text)
   if r.returncode:raise SystemExit(r.returncode)
- (root/'build/test-results-0.21.0.txt').write_text('\n'.join(reports),encoding='utf-8')
+ (root/'build/test-results-0.23.0.txt').write_text('\n'.join(reports),encoding='utf-8')
 
 if a.test:
  result=subprocess.run(options+['-cp',full_cp,'kr.workbench.TestLauncher','kr.payloadrunner.EngineTest'],cwd=root,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=180)

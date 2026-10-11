@@ -9,8 +9,10 @@ services:
         condition: service_healthy
     networks: [lab]
   was:
-    image: enterprise-lab-was:3.0
-    build: .
+    image: enterprise-lab-was:3.5.0
+    build:
+      context: .
+      dockerfile: Dockerfile.source
     environment:
       DB_URL: jdbc:oracle:thin:@//db:1521/FREEPDB1
       DB_USER: LABAPP

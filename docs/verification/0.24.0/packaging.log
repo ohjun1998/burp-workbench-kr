@@ -1,0 +1,9 @@
+test_archive_is_reproducible (test_package_downloads.PackageChecks.test_archive_is_reproducible) ... ok
+test_compose_builds_current_source (test_package_downloads.PackageChecks.test_compose_builds_current_source) ... ok
+test_docker_source_inputs_are_complete (test_package_downloads.PackageChecks.test_docker_source_inputs_are_complete) ... ok
+test_existing_version_is_immutable (test_package_downloads.PackageChecks.test_existing_version_is_immutable) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.007s
+
+OK

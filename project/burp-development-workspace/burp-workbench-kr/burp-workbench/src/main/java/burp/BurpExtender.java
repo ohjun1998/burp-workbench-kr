@@ -11,7 +11,7 @@ public final class BurpExtender implements IBurpExtender, BurpExtension {
     private kr.payloadrunner.PayloadRunnerPanel payloadRunner;
     @Override public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks) {
         this.callbacks=callbacks;
-        callbacks.setExtensionName("Burp Workbench KR 0.23.0");
+        callbacks.setExtensionName("Burp Workbench KR 0.24.0");
     }
     @Override public void initialize(MontoyaApi api) {
         if(callbacks==null)throw new IllegalStateException("Burp Multi-API callbacks were not supplied. Use a current Burp release.");
@@ -27,6 +27,6 @@ public final class BurpExtender implements IBurpExtender, BurpExtension {
         });
         payloadRunner.setEvidenceSink((service,rows)->workbench.capturePayloadEvidence(burp.api.montoya.http.HttpService.httpService(service.getHost(),service.getPort(),service.getProtocol().equalsIgnoreCase("https")),rows));
         api.extension().registerUnloadingHandler(payloadRunner::extensionUnloaded);
-        api.extension().setName("Burp Workbench KR 0.23.0");
+        api.extension().setName("Burp Workbench KR 0.24.0");
     }
 }

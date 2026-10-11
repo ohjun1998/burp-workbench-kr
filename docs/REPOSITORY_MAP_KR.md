@@ -27,7 +27,8 @@
 | 실습 사이트 소스·Docker 설정 | [`project/burp-development-workspace/community-security-lab/`](../project/burp-development-workspace/community-security-lab/) |
 | 버전별 다운로드 생성 | [`tools/package_downloads.py`](../tools/package_downloads.py) |
 | GitHub 자동 검증 | [`.github/workflows/check.yml`](../.github/workflows/check.yml) |
-| PDF 가이드 생성 | [`tools/build_guide.py`](../tools/build_guide.py), [`docs/GUIDE_0.23.0_KR.md`](GUIDE_0.23.0_KR.md) |
+| PDF 가이드 생성 | [`tools/build_guide.py`](../tools/build_guide.py), [`docs/GUIDE_0.24.0_KR.md`](GUIDE_0.24.0_KR.md) |
+| 크기·테마별 화면 배치 검사 | [`tools/render_ui_layout.py`](../tools/render_ui_layout.py), [`docs/UI_0.24.0_KR.md`](UI_0.24.0_KR.md) |
 
 `dist/`는 개발 중 빌드 결과이고 `downloads/`는 공유할 버전별 산출물입니다. 배포는 `python dev.py release`, 현재 소스와 다운로드의 대응 확인은 `python tools/package_downloads.py --verify`를 사용합니다.
 

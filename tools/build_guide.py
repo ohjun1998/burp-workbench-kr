@@ -28,9 +28,9 @@ from reportlab.platypus import (
 ROOT = Path(__file__).resolve().parents[1]
 WB = ROOT / "project/burp-development-workspace/burp-workbench-kr/burp-workbench"
 FONT = WB / "src/main/resources/fonts/NanumGothic-Regular.ttf"
-ASSETS = ROOT / "docs/guide-assets/0.23.0"
-SOURCE = ROOT / "docs/GUIDE_0.23.0_KR.md"
-OUTPUT = ROOT / "downloads/guides/0.23.0/Burp_Workbench_KR_0.23.0_guide.pdf"
+ASSETS = ROOT / "docs/guide-assets/0.24.0"
+SOURCE = ROOT / "docs/GUIDE_0.24.0_KR.md"
+OUTPUT = ROOT / "downloads/guides/0.24.0/Burp_Workbench_KR_0.24.0_guide.pdf"
 INK = colors.HexColor("#182936")
 TEAL = colors.HexColor("#007A7C")
 GRAY = colors.HexColor("#5D6A73")
@@ -41,11 +41,14 @@ WIDTH = PAGE[0] - 88
 
 
 def refresh_previews(java: str):
-    output = ROOT / "tmp/pdfs/guide-preview-classes"
+    output = ROOT / "tmp/pdfs/guide-preview-classes-0.24.0"
     output.mkdir(parents=True, exist_ok=True)
     ASSETS.mkdir(parents=True, exist_ok=True)
     dependencies = [WB / "deps" / name for name in ("montoya-2026.jar", "legacy-api.jar", "rhino.jar")]
-    classpath = os.pathsep.join(map(str, [*dependencies, WB / "build/classes", WB / "build/tests"]))
+    release_jar = WB / "dist/burp-workbench-kr-0.24.0.jar"
+    if not release_jar.is_file():
+        raise FileNotFoundError("Build the current release JAR and test adapters with python dev.py test first.")
+    classpath = os.pathsep.join(map(str, [*dependencies, release_jar, WB / "build/tests"]))
     subprocess.run([java, "com.sun.tools.javac.Main", "--release", "17", "-encoding", "UTF-8", "-cp", classpath,
                     "-d", str(output), str(ROOT / "tools/GuidePreview.java")], check=True)
     subprocess.run([java, "-Djava.awt.headless=true", "-Dfile.encoding=UTF-8", "-cp", classpath + os.pathsep + str(output),
@@ -148,7 +151,7 @@ def build():
         canvas.rect(0, PAGE[1] - 8, PAGE[0], 8, fill=1, stroke=0)
         canvas.setFont("GuideKR", 8)
         canvas.setFillColor(GRAY)
-        canvas.drawString(44, PAGE[1] - 31, "WORKBENCH KR / 0.23.0")
+        canvas.drawString(44, PAGE[1] - 31, "WORKBENCH KR / 0.24.0")
         canvas.drawRightString(PAGE[0] - 44, PAGE[1] - 31, "실습 사이트 3.5.0 · 한국어 가이드")
         canvas.setStrokeColor(RULE)
         canvas.line(44, 43, PAGE[0] - 44, 43)
@@ -164,7 +167,7 @@ def build():
                 self.canv.addOutlineEntry(flowable.getPlainText(), key, 0, False)
 
     document = GuideDocument(str(OUTPUT), pagesize=PAGE, rightMargin=44, leftMargin=44,
-                                topMargin=63, bottomMargin=58, title="Burp Workbench KR 0.23.0 실전 점검 가이드",
+                                topMargin=63, bottomMargin=58, title="Burp Workbench KR 0.24.0 실전 점검 가이드",
                                 author="Burp Workbench KR", pageCompression=1)
     document.build(story, onFirstPage=page_frame, onLaterPages=page_frame)
     checksum = hashlib.sha256(OUTPUT.read_bytes()).hexdigest()

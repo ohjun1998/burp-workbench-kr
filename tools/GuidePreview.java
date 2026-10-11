@@ -22,7 +22,13 @@ import javax.swing.plaf.FontUIResource;
 public final class GuidePreview extends WorkbenchTest {
     static void render(Container root, Path path, int width, int height) throws Exception {
         root.setSize(width, height);
-        UiLayoutTest.layout(root);
+        // Resize listeners schedule divider positions on the EDT; paint after they settle.
+        for (int pass=0; pass<6; pass++) {
+            UiLayoutTest.layout(root);
+            var loop=java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();
+            javax.swing.SwingUtilities.invokeLater(loop::exit);
+            loop.enter();
+        }
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         var graphics = image.createGraphics();
         root.paint(graphics);
@@ -68,10 +74,16 @@ public final class GuidePreview extends WorkbenchTest {
         edt(()->{});
         JPanel root = (JPanel) get(ext, "root");
         JTabbedPane tabs = (JTabbedPane) get(ext, "tabs");
+        var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
+        edt(()->js.input.setText("// 가이드용 예시: 실제 요청을 실행하지 않습니다.\nconst endpoint = '/api/bounty/fixed/objects/202';\nfunction loadExample() {\n  return fetch(endpoint).then(response => response.json());\n}\n"));
+        // Let the production font fallback listener run before painting Korean source text.
+        edt(()->{});
         edt(() -> {
             try {
                 activity.refresh();
                 root.addNotify();
+                tabs.setSelectedComponent(js);
+                render(root,out.resolve("js-compact.png"),1024,720);
                 for (int i:List.of(0,1,3,4,5,6,7)) {
                     tabs.setSelectedIndex(i);
                     render(root, out.resolve(String.format("tool-%02d.png", i)), 1440, 920);

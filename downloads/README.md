@@ -6,12 +6,12 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| Burp 확장 JAR | 0.23.0 | [burp-workbench-kr-0.23.0.jar](extensions/0.23.0/burp-workbench-kr-0.23.0.jar) |
-| 확장 소스·빌드 의존성 | 0.23.0 | [burp-workbench-kr-0.23.0-source.zip](extensions/0.23.0/burp-workbench-kr-0.23.0-source.zip) |
+| Burp 확장 JAR | 0.24.0 | [burp-workbench-kr-0.24.0.jar](extensions/0.24.0/burp-workbench-kr-0.24.0.jar) |
+| 확장 소스·빌드 의존성 | 0.24.0 | [burp-workbench-kr-0.24.0-source.zip](extensions/0.24.0/burp-workbench-kr-0.24.0-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.5.0 | [community-security-lab-3.5.0-docker.zip](docker/3.5.0/community-security-lab-3.5.0-docker.zip) |
-| 한국어 그림 가이드북 | 0.23.0 | [Burp_Workbench_KR_0.23.0_guide.pdf](guides/0.23.0/Burp_Workbench_KR_0.23.0_guide.pdf) |
+| 한국어 그림 가이드북 | 0.24.0 | [Burp_Workbench_KR_0.24.0_guide.pdf](guides/0.24.0/Burp_Workbench_KR_0.24.0_guide.pdf) |
 
-[변경 안내](../docs/RELEASE_0.23.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.23.0.json)
+[변경 안내](../docs/RELEASE_0.24.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.24.0.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요.
 
@@ -25,6 +25,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
+| 이전 확장·가이드 | 0.23.0 | [JAR](extensions/0.23.0/burp-workbench-kr-0.23.0.jar) · [소스](extensions/0.23.0/burp-workbench-kr-0.23.0-source.zip) · [PDF](guides/0.23.0/Burp_Workbench_KR_0.23.0_guide.pdf) |
 | 이전 확장 | 0.22.1 | [JAR](extensions/0.22.1/burp-workbench-kr-0.22.1.jar) · [소스](extensions/0.22.1/burp-workbench-kr-0.22.1-source.zip) |
 | 초기 테스트 배포 · CI 대기 문제 수정 전 | 0.22.0 | [JAR](extensions/0.22.0/burp-workbench-kr-0.22.0.jar) · [소스](extensions/0.22.0/burp-workbench-kr-0.22.0-source.zip) |
 | 과거 배포 원본 | 0.21.0 | [JAR](extensions/0.21.0/burp-workbench-kr-0.21.0.jar) |

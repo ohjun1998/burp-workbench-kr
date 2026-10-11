@@ -85,7 +85,7 @@ def http_test(runtime, compiler, port):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['doctor', 'build', 'test', 'http-test', 'check'])
+    parser.add_argument('command', choices=['doctor', 'build', 'test', 'http-test', 'check', 'release'])
     parser.add_argument('--java', default='java')
     parser.add_argument('--javac')
     parser.add_argument('--port', type=int, default=18099)
@@ -103,6 +103,8 @@ def main():
         else:
             build(runtime, compiler, test=True)
             http_test(runtime, compiler, args.port)
+            if args.command == 'release':
+                run([sys.executable, ROOT / 'tools/package_downloads.py'])
     except (OSError, RuntimeError, subprocess.CalledProcessError) as error:
         print('ERROR:', error, file=sys.stderr)
         return 1

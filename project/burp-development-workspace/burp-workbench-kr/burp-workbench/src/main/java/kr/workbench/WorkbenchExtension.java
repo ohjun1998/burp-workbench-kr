@@ -61,7 +61,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     private record Traffic(String time,String source,HttpRequest request,HttpResponse response) {}
 
     public void initialize(MontoyaApi api) {
-        this.api=api;localScope=WorkbenchScope.install(api);api.extension().setName("Burp Workbench KR 0.22.0");
+        this.api=api;localScope=WorkbenchScope.install(api);api.extension().setName("Burp Workbench KR 0.22.1");
         api.extension().registerUnloadingHandler(()->{
             unloaded.set(true);generation.incrementAndGet();incoming.clear();
             SwingUtilities.invokeLater(()->{if(commonSettingsWindow!=null)commonSettingsWindow.dispose();if(scopeWindow!=null)scopeWindow.dispose();if(timer!=null) timer.stop();if(responseRecon!=null)responseRecon.close();if(jsAnalysis!=null)jsAnalysis.close();if(authCompare!=null)authCompare.close();if(bountySupport!=null)bountySupport.close();traffic.clear();if(environments!=null){environments.close();}if(passiveScan!=null)passiveScan.close();if(activity!=null)activity.close();WorkbenchScope.release(api);});

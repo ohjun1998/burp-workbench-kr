@@ -4,8 +4,9 @@ GitHub에 로그인한 상태에서 아래 파일을 열고 **Download raw file*
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
-| Burp 확장 · 최신 테스트 | 0.22.0 | [burp-workbench-kr-0.22.0.jar](extensions/0.22.0/burp-workbench-kr-0.22.0.jar) |
-| 확장 소스·빌드 의존성 | 0.22.0 | [burp-workbench-kr-0.22.0-source.zip](extensions/0.22.0/burp-workbench-kr-0.22.0-source.zip) |
+| Burp 확장 · 최신 테스트 | 0.22.1 | [burp-workbench-kr-0.22.1.jar](extensions/0.22.1/burp-workbench-kr-0.22.1.jar) |
+| 확장 소스·빌드 의존성 | 0.22.1 | [burp-workbench-kr-0.22.1-source.zip](extensions/0.22.1/burp-workbench-kr-0.22.1-source.zip) |
+| 초기 테스트 배포 · CI 대기 문제 수정 전 | 0.22.0 | [burp-workbench-kr-0.22.0.jar](extensions/0.22.0/burp-workbench-kr-0.22.0.jar) |
 | 이전 배포 원본 | 0.21.0 | [burp-workbench-kr-0.21.0.jar](extensions/0.21.0/burp-workbench-kr-0.21.0.jar) |
 | Docker 실행 패키지 | 실습 사이트 3.4.0 | [community-security-lab-3.4.0-docker.zip](docker/3.4.0/community-security-lab-3.4.0-docker.zip) |
 

@@ -35,5 +35,13 @@
     "Version-specific PayloadIntegrationTest assertion updated from 0.21.0 to 0.22.0",
     "New evidence restore test corrected to use JSON serialization rather than raw Set-backed Map; final run passed"
   ],
-  "logs": "verification/0.22.0/release-check.log"
+  "logs": "verification/0.22.0/release-check.log",
+  "github_ci": {
+    "conclusion": "failure",
+    "run_ids": [
+      38124099364,
+      38124068986
+    ],
+    "failure": "HTTP fixture activity query mutation assertion raced with pending worker tasks. Regression/API/headless and payload checks passed. Fixed in 0.22.1 with a queue completion barrier."
+  }
 }

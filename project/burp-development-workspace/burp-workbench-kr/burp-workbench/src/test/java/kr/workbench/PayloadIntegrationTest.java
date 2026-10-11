@@ -50,14 +50,14 @@ public final class PayloadIntegrationTest {
   JTabbedPane tabs=(JTabbedPane)WorkbenchTest.get(workbench,"tabs");
   check(suiteTabs.get()==1&&legacyTabs.get()==0,"single Workbench suite tab; no standalone Payload Runner tab");
   check(tabs.getTabCount()==11,"ten tools including bounty support plus independent Settings tab");
-  check(names.stream().allMatch("Burp Workbench KR 0.21.0"::equals),"embedded runner preserves Workbench extension name");
+  check(names.stream().allMatch("Burp Workbench KR · 웹 보안 점검 (0.25.0)"::equals),"embedded runner preserves Workbench extension name");
   check(java.util.stream.IntStream.range(0,tabs.getTabCount()).noneMatch(i->Set.of("도구 가이드","원본 엔진").contains(tabs.getTitleAt(i))),"removed pages absent");
   check(entry.getClass().getResource("/engines/catalog.properties")==null,"engine catalog excluded from installation");
   check(sent.get()==0,"loading integrated extension sends zero requests");
   check(menus.size()==1&&legacyUnloads.size()==1,"one runner menu factory and unload listener without engine menu factory");
-  check(WorkbenchTest.get(runner,"panel")==tabs.getComponentAt(tabs.indexOfTab("페이로드 검사")),"runner component is embedded in Workbench");
+  check(WorkbenchTest.get(runner,"panel")==tabs.getComponentAt(tabs.indexOfTab("입력값 보안 검사")),"runner component is embedded in Workbench");
   SwingUtilities.invokeAndWait(workbench::selectPayloadRunnerPage);
-  check(tabs.getSelectedIndex()==tabs.indexOfTab("페이로드 검사"),"import navigation selects integrated runner page");
+  check(tabs.getSelectedIndex()==tabs.indexOfTab("입력값 보안 검사"),"import navigation selects integrated runner page");
   check(WorkbenchTest.get(workbench,"payloadImport")!=null,"Workbench selected-request action connected to runner");
   check(((JComboBox<?>)WorkbenchTest.get(runner,"mode")).getSelectedIndex()==0,"adaptive strategy remains default");
   check(((JComboBox<?>)WorkbenchTest.get(runner,"profile")).getItemCount()==16,"all sixteen payload profiles preserved");

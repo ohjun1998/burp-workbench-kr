@@ -1,0 +1,1837 @@
+theme,width,height,view,kind,label,selected,textWidth,allocatedWidth,allocatedHeight,fullyVisible,textFits
+light,1024,720,tool-00.png,tab,요청·응답 목록,true,86,107,21,true,true
+light,1024,720,tool-00.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-00.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-00.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-00.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-00.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-00.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-00.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-00.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-00.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-00.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-00.png,heading,요청  REQUEST,true,100,646,28,true,true
+light,1024,720,tool-00.png,heading,응답  RESPONSE,true,108,646,28,true,true
+light,1024,720,tool-01.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-01.png,tab,계정 권한 비교,true,86,107,21,true,true
+light,1024,720,tool-01.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-01.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-01.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-01.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-01.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-01.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-01.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-01.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-01.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-01.png,heading,계정 권한 비교,true,115,115,24,true,true
+light,1024,720,tool-01.png,heading,인증 정보 후보 · 우클릭으로 비교 계정 지정,true,261,446,28,true,true
+light,1024,720,tool-01.png,heading,비교 기록,true,58,446,28,true,true
+light,1024,720,tool-01.png,tab,비교 계정 1,true,68,89,21,true,true
+light,1024,720,tool-01.png,tab,비교 계정 2,false,68,89,21,true,true
+light,1024,720,tool-01.png,tab,비교 계정 3,false,68,89,21,true,true
+light,1024,720,tool-01.png,tab,원본,false,26,47,21,true,true
+light,1024,720,tool-01.png,heading,요청 REQUEST,true,96,541,28,true,true
+light,1024,720,tool-01.png,heading,응답 RESPONSE,true,104,541,28,true,true
+light,1024,720,tool-01.png,heading,판정 근거 · JSON 필드 차이,true,168,546,28,true,true
+light,1024,720,tool-02.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-02.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-02.png,tab,데이터 변환·비교,true,99,120,21,true,true
+light,1024,720,tool-02.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-02.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-02.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-02.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-02.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-02.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-02.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-02.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-02.png,tab,인코딩·변환,true,69,90,21,true,true
+light,1024,720,tool-02.png,tab,JWT 내용 확인,false,87,108,21,true,true
+light,1024,720,tool-02.png,tab,응답·데이터 비교,false,99,120,21,true,true
+light,1024,720,tool-02.png,heading,인코딩·변환,true,93,93,24,true,true
+light,1024,720,tool-02.png,heading,입력 (UTF-8 텍스트),true,126,980,28,true,true
+light,1024,720,tool-02.png,heading,출력,true,27,980,28,true,true
+light,1024,720,tool-03.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-03.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-03.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-03.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+light,1024,720,tool-03.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-03.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-03.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-03.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-03.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-03.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-03.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-03.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+light,1024,720,tool-03.png,heading,JS 원본 · 수동 분석,true,115,444,28,true,true
+light,1024,720,tool-03.png,tab,URL · API,true,59,80,21,true,true
+light,1024,720,tool-03.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+light,1024,720,tool-03.png,tab,도메인,false,39,60,21,true,true
+light,1024,720,tool-03.png,tab,클라우드 URL,false,82,103,21,true,true
+light,1024,720,tool-03.png,tab,NPM 의존성,false,75,96,21,false,true
+light,1024,720,tool-03.png,tab,소스맵,false,39,60,21,false,true
+light,1024,720,tool-03.png,tab,복원 원본,false,56,77,21,false,true
+light,1024,720,tool-03.png,tab,분석 상세,false,56,77,21,false,true
+light,1024,720,tool-03.png,tab,History 분석 목록,false,104,125,21,false,true
+light,1024,720,tool-03.png,heading,요청 REQUEST,true,96,544,28,true,true
+light,1024,720,tool-03.png,heading,응답 RESPONSE,true,104,544,28,true,true
+light,1024,720,tool-04.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-04.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-04.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-04.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-04.png,tab,서버·경로 탐색,true,86,107,21,true,true
+light,1024,720,tool-04.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-04.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-04.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-04.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-04.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-04.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-04.png,heading,서버·경로 탐색,true,116,116,24,true,true
+light,1024,720,tool-04.png,heading,관찰한 환경,true,71,442,28,true,true
+light,1024,720,tool-04.png,heading,추천 경로 · 미검증 후보,true,141,442,28,true,true
+light,1024,720,tool-04.png,heading,요청 REQUEST,true,96,542,28,true,true
+light,1024,720,tool-04.png,heading,응답 RESPONSE,true,104,542,28,true,true
+light,1024,720,tool-05.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-05.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-05.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-05.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-05.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-05.png,tab,URL 후보 수집,true,86,107,21,true,true
+light,1024,720,tool-05.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-05.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-05.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-05.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-05.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-05.png,tab,127.0.0.1 · ,true,72,93,21,true,true
+light,1024,720,tool-05.png,heading,URL 후보 수집,true,115,115,24,true,true
+light,1024,720,tool-05.png,heading,URL 수집 목록,true,89,436,28,true,true
+light,1024,720,tool-05.png,heading,요청 REQUEST,true,96,535,28,true,true
+light,1024,720,tool-05.png,heading,응답 RESPONSE,true,104,535,28,true,true
+light,1024,720,tool-06.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-06.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-06.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-06.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-06.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-06.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-06.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1024,720,tool-06.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-06.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-06.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-06.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-06.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1024,720,tool-06.png,tab,URL 점검 현황,true,86,107,21,true,true
+light,1024,720,tool-06.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1024,720,tool-06.png,tab,계정별 점검,false,69,90,21,true,true
+light,1024,720,tool-06.png,tab,업무별 현황,false,69,90,21,true,true
+light,1024,720,tool-06.png,heading,URL 점검 현황,true,89,708,28,true,true
+light,1024,720,tool-06.png,heading,선택 URL 입력,true,89,275,28,true,true
+light,1024,720,tool-07.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-07.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-07.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-07.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-07.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-07.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-07.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-07.png,tab,응답 보안 분석,true,86,107,21,true,true
+light,1024,720,tool-07.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-07.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-07.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-07.png,heading,응답 보안 분석,true,115,115,24,true,true
+light,1024,720,tool-07.png,tab,응답 관찰,true,56,77,21,true,true
+light,1024,720,tool-07.png,tab,API 문서,false,51,72,21,true,true
+light,1024,720,tool-07.png,tab,저장/조회 연결,false,87,108,21,true,true
+light,1024,720,tool-08.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1024,720,tool-08.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-08.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-08.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-08.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-08.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-08.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-08.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-08.png,tab,입력값 보안 검사,true,99,120,21,true,true
+light,1024,720,tool-08.png,tab,재현·증거 정리,false,86,107,21,false,true
+light,1024,720,tool-08.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-08.png,tab,요청 준비,true,56,77,21,true,true
+light,1024,720,tool-08.png,tab,검사 후보,false,56,77,21,true,true
+light,1024,720,tool-08.png,heading,진단 결과 · 후보와 근거,true,141,444,28,true,true
+light,1024,720,tool-08.png,heading,전송 요청 REQUEST,true,127,544,28,true,true
+light,1024,720,tool-08.png,heading,응답 RESPONSE,true,104,544,28,true,true
+light,1024,720,tool-08.png,heading,입력값 보안 검사,true,133,133,24,true,true
+light,1024,720,tool-09.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,tool-09.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tool-09.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tool-09.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tool-09.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tool-09.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tool-09.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,tool-09.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tool-09.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tool-09.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1024,720,tool-09.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tool-09.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1024,720,tool-09.png,tab,외부 도구,true,56,77,21,true,true
+light,1024,720,tool-09.png,tab,여러 요청 재현,false,86,107,21,true,true
+light,1024,720,tool-09.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1024,720,tool-09.png,tab,증거 묶음,false,56,77,21,true,true
+light,1024,720,tool-09.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1024,720,tool-09.png,heading,외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,true,312,996,28,true,true
+light,1024,720,settings.png,heading,화면 배치,true,58,1022,28,true,true
+light,1024,720,data-compare.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,data-compare.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,data-compare.png,tab,데이터 변환·비교,true,99,120,21,true,true
+light,1024,720,data-compare.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,data-compare.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,data-compare.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,data-compare.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,data-compare.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,data-compare.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,data-compare.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1024,720,data-compare.png,tab,설정,false,26,47,21,false,true
+light,1024,720,data-compare.png,tab,인코딩·변환,false,69,90,21,true,true
+light,1024,720,data-compare.png,tab,JWT 내용 확인,false,87,108,21,true,true
+light,1024,720,data-compare.png,tab,응답·데이터 비교,true,99,120,21,true,true
+light,1024,720,data-compare.png,heading,응답·데이터 비교,true,134,134,24,true,true
+light,1024,720,data-compare.png,heading,왼쪽 데이터,true,71,493,28,true,true
+light,1024,720,data-compare.png,heading,오른쪽 데이터,true,85,494,28,true,true
+light,1024,720,stored-flow.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,stored-flow.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,stored-flow.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,stored-flow.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,stored-flow.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,stored-flow.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,stored-flow.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,stored-flow.png,tab,응답 보안 분석,true,86,107,21,true,true
+light,1024,720,stored-flow.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,stored-flow.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1024,720,stored-flow.png,tab,설정,false,26,47,21,false,true
+light,1024,720,stored-flow.png,heading,응답 보안 분석,true,115,115,24,true,true
+light,1024,720,stored-flow.png,tab,응답 관찰,false,56,77,21,true,true
+light,1024,720,stored-flow.png,tab,API 문서,false,51,72,21,true,true
+light,1024,720,stored-flow.png,tab,저장/조회 연결,true,87,108,21,true,true
+light,1024,720,accounts.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,accounts.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,accounts.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,accounts.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,accounts.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,accounts.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,accounts.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1024,720,accounts.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,accounts.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,accounts.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1024,720,accounts.png,tab,설정,false,26,47,21,false,true
+light,1024,720,accounts.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1024,720,accounts.png,tab,URL 점검 현황,false,86,107,21,true,true
+light,1024,720,accounts.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1024,720,accounts.png,tab,계정별 점검,true,69,90,21,true,true
+light,1024,720,accounts.png,tab,업무별 현황,false,69,90,21,true,true
+light,1024,720,accounts.png,heading,선택 URL의 입력,true,103,275,28,true,true
+light,1024,720,tasks.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,tasks.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,tasks.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,tasks.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,tasks.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,tasks.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,tasks.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1024,720,tasks.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,tasks.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,tasks.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1024,720,tasks.png,tab,설정,false,26,47,21,false,true
+light,1024,720,tasks.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1024,720,tasks.png,tab,URL 점검 현황,false,86,107,21,true,true
+light,1024,720,tasks.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1024,720,tasks.png,tab,계정별 점검,false,69,90,21,true,true
+light,1024,720,tasks.png,tab,업무별 현황,true,69,90,21,true,true
+light,1024,720,tasks.png,heading,요구 계정 × API,true,97,992,28,true,true
+light,1024,720,bounty-1.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,bounty-1.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,bounty-1.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,bounty-1.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,bounty-1.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,설정,false,26,47,21,false,true
+light,1024,720,bounty-1.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1024,720,bounty-1.png,tab,외부 도구,false,56,77,21,true,true
+light,1024,720,bounty-1.png,tab,여러 요청 재현,true,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1024,720,bounty-1.png,tab,증거 묶음,false,56,77,21,true,true
+light,1024,720,bounty-1.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1024,720,bounty-1.png,heading,요청 단계 · ===STEP=== 줄로 구분,true,222,513,28,true,true
+light,1024,720,bounty-1.png,heading,JSON 변수 추출 · 1.id=$.id → {{id|URL}},true,251,513,28,true,true
+light,1024,720,bounty-1.png,heading,단계별 실행 결과,true,102,474,28,true,true
+light,1024,720,bounty-1.png,heading,선택 단계 · 요청/응답,true,129,474,28,true,true
+light,1024,720,bounty-3.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,bounty-3.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,bounty-3.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1024,720,bounty-3.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,bounty-3.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,설정,false,26,47,21,false,true
+light,1024,720,bounty-3.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1024,720,bounty-3.png,tab,외부 도구,false,56,77,21,true,true
+light,1024,720,bounty-3.png,tab,여러 요청 재현,false,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1024,720,bounty-3.png,tab,증거 묶음,true,56,77,21,true,true
+light,1024,720,bounty-3.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1024,720,bounty-3.png,heading,실제 영향 · 직접 작성,true,128,493,28,true,true
+light,1024,720,bounty-3.png,heading,재현 절차 · 직접 작성,true,128,494,28,true,true
+light,1024,720,js-horizontal.png,tab,요청·응답 목록,false,86,107,21,false,true
+light,1024,720,js-horizontal.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1024,720,js-horizontal.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1024,720,js-horizontal.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+light,1024,720,js-horizontal.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1024,720,js-horizontal.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1024,720,js-horizontal.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1024,720,js-horizontal.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1024,720,js-horizontal.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1024,720,js-horizontal.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1024,720,js-horizontal.png,tab,설정,false,26,47,21,false,true
+light,1024,720,js-horizontal.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+light,1024,720,js-horizontal.png,heading,JS 원본 · 수동 분석,true,115,593,28,true,true
+light,1024,720,js-horizontal.png,tab,URL · API,true,59,80,21,true,true
+light,1024,720,js-horizontal.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+light,1024,720,js-horizontal.png,tab,도메인,false,39,60,21,true,true
+light,1024,720,js-horizontal.png,tab,클라우드 URL,false,82,103,21,true,true
+light,1024,720,js-horizontal.png,tab,NPM 의존성,false,75,96,21,false,true
+light,1024,720,js-horizontal.png,tab,소스맵,false,39,60,21,false,true
+light,1024,720,js-horizontal.png,tab,복원 원본,false,56,77,21,false,true
+light,1024,720,js-horizontal.png,tab,분석 상세,false,56,77,21,false,true
+light,1024,720,js-horizontal.png,tab,History 분석 목록,false,104,125,21,false,true
+light,1024,720,js-horizontal.png,heading,요청 REQUEST,true,96,494,28,true,true
+light,1024,720,js-horizontal.png,heading,응답 RESPONSE,true,104,494,28,true,true
+light,1280,800,tool-00.png,tab,요청·응답 목록,true,86,107,21,true,true
+light,1280,800,tool-00.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-00.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-00.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-00.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-00.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-00.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-00.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-00.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-00.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-00.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-00.png,heading,요청  REQUEST,true,100,812,28,true,true
+light,1280,800,tool-00.png,heading,응답  RESPONSE,true,108,812,28,true,true
+light,1280,800,tool-01.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-01.png,tab,계정 권한 비교,true,86,107,21,true,true
+light,1280,800,tool-01.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-01.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-01.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-01.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-01.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-01.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-01.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-01.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-01.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-01.png,heading,계정 권한 비교,true,115,115,24,true,true
+light,1280,800,tool-01.png,heading,인증 정보 후보 · 우클릭으로 비교 계정 지정,true,261,561,28,true,true
+light,1280,800,tool-01.png,heading,비교 기록,true,58,561,28,true,true
+light,1280,800,tool-01.png,tab,비교 계정 1,true,68,89,21,true,true
+light,1280,800,tool-01.png,tab,비교 계정 2,false,68,89,21,true,true
+light,1280,800,tool-01.png,tab,비교 계정 3,false,68,89,21,true,true
+light,1280,800,tool-01.png,tab,원본,false,26,47,21,true,true
+light,1280,800,tool-01.png,heading,요청 REQUEST,true,96,682,28,true,true
+light,1280,800,tool-01.png,heading,응답 RESPONSE,true,104,682,28,true,true
+light,1280,800,tool-01.png,heading,판정 근거 · JSON 필드 차이,true,168,687,28,true,true
+light,1280,800,tool-02.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-02.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-02.png,tab,데이터 변환·비교,true,99,120,21,true,true
+light,1280,800,tool-02.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-02.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-02.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-02.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-02.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-02.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-02.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-02.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-02.png,tab,인코딩·변환,true,69,90,21,true,true
+light,1280,800,tool-02.png,tab,JWT 내용 확인,false,87,108,21,true,true
+light,1280,800,tool-02.png,tab,응답·데이터 비교,false,99,120,21,true,true
+light,1280,800,tool-02.png,heading,인코딩·변환,true,93,93,24,true,true
+light,1280,800,tool-02.png,heading,입력 (UTF-8 텍스트),true,126,1236,28,true,true
+light,1280,800,tool-02.png,heading,출력,true,27,1236,28,true,true
+light,1280,800,tool-03.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-03.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-03.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-03.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+light,1280,800,tool-03.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-03.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-03.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-03.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-03.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-03.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-03.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-03.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+light,1280,800,tool-03.png,heading,JS 원본 · 수동 분석,true,115,559,28,true,true
+light,1280,800,tool-03.png,tab,URL · API,true,59,80,21,true,true
+light,1280,800,tool-03.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+light,1280,800,tool-03.png,tab,도메인,false,39,60,21,true,true
+light,1280,800,tool-03.png,tab,클라우드 URL,false,82,103,21,true,true
+light,1280,800,tool-03.png,tab,NPM 의존성,false,75,96,21,true,true
+light,1280,800,tool-03.png,tab,소스맵,false,39,60,21,true,true
+light,1280,800,tool-03.png,tab,복원 원본,false,56,77,21,false,true
+light,1280,800,tool-03.png,tab,분석 상세,false,56,77,21,false,true
+light,1280,800,tool-03.png,tab,History 분석 목록,false,104,125,21,false,true
+light,1280,800,tool-03.png,heading,요청 REQUEST,true,96,685,28,true,true
+light,1280,800,tool-03.png,heading,응답 RESPONSE,true,104,685,28,true,true
+light,1280,800,tool-04.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-04.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-04.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-04.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-04.png,tab,서버·경로 탐색,true,86,107,21,true,true
+light,1280,800,tool-04.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-04.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-04.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-04.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-04.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-04.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-04.png,heading,서버·경로 탐색,true,116,116,24,true,true
+light,1280,800,tool-04.png,heading,관찰한 환경,true,71,557,28,true,true
+light,1280,800,tool-04.png,heading,추천 경로 · 미검증 후보,true,141,557,28,true,true
+light,1280,800,tool-04.png,heading,요청 REQUEST,true,96,683,28,true,true
+light,1280,800,tool-04.png,heading,응답 RESPONSE,true,104,683,28,true,true
+light,1280,800,tool-05.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-05.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-05.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-05.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-05.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-05.png,tab,URL 후보 수집,true,86,107,21,true,true
+light,1280,800,tool-05.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-05.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-05.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-05.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-05.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-05.png,tab,127.0.0.1 · ,true,72,93,21,true,true
+light,1280,800,tool-05.png,heading,URL 후보 수집,true,115,115,24,true,true
+light,1280,800,tool-05.png,heading,URL 수집 목록,true,89,551,28,true,true
+light,1280,800,tool-05.png,heading,요청 REQUEST,true,96,676,28,true,true
+light,1280,800,tool-05.png,heading,응답 RESPONSE,true,104,676,28,true,true
+light,1280,800,tool-06.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-06.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-06.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-06.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-06.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-06.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-06.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1280,800,tool-06.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-06.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-06.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-06.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-06.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1280,800,tool-06.png,tab,URL 점검 현황,true,86,107,21,true,true
+light,1280,800,tool-06.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1280,800,tool-06.png,tab,계정별 점검,false,69,90,21,true,true
+light,1280,800,tool-06.png,tab,업무별 현황,false,69,90,21,true,true
+light,1280,800,tool-06.png,heading,URL 점검 현황,true,89,892,28,true,true
+light,1280,800,tool-06.png,heading,선택 URL 입력,true,89,347,28,true,true
+light,1280,800,tool-07.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-07.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-07.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-07.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-07.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-07.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-07.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-07.png,tab,응답 보안 분석,true,86,107,21,true,true
+light,1280,800,tool-07.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-07.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-07.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-07.png,heading,응답 보안 분석,true,115,115,24,true,true
+light,1280,800,tool-07.png,tab,응답 관찰,true,56,77,21,true,true
+light,1280,800,tool-07.png,tab,API 문서,false,51,72,21,true,true
+light,1280,800,tool-07.png,tab,저장/조회 연결,false,87,108,21,true,true
+light,1280,800,tool-08.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-08.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-08.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-08.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-08.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-08.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-08.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-08.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-08.png,tab,입력값 보안 검사,true,99,120,21,true,true
+light,1280,800,tool-08.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tool-08.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-08.png,tab,요청 준비,true,56,77,21,true,true
+light,1280,800,tool-08.png,tab,검사 후보,false,56,77,21,true,true
+light,1280,800,tool-08.png,heading,진단 결과 · 후보와 근거,true,141,559,28,true,true
+light,1280,800,tool-08.png,heading,전송 요청 REQUEST,true,127,685,28,true,true
+light,1280,800,tool-08.png,heading,응답 RESPONSE,true,104,685,28,true,true
+light,1280,800,tool-08.png,heading,입력값 보안 검사,true,133,133,24,true,true
+light,1280,800,tool-09.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tool-09.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tool-09.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tool-09.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1280,800,tool-09.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tool-09.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1280,800,tool-09.png,tab,외부 도구,true,56,77,21,true,true
+light,1280,800,tool-09.png,tab,여러 요청 재현,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1280,800,tool-09.png,tab,증거 묶음,false,56,77,21,true,true
+light,1280,800,tool-09.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1280,800,tool-09.png,heading,외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,true,312,1252,28,true,true
+light,1280,800,settings.png,heading,화면 배치,true,58,1278,28,true,true
+light,1280,800,data-compare.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,data-compare.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,data-compare.png,tab,데이터 변환·비교,true,99,120,21,true,true
+light,1280,800,data-compare.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,data-compare.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,data-compare.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,data-compare.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,data-compare.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,data-compare.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,data-compare.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,data-compare.png,tab,설정,false,26,47,21,true,true
+light,1280,800,data-compare.png,tab,인코딩·변환,false,69,90,21,true,true
+light,1280,800,data-compare.png,tab,JWT 내용 확인,false,87,108,21,true,true
+light,1280,800,data-compare.png,tab,응답·데이터 비교,true,99,120,21,true,true
+light,1280,800,data-compare.png,heading,응답·데이터 비교,true,134,134,24,true,true
+light,1280,800,data-compare.png,heading,왼쪽 데이터,true,71,621,28,true,true
+light,1280,800,data-compare.png,heading,오른쪽 데이터,true,85,622,28,true,true
+light,1280,800,stored-flow.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,stored-flow.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,stored-flow.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,stored-flow.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,stored-flow.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,stored-flow.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,stored-flow.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,stored-flow.png,tab,응답 보안 분석,true,86,107,21,true,true
+light,1280,800,stored-flow.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,stored-flow.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,stored-flow.png,tab,설정,false,26,47,21,true,true
+light,1280,800,stored-flow.png,heading,응답 보안 분석,true,115,115,24,true,true
+light,1280,800,stored-flow.png,tab,응답 관찰,false,56,77,21,true,true
+light,1280,800,stored-flow.png,tab,API 문서,false,51,72,21,true,true
+light,1280,800,stored-flow.png,tab,저장/조회 연결,true,87,108,21,true,true
+light,1280,800,accounts.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,accounts.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,accounts.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1280,800,accounts.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,accounts.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,설정,false,26,47,21,true,true
+light,1280,800,accounts.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1280,800,accounts.png,tab,URL 점검 현황,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1280,800,accounts.png,tab,계정별 점검,true,69,90,21,true,true
+light,1280,800,accounts.png,tab,업무별 현황,false,69,90,21,true,true
+light,1280,800,accounts.png,heading,선택 URL의 입력,true,103,347,28,true,true
+light,1280,800,tasks.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,tasks.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,tasks.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1280,800,tasks.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,tasks.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,설정,false,26,47,21,true,true
+light,1280,800,tasks.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1280,800,tasks.png,tab,URL 점검 현황,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1280,800,tasks.png,tab,계정별 점검,false,69,90,21,true,true
+light,1280,800,tasks.png,tab,업무별 현황,true,69,90,21,true,true
+light,1280,800,tasks.png,heading,요구 계정 × API,true,97,1248,28,true,true
+light,1280,800,bounty-1.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,bounty-1.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,bounty-1.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,bounty-1.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,설정,false,26,47,21,true,true
+light,1280,800,bounty-1.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1280,800,bounty-1.png,tab,외부 도구,false,56,77,21,true,true
+light,1280,800,bounty-1.png,tab,여러 요청 재현,true,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1280,800,bounty-1.png,tab,증거 묶음,false,56,77,21,true,true
+light,1280,800,bounty-1.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1280,800,bounty-1.png,heading,요청 단계 · ===STEP=== 줄로 구분,true,222,646,28,true,true
+light,1280,800,bounty-1.png,heading,JSON 변수 추출 · 1.id=$.id → {{id|URL}},true,251,646,28,true,true
+light,1280,800,bounty-1.png,heading,단계별 실행 결과,true,102,597,28,true,true
+light,1280,800,bounty-1.png,heading,선택 단계 · 요청/응답,true,129,597,28,true,true
+light,1280,800,bounty-3.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,bounty-3.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1280,800,bounty-3.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,bounty-3.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,설정,false,26,47,21,true,true
+light,1280,800,bounty-3.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1280,800,bounty-3.png,tab,외부 도구,false,56,77,21,true,true
+light,1280,800,bounty-3.png,tab,여러 요청 재현,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1280,800,bounty-3.png,tab,증거 묶음,true,56,77,21,true,true
+light,1280,800,bounty-3.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1280,800,bounty-3.png,heading,실제 영향 · 직접 작성,true,128,621,28,true,true
+light,1280,800,bounty-3.png,heading,재현 절차 · 직접 작성,true,128,622,28,true,true
+light,1280,800,js-horizontal.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1280,800,js-horizontal.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1280,800,js-horizontal.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1280,800,js-horizontal.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+light,1280,800,js-horizontal.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1280,800,js-horizontal.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1280,800,js-horizontal.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1280,800,js-horizontal.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1280,800,js-horizontal.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1280,800,js-horizontal.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1280,800,js-horizontal.png,tab,설정,false,26,47,21,true,true
+light,1280,800,js-horizontal.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+light,1280,800,js-horizontal.png,heading,JS 원본 · 수동 분석,true,115,746,28,true,true
+light,1280,800,js-horizontal.png,tab,URL · API,true,59,80,21,true,true
+light,1280,800,js-horizontal.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+light,1280,800,js-horizontal.png,tab,도메인,false,39,60,21,true,true
+light,1280,800,js-horizontal.png,tab,클라우드 URL,false,82,103,21,true,true
+light,1280,800,js-horizontal.png,tab,NPM 의존성,false,75,96,21,true,true
+light,1280,800,js-horizontal.png,tab,소스맵,false,39,60,21,false,true
+light,1280,800,js-horizontal.png,tab,복원 원본,false,56,77,21,false,true
+light,1280,800,js-horizontal.png,tab,분석 상세,false,56,77,21,false,true
+light,1280,800,js-horizontal.png,tab,History 분석 목록,false,104,125,21,false,true
+light,1280,800,js-horizontal.png,heading,요청 REQUEST,true,96,622,28,true,true
+light,1280,800,js-horizontal.png,heading,응답 RESPONSE,true,104,622,28,true,true
+light,1440,920,tool-00.png,tab,요청·응답 목록,true,86,107,21,true,true
+light,1440,920,tool-00.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-00.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-00.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-00.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-00.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-00.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-00.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-00.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-00.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-00.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-00.png,heading,요청  REQUEST,true,100,916,28,true,true
+light,1440,920,tool-00.png,heading,응답  RESPONSE,true,108,916,28,true,true
+light,1440,920,tool-01.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-01.png,tab,계정 권한 비교,true,86,107,21,true,true
+light,1440,920,tool-01.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-01.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-01.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-01.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-01.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-01.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-01.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-01.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-01.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-01.png,heading,계정 권한 비교,true,115,115,24,true,true
+light,1440,920,tool-01.png,heading,인증 정보 후보 · 우클릭으로 비교 계정 지정,true,261,633,28,true,true
+light,1440,920,tool-01.png,heading,비교 기록,true,58,633,28,true,true
+light,1440,920,tool-01.png,tab,비교 계정 1,true,68,89,21,true,true
+light,1440,920,tool-01.png,tab,비교 계정 2,false,68,89,21,true,true
+light,1440,920,tool-01.png,tab,비교 계정 3,false,68,89,21,true,true
+light,1440,920,tool-01.png,tab,원본,false,26,47,21,true,true
+light,1440,920,tool-01.png,heading,요청 REQUEST,true,96,770,28,true,true
+light,1440,920,tool-01.png,heading,응답 RESPONSE,true,104,770,28,true,true
+light,1440,920,tool-01.png,heading,판정 근거 · JSON 필드 차이,true,168,775,28,true,true
+light,1440,920,tool-02.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-02.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-02.png,tab,데이터 변환·비교,true,99,120,21,true,true
+light,1440,920,tool-02.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-02.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-02.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-02.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-02.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-02.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-02.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-02.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-02.png,tab,인코딩·변환,true,69,90,21,true,true
+light,1440,920,tool-02.png,tab,JWT 내용 확인,false,87,108,21,true,true
+light,1440,920,tool-02.png,tab,응답·데이터 비교,false,99,120,21,true,true
+light,1440,920,tool-02.png,heading,인코딩·변환,true,93,93,24,true,true
+light,1440,920,tool-02.png,heading,입력 (UTF-8 텍스트),true,126,1396,28,true,true
+light,1440,920,tool-02.png,heading,출력,true,27,1396,28,true,true
+light,1440,920,tool-03.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-03.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-03.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-03.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+light,1440,920,tool-03.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-03.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-03.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-03.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-03.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-03.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-03.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-03.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+light,1440,920,tool-03.png,heading,JS 원본 · 수동 분석,true,115,631,28,true,true
+light,1440,920,tool-03.png,tab,URL · API,true,59,80,21,true,true
+light,1440,920,tool-03.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+light,1440,920,tool-03.png,tab,도메인,false,39,60,21,true,true
+light,1440,920,tool-03.png,tab,클라우드 URL,false,82,103,21,true,true
+light,1440,920,tool-03.png,tab,NPM 의존성,false,75,96,21,true,true
+light,1440,920,tool-03.png,tab,소스맵,false,39,60,21,true,true
+light,1440,920,tool-03.png,tab,복원 원본,false,56,77,21,true,true
+light,1440,920,tool-03.png,tab,분석 상세,false,56,77,21,false,true
+light,1440,920,tool-03.png,tab,History 분석 목록,false,104,125,21,false,true
+light,1440,920,tool-03.png,heading,요청 REQUEST,true,96,773,28,true,true
+light,1440,920,tool-03.png,heading,응답 RESPONSE,true,104,773,28,true,true
+light,1440,920,tool-04.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-04.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-04.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-04.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-04.png,tab,서버·경로 탐색,true,86,107,21,true,true
+light,1440,920,tool-04.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-04.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-04.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-04.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-04.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-04.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-04.png,heading,서버·경로 탐색,true,116,116,24,true,true
+light,1440,920,tool-04.png,heading,관찰한 환경,true,71,629,28,true,true
+light,1440,920,tool-04.png,heading,추천 경로 · 미검증 후보,true,141,629,28,true,true
+light,1440,920,tool-04.png,heading,요청 REQUEST,true,96,771,28,true,true
+light,1440,920,tool-04.png,heading,응답 RESPONSE,true,104,771,28,true,true
+light,1440,920,tool-05.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-05.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-05.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-05.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-05.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-05.png,tab,URL 후보 수집,true,86,107,21,true,true
+light,1440,920,tool-05.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-05.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-05.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-05.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-05.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-05.png,tab,127.0.0.1 · ,true,72,93,21,true,true
+light,1440,920,tool-05.png,heading,URL 후보 수집,true,115,115,24,true,true
+light,1440,920,tool-05.png,heading,URL 수집 목록,true,89,623,28,true,true
+light,1440,920,tool-05.png,heading,요청 REQUEST,true,96,764,28,true,true
+light,1440,920,tool-05.png,heading,응답 RESPONSE,true,104,764,28,true,true
+light,1440,920,tool-06.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-06.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-06.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-06.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-06.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-06.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-06.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1440,920,tool-06.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-06.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-06.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-06.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-06.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1440,920,tool-06.png,tab,URL 점검 현황,true,86,107,21,true,true
+light,1440,920,tool-06.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1440,920,tool-06.png,tab,계정별 점검,false,69,90,21,true,true
+light,1440,920,tool-06.png,tab,업무별 현황,false,69,90,21,true,true
+light,1440,920,tool-06.png,heading,URL 점검 현황,true,89,1008,28,true,true
+light,1440,920,tool-06.png,heading,선택 URL 입력,true,89,391,28,true,true
+light,1440,920,tool-07.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-07.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-07.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-07.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-07.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-07.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-07.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-07.png,tab,응답 보안 분석,true,86,107,21,true,true
+light,1440,920,tool-07.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-07.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-07.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-07.png,heading,응답 보안 분석,true,115,115,24,true,true
+light,1440,920,tool-07.png,tab,응답 관찰,true,56,77,21,true,true
+light,1440,920,tool-07.png,tab,API 문서,false,51,72,21,true,true
+light,1440,920,tool-07.png,tab,저장/조회 연결,false,87,108,21,true,true
+light,1440,920,tool-08.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-08.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-08.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-08.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-08.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-08.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-08.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-08.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-08.png,tab,입력값 보안 검사,true,99,120,21,true,true
+light,1440,920,tool-08.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tool-08.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-08.png,tab,요청 준비,true,56,77,21,true,true
+light,1440,920,tool-08.png,tab,검사 후보,false,56,77,21,true,true
+light,1440,920,tool-08.png,heading,진단 결과 · 후보와 근거,true,141,631,28,true,true
+light,1440,920,tool-08.png,heading,전송 요청 REQUEST,true,127,773,28,true,true
+light,1440,920,tool-08.png,heading,응답 RESPONSE,true,104,773,28,true,true
+light,1440,920,tool-08.png,heading,입력값 보안 검사,true,133,133,24,true,true
+light,1440,920,tool-09.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tool-09.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tool-09.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tool-09.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1440,920,tool-09.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tool-09.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1440,920,tool-09.png,tab,외부 도구,true,56,77,21,true,true
+light,1440,920,tool-09.png,tab,여러 요청 재현,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1440,920,tool-09.png,tab,증거 묶음,false,56,77,21,true,true
+light,1440,920,tool-09.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1440,920,tool-09.png,heading,외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,true,312,1412,28,true,true
+light,1440,920,settings.png,heading,화면 배치,true,58,1438,28,true,true
+light,1440,920,data-compare.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,data-compare.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,data-compare.png,tab,데이터 변환·비교,true,99,120,21,true,true
+light,1440,920,data-compare.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,data-compare.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,data-compare.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,data-compare.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,data-compare.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,data-compare.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,data-compare.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,data-compare.png,tab,설정,false,26,47,21,true,true
+light,1440,920,data-compare.png,tab,인코딩·변환,false,69,90,21,true,true
+light,1440,920,data-compare.png,tab,JWT 내용 확인,false,87,108,21,true,true
+light,1440,920,data-compare.png,tab,응답·데이터 비교,true,99,120,21,true,true
+light,1440,920,data-compare.png,heading,응답·데이터 비교,true,134,134,24,true,true
+light,1440,920,data-compare.png,heading,왼쪽 데이터,true,71,701,28,true,true
+light,1440,920,data-compare.png,heading,오른쪽 데이터,true,85,702,28,true,true
+light,1440,920,stored-flow.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,stored-flow.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,stored-flow.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,stored-flow.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,stored-flow.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,stored-flow.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,stored-flow.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,stored-flow.png,tab,응답 보안 분석,true,86,107,21,true,true
+light,1440,920,stored-flow.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,stored-flow.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,stored-flow.png,tab,설정,false,26,47,21,true,true
+light,1440,920,stored-flow.png,heading,응답 보안 분석,true,115,115,24,true,true
+light,1440,920,stored-flow.png,tab,응답 관찰,false,56,77,21,true,true
+light,1440,920,stored-flow.png,tab,API 문서,false,51,72,21,true,true
+light,1440,920,stored-flow.png,tab,저장/조회 연결,true,87,108,21,true,true
+light,1440,920,accounts.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,accounts.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,accounts.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1440,920,accounts.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,accounts.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,설정,false,26,47,21,true,true
+light,1440,920,accounts.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1440,920,accounts.png,tab,URL 점검 현황,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1440,920,accounts.png,tab,계정별 점검,true,69,90,21,true,true
+light,1440,920,accounts.png,tab,업무별 현황,false,69,90,21,true,true
+light,1440,920,accounts.png,heading,선택 URL의 입력,true,103,391,28,true,true
+light,1440,920,tasks.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,tasks.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,tasks.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,점검 진행 현황,true,86,107,21,true,true
+light,1440,920,tasks.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,tasks.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,설정,false,26,47,21,true,true
+light,1440,920,tasks.png,heading,점검 진행 현황,true,115,115,24,true,true
+light,1440,920,tasks.png,tab,URL 점검 현황,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,미확정 JS 발견,false,86,107,21,true,true
+light,1440,920,tasks.png,tab,계정별 점검,false,69,90,21,true,true
+light,1440,920,tasks.png,tab,업무별 현황,true,69,90,21,true,true
+light,1440,920,tasks.png,heading,요구 계정 × API,true,97,1408,28,true,true
+light,1440,920,bounty-1.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,bounty-1.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,bounty-1.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,bounty-1.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,설정,false,26,47,21,true,true
+light,1440,920,bounty-1.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1440,920,bounty-1.png,tab,외부 도구,false,56,77,21,true,true
+light,1440,920,bounty-1.png,tab,여러 요청 재현,true,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1440,920,bounty-1.png,tab,증거 묶음,false,56,77,21,true,true
+light,1440,920,bounty-1.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1440,920,bounty-1.png,heading,요청 단계 · ===STEP=== 줄로 구분,true,222,729,28,true,true
+light,1440,920,bounty-1.png,heading,JSON 변수 추출 · 1.id=$.id → {{id|URL}},true,251,729,28,true,true
+light,1440,920,bounty-1.png,heading,단계별 실행 결과,true,102,674,28,true,true
+light,1440,920,bounty-1.png,heading,선택 단계 · 요청/응답,true,129,674,28,true,true
+light,1440,920,bounty-3.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,bounty-3.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+light,1440,920,bounty-3.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,bounty-3.png,tab,재현·증거 정리,true,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,설정,false,26,47,21,true,true
+light,1440,920,bounty-3.png,heading,재현·증거 정리,true,116,116,24,true,true
+light,1440,920,bounty-3.png,tab,외부 도구,false,56,77,21,true,true
+light,1440,920,bounty-3.png,tab,여러 요청 재현,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,외부 연결 확인,false,86,107,21,true,true
+light,1440,920,bounty-3.png,tab,증거 묶음,true,56,77,21,true,true
+light,1440,920,bounty-3.png,tab,브라우저 확인,false,82,103,21,true,true
+light,1440,920,bounty-3.png,heading,실제 영향 · 직접 작성,true,128,701,28,true,true
+light,1440,920,bounty-3.png,heading,재현 절차 · 직접 작성,true,128,702,28,true,true
+light,1440,920,js-horizontal.png,tab,요청·응답 목록,false,86,107,21,true,true
+light,1440,920,js-horizontal.png,tab,계정 권한 비교,false,86,107,21,true,true
+light,1440,920,js-horizontal.png,tab,데이터 변환·비교,false,99,120,21,true,true
+light,1440,920,js-horizontal.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+light,1440,920,js-horizontal.png,tab,서버·경로 탐색,false,86,107,21,true,true
+light,1440,920,js-horizontal.png,tab,URL 후보 수집,false,86,107,21,true,true
+light,1440,920,js-horizontal.png,tab,점검 진행 현황,false,86,107,21,true,true
+light,1440,920,js-horizontal.png,tab,응답 보안 분석,false,86,107,21,true,true
+light,1440,920,js-horizontal.png,tab,입력값 보안 검사,false,99,120,21,true,true
+light,1440,920,js-horizontal.png,tab,재현·증거 정리,false,86,107,21,true,true
+light,1440,920,js-horizontal.png,tab,설정,false,26,47,21,true,true
+light,1440,920,js-horizontal.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+light,1440,920,js-horizontal.png,heading,JS 원본 · 수동 분석,true,115,842,28,true,true
+light,1440,920,js-horizontal.png,tab,URL · API,true,59,80,21,true,true
+light,1440,920,js-horizontal.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+light,1440,920,js-horizontal.png,tab,도메인,false,39,60,21,true,true
+light,1440,920,js-horizontal.png,tab,클라우드 URL,false,82,103,21,true,true
+light,1440,920,js-horizontal.png,tab,NPM 의존성,false,75,96,21,true,true
+light,1440,920,js-horizontal.png,tab,소스맵,false,39,60,21,true,true
+light,1440,920,js-horizontal.png,tab,복원 원본,false,56,77,21,false,true
+light,1440,920,js-horizontal.png,tab,분석 상세,false,56,77,21,false,true
+light,1440,920,js-horizontal.png,tab,History 분석 목록,false,104,125,21,false,true
+light,1440,920,js-horizontal.png,heading,요청 REQUEST,true,96,702,28,true,true
+light,1440,920,js-horizontal.png,heading,응답 RESPONSE,true,104,702,28,true,true
+dark,1024,720,tool-00.png,tab,요청·응답 목록,true,86,107,21,true,true
+dark,1024,720,tool-00.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-00.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-00.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-00.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-00.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-00.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-00.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-00.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-00.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-00.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-00.png,heading,요청  REQUEST,true,100,646,28,true,true
+dark,1024,720,tool-00.png,heading,응답  RESPONSE,true,108,646,28,true,true
+dark,1024,720,tool-01.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-01.png,tab,계정 권한 비교,true,86,107,21,true,true
+dark,1024,720,tool-01.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-01.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-01.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-01.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-01.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-01.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-01.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-01.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-01.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-01.png,heading,계정 권한 비교,true,115,115,24,true,true
+dark,1024,720,tool-01.png,heading,인증 정보 후보 · 우클릭으로 비교 계정 지정,true,261,446,28,true,true
+dark,1024,720,tool-01.png,heading,비교 기록,true,58,446,28,true,true
+dark,1024,720,tool-01.png,tab,비교 계정 1,true,68,89,21,true,true
+dark,1024,720,tool-01.png,tab,비교 계정 2,false,68,89,21,true,true
+dark,1024,720,tool-01.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,1024,720,tool-01.png,tab,원본,false,26,47,21,true,true
+dark,1024,720,tool-01.png,heading,요청 REQUEST,true,96,541,28,true,true
+dark,1024,720,tool-01.png,heading,응답 RESPONSE,true,104,541,28,true,true
+dark,1024,720,tool-01.png,heading,판정 근거 · JSON 필드 차이,true,168,546,28,true,true
+dark,1024,720,tool-02.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-02.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-02.png,tab,데이터 변환·비교,true,99,120,21,true,true
+dark,1024,720,tool-02.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-02.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-02.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-02.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-02.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-02.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-02.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-02.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-02.png,tab,인코딩·변환,true,69,90,21,true,true
+dark,1024,720,tool-02.png,tab,JWT 내용 확인,false,87,108,21,true,true
+dark,1024,720,tool-02.png,tab,응답·데이터 비교,false,99,120,21,true,true
+dark,1024,720,tool-02.png,heading,인코딩·변환,true,93,93,24,true,true
+dark,1024,720,tool-02.png,heading,입력 (UTF-8 텍스트),true,126,980,28,true,true
+dark,1024,720,tool-02.png,heading,출력,true,27,980,28,true,true
+dark,1024,720,tool-03.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-03.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-03.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-03.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+dark,1024,720,tool-03.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-03.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-03.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-03.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-03.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-03.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-03.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-03.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+dark,1024,720,tool-03.png,heading,JS 원본 · 수동 분석,true,115,444,28,true,true
+dark,1024,720,tool-03.png,tab,URL · API,true,59,80,21,true,true
+dark,1024,720,tool-03.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+dark,1024,720,tool-03.png,tab,도메인,false,39,60,21,true,true
+dark,1024,720,tool-03.png,tab,클라우드 URL,false,82,103,21,true,true
+dark,1024,720,tool-03.png,tab,NPM 의존성,false,75,96,21,false,true
+dark,1024,720,tool-03.png,tab,소스맵,false,39,60,21,false,true
+dark,1024,720,tool-03.png,tab,복원 원본,false,56,77,21,false,true
+dark,1024,720,tool-03.png,tab,분석 상세,false,56,77,21,false,true
+dark,1024,720,tool-03.png,tab,History 분석 목록,false,104,125,21,false,true
+dark,1024,720,tool-03.png,heading,요청 REQUEST,true,96,544,28,true,true
+dark,1024,720,tool-03.png,heading,응답 RESPONSE,true,104,544,28,true,true
+dark,1024,720,tool-04.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-04.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-04.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-04.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-04.png,tab,서버·경로 탐색,true,86,107,21,true,true
+dark,1024,720,tool-04.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-04.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-04.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-04.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-04.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-04.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-04.png,heading,서버·경로 탐색,true,116,116,24,true,true
+dark,1024,720,tool-04.png,heading,관찰한 환경,true,71,442,28,true,true
+dark,1024,720,tool-04.png,heading,추천 경로 · 미검증 후보,true,141,442,28,true,true
+dark,1024,720,tool-04.png,heading,요청 REQUEST,true,96,542,28,true,true
+dark,1024,720,tool-04.png,heading,응답 RESPONSE,true,104,542,28,true,true
+dark,1024,720,tool-05.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-05.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-05.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-05.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-05.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-05.png,tab,URL 후보 수집,true,86,107,21,true,true
+dark,1024,720,tool-05.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-05.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-05.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-05.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-05.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-05.png,tab,127.0.0.1 · ,true,72,93,21,true,true
+dark,1024,720,tool-05.png,heading,URL 후보 수집,true,115,115,24,true,true
+dark,1024,720,tool-05.png,heading,URL 수집 목록,true,89,436,28,true,true
+dark,1024,720,tool-05.png,heading,요청 REQUEST,true,96,535,28,true,true
+dark,1024,720,tool-05.png,heading,응답 RESPONSE,true,104,535,28,true,true
+dark,1024,720,tool-06.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-06.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-06.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-06.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-06.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-06.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1024,720,tool-06.png,tab,URL 점검 현황,true,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1024,720,tool-06.png,tab,계정별 점검,false,69,90,21,true,true
+dark,1024,720,tool-06.png,tab,업무별 현황,false,69,90,21,true,true
+dark,1024,720,tool-06.png,heading,URL 점검 현황,true,89,708,28,true,true
+dark,1024,720,tool-06.png,heading,선택 URL 입력,true,89,275,28,true,true
+dark,1024,720,tool-07.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-07.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-07.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-07.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-07.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-07.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-07.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-07.png,tab,응답 보안 분석,true,86,107,21,true,true
+dark,1024,720,tool-07.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-07.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-07.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-07.png,heading,응답 보안 분석,true,115,115,24,true,true
+dark,1024,720,tool-07.png,tab,응답 관찰,true,56,77,21,true,true
+dark,1024,720,tool-07.png,tab,API 문서,false,51,72,21,true,true
+dark,1024,720,tool-07.png,tab,저장/조회 연결,false,87,108,21,true,true
+dark,1024,720,tool-08.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1024,720,tool-08.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-08.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-08.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-08.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-08.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-08.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-08.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-08.png,tab,입력값 보안 검사,true,99,120,21,true,true
+dark,1024,720,tool-08.png,tab,재현·증거 정리,false,86,107,21,false,true
+dark,1024,720,tool-08.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-08.png,tab,요청 준비,true,56,77,21,true,true
+dark,1024,720,tool-08.png,tab,검사 후보,false,56,77,21,true,true
+dark,1024,720,tool-08.png,heading,진단 결과 · 후보와 근거,true,141,444,28,true,true
+dark,1024,720,tool-08.png,heading,전송 요청 REQUEST,true,127,544,28,true,true
+dark,1024,720,tool-08.png,heading,응답 RESPONSE,true,104,544,28,true,true
+dark,1024,720,tool-08.png,heading,입력값 보안 검사,true,133,133,24,true,true
+dark,1024,720,tool-09.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,tool-09.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tool-09.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tool-09.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tool-09.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tool-09.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1024,720,tool-09.png,tab,외부 도구,true,56,77,21,true,true
+dark,1024,720,tool-09.png,tab,여러 요청 재현,false,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1024,720,tool-09.png,tab,증거 묶음,false,56,77,21,true,true
+dark,1024,720,tool-09.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1024,720,tool-09.png,heading,외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,true,312,996,28,true,true
+dark,1024,720,settings.png,heading,화면 배치,true,58,1022,28,true,true
+dark,1024,720,data-compare.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,data-compare.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,data-compare.png,tab,데이터 변환·비교,true,99,120,21,true,true
+dark,1024,720,data-compare.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,data-compare.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,data-compare.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,data-compare.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,data-compare.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,data-compare.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,data-compare.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1024,720,data-compare.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,data-compare.png,tab,인코딩·변환,false,69,90,21,true,true
+dark,1024,720,data-compare.png,tab,JWT 내용 확인,false,87,108,21,true,true
+dark,1024,720,data-compare.png,tab,응답·데이터 비교,true,99,120,21,true,true
+dark,1024,720,data-compare.png,heading,응답·데이터 비교,true,134,134,24,true,true
+dark,1024,720,data-compare.png,heading,왼쪽 데이터,true,71,493,28,true,true
+dark,1024,720,data-compare.png,heading,오른쪽 데이터,true,85,494,28,true,true
+dark,1024,720,stored-flow.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,stored-flow.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,stored-flow.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,stored-flow.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,stored-flow.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,stored-flow.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,stored-flow.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,stored-flow.png,tab,응답 보안 분석,true,86,107,21,true,true
+dark,1024,720,stored-flow.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,stored-flow.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1024,720,stored-flow.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,stored-flow.png,heading,응답 보안 분석,true,115,115,24,true,true
+dark,1024,720,stored-flow.png,tab,응답 관찰,false,56,77,21,true,true
+dark,1024,720,stored-flow.png,tab,API 문서,false,51,72,21,true,true
+dark,1024,720,stored-flow.png,tab,저장/조회 연결,true,87,108,21,true,true
+dark,1024,720,accounts.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,accounts.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,accounts.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,accounts.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,accounts.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,accounts.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,accounts.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1024,720,accounts.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,accounts.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,accounts.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1024,720,accounts.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,accounts.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1024,720,accounts.png,tab,URL 점검 현황,false,86,107,21,true,true
+dark,1024,720,accounts.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1024,720,accounts.png,tab,계정별 점검,true,69,90,21,true,true
+dark,1024,720,accounts.png,tab,업무별 현황,false,69,90,21,true,true
+dark,1024,720,accounts.png,heading,선택 URL의 입력,true,103,275,28,true,true
+dark,1024,720,tasks.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,tasks.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,tasks.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,tasks.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,tasks.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,tasks.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,tasks.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1024,720,tasks.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,tasks.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,tasks.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1024,720,tasks.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,tasks.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1024,720,tasks.png,tab,URL 점검 현황,false,86,107,21,true,true
+dark,1024,720,tasks.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1024,720,tasks.png,tab,계정별 점검,false,69,90,21,true,true
+dark,1024,720,tasks.png,tab,업무별 현황,true,69,90,21,true,true
+dark,1024,720,tasks.png,heading,요구 계정 × API,true,97,992,28,true,true
+dark,1024,720,bounty-1.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,bounty-1.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,bounty-1.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,bounty-1.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,bounty-1.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,bounty-1.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1024,720,bounty-1.png,tab,외부 도구,false,56,77,21,true,true
+dark,1024,720,bounty-1.png,tab,여러 요청 재현,true,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1024,720,bounty-1.png,tab,증거 묶음,false,56,77,21,true,true
+dark,1024,720,bounty-1.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1024,720,bounty-1.png,heading,요청 단계 · ===STEP=== 줄로 구분,true,222,513,28,true,true
+dark,1024,720,bounty-1.png,heading,JSON 변수 추출 · 1.id=$.id → {{id|URL}},true,251,513,28,true,true
+dark,1024,720,bounty-1.png,heading,단계별 실행 결과,true,102,474,28,true,true
+dark,1024,720,bounty-1.png,heading,선택 단계 · 요청/응답,true,129,474,28,true,true
+dark,1024,720,bounty-3.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,bounty-3.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,bounty-3.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1024,720,bounty-3.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,bounty-3.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,bounty-3.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1024,720,bounty-3.png,tab,외부 도구,false,56,77,21,true,true
+dark,1024,720,bounty-3.png,tab,여러 요청 재현,false,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1024,720,bounty-3.png,tab,증거 묶음,true,56,77,21,true,true
+dark,1024,720,bounty-3.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1024,720,bounty-3.png,heading,실제 영향 · 직접 작성,true,128,493,28,true,true
+dark,1024,720,bounty-3.png,heading,재현 절차 · 직접 작성,true,128,494,28,true,true
+dark,1024,720,js-horizontal.png,tab,요청·응답 목록,false,86,107,21,false,true
+dark,1024,720,js-horizontal.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1024,720,js-horizontal.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1024,720,js-horizontal.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+dark,1024,720,js-horizontal.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1024,720,js-horizontal.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1024,720,js-horizontal.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1024,720,js-horizontal.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1024,720,js-horizontal.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1024,720,js-horizontal.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1024,720,js-horizontal.png,tab,설정,false,26,47,21,false,true
+dark,1024,720,js-horizontal.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+dark,1024,720,js-horizontal.png,heading,JS 원본 · 수동 분석,true,115,593,28,true,true
+dark,1024,720,js-horizontal.png,tab,URL · API,true,59,80,21,true,true
+dark,1024,720,js-horizontal.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+dark,1024,720,js-horizontal.png,tab,도메인,false,39,60,21,true,true
+dark,1024,720,js-horizontal.png,tab,클라우드 URL,false,82,103,21,true,true
+dark,1024,720,js-horizontal.png,tab,NPM 의존성,false,75,96,21,false,true
+dark,1024,720,js-horizontal.png,tab,소스맵,false,39,60,21,false,true
+dark,1024,720,js-horizontal.png,tab,복원 원본,false,56,77,21,false,true
+dark,1024,720,js-horizontal.png,tab,분석 상세,false,56,77,21,false,true
+dark,1024,720,js-horizontal.png,tab,History 분석 목록,false,104,125,21,false,true
+dark,1024,720,js-horizontal.png,heading,요청 REQUEST,true,96,494,28,true,true
+dark,1024,720,js-horizontal.png,heading,응답 RESPONSE,true,104,494,28,true,true
+dark,1280,800,tool-00.png,tab,요청·응답 목록,true,86,107,21,true,true
+dark,1280,800,tool-00.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-00.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-00.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-00.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-00.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-00.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-00.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-00.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-00.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-00.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-00.png,heading,요청  REQUEST,true,100,812,28,true,true
+dark,1280,800,tool-00.png,heading,응답  RESPONSE,true,108,812,28,true,true
+dark,1280,800,tool-01.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-01.png,tab,계정 권한 비교,true,86,107,21,true,true
+dark,1280,800,tool-01.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-01.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-01.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-01.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-01.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-01.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-01.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-01.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-01.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-01.png,heading,계정 권한 비교,true,115,115,24,true,true
+dark,1280,800,tool-01.png,heading,인증 정보 후보 · 우클릭으로 비교 계정 지정,true,261,561,28,true,true
+dark,1280,800,tool-01.png,heading,비교 기록,true,58,561,28,true,true
+dark,1280,800,tool-01.png,tab,비교 계정 1,true,68,89,21,true,true
+dark,1280,800,tool-01.png,tab,비교 계정 2,false,68,89,21,true,true
+dark,1280,800,tool-01.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,1280,800,tool-01.png,tab,원본,false,26,47,21,true,true
+dark,1280,800,tool-01.png,heading,요청 REQUEST,true,96,682,28,true,true
+dark,1280,800,tool-01.png,heading,응답 RESPONSE,true,104,682,28,true,true
+dark,1280,800,tool-01.png,heading,판정 근거 · JSON 필드 차이,true,168,687,28,true,true
+dark,1280,800,tool-02.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-02.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-02.png,tab,데이터 변환·비교,true,99,120,21,true,true
+dark,1280,800,tool-02.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-02.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-02.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-02.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-02.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-02.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-02.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-02.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-02.png,tab,인코딩·변환,true,69,90,21,true,true
+dark,1280,800,tool-02.png,tab,JWT 내용 확인,false,87,108,21,true,true
+dark,1280,800,tool-02.png,tab,응답·데이터 비교,false,99,120,21,true,true
+dark,1280,800,tool-02.png,heading,인코딩·변환,true,93,93,24,true,true
+dark,1280,800,tool-02.png,heading,입력 (UTF-8 텍스트),true,126,1236,28,true,true
+dark,1280,800,tool-02.png,heading,출력,true,27,1236,28,true,true
+dark,1280,800,tool-03.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-03.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-03.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-03.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+dark,1280,800,tool-03.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-03.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-03.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-03.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-03.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-03.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-03.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-03.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+dark,1280,800,tool-03.png,heading,JS 원본 · 수동 분석,true,115,559,28,true,true
+dark,1280,800,tool-03.png,tab,URL · API,true,59,80,21,true,true
+dark,1280,800,tool-03.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+dark,1280,800,tool-03.png,tab,도메인,false,39,60,21,true,true
+dark,1280,800,tool-03.png,tab,클라우드 URL,false,82,103,21,true,true
+dark,1280,800,tool-03.png,tab,NPM 의존성,false,75,96,21,true,true
+dark,1280,800,tool-03.png,tab,소스맵,false,39,60,21,true,true
+dark,1280,800,tool-03.png,tab,복원 원본,false,56,77,21,false,true
+dark,1280,800,tool-03.png,tab,분석 상세,false,56,77,21,false,true
+dark,1280,800,tool-03.png,tab,History 분석 목록,false,104,125,21,false,true
+dark,1280,800,tool-03.png,heading,요청 REQUEST,true,96,685,28,true,true
+dark,1280,800,tool-03.png,heading,응답 RESPONSE,true,104,685,28,true,true
+dark,1280,800,tool-04.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-04.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-04.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-04.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-04.png,tab,서버·경로 탐색,true,86,107,21,true,true
+dark,1280,800,tool-04.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-04.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-04.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-04.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-04.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-04.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-04.png,heading,서버·경로 탐색,true,116,116,24,true,true
+dark,1280,800,tool-04.png,heading,관찰한 환경,true,71,557,28,true,true
+dark,1280,800,tool-04.png,heading,추천 경로 · 미검증 후보,true,141,557,28,true,true
+dark,1280,800,tool-04.png,heading,요청 REQUEST,true,96,683,28,true,true
+dark,1280,800,tool-04.png,heading,응답 RESPONSE,true,104,683,28,true,true
+dark,1280,800,tool-05.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-05.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-05.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-05.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-05.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-05.png,tab,URL 후보 수집,true,86,107,21,true,true
+dark,1280,800,tool-05.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-05.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-05.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-05.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-05.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-05.png,tab,127.0.0.1 · ,true,72,93,21,true,true
+dark,1280,800,tool-05.png,heading,URL 후보 수집,true,115,115,24,true,true
+dark,1280,800,tool-05.png,heading,URL 수집 목록,true,89,551,28,true,true
+dark,1280,800,tool-05.png,heading,요청 REQUEST,true,96,676,28,true,true
+dark,1280,800,tool-05.png,heading,응답 RESPONSE,true,104,676,28,true,true
+dark,1280,800,tool-06.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-06.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-06.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-06.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-06.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1280,800,tool-06.png,tab,URL 점검 현황,true,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1280,800,tool-06.png,tab,계정별 점검,false,69,90,21,true,true
+dark,1280,800,tool-06.png,tab,업무별 현황,false,69,90,21,true,true
+dark,1280,800,tool-06.png,heading,URL 점검 현황,true,89,892,28,true,true
+dark,1280,800,tool-06.png,heading,선택 URL 입력,true,89,347,28,true,true
+dark,1280,800,tool-07.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-07.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-07.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-07.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-07.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-07.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-07.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-07.png,tab,응답 보안 분석,true,86,107,21,true,true
+dark,1280,800,tool-07.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-07.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-07.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-07.png,heading,응답 보안 분석,true,115,115,24,true,true
+dark,1280,800,tool-07.png,tab,응답 관찰,true,56,77,21,true,true
+dark,1280,800,tool-07.png,tab,API 문서,false,51,72,21,true,true
+dark,1280,800,tool-07.png,tab,저장/조회 연결,false,87,108,21,true,true
+dark,1280,800,tool-08.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-08.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-08.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-08.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-08.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-08.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-08.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-08.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-08.png,tab,입력값 보안 검사,true,99,120,21,true,true
+dark,1280,800,tool-08.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tool-08.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-08.png,tab,요청 준비,true,56,77,21,true,true
+dark,1280,800,tool-08.png,tab,검사 후보,false,56,77,21,true,true
+dark,1280,800,tool-08.png,heading,진단 결과 · 후보와 근거,true,141,559,28,true,true
+dark,1280,800,tool-08.png,heading,전송 요청 REQUEST,true,127,685,28,true,true
+dark,1280,800,tool-08.png,heading,응답 RESPONSE,true,104,685,28,true,true
+dark,1280,800,tool-08.png,heading,입력값 보안 검사,true,133,133,24,true,true
+dark,1280,800,tool-09.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tool-09.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tool-09.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tool-09.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tool-09.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1280,800,tool-09.png,tab,외부 도구,true,56,77,21,true,true
+dark,1280,800,tool-09.png,tab,여러 요청 재현,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1280,800,tool-09.png,tab,증거 묶음,false,56,77,21,true,true
+dark,1280,800,tool-09.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1280,800,tool-09.png,heading,외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,true,312,1252,28,true,true
+dark,1280,800,settings.png,heading,화면 배치,true,58,1278,28,true,true
+dark,1280,800,data-compare.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,data-compare.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,data-compare.png,tab,데이터 변환·비교,true,99,120,21,true,true
+dark,1280,800,data-compare.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,data-compare.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,data-compare.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,data-compare.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,data-compare.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,data-compare.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,data-compare.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,data-compare.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,data-compare.png,tab,인코딩·변환,false,69,90,21,true,true
+dark,1280,800,data-compare.png,tab,JWT 내용 확인,false,87,108,21,true,true
+dark,1280,800,data-compare.png,tab,응답·데이터 비교,true,99,120,21,true,true
+dark,1280,800,data-compare.png,heading,응답·데이터 비교,true,134,134,24,true,true
+dark,1280,800,data-compare.png,heading,왼쪽 데이터,true,71,621,28,true,true
+dark,1280,800,data-compare.png,heading,오른쪽 데이터,true,85,622,28,true,true
+dark,1280,800,stored-flow.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,stored-flow.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,stored-flow.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,stored-flow.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,stored-flow.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,stored-flow.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,stored-flow.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,stored-flow.png,tab,응답 보안 분석,true,86,107,21,true,true
+dark,1280,800,stored-flow.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,stored-flow.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,stored-flow.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,stored-flow.png,heading,응답 보안 분석,true,115,115,24,true,true
+dark,1280,800,stored-flow.png,tab,응답 관찰,false,56,77,21,true,true
+dark,1280,800,stored-flow.png,tab,API 문서,false,51,72,21,true,true
+dark,1280,800,stored-flow.png,tab,저장/조회 연결,true,87,108,21,true,true
+dark,1280,800,accounts.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,accounts.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,accounts.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1280,800,accounts.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,accounts.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,accounts.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1280,800,accounts.png,tab,URL 점검 현황,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1280,800,accounts.png,tab,계정별 점검,true,69,90,21,true,true
+dark,1280,800,accounts.png,tab,업무별 현황,false,69,90,21,true,true
+dark,1280,800,accounts.png,heading,선택 URL의 입력,true,103,347,28,true,true
+dark,1280,800,tasks.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,tasks.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,tasks.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1280,800,tasks.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,tasks.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,tasks.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1280,800,tasks.png,tab,URL 점검 현황,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1280,800,tasks.png,tab,계정별 점검,false,69,90,21,true,true
+dark,1280,800,tasks.png,tab,업무별 현황,true,69,90,21,true,true
+dark,1280,800,tasks.png,heading,요구 계정 × API,true,97,1248,28,true,true
+dark,1280,800,bounty-1.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,bounty-1.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,bounty-1.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,bounty-1.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,bounty-1.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1280,800,bounty-1.png,tab,외부 도구,false,56,77,21,true,true
+dark,1280,800,bounty-1.png,tab,여러 요청 재현,true,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1280,800,bounty-1.png,tab,증거 묶음,false,56,77,21,true,true
+dark,1280,800,bounty-1.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1280,800,bounty-1.png,heading,요청 단계 · ===STEP=== 줄로 구분,true,222,646,28,true,true
+dark,1280,800,bounty-1.png,heading,JSON 변수 추출 · 1.id=$.id → {{id|URL}},true,251,646,28,true,true
+dark,1280,800,bounty-1.png,heading,단계별 실행 결과,true,102,597,28,true,true
+dark,1280,800,bounty-1.png,heading,선택 단계 · 요청/응답,true,129,597,28,true,true
+dark,1280,800,bounty-3.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,bounty-3.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1280,800,bounty-3.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,bounty-3.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,bounty-3.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1280,800,bounty-3.png,tab,외부 도구,false,56,77,21,true,true
+dark,1280,800,bounty-3.png,tab,여러 요청 재현,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1280,800,bounty-3.png,tab,증거 묶음,true,56,77,21,true,true
+dark,1280,800,bounty-3.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1280,800,bounty-3.png,heading,실제 영향 · 직접 작성,true,128,621,28,true,true
+dark,1280,800,bounty-3.png,heading,재현 절차 · 직접 작성,true,128,622,28,true,true
+dark,1280,800,js-horizontal.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1280,800,js-horizontal.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1280,800,js-horizontal.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1280,800,js-horizontal.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+dark,1280,800,js-horizontal.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1280,800,js-horizontal.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1280,800,js-horizontal.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1280,800,js-horizontal.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1280,800,js-horizontal.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1280,800,js-horizontal.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1280,800,js-horizontal.png,tab,설정,false,26,47,21,true,true
+dark,1280,800,js-horizontal.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+dark,1280,800,js-horizontal.png,heading,JS 원본 · 수동 분석,true,115,746,28,true,true
+dark,1280,800,js-horizontal.png,tab,URL · API,true,59,80,21,true,true
+dark,1280,800,js-horizontal.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+dark,1280,800,js-horizontal.png,tab,도메인,false,39,60,21,true,true
+dark,1280,800,js-horizontal.png,tab,클라우드 URL,false,82,103,21,true,true
+dark,1280,800,js-horizontal.png,tab,NPM 의존성,false,75,96,21,true,true
+dark,1280,800,js-horizontal.png,tab,소스맵,false,39,60,21,false,true
+dark,1280,800,js-horizontal.png,tab,복원 원본,false,56,77,21,false,true
+dark,1280,800,js-horizontal.png,tab,분석 상세,false,56,77,21,false,true
+dark,1280,800,js-horizontal.png,tab,History 분석 목록,false,104,125,21,false,true
+dark,1280,800,js-horizontal.png,heading,요청 REQUEST,true,96,622,28,true,true
+dark,1280,800,js-horizontal.png,heading,응답 RESPONSE,true,104,622,28,true,true
+dark,1440,920,tool-00.png,tab,요청·응답 목록,true,86,107,21,true,true
+dark,1440,920,tool-00.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-00.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-00.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-00.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-00.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-00.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-00.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-00.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-00.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-00.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-00.png,heading,요청  REQUEST,true,100,916,28,true,true
+dark,1440,920,tool-00.png,heading,응답  RESPONSE,true,108,916,28,true,true
+dark,1440,920,tool-01.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-01.png,tab,계정 권한 비교,true,86,107,21,true,true
+dark,1440,920,tool-01.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-01.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-01.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-01.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-01.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-01.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-01.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-01.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-01.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-01.png,heading,계정 권한 비교,true,115,115,24,true,true
+dark,1440,920,tool-01.png,heading,인증 정보 후보 · 우클릭으로 비교 계정 지정,true,261,633,28,true,true
+dark,1440,920,tool-01.png,heading,비교 기록,true,58,633,28,true,true
+dark,1440,920,tool-01.png,tab,비교 계정 1,true,68,89,21,true,true
+dark,1440,920,tool-01.png,tab,비교 계정 2,false,68,89,21,true,true
+dark,1440,920,tool-01.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,1440,920,tool-01.png,tab,원본,false,26,47,21,true,true
+dark,1440,920,tool-01.png,heading,요청 REQUEST,true,96,770,28,true,true
+dark,1440,920,tool-01.png,heading,응답 RESPONSE,true,104,770,28,true,true
+dark,1440,920,tool-01.png,heading,판정 근거 · JSON 필드 차이,true,168,775,28,true,true
+dark,1440,920,tool-02.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-02.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-02.png,tab,데이터 변환·비교,true,99,120,21,true,true
+dark,1440,920,tool-02.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-02.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-02.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-02.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-02.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-02.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-02.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-02.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-02.png,tab,인코딩·변환,true,69,90,21,true,true
+dark,1440,920,tool-02.png,tab,JWT 내용 확인,false,87,108,21,true,true
+dark,1440,920,tool-02.png,tab,응답·데이터 비교,false,99,120,21,true,true
+dark,1440,920,tool-02.png,heading,인코딩·변환,true,93,93,24,true,true
+dark,1440,920,tool-02.png,heading,입력 (UTF-8 텍스트),true,126,1396,28,true,true
+dark,1440,920,tool-02.png,heading,출력,true,27,1396,28,true,true
+dark,1440,920,tool-03.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-03.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-03.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-03.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+dark,1440,920,tool-03.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-03.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-03.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-03.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-03.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-03.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-03.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-03.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+dark,1440,920,tool-03.png,heading,JS 원본 · 수동 분석,true,115,631,28,true,true
+dark,1440,920,tool-03.png,tab,URL · API,true,59,80,21,true,true
+dark,1440,920,tool-03.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+dark,1440,920,tool-03.png,tab,도메인,false,39,60,21,true,true
+dark,1440,920,tool-03.png,tab,클라우드 URL,false,82,103,21,true,true
+dark,1440,920,tool-03.png,tab,NPM 의존성,false,75,96,21,true,true
+dark,1440,920,tool-03.png,tab,소스맵,false,39,60,21,true,true
+dark,1440,920,tool-03.png,tab,복원 원본,false,56,77,21,true,true
+dark,1440,920,tool-03.png,tab,분석 상세,false,56,77,21,false,true
+dark,1440,920,tool-03.png,tab,History 분석 목록,false,104,125,21,false,true
+dark,1440,920,tool-03.png,heading,요청 REQUEST,true,96,773,28,true,true
+dark,1440,920,tool-03.png,heading,응답 RESPONSE,true,104,773,28,true,true
+dark,1440,920,tool-04.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-04.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-04.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-04.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-04.png,tab,서버·경로 탐색,true,86,107,21,true,true
+dark,1440,920,tool-04.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-04.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-04.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-04.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-04.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-04.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-04.png,heading,서버·경로 탐색,true,116,116,24,true,true
+dark,1440,920,tool-04.png,heading,관찰한 환경,true,71,629,28,true,true
+dark,1440,920,tool-04.png,heading,추천 경로 · 미검증 후보,true,141,629,28,true,true
+dark,1440,920,tool-04.png,heading,요청 REQUEST,true,96,771,28,true,true
+dark,1440,920,tool-04.png,heading,응답 RESPONSE,true,104,771,28,true,true
+dark,1440,920,tool-05.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-05.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-05.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-05.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-05.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-05.png,tab,URL 후보 수집,true,86,107,21,true,true
+dark,1440,920,tool-05.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-05.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-05.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-05.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-05.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-05.png,tab,127.0.0.1 · ,true,72,93,21,true,true
+dark,1440,920,tool-05.png,heading,URL 후보 수집,true,115,115,24,true,true
+dark,1440,920,tool-05.png,heading,URL 수집 목록,true,89,623,28,true,true
+dark,1440,920,tool-05.png,heading,요청 REQUEST,true,96,764,28,true,true
+dark,1440,920,tool-05.png,heading,응답 RESPONSE,true,104,764,28,true,true
+dark,1440,920,tool-06.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-06.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-06.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-06.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-06.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1440,920,tool-06.png,tab,URL 점검 현황,true,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1440,920,tool-06.png,tab,계정별 점검,false,69,90,21,true,true
+dark,1440,920,tool-06.png,tab,업무별 현황,false,69,90,21,true,true
+dark,1440,920,tool-06.png,heading,URL 점검 현황,true,89,1008,28,true,true
+dark,1440,920,tool-06.png,heading,선택 URL 입력,true,89,391,28,true,true
+dark,1440,920,tool-07.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-07.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-07.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-07.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-07.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-07.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-07.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-07.png,tab,응답 보안 분석,true,86,107,21,true,true
+dark,1440,920,tool-07.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-07.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-07.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-07.png,heading,응답 보안 분석,true,115,115,24,true,true
+dark,1440,920,tool-07.png,tab,응답 관찰,true,56,77,21,true,true
+dark,1440,920,tool-07.png,tab,API 문서,false,51,72,21,true,true
+dark,1440,920,tool-07.png,tab,저장/조회 연결,false,87,108,21,true,true
+dark,1440,920,tool-08.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-08.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-08.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-08.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-08.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-08.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-08.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-08.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-08.png,tab,입력값 보안 검사,true,99,120,21,true,true
+dark,1440,920,tool-08.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tool-08.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-08.png,tab,요청 준비,true,56,77,21,true,true
+dark,1440,920,tool-08.png,tab,검사 후보,false,56,77,21,true,true
+dark,1440,920,tool-08.png,heading,진단 결과 · 후보와 근거,true,141,631,28,true,true
+dark,1440,920,tool-08.png,heading,전송 요청 REQUEST,true,127,773,28,true,true
+dark,1440,920,tool-08.png,heading,응답 RESPONSE,true,104,773,28,true,true
+dark,1440,920,tool-08.png,heading,입력값 보안 검사,true,133,133,24,true,true
+dark,1440,920,tool-09.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tool-09.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tool-09.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tool-09.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tool-09.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1440,920,tool-09.png,tab,외부 도구,true,56,77,21,true,true
+dark,1440,920,tool-09.png,tab,여러 요청 재현,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1440,920,tool-09.png,tab,증거 묶음,false,56,77,21,true,true
+dark,1440,920,tool-09.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1440,920,tool-09.png,heading,외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,true,312,1412,28,true,true
+dark,1440,920,settings.png,heading,화면 배치,true,58,1438,28,true,true
+dark,1440,920,data-compare.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,data-compare.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,data-compare.png,tab,데이터 변환·비교,true,99,120,21,true,true
+dark,1440,920,data-compare.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,data-compare.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,data-compare.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,data-compare.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,data-compare.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,data-compare.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,data-compare.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,data-compare.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,data-compare.png,tab,인코딩·변환,false,69,90,21,true,true
+dark,1440,920,data-compare.png,tab,JWT 내용 확인,false,87,108,21,true,true
+dark,1440,920,data-compare.png,tab,응답·데이터 비교,true,99,120,21,true,true
+dark,1440,920,data-compare.png,heading,응답·데이터 비교,true,134,134,24,true,true
+dark,1440,920,data-compare.png,heading,왼쪽 데이터,true,71,701,28,true,true
+dark,1440,920,data-compare.png,heading,오른쪽 데이터,true,85,702,28,true,true
+dark,1440,920,stored-flow.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,stored-flow.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,stored-flow.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,stored-flow.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,stored-flow.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,stored-flow.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,stored-flow.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,stored-flow.png,tab,응답 보안 분석,true,86,107,21,true,true
+dark,1440,920,stored-flow.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,stored-flow.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,stored-flow.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,stored-flow.png,heading,응답 보안 분석,true,115,115,24,true,true
+dark,1440,920,stored-flow.png,tab,응답 관찰,false,56,77,21,true,true
+dark,1440,920,stored-flow.png,tab,API 문서,false,51,72,21,true,true
+dark,1440,920,stored-flow.png,tab,저장/조회 연결,true,87,108,21,true,true
+dark,1440,920,accounts.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,accounts.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,accounts.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1440,920,accounts.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,accounts.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,accounts.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1440,920,accounts.png,tab,URL 점검 현황,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1440,920,accounts.png,tab,계정별 점검,true,69,90,21,true,true
+dark,1440,920,accounts.png,tab,업무별 현황,false,69,90,21,true,true
+dark,1440,920,accounts.png,heading,선택 URL의 입력,true,103,391,28,true,true
+dark,1440,920,tasks.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,tasks.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,tasks.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,점검 진행 현황,true,86,107,21,true,true
+dark,1440,920,tasks.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,tasks.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,tasks.png,heading,점검 진행 현황,true,115,115,24,true,true
+dark,1440,920,tasks.png,tab,URL 점검 현황,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,미확정 JS 발견,false,86,107,21,true,true
+dark,1440,920,tasks.png,tab,계정별 점검,false,69,90,21,true,true
+dark,1440,920,tasks.png,tab,업무별 현황,true,69,90,21,true,true
+dark,1440,920,tasks.png,heading,요구 계정 × API,true,97,1408,28,true,true
+dark,1440,920,bounty-1.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,bounty-1.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,bounty-1.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,bounty-1.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,bounty-1.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1440,920,bounty-1.png,tab,외부 도구,false,56,77,21,true,true
+dark,1440,920,bounty-1.png,tab,여러 요청 재현,true,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1440,920,bounty-1.png,tab,증거 묶음,false,56,77,21,true,true
+dark,1440,920,bounty-1.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1440,920,bounty-1.png,heading,요청 단계 · ===STEP=== 줄로 구분,true,222,729,28,true,true
+dark,1440,920,bounty-1.png,heading,JSON 변수 추출 · 1.id=$.id → {{id|URL}},true,251,729,28,true,true
+dark,1440,920,bounty-1.png,heading,단계별 실행 결과,true,102,674,28,true,true
+dark,1440,920,bounty-1.png,heading,선택 단계 · 요청/응답,true,129,674,28,true,true
+dark,1440,920,bounty-3.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,bounty-3.png,tab,JS에서 API 찾기,false,94,115,21,true,true
+dark,1440,920,bounty-3.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,bounty-3.png,tab,재현·증거 정리,true,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,bounty-3.png,heading,재현·증거 정리,true,116,116,24,true,true
+dark,1440,920,bounty-3.png,tab,외부 도구,false,56,77,21,true,true
+dark,1440,920,bounty-3.png,tab,여러 요청 재현,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,외부 연결 확인,false,86,107,21,true,true
+dark,1440,920,bounty-3.png,tab,증거 묶음,true,56,77,21,true,true
+dark,1440,920,bounty-3.png,tab,브라우저 확인,false,82,103,21,true,true
+dark,1440,920,bounty-3.png,heading,실제 영향 · 직접 작성,true,128,701,28,true,true
+dark,1440,920,bounty-3.png,heading,재현 절차 · 직접 작성,true,128,702,28,true,true
+dark,1440,920,js-horizontal.png,tab,요청·응답 목록,false,86,107,21,true,true
+dark,1440,920,js-horizontal.png,tab,계정 권한 비교,false,86,107,21,true,true
+dark,1440,920,js-horizontal.png,tab,데이터 변환·비교,false,99,120,21,true,true
+dark,1440,920,js-horizontal.png,tab,JS에서 API 찾기,true,94,115,21,true,true
+dark,1440,920,js-horizontal.png,tab,서버·경로 탐색,false,86,107,21,true,true
+dark,1440,920,js-horizontal.png,tab,URL 후보 수집,false,86,107,21,true,true
+dark,1440,920,js-horizontal.png,tab,점검 진행 현황,false,86,107,21,true,true
+dark,1440,920,js-horizontal.png,tab,응답 보안 분석,false,86,107,21,true,true
+dark,1440,920,js-horizontal.png,tab,입력값 보안 검사,false,99,120,21,true,true
+dark,1440,920,js-horizontal.png,tab,재현·증거 정리,false,86,107,21,true,true
+dark,1440,920,js-horizontal.png,tab,설정,false,26,47,21,true,true
+dark,1440,920,js-horizontal.png,heading,JS에서 API 찾기,true,127,127,24,true,true
+dark,1440,920,js-horizontal.png,heading,JS 원본 · 수동 분석,true,115,842,28,true,true
+dark,1440,920,js-horizontal.png,tab,URL · API,true,59,80,21,true,true
+dark,1440,920,js-horizontal.png,tab,토큰 · API 키 후보,false,106,127,21,true,true
+dark,1440,920,js-horizontal.png,tab,도메인,false,39,60,21,true,true
+dark,1440,920,js-horizontal.png,tab,클라우드 URL,false,82,103,21,true,true
+dark,1440,920,js-horizontal.png,tab,NPM 의존성,false,75,96,21,true,true
+dark,1440,920,js-horizontal.png,tab,소스맵,false,39,60,21,true,true
+dark,1440,920,js-horizontal.png,tab,복원 원본,false,56,77,21,false,true
+dark,1440,920,js-horizontal.png,tab,분석 상세,false,56,77,21,false,true
+dark,1440,920,js-horizontal.png,tab,History 분석 목록,false,104,125,21,false,true
+dark,1440,920,js-horizontal.png,heading,요청 REQUEST,true,96,702,28,true,true
+dark,1440,920,js-horizontal.png,heading,응답 RESPONSE,true,104,702,28,true,true

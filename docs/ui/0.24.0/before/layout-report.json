@@ -1,0 +1,407 @@
+{
+  "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+  "source": "downloads/extensions/0.23.0/burp-workbench-kr-0.23.0.jar",
+  "releaseJarSha256": "d27eb813b82b79218246011ff5d4370ca90e1986fd5d93b53028f9c3b89039dd",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1024x720",
+    "1280x800",
+    "1440x920"
+  ],
+  "renderedViews": 96,
+  "controlsMeasured": 1074,
+  "clippedControlsOutsideScrollers": 6,
+  "smallControls": 0,
+  "collapsedRequiredWorkAreas": 18,
+  "minimumWorkAreas": {
+    "tool-03.png:preview.js.source": 80,
+    "js-horizontal.png:preview.js.source": 80,
+    "bounty-1.png:preview.workflow.input": 80,
+    "bounty-1.png:preview.workflow.detail": 80,
+    "bounty-3.png:preview.evidence.impact": 70,
+    "bounty-3.png:preview.evidence.repro": 70
+  },
+  "failures": [
+    {
+      "theme": "light",
+      "size": "1024x720",
+      "view": "tool-03.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1024",
+          "height": "720",
+          "view": "tool-03.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "425",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1024x720",
+      "view": "js-horizontal.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1024",
+          "height": "720",
+          "view": "js-horizontal.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "405",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1024x720",
+      "view": "bounty-1.png",
+      "name": "preview.workflow.detail",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1024",
+          "height": "720",
+          "view": "bounty-1.png",
+          "kind": "JTextArea",
+          "name": "preview.workflow.detail",
+          "x": "13",
+          "y": "863",
+          "visibleWidth": "979",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "view": "tool-03.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1280",
+          "height": "800",
+          "view": "tool-03.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "540",
+          "visibleHeight": "1"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "view": "js-horizontal.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1280",
+          "height": "800",
+          "view": "js-horizontal.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "515",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "view": "bounty-1.png",
+      "name": "preview.workflow.detail",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1280",
+          "height": "800",
+          "view": "bounty-1.png",
+          "kind": "JTextArea",
+          "name": "preview.workflow.detail",
+          "x": "13",
+          "y": "907",
+          "visibleWidth": "1235",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1440x920",
+      "view": "tool-03.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1440",
+          "height": "920",
+          "view": "tool-03.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "629",
+          "visibleHeight": "53"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1440x920",
+      "view": "js-horizontal.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1440",
+          "height": "920",
+          "view": "js-horizontal.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "601",
+          "visibleHeight": "35"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1440x920",
+      "view": "bounty-1.png",
+      "name": "preview.workflow.detail",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "light",
+          "width": "1440",
+          "height": "920",
+          "view": "bounty-1.png",
+          "kind": "JTextArea",
+          "name": "preview.workflow.detail",
+          "x": "13",
+          "y": "973",
+          "visibleWidth": "1395",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1024x720",
+      "view": "tool-03.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1024",
+          "height": "720",
+          "view": "tool-03.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "425",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1024x720",
+      "view": "js-horizontal.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1024",
+          "height": "720",
+          "view": "js-horizontal.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "405",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1024x720",
+      "view": "bounty-1.png",
+      "name": "preview.workflow.detail",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1024",
+          "height": "720",
+          "view": "bounty-1.png",
+          "kind": "JTextArea",
+          "name": "preview.workflow.detail",
+          "x": "13",
+          "y": "863",
+          "visibleWidth": "979",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "view": "tool-03.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1280",
+          "height": "800",
+          "view": "tool-03.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "540",
+          "visibleHeight": "1"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "view": "js-horizontal.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1280",
+          "height": "800",
+          "view": "js-horizontal.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "515",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "view": "bounty-1.png",
+      "name": "preview.workflow.detail",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1280",
+          "height": "800",
+          "view": "bounty-1.png",
+          "kind": "JTextArea",
+          "name": "preview.workflow.detail",
+          "x": "13",
+          "y": "907",
+          "visibleWidth": "1235",
+          "visibleHeight": "0"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1440x920",
+      "view": "tool-03.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1440",
+          "height": "920",
+          "view": "tool-03.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "629",
+          "visibleHeight": "53"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1440x920",
+      "view": "js-horizontal.png",
+      "name": "preview.js.source",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1440",
+          "height": "920",
+          "view": "js-horizontal.png",
+          "kind": "JTextArea",
+          "name": "preview.js.source",
+          "x": "14",
+          "y": "413",
+          "visibleWidth": "601",
+          "visibleHeight": "35"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1440x920",
+      "view": "bounty-1.png",
+      "name": "preview.workflow.detail",
+      "minimumHeight": 80,
+      "actual": [
+        {
+          "theme": "dark",
+          "width": "1440",
+          "height": "920",
+          "view": "bounty-1.png",
+          "kind": "JTextArea",
+          "name": "preview.workflow.detail",
+          "x": "13",
+          "y": "973",
+          "visibleWidth": "1395",
+          "visibleHeight": "0"
+        }
+      ]
+    }
+  ]
+}

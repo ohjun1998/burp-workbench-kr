@@ -1,0 +1,267 @@
+PASS new lab page served
+PASS new lab manifest version
+PASS live login alice
+PASS live login bob
+PASS live login admin
+PASS live login moderator
+PASS vuln owner baseline 201
+PASS vuln object 201 account alice
+PASS vuln matrix policy 201 alice
+PASS vuln PUBLIC no owner false positive alice
+PASS vuln object 201 account bob
+PASS vuln matrix policy 201 bob
+PASS vuln PUBLIC no owner false positive bob
+PASS vuln object 201 account moderator
+PASS vuln matrix policy 201 moderator
+PASS vuln PUBLIC no owner false positive moderator
+PASS vuln object 201 account admin
+PASS vuln matrix policy 201 admin
+PASS vuln PUBLIC no owner false positive admin
+PASS vuln object 201 account guest
+PASS vuln matrix policy 201 guest
+PASS vuln PUBLIC no owner false positive guest
+PASS vuln owner baseline 202
+PASS vuln object 202 account alice
+PASS vuln matrix policy 202 alice
+PASS vuln object 202 account bob
+PASS vuln matrix policy 202 bob
+PASS vuln object 202 account moderator
+PASS vuln matrix policy 202 moderator
+PASS vuln object 202 account admin
+PASS vuln matrix policy 202 admin
+PASS vuln object 202 account guest
+PASS vuln matrix policy 202 guest
+PASS vuln owner baseline 203
+PASS vuln object 203 account alice
+PASS vuln matrix policy 203 alice
+PASS vuln object 203 account bob
+PASS vuln matrix policy 203 bob
+PASS vuln object 203 account moderator
+PASS vuln matrix policy 203 moderator
+PASS vuln object 203 account admin
+PASS vuln matrix policy 203 admin
+PASS vuln object 203 account guest
+PASS vuln matrix policy 203 guest
+PASS vuln owner baseline 204
+PASS vuln object 204 account alice
+PASS vuln matrix policy 204 alice
+PASS vuln object 204 account bob
+PASS vuln matrix policy 204 bob
+PASS vuln object 204 account moderator
+PASS vuln matrix policy 204 moderator
+PASS vuln object 204 account admin
+PASS vuln matrix policy 204 admin
+PASS vuln object 204 account guest
+PASS vuln matrix policy 204 guest
+PASS vuln owner baseline 205
+PASS vuln object 205 account alice
+PASS vuln matrix policy 205 alice
+PASS vuln object 205 account bob
+PASS vuln matrix policy 205 bob
+PASS vuln object 205 account moderator
+PASS vuln matrix policy 205 moderator
+PASS vuln object 205 account admin
+PASS vuln matrix policy 205 admin
+PASS vuln object 205 account guest
+PASS vuln matrix policy 205 guest
+PASS vuln owner baseline 206
+PASS vuln object 206 account alice
+PASS vuln matrix policy 206 alice
+PASS vuln object 206 account bob
+PASS vuln matrix policy 206 bob
+PASS vuln object 206 account moderator
+PASS vuln matrix policy 206 moderator
+PASS vuln object 206 account admin
+PASS vuln matrix policy 206 admin
+PASS vuln object 206 account guest
+PASS vuln matrix policy 206 guest
+PASS fixed owner baseline 201
+PASS fixed object 201 account alice
+PASS fixed matrix policy 201 alice
+PASS fixed PUBLIC no owner false positive alice
+PASS fixed object 201 account bob
+PASS fixed matrix policy 201 bob
+PASS fixed PUBLIC no owner false positive bob
+PASS fixed object 201 account moderator
+PASS fixed matrix policy 201 moderator
+PASS fixed PUBLIC no owner false positive moderator
+PASS fixed object 201 account admin
+PASS fixed matrix policy 201 admin
+PASS fixed PUBLIC no owner false positive admin
+PASS fixed object 201 account guest
+PASS fixed matrix policy 201 guest
+PASS fixed PUBLIC no owner false positive guest
+PASS fixed owner baseline 202
+PASS fixed object 202 account alice
+PASS fixed matrix policy 202 alice
+PASS fixed object 202 account bob
+PASS fixed matrix policy 202 bob
+PASS fixed object 202 account moderator
+PASS fixed matrix policy 202 moderator
+PASS fixed object 202 account admin
+PASS fixed matrix policy 202 admin
+PASS fixed object 202 account guest
+PASS fixed matrix policy 202 guest
+PASS fixed owner baseline 203
+PASS fixed object 203 account alice
+PASS fixed matrix policy 203 alice
+PASS fixed object 203 account bob
+PASS fixed matrix policy 203 bob
+PASS fixed object 203 account moderator
+PASS fixed matrix policy 203 moderator
+PASS fixed object 203 account admin
+PASS fixed matrix policy 203 admin
+PASS fixed object 203 account guest
+PASS fixed matrix policy 203 guest
+PASS fixed owner baseline 204
+PASS fixed object 204 account alice
+PASS fixed matrix policy 204 alice
+PASS fixed object 204 account bob
+PASS fixed matrix policy 204 bob
+PASS fixed object 204 account moderator
+PASS fixed matrix policy 204 moderator
+PASS fixed object 204 account admin
+PASS fixed matrix policy 204 admin
+PASS fixed object 204 account guest
+PASS fixed matrix policy 204 guest
+PASS fixed owner baseline 205
+PASS fixed object 205 account alice
+PASS fixed matrix policy 205 alice
+PASS fixed object 205 account bob
+PASS fixed matrix policy 205 bob
+PASS fixed object 205 account moderator
+PASS fixed matrix policy 205 moderator
+PASS fixed object 205 account admin
+PASS fixed matrix policy 205 admin
+PASS fixed object 205 account guest
+PASS fixed matrix policy 205 guest
+PASS fixed owner baseline 206
+PASS fixed object 206 account alice
+PASS fixed matrix policy 206 alice
+PASS fixed object 206 account bob
+PASS fixed matrix policy 206 bob
+PASS fixed object 206 account moderator
+PASS fixed matrix policy 206 moderator
+PASS fixed object 206 account admin
+PASS fixed matrix policy 206 admin
+PASS fixed object 206 account guest
+PASS fixed matrix policy 206 guest
+PASS nonexistent object stays review without valid owner baseline
+PASS invalid mode rejected
+PASS vuln stored creation accepted
+PASS vuln write stage does not prove readback
+PASS vuln readback links HTML stage
+PASS vuln escaping control classified without execution claim
+PASS vuln stored actual bytes
+PASS vuln stored cross-account policy
+PASS vuln stored anonymous policy
+PASS vuln cross-mode object isolation
+PASS vuln other account cannot delete fixtures
+PASS vuln owner deletion accepted
+PASS vuln owner recheck detects deleted data
+PASS vuln upload accepted
+PASS vuln download body retains marker
+PASS vuln download disposition control
+PASS vuln download MIME control
+PASS vuln download cross-account control
+PASS vuln upload readback stage honors MIME
+PASS fixed stored creation accepted
+PASS fixed write stage does not prove readback
+PASS fixed readback links HTML stage
+PASS fixed escaping control classified without execution claim
+PASS fixed stored actual bytes
+PASS fixed stored cross-account policy
+PASS fixed stored anonymous policy
+PASS fixed cross-mode object isolation
+PASS fixed other account cannot delete fixtures
+PASS fixed owner deletion accepted
+PASS fixed owner recheck detects deleted data
+PASS fixed upload accepted
+PASS fixed download body retains marker
+PASS fixed download disposition control
+PASS fixed download MIME control
+PASS fixed download cross-account control
+PASS fixed upload readback stage honors MIME
+PASS fixed stored requires CSRF
+PASS fixed HTML filename rejected
+PASS anonymous cannot create stored fixture
+PASS stored body bound
+PASS upload byte bound
+PASS reset requires CSRF
+PASS reset requires login
+PASS owner reset succeeds
+PASS bounded fixture allocation 0
+PASS bounded fixture allocation 1
+PASS bounded fixture allocation 2
+PASS bounded fixture allocation 3
+PASS bounded fixture allocation 4
+PASS bounded fixture allocation 5
+PASS bounded fixture allocation 6
+PASS bounded fixture allocation 7
+PASS bounded fixture allocation 8
+PASS bounded fixture allocation 9
+PASS bounded fixture allocation 10
+PASS bounded fixture allocation 11
+PASS bounded fixture allocation 12
+PASS bounded fixture allocation 13
+PASS bounded fixture allocation 14
+PASS bounded fixture allocation 15
+PASS bounded fixture allocation 16
+PASS bounded fixture allocation 17
+PASS bounded fixture allocation 18
+PASS bounded fixture allocation 19
+PASS bounded fixture allocation 20
+PASS bounded fixture allocation 21
+PASS bounded fixture allocation 22
+PASS bounded fixture allocation 23
+PASS bounded fixture allocation 24
+PASS bounded fixture allocation 25
+PASS bounded fixture allocation 26
+PASS bounded fixture allocation 27
+PASS bounded fixture allocation 28
+PASS bounded fixture allocation 29
+PASS bounded fixture allocation 30
+PASS bounded fixture allocation 31
+PASS bounded fixture allocation 32
+PASS bounded fixture allocation 33
+PASS bounded fixture allocation 34
+PASS bounded fixture allocation 35
+PASS bounded fixture allocation 36
+PASS bounded fixture allocation 37
+PASS bounded fixture allocation 38
+PASS bounded fixture allocation 39
+PASS bounded fixture allocation 40
+PASS bounded fixture allocation 41
+PASS bounded fixture allocation 42
+PASS bounded fixture allocation 43
+PASS bounded fixture allocation 44
+PASS bounded fixture allocation 45
+PASS bounded fixture allocation 46
+PASS bounded fixture allocation 47
+PASS bounded fixture allocation 48
+PASS bounded fixture allocation 49
+PASS bounded fixture allocation 50
+PASS bounded fixture allocation 51
+PASS bounded fixture allocation 52
+PASS bounded fixture allocation 53
+PASS bounded fixture allocation 54
+PASS bounded fixture allocation 55
+PASS bounded fixture allocation 56
+PASS bounded fixture allocation 57
+PASS bounded fixture allocation 58
+PASS bounded fixture allocation 59
+PASS bounded fixture allocation 60
+PASS bounded fixture allocation 61
+PASS bounded fixture allocation 62
+PASS bounded fixture allocation 63
+PASS 65th owner fixture rejected
+PASS reset removes exactly owner's 64 items
+PASS reset preserves another account data
+PASS reset makes capacity reusable
+PASS vuln actual SQL positive/negative control
+PASS vuln actual reflected marker positive/negative control
+PASS fixed actual SQL positive/negative control
+PASS fixed actual reflected marker positive/negative control
+PASS export strips live account secrets
+PASS export preserves observed stored marker
+BOUNTY_WORKFLOW_SUMMARY checks=266 HTTP_requests=259 exit=0

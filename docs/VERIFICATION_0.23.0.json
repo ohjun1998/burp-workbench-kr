@@ -1,0 +1,103 @@
+{
+  "version": "0.23.0",
+  "labVersion": "3.5.0",
+  "verifiedAtUtc": "2026-10-11T08:55:51.984532+00:00",
+  "command": "python dev.py release",
+  "exitCode": 0,
+  "checks": {
+    "regression": 1052,
+    "regressionGroups": 35,
+    "newRegression": 104,
+    "payloadHttpFixture": 127,
+    "allFeaturesHttp": 100,
+    "allFeaturesRequests": 199,
+    "communityBounty": 266,
+    "communityBountyRequests": 259,
+    "functionalTotal": 1545,
+    "packagingUnittest": 4
+  },
+  "runtime": {
+    "java": "OpenJDK 17.0.20",
+    "python": "3.12.14",
+    "extension": "production release JAR with Montoya API adapters and headless Swing",
+    "lab": "current Java/resources compiled; embedded Tomcat/Spring/H2 Oracle mode; no historical WAR app code"
+  },
+  "integrity": {
+    "downloadsMatchSources": true,
+    "productionSourceUnchangedDuringBounty": true,
+    "portsClosed": [
+      18099,
+      18399
+    ]
+  },
+  "pdf": {
+    "pages": 22,
+    "numberedUiFigures": 14,
+    "source": "current production Swing components rendered with API adapter; example data",
+    "allPagesRenderedAndVisuallyReviewed": true,
+    "sameInputsReproduceSamePdf": true
+  },
+  "review": {
+    "independentCodeReview": true,
+    "resolved": [
+      "source cache cleanup race on unload",
+      "conflicting browser images cannot silently replace existing proof",
+      "unspecified-auth GET does not claim anonymous execution",
+      "source retention failure does not suppress passive findings",
+      "repository Compose builds current source instead of historical WAR"
+    ]
+  },
+  "initialFailuresResolved": [
+    "JS panel test worker/EDT completion barrier",
+    "passive original packet retention factory failure isolated from analysis",
+    "vuln/fixed HTTP scenarios now use distinct markers as required by flow reset semantics",
+    "sequential HTTP stages use distinct ports to avoid TIME_WAIT bind failure"
+  ],
+  "notExecuted": [
+    "native Burp load/GUI",
+    "browser DOM or stored XSS execution",
+    "Docker/Oracle/Nginx full stack",
+    "current native TLS/HTTP2",
+    "Pro Collaborator",
+    "external BApp execution"
+  ],
+  "githubCi": "Recorded separately in this PR Checks; this file records the local release run.",
+  "files": {
+    "downloads/extensions/0.23.0/SHA256SUMS": {
+      "bytes": 197,
+      "sha256": "93f838b1f39eb7fd022373a280344e5bea9d2d92ed521456d55c2d350c729950"
+    },
+    "downloads/extensions/0.23.0/burp-workbench-kr-0.23.0-source.zip": {
+      "bytes": 2877512,
+      "sha256": "e4f14a46525fff89851324c2c7b028911f2857df9a6a348b4f8859339ef4ed71"
+    },
+    "downloads/extensions/0.23.0/burp-workbench-kr-0.23.0.jar": {
+      "bytes": 2992717,
+      "sha256": "d27eb813b82b79218246011ff5d4370ca90e1986fd5d93b53028f9c3b89039dd"
+    },
+    "downloads/extensions/0.23.0/manifest.json": {
+      "bytes": 26393,
+      "sha256": "9f14edfab8166bfb6ff21fe79259a73b9814ebaef917e7d7f80d6d7d39d56536"
+    },
+    "downloads/docker/3.5.0/SHA256SUMS": {
+      "bytes": 106,
+      "sha256": "7d477fae64190835a8b7dae533ede71f377431113f506530b193cc32394d914d"
+    },
+    "downloads/docker/3.5.0/community-security-lab-3.5.0-docker.zip": {
+      "bytes": 1116552,
+      "sha256": "68e36673d2696a2bdf437ce6d3a587bc0124de814b9aed15c1cdc169d1bbaa6b"
+    },
+    "downloads/docker/3.5.0/manifest.json": {
+      "bytes": 12805,
+      "sha256": "b370de839e27a24b10be3036199afcb42d4b066084e425128560487abcc12d5a"
+    },
+    "downloads/guides/0.23.0/Burp_Workbench_KR_0.23.0_guide.pdf": {
+      "bytes": 529759,
+      "sha256": "73cdb5e6ad1349a48a6cca181e721e1d8681d94c25dbe394e1a99f52276ef509"
+    },
+    "downloads/guides/0.23.0/SHA256SUMS.txt": {
+      "bytes": 101,
+      "sha256": "6ad66616ceb8756b4a7bbc7f7eb373413793c8dbc891aa8a193b07a95403434f"
+    }
+  }
+}

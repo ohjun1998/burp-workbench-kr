@@ -1,0 +1,40 @@
+name: Assemble reviewed Korean guide
+on:
+  push:
+    branches: [account-a/assemble-guide-easy-ko]
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Store the reviewed PDF as an exact Git commit
+        env:
+          WB_GUIDE_TOKEN: ${{ github.token }}
+          SOURCE_TREE: 21017ca6ebe1051ec641e15912726f14a9697fc9
+          EXPECTED_TREE: 17428682f69028bfd334c1a0f6f5ea841f015032
+          SOURCE_COMMIT: c8de886af925b706a60cfce23505c2990a9d5de0
+          PDF_PATH: downloads/guides/0.25.0-easy-ko/Burp_Workbench_KR_0.25.0_easy_guide.pdf
+          PDF_SHA256: 126d65a9a420ebb8d13a87a6d2ae2f6015c6f9c34e7d27622c4f77eb9b29d687
+          PDF_BLOB: 14717588ac23e38b825be4cae96c1e45cd32b8af
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, os, urllib.request
+          from pathlib import Path
+          parts=sorted(Path('transfer').glob('part-*.b64'))
+          assert len(parts)==5
+          data=base64.b64decode(''.join(p.read_text() for p in parts),validate=True)
+          assert hashlib.sha256(data).hexdigest()==os.environ['PDF_SHA256']
+          def post(endpoint,value):
+              req=urllib.request.Request('https://api.github.com/repos/ohjun1998/burp-workbench-kr/git/'+endpoint,data=json.dumps(value).encode(),headers={'Authorization':'Bearer '+os.environ['WB_GUIDE_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'},method='POST')
+              with urllib.request.urlopen(req,timeout=60) as response: return json.load(response)
+          blob=post('blobs',{'content':base64.b64encode(data).decode(),'encoding':'base64'})
+          assert blob['sha']==os.environ['PDF_BLOB']
+          tree=post('trees',{'base_tree':os.environ['SOURCE_TREE'],'tree':[{'path':os.environ['PDF_PATH'],'mode':'100644','type':'blob','sha':blob['sha']}]})
+          assert tree['sha']==os.environ['EXPECTED_TREE']
+          commit=post('commits',{'message':'docs: publish reviewed natural Korean guide PDF','tree':tree['sha'],'parents':[os.environ['SOURCE_COMMIT']]})
+          print('GUIDE_RELEASE_COMMIT='+commit['sha'])
+          Path(os.environ['GITHUB_STEP_SUMMARY']).write_text('Verified guide commit: '+commit['sha']+'\nTree: '+tree['sha']+'\nSHA256: '+os.environ['PDF_SHA256']+'\n')
+          PY

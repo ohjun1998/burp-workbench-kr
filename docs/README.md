@@ -15,7 +15,9 @@
 | [0.25.0 쉬운 이름·화면 안내](UI_0.25.0_KR.md) | 작업별 화면 선택, 하위 탭, 기능 안내와 클릭 순서 |
 | [0.25.0 검증 기록](VERIFICATION_0.25.0.json) | 실제 실행한 검사, 산출물, 환경상 남은 범위 |
 | [0.25.0 인수인계](HANDOFF_0.25.0_KR.md) | 변경 범위, 재개 위치와 후속 작업 |
-| [0.25.0 PDF 원고](GUIDE_0.25.0_KR.md) | 그림 가이드의 원문과 단계별 설명 |
+| [0.25.0 쉬운 한국어 PDF 원고](GUIDE_0.25.0_EASY_KR.md) | 사용 목적, 클릭 순서, 확인할 결과를 풀어 쓴 개정판 |
+| [한국어 가이드 개정 기록](HANDOFF_GUIDE_EASY_KR.md) | 사용자 피드백, 수정한 설명, 실제 문서 검토 결과 |
+| [0.25.0 개정 전 PDF 원고](GUIDE_0.25.0_KR.md) | 개정 전 설명을 보존한 원고 |
 | [저장소 안내](REPOSITORY_MAP_KR.md) | 파일 종류별 공식 위치와 과거 자료 구분 |
 
 버전 문서는 해당 브랜치의 소스·산출물을 설명합니다. 현재 `main`의 합쳐진 상태는 [PROJECT_STATUS_KR.md](../PROJECT_STATUS_KR.md), 미병합 작업의 상태는 [Pull requests](https://github.com/ohjun1998/burp-workbench-kr/pulls)를 확인합니다.

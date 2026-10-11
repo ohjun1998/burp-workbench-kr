@@ -35,6 +35,7 @@ FONT = WB / "src/main/resources/fonts/NanumGothic-Regular.ttf"
 ASSETS = ROOT / "docs/guide-assets/0.25.0"
 SOURCE = ROOT / "docs/GUIDE_0.25.0_KR.md"
 OUTPUT = ROOT / "downloads/guides/0.25.0/Burp_Workbench_KR_0.25.0_guide.pdf"
+EASY_KO = False
 INK = colors.HexColor("#182936")
 TEAL = colors.HexColor("#007A7C")
 GRAY = colors.HexColor("#5D6A73")
@@ -114,33 +115,33 @@ class UseCaseMap(Flowable):
         text(246,263,"WORKBENCH KR",9.4,TEAL)
         actor(29,166,"점검자")
         if kind == "inspect":
-            use(246,229,191,"SCOPE에 허용 범위 등록")
-            use(246,165,184,"관측 요청·응답 선택")
-            use(165,81,153,"계정을 바꿔 비교 실행")
+            use(246,229,191,"SCOPE에 점검할 주소 등록" if EASY_KO else "SCOPE에 허용 범위 등록")
+            use(246,165,184,"목록에서 요청 선택" if EASY_KO else "관측 요청·응답 선택")
+            use(165,81,153,"다른 계정으로 요청 보내기" if EASY_KO else "계정을 바꿔 비교 실행")
             use(333,81,143,"Repeater 요청 준비")
             box(435,210,67,40,"Burp\n브라우저")
             box(435,98,67,37,"Burp\nRepeater")
             box(435,23,67,38,"대상 서버")
             arrow([(41,166),(153,166)],"선택",(102,175))
             arrow([(42,189),(60,229),(150,229)],"범위 지정",(99,240))
-            arrow([(246,208),(246,185)],"공통 범위",(287,194))
-            arrow([(435,229),(427,229),(427,166),(339,166)],"관측",(386,178))
-            arrow([(213,144),(183,102)],"명시적 실행",(159,126))
-            arrow([(279,144),(315,102)],"편집 초안",(335,125))
+            arrow([(246,208),(246,185)],"주소 확인" if EASY_KO else "공통 범위",(287,194))
+            arrow([(435,229),(427,229),(427,166),(339,166)],"요청·응답" if EASY_KO else "관측",(386,178))
+            arrow([(213,144),(183,102)],"직접 실행" if EASY_KO else "명시적 실행",(159,126))
+            arrow([(279,144),(315,102)],"요청 가져오기" if EASY_KO else "편집 초안",(335,125))
             arrow([(165,60),(165,35),(435,35)],"요청 전송 · 응답 비교",(292,41))
             arrow([(404,81),(426,81),(426,116),(435,116)])
         elif kind == "evidence":
-            use(246,228,228,"검사 결과와 원본을 증거로 연결")
-            use(246,164,220,"영향·재현 작성 / 가림 미리보기")
+            use(246,228,228,"확인한 요청·응답 모으기" if EASY_KO else "검사 결과와 원본을 증거로 연결")
+            use(246,164,220,"결과 설명 적기\n민감한 정보 가리기" if EASY_KO else "영향·재현 작성 / 가림 미리보기")
             use(174,84,155,"증거 ZIP 저장")
-            use(335,84,147,"업무 조건 확인\n직접 완료")
-            box(435,201,67,47,"Burp 트래픽\n원본 패킷")
-            box(435,23,67,42,"사용자\n로컬 파일")
-            arrow([(435,224),(361,224)],"원본",(400,235))
+            use(335,84,147,"남은 점검 확인\n업무 완료 누르기" if EASY_KO else "업무 조건 확인\n직접 완료")
+            box(435,201,67,47,"Burp에 기록된\n요청·응답" if EASY_KO else "Burp 트래픽\n원본 패킷")
+            box(435,23,67,42,"저장한\n증거 파일" if EASY_KO else "사용자\n로컬 파일")
+            arrow([(435,224),(361,224)],"요청·응답" if EASY_KO else "원본",(400,235))
             arrow([(246,207),(246,185)],"저장할 자료",(291,194))
             arrow([(41,166),(135,166)],"직접 작성·확인",(89,178))
             arrow([(213,143),(182,105)],"직접 저장",(166,124))
-            arrow([(174,63),(174,40),(435,40)],"파일 생성 후 연결",(282,45))
+            arrow([(174,63),(174,40),(435,40)],"ZIP 파일 연결" if EASY_KO else "파일 생성 후 연결",(282,45))
             arrow([(435,62),(426,91),(409,91)],"파일 확인",(460,91))
             arrow([(41,146),(57,83),(95,83)],"저장 선택",(59,113))
         else:
@@ -251,11 +252,11 @@ def build():
         canvas.setFont("GuideKR", 8)
         canvas.setFillColor(GRAY)
         canvas.drawString(44, PAGE[1] - 31, "WORKBENCH KR / 0.25.0")
-        canvas.drawRightString(PAGE[0] - 44, PAGE[1] - 31, "실습 사이트 3.5.0 · 한국어 가이드")
+        canvas.drawRightString(PAGE[0] - 44, PAGE[1] - 31, "실습 사이트 3.5.0 · 쉬운 한국어 개정판" if EASY_KO else "실습 사이트 3.5.0 · 한국어 가이드")
         canvas.setStrokeColor(RULE)
         canvas.line(44, 43, PAGE[0] - 44, 43)
         canvas.setFillColor(GRAY)
-        canvas.drawString(44, 28, "운영 UI 미리보기 · 실제 Burp / Docker 실행 검증과 구분")
+        canvas.drawString(44, 28, "사용법을 설명하기 위해 만든 예시 화면" if EASY_KO else "운영 UI 미리보기 · 실제 Burp / Docker 실행 검증과 구분")
         canvas.drawRightString(PAGE[0] - 44, 28, f"{doc.page:02d} / {len(pages)}")
 
     class GuideDocument(SimpleDocTemplate):
@@ -270,7 +271,7 @@ def build():
                 self.canv.addOutlineEntry(flowable.getPlainText(), key, 0, False)
 
     document = GuideDocument(str(OUTPUT), pagesize=PAGE, rightMargin=44, leftMargin=44,
-                                topMargin=63, bottomMargin=58, title="Burp Workbench KR 0.25.0 처음 시작하는 웹 보안 점검",
+                                topMargin=63, bottomMargin=58, title="Burp Workbench KR 0.25.0 쉬운 한국어 사용 안내서" if EASY_KO else "Burp Workbench KR 0.25.0 처음 시작하는 웹 보안 점검",
                                 author="Burp Workbench KR", pageCompression=1)
     document.build(story, onFirstPage=page_frame, onLaterPages=page_frame)
     if document.page != len(pages):
@@ -284,7 +285,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--refresh-previews", action="store_true")
     parser.add_argument("--java", default="java")
+    parser.add_argument("--edition", choices=("original", "easy-ko"), default="original")
     args = parser.parse_args()
+    if args.edition == "easy-ko":
+        EASY_KO = True
+        SOURCE = ROOT / "docs/GUIDE_0.25.0_EASY_KR.md"
+        OUTPUT = ROOT / "downloads/guides/0.25.0-easy-ko/Burp_Workbench_KR_0.25.0_easy_guide.pdf"
     if args.refresh_previews:
         refresh_previews(args.java)
     build()

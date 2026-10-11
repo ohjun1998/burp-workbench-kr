@@ -78,6 +78,14 @@ python tools/render_ui_layout.py --guide-only --out tmp/ui-guide --check
 
 ## PDF 가이드 재생성
 
+0.25.0용 쉬운 한국어 개정판은 `docs/GUIDE_0.25.0_EASY_KR.md`를 원고로 사용합니다.
+
+```sh
+python tools/build_guide.py --edition easy-ko
+```
+
+결과는 `downloads/guides/0.25.0-easy-ko/Burp_Workbench_KR_0.25.0_easy_guide.pdf`입니다. 아래의 기존 생성 명령은 개정 전 안내서용입니다. 문서만 고칠 때도 새 개정판 폴더를 사용해 이전 PDF를 보존합니다.
+
 [현재 Markdown 원고](docs/GUIDE_0.25.0_KR.md)와 `docs/guide-assets/0.25.0/`의 검토한 화면을 사용합니다. Python 환경에 `reportlab`이 필요합니다.
 
 ```sh

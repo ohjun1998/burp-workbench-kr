@@ -1,0 +1,64 @@
+name: Assemble reviewed Workbench 0.25.0
+on:
+  push:
+    branches: [account-a/assemble-0.25.0-beginner-guide]
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Preserve reviewed PDF and image bytes
+        run: |
+          python - <<'PY'
+          import base64, hashlib, os
+          from pathlib import Path
+          parts=sorted(Path('transfer').glob('part-*.b64'))
+          assert len(parts)==7
+          data=base64.b64decode(''.join(p.read_text() for p in parts),validate=True)
+          assert hashlib.sha256(data).hexdigest()=='3638a265a428189b45b3353a38dce53a5b4804fb71dcd0b4bfb753f1e2b033cf'
+          (Path(os.environ['RUNNER_TEMP'])/'workbench-reviewed.zip').write_bytes(data)
+          PY
+      - uses: actions/checkout@v6
+        with:
+          ref: ed02eabc66ba7d1864babadec83759e9d11afe1d
+          fetch-depth: 0
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Restore reviewed PDF and UI evidence
+        run: |
+          python - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import os, zipfile
+          with zipfile.ZipFile(Path(os.environ['RUNNER_TEMP'])/'workbench-reviewed.zip') as archive:
+              for info in archive.infolist():
+                  p=PurePosixPath(info.filename)
+                  assert not p.is_absolute() and '..' not in p.parts
+                  assert info.filename.startswith(('docs/guide-assets/0.25.0/','docs/ui/0.25.0/','downloads/guides/0.25.0/'))
+              archive.extractall('.')
+          PY
+      - name: Rebuild and verify release bytes
+        run: python dev.py release
+      - name: Confirm exact reviewed tree and publish task branch
+        env:
+          EXPECTED_TREE: 264ad3b00c6d8d4986d094a54f21243ae83dbdfc
+        run: |
+          git add docs/guide-assets/0.25.0 docs/ui/0.25.0 downloads/extensions/0.25.0 downloads/guides/0.25.0
+          actual_tree=$(git write-tree)
+          if [ "$actual_tree" != "$EXPECTED_TREE" ]; then
+            echo "Tree mismatch: $actual_tree"
+            git diff --cached --stat
+            exit 1
+          fi
+          git config user.name "Workbench Build"
+          git config user.email "workbench-build@users.noreply.github.com"
+          release_commit=$(git commit-tree "$actual_tree" -p ed02eabc66ba7d1864babadec83759e9d11afe1d -m "build: publish verified Workbench 0.25.0 JAR, source and beginner PDF")
+          git push origin "$release_commit:refs/heads/account-a/0.25.0-beginner-guide"
+          echo "Published $release_commit with verified tree $actual_tree" >> "$GITHUB_STEP_SUMMARY"

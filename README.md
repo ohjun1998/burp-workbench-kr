@@ -1,43 +1,63 @@
 # Burp Workbench KR
 
-한국어 Burp Suite 확장과 LOOP 커뮤니티 보안 실습 사이트를 함께 개발합니다. 이 브랜치의 테스트 배포는 **확장 0.24.0 · 실습 사이트 3.5.0**입니다. `main`에 합쳐진 상태는 [프로젝트 상태](PROJECT_STATUS_KR.md), 진행 중인 변경은 [Pull requests](https://github.com/ohjun1998/burp-workbench-kr/pulls)에서 확인합니다.
+**SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-## 필요한 곳으로 바로 가기
+처음 사용하는 분은 아래 **설치하고 첫 요청 확인하기**부터 시작하세요. 이 브랜치의 테스트 배포는 **확장 0.25.0 · 실습 사이트 3.5.0**입니다. 이번 버전은 기능 이름을 쉬운 작업명으로 바꾸고 화면 안 기능 안내와 PDF를 정리했습니다.
 
-| 하려는 일 | 시작 위치 |
+## 설치하고 첫 요청 확인하기
+
+1. **[최신 JAR와 PDF 다운로드](downloads/README.md)**에서 0.25.0 파일을 받습니다. 이전 Workbench를 해제한 뒤 Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다.
+2. Burp 브라우저로 점검할 사이트를 사용합니다. Workbench의 **요청·응답 목록**에서 요청 한 건을 선택하고 우클릭 → **SCOPE 지정**에서 필요한 경로나 도메인을 추가합니다. 이 Workbench SCOPE를 여러 도구가 함께 사용합니다.
+3. 선택한 요청·응답을 읽고 목적에 맞는 도구로 이동합니다. 처음에는 **Repeater**로 요청을 준비해 직접 확인하고, 원본이 필요한 비교·증거 기능은 선택한 요청에서 이어갑니다.
+4. 화면의 **기능 안내** 버튼(또는 **F1**)과 **[그림 가이드북](downloads/guides/README.md)**으로 준비할 입력과 다음 버튼을 확인합니다. 재현한 결과는 **재현·증거 정리**에 모아 저장합니다.
+
+SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다. 추가 요청 전송·계정 비교 실행·수동 검증·취약점 판단·증거 저장은 사용자가 선택합니다. Repeater로 보내기는 요청을 준비하는 동작이며, Burp Repeater의 **Send**는 직접 누릅니다.
+
+## 하려는 일로 도구 찾기
+
+| 하고 싶은 일 | 0.25.0 화면 |
 |---|---|
-| 확장 JAR·소스 ZIP·Docker 실행 ZIP 다운로드 | **[테스트 파일 다운로드](downloads/README.md)** |
-| 그림과 함께 사용법 보기 | **[버전별 PDF 가이드북](downloads/guides/README.md)** |
-| 커뮤니티 사이트에서 모의 진단하기 | **[점검 순서와 판정 기준](docs/TEST_WORKFLOW_KR.md)** |
-| 이번 버전의 개선점·검증 범위 확인 | [0.24.0 변경 안내](docs/RELEASE_0.24.0_KR.md) |
-| 버튼 위치와 작은 화면 개선 확인 | [0.24.0 화면·버튼 안내](docs/UI_0.24.0_KR.md) |
-| 문서·소스·과거 기록 찾기 | [문서 목차](docs/README.md) · [저장소 안내](docs/REPOSITORY_MAP_KR.md) |
+| 요청·응답을 읽고 점검 범위를 정하기 | **요청·응답 목록** |
+| 같은 요청을 다른 계정 조건으로 비교하기 | **계정 권한 비교** |
+| 인코딩·JWT 내용을 읽거나 두 응답의 차이 찾기 | **데이터 변환·비교** |
+| JavaScript에 적힌 API와 원본 위치 찾기 | **JS에서 API 찾기** |
+| 서버 정보와 경로를 살펴보기 | **서버·경로 탐색** |
+| 사이트와 문서에서 URL 후보 모으기 | **URL 후보 수집** |
+| URL·계정·업무의 완료와 재검토 상태 보기 | **점검 진행 현황** |
+| 응답의 보안 단서·API 문서·저장 후 조회 흐름 읽기 | **응답 보안 분석** |
+| 선택한 입력값에 검사값을 넣어 응답 비교하기 | **입력값 보안 검사** |
+| 요청을 순서대로 재현하고 원본·증거 파일 정리하기 | **재현·증거 정리** |
 
-## 설치하고 점검하기
+[이전 이름과 새 이름 대응표](docs/RELEASE_0.25.0_KR.md) · [화면·버튼 안내](docs/UI_0.25.0_KR.md) · [문서 목차](docs/README.md)
 
-1. 다운로드 목록에서 같은 버전의 확장 JAR와 PDF를 받습니다. Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제합니다.
-2. Docker 실행 ZIP을 별도 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. Docker Desktop/Engine과 Compose v2가 필요하며 처음에는 이미지·빌드 의존성을 내려받습니다.
-3. `http://127.0.0.1:8088`을 Burp 브라우저에서 열고 실습 주소를 SCOPE에 추가합니다. [점검 순서](docs/TEST_WORKFLOW_KR.md)에 따라 정상·취약·수정 동작을 비교하고 증거를 저장합니다.
+## 로컬 커뮤니티에서 연습하기
 
-Docker ZIP은 사이트 소스와 실행 스크립트입니다. Docker 설치 파일이나 사전 빌드 이미지가 아닙니다. 실습용 취약 경로와 가짜 계정이 있으므로 로컬 격리 환경에서 사용합니다. 실제 Burp·브라우저·Docker에서 확인한 범위는 해당 버전의 검증 기록을 기준으로 읽습니다.
+[Docker 실행 ZIP](downloads/README.md)을 별도 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. Docker Desktop/Engine과 Compose v2가 필요하며 처음에는 이미지·빌드 의존성을 내려받습니다. `http://127.0.0.1:8088`을 Burp 브라우저에서 열고 실습 주소를 SCOPE에 추가하세요.
 
-0.24.0은 버튼을 해당 탭과 선택 대상 가까이에 배치하고 JS 원문·업무 흐름 상세의 공간 부족을 개선합니다. 실습 사이트와 Docker 패키지는 3.5.0을 사용합니다. 이전 확장·PDF 배포 파일도 다운로드 목록에서 계속 받을 수 있습니다.
+**[점검 순서와 판정 기준](docs/TEST_WORKFLOW_KR.md)**에 따라 정상·취약·수정 동작을 비교하고 증거를 저장할 수 있습니다. Docker ZIP은 사이트 소스와 실행 스크립트이며 Docker 설치 파일이나 사전 빌드 이미지는 아닙니다. 실습용 취약 경로와 가짜 계정이 있으므로 로컬 격리 환경에서 사용합니다.
 
-## 개발과 자동 검증
+## 변경과 검증 확인하기
 
-Python 3.10+ 및 JDK 17+가 필요합니다. 저장소 루트에서 실행합니다.
+| 찾는 자료 | 위치 |
+|---|---|
+| JAR·소스 ZIP·Docker ZIP·PDF | [테스트 파일 다운로드](downloads/README.md) |
+| 기능 이름과 사용 흐름의 변경점 | [0.25.0 변경 안내](docs/RELEASE_0.25.0_KR.md) |
+| 실제 실행한 검사와 남은 범위 | [0.25.0 검증 기록](docs/VERIFICATION_0.25.0.json) |
+| 소스·도구·과거 자료 위치 | [저장소 안내](docs/REPOSITORY_MAP_KR.md) |
+
+이전 버전 파일과 검증 기록은 보존합니다. `main`에 합쳐진 상태는 [프로젝트 상태](PROJECT_STATUS_KR.md), 진행 중인 변경과 CI는 [Pull requests](https://github.com/ohjun1998/burp-workbench-kr/pulls)에서 확인합니다. 자동 검사·Swing 화면 렌더링과 실제 Burp GUI·브라우저·Docker 실행은 구분하며, 수행한 범위는 버전별 검증 기록을 기준으로 읽습니다.
+
+## 개발과 협업
+
+Python 3.10+ 및 JDK 17+를 준비하고 저장소 루트에서 실행합니다.
 
 ```sh
 python dev.py doctor
 python dev.py check
 ```
 
-`check`는 확장을 다시 빌드하고 회귀 검사와 격리된 loopback HTTP 검사를 실행합니다. 공식 확장 빌드 경로는 `dev.py` → `build_all.py`입니다. 과거 버전이 적힌 Maven POM은 확장 배포 경로가 아닙니다. 환경 설정과 각 명령은 [개발 환경 안내](DEVELOPMENT_SETUP_KR.md), 코드 위치는 [저장소 안내](docs/REPOSITORY_MAP_KR.md)를 확인합니다.
+`check`는 확장을 다시 빌드하고 회귀 검사와 격리된 loopback HTTP 검사를 실행합니다. 공식 확장 빌드 경로는 `dev.py` → `build_all.py`입니다. 과거 버전이 적힌 Maven POM은 확장 배포 경로가 아닙니다. [개발 환경 안내](DEVELOPMENT_SETUP_KR.md)에서 각 명령과 화면·PDF 재생성 절차를 확인하세요.
 
-새 배포는 버전을 올린 뒤 `python dev.py release`로 생성합니다. 생성한 `downloads/`를 소스와 함께 PR에 포함하며 기존 버전 파일은 보존합니다. GitHub Actions는 빌드·기능 검사·화면 배치 검사·다운로드 무결성을 확인하고 JAR와 로그를 아티팩트로 제공합니다. 자동 검사가 실제 Burp GUI, 브라우저 DOM, Docker 전체 스택 또는 Pro 서비스 검증까지 대신하지는 않습니다.
+작업 전에 [AGENTS.md](AGENTS.md), [프로젝트 상태](PROJECT_STATUS_KR.md), [협업 안내](docs/COLLABORATION_KR.md)를 읽습니다. 계정 A/B는 `account-a/<작업명>` 또는 `account-b/<작업명>` 브랜치에서 작업하고, 변경·실제 검증·남은 한계를 PR로 전달합니다. 새 배포는 버전을 올린 뒤 `python dev.py release`로 만들고 버전별 `downloads/`를 소스와 함께 PR에 포함합니다. 기존 버전은 덮어쓰지 않습니다.
 
-## 협업
-
-작업 전에 [AGENTS.md](AGENTS.md), [프로젝트 상태](PROJECT_STATUS_KR.md), [협업 안내](docs/COLLABORATION_KR.md)를 읽습니다. 계정 A/B는 `account-a/<작업명>` 또는 `account-b/<작업명>` 브랜치에서 작업하고, 변경·실제 검증·남은 한계를 PR로 전달합니다. 소스와 작업 기록은 GitHub에서 공유하며 ChatGPT 대화와 사용량은 계정별입니다.
-
-기존 배포 원본·검증 자료는 `release/`, `history/`, `setup/`, `reproduction/`에 보존합니다. 이 폴더의 과거 문서보다 위의 현재 다운로드·가이드를 먼저 확인하세요. 확장 소스의 [GPL 라이선스](project/burp-development-workspace/burp-workbench-kr/burp-workbench/LICENSE)와 [제3자 고지](project/burp-development-workspace/burp-workbench-kr/burp-workbench/THIRD_PARTY_NOTICES.md)를 유지합니다.
+`release/`, `history/`, `setup/`, `reproduction/`의 문서는 작성 당시의 기록입니다. 현재 사용법은 위의 다운로드·가이드를 먼저 확인하세요. 확장 소스의 [GPL 라이선스](project/burp-development-workspace/burp-workbench-kr/burp-workbench/LICENSE)와 [제3자 고지](project/burp-development-workspace/burp-workbench-kr/burp-workbench/THIRD_PARTY_NOTICES.md)를 유지합니다.

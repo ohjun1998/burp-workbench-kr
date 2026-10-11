@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.24.0**과 실습 사이트 **3.5.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.24.0 검증 기록](docs/VERIFICATION_0.24.0.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.25.0**과 실습 사이트 **3.5.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.25.0 검증 기록](docs/VERIFICATION_0.25.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -67,15 +67,18 @@ python dev.py bounty-test --port 18399
 
 ```sh
 python tools/render_ui_layout.py --out tmp/ui-layout --check
+python tools/render_ui_layout.py --guide-only --out tmp/ui-guide --check
 ```
 
-기본 조건은 확장 작업 영역 1024×720, 1280×800, 1440×920과 밝은/어두운 테마입니다. JS의 대체 배치를 포함해 조건별 16개, 총 96개 화면을 렌더링합니다. `controls.csv`는 버튼·입력 크기, `content.csv`는 본문·표의 실제 노출 영역, `layout-report.json`은 잘림·작은 입력·핵심 영역 붕괴 검사 결과입니다. `--check`가 실패하면 해당 PNG와 영역을 확인합니다. 통과한 수치만으로 사용성을 모두 판단하지 않고 그림도 검토합니다.
+기본 조건은 확장 작업 영역 1024×720, 1280×800, 1440×920과 밝은/어두운 테마입니다. JS의 대체 배치를 포함해 조건별 18개, 총 108개 화면을 렌더링합니다. `controls.csv`는 버튼·입력 크기, `content.csv`는 본문·표의 실제 노출 영역, `text.csv`는 탭·제목의 글자 표시 영역, `layout-report.json`은 잘림·작은 입력·핵심 영역 붕괴 검사 결과입니다. `--check`가 실패하면 해당 PNG와 영역을 확인합니다. 통과한 수치만으로 사용성을 모두 판단하지 않고 그림도 검토합니다.
 
-로컬에서는 이 검사를 `dev.py check`와 별도로 실행합니다. GitHub CI는 `dev.py check` 다음 단계로 같은 화면 배치 게이트를 실행합니다. 이전 JAR와 비교할 때는 `--jar downloads/extensions/0.23.0/burp-workbench-kr-0.23.0.jar`를 지정합니다. [화면·버튼 개선 문서](docs/UI_0.24.0_KR.md)에 재현 방법과 해석 범위를 기록합니다. 합성 데이터와 API 어댑터를 쓰는 헤드리스 렌더링이며 실제 Burp GUI나 운영체제별 DPI 검증이 아닙니다.
+안내 창은 `--guide-only`로 별도 확인합니다. 실제 설정 창과 같은 구성에서 기본 760×480·최소 560×300, 밝은/어두운 테마, 12개 안내의 총 48개 화면을 검사합니다. 본문 줄바꿈·수평 스크롤·기능 선택·이동 버튼을 확인합니다.
+
+로컬에서는 이 검사를 `dev.py check`와 별도로 실행합니다. GitHub CI는 `dev.py check` 다음 단계로 같은 화면 배치 게이트를 실행합니다. 이전 JAR와 비교할 때는 `--jar downloads/extensions/0.23.0/burp-workbench-kr-0.23.0.jar`를 지정합니다. [화면·버튼 개선 문서](docs/UI_0.25.0_KR.md)에 재현 방법과 해석 범위를 기록합니다. 합성 데이터와 API 어댑터를 쓰는 헤드리스 렌더링이며 실제 Burp GUI나 운영체제별 DPI 검증이 아닙니다.
 
 ## PDF 가이드 재생성
 
-[현재 Markdown 원고](docs/GUIDE_0.24.0_KR.md)와 `docs/guide-assets/0.24.0/`의 검토한 화면을 사용합니다. Python 환경에 `reportlab`이 필요합니다.
+[현재 Markdown 원고](docs/GUIDE_0.25.0_KR.md)와 `docs/guide-assets/0.25.0/`의 검토한 화면을 사용합니다. Python 환경에 `reportlab`이 필요합니다.
 
 ```sh
 python tools/build_guide.py
@@ -87,7 +90,7 @@ python tools/build_guide.py
 python tools/build_guide.py --refresh-previews
 ```
 
-결과는 `downloads/guides/0.24.0/Burp_Workbench_KR_0.24.0_guide.pdf`입니다. 생성 후 페이지를 렌더해 글꼴·잘림·그림·내용을 확인하고 배포합니다. 화면은 합성 데이터를 넣은 운영 Swing 구성 요소의 헤드리스 미리보기이며 실제 Burp를 직접 조작한 캡처가 아닙니다. 이미 배포한 버전의 PDF를 수정할 때도 새 버전으로 관리합니다.
+결과는 `downloads/guides/0.25.0/Burp_Workbench_KR_0.25.0_guide.pdf`입니다. 생성 후 페이지를 렌더해 글꼴·잘림·그림·내용을 확인하고 배포합니다. 화면은 합성 데이터를 넣은 운영 Swing 구성 요소의 헤드리스 미리보기이며 실제 Burp를 직접 조작한 캡처가 아닙니다. 이미 배포한 버전의 PDF를 수정할 때도 새 버전으로 관리합니다.
 
 ## 현재 검증과 이전 기록 구분
 
@@ -95,7 +98,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.24.0.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.25.0.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 

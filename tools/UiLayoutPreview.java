@@ -22,6 +22,7 @@ import javax.swing.plaf.FontUIResource;
 public final class UiLayoutPreview extends WorkbenchTest {
     static final java.util.List<String> rows = new java.util.ArrayList<>();
     static final java.util.List<String> contentRows = new java.util.ArrayList<>();
+    static final java.util.List<String> textRows = new java.util.ArrayList<>();
     static String theme;
     static int width, height;
     static void render(Container root, Path path, int ignoredWidth, int ignoredHeight) throws Exception {
@@ -40,6 +41,32 @@ public final class UiLayoutPreview extends WorkbenchTest {
     static String csv(String value){return "\""+value.replace("\"","\"\"")+"\"";}
     static void inspect(Container root, java.awt.Component c, String view){
         if(!c.isVisible())return;
+        if(c instanceof JTabbedPane tabs) {
+            for(int i=0;i<tabs.getTabCount();i++) {
+                var local=tabs.getBoundsAt(i);if(local==null)continue;
+                var rect=javax.swing.SwingUtilities.convertRectangle(tabs,local,root);
+                var visible=visible(root,tabs,rect);
+                // Swing scrolls tab captions within a private viewport, independently of its page area.
+                for(var child:tabs.getComponents())if(child instanceof javax.swing.JViewport viewport&&viewport.isVisible())
+                    visible=visible.intersection(javax.swing.SwingUtilities.convertRectangle(tabs,viewport.getBounds(),root));
+                String label=tabs.getTitleAt(i);int textWidth=tabs.getFontMetrics(tabs.getFont()).stringWidth(label);
+                int textHeight=tabs.getFontMetrics(tabs.getFont()).getHeight();
+                boolean fits=rect.width>=textWidth+6&&rect.height>=textHeight;
+                var textBounds=new java.awt.Rectangle(rect.x+(rect.width-textWidth)/2,rect.y+(rect.height-textHeight)/2,textWidth,textHeight);
+                textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("tab"),csv(label),""+(tabs.getSelectedIndex()==i),""+textWidth,""+rect.width,""+rect.height,""+visible.contains(textBounds),""+fits));
+            }
+        }
+        if(c instanceof javax.swing.JLabel label&&label.getText()!=null&&!label.getText().isBlank()
+                &&label.getFont().isBold()&&label.getFont().getSize()>=14&&!label.getText().startsWith("<html")) {
+            var rect=javax.swing.SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);
+            var visible=visible(root,c,rect);var insets=label.getInsets();
+            int textWidth=label.getFontMetrics(label.getFont()).stringWidth(label.getText());
+            int iconWidth=label.getIcon()==null?0:label.getIcon().getIconWidth()+label.getIconTextGap();
+            boolean fits=rect.width-insets.left-insets.right>=textWidth+iconWidth&&rect.height-insets.top-insets.bottom>=label.getFontMetrics(label.getFont()).getHeight();
+            var textBounds=new java.awt.Rectangle();
+            javax.swing.SwingUtilities.layoutCompoundLabel(label,label.getFontMetrics(label.getFont()),label.getText(),label.getIcon(),label.getVerticalAlignment(),label.getHorizontalAlignment(),label.getVerticalTextPosition(),label.getHorizontalTextPosition(),new java.awt.Rectangle(rect.x+insets.left,rect.y+insets.top,Math.max(0,rect.width-insets.left-insets.right),Math.max(0,rect.height-insets.top-insets.bottom)),new java.awt.Rectangle(),textBounds,label.getIconTextGap());
+            textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("heading"),csv(label.getText()),"true",""+textWidth,""+rect.width,""+rect.height,""+visible.contains(textBounds),""+fits));
+        }
         boolean control=c instanceof javax.swing.AbstractButton b&&b.getText()!=null&&!b.getText().isBlank()||c instanceof javax.swing.JTextField||c instanceof javax.swing.JComboBox;
         if(c instanceof javax.swing.text.JTextComponent&&!(c instanceof javax.swing.JTextField)||c instanceof javax.swing.JTable){
             var rect=javax.swing.SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);
@@ -68,8 +95,60 @@ public final class UiLayoutPreview extends WorkbenchTest {
         }
         if(c instanceof Container parent)for(var child:parent.getComponents())inspect(root,child,view);
     }
+    static java.awt.Rectangle visible(Container root,java.awt.Component c,java.awt.Rectangle rect){
+        var visible=new java.awt.Rectangle(rect);
+        for(var parent=c.getParent();parent!=null&&parent!=root;parent=parent.getParent())
+            visible=visible.intersection(javax.swing.SwingUtilities.convertRectangle(parent,new java.awt.Rectangle(0,0,parent.getWidth(),parent.getHeight()),root));
+        return visible.intersection(new java.awt.Rectangle(0,0,width,height));
+    }
     static Object unchecked(Object owner,String name){try{return get(owner,name);}catch(Exception e){throw new RuntimeException(e);}}
 
+    static void renderGuides(WorkbenchExtension extension,Path out)throws Exception {
+        java.util.List<String> measurements=new java.util.ArrayList<>();
+        measurements.add("theme,width,height,feature,horizontalScroll,viewportWidth,contentWidth,textWidth,textHeight,lastGlyphBottom,maxGlyphRight,controlsVisible");
+        edt(()->{
+            try {
+                JPanel root=(JPanel)unchecked(extension,"root");
+                java.awt.Component[] content={null};
+                extension.dialogOpener=(owner,title,body,modal,closed)->{content[0]=body;return null;};
+                ((javax.swing.JButton)UiLayoutTest.named(root,"wb.feature.help")).doClick();
+                var body=WorkbenchUi.settingsBody(content[0],()->{});
+                var scroll=(javax.swing.JScrollPane)((java.awt.BorderLayout)body.getLayout()).getLayoutComponent(java.awt.BorderLayout.CENTER);
+                var choices=(javax.swing.JComboBox<?>)UiLayoutTest.named(content[0],"wb.feature.guide.choice");
+                var open=(javax.swing.JButton)UiLayoutTest.named(content[0],"wb.feature.guide.open");
+                var prose=(javax.swing.JTextArea)UiLayoutTest.named(content[0],"wb.feature.guide.text");
+                body.addNotify();
+                for(var feature:FeatureGuide.all()) {
+                    choices.setSelectedItem(feature);scroll.getViewport().setViewPosition(new java.awt.Point());
+                    render(body,out.resolve("guide-"+feature.id()+".png"),width,height);
+                    double maxRight=0,lastBottom=0;
+                    for(int position=0;position<=prose.getDocument().getLength();position++) {
+                        var glyph=prose.modelToView2D(position);
+                        if(glyph!=null){maxRight=Math.max(maxRight,glyph.getMaxX());lastBottom=Math.max(lastBottom,glyph.getMaxY());}
+                    }
+                    boolean controlsVisible=true;
+                    for(var control:List.of(choices,open)) {
+                        var rectangle=javax.swing.SwingUtilities.convertRectangle(control.getParent(),control.getBounds(),body);
+                        controlsVisible&=visible(body,control,rectangle).contains(rectangle)&&rectangle.width>0&&rectangle.height>0;
+                    }
+                    measurements.add(String.join(",",csv(theme),""+width,""+height,csv(feature.id()),""+scroll.getHorizontalScrollBar().isVisible(),""+scroll.getViewport().getExtentSize().width,""+content[0].getWidth(),""+prose.getWidth(),""+prose.getHeight(),""+(int)Math.ceil(lastBottom),""+(int)Math.ceil(maxRight),""+controlsVisible));
+                }
+                body.removeNotify();
+            }catch(Exception error){throw new RuntimeException(error);}
+        });
+        Files.write(out.resolve("guides.csv"),measurements,java.nio.charset.StandardCharsets.UTF_8);
+    }
+    static void writeMeasurements(Path out)throws Exception {
+        Files.write(out.resolve("controls.csv"),rows,java.nio.charset.StandardCharsets.UTF_8);
+        Files.write(out.resolve("content.csv"),contentRows,java.nio.charset.StandardCharsets.UTF_8);
+        Files.write(out.resolve("text.csv"),textRows,java.nio.charset.StandardCharsets.UTF_8);
+    }
+    static void unload()throws Exception {
+        for(var unload:PayloadIntegrationTest.modernUnloads)unload.extensionUnloaded();
+        for(var unload:PayloadIntegrationTest.legacyUnloads)unload.extensionUnloaded();
+        edt(()->{});
+        if(PayloadIntegrationTest.sent.get()!=0)throw new IllegalStateException("Layout rendering attempted HTTP requests");
+    }
     public static void main(String[] args) throws Exception {
         Path out = Path.of(args[0]);
         theme=args.length>2?args[2]:"light";
@@ -85,6 +164,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         }
         rows.add("theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled");
         contentRows.add("theme,width,height,view,kind,name,x,y,visibleWidth,visibleHeight");
+        textRows.add("theme,width,height,view,kind,label,selected,textWidth,allocatedWidth,allocatedHeight,fullyVisible,textFits");
         Files.createDirectories(out);
         Font font = Font.createFont(Font.TRUETYPE_FONT, Path.of(args[1]).toFile());
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
@@ -96,8 +176,14 @@ public final class UiLayoutPreview extends WorkbenchTest {
         }
         ObjectFactoryLocator.FACTORY = proxy(MontoyaObjectFactory.class, (p,m,a) -> def(m));
         MontoyaApi api = (MontoyaApi) PayloadIntegrationTest.host(MontoyaApi.class);
-        WorkbenchExtension ext = new WorkbenchExtension();
-        edt(() -> ext.initialize(api));
+        burp.BurpExtender entry=new burp.BurpExtender();
+        entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
+        edt(() -> entry.initialize(api));edt(()->{});
+        WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("guide")) {
+            try {renderGuides(ext,out);writeMeasurements(out);}finally{unload();}
+            System.out.println("Guide wrapper previews rendered: "+theme+" "+width+"x"+height+"; zero HTTP.");return;
+        }
         try {
         String origin = "http://127.0.0.1:8088";
         for (String path : List.of("/api/community/fixed/posts/102", "/api/community/vuln/posts/102", "/v3/api-docs", "/js-lab"))
@@ -136,7 +222,16 @@ public final class UiLayoutPreview extends WorkbenchTest {
             try {
                 activity.refresh();
                 root.addNotify();
-                for (int i:List.of(0,1,2,3,4,5,6,7,8)) {
+                java.awt.Component[] settings={null};
+                ext.dialogOpener=(owner,title,content,modal,closed)->{settings[0]=content;return null;};
+                for (int i=0;i<tabs.getTabCount();i++) {
+                    if(tabs.getTitleAt(i).equals("설정")) {
+                        tabs.setSelectedIndex(i);
+                        if(!(settings[0] instanceof Container))throw new IllegalStateException("Settings action did not open content");
+                        JPanel shell=new JPanel(new java.awt.BorderLayout());shell.add(settings[0],java.awt.BorderLayout.NORTH);
+                        render(shell,out.resolve("settings.png"),1440,920);
+                        continue;
+                    }
                     tabs.setSelectedIndex(i);
                     render(root, out.resolve(String.format("tool-%02d.png", i)), 1440, 920);
                 }
@@ -182,11 +277,9 @@ public final class UiLayoutPreview extends WorkbenchTest {
             } catch(Exception e) { throw new RuntimeException(e); }
         });
         } finally {
-            for(var unload:PayloadIntegrationTest.modernUnloads) unload.extensionUnloaded();
-            edt(()->{});
+            unload();
         }
-        Files.write(out.resolve("controls.csv"),rows,java.nio.charset.StandardCharsets.UTF_8);
-        Files.write(out.resolve("content.csv"),contentRows,java.nio.charset.StandardCharsets.UTF_8);
+        writeMeasurements(out);
         System.out.println("Layout previews rendered: "+theme+" "+width+"x"+height+"; synthetic data, no Burp GUI or HTTP execution.");
     }
 }

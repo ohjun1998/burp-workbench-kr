@@ -32,11 +32,12 @@ def source_files():
         files.extend(p for p in (WB / part).rglob('*') if p.is_file())
     files.extend(WB / name for name in ['build_all.py', 'shade_rhino.py', 'engine-lock.json', 'LICENSE', 'THIRD_PARTY_NOTICES.md'])
     files.extend(p for p in (WB / 'validation/all-features').glob('*') if p.is_file())
+    files.extend(p for p in (ROOT / 'audit/0.23.0').glob('*') if p.is_file() and p.suffix in ('.java', '.py'))
     return sorted(files)
 
 
 def docker_files():
-    files = [LAB / name for name in ['pom.xml', 'Dockerfile.source', '.dockerignore', 'LICENSE', 'FONT-LICENSE.txt', 'README_KR.md', 'DIAGNOSTICS_3.4_KR.md', 'compose.yaml', 'compose.verify.yaml', 'start.sh', 'start.ps1', 'verify-stack.sh', 'verify-stack.ps1', 'verify_stack.py']]
+    files = [LAB / name for name in ['pom.xml', 'Dockerfile.source', '.dockerignore', 'LICENSE', 'FONT-LICENSE.txt', 'README_KR.md', 'DIAGNOSTICS_3.4_KR.md', 'BOUNTY_LAB_3.5_KR.md', 'compose.yaml', 'compose.verify.yaml', 'start.sh', 'start.ps1', 'verify-stack.sh', 'verify-stack.ps1', 'verify_stack.py']]
     for folder in ['src', 'infra', 'protocols']:
         files.extend(p for p in (LAB / folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix not in ('.pem', '.key', '.crt', '.pyc'))
     return sorted(files)
@@ -126,6 +127,7 @@ Linux/macOS: `sh start.sh`
 Oracle 시작에 시간이 필요합니다. 포트 8088, 8443, 8091, 8092 충돌을 먼저 확인하세요.
 실습용 자격정보를 포함한 로컬 학습 사이트입니다. 모든 공개 포트는 127.0.0.1로 제한합니다.
 현재 배포의 실제 Docker/Oracle/Nginx 기동 검증은 미실행입니다.
+새 모의 버그바운티 실습: http://127.0.0.1:8088/bounty-lab
 자세한 테스트 절차는 README_KR.md 및 DIAGNOSTICS_3.4_KR.md를 확인하세요.
 '''.encode()
     publish(docker_folder, {f'community-security-lab-{lab}-docker.zip': archive(files)}, docker_files())

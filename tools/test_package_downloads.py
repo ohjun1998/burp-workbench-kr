@@ -33,5 +33,11 @@ class PackageChecks(unittest.TestCase):
         self.assertNotIn('dist/ROOT.war', names)
         self.assertFalse(any('/runtime/' in n for n in names))
 
+    def test_compose_builds_current_source(self):
+        compose = (p.LAB / 'compose.yaml').read_text()
+        self.assertIn('dockerfile: Dockerfile.source', compose)
+        self.assertIn('image: enterprise-lab-was:' + p.lab_version(), compose)
+        self.assertIn('BOUNTY_LAB_3.5_KR.md', {f.name for f in p.docker_files()})
+
 if __name__ == '__main__':
     unittest.main()

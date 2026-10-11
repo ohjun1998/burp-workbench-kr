@@ -54,5 +54,9 @@ jobs:
             project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/tests.txt
             project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json
             project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/server.log
+            audit/0.23.0/.run/results.json
+            audit/0.23.0/.run/integrity.json
+            audit/0.23.0/.run/audit.log
+            audit/0.23.0/.run/server.log
           if-no-files-found: warn
           retention-days: 14

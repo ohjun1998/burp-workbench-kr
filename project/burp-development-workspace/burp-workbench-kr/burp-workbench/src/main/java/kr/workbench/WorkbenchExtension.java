@@ -33,6 +33,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     private final AtomicBoolean capture=new AtomicBoolean(true), scopeOnly=new AtomicBoolean(false), unloaded=new AtomicBoolean(false);
     private final AtomicLong generation=new AtomicLong();
     private final AtomicInteger dropped=new AtomicInteger();
+    private final AtomicLong received=new AtomicLong(),sizeExcluded=new AtomicLong(),queueOverflow=new AtomicLong(),processingErrors=new AtomicLong();
+    private final ConcurrentMap<String,AtomicLong> captureErrorCounts=new ConcurrentHashMap<>();
+    private volatile String lastResponse="없음",lastCaptureError="없음";
     private final ArrayBlockingQueue<Traffic> incoming=new ArrayBlockingQueue<>(250);
     private final List<Traffic> traffic=new ArrayList<>();
     private final DefaultTableModel logModel=model("NO","메서드","URL","상태","시간","도구","본문 bytes");
@@ -87,7 +90,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         addPage("트래픽","traffic",trafficPanel(),false);addPage("권한 비교","auth",authPanel(),false);addPage("데이터 도구","data",dataPanel(),true);addPage("JS 추출","js",jsPanel(),false);environments=new EnvironmentPanel(api);addPage("환경 탐색","environment",environments,false);passiveScan=new PassiveScanWorkspace(api);addPage("URL 수집","passive",passiveScan,false);
         activity=new ActivityPanel(api);activity.assessmentPanel.selectedTraffic=()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request,t.response)).toList();activity.assessmentPanel.authNames=()->authCompare.authNames;activity.assessmentPanel.cookieNames=()->authCompare.cookieNames;authCompare.trackingSource=activity.tracker.assessments::accounts;authCompare.trackingCreate=activity.tracker.assessments::register;authCompare.trackingBind=activity.tracker.assessments::bind;authCompare.trackingSink=activity::accountInspection;jsAnalysis.coverage=(result,source)->activity.analyzed(result,source);jsAnalysis.observation=activity::observation;activity.sourceNavigator=(source,line,kind)->{tabs.setSelectedComponent(jsAnalysis);jsAnalysis.navigateSource(source,line,kind);};authCompare.reviewSink=(method,url,reason)->activity.review(method,url,reason);environments.sessions=(slot,url)->{var candidate=authCompare.slots[slot];if(candidate==null)throw new IllegalArgumentException("권한 비교 계정 미지정");if(!candidate.origin().equals(AuthComparePanel.origin(HttpRequest.httpRequestFromUrl(url))))throw new IllegalArgumentException("계정 Origin과 대상이 다릅니다.");return candidate.headers();};addPage("활동 추적","activity",activity,false);passiveScan.discovery=(url,source)->activity.discover(url,source);responseRecon=new ResponseReconPanel(api);addPage("응답 분석","response.recon",responseRecon,false);bountySupport=new BountySupportPanel(api,()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request,t.response)).toList(),authCompare,activity);addPage("점검 지원","bounty",bountySupport,false);structuredCompare.evidenceSink=this::captureObserved;passiveScan.evidenceSink=this::captureObserved;responseRecon.evidenceSink=this::captureObserved;responseRecon.storedEvidenceSink=(packets,note,image,sha)->{bountySupport.captureObservedWithImage(packets,note,image,sha);tabs.setSelectedComponent(bountySupport);};addPage("설정","settings",settingsPanel(),false);settingsActionReady=true;root.add(tabs);commonSettings.apply();JPanel footer=new JPanel(new BorderLayout(12,0));footer.setBorder(BorderFactory.createEmptyBorder(6,12,6,12));footer.add(status);JPanel footerActions=new JPanel(new BorderLayout(10,0));footerActions.add(stats);featureHelp.setName("wb.feature.help");featureHelp.addActionListener(e->openFeatureHelp());footerActions.add(featureHelp,BorderLayout.EAST);footer.add(footerActions,BorderLayout.EAST);tabs.addChangeListener(e->updateFeatureHelp());updateFeatureHelp();root.add(footer,BorderLayout.SOUTH);WorkbenchUi.status(status);
         api.userInterface().applyThemeToComponent(root);WorkbenchUi.style(root);api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB,root);
-        timer=new javax.swing.Timer(300,e->{drain();});timer.start();
+        // A listener exception can leave Swing Timer coalescing latched and stop all future ticks.
+        timer=new javax.swing.Timer(300,e->captureStage("목록 갱신",this::drain));timer.start();
         root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("F1"),"featureHelp");root.getActionMap().put("featureHelp",new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){openFeatureHelp();}});
         root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("control R"),"repeater");
         root.getActionMap().put("repeater",new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){try{selectedTraffic().forEach(t->api.repeater().sendToRepeater(t.request,"Workbench"));}catch(Exception ex){error(ex);}}});
@@ -154,7 +158,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     }
     private void showTraffic(int view){if(view>=0){int index=logTable.convertRowIndexToModel(view);if(index<traffic.size()){current=traffic.get(index);requestView.setRequest(current.request);responseView.setResponse(current.response);requestPacket.setPacket(current.request.toString());responsePacket.setPacket(current.response==null?null:current.response.toString(),PacketFormat.decodedResponse(current.response));selectionInfo.setText(String.format("%03d",((Number)logModel.getValueAt(index,0)).longValue())+"   "+current.request.method()+"   "+current.request.url()+"   · "+(current.response==null?"응답 없음":current.response.statusCode()+" · "+current.response.body().length()+" bytes"));selectionInfo.setText(selectionInfo.getText()+" · "+WorkbenchScope.reason(api,current.request));selectionInfo.setToolTipText(selectionInfo.getText());}}else{current=null;requestView.setRequest(null);responseView.setResponse(null);requestPacket.setPacket(null);responsePacket.setPacket(null);selectionInfo.setText("목록에서 요청을 선택하세요 · 요청과 응답을 함께 표시합니다.");}}
     void openPassive(String url){tabs.setSelectedComponent(passiveScan);try{passiveScan.open(url,true);}catch(IllegalArgumentException e){status.setText("URL 수집 · "+e.getMessage());}}
-    private void refreshTrafficInfo(){if(logTable==null)return;if(clearTraffic!=null)clearTraffic.setEnabled(!traffic.isEmpty());if(exportTraffic!=null)exportTraffic.setEnabled(!traffic.isEmpty());if(clearSearch!=null)clearSearch.setEnabled(!filter.getText().isEmpty());captureInfo.setText("보관 "+traffic.size()+" · 표시 "+logTable.getRowCount()+" · "+(capture.get()?"수집 중":"일시정지")+" · "+(scopeOnly.get()?"Scope 내":"전체 대상"));captureInfo.setToolTipText("최근 250건 · 요청+응답 합계 128 KiB 이하 · Scope만 ON이면 범위 밖 제외 · 응답 없는 요청은 트래픽 수집 제외");}
+    private void refreshTrafficInfo(){if(logTable==null)return;if(clearTraffic!=null)clearTraffic.setEnabled(!traffic.isEmpty());if(exportTraffic!=null)exportTraffic.setEnabled(!traffic.isEmpty());if(clearSearch!=null)clearSearch.setEnabled(!filter.getText().isEmpty());captureInfo.setText("보관 "+traffic.size()+" · 표시 "+logTable.getRowCount()+" · "+(capture.get()?"수집 중":"일시정지")+" · "+(scopeOnly.get()?"Scope 내":"전체 대상"));captureInfo.setToolTipText(captureDiagnostics());}
     private JPanel withHeading(String title,String hint,JPanel content){JPanel p=new JPanel(new BorderLayout(0,4));p.setBorder(BorderFactory.createEmptyBorder(6,8,8,8));p.add(WorkbenchUi.header(title,hint,null),BorderLayout.NORTH);p.add(content);return p;}
     private Component trafficListPanel(){
         JPanel panel=new JPanel(new BorderLayout(4,4));scopeTable.setName("wb.traffic.scope.table");scopeTable.setAutoCreateRowSorter(true);scopeTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);scopeTable.getColumnModel().getColumn(0).setMinWidth(115);scopeTable.getColumnModel().getColumn(0).setPreferredWidth(120);scopeTable.getColumnModel().getColumn(0).setMaxWidth(140);scopeTable.getColumnModel().getColumn(1).setPreferredWidth(450);scopeTable.getColumnModel().getColumn(2).setPreferredWidth(340);JScrollPane rulesScroll=new JScrollPane(scopeTable);rulesScroll.setPreferredSize(new Dimension(650,230));panel.add(rulesScroll);JTextArea note=new JTextArea("트래픽 우클릭 → SCOPE 지정\nURL 경로: 같은 경로와 하위 경로 · 도메인 전체: 같은 프로토콜/호스트/포트\n등록한 Workbench SCOPE를 모든 도구에 적용합니다. Burp Target Scope는 변경하지 않습니다.");note.setEditable(false);note.setLineWrap(true);note.setWrapStyleWord(true);panel.add(note,BorderLayout.NORTH);JButton remove=button("선택 SCOPE 삭제",()->{List<WorkbenchScope.Rule> rules=localScope.rules();List<WorkbenchScope.Rule> picked=new ArrayList<>();for(int row:scopeTable.getSelectedRows())picked.add(rules.get(scopeTable.convertRowIndexToModel(row)));for(var rule:picked)localScope.remove(rule);scopeChanged();});remove.setName("wb.traffic.scope.remove");panel.add(row(remove,button("규칙 내보내기",this::exportScopeRules),button("규칙 불러오기 · 교체",this::importScopeRules)),BorderLayout.SOUTH);scopeContent=panel;scopeContent.setName("wb.traffic.scope.content");WorkbenchUi.style(scopeContent);refreshScopeList();return new JScrollPane(logTable);
@@ -193,32 +197,92 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         if(current==null || current.response==null)throw new IllegalArgumentException("응답이 있는 요청을 선택하세요.");
         String text=EnvironmentPanel.decodedBody(PacketFormat.decodedResponse(current.response));jsAnalysis.rememberPacket(current.request.url(),EnvironmentPanel.preview(current.request.toString()),EnvironmentPanel.preview(current.response.toString()),EnvironmentPanel.preview(PacketFormat.response(current.response.toByteArray().getBytes(),current.response.statusCode(),"",text)));jsAnalysis.load(text,current.request.url());tabs.setSelectedIndex(3);
     }
-    @Override public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent r){if(activity!=null&&!unloaded.get())activity.observe(r,r.toolSource().toolType().toString());if(authCompare!=null&&!unloaded.get())try{authCompare.begin(r,r.toolSource().toolType(),r.messageId());}catch(Exception e){api.logging().logToError("계정 자동 비교 요청 확인 실패: "+e.getClass().getSimpleName());}return RequestToBeSentAction.continueWith(r,r.annotations());}
+    @Override public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent r){
+        if(!unloaded.get()){
+            captureStage("요청 활동 관찰",()->{if(activity!=null)activity.observe(r,r.toolSource().toolType().toString());});
+            captureStage("계정 자동 비교 요청",()->{if(authCompare!=null)authCompare.begin(r,r.toolSource().toolType(),r.messageId());});
+        }
+        return RequestToBeSentAction.continueWith(r,r.annotations());
+    }
     @Override public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived r) {
-        if(responseRecon!=null&&!unloaded.get())responseRecon.offer(r.initiatingRequest(),r);if(activity!=null&&!unloaded.get())activity.response(r.initiatingRequest(),r);
-        if(authCompare!=null&&!unloaded.get())try{authCompare.received(r.messageId(),r.initiatingRequest(),r);}catch(Exception e){api.logging().logToError("계정 자동 비교 응답 확인 실패: "+e.getClass().getSimpleName());}
-        if(!unloaded.get()&&capture.get())try {
-            HttpRequest q=r.initiatingRequest();
-            if((!scopeOnly.get()||WorkbenchScope.contains(api,q))&&q.toByteArray().length()+r.toByteArray().length()<=MESSAGE_LIMIT) {
+        if(!unloaded.get()){
+            received.incrementAndGet();lastResponse=LocalTime.now().withNano(0).toString();
+            // Collection is independent of optional analyses. Never let an observer block Burp's action.
+            captureStage("응답 수집",()->{
+                if(!capture.get())return;
+                HttpRequest q=r.initiatingRequest();
+                if(scopeOnly.get()&&!WorkbenchScope.contains(api,q))return;
+                if(!withinCaptureLimit(q,r))return;
                 Traffic t=new Traffic(LocalTime.now().withNano(0).toString(),r.toolSource().toolType().toString(),q,r);
-                if(!incoming.offer(t))dropped.incrementAndGet();
-            } else if(q.toByteArray().length()+r.toByteArray().length()>MESSAGE_LIMIT)dropped.incrementAndGet();
-        }catch(Exception e){dropped.incrementAndGet();}
+                if(!incoming.offer(t)){queueOverflow.incrementAndGet();dropped.incrementAndGet();}
+            });
+            captureStage("응답 보안 관찰",()->{if(responseRecon!=null)responseRecon.offer(r.initiatingRequest(),r);});
+            captureStage("응답 활동 관찰",()->{if(activity!=null)activity.response(r.initiatingRequest(),r);});
+            captureStage("계정 자동 비교 응답",()->{if(authCompare!=null)authCompare.received(r.messageId(),r.initiatingRequest(),r);});
+        }
         return ResponseReceivedAction.continueWith(r,r.annotations());
     }
-    private void drain() {
-        for(int i=0;i<50;i++){Traffic t=incoming.poll();if(t==null)break;addTraffic(t);}
-        stats.setText("트래픽 "+traffic.size()+" · 계정 비교 "+(authCompare==null?0:authCompare.runs.size())+" · 누락 "+dropped.get());stats.setToolTipText("최근 250행 · 메시지 합계 128 KiB/행");refreshTrafficInfo();
+    private boolean withinCaptureLimit(HttpRequest q,HttpResponse s){
+        if(q==null)throw new IllegalArgumentException("요청 없음");
+        // Promote before addition so large messages cannot wrap an int and bypass the bound.
+        long bytes=(long)q.toByteArray().length()+(s==null?0:s.toByteArray().length());
+        if(bytes<=MESSAGE_LIMIT)return true;
+        sizeExcluded.incrementAndGet();dropped.incrementAndGet();return false;
     }
-    private void addTraffic(Traffic t) {
-        environments.observe(t.request,t.response);if(authCompare!=null)authCompare.observe(t.request,t.response);
-        if(traffic.size()>=ROW_LIMIT){traffic.remove(0);logModel.removeRow(0);}traffic.add(t);logModel.addRow(new Object[]{++trafficNo,t.request.method(),t.request.url(),t.response==null?"없음":t.response.statusCode(),t.time,t.source,t.response==null?0:t.response.body().length()});refreshTrafficInfo();
+    private void captureStage(String stage,Runnable task){
+        try{task.run();}catch(RuntimeException ex){captureFailure(stage,ex);}
+    }
+    private void captureFailure(String stage,RuntimeException ex){
+        processingErrors.incrementAndGet();
+        lastCaptureError=stage+" · "+ex.getClass().getSimpleName();
+        long count=captureErrorCounts.computeIfAbsent(stage,k->new AtomicLong()).incrementAndGet();
+        // Log first occurrences and powers of two, without packet content or exception messages.
+        if(count<=3||(count&(count-1))==0)try{
+            StringBuilder detail=new StringBuilder("Workbench 수집 · ").append(stage).append(" 실패 · ").append(ex.getClass().getSimpleName()).append(" · 단계 오류 ").append(count);
+            Arrays.stream(ex.getStackTrace()).filter(frame->frame.getClassName().startsWith("kr.workbench.")).limit(3).forEach(frame->detail.append("\n  at ").append(frame));
+            api.logging().logToError(detail.toString());
+        }catch(RuntimeException ignored){/* Host logging must not stop collection either. */}
+    }
+    private String captureDiagnostics(){
+        return "최근 250건 · 요청+응답 합계 128 KiB 이하 · 응답 없는 요청은 자동 수집 제외"
+            +" · 수신 "+received.get()+" · 마지막 응답 "+lastResponse+" · 대기 "+incoming.size()
+            +" · 크기 제외 "+sizeExcluded.get()+" · 큐 초과 "+queueOverflow.get()+" · 처리 오류 "+processingErrors.get()
+            +" · 마지막 오류 "+lastCaptureError+" · Scope만 ON이면 범위 밖 제외 · 수신/오류는 확장 로드 이후 누적";
+    }
+    private void drain() {
+        if(unloaded.get())return;
+        for(int i=0;i<50;i++){Traffic t=incoming.poll();if(t==null)break;captureStage("목록 항목 처리",()->addTraffic(t));}
+        stats.setText("수신 "+received.get()+" · 대기 "+incoming.size()+" · 크기 제외 "+sizeExcluded.get()+" · 큐 초과 "+queueOverflow.get()+" · 오류 "+processingErrors.get());
+        stats.setToolTipText(captureDiagnostics());refreshTrafficInfo();
+    }
+    private boolean addTraffic(Traffic t) {
+        if(unloaded.get())return false;
+        Object[] values;
+        try{values=new Object[]{trafficNo+1,t.request.method(),t.request.url(),t.response==null?"없음":t.response.statusCode(),t.time,t.source,t.response==null?0:t.response.body().length()};}
+        catch(RuntimeException ex){dropped.incrementAndGet();captureFailure("목록 메타데이터",ex);return false;}
+        // Retain the packet before optional observers, which can fail on unusual HTTP metadata.
+        if(traffic.size()>=ROW_LIMIT){traffic.remove(0);logModel.removeRow(0);}traffic.add(t);trafficNo++;logModel.addRow(values);
+        captureStage("서버 환경 관찰",()->{if(environments!=null)environments.observe(t.request,t.response);});
+        captureStage("인증 후보 관찰",()->{if(authCompare!=null)authCompare.observe(t.request,t.response);});
+        refreshTrafficInfo();return true;
     }
     @Override public List<Component> provideMenuItems(ContextMenuEvent e) {
         List<HttpRequestResponse> picked=new ArrayList<>(e.selectedRequestResponses());if(picked.isEmpty())e.messageEditorRequestResponse().ifPresent(m->picked.add(m.requestResponse()));if(picked.isEmpty())return List.of();
         JMenu menu=new JMenu("Workbench KR");JMenuItem bring=new JMenuItem("요청·응답 목록에 가져오기");bring.addActionListener(x->SwingUtilities.invokeLater(()->{
-            int count=0;for(HttpRequestResponse rr:picked){if(count>=20)break;if(rr.request()==null||rr.request().toByteArray().length()+(rr.response()==null?0:rr.response().toByteArray().length())>MESSAGE_LIMIT){dropped.incrementAndGet();continue;}addTraffic(new Traffic(LocalTime.now().withNano(0).toString(),"가져오기",rr.request(),rr.response()));if(responseRecon!=null)responseRecon.offer(rr.request(),rr.response());if(activity!=null){activity.observe(rr.request(),"가져오기");activity.response(rr.request(),rr.response());}count++;}
-            if(count>0){int row=logTable.convertRowIndexToView(traffic.size()-1);if(row>=0)logTable.setRowSelectionInterval(row,row);status.setText("가져오기 완료 · Workbench KR 탭에서 확인하세요.");}
+            if(unloaded.get())return;
+            int count=0;for(HttpRequestResponse rr:picked){
+                if(count>=20)break;
+                try{
+                    HttpRequest q=rr.request();HttpResponse response=rr.response();
+                    if(!withinCaptureLimit(q,response))continue;
+                    if(!addTraffic(new Traffic(LocalTime.now().withNano(0).toString(),"가져오기",q,response)))continue;
+                    count++;
+                    captureStage("가져온 응답 보안 관찰",()->{if(responseRecon!=null)responseRecon.offer(q,response);});
+                    captureStage("가져온 요청 활동 관찰",()->{if(activity!=null)activity.observe(q,"가져오기");});
+                    captureStage("가져온 응답 활동 관찰",()->{if(activity!=null)activity.response(q,response);});
+                }catch(RuntimeException ex){dropped.incrementAndGet();captureFailure("목록 가져오기",ex);}
+            }
+            if(count>0){int row=logTable.convertRowIndexToView(traffic.size()-1);if(row>=0)captureStage("가져온 패킷 표시",()->logTable.setRowSelectionInterval(row,row));status.setText("가져오기 완료 · "+count+"건 · Workbench KR 탭에서 확인하세요.");}
         }));menu.add(bring);
         JMenuItem repeater=new JMenuItem("Repeater에 요청 준비");repeater.addActionListener(x->picked.stream().limit(20).forEach(rr->api.repeater().sendToRepeater(rr.request(),"Workbench")));menu.add(repeater);return List.of(menu);
     }

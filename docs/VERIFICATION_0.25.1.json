@@ -1,0 +1,301 @@
+{
+  "date": "2026-10-13",
+  "extensionVersion": "0.25.1",
+  "labVersion": "3.5.0",
+  "sourceUpstream": "3c06ee37cdfa4d02d88f4b6c15fb7ae368800d69",
+  "currentMainAtStart": "747187431077fab7657af24b08f7dd24df2a08fc",
+  "jarSha256": "907a1d155fd6b802bc543cdbc8613e04d0ae4b18d2bc9c5d25f2baf1682a86e8",
+  "checks": {
+    "regression": 1269,
+    "regressionGroups": 40,
+    "newCaptureRecovery": 38,
+    "payloadHttp": 127,
+    "allFeaturesHttp": 100,
+    "allFeaturesHttpRequests": 199,
+    "bountyWorkflow": 266,
+    "bountyHttpRequests": 259,
+    "total": 1762,
+    "packagingInvariants": 4
+  },
+  "regressionGroups": [
+    {
+      "group": "AccountTasksTest",
+      "passed": 57
+    },
+    {
+      "group": "ActivityReconTest",
+      "passed": 49
+    },
+    {
+      "group": "AssessmentUiOptimizationTest",
+      "passed": 18
+    },
+    {
+      "group": "AuditRepairsTest",
+      "passed": 63
+    },
+    {
+      "group": "AuthRecordTest",
+      "passed": 37
+    },
+    {
+      "group": "BountyFeaturesTest",
+      "passed": 67
+    },
+    {
+      "group": "CompletenessTest",
+      "passed": 38
+    },
+    {
+      "group": "DisplayWorkflowTest",
+      "passed": 13
+    },
+    {
+      "group": "EnvironmentBatchTest",
+      "passed": 23
+    },
+    {
+      "group": "EnvironmentDiscoveryTest",
+      "passed": 30
+    },
+    {
+      "group": "EnvironmentFeedbackTest",
+      "passed": 5
+    },
+    {
+      "group": "EnvironmentPanelTest",
+      "passed": 6
+    },
+    {
+      "group": "EnvironmentTest",
+      "passed": 27
+    },
+    {
+      "group": "EvidenceLinkTest",
+      "passed": 31
+    },
+    {
+      "group": "EvidencePreviewTest",
+      "passed": 27
+    },
+    {
+      "group": "FeatureGuideWorkflowTest",
+      "passed": 95
+    },
+    {
+      "group": "IntegrationEdgesTest",
+      "passed": 11
+    },
+    {
+      "group": "JsAnalysisPanelTest",
+      "passed": 11
+    },
+    {
+      "group": "JsAnalysisTest",
+      "passed": 31
+    },
+    {
+      "group": "JsHistoryTest",
+      "passed": 22
+    },
+    {
+      "group": "JsNavigationTest",
+      "passed": 14
+    },
+    {
+      "group": "JsUiOptimizationTest",
+      "passed": 27
+    },
+    {
+      "group": "LayoutPassiveWorkflowTest",
+      "passed": 16
+    },
+    {
+      "group": "OtherImprovementsTest",
+      "passed": 56
+    },
+    {
+      "group": "PacketUiTest",
+      "passed": 24
+    },
+    {
+      "group": "PassiveScanTest",
+      "passed": 31
+    },
+    {
+      "group": "PayloadIntegrationTest",
+      "passed": 14
+    },
+    {
+      "group": "PopupWorkflowTest",
+      "passed": 21
+    },
+    {
+      "group": "ReviewConditionsTest",
+      "passed": 43
+    },
+    {
+      "group": "ReviewWorkflowTest",
+      "passed": 48
+    },
+    {
+      "group": "StoredFlowStagesTest",
+      "passed": 46
+    },
+    {
+      "group": "StructuredCompareTest",
+      "passed": 16
+    },
+    {
+      "group": "TargetCleanupTest",
+      "passed": 24
+    },
+    {
+      "group": "TextEncodingTest",
+      "passed": 14
+    },
+    {
+      "group": "TrafficCaptureRecoveryTest",
+      "passed": 38
+    },
+    {
+      "group": "TrafficScopeTest",
+      "passed": 22
+    },
+    {
+      "group": "UiCleanupTest",
+      "passed": 38
+    },
+    {
+      "group": "UiLayoutTest",
+      "passed": 64
+    },
+    {
+      "group": "UiPanelsOptimizationTest",
+      "passed": 29
+    },
+    {
+      "group": "WorkbenchTest",
+      "passed": 23
+    }
+  ],
+  "baselineFailure": {
+    "expectedFailure": true,
+    "retainedRows": 145,
+    "requestedRows": 146,
+    "trigger": "Auth candidate observation: underscore hostname makes URI.getHost null",
+    "mechanism": "Unhandled listener exception prevents Swing Timer coalescing reset",
+    "userInitialExceptionConfirmed": false
+  },
+  "fixedRecovery": {
+    "retainsFaultingObserverPacket": true,
+    "normalPacketAfterFault": true,
+    "retainedRowsAfterFaultAndNextResponse": 147,
+    "timerBoundaryAndLoggingFailureRecover": true,
+    "requestAndResponseContinueWithPreserved": true,
+    "manualImportContinues": true,
+    "sizeQueueAndProcessingCountersSeparated": true
+  },
+  "uiLayouts": {
+    "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+    "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.25.1.jar",
+    "releaseJarSha256": "907a1d155fd6b802bc543cdbc8613e04d0ae4b18d2bc9c5d25f2baf1682a86e8",
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "sizes": [
+      "1024x720",
+      "1280x800",
+      "1440x920"
+    ],
+    "renderedViews": 108,
+    "controlsMeasured": 1086,
+    "clippedControlsOutsideScrollers": 0,
+    "smallControls": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "tabAndHeadingLabelsMeasured": 1836,
+    "clippedSelectedTabOrHeadingLabels": 0,
+    "minimumWorkAreas": {
+      "tool-03.png:preview.js.source": 80,
+      "js-horizontal.png:preview.js.source": 80,
+      "bounty-1.png:preview.workflow.input": 80,
+      "bounty-1.png:preview.workflow.detail": 80,
+      "bounty-3.png:preview.evidence.impact": 70,
+      "bounty-3.png:preview.evidence.repro": 70
+    },
+    "failures": [],
+    "textFailures": [],
+    "guideBodiesMeasured": 0,
+    "guideLayoutFailures": 0,
+    "guideFailures": []
+  },
+  "featureGuideLayouts": {
+    "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+    "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.25.1.jar",
+    "releaseJarSha256": "907a1d155fd6b802bc543cdbc8613e04d0ae4b18d2bc9c5d25f2baf1682a86e8",
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "sizes": [
+      "760x480",
+      "560x300"
+    ],
+    "renderedViews": 48,
+    "controlsMeasured": 144,
+    "clippedControlsOutsideScrollers": 0,
+    "smallControls": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "tabAndHeadingLabelsMeasured": 0,
+    "clippedSelectedTabOrHeadingLabels": 0,
+    "minimumWorkAreas": {},
+    "failures": [],
+    "textFailures": [],
+    "guideBodiesMeasured": 48,
+    "guideLayoutFailures": 0,
+    "guideFailures": []
+  },
+  "auditIntegrity": {
+    "extensionVersion": "0.25.1",
+    "labVersion": "3.5.0",
+    "jarSha256": "907a1d155fd6b802bc543cdbc8613e04d0ae4b18d2bc9c5d25f2baf1682a86e8",
+    "sourceFiles": 131,
+    "sourceFingerprint": "2e7bf2ba7254135bc5550b340f5c68ddf528628a5009dbcc0954456a9dc7f5cc",
+    "productionFilesUnchanged": true,
+    "serverPortClosed": true,
+    "nativeBurp": false,
+    "browserDOM": false,
+    "docker": false,
+    "database": "isolated H2 Oracle mode",
+    "currentLabSourceCompiled": true
+  },
+  "commands": [
+    "python dev.py release",
+    "python tools/package_downloads.py --verify",
+    "python tools/render_ui_layout.py --check --out tmp/ui-layout-0.25.1",
+    "python tools/render_ui_layout.py --guide-only --check --out tmp/ui-guide-0.25.1",
+    "python -m unittest discover -s tools -p 'test_*.py' -v",
+    "git -c core.whitespace=cr-at-eol diff --check"
+  ],
+  "limits": {
+    "retainedRows": 250,
+    "combinedMessageBytes": 131072,
+    "incomingQueue": 250,
+    "maxRowsPerTick": 50,
+    "timerMillis": 300
+  },
+  "notExecuted": [
+    "native Burp Suite or user PC runtime",
+    "native Burp GUI",
+    "browser DOM",
+    "Docker/Oracle/Nginx stack",
+    "live Collaborator",
+    "external BApp"
+  ],
+  "notes": [
+    "Current release JAR and current lab source were used; historical reports were not counted.",
+    "AllFeatures results.json retains old version/labVersion labels from its existing fixture; launch path was changed to 0.25.1 and the current lab source was compiled.",
+    "Separate 0.26 traffic/scope/storage work was not present in the upstream tree and was not included in this stability release."
+  ]
+}

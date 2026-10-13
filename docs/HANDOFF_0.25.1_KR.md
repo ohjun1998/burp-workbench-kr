@@ -27,3 +27,13 @@ API 어댑터·헤드리스 Swing·격리된 loopback HTTP 검사입니다. 실�
 ## 후속 확인
 
 사용자가 새 JAR를 로드해 정상 트래픽을 수집한 뒤 오류 수가 증가하면 상태 도움말의 마지막 오류 단계와 Extensions Errors를 확인합니다. 큰 응답 때문에 보관하지 않는 경우에는 크기 제외가 증가합니다. 250행·128KiB 한도 제거와 통합 SCOPE 모드는 별도 작업과 합쳐 검증해야 합니다. 같은 파일을 수정하는 다른 작업이 있으면 이 안정화 변경과 충돌을 해결한 뒤 회귀 검사를 다시 실행하세요.
+
+## GitHub 게시 완료 — 2026-10-14
+
+- PR: https://github.com/ohjun1998/burp-workbench-kr/pull/12
+- 기능 수정 커밋: `cdbfb799db36d50a9ed7db561597eb8d373bfb9c`.
+- 배포 파일 게시 커밋: `a936f2c53ed1d79c96b1a47837ab65ff65b9fa21`.
+- GitHub 재빌드·검증: https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38468182017 — 성공.
+- CI에서 만든 JAR 및 소스 ZIP은 위 로컬 검증본과 SHA-256이 각각 일치합니다. 근거: `docs/CI_PUBLICATION_0.25.1.json`.
+- 대용량 파일 직접 전송 대신 동일 소스로 GitHub에서 빌드·게시했습니다. 게시용 일회성 워크플로는 완료 후 제거했습니다.
+- 최종 PR CI 및 검토 상태는 PR #12에서 확인합니다. main 병합은 수행하지 않았습니다.

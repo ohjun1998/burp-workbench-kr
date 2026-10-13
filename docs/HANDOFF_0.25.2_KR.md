@@ -9,3 +9,12 @@
 실제 Burp Community 2026.3.3 / Java 21 / headless / loopback 전용 검증은 audit/0.25.2에 보존합니다. 601건과 2MiB 바이너리 요청·응답, 무누락, 원본 일치, clear/unload 정리를 확인했습니다. 사용자 프로필/브라우저/프록시 설정은 수정하지 않았습니다. GUI 동작, 장시간 대용량 스트레스, 디스크 고갈 상황은 실제 Burp 검증 범위 밖입니다.
 
 기존 기능 검사는 dev.py release 결과 및 CI를 기준으로 확인합니다. 상세 변경과 설치는 RELEASE_0.25.2_KR.md를 참고합니다.
+
+## GitHub 배포
+
+- PR: https://github.com/ohjun1998/burp-workbench-kr/pull/13
+- 소스 커밋: `b54ae2203327e439ad3237f8e46179c31d69639f`
+- 배포 파일 커밋: `9c19ceb3a76a19284d6eec9ef00ce6397ce523da`
+- 배포 CI: https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38473107408 (성공)
+- CI가 생성한 JAR·소스 ZIP은 로컬 검증 파일과 SHA-256이 일치합니다. 파일은 downloads/extensions/0.25.2에 보존합니다.
+- 일회성 배포 workflow는 배포 후 제거했습니다. main 병합은 수행하지 않습니다.

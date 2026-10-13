@@ -1,0 +1,10 @@
+{
+  "version": "0.25.2",
+  "sourceCommit": "b54ae2203327e439ad3237f8e46179c31d69639f",
+  "artifactCommit": "9c19ceb3a76a19284d6eec9ef00ce6397ce523da",
+  "publishRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38473107408",
+  "conclusion": "success",
+  "verifiedAgainstLocalNativeTestedJar": true,
+  "nativeBurpExecutedInCI": false,
+  "nativeBurpExecutedLocally": true
+}

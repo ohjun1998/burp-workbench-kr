@@ -26,7 +26,8 @@ import java.util.concurrent.atomic.*;
 import java.util.regex.Pattern;
 
 public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsProvider {
-    private static final int ROW_LIMIT=250, MESSAGE_LIMIT=128*1024;
+    private final Object captureLock=new Object();
+    private DiskTrafficStore trafficStore;
     private MontoyaApi api;private WorkbenchScope localScope;private final DefaultTableModel scopeModel=model("범위","등록 URL (쿼리 제외)","포함 관계");private final JTable scopeTable=new JTable(scopeModel){public String getToolTipText(java.awt.event.MouseEvent e){int row=rowAtPoint(e.getPoint()),column=columnAtPoint(e.getPoint());return row<0||column<0?null:Objects.toString(getValueAt(row,column),"");}};private JPanel scopeContent;private JDialog scopeWindow;private boolean settingsActionReady;
     @FunctionalInterface interface DialogOpener {JDialog open(Component owner,String title,Component content,boolean modal,Runnable closed);}
     DialogOpener dialogOpener=WorkbenchUi::settingsWindow;private JButton scopeListButton,clearTraffic,exportTraffic,clearSearch;
@@ -36,7 +37,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     private final AtomicLong received=new AtomicLong(),sizeExcluded=new AtomicLong(),queueOverflow=new AtomicLong(),processingErrors=new AtomicLong();
     private final ConcurrentMap<String,AtomicLong> captureErrorCounts=new ConcurrentHashMap<>();
     private volatile String lastResponse="없음",lastCaptureError="없음";
-    private final ArrayBlockingQueue<Traffic> incoming=new ArrayBlockingQueue<>(250);
+    private final ConcurrentLinkedQueue<Traffic> incoming=new ConcurrentLinkedQueue<>();
     private final List<Traffic> traffic=new ArrayList<>();
     private final DefaultTableModel logModel=model("NO","메서드","URL","상태","시간","도구","본문 bytes");
     private JTable logTable;
@@ -49,7 +50,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     public void capturePayloadEvidence(burp.api.montoya.http.HttpService service,java.util.List<kr.payloadrunner.Engine.Row> rows){bountySupport.capturePayload(service,rows);tabs.setSelectedComponent(bountySupport);bountySupport.pages.setSelectedIndex(3);}
     private java.util.function.Consumer<HttpRequest> payloadImport;
     public void setPayloadImport(java.util.function.Consumer<HttpRequest> action){payloadImport=action;}
-    private void selectedPayload(){if(current==null)throw new IllegalArgumentException("요청을 선택하세요.");if(payloadImport==null)throw new IllegalStateException("Payload Runner 준비 중");payloadImport.accept(current.request);}
+    private void selectedPayload(){if(current==null)throw new IllegalArgumentException("요청을 선택하세요.");if(payloadImport==null)throw new IllegalStateException("Payload Runner 준비 중");payloadImport.accept(current.request());}
     private JPanel root;
     private EnvironmentPanel environments;private PassiveScanWorkspace passiveScan;private ActivityPanel activity;
     private StructuredComparePanel structuredCompare;private ResponseReconPanel responseRecon;private JsAnalysisPanel jsAnalysis;
@@ -62,19 +63,33 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     private HttpResponseEditor responseView;
     private Traffic current;
     private javax.swing.Timer timer;
-    private record Traffic(String time,String source,HttpRequest request,HttpResponse response) {}
+    private record Traffic(String time,String source,DiskTrafficStore.PacketRef packet) {
+        HttpRequest request(){return packet.request();}
+        HttpResponse response(){return packet.response();}
+    }
+    private Traffic storeTraffic(String source,HttpRequest request,HttpResponse response){
+        return new Traffic(LocalTime.now().withNano(0).toString(),source,trafficStore.append(request,response));
+    }
+    private void clearStoredTraffic(){
+        synchronized(captureLock){
+            DiskTrafficStore replacement=new DiskTrafficStore();
+            DiskTrafficStore previous=trafficStore;trafficStore=replacement;
+            generation.incrementAndGet();incoming.clear();traffic.clear();current=null;
+            captureStage("임시 저장소 정리",previous::close);
+        }
+    }
 
     public void initialize(MontoyaApi api) {
-        this.api=api;localScope=WorkbenchScope.install(api);api.extension().setName(FeatureGuide.EXTENSION_NAME);
+        this.api=api;trafficStore=new DiskTrafficStore();localScope=WorkbenchScope.install(api);api.extension().setName(FeatureGuide.EXTENSION_NAME);
         api.extension().registerUnloadingHandler(()->{
-            unloaded.set(true);generation.incrementAndGet();incoming.clear();
+            synchronized(captureLock){unloaded.set(true);generation.incrementAndGet();incoming.clear();captureStage("임시 저장소 종료",trafficStore::close);}
             SwingUtilities.invokeLater(()->{if(featureHelpWindow!=null)featureHelpWindow.dispose();if(commonSettingsWindow!=null)commonSettingsWindow.dispose();if(scopeWindow!=null)scopeWindow.dispose();if(timer!=null) timer.stop();if(structuredCompare!=null)structuredCompare.clearSources();if(responseRecon!=null)responseRecon.close();if(jsAnalysis!=null)jsAnalysis.close();if(authCompare!=null)authCompare.close();if(bountySupport!=null)bountySupport.close();traffic.clear();if(environments!=null){environments.close();}if(passiveScan!=null)passiveScan.close();if(activity!=null)activity.close();WorkbenchScope.release(api);});
         });
         try {
             if(SwingUtilities.isEventDispatchThread()) buildUi(); else SwingUtilities.invokeAndWait(this::buildUi);
             SwingUtilities.invokeLater(jsAnalysis::startHistory);api.http().registerHttpHandler(this);api.userInterface().registerContextMenuItemsProvider(this);
             api.logging().logToOutput("Burp Workbench KR loaded. 계정 비교 재전송은 선택 실행 또는 새 요청 자동 비교 ON에서 실행합니다.");
-        } catch(Exception e) { api.logging().logToError(e.toString());throw new IllegalStateException(e); }
+        } catch(Exception e) {captureStage("초기화 실패 저장소 정리",trafficStore::close); api.logging().logToError(e.toString());throw new IllegalStateException(e); }
     }
     private static DefaultTableModel model(String... names) { return new DefaultTableModel(names,0){@Override public boolean isCellEditable(int r,int c){return false;}}; }
     private static JTextArea area(String text,int rows) {JTextArea a=new JTextArea(text,rows,60);a.setFont(new Font(Font.MONOSPACED,Font.PLAIN,13));a.setLineWrap(true);a.setWrapStyleWord(true);return a;}
@@ -88,13 +103,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         requestView=api.userInterface().createHttpRequestEditor(EditorOptions.READ_ONLY);
         responseView=api.userInterface().createHttpResponseEditor(EditorOptions.READ_ONLY);
         addPage("트래픽","traffic",trafficPanel(),false);addPage("권한 비교","auth",authPanel(),false);addPage("데이터 도구","data",dataPanel(),true);addPage("JS 추출","js",jsPanel(),false);environments=new EnvironmentPanel(api);addPage("환경 탐색","environment",environments,false);passiveScan=new PassiveScanWorkspace(api);addPage("URL 수집","passive",passiveScan,false);
-        activity=new ActivityPanel(api);activity.assessmentPanel.selectedTraffic=()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request,t.response)).toList();activity.assessmentPanel.authNames=()->authCompare.authNames;activity.assessmentPanel.cookieNames=()->authCompare.cookieNames;authCompare.trackingSource=activity.tracker.assessments::accounts;authCompare.trackingCreate=activity.tracker.assessments::register;authCompare.trackingBind=activity.tracker.assessments::bind;authCompare.trackingSink=activity::accountInspection;jsAnalysis.coverage=(result,source)->activity.analyzed(result,source);jsAnalysis.observation=activity::observation;activity.sourceNavigator=(source,line,kind)->{tabs.setSelectedComponent(jsAnalysis);jsAnalysis.navigateSource(source,line,kind);};authCompare.reviewSink=(method,url,reason)->activity.review(method,url,reason);environments.sessions=(slot,url)->{var candidate=authCompare.slots[slot];if(candidate==null)throw new IllegalArgumentException("권한 비교 계정 미지정");if(!candidate.origin().equals(AuthComparePanel.origin(HttpRequest.httpRequestFromUrl(url))))throw new IllegalArgumentException("계정 Origin과 대상이 다릅니다.");return candidate.headers();};addPage("활동 추적","activity",activity,false);passiveScan.discovery=(url,source)->activity.discover(url,source);responseRecon=new ResponseReconPanel(api);addPage("응답 분석","response.recon",responseRecon,false);bountySupport=new BountySupportPanel(api,()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request,t.response)).toList(),authCompare,activity);addPage("점검 지원","bounty",bountySupport,false);structuredCompare.evidenceSink=this::captureObserved;passiveScan.evidenceSink=this::captureObserved;responseRecon.evidenceSink=this::captureObserved;responseRecon.storedEvidenceSink=(packets,note,image,sha)->{bountySupport.captureObservedWithImage(packets,note,image,sha);tabs.setSelectedComponent(bountySupport);};addPage("설정","settings",settingsPanel(),false);settingsActionReady=true;root.add(tabs);commonSettings.apply();JPanel footer=new JPanel(new BorderLayout(12,0));footer.setBorder(BorderFactory.createEmptyBorder(6,12,6,12));footer.add(status);JPanel footerActions=new JPanel(new BorderLayout(10,0));footerActions.add(stats);featureHelp.setName("wb.feature.help");featureHelp.addActionListener(e->openFeatureHelp());footerActions.add(featureHelp,BorderLayout.EAST);footer.add(footerActions,BorderLayout.EAST);tabs.addChangeListener(e->updateFeatureHelp());updateFeatureHelp();root.add(footer,BorderLayout.SOUTH);WorkbenchUi.status(status);
+        activity=new ActivityPanel(api);activity.assessmentPanel.selectedTraffic=()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request(),t.response())).toList();activity.assessmentPanel.authNames=()->authCompare.authNames;activity.assessmentPanel.cookieNames=()->authCompare.cookieNames;authCompare.trackingSource=activity.tracker.assessments::accounts;authCompare.trackingCreate=activity.tracker.assessments::register;authCompare.trackingBind=activity.tracker.assessments::bind;authCompare.trackingSink=activity::accountInspection;jsAnalysis.coverage=(result,source)->activity.analyzed(result,source);jsAnalysis.observation=activity::observation;activity.sourceNavigator=(source,line,kind)->{tabs.setSelectedComponent(jsAnalysis);jsAnalysis.navigateSource(source,line,kind);};authCompare.reviewSink=(method,url,reason)->activity.review(method,url,reason);environments.sessions=(slot,url)->{var candidate=authCompare.slots[slot];if(candidate==null)throw new IllegalArgumentException("권한 비교 계정 미지정");if(!candidate.origin().equals(AuthComparePanel.origin(HttpRequest.httpRequestFromUrl(url))))throw new IllegalArgumentException("계정 Origin과 대상이 다릅니다.");return candidate.headers();};addPage("활동 추적","activity",activity,false);passiveScan.discovery=(url,source)->activity.discover(url,source);responseRecon=new ResponseReconPanel(api);addPage("응답 분석","response.recon",responseRecon,false);bountySupport=new BountySupportPanel(api,()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request(),t.response())).toList(),authCompare,activity);addPage("점검 지원","bounty",bountySupport,false);structuredCompare.evidenceSink=this::captureObserved;passiveScan.evidenceSink=this::captureObserved;responseRecon.evidenceSink=this::captureObserved;responseRecon.storedEvidenceSink=(packets,note,image,sha)->{bountySupport.captureObservedWithImage(packets,note,image,sha);tabs.setSelectedComponent(bountySupport);};addPage("설정","settings",settingsPanel(),false);settingsActionReady=true;root.add(tabs);commonSettings.apply();JPanel footer=new JPanel(new BorderLayout(12,0));footer.setBorder(BorderFactory.createEmptyBorder(6,12,6,12));footer.add(status);JPanel footerActions=new JPanel(new BorderLayout(10,0));footerActions.add(stats);featureHelp.setName("wb.feature.help");featureHelp.addActionListener(e->openFeatureHelp());footerActions.add(featureHelp,BorderLayout.EAST);footer.add(footerActions,BorderLayout.EAST);tabs.addChangeListener(e->updateFeatureHelp());updateFeatureHelp();root.add(footer,BorderLayout.SOUTH);WorkbenchUi.status(status);
         api.userInterface().applyThemeToComponent(root);WorkbenchUi.style(root);api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB,root);
         // A listener exception can leave Swing Timer coalescing latched and stop all future ticks.
         timer=new javax.swing.Timer(300,e->captureStage("목록 갱신",this::drain));timer.start();
         root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("F1"),"featureHelp");root.getActionMap().put("featureHelp",new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){openFeatureHelp();}});
         root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("control R"),"repeater");
-        root.getActionMap().put("repeater",new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){try{selectedTraffic().forEach(t->api.repeater().sendToRepeater(t.request,"Workbench"));}catch(Exception ex){error(ex);}}});
+        root.getActionMap().put("repeater",new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){try{selectedTraffic().forEach(t->api.repeater().sendToRepeater(t.request(),"Workbench"));}catch(Exception ex){error(ex);}}});
         root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("control F"),"search");
         root.getActionMap().put("search",new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){tabs.setSelectedIndex(0);filter.requestFocusInWindow();filter.selectAll();}});
     }
@@ -129,7 +144,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     }
     private void openSettings(){if(unloaded.get())return;if(commonSettingsWindow!=null&&commonSettingsWindow.isDisplayable()){commonSettingsWindow.toFront();commonSettingsWindow.requestFocus();return;}commonSettingsWindow=dialogOpener.open(root,"Workbench KR · 공통 설정",commonSettingsContent,false,()->commonSettingsWindow=null);}
     private void captureObserved(List<HttpRequestResponse> packets,String note){bountySupport.captureObserved(packets,note);tabs.setSelectedComponent(bountySupport);}
-    private JPanel dataPanel(){dataTabs=new JTabbedPane();dataTabs.addTab("인코딩·변환",withHeading("인코딩·변환","문자열을 바꾸고 입력·출력을 함께 확인",codecPanel()));dataTabs.addTab("JWT 내용 확인",withHeading("JWT 내용 확인","토큰 내용 읽기 · 서명 검증은 하지 않음",jwtPanel()));structuredCompare=new StructuredComparePanel(api);structuredCompare.selectedTraffic=()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request,t.response)).toList();dataTabs.addTab("응답·데이터 비교",structuredCompare);JPanel page=new JPanel(new BorderLayout());page.setName("wb.data.tools");page.putClientProperty("wb.data.tools",true);page.add(dataTabs);return page;}
+    private JPanel dataPanel(){dataTabs=new JTabbedPane();dataTabs.addTab("인코딩·변환",withHeading("인코딩·변환","문자열을 바꾸고 입력·출력을 함께 확인",codecPanel()));dataTabs.addTab("JWT 내용 확인",withHeading("JWT 내용 확인","토큰 내용 읽기 · 서명 검증은 하지 않음",jwtPanel()));structuredCompare=new StructuredComparePanel(api);structuredCompare.selectedTraffic=()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request(),t.response())).toList();dataTabs.addTab("응답·데이터 비교",structuredCompare);JPanel page=new JPanel(new BorderLayout());page.setName("wb.data.tools");page.putClientProperty("wb.data.tools",true);page.add(dataTabs);return page;}
     private JMenuItem trafficAction(String title,Runnable action){JMenuItem item=new JMenuItem(title);item.addActionListener(e->{try{action.run();}catch(Exception ex){error(ex);}});return item;}
     private JPanel trafficPanel() {
         JCheckBox enabled=new JCheckBox("수집 ON",true),scope=new JCheckBox("Scope만",false);
@@ -137,7 +152,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         scope.setToolTipText("기본 OFF · 전체 트래픽에서 우클릭으로 SCOPE를 등록하세요. ON이면 이후 SCOPE 내 트래픽만 수집합니다.");
         enabled.addActionListener(e->{capture.set(enabled.isSelected());enabled.setText(enabled.isSelected()?"수집 ON":"수집 OFF");refreshTrafficInfo();});
         scope.addActionListener(e->{scopeOnly.set(scope.isSelected());refreshTrafficInfo();});
-        logTable=new JTable(logModel){public String getToolTipText(java.awt.event.MouseEvent e){int row=rowAtPoint(e.getPoint());if(row<0)return null;int index=convertRowIndexToModel(row);return index<traffic.size()?WorkbenchScope.reason(api,traffic.get(index).request):null;}};logTable.setName("wb.traffic.history");logTable.setAutoCreateRowSorter(true);logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);JPopupMenu trafficMenu=new JPopupMenu();trafficMenu.add(trafficAction("URL 후보 수집 시작",()->{if(current==null)throw new IllegalArgumentException("요청을 선택하세요.");openPassive(current.request.url());}));trafficMenu.addSeparator();trafficMenu.add(trafficAction("선택 요청 계정 비교 실행",()->{selectedTraffic();tabs.setSelectedIndex(1);authCompare.compareSelection();}));trafficMenu.add(trafficAction("Repeater에 요청 준비",()->selectedTraffic().forEach(t->api.repeater().sendToRepeater(t.request,"Workbench"))));trafficMenu.add(trafficAction("입력값 검사에 요청 연결",this::selectedPayload));trafficMenu.add(trafficAction("재현·증거 정리 열기",()->{selectedTraffic();tabs.setSelectedComponent(bountySupport);}));trafficMenu.add(trafficAction("선택 요청 JWT 확인",this::selectedJwt));trafficMenu.add(trafficAction("선택 응답에서 API 찾기",this::selectedJs));trafficMenu.add(trafficAction("선택 요청 변환하기",()->{if(current==null)throw new IllegalArgumentException("요청을 선택하세요.");codecIn.setText(current.request.toString());tabs.setSelectedIndex(2);dataTabs.setSelectedIndex(0);}));JMenu scopeMenu=new JMenu("SCOPE 지정");scopeMenu.setName("wb.traffic.scope.menu");scopeMenu.add(trafficAction("선택 URL 경로 추가",()->addSelectedScope(false)));JMenuItem siteScope=trafficAction("현재 사이트 전체 경로 추가",()->addSelectedScope(true));siteScope.setToolTipText("선택 URL과 같은 프로토콜·호스트·포트의 모든 경로를 포함합니다.");scopeMenu.add(siteScope);scopeMenu.add(trafficAction("SCOPE 목록 보기",this::showScopeList));trafficMenu.addSeparator();trafficMenu.add(scopeMenu);logTable.putClientProperty("wb.traffic.popup",trafficMenu);logTable.addMouseListener(new java.awt.event.MouseAdapter(){void popup(java.awt.event.MouseEvent e){if(!e.isPopupTrigger())return;int row=logTable.rowAtPoint(e.getPoint());if(row>=0){if(!logTable.isRowSelected(row))logTable.setRowSelectionInterval(row,row);showTraffic(row);}else logTable.clearSelection();for(Component c:trafficMenu.getComponents())if(c instanceof JMenuItem item)item.setEnabled(row>=0);trafficMenu.show(logTable,e.getX(),e.getY());}public void mousePressed(java.awt.event.MouseEvent e){popup(e);}public void mouseReleased(java.awt.event.MouseEvent e){popup(e);}});
+        logTable=new JTable(logModel){public String getToolTipText(java.awt.event.MouseEvent e){int row=rowAtPoint(e.getPoint());if(row<0)return null;int index=convertRowIndexToModel(row);return index<traffic.size()?WorkbenchScope.reason(api,traffic.get(index).request()):null;}};logTable.setName("wb.traffic.history");logTable.setAutoCreateRowSorter(true);logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);JPopupMenu trafficMenu=new JPopupMenu();trafficMenu.add(trafficAction("URL 후보 수집 시작",()->{if(current==null)throw new IllegalArgumentException("요청을 선택하세요.");openPassive(current.request().url());}));trafficMenu.addSeparator();trafficMenu.add(trafficAction("선택 요청 계정 비교 실행",()->{selectedTraffic();tabs.setSelectedIndex(1);authCompare.compareSelection();}));trafficMenu.add(trafficAction("Repeater에 요청 준비",()->selectedTraffic().forEach(t->api.repeater().sendToRepeater(t.request(),"Workbench"))));trafficMenu.add(trafficAction("입력값 검사에 요청 연결",this::selectedPayload));trafficMenu.add(trafficAction("재현·증거 정리 열기",()->{selectedTraffic();tabs.setSelectedComponent(bountySupport);}));trafficMenu.add(trafficAction("선택 요청 JWT 확인",this::selectedJwt));trafficMenu.add(trafficAction("선택 응답에서 API 찾기",this::selectedJs));trafficMenu.add(trafficAction("선택 요청 변환하기",()->{if(current==null)throw new IllegalArgumentException("요청을 선택하세요.");codecIn.setText(current.request().toString());tabs.setSelectedIndex(2);dataTabs.setSelectedIndex(0);}));JMenu scopeMenu=new JMenu("SCOPE 지정");scopeMenu.setName("wb.traffic.scope.menu");scopeMenu.add(trafficAction("선택 URL 경로 추가",()->addSelectedScope(false)));JMenuItem siteScope=trafficAction("현재 사이트 전체 경로 추가",()->addSelectedScope(true));siteScope.setToolTipText("선택 URL과 같은 프로토콜·호스트·포트의 모든 경로를 포함합니다.");scopeMenu.add(siteScope);scopeMenu.add(trafficAction("SCOPE 목록 보기",this::showScopeList));trafficMenu.addSeparator();trafficMenu.add(scopeMenu);logTable.putClientProperty("wb.traffic.popup",trafficMenu);logTable.addMouseListener(new java.awt.event.MouseAdapter(){void popup(java.awt.event.MouseEvent e){if(!e.isPopupTrigger())return;int row=logTable.rowAtPoint(e.getPoint());if(row>=0){if(!logTable.isRowSelected(row))logTable.setRowSelectionInterval(row,row);showTraffic(row);}else logTable.clearSelection();for(Component c:trafficMenu.getComponents())if(c instanceof JMenuItem item)item.setEnabled(row>=0);trafficMenu.show(logTable,e.getX(),e.getY());}public void mousePressed(java.awt.event.MouseEvent e){popup(e);}public void mouseReleased(java.awt.event.MouseEvent e){popup(e);}});
         for(int i=6;i>=4;i--)logTable.removeColumn(logTable.getColumnModel().getColumn(i));
         int[] widths={55,75,340,65};for(int i=0;i<widths.length;i++)logTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
         logTable.getColumnModel().getColumn(0).setMinWidth(56);logTable.getColumnModel().getColumn(1).setMinWidth(65);logTable.getColumnModel().getColumn(3).setMinWidth(60);logTable.getColumnModel().getColumn(0).setMaxWidth(75);logTable.getColumnModel().getColumn(1).setMaxWidth(100);logTable.getColumnModel().getColumn(3).setMaxWidth(85);
@@ -146,7 +161,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         filter.setName("wb.traffic.search");filter.setColumns(20);filter.setToolTipText("메서드·URL·상태 검색 · Ctrl+F");
         filter.getDocument().addDocumentListener(new DocumentListener(){public void insertUpdate(DocumentEvent e){change();}public void removeUpdate(DocumentEvent e){change();}public void changedUpdate(DocumentEvent e){change();}void change(){sorter.setRowFilter(filter.getText().isEmpty()?null:RowFilter.regexFilter("(?i)"+Pattern.quote(filter.getText()),1,2,3));refreshTrafficInfo();}});
         logTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())showTraffic(logTable.getSelectedRow());});
-        clearTraffic=button("목록 비우기",()->{generation.incrementAndGet();incoming.clear();traffic.clear();logModel.setRowCount(0);current=null;selectionInfo.setText("요청을 선택하세요");requestView.setRequest(null);responseView.setResponse(null);requestPacket.setPacket(null);responsePacket.setPacket(null);refreshTrafficInfo();});
+        clearTraffic=button("목록 비우기",()->{clearStoredTraffic();logModel.setRowCount(0);selectionInfo.setText("요청을 선택하세요");requestView.setRequest(null);responseView.setResponse(null);requestPacket.setPacket(null);responsePacket.setPacket(null);refreshTrafficInfo();});
         clearTraffic.setName("wb.traffic.clear");clearTraffic.setToolTipText("보관 중인 트래픽 목록과 패킷을 비웁니다.");exportTraffic=button("내보내기",this::export);exportTraffic.setName("wb.traffic.export");exportTraffic.setToolTipText("현재 보관 중인 트래픽을 파일로 저장합니다.");clearSearch=button("검색 초기화",()->filter.setText(""));clearSearch.setName("wb.traffic.search.clear");
         scopeListButton=button("SCOPE 목록",this::showScopeList);scopeListButton.setName("wb.traffic.scope.list");JPanel controls=row(new JLabel("트래픽"),enabled,scope,new JLabel("검색"),filter,clearSearch,clearTraffic,exportTraffic,scopeListButton,captureInfo);
         JPanel top=controls;
@@ -156,7 +171,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         JSplitPane body=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,trafficListPanel(),messages,.30);body.setName("wb.traffic.workspace");
         JPanel main=page(top,body);main.setName("wb.traffic");refreshTrafficInfo();return main;
     }
-    private void showTraffic(int view){if(view>=0){int index=logTable.convertRowIndexToModel(view);if(index<traffic.size()){current=traffic.get(index);requestView.setRequest(current.request);responseView.setResponse(current.response);requestPacket.setPacket(current.request.toString());responsePacket.setPacket(current.response==null?null:current.response.toString(),PacketFormat.decodedResponse(current.response));selectionInfo.setText(String.format("%03d",((Number)logModel.getValueAt(index,0)).longValue())+"   "+current.request.method()+"   "+current.request.url()+"   · "+(current.response==null?"응답 없음":current.response.statusCode()+" · "+current.response.body().length()+" bytes"));selectionInfo.setText(selectionInfo.getText()+" · "+WorkbenchScope.reason(api,current.request));selectionInfo.setToolTipText(selectionInfo.getText());}}else{current=null;requestView.setRequest(null);responseView.setResponse(null);requestPacket.setPacket(null);responsePacket.setPacket(null);selectionInfo.setText("목록에서 요청을 선택하세요 · 요청과 응답을 함께 표시합니다.");}}
+    private void showTraffic(int view){if(view>=0){int index=logTable.convertRowIndexToModel(view);if(index<traffic.size()){current=traffic.get(index);HttpRequest request=current.request();HttpResponse response=current.response();requestView.setRequest(request);responseView.setResponse(response);requestPacket.setPacket(request.toString());responsePacket.setPacket(response==null?null:response.toString(),PacketFormat.decodedResponse(response));selectionInfo.setText(String.format("%03d",((Number)logModel.getValueAt(index,0)).longValue())+"   "+request.method()+"   "+request.url()+"   · "+(response==null?"응답 없음":response.statusCode()+" · "+response.body().length()+" bytes"));selectionInfo.setText(selectionInfo.getText()+" · "+WorkbenchScope.reason(api,request));selectionInfo.setToolTipText(selectionInfo.getText());}}else{current=null;requestView.setRequest(null);responseView.setResponse(null);requestPacket.setPacket(null);responsePacket.setPacket(null);selectionInfo.setText("목록에서 요청을 선택하세요 · 요청과 응답을 함께 표시합니다.");}}
     void openPassive(String url){tabs.setSelectedComponent(passiveScan);try{passiveScan.open(url,true);}catch(IllegalArgumentException e){status.setText("URL 수집 · "+e.getMessage());}}
     private void refreshTrafficInfo(){if(logTable==null)return;if(clearTraffic!=null)clearTraffic.setEnabled(!traffic.isEmpty());if(exportTraffic!=null)exportTraffic.setEnabled(!traffic.isEmpty());if(clearSearch!=null)clearSearch.setEnabled(!filter.getText().isEmpty());captureInfo.setText("보관 "+traffic.size()+" · 표시 "+logTable.getRowCount()+" · "+(capture.get()?"수집 중":"일시정지")+" · "+(scopeOnly.get()?"Scope 내":"전체 대상"));captureInfo.setToolTipText(captureDiagnostics());}
     private JPanel withHeading(String title,String hint,JPanel content){JPanel p=new JPanel(new BorderLayout(0,4));p.setBorder(BorderFactory.createEmptyBorder(6,8,8,8));p.add(WorkbenchUi.header(title,hint,null),BorderLayout.NORTH);p.add(content);return p;}
@@ -167,10 +182,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
  private void importScopeRules(){JFileChooser chooser=new JFileChooser();if(chooser.showOpenDialog(root)!=JFileChooser.APPROVE_OPTION)return;try{java.nio.file.Path path=chooser.getSelectedFile().toPath();if(java.nio.file.Files.size(path)>2*1024*1024)throw new IllegalArgumentException("SCOPE 파일 2MB 제한");localScope.importRules(java.nio.file.Files.readString(path));scopeChanged();}catch(Exception ex){error(ex);}}
  private void showScopeList(){if(unloaded.get())return;if(scopeWindow!=null&&scopeWindow.isDisplayable()){scopeWindow.toFront();scopeWindow.requestFocus();return;}refreshScopeList();scopeWindow=dialogOpener.open(root,"Workbench KR · SCOPE 목록",scopeContent,false,()->scopeWindow=null);}
     private void refreshScopeList(){scopeModel.setRowCount(0);for(var rule:localScope.rules())scopeModel.addRow(new Object[]{rule.originOnly()?"도메인 전체":"URL 경로",rule.url(),localScope.overlap(rule)});if(scopeListButton!=null)scopeListButton.setText("SCOPE 목록 ("+scopeModel.getRowCount()+")");}
-    private void addSelectedScope(boolean originOnly){List<Traffic> chosen=selectedTraffic();List<Traffic> newlyIncluded=traffic.stream().filter(t->!WorkbenchScope.contains(api,t.request)).toList();for(Traffic t:chosen)localScope.add(t.request.url(),originOnly);scopeChanged();for(Traffic t:newlyIncluded)if(WorkbenchScope.contains(api,t.request)){environments.observe(t.request,t.response);authCompare.observe(t.request,t.response);if(responseRecon!=null)responseRecon.offer(t.request,t.response);if(activity!=null){activity.observe(t.request,"트래픽 SCOPE");activity.response(t.request,t.response);}}status.setText("SCOPE 등록 완료 · "+chosen.size()+"개 선택 · URL 경로/도메인 범위는 SCOPE 목록에서 확인하세요.");}
+    private void addSelectedScope(boolean originOnly){List<Traffic> chosen=selectedTraffic();List<Traffic> newlyIncluded=traffic.stream().filter(t->!WorkbenchScope.contains(api,t.request())).toList();for(Traffic t:chosen)localScope.add(t.request().url(),originOnly);scopeChanged();for(Traffic t:newlyIncluded)if(WorkbenchScope.contains(api,t.request())){environments.observe(t.request(),t.response());authCompare.observe(t.request(),t.response());if(responseRecon!=null)responseRecon.offer(t.request(),t.response());if(activity!=null){activity.observe(t.request(),"트래픽 SCOPE");activity.response(t.request(),t.response());}}status.setText("SCOPE 등록 완료 · "+chosen.size()+"개 선택 · URL 경로/도메인 범위는 SCOPE 목록에서 확인하세요.");}
     private void scopeChanged(){refreshScopeList();if(current!=null&&logTable.getSelectedRow()>=0)showTraffic(logTable.getSelectedRow());if(jsAnalysis!=null)jsAnalysis.rescanHistory();status.setText("Workbench SCOPE "+localScope.rules().size()+"개 · 모든 도구에 적용 · 마지막 범위를 삭제하면 전송 대상 없음");}
     private JPanel authPanel() {
-        authCompare=new AuthComparePanel(api,()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request,t.response)).toList());return authCompare;
+        authCompare=new AuthComparePanel(api,()->selectedTraffic().stream().map(t->HttpRequestResponse.httpRequestResponse(t.request(),t.response())).toList());return authCompare;
     }
     private JPanel codecPanel() {
         codecOut.setEditable(false);String[] ops={"URL 인코딩 (form)","URL 디코딩 (form)","Base64 인코딩","Base64 디코딩","Base64URL 인코딩","Base64URL 디코딩","Hex 인코딩","Hex 디코딩","SHA-256","Gzip → Base64","Base64 → Gzip 해제"};
@@ -189,13 +204,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     }
     private void selectedJwt() {
         if(current==null)throw new IllegalArgumentException("트래픽에서 요청을 선택하세요.");
-        String token=Core.jwtFromMessage(current.request.toString());
+        String token=Core.jwtFromMessage(current.request().toString());
         if(token.isEmpty())throw new IllegalArgumentException("요청에서 JWS 후보를 찾지 못했습니다. JWT 탭에 직접 붙여넣으세요.");
         jwtIn.setText(token);jwtOut.setText(Core.jwt(token));tabs.setSelectedIndex(2);dataTabs.setSelectedIndex(1);
     }
     private void selectedJs() {
-        if(current==null || current.response==null)throw new IllegalArgumentException("응답이 있는 요청을 선택하세요.");
-        String text=EnvironmentPanel.decodedBody(PacketFormat.decodedResponse(current.response));jsAnalysis.rememberPacket(current.request.url(),EnvironmentPanel.preview(current.request.toString()),EnvironmentPanel.preview(current.response.toString()),EnvironmentPanel.preview(PacketFormat.response(current.response.toByteArray().getBytes(),current.response.statusCode(),"",text)));jsAnalysis.load(text,current.request.url());tabs.setSelectedIndex(3);
+        if(current==null)throw new IllegalArgumentException("응답이 있는 요청을 선택하세요.");
+        HttpRequest request=current.request();HttpResponse response=current.response();if(response==null)throw new IllegalArgumentException("응답이 있는 요청을 선택하세요.");
+        String text=EnvironmentPanel.decodedBody(PacketFormat.decodedResponse(response));jsAnalysis.rememberPacket(request.url(),EnvironmentPanel.preview(request.toString()),EnvironmentPanel.preview(response.toString()),EnvironmentPanel.preview(PacketFormat.response(response.toByteArray().getBytes(),response.statusCode(),"",text)));jsAnalysis.load(text,request.url());tabs.setSelectedIndex(3);
     }
     @Override public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent r){
         if(!unloaded.get()){
@@ -209,25 +225,19 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             received.incrementAndGet();lastResponse=LocalTime.now().withNano(0).toString();
             // Collection is independent of optional analyses. Never let an observer block Burp's action.
             captureStage("응답 수집",()->{
-                if(!capture.get())return;
-                HttpRequest q=r.initiatingRequest();
-                if(scopeOnly.get()&&!WorkbenchScope.contains(api,q))return;
-                if(!withinCaptureLimit(q,r))return;
-                Traffic t=new Traffic(LocalTime.now().withNano(0).toString(),r.toolSource().toolType().toString(),q,r);
-                if(!incoming.offer(t)){queueOverflow.incrementAndGet();dropped.incrementAndGet();}
+                synchronized(captureLock){
+                    if(unloaded.get()||!capture.get())return;
+                    HttpRequest q=r.initiatingRequest();
+                    if(scopeOnly.get()&&!WorkbenchScope.contains(api,q))return;
+                    try{incoming.offer(storeTraffic(r.toolSource().toolType().toString(),q,r));}
+                    catch(RuntimeException ex){dropped.incrementAndGet();throw ex;}
+                }
             });
             captureStage("응답 보안 관찰",()->{if(responseRecon!=null)responseRecon.offer(r.initiatingRequest(),r);});
             captureStage("응답 활동 관찰",()->{if(activity!=null)activity.response(r.initiatingRequest(),r);});
             captureStage("계정 자동 비교 응답",()->{if(authCompare!=null)authCompare.received(r.messageId(),r.initiatingRequest(),r);});
         }
         return ResponseReceivedAction.continueWith(r,r.annotations());
-    }
-    private boolean withinCaptureLimit(HttpRequest q,HttpResponse s){
-        if(q==null)throw new IllegalArgumentException("요청 없음");
-        // Promote before addition so large messages cannot wrap an int and bypass the bound.
-        long bytes=(long)q.toByteArray().length()+(s==null?0:s.toByteArray().length());
-        if(bytes<=MESSAGE_LIMIT)return true;
-        sizeExcluded.incrementAndGet();dropped.incrementAndGet();return false;
     }
     private void captureStage(String stage,Runnable task){
         try{task.run();}catch(RuntimeException ex){captureFailure(stage,ex);}
@@ -244,27 +254,27 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         }catch(RuntimeException ignored){/* Host logging must not stop collection either. */}
     }
     private String captureDiagnostics(){
-        return "최근 250건 · 요청+응답 합계 128 KiB 이하 · 응답 없는 요청은 자동 수집 제외"
+        return "건수·패킷 크기 제한 없음 · 원본은 임시 디스크 보관 · 응답 없는 요청은 자동 수집 제외"
             +" · 수신 "+received.get()+" · 마지막 응답 "+lastResponse+" · 대기 "+incoming.size()
-            +" · 크기 제외 "+sizeExcluded.get()+" · 큐 초과 "+queueOverflow.get()+" · 처리 오류 "+processingErrors.get()
+            +" · 저장 실패/누락 "+dropped.get()+" · 처리 오류 "+processingErrors.get()
             +" · 마지막 오류 "+lastCaptureError+" · Scope만 ON이면 범위 밖 제외 · 수신/오류는 확장 로드 이후 누적";
     }
     private void drain() {
         if(unloaded.get())return;
         for(int i=0;i<50;i++){Traffic t=incoming.poll();if(t==null)break;captureStage("목록 항목 처리",()->addTraffic(t));}
-        stats.setText("수신 "+received.get()+" · 대기 "+incoming.size()+" · 크기 제외 "+sizeExcluded.get()+" · 큐 초과 "+queueOverflow.get()+" · 오류 "+processingErrors.get());
+        stats.setText("수신 "+received.get()+" · 대기 "+incoming.size()+" · 저장 실패/누락 "+dropped.get()+" · 오류 "+processingErrors.get());
         stats.setToolTipText(captureDiagnostics());refreshTrafficInfo();
     }
     private boolean addTraffic(Traffic t) {
         if(unloaded.get())return false;
         Object[] values;
-        try{values=new Object[]{trafficNo+1,t.request.method(),t.request.url(),t.response==null?"없음":t.response.statusCode(),t.time,t.source,t.response==null?0:t.response.body().length()};}
+        try{values=new Object[]{trafficNo+1,t.packet.method(),t.packet.url(),t.packet.hasResponse()?Integer.valueOf(t.packet.responseStatus()):"없음",t.time,t.source,t.packet.responseBodyLength()};}
         catch(RuntimeException ex){dropped.incrementAndGet();captureFailure("목록 메타데이터",ex);return false;}
         // Retain the packet before optional observers, which can fail on unusual HTTP metadata.
-        if(traffic.size()>=ROW_LIMIT){traffic.remove(0);logModel.removeRow(0);}traffic.add(t);trafficNo++;logModel.addRow(values);
-        captureStage("서버 환경 관찰",()->{if(environments!=null)environments.observe(t.request,t.response);});
-        captureStage("인증 후보 관찰",()->{if(authCompare!=null)authCompare.observe(t.request,t.response);});
-        refreshTrafficInfo();return true;
+        traffic.add(t);trafficNo++;logModel.addRow(values);
+        captureStage("서버 환경 관찰",()->{if(environments!=null)environments.observe(t.request(),t.response());});
+        captureStage("인증 후보 관찰",()->{if(authCompare!=null)authCompare.observe(t.request(),t.response());});
+        captureStage("트래픽 상태 갱신",this::refreshTrafficInfo);return true;
     }
     @Override public List<Component> provideMenuItems(ContextMenuEvent e) {
         List<HttpRequestResponse> picked=new ArrayList<>(e.selectedRequestResponses());if(picked.isEmpty())e.messageEditorRequestResponse().ifPresent(m->picked.add(m.requestResponse()));if(picked.isEmpty())return List.of();
@@ -274,8 +284,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                 if(count>=20)break;
                 try{
                     HttpRequest q=rr.request();HttpResponse response=rr.response();
-                    if(!withinCaptureLimit(q,response))continue;
-                    if(!addTraffic(new Traffic(LocalTime.now().withNano(0).toString(),"가져오기",q,response)))continue;
+                    if(!addTraffic(storeTraffic("가져오기",q,response)))continue;
                     count++;
                     captureStage("가져온 응답 보안 관찰",()->{if(responseRecon!=null)responseRecon.offer(q,response);});
                     captureStage("가져온 요청 활동 관찰",()->{if(activity!=null)activity.observe(q,"가져오기");});
@@ -295,13 +304,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     }
     String csvReport() {
         StringBuilder b=new StringBuilder("\ufeff유형,메서드,URL,프로필,원본상태,비교상태,검토결과\r\n");
-        for(Traffic t:traffic)b.append("트래픽,").append(Core.csv(t.request.method())).append(',').append(Core.csv(Core.safeUrl(t.request.url()))).append(",,").append(t.response==null?"":t.response.statusCode()).append(",,\r\n");
+        for(Traffic t:traffic)b.append("트래픽,").append(Core.csv(t.packet.method())).append(',').append(Core.csv(Core.safeUrl(t.packet.url()))).append(",,").append(t.packet.hasResponse()?t.packet.responseStatus():"").append(",,\r\n");
         return b.toString();
     }
     String htmlReport() {
         StringBuilder b=new StringBuilder("<!doctype html><html lang='ko'><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Burp Workbench 결과</title><style>body{font:15px system-ui;margin:32px;background:#f5f7fb;color:#17243b}table{border-collapse:collapse;width:100%;background:white}td,th{padding:10px;border:1px solid #d9e0eb;text-align:left;overflow-wrap:anywhere}th{background:#e4ebf5}h1{font-size:26px}</style><h1>Burp Workbench KR · 결과</h1><p>자동 판정은 검토 후보입니다. 세션 헤더·본문·쿼리·fragment는 내보내지 않습니다. URL 경로에는 식별자가 남을 수 있습니다.</p>");
         b.append("<h2>트래픽 목록</h2><table><tr><th>시간</th><th>도구</th><th>메서드 / URL</th><th>상태</th></tr>");
-        for(Traffic t:traffic)b.append("<tr><td>").append(Core.html(t.time)).append("</td><td>").append(Core.html(t.source)).append("</td><td>").append(Core.html(t.request.method()+" "+Core.safeUrl(t.request.url()))).append("</td><td>").append(t.response==null?"없음":t.response.statusCode()).append("</td></tr>");return b.append("</table></html>").toString();
+        for(Traffic t:traffic)b.append("<tr><td>").append(Core.html(t.time)).append("</td><td>").append(Core.html(t.source)).append("</td><td>").append(Core.html(t.packet.method()+" "+Core.safeUrl(t.packet.url()))).append("</td><td>").append(t.packet.responseStatus()).append("</td></tr>");return b.append("</table></html>").toString();
     }
     private void error(Exception e){status.setText("확인 필요 · "+e.getMessage());JOptionPane.showMessageDialog(root,e.getMessage(),"Workbench KR",JOptionPane.INFORMATION_MESSAGE);}
 }

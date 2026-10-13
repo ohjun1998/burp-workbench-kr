@@ -42,7 +42,7 @@ public final class UiLayoutTest {
   SwingUtilities.invokeAndWait(()->{
    DefaultTableModel m=(DefaultTableModel)table.getModel();check(((Number)m.getValueAt(11,0)).longValue()==12,"stable monotonically increasing traffic NO");
    ((TableRowSorter<?>)table.getRowSorter()).setSortKeys(List.of(new RowSorter.SortKey(0,SortOrder.DESCENDING)));table.setRowSelectionInterval(0,0);
-   try{Object current=WorkbenchTest.get(w,"current");var f=current.getClass().getDeclaredField("request");f.setAccessible(true);check(f.get(current).toString().contains("/route/11"),"sorted NO selection resolves correct captured request");}catch(Exception e){throw new RuntimeException(e);}
+   try{Object current=WorkbenchTest.get(w,"current");var f=current.getClass().getDeclaredMethod("request");f.setAccessible(true);check(f.invoke(current).toString().contains("/route/11"),"sorted NO selection resolves correct captured request");}catch(Exception e){throw new RuntimeException(e);}
    ((JTextField)unchecked(w,"filter")).setText("/route/2");check(table.getRowCount()==1,"traffic search filters visible request fields");check(((JButton)named(root,"wb.traffic.search.clear")).isEnabled(),"search reset enabled after query");((JButton)named(root,"wb.traffic.search.clear")).doClick();check(table.getRowCount()==12&&!((JButton)named(root,"wb.traffic.search.clear")).isEnabled(),"search reset restores all rows and disables itself");
    ((JTextField)unchecked(w,"filter")).setText("");table.clearSelection();check(unchecked(w,"current")==null,"cleared selection resets stale request");
   });

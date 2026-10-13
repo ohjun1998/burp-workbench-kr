@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
+import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -87,6 +87,7 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
                 if(m.getReturnType()==RequestToBeSentAction.class){requestActions.incrementAndGet();return requestAction;}
                 return def(m);
             });
+            installTrafficPacketFactory();
             Extension extension=proxy(Extension.class,(p,m,a)->{
                 if(m.getName().equals("registerUnloadingHandler"))unload.set((ExtensionUnloadingHandler)a[0]);
                 return m.getReturnType().isInterface()?PayloadIntegrationTest.host(m.getReturnType()):def(m);
@@ -108,7 +109,7 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
         Timer timer()throws Exception{return (Timer)get(ext,"timer");}
         long metric(String name)throws Exception{return ((AtomicLong)get(ext,name)).get();}
         int dropped()throws Exception{return ((AtomicInteger)get(ext,"dropped")).get();}
-        @SuppressWarnings("unchecked") BlockingQueue<?> queue()throws Exception{return (BlockingQueue<?>)get(ext,"incoming");}
+        @SuppressWarnings("unchecked") Queue<?> queue()throws Exception{return (Queue<?>)get(ext,"incoming");}
         int rows()throws Exception {
             AtomicInteger count=new AtomicInteger();edt(()->{try{count.set(((List<?>)get(ext,"traffic")).size());}
                 catch(Exception ex){throw new IllegalStateException(ex);}});return count.get();
@@ -209,7 +210,7 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
 
             Thread callbackThread=Thread.currentThread();AtomicInteger bodyReads=new AtomicInteger();
             HttpResponse activityFailure=proxy(HttpResponse.class,(p,m,a)->{
-                if(m.getName().equals("body")&&Thread.currentThread()==callbackThread&&bodyReads.incrementAndGet()==3)
+                if(m.getName().equals("body")&&Thread.currentThread()==callbackThread&&bodyReads.incrementAndGet()==4)
                     throw new IllegalStateException(PRIVATE_TEXT);
                 return delegate(response,HttpResponse.class,m,a);
             });
@@ -257,37 +258,36 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
         }
     }
 
-    private static void captureExclusionsHaveDistinctCounters()throws Exception {
+    private static void unlimitedCaptureAndCleanup()throws Exception {
+        java.nio.file.Path lastFile;
         try(Fixture fixture=new Fixture()){
             fixture.stop();AtomicBoolean enabled=(AtomicBoolean)get(fixture.ext,"capture"),scopeOnly=(AtomicBoolean)get(fixture.ext,"scopeOnly");
             HttpRequest outside=plain("counters");HttpResponse small=response(200,"{}");
             enabled.set(false);fixture.send(outside,small);
-            check(fixture.queue().isEmpty()&&fixture.dropped()==0&&fixture.metric("received")==1,
-                "OFF responses count as received without creating packet losses");
-            enabled.set(true);scopeOnly.set(true);fixture.send(outside,response(200,"x".repeat(128*1024+1)));
-            check(fixture.queue().isEmpty()&&fixture.metric("sizeExcluded")==0&&fixture.dropped()==0,
-                "SCOPE exclusion does not count as an oversized or dropped packet");
-            scopeOnly.set(false);fixture.send(outside,response(200,"x".repeat(128*1024+1)));
-            check(fixture.metric("sizeExcluded")==1&&fixture.metric("queueOverflow")==0,
-                "oversized response has a distinct size exclusion counter");
-            HttpRequest huge=proxy(HttpRequest.class,(p,m,a)->{
-                if(m.getName().equals("toByteArray"))return proxy(burp.api.montoya.core.ByteArray.class,(pp,mm,aa)->
-                    mm.getName().equals("length")?Integer.MAX_VALUE:def(mm));
-                return delegate(outside,HttpRequest.class,m,a);
-            });
-            fixture.send(huge,small);
-            check(fixture.metric("sizeExcluded")==2&&fixture.queue().isEmpty(),"length arithmetic cannot wrap and admit an oversized packet");
-            int capacity=fixture.queue().remainingCapacity();
-            for(int i=0;i<capacity+1;i++)fixture.ext.handleHttpResponseReceived(event(outside,small));
-            check(fixture.queue().size()==capacity&&fixture.metric("queueOverflow")==1&&fixture.metric("sizeExcluded")==2,
-                "full incoming queue increments only its queue overflow counter");
-            check(fixture.dropped()==3&&fixture.metric("processingErrors")==0&&fixture.metric("received")==capacity+5,
-                "OFF, SCOPE, size and queue decisions remain separate from processing errors");
-            fixture.start();fixture.awaitRows(capacity);
-            JLabel info=(JLabel)get(fixture.ext,"captureInfo");
-            check(info.getToolTipText().contains("크기 제외 2")&&info.getToolTipText().contains("큐 초과 1"),
-                "visible collection diagnostics explain excluded traffic after the queue drains");
+            check(fixture.queue().isEmpty()&&fixture.dropped()==0,"OFF does not retain or count loss");
+            enabled.set(true);scopeOnly.set(true);fixture.send(outside,small);
+            check(fixture.queue().isEmpty(),"SCOPE exclusion is preserved");scopeOnly.set(false);
+            HttpResponse large=response(200,"A\u0000B"+"x".repeat(2*1024*1024));
+            fixture.send(plain("large"),large);
+            for(int i=0;i<600;i++)fixture.ext.handleHttpResponseReceived(event(plain("burst/"+i),small));
+            check(fixture.queue().size()==601,"burst queue accepts more than 250 packets without loss");
+            DiskTrafficStore store=(DiskTrafficStore)get(fixture.ext,"trafficStore");
+            check(store.size()==601&&store.diskBytes()>2*1024*1024,"complete large packets are stored on disk before UI drains");
+            fixture.start();fixture.awaitRows(601);
+            check(fixture.urls().get(0).endsWith("large")&&fixture.urls().get(600).endsWith("burst/599"),"oldest packet remains after more than 250 rows");
+            Object first=((List<?>)get(fixture.ext,"traffic")).get(0);
+            Method packet=first.getClass().getDeclaredMethod("packet");packet.setAccessible(true);
+            DiskTrafficStore.PacketRef ref=(DiskTrafficStore.PacketRef)packet.invoke(first);
+            check(java.util.Arrays.equals(ref.response().toByteArray().getBytes(),large.toByteArray().getBytes()),"2 MiB binary response round-trips with exact bytes");
+            check(fixture.dropped()==0&&fixture.metric("processingErrors")==0,"large packet and burst produce no capture losses");
+            java.nio.file.Path previous=store.file();
+            edt(()->{try{((javax.swing.JButton)get(fixture.ext,"clearTraffic")).doClick(0);}catch(Exception e){throw new RuntimeException(e);}});
+            check(!java.nio.file.Files.exists(previous)&&fixture.rows()==0&&fixture.queue().isEmpty(),"clear deletes old packets and pending references");
+            fixture.send(plain("after-clear"),small);fixture.awaitRows(1);
+            lastFile=((DiskTrafficStore)get(fixture.ext,"trafficStore")).file();
+            check(java.nio.file.Files.exists(lastFile),"capture resumes into a new private temporary file");
         }
+        check(!java.nio.file.Files.exists(lastFile),"unload removes the active temporary file");
     }
 
     public static void main(String[] args)throws Exception {
@@ -296,7 +296,7 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
         timerBoundaryAndLoggingRecover();
         optionalCallbackStagesCannotAbortBurpActions();
         manualImportContinuesAfterBadSelection();
-        captureExclusionsHaveDistinctCounters();
+        unlimitedCaptureAndCleanup();
         System.out.println("TrafficCaptureRecoveryTest: "+checks+" checks passed");
     }
 }

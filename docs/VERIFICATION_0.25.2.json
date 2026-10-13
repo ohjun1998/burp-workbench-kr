@@ -1,0 +1,30 @@
+{
+  "version": "0.25.2",
+  "checks": {
+    "java_regression_groups": 40,
+    "java_regression_assertions": 1272,
+    "payload_http": 127,
+    "all_features_http": 100,
+    "bounty_workflow": 266,
+    "packaging_unit": 4,
+    "download_integrity": "passed"
+  },
+  "native_burp": {
+    "edition": "Community",
+    "version": "2026.3.3",
+    "java": "21",
+    "headless": true,
+    "gui_tested": false,
+    "history_rows": 601,
+    "workbench_rows": 601,
+    "binary_response_body_bytes": 2097169,
+    "binary_request_body_bytes": 2097169,
+    "dropped": 0,
+    "processing_errors": 0,
+    "clear_and_unload_cleanup": true
+  },
+  "artifacts": {
+    "burp-workbench-kr-0.25.2-source.zip": "ebffcaaf9c6a298f6d74ba162e2872687ed2a72c293c72f006cf9c8ee14434d3",
+    "burp-workbench-kr-0.25.2.jar": "c2f186be4f9c3cdac7b1a00b2eac780d2c8e3444664a44556d809ecdbc358810"
+  }
+}

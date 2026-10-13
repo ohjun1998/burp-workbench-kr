@@ -1,0 +1,14 @@
+BURP [Burp Suite Community Edition, 2026, 3.3]
+PASS isolated native proxy listener starts
+PASS proxy returns the complete 2 MiB binary response
+PASS proxy forwards the complete 2 MiB request body
+PASS native HTTP history contains 601 requests
+PASS Workbench retains all 601 requests without a 250-row cap
+PASS native Montoya reconstruction preserves exact large response bytes
+PASS native disk reconstruction preserves the complete 2 MiB request body
+PASS raw packets are backed by the private temporary file
+PASS no captured packets were dropped
+PASS native capture and observers report no processing errors
+PASS clear removes both native table rows and stored raw packets
+PASS native extension unload deletes the current temporary store
+NATIVE_CAPTURE_SUCCESS

@@ -1,0 +1,47 @@
+name: Publish verified 0.25.2 downloads
+on:
+  push:
+    branches: [account-a/0.25.2-unlimited-traffic]
+permissions:
+  contents: write
+concurrency:
+  group: publish-unlimited-0252
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Build, verify, and package versioned downloads
+        run: python dev.py release
+      - name: Verify packaging and native-tested release bytes
+        run: |
+          python -m unittest discover -s tools -p 'test_package_downloads.py'
+          python tools/package_downloads.py --verify
+          python - <<'PYVERIFY'
+          import hashlib,json
+          from pathlib import Path
+          folder=Path('downloads/extensions/0.25.2')
+          expected=json.loads(Path('docs/VERIFICATION_0.25.2.json').read_text())['artifacts']
+          for name,digest in expected.items():
+              assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==digest, name
+          PYVERIFY
+      - name: Commit only this release's generated downloads
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add downloads/extensions/0.25.2
+          git commit -m 'build: publish verified 0.25.2 unlimited traffic downloads'
+          git push origin HEAD:account-a/0.25.2-unlimited-traffic
+      - uses: actions/upload-artifact@v7
+        with:
+          name: burp-workbench-kr-0.25.2
+          path: downloads/extensions/0.25.2/

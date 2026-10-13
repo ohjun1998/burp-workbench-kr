@@ -8,7 +8,7 @@ if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
 p=argparse.ArgumentParser();p.add_argument('--java',default='java');p.add_argument('--javac',default='javac');p.add_argument('--lab',type=Path);p.add_argument('--port',type=int,default=18099);args=p.parse_args()
 here=Path(__file__).resolve().parent;root=here.parent.parent;lab=(args.lab or root.parent.parent/'community-security-lab').resolve();task=here/'.run';task.mkdir(exist_ok=True)
 deps=task/'deps';deps.mkdir(exist_ok=True);site=task/'site';site.mkdir(exist_ok=True);classes=task/'classes';classes.mkdir(exist_ok=True)
-jar=root/'dist/burp-workbench-kr-0.25.1.jar'
+jar=root/'dist/burp-workbench-kr-0.25.2.jar'
 if not jar.exists():raise SystemExit('First run: python build_all.py --java <java> --javac <javac>')
 if not 1024<=args.port<=65535:raise SystemExit('port range')
 with zipfile.ZipFile(lab/'dist/ROOT.war') as war:

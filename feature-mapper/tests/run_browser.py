@@ -14,8 +14,10 @@ with tempfile.TemporaryDirectory(prefix='mapper-browser-fixture-') as folder:
     time.sleep(.1)
    with (a.output/'browser.log').open('w') as browser_log:
     browser=subprocess.run(['node',str(r/'tests/browser-native.mjs'),str(t/'native-browser-connection.json'),str(a.browser.resolve())],stdout=browser_log,stderr=subprocess.STDOUT,timeout=65)
-   if browser.returncode:raise RuntimeError('Browser validation failed; see browser.log')
-   if fixture.wait(timeout=10):raise RuntimeError('Mapping fixture validation failed; see fixture.log')
+   if browser.returncode:
+    print((a.output/'browser.log').read_text());raise RuntimeError('Browser validation failed; see browser.log')
+   if fixture.wait(timeout=10):
+    print((a.output/'fixture.log').read_text());raise RuntimeError('Mapping fixture validation failed; see fixture.log')
    for name in ['browser-native-result.txt','browser-fixture-result.txt']:
     (a.output/name).write_bytes((t/name).read_bytes());print((t/name).read_text())
   finally:

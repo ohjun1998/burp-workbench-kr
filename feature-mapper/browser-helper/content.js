@@ -9,7 +9,7 @@
   }
   function send(name, kind) {
     if (!name) return;
-    chrome.runtime.sendMessage({type: 'action', kind, label: name, title: document.title, page: location.origin + location.pathname}).catch(() => {});
+    chrome.runtime.sendMessage({type: 'action', kind, time: Date.now(), label: name, title: document.title, page: location.origin + location.pathname}).catch(() => {});
   }
   document.addEventListener('click', event => {
     if (!event.isTrusted) return;

@@ -26,3 +26,7 @@ export function permissionPattern(url) {
   if (!originOf(url)) throw new Error("HTTP/HTTPS 사이트가 필요합니다.");
   return u.protocol + "//" + u.hostname + "/*";
 }
+
+export function pickAction(actions, request) {
+  return [...actions].filter(a => a.time <= request.timeStamp + 5 && actionContext(a, request)).sort((a, b) => b.time - a.time)[0] || null;
+}

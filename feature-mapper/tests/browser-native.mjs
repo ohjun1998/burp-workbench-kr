@@ -36,7 +36,7 @@ try {
   await lab.locator('#profile').click();await lab.waitForFunction(()=>document.querySelector('#done').textContent==='수정 완료');
   await new Promise(resolve=>setTimeout(resolve,700));
   const state=await worker.evaluate(()=>chrome.storage.session.get(null));
-  check(!state.lastError,'browser request metadata reaches the bridge without errors');
+  check(!state.lastError && state.deliveryCount >= 4,'browser request metadata reaches the bridge without errors');
   check(Object.values(state).some(x=>x&&x.label==='내 정보 수정'),'second screen action has its own function label');
   await lab.bringToFront();await popup.locator('#disable').click();await popup.waitForFunction(()=>document.querySelector('#status').textContent.includes('해제 완료'));
   const configured=await worker.evaluate(()=>chrome.storage.local.get('origins'));

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import {originOf, pageOf, actionContext, validateConnection, permissionPattern} from '../browser-helper/mapping.js';
+import {originOf, pageOf, actionContext, validateConnection, permissionPattern, pickAction} from '../browser-helper/mapping.js';
 const token = 'a'.repeat(64);
 test('loopback pairing excludes remote endpoints and credentials', () => {
   assert.equal(validateConnection('http://127.0.0.1:1234', token), 'http://127.0.0.1:1234');
@@ -28,7 +28,7 @@ test('content observer sends labels and never reads input values', () => {
   assert.equal(messages.length, 1); assert.equal(messages[0].label, '게시글 등록');
   handlers.click({isTrusted: false, target: {closest: () => element}});
   assert.equal(messages.length, 1);
-  assert.deepEqual(Object.keys(messages[0]).sort(), ['kind', 'label', 'page', 'title', 'type']);
+  assert.deepEqual(Object.keys(messages[0]).sort(), ['kind', 'label', 'page', 'time', 'title', 'type']);
 });
 test('helper is an observer without request-blocking or credential permissions', () => {
   const manifest = JSON.parse(fs.readFileSync(new URL('../browser-helper/manifest.json', import.meta.url)));
@@ -41,4 +41,12 @@ test('helper is an observer without request-blocking or credential permissions',
 test("site permission patterns omit ports while origins retain them", () => {
   assert.equal(permissionPattern("http://127.0.0.1:18888"), "http://127.0.0.1/*");
   assert.equal(originOf("http://127.0.0.1:18888"), "http://127.0.0.1:18888");
+});
+
+test('a delayed network callback selects its original action, not a newer click', () => {
+  const original = {tab: 1, frame: 0, time: 1000, page: 'https://test/write', label: '등록'};
+  const newer = {...original, time: 1100, label: '수정'};
+  const request = {tabId: 1, frameId: 0, timeStamp: 1020, url: 'https://test/api/posts', type: 'xmlhttprequest'};
+  assert.equal(pickAction([original, newer], request), original);
+  assert.equal(pickAction([original, newer], {...request, timeStamp: 1110}), newer);
 });

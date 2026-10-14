@@ -31,9 +31,9 @@ public final class BrowserFixture {
                 Thread.sleep(300);
                 List<Mapper.Packet> ps=mapper.packetList(null);
                 var patch=ps.stream().filter(p->p.method.equals("PATCH")).findFirst().orElseThrow();
-                if(!mapper.features.get(patch.primary).name.startsWith("내 정보 수정"))throw new AssertionError("PATCH button label was not mapped");checks.add("PASS actual browser PATCH is mapped to its visible button label");
+                if(!mapper.features.get(patch.primary).name.startsWith("내 정보 수정"))throw new AssertionError("PATCH button label was not mapped: "+JsonWrite.text(mapper.metadata()));checks.add("PASS actual browser PATCH is mapped to its visible button label");
                 var post=ps.stream().filter(p->p.method.equals("POST")&&p.url.endsWith("/api/posts")).findFirst().orElseThrow();
-                if(!mapper.features.get(post.primary).name.startsWith("게시글 등록"))throw new AssertionError("post button label was not mapped");checks.add("PASS actual browser post is mapped to the registration function");
+                if(!mapper.features.get(post.primary).name.startsWith("게시글 등록"))throw new AssertionError("post button label was not mapped: "+JsonWrite.text(mapper.metadata()));checks.add("PASS actual browser post is mapped to the registration function");
                 if(post.parents.size()!=1)throw new AssertionError("missing upload data dependency");checks.add("PASS browser-generated file ID joins upload and post save");
                 if(mapper.packetList(post.primary).size()<3)throw new AssertionError("incomplete registration workflow");checks.add("PASS one automatic function includes upload, save and follow-up read");
                 if(patch.run.equals(post.run))throw new AssertionError("two clicks merged");checks.add("PASS separate browser actions produce separate execution cases");

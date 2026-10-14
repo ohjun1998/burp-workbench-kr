@@ -1,0 +1,18 @@
+{
+  "edition": "0.25.0-easy-ko",
+  "extension_version": "0.25.0",
+  "pdf": "downloads/guides/0.25.0-easy-ko/Burp_Workbench_KR_0.25.0_easy_guide.pdf",
+  "bytes": 554377,
+  "sha256": "126d65a9a420ebb8d13a87a6d2ae2f6015c6f9c34e7d27622c4f77eb9b29d687",
+  "pages": 24,
+  "bookmarks": 24,
+  "figures": 17,
+  "screenshots": 15,
+  "use_case_diagrams": 2,
+  "render_dpi": 110,
+  "visually_reviewed_pages": 24,
+  "production_changed": false,
+  "existing_pdf_preserved": true,
+  "package_verification": "passed",
+  "native_burp_run": false
+}

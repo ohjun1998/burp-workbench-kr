@@ -1,0 +1,14 @@
+{
+  "extensionVersion": "0.23.0",
+  "labVersion": "3.5.0",
+  "jarSha256": "d27eb813b82b79218246011ff5d4370ca90e1986fd5d93b53028f9c3b89039dd",
+  "sourceFiles": 130,
+  "sourceFingerprint": "864290ce3b427105363fb837688578820824d58c2923f2f9083235be8a638e3a",
+  "productionFilesUnchanged": true,
+  "serverPortClosed": true,
+  "nativeBurp": false,
+  "browserDOM": false,
+  "docker": false,
+  "database": "isolated H2 Oracle mode",
+  "currentLabSourceCompiled": true
+}

@@ -29,6 +29,27 @@ import java.io.File;
 public class WorkbenchTest {
     interface Call {Object run(Object proxy,Method method,Object[] args) throws Throwable;}
     static int checks;
+    private static final Map<String,HttpRequest> packetRequests=new java.util.concurrent.ConcurrentHashMap<>();
+    private static final Map<String,HttpResponse> packetResponses=new java.util.concurrent.ConcurrentHashMap<>();
+    private static MontoyaObjectFactory trafficFactory;
+    /** Restore exact registered test packets when production reads its temporary disk store. */
+    static synchronized void installTrafficPacketFactory(){
+        if(ObjectFactoryLocator.FACTORY==trafficFactory&&trafficFactory!=null)return;
+        MontoyaObjectFactory previous=ObjectFactoryLocator.FACTORY;
+        trafficFactory=proxy(MontoyaObjectFactory.class,(p,m,a)->{
+            if(m.getName().equals("byteArray")&&a.length==1&&a[0] instanceof byte[] raw)return bytes(raw);
+            if(m.getName().equals("httpRequest")&&a.length==2&&a[1] instanceof ByteArray raw){HttpRequest q=packetRequests.get(Base64.getEncoder().encodeToString(raw.getBytes()));if(q!=null){Object suppliedService=a[0];if(suppliedService==q.httpService())return q;return proxy(HttpRequest.class,(rp,rm,ra)->rm.getName().equals("httpService")?suppliedService:rm.invoke(q,ra));}}
+            if(m.getName().equals("httpResponse")&&a.length==1&&a[0] instanceof ByteArray raw){HttpResponse r=packetResponses.get(Base64.getEncoder().encodeToString(raw.getBytes()));if(r!=null)return r;}
+            if(m.getName().equals("httpRequestResponse")&&a.length>=2)return proxy(HttpRequestResponse.class,(pp,mm,aa)->switch(mm.getName()){case "request"->a[0];case "response"->a[1];default->def(mm);});
+            return previous==null?def(m):m.invoke(previous,a);
+        });
+        ObjectFactoryLocator.FACTORY=trafficFactory;
+    }
+    static void registerTrafficPacket(HttpRequest request,HttpResponse response){
+        if(request!=null)packetRequests.put(Base64.getEncoder().encodeToString(request.toByteArray().getBytes()),request);
+        if(response!=null)packetResponses.put(Base64.getEncoder().encodeToString(response.toByteArray().getBytes()),response);
+        installTrafficPacketFactory();
+    }
     @SuppressWarnings("unchecked") static <T>T proxy(Class<T> type,Call c){return (T)Proxy.newProxyInstance(type.getClassLoader(),new Class[]{type},(p,m,a)->{
         if(m.getName().equals("equals"))return p==a[0];if(m.getName().equals("hashCode"))return System.identityHashCode(p);
         return c.run(p,m,a==null?new Object[0]:a);
@@ -40,22 +61,24 @@ public class WorkbenchTest {
     static HttpHeader header(String n,String v){return proxy(HttpHeader.class,(p,m,a)->switch(m.getName()){case "name"->n;case "value"->v;case "toString"->n+": "+v;default->def(m);});}
     static HttpRequest request(String url,String method,boolean scope,List<HttpHeader> h){
         java.net.URI u=java.net.URI.create(url);HttpService s=proxy(HttpService.class,(p,m,a)->switch(m.getName()){case "host"->u.getHost();case "port"->u.getPort()<0?443:u.getPort();case "secure"->u.getScheme().equals("https");default->def(m);});
-        return proxy(HttpRequest.class,(p,m,a)->{
+        HttpRequest created=proxy(HttpRequest.class,(p,m,a)->{
             return switch(m.getName()){
                 case "body"->bytes(new byte[0]);case "bodyToString"->"";case "url"->url;case "method"->method;case "isInScope"->scope;case "httpService"->s;case "headers"->h;case "parameters"->List.of();
                 case "toString"->method+" "+u.getRawPath()+" HTTP/1.1\r\n"+h.stream().map(HttpHeader::toString).reduce("",(x,y)->x+y+"\r\n")+"\r\n";
-                case "toByteArray"->bytes((method+url+h.toString()).getBytes(StandardCharsets.UTF_8));
+                case "toByteArray"->bytes((method+" "+u.getRawPath()+(u.getRawQuery()==null?"":"?"+u.getRawQuery())+" HTTP/1.1\r\nHost: "+u.getRawAuthority()+"\r\n"+h.stream().map(HttpHeader::toString).reduce("",(x,y)->x+y+"\r\n")+"\r\n").getBytes(StandardCharsets.UTF_8));
                 case "withRemovedHeader"->{List<HttpHeader> n=new ArrayList<>(h);if(a[0] instanceof HttpHeader)n.remove(a[0]);else n.removeIf(x->x.name().equalsIgnoreCase((String)a[0]));yield request(url,method,scope,n);}
                 case "withHeader"->{List<HttpHeader> n=new ArrayList<>(h);n.removeIf(x->x.name().equalsIgnoreCase((String)a[0]));n.add(header((String)a[0],(String)a[1]));yield request(url,method,scope,n);}
                 default->def(m);
             };
         });
+        packetRequests.put(Base64.getEncoder().encodeToString(created.toByteArray().getBytes()),created);return created;
     }
-    static HttpResponse response(int code,String body){return proxy(HttpResponse.class,(p,m,a)->switch(m.getName()){case "statusCode"->(short)code;case "body"->bytes(body.getBytes(StandardCharsets.UTF_8));case "bodyToString"->body;case "toByteArray"->bytes(body.getBytes(StandardCharsets.UTF_8));case "toString"->"HTTP/1.1 "+code+"\r\n\r\n"+body;default->def(m);});}
+    static HttpResponse response(int code,String body){HttpResponse created=proxy(HttpResponse.class,(p,m,a)->switch(m.getName()){case "statusCode"->(short)code;case "body"->bytes(body.getBytes(StandardCharsets.UTF_8));case "bodyToString"->body;case "toByteArray"->bytes(("HTTP/1.1 "+code+"\r\n\r\n"+body).getBytes(StandardCharsets.UTF_8));case "toString"->"HTTP/1.1 "+code+"\r\n\r\n"+body;default->def(m);});packetResponses.put(Base64.getEncoder().encodeToString(created.toByteArray().getBytes()),created);return created;}
     static Object get(Object o,String name)throws Exception{Field f=o.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(o);}
     static Object call(Object o,String name,Class<?> type,Object arg)throws Exception{Method m=o.getClass().getDeclaredMethod(name,type);m.setAccessible(true);try{return m.invoke(o,arg);}catch(InvocationTargetException e){if(e.getCause() instanceof Exception x)throw x;throw e;}}
     static void edt(Runnable r)throws Exception{SwingUtilities.invokeAndWait(r);}
     static void importTraffic(WorkbenchExtension ext,HttpRequest q,HttpResponse s)throws Exception{
+        registerTrafficPacket(q,s);
         HttpRequestResponse rr=proxy(HttpRequestResponse.class,(p,m,a)->switch(m.getName()){case "request"->q;case "response"->s;default->def(m);});
         ContextMenuEvent event=proxy(ContextMenuEvent.class,(p,m,a)->switch(m.getName()){case "selectedRequestResponses"->List.of(rr);case "messageEditorRequestResponse"->Optional.empty();default->def(m);});
         edt(()->((JMenuItem)((JMenu)ext.provideMenuItems(event).get(0)).getMenuComponent(0)).doClick());edt(()->{});
@@ -97,7 +120,7 @@ public class WorkbenchTest {
         check(java.util.stream.IntStream.range(0,tabs.getTabCount()).noneMatch(i->tabs.getTitleAt(i).equals("공통 세션")),"common session tab removed");
         HttpRequest q=request("https://example.test/api","GET",true,List.of(header("Cookie","admin")));HttpResponse reply=response(200,"body");
         importTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==1,"imported request collected");
-        for(int i=0;i<260;i++)importTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==250,"traffic retains bounded 250-row window");
+        for(int i=0;i<260;i++)importTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==261,"all imported rows survive beyond the old 250-row window");
         for(var h:PayloadIntegrationTest.modernUnloads)h.extensionUnloaded();edt(()->{});
         check(((List<?>)get(ext,"traffic")).isEmpty(),"unload clears traffic");check(((AtomicBoolean)get(ext,"unloaded")).get(),"unload closes extension");
         System.out.println("WorkbenchTest: "+checks+" checks passed");

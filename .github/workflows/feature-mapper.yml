@@ -36,7 +36,7 @@ jobs:
           from pathlib import Path
           expected=json.loads((Path(os.environ['RUNNER_TEMP'])/'expected-mapper-manifest.json').read_text())
           actual=json.loads(Path('feature-mapper/dist/manifest.json').read_text())
-          assert expected == actual, 'Release bytes differ from committed source build'
+          assert expected == actual, {'expected':expected,'actual':actual}
           PY
       - name: Install isolated browser test tools
         run: |

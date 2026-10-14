@@ -1,0 +1,14 @@
+BURP Burp Suite Community Edition 2026.3.3-47134
+PASS isolated Burp proxy starts
+PASS real Burp callbacks retain upload, create and follow-up packets
+PASS native response IDs form a complete functional data chain
+PASS native post-creation feature includes all three steps
+PASS native GraphQL operations map to separate features
+PASS native session B does not inherit session A's data chain
+PASS native 2 MiB request and response retain exact bytes
+PASS native bridge enriches an already captured request with its function label
+PASS native captured project reopens with full original bytes
+PASS native mapping retains more than 250 rows
+PASS native unload deletes the temporary packet store
+PASS native unload closes the browser bridge
+NATIVE_MAPPER_SUCCESS

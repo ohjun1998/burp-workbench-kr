@@ -43,3 +43,9 @@ python dev.py check
 GitHub Actions는 push 및 PR에서 `python dev.py check`를 실행하고 검증된 JAR와 로그를 아티팩트로 제공합니다. `ubuntu-24.04`에서 JDK 17 / Python 3.12를 사용합니다. 실제 Burp GUI, Docker, Oracle, Pro Collaborator 검증은 이 CI 범위에 포함되지 않습니다. 과거 검증 기록과 현재 CI 결과를 구분합니다.
 
 실습용 가짜 토큰/계정이 소스에 포함되어 있습니다. 프로토콜 실행 과정에서 생성하는 개인키와 인증서는 Git 추적에서 제외합니다. 실습 사이트는 로컬 격리 환경에서 사용합니다. 기존 GPL 라이선스와 제3자 고지는 확장 소스 폴더에 유지합니다.
+
+## 기능별 패킷 자동 매핑 확장
+
+새 독립 확장 **Feature Mapper KR 0.1.0**은 패킷 구조·응답 ID 연결·브라우저 화면 동작으로 기능별 요청 묶음을 자동 생성합니다. 세션과 실행 사례를 나누고 원본과 점검 메모를 프로젝트로 저장합니다.
+
+[설치와 사용법](feature-mapper/README_KR.md) · [JAR·브라우저 보조 확장·소스 ZIP](feature-mapper/dist) · [구현과 검증 기록](docs/FEATURE_MAPPER_0.1.0_KR.md)

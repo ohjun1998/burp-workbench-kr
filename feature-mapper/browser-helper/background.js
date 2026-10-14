@@ -1,0 +1,54 @@
+import {originOf, pageOf, actionContext, validateConnection} from './mapping.js';
+const active = new Map();
+const ready = chrome.storage.local.get({base: '', token: '', origins: []});
+let settings = {base: '', token: '', origins: []};
+ready.then(x => { settings = x; });
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'local') return;
+  for (const key of ['base', 'token', 'origins']) if (changes[key]) settings[key] = changes[key].newValue;
+});
+async function deliver(event) {
+  await ready;
+  if (!settings.base || !settings.token || !settings.origins.includes(originOf(event.url))) return;
+  const base = validateConnection(settings.base, settings.token);
+  const response = await fetch(base + '/event', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-Feature-Mapper-Token': settings.token}, body: JSON.stringify(event), signal: AbortSignal.timeout(2500)});
+  if (!response.ok) throw new Error('Burp 연결 실패: ' + response.status);
+}
+chrome.runtime.onMessage.addListener((message, sender, respond) => {
+  if (message?.type !== 'action' || !sender.tab || sender.id !== chrome.runtime.id) return;
+  const page = pageOf(sender.url || message.page);
+  if (!settings.origins.includes(originOf(page))) return;
+  const label = String(message.label || '').replace(/[\r\n\t]/g, ' ').trim().slice(0, 80);
+  if (!label) return;
+  const value = {id: crypto.randomUUID(), tab: sender.tab.id, frame: sender.frameId || 0, time: Date.now(), page, label, title: String(message.title || '').slice(0, 120)};
+  const key = value.tab + ':' + value.frame;
+  const previous = active.get(key);
+  // A submit event immediately after the same click is one browser action.
+  if (message.kind === 'submit' && previous && value.time - previous.time < 500) value.id = previous.id;
+  active.set(key, value);
+  chrome.storage.session.set({['action:' + key]: value}).catch(() => {});
+  respond({ok: true});
+});
+chrome.tabs.onRemoved.addListener(tab => { for (const key of active.keys()) if (key.startsWith(tab + ':')) active.delete(key); });
+async function requestEvent(details) {
+  await ready;
+  if (details.tabId < 0 || !settings.origins.includes(originOf(details.url))) return;
+  const key = details.tabId + ':' + details.frameId;
+  let action = active.get(key);
+  if (!action) { await new Promise(resolve => setTimeout(resolve, 35)); action = active.get(key) || (await chrome.storage.session.get('action:' + key))['action:' + key]; }
+  action = actionContext(action, details);
+  if (!action) return;
+  let bodyHash = '';
+  const raw = details.requestBody?.raw;
+  if (raw?.length && raw.every(x => x.bytes) && raw.reduce((n, x) => n + x.bytes.byteLength, 0) <= 512 * 1024) {
+    const bytes = new Uint8Array(raw.reduce((n, x) => n + x.bytes.byteLength, 0)); let offset = 0;
+    for (const item of raw) { bytes.set(new Uint8Array(item.bytes), offset); offset += item.bytes.byteLength; }
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    bodyHash = Array.from(new Uint8Array(digest), x => x.toString(16).padStart(2, '0')).join('');
+  }
+  await deliver({type: 'network', time: details.timeStamp, method: details.method, url: details.url, bodyHash, actionId: action.id, label: action.label, title: action.title, page: action.page, tab: String(details.tabId), frame: String(details.frameId)});
+}
+// Observe only. This listener does not block, replay, or modify any target request.
+chrome.webRequest.onBeforeRequest.addListener(details => {
+  requestEvent(details).catch(error => chrome.storage.session.set({lastError: error.message}));
+}, {urls: ['http://*/*', 'https://*/*']}, ['requestBody']);

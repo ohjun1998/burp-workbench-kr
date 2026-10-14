@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Feature Mapper KR 브라우저 연결",
+  "version": "0.1.0",
+  "description": "선택한 사이트의 화면 동작과 요청 메타데이터를 로컬 Burp 기능 매핑 확장에 연결합니다.",
+  "permissions": ["storage", "activeTab", "scripting", "webRequest"],
+  "host_permissions": ["http://127.0.0.1/*"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "background": {"service_worker": "background.js", "type": "module"},
+  "action": {"default_popup": "popup.html", "default_title": "Feature Mapper 연결"}
+}

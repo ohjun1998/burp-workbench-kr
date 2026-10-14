@@ -1,0 +1,145 @@
+theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled
+light,760,480,guide-start.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-start.png,이 기능 열기,259,19,101,34,true,true,false
+light,760,480,guide-start.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-traffic.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-traffic.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-traffic.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-auth.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-auth.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-auth.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-data.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-data.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-data.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-js.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-js.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-js.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-environment.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-environment.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-environment.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-passive.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-passive.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-passive.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-activity.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-activity.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-activity.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-response.recon.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-response.recon.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-response.recon.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-payload.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-payload.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-payload.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-bounty.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-bounty.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-bounty.png,닫기,20,429,54,34,true,false,true
+light,760,480,guide-settings.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,760,480,guide-settings.png,이 기능 열기,259,19,101,34,true,true,true
+light,760,480,guide-settings.png,닫기,20,429,54,34,true,false,true
+light,560,300,guide-start.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-start.png,이 기능 열기,259,19,101,34,true,true,false
+light,560,300,guide-start.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-traffic.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-traffic.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-traffic.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-auth.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-auth.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-auth.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-data.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-data.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-data.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-js.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-js.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-js.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-environment.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-environment.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-environment.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-passive.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-passive.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-passive.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-activity.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-activity.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-activity.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-response.recon.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-response.recon.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-response.recon.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-payload.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-payload.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-payload.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-bounty.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-bounty.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-bounty.png,닫기,20,249,54,34,true,false,true
+light,560,300,guide-settings.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+light,560,300,guide-settings.png,이 기능 열기,259,19,101,34,true,true,true
+light,560,300,guide-settings.png,닫기,20,249,54,34,true,false,true
+dark,760,480,guide-start.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-start.png,이 기능 열기,259,19,101,34,true,true,false
+dark,760,480,guide-start.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-traffic.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-traffic.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-traffic.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-auth.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-auth.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-auth.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-data.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-data.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-data.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-js.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-js.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-js.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-environment.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-environment.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-environment.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-passive.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-passive.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-passive.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-activity.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-activity.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-activity.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-response.recon.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-response.recon.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-response.recon.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-payload.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-payload.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-payload.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-bounty.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-bounty.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-bounty.png,닫기,20,429,54,34,true,false,true
+dark,760,480,guide-settings.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,760,480,guide-settings.png,이 기능 열기,259,19,101,34,true,true,true
+dark,760,480,guide-settings.png,닫기,20,429,54,34,true,false,true
+dark,560,300,guide-start.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-start.png,이 기능 열기,259,19,101,34,true,true,false
+dark,560,300,guide-start.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-traffic.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-traffic.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-traffic.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-auth.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-auth.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-auth.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-data.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-data.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-data.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-js.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-js.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-js.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-environment.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-environment.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-environment.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-passive.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-passive.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-passive.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-activity.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-activity.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-activity.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-response.recon.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-response.recon.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-response.recon.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-payload.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-payload.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-payload.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-bounty.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-bounty.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-bounty.png,닫기,20,249,54,34,true,false,true
+dark,560,300,guide-settings.png,wb.feature.guide.choice,98,18,153,36,true,true,true
+dark,560,300,guide-settings.png,이 기능 열기,259,19,101,34,true,true,true
+dark,560,300,guide-settings.png,닫기,20,249,54,34,true,false,true

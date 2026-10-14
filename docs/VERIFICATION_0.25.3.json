@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-14",
+  "version": "0.25.3",
+  "baseCommit": "97da5217243eb88f2b3357c090352c8bee105dda",
+  "commands": [
+    {
+      "command": "python dev.py release",
+      "exit": 0
+    },
+    {
+      "command": "python tools/render_ui_layout.py --check --out tmp/ui-layout-resumed",
+      "exit": 0
+    },
+    {
+      "command": "python tools/render_ui_layout.py --guide-only --check --out tmp/ui-guide-resumed",
+      "exit": 0
+    },
+    {
+      "command": "python -m unittest discover -s tools -p 'test_*.py' -v",
+      "passed": 4
+    },
+    {
+      "command": "python tools/package_downloads.py --verify",
+      "exit": 0
+    }
+  ],
+  "regression": {
+    "groups": 41,
+    "checks": 1290,
+    "scopeModeChecks": 20,
+    "captureRecoveryChecks": 41
+  },
+  "payloadHttpChecks": 127,
+  "allFeaturesHttpChecks": 100,
+  "bountyWorkflowChecks": 266,
+  "scopeUi": {
+    "renderedViews": 4,
+    "controlsMeasured": 20,
+    "clipped": 0,
+    "sizes": [
+      "760x480",
+      "560x300"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "downloads": {
+    "burp-workbench-kr-0.25.3.jar": "7a962d4ae3f6da993c481a7965883f1efcb9517a24af84bbeea2a7445b62b914",
+    "burp-workbench-kr-0.25.3-source.zip": "53759140ee224a6125dd0b2313e328f48b21b9d38e11eb6e200aa44aae8e8c03"
+  },
+  "evidence": [
+    "audit/0.25.3/release-check.txt",
+    "audit/0.25.3/ui-layout.json",
+    "audit/0.25.3/ui-guide.json",
+    "audit/0.25.3/scope-ui/controls.csv"
+  ],
+  "notExecuted": [
+    "actual Burp GUI Add to scope",
+    "Docker/Oracle/Nginx full stack",
+    "long-duration disk exhaustion"
+  ]
+}

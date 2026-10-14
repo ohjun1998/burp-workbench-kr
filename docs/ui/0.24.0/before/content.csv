@@ -1,0 +1,277 @@
+theme,width,height,view,kind,name,x,y,visibleWidth,visibleHeight
+light,1024,720,tool-00.png,,wb.traffic.history,11,143,346,523
+light,1024,720,tool-00.png,JTextArea,wb.packet.preview,367,222,644,179
+light,1024,720,tool-00.png,JTextArea,wb.packet.preview,367,486,644,179
+light,1024,720,tool-01.png,JTable,wb.auth.credentials,12,235,444,110
+light,1024,720,tool-01.png,,wb.auth.history,12,439,444,209
+light,1024,720,tool-01.png,JTextArea,wb.card.요청 REQUEST,469,319,539,69
+light,1024,720,tool-01.png,JTextArea,wb.card.응답 RESPONSE,469,433,539,69
+light,1024,720,tool-01.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,467,547,544,118
+light,1024,720,tool-02.png,JTextArea,wb.card.입력 (UTF-8 텍스트),22,212,978,198
+light,1024,720,tool-02.png,JTextArea,wb.card.출력,22,455,978,199
+light,1024,720,tool-03.png,JTextArea,preview.js.source,14,413,425,0
+light,1024,720,tool-03.png,JTable,wb.js.lists,15,449,439,147
+light,1024,720,tool-03.png,JTextArea,wb.packet.preview,467,287,542,121
+light,1024,720,tool-03.png,JTextArea,wb.packet.preview,467,493,542,122
+light,1024,720,tool-04.png,JTable,wb.environment.technologies,16,253,440,103
+light,1024,720,tool-04.png,,wb.environment.paths,16,455,423,168
+light,1024,720,tool-04.png,JTextArea,wb.card.요청 REQUEST,467,221,540,178
+light,1024,720,tool-04.png,JTextArea,wb.card.응답 RESPONSE,467,484,540,139
+light,1024,720,tool-05.png,JTable,wb.passive.urls,22,400,434,199
+light,1024,720,tool-05.png,JTextArea,wb.packet.preview,467,408,533,61
+light,1024,720,tool-05.png,JTextArea,wb.packet.preview,467,554,533,62
+light,1024,720,tool-06.png,JTable,wb.activity.endpoints,16,280,736,337
+light,1024,720,tool-06.png,JTable,wb.activity.parameters,763,280,243,354
+light,1024,720,tool-07.png,JTable,wb.response.recon,13,245,996,242
+light,1024,720,tool-07.png,JTextArea,wb.response.recon,13,513,979,124
+light,1024,720,tool-08.png,JTextArea,wb.bounty.support,13,167,996,106
+light,1024,720,tool-08.png,JTextArea,wb.card.외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,14,318,994,254
+light,1024,720,data-compare.png,JTextArea,wb.card.왼쪽 데이터,14,262,491,374
+light,1024,720,data-compare.png,JTextArea,wb.card.오른쪽 데이터,516,262,492,374
+light,1024,720,stored-flow.png,JTable,wb.response.recon,13,245,996,187
+light,1024,720,stored-flow.png,JTextArea,wb.response.recon,13,458,979,157
+light,1024,720,accounts.png,JTable,wb.activity,15,341,787,253
+light,1024,720,accounts.png,JTable,wb.card.선택 계정의 입력 상태,812,376,194,217
+light,1024,720,tasks.png,JTable,wb.activity,15,334,992,85
+light,1024,720,tasks.png,JTable,wb.card.요구 계정 × API · 서로 다른 Origin은 조합에서 제외,16,512,973,81
+light,1024,720,bounty-1.png,JTextArea,preview.workflow.input,14,208,977,98
+light,1024,720,bounty-1.png,JTextArea,wb.card.응답 JSON 추출 · 예: 1.id=$.id / 다음 요청: {{id|URL}},14,348,994,67
+light,1024,720,bounty-1.png,JTable,wb.bounty.support,13,457,996,169
+light,1024,720,bounty-1.png,JTextArea,preview.workflow.detail,13,863,979,0
+light,1024,720,bounty-3.png,JTable,wb.bounty.support,13,247,996,128
+light,1024,720,bounty-3.png,JTextArea,preview.evidence.impact,14,419,491,188
+light,1024,720,bounty-3.png,JTextArea,preview.evidence.repro,517,419,491,188
+light,1024,720,js-horizontal.png,JTextArea,preview.js.source,14,413,405,0
+light,1024,720,js-horizontal.png,JTable,wb.js.lists,448,271,559,78
+light,1024,720,js-horizontal.png,JTextArea,wb.packet.preview,14,453,492,162
+light,1024,720,js-horizontal.png,JTextArea,wb.packet.preview,517,453,492,162
+light,1280,800,tool-00.png,,wb.traffic.history,11,120,436,626
+light,1280,800,tool-00.png,JTextArea,wb.packet.preview,457,199,810,230
+light,1280,800,tool-00.png,JTextArea,wb.packet.preview,457,514,810,231
+light,1280,800,tool-01.png,JTable,wb.auth.credentials,12,235,559,142
+light,1280,800,tool-01.png,,wb.auth.history,12,471,559,257
+light,1280,800,tool-01.png,JTextArea,wb.card.요청 REQUEST,584,280,680,128
+light,1280,800,tool-01.png,JTextArea,wb.card.응답 RESPONSE,584,453,680,129
+light,1280,800,tool-01.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,582,627,685,118
+light,1280,800,tool-02.png,JTextArea,wb.card.입력 (UTF-8 텍스트),22,212,1234,238
+light,1280,800,tool-02.png,JTextArea,wb.card.출력,22,495,1234,239
+light,1280,800,tool-03.png,JTextArea,preview.js.source,14,413,540,1
+light,1280,800,tool-03.png,JTable,wb.js.lists,15,483,554,193
+light,1280,800,tool-03.png,JTextArea,wb.packet.preview,582,287,683,161
+light,1280,800,tool-03.png,JTextArea,wb.packet.preview,582,533,683,162
+light,1280,800,tool-04.png,JTable,wb.environment.technologies,16,253,555,135
+light,1280,800,tool-04.png,,wb.environment.paths,16,487,538,216
+light,1280,800,tool-04.png,JTextArea,wb.card.요청 REQUEST,582,221,681,218
+light,1280,800,tool-04.png,JTextArea,wb.card.응답 RESPONSE,582,524,681,179
+light,1280,800,tool-05.png,JTable,wb.passive.urls,22,400,549,279
+light,1280,800,tool-05.png,JTextArea,wb.packet.preview,582,408,674,101
+light,1280,800,tool-05.png,JTextArea,wb.packet.preview,582,594,674,102
+light,1280,800,tool-06.png,JTable,wb.activity.endpoints,16,280,928,417
+light,1280,800,tool-06.png,JTable,wb.activity.parameters,955,280,307,434
+light,1280,800,tool-07.png,JTable,wb.response.recon,13,245,1252,298
+light,1280,800,tool-07.png,JTextArea,wb.response.recon,13,569,1252,148
+light,1280,800,tool-08.png,JTextArea,wb.bounty.support,13,167,1252,106
+light,1280,800,tool-08.png,JTextArea,wb.card.외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,14,318,1250,334
+light,1280,800,data-compare.png,JTextArea,wb.card.왼쪽 데이터,14,262,619,454
+light,1280,800,data-compare.png,JTextArea,wb.card.오른쪽 데이터,644,262,620,454
+light,1280,800,stored-flow.png,JTable,wb.response.recon,13,245,1252,235
+light,1280,800,stored-flow.png,JTextArea,wb.response.recon,13,506,1252,189
+light,1280,800,accounts.png,JTable,wb.activity,15,341,992,333
+light,1280,800,accounts.png,JTable,wb.card.선택 계정의 입력 상태,1017,376,245,297
+light,1280,800,tasks.png,JTable,wb.activity,15,295,1248,139
+light,1280,800,tasks.png,JTable,wb.card.요구 계정 × API · 서로 다른 Origin은 조합에서 제외,16,527,1200,163
+light,1280,800,bounty-1.png,JTextArea,preview.workflow.input,14,208,1233,142
+light,1280,800,bounty-1.png,JTextArea,wb.card.응답 JSON 추출 · 예: 1.id=$.id / 다음 요청: {{id|URL}},14,392,1250,67
+light,1280,800,bounty-1.png,JTable,wb.bounty.support,13,501,1252,205
+light,1280,800,bounty-1.png,JTextArea,preview.workflow.detail,13,907,1235,0
+light,1280,800,bounty-3.png,JTable,wb.bounty.support,13,247,1252,160
+light,1280,800,bounty-3.png,JTextArea,preview.evidence.impact,14,451,619,253
+light,1280,800,bounty-3.png,JTextArea,preview.evidence.repro,645,451,619,253
+light,1280,800,js-horizontal.png,JTextArea,preview.js.source,14,413,515,0
+light,1280,800,js-horizontal.png,JTable,wb.js.lists,558,271,705,110
+light,1280,800,js-horizontal.png,JTextArea,wb.packet.preview,14,485,620,210
+light,1280,800,js-horizontal.png,JTextArea,wb.packet.preview,645,485,620,210
+light,1440,920,tool-00.png,,wb.traffic.history,11,120,492,746
+light,1440,920,tool-00.png,JTextArea,wb.packet.preview,513,199,914,290
+light,1440,920,tool-00.png,JTextArea,wb.packet.preview,513,574,914,291
+light,1440,920,tool-01.png,JTable,wb.auth.credentials,12,235,631,190
+light,1440,920,tool-01.png,,wb.auth.history,12,519,631,329
+light,1440,920,tool-01.png,JTextArea,wb.card.요청 REQUEST,656,280,768,188
+light,1440,920,tool-01.png,JTextArea,wb.card.응답 RESPONSE,656,513,768,189
+light,1440,920,tool-01.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,654,747,773,118
+light,1440,920,tool-02.png,JTextArea,wb.card.입력 (UTF-8 텍스트),22,212,1394,298
+light,1440,920,tool-02.png,JTextArea,wb.card.출력,22,555,1394,299
+light,1440,920,tool-03.png,JTextArea,preview.js.source,14,413,629,53
+light,1440,920,tool-03.png,JTable,wb.js.lists,15,535,626,261
+light,1440,920,tool-03.png,JTextArea,wb.packet.preview,654,287,771,221
+light,1440,920,tool-03.png,JTextArea,wb.packet.preview,654,593,771,222
+light,1440,920,tool-04.png,JTable,wb.environment.technologies,16,253,627,183
+light,1440,920,tool-04.png,,wb.environment.paths,16,535,610,288
+light,1440,920,tool-04.png,JTextArea,wb.card.요청 REQUEST,654,221,769,278
+light,1440,920,tool-04.png,JTextArea,wb.card.응답 RESPONSE,654,584,769,239
+light,1440,920,tool-05.png,JTable,wb.passive.urls,22,400,621,399
+light,1440,920,tool-05.png,JTextArea,wb.packet.preview,654,408,762,161
+light,1440,920,tool-05.png,JTextArea,wb.packet.preview,654,654,762,162
+light,1440,920,tool-06.png,JTable,wb.activity.endpoints,16,280,1048,537
+light,1440,920,tool-06.png,JTable,wb.activity.parameters,1075,280,347,554
+light,1440,920,tool-07.png,JTable,wb.response.recon,13,245,1360,399
+light,1440,920,tool-07.png,JTextArea,wb.response.recon,13,653,1412,184
+light,1440,920,tool-08.png,JTextArea,wb.bounty.support,13,167,1412,106
+light,1440,920,tool-08.png,JTextArea,wb.card.외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,14,318,1410,454
+light,1440,920,data-compare.png,JTextArea,wb.card.왼쪽 데이터,14,262,699,574
+light,1440,920,data-compare.png,JTextArea,wb.card.오른쪽 데이터,724,262,700,574
+light,1440,920,stored-flow.png,JTable,wb.response.recon,13,245,1412,307
+light,1440,920,stored-flow.png,JTextArea,wb.response.recon,13,578,1412,237
+light,1440,920,accounts.png,JTable,wb.activity,15,341,1120,453
+light,1440,920,accounts.png,JTable,wb.card.선택 계정의 입력 상태,1145,376,277,417
+light,1440,920,tasks.png,JTable,wb.activity,15,295,1408,193
+light,1440,920,tasks.png,JTable,wb.card.요구 계정 × API · 서로 다른 Origin은 조합에서 제외,16,581,1200,229
+light,1440,920,bounty-1.png,JTextArea,preview.workflow.input,14,208,1410,208
+light,1440,920,bounty-1.png,JTextArea,wb.card.응답 JSON 추출 · 예: 1.id=$.id / 다음 요청: {{id|URL}},14,458,1410,67
+light,1440,920,bounty-1.png,JTable,wb.bounty.support,13,567,1412,259
+light,1440,920,bounty-1.png,JTextArea,preview.workflow.detail,13,973,1395,0
+light,1440,920,bounty-3.png,JTable,wb.bounty.support,13,247,1412,208
+light,1440,920,bounty-3.png,JTextArea,preview.evidence.impact,14,499,699,325
+light,1440,920,bounty-3.png,JTextArea,preview.evidence.repro,725,499,699,325
+light,1440,920,js-horizontal.png,JTextArea,preview.js.source,14,413,601,35
+light,1440,920,js-horizontal.png,JTable,wb.js.lists,627,271,796,158
+light,1440,920,js-horizontal.png,JTextArea,wb.packet.preview,14,533,700,282
+light,1440,920,js-horizontal.png,JTextArea,wb.packet.preview,725,533,700,282
+dark,1024,720,tool-00.png,,wb.traffic.history,11,143,346,523
+dark,1024,720,tool-00.png,JTextArea,wb.packet.preview,367,222,644,179
+dark,1024,720,tool-00.png,JTextArea,wb.packet.preview,367,486,644,179
+dark,1024,720,tool-01.png,JTable,wb.auth.credentials,12,235,444,110
+dark,1024,720,tool-01.png,,wb.auth.history,12,439,444,209
+dark,1024,720,tool-01.png,JTextArea,wb.card.요청 REQUEST,469,319,539,69
+dark,1024,720,tool-01.png,JTextArea,wb.card.응답 RESPONSE,469,433,539,69
+dark,1024,720,tool-01.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,467,547,544,118
+dark,1024,720,tool-02.png,JTextArea,wb.card.입력 (UTF-8 텍스트),22,212,978,198
+dark,1024,720,tool-02.png,JTextArea,wb.card.출력,22,455,978,199
+dark,1024,720,tool-03.png,JTextArea,preview.js.source,14,413,425,0
+dark,1024,720,tool-03.png,JTable,wb.js.lists,15,449,439,147
+dark,1024,720,tool-03.png,JTextArea,wb.packet.preview,467,287,542,121
+dark,1024,720,tool-03.png,JTextArea,wb.packet.preview,467,493,542,122
+dark,1024,720,tool-04.png,JTable,wb.environment.technologies,16,253,440,103
+dark,1024,720,tool-04.png,,wb.environment.paths,16,455,423,168
+dark,1024,720,tool-04.png,JTextArea,wb.card.요청 REQUEST,467,221,540,178
+dark,1024,720,tool-04.png,JTextArea,wb.card.응답 RESPONSE,467,484,540,139
+dark,1024,720,tool-05.png,JTable,wb.passive.urls,22,400,434,199
+dark,1024,720,tool-05.png,JTextArea,wb.packet.preview,467,408,533,61
+dark,1024,720,tool-05.png,JTextArea,wb.packet.preview,467,554,533,62
+dark,1024,720,tool-06.png,JTable,wb.activity.endpoints,16,280,736,337
+dark,1024,720,tool-06.png,JTable,wb.activity.parameters,763,280,243,354
+dark,1024,720,tool-07.png,JTable,wb.response.recon,13,245,996,242
+dark,1024,720,tool-07.png,JTextArea,wb.response.recon,13,513,979,124
+dark,1024,720,tool-08.png,JTextArea,wb.bounty.support,13,167,996,106
+dark,1024,720,tool-08.png,JTextArea,wb.card.외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,14,318,994,254
+dark,1024,720,data-compare.png,JTextArea,wb.card.왼쪽 데이터,14,262,491,374
+dark,1024,720,data-compare.png,JTextArea,wb.card.오른쪽 데이터,516,262,492,374
+dark,1024,720,stored-flow.png,JTable,wb.response.recon,13,245,996,187
+dark,1024,720,stored-flow.png,JTextArea,wb.response.recon,13,458,979,157
+dark,1024,720,accounts.png,JTable,wb.activity,15,341,787,253
+dark,1024,720,accounts.png,JTable,wb.card.선택 계정의 입력 상태,812,376,194,217
+dark,1024,720,tasks.png,JTable,wb.activity,15,334,992,85
+dark,1024,720,tasks.png,JTable,wb.card.요구 계정 × API · 서로 다른 Origin은 조합에서 제외,16,512,973,81
+dark,1024,720,bounty-1.png,JTextArea,preview.workflow.input,14,208,977,98
+dark,1024,720,bounty-1.png,JTextArea,wb.card.응답 JSON 추출 · 예: 1.id=$.id / 다음 요청: {{id|URL}},14,348,994,67
+dark,1024,720,bounty-1.png,JTable,wb.bounty.support,13,457,996,169
+dark,1024,720,bounty-1.png,JTextArea,preview.workflow.detail,13,863,979,0
+dark,1024,720,bounty-3.png,JTable,wb.bounty.support,13,247,996,128
+dark,1024,720,bounty-3.png,JTextArea,preview.evidence.impact,14,419,491,188
+dark,1024,720,bounty-3.png,JTextArea,preview.evidence.repro,517,419,491,188
+dark,1024,720,js-horizontal.png,JTextArea,preview.js.source,14,413,405,0
+dark,1024,720,js-horizontal.png,JTable,wb.js.lists,448,271,559,78
+dark,1024,720,js-horizontal.png,JTextArea,wb.packet.preview,14,453,492,162
+dark,1024,720,js-horizontal.png,JTextArea,wb.packet.preview,517,453,492,162
+dark,1280,800,tool-00.png,,wb.traffic.history,11,120,436,626
+dark,1280,800,tool-00.png,JTextArea,wb.packet.preview,457,199,810,230
+dark,1280,800,tool-00.png,JTextArea,wb.packet.preview,457,514,810,231
+dark,1280,800,tool-01.png,JTable,wb.auth.credentials,12,235,559,142
+dark,1280,800,tool-01.png,,wb.auth.history,12,471,559,257
+dark,1280,800,tool-01.png,JTextArea,wb.card.요청 REQUEST,584,280,680,128
+dark,1280,800,tool-01.png,JTextArea,wb.card.응답 RESPONSE,584,453,680,129
+dark,1280,800,tool-01.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,582,627,685,118
+dark,1280,800,tool-02.png,JTextArea,wb.card.입력 (UTF-8 텍스트),22,212,1234,238
+dark,1280,800,tool-02.png,JTextArea,wb.card.출력,22,495,1234,239
+dark,1280,800,tool-03.png,JTextArea,preview.js.source,14,413,540,1
+dark,1280,800,tool-03.png,JTable,wb.js.lists,15,483,554,193
+dark,1280,800,tool-03.png,JTextArea,wb.packet.preview,582,287,683,161
+dark,1280,800,tool-03.png,JTextArea,wb.packet.preview,582,533,683,162
+dark,1280,800,tool-04.png,JTable,wb.environment.technologies,16,253,555,135
+dark,1280,800,tool-04.png,,wb.environment.paths,16,487,538,216
+dark,1280,800,tool-04.png,JTextArea,wb.card.요청 REQUEST,582,221,681,218
+dark,1280,800,tool-04.png,JTextArea,wb.card.응답 RESPONSE,582,524,681,179
+dark,1280,800,tool-05.png,JTable,wb.passive.urls,22,400,549,279
+dark,1280,800,tool-05.png,JTextArea,wb.packet.preview,582,408,674,101
+dark,1280,800,tool-05.png,JTextArea,wb.packet.preview,582,594,674,102
+dark,1280,800,tool-06.png,JTable,wb.activity.endpoints,16,280,928,417
+dark,1280,800,tool-06.png,JTable,wb.activity.parameters,955,280,307,434
+dark,1280,800,tool-07.png,JTable,wb.response.recon,13,245,1252,298
+dark,1280,800,tool-07.png,JTextArea,wb.response.recon,13,569,1252,148
+dark,1280,800,tool-08.png,JTextArea,wb.bounty.support,13,167,1252,106
+dark,1280,800,tool-08.png,JTextArea,wb.card.외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,14,318,1250,334
+dark,1280,800,data-compare.png,JTextArea,wb.card.왼쪽 데이터,14,262,619,454
+dark,1280,800,data-compare.png,JTextArea,wb.card.오른쪽 데이터,644,262,620,454
+dark,1280,800,stored-flow.png,JTable,wb.response.recon,13,245,1252,235
+dark,1280,800,stored-flow.png,JTextArea,wb.response.recon,13,506,1252,189
+dark,1280,800,accounts.png,JTable,wb.activity,15,341,992,333
+dark,1280,800,accounts.png,JTable,wb.card.선택 계정의 입력 상태,1017,376,245,297
+dark,1280,800,tasks.png,JTable,wb.activity,15,295,1248,139
+dark,1280,800,tasks.png,JTable,wb.card.요구 계정 × API · 서로 다른 Origin은 조합에서 제외,16,527,1200,163
+dark,1280,800,bounty-1.png,JTextArea,preview.workflow.input,14,208,1233,142
+dark,1280,800,bounty-1.png,JTextArea,wb.card.응답 JSON 추출 · 예: 1.id=$.id / 다음 요청: {{id|URL}},14,392,1250,67
+dark,1280,800,bounty-1.png,JTable,wb.bounty.support,13,501,1252,205
+dark,1280,800,bounty-1.png,JTextArea,preview.workflow.detail,13,907,1235,0
+dark,1280,800,bounty-3.png,JTable,wb.bounty.support,13,247,1252,160
+dark,1280,800,bounty-3.png,JTextArea,preview.evidence.impact,14,451,619,253
+dark,1280,800,bounty-3.png,JTextArea,preview.evidence.repro,645,451,619,253
+dark,1280,800,js-horizontal.png,JTextArea,preview.js.source,14,413,515,0
+dark,1280,800,js-horizontal.png,JTable,wb.js.lists,558,271,705,110
+dark,1280,800,js-horizontal.png,JTextArea,wb.packet.preview,14,485,620,210
+dark,1280,800,js-horizontal.png,JTextArea,wb.packet.preview,645,485,620,210
+dark,1440,920,tool-00.png,,wb.traffic.history,11,120,492,746
+dark,1440,920,tool-00.png,JTextArea,wb.packet.preview,513,199,914,290
+dark,1440,920,tool-00.png,JTextArea,wb.packet.preview,513,574,914,291
+dark,1440,920,tool-01.png,JTable,wb.auth.credentials,12,235,631,190
+dark,1440,920,tool-01.png,,wb.auth.history,12,519,631,329
+dark,1440,920,tool-01.png,JTextArea,wb.card.요청 REQUEST,656,280,768,188
+dark,1440,920,tool-01.png,JTextArea,wb.card.응답 RESPONSE,656,513,768,189
+dark,1440,920,tool-01.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,654,747,773,118
+dark,1440,920,tool-02.png,JTextArea,wb.card.입력 (UTF-8 텍스트),22,212,1394,298
+dark,1440,920,tool-02.png,JTextArea,wb.card.출력,22,555,1394,299
+dark,1440,920,tool-03.png,JTextArea,preview.js.source,14,413,629,53
+dark,1440,920,tool-03.png,JTable,wb.js.lists,15,535,626,261
+dark,1440,920,tool-03.png,JTextArea,wb.packet.preview,654,287,771,221
+dark,1440,920,tool-03.png,JTextArea,wb.packet.preview,654,593,771,222
+dark,1440,920,tool-04.png,JTable,wb.environment.technologies,16,253,627,183
+dark,1440,920,tool-04.png,,wb.environment.paths,16,535,610,288
+dark,1440,920,tool-04.png,JTextArea,wb.card.요청 REQUEST,654,221,769,278
+dark,1440,920,tool-04.png,JTextArea,wb.card.응답 RESPONSE,654,584,769,239
+dark,1440,920,tool-05.png,JTable,wb.passive.urls,22,400,621,399
+dark,1440,920,tool-05.png,JTextArea,wb.packet.preview,654,408,762,161
+dark,1440,920,tool-05.png,JTextArea,wb.packet.preview,654,654,762,162
+dark,1440,920,tool-06.png,JTable,wb.activity.endpoints,16,280,1048,537
+dark,1440,920,tool-06.png,JTable,wb.activity.parameters,1075,280,347,554
+dark,1440,920,tool-07.png,JTable,wb.response.recon,13,245,1360,399
+dark,1440,920,tool-07.png,JTextArea,wb.response.recon,13,653,1412,184
+dark,1440,920,tool-08.png,JTextArea,wb.bounty.support,13,167,1412,106
+dark,1440,920,tool-08.png,JTextArea,wb.card.외부 결과 · METHOD [탭] URL [탭] 위치 [탭] 이름,14,318,1410,454
+dark,1440,920,data-compare.png,JTextArea,wb.card.왼쪽 데이터,14,262,699,574
+dark,1440,920,data-compare.png,JTextArea,wb.card.오른쪽 데이터,724,262,700,574
+dark,1440,920,stored-flow.png,JTable,wb.response.recon,13,245,1412,307
+dark,1440,920,stored-flow.png,JTextArea,wb.response.recon,13,578,1412,237
+dark,1440,920,accounts.png,JTable,wb.activity,15,341,1120,453
+dark,1440,920,accounts.png,JTable,wb.card.선택 계정의 입력 상태,1145,376,277,417
+dark,1440,920,tasks.png,JTable,wb.activity,15,295,1408,193
+dark,1440,920,tasks.png,JTable,wb.card.요구 계정 × API · 서로 다른 Origin은 조합에서 제외,16,581,1200,229
+dark,1440,920,bounty-1.png,JTextArea,preview.workflow.input,14,208,1410,208
+dark,1440,920,bounty-1.png,JTextArea,wb.card.응답 JSON 추출 · 예: 1.id=$.id / 다음 요청: {{id|URL}},14,458,1410,67
+dark,1440,920,bounty-1.png,JTable,wb.bounty.support,13,567,1412,259
+dark,1440,920,bounty-1.png,JTextArea,preview.workflow.detail,13,973,1395,0
+dark,1440,920,bounty-3.png,JTable,wb.bounty.support,13,247,1412,208
+dark,1440,920,bounty-3.png,JTextArea,preview.evidence.impact,14,499,699,325
+dark,1440,920,bounty-3.png,JTextArea,preview.evidence.repro,725,499,699,325
+dark,1440,920,js-horizontal.png,JTextArea,preview.js.source,14,413,601,35
+dark,1440,920,js-horizontal.png,JTable,wb.js.lists,627,271,796,158
+dark,1440,920,js-horizontal.png,JTextArea,wb.packet.preview,14,533,700,282
+dark,1440,920,js-horizontal.png,JTextArea,wb.packet.preview,725,533,700,282

@@ -1,8 +1,12 @@
 # 현재 개발 상태
 
-기준: 2026-10-11 / 확장 0.21.0 / 실습 사이트 3.4.0.
+기준: 2026-10-14 / 확장 0.25.3 / 실습 사이트 3.5.0.
 
-이번 변경은 GitHub 협업 준비입니다. 확장 운영 소스와 기능은 변경하지 않습니다.
+0.25.2 unlimited-traffic 소스를 기준으로 수집 ON → OFF → SCOPE 순환과 Burp Add to scope 자동 연동을 적용했습니다. SCOPE 목록의 체크·선택 삭제·일괄 삭제·URL 추가, 실시간 키워드 검색을 제공합니다. 기존 트래픽의 건수·패킷 크기 제한 제거와 원본 디스크 보관을 유지합니다.
+
+[최신 배포와 동작](docs/RELEASE_0.25.3_KR.md) · [검증](docs/VERIFICATION_0.25.3.json) · [인수인계](docs/HANDOFF_0.25.3_KR.md) · [다운로드](downloads/README.md)
+
+실행한 회귀·loopback HTTP·Swing 렌더 검증과 실제 Burp GUI/Docker 구동은 구분합니다. 최신 변경의 실제 Burp GUI/Docker 검증은 미실행입니다.
 
 ## 기준 자료
 

@@ -1,0 +1,21 @@
+theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled
+"light",760,480,"scope-light-760.png","wb.traffic.scope.url",55,377,330,32,true,true,true
+"light",760,480,"scope-light-760.png","URL 추가",393,376,84,34,true,true,true
+"light",760,480,"scope-light-760.png","선택 삭제",485,376,84,34,true,true,true
+"light",760,480,"scope-light-760.png","일괄 삭제",577,376,84,34,true,true,true
+"light",760,480,"scope-light-760.png","닫기",20,429,54,34,true,false,true
+"light",560,300,"scope-light-560.png","wb.traffic.scope.url",55,158,330,32,true,true,true
+"light",560,300,"scope-light-560.png","URL 추가",393,157,84,34,true,true,true
+"light",560,300,"scope-light-560.png","선택 삭제",21,196,84,34,true,true,true
+"light",560,300,"scope-light-560.png","일괄 삭제",113,196,84,34,true,true,true
+"light",560,300,"scope-light-560.png","닫기",20,249,54,34,true,false,true
+"dark",760,480,"scope-dark-760.png","wb.traffic.scope.url",55,377,330,32,true,true,true
+"dark",760,480,"scope-dark-760.png","URL 추가",393,376,84,34,true,true,true
+"dark",760,480,"scope-dark-760.png","선택 삭제",485,376,84,34,true,true,true
+"dark",760,480,"scope-dark-760.png","일괄 삭제",577,376,84,34,true,true,true
+"dark",760,480,"scope-dark-760.png","닫기",20,429,54,34,true,false,true
+"dark",560,300,"scope-dark-560.png","wb.traffic.scope.url",55,158,330,32,true,true,true
+"dark",560,300,"scope-dark-560.png","URL 추가",393,157,84,34,true,true,true
+"dark",560,300,"scope-dark-560.png","선택 삭제",21,196,84,34,true,true,true
+"dark",560,300,"scope-dark-560.png","일괄 삭제",113,196,84,34,true,true,true
+"dark",560,300,"scope-dark-560.png","닫기",20,249,54,34,true,false,true

@@ -1,0 +1,1075 @@
+theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled
+light,1024,720,tool-00.png,수집 ON,65,44,76,26,true,false,true
+light,1024,720,tool-00.png,Scope만,149,44,77,26,true,false,true
+light,1024,720,tool-00.png,JTextField,268,41,278,32,true,false,true
+light,1024,720,tool-00.png,검색 초기화,554,40,97,34,true,false,true
+light,1024,720,tool-00.png,목록 비우기,659,40,97,34,true,false,true
+light,1024,720,tool-00.png,내보내기,764,40,80,34,true,false,true
+light,1024,720,tool-00.png,SCOPE 목록 (0),852,40,124,34,true,false,true
+light,1024,720,tool-00.png,데이터 정렬,374,186,94,26,true,false,true
+light,1024,720,tool-00.png,데이터 정렬,374,450,94,26,true,false,true
+light,1024,720,tool-01.png,Record OFF,18,86,108,28,true,false,true
+light,1024,720,tool-01.png,선택 요청 비교,134,83,114,34,true,false,true
+light,1024,720,tool-01.png,중지,256,83,54,34,true,false,true
+light,1024,720,tool-01.png,History 비우기,318,83,115,34,true,false,true
+light,1024,720,tool-01.png,비교 설정,441,83,84,34,true,false,true
+light,1024,720,tool-01.png,세션·권한 매트릭스,533,83,140,34,true,false,true
+light,1024,720,tool-01.png,더보기,681,83,67,34,true,false,true
+light,1024,720,tool-01.png,JComboBox,663,172,176,36,true,false,true
+light,1024,720,tool-01.png,현재 패킷 → Repeater,847,173,164,34,true,false,true
+light,1024,720,tool-02.png,JComboBox,28,127,180,36,true,false,true
+light,1024,720,tool-02.png,변환,216,128,54,34,true,false,true
+light,1024,720,tool-02.png,출력 → 입력,278,128,101,34,true,false,true
+light,1024,720,tool-02.png,복사,387,128,54,34,true,false,true
+light,1024,720,tool-03.png,History 자동 분석,20,94,129,26,true,false,true
+light,1024,720,tool-03.png,JComboBox,221,92,360,30,true,false,true
+light,1024,720,tool-03.png,선택 URL → Repeater,20,133,164,34,true,false,true
+light,1024,720,tool-03.png,동적 값 확정,192,133,101,34,true,false,true
+light,1024,720,tool-03.png,원본 위치,301,133,84,34,true,false,true
+light,1024,720,tool-03.png,JComboBox,393,132,140,36,true,false,true
+light,1024,720,tool-03.png,추가 도구,541,133,84,34,true,false,true
+light,1024,720,tool-03.png,더보기,633,133,67,34,true,false,true
+light,1024,720,tool-03.png,대상 설정,123,251,84,34,true,false,true
+light,1024,720,tool-03.png,수동 분석,21,295,84,34,true,false,true
+light,1024,720,tool-03.png,선택 응답 가져오기,113,295,140,34,true,false,true
+light,1024,720,tool-03.png,←,21,340,41,34,true,false,false
+light,1024,720,tool-03.png,→,70,340,41,34,true,false,false
+light,1024,720,tool-03.png,JComboBox,119,339,137,36,true,false,true
+light,1024,720,tool-03.png,데이터 정렬,474,251,94,26,true,false,true
+light,1024,720,tool-03.png,데이터 정렬,474,457,94,26,true,false,true
+light,1024,720,tool-04.png,대상 설정,204,87,84,34,true,false,true
+light,1024,720,tool-04.png,전체 환경,296,87,84,34,true,false,true
+light,1024,720,tool-04.png,단일 시작,22,131,84,34,true,false,true
+light,1024,720,tool-04.png,일괄 시작,114,131,84,34,true,false,true
+light,1024,720,tool-04.png,중지,206,131,54,34,true,false,false
+light,1024,720,tool-04.png,선택 URL → 비로그인 GET Repeater,268,131,251,34,true,false,true
+light,1024,720,tool-04.png,후보 설정,527,131,84,34,true,false,true
+light,1024,720,tool-04.png,더보기,619,131,67,34,true,false,true
+light,1024,720,tool-04.png,요청·응답 정렬,474,448,111,26,true,false,true
+light,1024,720,tool-05.png,대상 설정,198,38,84,34,true,false,true
+light,1024,720,tool-05.png,대상 수집 시작,290,38,114,34,true,false,true
+light,1024,720,tool-05.png,선택 대상 닫기,412,38,114,34,true,false,true
+light,1024,720,tool-05.png,JComboBox,134,186,250,36,true,false,true
+light,1024,720,tool-05.png,하위 도메인 포함,392,191,124,26,true,false,true
+light,1024,720,tool-05.png,URL 수집,524,187,84,34,true,false,true
+light,1024,720,tool-05.png,도구 설정,616,187,84,34,true,false,true
+light,1024,720,tool-05.png,단일 시작,28,232,84,34,true,false,true
+light,1024,720,tool-05.png,일괄 시작,120,232,84,34,true,false,true
+light,1024,720,tool-05.png,중지,212,232,54,34,true,false,false
+light,1024,720,tool-05.png,미검증만 실행,369,236,107,26,true,false,true
+light,1024,720,tool-05.png,더보기,484,232,67,34,true,false,true
+light,1024,720,tool-05.png,선택 검증 원본 → 증거,559,232,161,34,true,false,false
+light,1024,720,tool-05.png,JTextField,62,278,278,32,true,false,true
+light,1024,720,tool-05.png,JComboBox,348,276,124,36,true,false,true
+light,1024,720,tool-05.png,정적 파일 숨김,480,281,111,26,true,false,true
+light,1024,720,tool-05.png,패턴별 대표만 표시,599,281,137,26,true,false,true
+light,1024,720,tool-05.png,패턴 요약,744,277,84,34,true,false,true
+light,1024,720,tool-05.png,데이터 정렬,474,372,94,26,true,false,true
+light,1024,720,tool-05.png,데이터 정렬,474,518,94,26,true,false,true
+light,1024,720,tool-06.png,추적 ON,20,90,76,26,true,false,true
+light,1024,720,tool-06.png,Scope만,104,90,77,26,true,false,true
+light,1024,720,tool-06.png,History 가져오기,189,86,128,34,true,false,true
+light,1024,720,tool-06.png,JComboBox,325,85,178,36,true,false,true
+light,1024,720,tool-06.png,JTextField,575,87,252,32,true,false,true
+light,1024,720,tool-06.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1024,720,tool-06.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1024,720,tool-06.png,발견 근거,308,131,84,34,true,false,true
+light,1024,720,tool-06.png,Repeater 초안,400,131,117,34,true,false,true
+light,1024,720,tool-06.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1024,720,tool-06.png,기록 저장,650,131,84,34,true,false,true
+light,1024,720,tool-06.png,기록 불러오기,742,131,110,34,true,false,true
+light,1024,720,tool-06.png,초기화,860,131,67,34,true,false,true
+light,1024,720,tool-07.png,저장/조회 마커,18,83,115,34,true,false,true
+light,1024,720,tool-07.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+light,1024,720,tool-07.png,관찰 초기화,338,83,97,34,true,false,true
+light,1024,720,tool-07.png,선택 관찰 → 증거 묶음,20,169,161,34,true,false,true
+light,1024,720,tool-08.png,JComboBox,118,125,237,36,true,false,true
+light,1024,720,tool-08.png,선택 요청 → Repeater,363,126,164,34,true,false,true
+light,1024,720,tool-08.png,공식 안내,535,126,84,34,true,false,true
+light,1024,720,tool-08.png,결과 → 활동 추적,20,587,131,34,true,false,true
+light,1024,720,data-compare.png,비교,20,110,54,34,true,false,true
+light,1024,720,data-compare.png,입력으로,82,110,80,34,true,false,true
+light,1024,720,data-compare.png,초기화,170,110,67,34,true,false,true
+light,1024,720,data-compare.png,데이터 정렬,245,114,94,26,true,false,true
+light,1024,720,data-compare.png,←,347,110,41,34,true,false,true
+light,1024,720,data-compare.png,→,396,110,41,34,true,false,true
+light,1024,720,data-compare.png,선택 트래픽 → 왼쪽 응답,20,154,174,34,true,false,true
+light,1024,720,data-compare.png,선택 트래픽 → 오른쪽 응답,202,154,187,34,true,false,true
+light,1024,720,data-compare.png,연결 원본 2개 → 증거,397,154,156,34,true,false,false
+light,1024,720,stored-flow.png,저장/조회 마커,18,83,115,34,true,false,true
+light,1024,720,stored-flow.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+light,1024,720,stored-flow.png,관찰 초기화,338,83,97,34,true,false,true
+light,1024,720,stored-flow.png,선택 흐름 → 증거 묶음,20,169,161,34,true,false,true
+light,1024,720,stored-flow.png,브라우저 실행 수동 확인 · 이미지,189,169,221,34,true,false,true
+light,1024,720,stored-flow.png,수동 실행 근거 해제,418,169,144,34,true,false,true
+light,1024,720,accounts.png,추적 ON,20,90,76,26,true,false,true
+light,1024,720,accounts.png,Scope만,104,90,77,26,true,false,true
+light,1024,720,accounts.png,History 가져오기,189,86,128,34,true,false,true
+light,1024,720,accounts.png,JComboBox,325,85,178,36,true,false,true
+light,1024,720,accounts.png,JTextField,575,87,252,32,true,false,true
+light,1024,720,accounts.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1024,720,accounts.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1024,720,accounts.png,발견 근거,308,131,84,34,true,false,true
+light,1024,720,accounts.png,Repeater 초안,400,131,117,34,true,false,true
+light,1024,720,accounts.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1024,720,accounts.png,기록 저장,650,131,84,34,true,false,true
+light,1024,720,accounts.png,기록 불러오기,742,131,110,34,true,false,true
+light,1024,720,accounts.png,초기화,860,131,67,34,true,false,true
+light,1024,720,accounts.png,JComboBox,86,217,96,36,true,false,true
+light,1024,720,accounts.png,JComboBox,190,217,123,36,true,false,true
+light,1024,720,accounts.png,계정 등록,321,218,84,34,true,false,true
+light,1024,720,accounts.png,계정 이름/역할,413,218,115,34,true,false,true
+light,1024,720,accounts.png,선택 트래픽 연결,536,218,127,34,true,false,true
+light,1024,720,accounts.png,세션 연결 해제,671,218,114,34,true,false,true
+light,1024,720,accounts.png,선택 URL 완료,22,263,114,34,true,false,true
+light,1024,720,accounts.png,완료 해제,144,263,84,34,true,false,true
+light,1024,720,accounts.png,입력 완료 / 해제,236,263,123,34,true,false,true
+light,1024,720,accounts.png,선택 API → 업무,367,263,126,34,true,false,true
+light,1024,720,accounts.png,점검 이력,501,263,84,34,true,false,true
+light,1024,720,tasks.png,추적 ON,20,90,76,26,true,false,true
+light,1024,720,tasks.png,Scope만,104,90,77,26,true,false,true
+light,1024,720,tasks.png,History 가져오기,189,86,128,34,true,false,true
+light,1024,720,tasks.png,JComboBox,325,85,178,36,true,false,true
+light,1024,720,tasks.png,JTextField,575,87,252,32,true,false,true
+light,1024,720,tasks.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1024,720,tasks.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1024,720,tasks.png,발견 근거,308,131,84,34,true,false,true
+light,1024,720,tasks.png,Repeater 초안,400,131,117,34,true,false,true
+light,1024,720,tasks.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1024,720,tasks.png,기록 저장,650,131,84,34,true,false,true
+light,1024,720,tasks.png,기록 불러오기,742,131,110,34,true,false,true
+light,1024,720,tasks.png,초기화,860,131,67,34,true,false,true
+light,1024,720,tasks.png,업무 등록,22,217,84,34,true,false,true
+light,1024,720,tasks.png,업무 설정,114,217,84,34,true,false,true
+light,1024,720,tasks.png,선택 API → 업무,206,217,126,34,true,false,true
+light,1024,720,tasks.png,선택 API 제외,340,217,109,34,true,false,true
+light,1024,720,tasks.png,증거 파일 확인,457,217,114,34,true,false,true
+light,1024,720,tasks.png,증거 ZIP 재연결,579,217,120,34,true,false,true
+light,1024,720,tasks.png,증거 재검증,707,217,97,34,true,false,true
+light,1024,720,tasks.png,업무 완료,812,217,84,34,true,false,true
+light,1024,720,tasks.png,완료 해제,904,217,84,34,true,false,true
+light,1024,720,tasks.png,점검 이력,22,256,84,34,true,false,true
+light,1024,720,bounty-1.png,선택 요청을 단계로 추가,20,125,170,34,true,false,true
+light,1024,720,bounty-1.png,대상 설정,198,125,84,34,true,false,true
+light,1024,720,bounty-1.png,순차 실행,290,125,84,34,true,false,true
+light,1024,720,bounty-1.png,중지,382,125,54,34,true,false,true
+light,1024,720,bounty-1.png,결과 → 증거 묶음,444,125,131,34,true,false,true
+light,1024,720,bounty-3.png,JTextField,54,125,382,32,true,false,true
+light,1024,720,bounty-3.png,JSON/폼 본문 포함 · 민감 키 가림,444,128,222,26,true,false,true
+light,1024,720,bounty-3.png,선택 트래픽 추가,20,167,127,34,true,false,true
+light,1024,720,bounty-3.png,선택 권한 비교 추가,155,167,144,34,true,false,true
+light,1024,720,bounty-3.png,업무 흐름 결과 추가,307,167,144,34,true,false,true
+light,1024,720,bounty-3.png,가림 미리보기,459,167,110,34,true,false,true
+light,1024,720,bounty-3.png,증거 ZIP 저장,577,167,107,34,true,false,true
+light,1024,720,bounty-3.png,증거 비우기,692,167,97,34,true,false,true
+light,1024,720,js-horizontal.png,History 자동 분석,20,94,129,26,true,false,true
+light,1024,720,js-horizontal.png,JComboBox,221,92,360,30,true,false,true
+light,1024,720,js-horizontal.png,선택 URL → Repeater,20,133,164,34,true,false,true
+light,1024,720,js-horizontal.png,동적 값 확정,192,133,101,34,true,false,true
+light,1024,720,js-horizontal.png,원본 위치,301,133,84,34,true,false,true
+light,1024,720,js-horizontal.png,JComboBox,393,132,140,36,true,false,true
+light,1024,720,js-horizontal.png,추가 도구,541,133,84,34,true,false,true
+light,1024,720,js-horizontal.png,더보기,633,133,67,34,true,false,true
+light,1024,720,js-horizontal.png,대상 설정,123,251,84,34,true,false,true
+light,1024,720,js-horizontal.png,수동 분석,21,295,84,34,true,false,true
+light,1024,720,js-horizontal.png,선택 응답 가져오기,113,295,140,34,true,false,true
+light,1024,720,js-horizontal.png,←,21,340,41,34,false,false,false
+light,1024,720,js-horizontal.png,→,70,340,41,34,false,false,false
+light,1024,720,js-horizontal.png,JComboBox,119,339,137,36,false,false,true
+light,1024,720,js-horizontal.png,데이터 정렬,21,417,94,26,true,false,true
+light,1024,720,js-horizontal.png,데이터 정렬,524,417,94,26,true,false,true
+light,1280,800,tool-00.png,수집 ON,65,44,76,26,true,false,true
+light,1280,800,tool-00.png,Scope만,149,44,77,26,true,false,true
+light,1280,800,tool-00.png,JTextField,268,41,278,32,true,false,true
+light,1280,800,tool-00.png,검색 초기화,554,40,97,34,true,false,true
+light,1280,800,tool-00.png,목록 비우기,659,40,97,34,true,false,true
+light,1280,800,tool-00.png,내보내기,764,40,80,34,true,false,true
+light,1280,800,tool-00.png,SCOPE 목록 (0),852,40,124,34,true,false,true
+light,1280,800,tool-00.png,데이터 정렬,464,163,94,26,true,false,true
+light,1280,800,tool-00.png,데이터 정렬,464,478,94,26,true,false,true
+light,1280,800,tool-01.png,Record OFF,18,86,108,28,true,false,true
+light,1280,800,tool-01.png,선택 요청 비교,134,83,114,34,true,false,true
+light,1280,800,tool-01.png,중지,256,83,54,34,true,false,true
+light,1280,800,tool-01.png,History 비우기,318,83,115,34,true,false,true
+light,1280,800,tool-01.png,비교 설정,441,83,84,34,true,false,true
+light,1280,800,tool-01.png,세션·권한 매트릭스,533,83,140,34,true,false,true
+light,1280,800,tool-01.png,더보기,681,83,67,34,true,false,true
+light,1280,800,tool-01.png,JComboBox,778,172,176,36,true,false,true
+light,1280,800,tool-01.png,현재 패킷 → Repeater,962,173,164,34,true,false,true
+light,1280,800,tool-02.png,JComboBox,28,127,180,36,true,false,true
+light,1280,800,tool-02.png,변환,216,128,54,34,true,false,true
+light,1280,800,tool-02.png,출력 → 입력,278,128,101,34,true,false,true
+light,1280,800,tool-02.png,복사,387,128,54,34,true,false,true
+light,1280,800,tool-03.png,History 자동 분석,20,94,129,26,true,false,true
+light,1280,800,tool-03.png,JComboBox,221,92,360,30,true,false,true
+light,1280,800,tool-03.png,선택 URL → Repeater,20,133,164,34,true,false,true
+light,1280,800,tool-03.png,동적 값 확정,192,133,101,34,true,false,true
+light,1280,800,tool-03.png,원본 위치,301,133,84,34,true,false,true
+light,1280,800,tool-03.png,JComboBox,393,132,140,36,true,false,true
+light,1280,800,tool-03.png,추가 도구,541,133,84,34,true,false,true
+light,1280,800,tool-03.png,더보기,633,133,67,34,true,false,true
+light,1280,800,tool-03.png,대상 설정,123,251,84,34,true,false,true
+light,1280,800,tool-03.png,수동 분석,21,295,84,34,true,false,true
+light,1280,800,tool-03.png,선택 응답 가져오기,113,295,140,34,true,false,true
+light,1280,800,tool-03.png,←,21,340,41,34,true,false,false
+light,1280,800,tool-03.png,→,70,340,41,34,true,false,false
+light,1280,800,tool-03.png,JComboBox,119,339,137,36,true,false,true
+light,1280,800,tool-03.png,데이터 정렬,589,251,94,26,true,false,true
+light,1280,800,tool-03.png,데이터 정렬,589,497,94,26,true,false,true
+light,1280,800,tool-04.png,대상 설정,204,87,84,34,true,false,true
+light,1280,800,tool-04.png,전체 환경,296,87,84,34,true,false,true
+light,1280,800,tool-04.png,단일 시작,22,131,84,34,true,false,true
+light,1280,800,tool-04.png,일괄 시작,114,131,84,34,true,false,true
+light,1280,800,tool-04.png,중지,206,131,54,34,true,false,false
+light,1280,800,tool-04.png,선택 URL → 비로그인 GET Repeater,268,131,251,34,true,false,true
+light,1280,800,tool-04.png,후보 설정,527,131,84,34,true,false,true
+light,1280,800,tool-04.png,더보기,619,131,67,34,true,false,true
+light,1280,800,tool-04.png,요청·응답 정렬,589,488,111,26,true,false,true
+light,1280,800,tool-05.png,대상 설정,198,38,84,34,true,false,true
+light,1280,800,tool-05.png,대상 수집 시작,290,38,114,34,true,false,true
+light,1280,800,tool-05.png,선택 대상 닫기,412,38,114,34,true,false,true
+light,1280,800,tool-05.png,JComboBox,134,186,250,36,true,false,true
+light,1280,800,tool-05.png,하위 도메인 포함,392,191,124,26,true,false,true
+light,1280,800,tool-05.png,URL 수집,524,187,84,34,true,false,true
+light,1280,800,tool-05.png,도구 설정,616,187,84,34,true,false,true
+light,1280,800,tool-05.png,단일 시작,28,232,84,34,true,false,true
+light,1280,800,tool-05.png,일괄 시작,120,232,84,34,true,false,true
+light,1280,800,tool-05.png,중지,212,232,54,34,true,false,false
+light,1280,800,tool-05.png,미검증만 실행,369,236,107,26,true,false,true
+light,1280,800,tool-05.png,더보기,484,232,67,34,true,false,true
+light,1280,800,tool-05.png,선택 검증 원본 → 증거,559,232,161,34,true,false,false
+light,1280,800,tool-05.png,JTextField,62,278,278,32,true,false,true
+light,1280,800,tool-05.png,JComboBox,348,276,124,36,true,false,true
+light,1280,800,tool-05.png,정적 파일 숨김,480,281,111,26,true,false,true
+light,1280,800,tool-05.png,패턴별 대표만 표시,599,281,137,26,true,false,true
+light,1280,800,tool-05.png,패턴 요약,744,277,84,34,true,false,true
+light,1280,800,tool-05.png,데이터 정렬,589,372,94,26,true,false,true
+light,1280,800,tool-05.png,데이터 정렬,589,558,94,26,true,false,true
+light,1280,800,tool-06.png,추적 ON,20,90,76,26,true,false,true
+light,1280,800,tool-06.png,Scope만,104,90,77,26,true,false,true
+light,1280,800,tool-06.png,History 가져오기,189,86,128,34,true,false,true
+light,1280,800,tool-06.png,JComboBox,325,85,178,36,true,false,true
+light,1280,800,tool-06.png,JTextField,575,87,252,32,true,false,true
+light,1280,800,tool-06.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1280,800,tool-06.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1280,800,tool-06.png,발견 근거,308,131,84,34,true,false,true
+light,1280,800,tool-06.png,Repeater 초안,400,131,117,34,true,false,true
+light,1280,800,tool-06.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1280,800,tool-06.png,기록 저장,650,131,84,34,true,false,true
+light,1280,800,tool-06.png,기록 불러오기,742,131,110,34,true,false,true
+light,1280,800,tool-06.png,초기화,860,131,67,34,true,false,true
+light,1280,800,tool-07.png,저장/조회 마커,18,83,115,34,true,false,true
+light,1280,800,tool-07.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+light,1280,800,tool-07.png,관찰 초기화,338,83,97,34,true,false,true
+light,1280,800,tool-07.png,선택 관찰 → 증거 묶음,20,169,161,34,true,false,true
+light,1280,800,tool-08.png,JComboBox,144,125,237,36,true,false,true
+light,1280,800,tool-08.png,선택 요청 → Repeater,389,126,164,34,true,false,true
+light,1280,800,tool-08.png,공식 안내,561,126,84,34,true,false,true
+light,1280,800,tool-08.png,결과 → 활동 추적,20,667,131,34,true,false,true
+light,1280,800,data-compare.png,비교,20,110,54,34,true,false,true
+light,1280,800,data-compare.png,입력으로,82,110,80,34,true,false,true
+light,1280,800,data-compare.png,초기화,170,110,67,34,true,false,true
+light,1280,800,data-compare.png,데이터 정렬,245,114,94,26,true,false,true
+light,1280,800,data-compare.png,←,347,110,41,34,true,false,true
+light,1280,800,data-compare.png,→,396,110,41,34,true,false,true
+light,1280,800,data-compare.png,선택 트래픽 → 왼쪽 응답,20,154,174,34,true,false,true
+light,1280,800,data-compare.png,선택 트래픽 → 오른쪽 응답,202,154,187,34,true,false,true
+light,1280,800,data-compare.png,연결 원본 2개 → 증거,397,154,156,34,true,false,false
+light,1280,800,stored-flow.png,저장/조회 마커,18,83,115,34,true,false,true
+light,1280,800,stored-flow.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+light,1280,800,stored-flow.png,관찰 초기화,338,83,97,34,true,false,true
+light,1280,800,stored-flow.png,선택 흐름 → 증거 묶음,20,169,161,34,true,false,true
+light,1280,800,stored-flow.png,브라우저 실행 수동 확인 · 이미지,189,169,221,34,true,false,true
+light,1280,800,stored-flow.png,수동 실행 근거 해제,418,169,144,34,true,false,true
+light,1280,800,accounts.png,추적 ON,20,90,76,26,true,false,true
+light,1280,800,accounts.png,Scope만,104,90,77,26,true,false,true
+light,1280,800,accounts.png,History 가져오기,189,86,128,34,true,false,true
+light,1280,800,accounts.png,JComboBox,325,85,178,36,true,false,true
+light,1280,800,accounts.png,JTextField,575,87,252,32,true,false,true
+light,1280,800,accounts.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1280,800,accounts.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1280,800,accounts.png,발견 근거,308,131,84,34,true,false,true
+light,1280,800,accounts.png,Repeater 초안,400,131,117,34,true,false,true
+light,1280,800,accounts.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1280,800,accounts.png,기록 저장,650,131,84,34,true,false,true
+light,1280,800,accounts.png,기록 불러오기,742,131,110,34,true,false,true
+light,1280,800,accounts.png,초기화,860,131,67,34,true,false,true
+light,1280,800,accounts.png,JComboBox,86,217,96,36,true,false,true
+light,1280,800,accounts.png,JComboBox,190,217,123,36,true,false,true
+light,1280,800,accounts.png,계정 등록,321,218,84,34,true,false,true
+light,1280,800,accounts.png,계정 이름/역할,413,218,115,34,true,false,true
+light,1280,800,accounts.png,선택 트래픽 연결,536,218,127,34,true,false,true
+light,1280,800,accounts.png,세션 연결 해제,671,218,114,34,true,false,true
+light,1280,800,accounts.png,선택 URL 완료,22,263,114,34,true,false,true
+light,1280,800,accounts.png,완료 해제,144,263,84,34,true,false,true
+light,1280,800,accounts.png,입력 완료 / 해제,236,263,123,34,true,false,true
+light,1280,800,accounts.png,선택 API → 업무,367,263,126,34,true,false,true
+light,1280,800,accounts.png,점검 이력,501,263,84,34,true,false,true
+light,1280,800,tasks.png,추적 ON,20,90,76,26,true,false,true
+light,1280,800,tasks.png,Scope만,104,90,77,26,true,false,true
+light,1280,800,tasks.png,History 가져오기,189,86,128,34,true,false,true
+light,1280,800,tasks.png,JComboBox,325,85,178,36,true,false,true
+light,1280,800,tasks.png,JTextField,575,87,252,32,true,false,true
+light,1280,800,tasks.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1280,800,tasks.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1280,800,tasks.png,발견 근거,308,131,84,34,true,false,true
+light,1280,800,tasks.png,Repeater 초안,400,131,117,34,true,false,true
+light,1280,800,tasks.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1280,800,tasks.png,기록 저장,650,131,84,34,true,false,true
+light,1280,800,tasks.png,기록 불러오기,742,131,110,34,true,false,true
+light,1280,800,tasks.png,초기화,860,131,67,34,true,false,true
+light,1280,800,tasks.png,업무 등록,22,217,84,34,true,false,true
+light,1280,800,tasks.png,업무 설정,114,217,84,34,true,false,true
+light,1280,800,tasks.png,선택 API → 업무,206,217,126,34,true,false,true
+light,1280,800,tasks.png,선택 API 제외,340,217,109,34,true,false,true
+light,1280,800,tasks.png,증거 파일 확인,457,217,114,34,true,false,true
+light,1280,800,tasks.png,증거 ZIP 재연결,579,217,120,34,true,false,true
+light,1280,800,tasks.png,증거 재검증,707,217,97,34,true,false,true
+light,1280,800,tasks.png,업무 완료,812,217,84,34,true,false,true
+light,1280,800,tasks.png,완료 해제,904,217,84,34,true,false,true
+light,1280,800,tasks.png,점검 이력,996,217,84,34,true,false,true
+light,1280,800,bounty-1.png,선택 요청을 단계로 추가,20,125,170,34,true,false,true
+light,1280,800,bounty-1.png,대상 설정,198,125,84,34,true,false,true
+light,1280,800,bounty-1.png,순차 실행,290,125,84,34,true,false,true
+light,1280,800,bounty-1.png,중지,382,125,54,34,true,false,true
+light,1280,800,bounty-1.png,결과 → 증거 묶음,444,125,131,34,true,false,true
+light,1280,800,bounty-3.png,JTextField,54,125,382,32,true,false,true
+light,1280,800,bounty-3.png,JSON/폼 본문 포함 · 민감 키 가림,444,128,222,26,true,false,true
+light,1280,800,bounty-3.png,선택 트래픽 추가,20,167,127,34,true,false,true
+light,1280,800,bounty-3.png,선택 권한 비교 추가,155,167,144,34,true,false,true
+light,1280,800,bounty-3.png,업무 흐름 결과 추가,307,167,144,34,true,false,true
+light,1280,800,bounty-3.png,가림 미리보기,459,167,110,34,true,false,true
+light,1280,800,bounty-3.png,증거 ZIP 저장,577,167,107,34,true,false,true
+light,1280,800,bounty-3.png,증거 비우기,692,167,97,34,true,false,true
+light,1280,800,js-horizontal.png,History 자동 분석,20,94,129,26,true,false,true
+light,1280,800,js-horizontal.png,JComboBox,221,92,360,30,true,false,true
+light,1280,800,js-horizontal.png,선택 URL → Repeater,20,133,164,34,true,false,true
+light,1280,800,js-horizontal.png,동적 값 확정,192,133,101,34,true,false,true
+light,1280,800,js-horizontal.png,원본 위치,301,133,84,34,true,false,true
+light,1280,800,js-horizontal.png,JComboBox,393,132,140,36,true,false,true
+light,1280,800,js-horizontal.png,추가 도구,541,133,84,34,true,false,true
+light,1280,800,js-horizontal.png,더보기,633,133,67,34,true,false,true
+light,1280,800,js-horizontal.png,대상 설정,123,251,84,34,true,false,true
+light,1280,800,js-horizontal.png,수동 분석,21,295,84,34,true,false,true
+light,1280,800,js-horizontal.png,선택 응답 가져오기,113,295,140,34,true,false,true
+light,1280,800,js-horizontal.png,←,21,340,41,34,true,false,false
+light,1280,800,js-horizontal.png,→,70,340,41,34,true,false,false
+light,1280,800,js-horizontal.png,JComboBox,119,339,137,36,true,false,true
+light,1280,800,js-horizontal.png,데이터 정렬,21,449,94,26,true,false,true
+light,1280,800,js-horizontal.png,데이터 정렬,652,449,94,26,true,false,true
+light,1440,920,tool-00.png,수집 ON,65,44,76,26,true,false,true
+light,1440,920,tool-00.png,Scope만,149,44,77,26,true,false,true
+light,1440,920,tool-00.png,JTextField,268,41,278,32,true,false,true
+light,1440,920,tool-00.png,검색 초기화,554,40,97,34,true,false,true
+light,1440,920,tool-00.png,목록 비우기,659,40,97,34,true,false,true
+light,1440,920,tool-00.png,내보내기,764,40,80,34,true,false,true
+light,1440,920,tool-00.png,SCOPE 목록 (0),852,40,124,34,true,false,true
+light,1440,920,tool-00.png,데이터 정렬,520,163,94,26,true,false,true
+light,1440,920,tool-00.png,데이터 정렬,520,538,94,26,true,false,true
+light,1440,920,tool-01.png,Record OFF,18,86,108,28,true,false,true
+light,1440,920,tool-01.png,선택 요청 비교,134,83,114,34,true,false,true
+light,1440,920,tool-01.png,중지,256,83,54,34,true,false,true
+light,1440,920,tool-01.png,History 비우기,318,83,115,34,true,false,true
+light,1440,920,tool-01.png,비교 설정,441,83,84,34,true,false,true
+light,1440,920,tool-01.png,세션·권한 매트릭스,533,83,140,34,true,false,true
+light,1440,920,tool-01.png,더보기,681,83,67,34,true,false,true
+light,1440,920,tool-01.png,JComboBox,850,172,176,36,true,false,true
+light,1440,920,tool-01.png,현재 패킷 → Repeater,1034,173,164,34,true,false,true
+light,1440,920,tool-02.png,JComboBox,28,127,180,36,true,false,true
+light,1440,920,tool-02.png,변환,216,128,54,34,true,false,true
+light,1440,920,tool-02.png,출력 → 입력,278,128,101,34,true,false,true
+light,1440,920,tool-02.png,복사,387,128,54,34,true,false,true
+light,1440,920,tool-03.png,History 자동 분석,20,94,129,26,true,false,true
+light,1440,920,tool-03.png,JComboBox,221,92,360,30,true,false,true
+light,1440,920,tool-03.png,선택 URL → Repeater,20,133,164,34,true,false,true
+light,1440,920,tool-03.png,동적 값 확정,192,133,101,34,true,false,true
+light,1440,920,tool-03.png,원본 위치,301,133,84,34,true,false,true
+light,1440,920,tool-03.png,JComboBox,393,132,140,36,true,false,true
+light,1440,920,tool-03.png,추가 도구,541,133,84,34,true,false,true
+light,1440,920,tool-03.png,더보기,633,133,67,34,true,false,true
+light,1440,920,tool-03.png,대상 설정,123,251,84,34,true,false,true
+light,1440,920,tool-03.png,수동 분석,21,295,84,34,true,false,true
+light,1440,920,tool-03.png,선택 응답 가져오기,113,295,140,34,true,false,true
+light,1440,920,tool-03.png,←,21,340,41,34,true,false,false
+light,1440,920,tool-03.png,→,70,340,41,34,true,false,false
+light,1440,920,tool-03.png,JComboBox,119,339,137,36,true,false,true
+light,1440,920,tool-03.png,데이터 정렬,661,251,94,26,true,false,true
+light,1440,920,tool-03.png,데이터 정렬,661,557,94,26,true,false,true
+light,1440,920,tool-04.png,대상 설정,204,87,84,34,true,false,true
+light,1440,920,tool-04.png,전체 환경,296,87,84,34,true,false,true
+light,1440,920,tool-04.png,단일 시작,22,131,84,34,true,false,true
+light,1440,920,tool-04.png,일괄 시작,114,131,84,34,true,false,true
+light,1440,920,tool-04.png,중지,206,131,54,34,true,false,false
+light,1440,920,tool-04.png,선택 URL → 비로그인 GET Repeater,268,131,251,34,true,false,true
+light,1440,920,tool-04.png,후보 설정,527,131,84,34,true,false,true
+light,1440,920,tool-04.png,더보기,619,131,67,34,true,false,true
+light,1440,920,tool-04.png,요청·응답 정렬,661,548,111,26,true,false,true
+light,1440,920,tool-05.png,대상 설정,198,38,84,34,true,false,true
+light,1440,920,tool-05.png,대상 수집 시작,290,38,114,34,true,false,true
+light,1440,920,tool-05.png,선택 대상 닫기,412,38,114,34,true,false,true
+light,1440,920,tool-05.png,JComboBox,134,186,250,36,true,false,true
+light,1440,920,tool-05.png,하위 도메인 포함,392,191,124,26,true,false,true
+light,1440,920,tool-05.png,URL 수집,524,187,84,34,true,false,true
+light,1440,920,tool-05.png,도구 설정,616,187,84,34,true,false,true
+light,1440,920,tool-05.png,단일 시작,28,232,84,34,true,false,true
+light,1440,920,tool-05.png,일괄 시작,120,232,84,34,true,false,true
+light,1440,920,tool-05.png,중지,212,232,54,34,true,false,false
+light,1440,920,tool-05.png,미검증만 실행,369,236,107,26,true,false,true
+light,1440,920,tool-05.png,더보기,484,232,67,34,true,false,true
+light,1440,920,tool-05.png,선택 검증 원본 → 증거,559,232,161,34,true,false,false
+light,1440,920,tool-05.png,JTextField,62,278,278,32,true,false,true
+light,1440,920,tool-05.png,JComboBox,348,276,124,36,true,false,true
+light,1440,920,tool-05.png,정적 파일 숨김,480,281,111,26,true,false,true
+light,1440,920,tool-05.png,패턴별 대표만 표시,599,281,137,26,true,false,true
+light,1440,920,tool-05.png,패턴 요약,744,277,84,34,true,false,true
+light,1440,920,tool-05.png,데이터 정렬,661,372,94,26,true,false,true
+light,1440,920,tool-05.png,데이터 정렬,661,618,94,26,true,false,true
+light,1440,920,tool-06.png,추적 ON,20,90,76,26,true,false,true
+light,1440,920,tool-06.png,Scope만,104,90,77,26,true,false,true
+light,1440,920,tool-06.png,History 가져오기,189,86,128,34,true,false,true
+light,1440,920,tool-06.png,JComboBox,325,85,178,36,true,false,true
+light,1440,920,tool-06.png,JTextField,575,87,252,32,true,false,true
+light,1440,920,tool-06.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1440,920,tool-06.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1440,920,tool-06.png,발견 근거,308,131,84,34,true,false,true
+light,1440,920,tool-06.png,Repeater 초안,400,131,117,34,true,false,true
+light,1440,920,tool-06.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1440,920,tool-06.png,기록 저장,650,131,84,34,true,false,true
+light,1440,920,tool-06.png,기록 불러오기,742,131,110,34,true,false,true
+light,1440,920,tool-06.png,초기화,860,131,67,34,true,false,true
+light,1440,920,tool-07.png,저장/조회 마커,18,83,115,34,true,false,true
+light,1440,920,tool-07.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+light,1440,920,tool-07.png,관찰 초기화,338,83,97,34,true,false,true
+light,1440,920,tool-07.png,선택 관찰 → 증거 묶음,20,169,161,34,true,false,true
+light,1440,920,tool-08.png,JComboBox,160,125,237,36,true,false,true
+light,1440,920,tool-08.png,선택 요청 → Repeater,405,126,164,34,true,false,true
+light,1440,920,tool-08.png,공식 안내,577,126,84,34,true,false,true
+light,1440,920,tool-08.png,결과 → 활동 추적,20,787,131,34,true,false,true
+light,1440,920,data-compare.png,비교,20,110,54,34,true,false,true
+light,1440,920,data-compare.png,입력으로,82,110,80,34,true,false,true
+light,1440,920,data-compare.png,초기화,170,110,67,34,true,false,true
+light,1440,920,data-compare.png,데이터 정렬,245,114,94,26,true,false,true
+light,1440,920,data-compare.png,←,347,110,41,34,true,false,true
+light,1440,920,data-compare.png,→,396,110,41,34,true,false,true
+light,1440,920,data-compare.png,선택 트래픽 → 왼쪽 응답,20,154,174,34,true,false,true
+light,1440,920,data-compare.png,선택 트래픽 → 오른쪽 응답,202,154,187,34,true,false,true
+light,1440,920,data-compare.png,연결 원본 2개 → 증거,397,154,156,34,true,false,false
+light,1440,920,stored-flow.png,저장/조회 마커,18,83,115,34,true,false,true
+light,1440,920,stored-flow.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+light,1440,920,stored-flow.png,관찰 초기화,338,83,97,34,true,false,true
+light,1440,920,stored-flow.png,선택 흐름 → 증거 묶음,20,169,161,34,true,false,true
+light,1440,920,stored-flow.png,브라우저 실행 수동 확인 · 이미지,189,169,221,34,true,false,true
+light,1440,920,stored-flow.png,수동 실행 근거 해제,418,169,144,34,true,false,true
+light,1440,920,accounts.png,추적 ON,20,90,76,26,true,false,true
+light,1440,920,accounts.png,Scope만,104,90,77,26,true,false,true
+light,1440,920,accounts.png,History 가져오기,189,86,128,34,true,false,true
+light,1440,920,accounts.png,JComboBox,325,85,178,36,true,false,true
+light,1440,920,accounts.png,JTextField,575,87,252,32,true,false,true
+light,1440,920,accounts.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1440,920,accounts.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1440,920,accounts.png,발견 근거,308,131,84,34,true,false,true
+light,1440,920,accounts.png,Repeater 초안,400,131,117,34,true,false,true
+light,1440,920,accounts.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1440,920,accounts.png,기록 저장,650,131,84,34,true,false,true
+light,1440,920,accounts.png,기록 불러오기,742,131,110,34,true,false,true
+light,1440,920,accounts.png,초기화,860,131,67,34,true,false,true
+light,1440,920,accounts.png,JComboBox,86,217,96,36,true,false,true
+light,1440,920,accounts.png,JComboBox,190,217,123,36,true,false,true
+light,1440,920,accounts.png,계정 등록,321,218,84,34,true,false,true
+light,1440,920,accounts.png,계정 이름/역할,413,218,115,34,true,false,true
+light,1440,920,accounts.png,선택 트래픽 연결,536,218,127,34,true,false,true
+light,1440,920,accounts.png,세션 연결 해제,671,218,114,34,true,false,true
+light,1440,920,accounts.png,선택 URL 완료,22,263,114,34,true,false,true
+light,1440,920,accounts.png,완료 해제,144,263,84,34,true,false,true
+light,1440,920,accounts.png,입력 완료 / 해제,236,263,123,34,true,false,true
+light,1440,920,accounts.png,선택 API → 업무,367,263,126,34,true,false,true
+light,1440,920,accounts.png,점검 이력,501,263,84,34,true,false,true
+light,1440,920,tasks.png,추적 ON,20,90,76,26,true,false,true
+light,1440,920,tasks.png,Scope만,104,90,77,26,true,false,true
+light,1440,920,tasks.png,History 가져오기,189,86,128,34,true,false,true
+light,1440,920,tasks.png,JComboBox,325,85,178,36,true,false,true
+light,1440,920,tasks.png,JTextField,575,87,252,32,true,false,true
+light,1440,920,tasks.png,URL 완료 / 해제,20,131,123,34,true,false,true
+light,1440,920,tasks.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+light,1440,920,tasks.png,발견 근거,308,131,84,34,true,false,true
+light,1440,920,tasks.png,Repeater 초안,400,131,117,34,true,false,true
+light,1440,920,tasks.png,Excel 내보내기,525,131,117,34,true,false,true
+light,1440,920,tasks.png,기록 저장,650,131,84,34,true,false,true
+light,1440,920,tasks.png,기록 불러오기,742,131,110,34,true,false,true
+light,1440,920,tasks.png,초기화,860,131,67,34,true,false,true
+light,1440,920,tasks.png,업무 등록,22,217,84,34,true,false,true
+light,1440,920,tasks.png,업무 설정,114,217,84,34,true,false,true
+light,1440,920,tasks.png,선택 API → 업무,206,217,126,34,true,false,true
+light,1440,920,tasks.png,선택 API 제외,340,217,109,34,true,false,true
+light,1440,920,tasks.png,증거 파일 확인,457,217,114,34,true,false,true
+light,1440,920,tasks.png,증거 ZIP 재연결,579,217,120,34,true,false,true
+light,1440,920,tasks.png,증거 재검증,707,217,97,34,true,false,true
+light,1440,920,tasks.png,업무 완료,812,217,84,34,true,false,true
+light,1440,920,tasks.png,완료 해제,904,217,84,34,true,false,true
+light,1440,920,tasks.png,점검 이력,996,217,84,34,true,false,true
+light,1440,920,bounty-1.png,선택 요청을 단계로 추가,20,125,170,34,true,false,true
+light,1440,920,bounty-1.png,대상 설정,198,125,84,34,true,false,true
+light,1440,920,bounty-1.png,순차 실행,290,125,84,34,true,false,true
+light,1440,920,bounty-1.png,중지,382,125,54,34,true,false,true
+light,1440,920,bounty-1.png,결과 → 증거 묶음,444,125,131,34,true,false,true
+light,1440,920,bounty-3.png,JTextField,54,125,382,32,true,false,true
+light,1440,920,bounty-3.png,JSON/폼 본문 포함 · 민감 키 가림,444,128,222,26,true,false,true
+light,1440,920,bounty-3.png,선택 트래픽 추가,20,167,127,34,true,false,true
+light,1440,920,bounty-3.png,선택 권한 비교 추가,155,167,144,34,true,false,true
+light,1440,920,bounty-3.png,업무 흐름 결과 추가,307,167,144,34,true,false,true
+light,1440,920,bounty-3.png,가림 미리보기,459,167,110,34,true,false,true
+light,1440,920,bounty-3.png,증거 ZIP 저장,577,167,107,34,true,false,true
+light,1440,920,bounty-3.png,증거 비우기,692,167,97,34,true,false,true
+light,1440,920,js-horizontal.png,History 자동 분석,20,94,129,26,true,false,true
+light,1440,920,js-horizontal.png,JComboBox,221,92,360,30,true,false,true
+light,1440,920,js-horizontal.png,선택 URL → Repeater,20,133,164,34,true,false,true
+light,1440,920,js-horizontal.png,동적 값 확정,192,133,101,34,true,false,true
+light,1440,920,js-horizontal.png,원본 위치,301,133,84,34,true,false,true
+light,1440,920,js-horizontal.png,JComboBox,393,132,140,36,true,false,true
+light,1440,920,js-horizontal.png,추가 도구,541,133,84,34,true,false,true
+light,1440,920,js-horizontal.png,더보기,633,133,67,34,true,false,true
+light,1440,920,js-horizontal.png,대상 설정,123,251,84,34,true,false,true
+light,1440,920,js-horizontal.png,수동 분석,21,295,84,34,true,false,true
+light,1440,920,js-horizontal.png,선택 응답 가져오기,113,295,140,34,true,false,true
+light,1440,920,js-horizontal.png,←,21,340,41,34,true,false,false
+light,1440,920,js-horizontal.png,→,70,340,41,34,true,false,false
+light,1440,920,js-horizontal.png,JComboBox,119,339,137,36,true,false,true
+light,1440,920,js-horizontal.png,데이터 정렬,21,497,94,26,true,false,true
+light,1440,920,js-horizontal.png,데이터 정렬,732,497,94,26,true,false,true
+dark,1024,720,tool-00.png,수집 ON,65,44,76,26,true,false,true
+dark,1024,720,tool-00.png,Scope만,149,44,77,26,true,false,true
+dark,1024,720,tool-00.png,JTextField,268,41,278,32,true,false,true
+dark,1024,720,tool-00.png,검색 초기화,554,40,97,34,true,false,true
+dark,1024,720,tool-00.png,목록 비우기,659,40,97,34,true,false,true
+dark,1024,720,tool-00.png,내보내기,764,40,80,34,true,false,true
+dark,1024,720,tool-00.png,SCOPE 목록 (0),852,40,124,34,true,false,true
+dark,1024,720,tool-00.png,데이터 정렬,374,186,94,26,true,false,true
+dark,1024,720,tool-00.png,데이터 정렬,374,450,94,26,true,false,true
+dark,1024,720,tool-01.png,Record OFF,18,86,108,28,true,false,true
+dark,1024,720,tool-01.png,선택 요청 비교,134,83,114,34,true,false,true
+dark,1024,720,tool-01.png,중지,256,83,54,34,true,false,true
+dark,1024,720,tool-01.png,History 비우기,318,83,115,34,true,false,true
+dark,1024,720,tool-01.png,비교 설정,441,83,84,34,true,false,true
+dark,1024,720,tool-01.png,세션·권한 매트릭스,533,83,140,34,true,false,true
+dark,1024,720,tool-01.png,더보기,681,83,67,34,true,false,true
+dark,1024,720,tool-01.png,JComboBox,663,172,176,36,true,false,true
+dark,1024,720,tool-01.png,현재 패킷 → Repeater,847,173,164,34,true,false,true
+dark,1024,720,tool-02.png,JComboBox,28,127,180,36,true,false,true
+dark,1024,720,tool-02.png,변환,216,128,54,34,true,false,true
+dark,1024,720,tool-02.png,출력 → 입력,278,128,101,34,true,false,true
+dark,1024,720,tool-02.png,복사,387,128,54,34,true,false,true
+dark,1024,720,tool-03.png,History 자동 분석,20,94,129,26,true,false,true
+dark,1024,720,tool-03.png,JComboBox,221,92,360,30,true,false,true
+dark,1024,720,tool-03.png,선택 URL → Repeater,20,133,164,34,true,false,true
+dark,1024,720,tool-03.png,동적 값 확정,192,133,101,34,true,false,true
+dark,1024,720,tool-03.png,원본 위치,301,133,84,34,true,false,true
+dark,1024,720,tool-03.png,JComboBox,393,132,140,36,true,false,true
+dark,1024,720,tool-03.png,추가 도구,541,133,84,34,true,false,true
+dark,1024,720,tool-03.png,더보기,633,133,67,34,true,false,true
+dark,1024,720,tool-03.png,대상 설정,123,251,84,34,true,false,true
+dark,1024,720,tool-03.png,수동 분석,21,295,84,34,true,false,true
+dark,1024,720,tool-03.png,선택 응답 가져오기,113,295,140,34,true,false,true
+dark,1024,720,tool-03.png,←,21,340,41,34,true,false,false
+dark,1024,720,tool-03.png,→,70,340,41,34,true,false,false
+dark,1024,720,tool-03.png,JComboBox,119,339,137,36,true,false,true
+dark,1024,720,tool-03.png,데이터 정렬,474,251,94,26,true,false,true
+dark,1024,720,tool-03.png,데이터 정렬,474,457,94,26,true,false,true
+dark,1024,720,tool-04.png,대상 설정,204,87,84,34,true,false,true
+dark,1024,720,tool-04.png,전체 환경,296,87,84,34,true,false,true
+dark,1024,720,tool-04.png,단일 시작,22,131,84,34,true,false,true
+dark,1024,720,tool-04.png,일괄 시작,114,131,84,34,true,false,true
+dark,1024,720,tool-04.png,중지,206,131,54,34,true,false,false
+dark,1024,720,tool-04.png,선택 URL → 비로그인 GET Repeater,268,131,251,34,true,false,true
+dark,1024,720,tool-04.png,후보 설정,527,131,84,34,true,false,true
+dark,1024,720,tool-04.png,더보기,619,131,67,34,true,false,true
+dark,1024,720,tool-04.png,요청·응답 정렬,474,448,111,26,true,false,true
+dark,1024,720,tool-05.png,대상 설정,198,38,84,34,true,false,true
+dark,1024,720,tool-05.png,대상 수집 시작,290,38,114,34,true,false,true
+dark,1024,720,tool-05.png,선택 대상 닫기,412,38,114,34,true,false,true
+dark,1024,720,tool-05.png,JComboBox,134,186,250,36,true,false,true
+dark,1024,720,tool-05.png,하위 도메인 포함,392,191,124,26,true,false,true
+dark,1024,720,tool-05.png,URL 수집,524,187,84,34,true,false,true
+dark,1024,720,tool-05.png,도구 설정,616,187,84,34,true,false,true
+dark,1024,720,tool-05.png,단일 시작,28,232,84,34,true,false,true
+dark,1024,720,tool-05.png,일괄 시작,120,232,84,34,true,false,true
+dark,1024,720,tool-05.png,중지,212,232,54,34,true,false,false
+dark,1024,720,tool-05.png,미검증만 실행,369,236,107,26,true,false,true
+dark,1024,720,tool-05.png,더보기,484,232,67,34,true,false,true
+dark,1024,720,tool-05.png,선택 검증 원본 → 증거,559,232,161,34,true,false,false
+dark,1024,720,tool-05.png,JTextField,62,278,278,32,true,false,true
+dark,1024,720,tool-05.png,JComboBox,348,276,124,36,true,false,true
+dark,1024,720,tool-05.png,정적 파일 숨김,480,281,111,26,true,false,true
+dark,1024,720,tool-05.png,패턴별 대표만 표시,599,281,137,26,true,false,true
+dark,1024,720,tool-05.png,패턴 요약,744,277,84,34,true,false,true
+dark,1024,720,tool-05.png,데이터 정렬,474,372,94,26,true,false,true
+dark,1024,720,tool-05.png,데이터 정렬,474,518,94,26,true,false,true
+dark,1024,720,tool-06.png,추적 ON,20,90,76,26,true,false,true
+dark,1024,720,tool-06.png,Scope만,104,90,77,26,true,false,true
+dark,1024,720,tool-06.png,History 가져오기,189,86,128,34,true,false,true
+dark,1024,720,tool-06.png,JComboBox,325,85,178,36,true,false,true
+dark,1024,720,tool-06.png,JTextField,575,87,252,32,true,false,true
+dark,1024,720,tool-06.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1024,720,tool-06.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1024,720,tool-06.png,발견 근거,308,131,84,34,true,false,true
+dark,1024,720,tool-06.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1024,720,tool-06.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1024,720,tool-06.png,기록 저장,650,131,84,34,true,false,true
+dark,1024,720,tool-06.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1024,720,tool-06.png,초기화,860,131,67,34,true,false,true
+dark,1024,720,tool-07.png,저장/조회 마커,18,83,115,34,true,false,true
+dark,1024,720,tool-07.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+dark,1024,720,tool-07.png,관찰 초기화,338,83,97,34,true,false,true
+dark,1024,720,tool-07.png,선택 관찰 → 증거 묶음,20,169,161,34,true,false,true
+dark,1024,720,tool-08.png,JComboBox,118,125,237,36,true,false,true
+dark,1024,720,tool-08.png,선택 요청 → Repeater,363,126,164,34,true,false,true
+dark,1024,720,tool-08.png,공식 안내,535,126,84,34,true,false,true
+dark,1024,720,tool-08.png,결과 → 활동 추적,20,587,131,34,true,false,true
+dark,1024,720,data-compare.png,비교,20,110,54,34,true,false,true
+dark,1024,720,data-compare.png,입력으로,82,110,80,34,true,false,true
+dark,1024,720,data-compare.png,초기화,170,110,67,34,true,false,true
+dark,1024,720,data-compare.png,데이터 정렬,245,114,94,26,true,false,true
+dark,1024,720,data-compare.png,←,347,110,41,34,true,false,true
+dark,1024,720,data-compare.png,→,396,110,41,34,true,false,true
+dark,1024,720,data-compare.png,선택 트래픽 → 왼쪽 응답,20,154,174,34,true,false,true
+dark,1024,720,data-compare.png,선택 트래픽 → 오른쪽 응답,202,154,187,34,true,false,true
+dark,1024,720,data-compare.png,연결 원본 2개 → 증거,397,154,156,34,true,false,false
+dark,1024,720,stored-flow.png,저장/조회 마커,18,83,115,34,true,false,true
+dark,1024,720,stored-flow.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+dark,1024,720,stored-flow.png,관찰 초기화,338,83,97,34,true,false,true
+dark,1024,720,stored-flow.png,선택 흐름 → 증거 묶음,20,169,161,34,true,false,true
+dark,1024,720,stored-flow.png,브라우저 실행 수동 확인 · 이미지,189,169,221,34,true,false,true
+dark,1024,720,stored-flow.png,수동 실행 근거 해제,418,169,144,34,true,false,true
+dark,1024,720,accounts.png,추적 ON,20,90,76,26,true,false,true
+dark,1024,720,accounts.png,Scope만,104,90,77,26,true,false,true
+dark,1024,720,accounts.png,History 가져오기,189,86,128,34,true,false,true
+dark,1024,720,accounts.png,JComboBox,325,85,178,36,true,false,true
+dark,1024,720,accounts.png,JTextField,575,87,252,32,true,false,true
+dark,1024,720,accounts.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1024,720,accounts.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1024,720,accounts.png,발견 근거,308,131,84,34,true,false,true
+dark,1024,720,accounts.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1024,720,accounts.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1024,720,accounts.png,기록 저장,650,131,84,34,true,false,true
+dark,1024,720,accounts.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1024,720,accounts.png,초기화,860,131,67,34,true,false,true
+dark,1024,720,accounts.png,JComboBox,86,217,96,36,true,false,true
+dark,1024,720,accounts.png,JComboBox,190,217,123,36,true,false,true
+dark,1024,720,accounts.png,계정 등록,321,218,84,34,true,false,true
+dark,1024,720,accounts.png,계정 이름/역할,413,218,115,34,true,false,true
+dark,1024,720,accounts.png,선택 트래픽 연결,536,218,127,34,true,false,true
+dark,1024,720,accounts.png,세션 연결 해제,671,218,114,34,true,false,true
+dark,1024,720,accounts.png,선택 URL 완료,22,263,114,34,true,false,true
+dark,1024,720,accounts.png,완료 해제,144,263,84,34,true,false,true
+dark,1024,720,accounts.png,입력 완료 / 해제,236,263,123,34,true,false,true
+dark,1024,720,accounts.png,선택 API → 업무,367,263,126,34,true,false,true
+dark,1024,720,accounts.png,점검 이력,501,263,84,34,true,false,true
+dark,1024,720,tasks.png,추적 ON,20,90,76,26,true,false,true
+dark,1024,720,tasks.png,Scope만,104,90,77,26,true,false,true
+dark,1024,720,tasks.png,History 가져오기,189,86,128,34,true,false,true
+dark,1024,720,tasks.png,JComboBox,325,85,178,36,true,false,true
+dark,1024,720,tasks.png,JTextField,575,87,252,32,true,false,true
+dark,1024,720,tasks.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1024,720,tasks.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1024,720,tasks.png,발견 근거,308,131,84,34,true,false,true
+dark,1024,720,tasks.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1024,720,tasks.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1024,720,tasks.png,기록 저장,650,131,84,34,true,false,true
+dark,1024,720,tasks.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1024,720,tasks.png,초기화,860,131,67,34,true,false,true
+dark,1024,720,tasks.png,업무 등록,22,217,84,34,true,false,true
+dark,1024,720,tasks.png,업무 설정,114,217,84,34,true,false,true
+dark,1024,720,tasks.png,선택 API → 업무,206,217,126,34,true,false,true
+dark,1024,720,tasks.png,선택 API 제외,340,217,109,34,true,false,true
+dark,1024,720,tasks.png,증거 파일 확인,457,217,114,34,true,false,true
+dark,1024,720,tasks.png,증거 ZIP 재연결,579,217,120,34,true,false,true
+dark,1024,720,tasks.png,증거 재검증,707,217,97,34,true,false,true
+dark,1024,720,tasks.png,업무 완료,812,217,84,34,true,false,true
+dark,1024,720,tasks.png,완료 해제,904,217,84,34,true,false,true
+dark,1024,720,tasks.png,점검 이력,22,256,84,34,true,false,true
+dark,1024,720,bounty-1.png,선택 요청을 단계로 추가,20,125,170,34,true,false,true
+dark,1024,720,bounty-1.png,대상 설정,198,125,84,34,true,false,true
+dark,1024,720,bounty-1.png,순차 실행,290,125,84,34,true,false,true
+dark,1024,720,bounty-1.png,중지,382,125,54,34,true,false,true
+dark,1024,720,bounty-1.png,결과 → 증거 묶음,444,125,131,34,true,false,true
+dark,1024,720,bounty-3.png,JTextField,54,125,382,32,true,false,true
+dark,1024,720,bounty-3.png,JSON/폼 본문 포함 · 민감 키 가림,444,128,222,26,true,false,true
+dark,1024,720,bounty-3.png,선택 트래픽 추가,20,167,127,34,true,false,true
+dark,1024,720,bounty-3.png,선택 권한 비교 추가,155,167,144,34,true,false,true
+dark,1024,720,bounty-3.png,업무 흐름 결과 추가,307,167,144,34,true,false,true
+dark,1024,720,bounty-3.png,가림 미리보기,459,167,110,34,true,false,true
+dark,1024,720,bounty-3.png,증거 ZIP 저장,577,167,107,34,true,false,true
+dark,1024,720,bounty-3.png,증거 비우기,692,167,97,34,true,false,true
+dark,1024,720,js-horizontal.png,History 자동 분석,20,94,129,26,true,false,true
+dark,1024,720,js-horizontal.png,JComboBox,221,92,360,30,true,false,true
+dark,1024,720,js-horizontal.png,선택 URL → Repeater,20,133,164,34,true,false,true
+dark,1024,720,js-horizontal.png,동적 값 확정,192,133,101,34,true,false,true
+dark,1024,720,js-horizontal.png,원본 위치,301,133,84,34,true,false,true
+dark,1024,720,js-horizontal.png,JComboBox,393,132,140,36,true,false,true
+dark,1024,720,js-horizontal.png,추가 도구,541,133,84,34,true,false,true
+dark,1024,720,js-horizontal.png,더보기,633,133,67,34,true,false,true
+dark,1024,720,js-horizontal.png,대상 설정,123,251,84,34,true,false,true
+dark,1024,720,js-horizontal.png,수동 분석,21,295,84,34,true,false,true
+dark,1024,720,js-horizontal.png,선택 응답 가져오기,113,295,140,34,true,false,true
+dark,1024,720,js-horizontal.png,←,21,340,41,34,false,false,false
+dark,1024,720,js-horizontal.png,→,70,340,41,34,false,false,false
+dark,1024,720,js-horizontal.png,JComboBox,119,339,137,36,false,false,true
+dark,1024,720,js-horizontal.png,데이터 정렬,21,417,94,26,true,false,true
+dark,1024,720,js-horizontal.png,데이터 정렬,524,417,94,26,true,false,true
+dark,1280,800,tool-00.png,수집 ON,65,44,76,26,true,false,true
+dark,1280,800,tool-00.png,Scope만,149,44,77,26,true,false,true
+dark,1280,800,tool-00.png,JTextField,268,41,278,32,true,false,true
+dark,1280,800,tool-00.png,검색 초기화,554,40,97,34,true,false,true
+dark,1280,800,tool-00.png,목록 비우기,659,40,97,34,true,false,true
+dark,1280,800,tool-00.png,내보내기,764,40,80,34,true,false,true
+dark,1280,800,tool-00.png,SCOPE 목록 (0),852,40,124,34,true,false,true
+dark,1280,800,tool-00.png,데이터 정렬,464,163,94,26,true,false,true
+dark,1280,800,tool-00.png,데이터 정렬,464,478,94,26,true,false,true
+dark,1280,800,tool-01.png,Record OFF,18,86,108,28,true,false,true
+dark,1280,800,tool-01.png,선택 요청 비교,134,83,114,34,true,false,true
+dark,1280,800,tool-01.png,중지,256,83,54,34,true,false,true
+dark,1280,800,tool-01.png,History 비우기,318,83,115,34,true,false,true
+dark,1280,800,tool-01.png,비교 설정,441,83,84,34,true,false,true
+dark,1280,800,tool-01.png,세션·권한 매트릭스,533,83,140,34,true,false,true
+dark,1280,800,tool-01.png,더보기,681,83,67,34,true,false,true
+dark,1280,800,tool-01.png,JComboBox,778,172,176,36,true,false,true
+dark,1280,800,tool-01.png,현재 패킷 → Repeater,962,173,164,34,true,false,true
+dark,1280,800,tool-02.png,JComboBox,28,127,180,36,true,false,true
+dark,1280,800,tool-02.png,변환,216,128,54,34,true,false,true
+dark,1280,800,tool-02.png,출력 → 입력,278,128,101,34,true,false,true
+dark,1280,800,tool-02.png,복사,387,128,54,34,true,false,true
+dark,1280,800,tool-03.png,History 자동 분석,20,94,129,26,true,false,true
+dark,1280,800,tool-03.png,JComboBox,221,92,360,30,true,false,true
+dark,1280,800,tool-03.png,선택 URL → Repeater,20,133,164,34,true,false,true
+dark,1280,800,tool-03.png,동적 값 확정,192,133,101,34,true,false,true
+dark,1280,800,tool-03.png,원본 위치,301,133,84,34,true,false,true
+dark,1280,800,tool-03.png,JComboBox,393,132,140,36,true,false,true
+dark,1280,800,tool-03.png,추가 도구,541,133,84,34,true,false,true
+dark,1280,800,tool-03.png,더보기,633,133,67,34,true,false,true
+dark,1280,800,tool-03.png,대상 설정,123,251,84,34,true,false,true
+dark,1280,800,tool-03.png,수동 분석,21,295,84,34,true,false,true
+dark,1280,800,tool-03.png,선택 응답 가져오기,113,295,140,34,true,false,true
+dark,1280,800,tool-03.png,←,21,340,41,34,true,false,false
+dark,1280,800,tool-03.png,→,70,340,41,34,true,false,false
+dark,1280,800,tool-03.png,JComboBox,119,339,137,36,true,false,true
+dark,1280,800,tool-03.png,데이터 정렬,589,251,94,26,true,false,true
+dark,1280,800,tool-03.png,데이터 정렬,589,497,94,26,true,false,true
+dark,1280,800,tool-04.png,대상 설정,204,87,84,34,true,false,true
+dark,1280,800,tool-04.png,전체 환경,296,87,84,34,true,false,true
+dark,1280,800,tool-04.png,단일 시작,22,131,84,34,true,false,true
+dark,1280,800,tool-04.png,일괄 시작,114,131,84,34,true,false,true
+dark,1280,800,tool-04.png,중지,206,131,54,34,true,false,false
+dark,1280,800,tool-04.png,선택 URL → 비로그인 GET Repeater,268,131,251,34,true,false,true
+dark,1280,800,tool-04.png,후보 설정,527,131,84,34,true,false,true
+dark,1280,800,tool-04.png,더보기,619,131,67,34,true,false,true
+dark,1280,800,tool-04.png,요청·응답 정렬,589,488,111,26,true,false,true
+dark,1280,800,tool-05.png,대상 설정,198,38,84,34,true,false,true
+dark,1280,800,tool-05.png,대상 수집 시작,290,38,114,34,true,false,true
+dark,1280,800,tool-05.png,선택 대상 닫기,412,38,114,34,true,false,true
+dark,1280,800,tool-05.png,JComboBox,134,186,250,36,true,false,true
+dark,1280,800,tool-05.png,하위 도메인 포함,392,191,124,26,true,false,true
+dark,1280,800,tool-05.png,URL 수집,524,187,84,34,true,false,true
+dark,1280,800,tool-05.png,도구 설정,616,187,84,34,true,false,true
+dark,1280,800,tool-05.png,단일 시작,28,232,84,34,true,false,true
+dark,1280,800,tool-05.png,일괄 시작,120,232,84,34,true,false,true
+dark,1280,800,tool-05.png,중지,212,232,54,34,true,false,false
+dark,1280,800,tool-05.png,미검증만 실행,369,236,107,26,true,false,true
+dark,1280,800,tool-05.png,더보기,484,232,67,34,true,false,true
+dark,1280,800,tool-05.png,선택 검증 원본 → 증거,559,232,161,34,true,false,false
+dark,1280,800,tool-05.png,JTextField,62,278,278,32,true,false,true
+dark,1280,800,tool-05.png,JComboBox,348,276,124,36,true,false,true
+dark,1280,800,tool-05.png,정적 파일 숨김,480,281,111,26,true,false,true
+dark,1280,800,tool-05.png,패턴별 대표만 표시,599,281,137,26,true,false,true
+dark,1280,800,tool-05.png,패턴 요약,744,277,84,34,true,false,true
+dark,1280,800,tool-05.png,데이터 정렬,589,372,94,26,true,false,true
+dark,1280,800,tool-05.png,데이터 정렬,589,558,94,26,true,false,true
+dark,1280,800,tool-06.png,추적 ON,20,90,76,26,true,false,true
+dark,1280,800,tool-06.png,Scope만,104,90,77,26,true,false,true
+dark,1280,800,tool-06.png,History 가져오기,189,86,128,34,true,false,true
+dark,1280,800,tool-06.png,JComboBox,325,85,178,36,true,false,true
+dark,1280,800,tool-06.png,JTextField,575,87,252,32,true,false,true
+dark,1280,800,tool-06.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1280,800,tool-06.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1280,800,tool-06.png,발견 근거,308,131,84,34,true,false,true
+dark,1280,800,tool-06.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1280,800,tool-06.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1280,800,tool-06.png,기록 저장,650,131,84,34,true,false,true
+dark,1280,800,tool-06.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1280,800,tool-06.png,초기화,860,131,67,34,true,false,true
+dark,1280,800,tool-07.png,저장/조회 마커,18,83,115,34,true,false,true
+dark,1280,800,tool-07.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+dark,1280,800,tool-07.png,관찰 초기화,338,83,97,34,true,false,true
+dark,1280,800,tool-07.png,선택 관찰 → 증거 묶음,20,169,161,34,true,false,true
+dark,1280,800,tool-08.png,JComboBox,144,125,237,36,true,false,true
+dark,1280,800,tool-08.png,선택 요청 → Repeater,389,126,164,34,true,false,true
+dark,1280,800,tool-08.png,공식 안내,561,126,84,34,true,false,true
+dark,1280,800,tool-08.png,결과 → 활동 추적,20,667,131,34,true,false,true
+dark,1280,800,data-compare.png,비교,20,110,54,34,true,false,true
+dark,1280,800,data-compare.png,입력으로,82,110,80,34,true,false,true
+dark,1280,800,data-compare.png,초기화,170,110,67,34,true,false,true
+dark,1280,800,data-compare.png,데이터 정렬,245,114,94,26,true,false,true
+dark,1280,800,data-compare.png,←,347,110,41,34,true,false,true
+dark,1280,800,data-compare.png,→,396,110,41,34,true,false,true
+dark,1280,800,data-compare.png,선택 트래픽 → 왼쪽 응답,20,154,174,34,true,false,true
+dark,1280,800,data-compare.png,선택 트래픽 → 오른쪽 응답,202,154,187,34,true,false,true
+dark,1280,800,data-compare.png,연결 원본 2개 → 증거,397,154,156,34,true,false,false
+dark,1280,800,stored-flow.png,저장/조회 마커,18,83,115,34,true,false,true
+dark,1280,800,stored-flow.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+dark,1280,800,stored-flow.png,관찰 초기화,338,83,97,34,true,false,true
+dark,1280,800,stored-flow.png,선택 흐름 → 증거 묶음,20,169,161,34,true,false,true
+dark,1280,800,stored-flow.png,브라우저 실행 수동 확인 · 이미지,189,169,221,34,true,false,true
+dark,1280,800,stored-flow.png,수동 실행 근거 해제,418,169,144,34,true,false,true
+dark,1280,800,accounts.png,추적 ON,20,90,76,26,true,false,true
+dark,1280,800,accounts.png,Scope만,104,90,77,26,true,false,true
+dark,1280,800,accounts.png,History 가져오기,189,86,128,34,true,false,true
+dark,1280,800,accounts.png,JComboBox,325,85,178,36,true,false,true
+dark,1280,800,accounts.png,JTextField,575,87,252,32,true,false,true
+dark,1280,800,accounts.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1280,800,accounts.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1280,800,accounts.png,발견 근거,308,131,84,34,true,false,true
+dark,1280,800,accounts.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1280,800,accounts.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1280,800,accounts.png,기록 저장,650,131,84,34,true,false,true
+dark,1280,800,accounts.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1280,800,accounts.png,초기화,860,131,67,34,true,false,true
+dark,1280,800,accounts.png,JComboBox,86,217,96,36,true,false,true
+dark,1280,800,accounts.png,JComboBox,190,217,123,36,true,false,true
+dark,1280,800,accounts.png,계정 등록,321,218,84,34,true,false,true
+dark,1280,800,accounts.png,계정 이름/역할,413,218,115,34,true,false,true
+dark,1280,800,accounts.png,선택 트래픽 연결,536,218,127,34,true,false,true
+dark,1280,800,accounts.png,세션 연결 해제,671,218,114,34,true,false,true
+dark,1280,800,accounts.png,선택 URL 완료,22,263,114,34,true,false,true
+dark,1280,800,accounts.png,완료 해제,144,263,84,34,true,false,true
+dark,1280,800,accounts.png,입력 완료 / 해제,236,263,123,34,true,false,true
+dark,1280,800,accounts.png,선택 API → 업무,367,263,126,34,true,false,true
+dark,1280,800,accounts.png,점검 이력,501,263,84,34,true,false,true
+dark,1280,800,tasks.png,추적 ON,20,90,76,26,true,false,true
+dark,1280,800,tasks.png,Scope만,104,90,77,26,true,false,true
+dark,1280,800,tasks.png,History 가져오기,189,86,128,34,true,false,true
+dark,1280,800,tasks.png,JComboBox,325,85,178,36,true,false,true
+dark,1280,800,tasks.png,JTextField,575,87,252,32,true,false,true
+dark,1280,800,tasks.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1280,800,tasks.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1280,800,tasks.png,발견 근거,308,131,84,34,true,false,true
+dark,1280,800,tasks.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1280,800,tasks.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1280,800,tasks.png,기록 저장,650,131,84,34,true,false,true
+dark,1280,800,tasks.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1280,800,tasks.png,초기화,860,131,67,34,true,false,true
+dark,1280,800,tasks.png,업무 등록,22,217,84,34,true,false,true
+dark,1280,800,tasks.png,업무 설정,114,217,84,34,true,false,true
+dark,1280,800,tasks.png,선택 API → 업무,206,217,126,34,true,false,true
+dark,1280,800,tasks.png,선택 API 제외,340,217,109,34,true,false,true
+dark,1280,800,tasks.png,증거 파일 확인,457,217,114,34,true,false,true
+dark,1280,800,tasks.png,증거 ZIP 재연결,579,217,120,34,true,false,true
+dark,1280,800,tasks.png,증거 재검증,707,217,97,34,true,false,true
+dark,1280,800,tasks.png,업무 완료,812,217,84,34,true,false,true
+dark,1280,800,tasks.png,완료 해제,904,217,84,34,true,false,true
+dark,1280,800,tasks.png,점검 이력,996,217,84,34,true,false,true
+dark,1280,800,bounty-1.png,선택 요청을 단계로 추가,20,125,170,34,true,false,true
+dark,1280,800,bounty-1.png,대상 설정,198,125,84,34,true,false,true
+dark,1280,800,bounty-1.png,순차 실행,290,125,84,34,true,false,true
+dark,1280,800,bounty-1.png,중지,382,125,54,34,true,false,true
+dark,1280,800,bounty-1.png,결과 → 증거 묶음,444,125,131,34,true,false,true
+dark,1280,800,bounty-3.png,JTextField,54,125,382,32,true,false,true
+dark,1280,800,bounty-3.png,JSON/폼 본문 포함 · 민감 키 가림,444,128,222,26,true,false,true
+dark,1280,800,bounty-3.png,선택 트래픽 추가,20,167,127,34,true,false,true
+dark,1280,800,bounty-3.png,선택 권한 비교 추가,155,167,144,34,true,false,true
+dark,1280,800,bounty-3.png,업무 흐름 결과 추가,307,167,144,34,true,false,true
+dark,1280,800,bounty-3.png,가림 미리보기,459,167,110,34,true,false,true
+dark,1280,800,bounty-3.png,증거 ZIP 저장,577,167,107,34,true,false,true
+dark,1280,800,bounty-3.png,증거 비우기,692,167,97,34,true,false,true
+dark,1280,800,js-horizontal.png,History 자동 분석,20,94,129,26,true,false,true
+dark,1280,800,js-horizontal.png,JComboBox,221,92,360,30,true,false,true
+dark,1280,800,js-horizontal.png,선택 URL → Repeater,20,133,164,34,true,false,true
+dark,1280,800,js-horizontal.png,동적 값 확정,192,133,101,34,true,false,true
+dark,1280,800,js-horizontal.png,원본 위치,301,133,84,34,true,false,true
+dark,1280,800,js-horizontal.png,JComboBox,393,132,140,36,true,false,true
+dark,1280,800,js-horizontal.png,추가 도구,541,133,84,34,true,false,true
+dark,1280,800,js-horizontal.png,더보기,633,133,67,34,true,false,true
+dark,1280,800,js-horizontal.png,대상 설정,123,251,84,34,true,false,true
+dark,1280,800,js-horizontal.png,수동 분석,21,295,84,34,true,false,true
+dark,1280,800,js-horizontal.png,선택 응답 가져오기,113,295,140,34,true,false,true
+dark,1280,800,js-horizontal.png,←,21,340,41,34,true,false,false
+dark,1280,800,js-horizontal.png,→,70,340,41,34,true,false,false
+dark,1280,800,js-horizontal.png,JComboBox,119,339,137,36,true,false,true
+dark,1280,800,js-horizontal.png,데이터 정렬,21,449,94,26,true,false,true
+dark,1280,800,js-horizontal.png,데이터 정렬,652,449,94,26,true,false,true
+dark,1440,920,tool-00.png,수집 ON,65,44,76,26,true,false,true
+dark,1440,920,tool-00.png,Scope만,149,44,77,26,true,false,true
+dark,1440,920,tool-00.png,JTextField,268,41,278,32,true,false,true
+dark,1440,920,tool-00.png,검색 초기화,554,40,97,34,true,false,true
+dark,1440,920,tool-00.png,목록 비우기,659,40,97,34,true,false,true
+dark,1440,920,tool-00.png,내보내기,764,40,80,34,true,false,true
+dark,1440,920,tool-00.png,SCOPE 목록 (0),852,40,124,34,true,false,true
+dark,1440,920,tool-00.png,데이터 정렬,520,163,94,26,true,false,true
+dark,1440,920,tool-00.png,데이터 정렬,520,538,94,26,true,false,true
+dark,1440,920,tool-01.png,Record OFF,18,86,108,28,true,false,true
+dark,1440,920,tool-01.png,선택 요청 비교,134,83,114,34,true,false,true
+dark,1440,920,tool-01.png,중지,256,83,54,34,true,false,true
+dark,1440,920,tool-01.png,History 비우기,318,83,115,34,true,false,true
+dark,1440,920,tool-01.png,비교 설정,441,83,84,34,true,false,true
+dark,1440,920,tool-01.png,세션·권한 매트릭스,533,83,140,34,true,false,true
+dark,1440,920,tool-01.png,더보기,681,83,67,34,true,false,true
+dark,1440,920,tool-01.png,JComboBox,850,172,176,36,true,false,true
+dark,1440,920,tool-01.png,현재 패킷 → Repeater,1034,173,164,34,true,false,true
+dark,1440,920,tool-02.png,JComboBox,28,127,180,36,true,false,true
+dark,1440,920,tool-02.png,변환,216,128,54,34,true,false,true
+dark,1440,920,tool-02.png,출력 → 입력,278,128,101,34,true,false,true
+dark,1440,920,tool-02.png,복사,387,128,54,34,true,false,true
+dark,1440,920,tool-03.png,History 자동 분석,20,94,129,26,true,false,true
+dark,1440,920,tool-03.png,JComboBox,221,92,360,30,true,false,true
+dark,1440,920,tool-03.png,선택 URL → Repeater,20,133,164,34,true,false,true
+dark,1440,920,tool-03.png,동적 값 확정,192,133,101,34,true,false,true
+dark,1440,920,tool-03.png,원본 위치,301,133,84,34,true,false,true
+dark,1440,920,tool-03.png,JComboBox,393,132,140,36,true,false,true
+dark,1440,920,tool-03.png,추가 도구,541,133,84,34,true,false,true
+dark,1440,920,tool-03.png,더보기,633,133,67,34,true,false,true
+dark,1440,920,tool-03.png,대상 설정,123,251,84,34,true,false,true
+dark,1440,920,tool-03.png,수동 분석,21,295,84,34,true,false,true
+dark,1440,920,tool-03.png,선택 응답 가져오기,113,295,140,34,true,false,true
+dark,1440,920,tool-03.png,←,21,340,41,34,true,false,false
+dark,1440,920,tool-03.png,→,70,340,41,34,true,false,false
+dark,1440,920,tool-03.png,JComboBox,119,339,137,36,true,false,true
+dark,1440,920,tool-03.png,데이터 정렬,661,251,94,26,true,false,true
+dark,1440,920,tool-03.png,데이터 정렬,661,557,94,26,true,false,true
+dark,1440,920,tool-04.png,대상 설정,204,87,84,34,true,false,true
+dark,1440,920,tool-04.png,전체 환경,296,87,84,34,true,false,true
+dark,1440,920,tool-04.png,단일 시작,22,131,84,34,true,false,true
+dark,1440,920,tool-04.png,일괄 시작,114,131,84,34,true,false,true
+dark,1440,920,tool-04.png,중지,206,131,54,34,true,false,false
+dark,1440,920,tool-04.png,선택 URL → 비로그인 GET Repeater,268,131,251,34,true,false,true
+dark,1440,920,tool-04.png,후보 설정,527,131,84,34,true,false,true
+dark,1440,920,tool-04.png,더보기,619,131,67,34,true,false,true
+dark,1440,920,tool-04.png,요청·응답 정렬,661,548,111,26,true,false,true
+dark,1440,920,tool-05.png,대상 설정,198,38,84,34,true,false,true
+dark,1440,920,tool-05.png,대상 수집 시작,290,38,114,34,true,false,true
+dark,1440,920,tool-05.png,선택 대상 닫기,412,38,114,34,true,false,true
+dark,1440,920,tool-05.png,JComboBox,134,186,250,36,true,false,true
+dark,1440,920,tool-05.png,하위 도메인 포함,392,191,124,26,true,false,true
+dark,1440,920,tool-05.png,URL 수집,524,187,84,34,true,false,true
+dark,1440,920,tool-05.png,도구 설정,616,187,84,34,true,false,true
+dark,1440,920,tool-05.png,단일 시작,28,232,84,34,true,false,true
+dark,1440,920,tool-05.png,일괄 시작,120,232,84,34,true,false,true
+dark,1440,920,tool-05.png,중지,212,232,54,34,true,false,false
+dark,1440,920,tool-05.png,미검증만 실행,369,236,107,26,true,false,true
+dark,1440,920,tool-05.png,더보기,484,232,67,34,true,false,true
+dark,1440,920,tool-05.png,선택 검증 원본 → 증거,559,232,161,34,true,false,false
+dark,1440,920,tool-05.png,JTextField,62,278,278,32,true,false,true
+dark,1440,920,tool-05.png,JComboBox,348,276,124,36,true,false,true
+dark,1440,920,tool-05.png,정적 파일 숨김,480,281,111,26,true,false,true
+dark,1440,920,tool-05.png,패턴별 대표만 표시,599,281,137,26,true,false,true
+dark,1440,920,tool-05.png,패턴 요약,744,277,84,34,true,false,true
+dark,1440,920,tool-05.png,데이터 정렬,661,372,94,26,true,false,true
+dark,1440,920,tool-05.png,데이터 정렬,661,618,94,26,true,false,true
+dark,1440,920,tool-06.png,추적 ON,20,90,76,26,true,false,true
+dark,1440,920,tool-06.png,Scope만,104,90,77,26,true,false,true
+dark,1440,920,tool-06.png,History 가져오기,189,86,128,34,true,false,true
+dark,1440,920,tool-06.png,JComboBox,325,85,178,36,true,false,true
+dark,1440,920,tool-06.png,JTextField,575,87,252,32,true,false,true
+dark,1440,920,tool-06.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1440,920,tool-06.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1440,920,tool-06.png,발견 근거,308,131,84,34,true,false,true
+dark,1440,920,tool-06.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1440,920,tool-06.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1440,920,tool-06.png,기록 저장,650,131,84,34,true,false,true
+dark,1440,920,tool-06.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1440,920,tool-06.png,초기화,860,131,67,34,true,false,true
+dark,1440,920,tool-07.png,저장/조회 마커,18,83,115,34,true,false,true
+dark,1440,920,tool-07.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+dark,1440,920,tool-07.png,관찰 초기화,338,83,97,34,true,false,true
+dark,1440,920,tool-07.png,선택 관찰 → 증거 묶음,20,169,161,34,true,false,true
+dark,1440,920,tool-08.png,JComboBox,160,125,237,36,true,false,true
+dark,1440,920,tool-08.png,선택 요청 → Repeater,405,126,164,34,true,false,true
+dark,1440,920,tool-08.png,공식 안내,577,126,84,34,true,false,true
+dark,1440,920,tool-08.png,결과 → 활동 추적,20,787,131,34,true,false,true
+dark,1440,920,data-compare.png,비교,20,110,54,34,true,false,true
+dark,1440,920,data-compare.png,입력으로,82,110,80,34,true,false,true
+dark,1440,920,data-compare.png,초기화,170,110,67,34,true,false,true
+dark,1440,920,data-compare.png,데이터 정렬,245,114,94,26,true,false,true
+dark,1440,920,data-compare.png,←,347,110,41,34,true,false,true
+dark,1440,920,data-compare.png,→,396,110,41,34,true,false,true
+dark,1440,920,data-compare.png,선택 트래픽 → 왼쪽 응답,20,154,174,34,true,false,true
+dark,1440,920,data-compare.png,선택 트래픽 → 오른쪽 응답,202,154,187,34,true,false,true
+dark,1440,920,data-compare.png,연결 원본 2개 → 증거,397,154,156,34,true,false,false
+dark,1440,920,stored-flow.png,저장/조회 마커,18,83,115,34,true,false,true
+dark,1440,920,stored-flow.png,선택 API → Repeater 초안,141,83,189,34,true,false,true
+dark,1440,920,stored-flow.png,관찰 초기화,338,83,97,34,true,false,true
+dark,1440,920,stored-flow.png,선택 흐름 → 증거 묶음,20,169,161,34,true,false,true
+dark,1440,920,stored-flow.png,브라우저 실행 수동 확인 · 이미지,189,169,221,34,true,false,true
+dark,1440,920,stored-flow.png,수동 실행 근거 해제,418,169,144,34,true,false,true
+dark,1440,920,accounts.png,추적 ON,20,90,76,26,true,false,true
+dark,1440,920,accounts.png,Scope만,104,90,77,26,true,false,true
+dark,1440,920,accounts.png,History 가져오기,189,86,128,34,true,false,true
+dark,1440,920,accounts.png,JComboBox,325,85,178,36,true,false,true
+dark,1440,920,accounts.png,JTextField,575,87,252,32,true,false,true
+dark,1440,920,accounts.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1440,920,accounts.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1440,920,accounts.png,발견 근거,308,131,84,34,true,false,true
+dark,1440,920,accounts.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1440,920,accounts.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1440,920,accounts.png,기록 저장,650,131,84,34,true,false,true
+dark,1440,920,accounts.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1440,920,accounts.png,초기화,860,131,67,34,true,false,true
+dark,1440,920,accounts.png,JComboBox,86,217,96,36,true,false,true
+dark,1440,920,accounts.png,JComboBox,190,217,123,36,true,false,true
+dark,1440,920,accounts.png,계정 등록,321,218,84,34,true,false,true
+dark,1440,920,accounts.png,계정 이름/역할,413,218,115,34,true,false,true
+dark,1440,920,accounts.png,선택 트래픽 연결,536,218,127,34,true,false,true
+dark,1440,920,accounts.png,세션 연결 해제,671,218,114,34,true,false,true
+dark,1440,920,accounts.png,선택 URL 완료,22,263,114,34,true,false,true
+dark,1440,920,accounts.png,완료 해제,144,263,84,34,true,false,true
+dark,1440,920,accounts.png,입력 완료 / 해제,236,263,123,34,true,false,true
+dark,1440,920,accounts.png,선택 API → 업무,367,263,126,34,true,false,true
+dark,1440,920,accounts.png,점검 이력,501,263,84,34,true,false,true
+dark,1440,920,tasks.png,추적 ON,20,90,76,26,true,false,true
+dark,1440,920,tasks.png,Scope만,104,90,77,26,true,false,true
+dark,1440,920,tasks.png,History 가져오기,189,86,128,34,true,false,true
+dark,1440,920,tasks.png,JComboBox,325,85,178,36,true,false,true
+dark,1440,920,tasks.png,JTextField,575,87,252,32,true,false,true
+dark,1440,920,tasks.png,URL 완료 / 해제,20,131,123,34,true,false,true
+dark,1440,920,tasks.png,파라미터 완료 / 해제,151,131,149,34,true,false,true
+dark,1440,920,tasks.png,발견 근거,308,131,84,34,true,false,true
+dark,1440,920,tasks.png,Repeater 초안,400,131,117,34,true,false,true
+dark,1440,920,tasks.png,Excel 내보내기,525,131,117,34,true,false,true
+dark,1440,920,tasks.png,기록 저장,650,131,84,34,true,false,true
+dark,1440,920,tasks.png,기록 불러오기,742,131,110,34,true,false,true
+dark,1440,920,tasks.png,초기화,860,131,67,34,true,false,true
+dark,1440,920,tasks.png,업무 등록,22,217,84,34,true,false,true
+dark,1440,920,tasks.png,업무 설정,114,217,84,34,true,false,true
+dark,1440,920,tasks.png,선택 API → 업무,206,217,126,34,true,false,true
+dark,1440,920,tasks.png,선택 API 제외,340,217,109,34,true,false,true
+dark,1440,920,tasks.png,증거 파일 확인,457,217,114,34,true,false,true
+dark,1440,920,tasks.png,증거 ZIP 재연결,579,217,120,34,true,false,true
+dark,1440,920,tasks.png,증거 재검증,707,217,97,34,true,false,true
+dark,1440,920,tasks.png,업무 완료,812,217,84,34,true,false,true
+dark,1440,920,tasks.png,완료 해제,904,217,84,34,true,false,true
+dark,1440,920,tasks.png,점검 이력,996,217,84,34,true,false,true
+dark,1440,920,bounty-1.png,선택 요청을 단계로 추가,20,125,170,34,true,false,true
+dark,1440,920,bounty-1.png,대상 설정,198,125,84,34,true,false,true
+dark,1440,920,bounty-1.png,순차 실행,290,125,84,34,true,false,true
+dark,1440,920,bounty-1.png,중지,382,125,54,34,true,false,true
+dark,1440,920,bounty-1.png,결과 → 증거 묶음,444,125,131,34,true,false,true
+dark,1440,920,bounty-3.png,JTextField,54,125,382,32,true,false,true
+dark,1440,920,bounty-3.png,JSON/폼 본문 포함 · 민감 키 가림,444,128,222,26,true,false,true
+dark,1440,920,bounty-3.png,선택 트래픽 추가,20,167,127,34,true,false,true
+dark,1440,920,bounty-3.png,선택 권한 비교 추가,155,167,144,34,true,false,true
+dark,1440,920,bounty-3.png,업무 흐름 결과 추가,307,167,144,34,true,false,true
+dark,1440,920,bounty-3.png,가림 미리보기,459,167,110,34,true,false,true
+dark,1440,920,bounty-3.png,증거 ZIP 저장,577,167,107,34,true,false,true
+dark,1440,920,bounty-3.png,증거 비우기,692,167,97,34,true,false,true
+dark,1440,920,js-horizontal.png,History 자동 분석,20,94,129,26,true,false,true
+dark,1440,920,js-horizontal.png,JComboBox,221,92,360,30,true,false,true
+dark,1440,920,js-horizontal.png,선택 URL → Repeater,20,133,164,34,true,false,true
+dark,1440,920,js-horizontal.png,동적 값 확정,192,133,101,34,true,false,true
+dark,1440,920,js-horizontal.png,원본 위치,301,133,84,34,true,false,true
+dark,1440,920,js-horizontal.png,JComboBox,393,132,140,36,true,false,true
+dark,1440,920,js-horizontal.png,추가 도구,541,133,84,34,true,false,true
+dark,1440,920,js-horizontal.png,더보기,633,133,67,34,true,false,true
+dark,1440,920,js-horizontal.png,대상 설정,123,251,84,34,true,false,true
+dark,1440,920,js-horizontal.png,수동 분석,21,295,84,34,true,false,true
+dark,1440,920,js-horizontal.png,선택 응답 가져오기,113,295,140,34,true,false,true
+dark,1440,920,js-horizontal.png,←,21,340,41,34,true,false,false
+dark,1440,920,js-horizontal.png,→,70,340,41,34,true,false,false
+dark,1440,920,js-horizontal.png,JComboBox,119,339,137,36,true,false,true
+dark,1440,920,js-horizontal.png,데이터 정렬,21,497,94,26,true,false,true
+dark,1440,920,js-horizontal.png,데이터 정렬,732,497,94,26,true,false,true

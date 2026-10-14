@@ -1,0 +1,134 @@
+{
+  "version": "0.25.0",
+  "date": "2026-10-11",
+  "labVersion": "3.5.0",
+  "scope": "Korean feature naming, no-send guide navigation, beginner PDF; original Workbench feature behavior retained",
+  "environment": {
+    "java": "OpenJDK 17.0.20",
+    "python": "3.12.14"
+  },
+  "commands": {
+    "python dev.py release": "passed",
+    "python tools/render_ui_layout.py --check --out tmp/ui-layout-0.25.0": "passed",
+    "python tools/render_ui_layout.py --guide-only --check --out tmp/ui-guide-0.25.0": "passed",
+    "python tools/build_guide.py --refresh-previews": "passed",
+    "python -m unittest discover -s tools -p test_*.py -v": "4 passed",
+    "python tools/package_downloads.py --verify": "passed"
+  },
+  "checks": {
+    "regressionGroups": 39,
+    "regressionChecks": 1231,
+    "newFeatureGuideChecks": 95,
+    "payloadFixtureChecks": 127,
+    "allFeaturesHttpChecks": 100,
+    "allFeaturesHttpRequests": 199,
+    "bountyWorkflowChecks": 266,
+    "bountyWorkflowHttpRequests": 259,
+    "totalRegressionAndHttpChecks": 1724,
+    "packagingChecks": 4
+  },
+  "ui": {
+    "main": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.25.0.jar",
+      "releaseJarSha256": "b558e7ab8992f74bc632a44e62b6e4ddf318461f2196df27b17bd0deb0f11872",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 108,
+      "controlsMeasured": 1086,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 1836,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guide": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.25.0.jar",
+      "releaseJarSha256": "b558e7ab8992f74bc632a44e62b6e4ddf318461f2196df27b17bd0deb0f11872",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    }
+  },
+  "pdf": {
+    "pages": 24,
+    "bookmarks": 24,
+    "figures": 17,
+    "vectorUseCaseDiagrams": 2,
+    "method": "Current combined BurpExtender entry point with synthetic policy-consistent data; zero HTTP during previews. All PDF pages rendered with Poppler and visually reviewed. Captions 1-17, goal index and previous/current-name map included."
+  },
+  "artifacts": {
+    "downloads/extensions/0.25.0/burp-workbench-kr-0.25.0-source.zip": {
+      "bytes": 2899365,
+      "sha256": "8c15660b25081e86995136e4fb5780da0ad69de8c615bc764d4bd3a185cf7810"
+    },
+    "downloads/extensions/0.25.0/burp-workbench-kr-0.25.0.jar": {
+      "bytes": 3011621,
+      "sha256": "b558e7ab8992f74bc632a44e62b6e4ddf318461f2196df27b17bd0deb0f11872"
+    },
+    "downloads/guides/0.25.0/Burp_Workbench_KR_0.25.0_guide.pdf": {
+      "bytes": 545159,
+      "sha256": "a63408e5cc3894a41b999b7f86d54421db1bdcec8d05f01e29f173c71582b32c"
+    }
+  },
+  "foundAndFixed": [
+    {
+      "problem": "At 560x300, feature guidance used 680px content inside 517px viewport and required horizontal scrolling.",
+      "fix": "Guide-specific Scrollable panel follows viewport width while retaining vertical scrolling.",
+      "before": "docs/verification/0.25.0/initial-guide-layout.json",
+      "after": "docs/ui/0.25.0/after/guide/layout-report.json"
+    }
+  ],
+  "evidence": [
+    "docs/verification/0.25.0/release-check.log",
+    "docs/verification/0.25.0/all-features-results.json",
+    "docs/verification/0.25.0/bounty-results.json",
+    "docs/ui/0.25.0/after/main/layout-report.json",
+    "docs/ui/0.25.0/after/guide/layout-report.json"
+  ],
+  "notVerified": [
+    "Native Burp GUI and OS-specific DPI/fonts/focus",
+    "Browser DOM/JavaScript execution",
+    "Full Docker/Oracle/Nginx stack",
+    "Live Pro Collaborator and external BApp execution"
+  ]
+}

@@ -26,7 +26,8 @@ if a.test:
  if run.returncode:raise SystemExit(run.returncode)
  subprocess.run(['node','--test',str(r/'tests/browser-helper.test.mjs')],check=True)
 helper={x.relative_to(r/'browser-helper').as_posix():x.read_bytes() for x in (r/'browser-helper').rglob('*') if x.is_file()};archive(dist/'feature-mapper-browser-0.1.0.zip',helper)
-source={x.relative_to(r).as_posix():x.read_bytes() for root in ['src','browser-helper','tests','deps'] for x in (r/root).rglob('*') if x.is_file()}
+source={x.relative_to(r).as_posix():x.read_bytes() for root in ['src','browser-helper','tests'] for x in (r/root).rglob('*') if x.is_file()}
+source[api.relative_to(r).as_posix()]=api.read_bytes()
 for name in ['build.py','README_KR.md','LICENSE','THIRD_PARTY_NOTICES.md']:
  if (r/name).exists():source[name]=(r/name).read_bytes()
 archive(dist/'feature-mapper-kr-0.1.0-source.zip',source)

@@ -8,10 +8,21 @@
   "release": {
     "command": "python dev.py release --java /usr/bin/java --javac <JDK17 javac wrapper> --port 18129 --bounty-port 18429",
     "result": "passed",
-    "regression": {"checks": 1298, "groups": 41},
-    "payloadHttp": {"checks": 127},
-    "allFeaturesHttp": {"checks": 100, "requests": 199},
-    "bountyHttp": {"checks": 266, "requests": 259},
+    "regression": {
+      "checks": 1298,
+      "groups": 41
+    },
+    "payloadHttp": {
+      "checks": 127
+    },
+    "allFeaturesHttp": {
+      "checks": 100,
+      "requests": 199
+    },
+    "bountyHttp": {
+      "checks": 266,
+      "requests": 259
+    },
     "totalChecks": 1791,
     "packagingUnitTests": 4,
     "packageSourceFingerprints": "passed",
@@ -26,8 +37,16 @@
     "guideWrapFailures": 0,
     "nativeGuiClicksTested": false
   },
-  "jsHistoryRepeat": {"runs": 20, "checksPerRun": 22, "failures": 0},
-  "scopeExportOmissionRegression": {"newChecks": 8, "suiteChecks": 28, "result": "passed"},
+  "jsHistoryRepeat": {
+    "runs": 20,
+    "checksPerRun": 22,
+    "failures": 0
+  },
+  "scopeExportOmissionRegression": {
+    "newChecks": 8,
+    "suiteChecks": 28,
+    "result": "passed"
+  },
   "nativeBurp": {
     "edition": "Community",
     "version": "2026.3.3",
@@ -36,7 +55,16 @@
     "command": "python audit/0.25.4/run_native.py --burp-jar <Burp Community 2026.3.3 JAR> --java <Java 21 executable> --compiler-java /usr/bin/java --accept-community-license --soak-seconds 300 --output tmp/native-scope-soak",
     "result": "passed",
     "checks": 15,
-    "covered": ["ON/OFF/SCOPE", "observed existing native scope", "native include notification", "unchecked parent persistence", "native exclusion", "2 MiB raw byte restoration", "601 additional response burst", "unload removes temporary traffic store"],
+    "covered": [
+      "ON/OFF/SCOPE",
+      "observed existing native scope",
+      "native include notification",
+      "unchecked parent persistence",
+      "native exclusion",
+      "2 MiB raw byte restoration",
+      "601 additional response burst",
+      "unload removes temporary traffic store"
+    ],
     "soakSeconds": 300,
     "soakAdditionalResponses": 2950,
     "finalRetainedRows": 3555,
@@ -52,7 +80,13 @@
     "nodeTests": 7,
     "nativeBurpChecks": 12,
     "localBrowser": "not executed: environment refused the browser Unix socket; verify the real browser workflow separately",
-    "remoteBrowser": "pending"
+    "remoteBrowser": {
+      "result": "passed",
+      "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672219245",
+      "browserChecks": 8,
+      "productionMapperFixtureChecks": 5,
+      "nativeBurpInstance": false
+    }
   },
   "pdf": {
     "pages": 26,
@@ -63,10 +97,16 @@
     "sha256": "7a83cba9108575c57f19db94d60f24b8f476bbc1241b87cef82cb066d76f1bc6"
   },
   "docker": {
-    "version": "3.5.0",
-    "existingDistributionBytes": "unchanged from main",
+    "version": "3.5.1",
+    "existingDistributionBytes": "3.5.0 distribution preserved without replacement",
     "localExecution": "not available: Docker is not installed",
-    "remoteExecution": "pending isolated Oracle/Nginx workflow"
+    "remoteExecution": "pending rerun after correcting host port publication",
+    "initialRun": {
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672204954",
+      "result": "failed",
+      "reason": "Containers healthy, but only internal networks produced no published host ports; host health request failed before Oracle HTTP suite"
+    },
+    "fix": "Attach web/protocols to a loopback-bound front bridge; keep DB/WAS on the internal lab network; wait for Nginx HTTP health"
   },
   "environmentNotes": [
     "HTTP tests compiled current lab source using SHA-256-verified Maven runtime dependencies. The temporary dependency-only archive was not uploaded and does not replace the repository WAR.",
@@ -79,5 +119,8 @@
     "Multi-hour collection and real disk exhaustion",
     "Pro Collaborator and external BApp integration"
   ],
-  "remoteChecks": {"state": "pending", "branch": "account-a/0.25.4-remaining-20261015"}
+  "remoteChecks": {
+    "state": "pending",
+    "branch": "account-a/0.25.4-remaining-20261015"
+  }
 }

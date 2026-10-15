@@ -17,7 +17,7 @@
 
 별도 Burp 설치와 Java 21, 임시 사용자/데이터 디렉터리에서 Scope API·ON/OFF/SCOPE·체크 해제·제외 규칙·2MiB 바이트 복원·601건 추가 수집·unload 정리를 확인했습니다. 사용자 Burp/프록시 설정은 변경하지 않았습니다. JS 검사 20회 반복과 실제 Scope export 생략 회귀 8개를 확인했습니다. 기능 Mapper는 Java 48개·Node 7개와 실제 Burp 12개를 다시 실행했습니다.
 
-소스만 복원한 이 환경에서는 실습 WAR 대신 고정 SHA-256이 일치하는 Maven 런타임 JAR만 담은 로컬 의존성 아카이브를 준비했습니다. HTTP 검사는 현재 실습 소스를 다시 컴파일했습니다. 이 임시 아카이브는 GitHub에 올리거나 기존 WAR를 대체하지 않습니다. 기존 Docker 3.5.0 ZIP/manifest/SHA256SUMS는 원격 Git blob SHA와 동일합니다.
+소스만 복원한 이 환경에서는 실습 WAR 대신 고정 SHA-256이 일치하는 Maven 런타임 JAR만 담은 로컬 의존성 아카이브를 준비했습니다. HTTP 검사는 현재 실습 소스를 다시 컴파일했습니다. 이 임시 아카이브는 GitHub에 올리거나 기존 WAR를 대체하지 않습니다. 기존 Docker 3.5.0 ZIP/manifest/SHA256SUMS는 보존합니다. 원격 전체 검사에서 컨테이너가 정상이어도 internal 전용망에는 호스트 포트가 게시되지 않아 8088 접속이 실패했습니다. 실습 3.5.1에서 웹·프로토콜 서비스의 접속용 bridge와 Nginx HTTP healthcheck를 추가하고 DB·WAS 내부망과 127.0.0.1 바인딩을 유지합니다. Docker 공식 [Compose 네트워크 설명](https://docs.docker.com/compose/how-tos/networking/)과 원격 실제 포트 상태를 함께 확인했습니다.
 
 초기 확인에서 Scope export 전제 오류와 테스트의 큐 포화 신호 추가 실패를 발견해 수정했습니다. 새 context 후보 읽기가 잘못된 선택 항목에서 메뉴 작성을 막던 문제도 기존 오류 복구 검사로 찾아 격리했습니다. 초기 환경의 WAR 부재·GUI 초기화·브라우저 Unix 소켓 제한은 제품 검사 성공으로 합산하지 않습니다.
 

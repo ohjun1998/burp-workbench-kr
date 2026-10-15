@@ -8,7 +8,7 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 |---|---|---|
 | Burp 확장 JAR | 0.25.4 | [burp-workbench-kr-0.25.4.jar](extensions/0.25.4/burp-workbench-kr-0.25.4.jar) |
 | 확장 소스·빌드 의존성 | 0.25.4 | [burp-workbench-kr-0.25.4-source.zip](extensions/0.25.4/burp-workbench-kr-0.25.4-source.zip) |
-| 커뮤니티 실습 Docker 실행 ZIP | 3.5.0 | [community-security-lab-3.5.0-docker.zip](docker/3.5.0/community-security-lab-3.5.0-docker.zip) |
+| 커뮤니티 실습 Docker 실행 ZIP | 3.5.1 | [community-security-lab-3.5.1-docker.zip](docker/3.5.1/community-security-lab-3.5.1-docker.zip) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
 [0.25.4 수집 모드와 SCOPE 관리](../docs/RELEASE_0.25.4_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.25.4.json)
@@ -34,8 +34,9 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 | 이전 확장 | 0.22.1 | [JAR](extensions/0.22.1/burp-workbench-kr-0.22.1.jar) · [소스](extensions/0.22.1/burp-workbench-kr-0.22.1-source.zip) |
 | 초기 테스트 배포 · CI 대기 문제 수정 전 | 0.22.0 | [JAR](extensions/0.22.0/burp-workbench-kr-0.22.0.jar) · [소스](extensions/0.22.0/burp-workbench-kr-0.22.0-source.zip) |
 | 과거 배포 원본 | 0.21.0 | [JAR](extensions/0.21.0/burp-workbench-kr-0.21.0.jar) |
+| 이전 Docker 실행 ZIP | 3.5.0 | [Docker ZIP](docker/3.5.0/community-security-lab-3.5.0-docker.zip) |
 | 이전 Docker 실행 ZIP | 3.4.0 | [Docker ZIP](docker/3.4.0/community-security-lab-3.4.0-docker.zip) |
 
-개발자는 `python dev.py release`로 검증 후 새 버전 폴더를 생성하고 소스와 함께 PR에 포함합니다. 기존 버전은 덮어쓰지 않습니다. 확장과 실습 사이트는 버전을 따로 관리합니다. PDF도 기존 파일을 보존하고 새 문서 개정판 폴더에 추가합니다. 이번 문서 개정판은 `python tools/build_guide.py --edition easy-ko`로 생성합니다.
+개발자는 `python dev.py release`로 검증 후 새 버전 폴더를 생성하고 소스와 함께 PR에 포함합니다. 기존 버전은 덮어쓰지 않습니다. 확장과 실습 사이트는 버전을 따로 관리합니다. PDF도 기존 파일을 보존하고 새 문서 개정판 폴더에 추가합니다. 이번 문서 개정판은 `python tools/build_readable_guide.py`로 생성합니다.
 
 별도 기능 매핑 확장: [Feature Mapper KR 설치와 다운로드](../feature-mapper/README_KR.md). Workbench JAR에 포함되지 않습니다.

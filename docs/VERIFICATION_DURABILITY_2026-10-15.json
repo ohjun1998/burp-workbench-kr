@@ -40,20 +40,47 @@
     }
   },
   "remote": {
-    "state": "Final 0.25.5 artifacts and test fixes prepared; current-head CI pending publication.",
+    "state": "0.25.5 source/artifacts published in 430eb9b4e876dbbdf7eecddd8173c48e5f07a733; release, Linux durability, Windows and build/UI/packaging checks passed. Subsequent documentation-only changes are tracked in PR #18 Checks.",
     "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
     "initialRuns": [
       {
         "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
         "linux": "passed: ENOSPC 13 checks and 180-second soak 8 checks, 3626 responses, zero drops/errors",
-        "windows": "failed: legacy ExtenderTest observed running=false before delayed SwingWorker row publication"
+        "windows": "failed in legacy ExtenderTest; initial delayed-row hypothesis was superseded by the reproduced Legacy busy-state race. Temporary copied test workaround removed."
       },
       {
         "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687511859",
         "linux": "passed",
         "windows": "Java regression and 3-minute capture passed; Windows PowerShell 5.1 parser rejected the BOM-less Korean start.ps1"
       }
-    ]
+    ],
+    "releaseCommit": "430eb9b4e876dbbdf7eecddd8173c48e5f07a733",
+    "currentSourceChecks": {
+      "durabilityRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38704166994",
+      "buildRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38704167044",
+      "fullRelease": "passed",
+      "realDiskExhaustion": "passed",
+      "windows": "passed: Java regression, 180-second capture and six PowerShell checks",
+      "linuxSoak": "passed",
+      "swingLayout": "passed",
+      "packaging": "passed",
+      "linuxCapture": {
+        "requestedSeconds": 180,
+        "acceptedResponses": 3626,
+        "drops": 0,
+        "processingErrors": 0,
+        "checks": 8
+      },
+      "windowsCapture": {
+        "requestedSeconds": 180,
+        "acceptedResponses": 3636,
+        "drops": 0,
+        "processingErrors": 0,
+        "checks": 8
+      },
+      "windowsPowerShellChecks": 6,
+      "realDiskExhaustionChecks": 13
+    }
   },
   "remaining": [
     "Native Burp GUI HTTP history Add to scope click flow",
@@ -114,6 +141,8 @@
     "sourceArchiveEntries": 150,
     "rawLogsOrPrivateRuntimeFilesIncluded": false,
     "temporaryRuntimeWarIncluded": false,
-    "resumeRequest": "User explicitly requested resolving the blocked code upload on 2026-10-15; resume scoped release publication to the same repository and task branch."
-  }
+    "resumeRequest": "User explicitly requested resolving the blocked code upload on 2026-10-15; resume scoped release publication to the same repository and task branch.",
+    "result": "Scoped final release upload accepted after user resume request; commit 430eb9b4e876dbbdf7eecddd8173c48e5f07a733."
+  },
+  "sourceReview": "SOURCE_REVIEW_2026-10-15_KR.md"
 }

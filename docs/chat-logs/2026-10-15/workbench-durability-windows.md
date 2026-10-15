@@ -36,3 +36,7 @@
 ## 08. 도우미 · 요약
 
 Linux에서 실제 16 MiB tmpfs ENOSPC 13개와 180초 3,626건 수집 8개를 통과. Windows에서 기존 ExtenderTest의 worker 종료와 UI 행 게시 사이 대기 경쟁을 발견해 원본 assertion을 유지하는 테스트 복사본의 bounded EDT wait로 보완. 별도로 Windows PowerShell 5.1이 BOM 없는 한글 start.ps1을 파싱하지 못하는 문제를 확인하여 UTF-8 BOM과 실습 3.5.2 새 배포로 수정.
+
+## 09. 도우미 · 요약
+
+Windows 시작 스크립트 UTF-8 BOM 수정과 실습 3.5.2 새 Docker ZIP을 PR #18의 c3298fd에 반영. 기존 0.25.4 및 3.5.1 다운로드 보존. 수정본의 전체 release·Windows 검사를 다시 실행하고 통과 결과를 기록한 뒤 병합하기로 함.

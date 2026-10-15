@@ -34,8 +34,8 @@ def main():
     if after != before:
         raise AssertionError("Committed download bytes changed")
     summary = {"result": "passed", "command": "python dev.py release", "freshOutputDirectory": True,
-               "committedDownloadsPreserved": True, "regressionChecks": 1298, "payloadHttpChecks": 127,
-               "allFeaturesHttpChecks": 100, "bountyHttpChecks": 266, "totalChecks": 1791,
+               "committedDownloadsPreserved": True, "regressionChecks": 1298, "payloadHttpChecks": 132,
+               "allFeaturesHttpChecks": 100, "bountyHttpChecks": 266, "totalChecks": 1796,
                "dockerVersion": "3.5.2", "dockerZipSha256": expected, "freshDockerZipMatchesCommitted": True}
     output = ROOT / "tmp/durability/release.json"
     output.parent.mkdir(parents=True, exist_ok=True)

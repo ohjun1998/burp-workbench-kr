@@ -3,12 +3,13 @@ Requires Python 3.10+, JDK 17+, matching community-security-lab beside burp-work
 No Burp GUI, desktop browser, Docker, external target traffic or cloud VM is used.
 """
 from pathlib import Path
-import argparse,subprocess,os,time,zipfile,shutil,urllib.request,json,hashlib,sys
+import argparse,subprocess,os,time,zipfile,shutil,urllib.request,json,hashlib,sys,re
 if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
 p=argparse.ArgumentParser();p.add_argument('--java',default='java');p.add_argument('--javac',default='javac');p.add_argument('--lab',type=Path);p.add_argument('--port',type=int,default=18099);args=p.parse_args()
 here=Path(__file__).resolve().parent;root=here.parent.parent;lab=(args.lab or root.parent.parent/'community-security-lab').resolve();task=here/'.run';task.mkdir(exist_ok=True)
 deps=task/'deps';deps.mkdir(exist_ok=True);site=task/'site';site.mkdir(exist_ok=True);classes=task/'classes';classes.mkdir(exist_ok=True)
-jar=root/'dist/burp-workbench-kr-0.25.4.jar'
+version=re.search(r'dist/burp-workbench-kr-([0-9.]+)\.jar',(root/'build_all.py').read_text()).group(1)
+jar=root/f'dist/burp-workbench-kr-{version}.jar'
 if not jar.exists():raise SystemExit('First run: python build_all.py --java <java> --javac <javac>')
 if not 1024<=args.port<=65535:raise SystemExit('port range')
 with zipfile.ZipFile(lab/'dist/ROOT.war') as war:

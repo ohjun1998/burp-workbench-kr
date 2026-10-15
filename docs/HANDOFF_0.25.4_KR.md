@@ -49,3 +49,5 @@ Docker Engine 28.0.4 / Compose 2.38.2에서 Oracle HTTP 54개, Oracle health·Ng
 Windows에서는 JDK 17 Java 회귀와 수집을 실행하고 Windows PowerShell 5.1 파서 및 start.ps1의 성공·실패 분기를 확인합니다. Docker·브라우저 명령은 제어된 어댑터이며 Docker Desktop 전체 실행은 남아 있습니다. 새 workflow의 7200·10800초 수동 실행 옵션은 다시간 어댑터 검사 경로이며 실행하지 않은 시간을 완료로 집계하지 않습니다.
 
 추가 Windows 실행에서 BOM 없는 한글 `start.ps1`의 파싱 실패가 확인되어 실습 3.5.2로 수정했습니다. 기존 확장 0.25.4와 Docker 3.5.1 다운로드는 보존합니다. Windows의 기존 페이로드 UI 테스트는 worker 종료 후 결과 행 게시까지 기다리는 독립 테스트 복사본으로 실행하며 기존 assertion과 10초 제한을 유지합니다.
+
+최종 원인 재현에서 PayloadHttp FutureTask의 busy 해제와 결과 공개 순서 경쟁을 확인했습니다. 0.25.5에서 task별 1회 선해제로 수정하고 5,000회 순차 전송 등 5개 회귀를 추가합니다. 임시 테스트 복사본은 제거했으며 Windows에서도 원본 검사 전체를 실행합니다. 최신 내용은 RELEASE_0.25.5_KR.md와 별도 잔여 검증 기록을 기준으로 읽으세요.

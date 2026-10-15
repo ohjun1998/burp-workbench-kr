@@ -1,11 +1,11 @@
 {
   "date": "2026-10-15",
   "timezone": "Asia/Seoul",
-  "extensionVersion": "0.25.4",
+  "extensionVersion": "0.25.5",
   "labVersion": "3.5.2",
   "baseMain": "551a9e7e2029358278d54fa9be4beb524cc04126",
   "implementationCommit": "576371a3326deab0a569e1271c3a8d0f826c8e01",
-  "scope": "Extension production source and 0.25.4 downloads unchanged; lab 3.5.2 fixes Windows PowerShell 5.1 startup encoding and updates version metadata.",
+  "scope": "Workbench 0.25.5 fixes the Legacy FutureTask busy-state publication race; lab 3.5.2 fixes Windows PowerShell 5.1 startup encoding. Previous releases are preserved.",
   "local": {
     "java": "17.0.20",
     "regressionGroups": 41,
@@ -23,10 +23,13 @@
       "The first partial source restore lacked the bundled font and lab JS fixture; these were restored before successful regression execution. The font matches repository Git blob 2aa2b20905b4136808a0126d8e36e5c0f576715c.",
       "The first new adapter omitted HttpResponseReceived.messageId. Corrected the test adapter and reran successfully. No production change was required."
     ],
-    "realDiskExhaustion": "not executed locally: isolated mount capability unavailable"
+    "realDiskExhaustion": "not executed locally: isolated mount capability unavailable",
+    "note": "These original checks preceded the new five-check regression; the 0.25.5 run is recorded separately after completion.",
+    "currentReleaseCommand": "python dev.py release --port 18159 --bounty-port 18459",
+    "runtimeNote": "Hash-verified runtime dependency archive only; current lab Java source is compiled. Temporary WAR is excluded from commits."
   },
   "remote": {
-    "state": "corrected source awaiting final remote checks",
+    "state": "0.25.5 source fix pending complete validation and versioned download publication",
     "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
     "initialRuns": [
       {
@@ -54,14 +57,24 @@
     "Heap measurements are observations, not a memory-leak proof.",
     "Historical 0.25.4 native Burp and Docker results remain in VERIFICATION_0.25.4.json and are not counted as fresh runs."
   ],
-  "windowsTestAdaptation": {
-    "originalSourceUnchanged": true,
-    "where": "audit/durability/run_windows_regression.py",
-    "scope": "Independent copied ExtenderTest waits for both worker termination and published UI rows; existing assertions retained with a 10-second timeout"
-  },
   "docker352": {
     "change": "UTF-8 BOM for start.ps1; version metadata 3.5.2",
     "zipSha256": "d0a60bc42ce6698cad43b8269402dd836a3932f334781ae7aa15f63ac14bbcf6",
     "priorDownloadsPreserved": true
-  }
+  },
+  "legacyTransport": {
+    "beforeFix": {
+      "completedSequentialSends": 459,
+      "falseBusyRejections": 5
+    },
+    "fix": "Release busy before publishing FutureTask completion; release at most once per task so an old completion cannot clear a newer task. Keep the actual-running callback lock on cancellation/timeouts.",
+    "newRegressionChecks": 5,
+    "sequentialRequestsInRegression": 5000,
+    "temporaryUiTestCopyRemoved": true,
+    "afterFixIndependentProbe": {
+      "completedSequentialSends": 100000,
+      "falseBusyRejections": 0
+    }
+  },
+  "publication": "Direct scoped commits; no CI repository write permission."
 }

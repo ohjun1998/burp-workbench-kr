@@ -6,8 +6,8 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| Burp 확장 JAR | 0.25.4 | [burp-workbench-kr-0.25.4.jar](extensions/0.25.4/burp-workbench-kr-0.25.4.jar) |
-| 확장 소스·빌드 의존성 | 0.25.4 | [burp-workbench-kr-0.25.4-source.zip](extensions/0.25.4/burp-workbench-kr-0.25.4-source.zip) |
+| Burp 확장 JAR | 0.25.4 | [burp-workbench-kr-0.25.5.jar](extensions/0.25.5/burp-workbench-kr-0.25.5.jar) |
+| 확장 소스·빌드 의존성 | 0.25.4 | [burp-workbench-kr-0.25.5-source.zip](extensions/0.25.5/burp-workbench-kr-0.25.5-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.5.2 | [community-security-lab-3.5.2-docker.zip](docker/3.5.2/community-security-lab-3.5.2-docker.zip) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
@@ -41,3 +41,5 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 별도 기능 매핑 확장: [Feature Mapper KR 설치와 다운로드](../feature-mapper/README_KR.md). Workbench JAR에 포함되지 않습니다.
 
+
+최신 확장은 0.25.5이며 Legacy 순차 전송의 잘못된 사용 중 판정을 수정합니다. 화면과 수집 사용법은 0.25.4 PDF를 계속 참고할 수 있습니다.

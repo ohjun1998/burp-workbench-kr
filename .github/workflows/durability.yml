@@ -36,16 +36,13 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Build and execute all Java checks on a test copy with a bounded EDT completion wait
-        run: python audit/durability/run_windows_regression.py
+      - name: Build and execute every Java regression group on Windows
+        run: python project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --test
       - name: Execute production capture and Swing timer on Windows
         run: python audit/durability/run_capture.py --seconds 180 --output tmp/durability/windows-capture.json
       - name: Parse and execute startup script under Windows PowerShell 5.1 with controlled commands
         shell: powershell
         run: ./audit/durability/check_windows_scripts.ps1
-      - name: Collect payload callback and UI diagnostics on failure
-        if: failure()
-        run: python audit/durability/run_windows_regression.py --payload-only
       - uses: actions/upload-artifact@v7
         if: always()
         with:

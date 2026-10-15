@@ -37,6 +37,9 @@ try {
     New-Item -ItemType Directory -Force (Split-Path $out) | Out-Null
     [ordered]@{ result='passed'; checks=$checks.Count; powershell=$PSVersionTable.PSVersion.ToString(); os=[Environment]::OSVersion.VersionString; dockerBackendExecuted=$false; browserLaunched=$false; passedChecks=$checks.ToArray() } | ConvertTo-Json -Depth 4 | Out-File -Encoding utf8 $out
     Get-Content $out
+    # The deliberately failed command above must not become the shell's final exit code.
+    # This point is reached only after every success/failure assertion has passed.
+    $global:LASTEXITCODE = 0
 } finally {
     Set-Location $initial
     Remove-Item Function:\docker -ErrorAction SilentlyContinue

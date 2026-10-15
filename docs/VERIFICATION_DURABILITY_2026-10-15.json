@@ -4,7 +4,6 @@
   "extensionVersion": "0.25.5",
   "labVersion": "3.5.2",
   "baseMain": "551a9e7e2029358278d54fa9be4beb524cc04126",
-  "implementationCommit": "576371a3326deab0a569e1271c3a8d0f826c8e01",
   "scope": "Workbench 0.25.5 fixes the Legacy FutureTask busy-state publication race; lab 3.5.2 fixes Windows PowerShell 5.1 startup encoding. Previous releases are preserved.",
   "local": {
     "java": "17.0.20",
@@ -26,10 +25,22 @@
     "realDiskExhaustion": "not executed locally: isolated mount capability unavailable",
     "note": "These original checks preceded the new five-check regression; the 0.25.5 run is recorded separately after completion.",
     "currentReleaseCommand": "python dev.py release --port 18159 --bounty-port 18459",
-    "runtimeNote": "Hash-verified runtime dependency archive only; current lab Java source is compiled. Temporary WAR is excluded from commits."
+    "runtimeNote": "Hash-verified runtime dependency archive only; current lab Java source is compiled. Temporary WAR is excluded from commits.",
+    "release0255": {
+      "result": "passed",
+      "regressionGroups": 41,
+      "regressionChecks": 1298,
+      "payloadHttpChecks": 132,
+      "allFeaturesHttpChecks": 100,
+      "bountyHttpChecks": 266,
+      "totalChecks": 1796,
+      "sourceFingerprints": "passed",
+      "jarSha256": "d7799bd9121fc15c0b51799f891925dbf0416fa1f61c7976c7a6d19e44c60e42",
+      "sourceZipSha256": "17fa3a2ed726141b23b478f7bd06e6cf75e7846ba33285c2b5c04f1dc7dfc010"
+    }
   },
   "remote": {
-    "state": "0.25.5 source fix pending complete validation and versioned download publication",
+    "state": "Final 0.25.5 artifacts and test fixes prepared; current-head CI pending publication.",
     "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
     "initialRuns": [
       {
@@ -60,7 +71,17 @@
   "docker352": {
     "change": "UTF-8 BOM for start.ps1; version metadata 3.5.2",
     "zipSha256": "d0a60bc42ce6698cad43b8269402dd836a3932f334781ae7aa15f63ac14bbcf6",
-    "priorDownloadsPreserved": true
+    "priorDownloadsPreserved": true,
+    "remoteResult": "passed",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38691618322",
+    "oracleHttpChecks": 54,
+    "hostChecks": [
+      "All four published ports limited to 127.0.0.1",
+      "No DB/WAS published ports",
+      "TLS HTTP/1.1",
+      "HTTP/2",
+      "Both CSD fixture endpoint baseline responses"
+    ]
   },
   "legacyTransport": {
     "beforeFix": {
@@ -76,5 +97,23 @@
       "falseBusyRejections": 0
     }
   },
-  "publication": "Direct scoped commits; no CI repository write permission."
+  "publication": "Direct scoped commits; no CI repository write permission.",
+  "initialHarnessCommit": "576371a3326deab0a569e1271c3a8d0f826c8e01",
+  "sourceFixBaseCommit": "eea1231ef28683158d81cb00183c87cdd8b409d9",
+  "windowsHarnessExitFix": "All six PowerShell assertions passed; clear the deliberately simulated failure exit code only after all assertions complete so the shell reports actual test success.",
+  "publicationReview": {
+    "destination": "ohjun1998/burp-workbench-kr",
+    "visibility": "private",
+    "owner": "ohjun1998",
+    "repositoryPermissionsVerified": [
+      "admin",
+      "maintain",
+      "push",
+      "pull"
+    ],
+    "sourceArchiveEntries": 150,
+    "rawLogsOrPrivateRuntimeFilesIncluded": false,
+    "temporaryRuntimeWarIncluded": false,
+    "resumeRequest": "User explicitly requested resolving the blocked code upload on 2026-10-15; resume scoped release publication to the same repository and task branch."
+  }
 }

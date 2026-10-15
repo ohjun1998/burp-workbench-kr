@@ -40,3 +40,7 @@ Linux에서 실제 16 MiB tmpfs ENOSPC 13개와 180초 3,626건 수집 8개를 �
 ## 09. 도우미 · 요약
 
 Windows 시작 스크립트 UTF-8 BOM 수정과 실습 3.5.2 새 Docker ZIP을 PR #18의 c3298fd에 반영. 기존 0.25.4 및 3.5.1 다운로드 보존. 수정본의 전체 release·Windows 검사를 다시 실행하고 통과 결과를 기록한 뒤 병합하기로 함.
+
+## 10. 도우미 · 요약
+
+Windows payload UI assertion이 bounded UI wait 뒤에도 한 실행에서 실패하여 대기 순서만으로 원인을 확정하지 않음. 일부 동일 커밋 실행은 통과. 기존 assertion을 유지한 채 callback 수·행 수·Scope 판정 수·상태를 출력하는 진단을 추가하여 확인하기로 함.

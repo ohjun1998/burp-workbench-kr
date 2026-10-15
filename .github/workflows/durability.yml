@@ -43,6 +43,9 @@ jobs:
       - name: Parse and execute startup script under Windows PowerShell 5.1 with controlled commands
         shell: powershell
         run: ./audit/durability/check_windows_scripts.ps1
+      - name: Collect payload callback and UI diagnostics on failure
+        if: failure()
+        run: python audit/durability/run_windows_regression.py --payload-only
       - uses: actions/upload-artifact@v7
         if: always()
         with:

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run unchanged production sources and all checks with a bounded EDT wait in a test copy."""
 import hashlib
+import argparse
 import json
 from pathlib import Path
 import shutil
@@ -19,12 +20,15 @@ NEW = """long end=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNano
    if(complete.get())break;
    Thread.sleep(20);
   }
-  SwingUtilities.invokeAndWait(()->{});"""
+  SwingUtilities.invokeAndWait(()->System.out.println("WINDOWS_PAYLOAD_UI_DIAGNOSTIC sends="+sendCount.get()+" rows="+ext.model.getRowCount()+" scopeChecks="+scopeChecks.get()+" running="+ext.running+" status="+ext.status.getText()));"""
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--payload-only', action='store_true', help='Diagnostic mode; does not count as the complete regression suite')
+    args = p.parse_args()
     original = (WB / TEST).read_bytes()
     source = original.decode("utf-8")
     if source.count(OLD) != 1:
@@ -41,6 +45,13 @@ def main():
         # SwingWorker may publish its rows after running becomes false. Change only
         # the copied test's waiting condition; every original assertion still runs.
         (copied / TEST).write_text(source.replace(OLD, NEW), encoding="utf-8")
+        if args.payload_only:
+            build = copied / 'build_all.py'
+            body = build.read_text(encoding='utf-8')
+            start = body.index("for name in ['StructuredCompareTest'")
+            end = body.index(']:', start) + 2
+            build.write_text(body[:start]+'for name in []:'+body[end:], encoding='utf-8')
+            print('DIAGNOSTIC ONLY: executing all 127 payload HTTP assertions; full 41-group result is not claimed', flush=True)
         subprocess.run([sys.executable, "-u", str(copied / "build_all.py"), "--test"], cwd=copied, check=True)
         if (WB / TEST).read_bytes() != original or any(sha(WB / p) != digest for p, digest in production.items()):
             raise AssertionError("Original source changed while validating its test copy")
@@ -58,7 +69,9 @@ def main():
         summary = {"result": "passed", "productionSourceUnchanged": True, "originalTestSourceUnchanged": True,
                    "adaptedTest": TEST.as_posix(), "originalTestSha256": hashlib.sha256(original).hexdigest(),
                    "adaptation": "Test copy waits for worker completion and both published UI rows; bounded to 10 seconds",
-                   "originalAssertionsRemoved": 0, "javaRegressionGroups": 41, "javaRegressionChecks": 1298,
+                   "originalAssertionsRemoved": 0, "diagnosticOnly": args.payload_only,
+                   "javaRegressionGroups": 0 if args.payload_only else 41,
+                   "javaRegressionChecks": 0 if args.payload_only else 1298,
                    "payloadHttpChecks": 127}
         output.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(summary))

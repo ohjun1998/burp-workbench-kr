@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.25.4**과 실습 사이트 **3.5.1**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.25.4 검증 기록](docs/VERIFICATION_0.25.4.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.25.4**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.25.4 검증 기록](docs/VERIFICATION_0.25.4.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -123,3 +123,16 @@ GitHub 연결이 로컬 터미널의 `git push` 인증을 자동으로 제공하
 최신 PDF는 `python tools/build_readable_guide.py`로 생성합니다. 이전 안내서는 덮어쓰지 않습니다. `audit/0.25.4/run_native.py`는 별도 설치한 Burp Community와 Java 21+를 사용하고 임시 프로필을 생성·삭제합니다. 공식 Scope API와 실제 loopback HTTP 검증이며 GUI 클릭 검증은 아닙니다. `--soak-seconds 300`으로 5분 수집도 확인할 수 있습니다.
 
 날짜별 작업 대화는 `docs/chat-logs/`에 함께 기록합니다. Docker 전체 검증은 GitHub Actions의 **Isolated Docker lab verification** 또는 실습 폴더의 `verify-stack.sh`를 사용합니다. 외부 BApp/Pro Collaborator 검증은 별도 환경이 필요합니다.
+
+
+## 수집 내구성·디스크 고갈·Windows 추가 검증
+
+[audit/durability](audit/durability/README_KR.md)의 추가 하네스와 **Capture durability and Windows verification** workflow를 사용합니다. 먼저 확장 폴더에서 `python build_all.py --test`를 통과한 뒤 저장소 루트에서 실행합니다.
+
+```sh
+python audit/durability/run_capture.py --seconds 180 --output tmp/durability/capture.json
+```
+
+이 하네스는 Montoya 어댑터와 실제 운영 콜백·Swing 타이머·디스크 보관을 사용합니다. 기존 Burp 프로필·브라우저·프록시 설정을 변경하지 않습니다. 실제 ENOSPC 검사는 workflow가 만든 별도 16 MiB tmpfs 안에서만 실행하며, 하네스도 파일시스템 종류·전체 용량을 먼저 확인합니다. 사용 중인 디스크를 채우는 방식으로 실행하지 마세요.
+
+workflow 수동 실행의 7200·10800초 옵션은 2·3시간 어댑터 수집입니다. Windows job은 JDK 17 회귀·3분 수집 및 Windows PowerShell 5.1 시작 스크립트의 제어된 명령 실행을 포함합니다. 실제 Docker Desktop 전체 실행, native Burp GUI·다시간 native 수집은 이 결과와 구분합니다. [추가 검증 기록](docs/VERIFICATION_DURABILITY_2026-10-15.json)을 확인하세요.

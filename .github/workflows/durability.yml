@@ -36,8 +36,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Build and execute all Java regression groups on Windows
-        run: python project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --test
+      - name: Build and execute all Java checks on a test copy with a bounded EDT completion wait
+        run: python audit/durability/run_windows_regression.py
       - name: Execute production capture and Swing timer on Windows
         run: python audit/durability/run_capture.py --seconds 180 --output tmp/durability/windows-capture.json
       - name: Parse and execute startup script under Windows PowerShell 5.1 with controlled commands
@@ -65,8 +65,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Build and run Java regression groups
-        run: python project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --test
+      - name: Build, run complete release checks and verify the new Docker archive
+        run: python audit/durability/run_release.py
       - name: Verify actual ENOSPC, rollback and recovery on a private 16 MiB filesystem
         shell: bash
         run: |

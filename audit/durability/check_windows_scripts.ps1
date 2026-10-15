@@ -18,7 +18,7 @@ try {
     foreach ($name in @('start.ps1', 'verify-stack.ps1')) {
         $tokens = $null; $errors = $null
         [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $lab $name), [ref]$tokens, [ref]$errors) | Out-Null
-        if ($errors.Count) { throw "Windows PowerShell parser rejected $name" }
+        if ($errors.Count) { throw "Windows PowerShell parser rejected ${name}: $($errors[0].Message)" }
         $checks.Add("Windows PowerShell parsed $name")
     }
     & (Join-Path $lab 'start.ps1')
@@ -35,7 +35,7 @@ try {
     $checks.Add('start.ps1 does not request a browser after failed startup')
     $out = Join-Path $root 'tmp/durability/windows-scripts.json'
     New-Item -ItemType Directory -Force (Split-Path $out) | Out-Null
-    [ordered]@{ result='passed'; checks=$checks.Count; powershell=$PSVersionTable.PSVersion.ToString(); os=[Environment]::OSVersion.VersionString; dockerBackendExecuted=$false; browserLaunched=$false; passedChecks=@($checks) } | ConvertTo-Json -Depth 4 | Out-File -Encoding utf8 $out
+    [ordered]@{ result='passed'; checks=$checks.Count; powershell=$PSVersionTable.PSVersion.ToString(); os=[Environment]::OSVersion.VersionString; dockerBackendExecuted=$false; browserLaunched=$false; passedChecks=$checks.ToArray() } | ConvertTo-Json -Depth 4 | Out-File -Encoding utf8 $out
     Get-Content $out
 } finally {
     Set-Location $initial

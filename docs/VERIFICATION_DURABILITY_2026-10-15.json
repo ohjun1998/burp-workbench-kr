@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-15",
+  "timezone": "Asia/Seoul",
+  "extensionVersion": "0.25.4",
+  "labVersion": "3.5.2",
+  "baseMain": "551a9e7e2029358278d54fa9be4beb524cc04126",
+  "implementationCommit": "576371a3326deab0a569e1271c3a8d0f826c8e01",
+  "scope": "Extension production source and 0.25.4 downloads unchanged; lab 3.5.2 fixes Windows PowerShell 5.1 startup encoding and updates version metadata.",
+  "local": {
+    "java": "17.0.20",
+    "regressionGroups": 41,
+    "regressionChecks": 1298,
+    "payloadHttpChecks": 127,
+    "quickSoak": {
+      "requestedSeconds": 15,
+      "acceptedResponses": 524,
+      "drops": 0,
+      "processingErrors": 0,
+      "checks": 8,
+      "result": "passed"
+    },
+    "restorationNotes": [
+      "The first partial source restore lacked the bundled font and lab JS fixture; these were restored before successful regression execution. The font matches repository Git blob 2aa2b20905b4136808a0126d8e36e5c0f576715c.",
+      "The first new adapter omitted HttpResponseReceived.messageId. Corrected the test adapter and reran successfully. No production change was required."
+    ],
+    "realDiskExhaustion": "not executed locally: isolated mount capability unavailable"
+  },
+  "remote": {
+    "state": "corrected source awaiting final remote checks",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
+    "initialRuns": [
+      {
+        "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
+        "linux": "passed: ENOSPC 13 checks and 180-second soak 8 checks, 3626 responses, zero drops/errors",
+        "windows": "failed: legacy ExtenderTest observed running=false before delayed SwingWorker row publication"
+      },
+      {
+        "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687511859",
+        "linux": "passed",
+        "windows": "Java regression and 3-minute capture passed; Windows PowerShell 5.1 parser rejected the BOM-less Korean start.ps1"
+      }
+    ]
+  },
+  "remaining": [
+    "Native Burp GUI HTTP history Add to scope click flow",
+    "Enumeration of unobserved URLs and original advanced rules when native Scope export omits them",
+    "Multi-hour collection; manual workflow supports 7200 and 10800 second adapter soaks but those durations were not run in this update",
+    "Pro Collaborator and external BApp integration",
+    "Windows Docker Desktop full Linux-container lab execution"
+  ],
+  "coverageNotes": [
+    "The new capture checks run production callbacks, Swing timer and disk storage with a Montoya adapter host, not a native Burp instance.",
+    "Windows startup checks use controlled Docker and browser commands. No browser is launched and no Docker Desktop backend is started.",
+    "Heap measurements are observations, not a memory-leak proof.",
+    "Historical 0.25.4 native Burp and Docker results remain in VERIFICATION_0.25.4.json and are not counted as fresh runs."
+  ],
+  "windowsTestAdaptation": {
+    "originalSourceUnchanged": true,
+    "where": "audit/durability/run_windows_regression.py",
+    "scope": "Independent copied ExtenderTest waits for both worker termination and published UI rows; existing assertions retained with a 10-second timeout"
+  },
+  "docker352": {
+    "change": "UTF-8 BOM for start.ps1; version metadata 3.5.2",
+    "zipSha256": "d0a60bc42ce6698cad43b8269402dd836a3932f334781ae7aa15f63ac14bbcf6",
+    "priorDownloadsPreserved": true
+  }
+}

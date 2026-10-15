@@ -1,0 +1,89 @@
+name: Capture durability and Windows verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      soak_seconds:
+        description: 'Adapter soak duration (180 to 10800 seconds; 7200 for two hours)'
+        required: true
+        default: '7200'
+        type: choice
+        options: ['180', '7200', '10800']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: durability-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Build and execute all Java regression groups on Windows
+        run: python project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --test
+      - name: Execute production capture and Swing timer on Windows
+        run: python audit/durability/run_capture.py --seconds 180 --output tmp/durability/windows-capture.json
+      - name: Parse and execute startup script under Windows PowerShell 5.1 with controlled commands
+        shell: powershell
+        run: ./audit/durability/check_windows_scripts.ps1
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: windows-durability-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tmp/durability/*.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  isolated-disk-and-soak:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 195
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Build and run Java regression groups
+        run: python project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --test
+      - name: Verify actual ENOSPC, rollback and recovery on a private 16 MiB filesystem
+        shell: bash
+        run: |
+          set -euo pipefail
+          disk_dir="$RUNNER_TEMP/workbench-disk-full"
+          mkdir -p "$disk_dir"
+          sudo mount -t tmpfs -o "size=16m,mode=700,uid=$(id -u),gid=$(id -g)" tmpfs "$disk_dir"
+          trap 'sudo umount "$disk_dir"' EXIT
+          python audit/durability/run_capture.py --mode disk-full --temp-dir "$disk_dir" --output tmp/durability/disk-full.json
+      - name: Verify sustained capture
+        env:
+          SOAK_SECONDS: ${{ inputs.soak_seconds || '180' }}
+        run: python audit/durability/run_capture.py --seconds "$SOAK_SECONDS" --output tmp/durability/linux-soak.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: linux-durability-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tmp/durability/*.json
+          if-no-files-found: warn
+          retention-days: 14

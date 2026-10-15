@@ -1,0 +1,58 @@
+name: Feature Mapper verification
+on:
+  push:
+    paths: ['feature-mapper/**', '.github/workflows/feature-mapper.yml']
+  pull_request:
+    paths: ['feature-mapper/**', '.github/workflows/feature-mapper.yml']
+permissions:
+  contents: read
+concurrency:
+  group: feature-mapper-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Build and check mapping, storage, helper, and release bytes
+        run: |
+          cp feature-mapper/dist/manifest.json "$RUNNER_TEMP/expected-mapper-manifest.json"
+          python feature-mapper/build.py --test
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          expected=json.loads((Path(os.environ['RUNNER_TEMP'])/'expected-mapper-manifest.json').read_text())
+          actual=json.loads(Path('feature-mapper/dist/manifest.json').read_text())
+          assert expected == actual, {'expected':expected,'actual':actual}
+          PY
+      - name: Install isolated browser test tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/mapper-node" --ignore-scripts --no-audit --no-fund playwright-core@1.64.0
+          curl --fail --location --retry 2 --output "$RUNNER_TEMP/chrome.zip" 'https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.57/linux64/chrome-linux64.zip'
+          unzip -q "$RUNNER_TEMP/chrome.zip" -d "$RUNNER_TEMP/mapper-chrome"
+      - name: Real browser helper to production mapping bridge
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/mapper-node/node_modules/playwright-core
+        run: python feature-mapper/tests/run_browser.py --browser "$RUNNER_TEMP/mapper-chrome/chrome-linux64/chrome" --output feature-mapper/build/browser-verification
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: feature-mapper-${{ github.sha }}
+          path: |
+            feature-mapper/dist/
+            feature-mapper/build/test-results.txt
+            feature-mapper/build/browser-verification/
+          retention-days: 14

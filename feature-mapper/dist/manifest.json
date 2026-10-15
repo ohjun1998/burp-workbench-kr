@@ -1,0 +1,9 @@
+{
+  "version": "0.1.0",
+  "artifacts": {
+    "feature-mapper-browser-0.1.0.zip": "0109aa73b73e46a655c8be95d9a36e402a34bcafe4c027ce5af62ee109d2d5fd",
+    "feature-mapper-kr-0.1.0-source.zip": "5d6fff6d5a4a9648b90820304205bfec7001fffd73fb545038164b4ef321e815",
+    "feature-mapper-kr-0.1.0.jar": "3cdf16a51941da9cc2640d8f9bdfd347f28b77743c6bbc1d5aef1038cd970b22"
+  },
+  "api_sha256": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94"
+}

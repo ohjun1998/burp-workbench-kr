@@ -1,0 +1,71 @@
+name: Isolated Docker lab verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['account-a/0.25.4-remaining-20261015']
+    paths:
+      - '.github/workflows/lab-stack.yml'
+      - 'project/burp-development-workspace/community-security-lab/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lab-stack-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  oracle-nginx:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: project/burp-development-workspace/community-security-lab
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Build current source and verify the isolated Oracle and Nginx stack
+        run: bash verify-stack.sh
+      - name: Verify loopback publication and private database services
+        run: |
+          docker compose ps --all --format json > verification-results/published-ports.json
+          curl --fail --silent --show-error --insecure --http1.1 --max-time 10 https://127.0.0.1:8443/tls > verification-results/host-tls.js
+          curl --fail --silent --show-error --insecure --http2 --max-time 10 --output verification-results/host-h2.js --write-out '%{http_version}' https://127.0.0.1:8443/tls > verification-results/host-h2-version.txt
+          curl --fail --silent --show-error --max-time 10 http://127.0.0.1:8091/csd > verification-results/host-csd-vuln.txt
+          curl --fail --silent --show-error --max-time 10 http://127.0.0.1:8092/csd > verification-results/host-csd-fixed.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows = [json.loads(line) for line in Path('verification-results/published-ports.json').read_text().splitlines() if line.strip()]
+          services = {row['Service']: row for row in rows}
+          expected = {'web': {8088}, 'protocols': {8443, 8091, 8092}}
+          for name, ports in expected.items():
+              actual = services[name].get('Publishers') or []
+              assert {int(p['PublishedPort']) for p in actual} == ports, (name, actual)
+              assert all(p['URL'] == '127.0.0.1' for p in actual), (name, actual)
+          for name in ('db', 'was'):
+              assert not services[name].get('Publishers'), services[name]
+          assert 'tls-confirmed' in Path('verification-results/host-tls.js').read_text()
+          assert Path('verification-results/host-h2-version.txt').read_text().strip() == '2'
+          assert 'h2-confirmed' in Path('verification-results/host-h2.js').read_text()
+          for mode in ('vuln', 'fixed'):
+              assert Path(f'verification-results/host-csd-{mode}.txt').read_text() == 'fixture response'
+          print('Loopback publication verified for all four ports; DB and WAS have no published ports.')
+          print('Host TLS HTTP/1.1, HTTP/2 and both CSD fixture endpoints verified.')
+          PY
+      - name: Collect final status before removing this job's containers
+        if: always()
+        run: |
+          mkdir -p verification-results
+          docker compose ps --all --format json > verification-results/final-container-status.json || true
+          docker compose logs --no-color --tail 300 > verification-results/final-containers.log || true
+          docker compose -f compose.yaml -f compose.verify.yaml down --volumes --remove-orphans
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: docker-stack-${{ github.sha }}
+          path: project/burp-development-workspace/community-security-lab/verification-results/
+          if-no-files-found: error
+          retention-days: 14

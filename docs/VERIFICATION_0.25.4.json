@@ -1,0 +1,168 @@
+{
+  "version": "0.25.4",
+  "date": "2026-10-15",
+  "timezone": "Asia/Seoul",
+  "baseMain": "6acffd3db131af595c84c3902f727f6392a1ecd5",
+  "mapperParent": "e70b1a395c13fde16a6a6b5be72e085fe67d25cc",
+  "recordType": "Sanitized verification summary; excludes raw local test logs and packet evidence",
+  "release": {
+    "command": "python dev.py release --java /usr/bin/java --javac <JDK17 javac wrapper> --port 18129 --bounty-port 18429",
+    "result": "passed",
+    "regression": {
+      "checks": 1298,
+      "groups": 41
+    },
+    "payloadHttp": {
+      "checks": 127
+    },
+    "allFeaturesHttp": {
+      "checks": 100,
+      "requests": 199
+    },
+    "bountyHttp": {
+      "checks": 266,
+      "requests": 259
+    },
+    "totalChecks": 1791,
+    "packagingUnitTests": 4,
+    "packageSourceFingerprints": "passed",
+    "jarSha256": "ce5701aa2b945c3570187b461c151223b54951bd23a0f586720f3b9e458b5c9c",
+    "sourceZipSha256": "218998fe754c4c0e875d83743f4517405cc348d08dec373166042a6f5f8edf95"
+  },
+  "swing": {
+    "mainViews": 108,
+    "guideViews": 48,
+    "clippedOrCollapsedControls": 0,
+    "smallControls": 0,
+    "guideWrapFailures": 0,
+    "nativeGuiClicksTested": false
+  },
+  "jsHistoryRepeat": {
+    "runs": 20,
+    "checksPerRun": 22,
+    "failures": 0
+  },
+  "scopeExportOmissionRegression": {
+    "newChecks": 8,
+    "suiteChecks": 28,
+    "result": "passed"
+  },
+  "nativeBurp": {
+    "edition": "Community",
+    "version": "2026.3.3",
+    "java": "21",
+    "profile": "isolated temporary user and data directories",
+    "command": "python audit/0.25.4/run_native.py --burp-jar <Burp Community 2026.3.3 JAR> --java <Java 21 executable> --compiler-java /usr/bin/java --accept-community-license --soak-seconds 300 --output tmp/native-scope-soak",
+    "result": "passed",
+    "checks": 15,
+    "covered": [
+      "ON/OFF/SCOPE",
+      "observed existing native scope",
+      "native include notification",
+      "unchecked parent persistence",
+      "native exclusion",
+      "2 MiB raw byte restoration",
+      "601 additional response burst",
+      "unload removes temporary traffic store"
+    ],
+    "soakSeconds": 300,
+    "soakAdditionalResponses": 2950,
+    "finalRetainedRows": 3555,
+    "droppedResponses": 0,
+    "writeErrors": 0,
+    "nativeScopeExport": "target.scope returned an empty object despite true native isInScope results; production now uses the public API with observed URLs as fallback",
+    "nativeGuiClicksTested": false
+  },
+  "featureMapper": {
+    "version": "0.1.0",
+    "sourceAndReleaseBytes": "unchanged from mapperParent",
+    "javaChecks": 48,
+    "nodeTests": 7,
+    "nativeBurpChecks": 12,
+    "localBrowser": "not executed: environment refused the browser Unix socket; verify the real browser workflow separately",
+    "remoteBrowser": {
+      "result": "passed",
+      "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861849",
+      "browserChecks": 8,
+      "productionMapperFixtureChecks": 5,
+      "nativeBurpInstance": false
+    }
+  },
+  "pdf": {
+    "pages": 26,
+    "bookmarks": 26,
+    "missingSourceLines": 0,
+    "unmappedGlyphs": 0,
+    "allPagesRenderedAndReviewed": true,
+    "sha256": "7a83cba9108575c57f19db94d60f24b8f476bbc1241b87cef82cb066d76f1bc6"
+  },
+  "docker": {
+    "version": "3.5.1",
+    "existingDistributionBytes": "3.5.0 distribution preserved without replacement",
+    "localExecution": "not available: Docker is not installed",
+    "remoteExecution": "passed",
+    "initialRun": {
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672204954",
+      "result": "failed",
+      "reason": "Containers healthy, but only internal networks produced no published host ports; host health request failed before Oracle HTTP suite"
+    },
+    "fix": "Attach web/protocols to a loopback-bound front bridge; keep DB/WAS on the internal lab network; wait for Nginx HTTP health",
+    "verifiedCommit": "0a46c418f4c3e6ac05742e728ad18bba3c1d69b2",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672857576",
+    "engineVersion": "28.0.4",
+    "composeVersion": "2.38.2",
+    "oracleHttpChecks": 54,
+    "stackAssertions": [
+      "Oracle-backed application health",
+      "Nginx reverse proxy",
+      "Nginx stub_status",
+      "Oracle HTTP regression suite (54 checks)",
+      "Extension training manifest",
+      "JS source map training fixture"
+    ],
+    "hostChecks": [
+      "8088, 8443, 8091, 8092 published exclusively on 127.0.0.1",
+      "DB and WAS have no published ports",
+      "TLS HTTP/1.1 response",
+      "Negotiated HTTP/2 response",
+      "Both CSD fixture endpoints return expected response"
+    ],
+    "zipSha256": "adff760f7c1b4371e3a50ff9c86c1f4f15eca2931a8743e3f0d71aa6105371da",
+    "windowsScriptExecuted": false
+  },
+  "environmentNotes": [
+    "HTTP tests compiled current lab source using SHA-256-verified Maven runtime dependencies. The temporary dependency-only archive was not uploaded and does not replace the repository WAR.",
+    "Real Burp public API and loopback HTTP verification does not establish native GUI click coverage.",
+    "Raw local test logs, temporary profiles, dependencies, and packet evidence are excluded from this update."
+  ],
+  "remaining": [
+    "Native Burp GUI HTTP history Add to scope click flow",
+    "Enumeration of unobserved URLs and original advanced rules in Burp versions that omit target.scope exports",
+    "Multi-hour collection and real disk exhaustion",
+    "Pro Collaborator and external BApp integration"
+  ],
+  "remoteChecks": {
+    "state": "passed",
+    "verifiedImplementationCommit": "0a46c418f4c3e6ac05742e728ad18bba3c1d69b2",
+    "branch": "account-a/0.25.4-remaining-20261015",
+    "runs": [
+      {
+        "name": "Build and verify",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861876"
+      },
+      {
+        "name": "Feature Mapper verification",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861849"
+      },
+      {
+        "name": "Isolated Docker lab verification",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672857576"
+      }
+    ],
+    "mainHistory": "https://github.com/ohjun1998/burp-workbench-kr/actions?query=branch%3Amain",
+    "note": "The linked runs verify implementation and versioned artifacts. Later documentation-only commits and the final main merge have their own checks in GitHub."
+  }
+}

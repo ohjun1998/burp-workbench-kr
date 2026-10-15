@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.25.0**과 실습 사이트 **3.5.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.25.0 검증 기록](docs/VERIFICATION_0.25.0.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.25.4**과 실습 사이트 **3.5.1**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.25.4 검증 기록](docs/VERIFICATION_0.25.4.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -86,7 +86,7 @@ python tools/build_guide.py --edition easy-ko
 
 결과는 `downloads/guides/0.25.0-easy-ko/Burp_Workbench_KR_0.25.0_easy_guide.pdf`입니다. 아래의 기존 생성 명령은 개정 전 안내서용입니다. 문서만 고칠 때도 새 개정판 폴더를 사용해 이전 PDF를 보존합니다.
 
-[현재 Markdown 원고](docs/GUIDE_0.25.0_KR.md)와 `docs/guide-assets/0.25.0/`의 검토한 화면을 사용합니다. Python 환경에 `reportlab`이 필요합니다.
+[이전 0.25.0 Markdown 원고](docs/GUIDE_0.25.0_KR.md)와 `docs/guide-assets/0.25.0/`의 검토한 화면을 사용합니다. Python 환경에 `reportlab`이 필요합니다.
 
 ```sh
 python tools/build_guide.py
@@ -106,7 +106,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.25.0.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.25.4.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 
@@ -117,3 +117,9 @@ python tools/build_guide.py --refresh-previews
 5. 검토와 CI를 확인한 뒤 합칩니다. `PROJECT_STATUS_KR.md`에는 합쳐진 상태만 기록합니다.
 
 GitHub 연결이 로컬 터미널의 `git push` 인증을 자동으로 제공하지는 않습니다. 제공된 GitHub 도구 또는 인증된 체크아웃을 사용하며 자격 증명을 소스·로그·ZIP에 넣지 않습니다.
+
+## 0.25.4 추가 확인
+
+최신 PDF는 `python tools/build_readable_guide.py`로 생성합니다. 이전 안내서는 덮어쓰지 않습니다. `audit/0.25.4/run_native.py`는 별도 설치한 Burp Community와 Java 21+를 사용하고 임시 프로필을 생성·삭제합니다. 공식 Scope API와 실제 loopback HTTP 검증이며 GUI 클릭 검증은 아닙니다. `--soak-seconds 300`으로 5분 수집도 확인할 수 있습니다.
+
+날짜별 작업 대화는 `docs/chat-logs/`에 함께 기록합니다. Docker 전체 검증은 GitHub Actions의 **Isolated Docker lab verification** 또는 실습 폴더의 `verify-stack.sh`를 사용합니다. 외부 BApp/Pro Collaborator 검증은 별도 환경이 필요합니다.

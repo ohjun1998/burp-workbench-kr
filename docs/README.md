@@ -1,3 +1,12 @@
+# 최신 문서
+
+- [0.25.4 변경 안내](RELEASE_0.25.4_KR.md) · [검증](VERIFICATION_0.25.4.json) · [인수인계](HANDOFF_0.25.4_KR.md)
+- [26쪽 사용 안내서](../downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)
+- [Feature Mapper KR](../feature-mapper/README_KR.md)
+- [날짜별 작업 대화](chat-logs/README.md)
+
+이전 문서 목차는 아래에 보존합니다.
+
 # 문서 목차
 
 [저장소 첫 화면](../README.md) · [테스트 파일 다운로드](../downloads/README.md) · [PDF 가이드북](../downloads/guides/README.md)

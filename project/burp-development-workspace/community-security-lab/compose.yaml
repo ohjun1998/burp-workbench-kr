@@ -7,9 +7,15 @@ services:
     depends_on:
       was:
         condition: service_healthy
-    networks: [lab]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+      start_period: 5s
+    networks: [lab, front]
   was:
-    image: enterprise-lab-was:3.5.0
+    image: enterprise-lab-was:3.5.1
     build:
       context: .
       dockerfile: Dockerfile.source
@@ -35,7 +41,7 @@ services:
       interval: 10s
       timeout: 8s
       retries: 12
-    networks: [lab]
+    networks: [front]
   db:
     image: gvenzl/oracle-free:23-slim
     environment:
@@ -53,5 +59,9 @@ services:
 networks:
   lab:
     internal: true
+  front:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
 volumes:
   oracle-data:

@@ -32,6 +32,42 @@ public final class WorkbenchScope {
   for(var e:entries){burpEntries.put(e.key(),e);if(suppressed.contains(e.key()))continue;Rule rule=new Rule(e.label(),false,e.key());if(rules.add(rule)){if(!e.enabled())disabled.add(rule);changed=true;}}
   if(!entries.isEmpty()||changed)configured=true;if(changed)persist();return changed;
  }
+ /** Some Burp editions omit target.scope from configuration exports. Recover
+  * observable URL prefixes using only the public native Scope predicate. Every
+  * capture still checks that predicate, including native exclusion rules. */
+ synchronized boolean syncObserved(Collection<String> candidates){
+  boolean changed=suppressed.removeIf(k->k.startsWith("observed:")&&!nativeContains(k.substring(9)));
+  for(Rule rule:new ArrayList<>(rules))if(rule.burpKey()!=null&&rule.burpKey().startsWith("observed:")){
+   if(nativeContains(rule.url()))burpEntries.put(rule.burpKey(),observedEntry(rule.url()));
+   else {rules.remove(rule);disabled.remove(rule);burpEntries.remove(rule.burpKey());changed=true;}
+  }
+  for(String candidate:candidates){
+   String url=canonical(candidate);if(url==null||!nativeContains(url))continue;
+   // A disabled or deleted parent must not be bypassed by a newly seen child.
+   if(rules.stream().anyMatch(r->r.burpKey()!=null&&r.burpKey().startsWith("observed:")&&url.startsWith(r.url())))continue;
+   if(suppressed.stream().filter(k->k.startsWith("observed:")).anyMatch(k->url.startsWith(k.substring(9))))continue;
+   String prefix=observedPrefix(url),key="observed:"+prefix;
+   Rule rule=new Rule(prefix,false,key);
+   burpEntries.put(key,observedEntry(prefix));
+   if(!suppressed.contains(key)&&rules.add(rule))changed=true;
+  }
+  if(changed){configured=true;persist();}return changed;
+ }
+ private boolean nativeContains(String url){try{return api.scope().isInScope(url);}catch(RuntimeException e){return false;}}
+ private String observedPrefix(String url){
+  URI u=URI.create(url);String base=origin(url),path=Objects.toString(u.getRawPath(),"/");
+  if(nativeContains(base+"/"))return base+"/";
+  int start=1;
+  while(start<path.length()){
+   int end=path.indexOf('/',start);if(end<0)end=path.length();
+   String prefix=base+path.substring(0,end);
+   if(nativeContains(prefix))return prefix;
+   if(end<path.length()&&nativeContains(prefix+"/"))return prefix+"/";
+   start=end+1;
+  }
+  return url;
+ }
+ private static BurpScopeConfig.Entry observedEntry(String prefix){return new BurpScopeConfig.Entry("observed:"+prefix,prefix,true,prefix,null,null,null,null);}
  synchronized String overlap(Rule rule){if(rule.burpKey()!=null)return "Burp Target Scope · 제외 규칙도 적용";for(Rule other:rules)if(!other.equals(rule)&&covers(other,rule.url)&&(!rule.originOnly||other.originOnly||URI.create(other.url).getRawPath().equals("/")))return "다른 규칙에 포함: "+other.url;long count=rules.stream().filter(other->!other.equals(rule)&&covers(rule,other.url)&&(!other.originOnly||rule.originOnly||URI.create(rule.url).getRawPath().equals("/"))).count();return count>0?"하위 규칙 "+count+"개 포함":"독립 범위";}
  synchronized void importRules(String data){Object parsed=MinerJson.parse(data);if(!(parsed instanceof Map<?,?> doc)||!(doc.get("version") instanceof Number v)||(v.intValue()!=1&&v.intValue()!=2)||!(doc.get("rules") instanceof List<?> list))throw new IllegalArgumentException("SCOPE 버전/개수 형식 오류");for(Object item:list){if(!(item instanceof Map<?,?> row)||!(row.get("url") instanceof String url)||(!(row.get("burpKey") instanceof String)&&canonical(url)==null)||!(row.get("originOnly") instanceof Boolean)||(row.containsKey("enabled")&&!(row.get("enabled") instanceof Boolean)))throw new IllegalArgumentException("유효하지 않은 SCOPE 규칙");}load(data);configured=true;persist();}
  synchronized boolean configured(){return configured;}

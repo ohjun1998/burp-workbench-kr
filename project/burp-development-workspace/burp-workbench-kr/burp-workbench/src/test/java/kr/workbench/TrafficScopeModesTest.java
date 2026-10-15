@@ -26,7 +26,8 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
         final Map<String,String> saved=new HashMap<>();
         final WorkbenchExtension ext=new WorkbenchExtension();
         final MontoyaApi api;
-        Fixture()throws Exception {
+        Fixture()throws Exception {this(false);}
+        Fixture(boolean omitScopeExport)throws Exception {
             ObjectFactoryLocator.FACTORY=proxy(MontoyaObjectFactory.class,(p,m,a)->def(m));installTrafficPacketFactory();
             var registration=proxy(Registration.class,(p,m,a)->{if(m.getName().equals("deregister"))deregistered.incrementAndGet();return def(m);});
             var scope=proxy(Scope.class,(p,m,a)->switch(m.getName()){
@@ -35,7 +36,7 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
                 case "includeInScope","excludeFromScope"->{mutations.incrementAndGet();yield null;}
                 default->def(m);
             });
-            var suite=proxy(BurpSuite.class,(p,m,a)->m.getName().equals("exportProjectOptionsAsJson")?json.get():def(m));
+            var suite=proxy(BurpSuite.class,(p,m,a)->m.getName().equals("exportProjectOptionsAsJson")?(omitScopeExport?"{}":json.get()):def(m));
             var data=proxy(PersistedObject.class,(p,m,a)->switch(m.getName()){case "getString"->saved.get(a[0]);case "setString"->{saved.put((String)a[0],(String)a[1]);yield null;}default->def(m);});
             var persistence=proxy(Persistence.class,(p,m,a)->m.getName().equals("extensionData")?data:PayloadIntegrationTest.host(m.getReturnType()));
             var extension=proxy(Extension.class,(p,m,a)->{if(m.getName().equals("registerUnloadingHandler"))unload.set((ExtensionUnloadingHandler)a[0]);return m.getReturnType().isInterface()?PayloadIntegrationTest.host(m.getReturnType()):def(m);});
@@ -83,6 +84,23 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
             f.changed(config());f.changed(config("https://new.test/"));check(f.table().getRowCount()==1,"removing then re-adding native Scope restores it as a new checked entry");
             edt(()->f.mode().doClick(0));f.send("https://outside.test/new");check(f.queued()==5&&f.mode().getText().equals("ON"),"third click completes ON OFF SCOPE ON cycle");
             check(f.mutations.get()==0,"Workbench Scope edits never mutate global Burp Scope");
+        }
+        try(Fixture f=new Fixture(true)) {
+            check(f.scope().rules().isEmpty(),"missing native Scope export is supported without inventing unobserved URLs");
+            edt(()->{f.mode().doClick(0);f.mode().doClick(0);});
+            f.send("https://burp.test/api/items?secret=hidden");
+            check(f.queued()==1&&f.scope().rules().get(0).url().equals("https://burp.test/api/"),"native predicate recovers an observed in-scope prefix when export omits target");
+            check(!f.scope().save().contains("hidden"),"observed Scope fallback never persists query values");
+            edt(()->f.table().setValueAt(false,0,0));f.send("https://burp.test/api/new-child");
+            check(f.queued()==1&&f.scope().rules().size()==1,"unchecked fallback prefix cannot be bypassed by a newly observed child");
+            f.changed(config("https://burp.test/api/","https://new.test/"));f.send("https://burp.test/api/still-unchecked");
+            check(f.queued()==1&&!f.scope().enabled(f.scope().rules().get(0)),"fallback checkbox survives native Scope notifications");
+            edt(()->f.table().setValueAt(true,0,0));f.click("wb.traffic.scope.remove");f.send("https://burp.test/api/deleted");
+            check(f.queued()==1&&f.scope().rules().isEmpty(),"deleted fallback prefix cannot be resurrected by incoming traffic");
+            f.changed(config());f.changed(config("https://burp.test/api/"));f.send("https://burp.test/api/readded");
+            check(f.queued()==2,"native removal and re-addition can register a fresh fallback prefix");
+            f.send("https://burp.test/api/excluded");f.send("https://outside.test/a");
+            check(f.queued()==2,"fallback still enforces native exclusions and rejects outside traffic");
         }
         var advanced=BurpScopeConfig.parse("{\"target\":{\"scope\":{\"advanced_mode\":true,\"include\":[{\"enabled\":true,\"protocol\":\"https\",\"host\":\"^api[.]test$\",\"port\":\"^8443$\",\"file\":\"^/v1/\"}]}}}");
         check(advanced.get(0).matches("https://api.test:8443/v1/items")&&!advanced.get(0).matches("https://api.test/v1/items")&&!advanced.get(0).matches("https://api.test.evil:8443/v1/items"),"advanced native constraints retain host port and path matching");

@@ -9,7 +9,16 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 public class JsHistoryTest {
  static int checks;static void check(boolean v,String text){if(!v)throw new AssertionError(text);checks++;System.out.println("PASS "+text);}
- static void edt(Runnable r)throws Exception{SwingUtilities.invokeAndWait(r);}static void done(JsAnalysisPanel p)throws Exception{for(int i=0;i<200;i++){Thread.sleep(20);boolean[] idle={false};edt(()->idle[0]=p.idle());if(idle[0])return;}throw new AssertionError("idle timeout");}
+ static void edt(Runnable r)throws Exception{SwingUtilities.invokeAndWait(r);}
+ static void done(JsAnalysisPanel p)throws Exception{
+  // The worker can post its final render after an EDT idle check has already run.
+  // Await all previously queued analysis first, then drain the posted EDT callbacks.
+  var worker=(ThreadPoolExecutor)WorkbenchTest.get(p,"worker");
+  var barrier=new FutureTask<Void>(() -> null);
+  if(!worker.getQueue().offer(barrier,5,TimeUnit.SECONDS))throw new AssertionError("worker barrier queue timeout");
+  barrier.get(5,TimeUnit.SECONDS);
+  edt(()->{if(!p.idle())throw new AssertionError("analysis worker still active after barrier");});
+ }
  static ProxyHttpRequestResponse item(int id,String url,AtomicReference<HttpResponse> response){return WorkbenchTest.proxy(ProxyHttpRequestResponse.class,(p,m,a)->switch(m.getName()){case "id"->id;case "request"->WorkbenchTest.request(url,"GET",true,List.of());case "response"->response.get();default->WorkbenchTest.def(m);});}
  public static void main(String[] args)throws Exception{
   List<ProxyHttpRequestResponse> list=new CopyOnWriteArrayList<>();var pending=new AtomicReference<HttpResponse>();list.add(item(1,"https://history.test/pending.js",pending));list.add(item(2,"https://history.test/ready.js",new AtomicReference<>(WorkbenchTest.response(200,"fetch('/ready');"))));AtomicReference<ProxyResponseHandler> handler=new AtomicReference<>();AtomicInteger deregistered=new AtomicInteger();

@@ -4,7 +4,7 @@ import java.util.List;
 
 /** Stable feature IDs keep names, navigation and the beginner guide in agreement. */
 public final class FeatureGuide {
-    public static final String EXTENSION_NAME = "Burp Workbench KR · 웹 보안 점검 (0.25.3)";
+    public static final String EXTENSION_NAME = "Burp Workbench KR · 웹 보안 점검 (0.25.4)";
     public static final String SUITE_TAB = "Workbench KR · 웹 보안 점검";
     public record Feature(String id, String title, String summary, String steps, String traffic) {
         @Override public String toString() { return title; }
@@ -12,7 +12,7 @@ public final class FeatureGuide {
     private static final List<Feature> FEATURES = List.of(
         new Feature("start", "처음 시작하기", "사이트의 정상 요청을 모으고, 필요한 검사만 직접 실행합니다.",
             "1. Burp 브라우저로 사이트를 사용하고 ‘요청·응답 목록’에서 요청을 선택합니다. 기존 History는 Burp 우클릭 메뉴에서 가져옵니다.\n2. Burp HTTP history에서 Add to scope로 등록하고 Workbench의 SCOPE 목록에서 체크 상태를 확인합니다.\n3. 이 안내에서 필요한 기능을 고르고 ‘이 기능 열기’를 누릅니다. 검사 후 실제 요청·응답을 비교하고 증거를 저장합니다.",
-            "SCOPE 등록만으로 모든 검사를 실행하지 않습니다. Repeater 준비는 전송이 아닙니다. 실행·GET 확인·자동 비교 ON은 추가 요청을 보낼 수 있습니다.\nWorkbench의 체크·삭제 상태는 별도로 저장됩니다. 수집 버튼은 ON → OFF → SCOPE로 순환합니다. SCOPE에서는 목록에서 체크한 URL만 수집합니다. Burp의 Add to scope는 이 목록에 자동 반영됩니다."),
+            "SCOPE 등록만으로 모든 검사를 실행하지 않습니다. Repeater 준비는 전송이 아닙니다. 실행·GET 확인·자동 비교 ON은 추가 요청을 보낼 수 있습니다.\nWorkbench의 체크·삭제 상태는 별도로 저장됩니다. 수집 버튼은 ON → OFF → SCOPE로 순환합니다. SCOPE에서는 목록에서 체크한 URL만 수집합니다. Burp의 Add to scope는 이 목록에 자동 반영됩니다. 아직 방문하지 않은 등록 URL이 보이지 않으면 URL 추가로 직접 등록할 수 있습니다."),
         new Feature("traffic", "요청·응답 목록", "사이트에서 발생한 요청을 고르고 다른 점검 도구로 연결합니다.",
             "1. Burp 브라우저로 사이트를 사용합니다. 기존 History는 Burp에서 요청 우클릭 → Workbench KR → 요청·응답 목록에 가져오기를 선택합니다.\n2. 수집 버튼을 눌러 ON → OFF → SCOPE로 바꿉니다. Burp Add to scope로 등록하거나 SCOPE 목록에서 URL을 추가하고 수집할 URL을 체크합니다.\n3. 선택 요청의 메뉴에서 계정 비교, 입력값 검사, JS 분석 또는 증거 정리로 연결합니다.",
             "수집과 원본 보기는 추가 요청을 보내지 않습니다. 우클릭의 ‘계정 비교 실행’은 재전송하고, ‘URL 후보 수집 시작’은 설정에 따라 외부 아카이브를 조회합니다. Repeater 준비는 전송하지 않습니다."),

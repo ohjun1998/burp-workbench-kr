@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsProvider {
     private final Object captureLock=new Object();
     private DiskTrafficStore trafficStore;
+    private volatile boolean nativeScopeFallback;private final java.util.Set<String> scopeCandidates=java.util.Collections.synchronizedSet(new java.util.LinkedHashSet<>());
     private MontoyaApi api;private WorkbenchScope localScope;private final DefaultTableModel scopeModel=new DefaultTableModel(new String[]{"수집","범위","등록 URL (쿼리 제외)","포함 관계"},0){public boolean isCellEditable(int r,int c){return c==0;}public Class<?> getColumnClass(int c){return c==0?Boolean.class:String.class;}};private boolean refreshingScope;private burp.api.montoya.core.Registration scopeRegistration;private final JTable scopeTable=new JTable(scopeModel){public String getToolTipText(java.awt.event.MouseEvent e){int row=rowAtPoint(e.getPoint()),column=columnAtPoint(e.getPoint());return row<0||column<0?null:Objects.toString(getValueAt(row,column),"");}};private JPanel scopeContent;private JDialog scopeWindow;private boolean settingsActionReady;
     @FunctionalInterface interface DialogOpener {JDialog open(Component owner,String title,Component content,boolean modal,Runnable closed);}
     DialogOpener dialogOpener=WorkbenchUi::settingsWindow;private JButton scopeListButton,captureButton;
@@ -85,6 +86,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         this.api=api;trafficStore=new DiskTrafficStore();localScope=WorkbenchScope.install(api);api.extension().setName(FeatureGuide.EXTENSION_NAME);
         api.extension().registerUnloadingHandler(()->{
             if(scopeRegistration!=null)captureStage("Scope 알림 해제",scopeRegistration::deregister);
+            synchronized(scopeCandidates){scopeCandidates.clear();}
             synchronized(captureLock){unloaded.set(true);generation.incrementAndGet();incoming.clear();captureStage("임시 저장소 종료",trafficStore::close);}
             SwingUtilities.invokeLater(()->{if(featureHelpWindow!=null)featureHelpWindow.dispose();if(commonSettingsWindow!=null)commonSettingsWindow.dispose();if(scopeWindow!=null)scopeWindow.dispose();if(timer!=null) timer.stop();if(structuredCompare!=null)structuredCompare.clearSources();if(responseRecon!=null)responseRecon.close();if(jsAnalysis!=null)jsAnalysis.close();if(authCompare!=null)authCompare.close();if(bountySupport!=null)bountySupport.close();traffic.clear();if(environments!=null){environments.close();}if(passiveScan!=null)passiveScan.close();if(activity!=null)activity.close();WorkbenchScope.release(api);});
         });
@@ -175,7 +177,24 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     void openPassive(String url){tabs.setSelectedComponent(passiveScan);try{passiveScan.open(url,true);}catch(IllegalArgumentException e){status.setText("URL 수집 · "+e.getMessage());}}
     private void refreshTrafficInfo(){if(logTable==null)return;CaptureMode mode=captureMode.get();if(captureButton!=null)captureButton.setText(mode.name());captureInfo.setText("보관 "+traffic.size()+" · 표시 "+logTable.getRowCount()+" · "+switch(mode){case ON->"전체 수집";case OFF->"수집 중지";case SCOPE->"체크된 SCOPE 수집";});captureInfo.setToolTipText(captureDiagnostics());}
     private boolean acceptsTraffic(HttpRequest request){return switch(captureMode.get()){case ON->true;case OFF->false;case SCOPE->localScope.matches(request.url());};}
-    private void syncBurpScope(){if(unloaded.get())return;try{String json=api.burpSuite().exportProjectOptionsAsJson("target.scope");if(localScope.syncBurp(json))scopeChanged();}catch(RuntimeException ex){captureFailure("Burp Scope 동기화",ex);}}
+    private void syncBurpScope(){
+        if(unloaded.get())return;
+        try{
+            String json=api.burpSuite().exportProjectOptionsAsJson("target.scope");
+            if(json!=null&&json.contains("\"target\"")){nativeScopeFallback=false;if(localScope.syncBurp(json))scopeChanged();return;}
+            nativeScopeFallback=true;
+            java.util.List<String> urls=new java.util.ArrayList<>();
+            synchronized(scopeCandidates){urls.addAll(scopeCandidates);}
+            var history=api.proxy().history();if(history!=null)for(var item:history)if(item.request()!=null)urls.add(item.request().url());
+            var site=api.siteMap().requestResponses();if(site!=null)for(var item:site)if(item.request()!=null)urls.add(item.request().url());
+            for(var item:traffic)urls.add(item.packet().url());
+            if(localScope.syncObserved(urls))scopeChanged();
+        }catch(RuntimeException ex){captureFailure("Burp Scope 동기화",ex);}
+    }
+    private void rememberScopeCandidate(String url){
+        String safe=WorkbenchScope.canonical(url);if(safe==null)return;
+        synchronized(scopeCandidates){if(scopeCandidates.size()>=10000)scopeCandidates.remove(scopeCandidates.iterator().next());scopeCandidates.add(safe);}
+    }
     private JPanel withHeading(String title,String hint,JPanel content){JPanel p=new JPanel(new BorderLayout(0,4));p.setBorder(BorderFactory.createEmptyBorder(6,8,8,8));p.add(WorkbenchUi.header(title,hint,null),BorderLayout.NORTH);p.add(content);return p;}
     private static final class ScopePanel extends JPanel implements Scrollable {
         ScopePanel(){super(new BorderLayout(4,4));}
@@ -247,6 +266,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if(unloaded.get())return;
                     if(captureMode.get()==CaptureMode.OFF)return;
                     HttpRequest q=r.initiatingRequest();
+                    if(nativeScopeFallback&&captureMode.get()==CaptureMode.SCOPE&&localScope.syncObserved(java.util.List.of(q.url())))SwingUtilities.invokeLater(this::scopeChanged);
                     if(!acceptsTraffic(q))return;
                     try{incoming.offer(storeTraffic(r.toolSource().toolType().toString(),q,r));}
                     catch(RuntimeException ex){dropped.incrementAndGet();throw ex;}
@@ -297,12 +317,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     }
     @Override public List<Component> provideMenuItems(ContextMenuEvent e) {
         List<HttpRequestResponse> picked=new ArrayList<>(e.selectedRequestResponses());if(picked.isEmpty())e.messageEditorRequestResponse().ifPresent(m->picked.add(m.requestResponse()));if(picked.isEmpty())return List.of();
+        for(var rr:picked)try{if(rr.request()!=null)rememberScopeCandidate(rr.request().url());}catch(RuntimeException ignored){}
         JMenu menu=new JMenu("Workbench KR");JMenuItem bring=new JMenuItem("요청·응답 목록에 가져오기");bring.addActionListener(x->SwingUtilities.invokeLater(()->{
             if(unloaded.get())return;
             int count=0;for(HttpRequestResponse rr:picked){
                 if(count>=20)break;
                 try{
                     HttpRequest q=rr.request();HttpResponse response=rr.response();
+                    if(nativeScopeFallback&&captureMode.get()==CaptureMode.SCOPE&&localScope.syncObserved(java.util.List.of(q.url())))scopeChanged();
                     if(!acceptsTraffic(q))continue;
                     if(!addTraffic(storeTraffic("가져오기",q,response)))continue;
                     count++;

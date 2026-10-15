@@ -5,7 +5,7 @@
 - Deliver changes through a PR with actual checks and a short Korean handoff. Keep merged project status in `PROJECT_STATUS_KR.md`; track in-progress ownership in Issues and PRs.
 - GitHub synchronization covers commits and work records, not the other ChatGPT account's conversation or usage quota. Never claim repository connection supplies terminal credentials automatically.
 
-- Communicate in Korean. Current extension version: 0.25.3; lab: 3.5.0.
+- Communicate in Korean. Current extension version: 0.25.4; lab: 3.5.0.
 - Read `DEVELOPMENT_SETUP_KR.md`, `이어가기_인수인계.md` and the current release guide before changing features.
 - Main source: `project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java`.
 - Tests: the adjacent `src/test/java`; lab source: `project/burp-development-workspace/community-security-lab`.
@@ -18,3 +18,5 @@
 - On functional changes, report before/after behavior, appropriate tests, and remaining limitations; provide JAR and source artifacts.
 
 - For a version update, run `python dev.py release` and commit versioned `downloads/` alongside source. Never overwrite an existing version. CI checks download/source fingerprints.
+
+- Every GitHub upload or update must include the related user-visible conversation under `docs/chat-logs/YYYY-MM-DD/<task>.md` using the Asia/Seoul date. Record available user requests and assistant replies, distinguish verbatim text from summaries, redact credentials, and never include hidden reasoning or raw tool outputs. `tools/record_chat.py` provides an idempotent writer. This is a standing user requirement.

@@ -27,4 +27,14 @@
 - Scope JSON을 내보내지 않는 버전의 관측 전 URL/고급 정규식 규칙 전체 열거.
 - 다시간 수집 및 실제 디스크 고갈. 제한된 시간의 수집 검사와 구분합니다.
 - Pro Collaborator와 외부 BApp은 별도 설치·권한이 있어야 실행할 수 있습니다.
-- Docker/Oracle/Nginx 결과와 GitHub 최종 main CI는 원격 실행 후 이 파일과 검증 JSON에 갱신합니다.
+- Windows PowerShell 스크립트의 실제 실행은 별도 확인 범위입니다.
+
+## GitHub 실제 실행 결과
+
+구현·배포 자료 기준 커밋 `0a46c418f4c3e6ac05742e728ad18bba3c1d69b2`에서 [Build and verify](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861876), [Feature Mapper verification](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861849), [Docker 전체 스택](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672857576)이 모두 성공했습니다.
+
+Docker Engine 28.0.4 / Compose 2.38.2에서 Oracle HTTP 54개, Oracle health·Nginx·stub_status·실습 manifest·소스맵과 호스트 네 포트의 127.0.0.1 게시, DB/WAS 비공개, TLS HTTP/1.1·HTTP/2 및 CSD 두 엔드포인트의 기본 응답을 확인했습니다. 이 검사가 외부 Smuggler의 desync 탐지를 실행한 것은 아닙니다. 검증 뒤 이 job의 컨테이너와 DB 볼륨을 제거했습니다.
+
+실제 Chromium 검사는 보조 확장 8개와 production Mapper/Bridge fixture 5개를 통과했습니다. 해당 브라우저 fixture는 Burp 인스턴스가 아니며, 실제 Burp 12개 검사는 별도로 실행했습니다. 26쪽 PDF의 실습 3.5.0 설명은 3.5.1에도 적용되며 이번 실습 변경은 네트워크와 버전 정보입니다.
+
+이후 문서 기록 커밋과 병합 커밋의 최종 상태는 [PR #17](https://github.com/ohjun1998/burp-workbench-kr/pull/17) 및 [main Actions](https://github.com/ohjun1998/burp-workbench-kr/actions?query=branch%3Amain)를 기준으로 확인합니다.

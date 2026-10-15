@@ -15,9 +15,9 @@
 
 ## 실행한 검증과 남은 범위
 
-현재 릴리스 회귀·HTTP 검사 1,791개와 패키징 4개, Swing 기본·안내 156화면을 확인했습니다. 실제 Burp API·loopback HTTP, 실제 GUI 클릭, Docker 전체 스택은 별도의 범위이며 구체적인 실행 결과는 검증 JSON과 해당 커밋 Actions를 기준으로 확인합니다.
+현재 릴리스 회귀·HTTP 검사 1,791개와 패키징 4개, Swing 기본·안내 156화면을 확인했습니다. 실제 Burp API·loopback 15개와 5분 수집, Mapper Java 48개·Node 7개·실제 Burp 12개, 실제 Chromium/Mapper fixture 13개를 확인했습니다. Docker 3.5.1은 Oracle HTTP 54개와 Nginx·네 포트의 loopback 게시·TLS·HTTP/2 응답을 원격 Actions에서 통과했습니다. 실제 GUI 클릭은 별도 확인 범위입니다.
 
-현재 남은 범위는 실제 Burp GUI 우클릭 전체 흐름, Scope 목록 내보내기를 지원하지 않는 버전의 관측 전 URL/고급 규칙 전체 열거, 다시간 수집·실제 디스크 고갈, Pro Collaborator·외부 BApp입니다. Docker 전체 스택은 이번 원격 검증 대상으로 추가했으며 결과는 Actions 완료 후 갱신합니다.
+현재 남은 범위는 실제 Burp GUI 우클릭 전체 흐름, Scope 목록 내보내기를 지원하지 않는 버전의 관측 전 URL/고급 규칙 전체 열거, 다시간 수집·실제 디스크 고갈, Pro Collaborator·외부 BApp입니다. Docker 원격 검증에서 발견한 호스트 포트 누락은 실습 3.5.1로 수정했고 기존 3.5.0 배포는 보존했습니다. Windows PowerShell 실행은 별도 확인 범위입니다.
 
 ## 이전 개선안의 상태
 

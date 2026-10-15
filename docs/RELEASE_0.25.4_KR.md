@@ -35,4 +35,4 @@ ON은 모든 새 트래픽을 수집하고, OFF는 신규 수집을 중지합니
 - [Feature Mapper 설치](../feature-mapper/README_KR.md)
 - [날짜별 작업 대화](chat-logs/2026-10-15/workbench-remaining.md)
 
-실제 Burp Community API·loopback HTTP 검사와 GUI 클릭은 구분합니다. Docker 전체 검증은 별도 GitHub Actions에서 실행하고 해당 결과를 기록합니다. 외부 BApp, Pro Collaborator, 다시간 수집과 실제 디스크 고갈은 별도 확인 범위입니다.
+실제 Burp Community API·loopback HTTP 검사와 GUI 클릭은 구분합니다. 실습 3.5.1은 GitHub Actions에서 Oracle HTTP 54개, Nginx, 호스트 네 포트와 TLS·HTTP/2를 확인했습니다. 실제 Chromium/Mapper fixture 13개도 통과했으며 실제 Burp 검사는 별도로 기록했습니다. 외부 BApp, Pro Collaborator, 다시간 수집과 실제 디스크 고갈은 별도 확인 범위입니다.

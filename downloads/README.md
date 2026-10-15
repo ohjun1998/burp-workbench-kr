@@ -15,7 +15,7 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
-Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 주소는 http://127.0.0.1:8088 이며 새 실습은 `/bounty-lab`입니다. 전체 Docker 기동은 이번 환경에서 미검증입니다.
+Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 주소는 http://127.0.0.1:8088 이며 새 실습은 `/bounty-lab`입니다. 3.5.1은 GitHub Actions에서 Oracle·Nginx 전체 기동, HTTP 54개, 호스트 포트와 TLS·HTTP/2를 확인했습니다. Windows PowerShell 실행은 별도 확인 범위입니다.
 
 소스 ZIP: 확장 폴더의 `python build_all.py --test`로 확장 회귀 검사를 실행합니다. `dev.py check`의 전체 사이트 HTTP·모의 진단에는 저장소 전체 소스와 실습 런타임이 필요하므로 저장소 체크아웃을 사용하세요.
 

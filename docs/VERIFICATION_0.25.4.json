@@ -82,7 +82,7 @@
     "localBrowser": "not executed: environment refused the browser Unix socket; verify the real browser workflow separately",
     "remoteBrowser": {
       "result": "passed",
-      "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672219245",
+      "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861849",
       "browserChecks": 8,
       "productionMapperFixtureChecks": 5,
       "nativeBurpInstance": false
@@ -100,13 +100,35 @@
     "version": "3.5.1",
     "existingDistributionBytes": "3.5.0 distribution preserved without replacement",
     "localExecution": "not available: Docker is not installed",
-    "remoteExecution": "pending rerun after correcting host port publication",
+    "remoteExecution": "passed",
     "initialRun": {
       "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672204954",
       "result": "failed",
       "reason": "Containers healthy, but only internal networks produced no published host ports; host health request failed before Oracle HTTP suite"
     },
-    "fix": "Attach web/protocols to a loopback-bound front bridge; keep DB/WAS on the internal lab network; wait for Nginx HTTP health"
+    "fix": "Attach web/protocols to a loopback-bound front bridge; keep DB/WAS on the internal lab network; wait for Nginx HTTP health",
+    "verifiedCommit": "0a46c418f4c3e6ac05742e728ad18bba3c1d69b2",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672857576",
+    "engineVersion": "28.0.4",
+    "composeVersion": "2.38.2",
+    "oracleHttpChecks": 54,
+    "stackAssertions": [
+      "Oracle-backed application health",
+      "Nginx reverse proxy",
+      "Nginx stub_status",
+      "Oracle HTTP regression suite (54 checks)",
+      "Extension training manifest",
+      "JS source map training fixture"
+    ],
+    "hostChecks": [
+      "8088, 8443, 8091, 8092 published exclusively on 127.0.0.1",
+      "DB and WAS have no published ports",
+      "TLS HTTP/1.1 response",
+      "Negotiated HTTP/2 response",
+      "Both CSD fixture endpoints return expected response"
+    ],
+    "zipSha256": "adff760f7c1b4371e3a50ff9c86c1f4f15eca2931a8743e3f0d71aa6105371da",
+    "windowsScriptExecuted": false
   },
   "environmentNotes": [
     "HTTP tests compiled current lab source using SHA-256-verified Maven runtime dependencies. The temporary dependency-only archive was not uploaded and does not replace the repository WAR.",
@@ -120,7 +142,27 @@
     "Pro Collaborator and external BApp integration"
   ],
   "remoteChecks": {
-    "state": "pending",
-    "branch": "account-a/0.25.4-remaining-20261015"
+    "state": "passed",
+    "verifiedImplementationCommit": "0a46c418f4c3e6ac05742e728ad18bba3c1d69b2",
+    "branch": "account-a/0.25.4-remaining-20261015",
+    "runs": [
+      {
+        "name": "Build and verify",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861876"
+      },
+      {
+        "name": "Feature Mapper verification",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672861849"
+      },
+      {
+        "name": "Isolated Docker lab verification",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38672857576"
+      }
+    ],
+    "mainHistory": "https://github.com/ohjun1998/burp-workbench-kr/actions?query=branch%3Amain",
+    "note": "The linked runs verify implementation and versioned artifacts. Later documentation-only commits and the final main merge have their own checks in GitHub."
   }
 }

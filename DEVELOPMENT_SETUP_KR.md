@@ -86,7 +86,7 @@ python tools/build_guide.py --edition easy-ko
 
 결과는 `downloads/guides/0.25.0-easy-ko/Burp_Workbench_KR_0.25.0_easy_guide.pdf`입니다. 아래의 기존 생성 명령은 개정 전 안내서용입니다. 문서만 고칠 때도 새 개정판 폴더를 사용해 이전 PDF를 보존합니다.
 
-[현재 Markdown 원고](docs/GUIDE_0.25.0_KR.md)와 `docs/guide-assets/0.25.0/`의 검토한 화면을 사용합니다. Python 환경에 `reportlab`이 필요합니다.
+[이전 0.25.0 Markdown 원고](docs/GUIDE_0.25.0_KR.md)와 `docs/guide-assets/0.25.0/`의 검토한 화면을 사용합니다. Python 환경에 `reportlab`이 필요합니다.
 
 ```sh
 python tools/build_guide.py
@@ -106,7 +106,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.25.0.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.25.4.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 

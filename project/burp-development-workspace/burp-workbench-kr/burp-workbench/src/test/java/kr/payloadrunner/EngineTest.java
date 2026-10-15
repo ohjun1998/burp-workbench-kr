@@ -42,6 +42,7 @@ public final class EngineTest {
    sends.set(0);summary=Engine.run(new Engine.Config(Engine.Profile.SQLI,Engine.Encoding.URL,template("/sql"),"",List.of("a","b","c"),0,2,""),r->{sends.incrementAndGet();return tx.send(r);},new AtomicBoolean(),r->{});ok("budget includes baseline and SQL stability repeat",sends.get()==2&&summary.budgetReached());
    sends.set(0);summary=Engine.run(new Engine.Config(Engine.Profile.XSS,Engine.Encoding.URL,template("/xss"),"",List.of("a","b"),0,10,""),r->{if(sends.incrementAndGet()==2)throw new IOException("fixture transport error");return tx.send(r);},new AtomicBoolean(),stoppedRows::add);ok("payload transport error recorded and next payload continues",summary.completed()==2&&stoppedRows.stream().anyMatch(r->r.verdict().equals("전송/분석 오류")));
    kr.payloadrunner.ExtenderTest.run(port);
+   LegacyTransportRaceTest.run();
    AdditionalTest.run();
    AdaptiveTest.run();
    EvidenceTest.run();
@@ -51,3 +52,4 @@ public final class EngineTest {
  }
  public static void assertTest(String n,boolean v){ok(n,v);}
 }
+

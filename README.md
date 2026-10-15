@@ -2,11 +2,11 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-처음 사용하는 분은 아래 **설치하고 첫 요청 확인하기**부터 시작하세요. 이 브랜치의 테스트 배포는 **확장 0.25.4 · 실습 사이트 3.5.1**입니다. 이번 수정은 ON → OFF → SCOPE 수집 모드와 Burp Add to scope 자동 연동, 체크 기반 SCOPE 관리를 제공합니다. 0.25.2의 무제한 트래픽·원본 디스크 보관도 유지합니다. Scope 설정 내보내기에 대상 목록이 없는 Burp에서는 공식 Scope 판정과 History·선택 요청을 이용해 목록을 보완합니다. 목록에 필요한 주소가 없으면 URL 추가를 사용하세요. [수정 내용과 확인 방법](docs/RELEASE_0.25.4_KR.md)을 참고하세요.
+처음 사용하는 분은 아래 **설치하고 첫 요청 확인하기**부터 시작하세요. 이 브랜치의 테스트 배포는 **확장 0.25.5 · 실습 사이트 3.5.2**입니다. 0.25.5는 Legacy 순차 전송이 응답 완료 후에도 사용 중으로 거절되던 경쟁을 수정합니다. ON → OFF → SCOPE 수집 모드와 Burp Add to scope 자동 연동, 체크 기반 SCOPE 관리를 제공합니다. 0.25.2의 무제한 트래픽·원본 디스크 보관도 유지합니다. Scope 설정 내보내기에 대상 목록이 없는 Burp에서는 공식 Scope 판정과 History·선택 요청을 이용해 목록을 보완합니다. 목록에 필요한 주소가 없으면 URL 추가를 사용하세요. [수정 내용과 확인 방법](docs/RELEASE_0.25.5_KR.md)을 참고하세요.
 
 ## 설치하고 첫 요청 확인하기
 
-1. **[최신 JAR와 PDF 다운로드](downloads/README.md)**에서 0.25.4 JAR와 0.25.4용 가이드를 받습니다. 이전 Workbench를 해제한 뒤 Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다.
+1. **[최신 JAR와 PDF 다운로드](downloads/README.md)**에서 0.25.5 JAR와 0.25.4용 가이드를 받습니다. 이전 Workbench를 해제한 뒤 Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다.
 2. Burp 브라우저로 점검할 사이트를 사용합니다. Burp **HTTP history → Add to scope**로 대상을 등록합니다. Workbench **요청·응답 목록 → SCOPE 목록**에서 수집할 URL을 체크하고, 수집 버튼을 **SCOPE**로 바꿉니다. ON은 전체 수집, OFF는 수집 중지입니다. SCOPE 목록에서 URL을 직접 추가할 수도 있습니다.
 3. 선택한 요청·응답을 읽고 목적에 맞는 도구로 이동합니다. 처음에는 **Repeater**로 요청을 준비해 직접 확인하고, 원본이 필요한 비교·증거 기능은 선택한 요청에서 이어갑니다.
 4. 화면의 **기능 안내** 버튼(또는 **F1**)과 **[그림 가이드북](downloads/guides/README.md)**으로 준비할 입력과 다음 버튼을 확인합니다. 재현한 결과는 **재현·증거 정리**에 모아 저장합니다.
@@ -68,3 +68,4 @@ python dev.py check
 [Feature Mapper KR](feature-mapper/README_KR.md)은 사이트 사용 중 발생한 패킷을 기능·실행 사례별로 묶는 별도 Burp 확장입니다. Chrome/Edge 보조 확장의 화면·버튼 정보를 함께 사용할 수 있습니다. 설치용 JAR·브라우저 보조 확장·소스는 [별도 다운로드](feature-mapper/dist/)에서 받으세요. Workbench의 기존 기능과 배포 파일을 유지합니다.
 
 [날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 최신 안내서는 [0.25.4 읽기 쉬운 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)입니다.
+

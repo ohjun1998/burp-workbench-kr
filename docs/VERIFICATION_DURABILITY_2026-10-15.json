@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-15",
+  "timezone": "Asia/Seoul",
+  "extensionVersion": "0.25.5",
+  "labVersion": "3.5.2",
+  "baseMain": "551a9e7e2029358278d54fa9be4beb524cc04126",
+  "scope": "Workbench 0.25.5 fixes the Legacy FutureTask busy-state publication race; lab 3.5.2 fixes Windows PowerShell 5.1 startup encoding. Previous releases are preserved.",
+  "local": {
+    "java": "17.0.20",
+    "regressionGroups": 41,
+    "regressionChecks": 1298,
+    "payloadHttpChecks": 127,
+    "quickSoak": {
+      "requestedSeconds": 15,
+      "acceptedResponses": 524,
+      "drops": 0,
+      "processingErrors": 0,
+      "checks": 8,
+      "result": "passed"
+    },
+    "restorationNotes": [
+      "The first partial source restore lacked the bundled font and lab JS fixture; these were restored before successful regression execution. The font matches repository Git blob 2aa2b20905b4136808a0126d8e36e5c0f576715c.",
+      "The first new adapter omitted HttpResponseReceived.messageId. Corrected the test adapter and reran successfully. No production change was required."
+    ],
+    "realDiskExhaustion": "not executed locally: isolated mount capability unavailable",
+    "note": "These original checks preceded the new five-check regression; the 0.25.5 run is recorded separately after completion.",
+    "currentReleaseCommand": "python dev.py release --port 18159 --bounty-port 18459",
+    "runtimeNote": "Hash-verified runtime dependency archive only; current lab Java source is compiled. Temporary WAR is excluded from commits.",
+    "release0255": {
+      "result": "passed",
+      "regressionGroups": 41,
+      "regressionChecks": 1298,
+      "payloadHttpChecks": 132,
+      "allFeaturesHttpChecks": 100,
+      "bountyHttpChecks": 266,
+      "totalChecks": 1796,
+      "sourceFingerprints": "passed",
+      "jarSha256": "d7799bd9121fc15c0b51799f891925dbf0416fa1f61c7976c7a6d19e44c60e42",
+      "sourceZipSha256": "17fa3a2ed726141b23b478f7bd06e6cf75e7846ba33285c2b5c04f1dc7dfc010"
+    }
+  },
+  "remote": {
+    "state": "0.25.5 source/artifacts published in 430eb9b4e876dbbdf7eecddd8173c48e5f07a733; release, Linux durability, Windows and build/UI/packaging checks passed. Subsequent documentation-only changes are tracked in PR #18 Checks.",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
+    "initialRuns": [
+      {
+        "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687523136",
+        "linux": "passed: ENOSPC 13 checks and 180-second soak 8 checks, 3626 responses, zero drops/errors",
+        "windows": "failed in legacy ExtenderTest; initial delayed-row hypothesis was superseded by the reproduced Legacy busy-state race. Temporary copied test workaround removed."
+      },
+      {
+        "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38687511859",
+        "linux": "passed",
+        "windows": "Java regression and 3-minute capture passed; Windows PowerShell 5.1 parser rejected the BOM-less Korean start.ps1"
+      }
+    ],
+    "releaseCommit": "430eb9b4e876dbbdf7eecddd8173c48e5f07a733",
+    "currentSourceChecks": {
+      "durabilityRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38704166994",
+      "buildRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38704167044",
+      "fullRelease": "passed",
+      "realDiskExhaustion": "passed",
+      "windows": "passed: Java regression, 180-second capture and six PowerShell checks",
+      "linuxSoak": "passed",
+      "swingLayout": "passed",
+      "packaging": "passed",
+      "linuxCapture": {
+        "requestedSeconds": 180,
+        "acceptedResponses": 3626,
+        "drops": 0,
+        "processingErrors": 0,
+        "checks": 8
+      },
+      "windowsCapture": {
+        "requestedSeconds": 180,
+        "acceptedResponses": 3636,
+        "drops": 0,
+        "processingErrors": 0,
+        "checks": 8
+      },
+      "windowsPowerShellChecks": 6,
+      "realDiskExhaustionChecks": 13
+    }
+  },
+  "remaining": [
+    "Native Burp GUI HTTP history Add to scope click flow",
+    "Enumeration of unobserved URLs and original advanced rules when native Scope export omits them",
+    "Multi-hour collection; manual workflow supports 7200 and 10800 second adapter soaks but those durations were not run in this update",
+    "Pro Collaborator and external BApp integration",
+    "Windows Docker Desktop full Linux-container lab execution"
+  ],
+  "coverageNotes": [
+    "The new capture checks run production callbacks, Swing timer and disk storage with a Montoya adapter host, not a native Burp instance.",
+    "Windows startup checks use controlled Docker and browser commands. No browser is launched and no Docker Desktop backend is started.",
+    "Heap measurements are observations, not a memory-leak proof.",
+    "Historical 0.25.4 native Burp and Docker results remain in VERIFICATION_0.25.4.json and are not counted as fresh runs."
+  ],
+  "docker352": {
+    "change": "UTF-8 BOM for start.ps1; version metadata 3.5.2",
+    "zipSha256": "d0a60bc42ce6698cad43b8269402dd836a3932f334781ae7aa15f63ac14bbcf6",
+    "priorDownloadsPreserved": true,
+    "remoteResult": "passed",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38691618322",
+    "oracleHttpChecks": 54,
+    "hostChecks": [
+      "All four published ports limited to 127.0.0.1",
+      "No DB/WAS published ports",
+      "TLS HTTP/1.1",
+      "HTTP/2",
+      "Both CSD fixture endpoint baseline responses"
+    ]
+  },
+  "legacyTransport": {
+    "beforeFix": {
+      "completedSequentialSends": 459,
+      "falseBusyRejections": 5
+    },
+    "fix": "Release busy before publishing FutureTask completion; release at most once per task so an old completion cannot clear a newer task. Keep the actual-running callback lock on cancellation/timeouts.",
+    "newRegressionChecks": 5,
+    "sequentialRequestsInRegression": 5000,
+    "temporaryUiTestCopyRemoved": true,
+    "afterFixIndependentProbe": {
+      "completedSequentialSends": 100000,
+      "falseBusyRejections": 0
+    }
+  },
+  "publication": "Direct scoped commits; no CI repository write permission.",
+  "initialHarnessCommit": "576371a3326deab0a569e1271c3a8d0f826c8e01",
+  "sourceFixBaseCommit": "eea1231ef28683158d81cb00183c87cdd8b409d9",
+  "windowsHarnessExitFix": "All six PowerShell assertions passed; clear the deliberately simulated failure exit code only after all assertions complete so the shell reports actual test success.",
+  "publicationReview": {
+    "destination": "ohjun1998/burp-workbench-kr",
+    "visibility": "private",
+    "owner": "ohjun1998",
+    "repositoryPermissionsVerified": [
+      "admin",
+      "maintain",
+      "push",
+      "pull"
+    ],
+    "sourceArchiveEntries": 150,
+    "rawLogsOrPrivateRuntimeFilesIncluded": false,
+    "temporaryRuntimeWarIncluded": false,
+    "resumeRequest": "User explicitly requested resolving the blocked code upload on 2026-10-15; resume scoped release publication to the same repository and task branch.",
+    "result": "Scoped final release upload accepted after user resume request; commit 430eb9b4e876dbbdf7eecddd8173c48e5f07a733."
+  },
+  "sourceReview": "SOURCE_REVIEW_2026-10-15_KR.md"
+}

@@ -4,7 +4,7 @@ import java.util.List;
 
 /** Stable feature IDs keep names, navigation and the beginner guide in agreement. */
 public final class FeatureGuide {
-    public static final String EXTENSION_NAME = "Burp Workbench KR · 웹 보안 점검 (0.25.4)";
+    public static final String EXTENSION_NAME = "Burp Workbench KR · 웹 보안 점검 (0.25.5)";
     public static final String SUITE_TAB = "Workbench KR · 웹 보안 점검";
     public record Feature(String id, String title, String summary, String steps, String traffic) {
         @Override public String toString() { return title; }
@@ -56,3 +56,4 @@ public final class FeatureGuide {
         return f.title()+"\n\n어떤 기능인가요?\n"+f.summary()+"\n\n시작 순서\n"+f.steps()+"\n\n추가 요청과 결과 해석\n"+f.traffic()+"\n\n단축키: Ctrl+F 요청 검색 · Ctrl+R Repeater 준비 · F1 기능 안내";
     }
 }
+

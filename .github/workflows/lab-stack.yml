@@ -3,7 +3,7 @@ name: Isolated Docker lab verification
 on:
   workflow_dispatch:
   push:
-    branches: ['account-a/0.25.4-remaining-20261015']
+    branches: ['main', 'account-a/**', 'account-b/**']
     paths:
       - '.github/workflows/lab-stack.yml'
       - 'project/burp-development-workspace/community-security-lab/**'
@@ -69,3 +69,4 @@ jobs:
           path: project/burp-development-workspace/community-security-lab/verification-results/
           if-no-files-found: error
           retention-days: 14
+

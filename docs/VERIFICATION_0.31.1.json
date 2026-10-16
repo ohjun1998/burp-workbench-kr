@@ -291,5 +291,13 @@
     "supersededBy": "0.31.1",
     "version": "0.31.0"
   },
-  "windowsFix": "Read StyledDocument text directly instead of EditorKit OS line-ending serialization. Set explicit LF export policy and test forced Windows CRLF configuration plus exact search offsets."
+  "windowsFix": "Read StyledDocument text directly instead of EditorKit OS line-ending serialization. Set explicit LF export policy and test forced Windows CRLF configuration plus exact search offsets.",
+  "remoteCandidateResult": {
+    "result": "failed",
+    "platform": "Windows",
+    "workflowRun": 38909824354,
+    "job": 117002548641,
+    "failure": "Raw CRLF check passed; first asynchronous Search offset assertion failed",
+    "supersededBy": "0.31.2"
+  }
 }

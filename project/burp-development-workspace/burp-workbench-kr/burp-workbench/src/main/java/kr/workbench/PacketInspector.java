@@ -235,8 +235,8 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     if(query.isEmpty())return new SearchResult(List.of(),false,null);
     if(query.length()>512)return new SearchResult(List.of(),false,"검색어 512자 제한");
     try {
-      long deadline=System.nanoTime()+TimeUnit.MILLISECONDS.toNanos(200);
       Pattern pattern=Pattern.compile(expression?query:Pattern.quote(query),Pattern.MULTILINE|(sensitive?0:Pattern.CASE_INSENSITIVE|Pattern.UNICODE_CASE));
+      long deadline=System.nanoTime()+TimeUnit.MILLISECONDS.toNanos(200);
       Matcher matcher=pattern.matcher(new GuardedText(value,deadline,cancelled));List<Span> found=new ArrayList<>();
       while(matcher.find()) {
         if(cancelled.getAsBoolean()||System.nanoTime()>deadline)throw new SearchBudget();

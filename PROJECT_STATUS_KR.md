@@ -1,16 +1,16 @@
 # 현재 개발 상태
 
-기준: 2026-10-16 (한국 시간) / Workbench 0.31.1 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.0.
+기준: 2026-10-16 (한국 시간) / Workbench 0.31.2 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.0.
 
-## Pretty·Raw·Hex·Search 0.31.1
+## Pretty·Raw·Hex·Search 0.31.2
 
 승인한 시안의 탭·줄 번호·구문 강조·하단 Search를 운영 PacketInspector로 적용했습니다. 요청·응답은 독립된 검색어·보기·옵션을 유지하며 결과 강조·이전/다음 순환·현재 위치/개수·Aa·정규식·단축키·줄바꿈을 지원합니다. ⋯ 버튼은 Burp 기본 읽기 전용 편집기를 별도 창에 열어 전체 원본과 추가 보기를 유지합니다.
 
 Raw 줄바꿈·원본 바이트·큰 정수 보존, Hex 오프셋·ASCII, 검색 취소·오래된 결과 차단·정규식 오류/시간 예산·해제 정리를 검사합니다. 미리보기 64 KiB·검색어 512자·강조 2,000개는 화면 범위이며 수집·저장 원본의 개수/본문 제한은 아닙니다.
 
-정식 release 2,120개(Java 50그룹 1,621·페이로드 HTTP 132·전체 기능 HTTP 101·모의 진단 266), Mapper Java 89·Node 7, 화면 214개·패키징 4개를 통과했습니다. 패킷 전용 41개에는 Windows 줄바꿈과 검색 위치 회귀를 포함합니다. 최종 검사 결과는 [0.31.1 검증 기록](docs/VERIFICATION_0.31.1.json)을 기준으로 합니다. 0.31.0 후보는 원격 Windows 줄바꿈 회귀에서 실패하여 배포하지 않았고 원본 기록을 보존합니다. 실제 Burp GUI·OS DPI는 별도 범위입니다.
+정식 release 2,120개(Java 50그룹 1,621·페이로드 HTTP 132·전체 기능 HTTP 101·모의 진단 266), Mapper Java 89·Node 7, 화면 214개·패키징 4개를 통과했습니다. 패킷 전용 41개에는 Windows 줄바꿈과 검색 위치 회귀를 포함합니다. 최종 검사 결과는 [0.31.2 검증 기록](docs/VERIFICATION_0.31.2.json)을 기준으로 합니다. 0.31.0 후보는 원격 Windows 줄바꿈 회귀에서, 0.31.1 후보는 첫 비동기 검색 검사의 대기 시점에서 실패하여 main에 반영하지 않았고 원본 기록을 보존합니다. 0.31.2는 실제 결과 적용까지 기다리며 정규식 컴파일과 매칭 시간 예산을 분리합니다. 원격 최종 결과는 PR #27을 기준으로 합니다. 실제 Burp GUI·OS DPI는 별도 범위입니다.
 
-[사용법·화면·인수인계](docs/RELEASE_0.31.1_KR.md) · [검증](docs/VERIFICATION_0.31.1.json) · [다운로드](downloads/README.md) · [작업 대화](docs/chat-logs/2026-10-16/workbench-packet-tabs-search-0310.md)
+[사용법·화면·인수인계](docs/RELEASE_0.31.2_KR.md) · [검증](docs/VERIFICATION_0.31.2.json) · [다운로드](downloads/README.md) · [작업 대화](docs/chat-logs/2026-10-16/workbench-packet-tabs-search-0310.md)
 
 이하 0.30.0 기록은 이전 배포로 보존합니다.
 

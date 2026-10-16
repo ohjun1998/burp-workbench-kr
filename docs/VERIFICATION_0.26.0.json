@@ -275,5 +275,12 @@
     "Workbench persistent project save/resume",
     "Shared packet identity across all Workbench and Mapper workflows"
   ],
-  "resumeVerification": "VERIFICATION_RESUME_2026-10-16.json"
+  "resumeVerification": "VERIFICATION_RESUME_2026-10-16.json",
+  "postMergeWindowsRegression": {
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38847026268",
+    "observedAfterMainMerge": true,
+    "initialSuccessfulPRChecksRemainHistoricalEvidence": true,
+    "error": "DiskTrafficStore.StorageException caused by IOException: Invalid metadata string",
+    "supersededBy": "0.26.1; independent reader file handles and five additional storage checks"
+  }
 }

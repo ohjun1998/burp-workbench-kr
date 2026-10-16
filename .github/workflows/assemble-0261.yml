@@ -1,0 +1,32 @@
+name: Assemble exact Workbench 0.26.1 downloads
+on:
+  push:
+    branches: ['account-a/windows-store-0261-20261016']
+    paths: ['.github/workflows/assemble-0261.yml']
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Rebuild reviewed bytes and immutable source archives
+        run: |
+          python dev.py build
+          python feature-mapper/build.py
+          python tools/package_downloads.py
+          python tools/package_downloads.py --verify
+      - name: Publish only the two locally verified artifact hashes
+        env:
+          ASSEMBLY_TOKEN: ${{ github.token }}
+        run: python audit/assembly/publish_0261.py

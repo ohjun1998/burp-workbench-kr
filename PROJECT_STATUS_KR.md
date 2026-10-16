@@ -21,7 +21,7 @@
 
 동일 하네스의 변경 전/후 비교에서 수집 4개 시나리오의 3,900건 전량과 원본 샘플을 보존했고 누락·처리 오류는 0입니다. 500건/초·1,500건 후 화면 배출은 5.993→0.304초, Mapper 15,000패킷의 기능별 조회 3,000회는 1,091.47→20.82ms였습니다. 색인 저장 비용(+3.43%, 해당 작은 응답 시나리오)과 순수 입력 시간 증가도 관측했습니다. 단일 공유 호스트의 API 어댑터 결과이므로 실제 Burp 처리량 보증으로 해석하지 않습니다. 계측 뒤 JS 상태문구 배치만 조정했으며 측정 소스 지문과 최종 릴리스 지문을 구분해 기록합니다.
 
-재개 검증 기록은 [2026-10-16 검증](docs/VERIFICATION_RESUME_2026-10-16.json)과 [인수인계](docs/HANDOFF_RESUME_2026-10-16_KR.md)에 있습니다. 원격 CI의 현재 결과와 정확한 소스 커밋은 검증 기록에 갱신합니다. 기존 0.25.5의 Linux/Windows 내구성·Docker 결과는 [과거 검증](docs/VERIFICATION_DURABILITY_2026-10-15.json)에 보존하며 새 버전 결과에 합산하지 않습니다. 이전 다운로드와 Mapper 0.1.0 파일은 보존합니다.
+재개 검증 기록은 [2026-10-16 검증](docs/VERIFICATION_RESUME_2026-10-16.json)과 [인수인계](docs/HANDOFF_RESUME_2026-10-16_KR.md)에 있습니다. 제품 소스 커밋 `0b0efef`의 원격 build·화면·패키징, Mapper Java75·Node7·Chromium13, Linux 실제 ENOSPC13, Linux/Windows 180초 수집과 PowerShell6 검사가 모두 성공했습니다. 연속 수집은 Linux 3,617건·Windows 3,639건이며 각각 누락·처리 오류 0건입니다. 수집은 Montoya 호스트 어댑터, 브라우저 검사는 실제 Chromium과 production Mapper/Bridge fixture입니다. 마지막 문서 커밋과 병합 상태는 [PR #19](https://github.com/ohjun1998/burp-workbench-kr/pull/19)에서 확인할 수 있습니다. 기존 0.25.5의 Linux/Windows 내구성·Docker 결과는 [과거 검증](docs/VERIFICATION_DURABILITY_2026-10-15.json)에 보존하며 새 버전 결과에 합산하지 않습니다. 이전 다운로드와 Mapper 0.1.0 파일은 보존합니다.
 
 ## 남은 범위
 

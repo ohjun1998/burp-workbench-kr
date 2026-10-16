@@ -1,31 +1,34 @@
 # Workbench 0.26.0 재개 인수인계
 
-기준일: 2026-10-16 (한국 시간). 원격 마지막 확인 main은 `65d19764965532f2f0f018cbfab12351d52541df`이며 Workbench 0.25.5·Mapper 0.1.0·실습 3.5.2입니다.
+2026-10-16 (한국 시간). Workbench 0.26.0·Feature Mapper 0.2.0·실습 3.5.2. 통합 PR은 [#19](https://github.com/ohjun1998/burp-workbench-kr/pull/19)입니다.
 
-## 이번에 완료한 작업
+## 반영 내용
 
-중단된 Workbench 0.26.0·Mapper 0.2.0 소스와 버전별 JAR·소스 ZIP을 별도 작업 폴더에 복구했습니다. 정식 release 1,943개(46개 Java 그룹 1,445개, 페이로드 HTTP 132개, 전체 기능 HTTP 100개, 모의 진단 266개), Mapper Java 75개·Node 7개를 이번 환경에서 다시 통과했습니다. Swing 108화면·안내 48화면, 패키징 단위 검사 4개, 다운로드 해시·소스 지문도 다시 통과했습니다. 상세는 `VERIFICATION_RESUME_2026-10-16.json`입니다.
+소스 검토의 P1·P2 항목인 수집·화면·관찰 분리, 디스크 메타데이터 색인, Mapper 후보 인덱스·잠금 밖 스냅샷 저장, 증거 디스크 참조·스트리밍 출력, JS 캐시·대기 바이트 예산, 화면 증분 갱신, BuildInfo 버전 통합을 복구·검증했습니다. `RELEASE_0.26.0_KR.md`와 기존 성능 계측의 범위·한계를 함께 읽으세요.
 
-소스 개선은 수집·화면·관찰 분리, 디스크 메타데이터 색인, Mapper 후보 인덱스·잠금 밖 스냅샷 저장, 증거 디스크 참조·스트리밍 출력, JS 캐시·대기 바이트 예산, 화면 증분 갱신, BuildInfo 버전 통합입니다. `RELEASE_0.26.0_KR.md`를 확인하세요.
+소스 커밋 `8d68cfe`에서 GitHub가 정식 release를 수행했고, 로컬 검증본과 SHA-256 다섯 개가 모두 일치할 때만 배포 커밋 `0672fb8`에 JAR·소스 ZIP·브라우저 보조 ZIP을 게시했습니다. 일회성 조립 workflow와 게시 스크립트는 제거했습니다. 0.21.0, 기존 배포 파일과 실습 3.5.2 파일은 보존합니다.
 
-## GitHub 중단 상태
+Mapper CI가 과거 0.1.0 명세와 새 0.2.0을 비교하던 부분을 현재 BuildInfo 버전의 다운로드 명세·소스 지문 검증으로 수정했습니다. 제품 소스·배포의 최종 검증 커밋은 `0b0efeff6746d5a531b6748488d3dca8dfc9a224`입니다. 이후 문서 커밋은 제품 파일을 바꾸지 않습니다.
 
-처음에는 GitHub 연결과 저장소 pull/push/admin 권한을 확인했습니다. 바이너리 blob 업로드 1회가 중단된 뒤 GitHub 도구가 제거됐고 플러그인 목록은 `installed=false`로 확인됐습니다. 해당 호출의 blob 생성 여부는 확정하지 않습니다. 이번 작업에서는 원격 브랜치·커밋·PR·main을 갱신하지 않았습니다.
+## 이번에 실제로 통과한 검증
 
-0.25.5 기반 커밋으로 성공했던 CI를 0.26.0의 검사로 사용하지 않습니다. 기존 최적화 작업 브랜치도 마지막 확인 시 main과 같은 커밋이었습니다.
+| 범위 | 결과 |
+|---|---|
+| Workbench 정식 release | Java 46그룹 1,445개·페이로드 HTTP132개·전체 기능 HTTP100개·모의 진단266개, 합계1,943개 |
+| Mapper | Java75개·Node7개 |
+| 실제 Chromium | 보조 확장8개·production Mapper/Bridge fixture5개 |
+| 생산 Swing 구성요소 | 108화면·안내48화면, 잘림·본문 붕괴0 |
+| 배포 | 패키징 단위4개·다운로드 해시·소스 지문 통과 |
+| 실제 Linux 디스크 고갈 | 독립16MiB tmpfs의 ENOSPC·부분 기록 롤백·기존 원본 유지·공간 확보 후 재개13개 |
+| 180초 연속 수집 | Linux3,617건·Windows3,639건, 각각 누락·처리 오류0 |
+| Windows PowerShell5.1 | 파서·시작 성공/실패 분기6개, Docker·브라우저 명령은 제어된 어댑터 |
 
-## 연결 복구 후 진행 순서
+[빌드·화면·패키징](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38845536661), [Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38845536690), [Mapper·Chromium](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38845536917)이 모두 성공했습니다. 원격 조립은 [38845137204](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38845137204)입니다. 이번 로컬 환경에서도 release·Mapper·화면·패키징을 다시 실행했습니다. 상세 수치와 원본 바이트/텍스트의 구분은 `VERIFICATION_RESUME_2026-10-16.json`에 있습니다.
 
-1. GitHub 연결·저장소 권한과 최신 main을 다시 확인합니다. main이 바뀌었으면 그 변경을 보존하고 충돌·영향 범위를 재검증합니다.
-2. 최신 main에서 `account-a/resume-0260-20261016` 작업 브랜치를 만듭니다. 로컬 변경 목록의 파일만 반영하고 0.21.0과 기존 버전 다운로드를 보존합니다.
-3. 0.26.0·Mapper 0.2.0 배포 파일, 검증 기록과 10월 15일·16일 대화 기록을 같은 커밋에 포함합니다. 원격 tree의 전체 파일 SHA와 로컬 배포·소스 입력이 일치하는지 확인합니다.
-4. PR을 만들고 새 소스 커밋의 Linux release·화면·패키징·ENOSPC·3분 수집, Windows 회귀·Mapper·3분 수집·PowerShell 검사를 확인합니다. 실패하면 원인을 수정하고 영향 검사를 실행합니다.
-5. 성공한 검사 링크와 실제 결과를 기록한 후 사용자가 이미 요청한 main 반영을 PR 병합으로 완료합니다. 병합 후 main과 배포 파일을 확인합니다.
+수집은 Montoya 호스트 어댑터에서 실제 운영 콜백·디스크·Swing 타이머를 실행했습니다. Chromium도 production Mapper/Bridge fixture를 사용했으며 실제 Burp GUI 검사로 합산하지 않습니다. 과거 0.25.x 결과는 새 버전의 실행 결과에 포함하지 않습니다.
 
-## 별도 잔여 범위
+## 최종 병합과 후속 범위
 
-실제 Burp GUI Add to scope 전체 클릭 흐름, 관측 전 Scope 고급 규칙 열거, 다시간 수집, Pro Collaborator·외부 BApp, Windows Docker Desktop 전체 구동은 이번에 실행하지 않았습니다. 영속 프로젝트 저장·재개와 Workbench–Mapper 공통 패킷 ID는 별도 후속 고도화 후보입니다.
+사용자가 main 반영을 요청했으며 PR의 마지막 head 검사 성공 후 병합합니다. PR #19가 최신 병합 상태와 마지막 문서 커밋 검사의 기준입니다. GitHub 작업 대화는 `docs/chat-logs/2026-10-15/`와 `2026-10-16/`에 포함했습니다.
 
-## 연결 복구와 배포 게시
-
-GitHub 연결과 저장소 권한을 복구한 뒤 소스 `8d68cfe`를 게시했습니다. 원격 조립 실행 `38845137204`의 전체 release 1,943개가 통과했고 배포 커밋 `0672fb8`의 파일 다섯 개가 로컬 검증본과 바이트 단위 해시로 일치합니다. 일회성 조립 workflow와 게시 스크립트는 제거합니다. 최초 Mapper CI의 과거 0.1.0 명세 비교를 현재 버전 명세 검증으로 수정했으며 최종 PR의 Linux·Windows·브라우저 검증은 이어서 확인합니다. 앞 절의 미연결 상태는 복구 전 경과입니다.
+실제 Burp 0.26.0 runtime/GUI의 Add to scope 전체 클릭 흐름, 관측 전 Scope 고급 규칙 전체 열거, 다시간 수집, Pro Collaborator·외부 BApp, Windows Docker Desktop 전체 구동은 남은 검증입니다. 영속 프로젝트 저장·재개와 Workbench–Mapper 전체의 공통 패킷 ID는 별도 후속 고도화 후보입니다. 증거 내부 packetId와 구분합니다.

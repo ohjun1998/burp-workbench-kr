@@ -4,6 +4,7 @@ import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.internal.MontoyaObjectFactory;
 import burp.api.montoya.internal.ObjectFactoryLocator;
 import java.awt.Container;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTabbedPane;
@@ -164,6 +167,14 @@ public final class UiLayoutPreview extends WorkbenchTest {
         edt(()->{});
         if(PayloadIntegrationTest.sent.get()!=0)throw new IllegalStateException("Layout rendering attempted HTTP requests");
     }
+    static void renderAt(Container root,Path path,int w,int h)throws Exception {
+        int previousWidth=width,previousHeight=height;
+        try{width=w;height=h;render(root,path,w,h);}finally{width=previousWidth;height=previousHeight;}
+    }
+    static void installHeaders(Component component) {
+        if(component instanceof JTable table){var parent=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,table);if(parent!=null)parent.setColumnHeaderView(table.getTableHeader());}
+        if(component instanceof Container c)for(Component child:c.getComponents())installHeaders(child);
+    }
     public static void main(String[] args) throws Exception {
         Thread.setDefaultUncaughtExceptionHandler((thread,error)->{renderingErrors.add(error);error.printStackTrace();});
         Path out = Path.of(args[0]);
@@ -196,6 +207,39 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("js")) {
+            try {
+                var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
+                String origin="https://app.example.test";
+                String code="const root='/api';\nfetch(root+'/users');\nfetch(root+'/users/'+userId);\nconst apiKey='AIza"+"Z".repeat(35)+"';";
+                edt(()->{
+                    js.rememberPacket(origin+"/assets/app.js","GET /assets/app.js HTTP/1.1\r\nHost: app.example.test\r\n\r\n", "HTTP/1.1 200 OK\r\nContent-Type: application/javascript\r\n\r\n"+code,"HTTP/1.1 200 OK\r\nContent-Type: application/javascript\r\n\r\n"+code);
+                    js.load(code,origin+"/assets/app.js");
+                });JsAnalysisPanelTest.waitDone(js);
+                edt(()->js.load("{\"api\":\"/api/settings\",\"api_key\":\"Q1w2e3R4t5Y6u7I8o9P0\"}",origin+"/config.json"));JsAnalysisPanelTest.waitDone(js);
+                JPanel root=(JPanel)get(ext,"root");
+                Component[] history={null},packets={null};
+                edt(()->{
+                    ((JTabbedPane)unchecked(ext,"tabs")).setSelectedComponent(js);
+                    js.sources.setSelectedItem(origin+"/assets/app.js");js.urlTable.setRowSelectionInterval(0,0);
+                    js.analysisWindow.opener=(owner,title,content,modal,closed)->{history[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
+                    js.packetWindow.opener=(owner,title,content,modal,closed)->{packets[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
+                    js.analysisList.doClick(0);js.openPacket(js.urlTable,0);
+                    try {
+                        installHeaders(root);installHeaders(history[0]);installHeaders(packets[0]);
+                        render(root,out.resolve("js-workspace.png"),width,height);
+                        renderAt((Container)history[0],out.resolve("js-analysis-list.png"),760,480);
+                        renderAt((Container)history[0],out.resolve("js-analysis-list-small.png"),560,300);
+                        renderAt((Container)packets[0],out.resolve("js-packets.png"),760,480);
+                        renderAt((Container)packets[0],out.resolve("js-packets-small.png"),560,300);
+                        js.passive.doClick(0);render(root,out.resolve("js-analysis-off.png"),width,height);
+                    }catch(Exception e){throw new RuntimeException(e);}
+                });
+                writeMeasurements(out);
+            } finally {unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("JS response workspace preview failed");
+            System.out.println("JS/text workspace and modeless windows rendered: "+theme+" "+width+"x"+height+"; synthetic packets, zero HTTP.");return;
+        }
         if(args.length>5&&args[5].equals("packet")) {
             try {
                 String origin="https://app.example.test";

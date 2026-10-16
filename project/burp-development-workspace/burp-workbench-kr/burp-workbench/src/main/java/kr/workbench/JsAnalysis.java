@@ -24,25 +24,42 @@ public final class JsAnalysis {
   rule("JWT / JWS","eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}"),
   rule("Private key","-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----[\\s\\S]{0,16384}?-----END (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----"));
  private static Rule rule(String n,String p){return new Rule(n,Pattern.compile(p));}
- private final String source,base;private final List<Endpoint> urls=new ArrayList<>();private final List<Secret> secrets=new ArrayList<>();private final Set<String> urlKeys=new HashSet<>(),secretKeys=new HashSet<>();
+ private final String source,base;private String contentType="";private final List<Endpoint> urls=new ArrayList<>();private final List<Secret> secrets=new ArrayList<>();private final Set<String> urlKeys=new HashSet<>(),secretKeys=new HashSet<>();
  private final Map<Scope,Map<String,VariableInitializer>> bindings=new IdentityHashMap<>();private final Map<Scope,Map<String,FunctionNode>> functions=new IdentityHashMap<>();private record Frame(Scope scope,Map<String,Value> values){}private final Deque<Frame> frames=new ArrayDeque<>();private int offset;private boolean bounded;private long deadline;private int recoveryDepth;
  private JsAnalysis(String source,String base){this.source=source.substring(0,Math.min(SOURCE_LIMIT,source.length()));this.base=base==null?"":base;bounded=source.length()>SOURCE_LIMIT;}
  public static Result analyze(String text,String base){JsAnalysis a=new JsAnalysis(text==null?"":text,base);return a.run();}
+ public static Result analyze(String text,String base,String type){JsAnalysis a=new JsAnalysis(text==null?"":text,base);a.contentType=type==null?"":type;return a.run();}
  private Result run(){int errors=0,parsed=0,compatible=0;deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(4);
-  for(Segment seg:segments(source)){if(System.nanoTime()>deadline){bounded=true;break;}offset=seg.offset;bindings.clear();functions.clear();frames.clear();
+  TextCandidates.Scan data=TextCandidates.scan(source,contentType,base,deadline);bounded|=data.limited();
+  for(Segment seg:data.dataOnly()?List.<Segment>of():segments(source)){if(System.nanoTime()>deadline){bounded=true;break;}offset=seg.offset;bindings.clear();functions.clear();frames.clear();
    try{CompilerEnvirons env=new CompilerEnvirons();env.setLanguageVersion(Context.VERSION_ES6);env.setRecoverFromErrors(false);env.setRecordingComments(false);env.setErrorReporter(new ErrorReporter(){public void warning(String m,String s,int l,String ls,int c){}public void error(String m,String s,int l,String ls,int c){throw new EvaluatorException("unsupported syntax",s,l);}public EvaluatorException runtimeError(String m,String s,int l,String ls,int c){return new EvaluatorException("unsupported syntax",s,l);}});
     JsSyntax.Compatible syntax=JsSyntax.compatible(seg.text);AstRoot root=new Parser(env).parse(syntax.text(),"captured.js",1);if(syntax.changed())compatible++;
     root.visit(n->{budget();if(n instanceof CatchClause clause&&clause.getVarName()==null)clause.setVarName(new Name(clause.getPosition(),"WB_UNUSED_CATCH"));if(n instanceof FunctionNode f&&f.getFunctionName()!=null&&!f.getFunctionName().getIdentifier().isEmpty())functions.computeIfAbsent(f.getEnclosingScope(),x->new HashMap<>()).put(f.getFunctionName().getIdentifier(),f);if(n instanceof VariableInitializer v&&v.getTarget() instanceof Name name&&v.getParent() instanceof VariableDeclaration d)bindings.computeIfAbsent(name.getDefiningScope()==null?name.getEnclosingScope():name.getDefiningScope(),x->new HashMap<>()).put(name.getIdentifier(),d.isConst()?v:null);return true;});
     root.visit(n->{budget();inspect(n);return true;});parsed++;
    }catch(IllegalStateException e){bounded=true;break;}catch(EvaluatorException|StackOverflowError e){errors++;Matcher literal=Pattern.compile("[\"']((?:https?://|wss?://|/|\\./|\\.\\./)[^\"'\\r\\n<>]{1,2048})[\"']").matcher(seg.text);while(literal.find()&&urls.size()<RESULT_LIMIT){StringLiteral node=new StringLiteral(literal.start(),literal.end()-literal.start());node.setValue(literal.group(1));int before=urls.size();endpoint(node,"?","문자열 조각 · AST 실패",null,"body");if(urls.size()>before){Endpoint item=urls.remove(urls.size()-1);urls.add(new Endpoint(item.url,item.method,item.kind,item.parameters,item.headers,item.bodyKeys,item.line,item.start,item.length,false,"문맥/메서드 미확정 · 자동 수집 제외"));}}}
   }
+  if(errors>0 && !data.dataOnly() && data.values().isEmpty())data=TextCandidates.fallback(source,deadline);
+  for(var item:data.values()){if(System.nanoTime()>deadline||Thread.currentThread().isInterrupted()){bounded=true;break;}dataValue(item,data.format());}
+  bounded|=data.limited();
   // Provider patterns also cover JSON config, unsupported syntax and HTML outside scripts.
   for(Rule r:RULES){Matcher m=r.pattern.matcher(source);while(m.find()&&secrets.size()<RESULT_LIMIT)addSecret(r.name,m.group(),m.start(),m.end()-m.start(),"패턴 일치 · 유효성 미검증");}
-  String state="AST 블록 "+parsed+" · URL/API "+urls.size()+" · 시크릿 후보 "+secrets.size()+" · 실행/요청/키 검증 없음";
+  String state=(data.dataOnly()?data.format()+" 정적 분석":"AST 블록 "+parsed)+" · URL/API "+urls.size()+" · 시크릿 후보 "+secrets.size()+" · 실행/요청/키 검증 없음";
   if(compatible>0)state+=" · async/module 구문 호환 보조 "+compatible;if(errors>0)state+=" · AST 실패 "+errors+" (지원 문법 밖/오류; 패턴 탐지만 보조)";if(bounded)state+=" · 입력/시간/결과 제한으로 일부 분석";
   JsMiner.Result miner=JsMiner.analyze(source,base);
   if(recoveryDepth==0)for(var recovered:miner.recovered()){if(System.nanoTime()>deadline){bounded=true;break;}JsAnalysis child=new JsAnalysis(recovered.content(),base);child.recoveryDepth=1;Result result=child.run();miner=JsMiner.mergeRecon(miner,result.miner());for(Endpoint e:result.endpoints())if(urls.size()<RESULT_LIMIT)urls.add(new Endpoint(e.url,e.method,"source map: "+recovered.name(),e.parameters,e.headers,e.bodyKeys,e.line,-1,0,e.complete,e.evidence));for(Secret secret:result.secrets())if(secrets.size()<RESULT_LIMIT&&secretKeys.add(secret.rule+":"+secret.fingerprint))secrets.add(new Secret(secret.rule,secret.masked,secret.length,secret.fingerprint,secret.line,-1,0,"source map: "+recovered.name()+" · "+secret.confidence));}
   return new Result(List.copyOf(urls),List.copyOf(secrets),state.replaceAll("URL/API \\d+","URL/API "+urls.size()).replaceAll("시크릿 후보 \\d+","시크릿 후보 "+secrets.size())+" · 도메인 "+miner.domains().size()+" · map "+miner.maps().size()+" · 원본 "+miner.recovered().size(),bounded,miner);
+ }
+ private void dataValue(TextCandidates.Value item,String format){
+  String value=item.text().strip();if(value.isEmpty()||value.length()>16384)return;
+  StringLiteral node=new StringLiteral(item.start(),item.length());node.setValue(value);offset=0;
+  if(value.matches("(?s)(?:https?://|wss?://|/|\\./|\\.\\./).*")){
+   boolean covered=urls.stream().anyMatch(e->item.start()>=e.start()&&item.start()<e.start()+e.length());
+   if(!covered){int before=urls.size();endpoint(node,"?",format+" · "+item.key(),null,"body");
+    if(urls.size()>before){Endpoint e=urls.remove(urls.size()-1);boolean complete=e.complete()&&!value.matches("(?s).*(?:\\{[^}]+}|\\$\\{|/[ :]*:[A-Za-z_]).*");urls.add(new Endpoint(e.url(),e.method(),e.kind(),e.parameters(),e.headers(),e.bodyKeys(),e.line(),e.start(),e.length(),complete,"정적 문자열 · 메서드/도달 여부 미확정 · URL 쿼리 값 제외"));}
+   }
+  }
+  for(Rule r:RULES){Matcher m=r.pattern.matcher(value);while(m.find()&&secrets.size()<RESULT_LIMIT)addSecret(r.name,m.group(),item.start(),item.length(),format+" 문자열 패턴 · 유효성 미검증");}
+  secretContext(item.key(),new Value(value,true),node);
  }
  private void budget(){if(Thread.currentThread().isInterrupted()||System.nanoTime()>deadline)throw new IllegalStateException("limit");}
  private static List<Segment> segments(String text){if(!Pattern.compile("(?is)^\\s*(?:<!doctype|<html|<head|<body|<script|<div)").matcher(text).find())return List.of(new Segment(text,0));List<Segment> list=new ArrayList<>();Matcher m=Pattern.compile("(?is)<script\\b([^>]*)>(.*?)</script\\s*>").matcher(text);while(m.find()&&list.size()<64){String attrs=m.group(1);if(!attrs.matches("(?is).*\\bsrc\\s*=.*")&&!attrs.matches("(?is).*\\btype\\s*=\\s*['\"]application/(?:ld\\+)?json.*"))list.add(new Segment(m.group(2),m.start(2)));}return list;}

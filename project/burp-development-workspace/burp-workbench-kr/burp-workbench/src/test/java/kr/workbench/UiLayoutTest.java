@@ -26,7 +26,7 @@ public final class UiLayoutTest {
   check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"traffic requests and responses side by side below list");
   check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.environment.lists")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"environment left stacked lists and right stacked packets");
   check(((JSplitPane)named(root,"wb.auth.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.auth.lists")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"auth credentials/history left and packets right");
-  check(((JSplitPane)named(root,"wb.js.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS and passive packets request above response");
+  check(named(root,"wb.js.messages")==null&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS has no embedded packet area and passive keeps the shared packet layout");
   check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"payload editors and results above packets in reference layout");
   check(requestResponseTabs(root)==0,"request and response are persistent panes, not switching tabs");
   check(table.getRowHeight()==24&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2,"compact rows fit Gothic text with vertical padding");

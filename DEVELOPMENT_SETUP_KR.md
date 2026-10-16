@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.31.2**, Feature Mapper **0.3.0**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.31.2 검증 기록](docs/VERIFICATION_0.31.2.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.32.1**, Feature Mapper **0.3.0**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.32.1 검증 기록](docs/VERIFICATION_0.32.1.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -109,7 +109,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.31.2.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.32.1.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 
@@ -144,9 +144,9 @@ workflow 수동 실행의 7200·10800초 옵션은 2·3시간 어댑터 수집�
 
 각 확장의 BuildInfo.java가 릴리스 버전의 기준입니다. Python 빌드·HTTP·화면 하네스와 패키징은 release_info.py를 통해 같은 값을 읽습니다. 증거 schemaVersion은 별도 관리합니다. dev.py check/release는 Mapper Java·Node 회귀도 포함하며 실제 검사 건수는 build/check-summary.json에 저장합니다. [성능 비교 실행](audit/performance/README_KR.md)은 전용 출력 디렉터리를 사용합니다.
 
-0.31.2은 트래픽 표의 24px 행·13px 나눔고딕을 유지하고 기본 패킷 보기를 Pretty·Raw·Hex·Search가 있는 운영 PacketInspector로 표시합니다. ⋯ 버튼은 READ_ONLY Burp 메시지 편집기의 실제 uiComponent를 별도 창에 호스팅합니다. 네이티브 편집기 내부는 Workbench 테마 재적용 대상에서 제외합니다.
+0.32.1은 트래픽 표의 24px 행·13px 나눔고딕을 유지하고 기본 패킷 보기를 Pretty·Raw·Hex·Search가 있는 운영 PacketInspector로 표시합니다. ⋯ 버튼은 READ_ONLY Burp 메시지 편집기의 실제 uiComponent를 별도 창에 호스팅합니다. 네이티브 편집기 내부는 Workbench 테마 재적용 대상에서 제외합니다.
 
-## 0.31.2 패킷 UI 검사
+## 0.32.1 패킷 UI 검사
 
 요청·응답 목록의 기본 보기는 운영 PacketInspector입니다. Pretty·Raw·Hex·구문 강조·Search를 직접 렌더링하고 ⋯ 버튼으로 Burp 기본 편집기를 별도 창에서 엽니다. 다음 명령은 합성 HTTP를 넣어 두 크기·두 테마·세 보기의 12개 운영 화면을 검사합니다.
 
@@ -155,3 +155,11 @@ python tools/render_ui_layout.py --packet-only --sizes 1024x720 1280x800 --check
 ```
 
 큰 패킷의 원본은 그대로 보관하며 미리보기는 앞 64 KiB를 복사합니다. 검색은 백그라운드·취소 세대·정규식 시간 예산을 사용합니다. 실제 Burp GUI·DPI는 별도 확인 범위입니다.
+
+## 0.32.1 JS·텍스트 분석 창 검사
+
+```sh
+python tools/render_ui_layout.py --js-only --sizes 1024x720 1280x800 --check --out tmp/ui-js
+```
+
+밝은/어두운 테마의 운영 화면·분석 OFF 상태와 분석 목록·패킷 창의 기본 760×480·최소 560×300을 확인합니다. 합성 출처 패킷을 사용하며 추가 HTTP 요청이나 실제 Burp GUI 조작은 없습니다. JS 결과의 단축키·정렬된 행 연결·팝업 스냅샷·분석 중지/재개와 JSON/XML/HTML/일반 텍스트 추출은 새 회귀 두 그룹에서 검사합니다.

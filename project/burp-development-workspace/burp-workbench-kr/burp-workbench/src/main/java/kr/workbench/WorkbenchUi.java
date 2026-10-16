@@ -47,7 +47,7 @@ public final class WorkbenchUi {
  public static void feedback(JLabel label){String initial=label.getText();label.setVisible(false);label.addPropertyChangeListener("text",e->{String text=label.getText();label.setVisible(text!=null&&!text.isBlank()&&!text.equals(initial));if(label.getParent()!=null)label.getParent().revalidate();});}
 
  public static void primary(JButton b){b.putClientProperty("wb.primary",true);buttonPaint(b);}
- private static void buttonPaint(AbstractButton b){boolean active=b.isEnabled()&&Boolean.TRUE.equals(b.getClientProperty("wb.primary"));b.setBackground(active?accent():surface());b.setForeground(active?Color.WHITE:b.isEnabled()?ink():toneInk(Tone.NEUTRAL));}
+ private static void buttonPaint(AbstractButton b){if(Boolean.TRUE.equals(b.getClientProperty("wb.state.toggle"))){b.setBackground(b.isSelected()?new Color(23,125,70):new Color(181,45,58));b.setForeground(Color.WHITE);return;}boolean active=b.isEnabled()&&Boolean.TRUE.equals(b.getClientProperty("wb.primary"));b.setBackground(active?accent():surface());b.setForeground(active?Color.WHITE:b.isEnabled()?ink():toneInk(Tone.NEUTRAL));}
  public static void style(Component c){
   if(c instanceof PacketInspector inspector){inspector.applyTheme();return;}
   if(c instanceof JComponent aa)aa.putClientProperty(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

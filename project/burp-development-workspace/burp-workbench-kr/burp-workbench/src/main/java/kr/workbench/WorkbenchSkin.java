@@ -60,8 +60,12 @@ final class WorkbenchSkin {
         capture(g, (JButton)button);
       } else {
         Color fill = button.getBackground();
-        if (button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
-        if (button.getModel().isPressed()) fill = WorkbenchUi.selected();
+        if (Boolean.TRUE.equals(button.getClientProperty("wb.state.toggle"))) {
+          if(button.getModel().isRollover() || button.getModel().isPressed())fill=fill.brighter();
+        } else {
+          if (button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
+          if (button.getModel().isPressed()) fill = WorkbenchUi.selected();
+        }
         g.setColor(fill);
         g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
         g.setColor(button.hasFocus() ? WorkbenchUi.accent() : WorkbenchUi.line());

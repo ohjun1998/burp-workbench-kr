@@ -25,17 +25,17 @@ public final class JsUiOptimizationTest {
      settle(panel,size[0],size[1]);edt(()->{
       Rectangle source=visible(panel.input,panel);
       check(source.width>=300&&source.height>=80,"editable JS source remains visible in "+mode+" at "+size[0]+"x"+size[1]+" ("+source.width+"x"+source.height+")");
-      check(visible(panel.analyze,panel).height==panel.analyze.getHeight()&&visible(panel.navigator.previous,panel).height==panel.navigator.previous.getHeight(),"analysis and navigation controls remain next to source in "+mode+" at "+size[0]);
-      Rectangle request=visible(panel.requestPacket.text,panel),response=visible(panel.responsePacket.text,panel);
-      check(request.width>=220&&response.width>=220&&request.height>=70&&response.height>=70,"request and response stay readable in "+mode+" at "+size[0]+" ("+request.width+"x"+request.height+", "+response.width+"x"+response.height+")");
+      check(visible(panel.analysisList,panel).height==panel.analysisList.getHeight()&&visible(panel.navigator.previous,panel).height==panel.navigator.previous.getHeight(),"analysis list and navigation controls stay visible in "+mode+" at "+size[0]);
+      Rectangle findings=visible(panel.results,panel);
+      check(findings.width>=450&&findings.height>=300&&!SwingUtilities.isDescendingFrom(panel.requestPacket,panel),"findings use the released packet area in "+mode+" at "+size[0]);
      });
     }
    }
    String source="https://allowed.test/assets/"+"long-module-name-".repeat(30)+"application.js";
    edt(()->panel.load("fetch('/users'); const apiKey='ghp_"+"A1b2C3d4".repeat(5)+"';",source));JsAnalysisPanelTest.waitDone(panel);
    edt(()->{
-    check(panel.sources.getToolTipText().equals(source),"long source URL is available in the recent-source tooltip");
-    check(panel.sources.getPreferredSize().width<=320,"long source URL does not stretch the recent-source selector");
+    check(((JLabel)UiLayoutTest.named(panel,"wb.js.source.summary")).getToolTipText().equals(source),"long source URL is available in the source tooltip");
+    check(!SwingUtilities.isDescendingFrom(panel.sources,panel)&&panel.analysisList.getPreferredSize().width<200,"analysis list button has stable width without an inline source selector");
     check(!panel.toRepeater.isEnabled()&&!panel.resolve.isEnabled(),"analysis does not enable endpoint actions before row selection");
     panel.urlTable.setRowSelectionInterval(0,0);
     check(panel.toRepeater.isEnabled()&&panel.resolve.isEnabled()&&panel.locate.isEnabled(),"selecting an endpoint enables its actions");

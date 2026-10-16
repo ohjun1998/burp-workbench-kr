@@ -31,7 +31,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   };
   final JButton analysisList = new JButton("분석 목록"),
       analysisDetails = new JButton("분석 상세"),
-      resolve = new JButton("URL·메서드 확인"),
+      resolve = new JButton("요청 설정"),
       locate = new JButton("원본 위치");
   private final MontoyaApi api;
   private JsAnalysis.Result current;
@@ -234,26 +234,14 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     tools.addActionListener(e -> toolMenu.show(tools, 0, tools.getHeight()));
     more.addActionListener(e -> moreMenu.show(more, 0, more.getHeight()));
     JButton target = targetSettings.button();
-    for(JButton button:new JButton[]{target,analysisList,analysisDetails,resolve,locate,tools,more})
-      button.putClientProperty("wb.compact.button",true);
-    JComponent separator=new JComponent() {
-      @Override public Dimension getPreferredSize(){return new Dimension(8,32);}
-      @Override protected void paintComponent(Graphics graphics){
-        Color color=WorkbenchUi.line();
-        graphics.setColor(new Color(color.getRed(),color.getGreen(),color.getBlue(),150));
-        graphics.drawLine(getWidth()/2,(getHeight()-12)/2,getWidth()/2,(getHeight()+12)/2);
-      }
-    };
-    separator.setName("wb.js.actions.separator");
-    JPanel toolbar=WorkbenchUi.row(passive,target,analysisList,analysisDetails,separator,resolve,locate,tools,more);
-    toolbar.setName("wb.js.toolbar");
+    JPanel toolbar=JsAnalysisActions.create(passive,target,analysisList,analysisDetails,resolve,locate,tools,more);
     resolve.addActionListener(e -> openResolvedDraft());
 
     header.removeAll();
     header.add(
         WorkbenchUi.header(FeatureGuide.title("js"), "JS에서 경로·입력·민감정보 후보 찾기 · 발견은 검증과 다름", null),
         BorderLayout.NORTH);
-    JPanel actions=new JPanel(new BorderLayout(10,0));
+    JPanel actions=new JPanel(new BorderLayout(18,0));
     actions.setName("wb.js.header.actions");actions.add(toolbar);actions.add(totals,BorderLayout.EAST);
     header.add(actions);
     footer.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
@@ -272,7 +260,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     urlTable.getInputMap(WHEN_FOCUSED).put(repeaterKey,"wb.js.repeater");
     urlTable.getActionMap().put("wb.js.repeater",toRepeater);
     urlTable.setToolTipText("더블클릭: 발견 출처 패킷 · Ctrl+R: 선택 URL의 Repeater 창 열기");
-    resolve.setToolTipText("선택한 URL의 동적 부분을 입력한 뒤 Repeater 초안을 준비합니다.");
+    resolve.setToolTipText("선택 URL의 경로·메서드를 확인하고 동적 부분을 입력해 Repeater 초안을 준비합니다.");
     locate.setToolTipText("선택한 URL 또는 시크릿 후보의 원문 위치로 이동합니다.");
     results.addChangeListener(e -> refreshActions());
     refreshActions();

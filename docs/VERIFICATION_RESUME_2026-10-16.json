@@ -144,11 +144,13 @@
   },
   "github": {
     "connectionBeforeInterruption": "ohjun1998; repository pull/push/admin permissions verified",
-    "connectionAfterInterruption": "Connection restored; repository read/write/admin permissions rechecked",
+    "connectionAfterInterruption": "Restored and repository permissions verified",
     "uploadAttempt": "One binary blob call interrupted; result unknown, branch not updated by this task",
-    "branchCommitAndPR": "Task branch created from main; source commit and PR pending",
+    "branchCommitAndPR": "Source and five byte-exact artifacts published to task branch; PR checks pending",
     "mainMerged": false,
-    "remoteTestsFor0260": "Preparing exact-hash assembly workflow"
+    "remoteTestsFor0260": "Assembly release passed 1943 checks; final Linux/Windows/browser PR checks pending",
+    "sourceCommit": "8d68cfe70cb1f8b2122c270e76eb686416923afd",
+    "artifactCommit": "0672fb87f8fece467d38c567105fcd69bc81baa5"
   },
   "notExecuted": [
     "Native Burp GUI",
@@ -156,5 +158,19 @@
     "Pro Collaborator and external BApps",
     "Windows Docker Desktop full startup",
     "Remote Linux/Windows verification for 0.26.0"
-  ]
+  ],
+  "remoteAssembly": {
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38845137204",
+    "result": "passed",
+    "releaseChecks": 1943,
+    "allFiveArtifactsMatchLocalSha256AndGitBlob": true
+  },
+  "initialMapperCI": {
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38845137174",
+    "result": "failed_after_unit_tests",
+    "javaChecksPassed": 75,
+    "nodeChecksPassed": 7,
+    "cause": "Workflow compared new 0.2.0 manifest to historical feature-mapper/dist/manifest.json for 0.1.0",
+    "fix": "Compare artifact hashes and source fingerprints with downloads/feature-mapper/{BuildInfo version}/manifest.json"
+  }
 }

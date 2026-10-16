@@ -180,8 +180,12 @@
     "note": "Performance measured before final JS status text layout adjustment; exact measured fingerprints are preserved in the performance report."
   },
   "remoteCI": {
-    "status": "preparing_source_upload_and_exact_hash_assembly",
-    "branch": "account-a/resume-0260-20261016"
+    "status": "assembly_passed_pr_checks_pending",
+    "branch": "account-a/resume-0260-20261016",
+    "sourceCommit": "8d68cfe70cb1f8b2122c270e76eb686416923afd",
+    "artifactCommit": "0672fb87f8fece467d38c567105fcd69bc81baa5",
+    "assemblyRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38845137204",
+    "allFiveArtifactsMatchLocallyVerifiedBytes": true
   },
   "notExecuted": [
     "Native Burp GUI",

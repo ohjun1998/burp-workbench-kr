@@ -36,3 +36,7 @@ GitHub 연결 복구 후 저장소 읽기·쓰기·관리 권한과 main 65d1976
 ## 08. 사용자 · 원문
 
 다시 진행해볼래?
+
+## 09. 도우미 · 요약
+
+소스 8d68cfe의 전체 원격 release 1,943개가 통과했다. GitHub에서 생성한 Workbench0.26.0·Mapper0.2.0 배포 파일 다섯 개는 로컬 검증본의 SHA-256와 Git blob SHA에 모두 일치하며 0672fb8에 게시됐다. 최초 Mapper CI는 Java75·Node7 통과 뒤 기존 0.1.0 명세 비교 때문에 실패하여 현재 BuildInfo 버전의 다운로드 명세·소스 지문을 대조하도록 수정했다. 단발성 조립 workflow를 제거하고 PR에서 Linux·Windows·Chromium 검증을 진행한다.

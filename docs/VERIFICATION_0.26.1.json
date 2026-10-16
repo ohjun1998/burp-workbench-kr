@@ -93,5 +93,74 @@
     "windowsExtraCoverage": "CapturePipelineTest and TrafficCaptureRecoveryTest each repeated ten times before sustained capture",
     "countsNote": "Repeated executions are not additional unique checks."
   },
-  "scope": "Montoya adapter and production disk/Swing paths; native Burp runtime/GUI and multi-hour capture remain separate."
+  "scope": "Montoya adapter and production disk/Swing paths; native Burp runtime/GUI and multi-hour capture remain separate.",
+  "localSwing": {
+    "layout": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.26.1.jar",
+      "releaseJarSha256": "b5aa13895b2833808d35bb2f26b69aef0f9d8ee39f8126e05c1f6be3b038faba",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 108,
+      "controlsMeasured": 1062,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 1836,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guidance": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.26.1.jar",
+      "releaseJarSha256": "b5aa13895b2833808d35bb2f26b69aef0f9d8ee39f8126e05c1f6be3b038faba",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    }
+  },
+  "remoteAssembly": {
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38848009602",
+    "sourceCommit": "1786340b03b0fa52d4299a0959055c59c65dc790",
+    "artifactCommit": "e15a5da5f843a195f3d777ece0dd13bcc456535b",
+    "result": "passed",
+    "bothDownloadsMatchLocallyTestedBytes": true
+  }
 }

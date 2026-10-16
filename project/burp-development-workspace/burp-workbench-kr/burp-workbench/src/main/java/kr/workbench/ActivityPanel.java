@@ -1,68 +1,748 @@
 package kr.workbench;
-import burp.api.montoya.MontoyaApi;import burp.api.montoya.http.message.requests.HttpRequest;import burp.api.montoya.http.message.responses.HttpResponse;
-import javax.swing.*;import javax.swing.table.*;import java.awt.*;import java.nio.file.*;import java.util.*;import java.util.List;import java.util.concurrent.*;import java.util.concurrent.atomic.*;
+
+import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.http.message.requests.HttpRequest;
+import burp.api.montoya.http.message.responses.HttpResponse;
+import java.awt.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 final class ActivityPanel extends JPanel implements AutoCloseable {
- final ActivityTracker tracker=new ActivityTracker();final MontoyaApi api;final JTabbedPane coveragePages=new JTabbedPane();final AssessmentPanel assessmentPanel;long assessmentShown=-1;
- final DefaultTableModel model=EnvironmentPanel.model("메서드","URL","점검 상태","요청","Repeater","미완료 파라미터","출처","최근 활동","재검토 근거"),params=EnvironmentPanel.model("위치:이름","상태");
- final DefaultTableModel pendingModel=EnvironmentPanel.model("메서드","미확정 URL","소스","줄","종류");final JTable pendingTable=new JTable(pendingModel);List<ActivityTracker.Pending> pendingSnapshot=List.of();final JTextField pendingResolved=new JTextField(32);
- final JTable table=new JTable(model),parameterTable=new JTable(params);final JLabel summary=new JLabel("활동 추적 준비됨");final JTextField search=new JTextField(14);final JComboBox<String> filter=new JComboBox<>(new String[]{"전체","미완료 URL","미완료 파라미터","Repeater 작업","점검 완료","JS 발견 · 요청 미관측","발견만 함","요청 관측","재검토 필요"});final JCheckBox enabled=new JCheckBox("추적 ON",true),scope=new JCheckBox("Scope만",true);
- final AtomicBoolean closed=new AtomicBoolean();final AtomicLong generation=new AtomicLong(),dropped=new AtomicLong();volatile boolean recording=true,scopeOnly=true;
- final ThreadPoolExecutor worker=new ThreadPoolExecutor(1,1,0,TimeUnit.SECONDS,new ArrayBlockingQueue<>(256),r->{Thread t=new Thread(r,"Workbench-activity");t.setDaemon(true);return t;},new ThreadPoolExecutor.AbortPolicy());final javax.swing.Timer timer;List<ActivityTracker.View> snapshot=List.of();long shown=-1;String selectedKey;interface SourceNavigator{void open(String source,int line,String kind);}
- final JButton finish=new JButton("URL 완료"),finishParam=new JButton("입력 완료"),evidence=new JButton("발견 근거"),draft=new JButton("Repeater 초안"),resolve=new JButton("URL 확정"),sourceButton=new JButton("소스 근거");
- SourceNavigator sourceNavigator=(source,line,kind)->{};final TargetWindow evidenceWindow=new TargetWindow(this,"발견 근거",this::evidenceContent);
- ActivityPanel(MontoyaApi api){super(new BorderLayout(8,8));this.api=api;setName("wb.activity");setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-  JButton importHistory=new JButton("History 가져오기"),records=new JButton("기록 ▾");JMenuItem export=new JMenuItem("Excel 내보내기"),save=new JMenuItem("기록 저장"),load=new JMenuItem("기록 불러오기"),clear=new JMenuItem("기록 초기화");
-  JPopupMenu recordMenu=new JPopupMenu();recordMenu.add(save);recordMenu.add(load);recordMenu.add(export);recordMenu.addSeparator();recordMenu.add(clear);WorkbenchUi.style(recordMenu);records.setToolTipText("활동·계정·업무 기록의 저장, 불러오기, Excel 내보내기 및 초기화");records.addActionListener(e->recordMenu.show(records,0,records.getHeight()));
-  add(WorkbenchUi.header(FeatureGuide.title("activity"),"계정·URL·입력의 미점검 항목을 찾고 완료 상태 관리",WorkbenchUi.row(enabled,scope,importHistory,records)),BorderLayout.NORTH);
-  finish.setName("wb.activity.finish");finishParam.setName("wb.activity.finishInput");evidence.setName("wb.activity.evidence");draft.setName("wb.activity.draft");resolve.setName("wb.activity.resolve");sourceButton.setName("wb.activity.source");WorkbenchUi.primary(finish);WorkbenchUi.primary(resolve);
-  finish.setToolTipText("선택 URL의 전체 점검 완료를 전환합니다. 계정별 완료와는 별도입니다.");finishParam.setToolTipText("오른쪽 표에서 선택한 입력의 점검 완료를 전환합니다.");draft.setToolTipText("선택 URL의 요청 초안을 Repeater로 보냅니다. 전송 전에 값·인증을 확인하세요.");evidence.setToolTipText("선택 URL의 발견 출처와 JS 근거를 표시합니다.");resolve.setToolTipText("선택한 미확정 JS 경로를 입력한 SCOPE URL로 확정합니다.");sourceButton.setToolTipText("선택한 미확정 경로의 원본 JS 위치를 엽니다.");
-  evidence.addActionListener(e->{evidenceWindow.closeWindow();evidenceWindow.open();});draft.addActionListener(e->draftSelected());
-  table.setName("wb.activity.endpoints");parameterTable.setName("wb.activity.parameters");table.setAutoCreateRowSorter(true);parameterTable.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);parameterTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);int[] widths={75,340,135,60,75,135,160,190,220};for(int i=0;i<widths.length;i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);table.setToolTipText("가로 스크롤로 출처와 최근 활동을 확인할 수 있습니다.");
-  JSplitPane split=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,WorkbenchUi.card("URL 점검 현황",new JScrollPane(table)),WorkbenchUi.card("선택 URL 입력",new JScrollPane(parameterTable)),.72);
-  JPanel endpointsPage=new JPanel(new BorderLayout(6,6));endpointsPage.add(WorkbenchUi.row(filter,new JLabel("검색"),search,finish,finishParam,evidence,draft),BorderLayout.NORTH);endpointsPage.add(split);coveragePages.addTab("URL 점검 현황",endpointsPage);
-  JPanel pendingPage=new JPanel(new BorderLayout(6,6));pendingPage.add(new JScrollPane(pendingTable));pendingPage.add(WorkbenchUi.row(new JLabel("확정 URL"),pendingResolved,resolve,sourceButton),BorderLayout.SOUTH);pendingTable.setAutoCreateRowSorter(true);pendingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-  pendingTable.getSelectionModel().addListSelectionListener(e->{int row=pendingTable.getSelectedRow();if(!e.getValueIsAdjusting()){if(row>=0&&pendingTable.convertRowIndexToModel(row)<pendingSnapshot.size())pendingResolved.setText(pendingSnapshot.get(pendingTable.convertRowIndexToModel(row)).template());updateActions();}});
-  resolve.addActionListener(e->{int row=pendingTable.getSelectedRow();if(row<0)return;var p=pendingSnapshot.get(pendingTable.convertRowIndexToModel(row));try{if(!allowedUrl(pendingResolved.getText()))throw new IllegalArgumentException("SCOPE 밖 URL");tracker.resolve(p,pendingResolved.getText());refresh();}catch(Exception ex){summary.setText(ex.getMessage());}});
-  sourceButton.addActionListener(e->{int row=pendingTable.getSelectedRow();if(row>=0){var p=pendingSnapshot.get(pendingTable.convertRowIndexToModel(row));sourceNavigator.open(p.source(),p.line(),p.kind());}});
-  coveragePages.addTab("미확정 JS 발견",pendingPage);assessmentPanel=new AssessmentPanel(this);coveragePages.addTab("계정별 점검",assessmentPanel.accountsPage);coveragePages.addTab("업무별 현황",assessmentPanel.tasksPage);add(coveragePages);add(summary,BorderLayout.SOUTH);
-  enabled.addActionListener(e->{recording=enabled.isSelected();enabled.setText(recording?"추적 ON":"추적 OFF");});scope.addActionListener(e->scopeOnly=scope.isSelected());filter.addActionListener(e->applyFilter());search.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){applyFilter();}public void removeUpdate(javax.swing.event.DocumentEvent e){applyFilter();}public void changedUpdate(javax.swing.event.DocumentEvent e){applyFilter();}});
-  table.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())showParameters();});parameterTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())updateActions();});
-  finish.addActionListener(e->{var v=selected();if(v!=null){tracker.complete(v.key(),!tracker.completed(v.key()));refresh();}});
-  finishParam.addActionListener(e->{var v=selected();int row=parameterTable.getSelectedRow();if(v!=null&&row>=0){int index=parameterTable.convertRowIndexToModel(row);tracker.completeParameter(v.key(),params.getValueAt(index,0).toString(),!params.getValueAt(index,1).equals("점검 완료"));refresh();}});
-  importHistory.addActionListener(e->submit(()->{var h=api.proxy().history();if(h!=null)for(var rr:h){if(closed.get()||Thread.currentThread().isInterrupted())break;if(allowed(rr.request())){tracker.observe(rr.request(),"History");if(rr.response()!=null&&rr.response().body().length()<=JsAnalysis.SOURCE_LIMIT)discoverResponse(rr.request(),rr.response());}}}));
-  export.addActionListener(e->choose("활동 추적.xlsx",path->MetadataExport.xlsx(path,tracker.workbook())));
-  save.addActionListener(e->choose("활동 추적.json",path->Files.writeString(path,tracker.save())));
-  load.addActionListener(e->{JFileChooser chooser=new JFileChooser();if(chooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){Path path=chooser.getSelectedFile().toPath();submit(()->{try{if(Files.size(path)>32*1024*1024)throw new IllegalArgumentException("기록 파일 32MB 제한");tracker.load(Files.readString(path));}catch(Exception ex){message("불러오기 실패: "+ex.getMessage());}});}});
-  clear.addActionListener(e->{if(JOptionPane.showConfirmDialog(this,"활동 추적 기록을 초기화할까요?","초기화",JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION){generation.incrementAndGet();worker.getQueue().clear();submit(tracker::clear);}});
-  timer=new javax.swing.Timer(1000,e->refresh());timer.start();WorkbenchUi.style(this);refresh();
- }
- interface FileAction{void run(Path path)throws Exception;}
- private void choose(String name,FileAction action){JFileChooser c=new JFileChooser();c.setSelectedFile(new java.io.File(name));if(c.showSaveDialog(this)!=JFileChooser.APPROVE_OPTION)return;Path path=c.getSelectedFile().toPath();if(Files.exists(path)&&JOptionPane.showConfirmDialog(this,"기존 파일을 덮어쓸까요?","저장",JOptionPane.OK_CANCEL_OPTION)!=JOptionPane.OK_OPTION)return;submit(()->{try{action.run(path);message("저장 완료 · "+path.getFileName());}catch(Exception ex){message("저장 실패: "+ex.getMessage());}});}
- void message(String s){SwingUtilities.invokeLater(()->{if(!closed.get())summary.setText(s);});}
- void submit(Runnable work){if(closed.get())return;long g=generation.get();try{worker.execute(()->{if(!closed.get()&&generation.get()==g)try{work.run();}catch(Exception ex){dropped.incrementAndGet();message("활동 처리 실패 · "+ex.getClass().getSimpleName());}});}catch(RejectedExecutionException ex){dropped.incrementAndGet();}}
- boolean allowed(HttpRequest q){return q!=null&&(!scopeOnly||WorkbenchScope.contains(api,q));}
- boolean allowedUrl(String url){try{return !scopeOnly||WorkbenchScope.contains(api,url);}catch(Exception e){return false;}}
- void observe(HttpRequest q,String source){if(!recording||closed.get())return;submit(()->{if(recording&&allowed(q))tracker.observe(q,source);});}
- void response(HttpRequest q,HttpResponse r){if(!recording||closed.get()||r==null||q==null)return;if(r.body()!=null&&r.body().length()>JsAnalysis.SOURCE_LIMIT){dropped.incrementAndGet();return;}submit(()->{if(recording&&allowed(q))discoverResponse(q,r);});}
- void discover(String url,String source){if(!recording)return;submit(()->{if(allowedUrl(url)){String method=source.substring(source.lastIndexOf(' ')+1);if((source.startsWith("Burp History ")||source.startsWith("OpenAPI ")||source.startsWith("JS "))&&method.matches("GET|HEAD|OPTIONS|POST|PUT|PATCH|DELETE"))tracker.discover(new ReconMetadata.Discovery(url,method,ReconMetadata.parameters(url),Set.of(),source));else tracker.discover(url,source);}});}
- void analyzed(JsAnalysis.Result result){analyzed(result,"직접 입력");}
- void analyzed(JsAnalysis.Result result,String source){if(!recording||result==null)return;submit(()->{for(var e:result.endpoints()){if(closed.get())break;if(!e.complete()||e.url().contains("{dynamic}")){if(allowedUrl(source))tracker.pending(e,source);continue;}if(!allowedUrl(e.url()))continue;Set<String> query=new TreeSet<>(),body=new TreeSet<>();for(String n:e.parameters().split(",\\s*"))if(!n.isBlank())query.add(n);for(String n:e.bodyKeys().split(",\\s*"))if(!n.isBlank())body.add(n);tracker.discover(new ReconMetadata.Discovery(e.url(),e.method(),query,body,"JS 분석"));tracker.evidence(e.method(),e.url(),source,e.line(),e.kind());}});}
- private void discoverResponse(HttpRequest q,HttpResponse r){try{String body=JsAnalysisPanel.readBody(r);boolean js=q.url().split("\\?",2)[0].toLowerCase(Locale.ROOT).endsWith(".js");if(r.headers()!=null)for(var h:r.headers())if(h.name().equalsIgnoreCase("Content-Type")&&h.value().toLowerCase(Locale.ROOT).contains("javascript"))js=true;for(var d:ReconMetadata.discover(q.url(),body,js)){if(closed.get()||Thread.currentThread().isInterrupted())break;if(allowedUrl(d.url()))tracker.discover(d);}}catch(java.io.IOException ex){dropped.incrementAndGet();}}
- ActivityTracker.View selected(){int row=table.getSelectedRow();if(row<0)return null;int index=table.convertRowIndexToModel(row);return index>=snapshot.size()?null:snapshot.get(index);}
- void updateActions(){var selected=selected();boolean has=selected!=null;finish.setEnabled(has);evidence.setEnabled(has);draft.setEnabled(has);finishParam.setEnabled(has&&parameterTable.getSelectedRow()>=0);finish.setText(has&&tracker.completed(selected.key())?"URL 완료 해제":"URL 완료");int row=parameterTable.getSelectedRow();boolean inputDone=row>=0&&params.getValueAt(parameterTable.convertRowIndexToModel(row),1).equals("점검 완료");finishParam.setText(inputDone?"입력 완료 해제":"입력 완료");boolean pending=pendingTable.getSelectedRow()>=0&&pendingTable.convertRowIndexToModel(pendingTable.getSelectedRow())<pendingSnapshot.size();resolve.setEnabled(pending);sourceButton.setEnabled(pending);pendingResolved.setEnabled(pending);}
- void showParameters(){var v=selected();int selectedRow=parameterTable.getSelectedRow();String input=selectedRow<0?"":params.getValueAt(parameterTable.convertRowIndexToModel(selectedRow),0).toString();boolean same=v!=null&&v.key().equals(selectedKey);selectedKey=v==null?null:v.key();params.setRowCount(0);if(v!=null)for(var p:v.parameters())params.addRow(new Object[]{p.key(),p.state()});if(same)for(int i=0;i<params.getRowCount();i++)if(params.getValueAt(i,0).equals(input)){int row=parameterTable.convertRowIndexToView(i);if(row>=0)parameterTable.setRowSelectionInterval(row,row);break;}updateActions();}
- void refresh(){if(closed.get())return;long revision;boolean endpointChanged; synchronized(tracker){revision=tracker.revision;}endpointChanged=revision!=shown;if(endpointChanged){String key=selectedKey;int inputRow=parameterTable.getSelectedRow();String input=inputRow<0?"":params.getValueAt(parameterTable.convertRowIndexToModel(inputRow),0).toString();snapshot=tracker.views();model.setRowCount(0);for(var v:snapshot)model.addRow(new Object[]{v.method(),v.url(),v.state(),v.observed(),v.repeater(),v.parameters().stream().filter(p->!p.state().equals("점검 완료")).count(),v.sources(),v.last(),v.review()});pendingSnapshot=tracker.pendingViews();pendingModel.setRowCount(0);for(var p:pendingSnapshot)pendingModel.addRow(new Object[]{p.method(),p.template(),p.source(),p.line(),p.kind()});shown=revision;applyFilter();if(key!=null)for(int i=0;i<snapshot.size();i++)if(snapshot.get(i).key().equals(key)){int row=table.convertRowIndexToView(i);if(row>=0)table.setRowSelectionInterval(row,row);break;}showParameters();for(int i=0;i<params.getRowCount();i++)if(params.getValueAt(i,0).equals(input)){int row=parameterTable.convertRowIndexToView(i);if(row>=0)parameterTable.setRowSelectionInterval(row,row);break;}}
-  if(endpointChanged||assessmentShown!=tracker.assessments.revision){assessmentPanel.refresh();assessmentShown=tracker.assessments.revision;}
-  long completed=snapshot.stream().filter(v->v.state().equals("점검 완료")).count(),missing=snapshot.stream().flatMap(v->v.parameters().stream()).filter(p->!p.state().equals("점검 완료")).count();summary.setText("URL "+snapshot.size()+" · 완료 "+completed+" · 미완료 "+(snapshot.size()-completed)+" · 미완료 파라미터 "+missing+" · 미확정 JS "+tracker.pendingViews().size()+" · 처리 누락 "+dropped.get()+" · 한도 제외 "+tracker.rejected+" / 최대 "+ActivityTracker.LIMIT);
- }
- void applyFilter(){TableRowSorter<DefaultTableModel> sorter=(TableRowSorter<DefaultTableModel>)table.getRowSorter();if(sorter==null)return;String term=search.getText().toLowerCase(Locale.ROOT);int choice=filter.getSelectedIndex();sorter.setRowFilter(new RowFilter<>(){public boolean include(Entry<? extends DefaultTableModel,? extends Integer> entry){if(entry.getIdentifier()>=snapshot.size())return false;var v=snapshot.get(entry.getIdentifier());boolean state=switch(choice){case 1->!v.state().equals("점검 완료");case 2->v.parameters().stream().anyMatch(p->!p.state().equals("점검 완료"));case 3->v.repeater()>0;case 4->v.state().equals("점검 완료");case 5->v.observed()==0&&v.sources().contains("JS");case 6->v.state().equals("발견만 함");case 7->v.state().equals("요청 관측");case 8->!v.review().isEmpty();default->true;};return state&&(v.url()+" "+v.method()+" "+v.sources()+" "+v.parameters()).toLowerCase(Locale.ROOT).contains(term);}});}
- JPanel evidenceContent(){var v=selected();JPanel panel=TargetWindow.options(new JLabel(v==null?"대상을 선택하세요":v.method()+" "+v.url()));if(v!=null){for(var ev:v.evidence()){JButton open=new JButton("원본 보기");open.addActionListener(e->sourceNavigator.open(ev.source(),ev.line(),ev.kind()));panel.add(WorkbenchUi.row(new JLabel(ev.source()+" · 줄 "+ev.line()+" · "+ev.kind()),open));}if(v.evidence().isEmpty())panel.add(new JLabel("상세 JS 근거 없음 · 출처: "+v.sources()));if(!v.review().isEmpty())panel.add(new JLabel(v.review()));}return panel;}
- void review(String method,String url,String reason){submit(()->{if(allowedUrl(url))tracker.review(method,url,reason);});}
- void accountInspection(String id,HttpRequest expected,HttpRequest actual,String note,boolean needsReview,Set<String> names,Set<String> cookies){if(id.isEmpty())return;submit(()->{if(!allowed(expected))return;var account=tracker.assessments.account(id);if(!account.origin().equals(AssessmentTracker.origin(expected.url())))return;boolean trusted=actual!=null&&AuthComparePanel.sameTarget(actual,expected)&&allowed(actual)&&AuthComparePanel.credentialValues(actual,names).equals(AuthComparePanel.credentialValues(expected,names));if(trusted)tracker.assessments.bind(List.of(new AssessmentTracker.Binding(id,actual.url(),AssessmentTracker.headers(actual),names,cookies)));tracker.discover(new ReconMetadata.Discovery(expected.url(),expected.method(),ReconMetadata.parameters(expected.url()),Set.of(),"권한 비교"));String result=note.substring(0,Math.min(note.length(),512));tracker.assessments.inspected(id,expected.method(),expected.url(),tracker.parameterNames(expected.method(),expected.url()),result,needsReview||!trusted||result.contains("동일 인증")||result.contains("보류")||result.contains("없음")||result.contains("오류")||result.contains("실패"));});}
- void evidenceSaved(String id,String filename,List<BountyEvidence.Item> items){evidenceSaved(id,filename,items,null);}
- void evidenceSaved(String id,String filename,List<BountyEvidence.Item> items,java.nio.file.Path path){submit(()->{try{tracker.assessments.evidenceSaved(id,filename,items);if(path!=null)tracker.assessments.attachEvidenceFile(path);}catch(Exception ex){message("ZIP 저장 후 계정/업무 연결 실패 · "+ex.getMessage());}});}
- String observation(JsAnalysis.Endpoint e){return tracker.observation(e.method(),e.url());}
- void draftSelected(){try{var v=selected();if(v==null)return;String query=String.join(", ",v.parameters().stream().filter(p->p.key().startsWith("URL:")).map(p->p.key().substring(4)).toList()),body=String.join(", ",v.parameters().stream().filter(p->(p.key().startsWith("BODY:")||p.key().startsWith("JSON:"))).map(p->p.key().substring(5)).toList());var item=new JsAnalysis.Endpoint(v.url(),v.method(),"활동 추적",query,"",body,1,0,0,true,"");var draft=JsRequestDraft.create(item,null,tracker.contentType(v.key()));if(!WorkbenchScope.contains(api,draft.url()))throw new IllegalArgumentException("Scope 밖 URL입니다.");api.repeater().sendToRepeater(draft.request(),"활동 추적 · 값/인증 확인");summary.setText("초안 준비 · REPLACE_ME 값/인증/본문 형식을 확인하세요. 전송·완료 처리 없음");}catch(Exception e){summary.setText(e.getMessage());}}
- @Override public void close(){if(!closed.compareAndSet(false,true))return;evidenceWindow.close();assessmentPanel.close();generation.incrementAndGet();worker.shutdownNow();timer.stop();tracker.clear();snapshot=List.of();model.setRowCount(0);params.setRowCount(0);}
+  final ActivityTracker tracker = new ActivityTracker();
+  final MontoyaApi api;
+  final JTabbedPane coveragePages = new JTabbedPane();
+  final AssessmentPanel assessmentPanel;
+  long assessmentShown = -1;
+  final DefaultTableModel
+      model =
+          EnvironmentPanel.model(
+              "메서드", "URL", "점검 상태", "요청", "Repeater", "미완료 파라미터", "출처", "최근 활동", "재검토 근거"),
+      params = EnvironmentPanel.model("위치:이름", "상태");
+  final DefaultTableModel pendingModel = EnvironmentPanel.model("메서드", "미확정 URL", "소스", "줄", "종류");
+  final JTable pendingTable = new JTable(pendingModel);
+  List<ActivityTracker.Pending> pendingSnapshot = List.of();
+  final JTextField pendingResolved = new JTextField(32);
+  final JTable table = new JTable(model), parameterTable = new JTable(params);
+  final JLabel summary = new JLabel("활동 추적 준비됨");
+  final JTextField search = new JTextField(14);
+  final JComboBox<String> filter =
+      new JComboBox<>(
+          new String[] {
+            "전체",
+            "미완료 URL",
+            "미완료 파라미터",
+            "Repeater 작업",
+            "점검 완료",
+            "JS 발견 · 요청 미관측",
+            "발견만 함",
+            "요청 관측",
+            "재검토 필요"
+          });
+  final JCheckBox enabled = new JCheckBox("추적 ON", true), scope = new JCheckBox("Scope만", true);
+  final AtomicBoolean closed = new AtomicBoolean();
+  final AtomicLong generation = new AtomicLong(), dropped = new AtomicLong();
+  volatile boolean recording = true, scopeOnly = true;
+  final ThreadPoolExecutor worker =
+      new ThreadPoolExecutor(
+          1,
+          1,
+          0,
+          TimeUnit.SECONDS,
+          new ArrayBlockingQueue<>(256),
+          r -> {
+            Thread t = new Thread(r, "Workbench-activity");
+            t.setDaemon(true);
+            return t;
+          },
+          new ThreadPoolExecutor.AbortPolicy());
+  final javax.swing.Timer timer;
+  List<ActivityTracker.View> snapshot = List.of();
+  long shown = -1;
+  String selectedKey;
+
+  interface SourceNavigator {
+    void open(String source, int line, String kind);
+  }
+
+  final JButton finish = new JButton("URL 완료"),
+      finishParam = new JButton("입력 완료"),
+      evidence = new JButton("발견 근거"),
+      draft = new JButton("Repeater 초안"),
+      resolve = new JButton("URL 확정"),
+      sourceButton = new JButton("소스 근거");
+  final KeyedTableRows<String> endpointRows = new KeyedTableRows<>();
+  final KeyedTableRows<String> parameterRows = new KeyedTableRows<>();
+  final KeyedTableRows<String> pendingRows = new KeyedTableRows<>();
+  boolean updatingTables;
+  SourceNavigator sourceNavigator = (source, line, kind) -> {};
+  final TargetWindow evidenceWindow = new TargetWindow(this, "발견 근거", this::evidenceContent);
+
+  ActivityPanel(MontoyaApi api) {
+    super(new BorderLayout(8, 8));
+    this.api = api;
+    setName("wb.activity");
+    setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    JButton importHistory = new JButton("History 가져오기"), records = new JButton("기록 ▾");
+    JMenuItem export = new JMenuItem("Excel 내보내기"),
+        save = new JMenuItem("기록 저장"),
+        load = new JMenuItem("기록 불러오기"),
+        clear = new JMenuItem("기록 초기화");
+    JPopupMenu recordMenu = new JPopupMenu();
+    recordMenu.add(save);
+    recordMenu.add(load);
+    recordMenu.add(export);
+    recordMenu.addSeparator();
+    recordMenu.add(clear);
+    WorkbenchUi.style(recordMenu);
+    records.setToolTipText("활동·계정·업무 기록의 저장, 불러오기, Excel 내보내기 및 초기화");
+    records.addActionListener(e -> recordMenu.show(records, 0, records.getHeight()));
+    add(
+        WorkbenchUi.header(
+            FeatureGuide.title("activity"),
+            "계정·URL·입력의 미점검 항목을 찾고 완료 상태 관리",
+            WorkbenchUi.row(enabled, scope, importHistory, records)),
+        BorderLayout.NORTH);
+    finish.setName("wb.activity.finish");
+    finishParam.setName("wb.activity.finishInput");
+    evidence.setName("wb.activity.evidence");
+    draft.setName("wb.activity.draft");
+    resolve.setName("wb.activity.resolve");
+    sourceButton.setName("wb.activity.source");
+    WorkbenchUi.primary(finish);
+    WorkbenchUi.primary(resolve);
+    finish.setToolTipText("선택 URL의 전체 점검 완료를 전환합니다. 계정별 완료와는 별도입니다.");
+    finishParam.setToolTipText("오른쪽 표에서 선택한 입력의 점검 완료를 전환합니다.");
+    draft.setToolTipText("선택 URL의 요청 초안을 Repeater로 보냅니다. 전송 전에 값·인증을 확인하세요.");
+    evidence.setToolTipText("선택 URL의 발견 출처와 JS 근거를 표시합니다.");
+    resolve.setToolTipText("선택한 미확정 JS 경로를 입력한 SCOPE URL로 확정합니다.");
+    sourceButton.setToolTipText("선택한 미확정 경로의 원본 JS 위치를 엽니다.");
+    evidence.addActionListener(
+        e -> {
+          evidenceWindow.closeWindow();
+          evidenceWindow.open();
+        });
+    draft.addActionListener(e -> draftSelected());
+    table.setName("wb.activity.endpoints");
+    parameterTable.setName("wb.activity.parameters");
+    table.setAutoCreateRowSorter(true);
+    parameterTable.setAutoCreateRowSorter(true);
+    table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    parameterTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    int[] widths = {75, 340, 135, 60, 75, 135, 160, 190, 220};
+    for (int i = 0; i < widths.length; i++)
+      table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+    table.setToolTipText("가로 스크롤로 출처와 최근 활동을 확인할 수 있습니다.");
+    JSplitPane split =
+        WorkbenchUi.split(
+            JSplitPane.HORIZONTAL_SPLIT,
+            WorkbenchUi.card("URL 점검 현황", new JScrollPane(table)),
+            WorkbenchUi.card("선택 URL 입력", new JScrollPane(parameterTable)),
+            .72);
+    JPanel endpointsPage = new JPanel(new BorderLayout(6, 6));
+    endpointsPage.add(
+        WorkbenchUi.row(filter, new JLabel("검색"), search, finish, finishParam, evidence, draft),
+        BorderLayout.NORTH);
+    endpointsPage.add(split);
+    coveragePages.addTab("URL 점검 현황", endpointsPage);
+    JPanel pendingPage = new JPanel(new BorderLayout(6, 6));
+    pendingPage.add(new JScrollPane(pendingTable));
+    pendingPage.add(
+        WorkbenchUi.row(new JLabel("확정 URL"), pendingResolved, resolve, sourceButton),
+        BorderLayout.SOUTH);
+    pendingTable.setAutoCreateRowSorter(true);
+    pendingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    pendingTable
+        .getSelectionModel()
+        .addListSelectionListener(
+            e -> {
+              int row = pendingTable.getSelectedRow();
+              if (!updatingTables && !e.getValueIsAdjusting()) {
+                if (row >= 0 && pendingTable.convertRowIndexToModel(row) < pendingSnapshot.size())
+                  pendingResolved.setText(
+                      pendingSnapshot.get(pendingTable.convertRowIndexToModel(row)).template());
+                updateActions();
+              }
+            });
+    resolve.addActionListener(
+        e -> {
+          int row = pendingTable.getSelectedRow();
+          if (row < 0) return;
+          var p = pendingSnapshot.get(pendingTable.convertRowIndexToModel(row));
+          try {
+            if (!allowedUrl(pendingResolved.getText()))
+              throw new IllegalArgumentException("SCOPE 밖 URL");
+            tracker.resolve(p, pendingResolved.getText());
+            refresh();
+          } catch (Exception ex) {
+            summary.setText(ex.getMessage());
+          }
+        });
+    sourceButton.addActionListener(
+        e -> {
+          int row = pendingTable.getSelectedRow();
+          if (row >= 0) {
+            var p = pendingSnapshot.get(pendingTable.convertRowIndexToModel(row));
+            sourceNavigator.open(p.source(), p.line(), p.kind());
+          }
+        });
+    coveragePages.addTab("미확정 JS 발견", pendingPage);
+    assessmentPanel = new AssessmentPanel(this);
+    coveragePages.addTab("계정별 점검", assessmentPanel.accountsPage);
+    coveragePages.addTab("업무별 현황", assessmentPanel.tasksPage);
+    add(coveragePages);
+    add(summary, BorderLayout.SOUTH);
+    enabled.addActionListener(
+        e -> {
+          recording = enabled.isSelected();
+          enabled.setText(recording ? "추적 ON" : "추적 OFF");
+        });
+    scope.addActionListener(e -> scopeOnly = scope.isSelected());
+    filter.addActionListener(e -> applyFilter());
+    search
+        .getDocument()
+        .addDocumentListener(
+            new javax.swing.event.DocumentListener() {
+              public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                applyFilter();
+              }
+
+              public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                applyFilter();
+              }
+
+              public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                applyFilter();
+              }
+            });
+    table
+        .getSelectionModel()
+        .addListSelectionListener(
+            e -> {
+              if (!updatingTables && !e.getValueIsAdjusting()) showParameters();
+            });
+    parameterTable
+        .getSelectionModel()
+        .addListSelectionListener(
+            e -> {
+              if (!updatingTables && !e.getValueIsAdjusting()) updateActions();
+            });
+    finish.addActionListener(
+        e -> {
+          var v = selected();
+          if (v != null) {
+            tracker.complete(v.key(), !tracker.completed(v.key()));
+            refresh();
+          }
+        });
+    finishParam.addActionListener(
+        e -> {
+          var v = selected();
+          int row = parameterTable.getSelectedRow();
+          if (v != null && row >= 0) {
+            int index = parameterTable.convertRowIndexToModel(row);
+            tracker.completeParameter(
+                v.key(),
+                params.getValueAt(index, 0).toString(),
+                !params.getValueAt(index, 1).equals("점검 완료"));
+            refresh();
+          }
+        });
+    importHistory.addActionListener(
+        e ->
+            submit(
+                () -> {
+                  var h = api.proxy().history();
+                  if (h != null)
+                    for (var rr : h) {
+                      if (closed.get() || Thread.currentThread().isInterrupted()) break;
+                      if (allowed(rr.request())) {
+                        tracker.observe(rr.request(), "History");
+                        if (rr.response() != null
+                            && rr.response().body().length() <= JsAnalysis.SOURCE_LIMIT)
+                          discoverResponse(rr.request(), rr.response());
+                      }
+                    }
+                }));
+    export.addActionListener(
+        e -> choose("활동 추적.xlsx", path -> MetadataExport.xlsx(path, tracker.workbook())));
+    save.addActionListener(
+        e -> choose("활동 추적.json", path -> Files.writeString(path, tracker.save())));
+    load.addActionListener(
+        e -> {
+          JFileChooser chooser = new JFileChooser();
+          if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            Path path = chooser.getSelectedFile().toPath();
+            submit(
+                () -> {
+                  try {
+                    if (Files.size(path) > 32 * 1024 * 1024)
+                      throw new IllegalArgumentException("기록 파일 32MB 제한");
+                    tracker.load(Files.readString(path));
+                  } catch (Exception ex) {
+                    message("불러오기 실패: " + ex.getMessage());
+                  }
+                });
+          }
+        });
+    clear.addActionListener(
+        e -> {
+          if (JOptionPane.showConfirmDialog(
+                  this, "활동 추적 기록을 초기화할까요?", "초기화", JOptionPane.OK_CANCEL_OPTION)
+              == JOptionPane.OK_OPTION) {
+            generation.incrementAndGet();
+            worker.getQueue().clear();
+            submit(tracker::clear);
+          }
+        });
+    coveragePages.addChangeListener(e -> refreshVisible());
+    addHierarchyListener(
+        e -> {
+          if ((e.getChangeFlags() & java.awt.event.HierarchyEvent.SHOWING_CHANGED) != 0
+              && isShowing()) {
+            refreshVisible();
+          }
+        });
+    timer = new javax.swing.Timer(1000, e -> refreshVisible());
+    timer.start();
+    WorkbenchUi.style(this);
+    refresh();
+  }
+
+  interface FileAction {
+    void run(Path path) throws Exception;
+  }
+
+  private void choose(String name, FileAction action) {
+    JFileChooser c = new JFileChooser();
+    c.setSelectedFile(new java.io.File(name));
+    if (c.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
+    Path path = c.getSelectedFile().toPath();
+    if (Files.exists(path)
+        && JOptionPane.showConfirmDialog(this, "기존 파일을 덮어쓸까요?", "저장", JOptionPane.OK_CANCEL_OPTION)
+            != JOptionPane.OK_OPTION) return;
+    submit(
+        () -> {
+          try {
+            action.run(path);
+            message("저장 완료 · " + path.getFileName());
+          } catch (Exception ex) {
+            message("저장 실패: " + ex.getMessage());
+          }
+        });
+  }
+
+  void message(String s) {
+    SwingUtilities.invokeLater(
+        () -> {
+          if (!closed.get()) summary.setText(s);
+        });
+  }
+
+  void submit(Runnable work) {
+    if (closed.get()) return;
+    long g = generation.get();
+    try {
+      worker.execute(
+          () -> {
+            if (!closed.get() && generation.get() == g)
+              try {
+                work.run();
+              } catch (Exception ex) {
+                dropped.incrementAndGet();
+                message("활동 처리 실패 · " + ex.getClass().getSimpleName());
+              }
+          });
+    } catch (RejectedExecutionException ex) {
+      dropped.incrementAndGet();
+    }
+  }
+
+  boolean allowed(HttpRequest q) {
+    return q != null && (!scopeOnly || WorkbenchScope.contains(api, q));
+  }
+
+  boolean allowedUrl(String url) {
+    try {
+      return !scopeOnly || WorkbenchScope.contains(api, url);
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  void observe(HttpRequest q, String source) {
+    if (!recording || closed.get()) return;
+    submit(
+        () -> {
+          if (recording && allowed(q)) tracker.observe(q, source);
+        });
+  }
+
+  void response(HttpRequest q, HttpResponse r) {
+    if (!recording || closed.get() || r == null || q == null) return;
+    if (r.body() != null && r.body().length() > JsAnalysis.SOURCE_LIMIT) {
+      dropped.incrementAndGet();
+      return;
+    }
+    submit(
+        () -> {
+          if (recording && allowed(q)) discoverResponse(q, r);
+        });
+  }
+
+  void discover(String url, String source) {
+    if (!recording) return;
+    submit(
+        () -> {
+          if (allowedUrl(url)) {
+            String method = source.substring(source.lastIndexOf(' ') + 1);
+            if ((source.startsWith("Burp History ")
+                    || source.startsWith("OpenAPI ")
+                    || source.startsWith("JS "))
+                && method.matches("GET|HEAD|OPTIONS|POST|PUT|PATCH|DELETE"))
+              tracker.discover(
+                  new ReconMetadata.Discovery(
+                      url, method, ReconMetadata.parameters(url), Set.of(), source));
+            else tracker.discover(url, source);
+          }
+        });
+  }
+
+  void analyzed(JsAnalysis.Result result) {
+    analyzed(result, "직접 입력");
+  }
+
+  void analyzed(JsAnalysis.Result result, String source) {
+    if (!recording || result == null) return;
+    submit(
+        () -> {
+          for (var e : result.endpoints()) {
+            if (closed.get()) break;
+            if (!e.complete() || e.url().contains("{dynamic}")) {
+              if (allowedUrl(source)) tracker.pending(e, source);
+              continue;
+            }
+            if (!allowedUrl(e.url())) continue;
+            Set<String> query = new TreeSet<>(), body = new TreeSet<>();
+            for (String n : e.parameters().split(",\\s*")) if (!n.isBlank()) query.add(n);
+            for (String n : e.bodyKeys().split(",\\s*")) if (!n.isBlank()) body.add(n);
+            tracker.discover(
+                new ReconMetadata.Discovery(e.url(), e.method(), query, body, "JS 분석"));
+            tracker.evidence(e.method(), e.url(), source, e.line(), e.kind());
+          }
+        });
+  }
+
+  private void discoverResponse(HttpRequest q, HttpResponse r) {
+    try {
+      String body = JsAnalysisPanel.readBody(r);
+      boolean js = q.url().split("\\?", 2)[0].toLowerCase(Locale.ROOT).endsWith(".js");
+      if (r.headers() != null)
+        for (var h : r.headers())
+          if (h.name().equalsIgnoreCase("Content-Type")
+              && h.value().toLowerCase(Locale.ROOT).contains("javascript")) js = true;
+      for (var d : ReconMetadata.discover(q.url(), body, js)) {
+        if (closed.get() || Thread.currentThread().isInterrupted()) break;
+        if (allowedUrl(d.url())) tracker.discover(d);
+      }
+    } catch (java.io.IOException ex) {
+      dropped.incrementAndGet();
+    }
+  }
+
+  ActivityTracker.View selected() {
+    int row = table.getSelectedRow();
+    if (row < 0) return null;
+    int index = table.convertRowIndexToModel(row);
+    return index >= snapshot.size() ? null : snapshot.get(index);
+  }
+
+  void updateActions() {
+    var selected = selected();
+    boolean has = selected != null;
+    finish.setEnabled(has);
+    evidence.setEnabled(has);
+    draft.setEnabled(has);
+    finishParam.setEnabled(has && parameterTable.getSelectedRow() >= 0);
+    finish.setText(has && tracker.completed(selected.key()) ? "URL 완료 해제" : "URL 완료");
+    int row = parameterTable.getSelectedRow();
+    boolean inputDone =
+        row >= 0
+            && params.getValueAt(parameterTable.convertRowIndexToModel(row), 1).equals("점검 완료");
+    finishParam.setText(inputDone ? "입력 완료 해제" : "입력 완료");
+    boolean pending =
+        pendingTable.getSelectedRow() >= 0
+            && pendingTable.convertRowIndexToModel(pendingTable.getSelectedRow())
+                < pendingSnapshot.size();
+    resolve.setEnabled(pending);
+    sourceButton.setEnabled(pending);
+    pendingResolved.setEnabled(pending);
+  }
+
+  void showParameters() {
+    var selected = selected();
+    String key = selected == null ? null : selected.key();
+    if (!Objects.equals(key, selectedKey)) parameterTable.clearSelection();
+    selectedKey = key;
+    parameterRows.update(
+        parameterTable,
+        selected == null ? List.of() : selected.parameters(),
+        ActivityTracker.ParameterView::key,
+        parameter -> new Object[] {parameter.key(), parameter.state()});
+    updateActions();
+  }
+
+  /** Explicit refreshes also work before a Burp window is shown (including headless QA). */
+  void refresh() {
+    refresh(false);
+  }
+
+  void refreshVisible() {
+    if (isShowing()) refresh(true);
+  }
+
+  private void refresh(boolean visibleOnly) {
+    if (closed.get()) return;
+    ActivityTracker.Snapshot current = tracker.snapshot();
+    int page = coveragePages.getSelectedIndex();
+    updatingTables = true;
+    try {
+      if ((!visibleOnly || page == 0) && snapshot != current.rows()) {
+        snapshot = current.rows();
+        endpointRows.update(
+            table,
+            snapshot,
+            ActivityTracker.View::key,
+            view ->
+                new Object[] {
+                  view.method(),
+                  view.url(),
+                  view.state(),
+                  view.observed(),
+                  view.repeater(),
+                  view.parameters().stream()
+                      .filter(parameter -> !parameter.state().equals("점검 완료"))
+                      .count(),
+                  view.sources(),
+                  view.last(),
+                  view.review()
+                });
+        shown = tracker.revision();
+      }
+      List<ActivityTracker.Pending> pending = tracker.pendingViews();
+      if ((!visibleOnly || page == 1) && pendingSnapshot != pending) {
+        pendingSnapshot = pending;
+        pendingRows.update(
+            pendingTable,
+            pendingSnapshot,
+            item -> item.method() + " " + item.template() + " " + item.source() + ":" + item.line(),
+            item ->
+                new Object[] {
+                  item.method(), item.template(), item.source(), item.line(), item.kind()
+                });
+      }
+    } finally {
+      updatingTables = false;
+    }
+    if (!visibleOnly || page == 0) showParameters();
+    updateActions();
+    assessmentPanel.refresh(visibleOnly);
+    assessmentShown = tracker.assessments.revision();
+    summary.setText(
+        "URL "
+            + current.rows().size()
+            + " · 완료 "
+            + current.completed()
+            + " · 미완료 "
+            + (current.rows().size() - current.completed())
+            + " · 미완료 파라미터 "
+            + current.incompleteInputs()
+            + " · 미확정 JS "
+            + tracker.pendingViews().size()
+            + " · 처리 누락 "
+            + dropped.get()
+            + " · 한도 제외 "
+            + tracker.rejected()
+            + " / 최대 "
+            + ActivityTracker.LIMIT);
+  }
+
+  void applyFilter() {
+    TableRowSorter<DefaultTableModel> sorter =
+        (TableRowSorter<DefaultTableModel>) table.getRowSorter();
+    if (sorter == null) return;
+    String term = search.getText().toLowerCase(Locale.ROOT);
+    int choice = filter.getSelectedIndex();
+    sorter.setRowFilter(
+        new RowFilter<>() {
+          public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
+            if (entry.getIdentifier() >= snapshot.size()) return false;
+            var v = snapshot.get(entry.getIdentifier());
+            boolean state =
+                switch (choice) {
+                  case 1 -> !v.state().equals("점검 완료");
+                  case 2 -> v.parameters().stream().anyMatch(p -> !p.state().equals("점검 완료"));
+                  case 3 -> v.repeater() > 0;
+                  case 4 -> v.state().equals("점검 완료");
+                  case 5 -> v.observed() == 0 && v.sources().contains("JS");
+                  case 6 -> v.state().equals("발견만 함");
+                  case 7 -> v.state().equals("요청 관측");
+                  case 8 -> !v.review().isEmpty();
+                  default -> true;
+                };
+            return state
+                && (v.url() + " " + v.method() + " " + v.sources() + " " + v.parameters())
+                    .toLowerCase(Locale.ROOT)
+                    .contains(term);
+          }
+        });
+  }
+
+  JPanel evidenceContent() {
+    var v = selected();
+    JPanel panel =
+        TargetWindow.options(new JLabel(v == null ? "대상을 선택하세요" : v.method() + " " + v.url()));
+    if (v != null) {
+      for (var ev : v.evidence()) {
+        JButton open = new JButton("원본 보기");
+        open.addActionListener(e -> sourceNavigator.open(ev.source(), ev.line(), ev.kind()));
+        panel.add(
+            WorkbenchUi.row(
+                new JLabel(ev.source() + " · 줄 " + ev.line() + " · " + ev.kind()), open));
+      }
+      if (v.evidence().isEmpty()) panel.add(new JLabel("상세 JS 근거 없음 · 출처: " + v.sources()));
+      if (!v.review().isEmpty()) panel.add(new JLabel(v.review()));
+    }
+    return panel;
+  }
+
+  void review(String method, String url, String reason) {
+    submit(
+        () -> {
+          if (allowedUrl(url)) tracker.review(method, url, reason);
+        });
+  }
+
+  void accountInspection(
+      String id,
+      HttpRequest expected,
+      HttpRequest actual,
+      String note,
+      boolean needsReview,
+      Set<String> names,
+      Set<String> cookies) {
+    if (id.isEmpty()) return;
+    submit(
+        () -> {
+          if (!allowed(expected)) return;
+          var account = tracker.assessments.account(id);
+          if (!account.origin().equals(AssessmentTracker.origin(expected.url()))) return;
+          boolean trusted =
+              actual != null
+                  && AuthComparePanel.sameTarget(actual, expected)
+                  && allowed(actual)
+                  && AuthComparePanel.credentialValues(actual, names)
+                      .equals(AuthComparePanel.credentialValues(expected, names));
+          if (trusted)
+            tracker.assessments.bind(
+                List.of(
+                    new AssessmentTracker.Binding(
+                        id, actual.url(), AssessmentTracker.headers(actual), names, cookies)));
+          tracker.discover(
+              new ReconMetadata.Discovery(
+                  expected.url(),
+                  expected.method(),
+                  ReconMetadata.parameters(expected.url()),
+                  Set.of(),
+                  "권한 비교"));
+          String result = note.substring(0, Math.min(note.length(), 512));
+          tracker.assessments.inspected(
+              id,
+              expected.method(),
+              expected.url(),
+              tracker.parameterNames(expected.method(), expected.url()),
+              result,
+              needsReview
+                  || !trusted
+                  || result.contains("동일 인증")
+                  || result.contains("보류")
+                  || result.contains("없음")
+                  || result.contains("오류")
+                  || result.contains("실패"));
+        });
+  }
+
+  void evidenceSaved(String id, String filename, List<BountyEvidence.Item> items) {
+    evidenceSaved(id, filename, items, null);
+  }
+
+  void evidenceSaved(
+      String id, String filename, List<BountyEvidence.Item> items, java.nio.file.Path path) {
+    submit(
+        () -> {
+          try {
+            tracker.assessments.evidenceSaved(id, filename, items);
+            if (path != null) tracker.assessments.attachEvidenceFile(path);
+          } catch (Exception ex) {
+            message("ZIP 저장 후 계정/업무 연결 실패 · " + ex.getMessage());
+          }
+        });
+  }
+
+  String observation(JsAnalysis.Endpoint e) {
+    return tracker.observation(e.method(), e.url());
+  }
+
+  void draftSelected() {
+    try {
+      var v = selected();
+      if (v == null) return;
+      String
+          query =
+              String.join(
+                  ", ",
+                  v.parameters().stream()
+                      .filter(p -> p.key().startsWith("URL:"))
+                      .map(p -> p.key().substring(4))
+                      .toList()),
+          body =
+              String.join(
+                  ", ",
+                  v.parameters().stream()
+                      .filter(p -> (p.key().startsWith("BODY:") || p.key().startsWith("JSON:")))
+                      .map(p -> p.key().substring(5))
+                      .toList());
+      var item =
+          new JsAnalysis.Endpoint(v.url(), v.method(), "활동 추적", query, "", body, 1, 0, 0, true, "");
+      var draft = JsRequestDraft.create(item, null, tracker.contentType(v.key()));
+      if (!WorkbenchScope.contains(api, draft.url()))
+        throw new IllegalArgumentException("Scope 밖 URL입니다.");
+      api.repeater().sendToRepeater(draft.request(), "활동 추적 · 값/인증 확인");
+      summary.setText("초안 준비 · REPLACE_ME 값/인증/본문 형식을 확인하세요. 전송·완료 처리 없음");
+    } catch (Exception e) {
+      summary.setText(e.getMessage());
+    }
+  }
+
+  @Override
+  public void close() {
+    if (!closed.compareAndSet(false, true)) return;
+    evidenceWindow.close();
+    assessmentPanel.close();
+    generation.incrementAndGet();
+    worker.shutdownNow();
+    timer.stop();
+    tracker.clear();
+    snapshot = List.of();
+    model.setRowCount(0);
+    params.setRowCount(0);
+    endpointRows.clear();
+    parameterRows.clear();
+    pendingRows.clear();
+  }
 }

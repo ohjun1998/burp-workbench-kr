@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipFile;
 
-/** Same packet formatter drives preview and export; no HTTP or filesystem side effects on capture. */
+/** Same packet formatter drives preview and export; capture keeps complete source bytes in a private temporary disk store. */
 public final class EvidencePreviewTest extends WorkbenchTest {
  public static void main(String[] args)throws Exception{
   BountyFeaturesTest.factory();
@@ -48,7 +48,7 @@ public final class EvidencePreviewTest extends WorkbenchTest {
    rejects(()->b.captureObserved(List.of(valid,outside),"mixed scope"),"scope batch rejected");
    check(b.evidence.isEmpty()&&b.evidenceSecrets.isEmpty(),"mixed scope rejection leaves evidence untouched");
    b.captureObserved(List.of(valid),"source-linked observation");
-   check(b.evidence.size()==1&&b.evidence.get(0).request().contains("COOKIE_SECRET"),"source retained in memory for exact formatter input");
+   check(b.evidence.size()==1&&b.evidence.get(0).request().contains("COOKIE_SECRET"),"source preview loaded from retained disk bytes");
    check(!b.evidencePreview().contains("COOKIE_SECRET"),"connected source preview redacts credentials");
    rejects(()->b.captureObserved(Collections.nCopies(32,valid),"over capacity"),"over capacity rejected");
    check(b.evidence.size()==1,"over capacity rejection is atomic");

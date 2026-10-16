@@ -1,0 +1,625 @@
+{
+  "schemaVersion": 1,
+  "title": "Workbench 0.26.0 / Feature Mapper 0.2.0 performance evidence",
+  "dateKorea": "2026-10-15",
+  "baselineVersions": {
+    "workbench": "0.25.5",
+    "featureMapper": "0.1.0"
+  },
+  "candidateVersions": {
+    "workbench": "0.26.0",
+    "featureMapper": "0.2.0"
+  },
+  "scope": {
+    "capture": "Production callback, disk store, index, observer pipeline and Swing timers under a synthetic Montoya adapter. Headless, no native Burp or complete GUI painting.",
+    "mapper": "Production Mapper with synthetic inputs and local storage; no browser or external target.",
+    "measuredRunsPerSnapshotAndComponent": 1,
+    "warmupExcluded": {
+      "capturePackets": 100,
+      "mapperPackets": 200,
+      "mapperFeatures": 10,
+      "mapperQueryRounds": 5
+    },
+    "javaVersion": "17.0.20",
+    "heapLimitBytes": 536870912,
+    "candidateSharedHostLoad": "Canonical Workbench regression tests ran concurrently on the same host. Baseline and candidate host load was not controlled to be identical."
+  },
+  "provenance": {
+    "candidateCaptureFingerprintScope": "Java production/test sources at performance freeze, before the subsequent JS preview status-label layout adjustment. This is not the final release archive hash. Capture and Mapper implementation were frozen for this run.",
+    "fingerprintAlgorithm": "audit/performance/run.py fingerprint(): SHA-256 over sorted Java files, appending repository-relative UTF-8 path, one NUL byte and exact file bytes for each file. Capture includes main and test Java; Mapper includes main Java.",
+    "sameHarnessAsBaseline": {
+      "capture": true,
+      "mapper": true
+    },
+    "finalReleaseIdentity": "Use release manifest and VERIFICATION_0.26.0.json for final artifact hashes."
+  },
+  "reproduction": {
+    "runner": "audit/performance/run.py",
+    "instructions": "audit/performance/README_KR.md",
+    "command": "python audit/performance/run.py --baseline /path/to/baseline-0.25.5 --candidate /path/to/candidate-0.26.0 --dependencies /path/to/repository-with-deps --output tmp/performance/comparison-new",
+    "freshOutputRequired": true,
+    "sharedBuildOrDistModified": false,
+    "wallClockThresholdUsedAsPassCriterion": false
+  },
+  "metricNotes": {
+    "callbackLatency": "Only the handleHttpResponseReceived call; pacing waits excluded, adapter overhead included.",
+    "edtDispatchDelay": "invokeLater enqueue-to-execution delay sampled every 25ms with at most one outstanding sample. No full GUI painting.",
+    "postSendDrainSeconds": "Wait after final callback until all metadata rows publish and separate observation worker has no pending work.",
+    "heap": "Runtime.totalMemory-freeMemory observations; transient objects and JVM effects included. Peak sampled every 25ms, not retained-heap profiling.",
+    "peakUiBacklog": "Sampled accepted callback count minus published rows; may miss true peak.",
+    "peakAnalysisPending": "Baseline has no separate worker, so zero means not applicable/unavailable. Candidate samples pending work including active preparation/application.",
+    "diskBytes": "Baseline raw bytes; candidate raw plus metadata and 12-byte index entry. This fixture adds 143 bytes per packet; metadata length makes real costs variable.",
+    "packetRestores": "Request/response factory calls on/off EDT; deliberate post-measurement fidelity reads excluded.",
+    "mapperCandidateCounter": "Baseline not instrumented. Candidate counts examined indexed candidates; unrelated events add zero."
+  },
+  "fidelity": {
+    "captureEachSnapshot": {
+      "callbacks": 3900,
+      "retainedPackets": 3900,
+      "retainedRows": 3900,
+      "drops": 0,
+      "processingErrors": 0,
+      "byteExactRequestResponsePairSamples": 12,
+      "rawTemporaryFileDeletedAfterEveryScenario": true
+    },
+    "mapper": {
+      "queryMembershipAndPacketIdSumsMatch": true,
+      "browserAssignmentsBeforeDuplicateEach": 20,
+      "browserAssignmentsAfterAmbiguousDuplicateEach": 19,
+      "retainedBrowserScenarioPacketsEach": 801,
+      "candidateUnrelatedEventCandidateIncrease": 0
+    }
+  },
+  "captureComparison": [
+    {
+      "scenario": "paced-100-small",
+      "diskBytesBaseline": 1249800,
+      "diskBytesCandidate": 1292700,
+      "additionalDiskBytes": 42900,
+      "additionalDiskBytesPerPacket": 143.0,
+      "additionalDiskPercent": 3.43254920787326,
+      "postSendDrainSecondsBaseline": 0.308002577,
+      "postSendDrainSecondsCandidate": 0.305268769,
+      "packetRestoresTotalBaseline": 1200,
+      "packetRestoresTotalCandidate": 600
+    },
+    {
+      "scenario": "paced-500-small",
+      "diskBytesBaseline": 6249000,
+      "diskBytesCandidate": 6463500,
+      "additionalDiskBytes": 214500,
+      "additionalDiskBytesPerPacket": 143.0,
+      "additionalDiskPercent": 3.43254920787326,
+      "postSendDrainSecondsBaseline": 5.993442169,
+      "postSendDrainSecondsCandidate": 0.303525061,
+      "packetRestoresTotalBaseline": 6000,
+      "packetRestoresTotalCandidate": 3000
+    },
+    {
+      "scenario": "paced-200-large",
+      "diskBytesBaseline": 39363600,
+      "diskBytesCandidate": 39449400,
+      "additionalDiskBytes": 85800,
+      "additionalDiskBytesPerPacket": 143.0,
+      "additionalDiskPercent": 0.2179678687924885,
+      "postSendDrainSecondsBaseline": 0.605516242,
+      "postSendDrainSecondsCandidate": 0.304182484,
+      "packetRestoresTotalBaseline": 2400,
+      "packetRestoresTotalCandidate": 1200
+    },
+    {
+      "scenario": "burst-small",
+      "diskBytesBaseline": 6249000,
+      "diskBytesCandidate": 6463500,
+      "additionalDiskBytes": 214500,
+      "additionalDiskBytesPerPacket": 143.0,
+      "additionalDiskPercent": 3.43254920787326,
+      "postSendDrainSecondsBaseline": 8.952565544,
+      "postSendDrainSecondsCandidate": 0.222763809,
+      "packetRestoresTotalBaseline": 6000,
+      "packetRestoresTotalCandidate": 3000
+    }
+  ],
+  "measurements": {
+    "baseline": {
+      "capture": {
+        "host": "synthetic Montoya adapter; production capture callback, disk store and Swing timers",
+        "javaVersion": "17.0.20",
+        "heapLimitBytes": 536870912,
+        "scenarios": [
+          {
+            "scenario": "paced-100-small",
+            "offeredRatePerSecond": 100,
+            "responseBodyBytes": 4096,
+            "callbacks": 300,
+            "callbackLatency": {
+              "samples": 300,
+              "p50Millis": 0.271108,
+              "p95Millis": 0.569457,
+              "p99Millis": 0.804741,
+              "maxMillis": 2.742398
+            },
+            "edtDispatchDelay": {
+              "samples": 132,
+              "p50Millis": 0.143025,
+              "p95Millis": 0.246531,
+              "p99Millis": 0.370643,
+              "maxMillis": 0.382892
+            },
+            "sendSeconds": 2.990282165,
+            "postSendDrainSeconds": 0.308002577,
+            "retainedAtSendEnd": 299,
+            "peakUiBacklog": 29,
+            "oldestUiPendingMillis": 287.796864,
+            "peakAnalysisPending": 0,
+            "packetRestoresOnEdt": 1200,
+            "packetRestoresOffEdt": 0,
+            "tableInsertEvents": 300,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 300,
+            "retainedRows": 300,
+            "diskBytes": 1249800,
+            "heapBeforeBytes": 7214296,
+            "sampledPeakHeapBytes": 32188096,
+            "heapAfterBytes": 32188096,
+            "retainedDefaultTableRowVectors": 300,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          },
+          {
+            "scenario": "paced-500-small",
+            "offeredRatePerSecond": 500,
+            "responseBodyBytes": 4096,
+            "callbacks": 1500,
+            "callbackLatency": {
+              "samples": 1500,
+              "p50Millis": 0.057386,
+              "p95Millis": 0.125088,
+              "p99Millis": 0.25924,
+              "maxMillis": 2.390629
+            },
+            "edtDispatchDelay": {
+              "samples": 360,
+              "p50Millis": 0.101147,
+              "p95Millis": 0.167012,
+              "p99Millis": 0.366221,
+              "maxMillis": 2.563795
+            },
+            "sendSeconds": 2.998212403,
+            "postSendDrainSeconds": 5.993442169,
+            "retainedAtSendEnd": 500,
+            "peakUiBacklog": 1038,
+            "oldestUiPendingMillis": 6074.856195,
+            "peakAnalysisPending": 0,
+            "packetRestoresOnEdt": 6000,
+            "packetRestoresOffEdt": 0,
+            "tableInsertEvents": 1500,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 1500,
+            "retainedRows": 1500,
+            "diskBytes": 6249000,
+            "heapBeforeBytes": 7227416,
+            "sampledPeakHeapBytes": 46902016,
+            "heapAfterBytes": 11492184,
+            "retainedDefaultTableRowVectors": 1500,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          },
+          {
+            "scenario": "paced-200-large",
+            "offeredRatePerSecond": 200,
+            "responseBodyBytes": 65536,
+            "callbacks": 600,
+            "callbackLatency": {
+              "samples": 600,
+              "p50Millis": 0.155735,
+              "p95Millis": 0.447273,
+              "p99Millis": 1.914222,
+              "maxMillis": 5.417916
+            },
+            "edtDispatchDelay": {
+              "samples": 145,
+              "p50Millis": 0.123562,
+              "p95Millis": 0.846785,
+              "p99Millis": 2.972509,
+              "maxMillis": 7.341161
+            },
+            "sendSeconds": 2.995552829,
+            "postSendDrainSeconds": 0.605516242,
+            "retainedAtSendEnd": 500,
+            "peakUiBacklog": 145,
+            "oldestUiPendingMillis": 824.668673,
+            "peakAnalysisPending": 0,
+            "packetRestoresOnEdt": 2400,
+            "packetRestoresOffEdt": 0,
+            "tableInsertEvents": 600,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 600,
+            "retainedRows": 600,
+            "diskBytes": 39363600,
+            "heapBeforeBytes": 7399056,
+            "sampledPeakHeapBytes": 46331568,
+            "heapAfterBytes": 32256432,
+            "retainedDefaultTableRowVectors": 600,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          },
+          {
+            "scenario": "burst-small",
+            "offeredRatePerSecond": "burst",
+            "responseBodyBytes": 4096,
+            "callbacks": 1500,
+            "callbackLatency": {
+              "samples": 1500,
+              "p50Millis": 0.021362,
+              "p95Millis": 0.055133,
+              "p99Millis": 0.161413,
+              "maxMillis": 3.598136
+            },
+            "edtDispatchDelay": {
+              "samples": 360,
+              "p50Millis": 0.075002,
+              "p95Millis": 0.231078,
+              "p99Millis": 0.688726,
+              "maxMillis": 1.724927
+            },
+            "sendSeconds": 0.044930568,
+            "postSendDrainSeconds": 8.952565544,
+            "retainedAtSendEnd": 0,
+            "peakUiBacklog": 1500,
+            "oldestUiPendingMillis": 8931.785031,
+            "peakAnalysisPending": 0,
+            "packetRestoresOnEdt": 6000,
+            "packetRestoresOffEdt": 0,
+            "tableInsertEvents": 1500,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 1500,
+            "retainedRows": 1500,
+            "diskBytes": 6249000,
+            "heapBeforeBytes": 7461208,
+            "sampledPeakHeapBytes": 46711312,
+            "heapAfterBytes": 12739144,
+            "retainedDefaultTableRowVectors": 1500,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          }
+        ],
+        "label": "baseline",
+        "sourceFingerprintSha256": "d67e554306aa7bee995c06895c84e5a4eed12f9397bc75239c69d7b497a4e52f",
+        "harnessSha256": "444d5a6c61864e1888e480c1d645b379cce83437a17793d835d79033fe78b0e0",
+        "runElapsedSeconds": 26.919,
+        "dependencySha256": {
+          "legacy-api.jar": "0b9b16048e1a3d10bb8f36219bb7dfa637dad2d54e116199d3506b4174518e54",
+          "montoya-2026.jar": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94",
+          "rhino.jar": "12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975"
+        }
+      },
+      "mapper": {
+        "host": "synthetic inputs to production Mapper; no Burp/browser/network",
+        "javaVersion": "17.0.20",
+        "heapLimitBytes": 536870912,
+        "scenarios": [
+          {
+            "scenario": "feature-query-5000",
+            "packets": 5000,
+            "features": 100,
+            "queryRounds": 30,
+            "queryCalls": 3000,
+            "membershipsReturned": 150000,
+            "packetIdSum": 375075000,
+            "ingestMillis": 233.548167,
+            "featureQueriesMillis": 293.868232,
+            "heapBeforeBytes": 1567880,
+            "heapAfterBytes": 36298072,
+            "diskBytes": 750000,
+            "rawSamples": 2
+          },
+          {
+            "scenario": "feature-query-15000",
+            "packets": 15000,
+            "features": 100,
+            "queryRounds": 30,
+            "queryCalls": 3000,
+            "membershipsReturned": 450000,
+            "packetIdSum": 3375225000,
+            "ingestMillis": 450.569585,
+            "featureQueriesMillis": 1091.470506,
+            "heapBeforeBytes": 1580000,
+            "heapAfterBytes": 98346320,
+            "diskBytes": 2250000,
+            "rawSamples": 2
+          },
+          {
+            "scenario": "browser-correlation",
+            "initialPackets": 600,
+            "unrelatedEvents": 40,
+            "matchingEvents": 20,
+            "unrelatedNewPackets": 200,
+            "unrelatedEventsMillis": 55.717928,
+            "matchingEventsMillis": 44.098921,
+            "unrelatedNewPacketsMillis": 268.411867,
+            "mappedBeforeDuplicate": 20,
+            "mappedAfterDuplicate": 19,
+            "indexedCandidatesBeforeUnrelated": "not instrumented in this snapshot",
+            "indexedCandidatesAfterUnrelated": "not instrumented in this snapshot",
+            "indexedCandidatesTotal": "not instrumented in this snapshot",
+            "retainedPackets": 801
+          }
+        ],
+        "label": "baseline",
+        "sourceFingerprintSha256": "a10dc7b21cb423e2d08528c3795479c3f048f251d8014171cfe061a424b4009c",
+        "harnessSha256": "81f1bfcf5ecf36f3db0967e4bdc943b3201b0de52929b53cefd9f6819fa26e16",
+        "runElapsedSeconds": 2.791,
+        "dependencySha256": {
+          "montoya-api-2026.7.jar": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94"
+        }
+      }
+    },
+    "candidate": {
+      "capture": {
+        "host": "synthetic Montoya adapter; production capture callback, disk store and Swing timers",
+        "javaVersion": "17.0.20",
+        "heapLimitBytes": 536870912,
+        "scenarios": [
+          {
+            "scenario": "paced-100-small",
+            "offeredRatePerSecond": 100,
+            "responseBodyBytes": 4096,
+            "callbacks": 300,
+            "callbackLatency": {
+              "samples": 300,
+              "p50Millis": 0.248054,
+              "p95Millis": 0.565922,
+              "p99Millis": 2.096246,
+              "maxMillis": 4.825955
+            },
+            "edtDispatchDelay": {
+              "samples": 132,
+              "p50Millis": 0.082675,
+              "p95Millis": 0.141473,
+              "p99Millis": 0.367613,
+              "maxMillis": 0.866535
+            },
+            "sendSeconds": 2.990308182,
+            "postSendDrainSeconds": 0.305268769,
+            "retainedAtSendEnd": 299,
+            "peakUiBacklog": 29,
+            "oldestUiPendingMillis": 284.710742,
+            "peakAnalysisPending": 1,
+            "packetRestoresOnEdt": 0,
+            "packetRestoresOffEdt": 600,
+            "tableInsertEvents": 11,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 300,
+            "retainedRows": 300,
+            "diskBytes": 1292700,
+            "heapBeforeBytes": 7303064,
+            "sampledPeakHeapBytes": 26090064,
+            "heapAfterBytes": 26090064,
+            "retainedDefaultTableRowVectors": 0,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          },
+          {
+            "scenario": "paced-500-small",
+            "offeredRatePerSecond": 500,
+            "responseBodyBytes": 4096,
+            "callbacks": 1500,
+            "callbackLatency": {
+              "samples": 1500,
+              "p50Millis": 0.080291,
+              "p95Millis": 0.151428,
+              "p99Millis": 0.343377,
+              "maxMillis": 1.419928
+            },
+            "edtDispatchDelay": {
+              "samples": 133,
+              "p50Millis": 0.065658,
+              "p95Millis": 0.141613,
+              "p99Millis": 0.819043,
+              "maxMillis": 2.430589
+            },
+            "sendSeconds": 2.998130131,
+            "postSendDrainSeconds": 0.303525061,
+            "retainedAtSendEnd": 1494,
+            "peakUiBacklog": 144,
+            "oldestUiPendingMillis": 286.992094,
+            "peakAnalysisPending": 1,
+            "packetRestoresOnEdt": 0,
+            "packetRestoresOffEdt": 3000,
+            "tableInsertEvents": 11,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 1500,
+            "retainedRows": 1500,
+            "diskBytes": 6463500,
+            "heapBeforeBytes": 7324576,
+            "sampledPeakHeapBytes": 46121888,
+            "heapAfterBytes": 21850936,
+            "retainedDefaultTableRowVectors": 0,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          },
+          {
+            "scenario": "paced-200-large",
+            "offeredRatePerSecond": 200,
+            "responseBodyBytes": 65536,
+            "callbacks": 600,
+            "callbackLatency": {
+              "samples": 600,
+              "p50Millis": 0.156685,
+              "p95Millis": 0.31206,
+              "p99Millis": 1.099746,
+              "maxMillis": 1.773094
+            },
+            "edtDispatchDelay": {
+              "samples": 132,
+              "p50Millis": 0.074413,
+              "p95Millis": 0.125634,
+              "p99Millis": 0.748212,
+              "maxMillis": 1.582817
+            },
+            "sendSeconds": 2.995247567,
+            "postSendDrainSeconds": 0.304182484,
+            "retainedAtSendEnd": 598,
+            "peakUiBacklog": 58,
+            "oldestUiPendingMillis": 289.917473,
+            "peakAnalysisPending": 0,
+            "packetRestoresOnEdt": 0,
+            "packetRestoresOffEdt": 1200,
+            "tableInsertEvents": 11,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 600,
+            "retainedRows": 600,
+            "diskBytes": 39449400,
+            "heapBeforeBytes": 7475856,
+            "sampledPeakHeapBytes": 47038464,
+            "heapAfterBytes": 21206952,
+            "retainedDefaultTableRowVectors": 0,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          },
+          {
+            "scenario": "burst-small",
+            "offeredRatePerSecond": "burst",
+            "responseBodyBytes": 4096,
+            "callbacks": 1500,
+            "callbackLatency": {
+              "samples": 1500,
+              "p50Millis": 0.036866,
+              "p95Millis": 0.08693,
+              "p99Millis": 0.130105,
+              "maxMillis": 1.148609
+            },
+            "edtDispatchDelay": {
+              "samples": 12,
+              "p50Millis": 0.061752,
+              "p95Millis": 0.352971,
+              "p99Millis": 0.352971,
+              "maxMillis": 0.352971
+            },
+            "sendSeconds": 0.071034342,
+            "postSendDrainSeconds": 0.222763809,
+            "retainedAtSendEnd": 0,
+            "peakUiBacklog": 1500,
+            "oldestUiPendingMillis": 274.681748,
+            "peakAnalysisPending": 304,
+            "packetRestoresOnEdt": 0,
+            "packetRestoresOffEdt": 3000,
+            "tableInsertEvents": 1,
+            "tableUpdateEvents": 0,
+            "tableDeleteEvents": 0,
+            "retainedPackets": 1500,
+            "retainedRows": 1500,
+            "diskBytes": 6463500,
+            "heapBeforeBytes": 7489864,
+            "sampledPeakHeapBytes": 28661896,
+            "heapAfterBytes": 20238776,
+            "retainedDefaultTableRowVectors": 0,
+            "exactPacketSamples": 3,
+            "drops": 0,
+            "processingErrors": 0,
+            "temporaryStoreDeleted": true
+          }
+        ],
+        "label": "candidate",
+        "sourceFingerprintSha256": "fb7d5bf3bdb857e0804bc87aebe7b7b30b3f4cd579fc461ac0c502fdcfe60810",
+        "harnessSha256": "444d5a6c61864e1888e480c1d645b379cce83437a17793d835d79033fe78b0e0",
+        "runElapsedSeconds": 11.763,
+        "dependencySha256": {
+          "legacy-api.jar": "0b9b16048e1a3d10bb8f36219bb7dfa637dad2d54e116199d3506b4174518e54",
+          "montoya-2026.jar": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94",
+          "rhino.jar": "12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975"
+        }
+      },
+      "mapper": {
+        "host": "synthetic inputs to production Mapper; no Burp/browser/network",
+        "javaVersion": "17.0.20",
+        "heapLimitBytes": 536870912,
+        "scenarios": [
+          {
+            "scenario": "feature-query-5000",
+            "packets": 5000,
+            "features": 100,
+            "queryRounds": 30,
+            "queryCalls": 3000,
+            "membershipsReturned": 150000,
+            "packetIdSum": 375075000,
+            "ingestMillis": 340.584388,
+            "featureQueriesMillis": 19.519935,
+            "heapBeforeBytes": 1678008,
+            "heapAfterBytes": 46775944,
+            "diskBytes": 750000,
+            "rawSamples": 2
+          },
+          {
+            "scenario": "feature-query-15000",
+            "packets": 15000,
+            "features": 100,
+            "queryRounds": 30,
+            "queryCalls": 3000,
+            "membershipsReturned": 450000,
+            "packetIdSum": 3375225000,
+            "ingestMillis": 599.00988,
+            "featureQueriesMillis": 20.820412,
+            "heapBeforeBytes": 1688064,
+            "heapAfterBytes": 112176744,
+            "diskBytes": 2250000,
+            "rawSamples": 2
+          },
+          {
+            "scenario": "browser-correlation",
+            "initialPackets": 600,
+            "unrelatedEvents": 40,
+            "matchingEvents": 20,
+            "unrelatedNewPackets": 200,
+            "unrelatedEventsMillis": 11.677168,
+            "matchingEventsMillis": 14.60734,
+            "unrelatedNewPacketsMillis": 13.968477,
+            "mappedBeforeDuplicate": 20,
+            "mappedAfterDuplicate": 19,
+            "indexedCandidatesBeforeUnrelated": 0,
+            "indexedCandidatesAfterUnrelated": 0,
+            "indexedCandidatesTotal": 43,
+            "retainedPackets": 801
+          }
+        ],
+        "label": "candidate",
+        "sourceFingerprintSha256": "8e304fc24bb693fe0f96ce946dcc514e98682229dcdfc1536bc24a1e5e9306e3",
+        "harnessSha256": "81f1bfcf5ecf36f3db0967e4bdc943b3201b0de52929b53cefd9f6819fa26e16",
+        "runElapsedSeconds": 1.368,
+        "dependencySha256": {
+          "montoya-api-2026.7.jar": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94"
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Single measured run per snapshot/component, not a statistical benchmark or capacity guarantee.",
+    "Candidate and canonical regression shared a host; wall-clock comparisons include varying contention.",
+    "No native Burp, complete GUI painting, external browser, remote traffic, multi-hour soak or operating-system comparison.",
+    "Repeated synthetic capture inputs do not benchmark large-list search/sort; these metadata scans remain on the EDT.",
+    "Query/drain gains do not mean all callback, ingest, heap or EDT metrics improve. Indexing adds disk and insertion costs.",
+    "Subsequent JS preview status-label layout adjustment is outside the measured capture source fingerprint."
+  ]
+}

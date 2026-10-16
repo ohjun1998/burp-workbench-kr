@@ -2,6 +2,7 @@ name: Build and verify
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -27,6 +28,9 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
       - name: Check development prerequisites
         run: python dev.py doctor
       - name: Build and run regression and loopback HTTP checks
@@ -70,3 +74,4 @@ jobs:
             tmp/ui-guide-ci/guides.csv
           if-no-files-found: warn
           retention-days: 14
+

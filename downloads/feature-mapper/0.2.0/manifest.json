@@ -1,0 +1,38 @@
+{
+  "files": {
+    "feature-mapper-kr-0.2.0.jar": "9583daed9e8149958ec193c23c0b1dba9d0f62f90d51f7612e33e1c92a03d6a5",
+    "feature-mapper-browser-0.2.0.zip": "7f64f4e4d25da08bd5d66bd8be9b9971b8e32cc6af52e71bbbbd8a48f1236e75",
+    "feature-mapper-kr-0.2.0-source.zip": "f3473c5b92dfcfc40a9a4938130db0658926f123a27c6d2645da82a529969655"
+  },
+  "sources": {
+    "feature-mapper/LICENSE": "da559c4401e3b1086a6af18d9d1df4626c6adc627d05a60bfdd9df18effe5850",
+    "feature-mapper/README_KR.md": "24c964728804e02c1ca47eedc8f41955b4db92b4e48a49bf743b9eb0f0a4c142",
+    "feature-mapper/THIRD_PARTY_NOTICES.md": "4850626845cf44b166267a39546200b3ef098c5c36e863378cf1ac97370a5895",
+    "feature-mapper/browser-helper/background.js": "a29d90c5cda229b8557290aba02fc656e8eb2ef2fe3d2d4d909463290cd202a5",
+    "feature-mapper/browser-helper/content.js": "a55d3826196db5e42ae1e27b89a1cd4397cb964288e478704bebbefbe9f06c42",
+    "feature-mapper/browser-helper/manifest.json": "947efeb098779cebcfe939b9d17b167c4038444296e39f3e789c17ca028fb0d1",
+    "feature-mapper/browser-helper/mapping.js": "0bac873c3302ce3641ba0eda242432ea0c47f433fc20a3794e8c384bc3b59902",
+    "feature-mapper/browser-helper/package.json": "89c47db7851f89caec72da4f215ebc21cf1e294aeef3b45d2583562d846ab035",
+    "feature-mapper/browser-helper/popup.html": "106f24acd992d7ef6344ff13d32deea2b5145b3a21bb396a182f01332bd30f12",
+    "feature-mapper/browser-helper/popup.js": "c7021fa55724e7644490790e2cadd79d8364b9c940b02f45478d0b2a360e2c39",
+    "feature-mapper/build.py": "31f8a485056367f2f1540817e3f50149b8d8c10436a5ed91621a67c0fdcc03a8",
+    "feature-mapper/deps/montoya-api-2026.7.jar": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94",
+    "feature-mapper/release_info.py": "677d7493781262792ee677224603602d08d308cd393c2c91bc291e6dac2c4a42",
+    "feature-mapper/src/main/java/kr/featuremapper/BrowserBridge.java": "73f074bc9d959eb070904d990bf8c4d1a20cbbae3ba8255aba14f88449260912",
+    "feature-mapper/src/main/java/kr/featuremapper/BuildInfo.java": "3606911ac0d639e2c9bbe07b165ec4c92357178859fd11ad275bc0dc66a4656e",
+    "feature-mapper/src/main/java/kr/featuremapper/FeatureMapperExtension.java": "8f666092ce1208a4f17a0e0624386d6b13c6a5b01d2c0fb3c6a2627a050203c1",
+    "feature-mapper/src/main/java/kr/featuremapper/Json.java": "c45303dae72be2926f813a218ce5d82696a1060b799279d58b41adf523c03a0e",
+    "feature-mapper/src/main/java/kr/featuremapper/Mapper.java": "fbab9ee7728b86393bce3bd25073bc3d4b42a764803be00ca906fff3c0368dd6",
+    "feature-mapper/src/main/java/kr/featuremapper/PacketStore.java": "b7278b15b33f912b48778f616da3f5c102d8587c1261e16363ca52300d836f20",
+    "feature-mapper/src/main/java/kr/featuremapper/ProjectIO.java": "c9702afbdbbdb109a32d6ce7828fc416b1948a0ee2c167e01a6f4ecf52c10890",
+    "feature-mapper/src/main/java/kr/featuremapper/Signals.java": "0cafaa0754889ef63134bc3e77732625fd459332df944ad874479d07a3da4c9c",
+    "feature-mapper/src/test/java/kr/featuremapper/BrowserFixture.java": "2e5e5762da1a0634779f22b48300a2083891738d429566e28d0193bd2b34d235",
+    "feature-mapper/src/test/java/kr/featuremapper/MapperOptimizationTest.java": "e9d9d2b5cc9564ab80ed3f7804d2960cd3eaa852d93a25f5985266f839f90951",
+    "feature-mapper/src/test/java/kr/featuremapper/MapperTest.java": "ebda46e8ff6474ae035d02dc50d27bd287eccd12cc6af1a8fb0131ad228c0e6e",
+    "feature-mapper/src/test/java/kr/featuremapper/NativeMapperCheck.java": "d0840023bf2bceb2520e8e18809a3e48d57973f73624c6b5e3d065f4c4dee112",
+    "feature-mapper/tests/browser-helper.test.mjs": "90a779359e3bbcccaa06c956641c113f24cb50f9ef905614dd089e627457dab5",
+    "feature-mapper/tests/browser-native.mjs": "d7f72c5523525fecd74541cfc0b9f3614a2c38ef0715855518bf398cbdd5193b",
+    "feature-mapper/tests/run_browser.py": "8a8b5c2ff70649849cad2a6c187b90c3c9bd189af5a84a3d781abbfff1843dc4",
+    "feature-mapper/tests/run_native.py": "5685e30415805137334db9d9408f15bb18747e52d0bf1703aa235a3f60c5bbad"
+  }
+}

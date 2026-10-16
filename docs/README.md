@@ -65,3 +65,5 @@
 
 
 현재 수집·URL 편집 안내: [0.30.0 수동 SCOPE 수집·URL 수정](RELEASE_0.30.0_KR.md).
+
+현재 패킷 보기: [0.31.0 Pretty·Raw·Hex·Search](RELEASE_0.31.0_KR.md).

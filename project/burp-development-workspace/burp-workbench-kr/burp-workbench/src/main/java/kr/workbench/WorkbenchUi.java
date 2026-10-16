@@ -49,6 +49,7 @@ public final class WorkbenchUi {
  public static void primary(JButton b){b.putClientProperty("wb.primary",true);buttonPaint(b);}
  private static void buttonPaint(AbstractButton b){boolean active=b.isEnabled()&&Boolean.TRUE.equals(b.getClientProperty("wb.primary"));b.setBackground(active?accent():surface());b.setForeground(active?Color.WHITE:b.isEnabled()?ink():toneInk(Tone.NEUTRAL));}
  public static void style(Component c){
+  if(c instanceof PacketInspector inspector){inspector.applyTheme();return;}
   if(c instanceof JComponent aa)aa.putClientProperty(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
   if(c instanceof JComponent j&&Boolean.TRUE.equals(j.getClientProperty("wb.nativeEditor")))return;
   Font previous=c.getFont();Object size=c instanceof JComponent j?j.getClientProperty("wb.font.size"):null;boolean heading=c instanceof JComponent j&&Boolean.TRUE.equals(j.getClientProperty("wb.font.heading"));c.setFont(font().deriveFont(heading?Font.BOLD:previous==null?Font.PLAIN:previous.getStyle(),size instanceof Number n?n.floatValue():14f));c.setForeground(ink());

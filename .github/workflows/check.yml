@@ -41,6 +41,8 @@ jobs:
         run: python tools/render_ui_layout.py --guide-only --check --out tmp/ui-guide-ci
       - name: Verify Scope editor at default and minimum window sizes
         run: python tools/render_ui_layout.py --scope-only --check --out tmp/ui-scope-ci
+      - name: Verify Pretty Raw Hex and packet Search layouts
+        run: python tools/render_ui_layout.py --packet-only --sizes 1024x720 1280x800 --check --out tmp/ui-packet-ci
       - name: Check packaging invariants
         run: python -m unittest discover -s tools -p 'test_*.py' -v
       - name: Verify versioned downloads match current sources
@@ -77,6 +79,9 @@ jobs:
             tmp/ui-scope-ci/layout-report.json
             tmp/ui-scope-ci/controls.csv
             tmp/ui-scope-ci/content.csv
+            tmp/ui-packet-ci/layout-report.json
+            tmp/ui-packet-ci/controls.csv
+            tmp/ui-packet-ci/content.csv
           if-no-files-found: warn
           retention-days: 14
 

@@ -196,6 +196,39 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("packet")) {
+            try {
+                String origin="https://app.example.test";
+                for(int i=0;i<12;i++) {
+                    String path=i==3?"/api/profile":"/api/"+List.of("users","settings","notifications","logs").get(i%4)+"/"+(i+1);
+                    var base=request(origin+path,i==3?"POST":"GET",true,List.of());
+                    String wire=(i==3?"POST":"GET")+" "+path+" HTTP/1.1\r\nHost: app.example.test\r\nContent-Type: application/json\r\n\r\n{\"userId\":42,\"name\":\"demo\",\"role\":\"viewer\"}";
+                    var q=proxy(burp.api.montoya.http.message.requests.HttpRequest.class,(p,m,a)->switch(m.getName()){
+                        case "toString"->wire;case "toByteArray"->bytes(wire.getBytes(java.nio.charset.StandardCharsets.UTF_8));default->m.invoke(base,a);
+                    });
+                    seedTraffic(ext,q,response(200,"{\"success\":true,\"data\":{\"userId\":42,\"name\":\"demo\",\"role\":\"viewer\"}}"));
+                }
+                JPanel root=(JPanel)get(ext,"root");
+                var request=(PacketInspector)get(ext,"requestPacket");var response=(PacketInspector)get(ext,"responsePacket");
+                // Do not manufacture displayability without a heavyweight peer:
+                // JTextPane accessibility caret events otherwise ask AWT for a screen location.
+                edt(()->{
+                    JTable history=(JTable)unchecked(ext,"logTable");
+                    var parent=(javax.swing.JScrollPane)javax.swing.SwingUtilities.getAncestorOfClass(javax.swing.JScrollPane.class,history);
+                    parent.setColumnHeaderView(history.getTableHeader());
+                    history.setRowSelectionInterval(3,3);
+                });
+                for(int mode=0;mode<3;mode++) {
+                    int selected=mode;
+                    edt(()->{request.tabs.get(selected).doClick(0);response.tabs.get(selected).doClick(0);request.search.setText(selected==2?"75 73 65 72":"userId");response.search.setText(selected==2?"75 73 65 72":"userId");});
+                    PacketInspectorTest.idle(request);PacketInspectorTest.idle(response);
+                    edt(()->{try{render(root,out.resolve(selected==0?"packet-pretty-search.png":selected==1?"packet-raw.png":"packet-hex.png"),width,height);}catch(Exception ex){throw new RuntimeException(ex);}});
+                }
+                writeMeasurements(out);
+            }finally{unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("Packet preview failed");
+            System.out.println("Packet views rendered: "+theme+" "+width+"x"+height+"; production UI, synthetic HTTP, zero requests.");return;
+        }
         if(args.length>5&&args[5].equals("scope")) {
             try {
                 edt(()->{

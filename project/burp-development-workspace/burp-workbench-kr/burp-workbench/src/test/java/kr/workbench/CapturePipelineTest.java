@@ -21,6 +21,7 @@ public final class CapturePipelineTest extends WorkbenchTest {
     }
     public static void main(String[] args)throws Exception {
         installTrafficPacketFactory();
+        independentReaderPositionsAndConcurrentEviction();
         Path raw,index;
         try(DiskTrafficStore store=new DiskTrafficStore()){
             raw=store.file();index=store.indexFile();
@@ -57,6 +58,54 @@ public final class CapturePipelineTest extends WorkbenchTest {
         failedPublicationRetriesWithoutNewPackets();
         failedUserFilterAndSortRecover();
         System.out.println("CapturePipelineTest: "+checks+" checks passed");
+    }
+    private static void independentReaderPositionsAndConcurrentEviction()throws Exception {
+        java.nio.channels.FileChannel rawReader,indexReader;
+        try(DiskTrafficStore store=new DiskTrafficStore()){
+            HttpResponse response=response(200,"binary\0"+"x".repeat(4096));
+            byte[] expectedResponse=response.toByteArray().getBytes();
+            for(int i=0;i<600;i++)store.append(request("https://capture.test/isolation/"+i,"GET",true,List.of()),response);
+            var rawField=DiskTrafficStore.class.getDeclaredField("reader");rawField.setAccessible(true);
+            var indexField=DiskTrafficStore.class.getDeclaredField("indexReader");indexField.setAccessible(true);
+            var dataField=DiskTrafficStore.class.getDeclaredField("data");dataField.setAccessible(true);
+            var pointerField=DiskTrafficStore.class.getDeclaredField("index");pointerField.setAccessible(true);
+            rawReader=(java.nio.channels.FileChannel)rawField.get(store);
+            indexReader=(java.nio.channels.FileChannel)indexField.get(store);
+            var writer=(java.io.RandomAccessFile)dataField.get(store);
+            var pointerWriter=(java.io.RandomAccessFile)pointerField.get(store);
+            long rawPosition=writer.getFilePointer(),indexPosition=pointerWriter.getFilePointer();
+            rawReader.position(0);indexReader.position(0);
+            check(writer.getFilePointer()==rawPosition,"raw read position cannot change the append writer's file pointer");
+            check(pointerWriter.getFilePointer()==indexPosition,"index read position cannot change the append writer's file pointer");
+            CountDownLatch ready=new CountDownLatch(2),start=new CountDownLatch(1);
+            AtomicReference<Throwable> failure=new AtomicReference<>();
+            Thread[] readers=new Thread[2];
+            for(int n=0;n<readers.length;n++){
+                final int salt=n;
+                readers[n]=new Thread(()->{ready.countDown();try{
+                    start.await();
+                    for(int i=0;i<1200;i++){
+                        int row=(i*73+salt*281)%600;
+                        var ref=store.ref(row);
+                        if(!ref.url().equals("https://capture.test/isolation/"+row))throw new AssertionError("metadata changed");
+                        if(!java.util.Arrays.equals(ref.response().toByteArray().getBytes(),expectedResponse))throw new AssertionError("original bytes changed");
+                    }
+                }catch(Throwable error){failure.compareAndSet(null,error);}},"capture-index-reader-"+n);
+                readers[n].start();
+            }
+            if(!ready.await(5,TimeUnit.SECONDS))throw new AssertionError("readers failed to start");
+            start.countDown();
+            for(int i=600;i<1800;i++)store.append(request("https://capture.test/isolation/"+i,"GET",true,List.of()),response);
+            for(Thread thread:readers){thread.join(10000);if(thread.isAlive()){thread.interrupt();throw new AssertionError("concurrent reader timed out");}}
+            check(failure.get()==null&&store.size()==1800,"concurrent cache eviction, metadata reads and appends preserve all packets");
+            boolean exact=true;
+            for(int i=0;i<1800;i++){
+                var ref=store.ref(i);
+                if(!ref.url().equals("https://capture.test/isolation/"+i)||!java.util.Arrays.equals(ref.response().toByteArray().getBytes(),expectedResponse)){exact=false;break;}
+            }
+            check(exact,"every old and newly appended metadata record and original response remains byte exact");
+        }
+        check(!rawReader.isOpen()&&!indexReader.isOpen(),"unload closes both independent read channels before deleting files");
     }
     private static void boundedObserverBacklog()throws Exception {
         AtomicInteger prepared=new AtomicInteger(),applied=new AtomicInteger(),errors=new AtomicInteger();

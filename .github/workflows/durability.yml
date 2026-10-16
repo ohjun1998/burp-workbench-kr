@@ -42,6 +42,8 @@ jobs:
           node-version: '22'
       - name: Build and execute every Java regression group on Windows
         run: python project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --test
+      - name: Repeat concurrent storage and cache-eviction regressions ten times
+        run: python audit/durability/repeat_storage.py --iterations 10
       - name: Verify Mapper indexes and concurrent project save on Windows
         run: python feature-mapper/build.py --test
       - name: Execute production capture and Swing timer on Windows

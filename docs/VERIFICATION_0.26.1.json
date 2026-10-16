@@ -1,0 +1,166 @@
+{
+  "dateKorea": "2026-10-16",
+  "version": "0.26.1",
+  "baseMain": "8b29b6fd785114087dc03865a6ef60070ec0baf8",
+  "observedFailure": {
+    "version": "0.26.0",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38847026268",
+    "os": "Windows",
+    "test": "TrafficCaptureRecoveryTest.unlimitedCaptureAndCleanup",
+    "error": "DiskTrafficStore.StorageException caused by IOException: Invalid metadata string"
+  },
+  "reproduction": {
+    "againstPublished0260": "New pointer-isolation regression fails because reader.position changes writer.getFilePointer",
+    "fixed0261": "Reader channels opened independently in READ mode; all reader/writer resources closed on construction failure and unload"
+  },
+  "localRelease": {
+    "version": "0.26.1",
+    "groups": {
+      "BuildInfoTest": 3,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 51,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 24,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 22,
+      "TrafficScopeModesTest": 28,
+      "TrafficCaptureRecoveryTest": 41,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95
+    },
+    "regressionGroups": 46,
+    "regressionChecks": 1450,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 100,
+    "bountyHttpChecks": 266,
+    "totalChecks": 1948,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "localStorageRepeat": {
+    "result": "passed",
+    "version": "0.26.1",
+    "iterations": 10,
+    "groups": [
+      "CapturePipelineTest",
+      "TrafficCaptureRecoveryTest"
+    ],
+    "executions": 20,
+    "note": "Repeated executions are not additional unique check counts."
+  },
+  "artifactHashes": {
+    "burp-workbench-kr-0.26.1.jar": "b5aa13895b2833808d35bb2f26b69aef0f9d8ee39f8126e05c1f6be3b038faba",
+    "burp-workbench-kr-0.26.1-source.zip": "fdad9d81d5683e27b6a5f50d0916f03eb14f52afcac6c73b73f61f1439588ea7"
+  },
+  "remoteVerification": {
+    "authoritativeSource": "GitHub PR Checks and Actions for branch account-a/windows-store-0261-20261016; results recorded in the PR description",
+    "branch": "account-a/windows-store-0261-20261016",
+    "windowsExtraCoverage": "CapturePipelineTest and TrafficCaptureRecoveryTest each repeated ten times before sustained capture",
+    "countsNote": "Repeated executions are not additional unique checks."
+  },
+  "scope": "Montoya adapter and production disk/Swing paths; native Burp runtime/GUI and multi-hour capture remain separate.",
+  "localSwing": {
+    "layout": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.26.1.jar",
+      "releaseJarSha256": "b5aa13895b2833808d35bb2f26b69aef0f9d8ee39f8126e05c1f6be3b038faba",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 108,
+      "controlsMeasured": 1062,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 1836,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guidance": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.26.1.jar",
+      "releaseJarSha256": "b5aa13895b2833808d35bb2f26b69aef0f9d8ee39f8126e05c1f6be3b038faba",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    }
+  },
+  "remoteAssembly": {
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38848009602",
+    "sourceCommit": "1786340b03b0fa52d4299a0959055c59c65dc790",
+    "artifactCommit": "e15a5da5f843a195f3d777ece0dd13bcc456535b",
+    "result": "passed",
+    "bothDownloadsMatchLocallyTestedBytes": true
+  }
+}

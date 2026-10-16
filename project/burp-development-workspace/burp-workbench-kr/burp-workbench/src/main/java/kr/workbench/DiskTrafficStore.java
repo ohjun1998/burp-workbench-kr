@@ -153,20 +153,38 @@ final class DiskTrafficStore implements AutoCloseable {
   DiskTrafficStore() {
     Path created = null, createdIndex = null;
     RandomAccessFile opened = null, openedIndex = null;
+    FileChannel openedReader = null, openedIndexReader = null;
     try {
       created = privateFile("burp-workbench-traffic-", ".bin");
       createdIndex = privateFile("burp-workbench-traffic-", ".idx");
       opened = new RandomAccessFile(created.toFile(), "rw");
       openedIndex = new RandomAccessFile(createdIndex.toFile(), "rw");
+      // Separate handles are essential: a channel from RandomAccessFile shares its
+      // file pointer with that writer. Windows positional IO may move that pointer
+      // internally, outside the append monitor, while observers read older rows.
+      openedReader = FileChannel.open(created, StandardOpenOption.READ);
+      openedIndexReader = FileChannel.open(createdIndex, StandardOpenOption.READ);
       file = created;
       indexFile = createdIndex;
       data = opened;
       index = openedIndex;
-      reader = data.getChannel();
-      indexReader = index.getChannel();
+      reader = openedReader;
+      indexReader = openedIndexReader;
       file.toFile().deleteOnExit();
       indexFile.toFile().deleteOnExit();
     } catch (IOException error) {
+      if (openedReader != null)
+        try {
+          openedReader.close();
+        } catch (IOException cleanup) {
+          error.addSuppressed(cleanup);
+        }
+      if (openedIndexReader != null)
+        try {
+          openedIndexReader.close();
+        } catch (IOException cleanup) {
+          error.addSuppressed(cleanup);
+        }
       if (opened != null)
         try {
           opened.close();
@@ -432,7 +450,7 @@ final class DiskTrafficStore implements AutoCloseable {
         cache.clear();
       }
       IOException failure = null;
-      for (RandomAccessFile handle : List.of(data, index))
+      for (Closeable handle : List.of(reader, indexReader, data, index))
         try {
           handle.close();
         } catch (IOException error) {

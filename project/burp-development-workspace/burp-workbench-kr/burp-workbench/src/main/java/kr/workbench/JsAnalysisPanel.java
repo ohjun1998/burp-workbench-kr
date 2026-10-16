@@ -5,6 +5,7 @@ import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
 import java.net.URI;
 import java.util.*;
 import java.util.List;
@@ -17,24 +18,24 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final PacketView requestPacket = new PacketView(), responsePacket = new PacketView();
   final JTextArea input = new JTextArea(), detail = new JTextArea();
   final JTextField sourceUrl = new JTextField(40);
-  final JCheckBox passive = new JCheckBox("History 백그라운드 감시 (Scope)", true);
+  final JToggleButton passive = new JToggleButton("분석 ON", true);
   final DefaultTableModel
       endpoints = model("URL / 경로", "메서드", "사용 맥락", "쿼리·params 이름", "헤더 이름", "본문 키", "줄", "해결 상태"),
       secrets = model("시크릿 후보", "값 (가림)", "지문", "줄", "근거");
   final DefaultTableModel historyModel = model("출처 URL", "URL/API", "시크릿 후보", "분석 상태");
   final JTable historyTable = new JTable(historyModel);
   final JTable urlTable = new JTable(endpoints), secretTable = new JTable(secrets);
-  final JLabel status = new JLabel("JS 또는 HTML을 붙여넣고 AST 분석 · 원본 코드는 실행하지 않습니다.");
-  final JButton analyze = new JButton("AST 분석"),
-      toRepeater = new JButton("선택 URL → GET 경로 Repeater"),
-      resolve = new JButton("동적 값 확정"),
+  final JLabel status = new JLabel("분석 목록에서 응답을 선택하세요.");
+  final Action toRepeater = new AbstractAction("선택 URL → Repeater") {
+    public void actionPerformed(ActionEvent event) { prepareRepeater(); }
+  };
+  final JButton analysisList = new JButton("분석 목록"),
+      resolve = new JButton("URL·메서드 확인"),
       locate = new JButton("원본 위치");
   private final MontoyaApi api;
   private JsAnalysis.Result current;
   java.util.function.BiConsumer<JsAnalysis.Result, String> coverage = (result, source) -> {};
   java.util.function.Function<JsAnalysis.Endpoint, String> observation = item -> "발견만 함";
-  final JComboBox<String> endpointFilter =
-      new JComboBox<>(new String[] {"전체 API", "요청 미관측", "동적 값 미해결"});
   private final ThreadPoolExecutor worker =
       new ThreadPoolExecutor(
           1,
@@ -69,8 +70,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       mapModel = model("소스맵", "상태"),
       recoveredModel = model("원본 이름", "map 출처", "문자 수");
   final JButton discoverMaps = new JButton("소스맵 탐색 · Scope"),
-      checkNpm = new JButton("NPM 존재 조회"),
-      dumpFiles = new JButton("수집 파일 저장");
+      checkNpm = new JButton("NPM 존재 조회");
   final JLabel findingCount = new JLabel("0 / 0");
   final JTabbedPane results = new JTabbedPane();
   final JsFindingNavigator navigator;
@@ -81,6 +81,12 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   private volatile String currentSource = "";
   private final AtomicLong selectionGeneration = new AtomicLong();
   private boolean syncingSources;
+  final TargetWindow analysisWindow =
+      new TargetWindow(this, "분석 목록", this::analysisContent);
+  final TargetWindow packetWindow =
+      new TargetWindow(this, "발견 출처 · 요청/응답 패킷", this::packetContent);
+  private String[] openedPacket;
+  private String openedSource = "", openedFinding = "";
 
   static DefaultTableModel model(String... columns) {
     return new DefaultTableModel(columns, 0) {
@@ -118,31 +124,33 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     detail.setEditable(false);
     detail.setLineWrap(true);
     detail.setWrapStyleWord(true);
-    JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    controls.add(new JLabel("기준/출처 URL"));
-    controls.add(sourceUrl);
-    controls.add(analyze);
-    JButton selectedButton = new JButton("선택 응답 가져오기");
-    controls.add(selectedButton);
-    controls.add(passive);
-    JPanel sourceRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    sources.setPreferredSize(new Dimension(550, 28));
-    sourceRow.add(new JLabel("최근 분석"));
-    sourceRow.add(sources);
-    sourceRow.add(new JLabel("최근 최대 100개 · 총 캐시 예산 적용"));
-    JButton rescan = new JButton("기존 History 다시 분석");
-    sourceRow.add(rescan);
-    rescan.addActionListener(
-        e -> {
-          cache.resetFingerprints();
-          if (historyMonitor != null) historyMonitor.rescan();
-        });
-    passive.addItemListener(e -> watching.set(passive.isSelected()));
+    input.setEditable(false);
+    passive.setName("wb.js.analysis.toggle");
+    passive.putClientProperty("wb.state.toggle", true);
+    passive.setToolTipText("SCOPE 내 History의 텍스트 응답을 자동 분석합니다. OFF는 새 분석과 대기 작업을 중지합니다.");
+    passive.addItemListener(e -> {
+      boolean enabled = passive.isSelected();
+      watching.set(enabled);
+      passive.setText(enabled ? "분석 ON" : "분석 OFF");
+      if (!enabled) {
+        epoch.incrementAndGet();
+        jobs.cancelQueued();
+      } else if (historyMonitor != null) historyMonitor.rescan();
+      WorkbenchUi.style(passive);
+      refreshProgress();
+    });
+    analysisList.setName("wb.js.analysis.list");
+    analysisList.addActionListener(e -> analysisWindow.open());
     JPanel header = new JPanel(new BorderLayout());
-    header.add(controls, BorderLayout.NORTH);
-    header.add(sourceRow, BorderLayout.CENTER);
-    header.add(progress, BorderLayout.SOUTH);
     add(header, BorderLayout.NORTH);
+    JButton rescan = new JButton("History 다시 분석");
+    rescan.addActionListener(e -> {
+      cache.resetFingerprints();
+      if (historyMonitor != null) historyMonitor.rescan();
+    });
+    urlTable.setName("wb.js.url.table");
+    secretTable.setName("wb.js.secret.table");
+    historyTable.setName("wb.js.history.table");
     urlTable.setAutoCreateRowSorter(true);
     urlTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     int[] widths = {380, 85, 170, 170, 140, 150, 55, 150};
@@ -168,75 +176,37 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     }
     results.addTab("분석 상세", new JScrollPane(detail));
     historyTable.setAutoCreateRowSorter(true);
+    historyTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    int[] historyWidths={380,80,105,260};
+    for(int i=0;i<historyWidths.length;i++)historyTable.getColumnModel().getColumn(i).setPreferredWidth(historyWidths[i]);
     historyTable.setRowHeight(26);
-    results.addTab("History 분석 목록", new JScrollPane(historyTable));
     historyTable
         .getSelectionModel()
         .addListSelectionListener(
             e -> {
               int row = historyTable.getSelectedRow();
-              if (!e.getValueIsAdjusting() && row >= 0)
-                sources.setSelectedItem(
-                    historyModel.getValueAt(historyTable.convertRowIndexToModel(row), 0));
+              if (!syncingSources && !e.getValueIsAdjusting() && row >= 0) {
+                sources.setSelectedItem(historyModel.getValueAt(historyTable.convertRowIndexToModel(row), 0));
+                prepareNavigation();
+              }
             });
-    JSplitPane left =
-        WorkbenchUi.split(
-            JSplitPane.VERTICAL_SPLIT,
-            WorkbenchUi.card("JS 원본 · 수동 분석", manualPane(selectedButton)),
-            results,
-            .60);
-    left.setName("wb.js.lists");
-    JSplitPane messages =
-        WorkbenchUi.split(
-            JSplitPane.VERTICAL_SPLIT,
-            WorkbenchUi.card("요청 REQUEST", requestPacket),
-            WorkbenchUi.card("응답 RESPONSE", responsePacket),
-            .5);
-    messages.setName("wb.js.messages");
-    JSplitPane split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, left, messages, .48);
-    split.setName("wb.js.workspace");
-    add(split);
+    JSplitPane workspace = WorkbenchUi.split(
+        JSplitPane.HORIZONTAL_SPLIT,
+        WorkbenchUi.card("분석 원문", sourcePane()), results, .40);
+    workspace.setName("wb.js.findings");
+    results.setName("wb.js.results");
+    add(workspace);
+    for (int i=0;i<results.getTabCount();i++) {
+      Component view=results.getComponentAt(i);
+      if (view instanceof JScrollPane pane && pane.getViewport().getView() instanceof JTable table)
+        bindPacketOpening(table);
+    }
+    bindPacketOpening(historyTable);
     JPanel footer = new JPanel(new BorderLayout());
-    JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JButton copy = new JButton("URL 목록 복사"),
-        report = new JButton("가림 결과 복사"),
+    footer.add(status, BorderLayout.CENTER);
+    JButton copy = new JButton("URL 목록 복사"), report = new JButton("가림 결과 복사"),
         clear = new JButton("분석 초기화");
-    actions.add(toRepeater);
-    actions.add(copy);
-    actions.add(report);
-    actions.add(locate);
-    actions.add(clear);
-    JPanel minerControls = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    minerControls.add(discoverMaps);
-    minerControls.add(new JLabel("레지스트리 · 패키지 이름만 전송"));
-    minerControls.add(registry);
-    minerControls.add(checkNpm);
-    minerControls.add(dumpFiles);
-    footer.add(minerControls, BorderLayout.CENTER);
-    footer.add(status, BorderLayout.NORTH);
-    footer.add(actions, BorderLayout.SOUTH);
-    footer.remove(minerControls);
-    footer.remove(actions);
-    passive.setText("History 자동 분석");
-    analyze.setText("수동 분석");
-    toRepeater.setText("선택 URL → Repeater");
-    locate.setText("원본 위치");
-    sources.setPreferredSize(new Dimension(180, 30));
-    sources.setMinimumSize(new Dimension(150, 30));
-    sources.setMaximumRowCount(12);
     sources.setName("wb.js.sources");
-    sources.setToolTipText("최근 분석 100개 · 선택한 파일의 결과를 표시합니다.");
-    sources.setRenderer(
-        new DefaultListCellRenderer() {
-          @Override
-          public Component getListCellRendererComponent(
-              JList<?> list, Object value, int index, boolean selected, boolean focus) {
-            JLabel label =
-                (JLabel) super.getListCellRendererComponent(list, value, index, selected, focus);
-            label.setToolTipText(Objects.toString(value, ""));
-            return label;
-          }
-        });
     sourceUrl.setColumns(22);
     JButton tools = new JButton("추가 도구"), more = new JButton("더보기");
     JPopupMenu toolMenu = new JPopupMenu(), moreMenu = new JPopupMenu();
@@ -251,7 +221,6 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                 "NPM 조회",
                 JOptionPane.PLAIN_MESSAGE));
     toolMenu.add(npm);
-    menu(toolMenu, "수집 파일 저장", dumpFiles);
     menu(moreMenu, "History 다시 분석", rescan);
     menu(moreMenu, "URL 목록 복사", copy);
     menu(moreMenu, "가림 결과 복사", report);
@@ -260,10 +229,9 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     more.addActionListener(e -> moreMenu.show(more, 0, more.getHeight()));
     JPanel toolbar = new JPanel();
     toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-    toolbar.add(WorkbenchUi.row(passive, new JLabel("최근 분석"), sources, progress));
+    toolbar.add(WorkbenchUi.row(passive, analysisList, progress));
     resolve.addActionListener(e -> openResolvedDraft());
-    endpointFilter.addActionListener(e -> filterEndpoints());
-    toolbar.add(WorkbenchUi.row(toRepeater, resolve, locate, endpointFilter, tools, more));
+    toolbar.add(WorkbenchUi.row(resolve, locate, tools, more));
 
     header.removeAll();
     header.add(
@@ -272,20 +240,20 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     header.add(toolbar);
     footer.setBorder(BorderFactory.createEmptyBorder(5, 4, 5, 4));
     add(footer, BorderLayout.SOUTH);
-    WorkbenchUi.primary(analyze);
-    WorkbenchUi.primary(toRepeater);
     WorkbenchUi.style(this);
     WorkbenchUi.status(status);
     WorkbenchUi.feedback(status);
     WorkbenchUi.status(progress);
-    analyze.setToolTipText("편집한 JS / HTML을 정적으로 분석합니다. 원본 코드를 실행하지 않습니다.");
-    toRepeater.setToolTipText("선택한 URL의 요청 초안을 Repeater에 준비합니다. 요청은 전송하지 않습니다.");
+    KeyStroke repeaterKey=KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
+    getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(repeaterKey,"wb.js.repeater");
+    getActionMap().put("wb.js.repeater",toRepeater);
+    urlTable.getInputMap(WHEN_FOCUSED).put(repeaterKey,"wb.js.repeater");
+    urlTable.getActionMap().put("wb.js.repeater",toRepeater);
+    urlTable.setToolTipText("더블클릭: 발견 출처 패킷 · Ctrl+R: 선택 URL의 Repeater 초안 준비");
     resolve.setToolTipText("선택한 URL의 동적 부분을 입력한 뒤 Repeater 초안을 준비합니다.");
     locate.setToolTipText("선택한 URL 또는 시크릿 후보의 원문 위치로 이동합니다.");
     results.addChangeListener(e -> refreshActions());
     refreshActions();
-    analyze.addActionListener(e -> load(input.getText(), sourceUrl.getText()));
-    selectedButton.addActionListener(e -> selected.run());
     clear.addActionListener(e -> clear());
     sources.addActionListener(
         e -> {
@@ -365,10 +333,21 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
               }
             });
 
-    toRepeater.addActionListener(
-        e -> {
+    discoverMaps.addActionListener(e -> discover());
+    checkNpm.addActionListener(e -> checkRegistry());
+  }
+
+  void prepareRepeater() {
+    if (!toRepeater.isEnabled()) return;
           try {
             if (current == null) return;
+            if(urlTable.getSelectedRowCount()==1){
+              var item=current.endpoints().get(urlTable.convertRowIndexToModel(urlTable.getSelectedRow()));
+              if(!item.complete() || !List.of("GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS").contains(item.method())){
+                status.setText("동적 값 또는 메서드 확인 후 Repeater 초안을 준비하세요.");
+                openResolvedDraft();return;
+              }
+            }
             List<HttpRequest> drafts = new ArrayList<>();
             for (int row : urlTable.getSelectedRows()) {
               var item = current.endpoints().get(urlTable.convertRowIndexToModel(row));
@@ -385,11 +364,73 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",ex);
             status.setText(ex.getMessage());
           }
-        });
-    discoverMaps.addActionListener(e -> discover());
-    checkNpm.addActionListener(e -> checkRegistry());
-    dumpFiles.addActionListener(e -> saveFiles());
   }
+
+  JPanel analysisContent() {
+    JPanel panel=new WindowPanel();
+    panel.setName("wb.js.analysis.window");
+    panel.add(new JLabel("항목 선택: 분석 결과 보기 · 더블클릭: 발견 출처 패킷"),BorderLayout.NORTH);
+    JScrollPane scroll=new JScrollPane(historyTable);
+    scroll.setPreferredSize(new Dimension(690,330));
+    panel.add(scroll);
+    return panel;
+  }
+
+  private void bindPacketOpening(JTable table) {
+    table.addMouseListener(new MouseAdapter() {
+      public void mouseClicked(MouseEvent event) {
+        if (!SwingUtilities.isLeftMouseButton(event) || event.getClickCount()!=2) return;
+        int row=table.rowAtPoint(event.getPoint());
+        if (row<0) return;
+        table.setRowSelectionInterval(row,row);
+        openPacket(table, row);
+      }
+    });
+    table.getInputMap(WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0),"wb.js.packet");
+    table.getActionMap().put("wb.js.packet",new AbstractAction() {
+      public void actionPerformed(ActionEvent event) {if(table.getSelectedRow()>=0)openPacket(table,table.getSelectedRow());}
+    });
+  }
+
+  void openPacket(JTable table,int viewRow) {
+    if(closed.get() || viewRow<0 || viewRow>=table.getRowCount())return;
+    int row=table.convertRowIndexToModel(viewRow);
+    String source=table==historyTable?Objects.toString(historyModel.getValueAt(row,0),""):currentSource;
+    var entry=cache.get(source);
+    openedSource=source;
+    // The selected row identifies a finding, not an HTTP request to send or fabricate.
+    openedFinding=Objects.toString(table.getModel().getValueAt(row,0),"");
+    openedPacket=entry==null||entry.packet()==null?null:entry.packet().clone();
+    packetWindow.closeWindow();
+    packetWindow.open();
+  }
+
+  JPanel packetContent() {
+    PacketView request=new PacketView(), response=new PacketView();
+    request.text.setName("wb.js.packet.request.text");response.text.setName("wb.js.packet.response.text");
+    String[] snapshot=openedPacket;
+    request.setPacket(snapshot==null?"해당 출처의 요청 미리보기가 없습니다.":snapshot[0]);
+    response.setPacket(snapshot==null?"해당 출처의 응답 미리보기가 없습니다.":snapshot[1],snapshot==null?null:snapshot[2]);
+    JPanel body=new WindowPanel();body.setName("wb.js.packet.window");
+    JLabel source=new JLabel("발견 출처 · "+compact(openedSource));source.setToolTipText(openedSource);
+    JLabel finding=new JLabel("선택 항목 · "+compact(openedFinding));finding.setToolTipText(openedFinding);
+    body.add(TargetWindow.options(source,finding),BorderLayout.NORTH);
+    var packets=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
+        WorkbenchUi.card("요청 REQUEST",request),WorkbenchUi.card("응답 RESPONSE",response),.5);
+    packets.setName("wb.js.popup.messages");packets.setPreferredSize(new Dimension(690,330));body.add(packets);
+    return body;
+  }
+
+  private static final class WindowPanel extends JPanel implements Scrollable {
+    WindowPanel(){super(new BorderLayout(0,6));}
+    public Dimension getPreferredScrollableViewportSize(){return getPreferredSize();}
+    public int getScrollableUnitIncrement(Rectangle visible,int orientation,int direction){return 20;}
+    public int getScrollableBlockIncrement(Rectangle visible,int orientation,int direction){return Math.max(20,visible.height-20);}
+    public boolean getScrollableTracksViewportWidth(){return true;}
+    public boolean getScrollableTracksViewportHeight(){return true;}
+  }
+
+  private static String compact(String value) {return value.length()>56?value.substring(0,53)+"…":value;}
 
   void rememberPacket(String url, String request, String raw, String decoded) {
     cache.packet(
@@ -446,6 +487,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
         if (!exists) sources.addItem(key);
       }
       if (selected != null && keys.contains(selected)) sources.setSelectedItem(selected);
+      String selectedHistory = historyTable.getSelectedRow()<0?null:Objects.toString(historyModel.getValueAt(historyTable.convertRowIndexToModel(historyTable.getSelectedRow()),0),null);
       historyModel.setRowCount(0);
       for (var entry : snapshot.entrySet()) {
         var result = entry.getValue().result();
@@ -455,6 +497,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                 entry.getKey(), result.endpoints().size(), result.secrets().size(), result.status()
               });
       }
+      if(selectedHistory!=null)for(int row=0;row<historyModel.getRowCount();row++)if(selectedHistory.equals(historyModel.getValueAt(row,0))){int view=historyTable.convertRowIndexToView(row);if(view>=0)historyTable.setRowSelectionInterval(view,view);break;}
     } finally {
       syncingSources = false;
     }
@@ -480,19 +523,19 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     menu.add(item);
   }
 
-  JPanel manualPane(JButton selected) {
+  JPanel sourcePane() {
     JPanel p = new JPanel(new BorderLayout(0, 4));
     p.setName("wb.js.manual");
     JPanel actions = new JPanel();
     actions.setLayout(new BoxLayout(actions, BoxLayout.Y_AXIS));
-    actions.add(WorkbenchUi.row(analyze, selected, targetSettings.button()));
+    actions.add(WorkbenchUi.row(targetSettings.button()));
     actions.add(
         WorkbenchUi.row(navigator.previous, navigator.next, navigator.filter, findingCount));
     navigator.previous.getAccessibleContext().setAccessibleName("이전 감지 위치");
     navigator.next.getAccessibleContext().setAccessibleName("다음 감지 위치");
     String legend = "원문 표시: 파랑 URL · 빨강 시크릿 · 초록 도메인/의존성 · 보라 소스맵";
     navigator.filter.setToolTipText(legend);
-    input.setToolTipText("JS / HTML 원문을 붙여넣고 수동 분석을 누르세요. · " + legend);
+    input.setToolTipText("선택한 분석 결과의 원문 · " + legend);
     input.setName("wb.js.source");
     JScrollPane scroll = new JScrollPane(input);
     scroll.setName("wb.js.source.scroll");
@@ -529,7 +572,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       progressTimer.start();
       refreshProgress();
     } catch (Exception e) {
-      progress.setText("History 연결 실패 · 수동 분석은 사용 가능");
+      progress.setText("History 연결 실패 · 연결 상태를 확인하세요.");
     }
   }
 
@@ -540,10 +583,9 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
         String state = item.complete() ? observation.apply(item) : "동적 값 미해결";
         if (!state.equals(endpoints.getValueAt(i, 7))) endpoints.setValueAt(state, i, 7);
       }
-      filterEndpoints();
     }
     String counters =
-        (watching.get() ? "감시 중" : "새 항목 감시 일시정지")
+        (watching.get() ? "분석 ON" : "분석 OFF")
             + " · 대기/분석 "
             + jobs.count()
             + " · 처리 "
@@ -582,7 +624,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     // Keep the source selector and memory summary on one row at the minimum supported width.
     // Full counters and both byte budgets remain available in the tooltip.
     progress.setText(
-        (watching.get() ? "감시" : "정지")
+        (watching.get() ? "분석 ON" : "분석 OFF")
             + " · 대기 "
             + jobs.count()
             + "/"
@@ -654,12 +696,10 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       }
       String type = response.headerValue("Content-Type"), url = request.url();
       String mime = type == null ? "" : type.toLowerCase(Locale.ROOT);
-      if (!mime.contains("javascript")
-          && !mime.contains("ecmascript")
-          && !mime.contains("html")
-          && !mime.contains("json")
-          && !url.split("[?#]", 2)[0].toLowerCase(Locale.ROOT).matches(".*\\.(?:js|map|json)$"))
+      if (!TextCandidates.accepts(mime, url)) {
+        unsupported.incrementAndGet();
         return true;
+      }
       if (response.body().length() > 2 * 1024 * 1024) {
         unsupported.incrementAndGet();
         return true;
@@ -717,8 +757,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     if (token != epoch.get() || closed.get()) return;
     try {
       String text = readBody(snapshot.body(), snapshot.encoding(), snapshot.contentType());
-      if (snapshot.mime().contains("html") && !text.toLowerCase(Locale.ROOT).contains("<script"))
-        return;
+      if (text.isBlank() || !TextCandidates.textual(text)) { unsupported.incrementAndGet(); return; }
       String key = safeSource(snapshot.url());
       if (Objects.equals(cache.fingerprint(key), fingerprint(text))) {
         duplicates.incrementAndGet();
@@ -736,7 +775,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
           snapshot.url(),
           false,
           token,
-          new String[] {snapshot.request(), snapshot.raw(), decoded});
+          new String[] {snapshot.request(), snapshot.raw(), decoded}, snapshot.contentType());
     } catch (Exception e) {
       failed.incrementAndGet();
     }
@@ -797,11 +836,15 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   private void analyzeText(String text, String url, boolean manual, long token, String[] packet) {
+    analyzeText(text,url,manual,token,packet,"");
+  }
+
+  private void analyzeText(String text, String url, boolean manual, long token, String[] packet, String contentType) {
     if (closed.get() || token != epoch.get()) return;
     String key = safeSource(url), hash = fingerprint(text);
     JsAnalysis.Result result;
     try {
-      result = JsAnalysis.analyze(text, url);
+      result = JsAnalysis.analyze(text, url, contentType);
     } catch (Throwable e) {
       failed.incrementAndGet();
       result = new JsAnalysis.Result(List.of(), List.of(), "분석 실패 · 입력/지원 문법 확인", true);
@@ -827,7 +870,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             selectSource(key);
             sources.setSelectedItem(key);
             render(done);
-          } else status.setText("History 분석 저장: " + key + " · 최근 분석에서 선택하세요.");
+          } else status.setText("History 분석 저장: " + key + " · 분석 목록에서 선택하세요.");
           refreshProgress();
         });
   }
@@ -870,38 +913,26 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     if (code == null) code = input.getText();
     navigator.bind(code, r, Objects.equals(input.getText(), code));
     navigating = false;
-    filterEndpoints();
     refreshActions();
   }
 
-  void filterEndpoints() {
-    var sorter = (javax.swing.table.TableRowSorter<DefaultTableModel>) urlTable.getRowSorter();
-    int choice = endpointFilter.getSelectedIndex();
-    sorter.setRowFilter(
-        new javax.swing.RowFilter<>() {
-          public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
-            if (current == null || entry.getIdentifier() >= current.endpoints().size())
-              return false;
-            var item = current.endpoints().get(entry.getIdentifier());
-            return choice == 0
-                || choice == 2 && !item.complete()
-                || choice == 1 && item.complete() && observation.apply(item).equals("발견만 함");
-          }
-        });
-  }
-
   final JTextField resolvedUrl = new JTextField(45);
+  final JComboBox<String> resolvedMethod = new JComboBox<>(new String[]{"GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS"});
   JsAnalysis.Endpoint resolving;
   String resolvingSource = "";
   final TargetWindow resolveWindow =
-      new TargetWindow(this, "동적 URL 확정 · Repeater 초안", this::resolvedContent);
+      new TargetWindow(this, "URL·메서드 확인 · Repeater 초안", this::resolvedContent);
 
   JPanel resolvedContent() {
     JButton prepare = new JButton("확정하고 초안 준비");
+    prepare.setName("wb.js.draft.prepare");
     prepare.addActionListener(
         e -> {
           try {
-            var draft = JsRequestDraft.create(resolving, resolvedUrl.getText());
+            var confirmed=new JsAnalysis.Endpoint(resolving.url(),Objects.toString(resolvedMethod.getSelectedItem(),"GET"),
+                resolving.kind(),resolving.parameters(),resolving.headers(),resolving.bodyKeys(),resolving.line(),
+                resolving.start(),resolving.length(),resolving.complete(),resolving.evidence());
+            var draft = JsRequestDraft.create(confirmed, resolvedUrl.getText());
             if (!WorkbenchScope.contains(api, draft.url()))
               throw new IllegalArgumentException(
                   "Scope 밖 URL입니다. · " + WorkbenchScope.reason(api, draft.url()));
@@ -909,7 +940,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             var item =
                 new JsAnalysis.Endpoint(
                     draft.url(),
-                    resolving.method(),
+                    draft.method(),
                     resolving.kind(),
                     resolving.parameters(),
                     resolving.headers(),
@@ -929,7 +960,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
           }
         });
     return TargetWindow.options(
-        new JLabel("동적 부분을 실제 경로로 바꾸세요. 쿼리 값은 초안에 복사하지 않습니다."),
+        new JLabel("초안의 경로와 메서드를 확인하세요. 쿼리 값은 복사하지 않습니다."),
+        WorkbenchUi.row(new JLabel("초안 메서드"),resolvedMethod),
         WorkbenchUi.row(new JLabel("확정 URL"), resolvedUrl),
         prepare);
   }
@@ -940,6 +972,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     resolving = current.endpoints().get(urlTable.convertRowIndexToModel(row));
     resolvingSource = currentSource;
     resolvedUrl.setText(resolving.url());
+    resolvedMethod.setSelectedItem(List.of("GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS").contains(resolving.method())?resolving.method():"GET");
     resolveWindow.open();
   }
 
@@ -1281,42 +1314,10 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
         true);
   }
 
-  void saveFiles() {
-    JFileChooser chooser = new JFileChooser();
-    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
-    var path = chooser.getSelectedFile().toPath();
-    long token = epoch.get();
-    enqueue(
-        () -> {
-          if (closed.get() || token != epoch.get()) return;
-          var snapshot = new LinkedHashMap<String, String>();
-          var recovered = new ArrayList<JsMiner.Recovered>();
-          for (var entry : cache.snapshot().entrySet()) {
-            if (entry.getValue().source() != null)
-              snapshot.put(entry.getKey(), entry.getValue().source());
-            var result = entry.getValue().result();
-            if (result != null) JsMiner.appendRecovered(recovered, result.miner().recovered());
-          }
-          try {
-            var saved = JsMiner.dump(path, snapshot, recovered);
-            onEdt(
-                () -> {
-                  if (!closed.get() && token == epoch.get())
-                    status.setText("캐시에 보관된 정적 파일 저장: " + saved);
-                });
-          } catch (Exception e) {Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",e);
-            onEdt(
-                () -> {
-                  if (!closed.get() && token == epoch.get())
-                    status.setText("파일 저장 실패: " + e.getMessage());
-                });
-          }
-        },
-        true);
-  }
-
   public void clear() {
+    analysisWindow.closeWindow();
+    packetWindow.closeWindow();
+    openedPacket=null;openedSource="";openedFinding="";
     resolveWindow.closeWindow();
     resolving = null;
     navigator.reset();
@@ -1344,6 +1345,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   @Override
   public void close() {
     targetSettings.close();
+    analysisWindow.close();
+    packetWindow.close();
     resolveWindow.close();
     if (historyMonitor != null) historyMonitor.close();
     if (progressTimer != null) progressTimer.stop();

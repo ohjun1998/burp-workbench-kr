@@ -43,6 +43,8 @@ jobs:
         run: python tools/render_ui_layout.py --scope-only --check --out tmp/ui-scope-ci
       - name: Verify Pretty Raw Hex and packet Search layouts
         run: python tools/render_ui_layout.py --packet-only --sizes 1024x720 1280x800 --check --out tmp/ui-packet-ci
+      - name: Verify JS text analysis workspace and modeless windows
+        run: python tools/render_ui_layout.py --js-only --sizes 1024x720 1280x800 --check --out tmp/ui-js-ci
       - name: Check packaging invariants
         run: python -m unittest discover -s tools -p 'test_*.py' -v
       - name: Verify versioned downloads match current sources
@@ -82,6 +84,9 @@ jobs:
             tmp/ui-packet-ci/layout-report.json
             tmp/ui-packet-ci/controls.csv
             tmp/ui-packet-ci/content.csv
+            tmp/ui-js-ci/layout-report.json
+            tmp/ui-js-ci/controls.csv
+            tmp/ui-js-ci/content.csv
           if-no-files-found: warn
           retention-days: 14
 

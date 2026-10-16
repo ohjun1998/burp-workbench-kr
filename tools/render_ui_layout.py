@@ -29,9 +29,10 @@ def main():
     p.add_argument('--guide-only',action='store_true',help='Check the production feature-guide dialog wrapper separately')
     p.add_argument('--scope-only',action='store_true',help='Check the production Scope editor at default and minimum dialog sizes')
     p.add_argument('--packet-only',action='store_true',help='Render Pretty/search, Raw and Hex in the production packet panes')
+    p.add_argument('--js-only',action='store_true',help='Render JS/text analysis workspace and its modeless list/packet windows')
     p.add_argument('--themes',nargs='+',choices=['light','dark'],default=['light','dark'])
     args=p.parse_args()
-    if sum([args.guide_only,args.scope_only,args.packet_only])>1:p.error('Choose one preview mode')
+    if sum([args.guide_only,args.scope_only,args.packet_only,args.js_only])>1:p.error('Choose one preview mode')
     if args.sizes is None:args.sizes=['760x480','560x300'] if args.guide_only or args.scope_only else ['1024x720','1280x800','1440x920']
     version=runpy.run_path(str(WB/'release_info.py'))['VERSION']
     jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version}.jar').resolve()
@@ -49,7 +50,7 @@ def main():
     for theme in args.themes:
         for size in args.sizes:
             w,h=size.split('x');out=args.out/theme/size
-            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else []),check=True)
+            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else []),check=True)
             with (out/'controls.csv').open() as source:
                 all_rows.extend(csv.DictReader(source))
             with (out/'content.csv').open() as source:
@@ -80,13 +81,23 @@ def main():
     if args.guide_only:required={}
     if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
     if args.packet_only:required={(view,'wb.traffic.'+side+'.text'):100 for view in ['packet-pretty-search.png','packet-raw.png','packet-hex.png'] for side in ['request','response']}
+    if args.js_only:
+        required={('js-workspace.png','wb.js.source'):80,('js-analysis-off.png','wb.js.source'):80,
+                  ('js-packets.png','wb.js.packet.request.text'):80,('js-packets.png','wb.js.packet.response.text'):80,
+                  ('js-packets-small.png','wb.js.packet.request.text'):50,('js-packets-small.png','wb.js.packet.response.text'):50,
+                  ('js-analysis-list.png','wb.js.history.table'):60,('js-analysis-list-small.png','wb.js.history.table'):40}
     gate_failures=[]
     for theme in args.themes:
         for size in args.sizes:
             w,h=size.split('x')
             for (view,name),minimum in required.items():
-                matches=[r for r in content_rows if (r['theme'],r['width'],r['height'],r['view'],r['name'])==(theme,w,h,view,name)]
-                if len(matches)!=1 or int(matches[0]['visibleHeight'])<minimum or int(matches[0]['visibleWidth'])<160:
+                expected_w,expected_h=w,h
+                copies=1
+                if args.js_only and view in {'js-packets.png','js-analysis-list.png','js-packets-small.png','js-analysis-list-small.png'}:
+                    expected_w,expected_h=('560','300') if 'small' in view else ('760','480')
+                    copies=len(args.sizes)
+                matches=[r for r in content_rows if (r['theme'],r['width'],r['height'],r['view'],r['name'])==(theme,expected_w,expected_h,view,name)]
+                if len(matches)!=copies or any(int(r['visibleHeight'])<minimum or int(r['visibleWidth'])<160 for r in matches):
                     gate_failures.append({'theme':theme,'size':size,'view':view,'name':name,'minimumHeight':minimum,'actual':matches})
     small=[r for r in all_rows if int(r['controlHeight'])<24 or int(r['controlWidth'])<24]
     text_failures=[r for r in text_rows if r['selected']=='true' and (r['fullyVisible']=='false' or r['textFits']=='false')]

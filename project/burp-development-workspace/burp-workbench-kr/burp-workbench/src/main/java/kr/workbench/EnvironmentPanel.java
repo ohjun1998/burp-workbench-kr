@@ -88,6 +88,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
 
   static JTextArea message() {
     JTextArea a = new JTextArea();
+    a.putClientProperty("wb.packet.syntax",true);
     a.setEditable(false);
     return a;
   }

@@ -110,6 +110,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     return a;
   }
 
+  static JScrollPane packetScroll(JTextArea text) {text.putClientProperty("wb.packet.syntax",true);return new JScrollPane(text);}
+
   JButton action(String text, Runnable run) {
     JButton b = new JButton(text);
     b.addActionListener(
@@ -294,7 +296,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     JSplitPane inputs =
         WorkbenchUi.split(
             JSplitPane.VERTICAL_SPLIT,
-            WorkbenchUi.card("요청 단계 · ===STEP=== 줄로 구분", new JScrollPane(workflow)),
+            WorkbenchUi.card("요청 단계 · ===STEP=== 줄로 구분", packetScroll(workflow)),
             WorkbenchUi.card("JSON 변수 추출 · 1.id=$.id → {{id|URL}}", new JScrollPane(extract)),
             .73);
     inputs.setName("wb.bounty.flow.inputs");
@@ -303,7 +305,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         WorkbenchUi.split(
             JSplitPane.VERTICAL_SPLIT,
             WorkbenchUi.card("단계별 실행 결과", new JScrollPane(flowTable)),
-            WorkbenchUi.card("선택 단계 · 요청/응답", new JScrollPane(workflowDetail)),
+            WorkbenchUi.card("선택 단계 · 요청/응답", packetScroll(workflowDetail)),
             .40);
     results.setName("wb.bounty.flow.results");
     flowTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -556,7 +558,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     JPanel content = new JPanel(new BorderLayout(6, 6));
     content.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     content.add(new JLabel("현재 입력의 저장 미리보기 · 이미지/직접 작성 내용의 개인정보는 직접 확인하세요."), BorderLayout.NORTH);
-    content.add(new JScrollPane(text));
+    content.add(packetScroll(text));
+    WorkbenchUi.style(content);
     content.add(WorkbenchUi.row(action("닫기", dialog::dispose)), BorderLayout.SOUTH);
     dialog.setContentPane(content);
     dialog.setSize(900, 700);

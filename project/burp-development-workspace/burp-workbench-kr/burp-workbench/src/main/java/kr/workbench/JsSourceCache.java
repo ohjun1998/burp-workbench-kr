@@ -181,6 +181,7 @@ final class JsSourceCache {
     JsAnalysis.Result result = entry.result();
     if (result == null) return size;
     size += 96 + textBytes(result.status());
+    for(var draft:result.requestDrafts().entrySet())size+=128+textBytes(draft.getKey())+textBytes(draft.getValue().url())+textBytes(draft.getValue().method())+textBytes(draft.getValue().body())+textBytes(draft.getValue().contentType());
     for (var endpoint : result.endpoints())
       size +=
           128

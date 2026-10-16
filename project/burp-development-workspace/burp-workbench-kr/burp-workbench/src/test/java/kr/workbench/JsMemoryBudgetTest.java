@@ -75,6 +75,8 @@ public final class JsMemoryBudgetTest {
     check(
         JsSourceCache.weight("a", rich) > entryBytes + 3000,
         "packet previews and recovered text contribute to shared byte accounting");
+    var mapped=new JsAnalysis.Result(List.of(),List.of(),"draft",false,small.miner(),java.util.Map.of("draft",new JsRequestDraft.Draft("https://test/","POST","x".repeat(9000))));
+    check(JsSourceCache.weight("a",new JsSourceCache.Entry(sample.source(),"hash",mapped,null))>entryBytes+18000,"mapped request bodies count toward the existing cache budget");
     var fits = new JsSourceCache(JsSourceCache.weight("a", rich));
     check(
         fits.analysis("a", rich.source(), rich.fingerprint(), rich.result(), packet).accepted(),

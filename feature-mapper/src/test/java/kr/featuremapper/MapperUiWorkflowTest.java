@@ -49,6 +49,12 @@ final class MapperUiWorkflowTest {
         MapperTest.check(Arrays.stream(actions.getComponents()).map(c->((JButton)c).getText()).toList().equals(List.of("기능 안내","설정","로그")),"Mapper toolbar uses help, settings, log order");
         MapperTest.check(((BorderLayout)root.getLayout()).getLayoutComponent(BorderLayout.SOUTH)==null,"Mapper footer is removed to enlarge packet editors");
         MapperTest.check(MapperUi.font().canDisplayUpTo("요청 응답 기능 안내 설정 로그")<0,"Mapper bundled Korean font renders all toolbar captions");
+        try{for(String field:List.of("requestText","responseText")){
+          JTextArea text=(JTextArea)get(ext,field);String packet="HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{\"n\":2}";text.setText(packet);
+          MapperTest.check(kr.packetui.PacketStyle.installed(text),"Mapper "+field+" uses shared packet syntax");
+          JScrollPane scroll=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,text);
+          MapperTest.check(scroll.getRowHeader()!=null&&text.getText().equals(packet),"Mapper line gutter preserves packet CRLF and content");
+        }}catch(Exception e){throw new RuntimeException(e);}
         JTable table=(JTable)named(root,"fm.history");
         MapperTest.check(table.getRowHeight()>=32&&table.getRowCount()==4,"Mapper keeps readable rows and every captured item");
         ((JButton)named(root,"fm.navigation.settings")).doClick(0);
@@ -74,6 +80,7 @@ final class MapperUiWorkflowTest {
       });
       edt(()->{});edt(()->{});
       edt(()->{
+        try{MapperTest.check(kr.packetui.PacketStyle.installed((JTextArea)get(ext,"requestText")),"Mapper packet style returns after host re-theming");}catch(Exception e){throw new RuntimeException(e);}
         MapperTest.check(root.getBackground().equals(MapperUi.background()),"Mapper local appearance returns after host look-and-feel replacement");
         MapperTest.check(named(root,"fm.navigation.logs").isVisible(),"Mapper log access survives host re-theming");
       });

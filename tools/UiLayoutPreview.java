@@ -92,6 +92,11 @@ public final class UiLayoutPreview extends WorkbenchTest {
             javax.swing.SwingUtilities.layoutCompoundLabel(label,label.getFontMetrics(label.getFont()),label.getText(),label.getIcon(),label.getVerticalAlignment(),label.getHorizontalAlignment(),label.getVerticalTextPosition(),label.getHorizontalTextPosition(),new java.awt.Rectangle(rect.x+insets.left,rect.y+insets.top,Math.max(0,rect.width-insets.left-insets.right),Math.max(0,rect.height-insets.top-insets.bottom)),new java.awt.Rectangle(),textBounds,label.getIconTextGap());
             textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("heading"),csv(label.getText()),"true",""+textWidth,""+rect.width,""+rect.height,""+visible.contains(textBounds),""+fits));
         }
+        if(c instanceof JsAnalysisTotals.Lamp label){
+            var rect=SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);var clipped=visible(root,c,rect);
+            int required=label.getFontMetrics(WorkbenchUi.font().deriveFont(12f)).stringWidth(label.getText())+41;
+            textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("aggregate"),csv(label.getText()),"true",""+required,""+rect.width,""+rect.height,""+clipped.contains(rect),""+(rect.width>=required&&rect.height>=30)));
+        }
         boolean control=c instanceof javax.swing.AbstractButton b&&b.getText()!=null&&!b.getText().isBlank()||c instanceof javax.swing.JTextField||c instanceof javax.swing.JComboBox;
         if(c instanceof javax.swing.text.JTextComponent&&!(c instanceof javax.swing.JTextField)||c instanceof javax.swing.JTable){
             var rect=javax.swing.SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);
@@ -218,22 +223,23 @@ public final class UiLayoutPreview extends WorkbenchTest {
             try {
                 var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
                 String origin="https://app.example.test";
-                String code="const root='/api';\nfetch(root+'/users');\nfetch(root+'/users/'+userId);\nconst apiKey='AIza"+"Z".repeat(35)+"';";
+                String code="const root='/api';\nconst payload = {name: 'demo', count: 2, active: true};\nfetch(root+'/users?lang=ko', {\n  method: 'POST',\n  headers: {'Content-Type': 'application/json'},\n  body: JSON.stringify(payload)\n});\nfetch(root+'/users/'+userId);\nconst apiKey='AIza"+"Z".repeat(35)+"';";
                 edt(()->{
                     js.rememberPacket(origin+"/assets/app.js","GET /assets/app.js HTTP/1.1\r\nHost: app.example.test\r\n\r\n", "HTTP/1.1 200 OK\r\nContent-Type: application/javascript\r\n\r\n"+code,"HTTP/1.1 200 OK\r\nContent-Type: application/javascript\r\n\r\n"+code);
                     js.load(code,origin+"/assets/app.js");
                 });JsAnalysisPanelTest.waitDone(js);
                 edt(()->js.load("{\"api\":\"/api/settings\",\"api_key\":\"Q1w2e3R4t5Y6u7I8o9P0\"}",origin+"/config.json"));JsAnalysisPanelTest.waitDone(js);
                 JPanel root=(JPanel)get(ext,"root");
-                Component[] history={null},packets={null},repeater={null};
+                Component[] history={null},packets={null},repeater={null},details={null};
                 edt(()->{
                     ((JTabbedPane)unchecked(ext,"tabs")).setSelectedComponent(js);
                     js.sources.setSelectedItem(origin+"/assets/app.js");js.urlTable.setRowSelectionInterval(0,0);
                     js.analysisWindow.opener=(owner,title,content,modal,closed)->{history[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
                     js.packetWindow.opener=(owner,title,content,modal,closed)->{packets[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
                     js.repeater.opener=(owner,title,content,modal,closed)->{repeater[0]=content;return null;};
+                    js.detailsWindow.opener=(owner,title,content,modal,closed)->{details[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
                     js.analysisList.doClick(0);js.openPacket(js.urlTable,0);
-                    js.prepareRepeater();
+                    js.prepareRepeater();js.analysisDetails.doClick(0);
                     try {
                         installHeaders(root);installHeaders(history[0]);installHeaders(packets[0]);
                         render(root,out.resolve("js-workspace.png"),width,height);
@@ -243,7 +249,12 @@ public final class UiLayoutPreview extends WorkbenchTest {
                         renderAt((Container)packets[0],out.resolve("js-packets-small.png"),560,300);
                         renderAt((Container)repeater[0],out.resolve("js-repeater.png"),1120,720);
                         renderAt((Container)repeater[0],out.resolve("js-repeater-small.png"),780,440);
+                        installHeaders(details[0]);
+                        renderAt((Container)details[0],out.resolve("js-details.png"),980,640);
+                        renderAt((Container)details[0],out.resolve("js-details-small.png"),620,400);
                         js.passive.doClick(0);render(root,out.resolve("js-analysis-off.png"),width,height);
+                        js.totals.api.count(50000);js.totals.secret.count(50000);js.totals.domain.count(50000);js.totals.cloud.count(50000);
+                        render(root,out.resolve("js-maximum-counts.png"),width,height);
                     }catch(Exception e){throw new RuntimeException(e);}
                 });
                 writeMeasurements(out);

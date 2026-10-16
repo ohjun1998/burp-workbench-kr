@@ -87,7 +87,7 @@ def main():
                   ('js-packets-small.png','wb.js.packet.request.text'):50,('js-packets-small.png','wb.js.packet.response.text'):50,
                   ('js-analysis-list.png','wb.js.history.table'):60,('js-analysis-list-small.png','wb.js.history.table'):40,
                   ('js-repeater.png','wb.js.repeater.request.text'):160,('js-repeater.png','wb.js.repeater.response.text'):160,
-                  ('js-repeater-small.png','wb.js.repeater.request.text'):100,('js-repeater-small.png','wb.js.repeater.response.text'):100}
+                  ('js-repeater-small.png','wb.js.repeater.request.text'):100,('js-repeater-small.png','wb.js.repeater.response.text'):100,('js-details.png','wb.js.details.api.table'):100}
     gate_failures=[]
     for theme in args.themes:
         for size in args.sizes:
@@ -100,6 +100,9 @@ def main():
                     copies=len(args.sizes)
                 if args.js_only and view in {'js-repeater.png','js-repeater-small.png'}:
                     expected_w,expected_h=('780','440') if 'small' in view else ('1120','720')
+                    copies=len(args.sizes)
+                if args.js_only and view in {'js-details.png','js-details-small.png'}:
+                    expected_w,expected_h=('620','400') if 'small' in view else ('980','640')
                     copies=len(args.sizes)
                 matches=[r for r in content_rows if (r['theme'],r['width'],r['height'],r['view'],r['name'])==(theme,expected_w,expected_h,view,name)]
                 if len(matches)!=copies or any(int(r['visibleHeight'])<minimum or int(r['visibleWidth'])<160 for r in matches):

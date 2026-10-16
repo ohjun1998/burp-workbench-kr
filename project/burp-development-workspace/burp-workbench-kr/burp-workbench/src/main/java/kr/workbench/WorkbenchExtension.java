@@ -51,6 +51,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         }
       };
   private JPanel scopeContent;
+  private JTextField scopeUrlInput;
+  private JButton scopeEditButton;
+  private WorkbenchScope.Rule scopeEditingRule;
   private JDialog scopeWindow;
   private boolean settingsActionReady;
 
@@ -230,6 +233,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private HttpRequestEditor requestView;
   private final PacketView requestPacket = new PacketView(), responsePacket = new PacketView();
   private HttpResponseEditor responseView;
+  private Component requestEditorComponent, responseEditorComponent;
   private Traffic current;
   private javax.swing.Timer timer;
 
@@ -444,6 +448,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         };
     requestView = api.userInterface().createHttpRequestEditor(EditorOptions.READ_ONLY);
     responseView = api.userInterface().createHttpResponseEditor(EditorOptions.READ_ONLY);
+    requestEditorComponent = requestView == null ? null : requestView.uiComponent();
+    responseEditorComponent = responseView == null ? null : responseView.uiComponent();
     addPage("트래픽", "traffic", trafficPanel(), false);
     addPage("권한 비교", "auth", authPanel(), false);
     addPage("데이터 도구", "data", dataPanel(), true);
@@ -772,7 +778,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     captureButton.setName("wb.traffic.capture.mode");
     captureButton.putClientProperty("wb.capture", true);
     captureButton.setToolTipText(
-        "클릭: OFF ↔ SCOPE · OFF 수집 금지 / SCOPE HTTP history → Add to scope로 등록한 Burp Scope만 수집");
+        "클릭: OFF ↔ SCOPE · OFF 수집 중지 / SCOPE 목록에서 체크한 Burp Scope·수동 URL 수집");
     logTable =
         new JTable(logModel) {
           public String getToolTipText(java.awt.event.MouseEvent e) {
@@ -785,6 +791,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           }
         };
     logTable.setName("wb.traffic.history");
+    logTable.putClientProperty("wb.table.compact", true);
     logTable.setRowSorter(
         new CaptureRowSorter(logModel, error -> captureFailure("트래픽 검색·정렬", error)));
     logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -917,8 +924,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     top.setName("wb.traffic.controls");
     top.add(filter, BorderLayout.CENTER);
     top.add(actions, BorderLayout.EAST);
-    JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
-        res = WorkbenchUi.card("응답  RESPONSE", responsePacket);
+    JPanel req = trafficPacketPane("요청  REQUEST", "wb.traffic.request.native", requestEditorComponent, requestPacket),
+        res = trafficPacketPane("응답  RESPONSE", "wb.traffic.response.native", responseEditorComponent, responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
     viewers.setName("wb.traffic.messages");
     JPanel messages = new JPanel(new BorderLayout(0, 6));
@@ -933,6 +940,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     return main;
   }
 
+  private JPanel trafficPacketPane(String title, String name, Component editor, PacketView fallback) {
+    if (editor == null) return WorkbenchUi.card(title, fallback);
+    JPanel nativeHost = new JPanel(new BorderLayout());
+    nativeHost.setName(name);
+    nativeHost.add(editor);
+    return WorkbenchUi.nativeCard(title, nativeHost);
+  }
+
   private void showTraffic(int view) {
     if (view >= 0) {
       int index = logTable.convertRowIndexToModel(view);
@@ -940,10 +955,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         current = traffic.get(index);
         HttpRequest request = current.request();
         HttpResponse response = current.response();
-        requestView.setRequest(request);
-        responseView.setResponse(response);
-        requestPacket.setPacket(request.toString());
-        responsePacket.setPacket(
+        if (requestView != null) requestView.setRequest(request);
+        if (responseView != null) responseView.setResponse(response);
+        if (requestEditorComponent == null) requestPacket.setPacket(request.toString());
+        if (responseEditorComponent == null) responsePacket.setPacket(
             response == null ? null : response.toString(), PacketFormat.decodedResponse(response));
         selectionInfo.setText(
             String.format("%03d", ((Number) logModel.getValueAt(index, 0)).longValue())
@@ -961,8 +976,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       }
     } else {
       current = null;
-      requestView.setRequest(null);
-      responseView.setResponse(null);
+      if (requestView != null) requestView.setRequest(null);
+      if (responseView != null) responseView.setResponse(null);
       requestPacket.setPacket(null);
       responsePacket.setPacket(null);
       selectionInfo.setText("목록에서 요청을 선택하세요 · 요청과 응답을 함께 표시합니다.");
@@ -985,7 +1000,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       captureButton.setText(mode.name());
       captureButton.getAccessibleContext().setAccessibleDescription(switch (mode) {
         case OFF -> "빨강 · 트래픽 수집 중지";
-        case SCOPE -> "주황 · 체크된 Burp Target Scope만 수집";
+        case SCOPE -> "주황 · SCOPE 목록에서 체크한 범위만 수집";
       });
       captureButton.repaint();
     }
@@ -997,7 +1012,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             + " · "
             + switch (mode) {
               case OFF -> "수집 중지";
-              case SCOPE -> "Burp SCOPE 수집";
+              case SCOPE -> "체크된 SCOPE 수집";
             });
     captureInfo.setToolTipText(captureDiagnostics());
   }
@@ -1009,7 +1024,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         String url = request.url();
         if (nativeScopeFallback && localScope.syncObserved(java.util.List.of(url)))
           SwingUtilities.invokeLater(this::scopeChanged);
-        yield localScope.matchesNative(url);
+        yield localScope.matchesTraffic(url);
       }
     };
   }
@@ -1094,6 +1109,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     for (int i = 0; i < widths.length; i++)
       scopeTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
     scopeTable.getColumnModel().getColumn(0).setMaxWidth(65);
+    scopeTable.getColumnModel().getColumn(0).setMinWidth(55);
+    scopeTable.getColumnModel().getColumn(1).setMinWidth(90);
     scopeModel.addTableModelListener(
         e -> {
           if (refreshingScope
@@ -1114,22 +1131,39 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     rulesScroll.setMinimumSize(new Dimension(0, 45));
     panel.add(rulesScroll);
     JTextArea note =
-        new JTextArea("Burp Scope만 수집 · 수동 URL은 도구 대상용\n선택 삭제는 체크된 URL만 삭제합니다.");
+        new JTextArea("체크된 범위만 SCOPE 수집 · 수동 URL은 행 선택 후 수정");
     note.setEditable(false);
     note.setLineWrap(true);
     note.setWrapStyleWord(true);
     panel.add(note, BorderLayout.NORTH);
     JTextField urlInput = new JTextField(24);
+    scopeUrlInput = urlInput;
     urlInput.setName("wb.traffic.scope.url");
-    urlInput.setToolTipText("수동 URL은 도구 대상용 · 트래픽 수집은 Burp HTTP history → Add to scope 사용 · 쿼리 제외");
+    urlInput.setToolTipText("HTTP(S) URL과 하위 경로에 적용 · 쿼리 제외 · Burp Scope는 Burp에서 변경");
     Runnable add =
         () -> {
           localScope.add(urlInput.getText().trim(), false);
+          scopeTable.clearSelection();
           urlInput.setText("");
           scopeChanged();
         };
     JButton addButton = button("URL 추가", add);
     addButton.setName("wb.traffic.scope.add");
+    scopeEditButton = button("URL 수정", () -> {
+      if (scopeTable.isEditing()) scopeTable.getCellEditor().stopCellEditing();
+      WorkbenchScope.Rule selected = selectedScopeRule();
+      if (selected == null) throw new IllegalArgumentException("수정할 수동 URL 한 개를 선택하세요.");
+      WorkbenchScope.Rule updated = localScope.update(selected, urlInput.getText().trim());
+      scopeChanged();
+      selectScopeRule(updated);
+      urlInput.setText(updated.url());
+    });
+    scopeEditButton.setName("wb.traffic.scope.edit");
+    scopeEditButton.setToolTipText("수동 URL 한 행을 선택하고 입력값을 바꾼 뒤 수정합니다. 체크 상태는 유지됩니다.");
+    scopeEditButton.setEnabled(false);
+    scopeTable.getSelectionModel().addListSelectionListener(e -> {
+      if (!e.getValueIsAdjusting() && !refreshingScope) refreshScopeEditor();
+    });
     urlInput.addActionListener(
         e -> {
           try {
@@ -1158,7 +1192,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               scopeChanged();
             });
     clear.setName("wb.traffic.scope.clear");
-    panel.add(row(new JLabel("URL"), urlInput, addButton, remove, clear), BorderLayout.SOUTH);
+    JPanel inputRow = new JPanel(new BorderLayout(8, 0));
+    inputRow.add(new JLabel("URL"), BorderLayout.WEST);
+    inputRow.add(urlInput);
+    JPanel editor = new JPanel(new BorderLayout(0, 4));
+    editor.add(inputRow, BorderLayout.NORTH);
+    editor.add(row(addButton, scopeEditButton, remove, clear), BorderLayout.SOUTH);
+    panel.add(editor, BorderLayout.SOUTH);
     scopeContent = panel;
     scopeContent.setName("wb.traffic.scope.content");
     WorkbenchUi.style(scopeContent);
@@ -1180,6 +1220,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void refreshScopeList() {
+    WorkbenchScope.Rule selected = selectedScopeRule();
     refreshingScope = true;
     try {
       scopeModel.setRowCount(0);
@@ -1194,8 +1235,41 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     } finally {
       refreshingScope = false;
     }
+    if (selected != null) selectScopeRule(selected);
+    refreshScopeEditor();
     if (scopeListButton != null)
       scopeListButton.setText("SCOPE 목록 (" + scopeModel.getRowCount() + ")");
+  }
+
+  private WorkbenchScope.Rule selectedScopeRule() {
+    if (scopeTable.getSelectedRowCount() != 1) return null;
+    int index = scopeTable.convertRowIndexToModel(scopeTable.getSelectedRow());
+    // Read the displayed identity: local rules can have changed before the UI refresh.
+    if (index < 0 || index >= scopeModel.getRowCount()) return null;
+    String url = Objects.toString(scopeModel.getValueAt(index, 2), "");
+    String type = Objects.toString(scopeModel.getValueAt(index, 1), "");
+    return localScope.rules().stream().filter(r -> r.url().equals(url)
+        && (r.burpKey() != null ? "Burp Scope" : r.originOnly() ? "도메인 전체" : "URL 경로").equals(type))
+        .findFirst().orElse(null);
+  }
+
+  private void selectScopeRule(WorkbenchScope.Rule rule) {
+    int index = localScope.rules().indexOf(rule);
+    if (index < 0) return;
+    int view = scopeTable.convertRowIndexToView(index);
+    if (view >= 0) {
+      scopeTable.setRowSelectionInterval(view, view);
+      scopeTable.scrollRectToVisible(scopeTable.getCellRect(view, 2, true));
+    }
+  }
+
+  private void refreshScopeEditor() {
+    if (scopeEditButton == null) return;
+    WorkbenchScope.Rule selected = selectedScopeRule();
+    boolean editable = selected != null && selected.burpKey() == null;
+    scopeEditButton.setEnabled(editable);
+    if (editable && !selected.equals(scopeEditingRule)) scopeUrlInput.setText(selected.url());
+    scopeEditingRule = editable ? selected : null;
   }
 
   private void addSelectedScope(boolean originOnly) {
@@ -1221,7 +1295,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     refreshScopeList();
     if (current != null && logTable.getSelectedRow() >= 0) showTraffic(logTable.getSelectedRow());
     if (jsAnalysis != null) jsAnalysis.rescanHistory();
-    status.setText("Workbench SCOPE " + localScope.rules().size() + "개 · 체크된 범위만 도구에 적용");
+    refreshTrafficInfo();
+    status.setText("Workbench SCOPE " + localScope.rules().size() + "개 · 체크된 범위를 SCOPE 수집·도구에 적용");
   }
 
   private JPanel authPanel() {

@@ -27,9 +27,11 @@ def main():
     p.add_argument('--check',action='store_true',help='Fail if visible buttons clip or key work areas collapse')
     p.add_argument('--sizes',nargs='+',help='Default: 1024x720 1280x800 1440x920; guide-only: 760x480 560x300')
     p.add_argument('--guide-only',action='store_true',help='Check the production feature-guide dialog wrapper separately')
+    p.add_argument('--scope-only',action='store_true',help='Check the production Scope editor at default and minimum dialog sizes')
     p.add_argument('--themes',nargs='+',choices=['light','dark'],default=['light','dark'])
     args=p.parse_args()
-    if args.sizes is None:args.sizes=['760x480','560x300'] if args.guide_only else ['1024x720','1280x800','1440x920']
+    if args.guide_only and args.scope_only:p.error('Choose one dialog mode')
+    if args.sizes is None:args.sizes=['760x480','560x300'] if args.guide_only or args.scope_only else ['1024x720','1280x800','1440x920']
     version=runpy.run_path(str(WB/'release_info.py'))['VERSION']
     jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version}.jar').resolve()
     if not jar.is_file():raise SystemExit(f'Missing release JAR: {jar}. Run python dev.py test first.')
@@ -46,7 +48,7 @@ def main():
     for theme in args.themes:
         for size in args.sizes:
             w,h=size.split('x');out=args.out/theme/size
-            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else []),check=True)
+            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else []),check=True)
             with (out/'controls.csv').open() as source:
                 all_rows.extend(csv.DictReader(source))
             with (out/'content.csv').open() as source:
@@ -73,6 +75,7 @@ def main():
         ('bounty-3.png','preview.evidence.repro'):70,
     }
     if args.guide_only:required={}
+    if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
     gate_failures=[]
     for theme in args.themes:
         for size in args.sizes:

@@ -1,0 +1,194 @@
+{
+  "date": "2026-10-16",
+  "timezone": "Asia/Seoul",
+  "version": "0.30.0",
+  "mapperVersion": "0.3.0",
+  "baseCommit": "414bcf17dbf7da94c2131af577a81e2e9b12e2cf",
+  "result": "passed",
+  "release": {
+    "version": "0.30.0",
+    "groups": {
+      "BuildInfoTest": 3,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 51,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 27,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 41,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95,
+      "FolderNavigationTest": 40,
+      "DiagnosticsWorkflowTest": 28,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 49,
+    "regressionChecks": 1579,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 101,
+    "bountyHttpChecks": 266,
+    "totalChecks": 2078,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "scopeChecks": {
+    "TrafficScopeTest": 32,
+    "TrafficScopeModesTest": 54
+  },
+  "nativeEditorChecks": {
+    "PacketUiTest": 27,
+    "AppearanceWorkflowTest": 22
+  },
+  "mapper": {
+    "javaChecks": 89,
+    "nodeChecks": 7,
+    "result": "passed"
+  },
+  "ui": {
+    "workbench": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.30.0.jar",
+      "releaseJarSha256": "0b4a9794cd8c21d60c46794c99efc32fd4e0b8ec7ea7d4970e65ec60d1b8f078",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 150,
+      "controlsMeasured": 1710,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 2694,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guides": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.30.0.jar",
+      "releaseJarSha256": "0b4a9794cd8c21d60c46794c99efc32fd4e0b8ec7ea7d4970e65ec60d1b8f078",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "scope": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.30.0.jar",
+      "releaseJarSha256": "0b4a9794cd8c21d60c46794c99efc32fd4e0b8ec7ea7d4970e65ec60d1b8f078",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 4,
+      "controlsMeasured": 24,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "scope-list.png:wb.traffic.scope.table": 60
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    }
+  },
+  "totalRenderedViews": 202,
+  "packaging": {
+    "checks": 4,
+    "verify": "passed",
+    "workbenchSourceInputs": 170,
+    "artifacts": {
+      "burp-workbench-kr-0.30.0.jar": "0b4a9794cd8c21d60c46794c99efc32fd4e0b8ec7ea7d4970e65ec60d1b8f078",
+      "burp-workbench-kr-0.30.0-source.zip": "aa1f20eed5c73bd00157cb23be8a4c1503128c29820394795e8360b3dbe587fd"
+    }
+  },
+  "remoteChecks": "Final commit workflow results are recorded in the associated PR, separate from these local results.",
+  "limits": {
+    "nativeBurpGui": false,
+    "osDpi": false,
+    "method": "Production Swing/API adapters, original request/response object binding, isolated loopback HTTP fixtures. Packet screenshots explicitly use an API adapter, not native Burp syntax highlighting.",
+    "manualNativeExclusions": "Manual rules honor enabled native exclusions when target.scope export provides them; without configuration export manual scope is independent."
+  },
+  "qaIterations": [
+    "The first scope dialog layout gate found insufficient table height at 560x300; reduced the repeated note and verified the final table and all controls.",
+    "Updated the prior >=30px traffic row assertion to the requested 24px Gothic spacing; final complete release passed."
+  ]
+}

@@ -21,11 +21,20 @@ final class BurpScopeConfig {
         }
     }
     static List<Entry> parse(String json) {
+        return parseRows(json, "include");
+    }
+    static List<Entry> exclusions(String json) {
+        return parseRows(json, "exclude");
+    }
+    private static List<Entry> parseRows(String json, String listName) {
         if(json==null||json.isBlank())return List.of();
         Object value=MinerJson.parse(json);
         if(!(value instanceof Map<?,?> root)||!(root.get("target") instanceof Map<?,?> target)
-            ||!(target.get("scope") instanceof Map<?,?> scope)||!(scope.get("include") instanceof List<?> rows))
+            ||!(target.get("scope") instanceof Map<?,?> scope))
             throw new IllegalArgumentException("Burp Target Scope 설정 형식 확인 실패");
+        Object configuredRows=scope.get(listName);
+        if(configuredRows==null&&listName.equals("exclude"))return List.of();
+        if(!(configuredRows instanceof List<?> rows))throw new IllegalArgumentException("Burp Target Scope 목록 형식 확인 실패");
         boolean advanced=Boolean.TRUE.equals(scope.get("advanced_mode"));
         List<Entry> entries=new ArrayList<>();
         for(Object valueRow:rows) {

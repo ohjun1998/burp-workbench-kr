@@ -31,6 +31,12 @@ public final class AppearanceWorkflowTest extends WorkbenchTest {
             "reference layout shows full-width history above both packet panes");
         check(UiLayoutTest.named(root,"wb.traffic.title")==null,"traffic title stays compact after initial host registration");
         check(WorkbenchUi.font().canDisplayUpTo("요청·응답 목록 / 입력값 보안 검사")<0,"bundled sans font supports Korean captions");
+        JTable history=(JTable)getUnchecked(ext,"logTable");
+        check(history.getRowHeight()==24&&history.getFont().getSize()==13,"traffic uses compact 24px rows and 13px Gothic font");
+        Component cell=history.getDefaultRenderer(String.class).getTableCellRendererComponent(history,"GET",false,false,0,1);
+        check(cell.getFont().getSize()==13&&cell.getFont().getFamily().equals(WorkbenchUi.font().getFamily()),"traffic cells retain bundled Gothic rather than host replacement font");
+        check(36*10/history.getRowHeight()==15,"same 360px list area shows fifteen rows instead of ten");
+        history.setRowHeight(48);history.setFont(new Font(Font.SERIF,Font.PLAIN,18));
         Dimension stable = mode.getPreferredSize();
         for(String expected:new String[]{"OFF","SCOPE"}) {
           mode.setSize(stable);
@@ -54,6 +60,8 @@ public final class AppearanceWorkflowTest extends WorkbenchTest {
         check(tree.getCellRenderer()==renderer&&tree.getRowHeight()==40,"custom folders and spacing recover after host renderer and UI replacement");
         check(!(tree.getCellRenderer() instanceof DefaultTreeCellRenderer),"host gray folder renderer is removed after re-theming");
         check(UiLayoutTest.named(root,"wb.traffic.title")==null,"removed traffic heading does not return after look-and-feel reset");
+        JTable history=(JTable)getUnchecked(ext,"logTable");
+        check(history.getRowHeight()==24&&history.getFont().getSize()==13,"compact row spacing and font recover after host UI replacement");
         check(((JTextArea)getUnchecked(ext,"codecIn")).getText().equals("UNCHANGED_HOST_THEME_INPUT"),"re-theming preserves user work");
         mode.setSize(mode.getPreferredSize());var image=new BufferedImage(mode.getWidth(),mode.getHeight(),BufferedImage.TYPE_INT_RGB);
         var g=image.createGraphics();mode.paint(g);g.dispose();

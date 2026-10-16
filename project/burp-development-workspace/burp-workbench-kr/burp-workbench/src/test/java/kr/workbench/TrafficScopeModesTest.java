@@ -66,6 +66,10 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
         void click(String name)throws Exception {edt(()->((JButton)UiLayoutTest.named((JPanel)unchecked(ext,"scopeContent"),name)).doClick(0));}
         @Override public void close()throws Exception {unload.get().extensionUnloaded();edt(()->{});}
     }
+    static String excludedConfig(String prefix){return MetadataExport.json(Map.of("target",Map.of("scope",Map.of("advanced_mode",false,"include",List.of(Map.of("enabled",true,"prefix","https://burp.test/api/")),"exclude",List.of(Map.of("enabled",true,"prefix",prefix))))));}
+    static void select(Fixture f,String url)throws Exception {
+        edt(()->{for(int row=0;row<f.table().getRowCount();row++)if(url.equals(f.table().getValueAt(row,2))){f.table().setRowSelectionInterval(row,row);return;}throw new AssertionError("missing scope "+url);});
+    }
     static Object unchecked(Object o,String field){try{return get(o,field);}catch(Exception e){throw new RuntimeException(e);}}
     public static void main(String[] args)throws Exception {
         try(Fixture f=new Fixture()) {
@@ -89,10 +93,6 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
             String saved=f.scope().save();MontoyaApi reloadApi=proxy(MontoyaApi.class,(p,m,a)->m.invoke(f.api,a));WorkbenchScope restored=WorkbenchScope.install(reloadApi);restored.syncBurp(f.json.get());
             check(restored.rules().size()==1&&!restored.enabled(restored.rules().get(0)),"checkbox and deleted native entry persist across reload");WorkbenchScope.release(reloadApi);
             f.scope().load(saved);f.scope().syncBurp(f.json.get());
-            edt(()->((JTextField)UiLayoutTest.named((JPanel)unchecked(f.ext,"scopeContent"),"wb.traffic.scope.url")).setText("https://manual.test/api?secret=hidden"));f.click("wb.traffic.scope.add");
-            f.send("https://manual.test/api/child");f.send("https://manual.test/apievil");check(f.queued()==2&&!f.scope().save().contains("hidden"),"Workbench manual rules cannot authorize traffic collection and strip query values");
-            f.scope().add("https://burp.test/",true);f.send("https://burp.test/api/overlap");check(f.queued()==2,"manual overlap cannot bypass an unchecked native row");
-            f.bring("https://outside.test/manual");f.bring("https://manual.test/api/child");check(f.rows()==0,"SCOPE manual import rejects native outsiders and local-only rules");
             f.click("wb.traffic.scope.clear");check(f.table().getRowCount()==0,"bulk delete removes unchecked and checked rules");
             f.changed(f.json.get());f.send("https://new.test/a");check(f.table().getRowCount()==0&&f.queued()==2,"bulk delete suppresses native entries and empty SCOPE captures nothing");
             f.changed(config());f.changed(config("https://new.test/"));check(f.table().getRowCount()==1,"removing then re-adding native Scope restores it as a new checked entry");
@@ -101,6 +101,45 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
             f.json.set(config());f.send("https://new.test/stale");check(f.queued()==0&&f.rows()==3,"native removal rejects stale local rows immediately before notification");
             edt(()->f.mode().doClick(0));f.send("https://outside.test/new");f.send("https://new.test/new");check(f.queued()==0&&f.rows()==3&&f.mode().getText().equals("OFF"),"second click completes OFF SCOPE OFF cycle without discarding retained traffic");
             check(f.mutations.get()==0,"Workbench Scope edits never mutate global Burp Scope");
+        }
+        try(Fixture f=new Fixture()) {
+            JTextField input=(JTextField)unchecked(f.ext,"scopeUrlInput");
+            JButton edit=(JButton)unchecked(f.ext,"scopeEditButton");
+            check(!edit.isEnabled(),"URL edit disabled without one manual selection");
+            edt(()->input.setText("https://manual.test/api?secret=hidden"));f.click("wb.traffic.scope.add");
+            f.send("https://manual.test/api/child");f.bring("https://manual.test/api/child");
+            check(f.queued()==0&&f.rows()==0,"adding manual scope leaves OFF capture and import blocked");
+            check(!f.scope().save().contains("hidden"),"manual scope strips query secrets");
+            edt(()->f.mode().doClick(0));
+            f.send("https://manual.test/api/child");f.send("https://manual.test/apievil");f.send("https://manual.test.evil/api");
+            check(f.queued()==1,"URL added in production Scope UI immediately authorizes only its path and descendants");
+            select(f,"https://manual.test/api");
+            check(edit.isEnabled()&&input.getText().equals("https://manual.test/api"),"selecting manual URL loads the editor");
+            edt(()->f.table().setValueAt(false,f.table().getSelectedRow(),0));
+            f.send("https://manual.test/api/unchecked");check(f.queued()==1,"unchecking manual scope immediately stops capture");
+            edt(()->{f.table().getRowSorter().toggleSortOrder(2);f.table().getRowSorter().toggleSortOrder(2);});
+            select(f,"https://manual.test/api");edt(()->input.setText("https://edited.test/v2?token=hidden"));
+            f.changed(config("https://burp.test/api/","https://new.test/"));
+            check(input.getText().equals("https://edited.test/v2?token=hidden"),"native notifications preserve an in-progress manual edit");
+            f.click("wb.traffic.scope.edit");
+            var updated=f.scope().rules().stream().filter(r->r.url().equals("https://edited.test/v2")).findFirst().orElseThrow();
+            check(!f.scope().enabled(updated)&&f.table().getValueAt(f.table().getSelectedRow(),2).equals(updated.url()),"sorted URL edit preserves unchecked state and selection");
+            f.send("https://manual.test/api/old");f.send("https://edited.test/v2/disabled");check(f.queued()==1,"edited old URL revoked and new unchecked URL remains blocked");
+            edt(()->f.table().setValueAt(true,f.table().getSelectedRow(),0));
+            f.send("https://edited.test/v2/item");f.send("https://edited.test/v2evil");check(f.queued()==2,"enabling edited URL captures new descendants with path boundaries");
+            f.bring("https://outside.test/manual");check(f.rows()==0,"unregistered manual import stays blocked");
+            f.bring("https://edited.test/v2/manual");check(f.rows()==3,"manual scope authorizes History import through the same capture gate");
+            String saved=f.scope().save();WorkbenchScope copy=WorkbenchScope.install(proxy(MontoyaApi.class,(p,m,a)->def(m)));copy.load(saved);
+            check(copy.matchesTraffic("https://edited.test/v2/reloaded")&&!copy.matchesTraffic("https://manual.test/api/old")&&!saved.contains("hidden"),"edited URL and checkbox persist without query secrets");
+            select(f,"https://burp.test/api/");check(!edit.isEnabled(),"native Scope rows direct editing to Burp instead of changing global configuration");
+            edt(()->f.table().setRowSelectionInterval(0,1));check(!edit.isEnabled(),"multiple row selection disables URL edit");
+            f.changed(excludedConfig("https://edited.test/v2/private"));
+            f.send("https://edited.test/v2/private/item");check(f.queued()==0&&f.rows()==3,"manual URLs respect enabled exclusions exported from native Burp Scope");
+            f.send("https://edited.test/v2/public");check(f.queued()==1,"native exclusion does not block other paths in manual scope");
+            select(f,"https://edited.test/v2");edt(()->input.setText("https://edited.test/v3"));f.click("wb.traffic.scope.edit");
+            f.send("https://edited.test/v2/revoked");f.send("https://edited.test/v3/new");
+            check(f.queued()==2&&f.scope().enabled(f.scope().rules().stream().filter(r->r.url().equals("https://edited.test/v3")).findFirst().orElseThrow()),"editing an enabled URL atomically revokes old capture and enables its replacement");
+            check(f.mutations.get()==0,"manual scope registration and edit never mutate global Burp Scope");
         }
         try(Fixture f=new Fixture(true)) {
             check(f.scope().rules().isEmpty(),"missing native Scope export is supported without inventing unobserved URLs");
@@ -118,6 +157,8 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
             check(f.queued()==2,"native removal and re-addition can register a fresh fallback prefix");
             f.send("https://burp.test/api/excluded");f.send("https://outside.test/a");
             check(f.queued()==2,"fallback still enforces native exclusions and rejects outside traffic");
+            f.scope().add("https://manual-fallback.test/api",false);f.send("https://manual-fallback.test/api/child");
+            check(f.queued()==3,"manual Scope capture also works when Burp cannot export Scope settings");
         }
         var advanced=BurpScopeConfig.parse("{\"target\":{\"scope\":{\"advanced_mode\":true,\"include\":[{\"enabled\":true,\"protocol\":\"https\",\"host\":\"^api[.]test$\",\"port\":\"^8443$\",\"file\":\"^/v1/\"}]}}}");
         check(advanced.get(0).matches("https://api.test:8443/v1/items")&&!advanced.get(0).matches("https://api.test/v1/items")&&!advanced.get(0).matches("https://api.test.evil:8443/v1/items"),"advanced native constraints retain host port and path matching");

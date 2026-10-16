@@ -41,7 +41,17 @@ public final class UiLayoutPreview extends WorkbenchTest {
     static String csv(String value){return "\""+value.replace("\"","\"\"")+"\"";}
     static void inspect(Container root, java.awt.Component c, String view){
         if(!c.isVisible())return;
-        if(c instanceof JTabbedPane tabs) {
+        if(c instanceof javax.swing.JTree tree && "wb.navigation.tree".equals(c.getName())) {
+            for(int row=0;row<tree.getRowCount();row++) {
+                var path=tree.getPathForRow(row);
+                var local=tree.getRowBounds(row);
+                if(path==null||local==null)continue;
+                var rect=javax.swing.SwingUtilities.convertRectangle(tree,local,root);
+                var clipped=visible(root,tree,rect);
+                textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("folder-menu"),csv(path.getLastPathComponent().toString()),"true",""+rect.width,""+clipped.width,""+rect.height,""+clipped.contains(rect),""+(clipped.width>=rect.width)));
+            }
+        }
+        if(c instanceof JTabbedPane tabs && !"wb.navigation.pages".equals(c.getName())) {
             for(int i=0;i<tabs.getTabCount();i++) {
                 var local=tabs.getBoundsAt(i);if(local==null)continue;
                 var rect=javax.swing.SwingUtilities.convertRectangle(tabs,local,root);
@@ -273,6 +283,16 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 WorkbenchUi.packetLayout(root,true);
                 render(root,out.resolve("js-horizontal.png"),1440,920);
                 WorkbenchUi.packetLayout(root,false);
+                tabs.setSelectedIndex(0);
+                var menu=(javax.swing.JButton)UiLayoutTest.named(root,"wb.navigation.toggle");
+                var navigation=(javax.swing.JSplitPane)UiLayoutTest.named(root,"wb.navigation.split");
+                menu.doClick();
+                render(root,out.resolve("navigation-hidden.png"),1440,920);
+                menu.doClick();
+                navigation.setDividerLocation(285);
+                render(root,out.resolve("navigation-wide.png"),1440,920);
+                menu.doClick();menu.doClick();
+                render(root,out.resolve("navigation-restored.png"),1440,920);
                 root.removeNotify();
             } catch(Exception e) { throw new RuntimeException(e); }
         });

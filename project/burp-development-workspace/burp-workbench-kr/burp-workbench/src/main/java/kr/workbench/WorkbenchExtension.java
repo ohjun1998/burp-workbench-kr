@@ -216,7 +216,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private BountySupportPanel bountySupport;
   private JLabel selectionInfo = new JLabel("요청을 선택하세요");
   private JLabel status = new JLabel("준비됨"), stats = new JLabel();
-  private JTextField filter = new JTextField(24);
+  private JTextField filter = new WorkbenchSkin.SearchField(24);
   private JTextArea codecIn = area("", 10),
       codecOut = area("", 10),
       jwtIn = area("", 5),
@@ -328,6 +328,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (commonSettingsWindow != null) commonSettingsWindow.dispose();
                     if (scopeWindow != null) scopeWindow.dispose();
                     if (timer != null) timer.stop();
+                    if (root != null) root.putClientProperty("wb.skin.closed", true);
                     if (structuredCompare != null) structuredCompare.clearSources();
                     if (responseRecon != null) responseRecon.close();
                     if (jsAnalysis != null) jsAnalysis.close();
@@ -519,6 +520,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     WorkbenchUi.style(root);
     navigation.restoreLayout();
     api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB, root);
+    WorkbenchSkin.install(root, navigation::restoreLayout);
     // A listener exception can leave Swing Timer coalescing latched and stop all future ticks.
     timer = new javax.swing.Timer(300, e -> captureStage("목록 갱신", this::drain));
     timer.start();
@@ -751,6 +753,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               refreshTrafficInfo();
             });
     captureButton.setName("wb.traffic.capture.mode");
+    captureButton.putClientProperty("wb.capture", true);
     captureButton.setToolTipText(
         "클릭: ON → OFF → SCOPE → ON · ON 전체 수집 / OFF 수집 중지 / SCOPE 체크된 URL만 수집");
     logTable =
@@ -890,15 +893,25 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             });
     scopeListButton = button("SCOPE 목록", this::showScopeList);
     scopeListButton.setName("wb.traffic.scope.list");
-    JPanel controls =
-        row(
-            new JLabel("트래픽 수집"),
-            captureButton,
-            new JLabel("검색"),
-            filter,
-            scopeListButton,
-            captureInfo);
-    JPanel top = controls;
+    JLabel title = new JLabel("요청·응답 목록");
+    title.putClientProperty("wb.font.size", 25);
+    title.putClientProperty("wb.font.heading", true);
+    title.setName("wb.traffic.title");
+    JLabel breadcrumb = new JLabel("트래픽  /  요청·응답 목록");
+    breadcrumb.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
+    JPanel heading = new JPanel(new BorderLayout(12, 6));
+    heading.add(title, BorderLayout.CENTER);
+    heading.add(captureButton, BorderLayout.EAST);
+    heading.add(breadcrumb, BorderLayout.SOUTH);
+    JPanel search = new JPanel(new BorderLayout(10, 0));
+    search.add(new JLabel("검색"), BorderLayout.WEST);
+    search.add(filter, BorderLayout.CENTER);
+    search.add(scopeListButton, BorderLayout.EAST);
+    JPanel top = new JPanel(new BorderLayout(0, 12));
+    top.setBorder(BorderFactory.createEmptyBorder(2, 0, 10, 0));
+    top.add(heading, BorderLayout.NORTH);
+    top.add(search, BorderLayout.CENTER);
+    top.add(captureInfo, BorderLayout.SOUTH);
     JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
         res = WorkbenchUi.card("응답  RESPONSE", responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
@@ -911,6 +924,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficListPanel(), messages, .30);
     body.setName("wb.traffic.workspace");
     JPanel main = page(top, body);
+    main.setBorder(BorderFactory.createEmptyBorder(16, 16, 12, 16));
     main.setName("wb.traffic");
     refreshTrafficInfo();
     return main;
@@ -964,7 +978,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private void refreshTrafficInfo() {
     if (logTable == null) return;
     CaptureMode mode = captureMode.get();
-    if (captureButton != null) captureButton.setText(mode.name());
+    if (captureButton != null) {
+      captureButton.setText(mode.name());
+      captureButton.getAccessibleContext().setAccessibleDescription(switch (mode) {
+        case ON -> "초록 · 전체 트래픽 수집 중";
+        case OFF -> "빨강 · 트래픽 수집 중지";
+        case SCOPE -> "주황 · 체크된 SCOPE만 수집";
+      });
+      captureButton.repaint();
+    }
     captureInfo.setText(
         "보관 "
             + traffic.size()

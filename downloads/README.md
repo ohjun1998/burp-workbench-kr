@@ -6,13 +6,13 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| Burp 확장 JAR | 0.27.1 | [burp-workbench-kr-0.27.1.jar](extensions/0.27.1/burp-workbench-kr-0.27.1.jar) |
-| 확장 소스·빌드 의존성 | 0.27.1 | [burp-workbench-kr-0.27.1-source.zip](extensions/0.27.1/burp-workbench-kr-0.27.1-source.zip) |
+| Burp 확장 JAR | 0.28.0 | [burp-workbench-kr-0.28.0.jar](extensions/0.28.0/burp-workbench-kr-0.28.0.jar) |
+| 확장 소스·빌드 의존성 | 0.28.0 | [burp-workbench-kr-0.28.0-source.zip](extensions/0.28.0/burp-workbench-kr-0.28.0-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.5.2 | [community-security-lab-3.5.2-docker.zip](docker/3.5.2/community-security-lab-3.5.2-docker.zip) |
 | Feature Mapper JAR·브라우저 도우미·소스 | 0.2.0 | [다운로드](feature-mapper/0.2.0/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
-[0.27.1 폴더 아이콘·선택 강조](../docs/RELEASE_0.27.1_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.27.1.json)
+[0.28.0 전체 화면 디자인·상태등](../docs/RELEASE_0.28.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.28.0.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
@@ -26,6 +26,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
+| 이전 확장 · 폴더 아이콘·선택 강조 | 0.27.1 | [JAR](extensions/0.27.1/burp-workbench-kr-0.27.1.jar) · [소스](extensions/0.27.1/burp-workbench-kr-0.27.1-source.zip) |
 | 이전 확장 · 왼쪽 폴더 메뉴 | 0.27.0 | [JAR](extensions/0.27.0/burp-workbench-kr-0.27.0.jar) · [소스](extensions/0.27.0/burp-workbench-kr-0.27.0-source.zip) |
 | 이전 확장 · Windows 동시 I/O 보완 | 0.26.1 | [JAR](extensions/0.26.1/burp-workbench-kr-0.26.1.jar) · [소스](extensions/0.26.1/burp-workbench-kr-0.26.1-source.zip) |
 | Windows 동시 I/O 보완 전 | 0.26.0 | [JAR](extensions/0.26.0/burp-workbench-kr-0.26.0.jar) · [소스](extensions/0.26.0/burp-workbench-kr-0.26.0-source.zip) |
@@ -49,4 +50,4 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 별도 기능 매핑 확장: [Feature Mapper KR 설치와 다운로드](../feature-mapper/README_KR.md). Workbench JAR에 포함되지 않습니다.
 
 
-최신 확장은 0.27.1이며 주황색 폴더 아이콘과 선택 행 배경색·강조선을 적용했습니다. 기존 10개 도구를 폭 조절·숨기기가 가능한 왼쪽 폴더 메뉴로 표시합니다. 새 메뉴 사용법과 실제 Swing 화면은 [0.27.1 안내](../docs/RELEASE_0.27.1_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
+최신 확장은 0.28.0이며 주황색 폴더 아이콘과 선택 행 배경색·강조선을 적용했습니다. 기존 10개 도구를 폭 조절·숨기기가 가능한 왼쪽 폴더 메뉴로 표시합니다. 새 메뉴 사용법과 실제 Swing 화면은 [0.28.0 안내](../docs/RELEASE_0.28.0_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.

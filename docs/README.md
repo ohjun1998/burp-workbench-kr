@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.28.0 시안 기반 전체 화면·수집 상태등·테마 복원](RELEASE_0.28.0_KR.md) · [검증 기록](VERIFICATION_0.28.0.json)
+
 - [0.27.1 폴더 아이콘·선택 강조·실제 화면](RELEASE_0.27.1_KR.md) · [검증 기록](VERIFICATION_0.27.1.json)
 
 - [0.27.0 왼쪽 폴더 메뉴·사용법·실제 화면](RELEASE_0.27.0_KR.md) · [검증 기록](VERIFICATION_0.27.0.json)

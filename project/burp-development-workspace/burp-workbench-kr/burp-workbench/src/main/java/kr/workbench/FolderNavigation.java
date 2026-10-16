@@ -20,6 +20,7 @@ final class FolderNavigation extends JPanel {
   private final JTabbedPane pages;
   private final Map<String, DefaultMutableTreeNode> tools = new LinkedHashMap<>();
   private final JTree tree;
+  private final TreeCellRenderer renderer = new NavigationRenderer();
   private final JScrollPane sidebar;
   private final JSplitPane split;
   private final JButton toggle = new JButton();
@@ -72,12 +73,12 @@ final class FolderNavigation extends JPanel {
     tree.setName("wb.navigation.tree");
     tree.setRootVisible(false);
     tree.setShowsRootHandles(true);
-    tree.setRowHeight(36);
+    tree.setRowHeight(40);
     tree.setToggleClickCount(1);
     tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     tree.getAccessibleContext().setAccessibleName("기능 폴더 목록");
     tree.setToolTipText("폴더를 펼쳐 기능 선택 · 방향키로 이동 · 선택만으로 검사를 실행하지 않습니다.");
-    tree.setCellRenderer(new NavigationRenderer());
+    tree.setCellRenderer(renderer);
     /* Renderer labels stay transparent so the selected background spans the whole row. */
     for (int row = 0; row < tree.getRowCount(); row++) tree.expandRow(row);
     tree.addTreeSelectionListener(event -> {
@@ -234,6 +235,7 @@ final class FolderNavigation extends JPanel {
   }
 
   private final class NavigationRenderer extends JLabel implements TreeCellRenderer {
+    @Override public void updateUI() { setUI(new javax.swing.plaf.basic.BasicLabelUI()); }
     NavigationRenderer() {
       setOpaque(false);
       setIconTextGap(8);
@@ -246,7 +248,7 @@ final class FolderNavigation extends JPanel {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       boolean toolNode = node.getUserObject() instanceof Tool;
       setText(node.toString());
-      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, 14f));
+      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, 15f));
       Icon icon = new NavigationIcon(toolNode ? IconKind.PAGE : expanded ? IconKind.OPEN_FOLDER : IconKind.FOLDER);
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
@@ -350,7 +352,18 @@ final class FolderNavigation extends JPanel {
     tree.repaint();
   }
 
+  void restoreAppearance() {
+    if (tree.getUI().getClass().getEnclosingClass() != NavigationTree.class) tree.updateUI();
+    tree.setCellRenderer(renderer);
+    tree.setRowHeight(40);
+    tree.setOpaque(false);
+    tree.setFont(WorkbenchUi.font().deriveFont(15f));
+    tree.setBackground(WorkbenchUi.surface());
+    tree.treeDidChange();
+  }
+
   void restoreLayout() {
+    restoreAppearance();
     tree.setBackground(WorkbenchUi.surface());
     sidebar.setVisible(!hidden);
     split.setDividerSize(hidden ? 0 : 7);

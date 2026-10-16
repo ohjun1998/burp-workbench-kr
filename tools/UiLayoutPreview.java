@@ -94,7 +94,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         }
         if(c instanceof JsAnalysisTotals.Lamp label){
             var rect=SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);var clipped=visible(root,c,rect);
-            int required=label.getFontMetrics(WorkbenchUi.font().deriveFont(12f)).stringWidth(label.getText())+41;
+            int required=label.getPreferredSize().width;
             textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("aggregate"),csv(label.getText()),"true",""+required,""+rect.width,""+rect.height,""+clipped.contains(rect),""+(rect.width>=required&&rect.height>=30)));
         }
         boolean control=c instanceof javax.swing.AbstractButton b&&b.getText()!=null&&!b.getText().isBlank()||c instanceof javax.swing.JTextField||c instanceof javax.swing.JComboBox;

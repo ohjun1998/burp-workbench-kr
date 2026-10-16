@@ -87,10 +87,12 @@ public final class JsRepeaterWorkflowTest {
       edt(()->{
         panel.setSize(1260,780);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
         var toolbar=(JPanel)UiLayoutTest.named(panel,"wb.js.toolbar");
-        Component[] buttons=toolbar.getComponents();
-        verify(buttons[0]==panel.passive&&buttons[1].getName().equals("wb.target.settings")&&buttons[2]==panel.analysisList,"analysis, target settings and analysis list keep the approved order");
-        verify(buttons[3]==panel.analysisDetails&&buttons[4].getName().equals("wb.js.actions.separator")&&buttons[5]==panel.resolve,"analysis details follows the list before the small divider and URL method actions");
-        verify(panel.resolve.getY()+panel.resolve.getHeight()<=toolbar.getHeight()&&panel.passive.getWidth()>60,"actions wrap visibly alongside aggregate counters at 1280-pixel workspace");
+        var primary=(JPanel)UiLayoutTest.named(toolbar,"wb.js.toolbar.primary");
+        var secondary=(JPanel)UiLayoutTest.named(toolbar,"wb.js.toolbar.secondary");
+        Component[] buttons=primary.getComponents();
+        verify(buttons[0]==panel.passive&&buttons[1].getName().equals("wb.target.settings")&&buttons[3]==panel.analysisList.getParent(),"analysis, target settings and grouped analysis windows keep the approved order");
+        verify(panel.analysisList.getParent()==panel.analysisDetails.getParent()&&secondary.getComponent(0)==panel.resolve&&panel.resolve.getText().equals("요청 설정"),"analysis windows stay grouped above the shortened request settings and tools");
+        verify(secondary.getY()>=primary.getY()+primary.getHeight()+8&&panel.passive.getWidth()>60,"separate action rows remain visible with a breathing gap alongside aggregate counters");
         verify(panel.progress.getFont().getSize()==11&&panel.progress.getHorizontalAlignment()==SwingConstants.RIGHT&&!panel.progress.isOpaque(),"analysis counters are small, unboxed and right aligned");
         verify(!Boolean.TRUE.equals(panel.status.getClientProperty("wb.status")),"analysis messages no longer occupy a large colored footer");
         verify(panel.resultTabs.previous.isVisible()&&panel.resultTabs.next.isVisible(),"both tab-scroll arrows remain present");

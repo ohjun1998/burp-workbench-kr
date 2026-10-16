@@ -22,8 +22,8 @@ public final class JsDetailsWorkflowTest {
   });var panel=ref.get();JsAnalysisPanelTest.waitDone(panel);
   edt(()->{
    panel.analysisDetails.doClick(0);JsAnalysisDetails detail=windows.get(1);
-   var toolbar=(JPanel)UiLayoutTest.named(panel,"wb.js.toolbar");Component[] actions=toolbar.getComponents();
-   verify(actions[2]==panel.analysisList&&actions[3]==panel.analysisDetails,"analysis details sits directly right of analysis list");
+   var group=(JPanel)UiLayoutTest.named(panel,"wb.js.analysis.group");Component[] actions=group.getComponents();
+   verify(actions[0]==panel.analysisList&&actions[1]==panel.analysisDetails,"analysis details sits directly right of analysis list");
    verify(panel.results.getTabCount()==7&&java.util.stream.IntStream.range(0,7).noneMatch(i->panel.results.getTitleAt(i).equals("분석 상세")),"main results no longer contain the old details tab");
    verify(((JLabel)UiLayoutTest.named(detail,"wb.js.details.count.api")).getText().equals("2"),"API summary card matches the selected analysis");
    verify(((JLabel)UiLayoutTest.named(detail,"wb.js.details.count.secret")).getText().equals(Integer.toString(detail.snapshot.secrets().size()))&&detail.snapshot.secrets().size()>0,"token summary counts masked candidates");

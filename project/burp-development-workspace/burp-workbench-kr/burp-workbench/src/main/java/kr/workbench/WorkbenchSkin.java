@@ -74,10 +74,15 @@ final class WorkbenchSkin {
           if (button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
           if (button.getModel().isPressed()) fill = WorkbenchUi.selected();
         }
-        g.setColor(fill);
-        g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
-        g.setColor(button.hasFocus() ? WorkbenchUi.accent() : WorkbenchUi.line());
-        g.drawRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
+        boolean segment=Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"));
+        if(!segment||button.getModel().isRollover()||button.getModel().isPressed()) {
+          g.setColor(fill);
+          g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
+        }
+        if(!segment||button.hasFocus()) {
+          g.setColor(button.hasFocus() ? WorkbenchUi.accent() : WorkbenchUi.line());
+          g.drawRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
+        }
         super.paint(g, component);
       }
       g.dispose();

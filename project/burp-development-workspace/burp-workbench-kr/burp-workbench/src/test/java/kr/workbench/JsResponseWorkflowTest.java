@@ -55,7 +55,7 @@ public final class JsResponseWorkflowTest {
       for(String removed:List.of("수동 분석","선택 응답 가져오기","수집 파일 저장","선택 URL → Repeater","최근 분석"))verify(!contains(panel,removed),"removed inline action: "+removed);
       verify(!SwingUtilities.isDescendingFrom(panel.historyTable,panel)&&!SwingUtilities.isDescendingFrom(panel.sources,panel),"analysis history and recent source picker are outside the main layout");
       verify(!SwingUtilities.isDescendingFrom(panel.requestPacket,panel)&&!SwingUtilities.isDescendingFrom(panel.responsePacket,panel),"main workspace reserves its area for source and results rather than packets");
-      verify(UiLayoutTest.named(panel,"wb.js.findings")!=null&&panel.results.getTabCount()==8,"all eight result tabs remain available without a History tab");
+      verify(UiLayoutTest.named(panel,"wb.js.findings")!=null&&panel.results.getTabCount()==7,"seven finding tabs remain while analysis details open separately");
       verify(panel.historyTable.getAutoResizeMode()==JTable.AUTO_RESIZE_OFF&&panel.historyTable.getColumnModel().getColumn(0).getPreferredWidth()>=380,"analysis list preserves enough source URL width and allows horizontal scrolling");
       verify(!panel.input.isEditable(),"source is a read-only navigation view after manual analysis is removed");
       verify(panel.passive.getText().equals("분석 ON")&&panel.passive.getBackground().getGreen()>panel.passive.getBackground().getRed(),"analysis ON is a green toggle");

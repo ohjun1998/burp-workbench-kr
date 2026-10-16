@@ -11,10 +11,14 @@ public final class JsAnalysis {
  public static final int SOURCE_LIMIT=512*1024, RESULT_LIMIT=500;
  public record Endpoint(String url,String method,String kind,String parameters,String headers,String bodyKeys,int line,int start,int length,boolean complete,String evidence){}
  public record Secret(String rule,String masked,int length,String fingerprint,int line,int start,int sourceLength,String confidence){}
- public record Result(List<Endpoint> endpoints,List<Secret> secrets,String status,boolean truncated,JsMiner.Result miner){
+ public record Result(List<Endpoint> endpoints,List<Secret> secrets,String status,boolean truncated,JsMiner.Result miner,Map<String,JsRequestDraft.Draft> requestDrafts){
+ public Result(List<Endpoint> e,List<Secret> s,String state,boolean t,JsMiner.Result m){this(e,s,state,t,m,Map.of());}
  public Result(List<Endpoint> e,List<Secret> s,String state,boolean t){this(e,s,state,t,new JsMiner.Result(List.of(),List.of(),List.of(),List.of(),List.of(),""));}
+ @Override public String toString(){return "Result[endpoints="+endpoints+", secrets="+secrets+", status="+status+", truncated="+truncated+", miner="+miner+"]";}
  }
  private record Value(String text,boolean complete){}
+ private final Map<String,JsRequestDraft.Draft> requestDrafts=new LinkedHashMap<>();
+ static String draftKey(Endpoint e){return e.start()+"|"+e.method()+"|"+e.url();}
  private record Segment(String text,int offset){}
  private record Rule(String name,Pattern pattern){}
  private static final List<Rule> RULES=List.of(
@@ -47,7 +51,7 @@ public final class JsAnalysis {
   if(compatible>0)state+=" · async/module 구문 호환 보조 "+compatible;if(errors>0)state+=" · AST 실패 "+errors+" (지원 문법 밖/오류; 패턴 탐지만 보조)";if(bounded)state+=" · 입력/시간/결과 제한으로 일부 분석";
   JsMiner.Result miner=JsMiner.analyze(source,base);
   if(recoveryDepth==0)for(var recovered:miner.recovered()){if(System.nanoTime()>deadline){bounded=true;break;}JsAnalysis child=new JsAnalysis(recovered.content(),base);child.recoveryDepth=1;Result result=child.run();miner=JsMiner.mergeRecon(miner,result.miner());for(Endpoint e:result.endpoints())if(urls.size()<RESULT_LIMIT)urls.add(new Endpoint(e.url,e.method,"source map: "+recovered.name(),e.parameters,e.headers,e.bodyKeys,e.line,-1,0,e.complete,e.evidence));for(Secret secret:result.secrets())if(secrets.size()<RESULT_LIMIT&&secretKeys.add(secret.rule+":"+secret.fingerprint))secrets.add(new Secret(secret.rule,secret.masked,secret.length,secret.fingerprint,secret.line,-1,0,"source map: "+recovered.name()+" · "+secret.confidence));}
-  return new Result(List.copyOf(urls),List.copyOf(secrets),state.replaceAll("URL/API \\d+","URL/API "+urls.size()).replaceAll("시크릿 후보 \\d+","시크릿 후보 "+secrets.size())+" · 도메인 "+miner.domains().size()+" · map "+miner.maps().size()+" · 원본 "+miner.recovered().size(),bounded,miner);
+  return new Result(List.copyOf(urls),List.copyOf(secrets),state.replaceAll("URL/API \\d+","URL/API "+urls.size()).replaceAll("시크릿 후보 \\d+","시크릿 후보 "+secrets.size())+" · 도메인 "+miner.domains().size()+" · map "+miner.maps().size()+" · 원본 "+miner.recovered().size(),bounded,miner,Map.copyOf(requestDrafts));
  }
  private void dataValue(TextCandidates.Value item,String format){
   String value=item.text().strip();if(value.isEmpty()||value.length()>16384)return;
@@ -68,7 +72,7 @@ public final class JsAnalysis {
    FunctionNode wrapper=call.getTarget() instanceof Name name?function(name):null;if(wrapper!=null&&wrapper(wrapper)&&!args.isEmpty()){ObjectLiteral options=args.size()>1?object(args.get(1)):null;endpoint(args.get(0),method(options,"GET"),"fetch 래퍼 "+target,options,"body");}
    if(Set.of("fetch","window.fetch","globalThis.fetch","Request","window.Request").contains(target)&&!args.isEmpty()){ObjectLiteral options=args.size()>1?object(args.get(1)):null;endpoint(args.get(0),method(options,"GET"),target.endsWith("Request")?"Request":"fetch",options,"body");}
    else if(target.equals("axios")&&!args.isEmpty()){ObjectLiteral options=object(args.get(0));if(options!=null&&property(options,"url")!=null)endpoint(property(options,"url"),method(options,"GET"),"axios config",options,"data");else endpoint(args.get(0),"GET","axios",args.size()>1?object(args.get(1)):null,"data");}
-   else if(target.matches("axios\\.(get|post|put|patch|delete|head|options|request)")&&!args.isEmpty()){String verb=target.substring(6);if(verb.equals("request")){ObjectLiteral o=object(args.get(0));if(o!=null&&property(o,"url")!=null)endpoint(property(o,"url"),method(o,"GET"),"axios.request",o,"data");}else {ObjectLiteral options=args.size()>1?object(args.get(args.size()-1)):null;ObjectLiteral body=Set.of("post","put","patch").contains(verb)&&args.size()>1?object(args.get(1)):null;endpoint(args.get(0),verb.toUpperCase(Locale.ROOT),"axios."+verb,options,"data",body);}}
+   else if(target.matches("axios\\.(get|post|put|patch|delete|head|options|request)")&&!args.isEmpty()){String verb=target.substring(6);if(verb.equals("request")){ObjectLiteral o=object(args.get(0));if(o!=null&&property(o,"url")!=null)endpoint(property(o,"url"),method(o,"GET"),"axios.request",o,"data");}else {boolean hasBody=Set.of("post","put","patch").contains(verb);ObjectLiteral options=hasBody?(args.size()>2?object(args.get(2)):null):(args.size()>1?object(args.get(1)):null);AstNode body=hasBody&&args.size()>1?args.get(1):null;endpoint(args.get(0),verb.toUpperCase(Locale.ROOT),"axios."+verb,options,"data",body);}}
    else if(target.endsWith(".open")&&!target.equals("window.open")&&args.size()>1){Value verb=value(args.get(0),0);if(verb!=null&&verb.complete&&verb.text.matches("(?i)GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS"))endpoint(args.get(1),verb.text.toUpperCase(Locale.ROOT),"XHR-like open",null,"body");}
    else if(Set.of("WebSocket","window.WebSocket","EventSource","window.EventSource","window.open","location.assign","location.replace","window.location.assign","window.location.replace").contains(target)&&!args.isEmpty())endpoint(args.get(0),target.contains("WebSocket")?"UPGRADE":"GET",target,null,"body");
   }
@@ -80,7 +84,15 @@ public final class JsAnalysis {
  }
  private FunctionNode function(Name name){VariableInitializer b=binding(name);if(b!=null&&b.getInitializer() instanceof FunctionNode f)return f;for(Scope scope=name.getEnclosingScope();scope!=null;scope=scope.getEnclosingScope()){Map<String,FunctionNode> map=functions.get(scope);if(map!=null&&map.containsKey(name.getIdentifier()))return map.get(name.getIdentifier());if(scope instanceof FunctionNode fn&&fn.getParams().stream().anyMatch(p->p instanceof Name param&&param.getIdentifier().equals(name.getIdentifier())))return null;}return null;}
  private boolean wrapper(FunctionNode fn){if(fn.getParams().isEmpty()||!(fn.getParams().get(0) instanceof Name first))return false;boolean[] found={false};fn.getBody().visit(n->{budget();if(n instanceof FunctionNode)return false;if(n instanceof FunctionCall c&&Set.of("fetch","window.fetch","globalThis.fetch").contains(callee(c.getTarget()))&&!c.getArguments().isEmpty()&&c.getArguments().get(0) instanceof Name x&&x.getIdentifier().equals(first.getIdentifier()))found[0]=true;return true;});return found[0];}
- private ObjectLiteral object(AstNode n){if(n instanceof ObjectLiteral o)return o;if(n instanceof Name name){VariableInitializer v=binding(name);if(v!=null&&v.getInitializer() instanceof ObjectLiteral o)return o;}return null;}
+ private ObjectLiteral object(AstNode n){return object(n,0);}
+ private ObjectLiteral object(AstNode n,int depth){
+  if(n==null||depth>8)return null;
+  if(n instanceof ObjectLiteral o)return o;
+  if(n instanceof ParenthesizedExpression p)return object(p.getExpression(),depth+1);
+  if(n instanceof FunctionCall c&&callee(c.getTarget()).equals("JSON.stringify")&&!c.getArguments().isEmpty())return object(c.getArguments().get(0),depth+1);
+  if(n instanceof Name name){VariableInitializer v=binding(name);if(v!=null)return object(v.getInitializer(),depth+1);}
+  return null;
+ }
  private VariableInitializer binding(Name n){for(Scope scope=n.getEnclosingScope();scope!=null;scope=scope.getEnclosingScope()){Map<String,VariableInitializer> map=bindings.get(scope);if(map!=null&&map.containsKey(n.getIdentifier())){VariableInitializer v=map.get(n.getIdentifier());return v!=null&&v.getAbsolutePosition()<n.getAbsolutePosition()?v:null;}if(scope instanceof FunctionNode fn&&fn.getParams().stream().anyMatch(p->p instanceof Name param&&param.getIdentifier().equals(n.getIdentifier())))return null;}return null;}
  private AstNode property(ObjectLiteral o,String key){if(o==null)return null;for(AbstractObjectProperty prop:o.getElements())if(prop instanceof ObjectProperty p&&key(p.getKey()).equals(key))return p.getValue();return null;}
  private String keys(ObjectLiteral o){if(o==null)return "";List<String> keys=new ArrayList<>();for(AbstractObjectProperty prop:o.getElements())if(prop instanceof ObjectProperty p&&keys.size()<32)keys.add(key(p.getKey()));return String.join(", ",keys);}
@@ -95,13 +107,85 @@ public final class JsAnalysis {
   return null;
  }
  private void endpoint(AstNode node,String method,String kind,ObjectLiteral options,String body){endpoint(node,method,kind,options,body,null);}
- private void endpoint(AstNode node,String method,String kind,ObjectLiteral options,String body,ObjectLiteral directBody){Value v=value(node,0);if(v==null||v.text.length()>8192||!v.text.matches("(?s)(?:https?://|wss?://|/|\\./|\\.\\./).*"))return;
+ private void endpoint(AstNode node,String method,String kind,ObjectLiteral options,String body,AstNode directBody){Value v=value(node,0);if(v==null||v.text.length()>8192||!v.text.matches("(?s)(?:https?://|wss?://|/|\\./|\\.\\./).*"))return;
   Value baseValue=value(property(options,"baseURL"),0);String text=v.text;if(baseValue!=null&&baseValue.complete&&text.startsWith("/")&&!text.startsWith("//"))text=baseValue.text.replaceAll("/+$","")+text;
   String parameters="";int q=text.indexOf('?');if(q>=0){String query=text.substring(q+1).split("#",2)[0];List<String> names=new ArrayList<>();for(String pair:query.split("&"))if(names.size()<32)names.add(pair.split("=",2)[0].replaceAll("[^A-Za-z0-9_.%\\[\\]-]",""));parameters=String.join(", ",names);text=text.substring(0,q);}text=text.split("#",2)[0];
   boolean complete=v.complete;try{if(!base.isBlank())text=URI.create(base).resolve(text.replace("{dynamic}","DYNAMIC_VALUE")).toString().replace("DYNAMIC_VALUE","{dynamic}");URI u=URI.create(text.replace("{dynamic}","DYNAMIC_VALUE"));if(u.getUserInfo()!=null)text=u.getScheme()+"://"+u.getRawAuthority().substring(u.getRawAuthority().lastIndexOf('@')+1)+(u.getRawPath()==null?"":u.getRawPath());}catch(Exception ex){complete=false;}
   if(text.isEmpty()||urls.size()>=RESULT_LIMIT){bounded|=urls.size()>=RESULT_LIMIT;return;}String paramKeys=keys(object(property(options,"params")));if(!paramKeys.isEmpty())parameters=parameters.isEmpty()?paramKeys:parameters+", "+paramKeys;
-  String dedup=text+"|"+method+"|"+(offset+node.getAbsolutePosition());if(!urlKeys.add(dedup))return;int pos=Math.max(0,offset+node.getAbsolutePosition());urls.add(new Endpoint(text,method,kind,parameters,keys(object(property(options,"headers"))),keys(directBody==null?object(property(options,body)):directBody),line(pos),pos,node.getLength(),complete,"구문 맥락 추정 · URL 쿼리 값 제외"));
+  String dedup=text+"|"+method+"|"+(offset+node.getAbsolutePosition());if(!urlKeys.add(dedup))return;int pos=Math.max(0,offset+node.getAbsolutePosition());urls.add(new Endpoint(text,method,kind,parameters,keys(object(property(options,"headers"))),keys(object(directBody==null?property(options,body):directBody)),line(pos),pos,node.getLength(),complete,"구문 맥락 추정 · URL 쿼리 값 제외"));
+  Endpoint added=urls.get(urls.size()-1);prepareDraft(added,v.text,options,directBody==null?property(options,body):directBody);
  }
+ // These drafts stay in the bounded source cache, separate from masked reports and exports.
+ private void prepareDraft(Endpoint endpoint,String original,ObjectLiteral options,AstNode bodyNode){
+  try{
+   JsRequestDraft.Draft fallback=JsRequestDraft.preview(endpoint);
+   String baseUrl=fallback.url().split("\\?",2)[0];List<String> query=new ArrayList<>();
+   int question=original.indexOf('?');
+   if(question>=0)for(String pair:original.substring(question+1).split("#",2)[0].split("&")){
+    if(pair.isBlank()||query.size()>=64)continue;String[] bits=pair.split("=",2);
+    String name=java.net.URLDecoder.decode(bits[0],StandardCharsets.UTF_8);
+    String value=bits.length<2?"":java.net.URLDecoder.decode(bits[1],StandardCharsets.UTF_8);
+    addQuery(query,name,sensitive(name)||value.contains("{dynamic}")?"REPLACE_ME":value);
+   }
+   ObjectLiteral params=object(property(options,"params"));
+   if(params!=null)for(AbstractObjectProperty item:params.getElements())if(item instanceof ObjectProperty p){
+    String name=key(p.getKey());Object value=sensitive(name)?"REPLACE_ME":literal(p.getValue(),0,new int[]{0});
+    addQuery(query,name,value==null||value instanceof Map||value instanceof List?"REPLACE_ME":String.valueOf(value));
+   }
+   String contentType="application/json";ObjectLiteral headers=object(property(options,"headers"));
+   if(headers!=null)for(AbstractObjectProperty item:headers.getElements())if(item instanceof ObjectProperty p&&key(p.getKey()).equalsIgnoreCase("Content-Type")){
+    Value type=value(p.getValue(),0);if(type!=null&&type.complete)contentType=type.text;
+   }
+   if(!contentType.matches("[A-Za-z0-9.+-]+/[A-Za-z0-9.+-]+(?:;[ A-Za-z0-9=._-]*)?"))contentType="application/octet-stream";
+   String body="";bodyNode=constantNode(bodyNode,0);
+   if(bodyNode!=null){
+    String type=contentType.split(";",2)[0].strip().toLowerCase(Locale.ROOT);
+    boolean stringify=bodyNode instanceof FunctionCall call&&callee(call.getTarget()).equals("JSON.stringify");
+    Object value=literal(stringify?((FunctionCall)bodyNode).getArguments().isEmpty()?null:((FunctionCall)bodyNode).getArguments().get(0):bodyNode,0,new int[]{0});
+    if((endpoint.kind().equals("fetch")||endpoint.kind().equals("Request"))&&!stringify&&bodyNode instanceof ObjectLiteral)body="REPLACE_BODY";
+    else if(type.equals("application/json")||type.endsWith("+json")){
+     if(!stringify&&value instanceof String string&&!string.equals("REPLACE_ME"))try{value=maskFields(MinerJson.parse(string));}catch(Exception ignored){value="REPLACE_ME";}
+     body=MetadataExport.json(value);
+    }else if(type.equals("application/x-www-form-urlencoded")&&value instanceof Map<?,?> fields){
+     List<String> pairs=new ArrayList<>();for(var item:fields.entrySet())addQuery(pairs,item.getKey().toString(),item.getValue()==null||item.getValue() instanceof Map||item.getValue() instanceof List?"REPLACE_ME":String.valueOf(item.getValue()));body=String.join("&",pairs);
+    }else if(value instanceof String string&&List.of("text/plain","application/x-www-form-urlencoded","application/xml","text/xml").contains(type))body=string;
+    else body="REPLACE_BODY";
+    if(body.length()>16384)body="REPLACE_BODY";
+   }
+   requestDrafts.put(draftKey(endpoint),new JsRequestDraft.Draft(baseUrl+(query.isEmpty()?"":"?"+String.join("&",query)),fallback.method(),body,contentType));
+  }catch(IllegalArgumentException ignored){/* An unsupported URL still remains visible as a finding. */}
+ }
+ private AstNode constantNode(AstNode node,int depth){
+  if(depth>8)return node;
+  if(node instanceof ParenthesizedExpression p)return constantNode(p.getExpression(),depth+1);
+  if(node instanceof Name name){VariableInitializer v=binding(name);if(v!=null)return constantNode(v.getInitializer(),depth+1);}
+  return node;
+ }
+ private static boolean sensitive(String key){return key.matches("(?i).*(?:token|secret|password|authorization|cookie|credential|session|api.?key).*");}
+ private static void addQuery(List<String> query,String name,String value){if(!name.isBlank()&&name.length()<=128&&query.size()<64)query.add(java.net.URLEncoder.encode(name,StandardCharsets.UTF_8)+"="+java.net.URLEncoder.encode(value,StandardCharsets.UTF_8));}
+ private Object literal(AstNode node,int depth,int[] count){
+  budget();if(node==null||depth>8||++count[0]>256)return "REPLACE_ME";
+  if(node instanceof ParenthesizedExpression expression)return literal(expression.getExpression(),depth+1,count);
+  if(node instanceof Name name){VariableInitializer variable=binding(name);return variable==null?"REPLACE_ME":literal(variable.getInitializer(),depth+1,count);}
+  if(node instanceof StringLiteral string)return string.getValue().length()>16384?"REPLACE_ME":string.getValue();
+  if(node instanceof NumberLiteral number)try{return MinerJson.parse(number.getValue());}catch(Exception ignored){return "REPLACE_ME";}
+  if(node instanceof KeywordLiteral keyword)return switch(keyword.getType()){case Token.TRUE->true;case Token.FALSE->false;case Token.NULL->null;default->"REPLACE_ME";};
+  if(node instanceof UnaryExpression unary&&unary.getOperator()==Token.NEG&&unary.getOperand() instanceof NumberLiteral number)try{return MinerJson.parse("-"+number.getValue());}catch(Exception ignored){return "REPLACE_ME";}
+  if(node instanceof ObjectLiteral object){
+   Map<String,Object> result=new LinkedHashMap<>();for(AbstractObjectProperty item:object.getElements()){
+    if(!(item instanceof ObjectProperty p)||result.size()>=64||p.isGetterMethod()||p.isSetterMethod()||p.isNormalMethod())return "REPLACE_ME";
+    String key=key(p.getKey());if(key.equals("[동적 키]"))return "REPLACE_ME";
+    result.put(key,sensitive(key)?"REPLACE_ME":literal(p.getValue(),depth+1,count));
+   }return result;
+  }
+  if(node instanceof ArrayLiteral array){List<Object> values=new ArrayList<>();for(AstNode item:array.getElements()){if(values.size()>=64)return "REPLACE_ME";values.add(literal(item,depth+1,count));}return values;}
+  Value constant=value(node,0);return constant!=null&&constant.complete&&constant.text.length()<=16384?constant.text:"REPLACE_ME";
+ }
+ private static Object maskFields(Object value){
+  if(value instanceof Map<?,?> map){Map<String,Object> result=new LinkedHashMap<>();for(var item:map.entrySet())result.put(item.getKey().toString(),sensitive(item.getKey().toString())?"REPLACE_ME":maskFields(item.getValue()));return result;}
+  if(value instanceof List<?> list)return list.stream().map(JsAnalysis::maskFields).toList();return value;
+ }
+
  private void secretContext(String key,Value v,AstNode n){if(v==null||!v.complete||n==null||!key.matches("(?i).*(?:api[_-]?key|secret|token|password|authorization|private[_-]?key).*")||v.text.length()<8||v.text.length()>16384)return;if(v.text.matches("(?i).*(?:example|placeholder|your[_ -]|changeme|undefined|process\\.env|\\{dynamic\\}).*"))return;for(Rule r:RULES)if(r.pattern.matcher(v.text).find())return;
   double entropy=entropy(v.text);if(entropy<3.0||v.text.matches("(?i)^(?:https?://|/).*"))return;addSecret("시크릿 이름: "+key.replaceAll("[^A-Za-z0-9_.$-]",""),v.text,offset+n.getAbsolutePosition(),n.getLength(),"이름·엔트로피 추정 · 공개 설정값/오탐 가능");}
  public static double entropy(String text){Map<Character,Integer> f=new HashMap<>();for(char c:text.toCharArray())f.merge(c,1,Integer::sum);double e=0;for(int n:f.values()){double p=(double)n/text.length();e-=p*Math.log(p)/Math.log(2);}return e;}

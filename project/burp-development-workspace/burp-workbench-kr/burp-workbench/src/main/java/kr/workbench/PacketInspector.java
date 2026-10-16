@@ -25,6 +25,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   };
   final List<JToggleButton> tabs = new ArrayList<>();
   final javax.swing.Timer debounce;
+  final javax.swing.Timer syntaxDebounce;
   private final JPanel toolbar = new JPanel(new BorderLayout()), searchBar = new JPanel(new BorderLayout(4, 0));
   private final JScrollPane scroll;
   private final Lines lines;
@@ -40,6 +41,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private int current = -1;
   private Object currentHighlight;
   private Runnable nativeAction;
+  Runnable editedAction;
   private boolean truncated;
   private final boolean editable;
   private boolean rendering;
@@ -103,6 +105,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     previous.setToolTipText("이전 검색 결과 · 처음에서 마지막으로 이동");next.setToolTipText("다음 검색 결과 · 마지막에서 처음으로 이동");
     clear.setToolTipText("검색 비우기");caseSensitive.setToolTipText("대소문자 구분");regex.setToolTipText("정규식 검색");
     debounce = new javax.swing.Timer(120, e -> beginSearch());debounce.setRepeats(false);
+    syntaxDebounce=new javax.swing.Timer(100,e->{if(!closed)colorize();});syntaxDebounce.setRepeats(false);
     search.getDocument().addDocumentListener(new DocumentListener() {
       public void insertUpdate(DocumentEvent e) { scheduleSearch(); }
       public void removeUpdate(DocumentEvent e) { scheduleSearch(); }
@@ -119,7 +122,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
       public void insertUpdate(DocumentEvent e) { changed(); }
       public void removeUpdate(DocumentEvent e) { changed(); }
       public void changedUpdate(DocumentEvent e) {}
-      private void changed() { if(!rendering)scheduleSearch(); }
+      private void changed() { if(!rendering){scheduleSearch();syntaxDebounce.restart();if(editedAction!=null)editedAction.run();} }
     });
     applyTheme();
   }
@@ -232,7 +235,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     SimpleAttributeSet normal=new SimpleAttributeSet();StyleConstants.setForeground(normal,WorkbenchUi.ink());
     StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,14);
     doc.setCharacterAttributes(0,doc.getLength(),normal,true);
-    if(mode!=Mode.PRETTY)return;
+    if(mode==Mode.HEX)return;
     Color blue=WorkbenchUi.dark()?new Color(161,188,239):new Color(47,80,149);
     Color green=WorkbenchUi.dark()?new Color(155,209,113):new Color(36,119,47);
     Color orange=WorkbenchUi.dark()?new Color(245,159,79):new Color(164,80,16);
@@ -318,7 +321,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   @Override public void close() {
-    if(closed)return;closed=true;generation.incrementAndGet();debounce.stop();if(pending!=null)pending.cancel(true);worker.shutdownNow();
+    if(closed)return;closed=true;generation.incrementAndGet();debounce.stop();syntaxDebounce.stop();editedAction=null;if(pending!=null)pending.cancel(true);worker.shutdownNow();
     rawBytes=new byte[0];raw="";pretty="";matches=List.of();current=-1;nativeAction=null;
     text.setText("");search.setText("");text.getHighlighter().removeAllHighlights();count.setText("0 / 0");
   }

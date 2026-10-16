@@ -67,7 +67,7 @@ final class MapperUi {
     if(c instanceof JButton b) {b.setUI(new ButtonUi());b.setOpaque(false);b.setContentAreaFilled(false);b.setRolloverEnabled(true);b.setBorder(BorderFactory.createEmptyBorder(7,12,7,12));}
     if(c instanceof JCheckBox b)b.setOpaque(false);
     if(c instanceof JTextField t){t.setBackground(surface());t.setCaretColor(ink());t.setSelectionColor(selected());t.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(line()),BorderFactory.createEmptyBorder(8,10,8,10)));}
-    if(c instanceof JTextArea t){t.setBackground(surface());t.setCaretColor(ink());t.setSelectionColor(selected());t.setMargin(new Insets(8,10,8,10));if(Boolean.TRUE.equals(t.getClientProperty("fm.packet")))t.setFont(new Font(Font.MONOSPACED,Font.PLAIN,14));}
+    if(c instanceof JTextArea t){t.setBackground(surface());t.setCaretColor(ink());t.setSelectionColor(selected());t.setMargin(new Insets(8,10,8,10));if(Boolean.TRUE.equals(t.getClientProperty("fm.packet"))){t.setFont(new Font(Font.MONOSPACED,Font.PLAIN,14));kr.packetui.PacketStyle.install(t);}}
     if(c instanceof JScrollPane p){p.setBorder(BorderFactory.createLineBorder(line()));p.getViewport().setBackground(surface());}
     if(c instanceof JComboBox<?> b){if(!(b.getUI() instanceof ComboUi))b.setUI(new ComboUi());b.setBackground(surface());b.setMaximumRowCount(16);}
     if(c instanceof JScrollBar b){if(!(b.getUI() instanceof ScrollUi))b.setUI(new ScrollUi());b.setUnitIncrement(18);}

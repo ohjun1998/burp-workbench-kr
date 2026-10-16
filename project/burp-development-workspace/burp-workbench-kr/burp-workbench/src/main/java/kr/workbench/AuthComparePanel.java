@@ -476,6 +476,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
 
   JTextArea text() {
     JTextArea a = new JTextArea();
+    a.putClientProperty("wb.packet.syntax",true);
     a.setEditable(false);
     a.setLineWrap(false);
     a.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));

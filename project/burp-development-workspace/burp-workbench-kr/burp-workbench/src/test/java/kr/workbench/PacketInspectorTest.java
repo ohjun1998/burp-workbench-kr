@@ -28,7 +28,9 @@ public final class PacketInspectorTest extends WorkbenchTest {
       edt(()->{p.setPacket(original,null);check(!p.text.isEditable()&&p.tabs.size()==3&&p.mode()==PacketInspector.Mode.PRETTY,"three read-only views start in Pretty");check(p.text.getText().contains("\n  \"userId\": 9007199254740993"),"Pretty indents JSON without rounding its integer");
         int key=p.text.getText().indexOf("userId"),value=p.text.getText().indexOf("demo");
         check(!StyleConstants.getForeground(p.text.getStyledDocument().getCharacterElement(key).getAttributes()).equals(StyleConstants.getForeground(p.text.getStyledDocument().getCharacterElement(value).getAttributes())),"Pretty paints JSON keys and string values differently");});
-      mode(p,1);edt(()->check(p.text.getText().equals(raw),"Raw preserves the original text and CRLF without formatting"));
+      mode(p,1);edt(()->{check(p.text.getText().equals(raw),"Raw preserves the original text and CRLF without formatting");
+        int key=p.text.getText().indexOf("\"userId\"");
+        check(!StyleConstants.getForeground(p.text.getStyledDocument().getCharacterElement(key).getAttributes()).equals(WorkbenchUi.ink()),"Raw applies packet syntax without changing wire text");});
       edt(()->p.text.getDocument().putProperty(javax.swing.text.DefaultEditorKit.EndOfLineStringProperty,"\r\n"));
       check(p.text.getText().equals(raw),"Windows editor-kit serialization cannot duplicate raw carriage returns");
       query(p,"userId");check(p.matches().size()==1&&p.matches().get(0).start()==raw.indexOf("userId"),"Windows search offsets use document text rather than OS-serialized line endings: count="+p.count.getText()+" spans="+p.matches()+" expected="+raw.indexOf("userId"));
@@ -83,7 +85,7 @@ public final class PacketInspectorTest extends WorkbenchTest {
       check(p.search.getText().equals("userId")&&p.matches().size()==1&&p.mode()==PacketInspector.Mode.RAW,"theme update preserves mode query and matches");
       edt(()->UIManager.put("Panel.background",old));
       edt(()->{p.search.setText("demo");p.close();});idle(p);
-      check(p.closed()&&p.text.getText().isEmpty()&&p.matches().isEmpty()&&p.previewBytes().length==0,"unload cancels work and clears retained preview and search content");
+      check(!p.syntaxDebounce.isRunning()&&p.closed()&&p.text.getText().isEmpty()&&p.matches().isEmpty()&&p.previewBytes().length==0,"unload cancels work and clears retained preview and search content");
       edt(()->p.setPacket(copy,null));check(p.text.getText().isEmpty(),"closed inspector ignores later packet updates");
     } finally {edt(()->{p.close();other.close();});}
     System.out.println("PacketInspectorTest: "+checks+" checks passed");

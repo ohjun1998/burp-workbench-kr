@@ -68,7 +68,7 @@ final class JsRepeater implements AutoCloseable {
     final ExecutorService worker=Executors.newSingleThreadExecutor(task->{Thread t=new Thread(task,"Workbench-JS-Repeater");t.setDaemon(true);return t;});
     volatile Future<?> pending;
     volatile boolean closed;
-    boolean busy;
+    boolean busy,loading;
     int index;
 
     record Entry(String target,byte[] request,byte[] response,int responseLength,String decoded,String status,boolean sent) {
@@ -98,14 +98,32 @@ final class JsRepeater implements AutoCloseable {
       request.setNativeAction(this::exportNative);
       request.more.setToolTipText("편집한 요청을 Burp Repeater에 복사 · 전송 없음");
       send.addActionListener(event->send());previous.addActionListener(event->navigate(-1));next.addActionListener(event->navigate(1));
+      KeyStroke shortcut=KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,InputEvent.CTRL_DOWN_MASK);
+      Action submit=new AbstractAction(){public void actionPerformed(ActionEvent event){send();}};
+      getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(shortcut,"wb.js.repeater.send");
+      getActionMap().put("wb.js.repeater.send",submit);
+      for(JComponent editor:new JComponent[]{request.text,response.text,request.search,response.search,target}){
+        editor.getInputMap(WHEN_FOCUSED).put(shortcut,"wb.js.repeater.send");editor.getActionMap().put("wb.js.repeater.send",submit);
+      }
+      send.setToolTipText("요청 전송 · Ctrl+Space");
+      request.editedAction=this::draftChanged;
+      target.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
+        public void insertUpdate(javax.swing.event.DocumentEvent e){draftChanged();}public void removeUpdate(javax.swing.event.DocumentEvent e){draftChanged();}public void changedUpdate(javax.swing.event.DocumentEvent e){}
+      });
       load(0);
     }
 
     void load(int row) {
-      index=row;Entry entry=entries.get(index);target.setText(entry.target());
+      loading=true;index=row;Entry entry=entries.get(index);target.setText(entry.target());
       request.setPacket(entry.request(),null);
       response.setPacket(entry.response(),entry.decoded(),entry.responseLength());result.setText(entry.status());
-      updateButtons();
+      loading=false;updateButtons();
+    }
+
+    private void draftChanged(){
+      if(closed||loading||busy)return;
+      response.setPacket(new byte[0],null);result.setText("편집됨 · 미전송");
+      note.setText("요청이 변경되었습니다. Send 또는 Ctrl+Space로 응답을 확인하세요.");
     }
 
     private void updateButtons() {
@@ -138,6 +156,11 @@ final class JsRepeater implements AutoCloseable {
           ||!(origin.getPath().isEmpty()||origin.getPath().equals("/")))
         throw new IllegalArgumentException("전송 대상에는 HTTP(S) Origin만 입력하세요.");
       String wire=new String(request.editedBytes(),StandardCharsets.UTF_8);
+      String checked=wire;
+      for(int pass=0;pass<2;pass++)try{String decoded=java.net.URLDecoder.decode(checked,StandardCharsets.UTF_8);if(decoded.equals(checked))break;checked=decoded;}catch(IllegalArgumentException ignored){break;}
+      checked=checked.replaceAll("(?i)\\\\u005[fF]","_");
+      if(java.util.regex.Pattern.compile("(?i)REPLACE_(?:ME|METHOD|PARAMETER|PARAM|PATH|BODY)\\b|\\{dynamic\\}").matcher(checked).find())
+        throw new IllegalArgumentException("미확정 메서드·경로·파라미터가 남아 있습니다. Raw에서 실제 값을 확인하세요.");
       int boundary=wire.indexOf("\r\n\r\n"),separator=4;
       if(boundary<0){boundary=wire.indexOf("\n\n");separator=2;}
       if(boundary<0)throw new IllegalArgumentException("요청 헤더와 본문 사이에 빈 줄이 필요합니다.");
@@ -168,7 +191,7 @@ final class JsRepeater implements AutoCloseable {
         String actualOrigin=target.getText().strip().replaceAll("/$","");
         URI requestUrl=URI.create(snapshot.url());
         String effective=actualOrigin+requestUrl.getRawPath()+(requestUrl.getRawQuery()==null?"":"?"+requestUrl.getRawQuery());
-        busy=true;result.setText("전송 중…");note.setText("응답 대기 중");updateButtons();
+        response.setPacket(new byte[0],null);busy=true;result.setText("전송 중…");note.setText("응답 대기 중");updateButtons();
         pending=worker.submit(()->{
           long start=System.nanoTime();
           try {
@@ -199,6 +222,7 @@ final class JsRepeater implements AutoCloseable {
       catch(Exception error){showError(error);}
     }
     private void showError(Exception error) {
+      response.setPacket(new byte[0],null);
       note.setText(error.getMessage()==null?"요청 처리를 완료하지 못했습니다.":error.getMessage());
       note.setToolTipText(note.getText());result.setText("확인 필요");
       Diagnostics.failure(this,"JS Repeater",error);

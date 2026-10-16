@@ -26,6 +26,12 @@ public final class JsRepeaterWorkflowTest {
   static void waitSend(JsRepeater.Session session)throws Exception {
     session.pending.get(8,TimeUnit.SECONDS);edt(()->{});
   }
+  static void shortcut(JsRepeater.Session s,JComponent focused){
+    var stroke=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SPACE,java.awt.event.InputEvent.CTRL_DOWN_MASK);
+    Object binding=focused.getInputMap(JComponent.WHEN_FOCUSED).get(stroke);
+    verify(binding!=null&&focused.getActionMap().get(binding)!=null,"Ctrl+Space overrides the focused editor binding");
+    focused.getActionMap().get(binding).actionPerformed(new java.awt.event.ActionEvent(focused,0,"shortcut"));
+  }
   static void factory(AtomicBoolean redirectsDisabled) {
     ObjectFactoryLocator.FACTORY=proxy(MontoyaObjectFactory.class,(p,m,a)->switch(m.getName()) {
       case "byteArray"->bytes((byte[])a[0]);
@@ -76,40 +82,42 @@ public final class JsRepeaterWorkflowTest {
       AtomicInteger windows=new AtomicInteger();
       edt(()->{
         panel.repeater.opener=(owner,title,body,modal,closed)->{verify(!modal&&title.startsWith("Repeater"),"Ctrl+R opens an independent modeless Repeater");windows.incrementAndGet();return null;};
-        panel.load("fetch('/api/users?lang=ko',{method:'POST',headers:{Authorization:'SOURCE_SECRET'},body:{name:'sample',role:userRole}});",origin+"/assets/app.js");
+        panel.load("fetch('/api/users?lang=ko',{method:'POST',headers:{Authorization:'SOURCE_SECRET'},body:JSON.stringify({name:'sample',role:userRole})});",origin+"/assets/app.js");
       });JsAnalysisPanelTest.waitDone(panel);
       edt(()->{
         panel.setSize(1260,780);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
         var toolbar=(JPanel)UiLayoutTest.named(panel,"wb.js.toolbar");
         Component[] buttons=toolbar.getComponents();
         verify(buttons[0]==panel.passive&&buttons[1].getName().equals("wb.target.settings")&&buttons[2]==panel.analysisList,"analysis, target settings and analysis list keep the approved order");
-        verify(buttons[3].getName().equals("wb.js.actions.separator")&&buttons[4]==panel.resolve,"small divider separates the list from URL and method actions");
-        verify(panel.passive.getY()==panel.resolve.getY()||Math.abs(panel.passive.getY()-panel.resolve.getY())<5,"main actions fit on one compact toolbar at 1280-pixel workspace");
+        verify(buttons[3]==panel.analysisDetails&&buttons[4].getName().equals("wb.js.actions.separator")&&buttons[5]==panel.resolve,"analysis details follows the list before the small divider and URL method actions");
+        verify(panel.resolve.getY()+panel.resolve.getHeight()<=toolbar.getHeight()&&panel.passive.getWidth()>60,"actions wrap visibly alongside aggregate counters at 1280-pixel workspace");
         verify(panel.progress.getFont().getSize()==11&&panel.progress.getHorizontalAlignment()==SwingConstants.RIGHT&&!panel.progress.isOpaque(),"analysis counters are small, unboxed and right aligned");
         verify(!Boolean.TRUE.equals(panel.status.getClientProperty("wb.status")),"analysis messages no longer occupy a large colored footer");
         verify(panel.resultTabs.previous.isVisible()&&panel.resultTabs.next.isVisible(),"both tab-scroll arrows remain present");
+        panel.setSize(1000,780);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
         panel.resultTabs.next.doClick(0);verify(panel.resultTabs.viewport.getViewPosition().x>0,"right arrow scrolls the result titles");
         panel.resultTabs.previous.doClick(0);verify(panel.resultTabs.viewport.getViewPosition().x==0,"left arrow returns to the first result titles");
-        panel.results.setSelectedIndex(7);
+        panel.results.setSelectedIndex(6);
       });edt(()->{});
       edt(()->{
-        Rectangle selected=panel.resultTabs.titles.get(7).getBounds();int x=panel.resultTabs.viewport.getViewPosition().x;
+        Rectangle selected=panel.resultTabs.titles.get(6).getBounds();int x=panel.resultTabs.viewport.getViewPosition().x;
         verify(selected.x>=x&&selected.x+selected.width<=x+panel.resultTabs.viewport.getWidth(),"programmatic and keyboard tab selection reveals the selected caption");
         panel.results.setSelectedIndex(0);panel.urlTable.setRowSelectionInterval(0,0);panel.prepareRepeater();
       });var session=panel.repeater.sessions.get(0);
       edt(()->{
         String draft=wire(session);
-        verify(draft.startsWith("POST /api/users?lang=REPLACE_ME HTTP/1.1"),"source URL and query names are combined into the selected request");
-        verify(draft.contains("\"name\":\"REPLACE_ME\"")&&draft.contains("\"role\":\"REPLACE_ME\""),"source body keys become JSON placeholders");
+        verify(draft.startsWith("POST /api/users?lang=ko HTTP/1.1"),"source URL and confirmed query values are combined into the selected request");
+        verify(draft.contains("\"name\":\"sample\"")&&draft.contains("\"role\":\"REPLACE_ME\""),"confirmed body values are retained while dynamic fields stay unresolved");
         verify(!draft.contains("SOURCE_SECRET")&&!draft.contains("Authorization:"),"source credentials are not silently copied into a generated request");
         verify(received.get()==0&&exported.get()==0&&windows.get()==1,"opening and selecting a draft submit no HTTP and create no native Repeater tab");
-        String edited=draft.replace("lang=REPLACE_ME","lang=ko").replace("\"name\":\"REPLACE_ME\"","\"name\":\"홍길동\"").replace("\"role\":\"REPLACE_ME\"","\"role\":\"viewer\"");
+        String edited=draft.replace("lang=REPLACE_ME","lang=ko").replace("\"name\":\"sample\"","\"name\":\"홍길동\"").replace("\"role\":\"REPLACE_ME\"","\"role\":\"viewer\"");
         session.request.text.setText(edited);
         session.request.tabs.get(0).doClick(0);verify(!session.request.text.isEditable(),"Pretty is a display-only view of the edited request");
         session.request.tabs.get(2).doClick(0);verify(!session.request.text.isEditable(),"Hex is display-only");
         session.request.tabs.get(1).doClick(0);
         verify(session.request.text.isEditable()&&wire(session).equals(edited),"Raw edits, Unicode and CRLF survive Pretty/Hex round trips");
-        session.send.doClick(0);
+        shortcut(session,session.request.text);
+        shortcut(session,session.response.search);
       });waitSend(session);
       edt(()->{
         verify(received.get()==1&&receivedQuery.get().equals("lang=ko"),"Send delivers the edited URL and query to an isolated loopback receiver");
@@ -118,7 +126,9 @@ public final class JsRepeaterWorkflowTest {
         verify(redirectsDisabled.get(),"Repeater submission explicitly disables automatic redirects");
         verify(session.response.text.getText().contains("\"request\": 1")&&session.result.getText().startsWith("200 ·"),"the real loopback response and measured status appear in the window");
         session.request.more.doClick(0);verify(exported.get()==1&&received.get()==1,"optional native Repeater copy preserves explicit send control");
-        session.request.text.setText(wire(session).replace("viewer","member"));session.send.doClick(0);
+        session.request.text.setText(wire(session).replace("viewer","member"));
+        verify(session.response.text.getText().isBlank()&&session.result.getText().contains("미전송"),"editing a sent request clears the displayed old response");
+        shortcut(session,session.target);
       });waitSend(session);
       edt(()->{
         verify(received.get()==2&&receivedBody.get().contains("member"),"a second Send uses the new body rather than stale initial parameters");
@@ -126,6 +136,13 @@ public final class JsRepeaterWorkflowTest {
         verify(wire(session).contains("viewer")&&session.response.text.getText().contains("\"request\": 1"),"history back restores the matching first request and response");
         session.next.doClick(0);
         verify(wire(session).contains("member")&&session.response.text.getText().contains("\"request\": 2"),"history forward restores the matching second pair");
+        String valid=wire(session);
+        for(String placeholder:List.of("REPLACE_ME","REPLACE_METHOD","REPLACE_PARAMETER","REPLACE_PARAM","REPLACE_PATH","REPLACE_BODY","REPLACE%5FPARAMETER","%2552EPLACE_ME","REPLACE\\u005fME","{dynamic}")){
+          session.request.text.setText(valid.replace("member",placeholder));
+          shortcut(session,session.request.text);
+          verify(received.get()==2&&session.note.getText().contains("미확정")&&session.response.text.getText().isBlank(),"unresolved marker blocks shortcut and cannot display stale response: "+placeholder);
+        }
+        session.request.text.setText(valid);
         inScope.set(false);session.send.doClick(0);
         verify(received.get()==2&&session.note.getText().contains("Scope"),"Scope removal blocks sending an already opened request");inScope.set(true);
         session.target.setText(origin+"/unexpected");session.send.doClick(0);

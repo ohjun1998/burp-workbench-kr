@@ -2,7 +2,7 @@ package kr.workbench;
 import java.net.*;import java.nio.charset.StandardCharsets;import java.util.*;
 import burp.api.montoya.http.message.requests.HttpRequest;
 
-/** A metadata-only request draft. Never sends requests or copies captured credentials. */
+/** An explicit request draft. Building a draft never sends it or copies captured credentials. */
 final class JsRequestDraft {
  record Draft(String url,String method,String body,String contentType) {
   Draft(String url,String method,String body){this(url,method,body,"application/json");}
@@ -28,6 +28,14 @@ final class JsRequestDraft {
   Map<String,Object> body=new LinkedHashMap<>();for(String name:names(e.bodyKeys()))body.put(name,"REPLACE_ME");
   String type=contentType.split(";",2)[0].strip().toLowerCase(Locale.ROOT);if(!body.isEmpty()&&!Set.of("application/json","application/x-www-form-urlencoded").contains(type))throw new IllegalArgumentException("본문 형식 "+type+" · 실제 트래픽을 Repeater로 가져오세요.");String encoded=MetadataExport.json(body);if(type.equals("application/x-www-form-urlencoded")){StringJoiner form=new StringJoiner("&");for(String name:body.keySet())form.add(URLEncoder.encode(name,StandardCharsets.UTF_8)+"=REPLACE_ME");encoded=form.toString();}
   return new Draft(base+(query.length()==0?"":"?"+query),method,body.isEmpty()?"":encoded,type);
+ }
+ static Draft confirm(JsAnalysis.Endpoint endpoint,String resolved,String method,Draft mapped){
+  var confirmed=new JsAnalysis.Endpoint(endpoint.url(),method,endpoint.kind(),endpoint.parameters(),endpoint.headers(),mapped==null?endpoint.bodyKeys():"",endpoint.line(),endpoint.start(),endpoint.length(),true,endpoint.evidence());
+  Draft safe=create(confirmed,resolved,mapped==null?"application/json":mapped.contentType());
+  URI url=URI.create(resolved.strip());
+  String target=url.getScheme()+"://"+url.getRawAuthority()+(url.getRawPath()==null||url.getRawPath().isEmpty()?"/":url.getRawPath());
+  String query=url.getRawQuery();
+  return new Draft(query==null?safe.url():target+"?"+query,method,mapped==null?safe.body():mapped.body(),mapped==null?safe.contentType():mapped.contentType());
  }
  static Set<String> names(String text){Set<String> out=new LinkedHashSet<>();for(String n:text.split(",\\s*")){if(!n.isBlank()&&n.length()<=128&&out.size()<64)out.add(n);}return out;}
 }

@@ -48,7 +48,9 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 if(path==null||local==null)continue;
                 var rect=javax.swing.SwingUtilities.convertRectangle(tree,local,root);
                 var clipped=visible(root,tree,rect);
-                textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("folder-menu"),csv(path.getLastPathComponent().toString()),"true",""+rect.width,""+clipped.width,""+rect.height,""+clipped.contains(rect),""+(clipped.width>=rect.width)));
+                var renderer=tree.getCellRenderer().getTreeCellRendererComponent(tree,path.getLastPathComponent(),tree.isRowSelected(row),tree.isExpanded(row),tree.getModel().isLeaf(path.getLastPathComponent()),row,false);
+                var preferred=renderer.getPreferredSize();
+                textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("folder-menu"),csv(path.getLastPathComponent().toString()),"true",""+rect.width,""+clipped.width,""+rect.height,""+clipped.contains(rect),""+(clipped.width>=preferred.width && rect.width>=preferred.width)));
             }
         }
         if(c instanceof JTabbedPane tabs && !"wb.navigation.pages".equals(c.getName())) {

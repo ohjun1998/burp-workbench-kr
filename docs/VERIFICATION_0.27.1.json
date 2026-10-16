@@ -1,0 +1,149 @@
+{
+  "dateKorea": "2026-10-16",
+  "version": "0.27.1",
+  "baseMain": "eec4f8d165d197c09b72eb39b8fa11138a28bd42",
+  "change": "Orange vector folder/page icons, full-row active-tool selection with accent bar, legible captions, hover and keyboard focus; existing navigation and work retained.",
+  "localRelease": {
+    "version": "0.27.1",
+    "groups": {
+      "BuildInfoTest": 3,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 51,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 24,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 22,
+      "TrafficScopeModesTest": 28,
+      "TrafficCaptureRecoveryTest": 41,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95,
+      "FolderNavigationTest": 40
+    },
+    "regressionGroups": 47,
+    "regressionChecks": 1490,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 100,
+    "bountyHttpChecks": 266,
+    "totalChecks": 1988,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "localSwing": {
+    "layout": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.27.1.jar",
+      "releaseJarSha256": "8686dde36aa3b36291e7a47abbd7a787bd813a456f37dfb87c0de02069c553eb",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 126,
+      "controlsMeasured": 1410,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 2460,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guidance": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.27.1.jar",
+      "releaseJarSha256": "8686dde36aa3b36291e7a47abbd7a787bd813a456f37dfb87c0de02069c553eb",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    }
+  },
+  "styleSpotChecks": {
+    "checks": 40,
+    "result": "passed",
+    "scope": "Production FolderNavigation with local dummy pages; blank-row tool selection/folder toggle, retained active fill and accent at 2x paint scale, complete renderer widths in both themes. Zero HTTP; scratch QA harness, not an additional CI test group."
+  },
+  "packaging": {
+    "invariantChecks": 4,
+    "result": "passed",
+    "artifactHashes": {
+      "burp-workbench-kr-0.27.1.jar": "8686dde36aa3b36291e7a47abbd7a787bd813a456f37dfb87c0de02069c553eb",
+      "burp-workbench-kr-0.27.1-source.zip": "54b423b8b585b63bd9d8068ed854f31ddc4ebf55d3b80e30428e7bbddf6a95aa"
+    }
+  },
+  "remoteVerification": {
+    "authoritativeSource": "PR Checks for account-a/0.27.1-folder-design",
+    "snapshotStatus": "Local verification completed before upload; remote outcome is recorded in PR metadata."
+  },
+  "limitations": [
+    "Headless production Swing with synthetic data; no native Burp GUI, OS DPI or physical mouse validation.",
+    "Earlier downloads and separate Mapper/lab source preserved."
+  ]
+}

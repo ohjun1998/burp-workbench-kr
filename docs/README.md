@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.27.0 왼쪽 폴더 메뉴·사용법·실제 화면](RELEASE_0.27.0_KR.md) · [검증 기록](VERIFICATION_0.27.0.json)
+
 - [0.25.4 변경 안내](RELEASE_0.25.4_KR.md) · [검증](VERIFICATION_0.25.4.json) · [인수인계](HANDOFF_0.25.4_KR.md)
 - [26쪽 사용 안내서](../downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)
 - [Feature Mapper KR](../feature-mapper/README_KR.md)
@@ -56,3 +58,4 @@
 | [0.21.0 개발 환경 원문](archive/DEVELOPMENT_SETUP_0.21.0_KR.md) | 당시 Burp·브라우저·환경 복원 기록 |
 
 `release/`는 이전 배포 원본, `history/`는 이전 문서·그림·PDF, `setup/`은 환경 복원 당시 기록, `reproduction/`은 재현 자료입니다. 여기에 적힌 “최신”이나 통과 수는 그 문서 작성 시점의 값입니다. 현재 버전의 실행 결과로 합산하지 않습니다.
+

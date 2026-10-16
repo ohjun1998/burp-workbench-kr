@@ -221,7 +221,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     analyze.setText("수동 분석");
     toRepeater.setText("선택 URL → Repeater");
     locate.setText("원본 위치");
-    sources.setPreferredSize(new Dimension(320, 30));
+    sources.setPreferredSize(new Dimension(180, 30));
     sources.setMinimumSize(new Dimension(150, 30));
     sources.setMaximumRowCount(12);
     sources.setName("wb.js.sources");

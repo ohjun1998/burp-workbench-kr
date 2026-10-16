@@ -161,6 +161,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private final JTextArea featureHelpText = new JTextArea(15, 55);
   private final JButton featureHelp = new JButton("기능 안내");
   private JTabbedPane tabs;
+  private FolderNavigation navigation;
   private JTabbedPane dataTabs;
   private LayoutSettings commonSettings;
   private JPanel commonSettingsContent;
@@ -178,6 +179,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         FeatureGuide.feature("payload").summary(),
         tabs.indexOfComponent(bountySupport));
     WorkbenchUi.packetLayout(page, commonSettings.choice.getSelectedIndex() == 1);
+    navigation.refreshSelection();
   }
 
   public void selectPayloadRunnerPage() {
@@ -419,7 +421,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     root = new JPanel(new BorderLayout());
     root.setName("wb.root");
     tabs =
-        new JTabbedPane() {
+        new FolderNavigation.Pages() {
           @Override
           public void setSelectedIndex(int index) {
             if (settingsActionReady
@@ -497,7 +499,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         };
     addPage("설정", "settings", settingsPanel(), false);
     settingsActionReady = true;
-    root.add(tabs);
+    navigation = new FolderNavigation(api, tabs, this::openSettings);
+    root.add(navigation);
     commonSettings.apply();
     JPanel footer = new JPanel(new BorderLayout(12, 0));
     footer.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
@@ -514,6 +517,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     WorkbenchUi.status(status);
     api.userInterface().applyThemeToComponent(root);
     WorkbenchUi.style(root);
+    navigation.restoreLayout();
     api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB, root);
     // A listener exception can leave Swing Timer coalescing latched and stop all future ticks.
     timer = new javax.swing.Timer(300, e -> captureStage("목록 갱신", this::drain));

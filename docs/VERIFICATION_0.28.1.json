@@ -1,0 +1,198 @@
+{
+  "dateKorea": "2026-10-16",
+  "version": "0.28.1",
+  "baseMain": "6067def32804ccc7f5a2f07e2929e73180181bed",
+  "change": "Only OFF/SCOPE, default OFF, capture and passive observation gated by checked native Burp Scope; layout proposal remains image only.",
+  "localChecks": {
+    "version": "0.28.1",
+    "groups": {
+      "BuildInfoTest": 3,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 51,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 24,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 22,
+      "TrafficScopeModesTest": 37,
+      "TrafficCaptureRecoveryTest": 41,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95,
+      "FolderNavigationTest": 40,
+      "AppearanceWorkflowTest": 18
+    },
+    "regressionGroups": 48,
+    "regressionChecks": 1517,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 101,
+    "bountyHttpChecks": 266,
+    "totalChecks": 2016,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "scopePolicyRegression": {
+    "checks": 37,
+    "result": "passed",
+    "includedInJavaTotal": true,
+    "method": "Production HTTP callbacks, History context-menu import, Scope events, fallback predicate and Swing controls via API adapter."
+  },
+  "appearanceRegression": {
+    "checks": 18,
+    "result": "passed",
+    "includedInJavaTotal": true
+  },
+  "localSwing": {
+    "layout": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.28.1.jar",
+      "releaseJarSha256": "0b6386cba11c46d5a9798c6ecc41502818b31c62e28d50365c76aa65f399f301",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 144,
+      "controlsMeasured": 1554,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 3012,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guidance": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.28.1.jar",
+      "releaseJarSha256": "0b6386cba11c46d5a9798c6ecc41502818b31c62e28d50365c76aa65f399f301",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    }
+  },
+  "packagingUnitTests": {
+    "checks": 4,
+    "result": "passed"
+  },
+  "localSoak": {
+    "host": "Montoya adapter; production callback, Swing timer and disk store",
+    "nativeBurp": false,
+    "nativeGuiClicks": false,
+    "os": "Linux",
+    "java": "17.0.20",
+    "mode": "soak",
+    "received": 321,
+    "drops": 0,
+    "processingErrors": 0,
+    "errorStages": [],
+    "acceptedResponses": 321,
+    "retainedRows": 321,
+    "diskBytes": 1381845,
+    "heapBeforeBytes": 1935488,
+    "heapAfterBytes": 11224352,
+    "elapsedSeconds": 16.079620865,
+    "requestedSeconds": 15,
+    "intervalMillis": 50,
+    "result": "passed",
+    "checks": 8,
+    "passedChecks": [
+      "collection exceeds the former 250-row limit",
+      "every accepted packet remains in disk and UI",
+      "all response callbacks complete with zero drops and processing errors",
+      "real Swing collection timer remains active",
+      "retained packet restores exact request and response bytes",
+      "retained packet restores exact request and response bytes",
+      "retained packet restores exact request and response bytes",
+      "unload deletes the active private traffic store"
+    ]
+  },
+  "layoutNotImplemented": {
+    "trafficPanelConstructionIdenticalToMainExceptCaptureInitialLabelAndTooltip": true,
+    "unchangedSourceSha256": {
+      "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/WorkbenchUi.java": "75f9cf46fcf92d5ce50304cf0f81c9a5e1b96bb4ba59d7975954360e4ba504e7",
+      "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/LayoutSettings.java": "410fd637dc7aa4a7755024102dd87cbe976a56370e26720253e2c03cf4aa79ff",
+      "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/FolderNavigation.java": "6899b63bdcd41488ded41663453b49b52d91cdba51f68ddf1e82a23f89f88f0b",
+      "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/PacketView.java": "ddb57248ac6d3bce212615a85832c9bcaf754761878cf4f4c7e725ebde47b5af"
+    },
+    "proposal": "Generated image shown in conversation only; no production layout edits or proposal assets installed."
+  },
+  "previousDownloadsUnchanged": true,
+  "sourceInputs": 168,
+  "artifacts": {
+    "burp-workbench-kr-0.28.1.jar": "0b6386cba11c46d5a9798c6ecc41502818b31c62e28d50365c76aa65f399f301",
+    "burp-workbench-kr-0.28.1-source.zip": "562234ef4bb2e5fb8ad3641dc9e5e9440403e7c296acdc1b0e39dba666e6160e"
+  },
+  "remoteChecks": "See the task PR Checks for current Linux/Windows CI results; local reports above are separate.",
+  "limitations": [
+    "Montoya adapter and production Swing; no native Burp GUI execution or OS DPI verification.",
+    "Local continuous test 15 seconds; remote duration is recorded separately in PR checks.",
+    "Explicit tool actions and response completion of an already started account comparison are independent of passive collection."
+  ]
+}

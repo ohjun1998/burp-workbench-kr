@@ -38,7 +38,7 @@ public final class UiLayoutTest {
    check(messages.getLeftComponent().getWidth()>100&&messages.getRightComponent().getWidth()>100,"both message panes usable at "+size);
    check(outer.getRightComponent()==messages.getParent(),"no right-side vertical action sidebar at "+size);
   });
-  for(int i=0;i<12;i++)WorkbenchTest.importTraffic(w,WorkbenchTest.request("https://ui.test/route/"+i,i%2==0?"GET":"POST",true,List.of()),WorkbenchTest.response(i%3==0?403:200,"body"));
+  for(int i=0;i<12;i++)WorkbenchTest.seedTraffic(w,WorkbenchTest.request("https://ui.test/route/"+i,i%2==0?"GET":"POST",true,List.of()),WorkbenchTest.response(i%3==0?403:200,"body"));
   SwingUtilities.invokeAndWait(()->{
    DefaultTableModel m=(DefaultTableModel)table.getModel();check(((Number)m.getValueAt(11,0)).longValue()==12,"stable monotonically increasing traffic NO");
    ((TableRowSorter<?>)table.getRowSorter()).setSortKeys(List.of(new RowSorter.SortKey(0,SortOrder.DESCENDING)));table.setRowSelectionInterval(0,0);

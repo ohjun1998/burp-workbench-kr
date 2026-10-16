@@ -49,7 +49,7 @@ public final class FolderNavigationTest extends WorkbenchTest {
     WorkbenchExtension extension = (WorkbenchExtension) get(entry, "workbench");
     JPanel panel = (JPanel) get(extension, "root");
     JTabbedPane pages = (JTabbedPane) get(extension, "tabs");
-    importTraffic(extension, request("https://folder.test/selected", "GET", true, List.of()), response(200, "original"));
+    seedTraffic(extension, request("https://folder.test/selected", "GET", true, List.of()), response(200, "original"));
     try {
       edt(() -> {
         JTree tree = (JTree) UiLayoutTest.named(panel, "wb.navigation.tree");

@@ -48,11 +48,15 @@ public final class CaptureDurabilityCheck extends WorkbenchTest {
             Logging logging=proxy(Logging.class,(p,m,a)->{
                 if(m.getName().equals("logToError"))errors.add(String.valueOf(a[0]));return def(m);
             });
+            String scopeJson=TrafficScopeModesTest.config("https://durability.invalid/","https://disk-full.invalid/");
+            var nativeScope=proxy(burp.api.montoya.scope.Scope.class,(p,m,a)->m.getName().equals("isInScope")?BurpScopeConfig.parse(scopeJson).stream().anyMatch(e->e.matches((String)a[0])):def(m));
+            var nativeSuite=proxy(burp.api.montoya.burpsuite.BurpSuite.class,(p,m,a)->m.getName().equals("exportProjectOptionsAsJson")?scopeJson:def(m));
             MontoyaApi api=proxy(MontoyaApi.class,(p,m,a)->switch(m.getName()){
                 case "extension"->extension; case "logging"->logging;
+                case "scope"->nativeScope; case "burpSuite"->nativeSuite;
                 default->PayloadIntegrationTest.host(m.getReturnType());
             });
-            ext.initialize(api); edt(()->{});
+            ext.initialize(api); edt(()->{});edt(()->{try{((javax.swing.JButton)get(ext,"captureButton")).doClick(0);}catch(Exception e){throw new RuntimeException(e);}});
         }
         void send(HttpRequest q,HttpResponse r) {
             HttpResponseReceived event=proxy(HttpResponseReceived.class,(p,m,a)->switch(m.getName()){

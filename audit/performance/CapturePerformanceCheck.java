@@ -69,12 +69,17 @@ public final class CapturePerformanceCheck extends WorkbenchTest {
                 if (m.getName().equals("logToError")) errors.add(String.valueOf(a[0]).lines().findFirst().orElse(""));
                 return def(m);
             });
+            String scopeJson=TrafficScopeModesTest.config("https://benchmark.invalid/");
+            var nativeScope=proxy(burp.api.montoya.scope.Scope.class,(p,m,a)->m.getName().equals("isInScope")?BurpScopeConfig.parse(scopeJson).stream().anyMatch(e->e.matches((String)a[0])):def(m));
+            var nativeSuite=proxy(burp.api.montoya.burpsuite.BurpSuite.class,(p,m,a)->m.getName().equals("exportProjectOptionsAsJson")?scopeJson:def(m));
             MontoyaApi api = proxy(MontoyaApi.class, (p,m,a) -> switch (m.getName()) {
                 case "extension" -> extension;
                 case "logging" -> logging;
+                case "scope" -> nativeScope; case "burpSuite" -> nativeSuite;
                 default -> PayloadIntegrationTest.host(m.getReturnType());
             });
             ext.initialize(api);
+            edt(()->{try{var mode=(javax.swing.JButton)get(ext,"captureButton");for(int n=0;n<3&&!mode.getText().equals("SCOPE");n++)mode.doClick(0);if(!mode.getText().equals("SCOPE"))throw new AssertionError("SCOPE mode unavailable");}catch(Exception e){throw new RuntimeException(e);}});
             edt(() -> {});
             MontoyaObjectFactory previous = ObjectFactoryLocator.FACTORY;
             ObjectFactoryLocator.FACTORY = proxy(MontoyaObjectFactory.class, (p,m,a) -> {

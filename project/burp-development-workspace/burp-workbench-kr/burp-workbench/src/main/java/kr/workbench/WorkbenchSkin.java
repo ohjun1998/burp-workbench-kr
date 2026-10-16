@@ -73,7 +73,6 @@ final class WorkbenchSkin {
 
   static Color captureColor(String mode) {
     return switch (mode) {
-      case "ON" -> WorkbenchUi.dark() ? new Color(52, 220, 123) : new Color(21, 133, 71);
       case "OFF" -> WorkbenchUi.dark() ? new Color(255, 110, 120) : new Color(192, 53, 67);
       default -> WorkbenchUi.dark() ? new Color(255, 179, 66) : new Color(162, 96, 14);
     };
@@ -82,7 +81,6 @@ final class WorkbenchSkin {
   private static void capture(Graphics2D g, JButton button) {
     String mode = button.getText();
     String label = mode + "  |  " + switch (mode) {
-      case "ON" -> "수집 중";
       case "OFF" -> "수집 중지";
       default -> "범위 수집";
     };

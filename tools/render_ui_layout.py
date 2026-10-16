@@ -28,9 +28,10 @@ def main():
     p.add_argument('--sizes',nargs='+',help='Default: 1024x720 1280x800 1440x920; guide-only: 760x480 560x300')
     p.add_argument('--guide-only',action='store_true',help='Check the production feature-guide dialog wrapper separately')
     p.add_argument('--scope-only',action='store_true',help='Check the production Scope editor at default and minimum dialog sizes')
+    p.add_argument('--packet-only',action='store_true',help='Render Pretty/search, Raw and Hex in the production packet panes')
     p.add_argument('--themes',nargs='+',choices=['light','dark'],default=['light','dark'])
     args=p.parse_args()
-    if args.guide_only and args.scope_only:p.error('Choose one dialog mode')
+    if sum([args.guide_only,args.scope_only,args.packet_only])>1:p.error('Choose one preview mode')
     if args.sizes is None:args.sizes=['760x480','560x300'] if args.guide_only or args.scope_only else ['1024x720','1280x800','1440x920']
     version=runpy.run_path(str(WB/'release_info.py'))['VERSION']
     jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version}.jar').resolve()
@@ -48,7 +49,7 @@ def main():
     for theme in args.themes:
         for size in args.sizes:
             w,h=size.split('x');out=args.out/theme/size
-            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else []),check=True)
+            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else []),check=True)
             with (out/'controls.csv').open() as source:
                 all_rows.extend(csv.DictReader(source))
             with (out/'content.csv').open() as source:
@@ -67,6 +68,8 @@ def main():
     # Match stable preview-only names, then require real visible content rather than
     # merely asserting that a Swing component exists or has a non-zero outer size.
     required={
+        ('tool-00.png','wb.traffic.request.text'):100,
+        ('tool-00.png','wb.traffic.response.text'):100,
         ('tool-03.png','preview.js.source'):80,
         ('js-horizontal.png','preview.js.source'):80,
         ('bounty-1.png','preview.workflow.input'):80,
@@ -76,6 +79,7 @@ def main():
     }
     if args.guide_only:required={}
     if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
+    if args.packet_only:required={(view,'wb.traffic.'+side+'.text'):100 for view in ['packet-pretty-search.png','packet-raw.png','packet-hex.png'] for side in ['request','response']}
     gate_failures=[]
     for theme in args.themes:
         for size in args.sizes:

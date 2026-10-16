@@ -231,9 +231,11 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       jsIn = area("", 10),
       jsOut = area("", 10);
   private HttpRequestEditor requestView;
-  private final PacketView requestPacket = new PacketView(), responsePacket = new PacketView();
+  private final PacketInspector requestPacket = new PacketInspector("wb.traffic.request"),
+      responsePacket = new PacketInspector("wb.traffic.response");
   private HttpResponseEditor responseView;
   private Component requestEditorComponent, responseEditorComponent;
+  private JDialog requestNativeWindow, responseNativeWindow;
   private Traffic current;
   private javax.swing.Timer timer;
 
@@ -337,6 +339,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     diagnostics.close();
                     if (commonSettingsWindow != null) commonSettingsWindow.dispose();
                     if (scopeWindow != null) scopeWindow.dispose();
+                    if (requestNativeWindow != null) requestNativeWindow.dispose();
+                    if (responseNativeWindow != null) responseNativeWindow.dispose();
+                    requestPacket.close();
+                    responsePacket.close();
                     if (timer != null) timer.stop();
                     if (root != null) root.putClientProperty("wb.skin.closed", true);
                     if (structuredCompare != null) structuredCompare.clearSources();
@@ -450,6 +456,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     responseView = api.userInterface().createHttpResponseEditor(EditorOptions.READ_ONLY);
     requestEditorComponent = requestView == null ? null : requestView.uiComponent();
     responseEditorComponent = responseView == null ? null : responseView.uiComponent();
+    requestPacket.setNativeAction(requestEditorComponent == null ? null : () -> showNativePacket(true));
+    responsePacket.setNativeAction(responseEditorComponent == null ? null : () -> showNativePacket(false));
     addPage("트래픽", "traffic", trafficPanel(), false);
     addPage("권한 비교", "auth", authPanel(), false);
     addPage("데이터 도구", "data", dataPanel(), true);
@@ -924,8 +932,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     top.setName("wb.traffic.controls");
     top.add(filter, BorderLayout.CENTER);
     top.add(actions, BorderLayout.EAST);
-    JPanel req = trafficPacketPane("요청  REQUEST", "wb.traffic.request.native", requestEditorComponent, requestPacket),
-        res = trafficPacketPane("응답  RESPONSE", "wb.traffic.response.native", responseEditorComponent, responsePacket);
+    JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
+        res = WorkbenchUi.card("응답  RESPONSE", responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
     viewers.setName("wb.traffic.messages");
     JPanel messages = new JPanel(new BorderLayout(0, 6));
@@ -940,12 +948,19 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     return main;
   }
 
-  private JPanel trafficPacketPane(String title, String name, Component editor, PacketView fallback) {
-    if (editor == null) return WorkbenchUi.card(title, fallback);
+  private void showNativePacket(boolean request) {
+    if (unloaded.get()) return;
+    JDialog window = request ? requestNativeWindow : responseNativeWindow;
+    if (window != null && window.isDisplayable()) { window.toFront(); return; }
+    Component editor = request ? requestEditorComponent : responseEditorComponent;
+    if (editor == null) return;
     JPanel nativeHost = new JPanel(new BorderLayout());
-    nativeHost.setName(name);
+    nativeHost.setName(request ? "wb.traffic.request.native" : "wb.traffic.response.native");
+    nativeHost.putClientProperty("wb.nativeEditor", true);
     nativeHost.add(editor);
-    return WorkbenchUi.nativeCard(title, nativeHost);
+    JDialog opened = dialogOpener.open(root, "Workbench KR · Burp " + (request ? "요청" : "응답"), nativeHost, false,
+        () -> { if (request) requestNativeWindow = null; else responseNativeWindow = null; });
+    if (request) requestNativeWindow = opened; else responseNativeWindow = opened;
   }
 
   private void showTraffic(int view) {
@@ -957,9 +972,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         HttpResponse response = current.response();
         if (requestView != null) requestView.setRequest(request);
         if (responseView != null) responseView.setResponse(response);
-        if (requestEditorComponent == null) requestPacket.setPacket(request.toString());
-        if (responseEditorComponent == null) responsePacket.setPacket(
-            response == null ? null : response.toString(), PacketFormat.decodedResponse(response));
+        var requestWire = request.toByteArray();
+        requestPacket.setPacket(PacketInspector.prefix(requestWire), null, requestWire.length());
+        var responseWire = response == null ? null : response.toByteArray();
+        responsePacket.setPacket(PacketInspector.prefix(responseWire),
+            responseWire != null && responseWire.length() <= PacketInspector.PREVIEW_BYTES ? PacketFormat.decodedResponse(response) : null,
+            responseWire == null ? 0 : responseWire.length());
         selectionInfo.setText(
             String.format("%03d", ((Number) logModel.getValueAt(index, 0)).longValue())
                 + "   "
@@ -978,8 +996,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       current = null;
       if (requestView != null) requestView.setRequest(null);
       if (responseView != null) responseView.setResponse(null);
-      requestPacket.setPacket(null);
-      responsePacket.setPacket(null);
+      requestPacket.setPacket(null, null);
+      responsePacket.setPacket(null, null);
       selectionInfo.setText("목록에서 요청을 선택하세요 · 요청과 응답을 함께 표시합니다.");
     }
   }

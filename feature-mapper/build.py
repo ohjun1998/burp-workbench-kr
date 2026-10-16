@@ -46,6 +46,9 @@ def main():
     files['META-INF/MANIFEST.MF'] = (
         'Manifest-Version: 1.0\r\nImplementation-Title: Feature Mapper KR\r\n'
         f'Implementation-Version: {VERSION}\r\n\r\n').encode()
+    for resource in (ROOT / 'src/main/resources').rglob('*'):
+        if resource.is_file():
+            files[resource.relative_to(ROOT / 'src/main/resources').as_posix()] = resource.read_bytes()
     files['LICENSE'] = (ROOT / 'LICENSE').read_bytes()
     archive(jar, files)
     if args.test:

@@ -41,6 +41,8 @@ jobs:
           assert expected['files'] == actual['artifacts'], 'Mapper release artifact hashes differ'
           assert expected['sources'] == {'feature-mapper/' + name: digest for name, digest in actual['sources'].items()}, 'Mapper source fingerprints differ'
           PY
+      - name: Check responsive Mapper layout and diagnostics
+        run: python feature-mapper/tests/render_ui.py --check --out tmp/mapper-ui-ci
       - name: Install isolated browser test tools
         run: |
           npm install --prefix "$RUNNER_TEMP/mapper-node" --ignore-scripts --no-audit --no-fund playwright-core@1.64.0
@@ -58,4 +60,5 @@ jobs:
             feature-mapper/dist/
             feature-mapper/build/test-results.txt
             feature-mapper/build/browser-verification/
+            tmp/mapper-ui-ci/
           retention-days: 14

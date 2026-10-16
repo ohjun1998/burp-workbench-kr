@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JTable;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
@@ -306,6 +308,14 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 tree.setCellRenderer(new javax.swing.tree.DefaultTreeCellRenderer());tree.setRowHeight(18);
                 javax.swing.SwingUtilities.updateComponentTreeUI(root);
                 render(root,out.resolve("host-theme-recovered.png"),1440,920);
+                ((Diagnostics)get(ext,"diagnostics")).record("시안용 저장 오류",new java.io.IOException("SYNTHETIC_PACKET_TEXT_NOT_RECORDED"));
+                ((JButton)UiLayoutTest.named(root,"wb.navigation.logs")).doClick(0);
+                JTable errors=(JTable)UiLayoutTest.named(settings[0],"diagnostics.table");
+                if(errors.getRowCount()>0)errors.setRowSelectionInterval(0,0);
+                int workspaceWidth=width,workspaceHeight=height;
+                width=workspaceWidth<=1024?680:760;height=workspaceHeight<=720?420:480;
+                render(WorkbenchUi.settingsBody(settings[0],()->{}),out.resolve("logs.png"),width,height);
+                width=workspaceWidth;height=workspaceHeight;
 
                 root.removeNotify();
             } catch(Exception e) { throw new RuntimeException(e); }

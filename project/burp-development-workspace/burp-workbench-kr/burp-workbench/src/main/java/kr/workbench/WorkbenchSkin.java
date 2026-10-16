@@ -17,8 +17,10 @@ final class WorkbenchSkin {
   }
 
   static final class SearchField extends JTextField {
-    SearchField(int columns) { super(columns); }
-    SearchField() {}
+    private final String placeholder;
+    SearchField(int columns) { this(columns,"URL, 메서드, 상태 코드 검색"); }
+    SearchField() { this(0); }
+    SearchField(int columns,String placeholder) { super(columns); this.placeholder=placeholder; }
     @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(40,d.height)); }
     @Override protected void paintComponent(Graphics graphics) {
       super.paintComponent(graphics);
@@ -26,7 +28,7 @@ final class WorkbenchSkin {
         Graphics2D g=(Graphics2D)graphics.create();antialias(g);
         g.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
         g.setFont(WorkbenchUi.font());
-        String text="URL, 메서드, 상태 코드 검색";
+        String text=placeholder;
         FontMetrics fm=g.getFontMetrics();
         Shape old=g.getClip();g.clipRect(12,0,Math.max(0,getWidth()-24),getHeight());
         g.drawString(text,12,(getHeight()-fm.getHeight())/2+fm.getAscent());g.setClip(old);g.dispose();
@@ -34,7 +36,7 @@ final class WorkbenchSkin {
     }
   }
 
-  static void button(JButton button) {
+  static void button(AbstractButton button) {
     if (!(button.getUI() instanceof ButtonUi)) button.setUI(new ButtonUi());
     button.setOpaque(false);
     button.setContentAreaFilled(false);
@@ -51,14 +53,14 @@ final class WorkbenchSkin {
       return new Dimension(size.width, Math.max(32, size.height));
     }
     @Override public void paint(Graphics graphics, JComponent component) {
-      JButton button = (JButton) component;
+      AbstractButton button = (AbstractButton) component;
       Graphics2D g = (Graphics2D) graphics.create();
       antialias(g);
       if (Boolean.TRUE.equals(button.getClientProperty("wb.capture"))) {
-        capture(g, button);
+        capture(g, (JButton)button);
       } else {
         Color fill = button.getBackground();
-        if (button.isEnabled() && button.getModel().isRollover()) fill = WorkbenchUi.selected();
+        if (button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
         if (button.getModel().isPressed()) fill = WorkbenchUi.selected();
         g.setColor(fill);
         g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
@@ -69,6 +71,25 @@ final class WorkbenchSkin {
       g.dispose();
     }
     @Override protected void paintFocus(Graphics g, AbstractButton b, Rectangle view, Rectangle text, Rectangle icon) {}
+  }
+
+  static void combo(JComboBox<?> combo) {
+    if(!(combo.getUI() instanceof ComboUi))combo.setUI(new ComboUi());
+  }
+  private static final class ComboUi extends BasicComboBoxUI {
+    @Override public Dimension getPreferredSize(JComponent component){Dimension size=super.getPreferredSize(component);return new Dimension(size.width,Math.max(32,size.height));}
+    @Override protected JButton createArrowButton(){return new BasicArrowButton(SwingConstants.SOUTH,WorkbenchUi.raised(),WorkbenchUi.line(),WorkbenchUi.ink(),WorkbenchUi.line());}
+  }
+  static void scroll(JScrollBar bar) {
+    if(!(bar.getUI() instanceof ScrollUi))bar.setUI(new ScrollUi());
+    bar.setUnitIncrement(18);
+  }
+  private static final class ScrollUi extends BasicScrollBarUI {
+    @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=WorkbenchUi.line();}
+    @Override protected JButton createDecreaseButton(int direction){return arrow(direction);}
+    @Override protected JButton createIncreaseButton(int direction){return arrow(direction);}
+    private JButton arrow(int direction){return new BasicArrowButton(direction,WorkbenchUi.background(),WorkbenchUi.line(),WorkbenchUi.ink(),WorkbenchUi.line()){@Override public Dimension getPreferredSize(){return new Dimension(0,0);}};}
+    @Override protected void paintThumb(Graphics graphics,JComponent component,Rectangle bounds){if(bounds.isEmpty()||!scrollbar.isEnabled())return;Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(isThumbRollover()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRoundRect(bounds.x+2,bounds.y+2,Math.max(2,bounds.width-4),Math.max(2,bounds.height-4),7,7);g.dispose();}
   }
 
   static Color captureColor(String mode) {

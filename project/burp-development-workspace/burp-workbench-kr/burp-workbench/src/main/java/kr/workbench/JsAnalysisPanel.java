@@ -276,6 +276,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     WorkbenchUi.primary(toRepeater);
     WorkbenchUi.style(this);
     WorkbenchUi.status(status);
+    WorkbenchUi.feedback(status);
     WorkbenchUi.status(progress);
     analyze.setToolTipText("편집한 JS / HTML을 정적으로 분석합니다. 원본 코드를 실행하지 않습니다.");
     toRepeater.setToolTipText("선택한 URL의 요청 초안을 Repeater에 준비합니다. 요청은 전송하지 않습니다.");
@@ -381,6 +382,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             for (var draft : drafts) api.repeater().sendToRepeater(draft, "JS 초안 · 값/인증 확인");
             status.setText("메서드/파라미터 초안 준비 · REPLACE_ME 값, 인증, 본문 형식은 직접 확인하세요. 전송 없음");
           } catch (Exception ex) {
+            Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",ex);
             status.setText(ex.getMessage());
           }
         });
@@ -922,6 +924,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                 resolvingSource);
             status.setText("초안 준비 · 값/인증/본문 형식 확인 필요 · 전송 없음");
           } catch (Exception ex) {
+            Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",ex);
             status.setText(ex.getMessage());
           }
         });
@@ -1242,7 +1245,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                     List.copyOf(recovered),
                     m.note()),
                 token);
-          } catch (Exception e) {
+          } catch (Exception e) {Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",e);
             onEdt(
                 () -> {
                   if (!closed.get() && token == epoch.get())
@@ -1302,7 +1305,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                   if (!closed.get() && token == epoch.get())
                     status.setText("캐시에 보관된 정적 파일 저장: " + saved);
                 });
-          } catch (Exception e) {
+          } catch (Exception e) {Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",e);
             onEdt(
                 () -> {
                   if (!closed.get() && token == epoch.get())

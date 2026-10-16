@@ -117,6 +117,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
           try {
             run.run();
           } catch (Exception ex) {
+            Diagnostics.failure(BountySupportPanel.this,"재현·증거 정리",ex);
             state.setText(Objects.toString(ex.getMessage(), ex.getClass().getSimpleName()));
           }
         });
@@ -139,7 +140,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         () -> {
           try {
             r.run();
-          } catch (Exception ex) {
+          } catch (Exception ex) {Diagnostics.failure(BountySupportPanel.this,"재현·증거 정리",ex);
             later(
                 () ->
                     state.setText(
@@ -192,6 +193,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     refreshActions();
     WorkbenchUi.style(this);
     WorkbenchUi.status(state);
+    WorkbenchUi.feedback(state);
   }
 
   JPanel toolsContent() {
@@ -208,6 +210,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
                   try {
                     Desktop.getDesktop().browse(URI.create(LINKS[tool.getSelectedIndex()]));
                   } catch (Exception ex) {
+                    Diagnostics.failure(BountySupportPanel.this,"재현·증거 정리",ex);
                     state.setText("공식 주소: " + LINKS[tool.getSelectedIndex()]);
                   }
                 })));
@@ -221,7 +224,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     p.add(
         WorkbenchUi.row(
             action("결과 → 활동 추적", this::importParameters),
-            new JLabel("URL/BODY/HEADER/COOKIE · 파라미터 값은 가져오지 않음")),
+            WorkbenchUi.hint("URL/BODY/HEADER/COOKIE · 파라미터 값은 가져오지 않음")),
         BorderLayout.SOUTH);
     return p;
   }

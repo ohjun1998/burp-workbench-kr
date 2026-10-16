@@ -51,6 +51,10 @@ final class FolderNavigation extends JPanel {
   }
 
   FolderNavigation(MontoyaApi api, JTabbedPane pages, Runnable openSettings) {
+    this(api, pages, openSettings, null, null);
+  }
+
+  FolderNavigation(MontoyaApi api, JTabbedPane pages, Runnable openSettings, JButton help, JButton logs) {
     super(new BorderLayout(0, 6));
     this.api = api;
     this.pages = pages;
@@ -120,7 +124,12 @@ final class FolderNavigation extends JPanel {
     toolbar.setBorder(BorderFactory.createEmptyBorder(4, 6, 0, 6));
     toolbar.add(toggle, BorderLayout.WEST);
     toolbar.add(current, BorderLayout.CENTER);
-    toolbar.add(settings, BorderLayout.EAST);
+    JPanel actions = new JPanel(new GridLayout(1, 0, 8, 0));
+    actions.setName("wb.navigation.actions");
+    if (help != null) actions.add(help);
+    actions.add(settings);
+    if (logs != null) actions.add(logs);
+    toolbar.add(actions, BorderLayout.EAST);
     add(toolbar, BorderLayout.NORTH);
     add(split, BorderLayout.CENTER);
     getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(

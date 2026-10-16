@@ -183,7 +183,8 @@ final class AssessmentPanel implements AutoCloseable {
             new JScrollPane(accountTable),
             WorkbenchUi.card("선택 URL의 입력", new JScrollPane(inputTable)),
             .72));
-    accountsPage.add(accountSummary, BorderLayout.SOUTH);
+    accountsPage.setToolTipText(accountSummary.getText());
+    accountSummary.addPropertyChangeListener("text", e -> accountsPage.setToolTipText(accountSummary.getText()));
     taskEdit = action("task.edit", "업무 설정", "선택 업무의 요구 계정·완료 조건을 편집합니다.", () -> openTask(true));
     taskTarget =
         action("task.target", "업무에 추가", "아래 상세 표의 선택 API를 다른 업무에 연결합니다.", this::openTarget);
@@ -221,7 +222,7 @@ final class AssessmentPanel implements AutoCloseable {
         BorderLayout.NORTH);
     JPanel details = new JPanel(new BorderLayout(4, 4));
     details.add(
-        row(taskTarget, taskRemove, new JLabel("선택 API에 적용 · Origin이 같은 계정만 조합")),
+        row(taskTarget, taskRemove, WorkbenchUi.hint("선택 API에 적용 · Origin이 같은 계정만 조합")),
         BorderLayout.NORTH);
     details.add(new JScrollPane(detailTable));
     tasksPage.add(
@@ -230,7 +231,8 @@ final class AssessmentPanel implements AutoCloseable {
             new JScrollPane(taskTable),
             WorkbenchUi.card("요구 계정 × API", details),
             .45));
-    tasksPage.add(taskSummary, BorderLayout.SOUTH);
+    tasksPage.setToolTipText(taskSummary.getText());
+    taskSummary.addPropertyChangeListener("text", e -> tasksPage.setToolTipText(taskSummary.getText()));
     accountChoice.addActionListener(
         e -> {
           if (!refreshing) refreshOperations();
@@ -285,6 +287,7 @@ final class AssessmentPanel implements AutoCloseable {
             work.run();
             owner.refresh();
           } catch (Exception ex) {
+            Diagnostics.failure(owner,"계정·업무 관리",ex);
             owner.summary.setText(Objects.toString(ex.getMessage(), "처리 실패"));
           }
         });
@@ -326,6 +329,7 @@ final class AssessmentPanel implements AutoCloseable {
             action.run();
             owner.refresh();
           } catch (Exception ex) {
+            Diagnostics.failure(owner,"계정·업무 관리",ex);
             owner.summary.setText(Objects.toString(ex.getMessage(), "처리 실패"));
           }
         });
@@ -727,7 +731,7 @@ final class AssessmentPanel implements AutoCloseable {
           try {
             tracker.attachEvidenceFile(path);
             SwingUtilities.invokeLater(owner::refresh);
-          } catch (Exception e) {
+          } catch (Exception e) {Diagnostics.failure(owner,"계정·업무 관리",e);
             SwingUtilities.invokeLater(() -> owner.summary.setText(e.getMessage()));
           }
         });

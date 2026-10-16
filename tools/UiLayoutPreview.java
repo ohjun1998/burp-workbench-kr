@@ -196,6 +196,28 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("scope")) {
+            try {
+                edt(()->{
+                    try {
+                        WorkbenchScope scope=(WorkbenchScope)unchecked(ext,"localScope");
+                        scope.syncBurp(TrafficScopeModesTest.config("https://native.example.test/"));
+                        scope.add("https://manual.example.test/api",false);
+                        java.awt.Component[] content={null};
+                        ext.dialogOpener=(owner,title,body,modal,closed)->{content[0]=body;return null;};
+                        ((JButton)unchecked(ext,"scopeListButton")).doClick(0);
+                        JTable table=(JTable)unchecked(ext,"scopeTable");table.setRowSelectionInterval(1,1);
+                        var body=WorkbenchUi.settingsBody(content[0],()->{});body.addNotify();
+                        body.setSize(width,height);UiLayoutTest.layout(body);
+                        table.scrollRectToVisible(table.getCellRect(1,2,true));
+                        render(body,out.resolve("scope-list.png"),width,height);body.removeNotify();
+                    }catch(Exception error){throw new RuntimeException(error);}
+                });
+                writeMeasurements(out);
+            }finally{unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("Scope preview failed");
+            System.out.println("Scope editor preview rendered: "+theme+" "+width+"x"+height+"; zero HTTP.");return;
+        }
         if(args.length>5&&args[5].equals("guide")) {
             try {renderGuides(ext,out);writeMeasurements(out);}finally{unload();}
             System.out.println("Guide wrapper previews rendered: "+theme+" "+width+"x"+height+"; zero HTTP.");return;

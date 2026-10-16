@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.29.0**, Feature Mapper **0.3.0**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.29.0 검증 기록](docs/VERIFICATION_0.29.0.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.30.0**, Feature Mapper **0.3.0**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.30.0 검증 기록](docs/VERIFICATION_0.30.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -68,6 +68,7 @@ python dev.py bounty-test --port 18399
 ```sh
 python tools/render_ui_layout.py --out tmp/ui-layout --check
 python tools/render_ui_layout.py --guide-only --out tmp/ui-guide --check
+python tools/render_ui_layout.py --scope-only --out tmp/ui-scope --check
 ```
 
 기본 조건은 확장 작업 영역 1024×720, 1280×800, 1440×920과 밝은/어두운 테마입니다. JS의 대체 배치와 메뉴 숨김·폭 조절·복원, OFF/SCOPE 상태등, 로그 창과 호스트 테마 재설정 후 복원을 포함해 조건별 25개, 총 150개 화면을 렌더링합니다. `controls.csv`는 버튼·입력 크기, `content.csv`는 본문·표의 실제 노출 영역, `text.csv`는 탭·제목의 글자 표시 영역, `layout-report.json`은 잘림·작은 입력·핵심 영역 붕괴 검사 결과입니다. `--check`가 실패하면 해당 PNG와 영역을 확인합니다. 통과한 수치만으로 사용성을 모두 판단하지 않고 그림도 검토합니다.
@@ -108,7 +109,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.29.0.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.30.0.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 
@@ -142,3 +143,5 @@ workflow 수동 실행의 7200·10800초 옵션은 2·3시간 어댑터 수집�
 ## 0.26.0 성능·버전 관리
 
 각 확장의 BuildInfo.java가 릴리스 버전의 기준입니다. Python 빌드·HTTP·화면 하네스와 패키징은 release_info.py를 통해 같은 값을 읽습니다. 증거 schemaVersion은 별도 관리합니다. dev.py check/release는 Mapper Java·Node 회귀도 포함하며 실제 검사 건수는 build/check-summary.json에 저장합니다. [성능 비교 실행](audit/performance/README_KR.md)은 전용 출력 디렉터리를 사용합니다.
+
+0.30.0은 트래픽 표만 24px 행·13px 나눔고딕으로 표시합니다. 패킷은 READ_ONLY Burp 메시지 편집기의 실제 uiComponent를 호스팅합니다. 네이티브 편집기는 Workbench 테마 재적용 대상에서 제외하며, 자동 화면 검사의 편집기는 원본 메시지 전달을 확인하는 명시적인 API 어댑터 미리보기입니다.

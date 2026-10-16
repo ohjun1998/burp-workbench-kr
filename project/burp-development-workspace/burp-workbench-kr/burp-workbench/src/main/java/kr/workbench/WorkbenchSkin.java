@@ -187,7 +187,8 @@ final class WorkbenchSkin {
     table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
       @Override public Component getTableCellRendererComponent(JTable owner, Object value, boolean selected, boolean focus, int row, int column) {
         super.getTableCellRendererComponent(owner, value, selected, focus, row, column);
-        setFont(WorkbenchUi.font().deriveFont(Font.BOLD)); setForeground(WorkbenchUi.ink());
+        boolean compact=Boolean.TRUE.equals(owner.getClientProperty("wb.table.compact"));
+        setFont(owner.getFont().deriveFont(compact?Font.PLAIN:Font.BOLD)); setForeground(WorkbenchUi.ink());
         setBackground(WorkbenchUi.raised());
         setIcon(null);
         if(owner.getRowSorter()!=null && !owner.getRowSorter().getSortKeys().isEmpty()) {
@@ -195,7 +196,7 @@ final class WorkbenchSkin {
           if(key.getColumn()==owner.convertColumnIndexToModel(column))
             setIcon(UIManager.getIcon(key.getSortOrder()==SortOrder.ASCENDING?"Table.ascendingSortIcon":"Table.descendingSortIcon"));
         }
-        setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,1,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(0,12,0,12)));
+        setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,1,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(0,compact?5:12,0,compact?5:12)));
         return this;
       }
     });

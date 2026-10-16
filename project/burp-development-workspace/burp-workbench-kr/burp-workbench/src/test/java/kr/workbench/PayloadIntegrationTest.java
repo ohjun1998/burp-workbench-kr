@@ -20,7 +20,9 @@ public final class PayloadIntegrationTest {
  static final List<IContextMenuFactory> menus=new ArrayList<>();
  static final AtomicInteger suiteTabs=new AtomicInteger(),legacyTabs=new AtomicInteger(),sent=new AtomicInteger();
  static final List<String> names=new ArrayList<>();
- static Object host(Class<?> type){return Proxy.newProxyInstance(type.getClassLoader(),new Class[]{type},(p,m,a)->{
+ static Object host(Class<?> type){
+  if(type==HttpRequestEditor.class||type==HttpResponseEditor.class)return messageEditor(type);
+  return Proxy.newProxyInstance(type.getClassLoader(),new Class[]{type},(p,m,a)->{
   if(m.getName().equals("equals"))return p==a[0];if(m.getName().equals("hashCode"))return System.identityHashCode(p);
   a=a==null?new Object[0]:a;
   switch(m.getName()){
@@ -40,6 +42,20 @@ public final class PayloadIntegrationTest {
   if(m.getReturnType().isInterface())return host(m.getReturnType());
   return WorkbenchTest.def(m);
  });}
+ /** Stable editor component and original message identity, not a native GUI renderer. */
+ static Object messageEditor(Class<?> type){
+  JPanel panel=new JPanel(new java.awt.BorderLayout());
+  panel.add(new JLabel("API 어댑터 미리보기 · 실제 Burp 화면과 다름"),java.awt.BorderLayout.NORTH);
+  PacketView preview=new PacketView();panel.add(preview);
+  AtomicReference<Object> message=new AtomicReference<>();
+  return Proxy.newProxyInstance(type.getClassLoader(),new Class[]{type},(p,m,a)->switch(m.getName()){
+   case "equals"->p==a[0];case "hashCode"->System.identityHashCode(p);
+   case "uiComponent"->panel;
+   case "setRequest","setResponse"->{message.set(a[0]);preview.setPacket(a[0]==null?null:a[0].toString());yield null;}
+   case "getRequest","getResponse"->message.get();
+   case "selection"->Optional.empty();default->WorkbenchTest.def(m);
+  });
+ }
  public static void main(String[] args)throws Exception{
   BurpExtender entry=new BurpExtender();entry.registerExtenderCallbacks((IBurpExtenderCallbacks)host(IBurpExtenderCallbacks.class));
   // Initialization may be called on the EDT by a host; no invokeAndWait deadlock.

@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.27.1**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.27.1 검증 기록](docs/VERIFICATION_0.27.1.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.28.0**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.28.0 검증 기록](docs/VERIFICATION_0.28.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -70,7 +70,7 @@ python tools/render_ui_layout.py --out tmp/ui-layout --check
 python tools/render_ui_layout.py --guide-only --out tmp/ui-guide --check
 ```
 
-기본 조건은 확장 작업 영역 1024×720, 1280×800, 1440×920과 밝은/어두운 테마입니다. JS의 대체 배치와 메뉴 숨김·폭 조절·복원을 포함해 조건별 21개, 총 126개 화면을 렌더링합니다. `controls.csv`는 버튼·입력 크기, `content.csv`는 본문·표의 실제 노출 영역, `text.csv`는 탭·제목의 글자 표시 영역, `layout-report.json`은 잘림·작은 입력·핵심 영역 붕괴 검사 결과입니다. `--check`가 실패하면 해당 PNG와 영역을 확인합니다. 통과한 수치만으로 사용성을 모두 판단하지 않고 그림도 검토합니다.
+기본 조건은 확장 작업 영역 1024×720, 1280×800, 1440×920과 밝은/어두운 테마입니다. JS의 대체 배치와 메뉴 숨김·폭 조절·복원, OFF/SCOPE 상태등과 호스트 테마 재설정 후 복원을 포함해 조건별 24개, 총 144개 화면을 렌더링합니다. `controls.csv`는 버튼·입력 크기, `content.csv`는 본문·표의 실제 노출 영역, `text.csv`는 탭·제목의 글자 표시 영역, `layout-report.json`은 잘림·작은 입력·핵심 영역 붕괴 검사 결과입니다. `--check`가 실패하면 해당 PNG와 영역을 확인합니다. 통과한 수치만으로 사용성을 모두 판단하지 않고 그림도 검토합니다.
 
 안내 창은 `--guide-only`로 별도 확인합니다. 실제 설정 창과 같은 구성에서 기본 760×480·최소 560×300, 밝은/어두운 테마, 12개 안내의 총 48개 화면을 검사합니다. 본문 줄바꿈·수평 스크롤·기능 선택·이동 버튼을 확인합니다.
 

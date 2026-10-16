@@ -23,6 +23,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
     static final java.util.List<String> rows = new java.util.ArrayList<>();
     static final java.util.List<String> contentRows = new java.util.ArrayList<>();
     static final java.util.List<String> textRows = new java.util.ArrayList<>();
+    static final java.util.List<Throwable> renderingErrors = new java.util.concurrent.CopyOnWriteArrayList<>();
     static String theme;
     static int width, height;
     static void render(Container root, Path path, int ignoredWidth, int ignoredHeight) throws Exception {
@@ -162,6 +163,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         if(PayloadIntegrationTest.sent.get()!=0)throw new IllegalStateException("Layout rendering attempted HTTP requests");
     }
     public static void main(String[] args) throws Exception {
+        Thread.setDefaultUncaughtExceptionHandler((thread,error)->{renderingErrors.add(error);error.printStackTrace();});
         Path out = Path.of(args[0]);
         theme=args.length>2?args[2]:"light";
         width=args.length>3?Integer.parseInt(args[3]):1024;
@@ -295,6 +297,16 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 render(root,out.resolve("navigation-wide.png"),1440,920);
                 menu.doClick();menu.doClick();
                 render(root,out.resolve("navigation-restored.png"),1440,920);
+                WorkbenchUi.packetLayout(root,true);
+                var capture=(javax.swing.JButton)UiLayoutTest.named(root,"wb.traffic.capture.mode");
+                capture.doClick(0);render(root,out.resolve("capture-off.png"),1440,920);
+                capture.doClick(0);render(root,out.resolve("capture-scope.png"),1440,920);
+                capture.doClick(0);
+                var tree=(javax.swing.JTree)UiLayoutTest.named(root,"wb.navigation.tree");
+                tree.setCellRenderer(new javax.swing.tree.DefaultTreeCellRenderer());tree.setRowHeight(18);
+                javax.swing.SwingUtilities.updateComponentTreeUI(root);
+                render(root,out.resolve("host-theme-recovered.png"),1440,920);
+
                 root.removeNotify();
             } catch(Exception e) { throw new RuntimeException(e); }
         });
@@ -302,6 +314,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
             unload();
         }
         writeMeasurements(out);
+        if(!renderingErrors.isEmpty())throw new IllegalStateException("Asynchronous UI errors during rendering: "+renderingErrors.size());
         System.out.println("Layout previews rendered: "+theme+" "+width+"x"+height+"; synthetic data, no Burp GUI or HTTP execution.");
     }
 }

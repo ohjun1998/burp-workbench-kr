@@ -383,7 +383,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             });
     JScrollPane candidateScroll = new JScrollPane(candidates);
     candidateScroll.setPreferredSize(new Dimension(900, 95));
-    JPanel candidateCard = WorkbenchUi.card("인증 정보 후보 · 우클릭으로 비교 계정 지정", candidateScroll);
+    JPanel candidateCard = WorkbenchUi.card("인증 정보 후보 · 우클릭으로 계정 지정", candidateScroll);
     candidateCard.setName("wb.card.수집한 인증 정보 · 중복 제거 · 우클릭으로 인가 지정");
     history.setName("wb.auth.history");
     history.setAutoCreateRowSorter(true);
@@ -418,10 +418,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     judgementDetails.setEditable(false);
     judgementDetails.setLineWrap(true);
     judgementDetails.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-    details.add(packets);
-    details.add(
-        WorkbenchUi.card("판정 근거 · JSON 필드 차이", new JScrollPane(judgementDetails)),
-        BorderLayout.SOUTH);
+    details.add(WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, packets,
+        WorkbenchUi.card("판정 근거 · JSON 필드 차이", new JScrollPane(judgementDetails)), .70));
     JPanel historyCard = WorkbenchUi.card("비교 기록", new JScrollPane(history));
     historyCard.setName("wb.card.Record History");
     JSplitPane lists =

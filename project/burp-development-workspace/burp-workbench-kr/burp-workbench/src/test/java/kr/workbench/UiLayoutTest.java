@@ -23,11 +23,11 @@ public final class UiLayoutTest {
   SwingUtilities.invokeAndWait(()->{JButton action=new JButton("실행");WorkbenchUi.primary(action);WorkbenchUi.style(action);action.setEnabled(false);check(action.getBackground().equals(WorkbenchUi.surface()),"disabled primary action has neutral background");action.setEnabled(true);check(action.getBackground().equals(WorkbenchUi.accent())&&action.getForeground().equals(Color.WHITE),"ready primary action restores accent");});
   check(table.getColumnCount()==4,"traffic has exactly four visible columns");
   check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
-  check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"traffic request above response");
-  check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.environment.lists")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"environment left stacked lists and right stacked packets");
-  check(((JSplitPane)named(root,"wb.auth.workspace")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.auth.lists")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"auth credentials/history left and packets right");
-  check(((JSplitPane)named(root,"wb.js.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"JS and passive packets request above response");
-  check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"payload editors/results left and packets right");
+  check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"traffic requests and responses side by side below list");
+  check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.environment.lists")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"environment left stacked lists and right stacked packets");
+  check(((JSplitPane)named(root,"wb.auth.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.auth.lists")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"auth credentials/history left and packets right");
+  check(((JSplitPane)named(root,"wb.js.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS and passive packets request above response");
+  check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"payload editors and results above packets in reference layout");
   check(requestResponseTabs(root)==0,"request and response are persistent panes, not switching tabs");
   check(table.getRowHeight()>=30,"readable row spacing");
   check(table.getDefaultRenderer(Object.class) instanceof WorkbenchUi.Cells,"semantic method/status renderer installed");

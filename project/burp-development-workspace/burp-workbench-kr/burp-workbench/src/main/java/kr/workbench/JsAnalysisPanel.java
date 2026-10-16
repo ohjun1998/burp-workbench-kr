@@ -73,6 +73,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       checkNpm = new JButton("NPM 존재 조회");
   final JLabel findingCount = new JLabel("0 / 0");
   final JTabbedPane results = new JTabbedPane();
+  final JsRepeater repeater;
+  ResultTabs resultTabs;
   final JsFindingNavigator navigator;
   boolean preparingSource, navigating;
   private final TargetWindow targetSettings;
@@ -103,6 +105,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   JsAnalysisPanel(MontoyaApi api, Runnable selected, long cacheBytes, long queueBytes) {
     super(new BorderLayout(8, 8));
     this.api = api;
+    repeater = new JsRepeater(this, api);
     cache = new JsSourceCache(cacheBytes);
     jobs = new JsWorkQueue(worker, queueBytes);
     targetSettings =
@@ -127,6 +130,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     input.setEditable(false);
     passive.setName("wb.js.analysis.toggle");
     passive.putClientProperty("wb.state.toggle", true);
+    passive.putClientProperty("wb.analysis.lamp", true);
     passive.setToolTipText("SCOPE 내 History의 텍스트 응답을 자동 분석합니다. OFF는 새 분석과 대기 작업을 중지합니다.");
     passive.addItemListener(e -> {
       boolean enabled = passive.isSelected();
@@ -192,7 +196,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             });
     JSplitPane workspace = WorkbenchUi.split(
         JSplitPane.HORIZONTAL_SPLIT,
-        WorkbenchUi.card("분석 원문", sourcePane()), results, .40);
+        WorkbenchUi.card("분석 원문", sourcePane()), resultTabs=new ResultTabs(results), .40);
     workspace.setName("wb.js.findings");
     results.setName("wb.js.results");
     add(workspace);
@@ -204,6 +208,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     bindPacketOpening(historyTable);
     JPanel footer = new JPanel(new BorderLayout());
     footer.add(status, BorderLayout.CENTER);
+    footer.add(progress, BorderLayout.EAST);
     JButton copy = new JButton("URL 목록 복사"), report = new JButton("가림 결과 복사"),
         clear = new JButton("분석 초기화");
     sources.setName("wb.js.sources");
@@ -227,29 +232,43 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     menu(moreMenu, "분석 초기화", clear);
     tools.addActionListener(e -> toolMenu.show(tools, 0, tools.getHeight()));
     more.addActionListener(e -> moreMenu.show(more, 0, more.getHeight()));
-    JPanel toolbar = new JPanel();
-    toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-    toolbar.add(WorkbenchUi.row(passive, analysisList, progress));
+    JButton target = targetSettings.button();
+    for(JButton button:new JButton[]{target,analysisList,resolve,locate,tools,more})
+      button.putClientProperty("wb.compact.button",true);
+    JComponent separator=new JComponent() {
+      @Override public Dimension getPreferredSize(){return new Dimension(8,32);}
+      @Override protected void paintComponent(Graphics graphics){
+        Color color=WorkbenchUi.line();
+        graphics.setColor(new Color(color.getRed(),color.getGreen(),color.getBlue(),150));
+        graphics.drawLine(getWidth()/2,(getHeight()-12)/2,getWidth()/2,(getHeight()+12)/2);
+      }
+    };
+    separator.setName("wb.js.actions.separator");
+    JPanel toolbar=WorkbenchUi.row(passive,target,analysisList,separator,resolve,locate,tools,more);
+    toolbar.setName("wb.js.toolbar");
     resolve.addActionListener(e -> openResolvedDraft());
-    toolbar.add(WorkbenchUi.row(resolve, locate, tools, more));
 
     header.removeAll();
     header.add(
         WorkbenchUi.header(FeatureGuide.title("js"), "JS에서 경로·입력·민감정보 후보 찾기 · 발견은 검증과 다름", null),
         BorderLayout.NORTH);
     header.add(toolbar);
-    footer.setBorder(BorderFactory.createEmptyBorder(5, 4, 5, 4));
+    footer.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+    status.putClientProperty("wb.font.size",11);
+    progress.putClientProperty("wb.font.size",11);
+    progress.setName("wb.js.progress");
+    progress.setHorizontalAlignment(SwingConstants.RIGHT);
+    status.addPropertyChangeListener("text",e->status.setToolTipText(status.getText()));
     add(footer, BorderLayout.SOUTH);
     WorkbenchUi.style(this);
-    WorkbenchUi.status(status);
-    WorkbenchUi.feedback(status);
-    WorkbenchUi.status(progress);
+    status.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
+    progress.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
     KeyStroke repeaterKey=KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
     getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(repeaterKey,"wb.js.repeater");
     getActionMap().put("wb.js.repeater",toRepeater);
     urlTable.getInputMap(WHEN_FOCUSED).put(repeaterKey,"wb.js.repeater");
     urlTable.getActionMap().put("wb.js.repeater",toRepeater);
-    urlTable.setToolTipText("더블클릭: 발견 출처 패킷 · Ctrl+R: 선택 URL의 Repeater 초안 준비");
+    urlTable.setToolTipText("더블클릭: 발견 출처 패킷 · Ctrl+R: 선택 URL의 Repeater 창 열기");
     resolve.setToolTipText("선택한 URL의 동적 부분을 입력한 뒤 Repeater 초안을 준비합니다.");
     locate.setToolTipText("선택한 URL 또는 시크릿 후보의 원문 위치로 이동합니다.");
     results.addChangeListener(e -> refreshActions());
@@ -335,31 +354,20 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
 
     discoverMaps.addActionListener(e -> discover());
     checkNpm.addActionListener(e -> checkRegistry());
+    refreshProgress();
   }
 
   void prepareRepeater() {
     if (!toRepeater.isEnabled()) return;
           try {
             if (current == null) return;
-            if(urlTable.getSelectedRowCount()==1){
-              var item=current.endpoints().get(urlTable.convertRowIndexToModel(urlTable.getSelectedRow()));
-              if(!item.complete() || !List.of("GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS").contains(item.method())){
-                status.setText("동적 값 또는 메서드 확인 후 Repeater 초안을 준비하세요.");
-                openResolvedDraft();return;
-              }
-            }
-            List<HttpRequest> drafts = new ArrayList<>();
+            List<JsRequestDraft.Draft> drafts = new ArrayList<>();
             for (int row : urlTable.getSelectedRows()) {
               var item = current.endpoints().get(urlTable.convertRowIndexToModel(row));
-              var draft = JsRequestDraft.create(item, null);
-              HttpRequest request = draft.request();
-              if (!WorkbenchScope.contains(api, request))
-                throw new IllegalArgumentException(
-                    "Scope 밖 URL입니다. · " + WorkbenchScope.reason(api, request));
-              drafts.add(request);
+              drafts.add(JsRequestDraft.preview(item));
             }
-            for (var draft : drafts) api.repeater().sendToRepeater(draft, "JS 초안 · 값/인증 확인");
-            status.setText("메서드/파라미터 초안 준비 · REPLACE_ME 값, 인증, 본문 형식은 직접 확인하세요. 전송 없음");
+            repeater.open(drafts);
+            status.setText("Repeater 창 열림 · Raw에서 경로·메서드·REPLACE_ME 값과 인증 확인 · 전송 없음");
           } catch (Exception ex) {
             Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",ex);
             status.setText(ex.getMessage());
@@ -528,7 +536,6 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     p.setName("wb.js.manual");
     JPanel actions = new JPanel();
     actions.setLayout(new BoxLayout(actions, BoxLayout.Y_AXIS));
-    actions.add(WorkbenchUi.row(targetSettings.button()));
     actions.add(
         WorkbenchUi.row(navigator.previous, navigator.next, navigator.filter, findingCount));
     navigator.previous.getAccessibleContext().setAccessibleName("이전 감지 위치");
@@ -936,7 +943,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             if (!WorkbenchScope.contains(api, draft.url()))
               throw new IllegalArgumentException(
                   "Scope 밖 URL입니다. · " + WorkbenchScope.reason(api, draft.url()));
-            api.repeater().sendToRepeater(draft.request(), "JS 동적 초안 · 값/인증 확인");
+            repeater.open(List.of(draft));
             var item =
                 new JsAnalysis.Endpoint(
                     draft.url(),
@@ -1345,6 +1352,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   @Override
   public void close() {
     targetSettings.close();
+    repeater.close();
     analysisWindow.close();
     packetWindow.close();
     resolveWindow.close();

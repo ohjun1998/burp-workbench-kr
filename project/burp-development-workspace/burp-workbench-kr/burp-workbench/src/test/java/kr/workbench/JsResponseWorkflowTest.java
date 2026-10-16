@@ -51,6 +51,7 @@ public final class JsResponseWorkflowTest {
     edt(()->{
       panel.analysisWindow.opener=(owner,title,content,modal,closed)->{verify(!modal,"analysis list opens modelessly");listContent.set(content);opened.incrementAndGet();return null;};
       panel.packetWindow.opener=(owner,title,content,modal,closed)->{verify(!modal,"source packets open modelessly");packetContent.set(content);opened.incrementAndGet();return null;};
+      panel.repeater.opener=(owner,title,content,modal,closed)->{verify(!modal,"Repeater opens modelessly");return null;};
       for(String removed:List.of("수동 분석","선택 응답 가져오기","수집 파일 저장","선택 URL → Repeater","최근 분석"))verify(!contains(panel,removed),"removed inline action: "+removed);
       verify(!SwingUtilities.isDescendingFrom(panel.historyTable,panel)&&!SwingUtilities.isDescendingFrom(panel.sources,panel),"analysis history and recent source picker are outside the main layout");
       verify(!SwingUtilities.isDescendingFrom(panel.requestPacket,panel)&&!SwingUtilities.isDescendingFrom(panel.responsePacket,panel),"main workspace reserves its area for source and results rather than packets");
@@ -75,7 +76,7 @@ public final class JsResponseWorkflowTest {
       panel.urlTable.getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(0,SortOrder.ASCENDING)));
       panel.urlTable.setRowSelectionInterval(0,0);
       panel.urlTable.getActionMap().get(binding).actionPerformed(new ActionEvent(panel.urlTable,0,""));
-      verify(repeated.get()==1&&draft.get().url().equals("https://allowed.test/a"),"Ctrl+R prepares the sorted selected endpoint rather than its original row index");
+      verify(repeated.get()==0&&JsAnalysisPanelTest.wire(panel,0).startsWith("GET /a HTTP/1.1"),"Ctrl+R opens the sorted selected endpoint in its own Repeater window");
       doubleClick(panel.urlTable);firstPacket.set(packetContent.get());
       verify(((JTextArea)UiLayoutTest.named(firstPacket.get(),"wb.js.packet.request.text")).getText().equals("REQUEST_SOURCE_A"),"double-click shows the request of the finding source without fabricating a candidate request");
       verify(((JTextArea)UiLayoutTest.named(firstPacket.get(),"wb.js.packet.response.text")).getText().equals("RESPONSE_SOURCE_A"),"double-click shows the matching captured response");
@@ -112,9 +113,10 @@ public final class JsResponseWorkflowTest {
       AtomicReference<Component> confirm=new AtomicReference<>();
       panel.resolveWindow.opener=(owner,title,content,modal,closed)->{confirm.set(content);return null;};
       panel.prepareRepeater();
-      verify(confirm.get()!=null&&repeated.get()==1,"Ctrl+R asks for a draft method when JSON does not provide one");
+      verify(confirm.get()==null&&repeated.get()==0&&JsAnalysisPanelTest.wire(panel,1).startsWith("REPLACE_METHOD /json-api"),"Ctrl+R opens an unresolved-method draft immediately without assuming GET");
+      panel.resolve.doClick(0);
       panel.resolvedMethod.setSelectedItem("POST");((JButton)UiLayoutTest.named(confirm.get(),"wb.js.draft.prepare")).doClick(0);
-      verify(repeated.get()==2&&draft.get().method().equals("POST")&&draft.get().url().equals("https://allowed.test/json-api"),"explicit method confirmation prepares the chosen data endpoint without sending it");
+      verify(repeated.get()==0&&JsAnalysisPanelTest.wire(panel,2).startsWith("POST /json-api HTTP/1.1"),"explicit method confirmation opens the chosen data endpoint without sending it");
       long processed=panel.processed.get();
       panel.offer(request("https://allowed.test/a.png","GET",true,List.of()),response("image/png","https://example.test/should-not-be-scanned"));
       verify(panel.processed.get()==processed&&panel.unsupported.get()>0,"known binary media do not enter the analysis queue");

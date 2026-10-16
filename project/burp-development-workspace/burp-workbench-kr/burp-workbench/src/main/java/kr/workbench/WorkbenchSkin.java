@@ -41,7 +41,9 @@ final class WorkbenchSkin {
     button.setOpaque(false);
     button.setContentAreaFilled(false);
     button.setRolloverEnabled(true);
-    button.setBorder(BorderFactory.createEmptyBorder(7, 12, 7, 12));
+    button.setBorder(Boolean.TRUE.equals(button.getClientProperty("wb.compact.button"))
+        ? BorderFactory.createEmptyBorder(5, 9, 5, 9)
+        : BorderFactory.createEmptyBorder(7, 12, 7, 12));
   }
 
   private static final class ButtonUi extends BasicButtonUI {
@@ -49,6 +51,8 @@ final class WorkbenchSkin {
     @Override public Dimension getPreferredSize(JComponent component) {
       if (Boolean.TRUE.equals(component.getClientProperty("wb.capture")))
         return new Dimension(174, 38);
+      if (Boolean.TRUE.equals(component.getClientProperty("wb.analysis.lamp")))
+        return new Dimension(112, 38);
       Dimension size = super.getPreferredSize(component);
       return new Dimension(size.width, Math.max(32, size.height));
     }
@@ -58,6 +62,10 @@ final class WorkbenchSkin {
       antialias(g);
       if (Boolean.TRUE.equals(button.getClientProperty("wb.capture"))) {
         capture(g, (JButton)button);
+      } else if (Boolean.TRUE.equals(button.getClientProperty("wb.analysis.lamp"))) {
+        lamp(g, button, button.getText(), button.isSelected()
+            ? (WorkbenchUi.dark() ? new Color(57, 222, 125) : new Color(20, 130, 70))
+            : captureColor("OFF"));
       } else {
         Color fill = button.getBackground();
         if (Boolean.TRUE.equals(button.getClientProperty("wb.state.toggle"))) {
@@ -110,6 +118,10 @@ final class WorkbenchSkin {
       default -> "범위 수집";
     };
     Color color = captureColor(mode);
+    lamp(g, button, label, color);
+  }
+
+  private static void lamp(Graphics2D g, AbstractButton button, String label, Color color) {
     g.setColor(WorkbenchUi.dark() ? new Color(color.getRed()/7, color.getGreen()/7+9, color.getBlue()/7+5)
         : new Color((color.getRed()+2295)/10, (color.getGreen()+2295)/10, (color.getBlue()+2295)/10));
     g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 10, 10);
@@ -165,11 +177,28 @@ final class WorkbenchSkin {
 
   static void tabs(JTabbedPane tabs) {
     if(tabs instanceof FolderNavigation.Pages)return;
+    if(Boolean.TRUE.equals(tabs.getClientProperty("wb.external.tabs"))) {
+      if(!(tabs.getUI() instanceof ContentTabsUi)) {
+        detachTabViewport(tabs);
+        tabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+        tabs.setUI(new ContentTabsUi());
+      }
+      return;
+    }
     if(!(tabs.getUI() instanceof TabsUi)) {
       detachTabViewport(tabs);
       tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
       tabs.setUI(new TabsUi());
     }
+  }
+
+  /** The JS result strip owns its scroll buttons, independent of overflow visibility. */
+  private static final class ContentTabsUi extends BasicTabbedPaneUI {
+    @Override protected int calculateTabAreaHeight(int placement, int runs, int height) { return 0; }
+    @Override protected int calculateTabAreaWidth(int placement, int runs, int width) { return 0; }
+    @Override protected void paintTabArea(Graphics g, int placement, int selected) {}
+    @Override protected void paintContentBorder(Graphics g, int placement, int selected) {}
+    @Override protected Insets getContentBorderInsets(int placement) { return new Insets(0, 0, 0, 0); }
   }
 
   private static final class TabsUi extends BasicTabbedPaneUI {

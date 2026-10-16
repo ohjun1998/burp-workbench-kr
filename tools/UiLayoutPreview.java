@@ -59,7 +59,8 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("folder-menu"),csv(path.getLastPathComponent().toString()),"true",""+rect.width,""+clipped.width,""+rect.height,""+clipped.contains(rect),""+(clipped.width>=preferred.width && rect.width>=preferred.width)));
             }
         }
-        if(c instanceof JTabbedPane tabs && !"wb.navigation.pages".equals(c.getName())) {
+        if(c instanceof JTabbedPane tabs && !"wb.navigation.pages".equals(c.getName())
+                && !Boolean.TRUE.equals(tabs.getClientProperty("wb.external.tabs"))) {
             for(int i=0;i<tabs.getTabCount();i++) {
                 var local=tabs.getBoundsAt(i);if(local==null)continue;
                 var rect=javax.swing.SwingUtilities.convertRectangle(tabs,local,root);
@@ -73,6 +74,12 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 var textBounds=new java.awt.Rectangle(rect.x+(rect.width-textWidth)/2,rect.y+(rect.height-textHeight)/2,textWidth,textHeight);
                 textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("tab"),csv(label),""+(tabs.getSelectedIndex()==i),""+textWidth,""+rect.width,""+rect.height,""+visible.contains(textBounds),""+fits));
             }
+        }
+        if(c instanceof javax.swing.JToggleButton tab && c.getName()!=null && c.getName().startsWith("wb.js.tab.")) {
+            var rect=SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);
+            var clipped=visible(root,c,rect);int textWidth=tab.getFontMetrics(tab.getFont()).stringWidth(tab.getText());
+            var textBounds=new java.awt.Rectangle(rect.x+11,rect.y+7,textWidth,tab.getFontMetrics(tab.getFont()).getHeight());
+            textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("tab"),csv(tab.getText()),""+tab.isSelected(),""+textWidth,""+rect.width,""+rect.height,""+clipped.contains(textBounds),""+(rect.width>=textWidth+22)));
         }
         if(c instanceof javax.swing.JLabel label&&label.getText()!=null&&!label.getText().isBlank()
                 &&label.getFont().isBold()&&label.getFont().getSize()>=14&&!label.getText().startsWith("<html")) {
@@ -218,13 +225,15 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 });JsAnalysisPanelTest.waitDone(js);
                 edt(()->js.load("{\"api\":\"/api/settings\",\"api_key\":\"Q1w2e3R4t5Y6u7I8o9P0\"}",origin+"/config.json"));JsAnalysisPanelTest.waitDone(js);
                 JPanel root=(JPanel)get(ext,"root");
-                Component[] history={null},packets={null};
+                Component[] history={null},packets={null},repeater={null};
                 edt(()->{
                     ((JTabbedPane)unchecked(ext,"tabs")).setSelectedComponent(js);
                     js.sources.setSelectedItem(origin+"/assets/app.js");js.urlTable.setRowSelectionInterval(0,0);
                     js.analysisWindow.opener=(owner,title,content,modal,closed)->{history[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
                     js.packetWindow.opener=(owner,title,content,modal,closed)->{packets[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
+                    js.repeater.opener=(owner,title,content,modal,closed)->{repeater[0]=content;return null;};
                     js.analysisList.doClick(0);js.openPacket(js.urlTable,0);
+                    js.prepareRepeater();
                     try {
                         installHeaders(root);installHeaders(history[0]);installHeaders(packets[0]);
                         render(root,out.resolve("js-workspace.png"),width,height);
@@ -232,6 +241,8 @@ public final class UiLayoutPreview extends WorkbenchTest {
                         renderAt((Container)history[0],out.resolve("js-analysis-list-small.png"),560,300);
                         renderAt((Container)packets[0],out.resolve("js-packets.png"),760,480);
                         renderAt((Container)packets[0],out.resolve("js-packets-small.png"),560,300);
+                        renderAt((Container)repeater[0],out.resolve("js-repeater.png"),1120,720);
+                        renderAt((Container)repeater[0],out.resolve("js-repeater-small.png"),780,440);
                         js.passive.doClick(0);render(root,out.resolve("js-analysis-off.png"),width,height);
                     }catch(Exception e){throw new RuntimeException(e);}
                 });

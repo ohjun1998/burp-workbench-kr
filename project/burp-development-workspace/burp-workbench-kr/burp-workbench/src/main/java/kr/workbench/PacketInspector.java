@@ -41,13 +41,27 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private Object currentHighlight;
   private Runnable nativeAction;
   private boolean truncated;
+  private final boolean editable;
+  private boolean rendering;
   record Span(int start, int end) {}
   record SearchResult(List<Span> spans, boolean capped, String error) {}
 
   PacketInspector(String name) {
+    this(name, false);
+  }
+
+  PacketInspector(String name, boolean editable) {
     super(new BorderLayout());
+    this.editable=editable;
+    if(editable)mode=Mode.RAW;
     setName(name);
     text = new JTextPane() {
+      @Override public void setText(String value) {
+        Document document=getDocument();
+        if(document==null){super.setText(value);return;}
+        try{document.remove(0,document.getLength());document.insertString(0,value==null?"":value,null);}
+        catch(BadLocationException ex){throw new IllegalStateException(ex);}
+      }
       @Override public String getText() {
         Document document=getDocument();
         if(document==null)return "";
@@ -67,7 +81,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
       String title = switch (value) { case PRETTY -> "Pretty"; case RAW -> "Raw"; case HEX -> "Hex"; };
       JToggleButton tab = new Tab(title);tab.setName(name + "." + title.toLowerCase());
       group.add(tab);choices.add(tab);tabs.add(tab);tab.setSelected(value == mode);
-      tab.addActionListener(e -> { mode = value; render(); });
+      tab.addActionListener(e -> { commitEdits();mode = value; render(); });
     }
     toolbar.add(choices, BorderLayout.WEST);
     JPanel actions = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 4, 2));actions.add(wrap);actions.add(more);
@@ -101,6 +115,12 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     bind(this, "ctrl F", "find", () -> { search.requestFocusInWindow();search.selectAll(); });
     bind(this, "F3", "next", () -> navigate(1));bind(this, "shift F3", "previous", () -> navigate(-1));
     text.addComponentListener(new ComponentAdapter() { public void componentResized(ComponentEvent e) { lines.revalidate();lines.repaint(); } });
+    if(editable)text.getDocument().addDocumentListener(new DocumentListener() {
+      public void insertUpdate(DocumentEvent e) { changed(); }
+      public void removeUpdate(DocumentEvent e) { changed(); }
+      public void changedUpdate(DocumentEvent e) {}
+      private void changed() { if(!rendering)scheduleSearch(); }
+    });
     applyTheme();
   }
 
@@ -116,6 +136,20 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   int currentMatch() { return current; }
   boolean closed() { return closed; }
   byte[] previewBytes() { return rawBytes.clone(); }
+  /** Authoring uses Raw bytes; Pretty and Hex remain display-only and cannot overwrite edits. */
+  byte[] editedBytes() {
+    if(!editable)throw new IllegalStateException("읽기 전용 패킷입니다.");
+    if(truncated)throw new IllegalStateException("잘린 미리보기는 전송할 수 없습니다. Burp Repeater에서 전체 요청을 여세요.");
+    commitEdits();return rawBytes.clone();
+  }
+
+  private void commitEdits() {
+    if(!editable || mode!=Mode.RAW || truncated)return;
+    raw=text.getText();rawBytes=raw.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+    // Raw is authoritative. Formatting is a view and is never a transmission source.
+    pretty=raw;
+    if(raw.length()<=PREVIEW_BYTES)try { pretty=PacketFormat.pretty(raw); } catch(StackOverflowError ignored) {}
+  }
 
   void setPacket(byte[] original, String decoded) {
     setPacket(original, decoded, original == null ? 0 : original.length);
@@ -167,8 +201,13 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     wrap.setEnabled(mode != Mode.HEX);
     wrap.setToolTipText(mode == Mode.HEX ? "Hex는 바이트 열을 고정하고 가로 스크롤로 표시합니다." : "긴 줄 자동 줄바꿈");
     String value = switch(mode) { case PRETTY -> pretty;case RAW -> raw;case HEX -> hex(rawBytes); };
+    rendering=true;
     try { text.getDocument().remove(0, text.getDocument().getLength());text.getDocument().insertString(0, value, null); }
     catch(BadLocationException ex) { throw new IllegalStateException(ex); }
+    finally { rendering=false; }
+    text.setEditable(editable && mode==Mode.RAW && !truncated);
+    if(editable)text.getAccessibleContext().setAccessibleName(mode==Mode.RAW?"요청 Raw 편집":"요청 표시 전용 · Raw에서 편집");
+    if(editable)text.setToolTipText("요청은 Raw에서 편집 · Pretty와 Hex는 표시 전용");
     text.setCaretPosition(0);colorize();lines.revalidate();lines.repaint();scheduleSearch();
   }
 

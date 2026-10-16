@@ -1,6 +1,6 @@
 # 최신 문서
 
-- [0.32.1 JS·JSON·XML 분석·목록 팝업·Ctrl+R](RELEASE_0.32.1_KR.md) · [검증 기록](VERIFICATION_0.32.1.json)
+- [0.33.0 JS·JSON·XML 분석·목록 팝업·Ctrl+R](RELEASE_0.33.0_KR.md) · [검증 기록](VERIFICATION_0.33.0.json)
 
 - [0.28.0 시안 기반 전체 화면·수집 상태등·테마 복원](RELEASE_0.28.0_KR.md) · [검증 기록](VERIFICATION_0.28.0.json)
 

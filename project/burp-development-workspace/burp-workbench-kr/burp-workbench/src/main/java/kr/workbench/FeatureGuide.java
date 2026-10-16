@@ -65,7 +65,7 @@ public final class FeatureGuide {
               "JS·JSON·XML·HTML·일반 텍스트 응답에서 API 경로와 토큰·키 후보를 찾습니다.",
               "1. SCOPE 내 사이트를 사용하고 ‘분석 ON’으로 History 응답을 자동 분석합니다. ‘분석 OFF’는 대기 분석도 중지합니다.\n"
                   + "2. ‘분석 목록’ 창에서 출처를 선택합니다. URL·API 등 결과를 더블클릭하면 발견 출처의 요청·응답 창이 열립니다.\n"
-                  + "3. API 행을 선택하고 Ctrl+R로 Repeater 초안을 준비합니다. 동적 값과 메서드를 확인한 뒤 실제 요청은 직접 전송합니다.",
+                  + "3. API 행을 선택하고 Ctrl+R로 Repeater 창을 엽니다. Raw에서 경로·메서드·REPLACE_ME 값과 인증을 수정하고 Send로 전송합니다. Pretty·Hex와 Search로 패킷을 확인합니다.",
               "코드 분석은 JS를 실행하거나 대상에 요청하지 않습니다. ‘소스맵 탐색’은 대상 URL을 요청하고 ‘NPM 존재 조회’는 설정한 레지스트리를"
                   + " 조회합니다. 발견 경로가 실제 기능이라는 보장은 없습니다."),
           new Feature(

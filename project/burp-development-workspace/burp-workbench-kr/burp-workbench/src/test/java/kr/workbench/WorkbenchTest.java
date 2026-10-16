@@ -78,6 +78,20 @@ public class WorkbenchTest {
     static Object get(Object o,String name)throws Exception{Field f=o.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(o);}
     static Object call(Object o,String name,Class<?> type,Object arg)throws Exception{Method m=o.getClass().getDeclaredMethod(name,type);m.setAccessible(true);try{return m.invoke(o,arg);}catch(InvocationTargetException e){if(e.getCause() instanceof Exception x)throw x;throw e;}}
     static void edt(Runnable r)throws Exception{SwingUtilities.invokeAndWait(r);}
+    /** Synthetic UI data only; policy is tested through real callbacks/context menus separately. */
+    static void seedTraffic(WorkbenchExtension ext,HttpRequest q,HttpResponse s)throws Exception{
+        registerTrafficPacket(q,s);
+        edt(()->{try{
+            Method store=WorkbenchExtension.class.getDeclaredMethod("storeTraffic",String.class,HttpRequest.class,HttpResponse.class);store.setAccessible(true);
+            Object row=store.invoke(ext,"시연 데이터",q,s);
+            Method add=WorkbenchExtension.class.getDeclaredMethod("addTraffic",row.getClass());add.setAccessible(true);add.invoke(ext,row);
+            ((ResponseReconPanel)get(ext,"responseRecon")).offer(q,s);
+            ((ActivityPanel)get(ext,"activity")).observe(q,"시연 데이터");
+            ((ActivityPanel)get(ext,"activity")).response(q,s);
+            JTable table=(JTable)get(ext,"logTable");if(table.getRowCount()>0)table.setRowSelectionInterval(table.getRowCount()-1,table.getRowCount()-1);
+        }catch(Exception e){throw new IllegalStateException(e);}});edt(()->{});
+    }
+    /** Exercises the actual History context-menu import with the current capture policy. */
     static void importTraffic(WorkbenchExtension ext,HttpRequest q,HttpResponse s)throws Exception{
         registerTrafficPacket(q,s);
         HttpRequestResponse rr=proxy(HttpRequestResponse.class,(p,m,a)->switch(m.getName()){case "request"->q;case "response"->s;default->def(m);});
@@ -120,8 +134,8 @@ public class WorkbenchTest {
         JTabbedPane tabs=(JTabbedPane)get(ext,"tabs");check(tabs.getTabCount()==10,"nine core tools including bounty support plus shared Settings tab");
         check(java.util.stream.IntStream.range(0,tabs.getTabCount()).noneMatch(i->tabs.getTitleAt(i).equals("공통 세션")),"common session tab removed");
         HttpRequest q=request("https://example.test/api","GET",true,List.of(header("Cookie","admin")));HttpResponse reply=response(200,"body");
-        importTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==1,"imported request collected");
-        for(int i=0;i<260;i++)importTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==261,"all imported rows survive beyond the old 250-row window");
+        seedTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==1,"synthetic UI packet loaded");
+        for(int i=0;i<260;i++)seedTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==261,"all seeded rows survive beyond the old 250-row window");
         for(var h:PayloadIntegrationTest.modernUnloads)h.extensionUnloaded();edt(()->{});
         check(((List<?>)get(ext,"traffic")).isEmpty(),"unload clears traffic");check(((AtomicBoolean)get(ext,"unloaded")).get(),"unload closes extension");
         System.out.println("WorkbenchTest: "+checks+" checks passed");

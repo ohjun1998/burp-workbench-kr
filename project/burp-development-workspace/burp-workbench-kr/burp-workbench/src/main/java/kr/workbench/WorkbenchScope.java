@@ -74,6 +74,10 @@ public final class WorkbenchScope {
  synchronized List<Rule> rules(){return List.copyOf(rules);}
  synchronized void add(String raw,boolean originOnly){String url=canonical(raw);if(url==null)throw new IllegalArgumentException("올바른 HTTP(S) URL을 선택하세요.");if(originOnly)url=origin(url)+"/";Rule rule=new Rule(url,originOnly);if(!rules.contains(rule)&&rules.size()>=LIMIT)throw new IllegalArgumentException("SCOPE는 최대 200개입니다.");configured=true;rules.add(rule);disabled.remove(rule);persist();}
  synchronized void remove(Rule rule){configured=true;rules.remove(rule);disabled.remove(rule);if(rule.burpKey()!=null)suppressed.add(rule.burpKey());persist();}
+ /** Traffic collection can only be authorized by native Burp Target Scope.
+  * Local manual rules remain available to explicit tools, never to collection.
+  * Native matching uses the original URL so Burp remains authoritative. */
+ synchronized boolean matchesNative(String raw){if(raw==null)return false;for(Rule rule:rules)if(rule.burpKey()!=null&&!disabled.contains(rule)&&ruleMatches(rule,raw,raw))return true;return false;}
  synchronized boolean matches(String raw){String url=canonical(raw);if(url==null)return false;for(Rule rule:rules)if(!disabled.contains(rule)&&ruleMatches(rule,raw,url))return true;return false;}
  static String canonical(String raw){String url=ActivityTracker.safeUrl(raw);if(url==null)return null;try {URI u=URI.create(url).normalize();for(String segment:u.getRawPath().split("/",-1)){String decoded=URLDecoder.decode(segment.replace("+","%2B"),StandardCharsets.UTF_8);if(decoded.equals(".")||decoded.equals("..")||decoded.contains("/")||decoded.contains("\\")||decoded.chars().anyMatch(c->c<32))return null;}return u.toString();}catch(Exception ex){return null;}}
  private static String origin(String url){URI u=URI.create(url);return u.getScheme()+"://"+u.getRawAuthority();}

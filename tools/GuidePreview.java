@@ -74,12 +74,12 @@ public final class GuidePreview extends WorkbenchTest {
         HttpRequest bob=request(origin+"/api/community/fixed/posts/102","GET",true,List.of(header("Host","127.0.0.1:8088"),header("Cookie","JSESSIONID=DEMO_BOB")));
         HttpRequest alice=request(origin+"/api/community/fixed/posts/102","GET",true,List.of(header("Host","127.0.0.1:8088"),header("Cookie","JSESSIONID=DEMO_ALICE")));
         HttpResponse owned=reply(200,"application/json","{\"ID\":102,\"OWNER_ID\":2,\"TITLE\":\"Bob의 가상 비공개 글\",\"VISIBILITY\":\"private\"}");
-        importTraffic(ext,bob,owned);
-        importTraffic(ext,alice,reply(404,"application/json","{\"error\":\"not found\"}"));
-        importTraffic(ext,request(origin+"/api/community/vuln/posts/102","GET",true,alice.headers()),owned);
+        seedTraffic(ext,bob,owned);
+        seedTraffic(ext,alice,reply(404,"application/json","{\"error\":\"not found\"}"));
+        seedTraffic(ext,request(origin+"/api/community/vuln/posts/102","GET",true,alice.headers()),owned);
         String document="{\"openapi\":\"3.0.0\",\"paths\":{\"/api/community/fixed/posts/{id}\":{\"get\":{\"parameters\":[{\"name\":\"id\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"integer\"}}],\"responses\":{\"200\":{\"description\":\"post\"}}}}}}";
-        importTraffic(ext,request(origin+"/v3/api-docs","GET",true,List.of(header("Host","127.0.0.1:8088"))),reply(200,"application/json",document));
-        importTraffic(ext,request(origin+"/js-lab","GET",true,List.of(header("Host","127.0.0.1:8088"))),reply(200,"text/html","<html><body>가상 JS 실습 화면</body></html>"));
+        seedTraffic(ext,request(origin+"/v3/api-docs","GET",true,List.of(header("Host","127.0.0.1:8088"))),reply(200,"application/json",document));
+        seedTraffic(ext,request(origin+"/js-lab","GET",true,List.of(header("Host","127.0.0.1:8088"))),reply(200,"text/html","<html><body>가상 JS 실습 화면</body></html>"));
         ActivityPanel activity=(ActivityPanel)get(ext,"activity");
         var tracker=activity.tracker.assessments;
         String aliceId=tracker.register(new AssessmentTracker.AccountInput("Alice",origin,"회원","Lab",false));

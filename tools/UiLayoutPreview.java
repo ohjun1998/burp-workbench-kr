@@ -201,7 +201,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         try {
         String origin = "http://127.0.0.1:8088";
         for (String path : List.of("/api/community/fixed/posts/102", "/api/community/vuln/posts/102", "/v3/api-docs", "/js-lab"))
-            importTraffic(ext, request(origin + path, "GET", true,
+            seedTraffic(ext, request(origin + path, "GET", true,
                 List.of(header("Cookie", "LAB_DEMO=alice"))), response(200, "{\"note\":\"guide demonstration data\"}"));
         edt(()->((PassiveScanWorkspace)unchecked(ext,"passiveScan")).open(origin,false));
         ActivityPanel activity = (ActivityPanel) get(ext, "activity");
@@ -299,7 +299,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 render(root,out.resolve("navigation-restored.png"),1440,920);
                 WorkbenchUi.packetLayout(root,true);
                 var capture=(javax.swing.JButton)UiLayoutTest.named(root,"wb.traffic.capture.mode");
-                capture.doClick(0);render(root,out.resolve("capture-off.png"),1440,920);
+                render(root,out.resolve("capture-off.png"),1440,920);
                 capture.doClick(0);render(root,out.resolve("capture-scope.png"),1440,920);
                 capture.doClick(0);
                 var tree=(javax.swing.JTree)UiLayoutTest.named(root,"wb.navigation.tree");

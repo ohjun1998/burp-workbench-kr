@@ -32,7 +32,7 @@ public final class AppearanceWorkflowTest extends WorkbenchTest {
         check(UiLayoutTest.named(root,"wb.traffic.title").getFont().getSize()>=24,"prominent traffic heading survives initial host registration");
         check(WorkbenchUi.font().canDisplayUpTo("요청·응답 목록 / 입력값 보안 검사")<0,"bundled sans font supports Korean captions");
         Dimension stable = mode.getPreferredSize();
-        for(String expected:new String[]{"ON","OFF","SCOPE"}) {
+        for(String expected:new String[]{"OFF","SCOPE"}) {
           mode.setSize(stable);
           var image=new BufferedImage(stable.width,stable.height,BufferedImage.TYPE_INT_RGB);
           var g=image.createGraphics();mode.paint(g);g.dispose();
@@ -41,7 +41,7 @@ public final class AppearanceWorkflowTest extends WorkbenchTest {
           check(mode.getPreferredSize().equals(stable),"status changes keep button geometry stable: "+expected);
           mode.doClick(0);
         }
-        check(mode.getText().equals("ON"),"status lamp preserves ON OFF SCOPE ON semantics");
+        check(mode.getText().equals("OFF"),"status lamp preserves OFF SCOPE OFF semantics");
         JTextArea input=(JTextArea)getUnchecked(ext,"codecIn");input.setText("UNCHANGED_HOST_THEME_INPUT");
         tree.setCellRenderer(new DefaultTreeCellRenderer());tree.setRowHeight(18);tree.setFont(new Font(Font.SERIF,Font.PLAIN,18));
         tree.setUI(new BasicTreeUI());
@@ -57,7 +57,7 @@ public final class AppearanceWorkflowTest extends WorkbenchTest {
         check(((JTextArea)getUnchecked(ext,"codecIn")).getText().equals("UNCHANGED_HOST_THEME_INPUT"),"re-theming preserves user work");
         mode.setSize(mode.getPreferredSize());var image=new BufferedImage(mode.getWidth(),mode.getHeight(),BufferedImage.TYPE_INT_RGB);
         var g=image.createGraphics();mode.paint(g);g.dispose();
-        check(image.getRGB(19,mode.getHeight()/2)==WorkbenchSkin.captureColor("ON").getRGB(),"colored capture lamp recovers after host button UI replacement");
+        check(image.getRGB(19,mode.getHeight()/2)==WorkbenchSkin.captureColor("OFF").getRGB(),"colored capture lamp recovers after host button UI replacement");
         var path=tree.getSelectionPath();var bounds=tree.getPathBounds(path);
         Component cell=tree.getCellRenderer().getTreeCellRendererComponent(tree,path.getLastPathComponent(),true,false,true,1,false);
         check(cell instanceof JLabel label&&label.getIcon()!=null,"selected tool keeps its custom document icon");

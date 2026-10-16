@@ -20,7 +20,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
         JPanel root=(JPanel)get(extension,"root");JTabbedPane tabs=(JTabbedPane)get(extension,"tabs");
         Object runner=get(entry,"payloadRunner");
         var source=request("https://guide.test/app/one","GET",true,List.of(header("Cookie","session=GUIDE_FIXTURE")));
-        importTraffic(extension,source,response(200,"fixture response"));
+        seedTraffic(extension,source,response(200,"fixture response"));
         AtomicReference<Component> dialog=new AtomicReference<>();AtomicReference<String> dialogTitle=new AtomicReference<>();
         AtomicInteger opened=new AtomicInteger();List<String> guides=new ArrayList<>();
         try {

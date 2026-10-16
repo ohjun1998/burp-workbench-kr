@@ -63,7 +63,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JButton scopeListButton, captureButton;
 
   enum CaptureMode {
-    ON,
     OFF,
     SCOPE;
 
@@ -72,7 +71,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     }
   }
 
-  private final AtomicReference<CaptureMode> captureMode = new AtomicReference<>(CaptureMode.ON);
+  private final AtomicReference<CaptureMode> captureMode = new AtomicReference<>(CaptureMode.OFF);
   private final AtomicBoolean unloaded = new AtomicBoolean(false);
   private final AtomicLong generation = new AtomicLong();
   private final AtomicInteger dropped = new AtomicInteger();
@@ -745,7 +744,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JPanel trafficPanel() {
     captureButton =
         button(
-            "ON",
+            "OFF",
             () -> {
               synchronized (captureLock) {
                 captureMode.set(captureMode.get().next());
@@ -755,7 +754,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     captureButton.setName("wb.traffic.capture.mode");
     captureButton.putClientProperty("wb.capture", true);
     captureButton.setToolTipText(
-        "클릭: ON → OFF → SCOPE → ON · ON 전체 수집 / OFF 수집 중지 / SCOPE 체크된 URL만 수집");
+        "클릭: OFF ↔ SCOPE · OFF 수집 금지 / SCOPE HTTP history → Add to scope로 등록한 Burp Scope만 수집");
     logTable =
         new JTable(logModel) {
           public String getToolTipText(java.awt.event.MouseEvent e) {
@@ -981,9 +980,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if (captureButton != null) {
       captureButton.setText(mode.name());
       captureButton.getAccessibleContext().setAccessibleDescription(switch (mode) {
-        case ON -> "초록 · 전체 트래픽 수집 중";
         case OFF -> "빨강 · 트래픽 수집 중지";
-        case SCOPE -> "주황 · 체크된 SCOPE만 수집";
+        case SCOPE -> "주황 · 체크된 Burp Target Scope만 수집";
       });
       captureButton.repaint();
     }
@@ -994,18 +992,21 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             + logTable.getRowCount()
             + " · "
             + switch (mode) {
-              case ON -> "전체 수집";
               case OFF -> "수집 중지";
-              case SCOPE -> "체크된 SCOPE 수집";
+              case SCOPE -> "Burp SCOPE 수집";
             });
     captureInfo.setToolTipText(captureDiagnostics());
   }
 
   private boolean acceptsTraffic(HttpRequest request) {
     return switch (captureMode.get()) {
-      case ON -> true;
       case OFF -> false;
-      case SCOPE -> localScope.matches(request.url());
+      case SCOPE -> {
+        String url = request.url();
+        if (nativeScopeFallback && localScope.syncObserved(java.util.List.of(url)))
+          SwingUtilities.invokeLater(this::scopeChanged);
+        yield localScope.matchesNative(url);
+      }
     };
   }
 
@@ -1109,14 +1110,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     rulesScroll.setMinimumSize(new Dimension(0, 45));
     panel.add(rulesScroll);
     JTextArea note =
-        new JTextArea("Burp Add to scope 자동 반영 · SCOPE 모드: 체크한 URL만 수집\n선택 삭제는 체크된 URL만 삭제합니다.");
+        new JTextArea("Burp Scope만 수집 · 수동 URL은 도구 대상용\n선택 삭제는 체크된 URL만 삭제합니다.");
     note.setEditable(false);
     note.setLineWrap(true);
     note.setWrapStyleWord(true);
     panel.add(note, BorderLayout.NORTH);
     JTextField urlInput = new JTextField(24);
     urlInput.setName("wb.traffic.scope.url");
-    urlInput.setToolTipText("HTTP(S) URL 입력 · 같은 경로와 하위 경로를 포함 · 쿼리 제외");
+    urlInput.setToolTipText("수동 URL은 도구 대상용 · 트래픽 수집은 Burp HTTP history → Add to scope 사용 · 쿼리 제외");
     Runnable add =
         () -> {
           localScope.add(urlInput.getText().trim(), false);
@@ -1339,7 +1340,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       captureStage(
           "요청 활동 관찰",
           () -> {
-            if (activity != null) activity.observe(r, r.toolSource().toolType().toString());
+            if (activity != null && acceptsTraffic(r))
+              activity.observe(r, r.toolSource().toolType().toString());
           });
       captureStage(
           "계정 자동 비교 요청",
@@ -1355,7 +1357,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if (!unloaded.get()) {
       received.incrementAndGet();
       lastResponse = LocalTime.now().withNano(0).toString();
-      // Collection is independent of optional analyses. Never let an observer block Burp's action.
+      // Passive observers only receive admitted traffic. An observer must never block Burp's action.
+      AtomicBoolean admitted = new AtomicBoolean();
       captureStage(
           "응답 수집",
           () -> {
@@ -1363,11 +1366,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               if (unloaded.get()) return;
               if (captureMode.get() == CaptureMode.OFF) return;
               HttpRequest q = r.initiatingRequest();
-              if (nativeScopeFallback
-                  && captureMode.get() == CaptureMode.SCOPE
-                  && localScope.syncObserved(java.util.List.of(q.url())))
-                SwingUtilities.invokeLater(this::scopeChanged);
               if (!acceptsTraffic(q)) return;
+              admitted.set(true);
               try {
                 incoming.offer(storeTraffic(r.toolSource().toolType().toString(), q, r));
               } catch (RuntimeException ex) {
@@ -1379,12 +1379,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       captureStage(
           "응답 보안 관찰",
           () -> {
-            if (responseRecon != null) responseRecon.offer(r.initiatingRequest(), r);
+            if (admitted.get() && responseRecon != null) responseRecon.offer(r.initiatingRequest(), r);
           });
       captureStage(
           "응답 활동 관찰",
           () -> {
-            if (activity != null) activity.response(r.initiatingRequest(), r);
+            if (admitted.get() && activity != null) activity.response(r.initiatingRequest(), r);
           });
       captureStage(
           "계정 자동 비교 응답",
@@ -1497,9 +1497,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     try {
                       HttpRequest q = rr.request();
                       HttpResponse response = rr.response();
-                      if (nativeScopeFallback
-                          && captureMode.get() == CaptureMode.SCOPE
-                          && localScope.syncObserved(java.util.List.of(q.url()))) scopeChanged();
                       if (!acceptsTraffic(q)) continue;
                       if (!addTraffic(storeTraffic("가져오기", q, response))) continue;
                       count++;

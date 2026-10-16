@@ -47,8 +47,8 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
     }
 
     private static HttpRequest plain(String path){return request("https://capture.test/"+path,"GET",false,List.of());}
-    private static HttpRequest malformed(){return request("http://qa_api.local/api/profile","GET",true,
-        List.of(header("Cookie","sid=fixture_user")));}
+    private static HttpRequest malformed(){return request("https://capture.test/api/profile","GET",true,
+        List.of(header("X-Auth-Token",null)));}
 
     private static HttpResponseReceived event(HttpRequest request,HttpResponse response){
         return event(request,response,new AtomicInteger(),0);
@@ -99,12 +99,16 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
                 }
                 return def(m);
             });
+            String scopeJson=TrafficScopeModesTest.config("https://capture.test/");
+            var nativeScope=proxy(burp.api.montoya.scope.Scope.class,(p,m,a)->m.getName().equals("isInScope")?BurpScopeConfig.parse(scopeJson).stream().anyMatch(e->e.matches((String)a[0])):def(m));
+            var nativeSuite=proxy(burp.api.montoya.burpsuite.BurpSuite.class,(p,m,a)->m.getName().equals("exportProjectOptionsAsJson")?scopeJson:def(m));
             api=proxy(MontoyaApi.class,(p,m,a)->switch(m.getName()){
                 case "extension"->extension;
                 case "logging"->logging;
+                case "scope"->nativeScope; case "burpSuite"->nativeSuite;
                 default->PayloadIntegrationTest.host(m.getReturnType());
             });
-            ext.initialize(api);edt(()->{});
+            ext.initialize(api);edt(()->{});edt(()->{try{((javax.swing.JButton)get(ext,"captureButton")).doClick(0);}catch(Exception e){throw new RuntimeException(e);}});
         }
         Timer timer()throws Exception{return (Timer)get(ext,"timer");}
         long metric(String name)throws Exception{return ((AtomicLong)get(ext,name)).get();}
@@ -151,10 +155,10 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
             AtomicBoolean rejected=new AtomicBoolean();edt(()->{try{
                 ((AuthComparePanel)get(fixture.ext,"authCompare")).observe(malformed(),response);
             }catch(RuntimeException expected){rejected.set(true);}catch(Exception ex){throw new IllegalStateException(ex);}});
-            check(rejected.get(),"underscore-host fixture triggers the real auth candidate observer failure");
+            check(rejected.get(),"native-scoped invalid credential metadata triggers the real auth candidate observer failure");
             fixture.send(malformed(),response);fixture.awaitRows(146);
             fixture.send(plain("after-malformed"),response);fixture.awaitRows(147);
-            check(fixture.urls().contains("http://qa_api.local/api/profile")&&fixture.urls().get(146).endsWith("after-malformed"),
+            check(fixture.urls().contains("https://capture.test/api/profile")&&fixture.urls().get(146).endsWith("after-malformed"),
                 "failed auth observation retains its packet and the next timer tick captures a normal packet");
             check(fixture.metric("processingErrors")==1&&fixture.dropped()==0,
                 "observer failure counts as processing error without reporting a retained packet as dropped");
@@ -262,11 +266,11 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
         java.nio.file.Path lastFile;
         try(Fixture fixture=new Fixture()){
             fixture.stop();javax.swing.JButton mode=(javax.swing.JButton)get(fixture.ext,"captureButton");
-            HttpRequest outside=plain("counters");HttpResponse small=response(200,"{}");
+            HttpRequest outside=request("https://outside.test/counters","GET",false,List.of());HttpResponse small=response(200,"{}");
             edt(()->mode.doClick(0));fixture.send(outside,small);
             check(fixture.queue().isEmpty()&&fixture.dropped()==0,"OFF does not retain or count loss");
             edt(()->mode.doClick(0));fixture.send(outside,small);
-            check(fixture.queue().isEmpty(),"SCOPE exclusion is preserved");edt(()->mode.doClick(0));
+            check(fixture.queue().isEmpty(),"SCOPE exclusion is preserved");
             HttpResponse large=response(200,"A\u0000B"+"x".repeat(2*1024*1024));
             fixture.send(plain("large"),large);
             for(int i=0;i<600;i++)fixture.ext.handleHttpResponseReceived(event(plain("burst/"+i),small));

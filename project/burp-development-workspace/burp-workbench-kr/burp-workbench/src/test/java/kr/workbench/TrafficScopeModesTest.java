@@ -22,6 +22,8 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
         final AtomicReference<String> json=new AtomicReference<>(config("https://burp.test/api/"));
         final AtomicReference<ScopeChangeHandler> handler=new AtomicReference<>();
         final AtomicReference<ExtensionUnloadingHandler> unload=new AtomicReference<>();
+        final AtomicInteger responseReads=new AtomicInteger();
+        final AtomicBoolean nativeFailure=new AtomicBoolean();
         final AtomicInteger deregistered=new AtomicInteger(),mutations=new AtomicInteger();
         final Map<String,String> saved=new HashMap<>();
         final WorkbenchExtension ext=new WorkbenchExtension();
@@ -32,7 +34,7 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
             var registration=proxy(Registration.class,(p,m,a)->{if(m.getName().equals("deregister"))deregistered.incrementAndGet();return def(m);});
             var scope=proxy(Scope.class,(p,m,a)->switch(m.getName()){
                 case "registerScopeChangeHandler"->{handler.set((ScopeChangeHandler)a[0]);yield registration;}
-                case "isInScope"->{String url=(String)a[0];yield !url.contains("/excluded")&&BurpScopeConfig.parse(json.get()).stream().anyMatch(e->e.enabled()&&e.matches(url));}
+                case "isInScope"->{if(nativeFailure.get())throw new IllegalStateException("unavailable");String url=(String)a[0];yield !url.contains("/excluded")&&BurpScopeConfig.parse(json.get()).stream().anyMatch(e->e.enabled()&&e.matches(url));}
                 case "includeInScope","excludeFromScope"->{mutations.incrementAndGet();yield null;}
                 default->def(m);
             });
@@ -50,8 +52,15 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
         void send(String url)throws Exception {
             HttpRequest q=request(url,"GET",false,List.of());HttpResponse r=response(200,"{}");
             ToolSource source=proxy(ToolSource.class,(p,m,a)->m.getName().equals("toolType")?ToolType.PROXY:def(m));
-            var event=proxy(HttpResponseReceived.class,(p,m,a)->switch(m.getName()){case "initiatingRequest"->q;case "toolSource"->source;case "annotations"->null;default->HttpResponse.class.getMethod(m.getName(),m.getParameterTypes()).invoke(r,a);});
+            var event=proxy(HttpResponseReceived.class,(p,m,a)->switch(m.getName()){case "initiatingRequest"->q;case "toolSource"->source;case "annotations"->null;default->{if(Set.of("body","bodyToString","toByteArray").contains(m.getName()))responseReads.incrementAndGet();yield HttpResponse.class.getMethod(m.getName(),m.getParameterTypes()).invoke(r,a);}});
             ext.handleHttpResponseReceived(event);
+        }
+        int rows(){return ((List<?>)unchecked(ext,"traffic")).size();}
+        void bring(String url)throws Exception {
+            HttpRequest q=request(url,"GET",false,List.of());HttpResponse response=response(200,"{}");registerTrafficPacket(q,response);
+            var rr=proxy(burp.api.montoya.http.message.HttpRequestResponse.class,(p,m,a)->switch(m.getName()){case "request"->q;case "response"->response;default->def(m);});
+            var event=proxy(burp.api.montoya.ui.contextmenu.ContextMenuEvent.class,(p,m,a)->switch(m.getName()){case "selectedRequestResponses"->List.of(rr);case "messageEditorRequestResponse"->Optional.empty();default->def(m);});
+            edt(()->((JMenuItem)((JMenu)ext.provideMenuItems(event).get(0)).getMenuComponent(0)).doClick(0));edt(()->{});
         }
         int queued(){return ((Queue<?>)unchecked(ext,"incoming")).size();}
         void click(String name)throws Exception {edt(()->((JButton)UiLayoutTest.named((JPanel)unchecked(ext,"scopeContent"),name)).doClick(0));}
@@ -63,14 +72,17 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
             check(f.table().getRowCount()==1&&f.table().getValueAt(0,2).equals("https://burp.test/api/"),"existing Burp Scope loaded without waiting for traffic");
             check(Boolean.TRUE.equals(f.table().getValueAt(0,0)),"new native Scope starts checked");
             edt(()->{var root=(JPanel)unchecked(f.ext,"root");check(PacketUiTest.buttons(((JTabbedPane)unchecked(f.ext,"tabs")).getComponentAt(0)).stream().noneMatch(b->Set.of("Scope만","SCOPE만","검색","검색 초기화","목록 비우기","내보내기","수집 ON").contains(b)),"traffic controls replaced by one mode button and live search");});
-            f.send("https://outside.test/a");check(f.queued()==1&&f.mode().getText().equals("ON"),"ON captures outside scope");
-            edt(()->f.mode().doClick(0));f.send("https://burp.test/api/a");check(f.queued()==1&&f.mode().getText().equals("OFF"),"OFF rejects new packets while retaining previous packets");
-            edt(()->f.mode().doClick(0));f.send("https://outside.test/a");f.send("https://burp.test/api/a");f.send("https://burp.test/api/excluded");
-            check(f.queued()==2&&f.mode().getText().equals("SCOPE"),"SCOPE captures checked rules and respects native exclusions");
-            edt(()->f.table().setValueAt(false,0,0));f.send("https://burp.test/api/b");check(f.queued()==2,"unchecked Scope immediately stops capture");check(WorkbenchScope.registeredRules(f.api).isEmpty(),"disabled scopes are excluded from shared target choices");
+            check(Arrays.equals(WorkbenchExtension.CaptureMode.values(),new WorkbenchExtension.CaptureMode[]{WorkbenchExtension.CaptureMode.OFF,WorkbenchExtension.CaptureMode.SCOPE}),"only OFF and SCOPE exist");
+            f.send("https://outside.test/a");f.send("https://burp.test/api/a");check(f.queued()==0&&f.mode().getText().equals("OFF"),"default OFF rejects native and outside packets");
+            check(((DiskTrafficStore)unchecked(f.ext,"trafficStore")).size()==0,"OFF writes no traffic to disk");
+            check(f.responseReads.get()==0,"OFF does not pass responses to passive analyzers");
+            f.bring("https://burp.test/api/manual-off");check(f.rows()==0,"OFF also rejects HTTP history manual import");
+            edt(()->f.mode().doClick(0));f.send("https://outside.test/a");check(f.responseReads.get()==0,"SCOPE outsiders do not enter passive analyzers");f.send("https://burp.test/api/a");f.send("https://burp.test/api/excluded");
+            check(f.queued()==1&&f.mode().getText().equals("SCOPE"),"SCOPE captures checked rules and respects native exclusions");
+            edt(()->f.table().setValueAt(false,0,0));f.send("https://burp.test/api/b");check(f.queued()==1,"unchecked Scope immediately stops capture");check(WorkbenchScope.registeredRules(f.api).isEmpty(),"disabled scopes are excluded from shared target choices");
             f.changed(config("https://burp.test/api/","https://new.test/"));
             check(f.table().getRowCount()==2&&!f.scope().enabled(f.scope().rules().get(0)),"Add to scope notification imports URL without re-enabling unchecked rows");
-            f.send("https://new.test/a");check(f.queued()==3,"native Add to scope capture starts automatically");
+            f.send("https://new.test/a");check(f.queued()==2,"native Add to scope capture starts automatically");
             edt(()->{f.table().getRowSorter().toggleSortOrder(2);f.table().getRowSorter().toggleSortOrder(2);f.table().setRowSelectionInterval(0,0);});
             f.click("wb.traffic.scope.remove");check(f.table().getRowCount()==1&&!f.scope().matches("https://new.test/a"),"selected delete removes checked rules only, independent of row sorting and highlight");
             f.changed(config("https://burp.test/api/","https://new.test/"));check(f.table().getRowCount()==1,"deleted native entry stays deleted on unrelated Scope notifications");
@@ -78,16 +90,21 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
             check(restored.rules().size()==1&&!restored.enabled(restored.rules().get(0)),"checkbox and deleted native entry persist across reload");WorkbenchScope.release(reloadApi);
             f.scope().load(saved);f.scope().syncBurp(f.json.get());
             edt(()->((JTextField)UiLayoutTest.named((JPanel)unchecked(f.ext,"scopeContent"),"wb.traffic.scope.url")).setText("https://manual.test/api?secret=hidden"));f.click("wb.traffic.scope.add");
-            f.send("https://manual.test/api/child");f.send("https://manual.test/apievil");check(f.queued()==4&&!f.scope().save().contains("hidden"),"URL add activates exact path/descendants and strips query");
+            f.send("https://manual.test/api/child");f.send("https://manual.test/apievil");check(f.queued()==2&&!f.scope().save().contains("hidden"),"Workbench manual rules cannot authorize traffic collection and strip query values");
+            f.scope().add("https://burp.test/",true);f.send("https://burp.test/api/overlap");check(f.queued()==2,"manual overlap cannot bypass an unchecked native row");
+            f.bring("https://outside.test/manual");f.bring("https://manual.test/api/child");check(f.rows()==0,"SCOPE manual import rejects native outsiders and local-only rules");
             f.click("wb.traffic.scope.clear");check(f.table().getRowCount()==0,"bulk delete removes unchecked and checked rules");
-            f.changed(f.json.get());f.send("https://new.test/a");check(f.table().getRowCount()==0&&f.queued()==4,"bulk delete suppresses native entries and empty SCOPE captures nothing");
+            f.changed(f.json.get());f.send("https://new.test/a");check(f.table().getRowCount()==0&&f.queued()==2,"bulk delete suppresses native entries and empty SCOPE captures nothing");
             f.changed(config());f.changed(config("https://new.test/"));check(f.table().getRowCount()==1,"removing then re-adding native Scope restores it as a new checked entry");
-            edt(()->f.mode().doClick(0));f.send("https://outside.test/new");check(f.queued()==5&&f.mode().getText().equals("ON"),"third click completes ON OFF SCOPE ON cycle");
+            f.bring("https://new.test/manual");check(f.rows()==3,"SCOPE manual import accepts a native URL and publishes retained live rows");
+            f.nativeFailure.set(true);f.send("https://new.test/unavailable");check(f.queued()==0&&f.rows()==3,"native Scope lookup failures reject capture");f.nativeFailure.set(false);
+            f.json.set(config());f.send("https://new.test/stale");check(f.queued()==0&&f.rows()==3,"native removal rejects stale local rows immediately before notification");
+            edt(()->f.mode().doClick(0));f.send("https://outside.test/new");f.send("https://new.test/new");check(f.queued()==0&&f.rows()==3&&f.mode().getText().equals("OFF"),"second click completes OFF SCOPE OFF cycle without discarding retained traffic");
             check(f.mutations.get()==0,"Workbench Scope edits never mutate global Burp Scope");
         }
         try(Fixture f=new Fixture(true)) {
             check(f.scope().rules().isEmpty(),"missing native Scope export is supported without inventing unobserved URLs");
-            edt(()->{f.mode().doClick(0);f.mode().doClick(0);});
+            edt(()->f.mode().doClick(0));
             f.send("https://burp.test/api/items?secret=hidden");
             check(f.queued()==1&&f.scope().rules().get(0).url().equals("https://burp.test/api/"),"native predicate recovers an observed in-scope prefix when export omits target");
             check(!f.scope().save().contains("hidden"),"observed Scope fallback never persists query values");

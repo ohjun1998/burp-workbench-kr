@@ -3,10 +3,12 @@ package kr.workbench;
 import burp.api.montoya.MontoyaApi;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Path2D;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
+import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.*;
 
 /** Folder navigation over the existing page instances and their shared selection model. */
@@ -66,32 +68,17 @@ final class FolderNavigation extends JPanel {
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
     folder(root, "데이터 도구", "data");
     folder(root, "점검 관리·증거", "activity", "bounty");
-    tree = new JTree(root);
+    tree = new NavigationTree(root);
     tree.setName("wb.navigation.tree");
     tree.setRootVisible(false);
     tree.setShowsRootHandles(true);
-    tree.setRowHeight(32);
+    tree.setRowHeight(36);
     tree.setToggleClickCount(1);
     tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     tree.getAccessibleContext().setAccessibleName("기능 폴더 목록");
     tree.setToolTipText("폴더를 펼쳐 기능 선택 · 방향키로 이동 · 선택만으로 검사를 실행하지 않습니다.");
-    tree.setCellRenderer(new DefaultTreeCellRenderer() {
-      @Override
-      public Component getTreeCellRendererComponent(JTree owner, Object value, boolean selected,
-          boolean expanded, boolean leaf, int row, boolean focus) {
-        super.getTreeCellRendererComponent(owner, value, selected, expanded, leaf, row, focus);
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        setFont(WorkbenchUi.font().deriveFont(node.getUserObject() instanceof Tool ? Font.PLAIN : Font.BOLD));
-        setBackgroundNonSelectionColor(WorkbenchUi.surface());
-        setBackgroundSelectionColor(WorkbenchUi.selected());
-        setTextNonSelectionColor(WorkbenchUi.ink());
-        setTextSelectionColor(WorkbenchUi.ink());
-        setBorderSelectionColor(WorkbenchUi.accent());
-        if (node.getUserObject() instanceof Tool tool) setEnabled(indexOf(tool.id()) >= 0);
-        else setEnabled(true);
-        return this;
-      }
-    });
+    tree.setCellRenderer(new NavigationRenderer());
+    /* Renderer labels stay transparent so the selected background spans the whole row. */
     for (int row = 0; row < tree.getRowCount(); row++) tree.expandRow(row);
     tree.addTreeSelectionListener(event -> {
       if (synchronizing) return;
@@ -100,6 +87,7 @@ final class FolderNavigation extends JPanel {
         int index = indexOf(tool.id());
         if (index >= 0) pages.setSelectedIndex(index);
       }
+      tree.repaint();
     });
     sidebar = new JScrollPane(tree);
     sidebar.setName("wb.navigation.sidebar");
@@ -141,6 +129,188 @@ final class FolderNavigation extends JPanel {
     });
     pages.addChangeListener(event -> refreshSelection());
     refreshSelection();
+  }
+
+  private boolean active(Object value) {
+    if (!(value instanceof DefaultMutableTreeNode node)
+        || !(node.getUserObject() instanceof Tool tool)) return false;
+    int index = indexOf(tool.id());
+    return index >= 0 && index == pages.getSelectedIndex();
+  }
+
+  /** Local UI delegate and vector icons avoid OS-dependent folders and tree guide lines. */
+  private final class NavigationTree extends JTree {
+    private int hovered = -1;
+
+    NavigationTree(TreeNode root) {
+      super(root);
+      setOpaque(false);
+      setBorder(BorderFactory.createEmptyBorder(6, 0, 8, 0));
+      addMouseMotionListener(new MouseMotionAdapter() {
+        @Override public void mouseMoved(MouseEvent event) {
+          int row = rowAt(event);
+          if (hovered != row) { hovered = row; repaint(); }
+        }
+      });
+      addMouseListener(new MouseAdapter() {
+        @Override public void mouseExited(MouseEvent event) { hovered = -1; repaint(); }
+      });
+      addFocusListener(new FocusAdapter() {
+        @Override public void focusGained(FocusEvent event) { repaint(); }
+        @Override public void focusLost(FocusEvent event) { repaint(); }
+      });
+    }
+
+    @Override public void updateUI() {
+      setUI(new BasicTreeUI() {
+        @Override protected void installDefaults() {
+          super.installDefaults();
+          setLeftChildIndent(10);
+          setRightChildIndent(12);
+          setExpandedIcon(new NavigationIcon(IconKind.DOWN));
+          setCollapsedIcon(new NavigationIcon(IconKind.RIGHT));
+        }
+        @Override protected void paintHorizontalLine(Graphics g, JComponent c, int y, int left, int right) {}
+        @Override protected void paintVerticalLine(Graphics g, JComponent c, int x, int top, int bottom) {}
+      });
+    }
+
+    private int rowAt(MouseEvent event) {
+      int row = getClosestRowForLocation(event.getX(), event.getY());
+      Rectangle bounds = row < 0 ? null : getRowBounds(row);
+      return bounds != null && event.getY() >= bounds.y && event.getY() < bounds.y + bounds.height ? row : -1;
+    }
+
+    @Override protected void processMouseEvent(MouseEvent event) {
+      // Make the highlighted blank part of a row clickable too; leave chevrons to BasicTreeUI.
+      int row = rowAt(event);
+      Rectangle bounds = row < 0 ? null : getRowBounds(row);
+      if (event.getID() == MouseEvent.MOUSE_PRESSED && SwingUtilities.isLeftMouseButton(event)
+          && bounds != null && event.getX() >= bounds.x + bounds.width) {
+        requestFocusInWindow();
+        TreePath path = getPathForRow(row);
+        setSelectionPath(path);
+        if (!getModel().isLeaf(path.getLastPathComponent())) {
+          if (isExpanded(path)) collapsePath(path); else expandPath(path);
+        }
+        event.consume();
+        return;
+      }
+      super.processMouseEvent(event);
+    }
+
+    @Override protected void paintComponent(Graphics graphics) {
+      Graphics2D g = (Graphics2D) graphics.create();
+      g.setColor(WorkbenchUi.surface());
+      g.fillRect(0, 0, getWidth(), getHeight());
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      Rectangle clip = g.getClipBounds();
+      for (int row = 0; row < getRowCount(); row++) {
+        Rectangle bounds = getRowBounds(row);
+        if (bounds == null || clip != null && !clip.intersects(0, bounds.y, getWidth(), bounds.height)) continue;
+        boolean currentTool = active(getPathForRow(row).getLastPathComponent());
+        if (currentTool || isRowSelected(row) || row == hovered) {
+          g.setColor(currentTool ? WorkbenchUi.selected() : WorkbenchUi.background());
+          g.fillRoundRect(4, bounds.y + 2, getWidth() - 8, bounds.height - 4, 8, 8);
+          if (currentTool) {
+            g.setColor(WorkbenchUi.accent());
+            g.fillRoundRect(4, bounds.y + 6, 3, bounds.height - 12, 3, 3);
+          }
+        }
+      }
+      g.dispose();
+      super.paintComponent(graphics);
+      if (hasFocus() && getLeadSelectionPath() != null) {
+        Rectangle bounds = getPathBounds(getLeadSelectionPath());
+        if (bounds != null) {
+          g = (Graphics2D) graphics.create();
+          g.setColor(WorkbenchUi.accent());
+          g.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[] {2, 2}, 0));
+          g.drawRoundRect(8, bounds.y + 4, getWidth() - 17, bounds.height - 9, 5, 5);
+          g.dispose();
+        }
+      }
+    }
+  }
+
+  private final class NavigationRenderer extends JLabel implements TreeCellRenderer {
+    NavigationRenderer() {
+      setOpaque(false);
+      setIconTextGap(8);
+      setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 12));
+    }
+
+    @Override
+    public Component getTreeCellRendererComponent(JTree owner, Object value, boolean selected,
+        boolean expanded, boolean leaf, int row, boolean focus) {
+      DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+      boolean toolNode = node.getUserObject() instanceof Tool;
+      setText(node.toString());
+      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, 14f));
+      Icon icon = new NavigationIcon(toolNode ? IconKind.PAGE : expanded ? IconKind.OPEN_FOLDER : IconKind.FOLDER);
+      setIcon(icon);
+      // The payload page attaches after navigation. Reserve its icon width even while unavailable.
+      setDisabledIcon(icon);
+      boolean available = !toolNode || indexOf(((Tool) node.getUserObject()).id()) >= 0;
+      setEnabled(available);
+      setForeground(available ? WorkbenchUi.ink() : WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
+      return this;
+    }
+
+    @Override protected void paintComponent(Graphics graphics) {
+      Graphics2D g = (Graphics2D) graphics.create();
+      g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+      super.paintComponent(g);
+      g.dispose();
+    }
+  }
+
+  private enum IconKind { FOLDER, OPEN_FOLDER, PAGE, RIGHT, DOWN }
+
+  /** Java2D paths keep their edges sharp at the host's display scale. */
+  private static final class NavigationIcon implements Icon {
+    private final IconKind kind;
+    NavigationIcon(IconKind kind) { this.kind = kind; }
+    public int getIconWidth() { return kind == IconKind.RIGHT || kind == IconKind.DOWN ? 12 : 20; }
+    public int getIconHeight() { return getIconWidth(); }
+
+    public void paintIcon(Component component, Graphics graphics, int x, int y) {
+      Graphics2D g = (Graphics2D) graphics.create();
+      g.translate(x, y);
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g.setStroke(new BasicStroke(1.4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+      if (kind == IconKind.RIGHT || kind == IconKind.DOWN) {
+        g.setColor(WorkbenchUi.dark() ? new Color(169, 181, 199) : new Color(99, 111, 129));
+        Path2D arrow = new Path2D.Float();
+        if (kind == IconKind.RIGHT) { arrow.moveTo(4, 2); arrow.lineTo(8, 6); arrow.lineTo(4, 10); }
+        else { arrow.moveTo(2, 4); arrow.lineTo(6, 8); arrow.lineTo(10, 4); }
+        g.draw(arrow);
+      } else if (kind == IconKind.PAGE) {
+        g.setColor(WorkbenchUi.dark() ? new Color(183, 195, 212) : new Color(101, 116, 137));
+        Path2D page = new Path2D.Float();
+        page.moveTo(5, 2); page.lineTo(11, 2); page.lineTo(16, 7); page.lineTo(16, 18);
+        page.lineTo(5, 18); page.closePath();
+        g.draw(page);
+        g.drawLine(11, 2, 11, 7); g.drawLine(11, 7, 16, 7);
+      } else {
+        Path2D folder = new Path2D.Float();
+        folder.moveTo(1, 5); folder.quadTo(1, 3, 3, 3); folder.lineTo(8, 3);
+        folder.lineTo(10, 5); folder.lineTo(17, 5); folder.quadTo(19, 5, 19, 7);
+        folder.lineTo(19, 16); folder.quadTo(19, 18, 17, 18); folder.lineTo(3, 18);
+        folder.quadTo(1, 18, 1, 16); folder.closePath();
+        g.setColor(new Color(225, 113, 26)); g.fill(folder);
+        g.setColor(new Color(255, 169, 62)); g.drawLine(3, 6, 16, 6);
+        if (kind == IconKind.OPEN_FOLDER) {
+          Path2D front = new Path2D.Float();
+          front.moveTo(1, 9); front.lineTo(20, 9); front.lineTo(18, 17);
+          front.quadTo(18, 18, 16, 18); front.lineTo(3, 18); front.closePath();
+          g.setColor(new Color(255, 150, 43)); g.fill(front);
+        } else {
+          g.setColor(new Color(255, 150, 43)); g.fillRoundRect(2, 8, 16, 9, 2, 2);
+        }
+      }
+      g.dispose();
+    }
   }
 
   private record Tool(String id) {

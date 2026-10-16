@@ -159,6 +159,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JComboBox<FeatureGuide.Feature> featureChoices;
   private final JTextArea featureHelpText = new JTextArea(15, 55);
   private final JButton featureHelp = new JButton("기능 안내");
+  private final Diagnostics diagnostics = new Diagnostics();
+  private final JButton logButton = new JButton("로그");
+  private JPanel logContent;
+  private JDialog logWindow;
   private JTabbedPane tabs;
   private FolderNavigation navigation;
   private JTabbedPane dataTabs;
@@ -168,6 +172,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
 
   public void addPayloadRunnerPage(Component page) {
     WorkbenchUi.style(page);
+    Diagnostics.bind(page, diagnostics);
     payloadPage = page;
     if (page instanceof JComponent component)
       component.putClientProperty("wb.feature.id", "payload");
@@ -324,6 +329,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               SwingUtilities.invokeLater(
                   () -> {
                     if (featureHelpWindow != null) featureHelpWindow.dispose();
+                    if (logWindow != null) logWindow.dispose();
+                    diagnostics.close();
                     if (commonSettingsWindow != null) commonSettingsWindow.dispose();
                     if (scopeWindow != null) scopeWindow.dispose();
                     if (timer != null) timer.stop();
@@ -499,22 +506,17 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         };
     addPage("설정", "settings", settingsPanel(), false);
     settingsActionReady = true;
-    navigation = new FolderNavigation(api, tabs, this::openSettings);
-    root.add(navigation);
-    commonSettings.apply();
-    JPanel footer = new JPanel(new BorderLayout(12, 0));
-    footer.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
-    footer.add(status);
-    JPanel footerActions = new JPanel(new BorderLayout(10, 0));
-    footerActions.add(stats);
     featureHelp.setName("wb.feature.help");
     featureHelp.addActionListener(e -> openFeatureHelp());
-    footerActions.add(featureHelp, BorderLayout.EAST);
-    footer.add(footerActions, BorderLayout.EAST);
+    logButton.setName("wb.navigation.logs");
+    logButton.setToolTipText("오류 기록과 수집 상태 확인");
+    logButton.addActionListener(e -> openLogs());
+    navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton);
+    root.add(navigation);
+    Diagnostics.bind(root, diagnostics);
+    commonSettings.apply();
     tabs.addChangeListener(e -> updateFeatureHelp());
     updateFeatureHelp();
-    root.add(footer, BorderLayout.SOUTH);
-    WorkbenchUi.status(status);
     api.userInterface().applyThemeToComponent(root);
     WorkbenchUi.style(root);
     navigation.restoreLayout();
@@ -638,6 +640,22 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             featureHelpContent,
             false,
             () -> featureHelpWindow = null);
+  }
+
+  private void updateLogButton() {
+    String label = diagnostics.size() == 0 ? "로그" : "로그 (" + diagnostics.size() + ")";
+    if (!label.equals(logButton.getText())) logButton.setText(label);
+    logButton.setForeground(diagnostics.size() == 0 ? WorkbenchUi.ink() : WorkbenchUi.toneInk(WorkbenchUi.Tone.ERROR));
+  }
+
+  private void openLogs() {
+    if (unloaded.get()) return;
+    logContent = diagnostics.panel(() -> "모드 " + captureMode.get() + " · 수신 " + received.get() + " · 보관 " + trafficStore.size() + " · 대기 " + incoming.size()
+        + "\n분석 대기 " + (captureObservations == null ? 0 : captureObservations.pending()) + " · 누락 " + dropped.get() + " · 처리 오류 " + processingErrors.get() + " · 마지막 응답 " + lastResponse);
+    WorkbenchUi.style(logContent);
+    if (logWindow != null && logWindow.isDisplayable()) { logWindow.toFront(); return; }
+    logWindow = dialogOpener.open(root, "Workbench KR · 로그", logContent, false, () -> logWindow = null);
+    if (logWindow != null) logWindow.setMinimumSize(new Dimension(680,420));
   }
 
   private static final class FeatureGuidePanel extends JPanel implements Scrollable {
@@ -892,38 +910,24 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             });
     scopeListButton = button("SCOPE 목록", this::showScopeList);
     scopeListButton.setName("wb.traffic.scope.list");
-    JLabel title = new JLabel("요청·응답 목록");
-    title.putClientProperty("wb.font.size", 25);
-    title.putClientProperty("wb.font.heading", true);
-    title.setName("wb.traffic.title");
-    JLabel breadcrumb = new JLabel("트래픽  /  요청·응답 목록");
-    breadcrumb.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
-    JPanel heading = new JPanel(new BorderLayout(12, 6));
-    heading.add(title, BorderLayout.CENTER);
-    heading.add(captureButton, BorderLayout.EAST);
-    heading.add(breadcrumb, BorderLayout.SOUTH);
-    JPanel search = new JPanel(new BorderLayout(10, 0));
-    search.add(new JLabel("검색"), BorderLayout.WEST);
-    search.add(filter, BorderLayout.CENTER);
-    search.add(scopeListButton, BorderLayout.EAST);
-    JPanel top = new JPanel(new BorderLayout(0, 12));
-    top.setBorder(BorderFactory.createEmptyBorder(2, 0, 10, 0));
-    top.add(heading, BorderLayout.NORTH);
-    top.add(search, BorderLayout.CENTER);
-    top.add(captureInfo, BorderLayout.SOUTH);
+    JPanel actions = new JPanel(new GridLayout(1, 2, 10, 0));
+    actions.add(scopeListButton);
+    actions.add(captureButton);
+    JPanel top = new JPanel(new BorderLayout(10, 0));
+    top.setName("wb.traffic.controls");
+    top.add(filter, BorderLayout.CENTER);
+    top.add(actions, BorderLayout.EAST);
     JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
         res = WorkbenchUi.card("응답  RESPONSE", responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
     viewers.setName("wb.traffic.messages");
     JPanel messages = new JPanel(new BorderLayout(0, 6));
-    selectionInfo.setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 8));
-    messages.add(selectionInfo, BorderLayout.NORTH);
     messages.add(viewers);
     JSplitPane body =
         WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficListPanel(), messages, .30);
     body.setName("wb.traffic.workspace");
     JPanel main = page(top, body);
-    main.setBorder(BorderFactory.createEmptyBorder(16, 16, 12, 16));
+    main.setBorder(BorderFactory.createEmptyBorder(8, 16, 12, 16));
     main.setName("wb.traffic");
     refreshTrafficInfo();
     return main;
@@ -1404,6 +1408,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void captureFailure(String stage, RuntimeException ex) {
+    diagnostics.record(stage, ex);
     processingErrors.incrementAndGet();
     lastCaptureError = stage + " · " + ex.getClass().getSimpleName();
     long count = captureErrorCounts.computeIfAbsent(stage, k -> new AtomicLong()).incrementAndGet();
@@ -1463,6 +1468,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             + " · 오류 "
             + processingErrors.get());
     stats.setToolTipText(captureDiagnostics());
+    updateLogButton();
     refreshTrafficInfo();
   }
 
@@ -1596,6 +1602,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void error(Exception e) {
+    diagnostics.record("사용자 작업", e);
     status.setText("확인 필요 · " + e.getMessage());
     JOptionPane.showMessageDialog(
         root, e.getMessage(), "Workbench KR", JOptionPane.INFORMATION_MESSAGE);

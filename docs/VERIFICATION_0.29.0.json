@@ -1,0 +1,233 @@
+{
+  "date": "2026-10-16",
+  "timezone": "Asia/Seoul",
+  "version": "0.29.0",
+  "mapperVersion": "0.3.0",
+  "baseCommit": "c833114fa8d5a61130f5e59698565d6c968f6cf2",
+  "result": "passed",
+  "release": {
+    "version": "0.29.0",
+    "groups": {
+      "BuildInfoTest": 3,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 51,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 24,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 22,
+      "TrafficScopeModesTest": 37,
+      "TrafficCaptureRecoveryTest": 41,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95,
+      "FolderNavigationTest": 40,
+      "DiagnosticsWorkflowTest": 28,
+      "AppearanceWorkflowTest": 18
+    },
+    "regressionGroups": 49,
+    "regressionChecks": 1545,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 101,
+    "bountyHttpChecks": 266,
+    "totalChecks": 2044,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "mapper": {
+    "javaChecks": 89,
+    "nodeChecks": 7,
+    "result": "passed"
+  },
+  "ui": {
+    "workbench": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.29.0.jar",
+      "releaseJarSha256": "f4c00ad210073ff729fa76c8d8d53d5bb4cc3abedd3a75a873756ea4a5e7ff8c",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 150,
+      "controlsMeasured": 1710,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 2694,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guides": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.29.0.jar",
+      "releaseJarSha256": "f4c00ad210073ff729fa76c8d8d53d5bb4cc3abedd3a75a873756ea4a5e7ff8c",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "mapper": {
+      "version": "0.3.0",
+      "jarSha256": "b290150a3580c651f84ae0855dfc6212f05423518e51942d52d0fdef237ed68c",
+      "method": "Production Swing; API adapters and synthetic metadata, no native Burp GUI.",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800",
+        "1440x920"
+      ],
+      "renderedViews": 30,
+      "controlsMeasured": 150,
+      "clippedControls": [],
+      "smallControls": [],
+      "result": "passed"
+    },
+    "totalRenderedViews": 228
+  },
+  "packaging": {
+    "checks": 4,
+    "verify": "passed",
+    "workbenchSourceInputs": 170,
+    "mapperSourceInputs": 36,
+    "workbenchArtifacts": {
+      "burp-workbench-kr-0.29.0.jar": "f4c00ad210073ff729fa76c8d8d53d5bb4cc3abedd3a75a873756ea4a5e7ff8c",
+      "burp-workbench-kr-0.29.0-source.zip": "ce9e2ad52745eeef4e0cb64683d47941dc5cb475f6a875a08f93d73527588224"
+    },
+    "mapperArtifacts": {
+      "feature-mapper-kr-0.3.0.jar": "b290150a3580c651f84ae0855dfc6212f05423518e51942d52d0fdef237ed68c",
+      "feature-mapper-browser-0.3.0.zip": "e778092b53bf369ec210bff40022964ac439ca397498e35294b5902d6627fd1c",
+      "feature-mapper-kr-0.3.0-source.zip": "c555eb6d87258c142ff336fb47482a2483c790c483c6faf2d485eae18b1570c5"
+    }
+  },
+  "localCapture": {
+    "host": "Montoya adapter; production callback, Swing timer and disk store",
+    "nativeBurp": false,
+    "nativeGuiClicks": false,
+    "os": "Linux",
+    "java": "17.0.20",
+    "mode": "soak",
+    "received": 327,
+    "drops": 0,
+    "processingErrors": 0,
+    "errorStages": [],
+    "acceptedResponses": 327,
+    "retainedRows": 327,
+    "diskBytes": 1407735,
+    "heapBeforeBytes": 1935488,
+    "heapAfterBytes": 14354064,
+    "elapsedSeconds": 16.612601795,
+    "requestedSeconds": 15,
+    "intervalMillis": 50,
+    "result": "passed",
+    "checks": 8,
+    "passedChecks": [
+      "collection exceeds the former 250-row limit",
+      "every accepted packet remains in disk and UI",
+      "all response callbacks complete with zero drops and processing errors",
+      "real Swing collection timer remains active",
+      "retained packet restores exact request and response bytes",
+      "retained packet restores exact request and response bytes",
+      "retained packet restores exact request and response bytes",
+      "unload deletes the active private traffic store"
+    ]
+  },
+  "remoteChecks": "See the associated PR Checks for the final commit; not counted as local checks.",
+  "limits": {
+    "nativeBurpGui": false,
+    "osDpi": false,
+    "nativeProCollaborator": false,
+    "browserLocal": false,
+    "method": "Production Swing/API adapters with synthetic traffic and isolated loopback HTTP fixtures; remote browser verification is tracked separately."
+  },
+  "resumeVerification": {
+    "date": "2026-10-16",
+    "timezone": "Asia/Seoul",
+    "result": "passed",
+    "commands": [
+      "python dev.py check --port 18739 --bounty-port 18749",
+      "python tools/render_ui_layout.py --check",
+      "python tools/render_ui_layout.py --guide-only --check",
+      "python feature-mapper/tests/render_ui.py --check",
+      "python tools/package_downloads.py --verify",
+      "python -m unittest discover -s tools -p test_*.py -v"
+    ],
+    "checks": 2044,
+    "mapperJavaChecks": 89,
+    "mapperNodeChecks": 7,
+    "renderedViews": 228,
+    "packagingChecks": 4,
+    "sourceInputsMatchUploadTree": true,
+    "priorCaptureResult": "localCapture is the earlier implementation run; capture was not repeated during the upload resume.",
+    "nativeBurpGui": false
+  }
+}

@@ -142,6 +142,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                 var a = (AssessmentTracker.Account) combo.getSelectedItem();
                 trackingAccounts[slot] = a == null ? "" : a.id();
               } catch (Exception ex) {
+                Diagnostics.failure(AuthComparePanel.this,"계정 권한 비교",ex);
                 state.setText(ex.getMessage());
                 refreshTracking();
               }
@@ -383,7 +384,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             });
     JScrollPane candidateScroll = new JScrollPane(candidates);
     candidateScroll.setPreferredSize(new Dimension(900, 95));
-    JPanel candidateCard = WorkbenchUi.card("인증 정보 후보 · 우클릭으로 계정 지정", candidateScroll);
+    JPanel candidateCard = WorkbenchUi.card("인증 정보 후보", candidateScroll);
     candidateCard.setName("wb.card.수집한 인증 정보 · 중복 제거 · 우클릭으로 인가 지정");
     history.setName("wb.auth.history");
     history.setAutoCreateRowSorter(true);
@@ -444,6 +445,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     pretty.addActionListener(e -> show(current()));
     WorkbenchUi.style(this);
     WorkbenchUi.status(state);
+    WorkbenchUi.feedback(state);
     show(null);
   }
 
@@ -492,6 +494,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     try {
       task.run();
     } catch (IllegalArgumentException e) {
+      Diagnostics.failure(this,"계정 권한 비교",e);
       if (recording.get() == null) {
         record.setSelected(false);
         record.setText("새 요청 자동 비교 OFF");
@@ -699,7 +702,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
           try {
             editable();
             largeEnabled = largeFiles.isSelected();
-          } catch (Exception ex) {
+          } catch (Exception ex) {Diagnostics.failure(AuthComparePanel.this,"계정 권한 비교",ex);
             largeFiles.setSelected(largeEnabled);
             state.setText(ex.getMessage());
           }
@@ -1024,6 +1027,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     try {
       validate(q, s, c);
     } catch (IllegalArgumentException e) {
+      Diagnostics.failure(AuthComparePanel.this,"계정 권한 비교",e);
       state.setText("기록 제외 · " + e.getMessage());
       return;
     }
@@ -1512,6 +1516,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       Files.writeString(path, text, StandardCharsets.UTF_8);
       state.setText("CSV 저장 완료");
     } catch (Exception e) {
+      Diagnostics.failure(AuthComparePanel.this,"계정 권한 비교",e);
       state.setText("CSV 저장 실패");
     }
   }

@@ -59,6 +59,13 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
             if (!executor.getQueue().offer(task)) throw new RejectedExecutionException("미리보기 종료 중");
           });
   private JPanel root;
+  private final Diagnostics diagnostics = new Diagnostics();
+  private final JButton logButton = new JButton("로그");
+  private final JButton captureButton = new JButton();
+  interface DialogOpener { JDialog open(Component owner, String title, Component content, Runnable closed); }
+  DialogOpener dialogOpener = MapperUi::window;
+  private JDialog helpWindow, settingsWindow, logWindow;
+  private JPanel settingsContent, logContent;
   private final JLabel status = new JLabel("사이트를 사용하면 기능을 자동으로 분류합니다.");
   private final JCheckBox scopeOnly = new JCheckBox("Burp Scope만 수집", false);
   private final JCheckBox enabled = new JCheckBox("자동 수집", true);
@@ -78,7 +85,7 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
       explanation = new JTextArea();
   private final JComboBox<String> runs = new JComboBox<>();
   private final JComboBox<String> sessions = new JComboBox<>();
-  private final JTextField search = new JTextField(16);
+  private final JTextField search = new MapperUi.Search();
   private List<Mapper.PacketRow> shown = List.of();
   private Mapper shownOwner;
   private String selectedFeature;
@@ -165,6 +172,7 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
   }
 
   private void failure(String stage, Exception error) {
+    diagnostics.record(stage, error);
     long n = errors.incrementAndGet();
     if (n <= 3 || (n & (n - 1)) == 0)
       try {
@@ -179,10 +187,7 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
                     + "회");
       } catch (Exception ignored) {
       }
-    SwingUtilities.invokeLater(
-        () ->
-            status.setText(
-                "확인 필요 · " + stage + " · " + error.getClass().getSimpleName() + " · 오류 " + n));
+
   }
 
   private JButton button(String name, Runnable action) {
@@ -201,17 +206,19 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
   private void buildUi() {
     root = new JPanel(new BorderLayout(8, 8));
     root.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-    JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    enabled.addActionListener(e -> collect.set(enabled.isSelected()));
-    scopeOnly.addActionListener(e -> scope.set(scopeOnly.isSelected()));
-    for (Component c :
-        List.of(
-            enabled,
-            scopeOnly,
-            button("프로젝트 저장", () -> chooseFile(true)),
-            button("프로젝트 열기", () -> chooseFile(false)),
-            button("새 프로젝트", this::newProject),
-            button("브라우저 연결", this::showBridge))) toolbar.add(c);
+    root.setName("fm.root");
+    enabled.addActionListener(e -> { collect.set(enabled.isSelected()); updateIndicators(); });
+    scopeOnly.addActionListener(e -> { scope.set(scopeOnly.isSelected()); updateIndicators(); });
+    JButton help = button("기능 안내", this::showHelp), settings = button("설정", this::showSettings);
+    help.setName("fm.navigation.help"); settings.setName("fm.navigation.settings"); logButton.setName("fm.navigation.logs");
+    logButton.addActionListener(e -> showLogs());
+    JPanel header = new JPanel(new BorderLayout(8,0));
+    header.add(new JLabel("기능·트래픽 매핑"));
+    JPanel navigation = MapperUi.row(help,settings,logButton); navigation.setName("fm.navigation.actions");
+    header.add(navigation,BorderLayout.EAST);
+    captureButton.setName("fm.capture"); captureButton.putClientProperty("fm.capture",true); captureButton.addActionListener(e -> enabled.doClick(0));
+    JPanel projectActions = MapperUi.row(button("프로젝트 저장", () -> chooseFile(true)),button("프로젝트 열기", () -> chooseFile(false)),button("Repeater에 준비", this::sendToRepeater),captureButton);
+    JPanel toolbar = new JPanel(new BorderLayout(0,6)); toolbar.add(header,BorderLayout.NORTH); toolbar.add(projectActions);
     root.add(toolbar, BorderLayout.NORTH);
     tree.setRootVisible(true);
     DefaultTreeCellRenderer tr = new DefaultTreeCellRenderer();
@@ -232,8 +239,11 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
     actions.add(button("기능 이름·상태·메모", this::editFeature));
     actions.add(button("선택 패킷 분류 수정", this::movePackets));
     left.add(actions, BorderLayout.SOUTH);
+    table.setName("fm.history");
     table.setAutoCreateRowSorter(true);
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    int[] widths={50,75,400,65,150,80,80},minimums={40,60,220,55,80,60,60};
+    for(int i=0;i<widths.length;i++){table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);table.getColumnModel().getColumn(i).setMinWidth(minimums[i]);}
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
     renderer.putClientProperty("html.disable", true);
     table.setDefaultRenderer(Object.class, renderer);
@@ -243,14 +253,11 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
             e -> {
               if (!e.getValueIsAdjusting()) showSelected();
             });
-    JPanel filters = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    filters.add(new JLabel("실행"));
-    filters.add(runs);
-    filters.add(new JLabel("세션"));
-    filters.add(sessions);
-    filters.add(new JLabel("검색"));
+    runs.setPreferredSize(new Dimension(135,36)); sessions.setPreferredSize(new Dimension(135,36));
+    JPanel filters = new JPanel(new BorderLayout(10,0));
+    filters.setName("fm.filters");
+    filters.add(MapperUi.row(new JLabel("실행"),runs,new JLabel("세션"),sessions),BorderLayout.WEST);
     filters.add(search);
-    filters.add(button("Repeater에 준비", this::sendToRepeater));
     runs.addActionListener(
         e -> {
           if (!rebuilding) fillRows();
@@ -277,16 +284,17 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
             });
     for (JTextArea a : List.of(requestText, responseText, explanation)) {
       a.setEditable(false);
-      a.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+      a.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     }
+    requestText.putClientProperty("fm.packet",true); responseText.putClientProperty("fm.packet",true);
     explanation.setLineWrap(true);
     explanation.setWrapStyleWord(true);
     JSplitPane packets =
         new JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT,
-            scroll("요청 원본 미리보기", requestText),
-            scroll("응답 원본 미리보기", responseText));
-    packets.setResizeWeight(.5);
+            scroll("요청  REQUEST", requestText),
+            scroll("응답  RESPONSE", responseText));
+    packets.setName("fm.messages"); MapperUi.split(packets,.5);
     JTabbedPane details = new JTabbedPane();
     details.addTab("요청·응답", packets);
     details.addTab("매핑 근거", new JScrollPane(explanation));
@@ -294,33 +302,68 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
     top.add(filters, BorderLayout.NORTH);
     top.add(new JScrollPane(table));
     JSplitPane main = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, details);
-    main.setResizeWeight(.55);
+    main.setName("fm.workspace"); MapperUi.split(main,.45);
     JSplitPane all = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, main);
-    all.setResizeWeight(.23);
-    all.setDividerLocation(300);
+    all.setName("fm.navigation.split"); MapperUi.split(all,.23);
+    all.putClientProperty("fm.initial.width",240); all.setResizeWeight(0);
+    all.setDividerLocation(240);
     root.add(all);
-    root.add(status, BorderLayout.SOUTH);
+
     api.userInterface().applyThemeToComponent(root);
+    MapperUi.style(root); Diagnostics.bind(root,diagnostics); MapperUi.install(root);
     api.userInterface().registerSuiteTab("기능 자동 매핑", root);
     timer =
         new javax.swing.Timer(
             500,
             e -> {
               try {
-                if (root.isShowing() && revision.get() != rendered) refresh();
+                if (root.isShowing()) { updateIndicators(); if (revision.get() != rendered) refresh(); }
               } catch (Exception ex) {
                 failure("화면 갱신", ex);
               }
             });
     timer.start();
-    refresh();
+    refresh(); updateIndicators();
   }
 
   private JPanel scroll(String title, JTextArea a) {
-    JPanel p = new JPanel(new BorderLayout());
-    p.add(new JLabel(title), BorderLayout.NORTH);
-    p.add(new JScrollPane(a));
-    return p;
+    return MapperUi.card(title,new JScrollPane(a));
+  }
+
+  private void updateIndicators() {
+    captureButton.setText(collect.get() ? (scope.get() ? "SCOPE 수집" : "전체 수집") : "OFF");
+    captureButton.setToolTipText("수집 전환 · 세부 범위는 설정에서 변경");
+    String label = diagnostics.size() == 0 ? "로그" : "로그 (" + diagnostics.size() + ")";
+    if (!label.equals(logButton.getText())) logButton.setText(label);
+    logButton.setForeground(diagnostics.size() == 0 ? MapperUi.ink() : new Color(210,70,80));
+  }
+
+  private void showHelp() {
+    if (closed.get()) return;
+    if(helpWindow!=null&&helpWindow.isDisplayable()){helpWindow.toFront();return;}
+    JTextArea text = new JTextArea("1. Burp를 통해 사이트를 사용하면 요청·응답이 기능별로 연결됩니다.\n\n2. 왼쪽에서 기능을 선택하고 실행·세션·검색으로 좁힙니다. 매핑 근거 탭에서 연결 이유를 확인하세요.\n\n3. Repeater에 준비는 요청만 옮깁니다. 실제 전송은 Repeater의 Send에서 직접 실행합니다.\n\n4. 설정에서 자동 수집과 Burp Scope 조건을 바꾸고 브라우저 도우미를 연결할 수 있습니다. 브라우저의 분석할 사이트를 활성화한 뒤 새로고침하세요.\n\n5. 프로젝트 저장에는 전체 원본 패킷이 포함됩니다. 로그에는 오류 단계와 코드 위치만 기록합니다.");
+    text.setEditable(false);text.setLineWrap(true);text.setWrapStyleWord(true);
+    helpWindow=dialogOpener.open(root,"Feature Mapper · 기능 안내",new JScrollPane(text),()->helpWindow=null);
+  }
+
+  private void showSettings() {
+    if (closed.get()) return;
+    if(settingsWindow!=null&&settingsWindow.isDisplayable()){settingsWindow.toFront();return;}
+    if(settingsContent==null){
+      settingsContent = new JPanel(); settingsContent.setLayout(new BoxLayout(settingsContent,BoxLayout.Y_AXIS)); settingsContent.setName("fm.settings");
+      settingsContent.add(MapperUi.row(enabled,scopeOnly));
+      settingsContent.add(MapperUi.row(button("브라우저 연결",this::showBridge),button("새 프로젝트",this::newProject)));
+    }
+    settingsWindow=dialogOpener.open(root,"Feature Mapper · 설정",settingsContent,()->settingsWindow=null);
+  }
+
+  private void showLogs() {
+    if (closed.get()) return;
+    if(logWindow!=null&&logWindow.isDisplayable()){logWindow.toFront();return;}
+    logContent=diagnostics.panel(()->"패킷 "+mapper.count()+" · 오류 "+errors.get()+" · "+(collect.get()?(scope.get()?"Burp Scope 수집":"전체 수집"):"수집 중지"));
+    MapperUi.style(logContent);
+    logWindow=dialogOpener.open(root,"Feature Mapper · 로그",logContent,()->logWindow=null);
+    if(logWindow!=null)logWindow.setMinimumSize(new Dimension(680,420));
   }
 
   record FeatureNode(String id, String label) {
@@ -595,6 +638,7 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
             70);
     text.setEditable(false);
     text.setLineWrap(true);
+    MapperUi.style(text);
     JOptionPane.showMessageDialog(
         root, new JScrollPane(text), "브라우저 연결", JOptionPane.INFORMATION_MESSAGE);
   }
@@ -723,6 +767,7 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
 
   private void unload() {
     if (!closed.compareAndSet(false, true)) return;
+    diagnostics.close();
     if (bridge != null) bridge.close();
     io.shutdownNow();
     previews.shutdownNow();
@@ -737,6 +782,8 @@ public final class FeatureMapperExtension implements BurpExtension, HttpHandler 
     SwingUtilities.invokeLater(
         () -> {
           if (timer != null) timer.stop();
+              if(root!=null)root.putClientProperty("fm.closed",true);
+              if(helpWindow!=null)helpWindow.dispose(); if(settingsWindow!=null)settingsWindow.dispose(); if(logWindow!=null)logWindow.dispose();
         });
   }
 }

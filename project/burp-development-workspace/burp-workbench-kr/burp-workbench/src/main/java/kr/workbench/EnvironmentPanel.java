@@ -189,6 +189,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     add(status, BorderLayout.SOUTH);
     WorkbenchUi.style(this);
     WorkbenchUi.status(status);
+    WorkbenchUi.feedback(status);
     int[] widths = {440, 210, 300, 190};
     for (int i = 0; i < widths.length; i++)
       pathTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
@@ -226,6 +227,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
             }
             status.setText("Repeater에 준비했습니다. 전송은 Repeater에서 실행하세요.");
           } catch (Exception ex) {
+            Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
             status.setText(ex.getMessage());
           }
         });
@@ -426,6 +428,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
                 + candidates.size()
                 + " · 응답 근거 우선 · 존재/취약점 미확인");
     } catch (Exception ex) {
+      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
       status.setText(ex.getMessage());
     }
     showSelected();
@@ -444,6 +447,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
             AuthJudgement.rules(volatileFields.getText(), "", "");
             if (job == null) refresh();
           } catch (Exception ex) {
+            Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
             status.setText(ex.getMessage());
           }
         });
@@ -511,6 +515,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
         if (!WorkbenchScope.contains(api, HttpRequest.httpRequestFromUrl(url)))
           throw new IllegalArgumentException("Scope 밖 후보가 있습니다. Scope를 확인하세요: " + url);
     } catch (Exception e) {
+      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",e);
       status.setText(e.getMessage());
       return;
     }
@@ -524,6 +529,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
       if (account.getSelectedIndex() > 0)
         for (String url : urls) sessions.headers(account.getSelectedIndex() - 1, url);
     } catch (Exception ex) {
+      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
       status.setText("계정 검증 준비 실패 · " + ex.getMessage());
       return;
     }
@@ -535,6 +541,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     try {
       ignored = AuthJudgement.rules(volatileFields.getText(), "", "").ignored();
     } catch (Exception ex) {
+      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
       status.setText(ex.getMessage());
       return;
     }
@@ -791,6 +798,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
       refresh();
       status.setText("가져옴 " + result.accepted() + "개 · 중복/형식/제한 제외 " + result.skipped() + "개");
     } catch (Exception e) {
+      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",e);
       status.setText("목록 가져오기 실패 · " + e.getMessage());
     }
   }

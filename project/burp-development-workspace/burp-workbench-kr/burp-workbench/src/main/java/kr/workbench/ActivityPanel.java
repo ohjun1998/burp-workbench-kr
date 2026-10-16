@@ -29,7 +29,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
   final JTextField pendingResolved = new JTextField(32);
   final JTable table = new JTable(model), parameterTable = new JTable(params);
   final JLabel summary = new JLabel("활동 추적 준비됨");
-  final JTextField search = new JTextField(14);
+  final JTextField search = new WorkbenchSkin.SearchField(14,"URL, 입력 이름 검색");
   final JComboBox<String> filter =
       new JComboBox<>(
           new String[] {
@@ -146,7 +146,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
             .72);
     JPanel endpointsPage = new JPanel(new BorderLayout(6, 6));
     endpointsPage.add(
-        WorkbenchUi.row(filter, new JLabel("검색"), search, finish, finishParam, evidence, draft),
+        WorkbenchUi.row(filter, search, finish, finishParam, evidence, draft),
         BorderLayout.NORTH);
     endpointsPage.add(split);
     coveragePages.addTab("URL 점검 현황", endpointsPage);
@@ -180,6 +180,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
             tracker.resolve(p, pendingResolved.getText());
             refresh();
           } catch (Exception ex) {
+            Diagnostics.failure(ActivityPanel.this,"점검 진행 현황",ex);
             summary.setText(ex.getMessage());
           }
         });
@@ -196,7 +197,8 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     coveragePages.addTab("계정별 점검", assessmentPanel.accountsPage);
     coveragePages.addTab("업무별 현황", assessmentPanel.tasksPage);
     add(coveragePages);
-    add(summary, BorderLayout.SOUTH);
+    setToolTipText(summary.getText());
+    summary.addPropertyChangeListener("text", e -> setToolTipText(summary.getText()));
     enabled.addActionListener(
         e -> {
           recording = enabled.isSelected();
@@ -284,7 +286,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
                     if (Files.size(path) > 32 * 1024 * 1024)
                       throw new IllegalArgumentException("기록 파일 32MB 제한");
                     tracker.load(Files.readString(path));
-                  } catch (Exception ex) {
+                  } catch (Exception ex) {Diagnostics.failure(ActivityPanel.this,"점검 진행 현황",ex);
                     message("불러오기 실패: " + ex.getMessage());
                   }
                 });
@@ -331,7 +333,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
           try {
             action.run(path);
             message("저장 완료 · " + path.getFileName());
-          } catch (Exception ex) {
+          } catch (Exception ex) {Diagnostics.failure(ActivityPanel.this,"점검 진행 현황",ex);
             message("저장 실패: " + ex.getMessage());
           }
         });
@@ -353,7 +355,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
             if (!closed.get() && generation.get() == g)
               try {
                 work.run();
-              } catch (Exception ex) {
+              } catch (Exception ex) {Diagnostics.failure(ActivityPanel.this,"점검 진행 현황",ex);
                 dropped.incrementAndGet();
                 message("활동 처리 실패 · " + ex.getClass().getSimpleName());
               }
@@ -688,7 +690,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
           try {
             tracker.assessments.evidenceSaved(id, filename, items);
             if (path != null) tracker.assessments.attachEvidenceFile(path);
-          } catch (Exception ex) {
+          } catch (Exception ex) {Diagnostics.failure(ActivityPanel.this,"점검 진행 현황",ex);
             message("ZIP 저장 후 계정/업무 연결 실패 · " + ex.getMessage());
           }
         });
@@ -725,6 +727,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
       api.repeater().sendToRepeater(draft.request(), "활동 추적 · 값/인증 확인");
       summary.setText("초안 준비 · REPLACE_ME 값/인증/본문 형식을 확인하세요. 전송·완료 처리 없음");
     } catch (Exception e) {
+      Diagnostics.failure(ActivityPanel.this,"점검 진행 현황",e);
       summary.setText(e.getMessage());
     }
   }

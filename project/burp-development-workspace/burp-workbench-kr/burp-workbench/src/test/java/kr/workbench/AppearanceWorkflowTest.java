@@ -29,7 +29,7 @@ public final class AppearanceWorkflowTest extends WorkbenchTest {
         check(((JSplitPane)UiLayoutTest.named(root,"wb.traffic.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT
             && ((JSplitPane)UiLayoutTest.named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,
             "reference layout shows full-width history above both packet panes");
-        check(UiLayoutTest.named(root,"wb.traffic.title").getFont().getSize()>=24,"prominent traffic heading survives initial host registration");
+        check(UiLayoutTest.named(root,"wb.traffic.title")==null,"traffic title stays compact after initial host registration");
         check(WorkbenchUi.font().canDisplayUpTo("요청·응답 목록 / 입력값 보안 검사")<0,"bundled sans font supports Korean captions");
         Dimension stable = mode.getPreferredSize();
         for(String expected:new String[]{"OFF","SCOPE"}) {
@@ -53,7 +53,7 @@ public final class AppearanceWorkflowTest extends WorkbenchTest {
         for(int i=0;i<6;i++)UiLayoutTest.layout(root);
         check(tree.getCellRenderer()==renderer&&tree.getRowHeight()==40,"custom folders and spacing recover after host renderer and UI replacement");
         check(!(tree.getCellRenderer() instanceof DefaultTreeCellRenderer),"host gray folder renderer is removed after re-theming");
-        check(UiLayoutTest.named(root,"wb.traffic.title").getFont().getSize()>=24,"heading size recovers after look-and-feel reset");
+        check(UiLayoutTest.named(root,"wb.traffic.title")==null,"removed traffic heading does not return after look-and-feel reset");
         check(((JTextArea)getUnchecked(ext,"codecIn")).getText().equals("UNCHANGED_HOST_THEME_INPUT"),"re-theming preserves user work");
         mode.setSize(mode.getPreferredSize());var image=new BufferedImage(mode.getWidth(),mode.getHeight(),BufferedImage.TYPE_INT_RGB);
         var g=image.createGraphics();mode.paint(g);g.dispose();

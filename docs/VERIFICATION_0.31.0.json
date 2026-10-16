@@ -280,5 +280,13 @@
     "osDpi": false,
     "method": "Production PacketInspector Swing UI, synthetic HTTP/API adapters and isolated loopback fixtures. Native Burp editor is available separately through the more button."
   },
-  "remoteChecks": "Final PR workflow results are tracked separately from these local checks."
+  "remoteChecks": "Final PR workflow results are tracked separately from these local checks.",
+  "remoteCandidateResult": {
+    "result": "failed",
+    "platform": "Windows",
+    "workflowRun": 38908286888,
+    "job": 116997348682,
+    "failure": "Raw CRLF serialization differs from StyledDocument offsets on Windows",
+    "supersededBy": "0.31.1"
+  }
 }

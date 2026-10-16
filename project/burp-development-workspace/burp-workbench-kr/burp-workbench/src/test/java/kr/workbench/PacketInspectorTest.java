@@ -29,6 +29,10 @@ public final class PacketInspectorTest extends WorkbenchTest {
         int key=p.text.getText().indexOf("userId"),value=p.text.getText().indexOf("demo");
         check(!StyleConstants.getForeground(p.text.getStyledDocument().getCharacterElement(key).getAttributes()).equals(StyleConstants.getForeground(p.text.getStyledDocument().getCharacterElement(value).getAttributes())),"Pretty paints JSON keys and string values differently");});
       mode(p,1);edt(()->check(p.text.getText().equals(raw),"Raw preserves the original text and CRLF without formatting"));
+      edt(()->p.text.getDocument().putProperty(javax.swing.text.DefaultEditorKit.EndOfLineStringProperty,"\r\n"));
+      check(p.text.getText().equals(raw),"Windows editor-kit serialization cannot duplicate raw carriage returns");
+      query(p,"userId");check(p.matches().size()==1&&p.matches().get(0).start()==raw.indexOf("userId"),"Windows search offsets use document text rather than OS-serialized line endings");
+      edt(()->p.search.setText(""));
       mode(p,2);edt(()->check(p.text.getText().startsWith("00000000  50 4F 53 54")&&p.text.getText().contains("00000010"),"Hex shows byte offsets and the actual HTTP bytes"));
       check(Arrays.equals(original,copy)&&Arrays.equals(p.previewBytes(),copy),"view changes do not alter original bytes");
       byte[] binary={0,10,13,32,65,(byte)128,(byte)255};edt(()->p.setPacket(binary,null));

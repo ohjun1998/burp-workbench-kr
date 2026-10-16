@@ -48,11 +48,18 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     super(new BorderLayout());
     setName(name);
     text = new JTextPane() {
+      @Override public String getText() {
+        Document document=getDocument();
+        if(document==null)return "";
+        try{return document.getText(0,document.getLength());}
+        catch(BadLocationException ex){throw new IllegalStateException(ex);}
+      }
       @Override public boolean getScrollableTracksViewportWidth() {
         return mode != Mode.HEX && wrap.isSelected() || getParent() != null && getUI().getPreferredSize(this).width <= getParent().getWidth();
       }
     };
     text.setName(name + ".text");text.setEditable(false);
+    text.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty,"\n");
     text.getAccessibleContext().setAccessibleName("읽기 전용 요청·응답 패킷");
     JPanel choices = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 0, 0));
     ButtonGroup group = new ButtonGroup();

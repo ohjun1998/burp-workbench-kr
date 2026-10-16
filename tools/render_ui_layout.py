@@ -6,6 +6,7 @@ The default classpath uses that JAR, including its bundled font. --jar allows
 comparison against an immutable release while current source is being edited.
 """
 from __future__ import annotations
+import runpy
 import argparse
 import csv
 import json
@@ -29,9 +30,8 @@ def main():
     p.add_argument('--themes',nargs='+',choices=['light','dark'],default=['light','dark'])
     args=p.parse_args()
     if args.sizes is None:args.sizes=['760x480','560x300'] if args.guide_only else ['1024x720','1280x800','1440x920']
-    version=re.search(r'dist/burp-workbench-kr-([0-9.]+)\.jar',(WB/'build_all.py').read_text(encoding='utf-8'))
-    if not version:raise SystemExit('Cannot locate the current build_all.py release version.')
-    jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version.group(1)}.jar').resolve()
+    version=runpy.run_path(str(WB/'release_info.py'))['VERSION']
+    jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version}.jar').resolve()
     if not jar.is_file():raise SystemExit(f'Missing release JAR: {jar}. Run python dev.py test first.')
     jar_hash=hashlib.sha256(jar.read_bytes()).hexdigest()
     source_name=jar.relative_to(ROOT).as_posix() if jar.is_relative_to(ROOT) else str(jar)

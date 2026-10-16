@@ -38,6 +38,7 @@ public class WorkbenchTest {
         MontoyaObjectFactory previous=ObjectFactoryLocator.FACTORY;
         trafficFactory=proxy(MontoyaObjectFactory.class,(p,m,a)->{
             if(m.getName().equals("byteArray")&&a.length==1&&a[0] instanceof byte[] raw)return bytes(raw);
+            if(m.getName().equals("httpService")&&a.length==3&&a[0] instanceof String)return proxy(HttpService.class,(sp,sm,sa)->switch(sm.getName()){case "host"->a[0];case "port"->a[1];case "secure"->a[2];default->def(sm);});
             if(m.getName().equals("httpRequest")&&a.length==2&&a[1] instanceof ByteArray raw){HttpRequest q=packetRequests.get(Base64.getEncoder().encodeToString(raw.getBytes()));if(q!=null){Object suppliedService=a[0];if(suppliedService==q.httpService())return q;return proxy(HttpRequest.class,(rp,rm,ra)->rm.getName().equals("httpService")?suppliedService:rm.invoke(q,ra));}}
             if(m.getName().equals("httpResponse")&&a.length==1&&a[0] instanceof ByteArray raw){HttpResponse r=packetResponses.get(Base64.getEncoder().encodeToString(raw.getBytes()));if(r!=null)return r;}
             if(m.getName().equals("httpRequestResponse")&&a.length>=2)return proxy(HttpRequestResponse.class,(pp,mm,aa)->switch(mm.getName()){case "request"->a[0];case "response"->a[1];default->def(mm);});
@@ -57,7 +58,7 @@ public class WorkbenchTest {
     static Object def(Method m){Class<?> t=m.getReturnType();if(t==boolean.class)return false;if(t==int.class)return 0;if(t==short.class)return (short)0;if(t==long.class)return 0L;return null;}
     static void check(boolean truth,String name){checks++;if(!truth)throw new AssertionError(name);System.out.println("PASS "+name);}
     static void rejects(Runnable r,String name){try{r.run();throw new AssertionError(name);}catch(IllegalArgumentException e){check(true,name);}}
-    static ByteArray bytes(byte[] b){return proxy(ByteArray.class,(p,m,a)->switch(m.getName()){case "length"->b.length;case "getBytes"->b.clone();case "toString"->new String(b,StandardCharsets.UTF_8);default->def(m);});}
+    static ByteArray bytes(byte[] b){return proxy(ByteArray.class,(p,m,a)->switch(m.getName()){case "length"->b.length;case "getBytes"->b.clone();case "getByte"->b[(int)a[0]];case "subArray"->{int from,to;if(a.length==1){Range range=(Range)a[0];from=range.startIndexInclusive();to=range.endIndexExclusive();}else{from=(int)a[0];to=(int)a[1];}Objects.checkFromToIndex(from,to,b.length);yield bytes(Arrays.copyOfRange(b,from,to));}case "toString"->new String(b,StandardCharsets.UTF_8);default->def(m);});}
     static HttpHeader header(String n,String v){return proxy(HttpHeader.class,(p,m,a)->switch(m.getName()){case "name"->n;case "value"->v;case "toString"->n+": "+v;default->def(m);});}
     static HttpRequest request(String url,String method,boolean scope,List<HttpHeader> h){
         java.net.URI u=java.net.URI.create(url);HttpService s=proxy(HttpService.class,(p,m,a)->switch(m.getName()){case "host"->u.getHost();case "port"->u.getPort()<0?443:u.getPort();case "secure"->u.getScheme().equals("https");default->def(m);});

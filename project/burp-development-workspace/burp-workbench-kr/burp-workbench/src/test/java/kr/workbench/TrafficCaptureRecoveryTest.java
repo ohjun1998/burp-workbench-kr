@@ -127,7 +127,7 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
         void start()throws Exception{Timer timer=timer();edt(timer::start);}
         void awaitRows(int expected)throws Exception {
             long deadline=System.nanoTime()+10_000_000_000L;
-            while(System.nanoTime()<deadline){if(rows()==expected)return;Thread.sleep(20);}
+            while(System.nanoTime()<deadline){if(rows()==expected&&((CaptureObservations)get(ext,"captureObservations")).pending()==0)return;Thread.sleep(20);}
             throw new AssertionError("Timer did not retain "+expected+" rows; retained "+rows()+", pending "+queue().size());
         }
         void await(BooleanSupplier condition,String failure)throws Exception {
@@ -250,7 +250,7 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
                 case "messageEditorRequestResponse"->Optional.empty();
                 default->def(m);
             });
-            edt(()->((JMenuItem)((JMenu)fixture.ext.provideMenuItems(menuEvent).get(0)).getMenuComponent(0)).doClick());edt(()->{});
+            edt(()->((JMenuItem)((JMenu)fixture.ext.provideMenuItems(menuEvent).get(0)).getMenuComponent(0)).doClick());fixture.awaitRows(2);
             check(fixture.rows()==2&&fixture.urls().get(1).endsWith("manual-good"),
                 "one manual import skips inaccessible and invalid packets, retaining the observer-fault packet and later valid packet");
             check(fixture.metric("processingErrors")==3&&fixture.dropped()==2,"manual import separates observer errors from actual packet exclusions");

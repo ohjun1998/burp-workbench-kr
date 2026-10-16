@@ -90,6 +90,28 @@ def bounty_test(runtime, compiler, port):
          '--java', runtime, '--javac', compiler, '--port', str(port)], cwd=ROOT)
 
 
+def mapper_test(runtime):
+    run([sys.executable, ROOT / 'feature-mapper/build.py', '--test', '--java', runtime], cwd=ROOT)
+
+
+def write_check_summary():
+    summary = json.loads((WB / 'build/test-summary.json').read_text())
+    for key, path in [
+        ('allFeaturesHttpChecks', WB / 'validation/all-features/.run/results.json'),
+        ('bountyHttpChecks', ROOT / 'audit/0.23.0/.run/results.json'),
+    ]:
+        result = json.loads(path.read_text())
+        if result['failed'] or result['passed'] != len(result['checks']):
+            raise RuntimeError('Incomplete or failed check report: ' + str(path))
+        summary[key] = result['passed']
+    summary['totalChecks'] = sum(summary[key] for key in [
+        'regressionChecks', 'payloadHttpChecks', 'allFeaturesHttpChecks', 'bountyHttpChecks'])
+    summary['mapper'] = 'Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt'
+    summary['result'] = 'passed'
+    (WB / 'build/check-summary.json').write_text(json.dumps(summary, indent=2) + '\n')
+    print('WORKBENCH_CHECK_SUMMARY', json.dumps({k: v for k, v in summary.items() if k != 'groups'}))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', choices=['doctor', 'build', 'test', 'http-test', 'bounty-test', 'check', 'release'])
@@ -117,6 +139,8 @@ def main():
             build(runtime, compiler, test=True)
             http_test(runtime, compiler, args.port)
             bounty_test(runtime, compiler, args.bounty_port)
+            mapper_test(runtime)
+            write_check_summary()
             if args.command == 'release':
                 run([sys.executable, ROOT / 'tools/package_downloads.py'])
     except (OSError, RuntimeError, subprocess.CalledProcessError) as error:

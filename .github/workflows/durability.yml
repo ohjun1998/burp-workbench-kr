@@ -2,6 +2,7 @@ name: Capture durability and Windows verification
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -36,8 +37,13 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
       - name: Build and execute every Java regression group on Windows
         run: python project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py --test
+      - name: Verify Mapper indexes and concurrent project save on Windows
+        run: python feature-mapper/build.py --test
       - name: Execute production capture and Swing timer on Windows
         run: python audit/durability/run_capture.py --seconds 180 --output tmp/durability/windows-capture.json
       - name: Parse and execute startup script under Windows PowerShell 5.1 with controlled commands
@@ -65,6 +71,9 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
       - name: Build, run complete release checks and verify the new Docker archive
         run: python audit/durability/run_release.py
       - name: Verify actual ENOSPC, rollback and recovery on a private 16 MiB filesystem

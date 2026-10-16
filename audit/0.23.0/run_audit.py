@@ -4,6 +4,7 @@ Uses the current extension release JAR and compiles current lab source. No nativ
 Burp, browser DOM, Docker, external targets, or historical WAR application code.
 """
 from pathlib import Path
+import runpy
 import argparse
 import hashlib
 import json
@@ -36,7 +37,7 @@ def main():
         if directory.exists():
             shutil.rmtree(directory)
         directory.mkdir()
-    version = re.search(r'burp-workbench-kr-([0-9.]+)\.jar', (wb / 'build_all.py').read_text()).group(1)
+    version = runpy.run_path(str(wb / 'release_info.py'))['VERSION']
     lab_version = re.search(r'<artifactId>loop-community-lab</artifactId><version>([^<]+)', (lab / 'pom.xml').read_text()).group(1)
     jar = wb / f'dist/burp-workbench-kr-{version}.jar'
     if not jar.is_file():

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Verify the current release in a separately installed Burp, without user profiles."""
 from pathlib import Path
+import runpy
 import argparse, os, subprocess, tempfile
 
 p = argparse.ArgumentParser(description=__doc__)
@@ -14,7 +15,7 @@ a = p.parse_args()
 root = Path(__file__).resolve().parents[2]
 wb = root / 'project/burp-development-workspace/burp-workbench-kr/burp-workbench'
 import re
-version = re.search(r'dist/burp-workbench-kr-([0-9.]+)\.jar', (wb/'build_all.py').read_text()).group(1)
+version = runpy.run_path(str(wb / 'release_info.py'))['VERSION']
 jar = wb / f'dist/burp-workbench-kr-{version}.jar'
 a.output.mkdir(parents=True, exist_ok=True)
 with tempfile.TemporaryDirectory(prefix='workbench-native-scope-') as folder:
@@ -37,3 +38,4 @@ with tempfile.TemporaryDirectory(prefix='workbench-native-scope-') as folder:
         print(output.read_text())
     if run.returncode or not output.exists() or 'NATIVE_SCOPE_SUCCESS' not in output.read_text():
         raise SystemExit(1)
+

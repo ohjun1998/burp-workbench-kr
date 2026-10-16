@@ -1,0 +1,47 @@
+name: Assemble verified Workbench 0.26.0 downloads
+
+on:
+  push:
+    branches: ['account-a/resume-0260-20261016']
+    paths: ['.github/workflows/assemble-0260.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: assemble-0260-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  assemble:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Build and verify release from this exact source commit
+        run: python dev.py release
+      - name: Verify versioned downloads and source fingerprints
+        run: python tools/package_downloads.py --verify
+      - name: Publish only byte-exact verified downloads to this task branch
+        env:
+          ASSEMBLY_TOKEN: ${{ github.token }}
+        run: python audit/assembly/publish_0260.py
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: assembly-0260-${{ github.run_id }}
+          path: tmp/assembly-0260.json
+          if-no-files-found: warn
+          retention-days: 14

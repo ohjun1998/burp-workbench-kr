@@ -6,12 +6,14 @@ import hashlib
 import io
 import json
 import re
+import runpy
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 WB = ROOT / 'project/burp-development-workspace/burp-workbench-kr/burp-workbench'
 LAB = ROOT / 'project/burp-development-workspace/community-security-lab'
 DOWNLOADS = ROOT / 'downloads'
+MAPPER = ROOT / 'feature-mapper'
 
 
 def sha(data):
@@ -19,7 +21,11 @@ def sha(data):
 
 
 def extension_version():
-    return re.search(r"dist/burp-workbench-kr-([0-9.]+)\.jar", (WB / 'build_all.py').read_text()).group(1)
+    return runpy.run_path(str(WB / 'release_info.py'))['VERSION']
+
+
+def mapper_info():
+    return runpy.run_path(str(MAPPER / 'release_info.py'))
 
 
 def lab_version():
@@ -30,7 +36,7 @@ def source_files():
     files = [ROOT / 'dev.py', ROOT / 'tools/package_downloads.py']
     for part in ['src', 'deps']:
         files.extend(p for p in (WB / part).rglob('*') if p.is_file())
-    files.extend(WB / name for name in ['build_all.py', 'shade_rhino.py', 'engine-lock.json', 'LICENSE', 'THIRD_PARTY_NOTICES.md'])
+    files.extend(WB / name for name in ['build_all.py', 'release_info.py', 'shade_rhino.py', 'engine-lock.json', 'LICENSE', 'THIRD_PARTY_NOTICES.md'])
     files.extend(p for p in (WB / 'validation/all-features').glob('*') if p.is_file())
     files.extend(p for p in (ROOT / 'audit/0.23.0').glob('*') if p.is_file() and p.suffix in ('.java', '.py'))
     return sorted(files)
@@ -92,10 +98,15 @@ def main():
     parser.add_argument('--verify', action='store_true')
     args = parser.parse_args()
     version, lab = extension_version(), lab_version()
+    mapper = mapper_info()
+    mapper_version = mapper['VERSION']
+    mapper_folder = DOWNLOADS / 'feature-mapper' / mapper_version
+    mapper_sources = mapper['source_files']()
     ext_folder, docker_folder = DOWNLOADS / 'extensions' / version, DOWNLOADS / 'docker' / lab
     if args.verify:
         verify(ext_folder, source_files())
         verify(docker_folder, docker_files())
+        verify(mapper_folder, mapper_sources)
         print('Versioned download hashes and source fingerprints verified.')
         return
     jar = WB / f'dist/burp-workbench-kr-{version}.jar'
@@ -104,6 +115,17 @@ def main():
             raise RuntimeError('Built JAR version does not match source version')
     sources = {p.relative_to(ROOT).as_posix(): p.read_bytes() for p in source_files()}
     publish(ext_folder, {jar.name: jar.read_bytes(), f'burp-workbench-kr-{version}-source.zip': archive(sources)}, source_files())
+    mapper_artifacts = [f'feature-mapper-kr-{mapper_version}.jar',
+                        f'feature-mapper-browser-{mapper_version}.zip',
+                        f'feature-mapper-kr-{mapper_version}-source.zip']
+    current_mapper_sources = {p.relative_to(MAPPER).as_posix(): sha(p.read_bytes()) for p in mapper_sources}
+    built_mapper = json.loads((MAPPER / 'dist/manifest.json').read_text())
+    if built_mapper.get('version') != mapper_version or built_mapper.get('sources') != current_mapper_sources:
+        raise RuntimeError('Mapper build is stale; run python feature-mapper/build.py --test')
+    mapper_payloads = {name: (MAPPER / 'dist' / name).read_bytes() for name in mapper_artifacts}
+    if {name: sha(data) for name, data in mapper_payloads.items()} != built_mapper['artifacts']:
+        raise RuntimeError('Mapper artifact checksums do not match its build manifest')
+    publish(mapper_folder, mapper_payloads, mapper_sources)
     files = {p.relative_to(LAB).as_posix(): p.read_bytes() for p in docker_files()}
     # Compile the current source in Docker; never ship a stale prebuilt WAR.
     files['Dockerfile'] = files['Dockerfile.source']

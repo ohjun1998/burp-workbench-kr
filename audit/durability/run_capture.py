@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Run production capture durability checks with an adapter host, without changing user settings."""
+import runpy
 import argparse
 import os
 from pathlib import Path
@@ -24,7 +25,7 @@ def main():
         p.error("soak must send more than 250 packets")
     if a.mode == "disk-full" and a.temp_dir is None:
         p.error("disk-full requires --temp-dir pointing to a dedicated tmpfs <=64 MiB")
-    version = re.search(r"dist/burp-workbench-kr-([0-9.]+)\.jar", (WB / "build_all.py").read_text()).group(1)
+    version = runpy.run_path(str(WB / 'release_info.py'))['VERSION']
     jar = WB / f"dist/burp-workbench-kr-{version}.jar"
     if not jar.is_file() or not (WB / "build/tests/kr/workbench/WorkbenchTest.class").is_file():
         p.error("run python build_all.py --test in the extension folder first")

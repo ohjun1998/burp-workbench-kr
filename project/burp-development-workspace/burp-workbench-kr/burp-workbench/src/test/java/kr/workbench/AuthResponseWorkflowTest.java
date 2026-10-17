@@ -51,11 +51,12 @@ public final class AuthResponseWorkflowTest extends WorkbenchTest {
     });
     AtomicInteger status = new AtomicInteger(200), sent = new AtomicInteger();
     AtomicReference<String> body = new AtomicReference<>("{\"secret\":\"alice\"}");
+    AtomicReference<burp.api.montoya.http.message.responses.HttpResponse> currentResponse=new AtomicReference<>(response(200,"{\"secret\":\"alice\"}"));
     AtomicReference<HttpRequest> actual = new AtomicReference<>();
     var http = proxy(Http.class,(p,m,a) -> {
       if (!m.getName().equals("sendRequest")) return def(m);
       actual.set((HttpRequest)a[0]); sent.incrementAndGet();
-      return AuthRecordTest.rr(actual.get(), response(status.get(), body.get()));
+      return AuthRecordTest.rr(actual.get(), actual.get().headers().stream().anyMatch(h->h.value().equals("ALICE"))?currentResponse.get():response(status.get(), body.get()));
     });
     var api = proxy(MontoyaApi.class,(p,m,a)->m.getName().equals("http") ? http : def(m));
     var original = AuthRecordTest.q("ALICE");
@@ -65,7 +66,7 @@ public final class AuthResponseWorkflowTest extends WorkbenchTest {
     edt(() -> {
       var panel = new AuthComparePanel(api, ()->List.of(AuthRecordTest.rr(original,currentBaseline.get()))); box.set(panel);
       panel.observe(AuthRecordTest.q("BOB"),baseline);
-      panel.assign(0,panel.credentials.values().iterator().next());
+      panel.assign(0,panel.credentials.values().iterator().next());panel.matrixRules.setText("GET /object/101 DENY UNKNOWN UNKNOWN UNKNOWN");
     });
     AuthComparePanel panel = box.get();
     try {
@@ -92,7 +93,7 @@ public final class AuthResponseWorkflowTest extends WorkbenchTest {
       edt(() -> { panel.matrixRules.setText("GET /object/101 DENY UNKNOWN UNKNOWN"); panel.responseDenialRules.setText("BODY_REGEX: [");
         try { panel.compareSelection(); throw new AssertionError(); } catch (IllegalArgumentException expected) { check(true,"invalid pattern blocked before send"); }
       });
-      check(sent.get()==3,"invalid rule sends no extra requests");
+      check(sent.get()==6,"invalid rule sends no extra requests");
       status.set(500);
       edt(() -> { panel.responseDenialRules.setText("BODY: 접근 권한이 없습니다"); panel.compareSelection(); });
       AuthRecordTest.idle(panel);
@@ -106,11 +107,11 @@ public final class AuthResponseWorkflowTest extends WorkbenchTest {
         var cell=(JLabel)panel.history.prepareRenderer(panel.history.getCellRenderer(0,panel.history.convertColumnIndexToView(7)),0,panel.history.convertColumnIndexToView(7));
         check(cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)),"sorted history uses correct run verdict");
       });
-      currentBaseline.set(response(200,"{\"error\":\"FORBIDDEN\"}")); body.set("{\"secret\":\"alice\"}");
+      currentBaseline.set(response(200,"{\"error\":\"FORBIDDEN\"}"));currentResponse.set(currentBaseline.get()); body.set("{\"secret\":\"alice\"}");
       edt(() -> { panel.responseDenialRules.setText(""); panel.compareSelection(); });
       AuthRecordTest.idle(panel);
-      check(panel.runs.get(5).packets[0].note.contains("기준 응답"), "DENY matrix cannot overwrite invalid JSON baseline: " + panel.runs.get(5).packets[0].note + " / " + JsAnalysisPanel.readBody(panel.runs.get(5).response));
-      check(AuthVerdict.of(panel.runs.get(5).packets[0].note)==AuthVerdict.REVIEW, "invalid baseline remains yellow");
+      check(panel.runs.get(5).baselineState==AuthComparePanel.Run.Baseline.INVALID&&panel.runs.get(5).packets[0].response==null, "DENY matrix cannot bypass invalid fresh JSON baseline");
+      check(AuthRunSummary.of(panel.runs.get(5)).verdict()==AuthVerdict.REVIEW, "invalid baseline remains yellow");
     } finally { edt(panel::close); }
     System.out.println("AuthResponseWorkflowTest: " + checks + " checks passed");
   }

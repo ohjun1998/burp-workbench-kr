@@ -22,7 +22,8 @@ public final class ReviewConditionsTest extends WorkbenchTest {
    Http http=proxy(Http.class,(p,m,a)->{
     if(!m.getName().equals("sendRequest"))return def(m);
     HttpRequest q=(HttpRequest)a[0];int n=calls.incrementAndGet();
-    if(n==1)return AuthRecordTest.rr(q,rs(404,"{}",List.of()));
+    if(n==1)return AuthRecordTest.rr(q,base);
+    if(n==2)return AuthRecordTest.rr(q,rs(404,"{}",List.of()));
     HttpRequest actual=mode.equals("targetChanged")?rq("https://auth.test/other","GET","",List.of(header("Cookie","SID=BOB"))):mode.equals("sessionChanged")?rq(url,"GET","",List.of(header("Cookie","SID=ADMIN"))):q;
     return AuthRecordTest.rr(actual,rs(mode.equals("deleted")?404:mode.equals("expired")?401:200,mode.equals("changed")?"{\"ownerId\":3}":"{\"ownerId\":2}",List.of()));
    });
@@ -30,8 +31,8 @@ public final class ReviewConditionsTest extends WorkbenchTest {
    AtomicReference<AuthComparePanel> box=new AtomicReference<>();
    edt(()->{var panel=new AuthComparePanel(api,()->List.of(AuthRecordTest.rr(original,base)));box.set(panel);panel.observe(rq(url,"GET","",List.of(header("Cookie","SID=ALICE"))),base);panel.assign(0,panel.credentials.values().iterator().next());panel.matrixRules.setText("GET /objects/102 "+(mode.equals("allow")?"ALLOW":"DENY")+" UNKNOWN UNKNOWN");panel.compareSelection();});
    AuthRecordTest.idle(box.get());String note=box.get().runs.get(0).packets[0].note;
-   check(calls.get()==2,mode+": target request and owner re-query executed");
-   check(mode.equals("same")?note.contains("차단 근거 일치")&&note.contains("소유자 재조회")&&!note.contains("재검토"):note.contains("재검토"),mode+": matrix keeps only verified denial and preserves uncertainty");
+   check(calls.get()==3,mode+": fresh reference, target request and owner re-query executed");
+   check(box.get().runs.get(0).packets[0].finding().verdict()==(mode.equals("same")?AuthVerdict.BLOCKED:AuthVerdict.REVIEW),mode+": matrix keeps only verified denial and preserves uncertainty");
    if(mode.equals("allow"))check(note.contains("소유자 재조회"),"ALLOW retains existence evidence while requesting policy review");
    edt(box.get()::close);WorkbenchScope.release(api);
   }

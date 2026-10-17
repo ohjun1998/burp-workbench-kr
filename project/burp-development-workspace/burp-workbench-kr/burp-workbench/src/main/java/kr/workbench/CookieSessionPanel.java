@@ -14,6 +14,8 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
   final AuthComparePanel owner;
   final JComboBox<String> account=new JComboBox<>(new String[]{"계정 1","계정 2","계정 3"});
   final JTextField url=new JTextField(34),identityPath=new JTextField("$.user.id",14),expected=new JTextField(14);
+  final JTextField rolePath=new JTextField(16),roleExpected=new JTextField(14),tenantPath=new JTextField(16),tenantExpected=new JTextField(14);
+  final TargetWindow claimWindow=new TargetWindow(this,"역할·조직 신원 조건",this::claimSettings);
   final JCheckBox beforeCompare=new JCheckBox("비교 전 신원 검사",true),filterCookies=new JCheckBox("검증한 쿠키 조합 반영",true);
   final JButton run=new JButton("검사 시작"),stop=new JButton("중지"),apply=new JButton("검증 결과 적용"),disable=new JButton("비교 전 검사 해제");
   final JLabel profile=new JLabel("비교 계정을 먼저 지정하세요.");
@@ -42,7 +44,7 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
     summary.setEditable(false);summary.setLineWrap(true);summary.setWrapStyleWord(true);summary.putClientProperty("wb.prose",true);summary.setAlignmentX(Component.LEFT_ALIGNMENT);
     beforeCompare.setToolTipText("비교 요청마다 최대 두 번의 사용자 확인/비로그인 GET을 먼저 실행하고 신원 확인 실패 시 중단합니다.");
     JPanel top=TargetWindow.options(
-        WorkbenchUi.row(new JLabel("검사 계정"),account,profile),
+        WorkbenchUi.row(new JLabel("검사 계정"),account,profile,owner.button("추가 신원 조건",claimWindow::open)),
         WorkbenchUi.row(new JLabel("검증 URL"),url),
         WorkbenchUi.row(new JLabel("사용자 JSON"),identityPath,new JLabel("기대 사용자"),expected),
         WorkbenchUi.row(run,stop,disable),summary);
@@ -68,7 +70,7 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
       public void removeUpdate(javax.swing.event.DocumentEvent e){changed();}
       public void changedUpdate(javax.swing.event.DocumentEvent e){changed();}
     };
-    for(JTextField field:new JTextField[]{url,identityPath,expected})field.getDocument().addDocumentListener(listener);
+    for(JTextField field:new JTextField[]{url,identityPath,expected,rolePath,roleExpected,tenantPath,tenantExpected})field.getDocument().addDocumentListener(listener);
     stop.setEnabled(false);apply.setEnabled(false);WorkbenchUi.style(this);
   }
   public Dimension getPreferredScrollableViewportSize(){return new Dimension(880,600);}
@@ -86,7 +88,8 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
     dialog.setVisible(true);return dialog;
   }
   void safe(Runnable action){try{action.run();}catch(IllegalArgumentException|RejectedExecutionException e){summary.setText(e instanceof RejectedExecutionException?"작업 대기열을 사용할 수 없습니다.":e.getMessage());}}
-  CookieSessionProbe.Config config(){return new CookieSessionProbe.Config(url.getText().strip(),identityPath.getText().strip(),expected.getText().strip());}
+  JPanel claimSettings(){return TargetWindow.options(new JLabel("사용자 ID와 함께 역할·조직을 서버 JSON 응답과 검증합니다. 빈 경로는 검사하지 않습니다."),WorkbenchUi.row(new JLabel("역할 JSON"),rolePath,new JLabel("기대 역할"),roleExpected),WorkbenchUi.row(new JLabel("조직 JSON"),tenantPath,new JLabel("기대 조직"),tenantExpected),new JLabel("예: $.role / $.roles[*] / $.tenantId · 실제 응답에 없는 조건은 통과하지 않습니다."));}
+  CookieSessionProbe.Config config(){List<CookieSessionProbe.Claim> claims=new ArrayList<>();if(!rolePath.getText().isBlank())claims.add(new CookieSessionProbe.Claim("역할",rolePath.getText().strip(),roleExpected.getText().strip()));if(!tenantPath.getText().isBlank())claims.add(new CookieSessionProbe.Claim("조직",tenantPath.getText().strip(),tenantExpected.getText().strip()));return new CookieSessionProbe.Config(url.getText().strip(),identityPath.getText().strip(),expected.getText().strip(),claims);}
   void invalidateResult(){generation.incrementAndGet();report=null;testedConfig=null;testedCandidate=null;apply.setEnabled(false);cookieModel.setRowCount(0);trialModel.setRowCount(0);}
   void loadSlot() {
     if(busy||owner.closed.get())return;
@@ -96,13 +99,15 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
       url.setText(config==null?"":config.url());
       identityPath.setText(config==null?(owner.refreshIdentityPaths[slot].getText().isBlank()?"$.user.id":owner.refreshIdentityPaths[slot].getText()):config.identityPath());
       expected.setText(config==null?owner.profileOwners[slot].getText():config.expectedIdentity());
+      rolePath.setText("");tenantPath.setText("");roleExpected.setText(owner.profileRoles[slot].getText());tenantExpected.setText(owner.profileTenants[slot].getText());
+      if(config!=null)for(var claim:config.claims())if(claim.label().equals("역할")){rolePath.setText(claim.path());roleExpected.setText(claim.expected());}else if(claim.label().equals("조직")){tenantPath.setText(claim.path());tenantExpected.setText(claim.expected());}
       profile.setText(candidate==null?"미지정":candidate.headers().isEmpty()?"비로그인":owner.label(slot)+" · "+candidate.key().substring(0,Math.min(12,candidate.key().length())));
       summary.setText(config==null?"사용자 정보를 반환하는 GET URL과 기대 사용자 값을 입력하세요.":"비교 전 검사 설정됨 · 쿠키 역할은 검사 시작으로 다시 확인합니다.");
     } finally {loading=false;}
   }
   void busy(boolean value) {
     busy=value;run.setEnabled(!value);stop.setEnabled(value);disable.setEnabled(!value);account.setEnabled(!value);
-    for(JTextField field:new JTextField[]{url,identityPath,expected})field.setEnabled(!value);
+    for(JTextField field:new JTextField[]{url,identityPath,expected,rolePath,roleExpected,tenantPath,tenantExpected})field.setEnabled(!value);
     apply.setEnabled(!value&&report!=null&&report.valid()&&report.complete());
   }
   void start() {
@@ -153,5 +158,5 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
     owner.state.setText("세션 검사 결과 적용 · "+owner.label(testedSlot));
   }
   void cancel(){generation.incrementAndGet();apply.setEnabled(false);summary.setText("중지 요청 · 이미 전송한 요청은 응답/타임아웃 후 종료합니다.");}
-  @Override public void close(){generation.incrementAndGet();Runnable clear=()->{loading=true;url.setText("");identityPath.setText("");expected.setText("");loading=false;invalidateResult();summary.setText("");};if(SwingUtilities.isEventDispatchThread())clear.run();else SwingUtilities.invokeLater(clear);}
+  @Override public void close(){claimWindow.close();generation.incrementAndGet();Runnable clear=()->{loading=true;url.setText("");identityPath.setText("");expected.setText("");rolePath.setText("");roleExpected.setText("");tenantPath.setText("");tenantExpected.setText("");loading=false;invalidateResult();summary.setText("");};if(SwingUtilities.isEventDispatchThread())clear.run();else SwingUtilities.invokeLater(clear);}
 }

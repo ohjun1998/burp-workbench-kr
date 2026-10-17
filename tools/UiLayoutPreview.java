@@ -232,12 +232,12 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     var credentials=new java.util.ArrayList<>(auth.credentials.values());
                     auth.mapCandidate(credentials.get(0),new AuthAccount("Alice","alice","101","관리자","alice@example.test"));
                     auth.mapCandidate(credentials.get(1),new AuthAccount("Bob","bob","102","일반 사용자","bob@example.test"));
-                    auth.assign(0,credentials.get(1));auth.assign(1,credentials.get(0));auth.anonymous(2);
+                    auth.assign(0,credentials.get(1));auth.assign(1,credentials.get(0));auth.anonymous(3);
                     var original=AuthRecordTest.q("ALICE");var baseline=response(200,"{\"secret\":\"alice\"}");
                     var run=new AuthComparePanel.Run(1,original,baseline,auth.context());
                     String[] notes={"우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인","원본과 동일 인증 · 교차 인가 미검증","판정 보류 · HTTP 500"};
-                    for(int i=0;i<3;i++){run.packets[i].request=AuthRecordTest.q(i==1?"ALICE":"DEMO");run.packets[i].response=response(i<2?200:500,i==0?"{\"secret\":\"alice\"}":"접근 거부 / 서버 오류");run.packets[i].note=notes[i];}
-                    run.note="완료";auth.runs.add(run);auth.historyModel.addRow(new Object[]{1,original.url(),"","","","완료"});auth.refresh(run);auth.history.setRowSelectionInterval(0,0);auth.show(run);
+                    for(int i:new int[]{0,1,3}){run.packets[i].request=AuthRecordTest.q(i==1?"ALICE":"DEMO");run.packets[i].response=response(i<2?200:500,i==0?"{\"secret\":\"alice\"}":"접근 거부 / 서버 오류");run.packets[i].note=notes[i==3?2:i];}
+                    run.baselineState=AuthComparePanel.Run.Baseline.VALID;run.baselineNote="현재 기준 HTTP 200 · 비교 직전 재확인";run.note="완료";auth.runs.add(run);auth.historyModel.addRow(new Object[]{1,original.url(),"","","","완료"});auth.refresh(run);auth.history.setRowSelectionInterval(0,0);auth.show(run);
                     installHeaders(auth);auth.setVisible(true);
                     try {
                         render(desktop,out.resolve("auth-desktop.png"),width,height);desktop.removeNotify();
@@ -252,11 +252,16 @@ public final class UiLayoutPreview extends WorkbenchTest {
                         var fieldRun=new AuthComparePanel.Run(2,original,response(200,"{\"ownerId\":101,\"title\":\"관리 문서\",\"optional\":null}"),auth.context());fieldRun.note="완료";
                         fieldRun.packets[0].request=run.packets[0].request;fieldRun.packets[0].response=response(200,"{\"ownerId\":102,\"title\":\"일반 문서\",\"items\":[]}");fieldRun.packets[0].note="판정 보류 · JSON 필드 차이 · 데이터/실행 결과 확인";
                         auth.show(fieldRun);auth.expandedEvidence.tabs.setSelectedIndex(1);renderAt(auth.expandedEvidence,out.resolve("auth-fields.png"),960,560);auth.show(run);
+                        var effectRun=new AuthComparePanel.Run(3,original,baseline,auth.context());effectRun.note="완료";effectRun.baselineState=AuthComparePanel.Run.Baseline.WRITE;effectRun.baselineNote="쓰기 원본 추가 재전송 없음 · 지정한 GET으로 처리 결과 확인";effectRun.packets[0].request=original;effectRun.packets[0].response=response(200,"{\"accepted\":true}");effectRun.packets[0].result(new AuthFinding(AuthFinding.Kind.SUSPECT,"기대 DENY · 후속 조회에서 기대 상태 변경 관측", ""));
+                        var effectConfig=new AuthEffectCheck.Config(true,"POST","/api/document","https://auth.test/object/101","$.value","1",AuthEffectCheck.Mode.EQUALS,1);effectRun.packets[0].effect=new AuthEffectCheck.Evidence(effectConfig,new AuthEffectCheck.Snapshot(original,response(200,"{\"value\":0}"),true,0),new AuthEffectCheck.Snapshot(original,response(200,"{\"value\":1}"),true,1),AuthEffectCheck.Outcome.OBSERVED,"후속 조회에서 기대 상태 변경 관측 · 요청과의 인과관계는 재현 근거로 확인");auth.show(effectRun);renderAt(auth.expandedEvidence,out.resolve("auth-effect-evidence.png"),960,640);auth.show(run);
                         auth.responseDenialRules.setText("BODY: 접근 권한이 없습니다\nBODY_REGEX: (?i)access\\s+denied\nHEADER: X-Access: denied");
                         JPanel settings=WorkbenchUi.settingsBody(auth.settingsContent(),()->{});installHeaders(settings);
                         render(settings,out.resolve("auth-settings.png"),width,height);
                         for(Component child:settings.getComponents())if(child instanceof JScrollPane scroll)scroll.getViewport().setViewPosition(new java.awt.Point(0,Math.max(0,scroll.getViewport().getView().getHeight()-scroll.getViewport().getHeight())));
                         render(settings,out.resolve("auth-settings-bottom.png"),width,height);
+                        auth.matrixRules.setText("GET /object/101 DENY ALLOW DENY DENY\nPOST /api/document DENY ALLOW DENY DENY");JPanel policy=WorkbenchUi.settingsBody(auth.matrixEditor,()->{});installHeaders(policy);render(policy,out.resolve("auth-policy.png"),width,height);
+                        JPanel claims=WorkbenchUi.settingsBody(auth.cookieSessions.claimSettings(),()->{});renderAt(claims,out.resolve("auth-claims.png"),820,480);
+                        JPanel effect=WorkbenchUi.settingsBody(auth.effectSettings,()->{});renderAt(effect,out.resolve("auth-effect.png"),1000,600);
                     }catch(Exception e){throw new RuntimeException(e);}
                 });writeMeasurements(out);
             } finally {unload();}

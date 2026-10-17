@@ -3,12 +3,13 @@ import java.net.URI;import java.util.*;import java.util.regex.Pattern;
 /** Reviewer-declared policy per operation and account slot. Role/tenant names are metadata. */
 final class BountyMatrix {
  enum Expected{UNKNOWN,ALLOW,DENY}
- record Rule(String method,String path,List<Expected> slots,Pattern match){}
+ record Rule(String method,String path,List<Expected> slots,Pattern match){Rule{slots=List.copyOf(slots);}}
  final List<Rule> rules;
  BountyMatrix(List<Rule> rules){this.rules=List.copyOf(rules);}
  static BountyMatrix parse(String text){if(text.length()>8192)throw new IllegalArgumentException("권한 매트릭스 8KB 제한");List<Rule> rules=new ArrayList<>();Set<String> unique=new HashSet<>();
-  for(String line:text.split("\\R")){if(line.isBlank())continue;String[] p=line.strip().split("\\s+");if(p.length!=5)throw new IllegalArgumentException("매트릭스: GET /경로 ALLOW DENY DENY (계정 1/2/3)");
-   var base=AuthPolicy.parse(p[0]+" "+p[1]+" PUBLIC",AuthPolicy.Access.UNSPECIFIED).rules.get(0);List<Expected> slots=new ArrayList<>();for(int i=2;i<5;i++)try{slots.add(Expected.valueOf(p[i]));}catch(Exception e){throw new IllegalArgumentException("기대 권한은 ALLOW / DENY / UNKNOWN");}
+  for(String line:text.split("\\R")){if(line.isBlank())continue;String[] p=line.strip().split("\\s+");if(p.length!=5&&p.length!=6)throw new IllegalArgumentException("매트릭스: GET /경로 ALLOW DENY DENY (계정 1/2/3/비로그인)");
+   var base=AuthPolicy.parse(p[0]+" "+p[1]+" PUBLIC",AuthPolicy.Access.UNSPECIFIED).rules.get(0);List<Expected> slots=new ArrayList<>();for(int i=2;i<p.length;i++)try{slots.add(Expected.valueOf(p[i]));}catch(Exception e){throw new IllegalArgumentException("기대 권한은 ALLOW / DENY / UNKNOWN");}
+   if(slots.size()==3)slots.add(Expected.UNKNOWN);
    if(!unique.add(p[0]+" "+p[1]))throw new IllegalArgumentException("중복 매트릭스 경로");rules.add(new Rule(p[0],p[1],slots,base.match()));if(rules.size()>32)throw new IllegalArgumentException("매트릭스 최대 32개");}
   rules.sort(Comparator.comparingInt((Rule r)->r.path.contains("{")?0:1).reversed().thenComparing(Comparator.comparingInt((Rule r)->r.path.length()).reversed()));return new BountyMatrix(rules);
  }

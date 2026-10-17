@@ -47,7 +47,8 @@ def main():
         if not (deps / name).is_file() or hashlib.sha256((deps / name).read_bytes()).hexdigest() != digest:
             raise RuntimeError('Prepare checked HTTP dependencies with python dev.py http-test: ' + name)
     cp = os.pathsep.join(str(deps / name) for name in sorted(hashes))
-    subprocess.run([args.java, 'com.sun.tools.javac.Main', '--release', '17', '-parameters', '-encoding', 'UTF-8', '-cp', cp, '-d', str(site)] + [str(p) for p in sorted((LAB / 'src/main/java').rglob('*.java'))], check=True)
+    sources=sorted((LAB / 'src/main/java').rglob('*.java'))+[ROOT/'tools/fixtures/UnregisteredPolicyFixture.java']
+    subprocess.run([args.java, 'com.sun.tools.javac.Main', '--release', '17', '-parameters', '-encoding', 'UTF-8', '-cp', cp, '-d', str(site)] + [str(p) for p in sources], check=True)
     shutil.copytree(LAB / 'src/main/resources', site, dirs_exist_ok=True)
     base = f'http://127.0.0.1:{args.port}'
     checks = []
@@ -167,9 +168,11 @@ def main():
             for asset in ['role-portal.js','role-portal.css']:
                 status('asset available ' + asset, guest, '/assets/'+asset, 200)
             data, _ = status('OpenAPI includes new endpoints', guest, '/v3/api-docs', 200)
-            check('OpenAPI version and portal path', data['info']['version']=='3.7.1' and '/api/access/fixed/admin/members' in data['paths'])
+            check('OpenAPI version and portal path', data['info']['version']=='3.8.0' and '/api/access/fixed/admin/members' in data['paths'])
             from community_workspace_checks import run_workspace_checks
             run_workspace_checks(Client, status, check, guest, alice, bob, admin, moderator)
+            from community_policy_checks import run_policy_checks
+            run_policy_checks(Client, status, check, guest, alice, bob, admin, moderator)
             status('logout', bob, '/api/auth/logout', 200, {})
             status('old session identity rejected', bob, '/api/access/me', 401)
             status('old session protected request rejected', bob, '/api/access/fixed/user/dashboard', 401)
@@ -182,7 +185,7 @@ def main():
                 server.kill(); server.wait(timeout=5)
         with socket.socket() as probe:
             closed = probe.connect_ex(('127.0.0.1', args.port)) != 0
-        report = {'version':'3.7.1', 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
+        report = {'version':'3.8.0', 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
                   'method':'Current Spring MVC/Tomcat sources, isolated H2 Oracle mode, separate real HTTP cookie jars on loopback',
                   'serverPortClosed':closed, 'browserDOM':False, 'nativeBurp':False, 'docker':False}
         (args.out/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

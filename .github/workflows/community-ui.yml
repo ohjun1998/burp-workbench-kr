@@ -1,0 +1,59 @@
+name: Community browser verification
+
+on:
+  push:
+    branches: ['main', 'account-a/**', 'account-b/**']
+    paths:
+      - 'project/burp-development-workspace/community-security-lab/**'
+      - 'tools/check_community_ui.py'
+      - 'tools/community_ui_checks.mjs'
+      - '.github/workflows/community-ui.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: community-ui-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Prepare checked HTTP runtime
+        run: |
+          python dev.py build
+          python dev.py http-test
+      - name: Install isolated browser test runtime
+        run: |
+          npm install --prefix tmp/browser --no-save playwright@1.62.1
+          tmp/browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise real community UI and responsive layouts
+        env:
+          PLAYWRIGHT_MODULE_ROOT: ${{ github.workspace }}/tmp/browser
+        run: python tools/check_community_ui.py
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: community-ui-${{ github.sha }}
+          path: |
+            tmp/community-ui/*.png
+            tmp/community-ui/results.json
+            tmp/community-ui/server.log
+          if-no-files-found: warn
+          retention-days: 14

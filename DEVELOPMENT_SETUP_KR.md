@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.37.4**, Feature Mapper **0.3.1**과 실습 사이트 **3.7.1**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.4 검증 기록](docs/VERIFICATION_0.37.4.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.37.4**, Feature Mapper **0.3.1**과 실습 사이트 **3.8.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.4 검증 기록](docs/VERIFICATION_0.37.4.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -206,3 +206,7 @@ JS의 확정된 메서드를 우선하고, 미확정 항목은 활동 추적의 
 ## 0.37.4 미확정 메서드 기본 GET
 
 JS에서 확인한 메서드 → 같은 Origin·경로의 단일 관찰 메서드 → GET 기본값 순서로 선택합니다. 근거 없음·충돌은 기본값으로 표시하며, 수동 변경과 미확정 경로·값·SCOPE 검증은 유지합니다. Repeater 회귀는 기본 GET과 수동 변경의 실제 loopback 응답, 기본값 표시와 자동 전송 없음도 확인합니다. JS 화면 검사에는 기본 GET 창의 기본·최소 크기와 두 테마를 포함합니다. [현재 사용법](docs/RELEASE_0.37.4_KR.md)과 [이번 검증](docs/VERIFICATION_0.37.4.json)을 확인하세요.
+
+## 사이트 3.8.0 권한·실제 브라우저 검사
+
+`python tools/check_role_portals.py`는 공통 RBAC·객체 권한·미선언 정책 기본 거부·권한 변경·접근 기록과 기존 실습을 검사합니다. 별도 `python tools/check_community_ui.py`는 현재 소스를 컴파일하고 독립 H2에서 Chromium으로 실제 UI 흐름과 1440/1024/390px 레이아웃을 확인합니다. Playwright 설치·실행 설정은 [3.8.0 사용법](docs/LAB_3.8.0_KR.md), 실행 결과는 [검증 기록](docs/VERIFICATION_LAB_3.8.0.json)을 확인하세요.

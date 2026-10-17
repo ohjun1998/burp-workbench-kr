@@ -265,6 +265,11 @@ public final class UiLayoutPreview extends WorkbenchTest {
                         renderAt((Container)packets[0],out.resolve("js-packets-small.png"),560,300);
                         renderAt((Container)repeater[0],out.resolve("js-repeater.png"),1120,720);
                         renderAt((Container)repeater[0],out.resolve("js-repeater-small.png"),780,440);
+                        JsRepeater.Session draft=(JsRepeater.Session)repeater[0];
+                        draft.request.tabs.get(1).doClick(0);
+                        draft.request.text.setText(new String(draft.request.editedBytes(),java.nio.charset.StandardCharsets.UTF_8).replaceFirst("^[A-Z_]+ ","REPLACE_METHOD "));
+                        draft.send.doClick(0);
+                        renderAt(draft,out.resolve("js-repeater-method-required.png"),780,440);
                         installHeaders(details[0]);
                         renderAt((Container)details[0],out.resolve("js-details.png"),980,640);
                         renderAt((Container)details[0],out.resolve("js-details-small.png"),620,400);

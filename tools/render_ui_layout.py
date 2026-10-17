@@ -89,7 +89,9 @@ def main():
                   ('js-packets-small.png','wb.js.packet.request.text'):50,('js-packets-small.png','wb.js.packet.response.text'):50,
                   ('js-analysis-list.png','wb.js.history.table'):60,('js-analysis-list-small.png','wb.js.history.table'):40,
                   ('js-repeater.png','wb.js.repeater.request.text'):160,('js-repeater.png','wb.js.repeater.response.text'):160,
-                  ('js-repeater-small.png','wb.js.repeater.request.text'):100,('js-repeater-small.png','wb.js.repeater.response.text'):100,('js-details.png','wb.js.details.api.table'):100}
+                  ('js-repeater-small.png','wb.js.repeater.request.text'):100,('js-repeater-small.png','wb.js.repeater.response.text'):100,
+                  ('js-repeater-method-required.png','wb.js.repeater.request.text'):100,('js-repeater-method-required.png','wb.js.repeater.response.text'):100,
+                  ('js-repeater-method-required.png','wb.js.repeater.note'):28,('js-details.png','wb.js.details.api.table'):100}
     gate_failures=[]
     for theme in args.themes:
         for size in args.sizes:
@@ -100,8 +102,8 @@ def main():
                 if args.js_only and view in {'js-packets.png','js-analysis-list.png','js-packets-small.png','js-analysis-list-small.png'}:
                     expected_w,expected_h=('560','300') if 'small' in view else ('760','480')
                     copies=len(args.sizes)
-                if args.js_only and view in {'js-repeater.png','js-repeater-small.png'}:
-                    expected_w,expected_h=('780','440') if 'small' in view else ('1120','720')
+                if args.js_only and view in {'js-repeater.png','js-repeater-small.png','js-repeater-method-required.png'}:
+                    expected_w,expected_h=('780','440') if 'small' in view or view=='js-repeater-method-required.png' else ('1120','720')
                     copies=len(args.sizes)
                 if args.js_only and view in {'js-details.png','js-details-small.png'}:
                     expected_w,expected_h=('620','400') if 'small' in view else ('980','640')

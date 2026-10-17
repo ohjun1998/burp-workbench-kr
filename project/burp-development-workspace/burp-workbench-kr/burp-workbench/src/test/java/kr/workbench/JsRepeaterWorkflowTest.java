@@ -8,6 +8,8 @@ import burp.api.montoya.internal.*;
 import burp.api.montoya.repeater.Repeater;
 import com.sun.net.httpserver.HttpServer;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 import java.net.*;
 import java.net.http.*;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +33,18 @@ public final class JsRepeaterWorkflowTest {
     Object binding=focused.getInputMap(JComponent.WHEN_FOCUSED).get(stroke);
     verify(binding!=null&&focused.getActionMap().get(binding)!=null,"Ctrl+Space overrides the focused editor binding");
     focused.getActionMap().get(binding).actionPerformed(new java.awt.event.ActionEvent(focused,0,"shortcut"));
+  }
+  static KeyEvent key(Component source,int id,int modifiers,int code,char character){
+    return new KeyEvent(source,id,System.currentTimeMillis(),modifiers,code,character);
+  }
+  static void sizeToggle(){
+    final Rectangle[] bounds={new Rectangle(2100,80,1120,720)},area={new Rectangle(1920,40,1920,1000)};
+    var button=new WindowMaximize(new JPanel());
+    var host=new WindowMaximize.Host(){public Rectangle bounds(){return bounds[0];}public Rectangle available(){return area[0];}public void bounds(Rectangle value){bounds[0]=value;}};
+    button.toggle(host);verify(bounds[0].equals(area[0])&&button.getText().equals("이전 크기"),"maximize uses the current monitor's offset and excludes taskbar space");
+    button.toggle(host);verify(bounds[0].equals(new Rectangle(2100,80,1120,720))&&button.getText().equals("최대화"),"restore returns the dialog to its prior position and size");
+    button.toggle(host);area[0]=new Rectangle(0,0,1024,700);button.toggle(host);
+    verify(area[0].contains(bounds[0]),"restore remains reachable after moving to a smaller monitor");
   }
   static void factory(AtomicBoolean redirectsDisabled) {
     ObjectFactoryLocator.FACTORY=proxy(MontoyaObjectFactory.class,(p,m,a)->switch(m.getName()) {
@@ -78,6 +92,7 @@ public final class JsRepeaterWorkflowTest {
     });factory(redirectsDisabled);
     AtomicReference<JsAnalysisPanel> panelRef=new AtomicReference<>();
     try {
+      edt(JsRepeaterWorkflowTest::sizeToggle);
       edt(()->panelRef.set(new JsAnalysisPanel(api,()->{})));var panel=panelRef.get();
       AtomicInteger windows=new AtomicInteger();
       edt(()->{
@@ -159,11 +174,38 @@ public final class JsRepeaterWorkflowTest {
         var unknown=ReviewWorkflowTest.item(origin+"/api/users","?","","",true);
         panel.repeater.open(List.of(JsRequestDraft.preview(unknown)));var method=panel.repeater.sessions.get(2);method.send.doClick(0);
         verify(wire(method).startsWith("REPLACE_METHOD ")&&received.get()==2,"unknown methods are explicit and block sending until edited");
+        verify(method.note.getText().contains("메서드 적용")&&method.method.getSelectedItem().equals("선택 필요"),"unresolved method feedback points to an explicit in-window fix without assuming GET");
+        method.applyMethod.doClick(0);verify(wire(method).startsWith("REPLACE_METHOD ")&&received.get()==2,"apply without an explicit method selection cannot guess or send a request");
+        method.request.tabs.get(2).doClick(0);method.method.setSelectedItem("GET");method.applyMethod.doClick(0);
+        verify(wire(method).startsWith("GET /api/users HTTP/1.1")&&method.request.mode()==PacketInspector.Mode.RAW&&received.get()==2,"method apply repairs the authoring bytes from Hex and opens Raw without transmitting");
+        KeyEvent outside=key(session.request.text,KeyEvent.KEY_PRESSED,InputEvent.CTRL_DOWN_MASK,KeyEvent.VK_SPACE,' ');
+        verify(!method.shortcuts.handle(outside,session.request.text)&&received.get()==2,"a Repeater shortcut cannot submit from another Repeater window");
+        Component focus=method.method.getEditor().getEditorComponent();
+        verify(!method.shortcuts.handle(key(focus,KeyEvent.KEY_PRESSED,0,KeyEvent.VK_SPACE,' '),focus),"ordinary spaces remain available to editors");
+        KeyEvent pressed=key(focus,KeyEvent.KEY_PRESSED,InputEvent.CTRL_DOWN_MASK,KeyEvent.VK_SPACE,' ');
+        verify(method.shortcuts.handle(pressed,focus)&&pressed.isConsumed(),"Ctrl+Space dispatch is handled before the method combo editor binding");
+        method.shortcuts.handle(key(focus,KeyEvent.KEY_PRESSED,InputEvent.CTRL_DOWN_MASK,KeyEvent.VK_SPACE,' '),focus);
+        KeyEvent typed=key(focus,KeyEvent.KEY_TYPED,InputEvent.CTRL_DOWN_MASK,KeyEvent.VK_UNDEFINED,' ');
+        verify(method.shortcuts.handle(typed,focus)&&typed.isConsumed(),"shortcut typing cannot insert a space into a request or method field");
+        method.shortcuts.handle(key(focus,KeyEvent.KEY_RELEASED,0,KeyEvent.VK_SPACE,' '),focus);
+      });var repaired=panel.repeater.sessions.get(2);waitSend(repaired);
+      edt(()->{
+        verify(received.get()==3&&repaired.result.getText().startsWith("200 ·")&&repaired.response.text.getText().contains("\"request\": 3"),"repair then Ctrl+Space produces exactly one real loopback response despite key repeat");
+        repaired.request.text.setText(wire(repaired).replace("/api/users","/api/users?next=REPLACE_ME"));
+        Component focus=repaired.response.text;
+        repaired.shortcuts.handle(key(focus,KeyEvent.KEY_PRESSED,InputEvent.CTRL_DOWN_MASK,KeyEvent.VK_SPACE,' '),focus);
+        repaired.shortcuts.handle(key(focus,KeyEvent.KEY_RELEASED,0,KeyEvent.VK_SPACE,' '),focus);
+        verify(received.get()==3&&repaired.note.getText().contains("미확정")&&repaired.response.text.getText().isBlank(),"response-pane shortcut still blocks unresolved values and clears the old response");
+        repaired.request.text.setText(wire(repaired).replace("next=REPLACE_ME","next=ok"));
+        repaired.send.doClick(0);
+      });waitSend(repaired);
+      edt(()->{
+        verify(received.get()==4&&"next=ok".equals(receivedQuery.get())&&repaired.response.text.getText().contains("\"request\": 4"),"Send after request repair returns the new response and preserves the confirmed query");
         byte[] large=("GET /api/users HTTP/1.1\r\nHost: 127.0.0.1\r\nX-Demo: "+"x".repeat(70000)+"\r\n\r\n").getBytes(StandardCharsets.UTF_8);
-        method.request.setPacket(large,null);method.send.doClick(0);
-        verify(received.get()==2&&method.note.getText().contains("잘린"),"truncated request previews are never transmitted as complete packets");
+        repaired.request.setPacket(large,null);repaired.send.doClick(0);
+        verify(received.get()==4&&repaired.note.getText().contains("잘린"),"truncated request previews are never transmitted as complete packets");
         panel.close();verify(session.closed&&session.worker.isShutdown()&&session.request.closed()&&session.response.closed(),"unload closes Repeater workers and clears packet editors");
-        int opened=windows.get();panel.repeater.open(List.of(JsRequestDraft.preview(unknown)));
+        int opened=windows.get();panel.repeater.open(List.of(new JsRequestDraft.Draft(origin+"/api/users","GET","")));
         verify(windows.get()==opened&&panel.repeater.sessions.isEmpty(),"unloaded workspaces cannot reopen draft windows");
       });
     } finally {

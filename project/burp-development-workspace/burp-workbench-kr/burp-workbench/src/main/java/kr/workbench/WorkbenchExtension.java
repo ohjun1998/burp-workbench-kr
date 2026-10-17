@@ -480,6 +480,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     authCompare.trackingSink = activity::accountInspection;
     jsAnalysis.coverage = (result, source) -> activity.analyzed(result, source);
     jsAnalysis.observation = activity::observation;
+    jsAnalysis.observedMethods = activity.tracker::observedMethods;
     jsAnalysis.trafficLookup=(method,url)->{
       DiskTrafficStore store=trafficStore;for(long row=store.size()-1;row>=0&&!unloaded.get();row--){var ref=store.ref(row);if(ref.method().equals(method)&&ActivityTracker.safeUrl(ref.url()).equals(ActivityTracker.safeUrl(url)))return ref.packet();}return null;
     };

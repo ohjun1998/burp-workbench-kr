@@ -84,6 +84,17 @@ final class ActivityTracker {
     return rejected;
   }
 
+  /** Existing bounded metadata only; discoveries alone are not observed requests. */
+  synchronized Map<String,Set<String>> observedMethods(Collection<String> targets) {
+    if(rejected>0)return Map.of();
+    Set<String> wanted=new HashSet<>();
+    for(String target:targets){String key=safeUrl(target);if(key!=null)wanted.add(key);}
+    Map<String,Set<String>> result=new HashMap<>();
+    for(Endpoint endpoint:endpoints.values())if(endpoint.observed>0&&wanted.contains(endpoint.url))
+      result.computeIfAbsent(endpoint.url,key->new HashSet<>()).add(endpoint.method);
+    result.replaceAll((key,value)->Set.copyOf(value));return Map.copyOf(result);
+  }
+
   private void invalidate(Endpoint endpoint) {
     endpoint.cachedView = null;
     endpointSnapshot = null;

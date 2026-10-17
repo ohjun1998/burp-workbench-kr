@@ -21,18 +21,24 @@ final class JsRepeater implements AutoCloseable {
   final Component owner;
   final MontoyaApi api;
   final List<Session> sessions=new ArrayList<>();
-  final List<JDialog> windows=new ArrayList<>();
-  WorkbenchExtension.DialogOpener opener=JsRepeater::window;
+  final List<Window> windows=new ArrayList<>();
+  interface WindowOpener {Window open(Component owner,String title,Component body,boolean modal,Runnable closed);}
+  WindowOpener opener=JsRepeater::window;
   private boolean closed;
 
   JsRepeater(Component owner,MontoyaApi api) { this.owner=owner;this.api=api; }
 
   void open(List<JsRequestDraft.Draft> drafts) {
+    openPrepared(drafts.stream().map(draft->JsMethodSelection.choose(draft,java.util.Set.of())).toList());
+  }
+
+  void openPrepared(List<JsMethodSelection.Choice> choices) {
+    List<JsRequestDraft.Draft> drafts=choices.stream().map(JsMethodSelection.Choice::draft).toList();
     if(closed || drafts.isEmpty())return;
-    Session session=new Session(api,drafts);
+    Session session=new Session(api,drafts,choices.stream().map(JsMethodSelection.Choice::reason).toList());
     sessions.add(session);
     String title="Repeater · "+drafts.get(0).method()+" "+URI.create(drafts.get(0).url()).getRawPath();
-    JDialog[] handle={null};
+    Window[] handle={null};
     try {
       handle[0]=opener.open(owner,title,session,false,()->{
         session.close();sessions.remove(session);windows.remove(handle[0]);
@@ -41,20 +47,23 @@ final class JsRepeater implements AutoCloseable {
     } catch(RuntimeException error) { session.close();sessions.remove(session);throw error; }
   }
 
-  private static JDialog window(Component owner,String title,Component body,boolean modal,Runnable closed) {
+  static JFrame window(Component owner,String title,Component body,boolean modal,Runnable closed) {
     if(GraphicsEnvironment.isHeadless())return null;
-    JDialog dialog=new JDialog(SwingUtilities.getWindowAncestor(owner),title,Dialog.ModalityType.MODELESS);
-    dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    dialog.setContentPane((Container)body);dialog.setMinimumSize(new Dimension(780,440));
-    dialog.setSize(1120,720);dialog.setLocationRelativeTo(owner);
-    dialog.addWindowListener(new WindowAdapter() { public void windowClosed(WindowEvent event) { closed.run(); } });
-    dialog.setVisible(true);return dialog;
+    JFrame frame=new JFrame(title);
+    frame.setUndecorated(false);frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+    Window parent=owner==null?null:SwingUtilities.getWindowAncestor(owner);
+    if(parent!=null)frame.setIconImages(parent.getIconImages());
+    frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);frame.setResizable(true);
+    frame.setContentPane((Container)body);frame.setMinimumSize(new Dimension(780,440));
+    frame.setSize(1120,720);frame.setLocationRelativeTo(owner);
+    frame.addWindowListener(new WindowAdapter() { public void windowClosed(WindowEvent event) { closed.run(); } });
+    frame.setVisible(true);return frame;
   }
 
   @Override public void close() {
     closed=true;
     for(Session session:List.copyOf(sessions))session.close();sessions.clear();
-    for(JDialog window:List.copyOf(windows))window.dispose();windows.clear();
+    for(Window window:List.copyOf(windows))window.dispose();windows.clear();
   }
 
   static final class Session extends JPanel implements AutoCloseable {
@@ -67,7 +76,6 @@ final class JsRepeater implements AutoCloseable {
     final JButton applyMethod=new JButton("메서드 적용");
     final JLabel methodHint=new JLabel(),result=new JLabel("전송 전");
     final JTextArea note=new JTextArea("요청은 Raw에서 편집 · 메서드·값과 인증을 확인하세요.",2,0);
-    final WindowMaximize maximize=new WindowMaximize(this);
     final JsRepeaterShortcuts shortcuts=new JsRepeaterShortcuts(this,send);
     final List<Entry> entries=new ArrayList<>();
     final ExecutorService worker=Executors.newSingleThreadExecutor(task->{Thread t=new Thread(task,"Workbench-JS-Repeater");t.setDaemon(true);return t;});
@@ -76,22 +84,26 @@ final class JsRepeater implements AutoCloseable {
     boolean busy,loading;
     int index;
 
-    record Entry(String target,byte[] request,byte[] response,int responseLength,String decoded,String status,boolean sent) {
+    record Entry(String target,byte[] request,byte[] response,int responseLength,String decoded,String status,boolean sent,String methodEvidence) {
       Entry { request=request.clone();response=response.clone(); }
     }
 
     Session(MontoyaApi api,List<JsRequestDraft.Draft> drafts) {
+      this(api,drafts,drafts.stream().map(draft->"분석·확인된 초안").toList());
+    }
+
+    Session(MontoyaApi api,List<JsRequestDraft.Draft> drafts,List<String> reasons) {
       super(new BorderLayout(6,6));this.api=api;setName("wb.js.repeater.window");
       setBorder(BorderFactory.createEmptyBorder(10,10,8,10));
       send.setName("wb.js.repeater.send");target.setName("wb.js.repeater.target");
       previous.setName("wb.js.repeater.previous");next.setName("wb.js.repeater.next");
       method.setName("wb.js.repeater.method");applyMethod.setName("wb.js.repeater.method.apply");
-      method.setEditable(true);method.setToolTipText("원본에서 확인한 HTTP 메서드 · 자동 선택하거나 전송하지 않습니다.");
+      method.setEditable(true);method.setToolTipText("분석·관찰 근거가 있으면 자동 선택 · 선택만으로 전송하지 않습니다.");
       previous.setToolTipText("이전 요청·응답");next.setToolTipText("다음 요청·응답");
       target.setToolTipText("전송 대상 Origin · 프로토콜, 호스트, 포트");
       JPanel action=new JPanel(new BorderLayout(8,0));
       action.add(WorkbenchUi.row(send,previous,next),BorderLayout.WEST);
-      action.add(target);action.add(WorkbenchUi.row(result,maximize),BorderLayout.EAST);
+      action.add(target);action.add(result,BorderLayout.EAST);
       JPanel header=new JPanel(new BorderLayout(0,6));header.add(action,BorderLayout.NORTH);
       header.add(WorkbenchUi.row(new JLabel("메서드"),method,applyMethod,methodHint));add(header,BorderLayout.NORTH);
       JSplitPane messages=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
@@ -103,9 +115,9 @@ final class JsRepeater implements AutoCloseable {
       methodHint.putClientProperty("wb.font.size",12);methodHint.setName("wb.js.repeater.method.hint");
       result.putClientProperty("wb.font.size",12);result.setName("wb.js.repeater.result");
       WorkbenchUi.style(this);WorkbenchUi.primary(send);
-      for(var draft:drafts) {
+      for(int row=0;row<drafts.size();row++) {var draft=drafts.get(row);
         URI uri=URI.create(draft.url());
-        entries.add(new Entry(uri.getScheme()+"://"+uri.getRawAuthority(),draft.wire().getBytes(StandardCharsets.UTF_8),new byte[0],0,null,"전송 전",false));
+        entries.add(new Entry(uri.getScheme()+"://"+uri.getRawAuthority(),draft.wire().getBytes(StandardCharsets.UTF_8),new byte[0],0,null,"전송 전",false,reasons.get(row)));
       }
       request.setNativeAction(this::exportNative);
       request.more.setToolTipText("편집한 요청을 Burp Repeater에 복사 · 전송 없음");
@@ -144,11 +156,23 @@ final class JsRepeater implements AutoCloseable {
     private void updateMethod(){
       String first=request.text.getText().split("\\s+",2)[0];
       // Pretty/Hex are views; method controls always read the authoring bytes.
-      try{first=new String(request.editedBytes(),StandardCharsets.UTF_8).split("\\s+",2)[0];}catch(IllegalStateException ignored){}
-      boolean known=first.matches("[A-Z][A-Z0-9_-]{0,31}")&&!first.equals("REPLACE_METHOD");
+      if(request.mode()!=PacketInspector.Mode.RAW)try{first=new String(request.editedBytes(),StandardCharsets.UTF_8).split("\\s+",2)[0];}catch(IllegalStateException ignored){}
+      boolean known=JsMethodSelection.known(first);
       method.setSelectedItem(known?first:"선택 필요");
-      methodHint.setText(known?"Raw에서 경로·파라미터도 확인하세요.":"전송 전 메서드를 선택하고 적용하세요.");
+      String reason=methodEvidence(first);
+      methodHint.setText(known?reason:"전송 전 메서드를 선택하고 적용하세요.");
+      methodHint.setToolTipText(reason+" · 메서드가 선택되어도 경로·파라미터·인증 확인 필요");
       if(!known)note.setText("전송하지 않음: HTTP 메서드가 미확정입니다. 위에서 실제 메서드를 선택하고 ‘메서드 적용’을 누르세요.");
+    }
+
+    private String methodEvidence(String method){
+      Entry entry=entries.get(index);String old=methodOf(entry.request());
+      return method.equals(old)&&entry.target().equals(target.getText().strip())?entry.methodEvidence():"직접 편집·선택한 메서드";
+    }
+
+    private static String methodOf(byte[] wire){
+      int length=0;while(length<wire.length&&length<33&&wire[length]!=' '&&wire[length]!='\r'&&wire[length]!='\n')length++;
+      return new String(wire,0,length,StandardCharsets.US_ASCII);
     }
 
     private void applyMethod(){
@@ -180,8 +204,8 @@ final class JsRepeater implements AutoCloseable {
       Entry old=entries.get(index);byte[] wire=request.editedBytes();String origin=target.getText().strip();
       boolean changed=!origin.equals(old.target())||!Arrays.equals(wire,old.request());
       if(old.sent()&&(changed||sending)) {
-        entries.add(new Entry(origin,wire,new byte[0],0,null,"전송 전",false));index=entries.size()-1;
-      } else if(changed)entries.set(index,new Entry(origin,wire,new byte[0],0,null,"전송 전",false));
+        entries.add(new Entry(origin,wire,new byte[0],0,null,"전송 전",false,methodEvidence(methodOf(wire))));index=entries.size()-1;
+      } else if(changed)entries.set(index,new Entry(origin,wire,new byte[0],0,null,"전송 전",false,methodEvidence(methodOf(wire))));
     }
 
     private void navigate(int direction) {
@@ -249,7 +273,7 @@ final class JsRepeater implements AutoCloseable {
             String decoded=reply.body().length()<=2*1024*1024?PacketFormat.decodedResponse(reply):null;
             if(decoded!=null&&decoded.length()>PacketInspector.PREVIEW_BYTES)decoded=decoded.substring(0,PacketInspector.PREVIEW_BYTES);
             String display=reply.statusCode()+" · "+TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-start)+" ms · "+size(length);
-            Entry complete=new Entry(original.target(),sentRequest,preview,length,decoded,display,true);
+            Entry complete=new Entry(original.target(),sentRequest,preview,length,decoded,display,true,original.methodEvidence());
             SwingUtilities.invokeLater(()->{
               if(closed)return;
               entries.set(destination,complete);busy=false;load(destination);

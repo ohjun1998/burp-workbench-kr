@@ -212,6 +212,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final JTextArea matrixRules = new JTextArea(5, 60);
   final TargetWindow sessionSettings =
       new TargetWindow(this, "계정 세션 · 역할/조직 권한", this::sessionSettingsContent);
+  final CookieSessionProbe.Config[] sessionChecks=new CookieSessionProbe.Config[3];
+  CookieSessionPanel cookieSessions;
+  final TargetWindow cookieSessionWindow=new TargetWindow(this,"쿠키·세션 검사",()->cookieSessions);
 
   record SessionKey(String candidate, BountySession.Config config) {}
 
@@ -247,8 +250,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       String[] tenants,
       boolean largeFiles,
       String[] accountIds,
-      Set<String> identityCookies) {
+      Set<String> identityCookies,
+      CookieSessionProbe.Config[] sessionChecks) {
     Context {
+      sessionChecks=sessionChecks.clone();
       accountIds = accountIds.clone();
       identityCookies = Set.copyOf(identityCookies);
       sessions = sessions.clone();
@@ -296,6 +301,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     super(new BorderLayout(8, 8));
     this.api = api;
     this.selected = selected;
+    cookieSessions=new CookieSessionPanel(this);
+    cookieSessionWindow.opener=CookieSessionPanel::window;
     setName("wb.auth.record");
     putClientProperty("wb.auth.controller", this);
     setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
@@ -317,6 +324,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             button("중지", this::stop),
             button("비교 기록 비우기", this::clearHistory),
             settings,
+            button("세션 검사", ()->{cookieSessions.loadSlot();cookieSessionWindow.open();}),
             button("세션·권한 매트릭스", sessionSettings::open),
             more));
     top.add(state);
@@ -672,6 +680,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         throw new IllegalArgumentException("비교 계정 1/2/3은 같은 사이트(Origin)여야 합니다.");
     if (slots[i] == null || !slots[i].key.equals(c.key)) trackingAccounts[i] = "";
     slots[i] = c;
+    sessionChecks[i]=null;
     refreshTracking();
     refreshed.clear();
     refreshSlots();
@@ -692,6 +701,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void clearSlot(int i) {
     editable();
     slots[i] = null;
+    sessionChecks[i]=null;
     trackingAccounts[i] = "";
     refreshTracking();
     refreshSlots();
@@ -788,7 +798,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       slotLabels[i].setText(
           c == null ? "미지정" : c.headers.isEmpty() ? "비로그인" : c.key.substring(0, 12));
       slotLabels[i].setToolTipText(
-          c == null ? null : c.origin + " · " + String.join(", ", c.headers.keySet()));
+          c == null ? null : c.origin + " · " + String.join(", ", c.headers.keySet())
+              +(sessionChecks[i]==null?"":" · 비교 전 신원 검사 ON"));
       if (slotMenus[i] != null) {
         slotMenus[i].setText(label(i) + " · " + slotLabels[i].getText());
         slotMenus[i].setToolTipText(slotLabels[i].getToolTipText());
@@ -822,6 +833,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     credentials.clear();
     candidateModel.setRowCount(0);
     Arrays.fill(slots, null);
+    Arrays.fill(sessionChecks,null);
+    cookieSessions.invalidateResult();
     Arrays.fill(trackingAccounts, "");
     refreshTracking();
     refreshSlots();
@@ -958,7 +971,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         tenants,
         largeEnabled,
         trackingAccounts,
-        cookieNames);
+        cookieNames,
+        sessionChecks);
   }
 
   void startRecord() {
@@ -1067,6 +1081,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         if (closed.get() || c.epoch != epoch.get()) break;
         final int refreshingSlot = i;
         Map<String, String> session = c.profiles[i].headers;
+        boolean checkingIdentity=false;
         try {
           var cfg = c.sessions[i];
           if (cfg.enabled()) {
@@ -1086,11 +1101,17 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
               refreshed.put(key, session);
             }
           }
+          if(c.sessionChecks[i]!=null) {
+            checkingIdentity=true;
+            CookieSessionProbe.verify(api,c.sessionChecks[i],session,c.names,c.origin,
+                ()->closed.get()||c.epoch!=epoch.get());
+          }
         } catch (Exception ex) {
+          final String stage=checkingIdentity?"신원 검사 실패":"갱신 실패";
           publish(
               run,
               () -> {
-                run.packets[refreshingSlot].note = "갱신 실패 · 비교 미전송 · " + ex.getMessage();
+                run.packets[refreshingSlot].note = stage+" · 비교 미전송 · " + ex.getMessage();
                 trackingSink.accept(
                     c.accountIds[refreshingSlot],
                     run.original,
@@ -1102,7 +1123,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                 reviewSink.accept(
                     run.original.method(),
                     run.original.url(),
-                    c.labels[refreshingSlot] + ": 세션 갱신 확인 필요");
+                    c.labels[refreshingSlot] + ": 세션 확인 필요");
               });
           continue;
         }
@@ -1484,6 +1505,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void stop() {
     recording.set(null);
     epoch.incrementAndGet();
+    if(cookieSessions.busy)cookieSessions.cancel();
     tickets.clear();
     record.setSelected(false);
     record.setText("새 요청 자동 비교 OFF");
@@ -1524,10 +1546,13 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
 
   @Override
   public void close() {
+    closed.set(true);
     comparisonSettings.close();
     sessionSettings.close();
+    cookieSessionWindow.close();
+    cookieSessions.close();
+    Arrays.fill(sessionChecks,null);
     refreshed.clear();
-    closed.set(true);
     recording.set(null);
     epoch.incrementAndGet();
     tickets.clear();

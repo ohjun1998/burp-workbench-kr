@@ -3,17 +3,19 @@ import java.util.*;
 /** Bounded JSON comparisons. Findings remain observations requiring human confirmation. */
 final class AuthJudgement {
  enum Empty{OBJECT,ARRAY}
- record Rules(Set<String> ignored,Map<String,String> denied,String ownerPath,AuthPolicy.Access policy){Rules(Set<String> ignored,Map<String,String> denied,String ownerPath){this(ignored,denied,ownerPath,AuthPolicy.Access.UNSPECIFIED);}Rules{ignored=Set.copyOf(ignored);denied=Map.copyOf(denied);}}
+ record Denial(String path,String value){}
+ record Rules(Set<String> ignored,List<Denial> denied,String ownerPath,AuthPolicy.Access policy){Rules(Set<String> ignored,Map<String,String> denied,String ownerPath,AuthPolicy.Access policy){this(ignored,denied.entrySet().stream().map(e->new Denial(e.getKey(),e.getValue())).toList(),ownerPath,policy);}Rules(Set<String> ignored,List<Denial> denied,String ownerPath){this(ignored,denied,ownerPath,AuthPolicy.Access.UNSPECIFIED);}Rules{ignored=Set.copyOf(ignored);denied=List.copyOf(denied);}}
  record Result(String state,String reason,String changes){String note(){return state+" · "+reason;}}
  static Rules rules(String ignored,String denied,String owner){
   if(ignored.length()>2048||denied.length()>4096||owner.length()>128)throw new IllegalArgumentException("판정 규칙 크기 제한");
   Set<String> skip=new LinkedHashSet<>();for(String p:ignored.split(","))if(!p.isBlank())skip.add(p.strip());
-  Map<String,String> block=new LinkedHashMap<>();for(String line:denied.split("\\R")){if(line.isBlank())continue;int i=line.indexOf('=');if(i<1)throw new IllegalArgumentException("차단 규칙은 JSON 경로=값 형식입니다.");block.put(line.substring(0,i).strip(),line.substring(i+1).strip());}
+  List<Denial> block=new ArrayList<>();for(String line:denied.split("\\R")){if(line.isBlank())continue;int i=line.indexOf('=');if(i<1)throw new IllegalArgumentException("차단 규칙은 JSON 경로=값 형식입니다.");block.add(new Denial(line.substring(0,i).strip(),line.substring(i+1).strip()));}
   if(skip.size()>32||block.size()>32)throw new IllegalArgumentException("규칙은 각각 최대 32개입니다.");return new Rules(skip,block,owner.strip());
  }
  static Result compare(int originalStatus,String original,int status,String body,Rules rules,String expectedOwner){return compare(originalStatus,original,status,body,rules,expectedOwner,false);}
  static Result compare(int originalStatus,String original,int status,String body,Rules rules,String expectedOwner,boolean existenceVerified){
   if(originalStatus<200||originalStatus>=300)return result("판정 보류","기준 응답 확인 필요","");
+  Map<String,Object> baseline=json(original);if(baseline!=null&&denied(baseline,rules))return result("판정 보류","기준 응답에 차단 규칙 일치","");
   if(status==401||status==403)return result("차단 근거 확인","HTTP "+status,"");
   if(status==404||status==410)return result(existenceVerified?"은닉형 접근 차단 후보":"은닉형 차단/미발견 후보",existenceVerified?"소유자 재조회 2xx 동일 · 대상 HTTP "+status:"기준 2xx · 대상 HTTP "+status+" · 존재/삭제 여부 재검증 필요","");
   if(status>=300&&status<400)return result("판정 보류","리다이렉트 · 로그인 여부 확인","");
@@ -40,7 +42,7 @@ final class AuthJudgement {
  private static void flatten(Object x,String path,Map<String,Object> out){if(out.size()>=8000)throw new IllegalArgumentException("필드 제한");if(x instanceof Map<?,?> m){if(m.isEmpty())out.put(path,Empty.OBJECT);else for(var e:m.entrySet())flatten(e.getValue(),path+(e.getKey().toString().matches("[A-Za-z_][A-Za-z0-9_]*")?"."+e.getKey():"["+MetadataExport.json(e.getKey())+"]"),out);}else if(x instanceof List<?> l){if(l.isEmpty())out.put(path,Empty.ARRAY);else for(int i=0;i<l.size();i++)flatten(l.get(i),path+"["+i+"]",out);}else out.put(path,x);}
  private static boolean match(String path,String rule){return rule.startsWith("$")?path.equals(rule):path.equals("$."+rule)||path.endsWith("."+rule);}
  static Object value(Map<String,Object> map,String path){String key=path.startsWith("$")?path:"$."+path;return map.get(key);}
- private static boolean denied(Map<String,Object> map,Rules r){for(var rule:r.denied.entrySet())for(var e:map.entrySet())if(match(e.getKey(),rule.getKey())&&text(e.getValue()).equals(rule.getValue()))return true;return false;}
+ static boolean denied(Map<String,Object> map,Rules r){for(var rule:r.denied)for(var e:map.entrySet())if(match(e.getKey(),rule.path())&&text(e.getValue()).equals(rule.value()))return true;return false;}
  private static String text(Object v){if(v instanceof Number n){var d=new java.math.BigDecimal(n.toString()).stripTrailingZeros();return Math.abs((long)d.scale())<128&&d.precision()-(long)d.scale()<128?d.toPlainString():d.toString();}return String.valueOf(v);}
  static Map<String,Object> without(Map<String,Object> map,Set<String> ignored){Map<String,Object> out=new TreeMap<>();for(var e:map.entrySet())if(ignored.stream().noneMatch(r->match(e.getKey(),r)))out.put(e.getKey(),e.getValue());return out;}
  static String changes(Map<String,Object> a,Map<String,Object> b,Set<String> ignored){Set<String> keys=new TreeSet<>(a.keySet());keys.addAll(b.keySet());StringBuilder out=new StringBuilder();int count=0;for(String k:keys){if(ignored.stream().anyMatch(r->match(k,r)))continue;if(a.containsKey(k)!=b.containsKey(k)||!Objects.equals(a.get(k),b.get(k))){if(count++>=100){out.append("[차이 100개 제한]\n");break;}out.append(k).append(" : ").append(display(a,k)).append(" → ").append(display(b,k)).append('\n');}}return out.length()==0?"비교 대상 필드 차이 없음":out.toString();}

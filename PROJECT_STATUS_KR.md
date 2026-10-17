@@ -1,6 +1,17 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.37.4 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.38.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+
+
+## 계정 비교 응답 분류·차단 규칙 — 0.38.0
+
+[PR #53](https://github.com/ohjun1998/burp-workbench-kr/pull/53)의 계정별 결과 셀·패킷 탭에 빨강(우회 의심)·초록(차단 응답 확인)·노랑(확인 필요)·회색(비교 미성립)을 적용했습니다. 기존 화면·표 열·스크롤을 유지하며 BODY/BODY_REGEX/HEADER/HEADER_REGEX 차단 규칙을 선택적으로 지정할 수 있습니다. 인증 후보만 지정해 비교할 수 있으며 신원 확인 API는 필수가 아닙니다.
+
+404/410·리다이렉트·서버 오류는 정상 차단으로 자동 확정하지 않습니다. 같은 JSON 경로의 여러 차단 값을 OR로 유지하고, 잘못된 기준·기대 권한 충돌·정규식 제한은 판정을 보류합니다.
+
+로컬 정식 release 2,525개(Java 2,025·payload HTTP 132·전체 기능 HTTP 102·모의 진단 HTTP 266), 새 응답 회귀 47개, 별도 Mapper 회귀, 두 테마 운영 Swing 화면 12개·컨트롤 200개와 다운로드 해시·소스 지문 검증을 통과했습니다. 실제 Burp GUI·Windows DPI/IME·외부 Autorize 실행은 미수행입니다. 소스 검증 커밋은 `c7e08c359d627987d2fb863875a0463251cc3000`이며 main 반영 문서 커밋은 소스·JAR·소스 ZIP을 보존합니다.
+
+[사용법·화면](docs/RELEASE_0.38.0_KR.md) · [검증 기록](docs/VERIFICATION_0.38.0.json) · [JAR·소스 ZIP](downloads/extensions/0.38.0/) · [대화](docs/chat-logs/2026-10-17/workbench-auth-response-0380.md)
 
 ## 공통 권한 정책·사이트 디자인 — 3.8.0
 

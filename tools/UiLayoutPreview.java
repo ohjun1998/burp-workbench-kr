@@ -90,7 +90,9 @@ public final class UiLayoutPreview extends WorkbenchTest {
             boolean fits=rect.width-insets.left-insets.right>=textWidth+iconWidth&&rect.height-insets.top-insets.bottom>=label.getFontMetrics(label.getFont()).getHeight();
             var textBounds=new java.awt.Rectangle();
             javax.swing.SwingUtilities.layoutCompoundLabel(label,label.getFontMetrics(label.getFont()),label.getText(),label.getIcon(),label.getVerticalAlignment(),label.getHorizontalAlignment(),label.getVerticalTextPosition(),label.getHorizontalTextPosition(),new java.awt.Rectangle(rect.x+insets.left,rect.y+insets.top,Math.max(0,rect.width-insets.left-insets.right),Math.max(0,rect.height-insets.top-insets.bottom)),new java.awt.Rectangle(),textBounds,label.getIconTextGap());
-            textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("heading"),csv(label.getText()),"true",""+textWidth,""+rect.width,""+rect.height,""+visible.contains(textBounds),""+fits));
+            boolean scrollableHeading=false;for(var ancestor=c.getParent();ancestor!=null&&ancestor!=root;ancestor=ancestor.getParent())if(ancestor instanceof javax.swing.JViewport)scrollableHeading=true;
+            boolean headingVisible=!scrollableHeading||(visible.y<=textBounds.y&&visible.y+visible.height>=textBounds.y+textBounds.height);
+            textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("heading"),csv(label.getText()),""+headingVisible,""+textWidth,""+rect.width,""+rect.height,""+visible.contains(textBounds),""+fits));
         }
         if(c instanceof JsAnalysisTotals.Lamp label){
             var rect=SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);var clipped=visible(root,c,rect);
@@ -219,6 +221,31 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("auth")) {
+            try {
+                var auth=(AuthComparePanel)get(ext,"authCompare");
+                edt(()->{
+                    auth.profileNames[0].setText("Bob");auth.profileNames[1].setText("비로그인");auth.profileNames[2].setText("관리자");
+                    auth.slots[0]=new AuthComparePanel.Candidate(1,"demo-auth-session","https://auth.test:443",java.util.Map.of("cookie","SID=DEMO"),1,"");
+                    var original=AuthRecordTest.q("ALICE");var baseline=response(200,"{\"secret\":\"alice\"}");
+                    var run=new AuthComparePanel.Run(1,original,baseline,auth.context());
+                    String[] notes={"우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인","차단 근거 확인 · HTTP 403","판정 보류 · HTTP 500"};
+                    for(int i=0;i<3;i++){run.packets[i].request=AuthRecordTest.q("DEMO");run.packets[i].response=response(i==0?200:i==1?403:500,i==0?"{\"secret\":\"alice\"}":"접근 거부 / 서버 오류");run.packets[i].note=notes[i];}
+                    run.note="완료";auth.runs.add(run);auth.historyModel.addRow(new Object[]{1,original.url(),"","","","완료"});auth.refresh(run);auth.history.setRowSelectionInterval(0,0);auth.show(run);
+                    installHeaders(auth);auth.setVisible(true);
+                    try {
+                        render(auth,out.resolve("auth-results.png"),width,height);
+                        auth.responseDenialRules.setText("BODY: 접근 권한이 없습니다\nBODY_REGEX: (?i)access\\s+denied\nHEADER: X-Access: denied");
+                        JPanel settings=WorkbenchUi.settingsBody(auth.settingsContent(),()->{});installHeaders(settings);
+                        render(settings,out.resolve("auth-settings.png"),width,height);
+                        for(Component child:settings.getComponents())if(child instanceof JScrollPane scroll)scroll.getViewport().setViewPosition(new java.awt.Point(0,Math.max(0,scroll.getViewport().getView().getHeight()-scroll.getViewport().getHeight())));
+                        render(settings,out.resolve("auth-settings-bottom.png"),width,height);
+                    }catch(Exception e){throw new RuntimeException(e);}
+                });writeMeasurements(out);
+            } finally {unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("Authorization preview failed");
+            System.out.println("Authorization verdicts rendered: "+theme+" "+width+"x"+height+"; synthetic packets, zero HTTP.");return;
+        }
         if(args.length>5&&args[5].equals("session")) {
             try {
                 var auth=(AuthComparePanel)get(ext,"authCompare");var inspector=auth.cookieSessions;

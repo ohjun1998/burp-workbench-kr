@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.37.4**, Feature Mapper **0.3.1**과 실습 사이트 **3.8.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.4 검증 기록](docs/VERIFICATION_0.37.4.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.38.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.8.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.38.0 검증 기록](docs/VERIFICATION_0.38.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -210,3 +210,13 @@ JS에서 확인한 메서드 → 같은 Origin·경로의 단일 관찰 메서�
 ## 사이트 3.8.0 권한·실제 브라우저 검사
 
 `python tools/check_role_portals.py`는 공통 RBAC·객체 권한·미선언 정책 기본 거부·권한 변경·접근 기록과 기존 실습을 검사합니다. 별도 `python tools/check_community_ui.py`는 현재 소스를 컴파일하고 독립 H2에서 Chromium으로 실제 UI 흐름과 1440/1024/390px 레이아웃을 확인합니다. Playwright 설치·실행 설정은 [3.8.0 사용법](docs/LAB_3.8.0_KR.md), 실행 결과는 [검증 기록](docs/VERIFICATION_LAB_3.8.0.json)을 확인하세요.
+
+## 0.38.0 계정 비교 응답 판정
+
+`AuthResponseWorkflowTest`는 인증값 교체·동일 본문·200 차단 응답·문자열/정규식·입력 제한·정규식 예산·기대 권한 충돌·동일 경로 JSON OR·잘못된 기준·설정 스냅샷·정렬된 행의 색상·탭 아이콘을 검사합니다. 실제 서버 응답은 기존 격리 HTTP 묶음에서 별도로 검사합니다.
+
+```sh
+python tools/render_ui_layout.py --auth-only --sizes 1024x720 1280x800 --check --out tmp/ui-auth
+```
+
+전체 빌드/회귀 종료 후 순서대로 실행하세요. 회귀 빌드 중 테스트 클래스 디렉터리가 초기화되므로 동시에 실행하지 않습니다. 두 테마에서 결과 화면·설정 상단·설정 하단 12개 화면을 생성합니다. 스크롤 설정의 화면 밖 제목과 경계에 걸친 제목은 선택된 제목으로 세지 않으며, 하단을 별도로 렌더링해 새 규칙 영역의 실제 노출을 확인합니다.

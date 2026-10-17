@@ -92,6 +92,7 @@ def main():
                   ('js-repeater-small.png','wb.js.repeater.request.text'):100,('js-repeater-small.png','wb.js.repeater.response.text'):100,
                   ('js-repeater-method-required.png','wb.js.repeater.request.text'):100,('js-repeater-method-required.png','wb.js.repeater.response.text'):100,
                   ('js-repeater-method-required.png','wb.js.repeater.note'):28,('js-details.png','wb.js.details.api.table'):100}
+        required.update({(view,'wb.js.repeater.'+side+'.text'):100 for view in ['js-repeater-auto-method.png','js-repeater-auto-method-small.png'] for side in ['request','response']})
     gate_failures=[]
     for theme in args.themes:
         for size in args.sizes:
@@ -102,7 +103,7 @@ def main():
                 if args.js_only and view in {'js-packets.png','js-analysis-list.png','js-packets-small.png','js-analysis-list-small.png'}:
                     expected_w,expected_h=('560','300') if 'small' in view else ('760','480')
                     copies=len(args.sizes)
-                if args.js_only and view in {'js-repeater.png','js-repeater-small.png','js-repeater-method-required.png'}:
+                if args.js_only and view in {'js-repeater.png','js-repeater-small.png','js-repeater-method-required.png','js-repeater-auto-method.png','js-repeater-auto-method-small.png'}:
                     expected_w,expected_h=('780','440') if 'small' in view or view=='js-repeater-method-required.png' else ('1120','720')
                     copies=len(args.sizes)
                 if args.js_only and view in {'js-details.png','js-details-small.png'}:

@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.37.2**, Feature Mapper **0.3.1**과 실습 사이트 **3.6.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.2 검증 기록](docs/VERIFICATION_0.37.2.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.37.3**, Feature Mapper **0.3.1**과 실습 사이트 **3.6.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.3 검증 기록](docs/VERIFICATION_0.37.3.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -109,7 +109,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.37.2.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.37.3.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 
@@ -193,3 +193,7 @@ python tools/render_ui_layout.py --session-only --check --out tmp/ui-session
 ## 사이트 3.7.0 통합 커뮤니티 검사
 
 `python tools/check_role_portals.py`가 현재 통합 페이지·신고·강의·계정 관리와 취약/수정 API를 실세션으로 검사합니다. 내부 `community_workspace_checks.py`는 별도 CLI가 아니라 같은 H2 서버에 붙는 수락 기준입니다. `/admin`, `/user`는 통합 페이지 별칭이며 관리자도 공통 요청·강의 신청을 사용합니다. [사용법](docs/LAB_3.7.0_KR.md)을 확인하세요.
+
+## 0.37.3 메서드 자동 선택과 기본 창 버튼
+
+JS의 확정된 메서드를 우선하고, 미확정 항목은 활동 추적의 실제 관찰 메타데이터에 같은 Origin·경로의 메서드가 하나만 있을 때 자동 선택합니다. 발견만 한 항목·충돌·불완전한 관찰 메타데이터는 수동 선택으로 남깁니다. 기존 본문 최대화·이전 크기를 제거하고 OS 제목 표시줄의 표준 □/X를 쓰는 JFrame으로 변경했습니다. Windows CI의 별도 headful 창 검사는 Burp를 실행하지 않고 표준 프레임의 최대화·복원·닫기를 검사합니다. 해당 실행 여부는 이번 PR과 [검증 기록](docs/VERIFICATION_0.37.3.json)을 구분해 확인하세요.

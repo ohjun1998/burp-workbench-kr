@@ -2,6 +2,7 @@
 
 - [사이트 3.6.0 관리자·사용자 포털과 계정 비교](LAB_3.6.0_KR.md) · [검증 기록](VERIFICATION_LAB_3.6.0.json)
 
+- [0.37.3 메서드 자동 선택·기본 창 버튼](RELEASE_0.37.3_KR.md) · [검증 기록](VERIFICATION_0.37.3.json)
 - [0.37.2 Repeater 전송 안내·단축키·최대화](RELEASE_0.37.2_KR.md) · [검증 기록](VERIFICATION_0.37.2.json)
 - [0.37.1 JS 분석 가독성 개선](RELEASE_0.37.1_KR.md) · [검증 기록](VERIFICATION_0.37.1.json)
 - [0.37.0 쿠키 식별·세션 신원 검사](RELEASE_0.37.0_KR.md) · [검증 기록](VERIFICATION_0.37.0.json)

@@ -40,6 +40,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   java.util.function.BiConsumer<JsAnalysis.Result, String> coverage = (result, source) -> {};
   java.util.function.BiFunction<String,String,burp.api.montoya.http.message.HttpRequestResponse> trafficLookup=(method,url)->null;
   java.util.function.Function<JsAnalysis.Endpoint, String> observation = item -> "발견만 함";
+  java.util.function.Function<Collection<String>,Map<String,Set<String>>> observedMethods=urls->Map.of();
   private final ThreadPoolExecutor worker =
       new ThreadPoolExecutor(
           1,
@@ -366,8 +367,12 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
               var item = current.endpoints().get(urlTable.convertRowIndexToModel(row));
               drafts.add(current.requestDrafts().getOrDefault(JsAnalysis.draftKey(item),JsRequestDraft.preview(item)));
             }
-            repeater.open(drafts);
-            status.setText("Repeater 창 열림 · Raw에서 경로·메서드·REPLACE_ME 값과 인증 확인 · 전송 없음");
+            List<String> unknown=drafts.stream().filter(draft->!JsMethodSelection.known(draft.method())).map(JsRequestDraft.Draft::url).toList();
+            Map<String,Set<String>> observed=unknown.isEmpty()?Map.of():observedMethods.apply(unknown);
+            List<JsMethodSelection.Choice> choices=new ArrayList<>();
+            for(var draft:drafts){String key=ActivityTracker.safeUrl(draft.url());choices.add(JsMethodSelection.choose(draft,key==null?Set.of():observed.get(key)));}
+            repeater.openPrepared(choices);
+            status.setText("Repeater 창 열림 · 메서드 선택 근거와 Raw의 경로·값·인증 확인 · 전송 없음");
           } catch (Exception ex) {
             Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",ex);
             status.setText(ex.getMessage());

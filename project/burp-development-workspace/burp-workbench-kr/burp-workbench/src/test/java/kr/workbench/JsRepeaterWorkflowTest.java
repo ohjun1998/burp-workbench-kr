@@ -37,14 +37,31 @@ public final class JsRepeaterWorkflowTest {
   static KeyEvent key(Component source,int id,int modifiers,int code,char character){
     return new KeyEvent(source,id,System.currentTimeMillis(),modifiers,code,character);
   }
-  static void sizeToggle(){
-    final Rectangle[] bounds={new Rectangle(2100,80,1120,720)},area={new Rectangle(1920,40,1920,1000)};
-    var button=new WindowMaximize(new JPanel());
-    var host=new WindowMaximize.Host(){public Rectangle bounds(){return bounds[0];}public Rectangle available(){return area[0];}public void bounds(Rectangle value){bounds[0]=value;}};
-    button.toggle(host);verify(bounds[0].equals(area[0])&&button.getText().equals("이전 크기"),"maximize uses the current monitor's offset and excludes taskbar space");
-    button.toggle(host);verify(bounds[0].equals(new Rectangle(2100,80,1120,720))&&button.getText().equals("최대화"),"restore returns the dialog to its prior position and size");
-    button.toggle(host);area[0]=new Rectangle(0,0,1024,700);button.toggle(host);
-    verify(area[0].contains(bounds[0]),"restore remains reachable after moving to a smaller monitor");
+  static void methodSelection(){
+    String url="https://example.test/api/action";
+    var tracker=new ActivityTracker();tracker.discover(url,"JS string");
+    var unknown=new JsRequestDraft.Draft(url+"?name=REPLACE_ME","REPLACE_METHOD","{\"count\":3}");
+    verify(tracker.observedMethods(List.of(url)).isEmpty(),"discovered URLs alone cannot supply an automatic method");
+    tracker.observe(request(url+"?token=NOT_COPIED","GET",true,List.of()),"History");
+    tracker.observe(request(url+"?token=OTHER_VALUE","GET",true,List.of()),"History");
+    var observed=tracker.observedMethods(List.of(url,"https://outside.test/api/action"));
+    verify(observed.get(url).equals(java.util.Set.of("GET"))&&!observed.toString().contains("NOT_COPIED"),"observed methods deduplicate query variants without exposing query values");
+    var selected=JsMethodSelection.choose(unknown,observed.get(url));
+    verify(selected.draft().method().equals("GET")&&selected.reason().contains("자동 선택"),"one observed HTTP method automatically resolves an unknown method");
+    verify(selected.draft().url().equals(unknown.url())&&selected.draft().body().equals(unknown.body())&&selected.draft().wire().contains("REPLACE_ME"),"automatic selection preserves authored values and unresolved-parameter guards");
+    verify(!observed.containsKey("https://outside.test/api/action"),"observed methods cannot cross origins");
+    var known=new JsRequestDraft.Draft(url,"POST","{\"name\":\"demo\"}");
+    verify(JsMethodSelection.choose(known,java.util.Set.of("GET")).draft()==known,"an explicit source method takes priority over another observed method");
+    tracker.observe(request(url,"POST",true,List.of()),"History");
+    var conflict=JsMethodSelection.choose(unknown,tracker.observedMethods(List.of(url)).get(url));
+    verify(conflict.draft().method().equals("REPLACE_METHOD")&&conflict.reason().contains("충돌"),"conflicting observed GET and POST methods retain manual confirmation");
+    verify(JsMethodSelection.choose(unknown,java.util.Set.of()).draft()==unknown,"missing observations never imply GET");
+    verify(JsMethodSelection.choose(new JsRequestDraft.Draft(url+"/REPLACE_PATH","REPLACE_METHOD",""),java.util.Set.of("GET")).draft().method().equals("REPLACE_METHOD"),"an unresolved path cannot borrow an observed method");
+    tracker.rejected=1;verify(tracker.observedMethods(List.of(url)).isEmpty(),"incomplete bounded tracking metadata does not auto-select a method");
+    tracker.clear();verify(tracker.observedMethods(List.of(url)).isEmpty(),"clearing tracking data also clears automatic-method evidence");
+    var parsed=JsAnalysis.analyze("fetch('/get');axios.post('/post',{name:'demo'});","https://example.test/app.js");
+    verify(parsed.endpoints().stream().anyMatch(e->e.url().endsWith("/get")&&e.method().equals("GET")),"fetch default GET remains selected from source context");
+    verify(parsed.endpoints().stream().anyMatch(e->e.url().endsWith("/post")&&e.method().equals("POST")),"axios POST remains selected from its explicit source call");
   }
   static void factory(AtomicBoolean redirectsDisabled) {
     ObjectFactoryLocator.FACTORY=proxy(MontoyaObjectFactory.class,(p,m,a)->switch(m.getName()) {
@@ -92,7 +109,7 @@ public final class JsRepeaterWorkflowTest {
     });factory(redirectsDisabled);
     AtomicReference<JsAnalysisPanel> panelRef=new AtomicReference<>();
     try {
-      edt(JsRepeaterWorkflowTest::sizeToggle);
+      edt(JsRepeaterWorkflowTest::methodSelection);
       edt(()->panelRef.set(new JsAnalysisPanel(api,()->{})));var panel=panelRef.get();
       AtomicInteger windows=new AtomicInteger();
       edt(()->{
@@ -208,6 +225,22 @@ public final class JsRepeaterWorkflowTest {
         int opened=windows.get();panel.repeater.open(List.of(new JsRequestDraft.Draft(origin+"/api/users","GET","")));
         verify(windows.get()==opened&&panel.repeater.sessions.isEmpty(),"unloaded workspaces cannot reopen draft windows");
       });
+      AtomicInteger lookups=new AtomicInteger();
+      edt(()->{
+        var auto=new JsAnalysisPanel(api,()->{});panelRef.set(auto);
+        ActivityTracker tracking=new ActivityTracker();tracking.observe(request(origin+"/api/users?existing=secret","GET",true,List.of()),"History");
+        auto.observedMethods=urls->{lookups.incrementAndGet();return tracking.observedMethods(urls);};
+        auto.load("const apiUrl='/api/users';",origin+"/auto.js");
+      });JsAnalysisPanelTest.waitDone(panelRef.get());
+      edt(()->{
+        var auto=panelRef.get();auto.urlTable.setRowSelectionInterval(0,0);auto.prepareRepeater();
+        var chosen=auto.repeater.sessions.get(0);
+        verify(wire(chosen).startsWith("GET /api/users HTTP/1.1")&&chosen.method.getSelectedItem().equals("GET")&&chosen.methodHint.getText().contains("자동 선택"),"Repeater receives an observed method automatically without a manual apply step");
+        verify(received.get()==4&&lookups.get()==1&&!wire(chosen).contains("secret"),"method lookup is batched once, does not copy observed query values and sends no HTTP");
+        verify(UiLayoutTest.named(chosen,"wb.js.repeater.maximize")==null,"the old body maximize/restore button is absent");
+        shortcut(chosen,chosen.request.text);
+      });var automatic=panelRef.get().repeater.sessions.get(0);waitSend(automatic);
+      edt(()->verify(received.get()==5&&automatic.response.text.getText().contains("\"request\": 5"),"an automatically selected method sends successfully through the existing shortcut and HTTP path"));
     } finally {
       if(panelRef.get()!=null)edt(panelRef.get()::close);server.stop(0);
     }

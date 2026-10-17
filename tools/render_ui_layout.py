@@ -27,6 +27,7 @@ def main():
     p.add_argument('--check',action='store_true',help='Fail if visible buttons clip or key work areas collapse')
     p.add_argument('--sizes',nargs='+',help='Default: 1024x720 1280x800 1440x920; guide-only: 760x480 560x300')
     p.add_argument('--guide-only',action='store_true',help='Check the production feature-guide dialog wrapper separately')
+    p.add_argument('--traffic-only',action='store_true',help='Render traffic view and compact search settings')
     p.add_argument('--scope-only',action='store_true',help='Check the production Scope editor at default and minimum dialog sizes')
     p.add_argument('--packet-only',action='store_true',help='Render Pretty/search, Raw, Hex and static Render in production packet panes')
     p.add_argument('--js-only',action='store_true',help='Render JS/text analysis workspace and its modeless list/packet windows')
@@ -35,7 +36,7 @@ def main():
     p.add_argument('--session-only',action='store_true',help='Render the production cookie/session inspector with synthetic findings')
     p.add_argument('--themes',nargs='+',choices=['light','dark'],default=['light','dark'])
     args=p.parse_args()
-    if sum([args.guide_only,args.scope_only,args.packet_only,args.js_only,args.session_only,args.auth_only,args.environment_only])>1:p.error('Choose one preview mode')
+    if sum([args.traffic_only,args.guide_only,args.scope_only,args.packet_only,args.js_only,args.session_only,args.auth_only,args.environment_only])>1:p.error('Choose one preview mode')
     if args.sizes is None:args.sizes=['1024x720','760x480'] if args.session_only else ['760x480','560x300'] if args.guide_only or args.scope_only else ['1024x720','1280x800','1440x920']
     version=runpy.run_path(str(WB/'release_info.py'))['VERSION']
     jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version}.jar').resolve()
@@ -53,7 +54,7 @@ def main():
     for theme in args.themes:
         for size in args.sizes:
             w,h=size.split('x');out=args.out/theme/size
-            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else ['environment'] if args.environment_only else ['auth'] if args.auth_only else ['session'] if args.session_only else []),check=True)
+            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else ['traffic'] if args.traffic_only else ['environment'] if args.environment_only else ['auth'] if args.auth_only else ['session'] if args.session_only else []),check=True)
             with (out/'controls.csv').open() as source:
                 all_rows.extend(csv.DictReader(source))
             with (out/'content.csv').open() as source:
@@ -82,6 +83,7 @@ def main():
         ('bounty-3.png','preview.evidence.repro'):70,
     }
     if args.guide_only:required={}
+    if args.traffic_only:required={("traffic-workspace.png","wb.traffic."+side+".text"):100 for side in ["request","response"]}
     if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
     if args.packet_only:required={(view,'wb.traffic.'+side+'.text'):100 for view in ['packet-pretty-search.png','packet-raw.png','packet-hex.png'] for side in ['request','response']}
     if args.packet_only:required.update({('packet-render.png','wb.traffic.'+side+'.render'):100 for side in ['request','response']})

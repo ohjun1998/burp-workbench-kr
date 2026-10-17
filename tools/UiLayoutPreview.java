@@ -221,6 +221,26 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("traffic")) {
+            try{
+                String origin="https://app.example.test";
+                for(int i=0;i<18;i++)seedTraffic(ext,request(origin+"/api/posts/"+(101+i),"GET",true,List.of(header("Cookie","DEMO_A"))),response(i%4==0?403:200,"{\"id\":"+(101+i)+",\"title\":\"점검용 게시글\"}"));
+                seedTraffic(ext,request(origin+"/api/users/me","GET",true,List.of(header("Cookie","DEMO_A"))),response(200,"{\"name\":\"일반 A\"}"));
+                seedTraffic(ext,request(origin+"/api/admin/users","GET",true,List.of(header("Cookie","DEMO_ADMIN"))),response(200,"[]"));
+                var browser=ext.trafficBrowser;
+                edt(()->{browser.identities=()->List.of(new TrafficBrowser.Identity(origin,"일반 A",java.util.Map.of("cookie","DEMO_A")),new TrafficBrowser.Identity(origin,"관리자",java.util.Map.of("cookie","DEMO_ADMIN")));browser.group.setSelected(true);browser.normalize.setSelected(true);browser.apply();browser.note(0,"권한 확인");browser.toggleStar(0);});
+                TrafficSearchUpgradeTest.idle(browser);
+                edt(()->{
+                    try{
+                        JPanel root=(JPanel)unchecked(ext,"root");((JTabbedPane)unchecked(ext,"tabs")).setSelectedIndex(0);JTable table=(JTable)unchecked(ext,"logTable");table.setRowSelectionInterval(0,0);installHeaders(root);
+                        render(root,out.resolve("traffic-workspace.png"),width,height);
+                        browser.loadControls();JPanel settings=browser.content();renderAt(settings,out.resolve("traffic-settings.png"),550,440);renderAt(settings,out.resolve("traffic-settings-minimum.png"),480,360);
+                        browser.advancedToggle.doClick(0);renderAt(settings,out.resolve("traffic-settings-advanced.png"),650,560);
+                    }catch(Exception e){throw new RuntimeException(e);}
+                });writeMeasurements(out);
+            }finally{unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("Traffic preview failed");return;
+        }
         if(args.length>5&&args[5].equals("environment")) {
             try {
                 var environment=(EnvironmentPanel)get(ext,"environments");
@@ -318,11 +338,15 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     js.load(code,origin+"/assets/app.js");
                 });JsAnalysisPanelTest.waitDone(js);
                 edt(()->js.load("{\"api\":\"/api/settings\",\"api_key\":\"Q1w2e3R4t5Y6u7I8o9P0\"}",origin+"/config.json"));JsAnalysisPanelTest.waitDone(js);
+                String baseline="fetch('/api/posts');fetch('/api/users/me');";
+                String updated=baseline+"\nfetch('/api/admin/users');fetch('/api/export',{method:'POST'});fetch('/api/files/upload',{method:'POST'});fetch('/api/orders/101');fetch('/api/reports');fetch('/api/roles');fetch('/api/config');fetch('/api/profile',{method:'PATCH'});fetch('/api/notifications');fetch('/api/audit');";
+                edt(()->js.loadContext(baseline,origin+"/assets/inventory.js","application/javascript",origin+"/"));JsAnalysisPanelTest.waitDone(js);
+                edt(()->js.loadContext(updated,origin+"/assets/inventory.js","application/javascript",origin+"/"));JsAnalysisPanelTest.waitDone(js);
                 JPanel root=(JPanel)get(ext,"root");
                 Component[] history={null},packets={null},repeater={null},details={null};
                 edt(()->{
                     ((JTabbedPane)unchecked(ext,"tabs")).setSelectedComponent(js);
-                    js.sources.setSelectedItem(origin+"/assets/app.js");js.urlTable.setRowSelectionInterval(0,0);
+                    js.sources.setSelectedItem(js.currentSourceKey());js.urlTable.setRowSelectionInterval(2,2);
                     js.analysisWindow.opener=(owner,title,content,modal,closed)->{history[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
                     js.packetWindow.opener=(owner,title,content,modal,closed)->{packets[0]=WorkbenchUi.settingsBody(content,()->{});return null;};
                     js.repeater.opener=(owner,title,content,modal,closed)->{repeater[0]=content;return null;};
@@ -332,6 +356,10 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     try {
                         installHeaders(root);installHeaders(history[0]);installHeaders(packets[0]);
                         render(root,out.resolve("js-workspace.png"),width,height);
+                        js.resultView.popup.setVisible(false);var filterPanel=(Container)js.resultView.popup.getComponent(0);WorkbenchUi.style(filterPanel);renderAt(filterPanel,out.resolve("js-filter.png"),285,260);
+                        js.resultView.comparison.opener=(owner,title,body,modal,closed)->null;js.resultView.openTraffic();js.resultView.comparison.closeWindow();
+                        renderAt(JsResultsView.tablePanel(js.resultView.traffic,"수집 패킷 대조 · 추가 요청 없음"),out.resolve("js-traffic-comparison.png"),850,430);
+                        renderAt(js.resultView.versionContent(),out.resolve("js-version-comparison.png"),900,460);
                         renderAt((Container)history[0],out.resolve("js-analysis-list.png"),760,480);
                         renderAt((Container)history[0],out.resolve("js-analysis-list-small.png"),560,300);
                         renderAt((Container)packets[0],out.resolve("js-packets.png"),760,480);

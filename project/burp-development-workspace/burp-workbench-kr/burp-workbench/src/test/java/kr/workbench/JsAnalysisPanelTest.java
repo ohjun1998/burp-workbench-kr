@@ -14,8 +14,13 @@ public final class JsAnalysisPanelTest {
   // FIFO worker completion precedes the EDT barrier. Checking idle after an earlier
   // EDT barrier can race with the worker posting its render callback immediately afterwards.
   var worker=(ThreadPoolExecutor)WorkbenchTest.get(p,"worker");
-  worker.submit(()->{}).get(5,TimeUnit.SECONDS);
-  edt(()->{if(!p.idle())throw new AssertionError("analysis worker still active after barrier");});
+  long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(8);
+  while(System.nanoTime()<deadline){
+    worker.submit(()->{}).get(5,TimeUnit.SECONDS);
+    var idle=new java.util.concurrent.atomic.AtomicBoolean();edt(()->idle.set(p.idle()));
+    if(idle.get())return;Thread.sleep(10);
+  }
+  throw new AssertionError("analysis worker still active after bounded worker/EDT barriers");
  }
  public static void main(String[] args)throws Exception{
   AtomicInteger repeated=new AtomicInteger();AtomicReference<HttpRequest> last=new AtomicReference<>();var repeater=WorkbenchTest.proxy(Repeater.class,(o,m,a)->{if(m.getName().equals("sendToRepeater")){repeated.incrementAndGet();last.set((HttpRequest)a[0]);}return WorkbenchTest.def(m);});var api=WorkbenchTest.proxy(MontoyaApi.class,(o,m,a)->m.getName().equals("repeater")?repeater:WorkbenchTest.def(m));

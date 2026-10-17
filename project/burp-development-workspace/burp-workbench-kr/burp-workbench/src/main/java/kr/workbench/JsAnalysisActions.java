@@ -17,6 +17,7 @@ final class JsAnalysisActions {
       buttons[i].setIcon(icon(icons[i]));
       buttons[i].setIconTextGap(6);
     }
+    more.setText("");more.setName("wb.js.more");more.setToolTipText("더보기");more.getAccessibleContext().setAccessibleName("더보기");more.setPreferredSize(new Dimension(36,34));more.setMinimumSize(new Dimension(32,30));
     JPanel windows=new JPanel(new GridLayout(1,2,0,0)) {
       @Override protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);

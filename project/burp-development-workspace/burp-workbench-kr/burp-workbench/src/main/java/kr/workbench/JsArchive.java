@@ -51,6 +51,12 @@ final class JsArchive {
       return new Saved((String)map.get("source"),(String)map.get("page"),(String)map.get("type"),(JsAnalysis.Result)decode(map.get("result"),JsAnalysis.Result.class),packet);
     }catch(RuntimeException ex){throw new IOException("분석 기록 형식 오류",ex);}
   }
+  synchronized List<Summary> versions(String source){return summaries.values().stream().filter(v->JsVersions.base(v.key()).equals(JsVersions.base(source))).sorted(java.util.Comparator.comparing(v->time(v.key()))).toList();}
+  synchronized String time(String key){try{return Files.getLastModifiedTime(file(key,".meta")).toInstant().toString();}catch(IOException ex){return "1970-01-01T00:00:00Z";}}
+  synchronized JsAnalysis.Result resultMetadata(String key)throws IOException{
+    Path path=file(key,".data");if(!Files.isRegularFile(path)||Files.size(path)>8L*1024*1024)return null;
+    try{var map=(Map<?,?>)MinerJson.parse(Files.readString(path),8*1024*1024,500000);return (JsAnalysis.Result)decode(map.get("result"),JsAnalysis.Result.class);}catch(RuntimeException ex){return null;}
+  }
   synchronized void clear()throws IOException{
     if(!Files.exists(directory)){summaries.clear();return;}
     try(var files=Files.list(directory)){for(Path path:files.filter(p->p.getFileName().toString().matches("[0-9a-f]{64}\\.(?:data|meta|tmp)")).toList())Files.deleteIfExists(path);}

@@ -33,7 +33,7 @@ final class DiskTrafficStore implements AutoCloseable {
     private final DiskTrafficStore store;
     private final HttpService service;
     private final String method, url, responseStatus, time, source;
-    private final long sequence, requestOffset, responseOffset;
+    private final long sequence, requestOffset, responseOffset, capturedAt;
     private final int requestLength, responseLength, responseBodyLength;
     private final boolean hasResponse;
 
@@ -51,7 +51,7 @@ final class DiskTrafficStore implements AutoCloseable {
         int requestLength,
         long responseOffset,
         int responseLength,
-        boolean hasResponse) {
+        boolean hasResponse, long capturedAt) {
       this.store = store;
       this.sequence = sequence;
       this.service = service;
@@ -66,6 +66,7 @@ final class DiskTrafficStore implements AutoCloseable {
       this.responseOffset = responseOffset;
       this.responseLength = responseLength;
       this.hasResponse = hasResponse;
+      this.capturedAt = capturedAt;
     }
 
     String id() {
@@ -87,6 +88,8 @@ final class DiskTrafficStore implements AutoCloseable {
     String responseStatus() {
       return responseStatus;
     }
+
+    long capturedAt() { return capturedAt; }
 
     String time() {
       return time;
@@ -111,6 +114,9 @@ final class DiskTrafficStore implements AutoCloseable {
     boolean hasResponse() {
       return hasResponse;
     }
+
+    byte[] requestPrefix(int limit) { return store.read(requestOffset, Math.min(requestLength, limit)); }
+    byte[] responsePrefix(int limit) { return hasResponse ? store.read(responseOffset, Math.min(responseLength, limit)) : new byte[0]; }
 
     HttpRequest request() {
       return HttpRequest.httpRequest(
@@ -255,7 +261,7 @@ final class DiskTrafficStore implements AutoCloseable {
                 requestBytes.length,
                 start + requestBytes.length,
                 responseBytes.length,
-                response != null);
+                response != null, System.currentTimeMillis());
         byte[] metadata = encode(ref);
         data.seek(start);
         data.write(requestBytes);
@@ -346,6 +352,7 @@ final class DiskTrafficStore implements AutoCloseable {
       out.writeLong(ref.responseOffset);
       out.writeInt(ref.responseLength);
       out.writeBoolean(ref.hasResponse);
+      out.writeLong(ref.capturedAt);
     }
     return bytes.toByteArray();
   }
@@ -367,7 +374,7 @@ final class DiskTrafficStore implements AutoCloseable {
           in.readInt(),
           in.readLong(),
           in.readInt(),
-          in.readBoolean());
+          in.readBoolean(), in.readLong());
     }
   }
 

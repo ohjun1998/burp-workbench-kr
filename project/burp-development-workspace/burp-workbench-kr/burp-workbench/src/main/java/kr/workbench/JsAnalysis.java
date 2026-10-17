@@ -230,7 +230,12 @@ public final class JsAnalysis {
  private void secretContext(String key,Value v,AstNode n){if(v==null||!v.complete||n==null||!key.matches("(?i).*(?:api[_-]?key|secret|token|password|authorization|private[_-]?key).*")||v.text.length()<8||v.text.length()>16384)return;if(v.text.matches("(?i).*(?:example|placeholder|your[_ -]|changeme|undefined|process\\.env|\\{dynamic\\}).*"))return;for(Rule r:RULES)if(r.pattern.matcher(v.text).find())return;
   double entropy=entropy(v.text);if(entropy<3.0||v.text.matches("(?i)^(?:https?://|/).*"))return;addSecret("시크릿 이름: "+key.replaceAll("[^A-Za-z0-9_.$-]",""),v.text,offset+n.getAbsolutePosition(),n.getLength(),"이름·엔트로피 추정 · 공개 설정값/오탐 가능");}
  public static double entropy(String text){Map<Character,Integer> f=new HashMap<>();for(char c:text.toCharArray())f.merge(c,1,Integer::sum);double e=0;for(int n:f.values()){double p=(double)n/text.length();e-=p*Math.log(p)/Math.log(2);}return e;}
- private void addSecret(String rule,String value,int position,int length,String confidence){if(secrets.size()>=resultLimit){bounded=true;return;}String hash=hash(value);if(!secretKeys.add(rule+":"+hash))return;secrets.add(new Secret(rule,"[가림 · "+value.length()+"자]",value.length(),hash.substring(0,16),line(position),position,length,confidence+" · Shannon "+String.format(Locale.ROOT,"%.2f",entropy(value))));}
+ private void addSecret(String rule,String value,int position,int length,String confidence){
+  String nearby=source.substring(Math.max(0,position-96),Math.min(source.length(),position+length+64)).toLowerCase(Locale.ROOT);
+  if(value.matches("(?is).*(?:example|placeholder|your[_-]?key|changeme).*"))confidence+=" · 예제/자리표시자 의심";
+  else if(entropy(value)<2.5)confidence+=" · 반복 패턴 의심";
+  else if(nearby.matches("(?s).*(?:publishable|public[_-]?key|client[_-]?id|measurement[_-]?id).*"))confidence+=" · 공개 식별자 가능";
+  if(secrets.size()>=resultLimit){bounded=true;return;}String hash=hash(value);if(!secretKeys.add(rule+":"+hash))return;secrets.add(new Secret(rule,"[가림 · "+value.length()+"자]",value.length(),hash.substring(0,16),line(position),position,length,confidence+" · Shannon "+String.format(Locale.ROOT,"%.2f",entropy(value))));}
  private static String hash(String v){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(v.getBytes(StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException(e);}}
  private int line(int position){if(newlineOffsets==null)newlineOffsets=java.util.stream.IntStream.range(0,source.length()).filter(i->source.charAt(i)=='\n').toArray();int index=Arrays.binarySearch(newlineOffsets,Math.min(position,source.length()));return 1+(index>=0?index:-index-1);}
 }

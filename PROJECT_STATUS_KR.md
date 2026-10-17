@@ -1,6 +1,6 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.37.1 / 실습 사이트 3.7.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.37.2 / 실습 사이트 3.7.0 / 별도 Feature Mapper KR 0.3.1.
 
 ## 통합 커뮤니티·취약점 실습 — 사이트 3.7.0
 
@@ -8,11 +8,22 @@
 
 공통 화면은 수정 API를 사용합니다. 별도 **취약점 실습** 메뉴는 게시글·신고 IDOR, 관리자 기능 접근, 강의 처리 권한 누락, SQLi, 저장형 XSS, 합성 API 키·토큰 노출, CSRF 검증 누락의 취약/수정 8개 사례와 실제 요청·응답을 제공합니다. 관리자 초기화로 실습 상태를 복원할 수 있습니다.
 
-현재 소스 loopback HTTP **242개**, 새 JS와 기존 분석기 호환 회귀 **63개**, 패키징 회귀 **6개**가 통과했습니다. 기존 Java·HTTP 검증 **2,442개**(Java 1,943·payload HTTP 132·전체 기능 HTTP 101·버그바운티 HTTP 266), Mapper Java 94·브라우저 도우미 회귀도 통과했습니다. 새 3.7.0 Docker ZIP과 기존 배포의 해시·소스 지문을 확인했습니다. 정확한 단계별 명령과 한계는 이번 검증 기록을 확인하세요. 실제 브라우저 DOM·XSS 실행·Burp GUI·Docker/Oracle 전체 기동은 미실행입니다. 기존 확장 0.37.1·Mapper 0.3.1과 이전 배포를 보존합니다.
+사이트 소스 loopback HTTP **242개**, 새 JS와 기존 분석기 호환 회귀 **63개**, 패키징 회귀 **6개**가 통과했습니다. 확장 0.37.1 기반 초기 Java·HTTP 검증 **2,442개**(Java 1,943·payload HTTP 132·전체 기능 HTTP 101·버그바운티 HTTP 266), Mapper Java 94·브라우저 도우미 회귀도 통과했습니다. 새 3.7.0 Docker ZIP과 기존 배포의 해시·소스 지문을 확인했습니다. 정확한 단계별 명령과 한계는 이번 검증 기록을 확인하세요. 실제 브라우저 DOM·XSS 실행·Burp GUI는 미실행입니다. 원격 Docker/Oracle/Nginx 기동·기존 Oracle 회귀·포트·TLS/HTTP2 검사는 성공했습니다. 병행 반영된 확장 0.37.2·Mapper 0.3.1과 이전 배포를 보존합니다. 0.37.2와의 통합 검사는 이번 PR의 기록을 따릅니다.
 
 [사용법](docs/LAB_3.7.0_KR.md) · [실행 검증](docs/VERIFICATION_LAB_3.7.0.json) · [Docker ZIP](downloads/docker/3.7.0/community-security-lab-3.7.0-docker.zip) · [대화](docs/chat-logs/2026-10-17/community-unified-lab-370.md)
 
 이하 항목의 검사 수와 화면은 각 이전 작업 당시의 기록입니다.
+
+
+## JS Repeater 전송 확인·Ctrl+Space·최대화 0.37.2
+
+사용자 첨부 화면은 `REPLACE_METHOD`가 남아 있어 전송 전 차단된 상태였습니다. Repeater에 메서드 선택·적용과 줄바꿈되는 안내를 추가했습니다. 자동으로 GET을 추정하거나 미확정 값·SCOPE 검사를 우회하지 않습니다. Ctrl+Space는 창 내부 포커스에서 Send와 같은 검사를 거치고 키 반복·다른 창 간 전파를 막도록 보강했습니다. 최대화·이전 크기 버튼은 현재 모니터의 작업 영역과 원래 창 크기를 오갑니다.
+
+기준 main `b072bc2`에서 정식 release **2,455개**(Java 1,956·HTTP 132+101+266), 별도 Mapper Java 94·Node 7, 두 테마 화면 **270개**, 패키징·배포 보존 회귀 **6개**와 배포 해시·소스 지문 검사를 통과했습니다. Repeater 73개 검사는 미확정 메서드 수정 후 실제 loopback 요청·응답 4회, 합성 Ctrl+Space·중복 억제·다른 창 격리, 최대화·복원 경계 어댑터를 포함합니다. 실제 Burp API·물리 키·Windows IME·OS 창 조작은 미실행이며 외부 첨부 대상에는 요청하지 않았습니다. 최초 검사 설정 오류와 재실행은 검증 기록에 분리했습니다. 원격 CI와 최종 병합 상태는 이번 PR Checks를 기준으로 확인합니다.
+
+[변경·사용 순서·화면](docs/RELEASE_0.37.2_KR.md) · [실행 검증](docs/VERIFICATION_0.37.2.json) · [다운로드](downloads/README.md) · [날짜별 대화](docs/chat-logs/2026-10-17/workbench-repeater-0372.md)
+
+이하 0.37.1과 이전 기록은 당시 검증 범위로 보존합니다.
 
 ## JS 분석 가독성·명칭 통일 0.37.1
 

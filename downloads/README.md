@@ -6,17 +6,17 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| Burp 확장 JAR | 0.37.1 | [burp-workbench-kr-0.37.1.jar](extensions/0.37.1/burp-workbench-kr-0.37.1.jar) |
-| 확장 소스·빌드 의존성 | 0.37.1 | [burp-workbench-kr-0.37.1-source.zip](extensions/0.37.1/burp-workbench-kr-0.37.1-source.zip) |
+| Burp 확장 JAR | 0.37.2 | [burp-workbench-kr-0.37.2.jar](extensions/0.37.2/burp-workbench-kr-0.37.2.jar) |
+| 확장 소스·빌드 의존성 | 0.37.2 | [burp-workbench-kr-0.37.2-source.zip](extensions/0.37.2/burp-workbench-kr-0.37.2-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.7.0 | [community-security-lab-3.7.0-docker.zip](docker/3.7.0/community-security-lab-3.7.0-docker.zip) |
 | Feature Mapper JAR·브라우저 도우미·소스 | 0.3.1 | [다운로드](feature-mapper/0.3.1/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
-[0.37.1 JS 분석 가독성 개선](../docs/RELEASE_0.37.1_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.37.1.json)
+[0.37.2 Repeater 전송 안내·단축키·최대화](../docs/RELEASE_0.37.2_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.37.2.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
-Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 주소는 http://127.0.0.1:8088 이며 모든 계정이 같은 커뮤니티에 로그인합니다. [통합 기능·8개 취약점 실습과 계정 비교](../docs/LAB_3.7.0_KR.md)를 참고하세요. 같은 Origin의 동시 계정 비교는 서로 다른 브라우저 프로필을 사용합니다. 현재 3.7.0의 실제 브라우저·Burp GUI·Docker/Oracle 전체 기동은 미실행입니다. 이전 버전의 실행 기록은 당시 검증 범위로 보존합니다.
+Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 주소는 http://127.0.0.1:8088 이며 모든 계정이 같은 커뮤니티에 로그인합니다. [통합 기능·8개 취약점 실습과 계정 비교](../docs/LAB_3.7.0_KR.md)를 참고하세요. 동시 계정 비교는 서로 다른 브라우저 프로필을 사용합니다. 통합 기능 242개는 H2 HTTP 검사이며, [원격 Docker/Oracle/Nginx 기동·기존 Oracle 회귀·포트·TLS/HTTP2 검사](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004098060)도 성공했습니다. 실제 커뮤니티 브라우저 DOM·XSS 실행·Burp GUI·Windows Docker Desktop 전체 구동은 별도 확인 범위입니다.
 
 소스 ZIP: 확장 폴더의 `python build_all.py --test`로 확장 회귀 검사를 실행합니다. `dev.py check`의 전체 사이트 HTTP·모의 진단에는 저장소 전체 소스와 실습 런타임이 필요하므로 저장소 체크아웃을 사용하세요.
 
@@ -28,6 +28,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 |---|---|---|
 | 이전 커뮤니티 Docker | 3.6.0 | [Docker ZIP](docker/3.6.0/community-security-lab-3.6.0-docker.zip) |
 | 이전 커뮤니티 Docker | 3.5.2 | [Docker ZIP](docker/3.5.2/community-security-lab-3.5.2-docker.zip) |
+| 이전 확장 · JS 분석 가독성 | 0.37.1 | [JAR](extensions/0.37.1/burp-workbench-kr-0.37.1.jar) · [소스](extensions/0.37.1/burp-workbench-kr-0.37.1-source.zip) |
 | 이전 확장 · 쿠키·세션 검사 | 0.37.0 | [JAR](extensions/0.37.0/burp-workbench-kr-0.37.0.jar) · [소스](extensions/0.37.0/burp-workbench-kr-0.37.0-source.zip) |
 | 이전 확장 · JS 분석 고도화 | 0.36.0 | [JAR](extensions/0.36.0/burp-workbench-kr-0.36.0.jar) · [소스](extensions/0.36.0/burp-workbench-kr-0.36.0-source.zip) |
 | 이전 확장 · 두 줄 버튼·빨간 집계 | 0.35.1 | [JAR](extensions/0.35.1/burp-workbench-kr-0.35.1.jar) · [소스](extensions/0.35.1/burp-workbench-kr-0.35.1-source.zip) |
@@ -63,5 +64,5 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 별도 기능 매핑 확장: [Feature Mapper KR 설치와 다운로드](../feature-mapper/README_KR.md). Workbench JAR에 포함되지 않습니다.
 
 
-최신 확장은 0.37.1입니다. JS·JSON·XML·텍스트 자동 분석, 분석 목록·패킷 팝업과 Ctrl+R 사용법은 [0.37.1 안내](../docs/RELEASE_0.37.1_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
+최신 확장은 0.37.2입니다. JS·JSON·XML·텍스트 자동 분석, 분석 목록·패킷 팝업과 Ctrl+R 사용법은 [0.37.2 안내](../docs/RELEASE_0.37.2_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
 

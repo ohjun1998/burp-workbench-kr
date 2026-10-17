@@ -1158,5 +1158,22 @@
     "python -m unittest discover -s tools -p test_*.py -v (6 passed)",
     "python tools/package_downloads.py",
     "python tools/package_downloads.py --verify"
-  ]
+  ],
+  "integration0372": {
+    "mainCommit": "71dc83c4994bb1aa3f447c4ff517cb9f5f337277",
+    "extensionVersion": "0.37.2",
+    "labVersion": "3.7.0",
+    "sameLabSourcesAndDockerZip": true,
+    "focusedHttpPassed": 242,
+    "focusedJsRegressionPassed": 63,
+    "downloadFingerprintsVerified": true,
+    "note": "Preserved all new main source/artifacts; merged six shared documentation files. Full integrated remote CI follows the PR merge commit."
+  },
+  "remoteCIInitial": {
+    "head": "996096f0d5428a4cb9ee6989cb86f0570086f1b8",
+    "build": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004100871",
+    "durability": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004100883",
+    "dockerOracle": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004098060",
+    "allSuccess": true
+  }
 }

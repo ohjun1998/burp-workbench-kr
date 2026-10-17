@@ -1,7 +1,21 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.39.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.39.1 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 계정 비교 시안 배치 보정 — 0.39.1
+
+[PR #55](https://github.com/ohjun1998/burp-workbench-kr/pull/55)를 main에 병합했습니다. 상단 주요 버튼 6개, 더보기의 세션 검사·권한 매트릭스, 비교 기록 영역의 기록 비우기와 개수·판정 범례를 적용했습니다. 표는 넓은 화면을 채우고 좁은 화면에서는 최소 열 너비를 유지하며 스크롤합니다. 비교 기록의 메서드 열과 두 열 계정 매핑 폼, 기본·최소 크기의 상세 창도 포함합니다.
+
+기존 정식 release 기록은 2,630개(Java 2,130·HTTP 132/102/266), 새 레이아웃 회귀 98개, 두 테마·세 해상도 Swing 화면 54개·컨트롤 786개입니다. 이번 재개에서는 로컬 전체 테스트를 재실행한 것으로 합산하지 않고, PR 원격 Build·Windows·Linux 내구성 성공 결과를 직접 확인했습니다.
+
+검증 PR head는 `0d86b3afaa338d6cd54938154140dff979bcec38`, main 병합 커밋은 `8092b39d980d5ea757a3c99e239ee1e3098a5d3e`이며 두 커밋의 파일 트리가 동일합니다. main에서 내려받은 JAR·소스 ZIP의 SHA-256과 압축 CRC를 직접 확인했고, 소스 ZIP 211개 파일의 지문도 배포 목록과 일치했습니다. 후속 기록 변경은 상태·검증·대화 문서만 갱신하며 소스·JAR·ZIP을 보존합니다.
+
+main의 [Build and verify](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39036078185)와 [Windows·Linux 내구성 검사](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39036078202)가 모두 성공했습니다. 이 결과는 기능 병합 커밋 `8092b39d980d5ea757a3c99e239ee1e3098a5d3e`에 대한 원격 검사입니다.
+
+실제 네이티브 Burp GUI·Windows DPI/IME는 미수행입니다.
+
+[변경 안내·화면](docs/RELEASE_0.39.1_KR.md) · [검증 기록](docs/VERIFICATION_0.39.1.json) · [JAR·소스 ZIP](downloads/extensions/0.39.1/) · [날짜별 대화](docs/chat-logs/2026-10-17/workbench-auth-layout-0391-completion.md)
 
 ## 계정 비교 화면·독립 인증 탐지·Ctrl+Space — 0.39.0
 

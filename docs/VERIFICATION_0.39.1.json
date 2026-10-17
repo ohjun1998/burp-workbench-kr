@@ -131,5 +131,54 @@
     "UI previews use production Swing components with synthetic data and send no HTTP.",
     "Tests cover visible sidebar and empty/populated tables at 1024x720, 1280x800 and 1600x900; dialogs include default and minimum sizes."
   ],
-  "remoteCI": "See PR Actions for separate remote results."
+  "remoteCI": {
+    "verifiedSourceCommit": "0d86b3afaa338d6cd54938154140dff979bcec38",
+    "pullRequest": 55,
+    "pullRequestChecks": {
+      "build": {
+        "runId": 39035380521,
+        "result": "success"
+      },
+      "durability": {
+        "runId": 39035380623,
+        "jobs": {
+          "windows": "success",
+          "isolated-disk-and-soak": "success"
+        }
+      }
+    },
+    "mainPublication": {
+      "mergeCommit": "8092b39d980d5ea757a3c99e239ee1e3098a5d3e",
+      "treeSha": "b69e53ccf7302e1f66e926579c1ad8086bfb75eb",
+      "matchesVerifiedPrTree": true
+    },
+    "mainChecks": {
+      "build": {
+        "runId": 39036078185,
+        "result": "success"
+      },
+      "durability": {
+        "runId": 39036078202,
+        "jobs": {
+          "windows": "success",
+          "isolated-disk-and-soak": "success"
+        }
+      }
+    }
+  },
+  "continuationVerification": {
+    "dateAsiaSeoul": "2026-10-17",
+    "downloadedFromCommit": "8092b39d980d5ea757a3c99e239ee1e3098a5d3e",
+    "releaseHashesMatch": true,
+    "zipCrcCheck": "passed for JAR and full source ZIP",
+    "sourceFingerprintsChecked": 211,
+    "sourceFingerprintMismatches": 0,
+    "existingSwingPreviewsInspected": [
+      "auth-desktop-dark.png",
+      "auth-candidate-minimum-dark.png",
+      "auth-detail-minimum-light.png"
+    ],
+    "localFullSuiteRerun": false,
+    "documentationOnlyFollowup": true
+  }
 }

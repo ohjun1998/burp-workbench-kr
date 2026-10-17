@@ -1,10 +1,12 @@
 # 현재 개발 상태
 
-## 검토 중: JS 전체 고도화 0.36.0
+## JS 전체 고도화 0.36.0
 
-2026-10-17 / account-a / Issue #35. main의 마지막 병합 배포는 아래 0.35.1 기록이며 0.36.0은 이 변경의 PR에서 검토합니다. 기존 레이아웃·표 열·연속 스크롤을 유지한 API 해석, Axios/래퍼, 큰 JS/압축, 소스맵, 디스크 이력, 실제 패킷 연결, GraphQL·검토 우선순위·중복 통합을 구현했습니다. [사용법·한계](docs/RELEASE_0.36.0_KR.md)와 [실행 검증](docs/VERIFICATION_0.36.0.json)을 기준으로 확인하세요.
+2026-10-17 / account-a / Issue #35 / [PR #36](https://github.com/ohjun1998/burp-workbench-kr/pull/36). 현재 배포 기준은 0.36.0입니다. PR에서 코드 검증과 main 반영 이력을 확인할 수 있습니다. 기존 레이아웃·표 열·연속 스크롤을 유지한 API 해석, Axios/래퍼, 큰 JS/압축, 소스맵, 디스크 이력, 실제 패킷 연결, GraphQL·검토 우선순위·중복 통합을 구현했습니다. [사용법·한계](docs/RELEASE_0.36.0_KR.md)와 [실행 검증](docs/VERIFICATION_0.36.0.json)을 기준으로 확인하세요.
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.35.1 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.36.0 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.1.
+
+0.36.0 코드의 GitHub Build and verify와 Linux·Windows 내구성 검사가 모두 통과했습니다. 회귀·HTTP 2,392개, 화면·패키징·배포 지문, 격리 디스크 고갈·복구, 180초 수집과 Windows 반복 저장·PowerShell 검사를 포함합니다. 아래 0.35.1 기록은 이전 배포로 보존합니다.
 
 ## JS 버튼 정돈·2×2 빨간 집계 0.35.1
 

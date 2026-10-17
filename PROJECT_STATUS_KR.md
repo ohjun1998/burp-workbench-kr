@@ -1,5 +1,9 @@
 # 현재 개발 상태
 
+## 검토 중: JS 전체 고도화 0.36.0
+
+2026-10-17 / account-a / Issue #35. main의 마지막 병합 배포는 아래 0.35.1 기록이며 0.36.0은 이 변경의 PR에서 검토합니다. 기존 레이아웃·표 열·연속 스크롤을 유지한 API 해석, Axios/래퍼, 큰 JS/압축, 소스맵, 디스크 이력, 실제 패킷 연결, GraphQL·검토 우선순위·중복 통합을 구현했습니다. [사용법·한계](docs/RELEASE_0.36.0_KR.md)와 [실행 검증](docs/VERIFICATION_0.36.0.json)을 기준으로 확인하세요.
+
 기준: 2026-10-17 (한국 시간) / Workbench 0.35.1 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.1.
 
 ## JS 버튼 정돈·2×2 빨간 집계 0.35.1
@@ -166,3 +170,4 @@ SCOPE 목록에서 체크한 수동 URL도 SCOPE 수집과 History 가져오기�
 실제 Burp GUI 우클릭 전체 흐름, Scope 목록을 내보내지 않는 버전의 관측 전 URL·고급 규칙 전체 열거, 다시간 수집, Pro Collaborator·외부 BApp, Windows Docker Desktop 전체 구동은 별도 검증 범위입니다. 수동 workflow의 2·3시간 옵션은 실제 실행한 시간과 구분합니다.
 
 main에는 병합한 변경을 기록하고 진행 중인 소유권과 검토는 PR에서 관리합니다. GitHub 변경과 관련된 사용자 요청·응답은 [한국 날짜별 대화 기록](docs/chat-logs/README.md)에 함께 남깁니다. [변경 전 전체 소스 검토](docs/SOURCE_REVIEW_2026-10-15_KR.md)는 당시 진단의 역사 기록으로 보존합니다.
+

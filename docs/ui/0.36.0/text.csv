@@ -1,0 +1,461 @@
+theme,width,height,view,kind,label,selected,textWidth,allocatedWidth,allocatedHeight,fullyVisible,textFits
+light,1024,720,js-workspace.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1024,720,js-workspace.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1024,720,js-workspace.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1024,720,js-workspace.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1024,720,js-workspace.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1024,720,js-workspace.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1024,720,js-workspace.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1024,720,js-workspace.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1024,720,js-workspace.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1024,720,js-workspace.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1024,720,js-workspace.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1024,720,js-workspace.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1024,720,js-workspace.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1024,720,js-workspace.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1024,720,js-workspace.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1024,720,js-workspace.png,aggregate,주요 경로  3,true,116,116,44,true,true
+light,1024,720,js-workspace.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+light,1024,720,js-workspace.png,aggregate,도메인  0,true,116,116,44,true,true
+light,1024,720,js-workspace.png,aggregate,클라우드  0,true,116,116,44,true,true
+light,1024,720,js-workspace.png,heading,분석 원문,true,66,306,31,true,true
+light,1024,720,js-workspace.png,tab,URL · API,true,59,81,32,true,true
+light,1024,720,js-workspace.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+light,1024,720,js-workspace.png,tab,도메인,false,39,61,32,true,true
+light,1024,720,js-workspace.png,tab,클라우드 URL,false,82,104,32,true,true
+light,1024,720,js-workspace.png,tab,NPM 의존성,false,75,97,32,false,true
+light,1024,720,js-workspace.png,tab,소스맵,false,39,61,32,false,true
+light,1024,720,js-workspace.png,tab,복원 원본,false,56,78,32,false,true
+light,760,480,js-packets.png,heading,요청 REQUEST,true,110,361,31,true,true
+light,760,480,js-packets.png,heading,응답 RESPONSE,true,119,362,31,true,true
+light,560,300,js-packets-small.png,heading,요청 REQUEST,true,110,261,31,true,true
+light,560,300,js-packets-small.png,heading,응답 RESPONSE,true,119,262,31,true,true
+light,1120,720,js-repeater.png,heading,요청 REQUEST,true,110,544,31,true,true
+light,1120,720,js-repeater.png,heading,응답 RESPONSE,true,119,545,31,true,true
+light,780,440,js-repeater-small.png,heading,요청 REQUEST,true,110,374,31,true,true
+light,780,440,js-repeater-small.png,heading,응답 RESPONSE,true,119,375,31,true,true
+light,980,640,js-details.png,heading,분석 결과 요약,true,130,938,26,true,true
+light,980,640,js-details.png,heading,URL · API,true,72,226,31,true,true
+light,980,640,js-details.png,heading,2,true,17,226,44,true,true
+light,980,640,js-details.png,heading,토큰 · 키 후보,true,95,226,31,true,true
+light,980,640,js-details.png,heading,1,true,17,226,44,true,true
+light,980,640,js-details.png,heading,도메인,true,47,226,31,true,true
+light,980,640,js-details.png,heading,0,true,17,226,44,true,true
+light,980,640,js-details.png,heading,복원 원본,true,66,226,31,true,true
+light,980,640,js-details.png,heading,0,true,17,226,44,true,true
+light,980,640,js-details.png,tab,URL · API,true,59,80,21,true,true
+light,980,640,js-details.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+light,980,640,js-details.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+light,980,640,js-details.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+light,620,400,js-details-small.png,heading,분석 결과 요약,true,130,561,26,true,true
+light,620,400,js-details-small.png,heading,URL · API,true,72,132,31,true,true
+light,620,400,js-details-small.png,heading,2,true,17,132,44,true,true
+light,620,400,js-details-small.png,heading,토큰 · 키 후보,true,95,132,31,true,true
+light,620,400,js-details-small.png,heading,1,true,17,132,44,true,true
+light,620,400,js-details-small.png,heading,도메인,true,47,132,31,true,true
+light,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+light,620,400,js-details-small.png,heading,복원 원본,true,66,132,31,true,true
+light,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+light,620,400,js-details-small.png,tab,URL · API,true,59,80,21,true,true
+light,620,400,js-details-small.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+light,620,400,js-details-small.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+light,620,400,js-details-small.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+light,1024,720,js-analysis-off.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1024,720,js-analysis-off.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1024,720,js-analysis-off.png,aggregate,주요 경로  3,true,116,116,44,true,true
+light,1024,720,js-analysis-off.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+light,1024,720,js-analysis-off.png,aggregate,도메인  0,true,116,116,44,true,true
+light,1024,720,js-analysis-off.png,aggregate,클라우드  0,true,116,116,44,true,true
+light,1024,720,js-analysis-off.png,heading,분석 원문,true,66,306,31,true,true
+light,1024,720,js-analysis-off.png,tab,URL · API,true,59,81,32,true,true
+light,1024,720,js-analysis-off.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+light,1024,720,js-analysis-off.png,tab,도메인,false,39,61,32,true,true
+light,1024,720,js-analysis-off.png,tab,클라우드 URL,false,82,104,32,true,true
+light,1024,720,js-analysis-off.png,tab,NPM 의존성,false,75,97,32,false,true
+light,1024,720,js-analysis-off.png,tab,소스맵,false,39,61,32,false,true
+light,1024,720,js-analysis-off.png,tab,복원 원본,false,56,78,32,false,true
+light,1024,720,js-maximum-counts.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1024,720,js-maximum-counts.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1024,720,js-maximum-counts.png,aggregate,"주요 경로  50,000",true,136,146,44,true,true
+light,1024,720,js-maximum-counts.png,aggregate,"민감한 정보  50,000",true,146,146,44,true,true
+light,1024,720,js-maximum-counts.png,aggregate,"도메인  50,000",true,123,146,44,true,true
+light,1024,720,js-maximum-counts.png,aggregate,"클라우드  50,000",true,133,146,44,true,true
+light,1024,720,js-maximum-counts.png,heading,분석 원문,true,66,306,31,true,true
+light,1024,720,js-maximum-counts.png,tab,URL · API,true,59,81,32,true,true
+light,1024,720,js-maximum-counts.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+light,1024,720,js-maximum-counts.png,tab,도메인,false,39,61,32,true,true
+light,1024,720,js-maximum-counts.png,tab,클라우드 URL,false,82,104,32,true,true
+light,1024,720,js-maximum-counts.png,tab,NPM 의존성,false,75,97,32,false,true
+light,1024,720,js-maximum-counts.png,tab,소스맵,false,39,61,32,false,true
+light,1024,720,js-maximum-counts.png,tab,복원 원본,false,56,78,32,false,true
+light,1280,800,js-workspace.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1280,800,js-workspace.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1280,800,js-workspace.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1280,800,js-workspace.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1280,800,js-workspace.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1280,800,js-workspace.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1280,800,js-workspace.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1280,800,js-workspace.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1280,800,js-workspace.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1280,800,js-workspace.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1280,800,js-workspace.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1280,800,js-workspace.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1280,800,js-workspace.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1280,800,js-workspace.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1280,800,js-workspace.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1280,800,js-workspace.png,aggregate,주요 경로  3,true,116,116,44,true,true
+light,1280,800,js-workspace.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+light,1280,800,js-workspace.png,aggregate,도메인  0,true,116,116,44,true,true
+light,1280,800,js-workspace.png,aggregate,클라우드  0,true,116,116,44,true,true
+light,1280,800,js-workspace.png,heading,분석 원문,true,66,408,31,true,true
+light,1280,800,js-workspace.png,tab,URL · API,true,59,81,32,true,true
+light,1280,800,js-workspace.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+light,1280,800,js-workspace.png,tab,도메인,false,39,61,32,true,true
+light,1280,800,js-workspace.png,tab,클라우드 URL,false,82,104,32,true,true
+light,1280,800,js-workspace.png,tab,NPM 의존성,false,75,97,32,true,true
+light,1280,800,js-workspace.png,tab,소스맵,false,39,61,32,true,true
+light,1280,800,js-workspace.png,tab,복원 원본,false,56,78,32,false,true
+light,760,480,js-packets.png,heading,요청 REQUEST,true,110,361,31,true,true
+light,760,480,js-packets.png,heading,응답 RESPONSE,true,119,362,31,true,true
+light,560,300,js-packets-small.png,heading,요청 REQUEST,true,110,261,31,true,true
+light,560,300,js-packets-small.png,heading,응답 RESPONSE,true,119,262,31,true,true
+light,1120,720,js-repeater.png,heading,요청 REQUEST,true,110,544,31,true,true
+light,1120,720,js-repeater.png,heading,응답 RESPONSE,true,119,545,31,true,true
+light,780,440,js-repeater-small.png,heading,요청 REQUEST,true,110,374,31,true,true
+light,780,440,js-repeater-small.png,heading,응답 RESPONSE,true,119,375,31,true,true
+light,980,640,js-details.png,heading,분석 결과 요약,true,130,938,26,true,true
+light,980,640,js-details.png,heading,URL · API,true,72,226,31,true,true
+light,980,640,js-details.png,heading,2,true,17,226,44,true,true
+light,980,640,js-details.png,heading,토큰 · 키 후보,true,95,226,31,true,true
+light,980,640,js-details.png,heading,1,true,17,226,44,true,true
+light,980,640,js-details.png,heading,도메인,true,47,226,31,true,true
+light,980,640,js-details.png,heading,0,true,17,226,44,true,true
+light,980,640,js-details.png,heading,복원 원본,true,66,226,31,true,true
+light,980,640,js-details.png,heading,0,true,17,226,44,true,true
+light,980,640,js-details.png,tab,URL · API,true,59,80,21,true,true
+light,980,640,js-details.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+light,980,640,js-details.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+light,980,640,js-details.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+light,620,400,js-details-small.png,heading,분석 결과 요약,true,130,561,26,true,true
+light,620,400,js-details-small.png,heading,URL · API,true,72,132,31,true,true
+light,620,400,js-details-small.png,heading,2,true,17,132,44,true,true
+light,620,400,js-details-small.png,heading,토큰 · 키 후보,true,95,132,31,true,true
+light,620,400,js-details-small.png,heading,1,true,17,132,44,true,true
+light,620,400,js-details-small.png,heading,도메인,true,47,132,31,true,true
+light,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+light,620,400,js-details-small.png,heading,복원 원본,true,66,132,31,true,true
+light,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+light,620,400,js-details-small.png,tab,URL · API,true,59,80,21,true,true
+light,620,400,js-details-small.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+light,620,400,js-details-small.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+light,620,400,js-details-small.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+light,1280,800,js-analysis-off.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1280,800,js-analysis-off.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1280,800,js-analysis-off.png,aggregate,주요 경로  3,true,116,116,44,true,true
+light,1280,800,js-analysis-off.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+light,1280,800,js-analysis-off.png,aggregate,도메인  0,true,116,116,44,true,true
+light,1280,800,js-analysis-off.png,aggregate,클라우드  0,true,116,116,44,true,true
+light,1280,800,js-analysis-off.png,heading,분석 원문,true,66,408,31,true,true
+light,1280,800,js-analysis-off.png,tab,URL · API,true,59,81,32,true,true
+light,1280,800,js-analysis-off.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+light,1280,800,js-analysis-off.png,tab,도메인,false,39,61,32,true,true
+light,1280,800,js-analysis-off.png,tab,클라우드 URL,false,82,104,32,true,true
+light,1280,800,js-analysis-off.png,tab,NPM 의존성,false,75,97,32,true,true
+light,1280,800,js-analysis-off.png,tab,소스맵,false,39,61,32,true,true
+light,1280,800,js-analysis-off.png,tab,복원 원본,false,56,78,32,false,true
+light,1280,800,js-maximum-counts.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1280,800,js-maximum-counts.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1280,800,js-maximum-counts.png,aggregate,"주요 경로  50,000",true,136,146,44,true,true
+light,1280,800,js-maximum-counts.png,aggregate,"민감한 정보  50,000",true,146,146,44,true,true
+light,1280,800,js-maximum-counts.png,aggregate,"도메인  50,000",true,123,146,44,true,true
+light,1280,800,js-maximum-counts.png,aggregate,"클라우드  50,000",true,133,146,44,true,true
+light,1280,800,js-maximum-counts.png,heading,분석 원문,true,66,408,31,true,true
+light,1280,800,js-maximum-counts.png,tab,URL · API,true,59,81,32,true,true
+light,1280,800,js-maximum-counts.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+light,1280,800,js-maximum-counts.png,tab,도메인,false,39,61,32,true,true
+light,1280,800,js-maximum-counts.png,tab,클라우드 URL,false,82,104,32,true,true
+light,1280,800,js-maximum-counts.png,tab,NPM 의존성,false,75,97,32,true,true
+light,1280,800,js-maximum-counts.png,tab,소스맵,false,39,61,32,true,true
+light,1280,800,js-maximum-counts.png,tab,복원 원본,false,56,78,32,false,true
+dark,1024,720,js-workspace.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1024,720,js-workspace.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1024,720,js-workspace.png,aggregate,주요 경로  3,true,116,116,44,true,true
+dark,1024,720,js-workspace.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+dark,1024,720,js-workspace.png,aggregate,도메인  0,true,116,116,44,true,true
+dark,1024,720,js-workspace.png,aggregate,클라우드  0,true,116,116,44,true,true
+dark,1024,720,js-workspace.png,heading,분석 원문,true,66,306,31,true,true
+dark,1024,720,js-workspace.png,tab,URL · API,true,59,81,32,true,true
+dark,1024,720,js-workspace.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+dark,1024,720,js-workspace.png,tab,도메인,false,39,61,32,true,true
+dark,1024,720,js-workspace.png,tab,클라우드 URL,false,82,104,32,true,true
+dark,1024,720,js-workspace.png,tab,NPM 의존성,false,75,97,32,false,true
+dark,1024,720,js-workspace.png,tab,소스맵,false,39,61,32,false,true
+dark,1024,720,js-workspace.png,tab,복원 원본,false,56,78,32,false,true
+dark,760,480,js-packets.png,heading,요청 REQUEST,true,110,361,31,true,true
+dark,760,480,js-packets.png,heading,응답 RESPONSE,true,119,362,31,true,true
+dark,560,300,js-packets-small.png,heading,요청 REQUEST,true,110,261,31,true,true
+dark,560,300,js-packets-small.png,heading,응답 RESPONSE,true,119,262,31,true,true
+dark,1120,720,js-repeater.png,heading,요청 REQUEST,true,110,544,31,true,true
+dark,1120,720,js-repeater.png,heading,응답 RESPONSE,true,119,545,31,true,true
+dark,780,440,js-repeater-small.png,heading,요청 REQUEST,true,110,374,31,true,true
+dark,780,440,js-repeater-small.png,heading,응답 RESPONSE,true,119,375,31,true,true
+dark,980,640,js-details.png,heading,분석 결과 요약,true,130,938,26,true,true
+dark,980,640,js-details.png,heading,URL · API,true,72,226,31,true,true
+dark,980,640,js-details.png,heading,2,true,17,226,44,true,true
+dark,980,640,js-details.png,heading,토큰 · 키 후보,true,95,226,31,true,true
+dark,980,640,js-details.png,heading,1,true,17,226,44,true,true
+dark,980,640,js-details.png,heading,도메인,true,47,226,31,true,true
+dark,980,640,js-details.png,heading,0,true,17,226,44,true,true
+dark,980,640,js-details.png,heading,복원 원본,true,66,226,31,true,true
+dark,980,640,js-details.png,heading,0,true,17,226,44,true,true
+dark,980,640,js-details.png,tab,URL · API,true,59,80,21,true,true
+dark,980,640,js-details.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+dark,980,640,js-details.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+dark,980,640,js-details.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+dark,620,400,js-details-small.png,heading,분석 결과 요약,true,130,561,26,true,true
+dark,620,400,js-details-small.png,heading,URL · API,true,72,132,31,true,true
+dark,620,400,js-details-small.png,heading,2,true,17,132,44,true,true
+dark,620,400,js-details-small.png,heading,토큰 · 키 후보,true,95,132,31,true,true
+dark,620,400,js-details-small.png,heading,1,true,17,132,44,true,true
+dark,620,400,js-details-small.png,heading,도메인,true,47,132,31,true,true
+dark,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+dark,620,400,js-details-small.png,heading,복원 원본,true,66,132,31,true,true
+dark,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+dark,620,400,js-details-small.png,tab,URL · API,true,59,80,21,true,true
+dark,620,400,js-details-small.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+dark,620,400,js-details-small.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+dark,620,400,js-details-small.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1024,720,js-analysis-off.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1024,720,js-analysis-off.png,aggregate,주요 경로  3,true,116,116,44,true,true
+dark,1024,720,js-analysis-off.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+dark,1024,720,js-analysis-off.png,aggregate,도메인  0,true,116,116,44,true,true
+dark,1024,720,js-analysis-off.png,aggregate,클라우드  0,true,116,116,44,true,true
+dark,1024,720,js-analysis-off.png,heading,분석 원문,true,66,306,31,true,true
+dark,1024,720,js-analysis-off.png,tab,URL · API,true,59,81,32,true,true
+dark,1024,720,js-analysis-off.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+dark,1024,720,js-analysis-off.png,tab,도메인,false,39,61,32,true,true
+dark,1024,720,js-analysis-off.png,tab,클라우드 URL,false,82,104,32,true,true
+dark,1024,720,js-analysis-off.png,tab,NPM 의존성,false,75,97,32,false,true
+dark,1024,720,js-analysis-off.png,tab,소스맵,false,39,61,32,false,true
+dark,1024,720,js-analysis-off.png,tab,복원 원본,false,56,78,32,false,true
+dark,1024,720,js-maximum-counts.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1024,720,js-maximum-counts.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1024,720,js-maximum-counts.png,aggregate,"주요 경로  50,000",true,136,146,44,true,true
+dark,1024,720,js-maximum-counts.png,aggregate,"민감한 정보  50,000",true,146,146,44,true,true
+dark,1024,720,js-maximum-counts.png,aggregate,"도메인  50,000",true,123,146,44,true,true
+dark,1024,720,js-maximum-counts.png,aggregate,"클라우드  50,000",true,133,146,44,true,true
+dark,1024,720,js-maximum-counts.png,heading,분석 원문,true,66,306,31,true,true
+dark,1024,720,js-maximum-counts.png,tab,URL · API,true,59,81,32,true,true
+dark,1024,720,js-maximum-counts.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+dark,1024,720,js-maximum-counts.png,tab,도메인,false,39,61,32,true,true
+dark,1024,720,js-maximum-counts.png,tab,클라우드 URL,false,82,104,32,true,true
+dark,1024,720,js-maximum-counts.png,tab,NPM 의존성,false,75,97,32,false,true
+dark,1024,720,js-maximum-counts.png,tab,소스맵,false,39,61,32,false,true
+dark,1024,720,js-maximum-counts.png,tab,복원 원본,false,56,78,32,false,true
+dark,1280,800,js-workspace.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1280,800,js-workspace.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1280,800,js-workspace.png,aggregate,주요 경로  3,true,116,116,44,true,true
+dark,1280,800,js-workspace.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+dark,1280,800,js-workspace.png,aggregate,도메인  0,true,116,116,44,true,true
+dark,1280,800,js-workspace.png,aggregate,클라우드  0,true,116,116,44,true,true
+dark,1280,800,js-workspace.png,heading,분석 원문,true,66,408,31,true,true
+dark,1280,800,js-workspace.png,tab,URL · API,true,59,81,32,true,true
+dark,1280,800,js-workspace.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+dark,1280,800,js-workspace.png,tab,도메인,false,39,61,32,true,true
+dark,1280,800,js-workspace.png,tab,클라우드 URL,false,82,104,32,true,true
+dark,1280,800,js-workspace.png,tab,NPM 의존성,false,75,97,32,true,true
+dark,1280,800,js-workspace.png,tab,소스맵,false,39,61,32,true,true
+dark,1280,800,js-workspace.png,tab,복원 원본,false,56,78,32,false,true
+dark,760,480,js-packets.png,heading,요청 REQUEST,true,110,361,31,true,true
+dark,760,480,js-packets.png,heading,응답 RESPONSE,true,119,362,31,true,true
+dark,560,300,js-packets-small.png,heading,요청 REQUEST,true,110,261,31,true,true
+dark,560,300,js-packets-small.png,heading,응답 RESPONSE,true,119,262,31,true,true
+dark,1120,720,js-repeater.png,heading,요청 REQUEST,true,110,544,31,true,true
+dark,1120,720,js-repeater.png,heading,응답 RESPONSE,true,119,545,31,true,true
+dark,780,440,js-repeater-small.png,heading,요청 REQUEST,true,110,374,31,true,true
+dark,780,440,js-repeater-small.png,heading,응답 RESPONSE,true,119,375,31,true,true
+dark,980,640,js-details.png,heading,분석 결과 요약,true,130,938,26,true,true
+dark,980,640,js-details.png,heading,URL · API,true,72,226,31,true,true
+dark,980,640,js-details.png,heading,2,true,17,226,44,true,true
+dark,980,640,js-details.png,heading,토큰 · 키 후보,true,95,226,31,true,true
+dark,980,640,js-details.png,heading,1,true,17,226,44,true,true
+dark,980,640,js-details.png,heading,도메인,true,47,226,31,true,true
+dark,980,640,js-details.png,heading,0,true,17,226,44,true,true
+dark,980,640,js-details.png,heading,복원 원본,true,66,226,31,true,true
+dark,980,640,js-details.png,heading,0,true,17,226,44,true,true
+dark,980,640,js-details.png,tab,URL · API,true,59,80,21,true,true
+dark,980,640,js-details.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+dark,980,640,js-details.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+dark,980,640,js-details.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+dark,620,400,js-details-small.png,heading,분석 결과 요약,true,130,561,26,true,true
+dark,620,400,js-details-small.png,heading,URL · API,true,72,132,31,true,true
+dark,620,400,js-details-small.png,heading,2,true,17,132,44,true,true
+dark,620,400,js-details-small.png,heading,토큰 · 키 후보,true,95,132,31,true,true
+dark,620,400,js-details-small.png,heading,1,true,17,132,44,true,true
+dark,620,400,js-details-small.png,heading,도메인,true,47,132,31,true,true
+dark,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+dark,620,400,js-details-small.png,heading,복원 원본,true,66,132,31,true,true
+dark,620,400,js-details-small.png,heading,0,true,17,132,44,true,true
+dark,620,400,js-details-small.png,tab,URL · API,true,59,80,21,true,true
+dark,620,400,js-details-small.png,tab,토큰 · 키 후보,false,81,102,21,true,true
+dark,620,400,js-details-small.png,tab,호스트 · 클라우드,false,103,124,21,true,true
+dark,620,400,js-details-small.png,tab,의존성 · 소스맵,false,90,111,21,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1280,800,js-analysis-off.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1280,800,js-analysis-off.png,aggregate,주요 경로  3,true,116,116,44,true,true
+dark,1280,800,js-analysis-off.png,aggregate,민감한 정보  2,true,116,116,44,true,true
+dark,1280,800,js-analysis-off.png,aggregate,도메인  0,true,116,116,44,true,true
+dark,1280,800,js-analysis-off.png,aggregate,클라우드  0,true,116,116,44,true,true
+dark,1280,800,js-analysis-off.png,heading,분석 원문,true,66,408,31,true,true
+dark,1280,800,js-analysis-off.png,tab,URL · API,true,59,81,32,true,true
+dark,1280,800,js-analysis-off.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+dark,1280,800,js-analysis-off.png,tab,도메인,false,39,61,32,true,true
+dark,1280,800,js-analysis-off.png,tab,클라우드 URL,false,82,104,32,true,true
+dark,1280,800,js-analysis-off.png,tab,NPM 의존성,false,75,97,32,true,true
+dark,1280,800,js-analysis-off.png,tab,소스맵,false,39,61,32,true,true
+dark,1280,800,js-analysis-off.png,tab,복원 원본,false,56,78,32,false,true
+dark,1280,800,js-maximum-counts.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1280,800,js-maximum-counts.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1280,800,js-maximum-counts.png,aggregate,"주요 경로  50,000",true,136,146,44,true,true
+dark,1280,800,js-maximum-counts.png,aggregate,"민감한 정보  50,000",true,146,146,44,true,true
+dark,1280,800,js-maximum-counts.png,aggregate,"도메인  50,000",true,123,146,44,true,true
+dark,1280,800,js-maximum-counts.png,aggregate,"클라우드  50,000",true,133,146,44,true,true
+dark,1280,800,js-maximum-counts.png,heading,분석 원문,true,66,408,31,true,true
+dark,1280,800,js-maximum-counts.png,tab,URL · API,true,59,81,32,true,true
+dark,1280,800,js-maximum-counts.png,tab,토큰 · API 키 후보,false,106,128,32,true,true
+dark,1280,800,js-maximum-counts.png,tab,도메인,false,39,61,32,true,true
+dark,1280,800,js-maximum-counts.png,tab,클라우드 URL,false,82,104,32,true,true
+dark,1280,800,js-maximum-counts.png,tab,NPM 의존성,false,75,97,32,true,true
+dark,1280,800,js-maximum-counts.png,tab,소스맵,false,39,61,32,true,true
+dark,1280,800,js-maximum-counts.png,tab,복원 원본,false,56,78,32,false,true

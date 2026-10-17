@@ -480,6 +480,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     authCompare.trackingSink = activity::accountInspection;
     jsAnalysis.coverage = (result, source) -> activity.analyzed(result, source);
     jsAnalysis.observation = activity::observation;
+    jsAnalysis.trafficLookup=(method,url)->{
+      DiskTrafficStore store=trafficStore;for(long row=store.size()-1;row>=0&&!unloaded.get();row--){var ref=store.ref(row);if(ref.method().equals(method)&&ActivityTracker.safeUrl(ref.url()).equals(ActivityTracker.safeUrl(url)))return ref.packet();}return null;
+    };
     activity.sourceNavigator =
         (source, line, kind) -> {
           tabs.setSelectedComponent(jsAnalysis);
@@ -1427,7 +1430,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         EnvironmentPanel.preview(
             PacketFormat.response(
                 response.toByteArray().getBytes(), response.statusCode(), "", text)));
-    jsAnalysis.load(text, request.url());
+    jsAnalysis.loadContext(text, request.url(),response.headerValue("Content-Type"),request.headerValue("Referer"));
     tabs.setSelectedIndex(3);
   }
 
@@ -1478,6 +1481,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           () -> {
             if (admitted.get() && responseRecon != null) responseRecon.offer(r.initiatingRequest(), r);
           });
+      captureStage("JS 비 Proxy 응답 분석",()->{
+        if(admitted.get()&&jsAnalysis!=null&&!r.toolSource().toolType().toString().equalsIgnoreCase("PROXY"))jsAnalysis.offer(r.initiatingRequest(),r);
+      });
       captureStage(
           "응답 활동 관찰",
           () -> {
@@ -1701,3 +1707,4 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         root, e.getMessage(), "Workbench KR", JOptionPane.INFORMATION_MESSAGE);
   }
 }
+

@@ -1,0 +1,513 @@
+theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled
+light,1024,720,js-workspace.png,메뉴 숨기기,6,4,93,32,true,false,true
+light,1024,720,js-workspace.png,기능 안내,762,4,80,32,true,false,true
+light,1024,720,js-workspace.png,설정,850,4,80,32,true,false,true
+light,1024,720,js-workspace.png,로그,938,4,80,32,true,false,true
+light,1024,720,js-workspace.png,분석 ON,247,52,112,38,true,false,true
+light,1024,720,js-workspace.png,대상 설정,369,55,92,32,true,false,true
+light,1024,720,js-workspace.png,분석 목록,490,55,92,32,true,false,true
+light,1024,720,js-workspace.png,분석 상세,582,55,92,32,true,false,true
+light,1024,720,js-workspace.png,요청 설정,247,108,92,32,true,false,true
+light,1024,720,js-workspace.png,원본 위치,349,108,92,32,true,false,true
+light,1024,720,js-workspace.png,추가 도구,451,108,92,32,true,false,true
+light,1024,720,js-workspace.png,더보기,553,108,76,32,true,false,true
+light,1024,720,js-workspace.png,←,246,191,37,32,true,false,true
+light,1024,720,js-workspace.png,→,291,191,37,32,true,false,true
+light,1024,720,js-workspace.png,JComboBox,336,191,105,32,true,false,true
+light,1024,720,js-workspace.png,URL · API,552,148,81,32,true,true,true
+light,1024,720,js-workspace.png,토큰 · API 키 후보,633,148,128,32,true,true,true
+light,1024,720,js-workspace.png,도메인,761,148,61,32,true,true,true
+light,1024,720,js-workspace.png,클라우드 URL,822,148,104,32,true,true,true
+light,1024,720,js-workspace.png,NPM 의존성,926,148,97,32,false,true,true
+light,1024,720,js-workspace.png,소스맵,1023,148,61,32,false,true,true
+light,1024,720,js-workspace.png,복원 원본,1084,148,78,32,false,true,true
+light,760,480,js-analysis-list.png,닫기,20,431,50,32,true,false,true
+light,560,300,js-analysis-list-small.png,닫기,20,251,50,32,true,false,true
+light,760,480,js-packets.png,데이터 정렬,22,98,94,26,true,true,true
+light,760,480,js-packets.png,데이터 정렬,392,98,94,26,true,true,true
+light,760,480,js-packets.png,닫기,20,431,50,32,true,false,true
+light,560,300,js-packets-small.png,데이터 정렬,22,98,94,26,true,true,true
+light,560,300,js-packets-small.png,데이터 정렬,292,98,94,26,true,true,true
+light,560,300,js-packets-small.png,닫기,20,251,50,32,true,false,true
+light,1120,720,js-repeater.png,Send,18,15,56,32,true,false,true
+light,1120,720,js-repeater.png,←,82,15,37,32,true,false,false
+light,1120,720,js-repeater.png,→,127,15,37,32,true,false,false
+light,1120,720,js-repeater.png,wb.js.repeater.target,180,10,886,42,true,false,true
+light,1120,720,js-repeater.png,Pretty,11,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Raw,87,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Hex,163,96,76,34,true,false,true
+light,1120,720,js-repeater.png,↵,491,98,28,28,true,false,true
+light,1120,720,js-repeater.png,⋯,523,98,28,28,true,false,true
+light,1120,720,js-repeater.png,wb.js.repeater.request.search,65,657,271,28,true,false,true
+light,1120,720,js-repeater.png,×,338,657,28,28,true,false,true
+light,1120,720,js-repeater.png,↑,373,657,28,28,true,false,false
+light,1120,720,js-repeater.png,↓,404,657,28,28,true,false,false
+light,1120,720,js-repeater.png,Aa,435,657,32,28,true,false,true
+light,1120,720,js-repeater.png,.*,470,657,28,28,true,false,true
+light,1120,720,js-repeater.png,Pretty,564,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Raw,640,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Hex,716,96,76,34,true,false,true
+light,1120,720,js-repeater.png,↵,1045,98,28,28,true,false,true
+light,1120,720,js-repeater.png,⋯,1077,98,28,28,true,false,false
+light,1120,720,js-repeater.png,wb.js.repeater.response.search,618,657,272,28,true,false,true
+light,1120,720,js-repeater.png,×,892,657,28,28,true,false,true
+light,1120,720,js-repeater.png,↑,927,657,28,28,true,false,false
+light,1120,720,js-repeater.png,↓,958,657,28,28,true,false,false
+light,1120,720,js-repeater.png,Aa,989,657,32,28,true,false,true
+light,1120,720,js-repeater.png,.*,1024,657,28,28,true,false,true
+light,780,440,js-repeater-small.png,Send,18,15,56,32,true,false,true
+light,780,440,js-repeater-small.png,←,82,15,37,32,true,false,false
+light,780,440,js-repeater-small.png,→,127,15,37,32,true,false,false
+light,780,440,js-repeater-small.png,wb.js.repeater.target,180,10,546,42,true,false,true
+light,780,440,js-repeater-small.png,Pretty,11,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Raw,87,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Hex,163,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,↵,321,98,28,28,true,false,true
+light,780,440,js-repeater-small.png,⋯,353,98,28,28,true,false,true
+light,780,440,js-repeater-small.png,wb.js.repeater.request.search,65,377,101,28,true,false,true
+light,780,440,js-repeater-small.png,×,168,377,28,28,true,false,true
+light,780,440,js-repeater-small.png,↑,203,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,↓,234,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,Aa,265,377,32,28,true,false,true
+light,780,440,js-repeater-small.png,.*,300,377,28,28,true,false,true
+light,780,440,js-repeater-small.png,Pretty,394,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Raw,470,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Hex,546,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,↵,705,98,28,28,true,false,true
+light,780,440,js-repeater-small.png,⋯,737,98,28,28,true,false,false
+light,780,440,js-repeater-small.png,wb.js.repeater.response.search,448,377,102,28,true,false,true
+light,780,440,js-repeater-small.png,×,552,377,28,28,true,false,true
+light,780,440,js-repeater-small.png,↑,587,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,↓,618,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,Aa,649,377,32,28,true,false,true
+light,780,440,js-repeater-small.png,.*,684,377,28,28,true,false,true
+light,980,640,js-details.png,닫기,20,591,50,32,true,false,true
+light,620,400,js-details-small.png,닫기,20,351,50,32,true,false,true
+light,1024,720,js-analysis-off.png,메뉴 숨기기,6,4,93,32,true,false,true
+light,1024,720,js-analysis-off.png,기능 안내,762,4,80,32,true,false,true
+light,1024,720,js-analysis-off.png,설정,850,4,80,32,true,false,true
+light,1024,720,js-analysis-off.png,로그,938,4,80,32,true,false,true
+light,1024,720,js-analysis-off.png,분석 OFF,247,52,112,38,true,false,true
+light,1024,720,js-analysis-off.png,대상 설정,369,55,92,32,true,false,true
+light,1024,720,js-analysis-off.png,분석 목록,490,55,92,32,true,false,true
+light,1024,720,js-analysis-off.png,분석 상세,582,55,92,32,true,false,true
+light,1024,720,js-analysis-off.png,요청 설정,247,108,92,32,true,false,true
+light,1024,720,js-analysis-off.png,원본 위치,349,108,92,32,true,false,true
+light,1024,720,js-analysis-off.png,추가 도구,451,108,92,32,true,false,true
+light,1024,720,js-analysis-off.png,더보기,553,108,76,32,true,false,true
+light,1024,720,js-analysis-off.png,←,246,191,37,32,true,false,true
+light,1024,720,js-analysis-off.png,→,291,191,37,32,true,false,true
+light,1024,720,js-analysis-off.png,JComboBox,336,191,105,32,true,false,true
+light,1024,720,js-analysis-off.png,URL · API,552,148,81,32,true,true,true
+light,1024,720,js-analysis-off.png,토큰 · API 키 후보,633,148,128,32,true,true,true
+light,1024,720,js-analysis-off.png,도메인,761,148,61,32,true,true,true
+light,1024,720,js-analysis-off.png,클라우드 URL,822,148,104,32,true,true,true
+light,1024,720,js-analysis-off.png,NPM 의존성,926,148,97,32,false,true,true
+light,1024,720,js-analysis-off.png,소스맵,1023,148,61,32,false,true,true
+light,1024,720,js-analysis-off.png,복원 원본,1084,148,78,32,false,true,true
+light,1024,720,js-maximum-counts.png,메뉴 숨기기,6,4,93,32,true,false,true
+light,1024,720,js-maximum-counts.png,기능 안내,762,4,80,32,true,false,true
+light,1024,720,js-maximum-counts.png,설정,850,4,80,32,true,false,true
+light,1024,720,js-maximum-counts.png,로그,938,4,80,32,true,false,true
+light,1024,720,js-maximum-counts.png,분석 OFF,247,52,112,38,true,false,true
+light,1024,720,js-maximum-counts.png,대상 설정,369,55,92,32,true,false,true
+light,1024,720,js-maximum-counts.png,분석 목록,490,55,92,32,true,false,true
+light,1024,720,js-maximum-counts.png,분석 상세,582,55,92,32,true,false,true
+light,1024,720,js-maximum-counts.png,요청 설정,247,108,92,32,true,false,true
+light,1024,720,js-maximum-counts.png,원본 위치,349,108,92,32,true,false,true
+light,1024,720,js-maximum-counts.png,추가 도구,451,108,92,32,true,false,true
+light,1024,720,js-maximum-counts.png,더보기,553,108,76,32,true,false,true
+light,1024,720,js-maximum-counts.png,←,246,191,37,32,true,false,true
+light,1024,720,js-maximum-counts.png,→,291,191,37,32,true,false,true
+light,1024,720,js-maximum-counts.png,JComboBox,336,191,105,32,true,false,true
+light,1024,720,js-maximum-counts.png,URL · API,552,148,81,32,true,true,true
+light,1024,720,js-maximum-counts.png,토큰 · API 키 후보,633,148,128,32,true,true,true
+light,1024,720,js-maximum-counts.png,도메인,761,148,61,32,true,true,true
+light,1024,720,js-maximum-counts.png,클라우드 URL,822,148,104,32,true,true,true
+light,1024,720,js-maximum-counts.png,NPM 의존성,926,148,97,32,false,true,true
+light,1024,720,js-maximum-counts.png,소스맵,1023,148,61,32,false,true,true
+light,1024,720,js-maximum-counts.png,복원 원본,1084,148,78,32,false,true,true
+light,1280,800,js-workspace.png,메뉴 숨기기,6,4,93,32,true,false,true
+light,1280,800,js-workspace.png,기능 안내,1018,4,80,32,true,false,true
+light,1280,800,js-workspace.png,설정,1106,4,80,32,true,false,true
+light,1280,800,js-workspace.png,로그,1194,4,80,32,true,false,true
+light,1280,800,js-workspace.png,분석 ON,247,52,112,38,true,false,true
+light,1280,800,js-workspace.png,대상 설정,369,55,92,32,true,false,true
+light,1280,800,js-workspace.png,분석 목록,490,55,92,32,true,false,true
+light,1280,800,js-workspace.png,분석 상세,582,55,92,32,true,false,true
+light,1280,800,js-workspace.png,요청 설정,247,108,92,32,true,false,true
+light,1280,800,js-workspace.png,원본 위치,349,108,92,32,true,false,true
+light,1280,800,js-workspace.png,추가 도구,451,108,92,32,true,false,true
+light,1280,800,js-workspace.png,더보기,553,108,76,32,true,false,true
+light,1280,800,js-workspace.png,←,246,191,37,32,true,false,true
+light,1280,800,js-workspace.png,→,291,191,37,32,true,false,true
+light,1280,800,js-workspace.png,JComboBox,336,191,105,32,true,false,true
+light,1280,800,js-workspace.png,URL · API,654,148,81,32,true,true,true
+light,1280,800,js-workspace.png,토큰 · API 키 후보,735,148,128,32,true,true,true
+light,1280,800,js-workspace.png,도메인,863,148,61,32,true,true,true
+light,1280,800,js-workspace.png,클라우드 URL,924,148,104,32,true,true,true
+light,1280,800,js-workspace.png,NPM 의존성,1028,148,97,32,true,true,true
+light,1280,800,js-workspace.png,소스맵,1125,148,61,32,true,true,true
+light,1280,800,js-workspace.png,복원 원본,1186,148,78,32,false,true,true
+light,760,480,js-analysis-list.png,닫기,20,431,50,32,true,false,true
+light,560,300,js-analysis-list-small.png,닫기,20,251,50,32,true,false,true
+light,760,480,js-packets.png,데이터 정렬,22,98,94,26,true,true,true
+light,760,480,js-packets.png,데이터 정렬,392,98,94,26,true,true,true
+light,760,480,js-packets.png,닫기,20,431,50,32,true,false,true
+light,560,300,js-packets-small.png,데이터 정렬,22,98,94,26,true,true,true
+light,560,300,js-packets-small.png,데이터 정렬,292,98,94,26,true,true,true
+light,560,300,js-packets-small.png,닫기,20,251,50,32,true,false,true
+light,1120,720,js-repeater.png,Send,18,15,56,32,true,false,true
+light,1120,720,js-repeater.png,←,82,15,37,32,true,false,false
+light,1120,720,js-repeater.png,→,127,15,37,32,true,false,false
+light,1120,720,js-repeater.png,wb.js.repeater.target,180,10,886,42,true,false,true
+light,1120,720,js-repeater.png,Pretty,11,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Raw,87,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Hex,163,96,76,34,true,false,true
+light,1120,720,js-repeater.png,↵,491,98,28,28,true,false,true
+light,1120,720,js-repeater.png,⋯,523,98,28,28,true,false,true
+light,1120,720,js-repeater.png,wb.js.repeater.request.search,65,657,271,28,true,false,true
+light,1120,720,js-repeater.png,×,338,657,28,28,true,false,true
+light,1120,720,js-repeater.png,↑,373,657,28,28,true,false,false
+light,1120,720,js-repeater.png,↓,404,657,28,28,true,false,false
+light,1120,720,js-repeater.png,Aa,435,657,32,28,true,false,true
+light,1120,720,js-repeater.png,.*,470,657,28,28,true,false,true
+light,1120,720,js-repeater.png,Pretty,564,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Raw,640,96,76,34,true,false,true
+light,1120,720,js-repeater.png,Hex,716,96,76,34,true,false,true
+light,1120,720,js-repeater.png,↵,1045,98,28,28,true,false,true
+light,1120,720,js-repeater.png,⋯,1077,98,28,28,true,false,false
+light,1120,720,js-repeater.png,wb.js.repeater.response.search,618,657,272,28,true,false,true
+light,1120,720,js-repeater.png,×,892,657,28,28,true,false,true
+light,1120,720,js-repeater.png,↑,927,657,28,28,true,false,false
+light,1120,720,js-repeater.png,↓,958,657,28,28,true,false,false
+light,1120,720,js-repeater.png,Aa,989,657,32,28,true,false,true
+light,1120,720,js-repeater.png,.*,1024,657,28,28,true,false,true
+light,780,440,js-repeater-small.png,Send,18,15,56,32,true,false,true
+light,780,440,js-repeater-small.png,←,82,15,37,32,true,false,false
+light,780,440,js-repeater-small.png,→,127,15,37,32,true,false,false
+light,780,440,js-repeater-small.png,wb.js.repeater.target,180,10,546,42,true,false,true
+light,780,440,js-repeater-small.png,Pretty,11,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Raw,87,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Hex,163,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,↵,321,98,28,28,true,false,true
+light,780,440,js-repeater-small.png,⋯,353,98,28,28,true,false,true
+light,780,440,js-repeater-small.png,wb.js.repeater.request.search,65,377,101,28,true,false,true
+light,780,440,js-repeater-small.png,×,168,377,28,28,true,false,true
+light,780,440,js-repeater-small.png,↑,203,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,↓,234,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,Aa,265,377,32,28,true,false,true
+light,780,440,js-repeater-small.png,.*,300,377,28,28,true,false,true
+light,780,440,js-repeater-small.png,Pretty,394,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Raw,470,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,Hex,546,96,76,34,true,false,true
+light,780,440,js-repeater-small.png,↵,705,98,28,28,true,false,true
+light,780,440,js-repeater-small.png,⋯,737,98,28,28,true,false,false
+light,780,440,js-repeater-small.png,wb.js.repeater.response.search,448,377,102,28,true,false,true
+light,780,440,js-repeater-small.png,×,552,377,28,28,true,false,true
+light,780,440,js-repeater-small.png,↑,587,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,↓,618,377,28,28,true,false,false
+light,780,440,js-repeater-small.png,Aa,649,377,32,28,true,false,true
+light,780,440,js-repeater-small.png,.*,684,377,28,28,true,false,true
+light,980,640,js-details.png,닫기,20,591,50,32,true,false,true
+light,620,400,js-details-small.png,닫기,20,351,50,32,true,false,true
+light,1280,800,js-analysis-off.png,메뉴 숨기기,6,4,93,32,true,false,true
+light,1280,800,js-analysis-off.png,기능 안내,1018,4,80,32,true,false,true
+light,1280,800,js-analysis-off.png,설정,1106,4,80,32,true,false,true
+light,1280,800,js-analysis-off.png,로그,1194,4,80,32,true,false,true
+light,1280,800,js-analysis-off.png,분석 OFF,247,52,112,38,true,false,true
+light,1280,800,js-analysis-off.png,대상 설정,369,55,92,32,true,false,true
+light,1280,800,js-analysis-off.png,분석 목록,490,55,92,32,true,false,true
+light,1280,800,js-analysis-off.png,분석 상세,582,55,92,32,true,false,true
+light,1280,800,js-analysis-off.png,요청 설정,247,108,92,32,true,false,true
+light,1280,800,js-analysis-off.png,원본 위치,349,108,92,32,true,false,true
+light,1280,800,js-analysis-off.png,추가 도구,451,108,92,32,true,false,true
+light,1280,800,js-analysis-off.png,더보기,553,108,76,32,true,false,true
+light,1280,800,js-analysis-off.png,←,246,191,37,32,true,false,true
+light,1280,800,js-analysis-off.png,→,291,191,37,32,true,false,true
+light,1280,800,js-analysis-off.png,JComboBox,336,191,105,32,true,false,true
+light,1280,800,js-analysis-off.png,URL · API,654,148,81,32,true,true,true
+light,1280,800,js-analysis-off.png,토큰 · API 키 후보,735,148,128,32,true,true,true
+light,1280,800,js-analysis-off.png,도메인,863,148,61,32,true,true,true
+light,1280,800,js-analysis-off.png,클라우드 URL,924,148,104,32,true,true,true
+light,1280,800,js-analysis-off.png,NPM 의존성,1028,148,97,32,true,true,true
+light,1280,800,js-analysis-off.png,소스맵,1125,148,61,32,true,true,true
+light,1280,800,js-analysis-off.png,복원 원본,1186,148,78,32,false,true,true
+light,1280,800,js-maximum-counts.png,메뉴 숨기기,6,4,93,32,true,false,true
+light,1280,800,js-maximum-counts.png,기능 안내,1018,4,80,32,true,false,true
+light,1280,800,js-maximum-counts.png,설정,1106,4,80,32,true,false,true
+light,1280,800,js-maximum-counts.png,로그,1194,4,80,32,true,false,true
+light,1280,800,js-maximum-counts.png,분석 OFF,247,52,112,38,true,false,true
+light,1280,800,js-maximum-counts.png,대상 설정,369,55,92,32,true,false,true
+light,1280,800,js-maximum-counts.png,분석 목록,490,55,92,32,true,false,true
+light,1280,800,js-maximum-counts.png,분석 상세,582,55,92,32,true,false,true
+light,1280,800,js-maximum-counts.png,요청 설정,247,108,92,32,true,false,true
+light,1280,800,js-maximum-counts.png,원본 위치,349,108,92,32,true,false,true
+light,1280,800,js-maximum-counts.png,추가 도구,451,108,92,32,true,false,true
+light,1280,800,js-maximum-counts.png,더보기,553,108,76,32,true,false,true
+light,1280,800,js-maximum-counts.png,←,246,191,37,32,true,false,true
+light,1280,800,js-maximum-counts.png,→,291,191,37,32,true,false,true
+light,1280,800,js-maximum-counts.png,JComboBox,336,191,105,32,true,false,true
+light,1280,800,js-maximum-counts.png,URL · API,654,148,81,32,true,true,true
+light,1280,800,js-maximum-counts.png,토큰 · API 키 후보,735,148,128,32,true,true,true
+light,1280,800,js-maximum-counts.png,도메인,863,148,61,32,true,true,true
+light,1280,800,js-maximum-counts.png,클라우드 URL,924,148,104,32,true,true,true
+light,1280,800,js-maximum-counts.png,NPM 의존성,1028,148,97,32,true,true,true
+light,1280,800,js-maximum-counts.png,소스맵,1125,148,61,32,true,true,true
+light,1280,800,js-maximum-counts.png,복원 원본,1186,148,78,32,false,true,true
+dark,1024,720,js-workspace.png,메뉴 숨기기,6,4,93,32,true,false,true
+dark,1024,720,js-workspace.png,기능 안내,762,4,80,32,true,false,true
+dark,1024,720,js-workspace.png,설정,850,4,80,32,true,false,true
+dark,1024,720,js-workspace.png,로그,938,4,80,32,true,false,true
+dark,1024,720,js-workspace.png,분석 ON,247,52,112,38,true,false,true
+dark,1024,720,js-workspace.png,대상 설정,369,55,92,32,true,false,true
+dark,1024,720,js-workspace.png,분석 목록,490,55,92,32,true,false,true
+dark,1024,720,js-workspace.png,분석 상세,582,55,92,32,true,false,true
+dark,1024,720,js-workspace.png,요청 설정,247,108,92,32,true,false,true
+dark,1024,720,js-workspace.png,원본 위치,349,108,92,32,true,false,true
+dark,1024,720,js-workspace.png,추가 도구,451,108,92,32,true,false,true
+dark,1024,720,js-workspace.png,더보기,553,108,76,32,true,false,true
+dark,1024,720,js-workspace.png,←,246,191,37,32,true,false,true
+dark,1024,720,js-workspace.png,→,291,191,37,32,true,false,true
+dark,1024,720,js-workspace.png,JComboBox,336,191,105,32,true,false,true
+dark,1024,720,js-workspace.png,URL · API,552,148,81,32,true,true,true
+dark,1024,720,js-workspace.png,토큰 · API 키 후보,633,148,128,32,true,true,true
+dark,1024,720,js-workspace.png,도메인,761,148,61,32,true,true,true
+dark,1024,720,js-workspace.png,클라우드 URL,822,148,104,32,true,true,true
+dark,1024,720,js-workspace.png,NPM 의존성,926,148,97,32,false,true,true
+dark,1024,720,js-workspace.png,소스맵,1023,148,61,32,false,true,true
+dark,1024,720,js-workspace.png,복원 원본,1084,148,78,32,false,true,true
+dark,760,480,js-analysis-list.png,닫기,20,431,50,32,true,false,true
+dark,560,300,js-analysis-list-small.png,닫기,20,251,50,32,true,false,true
+dark,760,480,js-packets.png,데이터 정렬,22,98,94,26,true,true,true
+dark,760,480,js-packets.png,데이터 정렬,392,98,94,26,true,true,true
+dark,760,480,js-packets.png,닫기,20,431,50,32,true,false,true
+dark,560,300,js-packets-small.png,데이터 정렬,22,98,94,26,true,true,true
+dark,560,300,js-packets-small.png,데이터 정렬,292,98,94,26,true,true,true
+dark,560,300,js-packets-small.png,닫기,20,251,50,32,true,false,true
+dark,1120,720,js-repeater.png,Send,18,15,56,32,true,false,true
+dark,1120,720,js-repeater.png,←,82,15,37,32,true,false,false
+dark,1120,720,js-repeater.png,→,127,15,37,32,true,false,false
+dark,1120,720,js-repeater.png,wb.js.repeater.target,180,10,886,42,true,false,true
+dark,1120,720,js-repeater.png,Pretty,11,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Raw,87,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Hex,163,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,↵,491,98,28,28,true,false,true
+dark,1120,720,js-repeater.png,⋯,523,98,28,28,true,false,true
+dark,1120,720,js-repeater.png,wb.js.repeater.request.search,65,657,271,28,true,false,true
+dark,1120,720,js-repeater.png,×,338,657,28,28,true,false,true
+dark,1120,720,js-repeater.png,↑,373,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,↓,404,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,Aa,435,657,32,28,true,false,true
+dark,1120,720,js-repeater.png,.*,470,657,28,28,true,false,true
+dark,1120,720,js-repeater.png,Pretty,564,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Raw,640,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Hex,716,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,↵,1045,98,28,28,true,false,true
+dark,1120,720,js-repeater.png,⋯,1077,98,28,28,true,false,false
+dark,1120,720,js-repeater.png,wb.js.repeater.response.search,618,657,272,28,true,false,true
+dark,1120,720,js-repeater.png,×,892,657,28,28,true,false,true
+dark,1120,720,js-repeater.png,↑,927,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,↓,958,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,Aa,989,657,32,28,true,false,true
+dark,1120,720,js-repeater.png,.*,1024,657,28,28,true,false,true
+dark,780,440,js-repeater-small.png,Send,18,15,56,32,true,false,true
+dark,780,440,js-repeater-small.png,←,82,15,37,32,true,false,false
+dark,780,440,js-repeater-small.png,→,127,15,37,32,true,false,false
+dark,780,440,js-repeater-small.png,wb.js.repeater.target,180,10,546,42,true,false,true
+dark,780,440,js-repeater-small.png,Pretty,11,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Raw,87,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Hex,163,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,↵,321,98,28,28,true,false,true
+dark,780,440,js-repeater-small.png,⋯,353,98,28,28,true,false,true
+dark,780,440,js-repeater-small.png,wb.js.repeater.request.search,65,377,101,28,true,false,true
+dark,780,440,js-repeater-small.png,×,168,377,28,28,true,false,true
+dark,780,440,js-repeater-small.png,↑,203,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,↓,234,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,Aa,265,377,32,28,true,false,true
+dark,780,440,js-repeater-small.png,.*,300,377,28,28,true,false,true
+dark,780,440,js-repeater-small.png,Pretty,394,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Raw,470,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Hex,546,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,↵,705,98,28,28,true,false,true
+dark,780,440,js-repeater-small.png,⋯,737,98,28,28,true,false,false
+dark,780,440,js-repeater-small.png,wb.js.repeater.response.search,448,377,102,28,true,false,true
+dark,780,440,js-repeater-small.png,×,552,377,28,28,true,false,true
+dark,780,440,js-repeater-small.png,↑,587,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,↓,618,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,Aa,649,377,32,28,true,false,true
+dark,780,440,js-repeater-small.png,.*,684,377,28,28,true,false,true
+dark,980,640,js-details.png,닫기,20,591,50,32,true,false,true
+dark,620,400,js-details-small.png,닫기,20,351,50,32,true,false,true
+dark,1024,720,js-analysis-off.png,메뉴 숨기기,6,4,93,32,true,false,true
+dark,1024,720,js-analysis-off.png,기능 안내,762,4,80,32,true,false,true
+dark,1024,720,js-analysis-off.png,설정,850,4,80,32,true,false,true
+dark,1024,720,js-analysis-off.png,로그,938,4,80,32,true,false,true
+dark,1024,720,js-analysis-off.png,분석 OFF,247,52,112,38,true,false,true
+dark,1024,720,js-analysis-off.png,대상 설정,369,55,92,32,true,false,true
+dark,1024,720,js-analysis-off.png,분석 목록,490,55,92,32,true,false,true
+dark,1024,720,js-analysis-off.png,분석 상세,582,55,92,32,true,false,true
+dark,1024,720,js-analysis-off.png,요청 설정,247,108,92,32,true,false,true
+dark,1024,720,js-analysis-off.png,원본 위치,349,108,92,32,true,false,true
+dark,1024,720,js-analysis-off.png,추가 도구,451,108,92,32,true,false,true
+dark,1024,720,js-analysis-off.png,더보기,553,108,76,32,true,false,true
+dark,1024,720,js-analysis-off.png,←,246,191,37,32,true,false,true
+dark,1024,720,js-analysis-off.png,→,291,191,37,32,true,false,true
+dark,1024,720,js-analysis-off.png,JComboBox,336,191,105,32,true,false,true
+dark,1024,720,js-analysis-off.png,URL · API,552,148,81,32,true,true,true
+dark,1024,720,js-analysis-off.png,토큰 · API 키 후보,633,148,128,32,true,true,true
+dark,1024,720,js-analysis-off.png,도메인,761,148,61,32,true,true,true
+dark,1024,720,js-analysis-off.png,클라우드 URL,822,148,104,32,true,true,true
+dark,1024,720,js-analysis-off.png,NPM 의존성,926,148,97,32,false,true,true
+dark,1024,720,js-analysis-off.png,소스맵,1023,148,61,32,false,true,true
+dark,1024,720,js-analysis-off.png,복원 원본,1084,148,78,32,false,true,true
+dark,1024,720,js-maximum-counts.png,메뉴 숨기기,6,4,93,32,true,false,true
+dark,1024,720,js-maximum-counts.png,기능 안내,762,4,80,32,true,false,true
+dark,1024,720,js-maximum-counts.png,설정,850,4,80,32,true,false,true
+dark,1024,720,js-maximum-counts.png,로그,938,4,80,32,true,false,true
+dark,1024,720,js-maximum-counts.png,분석 OFF,247,52,112,38,true,false,true
+dark,1024,720,js-maximum-counts.png,대상 설정,369,55,92,32,true,false,true
+dark,1024,720,js-maximum-counts.png,분석 목록,490,55,92,32,true,false,true
+dark,1024,720,js-maximum-counts.png,분석 상세,582,55,92,32,true,false,true
+dark,1024,720,js-maximum-counts.png,요청 설정,247,108,92,32,true,false,true
+dark,1024,720,js-maximum-counts.png,원본 위치,349,108,92,32,true,false,true
+dark,1024,720,js-maximum-counts.png,추가 도구,451,108,92,32,true,false,true
+dark,1024,720,js-maximum-counts.png,더보기,553,108,76,32,true,false,true
+dark,1024,720,js-maximum-counts.png,←,246,191,37,32,true,false,true
+dark,1024,720,js-maximum-counts.png,→,291,191,37,32,true,false,true
+dark,1024,720,js-maximum-counts.png,JComboBox,336,191,105,32,true,false,true
+dark,1024,720,js-maximum-counts.png,URL · API,552,148,81,32,true,true,true
+dark,1024,720,js-maximum-counts.png,토큰 · API 키 후보,633,148,128,32,true,true,true
+dark,1024,720,js-maximum-counts.png,도메인,761,148,61,32,true,true,true
+dark,1024,720,js-maximum-counts.png,클라우드 URL,822,148,104,32,true,true,true
+dark,1024,720,js-maximum-counts.png,NPM 의존성,926,148,97,32,false,true,true
+dark,1024,720,js-maximum-counts.png,소스맵,1023,148,61,32,false,true,true
+dark,1024,720,js-maximum-counts.png,복원 원본,1084,148,78,32,false,true,true
+dark,1280,800,js-workspace.png,메뉴 숨기기,6,4,93,32,true,false,true
+dark,1280,800,js-workspace.png,기능 안내,1018,4,80,32,true,false,true
+dark,1280,800,js-workspace.png,설정,1106,4,80,32,true,false,true
+dark,1280,800,js-workspace.png,로그,1194,4,80,32,true,false,true
+dark,1280,800,js-workspace.png,분석 ON,247,52,112,38,true,false,true
+dark,1280,800,js-workspace.png,대상 설정,369,55,92,32,true,false,true
+dark,1280,800,js-workspace.png,분석 목록,490,55,92,32,true,false,true
+dark,1280,800,js-workspace.png,분석 상세,582,55,92,32,true,false,true
+dark,1280,800,js-workspace.png,요청 설정,247,108,92,32,true,false,true
+dark,1280,800,js-workspace.png,원본 위치,349,108,92,32,true,false,true
+dark,1280,800,js-workspace.png,추가 도구,451,108,92,32,true,false,true
+dark,1280,800,js-workspace.png,더보기,553,108,76,32,true,false,true
+dark,1280,800,js-workspace.png,←,246,191,37,32,true,false,true
+dark,1280,800,js-workspace.png,→,291,191,37,32,true,false,true
+dark,1280,800,js-workspace.png,JComboBox,336,191,105,32,true,false,true
+dark,1280,800,js-workspace.png,URL · API,654,148,81,32,true,true,true
+dark,1280,800,js-workspace.png,토큰 · API 키 후보,735,148,128,32,true,true,true
+dark,1280,800,js-workspace.png,도메인,863,148,61,32,true,true,true
+dark,1280,800,js-workspace.png,클라우드 URL,924,148,104,32,true,true,true
+dark,1280,800,js-workspace.png,NPM 의존성,1028,148,97,32,true,true,true
+dark,1280,800,js-workspace.png,소스맵,1125,148,61,32,true,true,true
+dark,1280,800,js-workspace.png,복원 원본,1186,148,78,32,false,true,true
+dark,760,480,js-analysis-list.png,닫기,20,431,50,32,true,false,true
+dark,560,300,js-analysis-list-small.png,닫기,20,251,50,32,true,false,true
+dark,760,480,js-packets.png,데이터 정렬,22,98,94,26,true,true,true
+dark,760,480,js-packets.png,데이터 정렬,392,98,94,26,true,true,true
+dark,760,480,js-packets.png,닫기,20,431,50,32,true,false,true
+dark,560,300,js-packets-small.png,데이터 정렬,22,98,94,26,true,true,true
+dark,560,300,js-packets-small.png,데이터 정렬,292,98,94,26,true,true,true
+dark,560,300,js-packets-small.png,닫기,20,251,50,32,true,false,true
+dark,1120,720,js-repeater.png,Send,18,15,56,32,true,false,true
+dark,1120,720,js-repeater.png,←,82,15,37,32,true,false,false
+dark,1120,720,js-repeater.png,→,127,15,37,32,true,false,false
+dark,1120,720,js-repeater.png,wb.js.repeater.target,180,10,886,42,true,false,true
+dark,1120,720,js-repeater.png,Pretty,11,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Raw,87,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Hex,163,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,↵,491,98,28,28,true,false,true
+dark,1120,720,js-repeater.png,⋯,523,98,28,28,true,false,true
+dark,1120,720,js-repeater.png,wb.js.repeater.request.search,65,657,271,28,true,false,true
+dark,1120,720,js-repeater.png,×,338,657,28,28,true,false,true
+dark,1120,720,js-repeater.png,↑,373,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,↓,404,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,Aa,435,657,32,28,true,false,true
+dark,1120,720,js-repeater.png,.*,470,657,28,28,true,false,true
+dark,1120,720,js-repeater.png,Pretty,564,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Raw,640,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,Hex,716,96,76,34,true,false,true
+dark,1120,720,js-repeater.png,↵,1045,98,28,28,true,false,true
+dark,1120,720,js-repeater.png,⋯,1077,98,28,28,true,false,false
+dark,1120,720,js-repeater.png,wb.js.repeater.response.search,618,657,272,28,true,false,true
+dark,1120,720,js-repeater.png,×,892,657,28,28,true,false,true
+dark,1120,720,js-repeater.png,↑,927,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,↓,958,657,28,28,true,false,false
+dark,1120,720,js-repeater.png,Aa,989,657,32,28,true,false,true
+dark,1120,720,js-repeater.png,.*,1024,657,28,28,true,false,true
+dark,780,440,js-repeater-small.png,Send,18,15,56,32,true,false,true
+dark,780,440,js-repeater-small.png,←,82,15,37,32,true,false,false
+dark,780,440,js-repeater-small.png,→,127,15,37,32,true,false,false
+dark,780,440,js-repeater-small.png,wb.js.repeater.target,180,10,546,42,true,false,true
+dark,780,440,js-repeater-small.png,Pretty,11,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Raw,87,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Hex,163,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,↵,321,98,28,28,true,false,true
+dark,780,440,js-repeater-small.png,⋯,353,98,28,28,true,false,true
+dark,780,440,js-repeater-small.png,wb.js.repeater.request.search,65,377,101,28,true,false,true
+dark,780,440,js-repeater-small.png,×,168,377,28,28,true,false,true
+dark,780,440,js-repeater-small.png,↑,203,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,↓,234,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,Aa,265,377,32,28,true,false,true
+dark,780,440,js-repeater-small.png,.*,300,377,28,28,true,false,true
+dark,780,440,js-repeater-small.png,Pretty,394,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Raw,470,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,Hex,546,96,76,34,true,false,true
+dark,780,440,js-repeater-small.png,↵,705,98,28,28,true,false,true
+dark,780,440,js-repeater-small.png,⋯,737,98,28,28,true,false,false
+dark,780,440,js-repeater-small.png,wb.js.repeater.response.search,448,377,102,28,true,false,true
+dark,780,440,js-repeater-small.png,×,552,377,28,28,true,false,true
+dark,780,440,js-repeater-small.png,↑,587,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,↓,618,377,28,28,true,false,false
+dark,780,440,js-repeater-small.png,Aa,649,377,32,28,true,false,true
+dark,780,440,js-repeater-small.png,.*,684,377,28,28,true,false,true
+dark,980,640,js-details.png,닫기,20,591,50,32,true,false,true
+dark,620,400,js-details-small.png,닫기,20,351,50,32,true,false,true
+dark,1280,800,js-analysis-off.png,메뉴 숨기기,6,4,93,32,true,false,true
+dark,1280,800,js-analysis-off.png,기능 안내,1018,4,80,32,true,false,true
+dark,1280,800,js-analysis-off.png,설정,1106,4,80,32,true,false,true
+dark,1280,800,js-analysis-off.png,로그,1194,4,80,32,true,false,true
+dark,1280,800,js-analysis-off.png,분석 OFF,247,52,112,38,true,false,true
+dark,1280,800,js-analysis-off.png,대상 설정,369,55,92,32,true,false,true
+dark,1280,800,js-analysis-off.png,분석 목록,490,55,92,32,true,false,true
+dark,1280,800,js-analysis-off.png,분석 상세,582,55,92,32,true,false,true
+dark,1280,800,js-analysis-off.png,요청 설정,247,108,92,32,true,false,true
+dark,1280,800,js-analysis-off.png,원본 위치,349,108,92,32,true,false,true
+dark,1280,800,js-analysis-off.png,추가 도구,451,108,92,32,true,false,true
+dark,1280,800,js-analysis-off.png,더보기,553,108,76,32,true,false,true
+dark,1280,800,js-analysis-off.png,←,246,191,37,32,true,false,true
+dark,1280,800,js-analysis-off.png,→,291,191,37,32,true,false,true
+dark,1280,800,js-analysis-off.png,JComboBox,336,191,105,32,true,false,true
+dark,1280,800,js-analysis-off.png,URL · API,654,148,81,32,true,true,true
+dark,1280,800,js-analysis-off.png,토큰 · API 키 후보,735,148,128,32,true,true,true
+dark,1280,800,js-analysis-off.png,도메인,863,148,61,32,true,true,true
+dark,1280,800,js-analysis-off.png,클라우드 URL,924,148,104,32,true,true,true
+dark,1280,800,js-analysis-off.png,NPM 의존성,1028,148,97,32,true,true,true
+dark,1280,800,js-analysis-off.png,소스맵,1125,148,61,32,true,true,true
+dark,1280,800,js-analysis-off.png,복원 원본,1186,148,78,32,false,true,true
+dark,1280,800,js-maximum-counts.png,메뉴 숨기기,6,4,93,32,true,false,true
+dark,1280,800,js-maximum-counts.png,기능 안내,1018,4,80,32,true,false,true
+dark,1280,800,js-maximum-counts.png,설정,1106,4,80,32,true,false,true
+dark,1280,800,js-maximum-counts.png,로그,1194,4,80,32,true,false,true
+dark,1280,800,js-maximum-counts.png,분석 OFF,247,52,112,38,true,false,true
+dark,1280,800,js-maximum-counts.png,대상 설정,369,55,92,32,true,false,true
+dark,1280,800,js-maximum-counts.png,분석 목록,490,55,92,32,true,false,true
+dark,1280,800,js-maximum-counts.png,분석 상세,582,55,92,32,true,false,true
+dark,1280,800,js-maximum-counts.png,요청 설정,247,108,92,32,true,false,true
+dark,1280,800,js-maximum-counts.png,원본 위치,349,108,92,32,true,false,true
+dark,1280,800,js-maximum-counts.png,추가 도구,451,108,92,32,true,false,true
+dark,1280,800,js-maximum-counts.png,더보기,553,108,76,32,true,false,true
+dark,1280,800,js-maximum-counts.png,←,246,191,37,32,true,false,true
+dark,1280,800,js-maximum-counts.png,→,291,191,37,32,true,false,true
+dark,1280,800,js-maximum-counts.png,JComboBox,336,191,105,32,true,false,true
+dark,1280,800,js-maximum-counts.png,URL · API,654,148,81,32,true,true,true
+dark,1280,800,js-maximum-counts.png,토큰 · API 키 후보,735,148,128,32,true,true,true
+dark,1280,800,js-maximum-counts.png,도메인,863,148,61,32,true,true,true
+dark,1280,800,js-maximum-counts.png,클라우드 URL,924,148,104,32,true,true,true
+dark,1280,800,js-maximum-counts.png,NPM 의존성,1028,148,97,32,true,true,true
+dark,1280,800,js-maximum-counts.png,소스맵,1125,148,61,32,true,true,true
+dark,1280,800,js-maximum-counts.png,복원 원본,1186,148,78,32,false,true,true

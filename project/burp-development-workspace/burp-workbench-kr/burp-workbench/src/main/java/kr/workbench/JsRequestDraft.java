@@ -13,6 +13,7 @@ final class JsRequestDraft {
  /** Unresolved candidates open the editor immediately, without inventing a method or path value. */
  static Draft preview(JsAnalysis.Endpoint e){
   String url=e.url().replaceAll("\\{[^}]*}","REPLACE_PATH").replaceAll("(?<=/):[A-Za-z_$][A-Za-z0-9_$]*","REPLACE_PATH");
+  if(url.startsWith("/")||url.startsWith("./")||url.startsWith("../"))url=URI.create("https://REPLACE-HOST.invalid/").resolve(url).toString();
   boolean known=Set.of("GET","HEAD","OPTIONS","POST","PUT","PATCH","DELETE").contains(e.method());
   var safe=new JsAnalysis.Endpoint(e.url(),known?e.method():"GET",e.kind(),e.parameters(),e.headers(),e.bodyKeys(),e.line(),e.start(),e.length(),e.complete(),e.evidence());
   Draft draft=create(safe,url);
@@ -39,3 +40,4 @@ final class JsRequestDraft {
  }
  static Set<String> names(String text){Set<String> out=new LinkedHashSet<>();for(String n:text.split(",\\s*")){if(!n.isBlank()&&n.length()<=128&&out.size()<64)out.add(n);}return out;}
 }
+

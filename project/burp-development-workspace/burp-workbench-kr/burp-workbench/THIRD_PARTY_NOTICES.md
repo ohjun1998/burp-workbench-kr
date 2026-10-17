@@ -58,3 +58,7 @@ jsluice inspired the analysis workflow but its code/binary is not included. This
 
 - NanumGothic Regular is bundled unmodified as a Korean glyph fallback. Copyright NHN Corporation, design by Sandoll Communications. SIL Open Font License 1.1; full notice in `fonts/OFL.txt`. Reference: https://github.com/google/fonts/tree/main/ofl/nanumgothic
 - Environment paths are independently curated facts inspired by SecLists, Assetnote, official product documentation and the Wiz Actuator research. No complete upstream wordlist, scanner or exploit template is bundled. Reference details: `ENVIRONMENT_SOURCES_KR.md`. Imported user wordlists retain their upstream licensing obligations.
+
+## Google Brotli Java decoder 0.1.2
+
+The MIT-licensed org.brotli:dec:0.1.2 decoder is bundled under kr.workbench.shaded.brotli to avoid host collisions. The license is preserved in licenses/brotli/LICENSE. Upstream: https://github.com/google/brotli . Maven SHA-256: 615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52 . No external process or native decoder is required.

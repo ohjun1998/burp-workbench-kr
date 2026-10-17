@@ -155,11 +155,12 @@ final class JsRepeater implements AutoCloseable {
           ||origin.getRawQuery()!=null||origin.getRawFragment()!=null
           ||!(origin.getPath().isEmpty()||origin.getPath().equals("/")))
         throw new IllegalArgumentException("전송 대상에는 HTTP(S) Origin만 입력하세요.");
+      if(origin.getHost().equalsIgnoreCase("REPLACE-HOST.invalid"))throw new IllegalArgumentException("전송 대상 호스트를 먼저 확인하세요.");
       String wire=new String(request.editedBytes(),StandardCharsets.UTF_8);
       String checked=wire;
       for(int pass=0;pass<2;pass++)try{String decoded=java.net.URLDecoder.decode(checked,StandardCharsets.UTF_8);if(decoded.equals(checked))break;checked=decoded;}catch(IllegalArgumentException ignored){break;}
       checked=checked.replaceAll("(?i)\\\\u005[fF]","_");
-      if(java.util.regex.Pattern.compile("(?i)REPLACE_(?:ME|METHOD|PARAMETER|PARAM|PATH|BODY)\\b|\\{dynamic\\}").matcher(checked).find())
+      if(java.util.regex.Pattern.compile("(?i)REPLACE-HOST[.]invalid|REPLACE_(?:ME|METHOD|PARAMETER|PARAM|PATH|BODY)\\b|\\{dynamic\\}").matcher(checked).find())
         throw new IllegalArgumentException("미확정 메서드·경로·파라미터가 남아 있습니다. Raw에서 실제 값을 확인하세요.");
       int boundary=wire.indexOf("\r\n\r\n"),separator=4;
       if(boundary<0){boundary=wire.indexOf("\n\n");separator=2;}
@@ -234,3 +235,4 @@ final class JsRepeater implements AutoCloseable {
     }
   }
 }
+

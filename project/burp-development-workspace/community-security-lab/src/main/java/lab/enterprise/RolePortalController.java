@@ -1,15 +1,13 @@
 package lab.enterprise;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-/** Role-separated local training portals. Only explicit /vuln/ APIs omit authorization. */
+/** Service workflows and legacy links in the shared community workspace. */
 @RestController
 public class RolePortalController {
     private final JdbcTemplate db;
@@ -55,7 +53,7 @@ public class RolePortalController {
     private int access(String mode, String expectedRole, HttpServletRequest request) {
         boolean secure = fixed(mode);
         int id = uid(request);
-        if (secure && !expectedRole.equals(role(id))) deny(HttpStatus.FORBIDDEN, expectedRole.equals("ADMIN") ? "관리자 전용 기능" : "일반 사용자 전용 기능");
+        if (secure && expectedRole.equals("ADMIN") && !"ADMIN".equals(role(id))) deny(HttpStatus.FORBIDDEN, "관리자 전용 기능");
         return id;
     }
     private void csrf(String mode, HttpServletRequest request) {
@@ -67,28 +65,10 @@ public class RolePortalController {
         if (rows.isEmpty()) deny(HttpStatus.NOT_FOUND, "요청 없음");
         return rows.get(0);
     }
-    private static String resource(String name) throws IOException {
-        try (var stream = RolePortalController.class.getResourceAsStream("/static/" + name)) {
-            return new String(Objects.requireNonNull(stream).readAllBytes(), StandardCharsets.UTF_8);
-        }
-    }
-    private ResponseEntity<String> page(String area, boolean login, HttpServletRequest request) throws IOException {
-        if (!login) {
-            var session = request.getSession(false);
-            if (session == null || session.getAttribute("uid") == null)
-                return ResponseEntity.status(302).header("Location", "/" + area + "/login").header("Cache-Control", "no-store").build();
-            access("fixed", area.equals("admin") ? "ADMIN" : "USER", request);
-        }
-        String title = area.equals("admin") ? "관리자 센터" : "사용자 센터";
-        return ResponseEntity.ok().header("Cache-Control", "no-store")
-            .header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'")
-            .contentType(MediaType.parseMediaType("text/html;charset=UTF-8"))
-            .body(resource(login ? "role-login.html" : "role-portal.html").replace("__AREA__", area).replace("__TITLE__", title));
-    }
-    @GetMapping({"/admin", "/admin/"}) public ResponseEntity<String> adminPage(HttpServletRequest r) throws IOException { return page("admin", false, r); }
-    @GetMapping({"/user", "/user/"}) public ResponseEntity<String> userPage(HttpServletRequest r) throws IOException { return page("user", false, r); }
-    @GetMapping("/admin/login") public ResponseEntity<String> adminLogin(HttpServletRequest r) throws IOException { return page("admin", true, r); }
-    @GetMapping("/user/login") public ResponseEntity<String> userLogin(HttpServletRequest r) throws IOException { return page("user", true, r); }
+    private ResponseEntity<String> community(String view) { return ResponseEntity.status(302).header("Location", "/?view="+view).header("Cache-Control","no-store").build(); }
+    @GetMapping({"/admin", "/admin/"}) public ResponseEntity<String> adminPage(HttpServletRequest r) { return community("users"); }
+    @GetMapping({"/user", "/user/"}) public ResponseEntity<String> userPage(HttpServletRequest r) { return community("activity"); }
+    @GetMapping({"/admin/login", "/user/login"}) public ResponseEntity<String> sharedLogin() { return community("login"); }
 
     @GetMapping("/api/access/me") public Map<String, Object> me(HttpServletRequest r) {
         int id = uid(r);
@@ -102,7 +82,7 @@ public class RolePortalController {
     @GetMapping("/api/access/{mode}/user/requests/{id}") public Map<String, Object> detail(@PathVariable String mode, @PathVariable int id, HttpServletRequest r) {
         int owner = access(mode, "USER", r);
         var row = item(id);
-        if (fixed(mode) && ((Number) row.get("OWNER_ID")).intValue() != owner) deny(HttpStatus.NOT_FOUND, "요청 없음");
+        if (fixed(mode) && ((Number) row.get("OWNER_ID")).intValue() != owner && !"ADMIN".equals(role(owner))) deny(HttpStatus.NOT_FOUND, "요청 없음");
         return row;
     }
     @PostMapping("/api/access/{mode}/user/requests") public synchronized Map<String, Object> create(@PathVariable String mode, @RequestParam String subject, @RequestParam String body, HttpServletRequest r) {
@@ -115,7 +95,7 @@ public class RolePortalController {
     @PostMapping("/api/access/{mode}/user/requests/{id}/cancel") public synchronized Map<String, Object> cancel(@PathVariable String mode, @PathVariable int id, HttpServletRequest r) {
         int owner = access(mode, "USER", r); csrf(mode, r);
         var row = item(id);
-        if (fixed(mode) && ((Number) row.get("OWNER_ID")).intValue() != owner) deny(HttpStatus.NOT_FOUND, "요청 없음");
+        if (fixed(mode) && ((Number) row.get("OWNER_ID")).intValue() != owner && !"ADMIN".equals(role(owner))) deny(HttpStatus.NOT_FOUND, "요청 없음");
         if (db.update("UPDATE portal_requests SET state='CANCELLED' WHERE id=? AND state='PENDING'", id) != 1) deny(HttpStatus.CONFLICT, "대기 중인 요청만 취소할 수 있습니다.");
         return Map.of("id", id, "state", "CANCELLED");
     }

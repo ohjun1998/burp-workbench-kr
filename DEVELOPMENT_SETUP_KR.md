@@ -189,3 +189,7 @@ python tools/render_ui_layout.py --session-only --check --out tmp/ui-session
 ## 0.37.2 Repeater 전송 확인과 창 조절
 
 첨부 재현 화면의 REPLACE_METHOD는 전송 전 차단 사유입니다. Repeater에서 실제 HTTP 메서드를 선택·적용한 뒤 Send 또는 Ctrl+Space로 전송합니다. 미확정 경로·값과 SCOPE 검증은 계속 적용합니다. 창 안에 포커스가 있을 때만 동작하는 키 이벤트 처리와 최대화·이전 크기 버튼을 추가했습니다. [변경·확인 순서](docs/RELEASE_0.37.2_KR.md)와 [이번 실행 검증](docs/VERIFICATION_0.37.2.json)을 참고하세요.
+
+## 사이트 3.7.0 통합 커뮤니티 검사
+
+`python tools/check_role_portals.py`가 현재 통합 페이지·신고·강의·계정 관리와 취약/수정 API를 실세션으로 검사합니다. 내부 `community_workspace_checks.py`는 별도 CLI가 아니라 같은 H2 서버에 붙는 수락 기준입니다. `/admin`, `/user`는 통합 페이지 별칭이며 관리자도 공통 요청·강의 신청을 사용합니다. [사용법](docs/LAB_3.7.0_KR.md)을 확인하세요.

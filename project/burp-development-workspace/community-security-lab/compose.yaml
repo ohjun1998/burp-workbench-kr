@@ -15,7 +15,7 @@ services:
       start_period: 5s
     networks: [lab, front]
   was:
-    image: enterprise-lab-was:3.6.0
+    image: enterprise-lab-was:3.7.0
     build:
       context: .
       dockerfile: Dockerfile.source

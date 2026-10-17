@@ -109,19 +109,11 @@ def main():
             else:
                 raise RuntimeError('Lab startup timeout')
             alice, bob, admin, moderator = [Client().login(name) for name in ['alice', 'bob', 'admin', 'moderator']]
-            for area in ['admin', 'user']:
-                page, _ = status(area + ' login is public', guest, '/' + area + '/login', 200)
-                check(area + ' login template rendered', '__TITLE__' not in page and f'data-area="{area}"' in page)
-                _, headers = status(area + ' guest redirects', guest, '/' + area, 302)
-                check(area + ' redirect points to own login', headers['Location'] == '/' + area + '/login')
-            status('admin portal for admin', admin, '/admin', 200)
-            status('user portal for alice', alice, '/user', 200)
-            status('user portal for bob', bob, '/user', 200)
-            status('user cannot load admin page', alice, '/admin', 403)
-            status('admin cannot load user page', admin, '/user', 403)
-            status('moderator is not global admin', moderator, '/admin', 403)
-            status('moderator is not a general user', moderator, '/user', 403)
-            status('admin cannot call general-user dashboard', admin, '/api/access/fixed/user/dashboard', 403)
+            for area, view in [('admin','users'),('user','activity')]:
+                for suffix, expected in [('',view),('/login','login')]:
+                    _, headers = status(area + suffix + ' redirects to shared community', guest, '/'+area+suffix, 302)
+                    check(area + suffix + ' shared destination', headers['Location'] == '/?view='+expected)
+            status('admin uses common dashboard', admin, '/api/access/fixed/user/dashboard', 200)
             status('bob reads own request', bob, '/api/access/fixed/user/requests/502', 200)
             status('bob cannot read alice request', bob, '/api/access/fixed/user/requests/501', 404)
             bad_login = Client()
@@ -177,7 +169,9 @@ def main():
             for asset in ['role-portal.js','role-portal.css']:
                 status('asset available ' + asset, guest, '/assets/'+asset, 200)
             data, _ = status('OpenAPI includes new endpoints', guest, '/v3/api-docs', 200)
-            check('OpenAPI version and portal path', data['info']['version']=='3.6.0' and '/api/access/fixed/admin/members' in data['paths'])
+            check('OpenAPI version and portal path', data['info']['version']=='3.7.0' and '/api/access/fixed/admin/members' in data['paths'])
+            from community_workspace_checks import run_workspace_checks
+            run_workspace_checks(Client, status, check, guest, alice, bob, admin, moderator)
             status('logout', bob, '/api/auth/logout', 200, {})
             status('old session identity rejected', bob, '/api/access/me', 401)
             status('old session protected request rejected', bob, '/api/access/fixed/user/dashboard', 401)
@@ -190,7 +184,7 @@ def main():
                 server.kill(); server.wait(timeout=5)
         with socket.socket() as probe:
             closed = probe.connect_ex(('127.0.0.1', args.port)) != 0
-        report = {'version':'3.6.0', 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
+        report = {'version':'3.7.0', 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
                   'method':'Current Spring MVC/Tomcat sources, isolated H2 Oracle mode, separate real HTTP cookie jars on loopback',
                   'serverPortClosed':closed, 'browserDOM':False, 'nativeBurp':False, 'docker':False}
         (args.out/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

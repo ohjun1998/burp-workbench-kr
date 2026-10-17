@@ -1,13 +1,211 @@
-(()=>{'use strict';const $=s=>document.querySelector(s);let mode='vuln',user=null,csrf='',category='all',page='feed',selectedPost=null;const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const apiPath=p=>'/api/community/'+mode+p;const params=o=>new URLSearchParams(o).toString();async function call(path,opt={}){let headers={...(opt.headers||{})};if(opt.write&&mode==='fixed'){if(!csrf)throw Error('먼저 로그인하세요');headers['X-CSRF-Token']=csrf;}let r=await fetch(path,{method:opt.method||'GET',credentials:'same-origin',headers,body:opt.body});let text=await r.text();$('#trace').textContent=(opt.method||'GET')+' '+path+'\nHTTP '+r.status+'\n'+text;if(!r.ok){let msg;try{msg=JSON.parse(text).error}catch{}throw Error(msg||('HTTP '+r.status));}try{return JSON.parse(text)}catch{return text}}
-function toast(s){$('#toast').textContent=s;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',2600)}function updateUser(u){user=u?{id:u.id??u.ID,username:u.username??u.USERNAME,role:u.role??u.ROLE,email:u.email??u.EMAIL}:null;$('#who').textContent=user?user.username+' · '+user.role:'비회원';$('#reset').hidden=!(user&&user.role==='ADMIN');}
-async function login(){try{let x=await fetch('/api/auth/login',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params({username:$('#account').value,password:$('#password').value})});let d=await x.json();if(!x.ok)throw Error(d.error||'로그인 실패');csrf=d.csrf;updateUser(d.user);toast('로그인했습니다');await render();}catch(e){toast(e.message)}}async function restore(){try{let d=await fetch('/api/auth/me',{credentials:'same-origin'});if(d.ok){let x=await d.json();csrf=x.csrf;updateUser(x.user);}else updateUser(null)}catch{updateUser(null)}}
-function toolbar(title){return `<div class="toolbar"><h2>${esc(title)}</h2><select id="viewmode"><option value="vuln">취약 구현 · ${mode==='vuln'?'선택됨':'전환'}</option><option value="fixed">수정 구현 · ${mode==='fixed'?'선택됨':'전환'}</option></select></div>`}
-async function feed(){let rows=await call(apiPath('/posts'));let shown=rows.filter(x=>category==='all'||String(x.CATEGORY)===category);$('#count').textContent=rows.length+'개의 글';return toolbar('최신 게시글')+`<form id="searchform" class="toolbar"><input name="q" placeholder="게시글 검색" aria-label="게시글 검색"><button class="secondary">검색</button></form>`+(shown.length?shown.map(p=>`<article class="post"><div class="posthead"><span class="tag">${esc(p.CATEGORY)} · ${esc(p.VISIBILITY)}</span><span class="meta">${esc(p.USERNAME)} · #${p.ID}</span></div><h3><a href="#post/${p.ID}" data-post="${p.ID}">${esc(p.TITLE)}</a></h3><p class="body">${esc(p.BODY_PREVIEW||'게시글을 열어 내용을 확인하세요.')}</p><div class="postactions"><button data-post="${p.ID}">게시글 보기</button></div></article>`).join(''):'<div class="empty">이 조건에 맞는 공개 게시글이 없습니다.</div>')+'<p class="status">공개 목록은 제목과 작성자만 보여줍니다. URL에서 글 번호를 바꿔 비공개 권한을 확인해 보세요.</p>';}
-async function detail(id){let p=await call(apiPath('/posts/'+id));selectedPost=id;let body=mode==='vuln'?p.BODY:esc(p.BODY);let comments=(p.comments||[]).map(c=>`<div class="comment"><small>${esc(c.USERNAME)}</small><div>${mode==='vuln'?c.BODY:esc(c.BODY)}</div></div>`).join('');let files=(p.files||[]).map(f=>`<a href="${apiPath('/files/'+encodeURIComponent(f.ID))}" target="_blank" rel="noopener">${esc(f.FILENAME)}</a>`).join(' · ');let owner=Number(p.OWNER_ID)===Number(user?.id),canManage=owner||user?.role==='ADMIN'||(user?.role==='MODERATOR'&&p.CATEGORY==='security'&&p.VISIBILITY!=='PRIVATE');return toolbar('게시글')+`<article class="post"><div class="posthead"><span class="tag">${esc(p.CATEGORY)} · ${esc(p.VISIBILITY)}</span><span class="meta">${esc(p.USERNAME)} · #${p.ID}</span></div><h2>${esc(p.TITLE)}</h2><div class="body">${body}</div><div class="comments"><b>댓글 ${p.comments.length}</b>${comments||'<p class="meta">아직 댓글이 없습니다.</p>'}<form id="commentform" class="editor"><label>댓글<textarea name="body" maxlength="2000" required></textarea></label><button class="primary">댓글 등록</button></form></div><section class="comments"><b>첨부파일</b><p>${files||'첨부파일 없음'}</p><form id="fileform" class="editor"><label>학습 첨부파일 이름<input name="name" value="community-note.txt" required></label><label>파일 내용<textarea name="data" required>LOOP training attachment</textarea></label><button class="secondary">파일 올리기</button></form></section><div class="postactions"><button data-page="feed">목록</button>${canManage?'<button id="edit">수정</button><button id="delete">삭제</button>':''}</div></article>`;}
-function editor(){let post=selectedPost?'게시글 수정':'새 게시글';return toolbar(post)+`<form id="postform" class="editor"><h2>${post}</h2><label>제목<input name="title" maxlength="200" value="${selectedPost?'':'보안개발 커뮤니티에 오신 것을 환영합니다'}" required></label><div class="row"><label>게시판<select name="category"><option value="general">자유 게시판</option><option value="questions">질문 게시판</option><option value="security">보안 게시판</option></select></label><label>공개 범위<select name="visibility"><option value="PUBLIC">전체 공개</option><option value="MEMBERS">회원 전용</option><option value="PRIVATE">비공개</option></select></label></div><label>본문<textarea name="body" maxlength="4000" required>질문과 경험을 나눠주세요.</textarea></label><button class="primary">저장</button><p class="status">수정 구현에서는 서버가 작성자/운영자 권한과 CSRF 토큰을 확인합니다.</p></form>`;}
-async function messages(){if(!user)throw Error('로그인 후 쪽지를 확인하세요');let rows=await call(apiPath('/messages'));let table=rows.map(x=>`<tr><td>#${x.ID}</td><td>${x.SENDER_ID}</td><td>${x.RECEIVER_ID}</td><td>${esc(x.BODY)}</td><td><button data-message="${x.ID}">열기</button></td></tr>`).join('');return toolbar('회원 쪽지함')+`<div class="panel"><table class="messages"><tr><th>ID</th><th>보낸 회원</th><th>받는 회원</th><th>내용 요약</th><th></th></tr>${table}</table><form id="msgform" class="editor"><h3>새 쪽지</h3><label>받는 회원<input name="receiver" type="number" min="1" value="2" required></label><label>내용<textarea name="body" maxlength="2000" required>안녕하세요.</textarea></label><button class="primary">보내기</button></form><p class="status">수정 구현에서는 발신자와 수신자만 쪽지를 열 수 있습니다.</p></div>`;}
-async function moderation(){if(!user)throw Error('로그인하세요');let users;try{users=await call(apiPath('/admin/users?role=ADMIN'))}catch(e){return toolbar('운영자 센터')+`<div class="empty">${esc(e.message)}<p>학습 모드에서 일반 계정의 role 파라미터와 수정 모드의 실제 세션 역할을 비교하세요.</p></div>`}return toolbar('운영자 센터')+`<div class="panel"><h3>회원 목록 · ${users.length}명</h3><table class="messages"><tr><th>ID</th><th>사용자</th><th>역할</th><th>메일</th></tr>${users.map(x=>`<tr><td>${x.ID}</td><td>${esc(x.USERNAME)}</td><td>${esc(x.ROLE)}</td><td>${esc(x.EMAIL)}</td></tr>`).join('')}</table><p class="status">운영 권한 확인과 별개로 개인 쪽지와 비공개 글은 정책에 따라 보호됩니다.</p></div>`;}
-function profile(){if(!user)return toolbar('내 프로필')+'<div class="empty">로그인해 주세요.</div>';return toolbar('내 프로필')+`<div class="panel"><h3>${esc(user.username)}</h3><p>역할: <span class="rolebadge">${esc(user.role)}</span></p><p>회원 ID: ${user.id}</p><p>일반 회원끼리 비밀번호와 세션을 바꿔 교차 접근 여부를 확인하세요.</p></div>`;}
-async function render(){let v=$('#view');try{if(page==='feed')v.innerHTML=await feed();else if(page==='write')v.innerHTML=editor();else if(page==='messages')v.innerHTML=await messages();else if(page==='moderation')v.innerHTML=await moderation();else if(page==='profile')v.innerHTML=profile();else if(page.startsWith('post:'))v.innerHTML=await detail(Number(page.slice(5)));bind();}catch(e){v.innerHTML=`<div class="empty">${esc(e.message)}<p>현재 로그인과 공개 범위에 맞는 응답인지 확인하세요.</p><button data-page="feed">게시판으로</button></div>`;bind();}}
-function bind(){$('#searchform')?.addEventListener('submit',async e=>{e.preventDefault();try{const q=new FormData(e.target).get('q');const rows=await call(apiPath('/search?q='+encodeURIComponent(q)));$('#view').insertAdjacentHTML('beforeend',`<div class="panel"><b>검색 결과 ${rows.length}건</b>${rows.map(p=>`<p><button data-post="${p.ID}">${esc(p.TITLE)}</button></p>`).join('')}</div>`);$('#view').querySelectorAll('[data-post]').forEach(b=>b.onclick=()=>{page='post:'+b.dataset.post;render()})}catch(x){toast(x.message)}});$('#viewmode')?.addEventListener('change',e=>{mode=e.target.value;render()});$('#view').querySelectorAll('[data-post]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();page='post:'+b.dataset.post;render()}));$('#view').querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{page=b.dataset.page;selectedPost=null;render()}));$('#postform')?.addEventListener('submit',async e=>{e.preventDefault();try{let o=Object.fromEntries(new FormData(e.target));let suffix=selectedPost?`/posts/${selectedPost}/edit`: '/posts';let d=await call(apiPath(suffix),{method:'POST',body:params(o),write:true,headers:{'Content-Type':'application/x-www-form-urlencoded'}});toast(selectedPost?'게시글을 수정했습니다':'게시글 #'+d.id+'을 등록했습니다');selectedPost=d.id;page='post:'+d.id;render()}catch(x){toast(x.message)}});$('#commentform')?.addEventListener('submit',async e=>{e.preventDefault();try{await call(apiPath(`/posts/${selectedPost}/comments`),{method:'POST',body:params(Object.fromEntries(new FormData(e.target))),write:true,headers:{'Content-Type':'application/x-www-form-urlencoded'}});render()}catch(x){toast(x.message)}});$('#fileform')?.addEventListener('submit',async e=>{e.preventDefault();try{let f=new FormData(e.target),name=f.get('name'),data=f.get('data');await call(apiPath(`/posts/${selectedPost}/files?name=`+encodeURIComponent(name)),{method:'POST',body:data,write:true,headers:{'Content-Type':'text/plain; charset=UTF-8'}});toast('첨부파일을 저장했습니다');render()}catch(x){toast(x.message)}});$('#edit')?.addEventListener('click',async()=>{try{let p=await call(apiPath(`/posts/${selectedPost}`));$('#view').innerHTML=editor();bind();let f=$('#postform');f.elements.title.value=p.TITLE;f.elements.body.value=p.BODY;f.elements.visibility.value=p.VISIBILITY;f.elements.category.value=p.CATEGORY;}catch(e){toast(e.message)}});$('#delete')?.addEventListener('click',async()=>{try{await call(apiPath(`/posts/${selectedPost}/delete`),{method:'POST',write:true});page='feed';render()}catch(e){toast(e.message)}});$('#msgform')?.addEventListener('submit',async e=>{e.preventDefault();try{await call(apiPath('/messages'),{method:'POST',body:params(Object.fromEntries(new FormData(e.target))),write:true,headers:{'Content-Type':'application/x-www-form-urlencoded'}});toast('쪽지를 보냈습니다');render()}catch(x){toast(x.message)}});$('#view').querySelectorAll('[data-message]').forEach(b=>b.onclick=()=>call(apiPath('/messages/'+b.dataset.message)).catch(e=>toast(e.message)));}
-$('#registerform').onsubmit=async e=>{e.preventDefault();try{let d=await call('/api/community/register',{method:'POST',body:params(Object.fromEntries(new FormData(e.target))),headers:{'Content-Type':'application/x-www-form-urlencoded'}});toast('가입 완료: '+d.username+' · USER');$('#account').value=d.username;$('#password').value=e.target.elements.password.value;await login()}catch(x){toast(x.message)}};$('#login').onclick=login;$('#logout').onclick=async()=>{try{await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin',headers:{'X-CSRF-Token':csrf}})}finally{csrf='';updateUser(null);render()}};$('#mode').onchange=e=>{mode=e.target.value;render()};document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{page=b.dataset.page;selectedPost=null;render()});document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{category=b.dataset.category;page='feed';render()});$('#reset').onclick=async()=>{try{await fetch('/api/community/reset',{method:'POST',credentials:'same-origin',headers:{'X-CSRF-Token':csrf}});toast('게시판 실습 데이터를 초기화했습니다');page='feed';render()}catch(e){toast(e.message)}};restore().then(render);})();
+(() => {
+ 'use strict';
+ const $ = s => document.querySelector(s);
+ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const qp = new URLSearchParams(location.search);
+ let user = null, csrf = '', page = qp.get('view') || 'feed', category = 'all', generation = 0, editing = null, labMode = 'vuln';
+ const cp = p => '/api/community/fixed' + p, wp = p => '/api/workspace/fixed' + p, ap = p => '/api/access/fixed/' + p;
+ const state = s => ({PENDING:'검토 대기',APPROVED:'수락',REJECTED:'거절·반려',CANCELLED:'취소',RESOLVED:'처리 완료',OPEN:'신청 가능',CLOSED:'마감',ACTIVE:'활성',SUSPENDED:'정지'}[s] || s);
+ const badge = s => `<span class="state">${esc(state(s))}</span>`;
+ const title = t => `<div class="toolbar"><h2>${esc(t)}</h2><span class="meta">${user ? esc(user.username) + ' · ' + esc(user['role']) : '비회원'}</span></div>`;
+ const empty = t => `<p class="empty">${esc(t)}</p>`;
+ const nav = (p,t) => `<button type="button" data-page="${p}">${esc(t)}</button>`;
+ const table = (headers, rows) => `<div class="table-wrap"><table class="messages"><thead><tr>${headers.map(t=>`<th>${esc(t)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+ function toast(text) { $('#toast').textContent = text; $('#toast').style.display = 'block'; setTimeout(()=>$('#toast').style.display='none',3000); }
+ function updateUser(value) {
+  user = value ? {id:value.ID ?? value.id, username:value.USERNAME ?? value.username, role:value.ROLE ?? value.role, email:value.EMAIL ?? value.email} : null;
+  $('#who').textContent = user ? user.username + ' · ' + ({ADMIN:'관리자',USER:'일반 사용자',MODERATOR:'게시판 운영자'}[user['role']] || user['role']) : '비회원';
+  $('#admin-menu').hidden = user?.role !== 'ADMIN'; $('#logout').hidden = !user;
+ }
+ async function readResponse(response,path,method,identity) {
+  const raw=await response.text();$('#trace').textContent=`${method} ${path}\nHTTP ${response.status}\n${raw}`;
+  let data;try{data=JSON.parse(raw);}catch{data=raw;}
+  if(!response.ok){if(response.status===401&&identity===csrf){csrf='';updateUser(null);}const error=new Error(data.error||'HTTP '+response.status);error.status=response.status;throw error;}
+  return data;
+ }
+ async function request(path,options={}) {
+  const headers={...options.headers},identity=csrf;
+  if(options.method==='POST'&&!options.noCsrf)headers['X-CSRF-Token']=csrf;
+  const response=await fetch(path,{...options,headers,credentials:'same-origin',cache:'no-store'});
+  return readResponse(response,path,options.method||'GET',identity);
+ }
+ async function post(path,fields={},options={}) {
+  const headers={'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},identity=csrf;
+  if(!options.noCsrf)headers['X-CSRF-Token']=csrf;
+  const response=await fetch(path,{method:'POST',body:new URLSearchParams(fields),headers,credentials:'same-origin',cache:'no-store'});
+  return readResponse(response,path,'POST',identity);
+ }
+ async function restore() {
+  try {const data=await request('/api/access/me');csrf=data.csrf;updateUser(data.user);}
+  catch {csrf='';updateUser(null);}
+ }
+ function requireUser() { if(!user)throw Error('로그인 후 이용하세요. 상단에서 계정을 선택하고 로그인할 수 있습니다.'); }
+ function requireAdmin() { requireUser();if(user['role']!=='ADMIN')throw Error('관리자 권한이 필요한 메뉴입니다.'); }
+ async function login(event) {
+  event?.preventDefault();generation++;
+  try {const d=await post('/api/auth/login',{username:$('#account').value,password:$('#password').value});csrf=d.csrf;updateUser(d.user);editing=null;if(page==='login')page='feed';toast('로그인했습니다.');await render();}
+  catch(e){await restore();toast(e.message);await render();}
+ }
+ function listPosts(rows) {
+  return rows.map(p=>`<article class="post"><div class="posthead"><span class="tag">${esc(p.CATEGORY)} · ${esc(p.VISIBILITY)}</span><span class="meta">${esc(p.USERNAME)} · #${p.ID}</span></div><h3><button class="text-link" data-page="post:${p.ID}">${esc(p.TITLE)}</button></h3><div class="actions">${nav('post:'+p.ID,'게시글 보기')}</div></article>`).join('') || empty('게시글이 없습니다.');
+ }
+ async function feed() {
+  const rows=await request(cp('/posts'));$('#count').textContent=rows.length+'개의 게시글';
+  return title('최신 게시글')+`<form id="searchform" class="toolbar"><input name="q" placeholder="게시글 검색" aria-label="게시글 검색"><button class="secondary">검색</button>${nav('write','글쓰기')}</form><div id="post-list">${listPosts(rows.filter(p=>category==='all'||p.CATEGORY===category))}</div>`;
+ }
+ function editor(p=null) {
+  requireUser();editing=p;
+  return title(p?'게시글 수정':'게시글 작성')+`<form id="postform" class="panel editor"><label>제목<input name="title" maxlength="200" value="${esc(p?.TITLE||'')}" required></label><div class="row"><label>게시판<select name="category">${[['general','자유 게시판'],['questions','질문 게시판'],['security','보안 게시판']].map(([v,t])=>`<option value="${v}" ${p?.CATEGORY===v?'selected':''}>${t}</option>`).join('')}</select></label><label>공개 범위<select name="visibility">${[['PUBLIC','전체 공개'],['MEMBERS','회원 전용'],['PRIVATE','비공개']].map(([v,t])=>`<option value="${v}" ${p?.VISIBILITY===v?'selected':''}>${t}</option>`).join('')}</select></label></div><label>본문<textarea name="body" maxlength="4000" required>${esc(p?.BODY||'')}</textarea></label><button class="primary">저장</button></form>`;
+ }
+ async function detail(id) {
+  const p=await request(cp('/posts/'+id));
+  const manage = user && (user['id']===p.OWNER_ID || user['role']==='ADMIN' || (user['role']==='MODERATOR'&&p.CATEGORY==='security'&&p.VISIBILITY!=='PRIVATE'));
+  const comments=p.comments.map(c=>`<div class="comment"><small>${esc(c.USERNAME)} · #${esc(c.ID)}</small><div class="body">${esc(c.BODY)}</div><div class="comment-tools">${user&&(user['id']===c.OWNER_ID||user['role']==='ADMIN')?`<button data-comment-edit="${esc(c.ID)}" data-body="${esc(c.BODY)}">수정</button><button data-comment-delete="${esc(c.ID)}">삭제</button>`:''}${user?`<button data-report-type="COMMENT" data-report-id="${esc(c.ID)}">신고</button>`:''}</div></div>`).join('');
+  return title('게시글 상세')+`<article class="post"><div class="posthead"><span class="tag">${esc(p.CATEGORY)} · ${esc(p.VISIBILITY)}</span><span class="meta">${esc(p.USERNAME)} · #${p.ID}</span></div><h2>${esc(p.TITLE)}</h2><div class="body">${esc(p.BODY)}</div><div class="actions">${nav('feed','목록')}${manage?`<button data-edit="${p.ID}">수정</button><button class="danger" data-delete="${p.ID}">삭제</button>`:''}${user?`<button data-report-type="POST" data-report-id="${p.ID}">신고</button>`:''}</div><section class="comments"><h3>댓글 ${p.comments.length}</h3>${comments||empty('아직 댓글이 없습니다.')}${user?'<form id="commentform" class="editor"><label>댓글<textarea name="body" maxlength="2000" required></textarea></label><button class="primary">댓글 등록</button></form>':empty('로그인하면 댓글을 작성할 수 있습니다.')}</section><section class="comments"><h3>첨부파일</h3>${p.files.map(f=>`<p><a href="${cp('/files/'+encodeURIComponent(f.ID))}" target="_blank" rel="noopener">${esc(f.FILENAME)}</a></p>`).join('')||empty('첨부파일이 없습니다.')}${manage?'<form id="fileform" class="editor"><label>파일 이름<input name="name" value="community-note.txt" required></label><label>TXT 파일 내용<textarea name="data" required></textarea></label><button>파일 올리기</button></form>':''}</section></article>`;
+ }
+ async function courses(management=false) {
+  if(management)requireAdmin();const rows=await request(wp('/courses'));
+  let html=title(management?'강의·신청 관리':'강의 목록')+'<div class="course-grid">'+rows.map(c=>`<article class="course-card">${badge(c['STATE'])}<h3>${esc(c.TITLE)}</h3><p>${esc(c.DESCRIPTION)}</p><small>#${c.ID}</small><div class="actions">${nav('course:'+c.ID,'상세·신청')}${management?`<button data-course-edit="${c.ID}">수정</button><button data-course-delete="${c.ID}" class="danger">삭제</button>`:''}</div></article>`).join('')+'</div>';
+  if(management){
+   const apps=await request(wp('/admin/applications'));
+   html+=`<form id="courseform" class="panel editor"><h3>강의 등록</h3><label>강의명<input name="title" maxlength="160" required></label><label>소개<textarea name="description" maxlength="2000" required></textarea></label><button class="primary">등록</button></form><div class="panel"><h3>수강 신청 검토</h3>${table(['번호','강의·신청자','신청 사유','상태','처리'],apps.map(a=>`<tr><td>#${a.ID}</td><td>${esc(a.TITLE)}<p>${esc(a.USERNAME)}</p></td><td>${esc(a.REASON)}</td><td>${badge(a.STATE)}</td><td>${a.STATE==='PENDING'?`<button data-application="${a.ID}" data-decision="APPROVED">수락</button><button data-application="${a.ID}" data-decision="REJECTED">거절</button>`:'처리 완료'}</td></tr>`))}</div>`;
+  }return html;
+ }
+ async function course(id) {
+  const c=await request(wp('/courses/'+id));
+  return title('강의 상세')+`<div class="panel">${badge(c['STATE'])}<h2>${esc(c.TITLE)}</h2><p class="body">${esc(c.DESCRIPTION)}</p>${user&&c['STATE']==='OPEN'?`<form id="applyform" class="editor" data-course="${id}"><label>신청 사유<textarea name="reason" maxlength="1000" required></textarea></label><button class="primary">강의 신청</button></form>`:empty(user?'마감된 강의입니다.':'로그인 후 신청할 수 있습니다.')}</div>`;
+ }
+ async function activity() {
+  requireUser();const d=await request(wp('/activity'));
+  return title('내 활동')+`<div class="panel"><h3>내 게시글</h3>${d.posts.map(p=>`<p>${nav('post:'+p.ID,p.TITLE)} <span class="meta">${esc(p.VISIBILITY)}</span></p>`).join('')||empty('작성한 게시글이 없습니다.')}</div><div class="panel"><h3>내 댓글</h3>${d.comments.map(c=>`<p>${nav('post:'+c.POST_ID,'게시글 #'+c.POST_ID)} ${esc(c.BODY)}</p>`).join('')||empty('작성한 댓글이 없습니다.')}</div><div class="panel"><h3>내 신고</h3>${table(['번호·대상','신고 사유','상태','처리 내용'],d.reports.map(r=>`<tr><td>#${r.ID} · ${esc(r.TARGET_TYPE)} #${esc(r.TARGET_ID)}</td><td>${esc(r.REASON)}</td><td>${badge(r.STATE)}</td><td>${esc(r.RESOLUTION)}</td></tr>`))}</div><div class="panel"><h3>내 강의 신청</h3>${table(['번호·강의','신청 사유','상태','처리'],d.applications.map(a=>`<tr><td>#${a.ID} · ${esc(a.TITLE)}</td><td>${esc(a.REASON)}</td><td>${badge(a.STATE)}</td><td>${a.STATE==='PENDING'?`<button data-cancel-application="${a.ID}">신청 취소</button>`:''}</td></tr>`))}</div>`;
+ }
+ async function users() {
+  requireAdmin();const rows=await request(wp('/admin/users'));
+  return title('사용자 관리')+`<div class="panel">${table(['ID·계정','이메일','권한','계정 상태','변경'],rows.map(u=>`<tr><td>#${u.ID} · ${esc(u.USERNAME)}</td><td>${esc(u.EMAIL)}</td><td>${esc(u.ROLE)}</td><td>${badge(u.STATE)}</td><td>${u.ID===3?'복구용 관리자':`<button data-user="${u.ID}" data-email="${esc(u.EMAIL)}" data-role="${esc(u.ROLE)}" data-state="${esc(u.STATE)}">권한·상태 변경</button>`}</td></tr>`))}<div id="user-editor"></div></div>`;
+ }
+ async function content() {
+  requireAdmin();const posts=await request(wp('/admin/posts')),comments=await request(wp('/admin/comments'));
+  return title('게시글·댓글 관리')+`<div class="panel"><h3>전체 게시글</h3>${table(['번호·제목','작성자·공개 범위','관리'],posts.map(p=>`<tr><td>#${p.ID} · ${esc(p.TITLE)}</td><td>${esc(p.USERNAME)} · ${esc(p.VISIBILITY)}</td><td>${nav('post:'+p.ID,'열기')} <button data-delete="${p.ID}" class="danger">삭제</button></td></tr>`))}</div><div class="panel"><h3>전체 댓글</h3>${table(['작성자','내용','관리'],comments.map(c=>`<tr><td>${esc(c.USERNAME)}</td><td>${esc(c.BODY)}</td><td>${nav('post:'+c.POST_ID,'게시글')} <button data-comment-delete="${esc(c.ID)}">삭제</button></td></tr>`))}</div>`;
+ }
+ async function reports() {
+  requireAdmin();const rows=await request(wp('/admin/reports'));
+  return title('신고 관리')+`<div class="panel">${table(['번호·신고자','대상','사유','상태','관리'],rows.map(r=>`<tr><td>#${r.ID} · ${esc(r.USERNAME)}</td><td>${esc(r.TARGET_TYPE)} #${esc(r.TARGET_ID)}</td><td>${esc(r.REASON)}<p>${esc(r.RESOLUTION)}</p></td><td>${badge(r.STATE)}</td><td>${r.STATE==='PENDING'?`<button data-report-review="${r.ID}" data-decision="RESOLVED">처리</button><button data-report-review="${r.ID}" data-decision="REJECTED">반려</button>`:''}</td></tr>`))}</div>`;
+ }
+ async function messages() {
+  requireUser();const rows=await request(cp('/messages'));
+  return title('쪽지함')+`<div class="panel">${table(['번호','발신·수신','내용'],rows.map(m=>`<tr><td>#${m.ID}</td><td>${m.SENDER_ID} → ${m.RECEIVER_ID}</td><td>${esc(m.BODY)}</td></tr>`))}<form id="msgform" class="editor"><h3>쪽지 보내기</h3><label>받는 회원 ID<input name="receiver" type="number" min="1" value="2" required></label><label>내용<textarea name="body" maxlength="2000" required></textarea></label><button class="primary">보내기</button></form></div>`;
+ }
+ async function requests(review=false) {
+  requireUser();if(review)requireAdmin();
+  const d=await request(ap(review?'admin/review-queue':'user/dashboard')),rows=review?d:d.requests;
+  return title(review?'서비스 요청 관리':'내 서비스 요청')+(!review?`<div class="notice">${esc(d.notice)}</div>`:'')+`<div class="panel">${table(['번호·제목','내용·신청자','상태','처리'],rows.map(r=>`<tr><td>#${r.ID} · ${esc(r.SUBJECT)}</td><td>${esc(r.BODY||'')} ${esc(r.USERNAME||'')}</td><td>${badge(r.STATE)}</td><td>${review&&r.STATE==='PENDING'?`<button data-request-review="${r.ID}" data-decision="APPROVED">승인</button><button data-request-review="${r.ID}" data-decision="REJECTED">반려</button>`:!review?nav('request:'+r.ID,'상세'):''}</td></tr>`))}</div>`+(!review?'<form id="requestform" class="panel editor"><h3>새 서비스 요청</h3><label>제목<input name="subject" maxlength="160" required></label><label>신청 사유<textarea name="body" maxlength="2000" required></textarea></label><button class="primary">등록</button></form>':'');
+ }
+ async function requestDetail(id) {requireUser();const d=await request(ap('user/requests/'+id));return title('서비스 요청 상세')+`<div class="panel"><h3>${esc(d.SUBJECT)}</h3><p class="body">${esc(d.BODY)}</p>${badge(d['STATE'])}<div class="actions">${nav('requests','목록')}${d['STATE']==='PENDING'?`<button data-request-cancel="${d.ID}">취소</button>`:''}</div></div>`;}
+ async function profile() {
+  requireUser();return title('내 정보')+`<form id="profileform" class="panel editor"><h3>${esc(user.username)} · ${esc(user['role'])}</h3><p>회원 ID: ${user['id']}</p><label>이메일<input name="email" type="email" value="${esc(user.email)}" maxlength="140" required></label><button class="primary">저장</button></form>`;
+ }
+ async function settings() {
+  requireAdmin();const d=await request(ap('admin/settings'));
+  return title('공지·실습 초기화')+`<form id="settingsform" class="panel editor"><label>커뮤니티 서비스 공지<textarea name="notice" maxlength="500" required>${esc(d.notice)}</textarea></label><button class="primary">저장</button></form><div class="panel"><h3>실습 데이터 복원</h3><p>신고·강의·신청과 기본 계정 권한·정지 상태를 복원합니다. 게시판과 서비스 요청은 따로 초기화할 수 있습니다.</p><div class="actions"><button data-reset="workspace">신고·강의·계정 복원</button><button data-reset="community">게시판·댓글·쪽지 복원</button><button data-reset="access">서비스 요청·공지 복원</button></div></div>`;
+ }
+ function lab() {
+  const cards=[
+   ['post','비공개 게시글 IDOR','게시글 번호를 바꿔 다른 사용자의 비공개 글 조회를 비교합니다.','<label>게시글 ID<input name="id" type="number" value="102" required></label>'],
+   ['members','관리자 기능 접근','일반 사용자 세션으로 전체 회원 정보 접근을 비교합니다.',''],
+   ['report','신고 내역 IDOR','다른 사용자가 접수한 비공개 신고 사유 접근을 비교합니다.','<label>신고 ID<input name="id" type="number" value="602" required></label>'],
+   ['approval','강의 수락·거절 권한','일반 사용자 세션으로 관리자 처리 기능 접근을 비교합니다.','<label>신청 ID<input name="id" type="number" value="702" required></label><select name="decision"><option value="APPROVED">수락</option><option value="REJECTED">거절</option></select>'],
+   ['search','SQL 인젝션','검색어의 SQL 구문 해석과 파라미터 바인딩 결과를 비교합니다.','<label>검색어<input name="q" value="%\u0027 OR 1=1 -- " required></label>'],
+   ['xss','저장형 XSS','같은 댓글을 저장한 뒤 취약 화면과 안전한 문자 표시를 비교합니다.','<label>게시글 ID<input name="id" type="number" value="101" required></label><label>댓글 HTML<textarea name="body" maxlength="2000" required>&lt;img src=x onerror="this[\u0027outerHTML\u0027]=\u0027XSS 실습 실행됨\u0027"&gt;</textarea></label>'],
+   ['config','민감한 정보 노출','응답에 포함된 가짜 API 키·토큰과 수정 구현의 차이를 확인합니다.',''],
+   ['csrf','CSRF 검증 누락','CSRF 토큰을 보내지 않는 신고 등록 요청을 비교합니다.','<label>게시글 ID<input name="id" type="number" value="101" required></label><label>신고 사유<input name="reason" value="CSRF 검증 실습" required></label>']
+  ];
+  return title('취약점 실습')+`<div class="lab-banner"><strong>의도적으로 취약한 로컬 실습 메뉴</strong><p>가상 데이터를 사용합니다. 취약 모드의 쓰기 요청은 실제 실습 데이터에 반영됩니다. 관리자의 공지·실습 초기화에서 복원할 수 있습니다.</p></div><div class="lab-controls"><label>실습 구현 <select id="labmode"><option value="vuln" ${labMode==='vuln'?'selected':''}>취약 구현</option><option value="fixed" ${labMode==='fixed'?'selected':''}>수정 구현</option></select></label><span class="meta">현재 계정: ${esc(user?.username||'비회원')} · 권한 비교에는 alice / bob / admin 사용</span></div><div class="lab-grid">${cards.map(([id,t,desc,inputs])=>`<form class="lab-card" data-lab="${id}"><span class="tag">${id.toUpperCase()}</span><h3>${t}</h3><p>${desc}</p>${inputs}<button>요청 실행</button></form>`).join('')}</div><pre id="lab-result" class="lab-result" aria-live="polite">사례를 선택하고 요청을 실행하세요.</pre><div id="lab-preview" class="lab-preview" hidden></div>`;
+ }
+ async function render() {
+  const token=++generation,view=$('#view');view.setAttribute('aria-busy','true');
+  document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  try {
+   let html;
+   if(page==='feed'||page==='login')html=await feed();
+   else if(page==='write')html=editor(editing);
+   else if(page.startsWith('post:'))html=await detail(Number(page.split(':')[1]));
+   else if(page==='courses')html=await courses();
+   else if(page==='course-admin')html=await courses(true);
+   else if(page.startsWith('course:'))html=await course(Number(page.split(':')[1]));
+   else if(page==='activity')html=await activity();
+   else if(page==='users')html=await users();
+   else if(page==='content')html=await content();
+   else if(page==='reports')html=await reports();
+   else if(page==='messages')html=await messages();
+   else if(page==='profile')html=await profile();
+   else if(page==='requests'||page==='queue')html=await requests(page==='queue');
+   else if(page.startsWith('request:'))html=await requestDetail(Number(page.split(':')[1]));
+   else if(page==='settings')html=await settings();
+   else if(page==='lab')html=lab();
+   else {page='feed';html=await feed();}
+   if(token!==generation)return;view.innerHTML=html;bind();
+  } catch(e) {if(token===generation){view.innerHTML=`<div class="panel">${empty(e.message)}<div class="actions">${nav('feed','커뮤니티로')}</div></div>`;bind();}}
+  finally {if(token===generation)view.setAttribute('aria-busy','false');}
+ }
+ const go = p => {page=p;editing=null;render();};
+ async function action(button,job) {button.disabled=true;try{await job();}catch(e){toast(e.message);}finally{button.disabled=false;}}
+ function form(id,job){const f=$('#'+id);if(f)f.onsubmit=e=>{e.preventDefault();action(f.querySelector('button'),()=>job(Object.fromEntries(new FormData(f)),f));};}
+ function bind() {
+  $('#view').querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+  form('searchform',async fields=>{const token=generation;const rows=await request(cp('/search?q='+encodeURIComponent(fields.q)));if(token!==generation)return;$('#post-list').innerHTML=listPosts(rows);$('#post-list').querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));});
+  form('postform',async fields=>{const d=await post(cp(editing?'/posts/'+editing.ID+'/edit':'/posts'),fields);go('post:'+(d.id??d.updated));});
+  form('commentform',async fields=>{await post(cp('/posts/'+page.split(':')[1]+'/comments'),fields);await render();});
+  form('fileform',async fields=>{await request(cp('/posts/'+page.split(':')[1]+'/files?name='+encodeURIComponent(fields.name)),{method:'POST',body:fields.data,headers:{'Content-Type':'text/plain;charset=UTF-8'}});await render();});
+  form('msgform',async fields=>{await post(cp('/messages'),fields);await render();toast('쪽지를 보냈습니다.');});
+  form('applyform',async(fields,f)=>{await post(wp('/courses/'+f.dataset.course+'/apply'),fields);go('activity');toast('강의를 신청했습니다.');});
+  form('courseform',async fields=>{await post(wp('/admin/courses'),fields);await render();});
+  form('profileform',async fields=>{await post('/api/fixed/profile',fields);await restore();await render();toast('저장했습니다.');});
+  form('requestform',async fields=>{await post(ap('user/requests'),fields);await render();});
+  form('settingsform',async fields=>{await post(ap('admin/settings'),fields);toast('공지를 저장했습니다.');});
+  const clicks=(selector,fn)=>$('#view').querySelectorAll(selector).forEach(b=>b.onclick=()=>action(b,()=>fn(b)));
+  clicks('[data-edit]',async b=>{editing=await request(cp('/posts/'+b.dataset.edit));page='write';await render();});
+  clicks('[data-delete]',async b=>{if(!confirm('게시글과 연결된 댓글·첨부파일을 삭제할까요?'))return;await post(cp('/posts/'+b.dataset.delete+'/delete'));if(page!=='content')page='feed';await render();});
+  clicks('[data-comment-delete]',async b=>{if(!confirm('댓글을 삭제할까요?'))return;await post(cp('/comments/'+encodeURIComponent(b.dataset.commentDelete)+'/delete'));await render();});
+  clicks('[data-comment-edit]',async b=>{const body=prompt('댓글 수정',b.dataset.body);if(body===null)return;await post(cp('/comments/'+encodeURIComponent(b.dataset.commentEdit)+'/edit'),{body});await render();});
+  clicks('[data-report-type]',async b=>{const reason=prompt('신고 사유를 입력하세요.');if(reason===null)return;await post(wp('/reports'),{targetType:b.dataset.reportType,targetId:b.dataset.reportId,reason});toast('신고를 접수했습니다. 내 활동에서 처리 상태를 확인하세요.');});
+  clicks('[data-report-review]',async b=>{const resolution=prompt('처리 내용을 입력하세요.');if(resolution===null)return;await post(wp('/admin/reports/'+b.dataset.reportReview+'/review'),{decision:b.dataset.decision,resolution});await render();});
+  clicks('[data-application]',async b=>{await post(wp('/admin/applications/'+b.dataset.application+'/review'),{decision:b.dataset.decision});await render();});
+  clicks('[data-cancel-application]',async b=>{await post(wp('/applications/'+b.dataset.cancelApplication+'/cancel'));await render();});
+  clicks('[data-course-delete]',async b=>{if(!confirm('강의와 연결된 수강 신청을 삭제할까요?'))return;await post(wp('/admin/courses/'+b.dataset.courseDelete+'/delete'));await render();});
+  clicks('[data-course-edit]',async b=>{const c=await request(wp('/courses/'+b.dataset.courseEdit));$('#view').innerHTML=title('강의 수정')+`<form id="courseeditform" class="panel editor"><label>강의명<input name="title" maxlength="160" value="${esc(c.TITLE)}" required></label><label>소개<textarea name="description" maxlength="2000" required>${esc(c.DESCRIPTION)}</textarea></label><label>상태<select name="state"><option value="OPEN" ${c['STATE']==='OPEN'?'selected':''}>신청 가능</option><option value="CLOSED" ${c['STATE']==='CLOSED'?'selected':''}>마감</option></select></label><button class="primary">저장</button></form>`;form('courseeditform',async fields=>{await post(wp('/admin/courses/'+c.ID+'/edit'),fields);go('course-admin');});});
+  clicks('[data-user]',async b=>{$('#user-editor').innerHTML=`<form id="usereditform" class="editor"><h3>회원 #${b.dataset.user} 변경</h3><label>이메일<input name="email" type="email" value="${esc(b.dataset.email)}" required></label><label>권한<select name="role">${['USER','MODERATOR','ADMIN'].map(v=>`<option ${b.dataset.role===v?'selected':''}>${v}</option>`).join('')}</select></label><label>계정 상태<select name="state">${['ACTIVE','SUSPENDED'].map(v=>`<option value="${v}" ${b.dataset.state===v?'selected':''}>${state(v)}</option>`).join('')}</select></label><button class="primary">변경 저장</button></form>`;form('usereditform',async fields=>{await post(wp('/admin/users/'+b.dataset.user+'/edit'),fields);await restore();await render();});});
+  clicks('[data-request-review]',async b=>{await post(ap('admin/requests/'+b.dataset.requestReview+'/review'),{decision:b.dataset.decision});await render();});
+  clicks('[data-request-cancel]',async b=>{await post(ap('user/requests/'+b.dataset.requestCancel+'/cancel'));await render();});
+  clicks('[data-reset]',async b=>{if(!confirm('선택한 실습 데이터를 초기화할까요?'))return;await post('/api/'+b.dataset.reset+'/reset');await render();toast('초기화했습니다.');});
+  if($('#labmode'))$('#labmode').onchange=e=>{labMode=e.target.value;$('#lab-preview').hidden=true;$('#lab-preview').replaceChildren();$('#lab-result').textContent='구현을 변경했습니다. 요청을 다시 실행하세요.';};
+  $('#view').querySelectorAll('[data-lab]').forEach(f=>f.onsubmit=e=>{e.preventDefault();action(f.querySelector('button'),()=>runLab(f));});
+ }
+ async function runLab(formElement) {
+  const fields=Object.fromEntries(new FormData(formElement)), kind=formElement.dataset.lab, mode=labMode, token=generation;
+  const c=p=>'/api/community/'+mode+p,w=p=>'/api/workspace/'+mode+p;
+  const output=$('#lab-result'),preview=$('#lab-preview');preview.hidden=true;preview.replaceChildren();
+  try {
+   let data;
+   if(kind==='post')data=await request(c('/posts/'+Number(fields.id)));
+   if(kind==='members')data=await request(w('/admin/users'));
+   if(kind==='report')data=await request(w('/reports/'+Number(fields.id)));
+   if(kind==='approval')data=await post(w('/admin/applications/'+Number(fields.id)+'/review'),{decision:fields.decision});
+   if(kind==='search')data=await request(c('/search?q='+encodeURIComponent(fields.q)));
+   if(kind==='config')data=await request(w('/debug/config'));
+   if(kind==='csrf')data=await post(w('/reports'),{targetType:'POST',targetId:fields.id,reason:fields.reason},{noCsrf:true});
+   if(kind==='xss'){
+    requireUser();await post(c('/posts/'+Number(fields.id)+'/comments'),{body:fields.body});data=await request(c('/posts/'+Number(fields.id)));
+    if(token!==generation||mode!==labMode)return;
+    preview.hidden=false;
+    data.comments.forEach(comment=>{const line=document.createElement('div');line.className='comment';if(mode==='vuln')line.innerHTML=comment.BODY;else line.textContent=comment.BODY;preview.append(line);});
+   }
+   if(token===generation&&mode===labMode)output.textContent=$('#trace').textContent;
+  } catch(e){if(token===generation&&mode===labMode)output.textContent=$('#trace').textContent+'\n'+e.message;}
+ }
+ document.querySelectorAll('header [data-page],.left [data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+ document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{category=b.dataset.category;go('feed');});
+ $('#loginform').onsubmit=login;
+ $('#logout').onclick=()=>action($('#logout'),async()=>{await post('/api/auth/logout');csrf='';updateUser(null);go('feed');});
+ $('#registerform').onsubmit=e=>{e.preventDefault();const fields=Object.fromEntries(new FormData(e.target));action(e.target.querySelector('button'),async()=>{await post('/api/community/register',fields);$('#account').value=fields.username;$('#password').value=fields.password;$('#register').open=false;await login();});};
+ restore().then(render);
+})();

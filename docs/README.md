@@ -84,3 +84,8 @@
 현재 수집·URL 편집 안내: [0.30.0 수동 SCOPE 수집·URL 수정](RELEASE_0.30.0_KR.md).
 
 현재 패킷 보기: [0.31.2 Pretty·Raw·Hex·Search](RELEASE_0.31.2_KR.md).
+
+## 커뮤니티 실습 3.7.1
+
+- [단독 로그인·관리자/일반 사용자 연결](LAB_3.7.1_KR.md)
+- [현재 소스 실행 검증](VERIFICATION_LAB_3.7.1.json)

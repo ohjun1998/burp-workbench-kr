@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>로그인 · LOOP 커뮤니티</title><link rel="stylesheet" href="/assets/community.css"></head>
+<body data-screen="login">
+<header class="top"><a class="brand" href="/">LOOP<span>SECURITY COMMUNITY</span></a><a href="/">커뮤니티 둘러보기</a></header>
+<main class="login-layout">
+ <section class="login-intro"><span class="eyebrow">COMMUNITY & LEARNING</span><h1>하나의 커뮤니티,<br>계정에 맞는 시작.</h1><p>일반 사용자는 글과 댓글을 나누고 강의를 신청하세요. 관리자는 같은 커뮤니티에서 회원·콘텐츠·신고·강의를 관리할 수 있습니다.</p><div class="notice">로컬 취약점 진단을 위한 가상 계정과 데이터를 사용합니다.</div></section>
+ <section class="panel login-card" aria-labelledby="login-title">
+  <h2 id="login-title">커뮤니티 로그인</h2>
+  <div id="session-notice" class="notice" hidden><p id="session-user"></p><a id="continue-link" class="text-link" href="/">현재 계정으로 계속하기</a><p class="small">아래에서 다른 계정으로 로그인할 수 있습니다.</p></div>
+  <form id="loginform" class="login-form">
+   <fieldset class="login-types"><legend>로그인 유형</legend><label><input type="radio" name="accountType" value="USER" checked>일반 사용자</label><label><input type="radio" name="accountType" value="ADMIN">관리자</label></fieldset>
+   <p id="login-help" class="login-help">로그인하면 커뮤니티 게시글 목록으로 이동합니다.</p>
+   <label for="account">계정<input id="account" name="username" list="sample-accounts" value="alice" autocomplete="username" maxlength="50" required></label>
+   <datalist id="sample-accounts"><option value="alice"><option value="bob"><option value="moderator"><option value="admin"></datalist>
+   <label for="password">비밀번호<input id="password" name="password" type="password" value="LabOnly!2026" autocomplete="current-password" maxlength="120" required></label>
+   <p id="login-error" class="login-error" role="alert" hidden></p><button id="login" class="primary">일반 사용자로 로그인</button>
+  </form>
+  <p class="sample-hint">실습 계정: alice · bob · moderator / 관리자: admin<br>공통 비밀번호: <code>LabOnly!2026</code></p>
+  <details id="register" class="login-register"><summary>일반 사용자 회원가입</summary><form id="registerform" class="login-form"><label>닉네임<input name="username" minlength="3" maxlength="40" autocomplete="username" required></label><label>실습 이메일<input name="email" type="email" maxlength="140" autocomplete="email" required></label><label>비밀번호<input name="password" type="password" minlength="10" maxlength="120" autocomplete="new-password" required></label><button class="secondary">가입하고 커뮤니티로</button><p class="small">새 계정은 일반 사용자 권한으로 생성됩니다.</p></form></details>
+ </section>
+ <details class="trace-box"><summary>최근 로그인 요청·응답</summary><pre id="trace">로그인 요청 결과가 여기에 표시됩니다.</pre></details>
+</main>
+<footer>LOOP Community 3.7.1 · 학습 전용 가상 데이터</footer><div id="toast" role="status"></div><script src="/assets/community.js"></script>
+</body></html>

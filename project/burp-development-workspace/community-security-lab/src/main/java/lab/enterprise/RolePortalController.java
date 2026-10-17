@@ -68,7 +68,8 @@ public class RolePortalController {
     private ResponseEntity<String> community(String view) { return ResponseEntity.status(302).header("Location", "/?view="+view).header("Cache-Control","no-store").build(); }
     @GetMapping({"/admin", "/admin/"}) public ResponseEntity<String> adminPage(HttpServletRequest r) { return community("users"); }
     @GetMapping({"/user", "/user/"}) public ResponseEntity<String> userPage(HttpServletRequest r) { return community("activity"); }
-    @GetMapping({"/admin/login", "/user/login"}) public ResponseEntity<String> sharedLogin() { return community("login"); }
+    @GetMapping({"/admin/login", "/admin/login/"}) public ResponseEntity<String> adminLogin() { return ResponseEntity.status(302).header("Location","/login?type=admin").header("Cache-Control","no-store").build(); }
+    @GetMapping({"/user/login", "/user/login/"}) public ResponseEntity<String> userLogin() { return ResponseEntity.status(302).header("Location","/login?type=user").header("Cache-Control","no-store").build(); }
 
     @GetMapping("/api/access/me") public Map<String, Object> me(HttpServletRequest r) {
         int id = uid(r);

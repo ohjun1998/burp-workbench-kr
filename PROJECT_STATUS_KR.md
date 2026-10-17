@@ -1,6 +1,14 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.37.3 / 실습 사이트 3.7.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.37.3 / 실습 사이트 3.7.1 / 별도 Feature Mapper KR 0.3.1.
+
+## 단독 로그인·권한별 연결 — 사이트 3.7.1
+
+`/login`에서 일반 사용자/관리자 유형을 선택합니다. 서버가 실제 DB 권한과 유형을 확인한 뒤 일반 사용자는 게시글 목록, 관리자는 통합 커뮤니티의 사용자 관리로 연결합니다. 관리자도 공통 기능을 사용하며 moderator는 일반 사용자 유형으로 기존 게시판 관리 범위를 유지합니다. 기존 로그인 별칭, 회원가입·현재 계정 계속하기·로그아웃을 새 페이지로 연결했습니다. 기존 API 클라이언트의 유형 없는 로그인도 지원합니다.
+
+현재 소스 HTTP 307개·JS 로그인 흐름 4개·기존 분석기 호환 63개를 통과했습니다. 전체 release와 배포 검증 결과는 [검증 기록](docs/VERIFICATION_LAB_3.7.1.json)에 갱신합니다. 브라우저 실제 화면·Burp GUI 검증은 미실행입니다.
+
+[사용법](docs/LAB_3.7.1_KR.md) · [Docker ZIP](downloads/docker/3.7.1/community-security-lab-3.7.1-docker.zip) · [대화](docs/chat-logs/2026-10-17/community-standalone-login-371.md)
 
 ## Repeater 메서드 자동 선택·기본 창 버튼 0.37.3
 

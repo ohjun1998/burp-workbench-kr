@@ -34,25 +34,31 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final MontoyaApi api;
   final Supplier<List<HttpRequestResponse>> selected;
   final DefaultTableModel candidateModel = model("NO", "사용자 계정", "역할", "Origin", "인증 헤더 / 값", "최근 탐지"),
-      historyModel = model("NO", "URL", "계정 1", "계정 2", "계정 3", "실행 상태", "메서드");
+      historyModel = model("NO", "URL", "계정 1", "계정 2", "계정 3", "실행 상태", "메서드", "종합 결과");
   final JTable candidates = new AuthLayout.Table(candidateModel),
       history =
           new AuthLayout.Table(historyModel) {
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
               Component component = super.prepareRenderer(renderer, row, column);
-              if (component instanceof JLabel cell) cell.setIcon(null);
-              int modelColumn = convertColumnIndexToModel(column);
-              if (modelColumn >= 2 && modelColumn <= 4 && component instanceof JLabel cell) {
+              if (component instanceof JLabel cell) {
+                cell.setIcon(null); cell.setToolTipText(null); cell.getAccessibleContext().setAccessibleDescription(null);
+                cell.setForeground(WorkbenchUi.ink());
+                cell.setBackground(isCellSelected(row, column) ? WorkbenchUi.selected() : getBackground());
+                int modelColumn = convertColumnIndexToModel(column);
                 Run run = runs.get(convertRowIndexToModel(row));
-                String note = run.packets[modelColumn - 2].note;
-                AuthVerdict verdict = AuthVerdict.of(note);
-                cell.setIcon(verdict.icon());
-                cell.setText(run.packets[modelColumn-2].response==null?note:run.packets[modelColumn-2].response.statusCode()+" · "+verdict.label);
-                cell.setForeground(WorkbenchUi.toneInk(verdict.tone));
-                cell.setBackground(isCellSelected(row, column) ? WorkbenchUi.selected() : WorkbenchUi.toneFill(verdict.tone));
-                cell.setToolTipText(run.context.labels[modelColumn-2]+" · "+verdict.label+" · "+note);
-                cell.getAccessibleContext().setAccessibleDescription(verdict.label + " · " + note);
+                if (modelColumn >= 2 && modelColumn <= 4) {
+                  cell.setText(AuthRunSummary.responseLabel(run, modelColumn-2));
+                  cell.setToolTipText(run.context.labels[modelColumn-2]+" · 응답 코드 (판정 근거는 상세 창)");
+                  cell.getAccessibleContext().setAccessibleDescription(cell.getToolTipText()+" · "+cell.getText());
+                } else if (modelColumn == 7) {
+                  var result=AuthRunSummary.of(run);
+                  cell.setText(result.label()); cell.setIcon(result.verdict().icon());
+                  cell.setForeground(WorkbenchUi.toneInk(result.verdict().tone));
+                  cell.setBackground(isCellSelected(row,column)?WorkbenchUi.selected():WorkbenchUi.toneFill(result.verdict().tone));
+                  cell.setToolTipText(result.reason());
+                  cell.getAccessibleContext().setAccessibleDescription(result.label()+" · "+result.reason());
+                }
               }
               return component;
             }
@@ -60,7 +66,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             @Override
             public String getToolTipText(java.awt.event.MouseEvent e) {
               int row = rowAtPoint(e.getPoint()), col = columnAtPoint(e.getPoint());
-              return row < 0 || col < 0 ? null : Objects.toString(getValueAt(row, col), "");
+              if (row < 0 || col < 0) return null;
+              Run run=runs.get(convertRowIndexToModel(row));int modelColumn=convertColumnIndexToModel(col);
+              if(modelColumn==7)return AuthRunSummary.of(run).reason();
+              if(modelColumn>=2&&modelColumn<=4)return run.context.labels[modelColumn-2]+" · "+AuthRunSummary.responseLabel(run,modelColumn-2)+" · 판정 근거는 상세 창";
+              return Objects.toString(getValueAt(row,col), "");
             }
           };
   final LinkedHashMap<String, Candidate> credentials = new LinkedHashMap<>();
@@ -454,10 +464,12 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     for (int i = 2; i < 5; i++) history.getColumnModel().getColumn(i).setPreferredWidth(210);
     history.getColumnModel().getColumn(5).setPreferredWidth(90);
     history.getColumnModel().getColumn(0).setMaxWidth(70);
-    int[] historyMinimums={48,180,130,130,130,80,65};
-    for(int i=0;i<7;i++)history.getColumnModel().getColumn(i).setMinWidth(historyMinimums[i]);
+    int[] historyMinimums={48,180,100,100,100,80,65,140};
+    for(int i=0;i<8;i++)history.getColumnModel().getColumn(i).setMinWidth(historyMinimums[i]);
     history.getColumnModel().getColumn(6).setPreferredWidth(70);history.getColumnModel().getColumn(6).setMaxWidth(90);
+    history.getColumnModel().getColumn(7).setPreferredWidth(160);
     history.moveColumn(6,1);
+    history.moveColumn(history.convertColumnIndexToView(7),3);
     history
         .getSelectionModel()
         .addListSelectionListener(
@@ -1179,7 +1191,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       historyModel.removeRow(0);
     }
     runs.add(run);
-    historyModel.addRow(new Object[] {run.no, Core.safeUrl(q.url()), "대기", "대기", "대기", run.note,q.method()});
+    historyModel.addRow(new Object[] {run.no, Core.safeUrl(q.url()), "대기", "대기", "대기", run.note,q.method(),"비교 중"});
     if (history.getSelectedRow() < 0)
       history.setRowSelectionInterval(history.getRowCount() - 1, history.getRowCount() - 1);
     active.incrementAndGet();
@@ -1534,12 +1546,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     int index = runs.indexOf(run);
     if (index < 0) return;
     for (int i = 0; i < 3; i++)
-      historyModel.setValueAt(
-          run.context.labels[i]
-              + ": " + (run.packets[i].response == null ? "" : run.packets[i].response.statusCode() + " ")
-              + AuthVerdict.of(run.packets[i].note).describe(run.packets[i].note),
-          index,
-          2 + i);
+      historyModel.setValueAt(AuthRunSummary.responseLabel(run,i),index,2+i);
+    historyModel.setValueAt(AuthRunSummary.of(run).label(),index,7);
     historyModel.setValueAt(run.note, index, 5);
     historyModel.setValueAt(run.original.method(),index,6);refreshCounts();
     if (detailRun == run || detailRun==null && current() == run) show(run);
@@ -1579,8 +1587,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       loadInspector(responseViews[i],null,run==null?null:run.packets[i].response);
       highlightInspector(requestViews[i],q[i]);highlightInspector(responseViews[i],s[i]);
       packets.setTitleAt(i, run == null ? label(i) : run.context.labels[i]);
-      packets.setIconAt(i, run == null ? null : AuthVerdict.of(run.packets[i].note).icon());
-      packets.setToolTipTextAt(i, run == null ? null : run.packets[i].note);
+      packets.setIconAt(i, null);
+      packets.setToolTipTextAt(i, run == null ? null : AuthRunSummary.responseLabel(run,i)+" · "+run.packets[i].note);
     }
     paint(
         requests[3],
@@ -1602,9 +1610,12 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                 + " · "
                 + run.original.method()
                 + " · "
-                + run.note);
+                + "종합 결과: " + AuthRunSummary.of(run).label() + " · " + run.note);
+    detail.setIcon(run==null?null:AuthRunSummary.of(run).verdict().icon());
     detail.setToolTipText(run == null ? null : run.original.url());
     StringBuilder reasons = new StringBuilder();
+    if(run!=null)reasons.append("종합 결과: ").append(AuthRunSummary.of(run).label()).append("\n")
+        .append(AuthRunSummary.of(run).reason()).append("\n\n계정별 근거\n");
     if (run != null)
       for (int i = 0; i < 3; i++)
         reasons
@@ -1614,7 +1625,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             .append(", 조직=")
             .append(run.context.tenants[i])
             .append("] : ")
-            .append(AuthVerdict.of(run.packets[i].note).describe(run.packets[i].note))
+            .append(AuthRunSummary.responseLabel(run,i)).append(" · ")
+            .append(AuthRunSummary.reference(run.packets[i])?"기준 계정 · 원본과 동일 인증":AuthVerdict.of(run.packets[i].note).describe(run.packets[i].note))
             .append("\n")
             .append(run.packets[i].changes)
             .append("\n\n");

@@ -33,7 +33,7 @@ final class AuthLayout {
   static JPanel verdictLegend(){
     JPanel legend=new JPanel(new FlowLayout(FlowLayout.RIGHT,10,5));
     for(AuthVerdict verdict:AuthVerdict.values()){
-      JLabel label=new JLabel(verdict.label,verdict.icon(),SwingConstants.LEADING);label.putClientProperty("wb.font.size",12);legend.add(label);
+      JLabel label=new JLabel(verdict==AuthVerdict.BLOCKED?"차단 확인 / 정책 일치":verdict.label,verdict.icon(),SwingConstants.LEADING);label.putClientProperty("wb.font.size",12);legend.add(label);
     }
     return legend;
   }

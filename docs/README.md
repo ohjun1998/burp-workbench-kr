@@ -1,5 +1,6 @@
 # 최신 문서
 
+- [0.39.2 요청당 종합 결과 하나·계정별 응답 코드](RELEASE_0.39.2_KR.md) · [검증 기록](VERIFICATION_0.39.2.json)
 - [0.39.1 계정 비교 시안 정렬·반응형 표·두 열 상세](RELEASE_0.39.1_KR.md) · [검증 기록](VERIFICATION_0.39.1.json)
 
 - [0.39.0 계정 비교 화면·독립 인증 탐지·Ctrl+Space](RELEASE_0.39.0_KR.md) · [검증 기록](VERIFICATION_0.39.0.json)

@@ -8,7 +8,7 @@
 
 공통 화면은 수정 API를 사용합니다. 별도 **취약점 실습** 메뉴는 게시글·신고 IDOR, 관리자 기능 접근, 강의 처리 권한 누락, SQLi, 저장형 XSS, 합성 API 키·토큰 노출, CSRF 검증 누락의 취약/수정 8개 사례와 실제 요청·응답을 제공합니다. 관리자 초기화로 실습 상태를 복원할 수 있습니다.
 
-사이트 소스 loopback HTTP **242개**, 새 JS와 기존 분석기 호환 회귀 **63개**, 패키징 회귀 **6개**가 통과했습니다. 확장 0.37.1 기반 초기 Java·HTTP 검증 **2,442개**(Java 1,943·payload HTTP 132·전체 기능 HTTP 101·버그바운티 HTTP 266), Mapper Java 94·브라우저 도우미 회귀도 통과했습니다. 새 3.7.0 Docker ZIP과 기존 배포의 해시·소스 지문을 확인했습니다. 정확한 단계별 명령과 한계는 이번 검증 기록을 확인하세요. 실제 브라우저 DOM·XSS 실행·Burp GUI는 미실행입니다. 원격 Docker/Oracle/Nginx 기동·기존 Oracle 회귀·포트·TLS/HTTP2 검사는 성공했습니다. 병행 반영된 확장 0.37.2·Mapper 0.3.1과 이전 배포를 보존합니다. 0.37.2와의 통합 검사는 이번 PR의 기록을 따릅니다.
+사이트 소스 loopback HTTP **242개**, 새 JS와 기존 분석기 호환 회귀 **63개**, 패키징 회귀 **6개**가 통과했습니다. 확장 0.37.1 기반 초기 Java·HTTP 검증 **2,442개**(Java 1,943·payload HTTP 132·전체 기능 HTTP 101·버그바운티 HTTP 266), Mapper Java 94·브라우저 도우미 회귀도 통과했습니다. 새 3.7.0 Docker ZIP과 기존 배포의 해시·소스 지문을 확인했습니다. 정확한 단계별 명령과 한계는 이번 검증 기록을 확인하세요. 실제 브라우저 DOM·XSS 실행·Burp GUI는 미실행입니다. 원격 Docker/Oracle/Nginx 기동·기존 Oracle 회귀·포트·TLS/HTTP2 검사는 성공했습니다. 병행 반영된 확장 0.37.2·Mapper 0.3.1과 이전 배포를 보존합니다. 0.37.2 통합 후 HTTP 242개·JS 분석 호환 63개·다운로드 지문 재검증과 [원격 Build and verify](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004833006), [Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004833033)이 모두 성공했습니다. 최종 문서·대화 기록 커밋은 이 검증된 소스·실행 ZIP을 그대로 보존합니다.
 
 [사용법](docs/LAB_3.7.0_KR.md) · [실행 검증](docs/VERIFICATION_LAB_3.7.0.json) · [Docker ZIP](downloads/docker/3.7.0/community-security-lab-3.7.0-docker.zip) · [대화](docs/chat-logs/2026-10-17/community-unified-lab-370.md)
 

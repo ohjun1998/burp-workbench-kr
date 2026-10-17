@@ -1167,7 +1167,13 @@
     "focusedHttpPassed": 242,
     "focusedJsRegressionPassed": 63,
     "downloadFingerprintsVerified": true,
-    "note": "Preserved all new main source/artifacts; merged six shared documentation files. Full integrated remote CI follows the PR merge commit."
+    "note": "Preserved all new main source/artifacts; merged six shared documentation files. Full integrated remote CI follows the PR merge commit.",
+    "remoteCI": {
+      "codeHead": "d963708434a4a21d3eab5916fd5454a091b7480c",
+      "build": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004833006",
+      "linuxWindows": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004833033",
+      "allSuccess": true
+    }
   },
   "remoteCIInitial": {
     "head": "996096f0d5428a4cb9ee6989cb86f0570086f1b8",
@@ -1175,5 +1181,6 @@
     "durability": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004100883",
     "dockerOracle": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39004098060",
     "allSuccess": true
-  }
+  },
+  "finalRecord": "Final follow-up changes documentation/chat records only; source and Docker archive unchanged from fully verified integration head."
 }

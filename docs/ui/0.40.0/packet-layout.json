@@ -1,0 +1,35 @@
+{
+  "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+  "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
+  "releaseJarSha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1024x720",
+    "1280x800"
+  ],
+  "renderedViews": 16,
+  "controlsMeasured": 448,
+  "clippedControlsOutsideScrollers": 0,
+  "smallControls": 0,
+  "collapsedRequiredWorkAreas": 0,
+  "tabAndHeadingLabelsMeasured": 272,
+  "clippedSelectedTabOrHeadingLabels": 0,
+  "minimumWorkAreas": {
+    "packet-pretty-search.png:wb.traffic.request.text": 100,
+    "packet-pretty-search.png:wb.traffic.response.text": 100,
+    "packet-raw.png:wb.traffic.request.text": 100,
+    "packet-raw.png:wb.traffic.response.text": 100,
+    "packet-hex.png:wb.traffic.request.text": 100,
+    "packet-hex.png:wb.traffic.response.text": 100,
+    "packet-render.png:wb.traffic.request.render": 100,
+    "packet-render.png:wb.traffic.response.render": 100
+  },
+  "failures": [],
+  "textFailures": [],
+  "guideBodiesMeasured": 0,
+  "guideLayoutFailures": 0,
+  "guideFailures": []
+}

@@ -19,8 +19,9 @@ public final class WorkbenchUi {
  public static Color selected(){return dark()?new Color(88,54,39):new Color(255,236,220);}
  private static Font bundled;
  private static synchronized Font bundledFont(){if(bundled==null)try(var in=WorkbenchUi.class.getResourceAsStream("/fonts/NanumGothic-Regular.ttf")){if(in!=null)bundled=Font.createFont(Font.TRUETYPE_FONT,in);}catch(Exception ignored){}return bundled;}
- public static Font font(){Font f=bundledFont();return (f==null?new Font(Font.SANS_SERIF,Font.PLAIN,14):f).deriveFont(Font.PLAIN,14f);}
- public static Font textFont(String text){Font mono=new Font(Font.MONOSPACED,Font.PLAIN,14);return mono.canDisplayUpTo(text==null?"":text)<0?mono:font();}
+ private static Font preferred;
+ public static synchronized Font font(){if(preferred==null){String[] families=GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();for(String wanted:new String[]{"GulimChe","굴림체","Gulim","굴림"}){for(String family:families)if(family.equalsIgnoreCase(wanted)){preferred=new Font(family,Font.PLAIN,14);break;}if(preferred!=null)break;}if(preferred==null){Font f=bundledFont();preferred=f==null?new Font(Font.SANS_SERIF,Font.PLAIN,14):f;}}return preferred.deriveFont(Font.PLAIN,14f);}
+ public static Font textFont(String text){return font();}
  public static JDialog settingsWindow(Component owner,String title,Component content,boolean modal,Runnable closed){
   if(GraphicsEnvironment.isHeadless())return null;
   Window parent=SwingUtilities.getWindowAncestor(owner);JDialog dialog=new JDialog(parent,title,modal?Dialog.ModalityType.APPLICATION_MODAL:Dialog.ModalityType.MODELESS);dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

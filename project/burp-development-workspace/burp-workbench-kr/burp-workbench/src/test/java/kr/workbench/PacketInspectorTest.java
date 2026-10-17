@@ -25,7 +25,7 @@ public final class PacketInspectorTest extends WorkbenchTest {
     String raw="POST /api/profile HTTP/1.1\r\nHost: example.test\r\nContent-Type: application/json\r\n\r\n{\"userId\":9007199254740993,\"name\":\"demo\",\"role\":\"viewer\"}";
     byte[] original=raw.getBytes(StandardCharsets.UTF_8),copy=original.clone();
     try {
-      edt(()->{p.setPacket(original,null);check(!p.text.isEditable()&&p.tabs.size()==3&&p.mode()==PacketInspector.Mode.PRETTY,"three read-only views start in Pretty");check(p.text.getText().contains("\n  \"userId\": 9007199254740993"),"Pretty indents JSON without rounding its integer");
+      edt(()->{p.setPacket(original,null);check(!p.text.isEditable()&&p.tabs.size()==4&&p.mode()==PacketInspector.Mode.PRETTY,"four read-only views start in Pretty");check(p.text.getText().contains("\n  \"userId\": 9007199254740993"),"Pretty indents JSON without rounding its integer");
         int key=p.text.getText().indexOf("userId"),value=p.text.getText().indexOf("demo");
         check(!StyleConstants.getForeground(p.text.getStyledDocument().getCharacterElement(key).getAttributes()).equals(StyleConstants.getForeground(p.text.getStyledDocument().getCharacterElement(value).getAttributes())),"Pretty paints JSON keys and string values differently");});
       mode(p,1);edt(()->{check(p.text.getText().equals(raw),"Raw preserves the original text and CRLF without formatting");

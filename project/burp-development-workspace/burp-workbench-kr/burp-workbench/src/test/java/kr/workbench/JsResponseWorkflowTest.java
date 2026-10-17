@@ -113,7 +113,7 @@ public final class JsResponseWorkflowTest {
       AtomicReference<Component> confirm=new AtomicReference<>();
       panel.resolveWindow.opener=(owner,title,content,modal,closed)->{confirm.set(content);return null;};
       panel.prepareRepeater();
-      verify(confirm.get()==null&&repeated.get()==0&&JsAnalysisPanelTest.wire(panel,1).startsWith("REPLACE_METHOD /json-api"),"Ctrl+R opens an unresolved-method draft immediately without assuming GET");
+      verify(confirm.get()==null&&repeated.get()==0&&JsAnalysisPanelTest.wire(panel,1).startsWith("GET /json-api"),"Ctrl+R opens an unknown method as default GET without transmitting");
       panel.resolve.doClick(0);
       panel.resolvedMethod.setSelectedItem("POST");((JButton)UiLayoutTest.named(confirm.get(),"wb.js.draft.prepare")).doClick(0);
       verify(repeated.get()==0&&JsAnalysisPanelTest.wire(panel,2).startsWith("POST /json-api HTTP/1.1"),"explicit method confirmation opens the chosen data endpoint without sending it");

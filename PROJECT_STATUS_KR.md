@@ -1,7 +1,19 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.39.2 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.40.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 굴림체·Render·인증 비교 근거와 우클릭 개선 — 0.40.0
+
+[PR #59](https://github.com/ohjun1998/burp-workbench-kr/pull/59)를 main에 병합했습니다. 굴림체(GulimChe)를 우선하고 굴림·한글 대체 글꼴 순서로 표시합니다. 모든 Workbench Repeater·공통 패킷 뷰어에 정적 Render를 추가했습니다. Raw 바이트를 보존하며 스크립트·외부 리소스는 실행하지 않습니다.
+
+판정 요약의 판단 이유·다음 확인·계정별 관측과 JSON 필드의 원본/응답 값을 분리하고 크게 보기를 제공합니다. 인증 후보·비교 기록의 우클릭 삭제, 후보 인증값의 가림 해제, 관리자·일반·후보1·비로그인·해제·삭제의 한 단계 메뉴를 반영했습니다. 비로그인은 세 번째 위치이며 다시 누르면 해제합니다. 선택 후보의 해제·삭제는 다른 후보 지정과 과거 비교 스냅샷을 보존합니다.
+
+최종 정식 release **2,685개**(Java 2,185·HTTP 132/102/266), 새 UI 회귀 **28개**, 패키징 4개·다운로드 해시/소스 지문 검사를 통과했습니다. 두 테마의 운영 Swing 화면 **272개**, 컨트롤 **4,076개**, 선택 탭/제목 **2,812개**의 화면 배치 게이트를 통과하고 주요 PNG를 직접 확인했습니다. 합성 인증값과 격리된 loopback/API 어댑터 검사이며 실제 Burp GUI·Windows DPI/IME는 미수행입니다. Linux 화면은 굴림체 미설치 대체 글꼴입니다.
+
+최종 PR head는 `50c8e503ebfdb31d86640603c65ed2b5b79d3dad`, 병합 커밋은 `7dbf002efde2d2928dddcd66dde8bc322d4562fb`입니다. 두 커밋의 파일 트리 `938db56e82076da854d3302819ed91f041fb8125`가 동일합니다. [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048113561)·[Windows와 Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048113532)이 모두 성공했습니다. 병합 뒤 main의 자동 재검사는 별도 실행으로 검증 JSON에 확인 시점의 상태를 기록합니다. 후속 기록은 이 상태 문서·검증·날짜별 대화만 갱신하며 소스·배포 파일을 보존합니다.
+
+[변경·화면](docs/RELEASE_0.40.0_KR.md) · [검증 기록](docs/VERIFICATION_0.40.0.json) · [JAR·소스 ZIP](downloads/extensions/0.40.0/) · [날짜별 대화](docs/chat-logs/2026-10-18/workbench-render-auth-0400.md)
 
 ## 계정별 응답 코드·요청당 종합 결과 하나 — 0.39.2
 

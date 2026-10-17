@@ -2,7 +2,7 @@
   "version": "0.40.0",
   "dateAsiaSeoul": "2026-10-18",
   "baseCommit": "65c59a8b8db1edd568c14a322b644352dd1e5ec1",
-  "result": "local passed; remote pending",
+  "result": "passed",
   "command": "python dev.py release",
   "checks": {
     "version": "0.40.0",
@@ -312,8 +312,50 @@
     "합성 인증값과 API 어댑터·격리된 loopback HTTP를 사용했으며 실제 계정 자격정보를 공개하지 않았습니다."
   ],
   "remote": {
-    "status": "pending",
-    "pr": 59,
-    "note": "비로그인 토글 보완을 포함한 새 PR head에서 원격 검사를 확인합니다."
+    "status": "passed",
+    "sourcePr": 59,
+    "testedHead": "50c8e503ebfdb31d86640603c65ed2b5b79d3dad",
+    "testedTree": "938db56e82076da854d3302819ed91f041fb8125",
+    "mergeCommit": "7dbf002efde2d2928dddcd66dde8bc322d4562fb",
+    "mergeTreeMatches": true,
+    "checks": [
+      {
+        "name": "windows",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048113532/job/117440852958"
+      },
+      {
+        "name": "check",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048113561/job/117440852862"
+      },
+      {
+        "name": "isolated-disk-and-soak",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048113532/job/117440852850"
+      }
+    ],
+    "buildRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048113561",
+    "durabilityRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048113532",
+    "mainAutomaticRunsAtRecord": [
+      {
+        "id": 39048719878,
+        "name": "Build and verify",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048719878"
+      },
+      {
+        "id": 39048719900,
+        "name": "Capture durability and Windows verification",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39048719900"
+      }
+    ],
+    "note": "원격 성공은 PR 최종 head의 Build·Windows·Linux 검사입니다. 후속 문서 커밋은 소스·배포 파일을 변경하지 않습니다."
   }
 }

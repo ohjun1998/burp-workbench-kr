@@ -1,7 +1,21 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.41.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.42.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 서버·경로 탐색 고도화 — 0.42.0
+
+[PR #63](https://github.com/ohjun1998/burp-workbench-kr/pull/63)을 main에 병합했습니다. 기존 목록·요청/응답 분할을 유지하면서 실제 노출 내용 판별, 가짜 200·로그인·공통 화면 구분, 같은 Origin/SCOPE의 후속 탐색, 로그인 신원 확인, 속도·예산·일시정지/재개, 결과 JSON 저장과 계정별 변경 이력을 적용했습니다.
+
+최종 PR head `7eb7ebfcf9a37dd713a14ba4907706b55d6c4cff`의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39058261398)·[Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39058261358)이 모두 성공했습니다. 이번 재개에서 원격 로그의 **2,805개**(Java 2,305·HTTP 132/102/266), 신규 경로 탐색 회귀 **72개**, 패키징 **6개**, 다운로드·현재 소스 지문 검증 성공을 확인했습니다. Windows Repeater 기본 창·저장소/캐시 10회 반복·Mapper·180초 수집·PowerShell 검사와 Linux 디스크 부족/복구·180초 수집도 성공했습니다. 반복 실행을 고유 검사 수에 합산하지 않습니다.
+
+GitHub에서 체크아웃한 설치 JAR와 소스 ZIP의 SHA-256·압축 CRC, 소스 **227개** 파일 지문과 현재 소스 일치를 이번 환경에서 검증했습니다. 병합 커밋 `d1766196554b44f72e1c4d2ace738ba0b18b9cf3`의 파일 트리 `e5b9a860ae0c9bc66baad39147c3b9587440bcd6`는 검증한 PR head와 동일합니다. 기존 화면 **180개**·컨트롤 **2,136개**·탭/제목 **1,800개** 기록은 이전 작업의 Swing 합성 화면 검사이며 이번 재실행 수치로 합산하지 않습니다.
+
+병합 후 main의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39065627464)와 [Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39065627462) 자동 재검사도 **모두 성공**했습니다. Build 로그에서 2,805개·신규 72개·패키징 6개와 현재 다운로드/소스 지문 검증 성공을 재확인했습니다. 이번 환경에서는 배포 파일 무결성과 패키징 단위 검사 6개를 실행했으며 제품 전체 회귀·화면 렌더링을 다시 실행한 것으로 표현하지 않습니다.
+
+실제 native Burp GUI·Windows DPI/IME는 미수행입니다. 복원 파일에는 인증값·검증 기대값·원본 패킷을 저장하지 않으며, 인증을 다시 연결하고 명시적으로 재개합니다. 후속 완료 기록은 상태 문서·검증 JSON·날짜별 대화만 갱신합니다.
+
+[변경·화면](docs/RELEASE_0.42.0_KR.md) · [검증 기록](docs/VERIFICATION_0.42.0.json) · [JAR·소스 ZIP](downloads/extensions/0.42.0/) · [날짜별 대화](docs/chat-logs/2026-10-18/environment-discovery-0420-completion.md)
 
 ## 세션·권한 판정 고도화와 독립 비로그인 — 0.41.0
 

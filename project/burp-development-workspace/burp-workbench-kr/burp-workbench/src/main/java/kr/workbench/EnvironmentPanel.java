@@ -9,6 +9,8 @@ import java.awt.datatransfer.StringSelection;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.nio.file.*;
+import java.util.function.IntFunction;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -63,6 +65,21 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
       (slot, url) -> {
         throw new IllegalArgumentException("권한 비교에서 계정을 지정하세요.");
       };
+  IntFunction<CookieSessionProbe.Config> sessionConfig = slot -> null;
+  EnvironmentProject project = new EnvironmentProject();
+  final Map<String,String> packetAccounts = new HashMap<>();
+  final JSpinner delay = new JSpinner(new SpinnerNumberModel(200,0,10000,100)),
+      timeout = new JSpinner(new SpinnerNumberModel(10,1,30,1)),
+      budget = new JSpinner(new SpinnerNumberModel(150,1,500,10)),
+      depth = new JSpinner(new SpinnerNumberModel(1,0,3,1));
+  final JCheckBox follow = new JCheckBox("확인한 응답의 경로도 탐색", true);
+  final JButton pause = new JButton("일시정지");
+  final JMenuItem remaining = new JMenuItem("남은 경로 이어서 확인");
+  final TargetWindow resultDetails = new TargetWindow(this,"서버·경로 탐색 · 판정 근거",this::evidenceContent);
+  final TargetWindow changes = new TargetWindow(this,"서버·경로 탐색 · 변경 기록",this::changesContent);
+  volatile EnvironmentScan scan;
+  boolean ioBusy;
+  final javax.swing.Timer scanTimer = new javax.swing.Timer(250,e -> scanStatus());
   final MontoyaApi api;
   final JTextArea requestView = message(), responseView = message();
   final JButton start = new JButton("후보 목록 GET 확인"),
@@ -72,10 +89,10 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   final AtomicBoolean stopping = new AtomicBoolean(), closed = new AtomicBoolean();
   SwingWorker<Void, Packet> job;
 
-  record Packet(String url, String request, String response, String state, String decoded) {
-    Packet(String url, String request, String response, String state) {
-      this(url, request, response, state, response);
-    }
+  record Packet(String url, String request, String response, String state, String decoded,
+      EnvironmentScan.Result result,String account) {
+    Packet(String url,String request,String response,String state){this(url,request,response,state,response,null,"anonymous");}
+    Packet(String url,String request,String response,String state,String decoded){this(url,request,response,state,decoded,null,"anonymous");}
   }
 
   static DefaultTableModel model(String... c) {
@@ -117,16 +134,17 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     setName("wb.environment");
     setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
     limit.setSelectedItem(100);
+    limit.setPreferredSize(new Dimension(90,32));
     origins.setPreferredSize(new Dimension(360, 30));
-    JButton send = new JButton("선택 URL → 비로그인 GET Repeater"),
-        copy = new JButton("URL 목록 복사"),
-        clear = new JButton("분석 초기화");
+    JMenuItem send = new JMenuItem("선택 URL → 비로그인 GET Repeater");
     stop.setEnabled(false);
+    pause.setEnabled(false);
+    remaining.setEnabled(false);
     JButton settings = new JButton("후보 설정"), more = new JButton("더보기"), all = new JButton("전체 환경");
     JPanel toolbar = new JPanel();
     toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
     toolbar.add(WorkbenchUi.row(targetSummary, targetSettings.button(), all));
-    toolbar.add(WorkbenchUi.row(single, start, stop, send, settings, more));
+    toolbar.add(WorkbenchUi.row(single, start, pause, stop, settings, more));
     WorkbenchUi.primary(single);
     WorkbenchUi.primary(start);
     add(
@@ -139,6 +157,10 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
         });
     JPopupMenu menu = new JPopupMenu();
     JMenuItem copyItem = new JMenuItem("URL 목록 복사"), clearItem = new JMenuItem("분석 초기화");
+    JMenuItem saveProject = new JMenuItem("탐색 결과 저장"), loadProject = new JMenuItem("탐색 결과 불러오기"), history = new JMenuItem("변경 기록");
+    menu.add(remaining);menu.add(send);menu.add(history);menu.add(saveProject);menu.add(loadProject);
+    remaining.addActionListener(e->resumeRemaining());history.addActionListener(e->changes.open());
+    saveProject.addActionListener(e->projectFile(false));loadProject.addActionListener(e->projectFile(true));
     menu.add(copyItem);
     menu.add(clearItem);
     more.addActionListener(e -> menu.show(more, 0, more.getHeight()));
@@ -201,6 +223,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
             e -> {
               if (!e.getValueIsAdjusting()) showSelected();
             });
+    account.addActionListener(e->refresh());
     limit.addActionListener(e -> refresh());
     common.addActionListener(e -> refresh());
     origins.addActionListener(e -> refresh());
@@ -238,6 +261,8 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     start.addActionListener(e -> start());
     formatted.addActionListener(e -> showSelected());
     stop.addActionListener(e -> stop());
+    pause.addActionListener(e->togglePause());
+    pathTable.addMouseListener(new java.awt.event.MouseAdapter(){public void mouseClicked(java.awt.event.MouseEvent e){if(e.getClickCount()==2&&pathTable.rowAtPoint(e.getPoint())>=0)resultDetails.open();}});
     showSelected();
   }
 
@@ -259,7 +284,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
       responseView.setText("검증 전 응답은 없습니다. 시작 버튼으로 검증하세요.");
       return;
     }
-    Packet p = packets.get(url);
+    Packet p = currentPacket(url);
     if (p != null) {
       requestView.setText(formatted.isSelected() ? PacketFormat.pretty(p.request) : p.request);
       responseView.setText(formatted.isSelected() ? PacketFormat.pretty(p.decoded) : p.response);
@@ -272,7 +297,8 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
       } catch (Exception ex) {
         requestView.setText("GET " + url + "\n[검증 전 요청 미리보기]");
       }
-      responseView.setText("미검증 · 시작 버튼으로 응답을 수집하세요.");
+      var saved=project.latest.get(accountKey()+" GET "+url);
+      responseView.setText(saved==null?"미검증 · 시작 버튼으로 응답을 수집하세요.":"저장된 판정 · HTTP "+saved.status()+" · "+EnvironmentContent.title(saved.kind())+" · "+saved.change()+"\n원본 패킷은 저장하지 않습니다. 다시 GET 확인하면 현재 응답을 볼 수 있습니다.");
     }
     requestView.setCaretPosition(0);
     responseView.setCaretPosition(0);
@@ -283,13 +309,13 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   record Observation(EnvironmentCatalog.Site site, long generation) {}
 
   void clearAnalysis() {
-    if (job != null) {
+    if (job != null||ioBusy) {
       status.setText("중지 후 검증 종료를 기다려주세요.");
       return;
     }
     observationEpoch.incrementAndGet();
     catalog.sites.clear();
-    packets.clear();
+    packets.clear();packetAccounts.clear();project=new EnvironmentProject();remaining.setEnabled(false);
     origins.removeAllItems();
     refresh();
   }
@@ -405,13 +431,14 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
               category == null && common.isSelected(),
               (Integer) limit.getSelectedItem());
       for (var c : candidates) {
-        Packet p = packets.get(c.url());
+        Packet p = currentPacket(c.url());
+        var saved=project.latest.get(accountKey()+" GET "+c.url());
         paths.addRow(
             new Object[] {
               c.url(),
               c.source(),
               c.purpose(),
-              p == null ? (EnvironmentKnowledge.manualOnly(c.url()) ? "단일 검토" : "미검증") : p.state
+              p == null ? (saved!=null?"HTTP "+saved.status()+" · "+EnvironmentContent.title(saved.kind())+" · "+saved.change():(EnvironmentKnowledge.manualOnly(c.url()) ? "단일 검토" : "미검증")) : p.state
             });
       }
       if (selected != null)
@@ -458,6 +485,11 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
         WorkbenchUi.row(compareMissing, repeatMissing, unverifiedOnly),
         WorkbenchUi.row(new JLabel("JSON 동적 필드 제외"), volatileFields),
         new JLabel("예: $.requestId, $.meta.timestamp · 2회 기준 비교는 추가 GET 1건을 보냅니다."),
+        WorkbenchUi.row(new JLabel("요청 간격(ms)"),delay,new JLabel("타임아웃(초)"),timeout),
+        WorkbenchUi.row(new JLabel("전체 요청 한도"),budget,new JLabel("후속 깊이"),depth),
+        WorkbenchUi.row(follow),
+        new JLabel("기준·신원 확인도 요청 한도에 포함 · 로그인 계정은 권한 비교의 세션 검사 적용 필요"),
+        new JLabel("결과 저장은 판정·변경 이력·남은 경로만 포함 · 인증값·응답 본문 제외"),
         WorkbenchUi.row(words, apply));
   }
 
@@ -470,7 +502,8 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
 
   JPanel responsePane() {
     JPanel p = new JPanel(new BorderLayout(0, 4));
-    p.add(WorkbenchUi.row(formatted, new JLabel("정렬은 표시 전용 · 원본 헤더 유지")), BorderLayout.NORTH);
+    JButton evidence=new JButton("판정 근거");evidence.addActionListener(e->resultDetails.open());
+    p.add(WorkbenchUi.row(formatted,evidence), BorderLayout.NORTH);
     responseView.setLineWrap(true);
     responseView.setWrapStyleWord(false);
     p.add(new JScrollPane(responseView));
@@ -496,7 +529,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
             .map(EnvironmentCatalog.Candidate::url)
             .distinct()
             .filter(u -> !EnvironmentKnowledge.manualOnly(u))
-            .filter(u -> !unverifiedOnly.isSelected() || !packets.containsKey(u))
+            .filter(u -> !unverifiedOnly.isSelected() || !verified(u))
             .toList();
     if (urls.isEmpty()) {
       status.setText("일괄 검증할 미검증 후보가 없습니다. 단일 시작으로 다시 확인할 수 있습니다.");
@@ -505,251 +538,98 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     runUrls(urls);
   }
 
-  void runUrls(List<String> urls) {
-    if (closed.get() || job != null) return;
-    if (urls.isEmpty()) {
-      status.setText("검증할 URL 없음");
-      return;
-    }
-    try {
-      for (String url : urls)
-        if (!WorkbenchScope.contains(api, HttpRequest.httpRequestFromUrl(url)))
-          throw new IllegalArgumentException("Scope 밖 후보가 있습니다. Scope를 확인하세요: " + url);
-    } catch (Exception e) {
-      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",e);
-      status.setText(e.getMessage());
-      return;
-    }
-    final Map<String, String> session;
-    final String accountLabel = Objects.toString(account.getSelectedItem());
-    try {
-      session =
-          account.getSelectedIndex() == 0
-              ? Map.of()
-              : Map.copyOf(sessions.headers(account.getSelectedIndex() - 1, urls.get(0)));
-      if (account.getSelectedIndex() > 0)
-        for (String url : urls) sessions.headers(account.getSelectedIndex() - 1, url);
-    } catch (Exception ex) {
-      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
-      status.setText("계정 검증 준비 실패 · " + ex.getMessage());
-      return;
-    }
-    final Set<String> sessionNames = new HashSet<>(AuthComparePanel.DEFAULT_AUTH);
-    sessionNames.addAll(AuthComparePanel.CSRF);
-    sessionNames.addAll(session.keySet());
-    final boolean compare = compareMissing.isSelected(), repeat = repeatMissing.isSelected();
-    final Set<String> ignored;
-    try {
-      ignored = AuthJudgement.rules(volatileFields.getText(), "", "").ignored();
-    } catch (Exception ex) {
-      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
-      status.setText(ex.getMessage());
-      return;
-    }
-    final Map<String, String> roots = new HashMap<>();
-    for (String url : urls) roots.put(url, baselineRoot(url));
-    stopping.set(false);
-    start.setEnabled(false);
-    single.setEnabled(false);
-    technologies.setEnabled(false);
-    stop.setEnabled(true);
-    origins.setEnabled(false);
-    prefix.setEnabled(false);
-    limit.setEnabled(false);
-    common.setEnabled(false);
-    repeatMissing.setEnabled(false);
-    volatileFields.setEnabled(false);
-    compareMissing.setEnabled(false);
-    account.setEnabled(false);
-    status.setText(
-        "검증 시작 · "
-            + urls.size()
-            + "개 · "
-            + accountLabel
-            + " GET"
-            + (compare ? " · 없는 경로 기준 요청 포함" : ""));
-    job =
-        new SwingWorker<>() {
-          int completed;
-          String referenceNote = "";
+  void runUrls(List<String> urls) {try{runTasks(urls.stream().map(u->new EnvironmentProject.Pending(u,0)).toList());}catch(Exception e){status.setText(e.getMessage());}}
 
-          protected Void doInBackground() {
-            Map<String, EnvironmentControls.Reference> missing = new HashMap<>();
-            for (String url : urls) {
-              if (stopping.get() || closed.get()) break;
-              HttpRequest request = null;
-              try {
-                request =
-                    Core.sessionRequest(HttpRequest.httpRequestFromUrl(url), session, sessionNames);
-                if (compare && !missing.containsKey(roots.get(url))) {
-                  String root = roots.get(url), issue = "기준 요청 실패";
-                  EnvironmentControls.Sample first = null, second = null;
-                  for (int probeIndex = 0; probeIndex < (repeat ? 2 : 1); probeIndex++) {
-                    String reference = root + "/wb-missing-" + UUID.randomUUID();
-                    var probe =
-                        Core.sessionRequest(
-                            HttpRequest.httpRequestFromUrl(reference), session, sessionNames);
-                    if (!WorkbenchScope.contains(api, probe)) {
-                      issue = "기준 요청 SCOPE 제외";
-                      break;
-                    }
-                    if (stopping.get() || closed.get()) break;
-                    try {
-                      var result =
-                          api.http()
-                              .sendRequest(
-                                  probe,
-                                  RequestOptions.requestOptions()
-                                      .withResponseTimeout(10000)
-                                      .withRedirectionMode(RedirectionMode.NEVER));
-                      var r = result == null ? null : result.response();
-                      if (r == null) {
-                        issue = "기준 응답 없음";
-                        break;
-                      }
-                      if (r.statusCode() == 429) {
-                        stopping.set(true);
-                        referenceNote = "기준 HTTP 429 · 후속 요청 중단";
-                        break;
-                      }
-                      var sample =
-                          EnvironmentControls.sample(
-                              r.statusCode(),
-                              responseHeaders(r),
-                              decodedBody(PacketFormat.decodedResponse(r)),
-                              reference,
-                              ignored);
-                      if (probeIndex == 0) first = sample;
-                      else second = sample;
-                    } catch (Exception ex) {
-                      issue = "기준 요청/디코딩 오류";
-                      break;
-                    }
-                    if (probeIndex == 0 && repeat)
-                      try {
-                        Thread.sleep(200);
-                      } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                        stopping.set(true);
-                        break;
-                      }
-                  }
-                  missing.put(root, EnvironmentControls.reference(first, second, repeat, issue));
-                }
-                if (stopping.get() || closed.get()) break;
-                if (!WorkbenchScope.contains(api, request)) {
-                  publish(
-                      new Packet(
-                          url, preview(request.toString()), "전송하지 않음 · Scope 제외", "Scope 제외"));
-                  continue;
-                }
-                var rr =
-                    api.http()
-                        .sendRequest(
-                            request,
-                            RequestOptions.requestOptions()
-                                .withResponseTimeout(10000)
-                                .withRedirectionMode(RedirectionMode.NEVER));
-                var response = rr == null ? null : rr.response();
-                String headers = response == null ? "" : responseHeaders(response);
-                String decoded = response == null ? "" : PacketFormat.decodedResponse(response);
-                String note =
-                    response == null
-                        ? "응답 없음"
-                        : EnvironmentControls.state(
-                            response.statusCode(),
-                            headers,
-                            decodedBody(decoded),
-                            url,
-                            missing.get(roots.get(url)),
-                            ignored);
-                publish(
-                    new Packet(
-                        url,
-                        preview(
-                            (rr != null && rr.request() != null ? rr.request() : request)
-                                .toString()),
-                        response == null ? "응답 없음" : preview(response.toString()),
-                        note,
-                        response == null ? "응답 없음" : preview(decoded)));
-                if (response != null && response.statusCode() == 429) stopping.set(true);
-              } catch (Exception e) {
-                publish(
-                    new Packet(
-                        url,
-                        request == null ? "GET " + url : preview(request.toString()),
-                        "요청 실패 · " + e.getClass().getSimpleName(),
-                        "전송 오류"));
-              }
-              if (stopping.get() || closed.get()) break;
-              try {
-                Thread.sleep(200);
-              } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-              }
-            }
-            return null;
+  String accountKey(){int slot=account.getSelectedIndex()-1;if(slot<0)return "anonymous";var config=sessionConfig.apply(slot);return "slot-"+slot+(config==null?"":"-"+EnvironmentProject.hash(config.identityPath()+"\n"+config.expectedIdentity()+"\n"+config.claims()).substring(0,16));}
+  Packet currentPacket(String url){Packet packet=packets.get(url);return packet!=null&&(!packetAccounts.containsKey(url)||accountKey().equals(packetAccounts.get(url)))?packet:null;}
+  boolean verified(String url){var e=project.latest.get(accountKey()+" GET "+url);return e!=null?e.status()!=0&&e.status()!=429:currentPacket(url)!=null;}
+  EnvironmentScan.Profile profile(String url){
+    int slot=account.getSelectedIndex()-1;
+    if(slot<0)return new EnvironmentScan.Profile("anonymous",Map.of(),null);
+    var config=sessionConfig.apply(slot);
+    if(config==null)throw new IllegalArgumentException("권한 비교 → 세션 검사에서 신원 조건을 적용한 뒤 실행하세요.");
+    if(!EnvironmentCatalog.origin(java.net.URI.create(config.url())).equals(EnvironmentCatalog.origin(java.net.URI.create(url))))throw new IllegalArgumentException("신원 검사 URL과 대상 Origin이 다릅니다.");
+    Map<String,String> headers=Map.copyOf(sessions.headers(slot,url));if(headers.isEmpty())throw new IllegalArgumentException("로그인 계정의 인증 정보가 없습니다.");
+    return new EnvironmentScan.Profile(accountKey(),headers,config);
+  }
+  void runTasks(List<EnvironmentProject.Pending> tasks){
+    if(closed.get()||job!=null||ioBusy||tasks.isEmpty())return;
+    try{
+      for(var task:tasks)if(!WorkbenchScope.contains(api,HttpRequest.httpRequestFromUrl(task.url())))throw new IllegalArgumentException("SCOPE 밖 대기 경로 · 범위를 확인하세요.");
+      var profile=profile(tasks.get(0).url());
+      var ignored=AuthJudgement.rules(volatileFields.getText(),"","").ignored();
+      String app=EnvironmentCatalog.prefix(prefix.getText());var site=catalog.sites.get(EnvironmentCatalog.origin(java.net.URI.create(tasks.get(0).url())));
+      var options=new EnvironmentScan.Options(compareMissing.isSelected(),repeatMissing.isSelected(),ignored,(Integer)delay.getValue(),1000*(Integer)timeout.getValue(),(Integer)budget.getValue(),(Integer)depth.getValue(),follow.isSelected(),true,app,site==null?List.of():List.copyOf(site.prefixes));
+      stopping.set(false);
+      job=new SwingWorker<>(){
+        EnvironmentScan worker=new EnvironmentScan(api,options,profile,tasks,r->publish(new Packet(r.url(),r.request(),r.response(),r.state(),r.decoded(),r,profile.account())),()->closed.get()||stopping.get());
+        {scan=worker;}
+        protected Void doInBackground(){worker.run();return null;}
+        protected void process(List<Packet> updates){
+          if(closed.get())return;
+          for(Packet packet:updates){
+            String change=project.add(packet.url,packet.account,packet.result.status(),packet.result.finding().kind(),packet.result.fingerprint());
+            var updated=new Packet(packet.url,packet.request,packet.response,packet.state+" · "+change,packet.decoded,packet.result,packet.account);
+            if(packets.size()>=300&&!packets.containsKey(packet.url)){String first=packets.keySet().iterator().next();packets.remove(first);packetAccounts.remove(first);}
+            packets.put(packet.url,updated);packetAccounts.put(packet.url,packet.account);project.candidate(packet.url,"검증한 경로");
+            if(packet.result.learned()!=null&&(!packet.result.learned().detections.isEmpty()||!packet.result.learned().observed.isEmpty()||!packet.result.learned().discovered.isEmpty()))applyObservation(new Observation(packet.result.learned(),observationEpoch.get()));
+            if(packet.result.status()>0)catalog.feedback(packet.url,packet.result.status(),packet.state);
+            for(int i=0;i<candidates.size();i++)if(candidates.get(i).url().equals(packet.url))paths.setValueAt(updated.state,i,3);
           }
+          showSelected();scanStatus();
+        }
+        protected void done(){
+          job=null;scanTimer.stop();
+          if(closed.get())return;
+          try{get();}catch(Exception error){Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",error);worker.note="작업 오류 · 남은 경로 유지";}
+          project.pending=worker.remaining();project.pendingAccount=profile.account();setRunning(false);if(catalog.sites.containsKey(origins.getSelectedItem()))refresh();
+          status.setText(worker.note+" · 경로 "+worker.completed+" · 요청 "+worker.sent+" / "+options.budget()+" · 남음 "+project.pending.size());scan=null;
+        }
+      };
+      setRunning(true);scanTimer.start();job.execute();
+    }catch(Exception error){Diagnostics.failure(this,"서버·경로 탐색",error);status.setText(error.getMessage());}
+  }
+  void setRunning(boolean running){
+    start.setEnabled(!running&&!ioBusy);single.setEnabled(!running&&!ioBusy);stop.setEnabled(running);pause.setEnabled(running);pause.setText("일시정지");
+    for(JComponent c:List.of(technologies,origins,prefix,limit,common,repeatMissing,volatileFields,compareMissing,account,delay,timeout,budget,depth,follow))c.setEnabled(!running&&!ioBusy);
+    remaining.setEnabled(!running&&!ioBusy&&!project.pending.isEmpty());
+  }
+  void scanStatus(){var worker=scan;if(worker==null)return;pause.setText(worker.paused?"재개":"일시정지");status.setText((worker.paused?"일시정지 · "+worker.note:"검증 중")+" · 경로 "+worker.completed+" · 요청 "+worker.sent+" · 남음 "+worker.queue.size());}
+  void togglePause(){var worker=scan;if(worker==null)return;try{if(worker.paused)worker.resume(profile(worker.queue.peek().url()));else worker.pause("사용자 일시정지",0);scanStatus();}catch(Exception error){status.setText(error.getMessage());}}
+  void resumeRemaining(){if(!project.pendingAccount.equals(accountKey())){status.setText("저장 당시 계정으로 세션을 연결하고 재개하세요.");return;}runTasks(project.pending);}
+  JPanel evidenceContent(){
+    String url=selectedUrl();Packet packet=url==null?null:currentPacket(url);JTextArea text=message();text.setLineWrap(true);text.setWrapStyleWord(true);
+    if(packet!=null&&packet.result!=null){var f=packet.result.finding();text.setText("결과: "+f.title()+"\n\n판단 근거: "+f.reason()+"\n\n비교: "+packet.state+"\n\n다음 확인: "+f.next()+"\n\nURL: "+url);}
+    else{var saved=url==null?null:project.latest.get(accountKey()+" GET "+url);text.setText(saved==null?"검사한 경로를 선택하세요.":"저장된 판정: "+EnvironmentContent.title(saved.kind())+" · HTTP "+saved.status()+"\n변경: "+saved.change()+"\n검사 시각: "+java.time.Instant.ofEpochMilli(saved.time())+"\n원본 패킷은 저장하지 않습니다. 현재 상태는 다시 검사하세요.");}
+    JPanel body=new JPanel(new BorderLayout());body.add(new JScrollPane(text));body.setPreferredSize(new Dimension(700,420));return body;
+  }
+  static String accountName(String key){return key.equals("anonymous")?"비로그인":"비교 계정 "+(Character.digit(key.charAt(5),10)+1);}
+  JPanel changesContent(){
+    var model=model("검사 시각","계정","HTTP","내용 분류","변경","URL");
+    var clock=java.time.format.DateTimeFormatter.ofPattern("MM-dd HH:mm:ss").withZone(java.time.ZoneId.systemDefault());
+    for(var e:project.history)model.addRow(new Object[]{clock.format(java.time.Instant.ofEpochMilli(e.time())),accountName(e.account()),e.status(),EnvironmentContent.title(e.kind()),e.change(),e.url()});
+    JTable table=new JTable(model);table.setAutoCreateRowSorter(true);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    int[] widths={125,110,65,140,100,400};for(int i=0;i<widths.length;i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+    JPanel body=new JPanel(new BorderLayout());body.add(new JScrollPane(table));body.setPreferredSize(new Dimension(900,500));return body;
+  }
 
-          protected void process(List<Packet> updates) {
-            if (closed.get()) return;
-            for (Packet p : updates) {
-              if (packets.size() >= 300 && !packets.containsKey(p.url))
-                packets.remove(packets.keySet().iterator().next());
-              packets.put(p.url, p);
-              java.util.regex.Matcher code =
-                  java.util.regex.Pattern.compile("^HTTP (\\d{3})").matcher(p.state);
-              if (code.find()) catalog.feedback(p.url, Integer.parseInt(code.group(1)), p.state);
-              completed++;
-              for (int i = 0; i < candidates.size(); i++)
-                if (candidates.get(i).url().equals(p.url)) paths.setValueAt(p.state, i, 3);
-            }
-            showSelected();
-            status.setText(
-                "검증 "
-                    + completed
-                    + " / "
-                    + urls.size()
-                    + " · "
-                    + (stopping.get() ? "중지 중" : "진행 중"));
-          }
-
-          protected void done() {
-            job = null;
-            if (closed.get()) return;
-            start.setEnabled(true);
-            single.setEnabled(true);
-            technologies.setEnabled(true);
-            stop.setEnabled(false);
-            origins.setEnabled(true);
-            prefix.setEnabled(true);
-            limit.setEnabled(true);
-            common.setEnabled(true);
-            repeatMissing.setEnabled(true);
-            volatileFields.setEnabled(true);
-            compareMissing.setEnabled(true);
-            account.setEnabled(true);
-            status.setText(
-                (stopping.get() ? "검증 중지" : "검증 완료")
-                    + " · "
-                    + completed
-                    + " / "
-                    + urls.size()
-                    + " · 상태 코드는 검토 단서입니다.");
-            if (catalog.sites.containsKey(origins.getSelectedItem())) refresh();
-            status.setText(
-                (stopping.get() ? "검증 중지" : "검증 완료")
-                    + " · "
-                    + completed
-                    + " / "
-                    + urls.size()
-                    + " · 응답을 반영해 후보 순서 갱신"
-                    + (referenceNote.isEmpty() ? "" : " · " + referenceNote));
-            showSelected();
-          }
-        };
-    job.execute();
+  EnvironmentProject projectSnapshot(){
+    EnvironmentProject copy=EnvironmentProject.parse(project.json());
+    for(var site:catalog.sites.values())for(var c:catalog.candidates(site,"",false,300))copy.candidate(c.url(),c.source());
+    if(scan!=null){copy.pending=scan.remaining();copy.pendingAccount=scan.profile.account();}return copy;
+  }
+  void applyProject(EnvironmentProject loaded){
+    if(job!=null)throw new IllegalArgumentException("중지 후 불러오세요.");
+    observationEpoch.incrementAndGet();project=loaded;packets.clear();packetAccounts.clear();catalog.sites.clear();origins.removeAllItems();
+    LinkedHashMap<String,String> urls=new LinkedHashMap<>();loaded.candidates.values().forEach(c->urls.put(c.url(),c.source()));loaded.latest.values().forEach(e->urls.putIfAbsent(e.url(),"저장된 검사 결과"));loaded.pending.forEach(t->urls.putIfAbsent(t.url(),"남은 경로"));
+    for(var e:urls.entrySet()){String origin=EnvironmentCatalog.origin(java.net.URI.create(e.getKey()));var site=catalog.sites.get(origin);if(site==null){if(catalog.sites.size()>=50)continue;site=new EnvironmentCatalog.Site(origin);catalog.sites.put(origin,site);}if(site.discovered.size()<500)site.discovered.put(e.getKey(),new EnvironmentCatalog.Candidate(e.getKey(),e.getValue(),EnvironmentCatalog.purpose(e.getKey()),90,"저장한 메타데이터 · 재검증 필요"));}
+    catalog.sites.keySet().forEach(origins::addItem);remaining.setEnabled(!loaded.pending.isEmpty());refresh();
+  }
+  void projectFile(boolean load){
+    if(ioBusy||job!=null){status.setText("검증을 중지한 뒤 저장·불러오기를 실행하세요.");return;}
+    JFileChooser chooser=new JFileChooser();chooser.setSelectedFile(new java.io.File("서버경로_탐색.json"));int choice=load?chooser.showOpenDialog(this):chooser.showSaveDialog(this);if(choice!=JFileChooser.APPROVE_OPTION)return;
+    Path file=chooser.getSelectedFile().toPath();EnvironmentProject snapshot=load?null:projectSnapshot();ioBusy=true;setRunning(false);
+    new SwingWorker<EnvironmentProject,Void>(){protected EnvironmentProject doInBackground()throws Exception{if(load)return EnvironmentProject.read(file);snapshot.write(file);return snapshot;}protected void done(){ioBusy=false;try{var result=get();if(!closed.get()){if(load)applyProject(result);status.setText(load?"탐색 결과 불러옴 · 계정 재연결 후 명시적으로 재개하세요.":"탐색 결과 저장 완료 · 인증값·본문 제외");}}catch(Exception error){if(!closed.get())status.setText("저장/불러오기 실패 · 기존 결과 유지");}if(!closed.get())setRunning(false);}}.execute();
   }
 
   static String responseHeaders(HttpResponse r) {
@@ -805,16 +685,16 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   }
 
   void stop() {
-    stopping.set(true);
-    status.setText("중지 중 · 이미 전송한 요청은 응답/10초 타임아웃 후 종료합니다.");
+    stopping.set(true);if(scan!=null)scan.stop();
+    status.setText("중지 중 · 이미 전송한 요청은 응답/설정한 타임아웃 후 종료합니다.");
   }
 
   public void close() {
-    targetSettings.close();
+    targetSettings.close();resultDetails.close();changes.close();scanTimer.stop();if(scan!=null)scan.stop();
     candidateSettings.close();
     closed.set(true);
     stopping.set(true);
-    packets.clear();
+    packets.clear();packetAccounts.clear();project=new EnvironmentProject();
     catalog.sites.clear();
     origins.removeAllItems();
     refresh();

@@ -76,7 +76,7 @@ public final class EnvironmentCatalog {
   return s;
  }
  private void remember(Site s,URI from,String reference){String path=EnvironmentDiscovery.path(from,reference,s.origin);if(path!=null)s.observed.add(path);}
- public void feedback(String url,int code,String state){try{Site s=sites.get(origin(URI.create(url)));if(s!=null){if(s.feedback.size()>=500&&!s.feedback.containsKey(url))s.feedback.remove(s.feedback.keySet().iterator().next());s.feedback.put(url,state.contains("없는 경로와 동일")?-1:code);}}catch(Exception ignored){}}
+ public void feedback(String url,int code,String state){try{Site s=sites.get(origin(URI.create(url)));if(s!=null){if(s.feedback.size()>=500&&!s.feedback.containsKey(url))s.feedback.remove(s.feedback.keySet().iterator().next());s.feedback.put(url,(state.contains("없는 경로와 동일")||state.contains("기준과 유사")||state.contains("로그인 화면")||state.contains("보안 확인 화면"))?-1:code);}}catch(Exception ignored){}}
 
 
  static String origin(URI u){if(!Set.of("http","https").contains(u.getScheme())||u.getHost()==null||u.getUserInfo()!=null)throw new IllegalArgumentException("HTTP(S) URL 필요");int p=u.getPort();return u.getScheme()+"://"+(u.getHost().startsWith("[")?u.getHost():u.getHost().contains(":")?"["+u.getHost()+"]":u.getHost().toLowerCase(Locale.ROOT))+((p<0||p==80&&u.getScheme().equals("http")||p==443&&u.getScheme().equals("https"))?"":":"+p);}

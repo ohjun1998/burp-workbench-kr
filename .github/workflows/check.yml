@@ -53,6 +53,8 @@ jobs:
         run: python tools/render_ui_layout.py --session-only --check --out tmp/ui-session-ci
       - name: Verify authorization policy and effect verification layouts
         run: python tools/render_ui_layout.py --auth-only --sizes 1024x720 1280x800 --check --out tmp/ui-auth-ci
+      - name: Verify server discovery controls evidence and history layouts
+        run: python tools/render_ui_layout.py --environment-only --sizes 1024x720 1280x800 --check --out tmp/ui-environment-ci
       - name: Check packaging invariants
         run: python -m unittest discover -s tools -p 'test_*.py' -v
       - name: Verify versioned downloads match current sources
@@ -104,6 +106,10 @@ jobs:
             tmp/ui-auth-ci/controls.csv
             tmp/ui-auth-ci/content.csv
             tmp/ui-auth-ci/text.csv
+            tmp/ui-environment-ci/layout-report.json
+            tmp/ui-environment-ci/controls.csv
+            tmp/ui-environment-ci/content.csv
+            tmp/ui-environment-ci/text.csv
           if-no-files-found: warn
           retention-days: 14
 

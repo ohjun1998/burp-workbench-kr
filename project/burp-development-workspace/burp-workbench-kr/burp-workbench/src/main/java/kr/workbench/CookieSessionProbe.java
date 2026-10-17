@@ -83,8 +83,13 @@ final class CookieSessionProbe {
   /** A fresh identity check before comparison; never uses a past successful result as a lease. */
   static void verify(MontoyaApi api,Config config,Map<String,String> headers,Set<String> names,
       String origin,BooleanSupplier cancelled)throws Exception {
+    verify(api,config,headers,names,origin,cancelled,()->{});
+  }
+  static void verify(MontoyaApi api,Config config,Map<String,String> headers,Set<String> names,
+      String origin,BooleanSupplier cancelled,Runnable beforeSend)throws Exception {
     try {
       Runner runner=new Runner(api,config,headers,names,origin,cancelled);
+      runner.beforeSend=beforeSend;
       if(runner.send("비교 전 신원 확인",headers).outcome()!=Outcome.MATCH)
         throw new Failure("로그인 신원 확인 실패 · 세션 검사에서 다시 확인하세요.");
       Trial anonymous=runner.send("비교 전 비로그인 대조",Map.of());
@@ -100,7 +105,7 @@ final class CookieSessionProbe {
     final LinkedHashMap<String,String> cookies;
     final List<Trial> trials=new ArrayList<>();
     final Map<Set<String>,Outcome> outcomes=new HashMap<>();
-    int sent;
+    int sent; Runnable beforeSend=()->{};
     Runner(MontoyaApi api,Config config,Map<String,String> headers,Set<String> names,String origin,BooleanSupplier cancelled) {
       this.api=api;this.config=config;this.original=Map.copyOf(headers);this.origin=origin;this.cancelled=cancelled;
       Set<String> all=new HashSet<>(names);all.addAll(AuthComparePanel.DEFAULT_AUTH);all.addAll(AuthComparePanel.CSRF);
@@ -116,6 +121,7 @@ final class CookieSessionProbe {
       request=Core.sessionRequest(request,profile,names);
       if(sent>0)Thread.sleep(120);
       guard();if(!WorkbenchScope.contains(api,request))throw new Failure("전송 직전 SCOPE 제외 · 검사 중단");
+      beforeSend.run();guard();if(!WorkbenchScope.contains(api,request))throw new Failure("전송 직전 SCOPE 제외 · 검사 중단");
       sent++;
       var rr=api.http().sendRequest(request,RequestOptions.requestOptions().withResponseTimeout(10000).withRedirectionMode(RedirectionMode.NEVER));
       guard();

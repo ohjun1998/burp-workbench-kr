@@ -252,7 +252,59 @@
     "계정별 상태 초기화가 필요한 경우 사용자가 테스트 데이터를 다시 준비해야 합니다."
   ],
   "remote": {
-    "status": "pending",
-    "note": "소스 PR의 최종 head에 대한 원격 검증·병합 뒤 기록을 갱신합니다."
+    "status": "passed",
+    "pullRequest": "https://github.com/ohjun1998/burp-workbench-kr/pull/61",
+    "headCommit": "6c35b522cd899aa4fb8f25e5295bc6c467071041",
+    "mergeCommit": "9d0888b9b619f0dad5b271f27f5b8457d00aff06",
+    "mergeTree": "5e7d644d7778701689111398cc8e8906d878ff64",
+    "mergeTreeMatches": true,
+    "checks": [
+      {
+        "name": "check",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054148490/job/117458562674"
+      },
+      {
+        "name": "windows",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054148625/job/117458563018"
+      },
+      {
+        "name": "isolated-disk-and-soak",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054148625/job/117458563210"
+      }
+    ],
+    "buildRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054148490",
+    "durabilityRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054148625",
+    "mainAutomaticRunsAtRecord": [
+      {
+        "id": 39054794809,
+        "name": "Build and verify",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054794809"
+      },
+      {
+        "id": 39054794804,
+        "name": "Capture durability and Windows verification",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054794804"
+      }
+    ],
+    "note": "원격 성공은 PR 최종 head에 대한 Build·Windows·Linux 검사입니다. 병합 후 main 자동 재검사는 별도 실행이며 기록 시점에 진행 중입니다. 후속 문서 변경은 검증된 소스·JAR·소스 ZIP을 보존합니다."
+  },
+  "resumeVerification": {
+    "dateAsiaSeoul": "2026-10-18",
+    "method": "GitHub 최종 소스 커밋에서 JAR·소스 ZIP·SHA256SUMS·manifest.json을 직접 다운로드하여 검사",
+    "downloadSha256": "passed",
+    "jarAndSourceZipCrc": "passed",
+    "sourceArchiveFingerprints": "passed",
+    "sourceFiles": 223,
+    "releaseTestsRepeatedLocally": false
   }
 }

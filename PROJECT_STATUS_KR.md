@@ -1,7 +1,19 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.40.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.41.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 세션·권한 판정 고도화와 독립 비로그인 — 0.41.0
+
+[PR #61](https://github.com/ohjun1998/burp-workbench-kr/pull/61)을 main에 병합했습니다. 인증 후보·비교 기록의 상하 배치와 패킷 상세·판정 근거 구조를 유지했습니다. GET·HEAD의 현재 기준 세션 재검증, 관리자·일반·후보1과 독립 비로그인 네 대상, 편집 가능한 계정별 권한 표, 서버 사용자·역할·조직 조건을 적용했습니다. 중요 JSON 필드·배열 순서·명시적 동적 필드 제외와 쓰기 전후 GET 조회로 실제 상태 변경을 관측하며, HTTP 200만으로 쓰기 성공을 단정하지 않습니다. 중요 필드 누락·기준 만료·설정 충돌은 보류하고 안정적인 판정 코드로 종합 결과 하나를 표시합니다.
+
+최종 소스 head `6c35b522cd899aa4fb8f25e5295bc6c467071041`의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054148490)·[Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39054148625)이 모두 성공했습니다. 원격 Build 로그에서도 **2,733개**(Java 2,233·HTTP 132/102/266), 신규 정확도 회귀 **44개**, 패키징 **6개**와 다운로드·현재 소스 지문 검증 성공을 확인했습니다. Windows의 Repeater 기본 창·저장소/캐시 10회 반복·Mapper·180초 수집·PowerShell 검사, Linux의 실제 디스크 부족/복구·지속 수집도 성공했습니다.
+
+기존 로컬 화면 기록은 운영 Swing 합성 화면 **216개**·컨트롤 **2,740개**·탭/제목 **2,088개**이며 이번 재개에서 다시 수행한 것으로 합산하지 않습니다. 이번에는 GitHub에서 받은 JAR·소스 ZIP의 SHA-256·압축 CRC 및 소스 **223개** 파일 지문 일치를 직접 확인했습니다. 병합 커밋 `9d0888b9b619f0dad5b271f27f5b8457d00aff06`의 파일 트리 `5e7d644d7778701689111398cc8e8906d878ff64`는 검증한 PR head와 동일합니다. main에서 시작한 병합 후 자동 재검사는 별도 실행이며 기록 시점에 진행 중입니다. 후속 기록은 이 상태·검증 JSON·날짜별 대화만 갱신합니다.
+
+실제 native Burp GUI·Windows DPI/IME는 미수행입니다. 자동 판정은 관측 근거이며 실제 업무 정책과 상태 변경의 인과관계는 재현으로 확인합니다.
+
+[변경·화면](docs/RELEASE_0.41.0_KR.md) · [검증 기록](docs/VERIFICATION_0.41.0.json) · [JAR·소스 ZIP](downloads/extensions/0.41.0/) · [날짜별 대화](docs/chat-logs/2026-10-18/auth-accuracy-0410.md)
 
 ## 굴림체·Render·인증 비교 근거와 우클릭 개선 — 0.40.0
 

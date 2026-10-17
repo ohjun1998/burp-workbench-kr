@@ -1,7 +1,7 @@
 {
   "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
   "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
-  "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+  "releaseJarSha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
   "themes": [
     "light",
     "dark"

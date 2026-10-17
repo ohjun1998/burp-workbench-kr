@@ -1,7 +1,7 @@
 {
   "files": {
-    "burp-workbench-kr-0.40.0.jar": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
-    "burp-workbench-kr-0.40.0-source.zip": "75791cc88c25c5b6a54545b0a3cd864d73a25bed70e9d22bedb22adb3bb31df8"
+    "burp-workbench-kr-0.40.0.jar": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
+    "burp-workbench-kr-0.40.0-source.zip": "ff5037d86fdd1fd537eec66e15199f7467c0cf3df56c772aee047e40b03822ec"
   },
   "sources": {
     "audit/0.23.0/BountyWorkflowAudit.java": "5a1b58d8257218a2ac6e40c4ae5cc52361906035c42900d28eb9cbd5e3e89ebe",
@@ -32,7 +32,7 @@
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AssessmentTracker.java": "7e892a151db605b342519b3be6b74c060689db306c6b526fb610d6cea79499b0",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthAccount.java": "5f437ba9f4077bcd66d0d022a674fad309728b0202a99b67bf2f2828f2d9f1c5",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthCandidateDetails.java": "b37e2b4beda3e40f366e6ff81d15bf05cf08e3ab10f65052423ebe1cf8b5da9c",
-    "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthComparePanel.java": "b762619a8d73005030c060b452f742e813b3f43d50d7dfec117600d965ef65e3",
+    "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthComparePanel.java": "47e27d0ac6e4815eebfb2eb1732cb8cf37533900881be315028c7f38f4d30675",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthEvidencePanel.java": "d5b5abac3e34d893ef509951929d3c3fc99760f8f49af3cdabe4a1d30547bbee",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthFileEvidence.java": "8af7cc4d1a207fa5d4ec14d63ad7882ef7710b629da9161ddf93555db1b4864c",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/kr/workbench/AuthJudgement.java": "0103b5919673d14b226d7d4793879b82389185a0ae75d785ede5035ff25debbf",
@@ -196,7 +196,7 @@
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/PassiveScanTest.java": "ff4ac7bbaea0873cfb91c91b59eb92a3cddc212110feea421b7a2c1bd11c4b93",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/PayloadIntegrationTest.java": "6a3cbb5cb6d2eafc84c6c38547673e15ee543c090ee0353eb2a07a35e7ed4a78",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/PopupWorkflowTest.java": "ba13eccc3ce37e20b99ebe7473f0e1b1fbfd13c17a870175efc7fda3d23dbace",
-    "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/RenderAuthUiTest.java": "ca05cc3fc4120c95c1b413ecfd74d4fd4ab35214c10b558fc17751a1891721b6",
+    "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/RenderAuthUiTest.java": "b105ef44f67b8468e154fcaa6806a3a8e8dbb86741205a669d0a323d4a42f7c7",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/ReviewConditionsTest.java": "6f217a3165e9a55cbc54e278449a38972dbb81e69d0d861cac193c518ebec85d",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/ReviewWorkflowTest.java": "bfd4e9bb8605f5d161003fcc10c00e2137204aa8645183cf4a0f6393b11a8fe7",
     "project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/kr/workbench/StoredFlowStagesTest.java": "c42223a3b7e52c979ac0809fd4da4b859c14b4f53b75f2a2e5bc64ce4097fb24",

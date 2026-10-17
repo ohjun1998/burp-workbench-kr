@@ -25,7 +25,7 @@
       "DisplayWorkflowTest": 13,
       "PacketUiTest": 29,
       "PacketInspectorTest": 42,
-      "RenderAuthUiTest": 27,
+      "RenderAuthUiTest": 28,
       "PassiveScanTest": 31,
       "LayoutPassiveWorkflowTest": 16,
       "JsAnalysisTest": 31,
@@ -73,15 +73,15 @@
       "AppearanceWorkflowTest": 22
     },
     "regressionGroups": 64,
-    "regressionChecks": 2184,
+    "regressionChecks": 2185,
     "payloadHttpChecks": 132,
     "allFeaturesHttpChecks": 102,
     "bountyHttpChecks": 266,
-    "totalChecks": 2684,
+    "totalChecks": 2685,
     "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
     "result": "passed"
   },
-  "newRegressionGroup": "RenderAuthUiTest: 27 checks passed",
+  "newRegressionGroup": "RenderAuthUiTest: 28 checks passed",
   "packaging": {
     "regressionTests": 4,
     "fingerprints": "passed"
@@ -90,7 +90,7 @@
     "auth": {
       "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
       "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
-      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "releaseJarSha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
       "themes": [
         "light",
         "dark"
@@ -127,7 +127,7 @@
     "packet": {
       "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
       "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
-      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "releaseJarSha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
       "themes": [
         "light",
         "dark"
@@ -162,7 +162,7 @@
     "js": {
       "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
       "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
-      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "releaseJarSha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
       "themes": [
         "light",
         "dark"
@@ -213,7 +213,7 @@
     "all": {
       "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
       "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
-      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "releaseJarSha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
       "themes": [
         "light",
         "dark"
@@ -248,7 +248,7 @@
     "guide": {
       "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
       "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
-      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "releaseJarSha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3",
       "themes": [
         "light",
         "dark"
@@ -284,25 +284,26 @@
   "artifacts": {
     "manifest.json": {
       "bytes": 40973,
-      "sha256": "1dc157bc2b9c1e5f98f6560a2f7b62e42789a72e11046ae3c90ed31762871cc1"
+      "sha256": "354d66da8bf09520ac6d52cb10a4905629124aee3514c9ffb7189dda31773f48"
     },
     "burp-workbench-kr-0.40.0.jar": {
-      "bytes": 3456773,
-      "sha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23"
+      "bytes": 3456877,
+      "sha256": "e1fbb628a20867746b8e43a8e29d23cd13d30552b6b3f42f79fadf640617a2d3"
     },
     "SHA256SUMS": {
       "bytes": 197,
-      "sha256": "54e212a93b8347d65dd66d113d1aa39543810d075d252f9b8e47cae0354661cf"
+      "sha256": "3c3d0c6774ab217cbfcbb49f4929ed0eaaa9d40279e035ab170e2a67100a0f00"
     },
     "burp-workbench-kr-0.40.0-source.zip": {
-      "bytes": 3235383,
-      "sha256": "75791cc88c25c5b6a54545b0a3cd864d73a25bed70e9d22bedb22adb3bb31df8"
+      "bytes": 3235488,
+      "sha256": "ff5037d86fdd1fd537eec66e15199f7467c0cf3df56c772aee047e40b03822ec"
     }
   },
   "preflightCorrections": [
     "기존 마스킹·하위 메뉴·3개 탭 기대값을 새 요구사항으로 갱신했습니다.",
     "최소 크기의 패킷 영역 72px 문제를 분할 비율과 크게 보기로 보정한 뒤 모든 화면 게이트를 재검증했습니다.",
-    "반복 빌드·회귀 수를 합산하지 않고 최종 소스 1회 검사 수를 기록합니다."
+    "반복 빌드·회귀 수를 합산하지 않고 최종 소스 1회 검사 수를 기록합니다.",
+    "비로그인 메뉴를 다시 눌러 지정 해제할 수 있는 체크 항목으로 보완하고 회귀를 추가했습니다."
   ],
   "limitations": [
     "실제 native Burp GUI·Windows DPI/IME 미수행.",
@@ -312,6 +313,7 @@
   ],
   "remote": {
     "status": "pending",
-    "note": "PR 생성 후 별도 확인"
+    "pr": 59,
+    "note": "비로그인 토글 보완을 포함한 새 PR head에서 원격 검사를 확인합니다."
   }
 }

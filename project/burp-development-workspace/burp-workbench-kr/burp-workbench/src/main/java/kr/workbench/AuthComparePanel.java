@@ -77,7 +77,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final Candidate[] slots = new Candidate[3];
   final List<Run> runs = new ArrayList<>();
   static final String[] QUICK_SLOTS={"관리자","일반","후보1"};
-  final JMenuItem anonymousItem=new JMenuItem("비로그인"),unassignItem=new JMenuItem("해제"),deleteCandidateItem=new JMenuItem("삭제"),deleteHistoryItem=new JMenuItem("삭제");
+  final JCheckBoxMenuItem anonymousItem=new JCheckBoxMenuItem("비로그인");
+  final JMenuItem unassignItem=new JMenuItem("해제"),deleteCandidateItem=new JMenuItem("삭제"),deleteHistoryItem=new JMenuItem("삭제");
   final JMenuItem[] slotAssign = new JMenuItem[3];
   final JLabel[] slotLabels = {new JLabel(), new JLabel(), new JLabel()};
   final JToggleButton record = new JToggleButton("요청 비교 OFF");
@@ -407,8 +408,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       assign.addActionListener(e -> safe(() -> {assignSelected(slot);if(accounts.get(slots[slot].key())==null)profileNames[slot].setText(QUICK_SLOTS[slot]);refreshSlots();}));
       popup.add(assign);
     }
-    anonymousItem.addActionListener(e->safe(()->{anonymous(2);profileNames[2].setText("비로그인");refreshSlots();}));
-    anonymousItem.setToolTipText("후보1 위치를 비로그인으로 지정");
+    anonymousItem.addActionListener(e->safe(()->{if(slots[2]!=null&&slots[2].headers().isEmpty())clearSlot(2);else{anonymous(2);profileNames[2].setText("비로그인");}refreshSlots();}));
+    anonymousItem.setToolTipText("후보1 위치를 비로그인으로 지정 · 다시 누르면 비로그인 해제");
     unassignItem.addActionListener(e->safe(this::unassignSelected));
     unassignItem.setToolTipText("선택한 인증 후보의 모든 계정 지정을 해제");
     deleteCandidateItem.addActionListener(e->safe(this::deleteSelectedCandidate));
@@ -938,6 +939,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     }
     boolean idle=recording.get()==null&&active.get()==0;
     Candidate selected=selectedCandidate();
+    anonymousItem.setSelected(slots[2]!=null&&slots[2].headers().isEmpty());
     anonymousItem.setEnabled(idle&&(selected!=null||Arrays.stream(slots).anyMatch(Objects::nonNull)));
     unassignItem.setEnabled(idle&&selected!=null&&Arrays.stream(slots).anyMatch(c->c!=null&&c.key().equals(selected.key())));
     deleteCandidateItem.setEnabled(idle&&selected!=null);

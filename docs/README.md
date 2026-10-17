@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [사이트 3.6.0 관리자·사용자 포털과 계정 비교](LAB_3.6.0_KR.md) · [검증 기록](VERIFICATION_LAB_3.6.0.json)
+
 - [0.37.0 쿠키 식별·세션 신원 검사](RELEASE_0.37.0_KR.md) · [검증 기록](VERIFICATION_0.37.0.json)
 - [0.36.0 기존 레이아웃 유지·JS 분석 고도화](RELEASE_0.36.0_KR.md) · [검증 기록](VERIFICATION_0.36.0.json)
 - [0.35.1 두 줄 버튼·2×2 빨간 집계](RELEASE_0.35.1_KR.md) · [검증 기록](VERIFICATION_0.35.1.json)

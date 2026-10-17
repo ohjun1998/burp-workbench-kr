@@ -8,7 +8,7 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 |---|---|---|
 | Burp 확장 JAR | 0.37.0 | [burp-workbench-kr-0.37.0.jar](extensions/0.37.0/burp-workbench-kr-0.37.0.jar) |
 | 확장 소스·빌드 의존성 | 0.37.0 | [burp-workbench-kr-0.37.0-source.zip](extensions/0.37.0/burp-workbench-kr-0.37.0-source.zip) |
-| 커뮤니티 실습 Docker 실행 ZIP | 3.5.2 | [community-security-lab-3.5.2-docker.zip](docker/3.5.2/community-security-lab-3.5.2-docker.zip) |
+| 커뮤니티 실습 Docker 실행 ZIP | 3.6.0 | [community-security-lab-3.6.0-docker.zip](docker/3.6.0/community-security-lab-3.6.0-docker.zip) |
 | Feature Mapper JAR·브라우저 도우미·소스 | 0.3.1 | [다운로드](feature-mapper/0.3.1/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
@@ -16,7 +16,7 @@ GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세�
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
-Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 주소는 http://127.0.0.1:8088 이며 새 실습은 `/bounty-lab`입니다. 3.5.2는 GitHub Actions에서 Oracle·Nginx 전체 기동, HTTP 54개, 호스트 포트와 TLS·HTTP/2를 확인했습니다. Windows PowerShell 5.1의 시작 스크립트 분기를 확인하며 Windows Docker Desktop 전체 구동은 별도 범위입니다.
+Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 주소는 http://127.0.0.1:8088 이며 새 실습은 관리자 `/admin`·사용자 `/user` 센터이며 [역할별 비교 순서](../docs/LAB_3.6.0_KR.md)를 따릅니다. 같은 Origin의 로그인 세션을 공유하므로 동시 비교는 서로 다른 브라우저 프로필을 사용합니다. 3.6.0의 전체 Docker/Oracle/Nginx 구동은 별도 확인 범위입니다. 이전 3.5.2는 GitHub Actions에서 Oracle·Nginx 전체 기동, HTTP 54개, 호스트 포트와 TLS·HTTP/2를 확인했습니다. Windows PowerShell 5.1의 시작 스크립트 분기를 확인하며 Windows Docker Desktop 전체 구동은 별도 범위입니다.
 
 소스 ZIP: 확장 폴더의 `python build_all.py --test`로 확장 회귀 검사를 실행합니다. `dev.py check`의 전체 사이트 HTTP·모의 진단에는 저장소 전체 소스와 실습 런타임이 필요하므로 저장소 체크아웃을 사용하세요.
 
@@ -26,6 +26,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
+| 이전 커뮤니티 Docker | 3.5.2 | [Docker ZIP](docker/3.5.2/community-security-lab-3.5.2-docker.zip) |
 | 이전 확장 · JS 분석 고도화 | 0.36.0 | [JAR](extensions/0.36.0/burp-workbench-kr-0.36.0.jar) · [소스](extensions/0.36.0/burp-workbench-kr-0.36.0-source.zip) |
 | 이전 확장 · 두 줄 버튼·빨간 집계 | 0.35.1 | [JAR](extensions/0.35.1/burp-workbench-kr-0.35.1.jar) · [소스](extensions/0.35.1/burp-workbench-kr-0.35.1-source.zip) |
 | 이전 확장 · JS 작업 영역·Repeater | 0.33.0 | [JAR](extensions/0.33.0/burp-workbench-kr-0.33.0.jar) · [소스](extensions/0.33.0/burp-workbench-kr-0.33.0-source.zip) |

@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.37.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.5.2**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.0 검증 기록](docs/VERIFICATION_0.37.0.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.37.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.6.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.0 검증 기록](docs/VERIFICATION_0.37.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -177,3 +177,7 @@ python tools/render_ui_layout.py --session-only --check --out tmp/ui-session
 ```
 
 두 테마에서 기본 1024×720·최소 760×480의 운영 검사 창과 두 결과 탭을 렌더링합니다. 합성 자료를 쓰며 HTTP를 전송하지 않습니다.
+
+## 사이트 3.6.0 역할별 포털 검사
+
+`python tools/check_role_portals.py`는 현재 사이트를 별도 loopback 포트에 컴파일·실행하고 admin·alice·bob·moderator·비로그인으로 페이지·API·객체 소유권·CSRF·상태 변경을 검사합니다. 기본 포트는 18736이며 `--port`와 `--out`으로 변경할 수 있습니다. 실행 후 소유한 서버를 종료합니다. 브라우저 DOM·Burp GUI·Docker 실행 결과와 구분합니다.

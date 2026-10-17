@@ -6,7 +6,7 @@
 
 `/login`에서 일반 사용자/관리자 유형을 선택합니다. 서버가 실제 DB 권한과 유형을 확인한 뒤 일반 사용자는 게시글 목록, 관리자는 통합 커뮤니티의 사용자 관리로 연결합니다. 관리자도 공통 기능을 사용하며 moderator는 일반 사용자 유형으로 기존 게시판 관리 범위를 유지합니다. 기존 로그인 별칭, 회원가입·현재 계정 계속하기·로그아웃을 새 페이지로 연결했습니다. 기존 API 클라이언트의 유형 없는 로그인도 지원합니다.
 
-현재 소스 HTTP 307개·JS 로그인 흐름 4개·기존 분석기 호환 63개를 통과했습니다. 전체 release와 배포 검증 결과는 [검증 기록](docs/VERIFICATION_LAB_3.7.1.json)에 갱신합니다. 브라우저 실제 화면·Burp GUI 검증은 미실행입니다.
+현재 소스 HTTP 307개·JS 로그인 흐름 4개·기존 분석기 호환 63개, 최신 확장 0.37.3 기반 정식 release 2,470개(Java 1,971·HTTP 132+101+266), Mapper Java 94·브라우저 도우미 회귀, 패키징 회귀 6개와 배포 해시·소스 지문 검증을 통과했습니다. [원격 Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007253290)·[Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007253285)·[Docker/Oracle/Nginx](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007251107)도 모두 성공했습니다. 검증 코드 head는 `b281d819ca876df86ca5dd9ce6909f0e50795359`이며 최종 기록 커밋은 상태·검증·대화 세 문서만 갱신하고 소스와 실행 ZIP을 보존합니다. [정확한 검증 범위](docs/VERIFICATION_LAB_3.7.1.json)를 확인하세요. 브라우저 실제 화면·Burp GUI 검증은 미실행입니다.
 
 [사용법](docs/LAB_3.7.1_KR.md) · [Docker ZIP](downloads/docker/3.7.1/community-security-lab-3.7.1-docker.zip) · [대화](docs/chat-logs/2026-10-17/community-standalone-login-371.md)
 

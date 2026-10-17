@@ -20,3 +20,11 @@
 ## 04. 도우미 · 요약
 
 현재 소스 HTTP 검사 307개·로그인 스크립트 흐름 4개·기존 Workbench 분석기 호환 63개를 통과했습니다. 전체 release 검사와 3.7.1 실행 ZIP 생성을 진행하고 있습니다. 실제 브라우저 화면이나 Burp GUI를 실행한 결과로 표현하지 않습니다.
+
+## 05. 도우미 · 요약
+
+작업 중 최신 main에 Workbench 0.37.3이 반영되어 해당 소스와 배포를 보존한 채 통합했습니다. 최종 python dev.py release는 2,470개(Java 1,971·payload HTTP 132·전체 기능 HTTP 101·버그바운티 HTTP 266), Mapper Java 94·브라우저 도우미 회귀를 통과했습니다. HTTP 307개·로그인 JS 4개·분석기 호환 63개·패키징 회귀 6개와 소스 지문 검증도 통과했습니다.
+
+## 06. 도우미 · 요약
+
+PR #48의 최종 코드 b281d819ca876df86ca5dd9ce6909f0e50795359에서 원격 Build, Linux/Windows 내구성, Docker/Oracle/Nginx 검사가 모두 성공했습니다. 마지막 상태·검증·대화 기록 세 문서만 갱신하고 소스와 3.7.1 실행 ZIP은 그대로 보존하여 main에 반영합니다. /login에서 관리자(admin)는 사용자 관리, 일반 사용자(alice/bob)는 게시글 목록으로 연결되며 실제 서버 권한과 유형이 다르면 로그인하지 않습니다. 실제 브라우저 화면·Burp GUI는 미실행입니다. PR: https://github.com/ohjun1998/burp-workbench-kr/pull/48 / 배포: downloads/docker/3.7.1/community-security-lab-3.7.1-docker.zip

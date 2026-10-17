@@ -1252,7 +1252,7 @@
     "method": "Actual shipped community.js executed in Node vm with a DOM adapter; not a real browser"
   },
   "analysisCompatibility": {
-    "command": "AuditRepairsTest with current community.js and Workbench 0.37.2 JAR before latest-main integration",
+    "command": "python dev.py release: AuditRepairsTest with Workbench 0.37.3 and the current shipped community.js",
     "passed": 63,
     "failed": 0
   },
@@ -1262,8 +1262,19 @@
     "failed": 0
   },
   "fullRelease": {
-    "status": "running",
-    "command": "python dev.py release"
+    "status": "passed",
+    "command": "python dev.py release",
+    "summary": {
+      "version": "0.37.3",
+      "regressionGroups": 59,
+      "regressionChecks": 1971,
+      "payloadHttpChecks": 132,
+      "allFeaturesHttpChecks": 101,
+      "bountyHttpChecks": 266,
+      "totalChecks": 2470,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    }
   },
   "integrationNotes": [
     "Concurrent Workbench 0.37.3 source and immutable downloads preserved from main.",
@@ -1273,5 +1284,49 @@
     "Actual browser layout and browser DOM execution",
     "Native Burp GUI",
     "Local Docker/Oracle/Nginx stack"
-  ]
+  ],
+  "packaging": {
+    "verified": true,
+    "command": "python tools/package_downloads.py --verify",
+    "zipFiles": 83,
+    "zipSha256": "38772604709e8e300db26188dde749eddd15047239af032bf9c2d54d38f9ffa8",
+    "currentLoginSourcesMatchZip": true
+  },
+  "codeHead": "b281d819ca876df86ca5dd9ce6909f0e50795359",
+  "preservedUnchangedMainBlobs": 1148,
+  "remoteCI": {
+    "status": "passed",
+    "testedCodeHead": "b281d819ca876df86ca5dd9ce6909f0e50795359",
+    "runs": [
+      {
+        "name": "Build and verify",
+        "id": 39007253290,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007253290",
+        "conclusion": "success",
+        "scope": "Full regression, HTTP 307, login JS 4, Swing layouts, packaging and source fingerprints"
+      },
+      {
+        "name": "Capture durability and Windows verification",
+        "id": 39007253285,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007253285",
+        "conclusion": "success",
+        "scope": "Linux release, ENOSPC recovery, sustained capture; Windows Java and native window adapters, repeated storage, Mapper, 180-second capture, controlled PowerShell startup script checks"
+      },
+      {
+        "name": "Isolated Docker lab verification",
+        "id": 39007251107,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007251107",
+        "conclusion": "success",
+        "scope": "Current site source with Oracle/Nginx stack startup, existing Oracle HTTP regression, loopback publication, TLS/HTTP2 checks; distinct from the H2 307 acceptance checks"
+      }
+    ]
+  },
+  "finalRecordCommit": {
+    "scope": [
+      "PROJECT_STATUS_KR.md",
+      "docs/VERIFICATION_LAB_3.7.1.json",
+      "docs/chat-logs/2026-10-17/community-standalone-login-371.md"
+    ],
+    "codeAndExecutableZipUnchanged": true
+  }
 }

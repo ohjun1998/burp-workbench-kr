@@ -15,7 +15,7 @@ final class BountyMatrix {
  Expected expected(String method,String url,int slot){String path=URI.create(url).getPath();for(Rule r:rules)if((r.method.equals("*")||r.method.equals(method))&&r.match.matcher(path).matches())return r.slots.get(slot);return Expected.UNKNOWN;}
  String assess(Expected e,int status,String body,AuthJudgement.Rules rules){return assess(e,status,body,rules,false);}
  String assess(Expected e,int status,String body,AuthJudgement.Rules rules,boolean existenceVerified){if(e==Expected.UNKNOWN)return "";
-  boolean blocked=status==401||status==403;var json=AuthJudgement.json(body);if(json!=null)for(var d:rules.denied().entrySet()){Object v=AuthJudgement.value(json,d.getKey());if(v!=null&&String.valueOf(v).equals(d.getValue()))blocked=true;}
+  boolean blocked=status==401||status==403;var json=AuthJudgement.json(body);if(json!=null&&AuthJudgement.denied(json,rules))blocked=true;
   if(status==404||status==410){if(existenceVerified&&e==Expected.DENY)return "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP "+status;return "기대 "+e+" · 404/410 존재·세션 재검토"+(existenceVerified?" · 소유자 재조회 2xx 동일":"");}
   if(blocked)return e==Expected.DENY?"기대 DENY · 차단 근거 일치":"기대 ALLOW · 차단 관측 · 세션/정책 재검토";
   if(status>=200&&status<300&&!body.isBlank())return e==Expected.DENY?"기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인":"기대 ALLOW · 성공 응답 관측";

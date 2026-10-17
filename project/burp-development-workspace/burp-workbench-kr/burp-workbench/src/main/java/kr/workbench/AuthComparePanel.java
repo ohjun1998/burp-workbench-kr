@@ -39,6 +39,24 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       history =
           new JTable(historyModel) {
             @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+              Component component = super.prepareRenderer(renderer, row, column);
+              if (component instanceof JLabel cell) cell.setIcon(null);
+              int modelColumn = convertColumnIndexToModel(column);
+              if (modelColumn >= 2 && modelColumn <= 4 && component instanceof JLabel cell) {
+                Run run = runs.get(convertRowIndexToModel(row));
+                String note = run.packets[modelColumn - 2].note;
+                AuthVerdict verdict = AuthVerdict.of(note);
+                cell.setIcon(verdict.icon());
+                cell.setForeground(WorkbenchUi.toneInk(verdict.tone));
+                cell.setBackground(isCellSelected(row, column) ? WorkbenchUi.selected() : WorkbenchUi.toneFill(verdict.tone));
+                cell.setToolTipText(verdict.label + " · " + note);
+                cell.getAccessibleContext().setAccessibleDescription(verdict.label + " · " + note);
+              }
+              return component;
+            }
+
+            @Override
             public String getToolTipText(java.awt.event.MouseEvent e) {
               int row = rowAtPoint(e.getPoint()), col = columnAtPoint(e.getPoint());
               return row < 0 || col < 0 ? null : Objects.toString(getValueAt(row, col), "");
@@ -210,6 +228,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             new JTextField("x-csrf-token", 12)
           };
   final JTextArea matrixRules = new JTextArea(5, 60);
+  final JTextArea responseDenialRules = new JTextArea(4, 40);
   final TargetWindow sessionSettings =
       new TargetWindow(this, "계정 세션 · 역할/조직 권한", this::sessionSettingsContent);
   final CookieSessionProbe.Config[] sessionChecks=new CookieSessionProbe.Config[3];
@@ -244,6 +263,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       String[] owners,
       AuthJudgement.Rules rules,
       AuthPolicy policy,
+      AuthResponseRules responseRules,
       BountySession.Config[] sessions,
       BountyMatrix matrix,
       String[] roles,
@@ -458,8 +478,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
 
   static JLabel legend() {
-    JLabel label = new JLabel("차이 색상 안내");
-    label.setToolTipText("보라: 인증 · 주황: 헤더/상태 · 노랑: 본문");
+    JLabel label = new JLabel("결과·차이 색상 안내");
+    label.setToolTipText("결과: 빨강 우회 의심 · 초록 차단 · 노랑 확인 필요 · 회색 비교 미성립. 확정 판정이 아닙니다. 패킷 차이: 보라 인증 · 주황 헤더/상태 · 노랑 본문");
     return label;
   }
 
@@ -768,12 +788,16 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     panel.add(
         new JLabel("예: GET /api/posts/101 PUBLIC · GET /api/posts/{id} OWNER_ONLY · 정확한 경로 규칙 우선"));
     panel.add(WorkbenchUi.card("차단 규칙 · JSON 경로=값 (행별 OR)", new JScrollPane(denialRules)));
+    panel.add(WorkbenchUi.card("응답 차단 규칙 · 행별 OR · 선택 사항", new JScrollPane(responseDenialRules)));
+    panel.add(new JLabel("BODY: 접근 권한이 없습니다 · HEADER: X-Access: denied"));
+    panel.add(new JLabel("BODY_REGEX: (?i)access\\s+denied · HEADER_REGEX: 정규식 · 대소문자 구분, 정규식 (?i) 지원"));
     panel.add(
         button(
             "설정 확인",
             () -> {
               editable();
               ruleSnapshot();
+              AuthResponseRules.parse(responseDenialRules.getText());
               AuthPolicy.parse(
                   policyRules.getText(),
                   AuthPolicy.Access.values()[accessPolicy.getSelectedIndex()]);
@@ -965,6 +989,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         ruleSnapshot(),
         AuthPolicy.parse(
             policyRules.getText(), AuthPolicy.Access.values()[accessPolicy.getSelectedIndex()]),
+        AuthResponseRules.parse(responseDenialRules.getText()),
         sessions,
         BountyMatrix.parse(matrixRules.getText()),
         roles,
@@ -1154,7 +1179,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         HttpRequest actual = rr != null && rr.request() != null ? rr.request() : q;
         HttpResponse response = rr == null ? null : rr.response();
         String note = "응답 없음", changes = "";
-        boolean review = false, existenceVerified = false;
+        boolean review = false, existenceVerified = false, fingerprintDecision = false;
         if (response != null) {
           if (!bounded(actual, response, c.largeFiles)) {
             response = null;
@@ -1178,6 +1203,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                     + response.body().length()
                     + " bytes · SHA-256 "
                     + AuthFileEvidence.digest(response);
+            if (!c.responseRules.rules.isEmpty()) {
+              note = "판정 보류 · 대용량 응답 차단 규칙 검사 미지원 · 해시/본문 수동 확인";
+              fingerprintDecision = true;
+            }
             review = !note.startsWith("차단 근거 확인");
           } else
             try {
@@ -1225,6 +1254,16 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                           c.policy.forRequest(run.original.method(), run.original.url())),
                       c.owners[slot],
                       existenceVerified);
+              var fingerprint = c.responseRules.rules.isEmpty() ? null : c.responseRules.assess(
+                  run.response.statusCode(), responseHeaders(run.response), JsAnalysisPanel.readBody(run.response),
+                  response.statusCode(), responseHeaders(response), JsAnalysisPanel.readBody(response));
+              if (fingerprint != null) {
+                if (!result.reason().startsWith("기준 응답")) result = fingerprint;
+                fingerprintDecision = true;
+                if (result.state().equals("차단 근거 확인")
+                    && c.matrix.expected(run.original.method(), run.original.url(), slot) == BountyMatrix.Expected.ALLOW)
+                  result = new AuthJudgement.Result("판정 보류", "기대 ALLOW · 차단 관측 · 세션/정책 재검토 · " + fingerprint.reason(), "");
+              }
               note = result.note();
               changes = result.changes();
               review = !Set.of("차단 근거 확인", "공개/공유 허용", "은닉형 접근 차단 후보").contains(result.state());
@@ -1234,6 +1273,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             }
         }
         if (response != null
+            && !fingerprintDecision
+            && !note.contains("판정 보류 · 실제 전송")
+            && !note.contains("기준 응답")
+            && !note.contains("응답 디코딩/구조 제한")
             && c.matrix.expected(run.original.method(), run.original.url(), slot)
                 != BountyMatrix.Expected.UNKNOWN
             && sameTarget(actual, q)
@@ -1310,6 +1353,17 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     }
   }
 
+  static String responseHeaders(HttpResponse response) {
+    StringJoiner headers = new StringJoiner("\r\n");
+    if (response.headers() == null) {
+      String raw = response.toString();
+      int end = raw.indexOf("\r\n\r\n");
+      return end < 0 ? "" : raw.substring(0, end);
+    }
+    for (HttpHeader header : response.headers()) headers.add(header.name() + ": " + header.value());
+    return headers.toString();
+  }
+
   static boolean sameTarget(HttpRequest a, HttpRequest b) {
     try {
       java.net.URI x = java.net.URI.create(a.url()), y = java.net.URI.create(b.url());
@@ -1384,9 +1438,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     for (int i = 0; i < 3; i++)
       historyModel.setValueAt(
           run.context.labels[i]
-              + ": "
-              + (run.packets[i].response == null ? "" : run.packets[i].response.statusCode() + " ")
-              + run.packets[i].note,
+              + ": " + (run.packets[i].response == null ? "" : run.packets[i].response.statusCode() + " ")
+              + AuthVerdict.of(run.packets[i].note).describe(run.packets[i].note),
           index,
           2 + i);
     historyModel.setValueAt(run.note, index, 5);
@@ -1423,14 +1476,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       paint(requests[i], q[i], changed);
       paint(responses[i], s[i], changed);
       packets.setTitleAt(i, run == null ? label(i) : run.context.labels[i]);
-      packets.setIconAt(
-          i,
-          run == null
-              ? null
-              : WorkbenchUi.statusIcon(
-                  run.packets[i].response == null
-                      ? run.packets[i].note
-                      : String.valueOf(run.packets[i].response.statusCode())));
+      packets.setIconAt(i, run == null ? null : AuthVerdict.of(run.packets[i].note).icon());
       packets.setToolTipTextAt(i, run == null ? null : run.packets[i].note);
     }
     paint(
@@ -1463,7 +1509,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             .append(", 조직=")
             .append(run.context.tenants[i])
             .append("] : ")
-            .append(run.packets[i].note)
+            .append(AuthVerdict.of(run.packets[i].note).describe(run.packets[i].note))
             .append("\n")
             .append(run.packets[i].changes)
             .append("\n\n");

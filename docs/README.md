@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.38.0 계정 비교 응답 판정·색상](RELEASE_0.38.0_KR.md) · [검증 기록](VERIFICATION_0.38.0.json)
+
 - [0.37.4 미확정 메서드 기본 GET](RELEASE_0.37.4_KR.md) · [검증 기록](VERIFICATION_0.37.4.json)
 
 - [사이트 3.6.0 관리자·사용자 포털과 계정 비교](LAB_3.6.0_KR.md) · [검증 기록](VERIFICATION_LAB_3.6.0.json)

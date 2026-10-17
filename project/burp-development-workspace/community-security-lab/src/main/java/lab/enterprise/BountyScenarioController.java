@@ -43,7 +43,7 @@ public final class BountyScenarioController {
 
     @GetMapping("/api/bounty/manifest")
     public Map<String, Object> manifest() {
-        return Map.of("version", "3.7.1", "trainingOnly", true, "accounts", Map.of("alice", "A", "bob", "B", "moderator", "A", "admin", "ROOT"),
+        return Map.of("version", "3.8.0", "trainingOnly", true, "accounts", Map.of("alice", "A", "bob", "B", "moderator", "A", "admin", "ROOT"),
             "objects", List.of(Map.of("id", 201, "policy", "PUBLIC", "owner", "alice"), Map.of("id", 202, "policy", "OWNER_ONLY", "owner", "bob"),
                 Map.of("id", 203, "policy", "TENANT", "tenant", "A"), Map.of("id", 204, "policy", "SHARED", "members", "alice,bob"),
                 Map.of("id", 205, "policy", "TENANT", "tenant", "B"), Map.of("id", 206, "policy", "OWNER_ONLY", "owner", "alice")),

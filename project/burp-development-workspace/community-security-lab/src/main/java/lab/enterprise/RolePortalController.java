@@ -1,4 +1,5 @@
 package lab.enterprise;
+import static lab.enterprise.CommunityAccessPolicy.Permission.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -11,9 +12,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class RolePortalController {
     private final JdbcTemplate db;
+    private final CommunityAccessPolicy policy;
 
-    public RolePortalController(CommunityController community, JdbcTemplate db) {
-        this.db = db;
+    public RolePortalController(CommunityController community, JdbcTemplate db, CommunityAccessPolicy policy) {
+        this.db = db; this.policy = policy;
         ensure("portal_requests", "CREATE TABLE portal_requests (id INTEGER PRIMARY KEY, owner_id INTEGER, subject VARCHAR(160), body VARCHAR(2000), state VARCHAR(20))");
         ensure("portal_settings", "CREATE TABLE portal_settings (id INTEGER PRIMARY KEY, notice VARCHAR(500))");
         if (db.queryForObject("SELECT COUNT(*) FROM portal_requests", Integer.class) == 0) seed();
@@ -41,25 +43,15 @@ public class RolePortalController {
         if (!Set.of("fixed", "vuln").contains(mode)) deny(HttpStatus.NOT_FOUND, "실습 모드 없음");
         return mode.equals("fixed");
     }
-    private int uid(HttpServletRequest request) {
-        var session = request.getSession(false);
-        if (session == null || !(session.getAttribute("uid") instanceof Integer)) deny(HttpStatus.UNAUTHORIZED, "로그인 필요");
-        int id = (Integer) session.getAttribute("uid");
-        if (db.queryForObject("SELECT COUNT(*) FROM lab_users WHERE id=?", Integer.class, id) != 1)
-            deny(HttpStatus.UNAUTHORIZED, "다시 로그인하세요.");
-        return id;
-    }
-    private String role(int id) { return db.queryForObject("SELECT role FROM lab_users WHERE id=?", String.class, id); }
+    private int uid(HttpServletRequest request) { return policy.require(request,MEMBER).id(); }
+    private String role(int id) { return policy.role(id); }
     private int access(String mode, String expectedRole, HttpServletRequest request) {
         boolean secure = fixed(mode);
         int id = uid(request);
-        if (secure && expectedRole.equals("ADMIN") && !"ADMIN".equals(role(id))) deny(HttpStatus.FORBIDDEN, "관리자 전용 기능");
+        if (secure) policy.declared(request);
         return id;
     }
-    private void csrf(String mode, HttpServletRequest request) {
-        if (fixed(mode) && !Objects.equals(request.getSession().getAttribute("csrf"), request.getHeader("X-CSRF-Token")))
-            deny(HttpStatus.FORBIDDEN, "CSRF 토큰 불일치");
-    }
+    private void csrf(String mode,HttpServletRequest request) { if(fixed(mode))policy.csrf(request); }
     private Map<String, Object> item(int id) {
         var rows = db.queryForList("SELECT r.*,u.username FROM portal_requests r JOIN lab_users u ON r.owner_id=u.id WHERE r.id=?", id);
         if (rows.isEmpty()) deny(HttpStatus.NOT_FOUND, "요청 없음");
@@ -71,21 +63,25 @@ public class RolePortalController {
     @GetMapping({"/admin/login", "/admin/login/"}) public ResponseEntity<String> adminLogin() { return ResponseEntity.status(302).header("Location","/login?type=admin").header("Cache-Control","no-store").build(); }
     @GetMapping({"/user/login", "/user/login/"}) public ResponseEntity<String> userLogin() { return ResponseEntity.status(302).header("Location","/login?type=user").header("Cache-Control","no-store").build(); }
 
+    @AccessRule(MEMBER)
     @GetMapping("/api/access/me") public Map<String, Object> me(HttpServletRequest r) {
         int id = uid(r);
-        return Map.of("user", db.queryForMap("SELECT id,username,role,email FROM lab_users WHERE id=?", id), "csrf", r.getSession().getAttribute("csrf"), "trainingOnly", true);
+        return Map.of("user", db.queryForMap("SELECT id,username,role,email FROM lab_users WHERE id=?", id), "csrf", r.getSession().getAttribute("csrf"), "permissions",policy.permissionIds(id),"permissionLabels",policy.labels(), "trainingOnly", true);
     }
+    @AccessRule(REQUEST_USE)
     @GetMapping("/api/access/{mode}/user/dashboard") public Map<String, Object> dashboard(@PathVariable String mode, HttpServletRequest r) {
         int id = access(mode, "USER", r);
         return Map.of("requests", db.queryForList("SELECT id,owner_id,subject,state FROM portal_requests WHERE owner_id=? ORDER BY id DESC", id),
             "notice", db.queryForObject("SELECT notice FROM portal_settings WHERE id=1", String.class));
     }
+    @AccessRule(REQUEST_USE)
     @GetMapping("/api/access/{mode}/user/requests/{id}") public Map<String, Object> detail(@PathVariable String mode, @PathVariable int id, HttpServletRequest r) {
         int owner = access(mode, "USER", r);
         var row = item(id);
-        if (fixed(mode) && ((Number) row.get("OWNER_ID")).intValue() != owner && !"ADMIN".equals(role(owner))) deny(HttpStatus.NOT_FOUND, "요청 없음");
+        if (fixed(mode) && !policy.ownOrManage(owner,row.get("OWNER_ID"),REQUEST_REVIEW)) deny(HttpStatus.NOT_FOUND, "요청 없음");
         return row;
     }
+    @AccessRule(REQUEST_USE)
     @PostMapping("/api/access/{mode}/user/requests") public synchronized Map<String, Object> create(@PathVariable String mode, @RequestParam String subject, @RequestParam String body, HttpServletRequest r) {
         int owner = access(mode, "USER", r); csrf(mode, r);
         if (subject.isBlank() || subject.length() > 160 || body.isBlank() || body.length() > 2000) deny(HttpStatus.BAD_REQUEST, "제목 1~160자·내용 1~2000자를 입력하세요.");
@@ -93,21 +89,25 @@ public class RolePortalController {
         db.update("INSERT INTO portal_requests VALUES (?,?,?,?, 'PENDING')", id, owner, subject, body);
         return Map.of("id", id, "state", "PENDING");
     }
+    @AccessRule(REQUEST_USE)
     @PostMapping("/api/access/{mode}/user/requests/{id}/cancel") public synchronized Map<String, Object> cancel(@PathVariable String mode, @PathVariable int id, HttpServletRequest r) {
         int owner = access(mode, "USER", r); csrf(mode, r);
         var row = item(id);
-        if (fixed(mode) && ((Number) row.get("OWNER_ID")).intValue() != owner && !"ADMIN".equals(role(owner))) deny(HttpStatus.NOT_FOUND, "요청 없음");
+        if (fixed(mode) && !policy.ownOrManage(owner,row.get("OWNER_ID"),REQUEST_REVIEW)) deny(HttpStatus.NOT_FOUND, "요청 없음");
         if (db.update("UPDATE portal_requests SET state='CANCELLED' WHERE id=? AND state='PENDING'", id) != 1) deny(HttpStatus.CONFLICT, "대기 중인 요청만 취소할 수 있습니다.");
         return Map.of("id", id, "state", "CANCELLED");
     }
+    @AccessRule(USER_MANAGE)
     @GetMapping("/api/access/{mode}/admin/members") public List<Map<String, Object>> members(@PathVariable String mode, HttpServletRequest r) {
         access(mode, "ADMIN", r);
         return db.queryForList("SELECT id,username,role,email FROM lab_users ORDER BY id");
     }
+    @AccessRule(REQUEST_REVIEW)
     @GetMapping("/api/access/{mode}/admin/review-queue") public List<Map<String, Object>> queue(@PathVariable String mode, HttpServletRequest r) {
         access(mode, "ADMIN", r);
         return db.queryForList("SELECT r.*,u.username FROM portal_requests r JOIN lab_users u ON u.id=r.owner_id ORDER BY r.id DESC");
     }
+    @AccessRule(REQUEST_REVIEW)
     @PostMapping("/api/access/{mode}/admin/requests/{id}/review") public synchronized Map<String, Object> review(@PathVariable String mode, @PathVariable int id, @RequestParam String decision, HttpServletRequest r) {
         access(mode, "ADMIN", r); csrf(mode, r);
         if (!Set.of("APPROVED", "REJECTED").contains(decision)) deny(HttpStatus.BAD_REQUEST, "승인·반려 중 선택하세요.");
@@ -115,21 +115,32 @@ public class RolePortalController {
         if (db.update("UPDATE portal_requests SET state=? WHERE id=? AND state='PENDING'", decision, id) != 1) deny(HttpStatus.CONFLICT, "이미 처리된 요청입니다.");
         return Map.of("id", id, "state", decision);
     }
+    @AccessRule(SETTINGS_MANAGE)
     @GetMapping("/api/access/{mode}/admin/settings") public Map<String, Object> settings(@PathVariable String mode, HttpServletRequest r) {
         access(mode, "ADMIN", r);
         return Map.of("notice", db.queryForObject("SELECT notice FROM portal_settings WHERE id=1", String.class), "policy", "ADMIN_ONLY", "trainingOnly", true);
     }
+    @AccessRule(SETTINGS_MANAGE)
     @PostMapping("/api/access/{mode}/admin/settings") public Map<String, Object> settingsWrite(@PathVariable String mode, @RequestParam String notice, HttpServletRequest r) {
         access(mode, "ADMIN", r); csrf(mode, r);
         if (notice.isBlank() || notice.length() > 500) deny(HttpStatus.BAD_REQUEST, "공지 1~500자를 입력하세요.");
         db.update("UPDATE portal_settings SET notice=? WHERE id=1", notice);
         return Map.of("saved", true);
     }
+    @AccessRule(LAB_RESET)
     @PostMapping("/api/access/reset") public synchronized Map<String, Object> reset(HttpServletRequest r) {
         access("fixed", "ADMIN", r); csrf("fixed", r);
         db.update("DELETE FROM portal_requests"); seed();
         db.update("UPDATE portal_settings SET notice=? WHERE id=1", "LOOP 서비스 요청 센터에 오신 것을 환영합니다.");
         return Map.of("reset", true);
+    }
+    @AccessRule(POLICY_READ)
+    @GetMapping("/api/access/fixed/admin/permissions") public Map<String,Object> permissions(HttpServletRequest request) {
+        policy.require(request,POLICY_READ); return policy.matrix();
+    }
+    @AccessRule(POLICY_READ)
+    @GetMapping("/api/access/fixed/admin/audit") public Map<String,Object> audit(HttpServletRequest request) {
+        policy.require(request,POLICY_READ); return policy.audit();
     }
     @ExceptionHandler(ResponseStatusException.class) public ResponseEntity<Map<String, Object>> error(ResponseStatusException error) {
         return ResponseEntity.status(error.getStatusCode()).header("Cache-Control", "no-store")

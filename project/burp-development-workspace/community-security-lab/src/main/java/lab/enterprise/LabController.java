@@ -1,4 +1,5 @@
 package lab.enterprise;
+import static lab.enterprise.CommunityAccessPolicy.Permission.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,6 +38,7 @@ public class LabController {
  private Map<String,Object> user(int id){return db.queryForMap("SELECT id,username,role,email FROM lab_users WHERE id=?",id);}
  @GetMapping(value="/legacy",produces="text/html;charset=UTF-8") public String home()throws Exception{try(var in=getClass().getResourceAsStream("/static/index.html")){return new String(in.readAllBytes(),StandardCharsets.UTF_8);}}
  @GetMapping("/health") public Map<String,Object> health(){db.queryForObject("SELECT 1 FROM DUAL",Integer.class);return Map.of("status","UP","database",AppConfig.env("DB_URL","jdbc:h2:mem:lab").startsWith("jdbc:oracle")?"Oracle Free":"H2 Oracle mode (테스트용)","framework","Spring MVC","was","Apache Tomcat","trainingOnly",true);}
+ @AccessRule(PUBLIC)
  @PostMapping("/api/auth/login") public Map<String,Object> login(@RequestParam("username")String name,@RequestParam("password")String pass,@RequestParam(name="accountType",required=false)String accountType,HttpServletRequest r){
   var rows=db.queryForList("SELECT id,password_hash,role FROM lab_users WHERE username=?",name);
   if(rows.isEmpty()||!verify(pass,(String)rows.get(0).get("PASSWORD_HASH")))fail(HttpStatus.UNAUTHORIZED,"계정 또는 비밀번호 불일치");
@@ -46,14 +48,19 @@ public class LabController {
    boolean admin="ADMIN".equals(rows.get(0).get("ROLE"));
    if(admin!=accountType.equals("ADMIN"))fail(HttpStatus.FORBIDDEN,admin?"관리자 로그인을 선택하세요.":"일반 사용자 로그인을 선택하세요.");
   }
+  if(!CommunityAccessPolicy.knownRole((String)rows.get(0).get("ROLE")))fail(HttpStatus.FORBIDDEN,"허용되지 않은 계정 권한입니다.");
   var old=r.getSession(false);if(old!=null)old.invalidate();var s=r.getSession(true);int id=((Number)rows.get(0).get("ID")).intValue();s.setAttribute("uid",id);s.setAttribute("csrf",UUID.randomUUID().toString());return Map.of("user",user(id),"csrf",s.getAttribute("csrf"),"redirect","ADMIN".equals(rows.get(0).get("ROLE"))?"/?view=users":"/?view=feed");
  }
+ @AccessRule(MEMBER)
  @GetMapping("/api/auth/me") public Map<String,Object> me(HttpServletRequest r){int id=uid(r);return Map.of("user",user(id),"csrf",r.getSession().getAttribute("csrf"));}
+ @AccessRule(MEMBER)
  @PostMapping("/api/auth/logout") public Map<String,Object> logout(HttpServletRequest r){csrf(r);r.getSession().invalidate();return Map.of("ok",true);}
  @GetMapping("/api/{mode}/orders") public List<Map<String,Object>> orders(@PathVariable("mode")String m,HttpServletRequest r){fixed(m);return db.queryForList("SELECT * FROM lab_orders WHERE owner_id=? ORDER BY id",uid(r));}
  @GetMapping("/api/{mode}/orders/{id}") public Map<String,Object> order(@PathVariable("mode")String m,@PathVariable("id")int id,HttpServletRequest r){int u=uid(r);boolean f=fixed(m);var rows=db.queryForList(f?"SELECT * FROM lab_orders WHERE id=? AND owner_id=?":"SELECT * FROM lab_orders WHERE id=?",f?new Object[]{id,u}:new Object[]{id});if(rows.isEmpty())fail(HttpStatus.NOT_FOUND,"주문 없음");return rows.get(0);}
  @GetMapping("/api/{mode}/search") public List<Map<String,Object>> search(@PathVariable("mode")String m,@RequestParam(name="q",defaultValue="")String q,HttpServletRequest r){uid(r);if(q.length()>200)fail(HttpStatus.BAD_REQUEST,"검색어 너무 김");return fixed(m)?db.queryForList("SELECT id,product,amount FROM lab_orders WHERE product LIKE ? ORDER BY id","%"+q+"%"):db.queryForList("SELECT id,product,amount FROM lab_orders WHERE product LIKE '%"+q+"%' ORDER BY id");}
+ @AccessRule(USER_MANAGE)
  @GetMapping("/api/{mode}/admin/users") public List<Map<String,Object>> admin(@PathVariable("mode")String m,@RequestParam(name="role",defaultValue="USER")String role,HttpServletRequest r){int u=uid(r);String checked=fixed(m)?(String)user(u).get("ROLE"):role;if(!checked.equals("ADMIN"))fail(HttpStatus.FORBIDDEN,"관리자 권한 필요");return db.queryForList("SELECT id,username,role,email FROM lab_users ORDER BY id");}
+ @AccessRule(PROFILE_EDIT)
  @PostMapping("/api/{mode}/profile") public Map<String,Object> profile(@PathVariable("mode")String m,@RequestParam("email")String email,HttpServletRequest r){int u=uid(r);if(fixed(m))csrf(r);if(!email.matches("[A-Za-z0-9._+-]{1,80}@[A-Za-z0-9.-]{1,60}"))fail(HttpStatus.BAD_REQUEST,"이메일 형식 오류");db.update("UPDATE lab_users SET email=? WHERE id=?",email,u);return user(u);}
  @GetMapping("/api/{mode}/notes") public List<Map<String,Object>> notes(@PathVariable("mode")String m,HttpServletRequest r){uid(r);fixed(m);return db.queryForList("SELECT id,owner_id,body FROM lab_notes WHERE variant=? ORDER BY id",m);}
  @PostMapping("/api/{mode}/notes") public Map<String,Object> note(@PathVariable("mode")String m,@RequestParam("body")String body,HttpServletRequest r){int u=uid(r);if(fixed(m))csrf(r);if(body.length()>2000)fail(HttpStatus.BAD_REQUEST,"본문 너무 김");String id=UUID.randomUUID().toString();db.update("INSERT INTO lab_notes VALUES (?,?,?,?)",id,u,m,body);return Map.of("id",id);}
@@ -86,6 +93,7 @@ public class LabController {
  }
  document(paths,"/api/community/register","post",Set.of("username","password","email"),Set.of());
  document(paths,"/api/access/me","get",Set.of(),Set.of());
+ for(String path:List.of("/api/access/fixed/admin/permissions","/api/access/fixed/admin/audit","/api/workspace/fixed/moderation/posts"))document(paths,path,"get",Set.of(),Set.of());
  for(String mode:List.of("vuln","fixed")) {
   for(String path:List.of("user/dashboard","user/requests/{id}","admin/members","admin/review-queue","admin/settings"))document(paths,"/api/access/"+mode+"/"+path,"get",Set.of(),Set.of());
   document(paths,"/api/access/"+mode+"/user/requests","post",Set.of("subject","body"),Set.of());
@@ -110,7 +118,7 @@ public class LabController {
  document(paths,"/api/workspace/reset","post",Set.of(),Set.of());
  document(paths,"/api/access/reset","post",Set.of(),Set.of());
  document(paths,"/api/auth/login","post",Set.of("username","password","accountType"),Set.of());
- return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.7.1"),"paths",paths);
+ return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.8.0"),"paths",paths);
  }
  private static void document(Map<String,Object> paths,String path,String method,Set<String> fields,Set<String> query){
  @SuppressWarnings("unchecked") Map<String,Object> item=(Map<String,Object>)paths.computeIfAbsent(path,k->new LinkedHashMap<>());

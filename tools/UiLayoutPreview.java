@@ -221,6 +221,30 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("environment")) {
+            try {
+                var environment=(EnvironmentPanel)get(ext,"environments");
+                edt(()->{
+                    String origin="https://app.example.test";var site=environment.catalog.observe(origin+"/","Content-Type: application/vnd.spring-boot.actuator.v3+json","<a href='/v3/api-docs'>API</a>");environment.origins.addItem(origin);
+                    String url=origin+"/v3/api-docs",body="{\"openapi\":\"3.0.0\",\"paths\":{\"/api/users\":{\"get\":{}}}}";
+                    var finding=EnvironmentContent.inspect(url,200,"Content-Type: application/json",body,"");
+                    var result=new EnvironmentScan.Result(url,"GET /v3/api-docs HTTP/1.1\r\nHost: app.example.test\r\n\r\n","HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n"+body,"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n"+body,"HTTP 200 · API 명세 확인",200,finding,EnvironmentProject.hash(body),null);
+                    environment.project.add(url,"anonymous",200,"OPENAPI",result.fingerprint());environment.project.add(url,"anonymous",403,"DENIED",result.fingerprint());environment.project.add(url,"anonymous",200,"OPENAPI",result.fingerprint());
+                    environment.packets.put(url,new EnvironmentPanel.Packet(url,result.request(),result.response(),result.state(),result.decoded(),result,"anonymous"));environment.project.pending=List.of(new EnvironmentProject.Pending(origin+"/api/users",1));environment.refresh();
+                    for(int i=0;i<environment.candidates.size();i++)if(environment.candidates.get(i).url().equals(url)){int row=environment.pathTable.convertRowIndexToView(i);environment.pathTable.setRowSelectionInterval(row,row);break;}
+                    environment.requestView.setName("wb.environment.request.text");environment.responseView.setName("wb.environment.response.text");environment.setVisible(true);installHeaders(environment);
+                    try{
+                        render(environment,out.resolve("environment-workspace.png"),width,height);
+                        var settings=WorkbenchUi.settingsBody(environment.settingsContent(),()->{});renderAt(settings,out.resolve("environment-settings.png"),760,480);renderAt(settings,out.resolve("environment-settings-minimum.png"),560,300);
+                        var evidence=WorkbenchUi.settingsBody(environment.evidenceContent(),()->{});renderAt(evidence,out.resolve("environment-evidence.png"),760,480);renderAt(evidence,out.resolve("environment-evidence-minimum.png"),560,300);
+                        var history=WorkbenchUi.settingsBody(environment.changesContent(),()->{});installHeaders(history);renderAt(history,out.resolve("environment-history.png"),760,480);renderAt(history,out.resolve("environment-history-minimum.png"),560,300);
+                        environment.pause.setEnabled(true);environment.pause.setText("재개");environment.status.setText("일시정지 · HTTP 429 · 대기 후 재개 · 남음 1");render(environment,out.resolve("environment-paused.png"),width,height);
+                    }catch(Exception error){throw new RuntimeException(error);}
+                });writeMeasurements(out);
+            }finally{unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("Environment preview failed");
+            System.out.println("Environment views rendered: "+theme+" "+width+"x"+height+"; synthetic metadata, zero HTTP.");return;
+        }
         if(args.length>5&&args[5].equals("auth")) {
             try {
                 var auth=(AuthComparePanel)get(ext,"authCompare");

@@ -478,6 +478,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           jsAnalysis.navigateSource(source, line, kind);
         };
     authCompare.reviewSink = (method, url, reason) -> activity.review(method, url, reason);
+    environments.sessionConfig = slot -> authCompare.sessionChecks[slot];
     environments.sessions =
         (slot, url) -> {
           var candidate = authCompare.slots[slot];

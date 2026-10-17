@@ -1,0 +1,1903 @@
+{
+  "siteVersion": "3.8.0",
+  "workbenchVersion": "0.37.4",
+  "mapperVersion": "0.3.1",
+  "dateKST": "2026-10-17",
+  "baseMain": "b15833d633d959ffe42137c9b80a291d1bf58ce5",
+  "integratedMain": "0c9b7e8037b1dc84c01fcf463c6a8495c8d5613f",
+  "http": {
+    "version": "3.8.0",
+    "passed": 384,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "standalone login page /login",
+        "passed": true
+      },
+      {
+        "name": "login form and role selector /login",
+        "passed": true
+      },
+      {
+        "name": "login page is not cached /login",
+        "passed": true
+      },
+      {
+        "name": "standalone login page /login/",
+        "passed": true
+      },
+      {
+        "name": "login form and role selector /login/",
+        "passed": true
+      },
+      {
+        "name": "login page is not cached /login/",
+        "passed": true
+      },
+      {
+        "name": "standalone login page /login?type=admin",
+        "passed": true
+      },
+      {
+        "name": "login form and role selector /login?type=admin",
+        "passed": true
+      },
+      {
+        "name": "login page is not cached /login?type=admin",
+        "passed": true
+      },
+      {
+        "name": "standalone login page /login?type=user",
+        "passed": true
+      },
+      {
+        "name": "login form and role selector /login?type=user",
+        "passed": true
+      },
+      {
+        "name": "login page is not cached /login?type=user",
+        "passed": true
+      },
+      {
+        "name": "community uses standalone login link",
+        "passed": true
+      },
+      {
+        "name": "community has no inline credentials",
+        "passed": true
+      },
+      {
+        "name": "portal alias admin",
+        "passed": true
+      },
+      {
+        "name": "portal destination admin",
+        "passed": true
+      },
+      {
+        "name": "typed login alias admin",
+        "passed": true
+      },
+      {
+        "name": "typed login destination admin",
+        "passed": true
+      },
+      {
+        "name": "portal alias admin/",
+        "passed": true
+      },
+      {
+        "name": "portal destination admin/",
+        "passed": true
+      },
+      {
+        "name": "typed login alias admin/",
+        "passed": true
+      },
+      {
+        "name": "typed login destination admin/",
+        "passed": true
+      },
+      {
+        "name": "portal alias user",
+        "passed": true
+      },
+      {
+        "name": "portal destination user",
+        "passed": true
+      },
+      {
+        "name": "typed login alias user",
+        "passed": true
+      },
+      {
+        "name": "typed login destination user",
+        "passed": true
+      },
+      {
+        "name": "portal alias user/",
+        "passed": true
+      },
+      {
+        "name": "portal destination user/",
+        "passed": true
+      },
+      {
+        "name": "typed login alias user/",
+        "passed": true
+      },
+      {
+        "name": "typed login destination user/",
+        "passed": true
+      },
+      {
+        "name": "typed login succeeds alice",
+        "passed": true
+      },
+      {
+        "name": "server determines role and landing alice",
+        "passed": true
+      },
+      {
+        "name": "typed login has authenticated session alice",
+        "passed": true
+      },
+      {
+        "name": "typed login actual admin access alice",
+        "passed": true
+      },
+      {
+        "name": "typed login common functions alice",
+        "passed": true
+      },
+      {
+        "name": "typed login logout alice",
+        "passed": true
+      },
+      {
+        "name": "typed login logout invalidates session alice",
+        "passed": true
+      },
+      {
+        "name": "typed login succeeds admin",
+        "passed": true
+      },
+      {
+        "name": "server determines role and landing admin",
+        "passed": true
+      },
+      {
+        "name": "typed login has authenticated session admin",
+        "passed": true
+      },
+      {
+        "name": "typed login actual admin access admin",
+        "passed": true
+      },
+      {
+        "name": "typed login common functions admin",
+        "passed": true
+      },
+      {
+        "name": "typed login logout admin",
+        "passed": true
+      },
+      {
+        "name": "typed login logout invalidates session admin",
+        "passed": true
+      },
+      {
+        "name": "typed login succeeds moderator",
+        "passed": true
+      },
+      {
+        "name": "server determines role and landing moderator",
+        "passed": true
+      },
+      {
+        "name": "typed login has authenticated session moderator",
+        "passed": true
+      },
+      {
+        "name": "typed login actual admin access moderator",
+        "passed": true
+      },
+      {
+        "name": "typed login common functions moderator",
+        "passed": true
+      },
+      {
+        "name": "typed login logout moderator",
+        "passed": true
+      },
+      {
+        "name": "typed login logout invalidates session moderator",
+        "passed": true
+      },
+      {
+        "name": "invalid login rejected alice/ADMIN/403",
+        "passed": true
+      },
+      {
+        "name": "invalid typed login creates no session alice/ADMIN/403",
+        "passed": true
+      },
+      {
+        "name": "invalid login rejected admin/USER/403",
+        "passed": true
+      },
+      {
+        "name": "invalid typed login creates no session admin/USER/403",
+        "passed": true
+      },
+      {
+        "name": "invalid login rejected moderator/ADMIN/403",
+        "passed": true
+      },
+      {
+        "name": "invalid typed login creates no session moderator/ADMIN/403",
+        "passed": true
+      },
+      {
+        "name": "invalid login rejected alice/ROOT/400",
+        "passed": true
+      },
+      {
+        "name": "invalid typed login creates no session alice/ROOT/400",
+        "passed": true
+      },
+      {
+        "name": "invalid login rejected alice//400",
+        "passed": true
+      },
+      {
+        "name": "invalid typed login creates no session alice//400",
+        "passed": true
+      },
+      {
+        "name": "invalid login rejected admin/ADMIN/401",
+        "passed": true
+      },
+      {
+        "name": "invalid typed login creates no session admin/ADMIN/401",
+        "passed": true
+      },
+      {
+        "name": "identity before failed account switch",
+        "passed": true
+      },
+      {
+        "name": "failed typed account switch",
+        "passed": true
+      },
+      {
+        "name": "identity survives failed account switch",
+        "passed": true
+      },
+      {
+        "name": "failed account switch preserves identity and CSRF",
+        "passed": true
+      },
+      {
+        "name": "successful account switch",
+        "passed": true
+      },
+      {
+        "name": "successful switch changes actual identity and token",
+        "passed": true
+      },
+      {
+        "name": "old token cannot logout switched identity",
+        "passed": true
+      },
+      {
+        "name": "new token logs out switched identity",
+        "passed": true
+      },
+      {
+        "name": "login OpenAPI schema",
+        "passed": true
+      },
+      {
+        "name": "login type is documented",
+        "passed": true
+      },
+      {
+        "name": "admin uses common dashboard",
+        "passed": true
+      },
+      {
+        "name": "bob reads own request",
+        "passed": true
+      },
+      {
+        "name": "bob cannot read alice request",
+        "passed": true
+      },
+      {
+        "name": "wrong password rejected",
+        "passed": true
+      },
+      {
+        "name": "failed login has no authenticated session",
+        "passed": true
+      },
+      {
+        "name": "alice identity response",
+        "passed": true
+      },
+      {
+        "name": "alice identity is correct",
+        "passed": true
+      },
+      {
+        "name": "alice password hash is absent",
+        "passed": true
+      },
+      {
+        "name": "bob identity response",
+        "passed": true
+      },
+      {
+        "name": "bob identity is correct",
+        "passed": true
+      },
+      {
+        "name": "bob password hash is absent",
+        "passed": true
+      },
+      {
+        "name": "admin identity response",
+        "passed": true
+      },
+      {
+        "name": "admin identity is correct",
+        "passed": true
+      },
+      {
+        "name": "admin password hash is absent",
+        "passed": true
+      },
+      {
+        "name": "anonymous identity is rejected",
+        "passed": true
+      },
+      {
+        "name": "fixed guest blocked admin/members",
+        "passed": true
+      },
+      {
+        "name": "fixed guest blocked admin/review-queue",
+        "passed": true
+      },
+      {
+        "name": "fixed guest blocked admin/settings",
+        "passed": true
+      },
+      {
+        "name": "fixed guest blocked user/dashboard",
+        "passed": true
+      },
+      {
+        "name": "fixed guest blocked user/requests/501",
+        "passed": true
+      },
+      {
+        "name": "fixed admin allowed admin/members",
+        "passed": true
+      },
+      {
+        "name": "fixed alice vertical comparison admin/members",
+        "passed": true
+      },
+      {
+        "name": "fixed admin allowed admin/review-queue",
+        "passed": true
+      },
+      {
+        "name": "fixed alice vertical comparison admin/review-queue",
+        "passed": true
+      },
+      {
+        "name": "fixed admin allowed admin/settings",
+        "passed": true
+      },
+      {
+        "name": "fixed alice vertical comparison admin/settings",
+        "passed": true
+      },
+      {
+        "name": "fixed own object",
+        "passed": true
+      },
+      {
+        "name": "fixed cross-user object",
+        "passed": true
+      },
+      {
+        "name": "vuln guest blocked admin/members",
+        "passed": true
+      },
+      {
+        "name": "vuln guest blocked admin/review-queue",
+        "passed": true
+      },
+      {
+        "name": "vuln guest blocked admin/settings",
+        "passed": true
+      },
+      {
+        "name": "vuln guest blocked user/dashboard",
+        "passed": true
+      },
+      {
+        "name": "vuln guest blocked user/requests/501",
+        "passed": true
+      },
+      {
+        "name": "vuln admin allowed admin/members",
+        "passed": true
+      },
+      {
+        "name": "vuln alice vertical comparison admin/members",
+        "passed": true
+      },
+      {
+        "name": "vuln admin allowed admin/review-queue",
+        "passed": true
+      },
+      {
+        "name": "vuln alice vertical comparison admin/review-queue",
+        "passed": true
+      },
+      {
+        "name": "vuln admin allowed admin/settings",
+        "passed": true
+      },
+      {
+        "name": "vuln alice vertical comparison admin/settings",
+        "passed": true
+      },
+      {
+        "name": "vuln own object",
+        "passed": true
+      },
+      {
+        "name": "vuln cross-user object",
+        "passed": true
+      },
+      {
+        "name": "alice dashboard",
+        "passed": true
+      },
+      {
+        "name": "dashboard excludes bob objects",
+        "passed": true
+      },
+      {
+        "name": "fixed guest write rejected user/requests",
+        "passed": true
+      },
+      {
+        "name": "fixed guest write rejected user/requests/501/cancel",
+        "passed": true
+      },
+      {
+        "name": "fixed guest write rejected admin/requests/501/review",
+        "passed": true
+      },
+      {
+        "name": "fixed guest write rejected admin/settings",
+        "passed": true
+      },
+      {
+        "name": "vuln guest write rejected user/requests",
+        "passed": true
+      },
+      {
+        "name": "vuln guest write rejected user/requests/501/cancel",
+        "passed": true
+      },
+      {
+        "name": "vuln guest write rejected admin/requests/501/review",
+        "passed": true
+      },
+      {
+        "name": "vuln guest write rejected admin/settings",
+        "passed": true
+      },
+      {
+        "name": "query role spoof rejected",
+        "passed": true
+      },
+      {
+        "name": "invalid mode rejected",
+        "passed": true
+      },
+      {
+        "name": "missing object is 404",
+        "passed": true
+      },
+      {
+        "name": "fixed create missing csrf",
+        "passed": true
+      },
+      {
+        "name": "fixed create other account csrf",
+        "passed": true
+      },
+      {
+        "name": "fixed create invalid fields",
+        "passed": true
+      },
+      {
+        "name": "alice creates request",
+        "passed": true
+      },
+      {
+        "name": "bob cannot cancel alice request",
+        "passed": true
+      },
+      {
+        "name": "blocked cancel preserves state",
+        "passed": true
+      },
+      {
+        "name": "state stays pending",
+        "passed": true
+      },
+      {
+        "name": "owner cancels pending request",
+        "passed": true
+      },
+      {
+        "name": "cannot cancel twice",
+        "passed": true
+      },
+      {
+        "name": "user cannot approve",
+        "passed": true
+      },
+      {
+        "name": "admin csrf enforced",
+        "passed": true
+      },
+      {
+        "name": "decision enum enforced",
+        "passed": true
+      },
+      {
+        "name": "admin approves",
+        "passed": true
+      },
+      {
+        "name": "review replay rejected",
+        "passed": true
+      },
+      {
+        "name": "user cannot change notice",
+        "passed": true
+      },
+      {
+        "name": "admin updates notice",
+        "passed": true
+      },
+      {
+        "name": "user sees notice",
+        "passed": true
+      },
+      {
+        "name": "notice persisted",
+        "passed": true
+      },
+      {
+        "name": "vulnerable cross-user cancel works",
+        "passed": true
+      },
+      {
+        "name": "reset needs admin",
+        "passed": true
+      },
+      {
+        "name": "admin resets state",
+        "passed": true
+      },
+      {
+        "name": "vulnerable vertical review works",
+        "passed": true
+      },
+      {
+        "name": "vulnerable settings bypass works",
+        "passed": true
+      },
+      {
+        "name": "vulnerable cancel still rejects nonpending",
+        "passed": true
+      },
+      {
+        "name": "final reset",
+        "passed": true
+      },
+      {
+        "name": "asset available role-portal.js",
+        "passed": true
+      },
+      {
+        "name": "asset available role-portal.css",
+        "passed": true
+      },
+      {
+        "name": "OpenAPI includes new endpoints",
+        "passed": true
+      },
+      {
+        "name": "OpenAPI version and portal path",
+        "passed": true
+      },
+      {
+        "name": "shared community page",
+        "passed": true
+      },
+      {
+        "name": "workspace and lab menus in shared page",
+        "passed": true
+      },
+      {
+        "name": "current workspace JS served",
+        "passed": true
+      },
+      {
+        "name": "normal APIs use fixed mode",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/activity",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/reports/601",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/applications/701",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/admin/users",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/admin/reports",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/admin/applications",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/admin/posts",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/admin/comments",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected fixed/debug/config",
+        "passed": true
+      },
+      {
+        "name": "public course catalog fixed",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected fixed/reports",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected fixed/courses/802/apply",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected fixed/admin/courses",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected fixed/admin/users/2/edit",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/activity",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/reports/601",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/applications/701",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/admin/users",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/admin/reports",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/admin/applications",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/admin/posts",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/admin/comments",
+        "passed": true
+      },
+      {
+        "name": "workspace guest rejected vuln/debug/config",
+        "passed": true
+      },
+      {
+        "name": "public course catalog vuln",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected vuln/reports",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected vuln/courses/802/apply",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected vuln/admin/courses",
+        "passed": true
+      },
+      {
+        "name": "workspace guest write rejected vuln/admin/users/2/edit",
+        "passed": true
+      },
+      {
+        "name": "invalid workspace mode",
+        "passed": true
+      },
+      {
+        "name": "own activity",
+        "passed": true
+      },
+      {
+        "name": "own activity excludes other reports and applications",
+        "passed": true
+      },
+      {
+        "name": "ordinary user blocked admin/users",
+        "passed": true
+      },
+      {
+        "name": "moderator not global admin admin/users",
+        "passed": true
+      },
+      {
+        "name": "admin reads admin/users",
+        "passed": true
+      },
+      {
+        "name": "lab omits role check admin/users",
+        "passed": true
+      },
+      {
+        "name": "ordinary user blocked admin/reports",
+        "passed": true
+      },
+      {
+        "name": "moderator not global admin admin/reports",
+        "passed": true
+      },
+      {
+        "name": "admin reads admin/reports",
+        "passed": true
+      },
+      {
+        "name": "lab omits role check admin/reports",
+        "passed": true
+      },
+      {
+        "name": "ordinary user blocked admin/applications",
+        "passed": true
+      },
+      {
+        "name": "moderator not global admin admin/applications",
+        "passed": true
+      },
+      {
+        "name": "admin reads admin/applications",
+        "passed": true
+      },
+      {
+        "name": "lab omits role check admin/applications",
+        "passed": true
+      },
+      {
+        "name": "ordinary user blocked admin/posts",
+        "passed": true
+      },
+      {
+        "name": "moderator not global admin admin/posts",
+        "passed": true
+      },
+      {
+        "name": "admin reads admin/posts",
+        "passed": true
+      },
+      {
+        "name": "lab omits role check admin/posts",
+        "passed": true
+      },
+      {
+        "name": "ordinary user blocked admin/comments",
+        "passed": true
+      },
+      {
+        "name": "moderator not global admin admin/comments",
+        "passed": true
+      },
+      {
+        "name": "admin reads admin/comments",
+        "passed": true
+      },
+      {
+        "name": "lab omits role check admin/comments",
+        "passed": true
+      },
+      {
+        "name": "own report",
+        "passed": true
+      },
+      {
+        "name": "other report hidden",
+        "passed": true
+      },
+      {
+        "name": "lab report idor",
+        "passed": true
+      },
+      {
+        "name": "idor returns bob report marker",
+        "passed": true
+      },
+      {
+        "name": "admin report detail",
+        "passed": true
+      },
+      {
+        "name": "report CSRF required",
+        "passed": true
+      },
+      {
+        "name": "report other-user CSRF rejected",
+        "passed": true
+      },
+      {
+        "name": "private post cannot be reported by nonreader",
+        "passed": true
+      },
+      {
+        "name": "bad report type",
+        "passed": true
+      },
+      {
+        "name": "missing report target",
+        "passed": true
+      },
+      {
+        "name": "invalid report target id",
+        "passed": true
+      },
+      {
+        "name": "blank report reason",
+        "passed": true
+      },
+      {
+        "name": "create own report",
+        "passed": true
+      },
+      {
+        "name": "other user cannot read new report",
+        "passed": true
+      },
+      {
+        "name": "user cannot process report",
+        "passed": true
+      },
+      {
+        "name": "denied report process preserves state",
+        "passed": true
+      },
+      {
+        "name": "report stays pending",
+        "passed": true
+      },
+      {
+        "name": "admin report csrf required",
+        "passed": true
+      },
+      {
+        "name": "invalid report decision",
+        "passed": true
+      },
+      {
+        "name": "admin processes report",
+        "passed": true
+      },
+      {
+        "name": "reporter sees resolution",
+        "passed": true
+      },
+      {
+        "name": "report resolution persists",
+        "passed": true
+      },
+      {
+        "name": "report cannot be processed twice",
+        "passed": true
+      },
+      {
+        "name": "lab csrf omission is observable",
+        "passed": true
+      },
+      {
+        "name": "other application hidden",
+        "passed": true
+      },
+      {
+        "name": "lab application IDOR",
+        "passed": true
+      },
+      {
+        "name": "duplicate application rejected",
+        "passed": true
+      },
+      {
+        "name": "application csrf required",
+        "passed": true
+      },
+      {
+        "name": "user applies to course",
+        "passed": true
+      },
+      {
+        "name": "other user cannot cancel application",
+        "passed": true
+      },
+      {
+        "name": "user cannot approve course",
+        "passed": true
+      },
+      {
+        "name": "denied application mutation preserves state",
+        "passed": true
+      },
+      {
+        "name": "application stays pending",
+        "passed": true
+      },
+      {
+        "name": "admin course review csrf required",
+        "passed": true
+      },
+      {
+        "name": "invalid course review",
+        "passed": true
+      },
+      {
+        "name": "admin accepts application",
+        "passed": true
+      },
+      {
+        "name": "course review replay rejected",
+        "passed": true
+      },
+      {
+        "name": "approved application cancellation rejected",
+        "passed": true
+      },
+      {
+        "name": "user cannot create course",
+        "passed": true
+      },
+      {
+        "name": "course creation csrf required",
+        "passed": true
+      },
+      {
+        "name": "admin creates course",
+        "passed": true
+      },
+      {
+        "name": "admin uses common application function",
+        "passed": true
+      },
+      {
+        "name": "admin sees own activity",
+        "passed": true
+      },
+      {
+        "name": "admin application recorded under admin",
+        "passed": true
+      },
+      {
+        "name": "bob applies to new course",
+        "passed": true
+      },
+      {
+        "name": "owner cancels pending application",
+        "passed": true
+      },
+      {
+        "name": "owner cannot cancel twice",
+        "passed": true
+      },
+      {
+        "name": "course invalid state",
+        "passed": true
+      },
+      {
+        "name": "admin closes course",
+        "passed": true
+      },
+      {
+        "name": "closed course rejects application",
+        "passed": true
+      },
+      {
+        "name": "user cannot delete course",
+        "passed": true
+      },
+      {
+        "name": "admin deletes course",
+        "passed": true
+      },
+      {
+        "name": "deleted course hidden",
+        "passed": true
+      },
+      {
+        "name": "deleted course applications removed",
+        "passed": true
+      },
+      {
+        "name": "lab user can process another user application",
+        "passed": true
+      },
+      {
+        "name": "ordinary user cannot reset workspace",
+        "passed": true
+      },
+      {
+        "name": "reset csrf required",
+        "passed": true
+      },
+      {
+        "name": "reset restores learning data",
+        "passed": true
+      },
+      {
+        "name": "restored application",
+        "passed": true
+      },
+      {
+        "name": "application reset to pending",
+        "passed": true
+      },
+      {
+        "name": "user cannot change roles",
+        "passed": true
+      },
+      {
+        "name": "invalid managed email rejected",
+        "passed": true
+      },
+      {
+        "name": "admin updates member information",
+        "passed": true
+      },
+      {
+        "name": "member sees managed email update",
+        "passed": true
+      },
+      {
+        "name": "managed email persisted",
+        "passed": true
+      },
+      {
+        "name": "restore member email",
+        "passed": true
+      },
+      {
+        "name": "invalid role rejected",
+        "passed": true
+      },
+      {
+        "name": "recovery admin preserved",
+        "passed": true
+      },
+      {
+        "name": "admin user management csrf required",
+        "passed": true
+      },
+      {
+        "name": "admin suspends bob",
+        "passed": true
+      },
+      {
+        "name": "existing bob session is blocked",
+        "passed": true
+      },
+      {
+        "name": "suspended bob cannot log in",
+        "passed": true
+      },
+      {
+        "name": "admin reactivates bob",
+        "passed": true
+      },
+      {
+        "name": "reactivated bob uses community",
+        "passed": true
+      },
+      {
+        "name": "admin grants bob admin role",
+        "passed": true
+      },
+      {
+        "name": "role change applies to existing session",
+        "passed": true
+      },
+      {
+        "name": "admin restores bob role",
+        "passed": true
+      },
+      {
+        "name": "demotion applies to existing session",
+        "passed": true
+      },
+      {
+        "name": "new comment",
+        "passed": true
+      },
+      {
+        "name": "other user cannot edit comment",
+        "passed": true
+      },
+      {
+        "name": "other user cannot delete comment",
+        "passed": true
+      },
+      {
+        "name": "owner edits comment",
+        "passed": true
+      },
+      {
+        "name": "comment can be reported",
+        "passed": true
+      },
+      {
+        "name": "admin deletes any comment",
+        "passed": true
+      },
+      {
+        "name": "deleted comment is 404",
+        "passed": true
+      },
+      {
+        "name": "fixed search binds input",
+        "passed": true
+      },
+      {
+        "name": "bound injection returns no hidden records",
+        "passed": true
+      },
+      {
+        "name": "lab search demonstrates injection",
+        "passed": true
+      },
+      {
+        "name": "injected search exposes bob record",
+        "passed": true
+      },
+      {
+        "name": "fixed config is protected",
+        "passed": true
+      },
+      {
+        "name": "lab exposes synthetic config",
+        "passed": true
+      },
+      {
+        "name": "config contains synthetic key only",
+        "passed": true
+      },
+      {
+        "name": "workspace final reset",
+        "passed": true
+      },
+      {
+        "name": "policy administration guest/permissions",
+        "passed": true
+      },
+      {
+        "name": "policy administration guest/audit",
+        "passed": true
+      },
+      {
+        "name": "policy administration alice/permissions",
+        "passed": true
+      },
+      {
+        "name": "policy administration alice/audit",
+        "passed": true
+      },
+      {
+        "name": "policy administration moderator/permissions",
+        "passed": true
+      },
+      {
+        "name": "policy administration moderator/audit",
+        "passed": true
+      },
+      {
+        "name": "policy administration admin/permissions",
+        "passed": true
+      },
+      {
+        "name": "policy administration admin/audit",
+        "passed": true
+      },
+      {
+        "name": "capability identity alice",
+        "passed": true
+      },
+      {
+        "name": "common permissions retained alice",
+        "passed": true
+      },
+      {
+        "name": "management permission matches actual role alice",
+        "passed": true
+      },
+      {
+        "name": "board permission is scoped by role alice",
+        "passed": true
+      },
+      {
+        "name": "permission labels cover identity alice",
+        "passed": true
+      },
+      {
+        "name": "capability identity bob",
+        "passed": true
+      },
+      {
+        "name": "common permissions retained bob",
+        "passed": true
+      },
+      {
+        "name": "management permission matches actual role bob",
+        "passed": true
+      },
+      {
+        "name": "board permission is scoped by role bob",
+        "passed": true
+      },
+      {
+        "name": "permission labels cover identity bob",
+        "passed": true
+      },
+      {
+        "name": "capability identity admin",
+        "passed": true
+      },
+      {
+        "name": "common permissions retained admin",
+        "passed": true
+      },
+      {
+        "name": "management permission matches actual role admin",
+        "passed": true
+      },
+      {
+        "name": "board permission is scoped by role admin",
+        "passed": true
+      },
+      {
+        "name": "permission labels cover identity admin",
+        "passed": true
+      },
+      {
+        "name": "capability identity moderator",
+        "passed": true
+      },
+      {
+        "name": "common permissions retained moderator",
+        "passed": true
+      },
+      {
+        "name": "management permission matches actual role moderator",
+        "passed": true
+      },
+      {
+        "name": "board permission is scoped by role moderator",
+        "passed": true
+      },
+      {
+        "name": "permission labels cover identity moderator",
+        "passed": true
+      },
+      {
+        "name": "missing declared API policy denied",
+        "passed": true
+      },
+      {
+        "name": "unregistered API body is never executed",
+        "passed": true
+      },
+      {
+        "name": "missing declared API policy denied",
+        "passed": true
+      },
+      {
+        "name": "unregistered API body is never executed",
+        "passed": true
+      },
+      {
+        "name": "missing declared API policy denied",
+        "passed": true
+      },
+      {
+        "name": "unregistered API body is never executed",
+        "passed": true
+      },
+      {
+        "name": "scoped moderation guest",
+        "passed": true
+      },
+      {
+        "name": "scoped moderation alice",
+        "passed": true
+      },
+      {
+        "name": "scoped moderation moderator",
+        "passed": true
+      },
+      {
+        "name": "moderation excludes private and other boards moderator",
+        "passed": true
+      },
+      {
+        "name": "scoped moderation admin",
+        "passed": true
+      },
+      {
+        "name": "moderation excludes private and other boards admin",
+        "passed": true
+      },
+      {
+        "name": "server object capabilities guest/101",
+        "passed": true
+      },
+      {
+        "name": "server decides edit and delete guest/101",
+        "passed": true
+      },
+      {
+        "name": "server decides comment capability guest/101",
+        "passed": true
+      },
+      {
+        "name": "server object capabilities alice/101",
+        "passed": true
+      },
+      {
+        "name": "server decides edit and delete alice/101",
+        "passed": true
+      },
+      {
+        "name": "server decides comment capability alice/101",
+        "passed": true
+      },
+      {
+        "name": "server object capabilities bob/101",
+        "passed": true
+      },
+      {
+        "name": "server decides edit and delete bob/101",
+        "passed": true
+      },
+      {
+        "name": "server decides comment capability bob/101",
+        "passed": true
+      },
+      {
+        "name": "server object capabilities moderator/105",
+        "passed": true
+      },
+      {
+        "name": "server decides edit and delete moderator/105",
+        "passed": true
+      },
+      {
+        "name": "server decides comment capability moderator/105",
+        "passed": true
+      },
+      {
+        "name": "server object capabilities moderator/101",
+        "passed": true
+      },
+      {
+        "name": "server decides edit and delete moderator/101",
+        "passed": true
+      },
+      {
+        "name": "server decides comment capability moderator/101",
+        "passed": true
+      },
+      {
+        "name": "server object capabilities admin/102",
+        "passed": true
+      },
+      {
+        "name": "server decides edit and delete admin/102",
+        "passed": true
+      },
+      {
+        "name": "server decides comment capability admin/102",
+        "passed": true
+      },
+      {
+        "name": "create post for scope test",
+        "passed": true
+      },
+      {
+        "name": "moderator cannot move managed post outside board",
+        "passed": true
+      },
+      {
+        "name": "moderator cannot privatize another member post",
+        "passed": true
+      },
+      {
+        "name": "moderator may manage assigned public board",
+        "passed": true
+      },
+      {
+        "name": "ordinary member cannot spoof feature permission",
+        "passed": true
+      },
+      {
+        "name": "record denial without query contents",
+        "passed": true
+      },
+      {
+        "name": "manager reads bounded audit",
+        "passed": true
+      },
+      {
+        "name": "audit contains feature denial",
+        "passed": true
+      },
+      {
+        "name": "audit contains completed write",
+        "passed": true
+      },
+      {
+        "name": "audit metadata excludes secrets",
+        "passed": true
+      },
+      {
+        "name": "audit bounded and retention explicit",
+        "passed": true
+      },
+      {
+        "name": "grant moderator role through manager",
+        "passed": true
+      },
+      {
+        "name": "old bob session receives granted capability",
+        "passed": true
+      },
+      {
+        "name": "role grant updates server permissions",
+        "passed": true
+      },
+      {
+        "name": "new capability enables scoped API",
+        "passed": true
+      },
+      {
+        "name": "revoke moderator capability",
+        "passed": true
+      },
+      {
+        "name": "old cookie cannot retain revoked feature",
+        "passed": true
+      },
+      {
+        "name": "revoked identity is current",
+        "passed": true
+      },
+      {
+        "name": "revoked feature absent from identity",
+        "passed": true
+      },
+      {
+        "name": "logout",
+        "passed": true
+      },
+      {
+        "name": "old session identity rejected",
+        "passed": true
+      },
+      {
+        "name": "old session protected request rejected",
+        "passed": true
+      }
+    ],
+    "method": "Current Spring MVC/Tomcat sources, isolated H2 Oracle mode, separate real HTTP cookie jars on loopback",
+    "serverPortClosed": true,
+    "browserDOM": false,
+    "nativeBurp": false,
+    "docker": false
+  },
+  "browser": {
+    "siteVersion": "3.8.0",
+    "browserVersion": "153.0.8010.0",
+    "passed": 66,
+    "failed": 0,
+    "method": "Actual isolated Chromium against current compiled Spring MVC/Tomcat sources and fresh H2 database",
+    "checks": [
+      {
+        "name": "password visibility control",
+        "passed": true
+      },
+      {
+        "name": "wrong selected role stays on login",
+        "passed": true
+      },
+      {
+        "name": "general login has no administration menu",
+        "passed": true
+      },
+      {
+        "name": "header search returns real matching posts",
+        "passed": true
+      },
+      {
+        "name": "category filter only renders security posts",
+        "passed": true
+      },
+      {
+        "name": "profile lists actual granted permissions",
+        "passed": true
+      },
+      {
+        "name": "all eight training cases remain available",
+        "passed": true
+      },
+      {
+        "name": "fixed training request enforces feature permission",
+        "passed": true
+      },
+      {
+        "name": "explicit vulnerable training comparison remains available",
+        "passed": true
+      },
+      {
+        "name": "author sees server-authorized edit",
+        "passed": true
+      },
+      {
+        "name": "browser comment workflow",
+        "passed": true
+      },
+      {
+        "name": "actual login role menu bob",
+        "passed": true
+      },
+      {
+        "name": "other member cannot read private post",
+        "passed": true
+      },
+      {
+        "name": "forced management navigation is rejected",
+        "passed": true
+      },
+      {
+        "name": "direct API remains protected",
+        "passed": true
+      },
+      {
+        "name": "actual login role menu admin",
+        "passed": true
+      },
+      {
+        "name": "role policy matrix renders",
+        "passed": true
+      },
+      {
+        "name": "access audit shows denial",
+        "passed": true
+      },
+      {
+        "name": "access audit does not expose query values",
+        "passed": true
+      },
+      {
+        "name": "authorized manager can read private post",
+        "passed": true
+      },
+      {
+        "name": "manager creates course through UI",
+        "passed": true
+      },
+      {
+        "name": "member course application appears in activity",
+        "passed": true
+      },
+      {
+        "name": "manager approval updates state",
+        "passed": true
+      },
+      {
+        "name": "member sees approved course",
+        "passed": true
+      },
+      {
+        "name": "actual login role menu moderator",
+        "passed": true
+      },
+      {
+        "name": "moderator has scoped navigation",
+        "passed": true
+      },
+      {
+        "name": "moderation list excludes private content",
+        "passed": true
+      },
+      {
+        "name": "assigned board exposes allowed edit",
+        "passed": true
+      },
+      {
+        "name": "other board does not expose edit",
+        "passed": true
+      },
+      {
+        "name": "no page overflow community/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed community/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens community/1024",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer community/1024",
+        "passed": true
+      },
+      {
+        "name": "no page overflow community/390",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed community/390",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens community/390",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer community/390",
+        "passed": true
+      },
+      {
+        "name": "no page overflow admin-users/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed admin-users/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens admin-users/1024",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer admin-users/1024",
+        "passed": true
+      },
+      {
+        "name": "no page overflow admin-users/390",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed admin-users/390",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens admin-users/390",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer admin-users/390",
+        "passed": true
+      },
+      {
+        "name": "no page overflow permissions/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed permissions/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens permissions/1024",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer permissions/1024",
+        "passed": true
+      },
+      {
+        "name": "no page overflow permissions/390",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed permissions/390",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens permissions/390",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer permissions/390",
+        "passed": true
+      },
+      {
+        "name": "no page overflow moderation/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed moderation/1024",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens moderation/1024",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer moderation/1024",
+        "passed": true
+      },
+      {
+        "name": "no page overflow moderation/390",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation starts closed moderation/390",
+        "passed": true
+      },
+      {
+        "name": "mobile drawer opens moderation/390",
+        "passed": true
+      },
+      {
+        "name": "escape closes mobile drawer moderation/390",
+        "passed": true
+      },
+      {
+        "name": "desktop navigation can collapse",
+        "passed": true
+      },
+      {
+        "name": "mobile navigation selects page and closes",
+        "passed": true
+      },
+      {
+        "name": "logout returns to standalone login",
+        "passed": true
+      },
+      {
+        "name": "login fits mobile viewport",
+        "passed": true
+      },
+      {
+        "name": "no browser JavaScript exceptions",
+        "passed": true
+      }
+    ],
+    "screenshots": [
+      "login-desktop.png",
+      "community-desktop.png",
+      "profile-desktop.png",
+      "training-desktop.png",
+      "admin-users-desktop.png",
+      "admin-permissions-desktop.png",
+      "admin-audit-desktop.png",
+      "admin-courses-desktop.png",
+      "moderation-desktop.png",
+      "community-1024.png",
+      "community-390.png",
+      "admin-users-1024.png",
+      "admin-users-390.png",
+      "permissions-1024.png",
+      "permissions-390.png",
+      "moderation-1024.png",
+      "moderation-390.png",
+      "login-mobile.png"
+    ],
+    "browserErrors": [],
+    "nativeBurp": false,
+    "serverPortClosed": true
+  },
+  "javascriptLogin": {
+    "command": "node --test tools/test_community_login.mjs",
+    "passed": 4,
+    "failed": 0
+  },
+  "analysisCompatibility": {
+    "command": "AuditRepairsTest with current community.js",
+    "passed": 63,
+    "failed": 0
+  },
+  "packagingRegression": {
+    "command": "python -m unittest discover -s tools -p 'test_*.py' -v",
+    "passed": 6,
+    "failed": 0
+  },
+  "fullRelease": {
+    "status": "running",
+    "command": "python dev.py release"
+  },
+  "initialRuns": [
+    {
+      "head": "a4fa9eaabf9499bab1dd2031d99fbcce0b9c739e",
+      "run": 39009772310,
+      "result": "failed",
+      "reason": "Browser assertion checked a comment before asynchronous POST/render completed; screenshot confirmed the comment was persisted and visible. Test now waits for the new DOM content."
+    },
+    {
+      "environment": "local Chromium",
+      "result": "failed after test expansion",
+      "reason": "Profile test expected nine common permissions; intended RBAC grants eight. Corrected the assertion, then all 66 checks passed."
+    }
+  ],
+  "browserRuntimeNotes": [
+    "Local Playwright 1.62.1 with isolated Chromium 153.0.8010.0 supplied by @sparticuz/chromium 153.0.0; standard CDN browser download was unavailable in this environment.",
+    "GitHub browser workflow uses Playwright 1.62.1 and its matching Chromium.",
+    "Local browser archives were extracted with ownership changes disabled because the execution environment rejects archive uid/gid ownership changes; no product dependency or source was changed for that bootstrap."
+  ],
+  "securityDesign": {
+    "implementation": "Spring MVC HandlerInterceptor + explicit AccessRule + CommunityAccessPolicy; not a newly installed Spring Security dependency",
+    "defaultDenyForUnregisteredCommunityApis": true,
+    "serverObjectCapabilities": true,
+    "requestScopedIdentityRefresh": true,
+    "auditCapacity": 200,
+    "auditPersistent": false,
+    "vulnerableTrainingPathsPreserved": true
+  },
+  "notExecuted": [
+    "Native Burp GUI",
+    "User Windows browser or proxy changes",
+    "Local full Docker/Oracle/Nginx stack"
+  ]
+}

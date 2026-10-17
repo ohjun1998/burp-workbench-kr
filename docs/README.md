@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.37.4 미확정 메서드 기본 GET](RELEASE_0.37.4_KR.md) · [검증 기록](VERIFICATION_0.37.4.json)
+
 - [사이트 3.6.0 관리자·사용자 포털과 계정 비교](LAB_3.6.0_KR.md) · [검증 기록](VERIFICATION_LAB_3.6.0.json)
 
 - [0.37.3 메서드 자동 선택·기본 창 버튼](RELEASE_0.37.3_KR.md) · [검증 기록](VERIFICATION_0.37.3.json)
@@ -89,3 +91,8 @@
 
 - [단독 로그인·관리자/일반 사용자 연결](LAB_3.7.1_KR.md)
 - [현재 소스 실행 검증](VERIFICATION_LAB_3.7.1.json)
+
+## 커뮤니티 실습 3.8.0
+
+- [공통 권한 정책·반응형 커뮤니티·로그인·관리 화면](LAB_3.8.0_KR.md)
+- [실제 소스 검증과 브라우저 기록](VERIFICATION_LAB_3.8.0.json)

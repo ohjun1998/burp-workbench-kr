@@ -20,7 +20,7 @@ async function identity(name,type='USER'){
  return page;
 }
 try{
- await mkdir(out,{recursive:true});browser=await chromium.launch({headless:true});
+ await mkdir(out,{recursive:true});browser=await chromium.launch({headless:true,...(process.env.COMMUNITY_BROWSER_EXECUTABLE?{executablePath:process.env.COMMUNITY_BROWSER_EXECUTABLE,args:JSON.parse(process.env.COMMUNITY_BROWSER_ARGS||'[]')}:{})});
  const guestContext=await browser.newContext({viewport:{width:1440,height:1000},locale:'ko-KR',reducedMotion:'reduce'});contexts.push(guestContext);
  const guest=await guestContext.newPage();current=guest;guest.on('pageerror',error=>errors.push(error.message));
  await guest.goto(base+'/login');await guest.evaluate(()=>document.fonts.ready);await capture(guest,'login-desktop');
@@ -35,12 +35,16 @@ try{
  await alice.locator('[data-clear-search]').click();await ready(alice);
  await alice.locator('.feed-filters [data-category="security"]').click();await ready(alice);
  check('category filter only renders security posts',(await alice.locator('#post-list .tag').allTextContents()).every(t=>t==='보안 게시판'));
+ await visit(alice,'profile');check('profile lists actual granted permissions',await alice.locator('.permission-list li').count()===8);await capture(alice,'profile-desktop');
+ await visit(alice,'lab');check('all eight training cases remain available',await alice.locator('[data-lab]').count()===8);
+ await alice.locator('#labmode').selectOption('fixed');await alice.locator('[data-lab="members"] button').click();await alice.waitForFunction(()=>document.querySelector('#lab-result').textContent.includes('HTTP 403'));check('fixed training request enforces feature permission',(await alice.locator('#lab-result').textContent()).includes('HTTP 403'));
+ await alice.locator('#labmode').selectOption('vuln');await alice.locator('[data-lab="members"] button').click();await alice.waitForFunction(()=>document.querySelector('#lab-result').textContent.includes('HTTP 200'));check('explicit vulnerable training comparison remains available',(await alice.locator('#lab-result').textContent()).includes('HTTP 200'));await capture(alice,'training-desktop');
  await visit(alice,'write');const marker='UI_PRIVATE_POST_380';
  await alice.locator('#postform [name="title"]').fill(marker);await alice.locator('#postform [name="body"]').fill('실제 브라우저에서 작성한 비공개 게시글입니다.');
  await alice.locator('#postform [name="visibility"]').selectOption('PRIVATE');await alice.locator('#postform button').click();
  await alice.locator('#view h2').filter({hasText:marker}).waitFor();await ready(alice);
  const privateView=new URL(alice.url()).searchParams.get('view');check('author sees server-authorized edit',await alice.locator('[data-edit]').isVisible());
- await alice.locator('#commentform textarea').fill('BROWSER_COMMENT_380');await alice.locator('#commentform button').click();await ready(alice);
+ await alice.locator('#commentform textarea').fill('BROWSER_COMMENT_380');await alice.locator('#commentform button').click();await alice.locator('.comment .body').filter({hasText:'BROWSER_COMMENT_380'}).waitFor();await ready(alice);
  check('browser comment workflow',await alice.locator('.comment .body').filter({hasText:'BROWSER_COMMENT_380'}).isVisible());
  const bob=await identity('bob');await visit(bob,privateView);check('other member cannot read private post',!(await bob.locator('#view').textContent()).includes(marker));
  await visit(bob,'users');check('forced management navigation is rejected',(await bob.locator('#view').textContent()).includes('권한이 없습니다'));
@@ -51,12 +55,13 @@ try{
  check('access audit does not expose query values',!(await admin.locator('.messages').textContent()).includes('DO_NOT_LOG_UI_380'));await capture(admin,'admin-audit-desktop');
  await visit(admin,privateView);check('authorized manager can read private post',(await admin.locator('#view').textContent()).includes(marker));
  await visit(admin,'course-admin');await admin.locator('#courseform [name="title"]').fill('BROWSER_COURSE_380');await admin.locator('#courseform [name="description"]').fill('브라우저 수강 신청·승인 흐름');
- await admin.locator('#courseform button').click();await ready(admin);
+ const courseSaved=admin.waitForResponse(r=>r.request().method()==='POST'&&r.url().endsWith('/admin/courses'));await admin.locator('#courseform button').click();await courseSaved;await admin.waitForFunction(()=>!document.querySelector('#courseform button')?.disabled);await ready(admin);
  const courses=await (await admin.request.get(base+'/api/workspace/fixed/courses')).json();const course=courses.find(c=>c.TITLE==='BROWSER_COURSE_380');check('manager creates course through UI',!!course);
- await visit(alice,'course:'+course.ID);await alice.locator('#applyform textarea').fill('BROWSER_APPLICATION_380');await alice.locator('#applyform button').click();await ready(alice);
+ await visit(alice,'course:'+course.ID);await alice.locator('#applyform textarea').fill('BROWSER_APPLICATION_380');await alice.locator('#applyform button').click();await alice.locator('#current-title').filter({hasText:'내 활동'}).waitFor();await ready(alice);
  check('member course application appears in activity',(await alice.locator('#view').textContent()).includes('BROWSER_APPLICATION_380'));
  await visit(admin,'course-admin');const application=admin.locator('.messages tbody tr').filter({hasText:'BROWSER_APPLICATION_380'});
- await application.locator('[data-decision="APPROVED"]').click();await ready(admin);check('manager approval updates state',(await admin.locator('.messages tbody tr').filter({hasText:'BROWSER_APPLICATION_380'}).textContent()).includes('수락'));
+ await application.locator('[data-decision="APPROVED"]').click();await admin.locator('.messages tbody tr').filter({hasText:'BROWSER_APPLICATION_380'}).locator('.state[data-state="APPROVED"]').waitFor();await ready(admin);check('manager approval updates state',await admin.locator('.messages tbody tr').filter({hasText:'BROWSER_APPLICATION_380'}).locator('.state[data-state="APPROVED"]').isVisible());
+ await capture(admin,'admin-courses-desktop');
  await visit(alice,'activity');check('member sees approved course',(await alice.locator('.messages tbody tr').filter({hasText:'BROWSER_APPLICATION_380'}).textContent()).includes('수락'));
  const moderator=await identity('moderator');check('moderator has scoped navigation',await moderator.locator('#moderator-menu').isVisible());
  await visit(moderator,'moderation');check('moderation list excludes private content',(await moderator.locator('.post .tag').allTextContents()).every(t=>t==='보안 게시판'));await capture(moderator,'moderation-desktop');
@@ -85,7 +90,7 @@ try{
  if(current)await current.screenshot({path:path.join(out,'failure.png'),fullPage:true}).catch(()=>{});
  process.exitCode=1;console.error(error);
 }finally{
- await writeFile(path.join(out,'results.json'),JSON.stringify({siteVersion:'3.8.0',passed:checks.filter(c=>c.passed).length,failed:checks.filter(c=>!c.passed).length,method:'Actual isolated Chromium against current compiled Spring MVC/Tomcat sources and fresh H2 database',checks,screenshots,browserErrors:errors,nativeBurp:false},null,2)+'\n');
+ await writeFile(path.join(out,'results.json'),JSON.stringify({siteVersion:'3.8.0',browserVersion:browser?.version(),passed:checks.filter(c=>c.passed).length,failed:checks.filter(c=>!c.passed).length,method:'Actual isolated Chromium against current compiled Spring MVC/Tomcat sources and fresh H2 database',checks,screenshots,browserErrors:errors,nativeBurp:false},null,2)+'\n');
  for(const context of contexts)await context.close();if(browser)await browser.close();
  console.log('Community Chromium checks:',checks.filter(c=>c.passed).length,'passed;',checks.filter(c=>!c.passed).length,'failed;',screenshots.length,'screenshots');
 }

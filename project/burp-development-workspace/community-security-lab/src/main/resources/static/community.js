@@ -17,7 +17,7 @@
  const title = t => `<div class="toolbar"><h2>${esc(t)}</h2><span class="meta">${user ? esc(user.username) + ' · ' + esc(roleName(user['role'])) : '공개 커뮤니티'}</span></div>`;
  const empty = t => `<p class="empty">${esc(t)}</p>`;
  const nav = (p,t) => `<button type="button" data-page="${p}">${esc(t)}</button>`;
- const table = (headers, rows) => `<div class="table-wrap"><table class="messages"><thead><tr>${headers.map(t=>`<th>${esc(t)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+ const table = (headers, rows) => `<p class="table-hint">표를 좌우로 움직여 전체 내용을 확인하세요.</p><div class="table-wrap" tabindex="0" role="region" aria-label="목록 표"><table class="messages"><thead><tr>${headers.map(t=>`<th>${esc(t)}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
  function toast(text) { $('#toast').textContent = text; $('#toast').style.display = 'block'; setTimeout(()=>$('#toast').style.display='none',3000); }
  function updateUser(value,granted=[],labels={}) {
   permissions=new Set(granted);permissionLabels=labels;
@@ -155,11 +155,11 @@
  }
  async function policyPage() {
   requirePermission('policy:read');const data=await request(ap('admin/permissions'));
-  return title('권한 정책')+`<p class="page-description">역할별로 사용할 수 있는 기능을 확인하세요.</p><div class="notice">작성자와 담당 게시판, 신청 상태에 따라 같은 기능도 접근 범위가 달라집니다. 역할 변경은 다음 요청부터 적용됩니다.</div><section class="panel">${table(['기능','일반 사용자','게시판 운영자','관리자'],Object['entries'](data['labels']).map(([id,label])=>`<tr><td>${esc(label)}</td>${data.roles.map(r=>`<td><span class="${r.permissions.includes(id)?'permission-yes':'permission-no'}" aria-label="${r.permissions.includes(id)?'허용':'권한 없음'}">${r.permissions.includes(id)?'✓':'—'}</span></td>`).join('')}</tr>`))}</section>`;
+  return title('권한 정책')+`<p class="page-description">역할별로 사용할 수 있는 기능을 확인하세요.</p><div class="notice">작성자와 담당 게시판, 신청 상태에 따라 같은 기능도 접근 범위가 달라집니다. 역할 변경은 다음 요청부터 적용됩니다.</div><section class="panel policy-panel">${table(['기능','일반 사용자','게시판 운영자','관리자'],Object['entries'](data['labels']).map(([id,label])=>`<tr><td>${esc(label)}</td>${data.roles.map(r=>`<td><span class="${r.permissions.includes(id)?'permission-yes':'permission-no'}" aria-label="${r.permissions.includes(id)?'허용':'권한 없음'}">${r.permissions.includes(id)?'✓':'—'}</span></td>`).join('')}</tr>`))}</section>`;
  }
  async function auditPage() {
   requirePermission('policy:read');const data=await request(ap('admin/audit'));
-  return title('접근 기록')+`<p class="page-description">권한이 거부된 요청과 완료된 변경 작업을 확인합니다.</p><div class="notice">최근 ${data.capacity}건을 표시하며 서버를 다시 시작하면 기록이 초기화됩니다. 비밀번호·쿠키·요청 본문은 기록하지 않습니다.</div><section class="panel">${table(['시각','계정','작업','결과'],data.items.map(r=>`<tr><td>${esc(new Date(r.time).toLocaleString('ko-KR'))}</td><td>${esc(r.username||'비회원')}<p>${esc(roleName(r.role))}</p></td><td>${esc(r.method)} ${esc(r.path)}</td><td><span class="audit-status ${r.outcome==='DENIED'?'denied':'allowed'}">${r.outcome==='DENIED'?'거부':'완료'} · ${esc(r.status)}</span></td></tr>`))}</section>`;
+  return title('접근 기록')+`<p class="page-description">권한이 거부된 요청과 완료된 변경 작업을 확인합니다.</p><div class="notice">최근 ${data.capacity}건을 표시하며 서버를 다시 시작하면 기록이 초기화됩니다. 비밀번호·쿠키·요청 본문은 기록하지 않습니다.</div><section class="panel">${table(['시각','계정','작업','결과'],data.items.map(r=>`<tr><td>${esc(new Date(r.time).toLocaleString('ko-KR'))}</td><td>${esc(r.username||'비회원')}<p>${esc(roleName(r.role))}</p></td><td>${esc(r.method)} ${esc(r.path)}</td><td><span class="audit-status ${r.outcome==='ALLOWED'?'allowed':'denied'}">${r.outcome==='DENIED'?'거부':r.outcome==='NOT_FOUND'?'조회 불가':'완료'} · ${esc(r.status)}</span></td></tr>`))}</section>`;
  }
  async function moderation() {
   requirePermission('board:moderate');const rows=await request(wp('/moderation/posts'));

@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.37.3**, Feature Mapper **0.3.1**과 실습 사이트 **3.7.1**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.3 검증 기록](docs/VERIFICATION_0.37.3.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.37.4**, Feature Mapper **0.3.1**과 실습 사이트 **3.8.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.4 검증 기록](docs/VERIFICATION_0.37.4.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -109,7 +109,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.37.3.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.37.4.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 
@@ -201,3 +201,12 @@ JS의 확정된 메서드를 우선하고, 미확정 항목은 활동 추적의 
 ## 사이트 3.7.1 단독 로그인 검사
 
 `python tools/check_role_portals.py`는 단독 로그인·유형별 연결·실제 권한·세션 교체와 기존 통합 기능을 검사합니다. `node --test tools/test_community_login.mjs`는 배포 스크립트의 폼·오류·계정 전환·회원가입 흐름을 DOM 어댑터로 실행합니다. [사용법](docs/LAB_3.7.1_KR.md) · [검증](docs/VERIFICATION_LAB_3.7.1.json).
+
+
+## 0.37.4 미확정 메서드 기본 GET
+
+JS에서 확인한 메서드 → 같은 Origin·경로의 단일 관찰 메서드 → GET 기본값 순서로 선택합니다. 근거 없음·충돌은 기본값으로 표시하며, 수동 변경과 미확정 경로·값·SCOPE 검증은 유지합니다. Repeater 회귀는 기본 GET과 수동 변경의 실제 loopback 응답, 기본값 표시와 자동 전송 없음도 확인합니다. JS 화면 검사에는 기본 GET 창의 기본·최소 크기와 두 테마를 포함합니다. [현재 사용법](docs/RELEASE_0.37.4_KR.md)과 [이번 검증](docs/VERIFICATION_0.37.4.json)을 확인하세요.
+
+## 사이트 3.8.0 권한·실제 브라우저 검사
+
+`python tools/check_role_portals.py`는 공통 RBAC·객체 권한·미선언 정책 기본 거부·권한 변경·접근 기록과 기존 실습을 검사합니다. 별도 `python tools/check_community_ui.py`는 현재 소스를 컴파일하고 독립 H2에서 Chromium으로 실제 UI 흐름과 1440/1024/390px 레이아웃을 확인합니다. Playwright 설치·실행 설정은 [3.8.0 사용법](docs/LAB_3.8.0_KR.md), 실행 결과는 [검증 기록](docs/VERIFICATION_LAB_3.8.0.json)을 확인하세요.

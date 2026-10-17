@@ -1,6 +1,14 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.37.3 / 실습 사이트 3.7.1 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.37.4 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+
+## 공통 권한 정책·사이트 디자인 — 3.8.0
+
+Spring MVC 공통 인터셉터와 기능별 AccessRule·CommunityAccessPolicy를 적용했습니다. 실제 DB 역할·계정 상태·기능 권한·CSRF를 확인하고, 정상 커뮤니티의 미선언 정책은 기본 거부합니다. 작성자·담당 게시판·업무 상태 검사는 공통 정책과 각 업무에서 유지합니다. 화면은 서버의 허용 작업 목록을 사용합니다. 관리자 권한표·최근 200건 메모리 접근 기록과 게시판 운영자 목록을 추가했습니다. 기존 취약점 실습은 명시된 취약 경로에 유지합니다.
+
+커뮤니티·로그인·관리 화면을 왼쪽 탐색, 카드·표, 검색, 모바일 메뉴 서랍으로 개편했습니다. 실제 H2 HTTP 384개·로그인 스크립트 4개·기존 JS 분석 호환 63개·Chromium UI/반응형 검사 66개와 화면 18장을 확인했습니다. 패키징 회귀 6개도 통과했습니다. 전체 release와 원격 검증 결과는 [검증 기록](docs/VERIFICATION_LAB_3.8.0.json)에 갱신합니다. 최신 Workbench 0.37.4·Mapper 0.3.1과 이전 배포를 보존합니다.
+
+[사용법](docs/LAB_3.8.0_KR.md) · [Docker ZIP](downloads/docker/3.8.0/community-security-lab-3.8.0-docker.zip) · [대화](docs/chat-logs/2026-10-17/community-rbac-design-380.md)
 
 ## 단독 로그인·권한별 연결 — 사이트 3.7.1
 
@@ -9,6 +17,16 @@
 현재 소스 HTTP 307개·JS 로그인 흐름 4개·기존 분석기 호환 63개, 최신 확장 0.37.3 기반 정식 release 2,470개(Java 1,971·HTTP 132+101+266), Mapper Java 94·브라우저 도우미 회귀, 패키징 회귀 6개와 배포 해시·소스 지문 검증을 통과했습니다. [원격 Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007253290)·[Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007253285)·[Docker/Oracle/Nginx](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39007251107)도 모두 성공했습니다. 검증 코드 head는 `b281d819ca876df86ca5dd9ce6909f0e50795359`이며 최종 기록 커밋은 상태·검증·대화 세 문서만 갱신하고 소스와 실행 ZIP을 보존합니다. [정확한 검증 범위](docs/VERIFICATION_LAB_3.7.1.json)를 확인하세요. 브라우저 실제 화면·Burp GUI 검증은 미실행입니다.
 
 [사용법](docs/LAB_3.7.1_KR.md) · [Docker ZIP](downloads/docker/3.7.1/community-security-lab-3.7.1-docker.zip) · [대화](docs/chat-logs/2026-10-17/community-standalone-login-371.md)
+
+## Repeater 미확정 메서드 기본 GET — 0.37.4
+
+미확정 초안은 GET을 기본값으로 준비합니다. JS에서 확인한 메서드를 우선하고, 단일 관찰 메서드가 있으면 사용합니다. 근거 없음·충돌·불완전한 관찰 기록은 `GET · 기본값`으로 표시합니다. 수동 변경과 원본 URL·본문·Content-Type, 미확정 경로·값·SCOPE 검사 및 Send/Ctrl+Space의 명시적 전송을 유지합니다. 제목 표시줄의 기본 □/X는 0.37.3 동작을 유지합니다.
+
+출발 main `1d1efa2`에서 정식 release **2,478개**(Java 1,978·HTTP 132+102+266), Mapper Java 94·Node 7, 기본 GET을 포함한 두 테마 JS 화면 **64개**, 패키징 회귀 **4개**를 통과했습니다. Repeater **95개**는 기본 GET 전송·수동 변경·관찰 근거와 실제 loopback 응답 **6회**를 포함합니다. 이전 동작 기대·새 화면 측정 크기·활동 저장본 검사를 보완한 뒤 전체 검사를 재실행했습니다. 새 main `b15833d`의 사이트 3.7.1을 보존하도록 통합하고 HTTP 102+266개와 패키징을 다시 통과했습니다. 확장 JAR·소스는 같은 바이트를 유지합니다. 로컬은 API 어댑터·헤드리스 Swing이며 Windows 기본 창·내구성 검사는 이번 PR의 Checks에서 별도로 확인합니다. 실제 Burp GUI·물리 키/IME는 미실행입니다.
+
+[선택 기준·사용법·화면](docs/RELEASE_0.37.4_KR.md) · [실행 검증](docs/VERIFICATION_0.37.4.json) · [다운로드](downloads/README.md) · [날짜별 대화](docs/chat-logs/2026-10-17/workbench-default-get-0374.md)
+
+이하 0.37.3 및 사이트 기록은 당시 범위로 보존합니다.
 
 ## Repeater 메서드 자동 선택·기본 창 버튼 0.37.3
 

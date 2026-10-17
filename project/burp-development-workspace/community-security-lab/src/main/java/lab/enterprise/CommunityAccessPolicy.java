@@ -6,6 +6,8 @@ import java.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /** RBAC and object relationships shared by the normal community workflows. */
 public final class CommunityAccessPolicy {
@@ -67,7 +69,11 @@ public final class CommunityAccessPolicy {
         if(token==null&&path(request).equals("/api/auth/logout"))token=request.getParameter("csrf");
         if(token==null||!Objects.equals(token,request.getSession(false).getAttribute("csrf")))deny(HttpStatus.FORBIDDEN,"CSRF 토큰 불일치");
     }
-    public String role(int id) {return id==0?"GUEST":db.queryForObject("SELECT role FROM lab_users WHERE id=?",String.class,id);}
+    public String role(int id) {
+        if(id==0)return "GUEST";
+        if(RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes attributes&&attributes.getRequest().getAttribute(PRINCIPAL) instanceof Principal principal&&principal.id()==id)return principal.role();
+        return db.queryForObject("SELECT role FROM lab_users WHERE id=?",String.class,id);
+    }
     public boolean has(int id,Permission permission) {return id!=0&&forRole(role(id)).contains(permission);}
     public boolean ownOrManage(int id,Object owner,Permission management) {
         return id!=0&&(((Number)owner).intValue()==id||has(id,management));

@@ -54,9 +54,15 @@ public final class JsRepeaterWorkflowTest {
     verify(JsMethodSelection.choose(known,java.util.Set.of("GET")).draft()==known,"an explicit source method takes priority over another observed method");
     tracker.observe(request(url,"POST",true,List.of()),"History");
     var conflict=JsMethodSelection.choose(unknown,tracker.observedMethods(List.of(url)).get(url));
-    verify(conflict.draft().method().equals("REPLACE_METHOD")&&conflict.reason().contains("충돌"),"conflicting observed GET and POST methods retain manual confirmation");
-    verify(JsMethodSelection.choose(unknown,java.util.Set.of()).draft()==unknown,"missing observations never imply GET");
-    verify(JsMethodSelection.choose(new JsRequestDraft.Draft(url+"/REPLACE_PATH","REPLACE_METHOD",""),java.util.Set.of("GET")).draft().method().equals("REPLACE_METHOD"),"an unresolved path cannot borrow an observed method");
+    verify(conflict.draft().method().equals("GET")&&conflict.reason().contains("기본값")&&conflict.reason().contains("충돌"),"conflicting observations prepare a clearly labeled default GET");
+    var fallback=JsMethodSelection.choose(unknown,java.util.Set.of());
+    verify(fallback.draft().method().equals("GET")&&fallback.reason().contains("기본값"),"missing observations prepare GET as a default rather than confirmed evidence");
+    verify(fallback.draft().url().equals(unknown.url())&&fallback.draft().body().equals(unknown.body())&&fallback.draft().contentType().equals(unknown.contentType()),"default GET preserves the draft URL, body and content type");
+    verify(JsMethodSelection.choose(unknown,null).draft().method().equals("GET"),"a missing observation map also uses default GET");
+    var dynamic=JsMethodSelection.choose(new JsRequestDraft.Draft(url+"/REPLACE_PATH","REPLACE_METHOD",""),java.util.Set.of("POST"));
+    verify(dynamic.draft().method().equals("GET")&&dynamic.draft().wire().contains("REPLACE_PATH")&&dynamic.reason().contains("기본값"),"an unresolved path keeps its placeholder and cannot borrow an observed method");
+    verify(JsMethodSelection.choose(unknown,java.util.Set.of("REPLACE_METHOD")).reason().contains("기본값"),"an invalid observed method falls back without becoming confirmed evidence");
+    verify(JsMethodSelection.choose(unknown,java.util.Set.of("PATCH")).draft().method().equals("PATCH"),"a single observed method takes priority over default GET");
     tracker.rejected=1;verify(tracker.observedMethods(List.of(url)).isEmpty(),"incomplete bounded tracking metadata does not auto-select a method");
     tracker.clear();verify(tracker.observedMethods(List.of(url)).isEmpty(),"clearing tracking data also clears automatic-method evidence");
     var parsed=JsAnalysis.analyze("fetch('/get');axios.post('/post',{name:'demo'});","https://example.test/app.js");
@@ -189,12 +195,13 @@ public final class JsRepeaterWorkflowTest {
         var unresolved=panel.repeater.sessions.get(1);unresolved.send.doClick(0);
         verify(wire(unresolved).contains("REPLACE_PATH")&&received.get()==2,"dynamic paths open immediately but cannot be sent unresolved");
         var unknown=ReviewWorkflowTest.item(origin+"/api/users","?","","",true);
-        panel.repeater.open(List.of(JsRequestDraft.preview(unknown)));var method=panel.repeater.sessions.get(2);method.send.doClick(0);
-        verify(wire(method).startsWith("REPLACE_METHOD ")&&received.get()==2,"unknown methods are explicit and block sending until edited");
-        verify(method.note.getText().contains("메서드 적용")&&method.method.getSelectedItem().equals("선택 필요"),"unresolved method feedback points to an explicit in-window fix without assuming GET");
-        method.applyMethod.doClick(0);verify(wire(method).startsWith("REPLACE_METHOD ")&&received.get()==2,"apply without an explicit method selection cannot guess or send a request");
-        method.request.tabs.get(2).doClick(0);method.method.setSelectedItem("GET");method.applyMethod.doClick(0);
-        verify(wire(method).startsWith("GET /api/users HTTP/1.1")&&method.request.mode()==PacketInspector.Mode.RAW&&received.get()==2,"method apply repairs the authoring bytes from Hex and opens Raw without transmitting");
+        panel.repeater.open(List.of(JsRequestDraft.preview(unknown)));var method=panel.repeater.sessions.get(2);
+        verify(wire(method).startsWith("GET /api/users HTTP/1.1")&&received.get()==2,"unknown methods open as default GET without sending HTTP");
+        verify(method.methodHint.getText().contains("기본값")&&method.method.getSelectedItem().equals("GET"),"default GET is visibly distinguished from source and observed methods");
+        method.applyMethod.doClick(0);verify(wire(method).startsWith("GET ")&&received.get()==2,"applying the default does not submit the request");
+        method.request.tabs.get(2).doClick(0);method.method.setSelectedItem("POST");method.applyMethod.doClick(0);
+        verify(wire(method).startsWith("POST /api/users HTTP/1.1")&&method.request.mode()==PacketInspector.Mode.RAW&&received.get()==2,"manual override replaces default GET from Hex and opens Raw without transmitting");
+        verify(method.methodHint.getText().contains("직접"),"manual override replaces the default method evidence");
         KeyEvent outside=key(session.request.text,KeyEvent.KEY_PRESSED,InputEvent.CTRL_DOWN_MASK,KeyEvent.VK_SPACE,' ');
         verify(!method.shortcuts.handle(outside,session.request.text)&&received.get()==2,"a Repeater shortcut cannot submit from another Repeater window");
         Component focus=method.method.getEditor().getEditorComponent();
@@ -241,6 +248,15 @@ public final class JsRepeaterWorkflowTest {
         shortcut(chosen,chosen.request.text);
       });var automatic=panelRef.get().repeater.sessions.get(0);waitSend(automatic);
       edt(()->verify(received.get()==5&&automatic.response.text.getText().contains("\"request\": 5"),"an automatically selected method sends successfully through the existing shortcut and HTTP path"));
+      edt(()->{var auto=panelRef.get();auto.observedMethods=urls->java.util.Map.of();auto.load("const apiUrl='/api/users';",origin+"/default.js");});
+      JsAnalysisPanelTest.waitDone(panelRef.get());
+      edt(()->{
+        var auto=panelRef.get();auto.urlTable.setRowSelectionInterval(0,0);auto.prepareRepeater();
+        var chosen=auto.repeater.sessions.get(1);
+        verify(wire(chosen).startsWith("GET /api/users HTTP/1.1")&&chosen.methodHint.getText().contains("기본값")&&received.get()==5,"an unknown JS endpoint reaches Repeater as labeled default GET without auto-send");
+        chosen.send.doClick(0);
+      });var defaultGet=panelRef.get().repeater.sessions.get(1);waitSend(defaultGet);
+      edt(()->verify(received.get()==6&&defaultGet.result.getText().startsWith("200 ·")&&defaultGet.response.text.getText().contains("\"request\": 6"),"Send on default GET receives the real loopback response without a manual method apply"));
     } finally {
       if(panelRef.get()!=null)edt(panelRef.get()::close);server.stop(0);
     }

@@ -98,7 +98,7 @@ final class JsRepeater implements AutoCloseable {
       send.setName("wb.js.repeater.send");target.setName("wb.js.repeater.target");
       previous.setName("wb.js.repeater.previous");next.setName("wb.js.repeater.next");
       method.setName("wb.js.repeater.method");applyMethod.setName("wb.js.repeater.method.apply");
-      method.setEditable(true);method.setToolTipText("분석·관찰 근거가 있으면 자동 선택 · 선택만으로 전송하지 않습니다.");
+      method.setEditable(true);method.setToolTipText("JS 분석 → 단일 관찰 메서드 → 기본 GET 순으로 선택 · 직접 변경 가능 · 선택만으로 전송하지 않습니다.");
       previous.setToolTipText("이전 요청·응답");next.setToolTipText("다음 요청·응답");
       target.setToolTipText("전송 대상 Origin · 프로토콜, 호스트, 포트");
       JPanel action=new JPanel(new BorderLayout(8,0));

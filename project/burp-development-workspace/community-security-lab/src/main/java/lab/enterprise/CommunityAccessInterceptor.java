@@ -45,6 +45,7 @@ public final class CommunityAccessInterceptor implements HandlerInterceptor {
         if(!(request.getAttribute(CommunityAccessPolicy.DECLARED) instanceof CommunityAccessPolicy.Permission permission))return;
         int status=response.getStatus();
         if(status==401||status==403)policy.record(request,"DENIED",status);
+        else if(status==404)policy.record(request,"NOT_FOUND",status);
         else if(permission!=CommunityAccessPolicy.Permission.PUBLIC&&request.getMethod().equals("POST")&&status<400)policy.record(request,"ALLOWED",status);
     }
 }

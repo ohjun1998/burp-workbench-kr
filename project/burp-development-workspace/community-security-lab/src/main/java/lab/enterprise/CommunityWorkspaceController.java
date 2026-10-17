@@ -64,8 +64,8 @@ public class CommunityWorkspaceController {
         if (rows.isEmpty()) deny(HttpStatus.NOT_FOUND, "항목 없음");
         return rows.get(0);
     }
-    private void owned(String mode, Map<String,Object> row, int user) {
-        if (fixed(mode) && !policy.ownOrManage(user,row.get("OWNER_ID"),REPORT_REVIEW)) deny(HttpStatus.NOT_FOUND, "항목 없음");
+    private void owned(String mode, Map<String,Object> row, int user, CommunityAccessPolicy.Permission management) {
+        if (fixed(mode) && !policy.ownOrManage(user,row.get("OWNER_ID"),management)) deny(HttpStatus.NOT_FOUND, "항목 없음");
     }
 
     @AccessRule(MEMBER)
@@ -80,7 +80,7 @@ public class CommunityWorkspaceController {
     @AccessRule(REPORT_CREATE)
     @GetMapping("/api/workspace/{mode}/reports/{id}")
     public Map<String,Object> report(@PathVariable String mode, @PathVariable int id, HttpServletRequest r) {
-        int user = access(mode, false, r); var item = row("community_reports", id); owned(mode,item,user); return item;
+        int user = access(mode, false, r); var item = row("community_reports", id); owned(mode,item,user,REPORT_REVIEW); return item;
     }
     @AccessRule(REPORT_CREATE)
     @PostMapping("/api/workspace/{mode}/reports")
@@ -151,12 +151,12 @@ public class CommunityWorkspaceController {
     @AccessRule(COURSE_APPLY)
     @GetMapping("/api/workspace/{mode}/applications/{id}")
     public Map<String,Object> application(@PathVariable String mode,@PathVariable int id,HttpServletRequest r) {
-        int user=access(mode,false,r);var item=row("community_applications",id);owned(mode,item,user);return item;
+        int user=access(mode,false,r);var item=row("community_applications",id);owned(mode,item,user,COURSE_REVIEW);return item;
     }
     @AccessRule(COURSE_APPLY)
     @PostMapping("/api/workspace/{mode}/applications/{id}/cancel")
     public synchronized Map<String,Object> cancel(@PathVariable String mode,@PathVariable int id,HttpServletRequest r) {
-        int user=access(mode,false,r);csrf(mode,r);var item=row("community_applications",id);owned(mode,item,user);
+        int user=access(mode,false,r);csrf(mode,r);var item=row("community_applications",id);owned(mode,item,user,COURSE_REVIEW);
         if(db.update("UPDATE community_applications SET state='CANCELLED' WHERE id=? AND state='PENDING'",id)!=1)deny(HttpStatus.CONFLICT,"대기 중인 신청만 취소할 수 있습니다.");return Map.of("id",id,"state","CANCELLED");
     }
     @AccessRule(COURSE_REVIEW)

@@ -123,5 +123,25 @@
     "Account names are manually mapped metadata; identity verification remains optional and separate.",
     "The referenced image edit target was missing; no substitute image was edited."
   ],
-  "remoteCI": "PR Actions results are separate from these local checks."
+  "remoteCI": {
+    "sourceCommit": "9fe0dd42d63e0fcc856c9ed3f829743b7aa90335",
+    "checks": [
+      {
+        "name": "check",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578733/job/117398834362"
+      },
+      {
+        "name": "windows",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578686/job/117398834227"
+      },
+      {
+        "name": "isolated-disk-and-soak",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578686/job/117398834082"
+      }
+    ],
+    "mergeRecord": "Documentation-only follow-up preserves tested source and immutable downloads."
+  }
 }

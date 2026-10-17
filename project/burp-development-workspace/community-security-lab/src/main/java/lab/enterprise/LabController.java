@@ -40,6 +40,7 @@ public class LabController {
  @PostMapping("/api/auth/login") public Map<String,Object> login(@RequestParam("username")String name,@RequestParam("password")String pass,HttpServletRequest r){
   var rows=db.queryForList("SELECT id,password_hash FROM lab_users WHERE username=?",name);
   if(rows.isEmpty()||!verify(pass,(String)rows.get(0).get("PASSWORD_HASH")))fail(HttpStatus.UNAUTHORIZED,"계정 또는 비밀번호 불일치");
+  if(db.queryForObject("SELECT COUNT(*) FROM community_account_states WHERE user_id=? AND state='SUSPENDED'",Integer.class,rows.get(0).get("ID"))>0)fail(HttpStatus.FORBIDDEN,"정지된 계정입니다.");
   var old=r.getSession(false);if(old!=null)old.invalidate();var s=r.getSession(true);int id=((Number)rows.get(0).get("ID")).intValue();s.setAttribute("uid",id);s.setAttribute("csrf",UUID.randomUUID().toString());return Map.of("user",user(id),"csrf",s.getAttribute("csrf"));
  }
  @GetMapping("/api/auth/me") public Map<String,Object> me(HttpServletRequest r){int id=uid(r);return Map.of("user",user(id),"csrf",r.getSession().getAttribute("csrf"));}
@@ -87,9 +88,24 @@ public class LabController {
   document(paths,"/api/access/"+mode+"/admin/requests/{id}/review","post",Set.of("decision"),Set.of());
   document(paths,"/api/access/"+mode+"/admin/settings","post",Set.of("notice"),Set.of());
  }
+ for(String mode:List.of("fixed","vuln")) {
+  for(String path:List.of("activity","reports/{id}","courses","courses/{id}","applications/{id}","admin/users","admin/posts","admin/comments","admin/reports","admin/applications","debug/config"))document(paths,"/api/workspace/"+mode+"/"+path,"get",Set.of(),Set.of());
+  document(paths,"/api/workspace/"+mode+"/reports","post",Set.of("targetType","targetId","reason"),Set.of());
+  document(paths,"/api/workspace/"+mode+"/admin/reports/{id}/review","post",Set.of("decision","resolution"),Set.of());
+  document(paths,"/api/workspace/"+mode+"/courses/{id}/apply","post",Set.of("reason"),Set.of());
+  document(paths,"/api/workspace/"+mode+"/applications/{id}/cancel","post",Set.of(),Set.of());
+  document(paths,"/api/workspace/"+mode+"/admin/applications/{id}/review","post",Set.of("decision"),Set.of());
+  document(paths,"/api/workspace/"+mode+"/admin/courses","post",Set.of("title","description"),Set.of());
+  document(paths,"/api/workspace/"+mode+"/admin/courses/{id}/edit","post",Set.of("title","description","state"),Set.of());
+  document(paths,"/api/workspace/"+mode+"/admin/courses/{id}/delete","post",Set.of(),Set.of());
+  document(paths,"/api/workspace/"+mode+"/admin/users/{id}/edit","post",Set.of("role","state","email"),Set.of());
+  document(paths,"/api/community/"+mode+"/comments/{id}/edit","post",Set.of("body"),Set.of());
+  document(paths,"/api/community/"+mode+"/comments/{id}/delete","post",Set.of(),Set.of());
+ }
+ document(paths,"/api/workspace/reset","post",Set.of(),Set.of());
  document(paths,"/api/access/reset","post",Set.of(),Set.of());
  document(paths,"/api/auth/login","post",Set.of("username","password"),Set.of());
- return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.6.0"),"paths",paths);
+ return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.7.0"),"paths",paths);
  }
  private static void document(Map<String,Object> paths,String path,String method,Set<String> fields,Set<String> query){
  @SuppressWarnings("unchecked") Map<String,Object> item=(Map<String,Object>)paths.computeIfAbsent(path,k->new LinkedHashMap<>());

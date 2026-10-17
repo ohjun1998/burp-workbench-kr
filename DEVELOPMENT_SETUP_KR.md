@@ -185,3 +185,7 @@ python tools/render_ui_layout.py --session-only --check --out tmp/ui-session
 ## 0.37.1 JS 분석 가독성 개선
 
 전체 집계의 이름 13px·굵은 숫자 16px, 행 높이 40px와 내부 여백을 적용했습니다. 결과 탭·분석 목록·분석 상세의 주요 경로/민감한 정보 명칭을 맞추고 클라우드 탭을 집계와 통일했습니다. 두 테마와 1024×720·1280×800에서 큰 집계(50,000)까지 운영 Swing 레이아웃 검사에 포함합니다. [변경 안내](docs/RELEASE_0.37.1_KR.md)와 [이번 검증](docs/VERIFICATION_0.37.1.json)을 참고하세요. 앞의 0.37.0 절은 기능 도입 시점의 설명입니다.
+
+## 사이트 3.7.0 통합 커뮤니티 검사
+
+`python tools/check_role_portals.py`가 현재 통합 페이지·신고·강의·계정 관리와 취약/수정 API를 실세션으로 검사합니다. 내부 `community_workspace_checks.py`는 별도 CLI가 아니라 같은 H2 서버에 붙는 수락 기준입니다. `/admin`, `/user`는 통합 페이지 별칭이며 관리자도 공통 요청·강의 신청을 사용합니다. [사용법](docs/LAB_3.7.0_KR.md)을 확인하세요.

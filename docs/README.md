@@ -26,6 +26,12 @@
 
 [저장소 첫 화면](../README.md) · [테스트 파일 다운로드](../downloads/README.md) · [PDF 가이드북](../downloads/guides/README.md)
 
+## 커뮤니티 실습 3.7.0
+
+- [통합 커뮤니티·관리자/사용자 기능·8개 취약점 실습](LAB_3.7.0_KR.md)
+- [현재 소스 실행 검증](VERIFICATION_LAB_3.7.0.json)
+- [날짜별 작업 대화](chat-logs/2026-10-17/community-unified-lab-370.md)
+
 ## 처음 사용한다면
 
 [설치하고 첫 요청 확인하기](../README.md#설치하고-첫-요청-확인하기) → [같은 버전의 그림 가이드북](../downloads/guides/README.md) → [로컬 모의 진단](TEST_WORKFLOW_KR.md) 순서로 읽으세요. 화면의 **기능 안내**에서도 각 도구의 목적과 준비할 입력을 확인할 수 있습니다.

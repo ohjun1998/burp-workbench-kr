@@ -235,8 +235,8 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     auth.assign(0,credentials.get(1));auth.assign(1,credentials.get(0));auth.anonymous(2);
                     var original=AuthRecordTest.q("ALICE");var baseline=response(200,"{\"secret\":\"alice\"}");
                     var run=new AuthComparePanel.Run(1,original,baseline,auth.context());
-                    String[] notes={"우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인","차단 근거 확인 · HTTP 403","판정 보류 · HTTP 500"};
-                    for(int i=0;i<3;i++){run.packets[i].request=AuthRecordTest.q("DEMO");run.packets[i].response=response(i==0?200:i==1?403:500,i==0?"{\"secret\":\"alice\"}":"접근 거부 / 서버 오류");run.packets[i].note=notes[i];}
+                    String[] notes={"우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인","원본과 동일 인증 · 교차 인가 미검증","판정 보류 · HTTP 500"};
+                    for(int i=0;i<3;i++){run.packets[i].request=AuthRecordTest.q(i==1?"ALICE":"DEMO");run.packets[i].response=response(i<2?200:500,i==0?"{\"secret\":\"alice\"}":"접근 거부 / 서버 오류");run.packets[i].note=notes[i];}
                     run.note="완료";auth.runs.add(run);auth.historyModel.addRow(new Object[]{1,original.url(),"","","","완료"});auth.refresh(run);auth.history.setRowSelectionInterval(0,0);auth.show(run);
                     installHeaders(auth);auth.setVisible(true);
                     try {

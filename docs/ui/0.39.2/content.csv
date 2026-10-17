@@ -1,0 +1,121 @@
+theme,width,height,view,kind,name,x,y,visibleWidth,visibleHeight
+light,1024,720,auth-empty-desktop.png,Table,wb.auth.credentials,237,206,777,139
+light,1024,720,auth-empty-desktop.png,,wb.auth.history,237,426,777,223
+light,1024,720,auth-desktop.png,Table,wb.auth.credentials,237,206,777,132
+light,1024,720,auth-desktop.png,,wb.auth.history,237,419,777,214
+light,1024,720,auth-results.png,Table,wb.auth.credentials,10,136,1004,176
+light,1024,720,auth-results.png,,wb.auth.history,10,365,1004,285
+light,820,600,auth-candidate.png,Table,wb.auth.candidate.headers,14,310,792,208
+light,700,520,auth-candidate-minimum.png,Table,wb.auth.candidate.headers,14,310,672,128
+light,1180,780,auth-detail.png,,wb.auth.detail.request.0.text,55,185,530,298
+light,1180,780,auth-detail.png,,wb.auth.detail.response.0.text,636,185,530,298
+light,1180,780,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,572,1139,148
+light,840,520,auth-detail-minimum.png,,wb.auth.detail.request.0.text,55,185,343,116
+light,840,520,auth-detail-minimum.png,,wb.auth.detail.response.0.text,466,185,360,116
+light,840,520,auth-detail-minimum.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,390,799,70
+light,1024,720,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,977,84
+light,1024,720,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,977,6
+light,1024,720,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,977,0
+light,1024,720,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,248,977,84
+light,1024,720,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,391,977,67
+light,1024,720,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,499,977,88
+light,1280,800,auth-empty-desktop.png,Table,wb.auth.credentials,237,206,1033,169
+light,1280,800,auth-empty-desktop.png,,wb.auth.history,237,456,1033,290
+light,1280,800,auth-desktop.png,Table,wb.auth.credentials,237,206,1033,163
+light,1280,800,auth-desktop.png,,wb.auth.history,237,450,1033,280
+light,1280,800,auth-results.png,Table,wb.auth.credentials,10,136,1260,207
+light,1280,800,auth-results.png,,wb.auth.history,10,396,1260,334
+light,820,600,auth-candidate.png,Table,wb.auth.candidate.headers,14,310,792,208
+light,700,520,auth-candidate-minimum.png,Table,wb.auth.candidate.headers,14,310,672,128
+light,1180,780,auth-detail.png,,wb.auth.detail.request.0.text,55,185,530,298
+light,1180,780,auth-detail.png,,wb.auth.detail.response.0.text,636,185,530,298
+light,1180,780,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,572,1139,148
+light,840,520,auth-detail-minimum.png,,wb.auth.detail.request.0.text,55,185,343,116
+light,840,520,auth-detail-minimum.png,,wb.auth.detail.response.0.text,466,185,360,116
+light,840,520,auth-detail-minimum.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,390,799,70
+light,1280,800,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,1233,84
+light,1280,800,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,1233,67
+light,1280,800,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,1233,0
+light,1280,800,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,328,1233,84
+light,1280,800,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,471,1233,67
+light,1280,800,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,579,1233,88
+light,1600,900,auth-empty-desktop.png,Table,wb.auth.credentials,237,206,1353,207
+light,1600,900,auth-empty-desktop.png,,wb.auth.history,237,494,1353,352
+light,1600,900,auth-desktop.png,Table,wb.auth.credentials,237,206,1353,201
+light,1600,900,auth-desktop.png,,wb.auth.history,237,488,1353,342
+light,1600,900,auth-results.png,Table,wb.auth.credentials,10,136,1580,245
+light,1600,900,auth-results.png,,wb.auth.history,10,434,1580,396
+light,820,600,auth-candidate.png,Table,wb.auth.candidate.headers,14,310,792,208
+light,700,520,auth-candidate-minimum.png,Table,wb.auth.candidate.headers,14,310,672,128
+light,1180,780,auth-detail.png,,wb.auth.detail.request.0.text,55,185,530,298
+light,1180,780,auth-detail.png,,wb.auth.detail.response.0.text,636,185,530,298
+light,1180,780,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,572,1139,148
+light,840,520,auth-detail-minimum.png,,wb.auth.detail.request.0.text,55,185,343,116
+light,840,520,auth-detail-minimum.png,,wb.auth.detail.response.0.text,466,185,360,116
+light,840,520,auth-detail-minimum.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,390,799,70
+light,1600,900,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,1553,84
+light,1600,900,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,1553,67
+light,1600,900,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,1553,78
+light,1600,900,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,428,1553,84
+light,1600,900,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,571,1553,67
+light,1600,900,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,679,1553,88
+dark,1024,720,auth-empty-desktop.png,Table,wb.auth.credentials,237,206,777,139
+dark,1024,720,auth-empty-desktop.png,,wb.auth.history,237,426,777,223
+dark,1024,720,auth-desktop.png,Table,wb.auth.credentials,237,206,777,132
+dark,1024,720,auth-desktop.png,,wb.auth.history,237,419,777,214
+dark,1024,720,auth-results.png,Table,wb.auth.credentials,10,136,1004,176
+dark,1024,720,auth-results.png,,wb.auth.history,10,365,1004,285
+dark,820,600,auth-candidate.png,Table,wb.auth.candidate.headers,14,310,792,208
+dark,700,520,auth-candidate-minimum.png,Table,wb.auth.candidate.headers,14,310,672,128
+dark,1180,780,auth-detail.png,,wb.auth.detail.request.0.text,55,185,530,298
+dark,1180,780,auth-detail.png,,wb.auth.detail.response.0.text,636,185,530,298
+dark,1180,780,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,572,1139,148
+dark,840,520,auth-detail-minimum.png,,wb.auth.detail.request.0.text,55,185,343,116
+dark,840,520,auth-detail-minimum.png,,wb.auth.detail.response.0.text,466,185,360,116
+dark,840,520,auth-detail-minimum.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,390,799,70
+dark,1024,720,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,977,84
+dark,1024,720,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,977,6
+dark,1024,720,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,977,0
+dark,1024,720,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,248,977,84
+dark,1024,720,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,391,977,67
+dark,1024,720,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,499,977,88
+dark,1280,800,auth-empty-desktop.png,Table,wb.auth.credentials,237,206,1033,169
+dark,1280,800,auth-empty-desktop.png,,wb.auth.history,237,456,1033,290
+dark,1280,800,auth-desktop.png,Table,wb.auth.credentials,237,206,1033,163
+dark,1280,800,auth-desktop.png,,wb.auth.history,237,450,1033,280
+dark,1280,800,auth-results.png,Table,wb.auth.credentials,10,136,1260,207
+dark,1280,800,auth-results.png,,wb.auth.history,10,396,1260,334
+dark,820,600,auth-candidate.png,Table,wb.auth.candidate.headers,14,310,792,208
+dark,700,520,auth-candidate-minimum.png,Table,wb.auth.candidate.headers,14,310,672,128
+dark,1180,780,auth-detail.png,,wb.auth.detail.request.0.text,55,185,530,298
+dark,1180,780,auth-detail.png,,wb.auth.detail.response.0.text,636,185,530,298
+dark,1180,780,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,572,1139,148
+dark,840,520,auth-detail-minimum.png,,wb.auth.detail.request.0.text,55,185,343,116
+dark,840,520,auth-detail-minimum.png,,wb.auth.detail.response.0.text,466,185,360,116
+dark,840,520,auth-detail-minimum.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,390,799,70
+dark,1280,800,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,1233,84
+dark,1280,800,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,1233,67
+dark,1280,800,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,1233,0
+dark,1280,800,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,328,1233,84
+dark,1280,800,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,471,1233,67
+dark,1280,800,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,579,1233,88
+dark,1600,900,auth-empty-desktop.png,Table,wb.auth.credentials,237,206,1353,207
+dark,1600,900,auth-empty-desktop.png,,wb.auth.history,237,494,1353,352
+dark,1600,900,auth-desktop.png,Table,wb.auth.credentials,237,206,1353,201
+dark,1600,900,auth-desktop.png,,wb.auth.history,237,488,1353,342
+dark,1600,900,auth-results.png,Table,wb.auth.credentials,10,136,1580,245
+dark,1600,900,auth-results.png,,wb.auth.history,10,434,1580,396
+dark,820,600,auth-candidate.png,Table,wb.auth.candidate.headers,14,310,792,208
+dark,700,520,auth-candidate-minimum.png,Table,wb.auth.candidate.headers,14,310,672,128
+dark,1180,780,auth-detail.png,,wb.auth.detail.request.0.text,55,185,530,298
+dark,1180,780,auth-detail.png,,wb.auth.detail.response.0.text,636,185,530,298
+dark,1180,780,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,572,1139,148
+dark,840,520,auth-detail-minimum.png,,wb.auth.detail.request.0.text,55,185,343,116
+dark,840,520,auth-detail-minimum.png,,wb.auth.detail.response.0.text,466,185,360,116
+dark,840,520,auth-detail-minimum.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,390,799,70
+dark,1600,900,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,1553,84
+dark,1600,900,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,1553,67
+dark,1600,900,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,1553,78
+dark,1600,900,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,428,1553,84
+dark,1600,900,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,571,1553,67
+dark,1600,900,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,679,1553,88

@@ -1,0 +1,373 @@
+theme,width,height,view,kind,label,selected,textWidth,allocatedWidth,allocatedHeight,fullyVisible,textFits
+light,1024,720,auth-empty-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1024,720,auth-empty-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1024,720,auth-empty-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1024,720,auth-empty-desktop.png,heading,비교 기록,true,66,66,21,true,true
+light,1024,720,auth-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1024,720,auth-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1024,720,auth-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1024,720,auth-desktop.png,heading,비교 기록,true,66,66,21,true,true
+light,1024,720,auth-results.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1024,720,auth-results.png,heading,비교 기록,true,66,66,21,true,true
+light,820,600,auth-candidate.png,heading,Bob · bob,true,94,94,26,true,true
+light,820,600,auth-candidate.png,heading,사용자 계정,true,82,794,31,true,true
+light,820,600,auth-candidate.png,heading,인증 정보,true,66,794,31,true,true
+light,700,520,auth-candidate-minimum.png,heading,Bob · bob,true,94,94,26,true,true
+light,700,520,auth-candidate-minimum.png,heading,사용자 계정,true,82,674,31,true,true
+light,700,520,auth-candidate-minimum.png,heading,인증 정보,true,66,674,31,true,true
+light,1180,780,auth-detail.png,tab,Bob · bob,true,60,81,21,true,true
+light,1180,780,auth-detail.png,tab,Alice · alice,false,72,93,21,true,true
+light,1180,780,auth-detail.png,tab,비교 계정 3,false,68,89,21,true,true
+light,1180,780,auth-detail.png,tab,원본,false,26,47,21,true,true
+light,1180,780,auth-detail.png,heading,요청 REQUEST,true,110,572,31,true,true
+light,1180,780,auth-detail.png,heading,응답 RESPONSE,true,119,572,31,true,true
+light,1180,780,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1158,31,true,true
+light,840,520,auth-detail-minimum.png,tab,Bob · bob,true,60,81,21,true,true
+light,840,520,auth-detail-minimum.png,tab,Alice · alice,false,72,93,21,true,true
+light,840,520,auth-detail-minimum.png,tab,비교 계정 3,false,68,89,21,true,true
+light,840,520,auth-detail-minimum.png,tab,원본,false,26,47,21,true,true
+light,840,520,auth-detail-minimum.png,heading,요청 REQUEST,true,110,402,31,true,true
+light,840,520,auth-detail-minimum.png,heading,응답 RESPONSE,true,119,402,31,true,true
+light,840,520,auth-detail-minimum.png,heading,판정 근거 · JSON 필드 차이,true,192,818,31,true,true
+light,1024,720,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+light,1024,720,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+light,1024,720,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,979,31,false,true
+light,1024,720,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+light,1024,720,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+light,1024,720,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,979,31,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1280,800,auth-empty-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1280,800,auth-empty-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1280,800,auth-empty-desktop.png,heading,비교 기록,true,66,66,21,true,true
+light,1280,800,auth-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1280,800,auth-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1280,800,auth-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1280,800,auth-desktop.png,heading,비교 기록,true,66,66,21,true,true
+light,1280,800,auth-results.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1280,800,auth-results.png,heading,비교 기록,true,66,66,21,true,true
+light,820,600,auth-candidate.png,heading,Bob · bob,true,94,94,26,true,true
+light,820,600,auth-candidate.png,heading,사용자 계정,true,82,794,31,true,true
+light,820,600,auth-candidate.png,heading,인증 정보,true,66,794,31,true,true
+light,700,520,auth-candidate-minimum.png,heading,Bob · bob,true,94,94,26,true,true
+light,700,520,auth-candidate-minimum.png,heading,사용자 계정,true,82,674,31,true,true
+light,700,520,auth-candidate-minimum.png,heading,인증 정보,true,66,674,31,true,true
+light,1180,780,auth-detail.png,tab,Bob · bob,true,60,81,21,true,true
+light,1180,780,auth-detail.png,tab,Alice · alice,false,72,93,21,true,true
+light,1180,780,auth-detail.png,tab,비교 계정 3,false,68,89,21,true,true
+light,1180,780,auth-detail.png,tab,원본,false,26,47,21,true,true
+light,1180,780,auth-detail.png,heading,요청 REQUEST,true,110,572,31,true,true
+light,1180,780,auth-detail.png,heading,응답 RESPONSE,true,119,572,31,true,true
+light,1180,780,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1158,31,true,true
+light,840,520,auth-detail-minimum.png,tab,Bob · bob,true,60,81,21,true,true
+light,840,520,auth-detail-minimum.png,tab,Alice · alice,false,72,93,21,true,true
+light,840,520,auth-detail-minimum.png,tab,비교 계정 3,false,68,89,21,true,true
+light,840,520,auth-detail-minimum.png,tab,원본,false,26,47,21,true,true
+light,840,520,auth-detail-minimum.png,heading,요청 REQUEST,true,110,402,31,true,true
+light,840,520,auth-detail-minimum.png,heading,응답 RESPONSE,true,119,402,31,true,true
+light,840,520,auth-detail-minimum.png,heading,판정 근거 · JSON 필드 차이,true,192,818,31,true,true
+light,1280,800,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+light,1280,800,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+light,1280,800,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,1235,31,false,true
+light,1280,800,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+light,1280,800,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+light,1280,800,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1235,31,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1600,900,auth-empty-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1600,900,auth-empty-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1600,900,auth-empty-desktop.png,heading,비교 기록,true,66,66,21,true,true
+light,1600,900,auth-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+light,1600,900,auth-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+light,1600,900,auth-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1600,900,auth-desktop.png,heading,비교 기록,true,66,66,21,true,true
+light,1600,900,auth-results.png,heading,인증 정보 후보,true,101,101,21,true,true
+light,1600,900,auth-results.png,heading,비교 기록,true,66,66,21,true,true
+light,820,600,auth-candidate.png,heading,Bob · bob,true,94,94,26,true,true
+light,820,600,auth-candidate.png,heading,사용자 계정,true,82,794,31,true,true
+light,820,600,auth-candidate.png,heading,인증 정보,true,66,794,31,true,true
+light,700,520,auth-candidate-minimum.png,heading,Bob · bob,true,94,94,26,true,true
+light,700,520,auth-candidate-minimum.png,heading,사용자 계정,true,82,674,31,true,true
+light,700,520,auth-candidate-minimum.png,heading,인증 정보,true,66,674,31,true,true
+light,1180,780,auth-detail.png,tab,Bob · bob,true,60,81,21,true,true
+light,1180,780,auth-detail.png,tab,Alice · alice,false,72,93,21,true,true
+light,1180,780,auth-detail.png,tab,비교 계정 3,false,68,89,21,true,true
+light,1180,780,auth-detail.png,tab,원본,false,26,47,21,true,true
+light,1180,780,auth-detail.png,heading,요청 REQUEST,true,110,572,31,true,true
+light,1180,780,auth-detail.png,heading,응답 RESPONSE,true,119,572,31,true,true
+light,1180,780,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1158,31,true,true
+light,840,520,auth-detail-minimum.png,tab,Bob · bob,true,60,81,21,true,true
+light,840,520,auth-detail-minimum.png,tab,Alice · alice,false,72,93,21,true,true
+light,840,520,auth-detail-minimum.png,tab,비교 계정 3,false,68,89,21,true,true
+light,840,520,auth-detail-minimum.png,tab,원본,false,26,47,21,true,true
+light,840,520,auth-detail-minimum.png,heading,요청 REQUEST,true,110,402,31,true,true
+light,840,520,auth-detail-minimum.png,heading,응답 RESPONSE,true,119,402,31,true,true
+light,840,520,auth-detail-minimum.png,heading,판정 근거 · JSON 필드 차이,true,192,818,31,true,true
+light,1600,900,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1555,31,true,true
+light,1600,900,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1555,31,true,true
+light,1600,900,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1555,31,true,true
+light,1600,900,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1555,31,true,true
+light,1600,900,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1555,31,true,true
+light,1600,900,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1555,31,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1024,720,auth-empty-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1024,720,auth-empty-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1024,720,auth-empty-desktop.png,heading,비교 기록,true,66,66,21,true,true
+dark,1024,720,auth-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1024,720,auth-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1024,720,auth-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1024,720,auth-desktop.png,heading,비교 기록,true,66,66,21,true,true
+dark,1024,720,auth-results.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1024,720,auth-results.png,heading,비교 기록,true,66,66,21,true,true
+dark,820,600,auth-candidate.png,heading,Bob · bob,true,94,94,26,true,true
+dark,820,600,auth-candidate.png,heading,사용자 계정,true,82,794,31,true,true
+dark,820,600,auth-candidate.png,heading,인증 정보,true,66,794,31,true,true
+dark,700,520,auth-candidate-minimum.png,heading,Bob · bob,true,94,94,26,true,true
+dark,700,520,auth-candidate-minimum.png,heading,사용자 계정,true,82,674,31,true,true
+dark,700,520,auth-candidate-minimum.png,heading,인증 정보,true,66,674,31,true,true
+dark,1180,780,auth-detail.png,tab,Bob · bob,true,60,81,21,true,true
+dark,1180,780,auth-detail.png,tab,Alice · alice,false,72,93,21,true,true
+dark,1180,780,auth-detail.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,1180,780,auth-detail.png,tab,원본,false,26,47,21,true,true
+dark,1180,780,auth-detail.png,heading,요청 REQUEST,true,110,572,31,true,true
+dark,1180,780,auth-detail.png,heading,응답 RESPONSE,true,119,572,31,true,true
+dark,1180,780,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1158,31,true,true
+dark,840,520,auth-detail-minimum.png,tab,Bob · bob,true,60,81,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,Alice · alice,false,72,93,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,원본,false,26,47,21,true,true
+dark,840,520,auth-detail-minimum.png,heading,요청 REQUEST,true,110,402,31,true,true
+dark,840,520,auth-detail-minimum.png,heading,응답 RESPONSE,true,119,402,31,true,true
+dark,840,520,auth-detail-minimum.png,heading,판정 근거 · JSON 필드 차이,true,192,818,31,true,true
+dark,1024,720,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+dark,1024,720,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+dark,1024,720,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,979,31,false,true
+dark,1024,720,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+dark,1024,720,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+dark,1024,720,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,979,31,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1280,800,auth-empty-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1280,800,auth-empty-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1280,800,auth-empty-desktop.png,heading,비교 기록,true,66,66,21,true,true
+dark,1280,800,auth-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1280,800,auth-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1280,800,auth-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1280,800,auth-desktop.png,heading,비교 기록,true,66,66,21,true,true
+dark,1280,800,auth-results.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1280,800,auth-results.png,heading,비교 기록,true,66,66,21,true,true
+dark,820,600,auth-candidate.png,heading,Bob · bob,true,94,94,26,true,true
+dark,820,600,auth-candidate.png,heading,사용자 계정,true,82,794,31,true,true
+dark,820,600,auth-candidate.png,heading,인증 정보,true,66,794,31,true,true
+dark,700,520,auth-candidate-minimum.png,heading,Bob · bob,true,94,94,26,true,true
+dark,700,520,auth-candidate-minimum.png,heading,사용자 계정,true,82,674,31,true,true
+dark,700,520,auth-candidate-minimum.png,heading,인증 정보,true,66,674,31,true,true
+dark,1180,780,auth-detail.png,tab,Bob · bob,true,60,81,21,true,true
+dark,1180,780,auth-detail.png,tab,Alice · alice,false,72,93,21,true,true
+dark,1180,780,auth-detail.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,1180,780,auth-detail.png,tab,원본,false,26,47,21,true,true
+dark,1180,780,auth-detail.png,heading,요청 REQUEST,true,110,572,31,true,true
+dark,1180,780,auth-detail.png,heading,응답 RESPONSE,true,119,572,31,true,true
+dark,1180,780,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1158,31,true,true
+dark,840,520,auth-detail-minimum.png,tab,Bob · bob,true,60,81,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,Alice · alice,false,72,93,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,원본,false,26,47,21,true,true
+dark,840,520,auth-detail-minimum.png,heading,요청 REQUEST,true,110,402,31,true,true
+dark,840,520,auth-detail-minimum.png,heading,응답 RESPONSE,true,119,402,31,true,true
+dark,840,520,auth-detail-minimum.png,heading,판정 근거 · JSON 필드 차이,true,192,818,31,true,true
+dark,1280,800,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+dark,1280,800,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+dark,1280,800,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,1235,31,false,true
+dark,1280,800,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+dark,1280,800,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+dark,1280,800,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1235,31,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1600,900,auth-empty-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1600,900,auth-empty-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1600,900,auth-empty-desktop.png,heading,비교 기록,true,66,66,21,true,true
+dark,1600,900,auth-desktop.png,folder-menu,트래픽,true,83,83,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,요청·응답 목록,true,132,132,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,탐색·정보 수집,true,135,135,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,JS에서 API 찾기,true,141,141,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,서버·경로 탐색,true,132,132,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,URL 후보 수집,true,131,131,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,보안 분석·검증,true,135,135,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,계정 권한 비교,true,132,132,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,응답 보안 분석,true,132,132,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,입력값 보안 검사,true,146,146,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,데이터 도구,true,116,116,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,데이터 변환·비교,true,146,146,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,점검 관리·증거,true,135,135,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,점검 진행 현황,true,132,132,40,true,true
+dark,1600,900,auth-desktop.png,folder-menu,재현·증거 정리,true,132,132,40,true,true
+dark,1600,900,auth-desktop.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1600,900,auth-desktop.png,heading,비교 기록,true,66,66,21,true,true
+dark,1600,900,auth-results.png,heading,인증 정보 후보,true,101,101,21,true,true
+dark,1600,900,auth-results.png,heading,비교 기록,true,66,66,21,true,true
+dark,820,600,auth-candidate.png,heading,Bob · bob,true,94,94,26,true,true
+dark,820,600,auth-candidate.png,heading,사용자 계정,true,82,794,31,true,true
+dark,820,600,auth-candidate.png,heading,인증 정보,true,66,794,31,true,true
+dark,700,520,auth-candidate-minimum.png,heading,Bob · bob,true,94,94,26,true,true
+dark,700,520,auth-candidate-minimum.png,heading,사용자 계정,true,82,674,31,true,true
+dark,700,520,auth-candidate-minimum.png,heading,인증 정보,true,66,674,31,true,true
+dark,1180,780,auth-detail.png,tab,Bob · bob,true,60,81,21,true,true
+dark,1180,780,auth-detail.png,tab,Alice · alice,false,72,93,21,true,true
+dark,1180,780,auth-detail.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,1180,780,auth-detail.png,tab,원본,false,26,47,21,true,true
+dark,1180,780,auth-detail.png,heading,요청 REQUEST,true,110,572,31,true,true
+dark,1180,780,auth-detail.png,heading,응답 RESPONSE,true,119,572,31,true,true
+dark,1180,780,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1158,31,true,true
+dark,840,520,auth-detail-minimum.png,tab,Bob · bob,true,60,81,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,Alice · alice,false,72,93,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,비교 계정 3,false,68,89,21,true,true
+dark,840,520,auth-detail-minimum.png,tab,원본,false,26,47,21,true,true
+dark,840,520,auth-detail-minimum.png,heading,요청 REQUEST,true,110,402,31,true,true
+dark,840,520,auth-detail-minimum.png,heading,응답 RESPONSE,true,119,402,31,true,true
+dark,840,520,auth-detail-minimum.png,heading,판정 근거 · JSON 필드 차이,true,192,818,31,true,true
+dark,1600,900,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1555,31,true,true
+dark,1600,900,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1555,31,true,true
+dark,1600,900,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1555,31,true,true
+dark,1600,900,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1555,31,true,true
+dark,1600,900,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1555,31,true,true
+dark,1600,900,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1555,31,true,true

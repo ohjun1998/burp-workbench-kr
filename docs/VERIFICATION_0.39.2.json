@@ -134,5 +134,40 @@
     "UI renders production Swing components with synthetic data and sends no HTTP.",
     "Existing per-account judgement logic is preserved; identical public/shared responses can remain suspect candidates without explicit access policy."
   ],
-  "remoteCI": "Pending PR verification; local counts are not remote execution counts."
+  "remoteCI": {
+    "verifiedSourceCommit": "f66e66613a574796fd37c9501059046a4a8cce39",
+    "pullRequest": 57,
+    "result": "success",
+    "build": {
+      "runId": 39041366806,
+      "result": "success"
+    },
+    "durability": {
+      "runId": 39041366809,
+      "jobs": {
+        "windows": "success",
+        "isolated-disk-and-soak": "success"
+      }
+    },
+    "publication": {
+      "mergeCommit": "cbce2f6adca0e7c0aae0f8ef62d42282a3235934",
+      "treeSha": "03f079c749407689867955ec1acf374536f1b4b8",
+      "matchesVerifiedPrTree": true
+    },
+    "mainAutomaticRecheck": {
+      "statusAtPublication": "in_progress",
+      "observedAtUtc": "2026-10-17T14:43:33Z",
+      "runs": [
+        {
+          "id": 39041952494,
+          "name": "Build and verify"
+        },
+        {
+          "id": 39041952469,
+          "name": "Capture durability and Windows verification"
+        }
+      ],
+      "note": "Separate automatic rerun after merge; do not treat PR results as this rerun's results."
+    }
+  }
 }

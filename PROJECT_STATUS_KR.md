@@ -7,7 +7,7 @@
 
 계정별 칸에는 HTTP 응답 코드·기준 여부만 표시하고 URL 바로 오른쪽의 종합 결과 열에서 실행 한 건당 판정과 색상 하나를 표시합니다. 원본과 동일 인증인 기준 계정은 종합 판정에서 제외합니다. 일부 전송 실패·미확인·중지가 있으면 전체를 차단 확인으로 표시하지 않으며, 진행 중 결과·명시적 허용 정책 일치도 구분합니다. 상세 창에서 종합 근거와 계정별 근거를 확인합니다. 기존 개별 판정·실제 재전송·Ctrl+Space는 유지합니다.
 
-이번 로컬 정식 release **2,657개**(Java 2,157·HTTP 132/102/266), 종합 판정 회귀 **23개**, 레이아웃 회귀 **102개**, 두 테마·세 해상도의 Swing 화면 **54개**·컨트롤 **786개**, 패키징 회귀 4개와 다운로드 해시·소스 지문 검사가 통과했습니다. 실제 Burp GUI·Windows DPI/IME는 미수행입니다. 원격 검증은 해당 PR의 Checks와 검증 기록을 기준으로 구분합니다.
+이번 로컬 정식 release **2,657개**(Java 2,157·HTTP 132/102/266), 종합 판정 회귀 **23개**, 레이아웃 회귀 **102개**, 두 테마·세 해상도의 Swing 화면 **54개**·컨트롤 **786개**, 패키징 회귀 4개와 다운로드 해시·소스 지문 검사가 통과했습니다. 실제 Burp GUI·Windows DPI/IME는 미수행입니다. [PR #57](https://github.com/ohjun1998/burp-workbench-kr/pull/57)의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39041366806)·[Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39041366809)이 모두 성공한 뒤 main에 병합했습니다. 검증한 PR head는 `f66e66613a574796fd37c9501059046a4a8cce39`, 병합 커밋은 `cbce2f6adca0e7c0aae0f8ef62d42282a3235934`이며 두 파일 트리가 동일합니다. main의 별도 자동 재검증은 해당 실행 이력으로 구분합니다.
 
 [변경 안내·화면](docs/RELEASE_0.39.2_KR.md) · [검증 기록](docs/VERIFICATION_0.39.2.json) · [JAR·소스 ZIP](downloads/extensions/0.39.2/) · [날짜별 대화](docs/chat-logs/2026-10-17/workbench-auth-summary-0392.md)
 

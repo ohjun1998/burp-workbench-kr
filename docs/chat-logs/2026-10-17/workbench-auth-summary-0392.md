@@ -24,3 +24,11 @@
 ## 05. 도우미 · 요약
 
 기준 계정을 종합 판정에서 제외하고 일부 전송 실패나 미확인 응답이 전체 차단으로 표시되지 않게 구현했다. 좁은 창에서 종합 결과가 가로 스크롤 뒤로 숨는 문제를 발견해 URL 바로 오른쪽으로 옮기고 회귀 검사를 추가했다. 상태 코드만 보이는 계정 열, 종합 결과, 상세 근거와 기존 판정 조건의 범위를 구분했다. 기존 개별 응답 판정 로직을 변경한 것으로 보고하지 않는다. 검증 수·실행 범위는 RELEASE_0.39.2_KR.md 및 VERIFICATION_0.39.2.json을 따른다.
+
+## 최종 반영 안내 · 요약
+
+로컬 release 2,657개·종합 판정 회귀 23개·레이아웃 회귀 102개, Swing 54개 화면·컨트롤 786개, 패키징 4개와 다운로드 지문 검증을 통과했습니다. 업로드한 48개 파일의 Git blob 해시도 로컬 검증 파일과 일치했습니다.
+
+[PR #57](https://github.com/ohjun1998/burp-workbench-kr/pull/57)의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39041366806)·[Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39041366809)이 모두 성공한 뒤 main에 병합했습니다. 검증한 PR head는 `f66e66613a574796fd37c9501059046a4a8cce39`, 병합 커밋은 `cbce2f6adca0e7c0aae0f8ef62d42282a3235934`이며 두 파일 트리가 동일합니다. main의 별도 자동 재검증은 해당 실행 이력으로 구분합니다.
+
+후속 변경은 상태·검증·대화 기록 3개 문서만 갱신하며 검증된 소스·JAR·소스 ZIP은 보존합니다. 실제 Burp GUI·Windows DPI/IME는 미수행입니다.

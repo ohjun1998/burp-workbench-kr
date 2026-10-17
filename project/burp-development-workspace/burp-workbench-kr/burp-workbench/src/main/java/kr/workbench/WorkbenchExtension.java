@@ -271,30 +271,18 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     HttpRequest request = packet.request();
     HttpResponse response = packet.response();
     EnvironmentPanel.Observation environment = null;
-    AuthComparePanel.Observation credentials = null;
     try {
       if (environments != null) environment = environments.prepareObservation(request, response);
     } catch (RuntimeException error) {
       captureFailure("서버 환경 관찰", error);
     }
-    try {
-      if (authCompare != null) credentials = authCompare.prepareObservation(request, response);
-    } catch (RuntimeException error) {
-      captureFailure("인증 후보 관찰", error);
-    }
     final EnvironmentPanel.Observation preparedEnvironment = environment;
-    final AuthComparePanel.Observation preparedCredentials = credentials;
     // Only compact metadata crosses back to Swing; the original bytes become reclaimable here.
     return () -> {
       captureStage(
           "서버 환경 관찰",
           () -> {
             if (environments != null) environments.applyObservation(preparedEnvironment);
-          });
-      captureStage(
-          "인증 후보 관찰",
-          () -> {
-            if (authCompare != null) authCompare.applyObservation(preparedCredentials);
           });
     };
   }
@@ -375,7 +363,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       api.http().registerHttpHandler(this);
       api.userInterface().registerContextMenuItemsProvider(this);
       api.logging()
-          .logToOutput("Burp Workbench KR loaded. 계정 비교 재전송은 선택 실행 또는 새 요청 자동 비교 ON에서 실행합니다.");
+          .logToOutput("Burp Workbench KR loaded. 계정 비교 재전송은 선택 실행 또는 요청 비교 ON에서 실행합니다.");
     } catch (Exception e) {
       if (captureObservations != null) captureObservations.close();
       captureStage("초기화 실패 저장소 정리", trafficStore::close);
@@ -1303,7 +1291,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     for (Traffic t : newlyIncluded)
       if (WorkbenchScope.contains(api, t.request())) {
         environments.observe(t.request(), t.response());
-        authCompare.observe(t.request(), t.response());
+
         if (responseRecon != null) responseRecon.offer(t.request(), t.response());
         if (activity != null) {
           activity.observe(t.request(), "트래픽 SCOPE");
@@ -1438,6 +1426,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   @Override
   public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent r) {
     if (!unloaded.get()) {
+      captureStage("독립 인증 탐지",()->{if(authCompare!=null&&authCompare.detectionEnabled)authCompare.offerCredential(r,r.toolSource().toolType());});
       captureStage(
           "요청 활동 관찰",
           () -> {

@@ -147,7 +147,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   private void commitEdits() {
-    if(!editable || mode!=Mode.RAW || truncated)return;
+    if(!editable || mode!=Mode.RAW || truncated || text.getText().equals(raw))return;
     raw=text.getText();rawBytes=raw.getBytes(java.nio.charset.StandardCharsets.UTF_8);
     // Raw is authoritative. Formatting is a view and is never a transmission source.
     pretty=raw;

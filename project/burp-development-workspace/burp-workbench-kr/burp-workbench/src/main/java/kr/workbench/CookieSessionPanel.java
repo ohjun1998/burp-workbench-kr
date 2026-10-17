@@ -145,7 +145,8 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
     var headers=report.cookieOnly()&&filterCookies.isSelected()?CookieSessionProbe.retain(testedCandidate.headers(),report.retained()):testedCandidate.headers();
     String key=Core.hash((testedCandidate.origin()+"|"+MetadataExport.json(headers)).getBytes(StandardCharsets.UTF_8));
     String linked=owner.trackingAccounts[testedSlot];
-    owner.assign(testedSlot,new AuthComparePanel.Candidate(testedCandidate.no(),key,testedCandidate.origin(),headers,testedCandidate.count(),testedCandidate.used()));
+    var reduced=new AuthComparePanel.Candidate(testedCandidate.no(),key,testedCandidate.origin(),headers,testedCandidate.count(),testedCandidate.used());
+    owner.copyAccount(testedCandidate,reduced);owner.assign(testedSlot,reduced);
     owner.trackingAccounts[testedSlot]=linked;owner.refreshTracking();
     owner.sessionChecks[testedSlot]=beforeCompare.isSelected()?testedConfig:null;owner.refreshSlots();
     invalidateResult();summary.setText("계정에 검사 결과 적용 · 다음 비교부터 "+(beforeCompare.isSelected()?"신원 확인 후 전송":"현재 인증 조합 사용"));

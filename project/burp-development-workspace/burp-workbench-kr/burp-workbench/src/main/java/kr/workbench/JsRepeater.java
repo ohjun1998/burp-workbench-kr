@@ -47,6 +47,24 @@ final class JsRepeater implements AutoCloseable {
     } catch(RuntimeException error) { session.close();sessions.remove(session);throw error; }
   }
 
+  /** Open exact captured bytes in a separate editable window without sending them. */
+  void openPacket(HttpRequest request,burp.api.montoya.http.message.responses.HttpResponse response,String account) {
+    if(closed)return;
+    if(sessions.size()>=16)throw new IllegalArgumentException("Repeater 창 16개 제한 · 사용하지 않는 창을 닫으세요.");
+    var draft=new JsRequestDraft.Draft(request.url(),request.method(),"","");
+    Session session=new Session(api,List.of(draft),List.of("관측한 실제 요청 · "+account));
+    byte[] bytes=response==null?new byte[0]:PacketInspector.prefix(response.toByteArray());
+    String decoded=response==null?null:PacketFormat.decode(bytes);
+    session.entries.clear();
+    session.entries.add(new Session.Entry(AuthComparePanel.origin(request),request.toByteArray().getBytes(),bytes,response==null?0:response.toByteArray().length(),decoded,response==null?"전송 전":"원본 응답 · HTTP "+response.statusCode(),false,"관측한 실제 요청 · "+account));
+    session.load(0);session.shortcuts.suppressUntilRelease();
+    sessions.add(session);Window[] handle={null};
+    try {
+      handle[0]=opener.open(owner,"Repeater · "+account+" · "+request.method()+" "+URI.create(request.url()).getRawPath(),session,false,()->{session.close();sessions.remove(session);windows.remove(handle[0]);});
+      if(handle[0]!=null)windows.add(handle[0]);
+    } catch(RuntimeException error){session.close();sessions.remove(session);throw error;}
+  }
+
   static JFrame window(Component owner,String title,Component body,boolean modal,Runnable closed) {
     if(GraphicsEnvironment.isHeadless())return null;
     JFrame frame=new JFrame(title);

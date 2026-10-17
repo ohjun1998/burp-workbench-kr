@@ -1,0 +1,49 @@
+theme,width,height,view,kind,name,x,y,visibleWidth,visibleHeight
+light,1024,720,auth-results.png,JTable,wb.auth.credentials,10,216,1004,125
+light,1024,720,auth-results.png,,wb.auth.history,10,434,1004,259
+light,1024,720,auth-candidate.png,JTable,wb.auth.candidate.headers,14,382,996,256
+light,1024,720,auth-detail.png,,wb.auth.detail.request.0.text,55,157,452,275
+light,1024,720,auth-detail.png,,wb.auth.detail.response.0.text,558,157,452,275
+light,1024,720,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,521,983,139
+light,1024,720,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,977,84
+light,1024,720,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,977,6
+light,1024,720,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,977,0
+light,1024,720,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,248,977,84
+light,1024,720,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,391,977,67
+light,1024,720,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,499,977,88
+light,1280,800,auth-results.png,JTable,wb.auth.credentials,10,179,1095,186
+light,1280,800,auth-results.png,,wb.auth.history,10,441,1085,349
+light,1280,800,auth-candidate.png,JTable,wb.auth.candidate.headers,14,382,1252,336
+light,1280,800,auth-detail.png,,wb.auth.detail.request.0.text,55,157,580,331
+light,1280,800,auth-detail.png,,wb.auth.detail.response.0.text,686,157,580,331
+light,1280,800,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,577,1239,163
+light,1280,800,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,1233,84
+light,1280,800,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,1233,67
+light,1280,800,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,1233,0
+light,1280,800,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,328,1233,84
+light,1280,800,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,471,1233,67
+light,1280,800,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,579,1233,88
+dark,1024,720,auth-results.png,JTable,wb.auth.credentials,10,216,1004,125
+dark,1024,720,auth-results.png,,wb.auth.history,10,434,1004,259
+dark,1024,720,auth-candidate.png,JTable,wb.auth.candidate.headers,14,382,996,256
+dark,1024,720,auth-detail.png,,wb.auth.detail.request.0.text,55,157,452,275
+dark,1024,720,auth-detail.png,,wb.auth.detail.response.0.text,558,157,452,275
+dark,1024,720,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,521,983,139
+dark,1024,720,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,977,84
+dark,1024,720,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,977,6
+dark,1024,720,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,977,0
+dark,1024,720,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,248,977,84
+dark,1024,720,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,391,977,67
+dark,1024,720,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,499,977,88
+dark,1280,800,auth-results.png,JTable,wb.auth.credentials,10,179,1095,186
+dark,1280,800,auth-results.png,,wb.auth.history,10,441,1085,349
+dark,1280,800,auth-candidate.png,JTable,wb.auth.candidate.headers,14,382,1252,336
+dark,1280,800,auth-detail.png,,wb.auth.detail.request.0.text,55,157,580,331
+dark,1280,800,auth-detail.png,,wb.auth.detail.response.0.text,686,157,580,331
+dark,1280,800,auth-detail.png,JTextArea,wb.card.판정 근거 · JSON 필드 차이,12,577,1239,163
+dark,1280,800,auth-settings.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,508,1233,84
+dark,1280,800,auth-settings.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,651,1233,67
+dark,1280,800,auth-settings.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,759,1233,0
+dark,1280,800,auth-settings-bottom.png,JTextArea,wb.card.경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,15,328,1233,84
+dark,1280,800,auth-settings-bottom.png,JTextArea,wb.card.차단 규칙 · JSON 경로=값 (행별 OR),15,471,1233,67
+dark,1280,800,auth-settings-bottom.png,JTextArea,wb.card.응답 차단 규칙 · 행별 OR · 선택 사항,15,579,1233,88

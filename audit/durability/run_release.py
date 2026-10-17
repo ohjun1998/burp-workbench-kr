@@ -2,6 +2,7 @@
 """Run dev.py release with fresh output while preserving every committed download byte."""
 import hashlib
 import json
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -15,7 +16,9 @@ def digest(path):
 
 def main():
     downloads = ROOT / "downloads"
-    expected_zip = downloads / "docker/3.5.2/community-security-lab-3.5.2-docker.zip"
+    pom = ROOT / "project/burp-development-workspace/community-security-lab/pom.xml"
+    version = re.search(r'<artifactId>loop-community-lab</artifactId><version>([^<]+)', pom.read_text()).group(1)
+    expected_zip = downloads / f"docker/{version}/community-security-lab-{version}-docker.zip"
     expected = digest(expected_zip)
     before = {p.relative_to(downloads).as_posix(): digest(p) for p in downloads.rglob("*") if p.is_file()}
     with tempfile.TemporaryDirectory(prefix="workbench-release-outputs-") as directory:
@@ -25,7 +28,7 @@ def main():
             subprocess.run([sys.executable, "-u", str(ROOT / "dev.py"), "release"], cwd=ROOT, check=True)
             subprocess.run([sys.executable, str(ROOT / "tools/package_downloads.py"), "--verify"], cwd=ROOT, check=True)
             if digest(expected_zip) != expected:
-                raise AssertionError("Fresh release Docker ZIP differs from committed 3.5.2 download")
+                raise AssertionError(f"Fresh release Docker ZIP differs from committed {version} download")
         finally:
             if downloads.exists():
                 shutil.rmtree(downloads)
@@ -35,7 +38,7 @@ def main():
         raise AssertionError("Committed download bytes changed")
     summary = {"result": "passed", "command": "python dev.py release", "freshOutputDirectory": True,
                "committedDownloadsPreserved": True,
-               "dockerVersion": "3.5.2", "dockerZipSha256": expected, "freshDockerZipMatchesCommitted": True}
+               "dockerVersion": version, "dockerZipSha256": expected, "freshDockerZipMatchesCommitted": True}
     current = json.loads((ROOT / "project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/check-summary.json").read_text())
     summary.update({key: current[key] for key in ["version", "regressionGroups", "regressionChecks", "payloadHttpChecks", "allFeaturesHttpChecks", "bountyHttpChecks", "totalChecks"]})
     output = ROOT / "tmp/durability/release.json"

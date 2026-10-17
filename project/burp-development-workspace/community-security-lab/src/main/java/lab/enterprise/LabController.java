@@ -79,8 +79,17 @@ public class LabController {
   document(paths,"/api/community/"+mode+"/messages","post",Set.of("receiver","body"),Set.of());
  }
  document(paths,"/api/community/register","post",Set.of("username","password","email"),Set.of());
+ document(paths,"/api/access/me","get",Set.of(),Set.of());
+ for(String mode:List.of("vuln","fixed")) {
+  for(String path:List.of("user/dashboard","user/requests/{id}","admin/members","admin/review-queue","admin/settings"))document(paths,"/api/access/"+mode+"/"+path,"get",Set.of(),Set.of());
+  document(paths,"/api/access/"+mode+"/user/requests","post",Set.of("subject","body"),Set.of());
+  document(paths,"/api/access/"+mode+"/user/requests/{id}/cancel","post",Set.of(),Set.of());
+  document(paths,"/api/access/"+mode+"/admin/requests/{id}/review","post",Set.of("decision"),Set.of());
+  document(paths,"/api/access/"+mode+"/admin/settings","post",Set.of("notice"),Set.of());
+ }
+ document(paths,"/api/access/reset","post",Set.of(),Set.of());
  document(paths,"/api/auth/login","post",Set.of("username","password"),Set.of());
- return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.5.2"),"paths",paths);
+ return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.6.0"),"paths",paths);
  }
  private static void document(Map<String,Object> paths,String path,String method,Set<String> fields,Set<String> query){
  @SuppressWarnings("unchecked") Map<String,Object> item=(Map<String,Object>)paths.computeIfAbsent(path,k->new LinkedHashMap<>());

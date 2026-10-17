@@ -1,6 +1,16 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.37.0 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.37.0 / 실습 사이트 3.6.0 / 별도 Feature Mapper KR 0.3.1.
+
+## 관리자·사용자 전용 포털 — 사이트 3.6.0
+
+`/admin`과 `/user`에 별도 로그인·메뉴·업무 화면을 추가했습니다. 관리자는 전체 회원·요청 검토·승인/반려·공지 설정, 일반 사용자는 본인 요청 작성·조회·취소와 프로필을 사용합니다. 기본 수정 API는 실제 DB 역할·객체 소유자·계정 CSRF를 검증하며, 별도 취약 API는 로그인 후 역할·소유자 검증 누락을 비교하는 대조군입니다. 동일 Origin에서 admin·alice·bob 세션을 브라우저 프로필별로 유지해 비교합니다.
+
+현재 소스를 컴파일한 별도 세션의 실제 loopback HTTP **101개**, 정식 `python dev.py release` **2,442개**(Workbench Java 1,943·HTTP 132+101+266), 별도 Mapper Java 94·Node 7과 패키징·배포 보존 회귀 6개를 통과했습니다. 새 3.6.0 Docker ZIP의 역할별 소스·Windows BOM, 다운로드 해시·소스 지문도 확인했습니다. Workbench 0.37.0·Mapper 0.3.1과 기존 배포는 유지합니다. 브라우저 DOM·실제 Burp·Windows Docker Desktop 전체 구동은 미실행입니다. 현재 소스의 [원격 Docker/Oracle/Nginx 실습 스택](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38996673370)과 loopback 포트·TLS·HTTP/2 검사도 성공했습니다. 역할별 101개 HTTP 검사는 이 스택 검사와 별도의 H2 결과입니다. 배포 내구성 검사의 구버전 고정 경로를 현재 POM 기준으로 보완했으며 원격 최종 CI·main 병합 상태는 [PR #41](https://github.com/ohjun1998/burp-workbench-kr/pull/41) Checks에서 확인합니다.
+
+[사용법·역할별 기대 코드](docs/LAB_3.6.0_KR.md) · [실행 검증](docs/VERIFICATION_LAB_3.6.0.json) · [Docker 다운로드](downloads/docker/3.6.0/community-security-lab-3.6.0-docker.zip) · [날짜별 대화](docs/chat-logs/2026-10-17/community-role-portals-360.md)
+
+이하 확장 0.37.0의 변경과 이전 사이트 기록은 당시 범위로 보존합니다.
 
 ## 쿠키 식별·세션 신원 검사 0.37.0
 

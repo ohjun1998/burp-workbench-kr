@@ -63,7 +63,12 @@ final class JsRepeater implements AutoCloseable {
     final PacketInspector response=new PacketInspector("wb.js.repeater.response");
     final JTextField target=new JTextField(24);
     final JButton send=new JButton("Send"),previous=new JButton("←"),next=new JButton("→");
-    final JLabel result=new JLabel("전송 전"),note=new JLabel("요청은 Raw에서 편집 · REPLACE_ME 값과 인증을 확인하세요.");
+    final JComboBox<String> method=new JComboBox<>(new String[]{"선택 필요","GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS"});
+    final JButton applyMethod=new JButton("메서드 적용");
+    final JLabel methodHint=new JLabel(),result=new JLabel("전송 전");
+    final JTextArea note=new JTextArea("요청은 Raw에서 편집 · 메서드·값과 인증을 확인하세요.",2,0);
+    final WindowMaximize maximize=new WindowMaximize(this);
+    final JsRepeaterShortcuts shortcuts=new JsRepeaterShortcuts(this,send);
     final List<Entry> entries=new ArrayList<>();
     final ExecutorService worker=Executors.newSingleThreadExecutor(task->{Thread t=new Thread(task,"Workbench-JS-Repeater");t.setDaemon(true);return t;});
     volatile Future<?> pending;
@@ -80,15 +85,22 @@ final class JsRepeater implements AutoCloseable {
       setBorder(BorderFactory.createEmptyBorder(10,10,8,10));
       send.setName("wb.js.repeater.send");target.setName("wb.js.repeater.target");
       previous.setName("wb.js.repeater.previous");next.setName("wb.js.repeater.next");
+      method.setName("wb.js.repeater.method");applyMethod.setName("wb.js.repeater.method.apply");
+      method.setEditable(true);method.setToolTipText("원본에서 확인한 HTTP 메서드 · 자동 선택하거나 전송하지 않습니다.");
       previous.setToolTipText("이전 요청·응답");next.setToolTipText("다음 요청·응답");
       target.setToolTipText("전송 대상 Origin · 프로토콜, 호스트, 포트");
       JPanel action=new JPanel(new BorderLayout(8,0));
       action.add(WorkbenchUi.row(send,previous,next),BorderLayout.WEST);
-      action.add(target);action.add(result,BorderLayout.EAST);add(action,BorderLayout.NORTH);
+      action.add(target);action.add(WorkbenchUi.row(result,maximize),BorderLayout.EAST);
+      JPanel header=new JPanel(new BorderLayout(0,6));header.add(action,BorderLayout.NORTH);
+      header.add(WorkbenchUi.row(new JLabel("메서드"),method,applyMethod,methodHint));add(header,BorderLayout.NORTH);
       JSplitPane messages=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
           WorkbenchUi.card("요청 REQUEST",request),WorkbenchUi.card("응답 RESPONSE",response),.5);
       messages.setName("wb.js.repeater.messages");add(messages);
-      note.putClientProperty("wb.font.size",11);note.setName("wb.js.repeater.note");add(note,BorderLayout.SOUTH);
+      note.putClientProperty("wb.font.size",12);note.putClientProperty("wb.prose",true);
+      note.setEditable(false);note.setLineWrap(true);note.setWrapStyleWord(true);note.setBorder(null);
+      note.setName("wb.js.repeater.note");add(note,BorderLayout.SOUTH);
+      methodHint.putClientProperty("wb.font.size",12);methodHint.setName("wb.js.repeater.method.hint");
       result.putClientProperty("wb.font.size",12);result.setName("wb.js.repeater.result");
       WorkbenchUi.style(this);WorkbenchUi.primary(send);
       for(var draft:drafts) {
@@ -98,9 +110,11 @@ final class JsRepeater implements AutoCloseable {
       request.setNativeAction(this::exportNative);
       request.more.setToolTipText("편집한 요청을 Burp Repeater에 복사 · 전송 없음");
       send.addActionListener(event->send());previous.addActionListener(event->navigate(-1));next.addActionListener(event->navigate(1));
+      applyMethod.addActionListener(event->applyMethod());
       KeyStroke shortcut=KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,InputEvent.CTRL_DOWN_MASK);
       Action submit=new AbstractAction(){public void actionPerformed(ActionEvent event){send();}};
       getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(shortcut,"wb.js.repeater.send");
+      getInputMap(WHEN_IN_FOCUSED_WINDOW).put(shortcut,"wb.js.repeater.send");
       getActionMap().put("wb.js.repeater.send",submit);
       for(JComponent editor:new JComponent[]{request.text,response.text,request.search,response.search,target}){
         editor.getInputMap(WHEN_FOCUSED).put(shortcut,"wb.js.repeater.send");editor.getActionMap().put("wb.js.repeater.send",submit);
@@ -117,20 +131,49 @@ final class JsRepeater implements AutoCloseable {
       loading=true;index=row;Entry entry=entries.get(index);target.setText(entry.target());
       request.setPacket(entry.request(),null);
       response.setPacket(entry.response(),entry.decoded(),entry.responseLength());result.setText(entry.status());
-      loading=false;updateButtons();
+      loading=false;updateMethod();updateButtons();
     }
 
     private void draftChanged(){
       if(closed||loading||busy)return;
       response.setPacket(new byte[0],null);result.setText("편집됨 · 미전송");
       note.setText("요청이 변경되었습니다. Send 또는 Ctrl+Space로 응답을 확인하세요.");
+      updateMethod();
     }
+
+    private void updateMethod(){
+      String first=request.text.getText().split("\\s+",2)[0];
+      // Pretty/Hex are views; method controls always read the authoring bytes.
+      try{first=new String(request.editedBytes(),StandardCharsets.UTF_8).split("\\s+",2)[0];}catch(IllegalStateException ignored){}
+      boolean known=first.matches("[A-Z][A-Z0-9_-]{0,31}")&&!first.equals("REPLACE_METHOD");
+      method.setSelectedItem(known?first:"선택 필요");
+      methodHint.setText(known?"Raw에서 경로·파라미터도 확인하세요.":"전송 전 메서드를 선택하고 적용하세요.");
+      if(!known)note.setText("전송하지 않음: HTTP 메서드가 미확정입니다. 위에서 실제 메서드를 선택하고 ‘메서드 적용’을 누르세요.");
+    }
+
+    private void applyMethod(){
+      if(closed||busy)return;
+      String selected=String.valueOf(method.getEditor().getItem()).strip().toUpperCase(java.util.Locale.ROOT);
+      if(!selected.matches("[A-Z][A-Z0-9_-]{0,31}")||selected.startsWith("REPLACE_")){note.setText("원본 요청을 확인한 뒤 GET·POST 등 실제 메서드를 선택하세요.");return;}
+      try{
+        String raw=new String(request.editedBytes(),StandardCharsets.UTF_8);
+        int space=raw.indexOf(' '),line=raw.indexOf('\n');
+        if(space<=0||line>=0&&space>line)throw new IllegalArgumentException("Raw 첫 줄을 ‘메서드 /경로 HTTP/1.1’ 형식으로 확인하세요.");
+        request.setPacket((selected+raw.substring(space)).getBytes(StandardCharsets.UTF_8),null);
+        request.tabs.get(1).doClick(0);
+        draftChanged();note.setText("메서드 "+selected+" 적용 · 경로·파라미터를 확인한 뒤 Send 또는 Ctrl+Space로 전송하세요.");
+      }catch(Exception error){showError(error);}
+    }
+
+    @Override public void addNotify(){super.addNotify();if(!closed)shortcuts.install();}
+    @Override public void removeNotify(){shortcuts.close();super.removeNotify();}
 
     private void updateButtons() {
       send.setEnabled(!closed&&!busy&&api!=null);
       previous.setEnabled(!busy&&index>0);next.setEnabled(!busy&&index+1<entries.size());
       target.setEnabled(!busy);request.text.setEnabled(!busy);
       request.more.setEnabled(!busy&&api!=null);
+      method.setEnabled(!closed&&!busy);applyMethod.setEnabled(!closed&&!busy);
     }
 
     private void saveEdits(boolean sending) {
@@ -157,6 +200,7 @@ final class JsRepeater implements AutoCloseable {
         throw new IllegalArgumentException("전송 대상에는 HTTP(S) Origin만 입력하세요.");
       if(origin.getHost().equalsIgnoreCase("REPLACE-HOST.invalid"))throw new IllegalArgumentException("전송 대상 호스트를 먼저 확인하세요.");
       String wire=new String(request.editedBytes(),StandardCharsets.UTF_8);
+      if(wire.startsWith("REPLACE_METHOD "))throw new IllegalArgumentException("HTTP 메서드가 미확정입니다. 위에서 메서드를 선택하고 ‘메서드 적용’을 누르세요.");
       String checked=wire;
       for(int pass=0;pass<2;pass++)try{String decoded=java.net.URLDecoder.decode(checked,StandardCharsets.UTF_8);if(decoded.equals(checked))break;checked=decoded;}catch(IllegalArgumentException ignored){break;}
       checked=checked.replaceAll("(?i)\\\\u005[fF]","_");
@@ -230,6 +274,7 @@ final class JsRepeater implements AutoCloseable {
     }
     @Override public void close() {
       if(closed)return;closed=true;
+      shortcuts.close();
       if(pending!=null)pending.cancel(true);worker.shutdownNow();entries.clear();
       request.close();response.close();target.setText("");updateButtons();
     }

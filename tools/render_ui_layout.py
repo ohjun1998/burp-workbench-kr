@@ -30,10 +30,11 @@ def main():
     p.add_argument('--scope-only',action='store_true',help='Check the production Scope editor at default and minimum dialog sizes')
     p.add_argument('--packet-only',action='store_true',help='Render Pretty/search, Raw and Hex in the production packet panes')
     p.add_argument('--js-only',action='store_true',help='Render JS/text analysis workspace and its modeless list/packet windows')
+    p.add_argument('--session-only',action='store_true',help='Render the production cookie/session inspector with synthetic findings')
     p.add_argument('--themes',nargs='+',choices=['light','dark'],default=['light','dark'])
     args=p.parse_args()
-    if sum([args.guide_only,args.scope_only,args.packet_only,args.js_only])>1:p.error('Choose one preview mode')
-    if args.sizes is None:args.sizes=['760x480','560x300'] if args.guide_only or args.scope_only else ['1024x720','1280x800','1440x920']
+    if sum([args.guide_only,args.scope_only,args.packet_only,args.js_only,args.session_only])>1:p.error('Choose one preview mode')
+    if args.sizes is None:args.sizes=['1024x720','760x480'] if args.session_only else ['760x480','560x300'] if args.guide_only or args.scope_only else ['1024x720','1280x800','1440x920']
     version=runpy.run_path(str(WB/'release_info.py'))['VERSION']
     jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version}.jar').resolve()
     if not jar.is_file():raise SystemExit(f'Missing release JAR: {jar}. Run python dev.py test first.')
@@ -50,7 +51,7 @@ def main():
     for theme in args.themes:
         for size in args.sizes:
             w,h=size.split('x');out=args.out/theme/size
-            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else []),check=True)
+            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else ['session'] if args.session_only else []),check=True)
             with (out/'controls.csv').open() as source:
                 all_rows.extend(csv.DictReader(source))
             with (out/'content.csv').open() as source:
@@ -81,6 +82,7 @@ def main():
     if args.guide_only:required={}
     if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
     if args.packet_only:required={(view,'wb.traffic.'+side+'.text'):100 for view in ['packet-pretty-search.png','packet-raw.png','packet-hex.png'] for side in ['request','response']}
+    if args.session_only:required={('session-cookies.png','wb.auth.session.cookies'):60,('session-trials.png','wb.auth.session.trials'):60}
     if args.js_only:
         required={('js-workspace.png','wb.js.source'):80,('js-analysis-off.png','wb.js.source'):80,
                   ('js-packets.png','wb.js.packet.request.text'):80,('js-packets.png','wb.js.packet.response.text'):80,

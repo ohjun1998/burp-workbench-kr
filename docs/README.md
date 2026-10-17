@@ -1,5 +1,6 @@
 # 최신 문서
 
+- [0.36.0 쿠키 식별·세션 신원 검사](RELEASE_0.36.0_KR.md) · [검증 기록](VERIFICATION_0.36.0.json)
 - [0.35.1 두 줄 버튼·2×2 빨간 집계](RELEASE_0.35.1_KR.md) · [검증 기록](VERIFICATION_0.35.1.json)
 - [0.35.0 패킷 스타일·줄 번호·Ctrl+Space·요청 매핑](RELEASE_0.35.0_KR.md) · [검증 기록](VERIFICATION_0.35.0.json)
 - [0.33.0 JS·JSON·XML 분석·목록 팝업·Ctrl+R](RELEASE_0.33.0_KR.md) · [검증 기록](VERIFICATION_0.33.0.json)

@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.37.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.6.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.0 검증 기록](docs/VERIFICATION_0.37.0.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.37.1**, Feature Mapper **0.3.1**과 실습 사이트 **3.6.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.37.1 검증 기록](docs/VERIFICATION_0.37.1.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -109,7 +109,7 @@ python tools/build_guide.py --refresh-previews
 
 실제 Burp 검증은 별도 설치와 임시 프로필로 구성합니다. `validation/native/`와 `reproduction/`의 이전 하네스를 사용할 때는 Burp·Java·프로젝트 경로와 포트, 종료 처리를 현재 환경에 맞춥니다. 이전 Windows 절대 경로 런처를 그대로 실행하지 않습니다.
 
-이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.37.0.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
+이번 검사 수와 실패·재실행·미검증 범위는 [검증 기록](docs/VERIFICATION_0.37.1.json)을 기준으로 읽습니다. `history/`, `release/`, `setup/` 및 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)의 통과 수를 이번 결과에 합산하지 않습니다.
 
 ## GitHub에 변경 전달
 
@@ -181,3 +181,7 @@ python tools/render_ui_layout.py --session-only --check --out tmp/ui-session
 ## 사이트 3.6.0 역할별 포털 검사
 
 `python tools/check_role_portals.py`는 현재 사이트를 별도 loopback 포트에 컴파일·실행하고 admin·alice·bob·moderator·비로그인으로 페이지·API·객체 소유권·CSRF·상태 변경을 검사합니다. 기본 포트는 18736이며 `--port`와 `--out`으로 변경할 수 있습니다. 실행 후 소유한 서버를 종료합니다. 브라우저 DOM·Burp GUI·Docker 실행 결과와 구분합니다.
+
+## 0.37.1 JS 분석 가독성 개선
+
+전체 집계의 이름 13px·굵은 숫자 16px, 행 높이 40px와 내부 여백을 적용했습니다. 결과 탭·분석 목록·분석 상세의 주요 경로/민감한 정보 명칭을 맞추고 클라우드 탭을 집계와 통일했습니다. 두 테마와 1024×720·1280×800에서 큰 집계(50,000)까지 운영 Swing 레이아웃 검사에 포함합니다. [변경 안내](docs/RELEASE_0.37.1_KR.md)와 [이번 검증](docs/VERIFICATION_0.37.1.json)을 참고하세요. 앞의 0.37.0 절은 기능 도입 시점의 설명입니다.

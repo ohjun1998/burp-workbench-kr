@@ -22,7 +22,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final DefaultTableModel
       endpoints = model("URL / 경로", "메서드", "사용 맥락", "쿼리·params 이름", "헤더 이름", "본문 키", "줄", "해결 상태"),
       secrets = model("시크릿 후보", "값 (가림)", "지문", "줄", "근거");
-  final DefaultTableModel historyModel = model("출처 URL", "URL/API", "시크릿 후보", "분석 상태");
+  final DefaultTableModel historyModel = model("출처 URL", "주요 경로", "민감한 정보", "분석 상태");
   final JTable historyTable = new JTable(historyModel);
   final JTable urlTable = new JTable(endpoints){
     public String getToolTipText(MouseEvent event){int view=rowAtPoint(event.getPoint());if(current==null||view<0)return super.getToolTipText(event);var item=current.endpoints().get(convertRowIndexToModel(view));return "<html>"+JsFindingGroups.evidence(current,item).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")+"</html>";}
@@ -172,12 +172,12 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     secretTable.setAutoCreateRowSorter(true);
     urlTable.setRowHeight(26);
     secretTable.setRowHeight(26);
-    results.addTab("URL · API", new JScrollPane(urlTable));
-    results.addTab("토큰 · API 키 후보", new JScrollPane(secretTable));
+    results.addTab("주요 경로", new JScrollPane(urlTable));
+    results.addTab("민감한 정보", new JScrollPane(secretTable));
     for (var pair :
         new Object[][] {
           {"도메인", domainModel},
-          {"클라우드 URL", cloudModel},
+          {"클라우드", cloudModel},
           {"NPM 의존성", dependencyModel},
           {"소스맵", mapModel},
           {"복원 원본", recoveredModel}

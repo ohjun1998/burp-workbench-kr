@@ -55,15 +55,15 @@ final class AuthResponseRules {
     if (rules.isEmpty() || baselineStatus < 200 || baselineStatus >= 300) return null;
     try {
       if (!match(baselineHeaders, baseline).isEmpty())
-        return new AuthJudgement.Result("판정 보류", "기준 응답에 응답 차단 규칙 일치 · 규칙/기준 확인", "");
+        return new AuthJudgement.Result(AuthFinding.Kind.BASELINE, "기준 응답에 응답 차단 규칙 일치 · 규칙/기준 확인", "");
       // Redirects, missing objects and server errors stay uncertain even when a phrase matches.
       if (status == 401 || status == 403 || status >= 200 && status < 300) {
         String evidence = match(headers, body);
-        if (!evidence.isEmpty()) return new AuthJudgement.Result("차단 근거 확인", evidence, "");
+        if (!evidence.isEmpty()) return new AuthJudgement.Result(AuthFinding.Kind.BLOCKED, evidence, "");
       }
       return null;
     } catch (IllegalArgumentException e) {
-      return new AuthJudgement.Result("판정 보류", e.getMessage(), "");
+      return new AuthJudgement.Result(AuthFinding.Kind.REVIEW, e.getMessage(), "");
     }
   }
 }

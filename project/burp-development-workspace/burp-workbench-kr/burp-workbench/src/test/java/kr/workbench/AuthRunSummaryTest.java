@@ -41,7 +41,7 @@ public final class AuthRunSummaryTest extends WorkbenchTest {
         check(p.historyModel.getValueAt(0,2).equals("200 · 기준"),"baseline account displays status and reference marker only");
         check(p.historyModel.getValueAt(0,3).equals("403"),"other account displays HTTP code only");
         check(p.historyModel.getValueAt(0,7).equals("차단 응답 확인"),"same-auth gray does not contaminate one blocked summary");
-        check(p.history.getColumnName(3).equals("종합 결과")&&p.history.getColumnName(7).equals("실행 상태"),"single summary immediately after URL");
+        check(p.history.getColumnName(3).equals("종합 결과")&&p.history.getColumnName(8).equals("실행 상태"),"single summary immediately after URL");
         p.show(live);check(p.packets.getIconAt(0)==null&&p.packets.getIconAt(1)==null,"no per-account verdict lights in packet tabs");
         check(p.judgementDetails.getText().contains("종합 결과: 차단 응답 확인")&&p.judgementDetails.getText().contains("HTTP 403"),"aggregate and account evidence remain available in details");
         var r=run(p,200);packet(r,0,200,"원본과 동일 인증 · 교차 인가 미검증");packet(r,1,200,"우회 의심 · 동일 성공 응답");
@@ -60,7 +60,7 @@ public final class AuthRunSummaryTest extends WorkbenchTest {
         check(AuthRunSummary.of(r).verdict()==AuthVerdict.REVIEW,"explicit policy conflict remains uncertain");
         var bad=run(p,401);packet(bad,0,401,"원본과 동일 인증 · 교차 인가 미검증");packet(bad,1,401,"판정 보류 · 기준 응답 확인 필요");
         check(AuthRunSummary.of(bad).verdict()==AuthVerdict.REVIEW,"screenshot's 401 baseline requires one baseline review");
-        packet(bad,1,401,"원본과 동일 인증 · 교차 인가 미검증");check(AuthRunSummary.of(bad).verdict()==AuthVerdict.NONE,"reference-only responses are not cross-account evidence");
+        packet(bad,1,401,"원본과 동일 인증 · 교차 인가 미검증");check(AuthRunSummary.of(bad).verdict()==AuthVerdict.REVIEW,"invalid reference session still needs attention without cross-account evidence");
         var rejected=run(p,200);rejected.note="대기열 거부";
         check(AuthRunSummary.responseLabel(rejected,0).equals("응답 없음"),"rejected run is not permanently displayed as waiting");
         var failed=run(p,200);packet(failed,0,0,"전송 오류");packet(failed,1,0,"신원 검사 실패 · 비교 미전송");

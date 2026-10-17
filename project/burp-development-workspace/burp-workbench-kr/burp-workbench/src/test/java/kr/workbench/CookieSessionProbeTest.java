@@ -114,7 +114,7 @@ public final class CookieSessionProbeTest {
       verify(CookieSessionProbe.cookies(Map.of("cookie","SID=abc==; empty=")).get("SID").equals("abc=="),"base64 padding and empty cookie values survive parsing");
       fails(()->new CookieSessionProbe.Config(origin+"/me","$.id",""),"a user identity expectation is mandatory");
       fails(()->new CookieSessionProbe.Config("https://user:pass@example.test/me","$.id","1"),"validation URLs cannot embed basic-auth credentials");
-      var rq=BountyFeaturesTest.rq(origin+"/object","GET","",List.of(header("Cookie","SID=ORIGINAL_SECRET")));
+      var rq=BountyFeaturesTest.rq(origin+"/object","GET","",List.of(header("Cookie","SID="+SECRET)));
       AtomicReference<AuthComparePanel> ref=new AtomicReference<>();edt(()->{
         var panel=new AuthComparePanel(api,()->List.of(AuthRecordTest.rr(rq,response(200,"{}"))));ref.set(panel);
         panel.assign(0,new AuthComparePanel.Candidate(1,"captured-profile",normalized,profile,1,""));
@@ -126,11 +126,11 @@ public final class CookieSessionProbeTest {
         ui.apply();verify(panel.sessionChecks[0]!=null&&panel.slots[0].headers().get("cookie").equals("SID="+SECRET),"explicit apply installs the verified subset and fresh identity gate");
         panel.compareSelection();
       });AuthRecordTest.idle(panel);
-      verify(objects.get()==1,"successful preflight allows the requested comparison endpoint");
+      verify(objects.get()==2,"successful preflight allows the requested comparison endpoint");
       mode.set("expired");edt(panel::compareSelection);AuthRecordTest.idle(panel);
-      verify(objects.get()==1&&panel.runs.get(panel.runs.size()-1).packets[0].note.contains("신원 검사 실패"),"expired session blocks the protected comparison request after a fresh check");
+      verify(objects.get()==3&&panel.runs.get(panel.runs.size()-1).baselineState==AuthComparePanel.Run.Baseline.INVALID,"expired session blocks the protected comparison request after a fresh check");
       networkError.set(true);edt(panel::compareSelection);AuthRecordTest.idle(panel);networkError.set(false);
-      verify(objects.get()==1&&!panel.runs.get(panel.runs.size()-1).packets[0].note.contains("NETWORK_SECRET"),"preflight transport exceptions cannot leak credentials into comparison history");
+      verify(objects.get()==3&&!panel.runs.get(panel.runs.size()-1).baselineNote.contains("NETWORK_SECRET"),"preflight transport exceptions cannot leak credentials into comparison history");
       mode.set("single");edt(()->{var ui=panel.cookieSessions;ui.loadSlot();ui.start();});panel.cookieSessions.pending.get(20,TimeUnit.SECONDS);AuthRecordTest.idle(panel);
       edt(()->{
         var ui=panel.cookieSessions;verify(ui.apply.isEnabled(),"a retained account can be inspected again");ui.expected.setText("mallory");verify(!ui.apply.isEnabled()&&ui.cookieModel.getRowCount()==0,"changing the identity condition invalidates stale results");

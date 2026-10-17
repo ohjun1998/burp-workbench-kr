@@ -13,8 +13,11 @@ final class CookieSessionProbe {
   private static final class Failure extends IllegalArgumentException {
     Failure(String message){super(message);}
   }
-  record Config(String url,String identityPath,String expectedIdentity) {
+  record Claim(String label,String path,String expected){Claim{if(label==null||label.length()>32||path==null||!path.startsWith("$.")||path.length()>256||expected==null||expected.isBlank()||expected.length()>256||expected.chars().anyMatch(c->c<32))throw new Failure("추가 신원 조건의 JSON 경로와 기대값을 확인하세요.");}}
+  record Config(String url,String identityPath,String expectedIdentity,List<Claim> claims) {
+    Config(String url,String identityPath,String expectedIdentity){this(url,identityPath,expectedIdentity,List.of());}
     Config {
+      claims=List.copyOf(claims);if(claims.size()>8)throw new Failure("추가 신원 조건 최대 8개");
       if(url==null||url.length()>2048||url.chars().anyMatch(c->c<=32||c==127))
         throw new Failure("올바른 검증 URL을 입력하세요.");
       URI uri;
@@ -30,7 +33,8 @@ final class CookieSessionProbe {
     @Override public String toString(){return "SessionCheck["+Core.safeUrl(url)+", identity configured]";}
   }
   enum Outcome { MATCH, DIFFERENT, UNKNOWN }
-  record Trial(String label,List<String> cookies,int status,Outcome outcome,String note) {
+  record Trial(String label,List<String> cookies,int status,Outcome outcome,String note,boolean identityMatched) {
+    Trial(String label,List<String> cookies,int status,Outcome outcome,String note){this(label,cookies,status,outcome,note,outcome==Outcome.MATCH);}
     Trial {cookies=List.copyOf(cookies);}
   }
   record Finding(String name,String excluded,String alone,String result) {}
@@ -83,7 +87,8 @@ final class CookieSessionProbe {
       Runner runner=new Runner(api,config,headers,names,origin,cancelled);
       if(runner.send("비교 전 신원 확인",headers).outcome()!=Outcome.MATCH)
         throw new Failure("로그인 신원 확인 실패 · 세션 검사에서 다시 확인하세요.");
-      if(runner.send("비교 전 비로그인 대조",Map.of()).outcome()!=Outcome.DIFFERENT)
+      Trial anonymous=runner.send("비교 전 비로그인 대조",Map.of());
+      if(anonymous.outcome()!=Outcome.DIFFERENT||anonymous.identityMatched())
         throw new Failure("비로그인 응답 구분 실패 · 검증 URL/조건을 다시 확인하세요.");
     } catch(Failure error){throw error;}
     catch(Exception error){throw new Failure("신원 검사 전송 오류 · 비교 중단");}
@@ -130,7 +135,7 @@ final class CookieSessionProbe {
             throw new Failure("세션 쿠키 갱신 응답 · 새 쿠키를 수집한 뒤 다시 검사하세요.");
         }
       }
-      int status=response.statusCode();Outcome outcome=Outcome.UNKNOWN;
+      int status=response.statusCode();Outcome outcome=Outcome.UNKNOWN;boolean primaryMatch=false;
       if(status==429||status>=500)throw new Failure("요청 제한/서버 오류 · 검사 중단");
       String note="응답 형식/상태 확인 필요";
       if(status==401||status==403){outcome=Outcome.DIFFERENT;note="인증 거부 응답";}
@@ -140,11 +145,16 @@ final class CookieSessionProbe {
           Object identity=AuthJudgement.value(json,config.identityPath());
           boolean match=(identity instanceof String||identity instanceof Number||identity instanceof Boolean)
               &&config.expectedIdentity().equals(String.valueOf(identity));
-          outcome=match?Outcome.MATCH:Outcome.DIFFERENT;
-          note=match?"설정한 사용자 식별값 일치":"사용자 식별값 없음/불일치";
+          primaryMatch=match;String failed="";
+          if(match)for(Claim claim:config.claims()){
+            boolean matches=json.entrySet().stream().anyMatch(e->AuthJudgement.match(e.getKey(),claim.path())&&(e.getValue() instanceof String||e.getValue() instanceof Number||e.getValue() instanceof Boolean)&&claim.expected().equals(String.valueOf(e.getValue())));
+            if(!matches){failed=claim.label()+" 조건 누락/불일치";break;}
+          }
+          outcome=match&&failed.isEmpty()?Outcome.MATCH:Outcome.DIFFERENT;
+          note=!match?"사용자 식별값 없음/불일치":failed.isEmpty()?"사용자·추가 신원 조건 일치":failed;
         }
       }
-      Trial trial=new Trial(label,new ArrayList<>(cookies(profile).keySet()),status,outcome,note);trials.add(trial);return trial;
+      Trial trial=new Trial(label,new ArrayList<>(cookies(profile).keySet()),status,outcome,note,primaryMatch);trials.add(trial);return trial;
     }
     Outcome variant(String label,Set<String> selected)throws Exception {
       Set<String> key=Set.copyOf(selected);if(outcomes.containsKey(key))return outcomes.get(key);
@@ -157,8 +167,8 @@ final class CookieSessionProbe {
       if(original.isEmpty())throw new Failure("검사할 인증 계정을 먼저 지정하세요.");
       Outcome full=send("전체 세션",original).outcome();
       if(full!=Outcome.MATCH)return new Report(false,true,"전체 세션의 사용자 신원을 확인하지 못했습니다.",List.of(),trials,Set.of(),false);
-      Outcome anonymous=send("비로그인 대조",Map.of()).outcome();
-      if(anonymous!=Outcome.DIFFERENT)return new Report(false,false,"비로그인 대조가 구분되지 않음 · 검증 URL/사용자 조건 확인",List.of(),trials,Set.of(),false);
+      Trial anonymousTrial=send("비로그인 대조",Map.of());Outcome anonymous=anonymousTrial.outcome();
+      if(anonymous!=Outcome.DIFFERENT||anonymousTrial.identityMatched())return new Report(false,false,"비로그인 대조가 구분되지 않음 · 검증 URL/사용자 조건 확인",List.of(),trials,Set.of(),false);
       Set<String> all=new LinkedHashSet<>(cookies.keySet());
       outcomes.put(Set.of(),Outcome.DIFFERENT);
       boolean cookieOnly=!all.isEmpty()&&variant("쿠키만 사용",all)==Outcome.MATCH;

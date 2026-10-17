@@ -14,8 +14,9 @@
  function toast(text) { $('#toast').textContent = text; $('#toast').style.display = 'block'; setTimeout(()=>$('#toast').style.display='none',3000); }
  function updateUser(value) {
   user = value ? {id:value.ID ?? value.id, username:value.USERNAME ?? value.username, role:value.ROLE ?? value.role, email:value.EMAIL ?? value.email} : null;
+  if(!$('#who'))return;
   $('#who').textContent = user ? user.username + ' · ' + ({ADMIN:'관리자',USER:'일반 사용자',MODERATOR:'게시판 운영자'}[user['role']] || user['role']) : '비회원';
-  $('#admin-menu').hidden = user?.role !== 'ADMIN'; $('#logout').hidden = !user;
+  $('#admin-menu').hidden = user?.role !== 'ADMIN'; $('#logout').hidden = !user; $('#login-link').hidden = !!user;
  }
  async function readResponse(response,path,method,identity) {
   const raw=await response.text();$('#trace').textContent=`${method} ${path}\nHTTP ${response.status}\n${raw}`;
@@ -39,12 +40,40 @@
   try {const data=await request('/api/access/me');csrf=data.csrf;updateUser(data.user);}
   catch {csrf='';updateUser(null);}
  }
- function requireUser() { if(!user)throw Error('로그인 후 이용하세요. 상단에서 계정을 선택하고 로그인할 수 있습니다.'); }
+ function requireUser() { if(!user)throw Error('로그인 후 이용하세요. 상단의 로그인·회원가입에서 로그인할 수 있습니다.'); }
  function requireAdmin() { requireUser();if(user['role']!=='ADMIN')throw Error('관리자 권한이 필요한 메뉴입니다.'); }
- async function login(event) {
-  event?.preventDefault();generation++;
-  try {const d=await post('/api/auth/login',{username:$('#account').value,password:$('#password').value});csrf=d.csrf;updateUser(d.user);editing=null;if(page==='login')page='feed';toast('로그인했습니다.');await render();}
-  catch(e){await restore();toast(e.message);await render();}
+ async function login() {
+  const d=await post('/api/auth/login',{username:$('#account').value,password:$('#password').value,accountType:$('input[name="accountType"]:checked').value});
+  location.assign(d.redirect);
+ }
+ function initLogin() {
+  const types=document.querySelectorAll('input[name="accountType"]');
+  function selectType(type,fillAccount=false) {
+   types.forEach(input=>{input.checked=input.value===type;});
+   const admin=type==='ADMIN';
+   $('#login').textContent=admin?'관리자로 로그인':'일반 사용자로 로그인';
+   $('#login-help').textContent=admin?'로그인하면 커뮤니티의 사용자 관리 화면으로 이동합니다.':'로그인하면 커뮤니티 게시글 목록으로 이동합니다.';
+   if(fillAccount)$('#account').value=admin?'admin':'alice';
+   $('#login-error').hidden=true;
+  }
+  async function submit(job) {
+   const buttons=[$('#login'),$('#registerform').querySelector('button')];
+   buttons.forEach(button=>{button.disabled=true;});$('#login-error').hidden=true;
+   try {await job();}
+   catch(e){$('#login-error').textContent=e.message;$('#login-error').hidden=false;}
+   finally{buttons.forEach(button=>{button.disabled=false;});}
+  }
+  types.forEach(input=>{input.onchange=()=>selectType(input.value,true);});
+  selectType(qp.get('type')==='admin'?'ADMIN':'USER',true);
+  $('#loginform').onsubmit=e=>{e.preventDefault();submit(login);};
+  $('#registerform').onsubmit=e=>{
+   e.preventDefault();const fields=Object.fromEntries(new FormData(e.target));
+   submit(async()=>{await post('/api/community/register',fields);selectType('USER');$('#account').value=fields.username;$('#password').value=fields.password;await login();});
+  };
+  request('/api/access/me').then(d=>{
+   const admin=d.user.ROLE==='ADMIN';$('#session-user').textContent=d.user.USERNAME+' · '+(admin?'관리자':'일반 사용자')+'로 로그인 중입니다.';
+   $('#continue-link').href=admin?'/?view=users':'/?view=feed';$('#session-notice').hidden=false;
+  }).catch(()=>{});
  }
  function listPosts(rows) {
   return rows.map(p=>`<article class="post"><div class="posthead"><span class="tag">${esc(p.CATEGORY)} · ${esc(p.VISIBILITY)}</span><span class="meta">${esc(p.USERNAME)} · #${p.ID}</span></div><h3><button class="text-link" data-page="post:${p.ID}">${esc(p.TITLE)}</button></h3><div class="actions">${nav('post:'+p.ID,'게시글 보기')}</div></article>`).join('') || empty('게시글이 없습니다.');
@@ -126,7 +155,7 @@
   document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
   try {
    let html;
-   if(page==='feed'||page==='login')html=await feed();
+   if(page==='feed')html=await feed();
    else if(page==='write')html=editor(editing);
    else if(page.startsWith('post:'))html=await detail(Number(page.split(':')[1]));
    else if(page==='courses')html=await courses();
@@ -202,10 +231,10 @@
    if(token===generation&&mode===labMode)output.textContent=$('#trace').textContent;
   } catch(e){if(token===generation&&mode===labMode)output.textContent=$('#trace').textContent+'\n'+e.message;}
  }
+ if(document.body.dataset.screen==='login'){initLogin();return;}
+ if(page==='login'){location.replace('/login');return;}
  document.querySelectorAll('header [data-page],.left [data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
  document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{category=b.dataset.category;go('feed');});
- $('#loginform').onsubmit=login;
- $('#logout').onclick=()=>action($('#logout'),async()=>{await post('/api/auth/logout');csrf='';updateUser(null);go('feed');});
- $('#registerform').onsubmit=e=>{e.preventDefault();const fields=Object.fromEntries(new FormData(e.target));action(e.target.querySelector('button'),async()=>{await post('/api/community/register',fields);$('#account').value=fields.username;$('#password').value=fields.password;$('#register').open=false;await login();});};
+ $('#logout').onclick=()=>action($('#logout'),async()=>{await post('/api/auth/logout');csrf='';updateUser(null);location.assign('/login');});
  restore().then(render);
 })();

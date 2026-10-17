@@ -109,10 +109,8 @@ def main():
             else:
                 raise RuntimeError('Lab startup timeout')
             alice, bob, admin, moderator = [Client().login(name) for name in ['alice', 'bob', 'admin', 'moderator']]
-            for area, view in [('admin','users'),('user','activity')]:
-                for suffix, expected in [('',view),('/login','login')]:
-                    _, headers = status(area + suffix + ' redirects to shared community', guest, '/'+area+suffix, 302)
-                    check(area + suffix + ' shared destination', headers['Location'] == '/?view='+expected)
+            from community_login_checks import run_login_checks
+            run_login_checks(Client, status, check, guest)
             status('admin uses common dashboard', admin, '/api/access/fixed/user/dashboard', 200)
             status('bob reads own request', bob, '/api/access/fixed/user/requests/502', 200)
             status('bob cannot read alice request', bob, '/api/access/fixed/user/requests/501', 404)
@@ -169,7 +167,7 @@ def main():
             for asset in ['role-portal.js','role-portal.css']:
                 status('asset available ' + asset, guest, '/assets/'+asset, 200)
             data, _ = status('OpenAPI includes new endpoints', guest, '/v3/api-docs', 200)
-            check('OpenAPI version and portal path', data['info']['version']=='3.7.0' and '/api/access/fixed/admin/members' in data['paths'])
+            check('OpenAPI version and portal path', data['info']['version']=='3.7.1' and '/api/access/fixed/admin/members' in data['paths'])
             from community_workspace_checks import run_workspace_checks
             run_workspace_checks(Client, status, check, guest, alice, bob, admin, moderator)
             status('logout', bob, '/api/auth/logout', 200, {})
@@ -184,7 +182,7 @@ def main():
                 server.kill(); server.wait(timeout=5)
         with socket.socket() as probe:
             closed = probe.connect_ex(('127.0.0.1', args.port)) != 0
-        report = {'version':'3.7.0', 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
+        report = {'version':'3.7.1', 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
                   'method':'Current Spring MVC/Tomcat sources, isolated H2 Oracle mode, separate real HTTP cookie jars on loopback',
                   'serverPortClosed':closed, 'browserDOM':False, 'nativeBurp':False, 'docker':False}
         (args.out/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

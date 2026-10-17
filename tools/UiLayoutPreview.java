@@ -225,6 +225,8 @@ public final class UiLayoutPreview extends WorkbenchTest {
             try {
                 var auth=(AuthComparePanel)get(ext,"authCompare");
                 edt(()->{
+                    JPanel desktop=(JPanel)unchecked(ext,"root");JTabbedPane pages=(JTabbedPane)unchecked(ext,"tabs");pages.setSelectedComponent(auth);desktop.setVisible(true);desktop.addNotify();installHeaders(desktop);
+                    try{render(desktop,out.resolve("auth-empty-desktop.png"),width,height);}catch(Exception e){throw new RuntimeException(e);}
                     auth.setDetection(true);
                     auth.observe(AuthRecordTest.q("ALICE"),response(200,"{}"));auth.observe(AuthRecordTest.q("BOB"),response(200,"{}"));
                     var credentials=new java.util.ArrayList<>(auth.credentials.values());
@@ -238,11 +240,14 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     run.note="완료";auth.runs.add(run);auth.historyModel.addRow(new Object[]{1,original.url(),"","","","완료"});auth.refresh(run);auth.history.setRowSelectionInterval(0,0);auth.show(run);
                     installHeaders(auth);auth.setVisible(true);
                     try {
+                        render(desktop,out.resolve("auth-desktop.png"),width,height);desktop.removeNotify();
                         render(auth,out.resolve("auth-results.png"),width,height);
                         auth.candidateDetails.load(credentials.get(1));installHeaders(auth.candidateDetails);auth.candidateDetails.setVisible(true);
-                        render(auth.candidateDetails,out.resolve("auth-candidate.png"),width,height);
+                        renderAt(auth.candidateDetails,out.resolve("auth-candidate.png"),820,600);
+                        renderAt(auth.candidateDetails,out.resolve("auth-candidate-minimum.png"),700,520);
                         auth.detailRun=run;installHeaders(auth.packetDetails);auth.packetDetails.setVisible(true);
-                        render(auth.packetDetails,out.resolve("auth-detail.png"),width,height);
+                        renderAt(auth.packetDetails,out.resolve("auth-detail.png"),1180,780);
+                        renderAt(auth.packetDetails,out.resolve("auth-detail-minimum.png"),840,520);
                         auth.responseDenialRules.setText("BODY: 접근 권한이 없습니다\nBODY_REGEX: (?i)access\\s+denied\nHEADER: X-Access: denied");
                         JPanel settings=WorkbenchUi.settingsBody(auth.settingsContent(),()->{});installHeaders(settings);
                         render(settings,out.resolve("auth-settings.png"),width,height);

@@ -56,7 +56,7 @@ public final class AuthWorkspaceTest extends WorkbenchTest {
         AtomicReference<JsRepeater.Session> opened=new AtomicReference<>();
         p.capturedRepeater.opener=(owner,title,body,modal,closed)->{opened.set((JsRepeater.Session)body);return null;};
         p.openComparison(run);p.packets.setSelectedIndex(0);
-        check(p.history.getColumnModel().getColumn(2).getHeaderValue().toString().contains("Bob"),"history header uses run's mapped identity");
+        check(p.history.getColumnModel().getColumn(p.history.convertColumnIndexToView(2)).getHeaderValue().toString().contains("Bob"),"history header uses run's mapped identity");
         check(p.detailShortcuts.handle(key(p.packetDetails,KeyEvent.KEY_PRESSED),p.requestViews[0].text),"Ctrl+Space handled from selected packet editor");
         var session=opened.get();check(session!=null&&session.entries.size()==1,"Ctrl+Space opens a separate Repeater session");
         check(new String(session.request.editedBytes(),java.nio.charset.StandardCharsets.UTF_8).contains("bob-secret"),"Repeater receives selected account's exact authentication");

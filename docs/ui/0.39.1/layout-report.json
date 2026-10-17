@@ -1,0 +1,37 @@
+{
+  "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+  "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.39.1.jar",
+  "releaseJarSha256": "bb6141eaf4bf503b3c239c8e156b58ffc714c1a7bc2191444114074fcbd49809",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1024x720",
+    "1280x800",
+    "1600x900"
+  ],
+  "renderedViews": 54,
+  "controlsMeasured": 786,
+  "clippedControlsOutsideScrollers": 0,
+  "smallControls": 0,
+  "collapsedRequiredWorkAreas": 0,
+  "tabAndHeadingLabelsMeasured": 372,
+  "clippedSelectedTabOrHeadingLabels": 0,
+  "minimumWorkAreas": {
+    "auth-results.png:wb.auth.history": 60,
+    "auth-results.png:wb.auth.credentials": 60,
+    "auth-desktop.png:wb.auth.history": 60,
+    "auth-desktop.png:wb.auth.credentials": 60,
+    "auth-empty-desktop.png:wb.auth.history": 60,
+    "auth-empty-desktop.png:wb.auth.credentials": 60,
+    "auth-candidate-minimum.png:wb.auth.candidate.headers": 80,
+    "auth-detail-minimum.png:wb.auth.detail.request.0.text": 100,
+    "auth-detail-minimum.png:wb.auth.detail.response.0.text": 100
+  },
+  "failures": [],
+  "textFailures": [],
+  "guideBodiesMeasured": 0,
+  "guideLayoutFailures": 0,
+  "guideFailures": []
+}

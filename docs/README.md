@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.39.1 계정 비교 시안 정렬·반응형 표·두 열 상세](RELEASE_0.39.1_KR.md) · [검증 기록](VERIFICATION_0.39.1.json)
+
 - [0.39.0 계정 비교 화면·독립 인증 탐지·Ctrl+Space](RELEASE_0.39.0_KR.md) · [검증 기록](VERIFICATION_0.39.0.json)
 
 - [0.38.0 계정 비교 응답 판정·색상](RELEASE_0.38.0_KR.md) · [검증 기록](VERIFICATION_0.38.0.json)

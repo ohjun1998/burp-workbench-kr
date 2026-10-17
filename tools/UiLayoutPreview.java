@@ -276,6 +276,12 @@ public final class UiLayoutPreview extends WorkbenchTest {
                             renderAt(automatic,out.resolve("js-repeater-auto-method.png"),1120,720);
                             renderAt(automatic,out.resolve("js-repeater-auto-method-small.png"),780,440);
                         }finally{automatic.close();}
+                        var fallback=JsMethodSelection.choose(new JsRequestDraft.Draft(origin+"/api/users","REPLACE_METHOD",""),Set.of());
+                        var defaultGet=new JsRepeater.Session(js.repeater.api,List.of(fallback.draft()),List.of(fallback.reason()));
+                        try{
+                            renderAt(defaultGet,out.resolve("js-repeater-default-get.png"),1120,720);
+                            renderAt(defaultGet,out.resolve("js-repeater-default-get-small.png"),780,440);
+                        }finally{defaultGet.close();}
                         installHeaders(details[0]);
                         renderAt((Container)details[0],out.resolve("js-details.png"),980,640);
                         renderAt((Container)details[0],out.resolve("js-details-small.png"),620,400);

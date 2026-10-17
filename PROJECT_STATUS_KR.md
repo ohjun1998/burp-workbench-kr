@@ -6,7 +6,7 @@
 
 Spring MVC 공통 인터셉터와 기능별 AccessRule·CommunityAccessPolicy를 적용했습니다. 실제 DB 역할·계정 상태·기능 권한·CSRF를 확인하고, 정상 커뮤니티의 미선언 정책은 기본 거부합니다. 작성자·담당 게시판·업무 상태 검사는 공통 정책과 각 업무에서 유지합니다. 화면은 서버의 허용 작업 목록을 사용합니다. 관리자 권한표·최근 200건 메모리 접근 기록과 게시판 운영자 목록을 추가했습니다. 기존 취약점 실습은 명시된 취약 경로에 유지합니다.
 
-커뮤니티·로그인·관리 화면을 왼쪽 탐색, 카드·표, 검색, 모바일 메뉴 서랍으로 개편했습니다. 실제 H2 HTTP 384개·로그인 스크립트 4개·기존 JS 분석 호환 63개·Chromium UI/반응형 검사 66개와 화면 18장을 확인했습니다. 패키징 회귀 6개도 통과했습니다. 전체 release와 원격 검증 결과는 [검증 기록](docs/VERIFICATION_LAB_3.8.0.json)에 갱신합니다. 최신 Workbench 0.37.4·Mapper 0.3.1과 이전 배포를 보존합니다.
+커뮤니티·로그인·관리 화면을 왼쪽 탐색, 카드·표, 검색, 모바일 메뉴 서랍으로 개편했습니다. 실제 H2 HTTP 384개·로그인 스크립트 4개·기존 JS 분석 호환 63개·Chromium UI/반응형 검사 66개와 화면 18장을 확인했습니다. 패키징 회귀 6개도 통과했습니다. 최신 확장 0.37.4 기반 정식 release 2,478개(Java 1,978·HTTP 132+102+266), Mapper Java 94·브라우저 도우미 회귀와 실행 ZIP의 해시·소스 지문 검증도 통과했습니다. [원격 Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39010489864)·[Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39010489769)·[Docker/Oracle/Nginx](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39010487457)·[실제 Chromium](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39010487209)도 모두 성공했습니다. 검증 코드 head는 `b7747b74b5e6fb838a06d657c2355e9a3c889dc9`이며 최종 기록 커밋은 상태·검증·대화 세 문서만 갱신하고 소스·실행 ZIP·화면을 보존합니다. 정확한 범위는 [검증 기록](docs/VERIFICATION_LAB_3.8.0.json)을 확인하세요. 최신 Workbench 0.37.4·Mapper 0.3.1과 이전 배포를 보존합니다.
 
 [사용법](docs/LAB_3.8.0_KR.md) · [Docker ZIP](downloads/docker/3.8.0/community-security-lab-3.8.0-docker.zip) · [대화](docs/chat-logs/2026-10-17/community-rbac-design-380.md)
 

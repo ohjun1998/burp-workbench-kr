@@ -1,0 +1,147 @@
+{
+  "version": "0.39.0",
+  "dateAsiaSeoul": "2026-10-17",
+  "result": "passed",
+  "command": "python dev.py release",
+  "checks": {
+    "version": "0.39.0",
+    "groups": {
+      "BuildInfoTest": 3,
+      "JsUpgradeTest": 36,
+      "JsArchiveWorkflowTest": 8,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 52,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 29,
+      "PacketInspectorTest": 42,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsDraftMappingTest": 19,
+      "JsDetailsWorkflowTest": 26,
+      "PacketStyleTest": 30,
+      "TextAnalysisTest": 23,
+      "JsResponseWorkflowTest": 51,
+      "JsRepeaterWorkflowTest": 95,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "AuthWorkspaceTest": 21,
+      "AuthResponseWorkflowTest": 47,
+      "CookieSessionProbeTest": 50,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 43,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95,
+      "FolderNavigationTest": 40,
+      "DiagnosticsWorkflowTest": 28,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 61,
+    "regressionChecks": 2032,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 2532,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "newWorkflowChecks": 21,
+  "ui": {
+    "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+    "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.39.0.jar",
+    "releaseJarSha256": "5e45874b586472a8a348b8b56ef2b6dd5edeb4194d8fc6e62f730130324bf44c",
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "sizes": [
+      "1024x720",
+      "1280x800"
+    ],
+    "renderedViews": 20,
+    "controlsMeasured": 320,
+    "clippedControlsOutsideScrollers": 0,
+    "smallControls": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "tabAndHeadingLabelsMeasured": 72,
+    "clippedSelectedTabOrHeadingLabels": 0,
+    "minimumWorkAreas": {
+      "auth-results.png:wb.auth.history": 60
+    },
+    "failures": [],
+    "textFailures": [],
+    "guideBodiesMeasured": 0,
+    "guideLayoutFailures": 0,
+    "guideFailures": []
+  },
+  "packaging": {
+    "command": "python tools/package_downloads.py --verify",
+    "result": "passed",
+    "regressionCommand": "python tools/test_package_downloads.py",
+    "regressionTests": 4,
+    "resultRegression": "passed"
+  },
+  "artifacts": {
+    "burp-workbench-kr-0.39.0.jar": "5e45874b586472a8a348b8b56ef2b6dd5edeb4194d8fc6e62f730130324bf44c",
+    "burp-workbench-kr-0.39.0-source.zip": "05e7f64b59a29b652f8c464fe92348c2e2aa742d29cef0467009c4cf91de6e19"
+  },
+  "limitations": [
+    "Actual Burp GUI and Windows DPI/IME were not exercised.",
+    "Automated HTTP uses isolated loopback hosts and Montoya adapters.",
+    "Account names are manually mapped metadata; identity verification remains optional and separate.",
+    "The referenced image edit target was missing; no substitute image was edited."
+  ],
+  "remoteCI": {
+    "sourceCommit": "9fe0dd42d63e0fcc856c9ed3f829743b7aa90335",
+    "checks": [
+      {
+        "name": "check",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578733/job/117398834362"
+      },
+      {
+        "name": "windows",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578686/job/117398834227"
+      },
+      {
+        "name": "isolated-disk-and-soak",
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578686/job/117398834082"
+      }
+    ],
+    "mergeRecord": "Documentation-only follow-up preserves tested source and immutable downloads."
+  }
+}

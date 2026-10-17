@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.38.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.8.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.38.0 검증 기록](docs/VERIFICATION_0.38.0.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.39.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.8.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.39.0 검증 기록](docs/VERIFICATION_0.39.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -220,3 +220,7 @@ python tools/render_ui_layout.py --auth-only --sizes 1024x720 1280x800 --check -
 ```
 
 전체 빌드/회귀 종료 후 순서대로 실행하세요. 회귀 빌드 중 테스트 클래스 디렉터리가 초기화되므로 동시에 실행하지 않습니다. 두 테마에서 결과 화면·설정 상단·설정 하단 12개 화면을 생성합니다. 스크롤 설정의 화면 밖 제목과 경계에 걸친 제목은 선택된 제목으로 세지 않으며, 하단을 별도로 렌더링해 새 규칙 영역의 실제 노출을 확인합니다.
+
+## 0.39.0 계정 비교 화면
+
+인증 탐지·요청 비교를 각각 ON/OFF로 제어합니다. 사용자 매핑과 상세 창, Ctrl+Space 전달은 [변경 안내](docs/RELEASE_0.39.0_KR.md)를 확인하세요. 인증 탐지는 Scope와 독립하며 실제 비교 요청은 기존 범위 검사를 유지합니다.

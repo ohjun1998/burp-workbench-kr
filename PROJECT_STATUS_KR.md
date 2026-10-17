@@ -1,7 +1,19 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.38.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-17 (한국 시간) / Workbench 0.39.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 계정 비교 화면·독립 인증 탐지·Ctrl+Space — 0.39.0
+
+[PR #54](https://github.com/ohjun1998/burp-workbench-kr/pull/54)를 통해 인증 탐지 ON/OFF를 트래픽 OFF/SCOPE와 분리하고 요청 비교 ON/OFF, 사용자 계정 매핑, 인증 후보·비교 기록의 더블클릭 상세 창을 적용했습니다. 메인 화면은 인증 후보와 비교 기록을 위아래로 배치하며 비교 기록·패킷 탭에는 실행 당시 계정명을 표시합니다. 계정 매핑은 수동 정보이며 선택적 신원 검사와 구분합니다.
+
+비교 상세의 Repeater 버튼을 제거하고 Ctrl+Space로 선택 계정의 실제 요청·응답을 별도 Workbench Repeater 창에 준비합니다. 창 열기는 요청을 보내지 않으며 길게 누른 단축키의 자동 전송을 막습니다. 실제 비교의 Scope·쓰기 요청 제한과 기존 응답 분류를 유지합니다.
+
+로컬 정식 release 2,532개(Java 2,032·payload HTTP 132·전체 기능 HTTP 102·모의 진단 HTTP 266), 새 흐름 21개, 별도 Mapper Java 94 및 브라우저 도우미 회귀, 패키징 4개, 두 테마·두 해상도 Swing 화면 20개·컨트롤 320개와 다운로드 해시·소스 지문을 검증했습니다. [원격 Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578733)와 [Linux 내구성·Windows](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39033578686) 모두 성공했습니다. Windows는 자동 어댑터 검사이며 실제 Burp GUI·Windows DPI/IME는 미수행입니다.
+
+검증 소스 커밋은 `9fe0dd42d63e0fcc856c9ed3f829743b7aa90335`입니다. 병합 기록 커밋은 상태·검증·대화 문서만 갱신하며 검증된 소스·JAR·소스 ZIP을 보존합니다.
+
+[사용법·화면](docs/RELEASE_0.39.0_KR.md) · [검증 기록](docs/VERIFICATION_0.39.0.json) · [JAR·소스 ZIP](downloads/extensions/0.39.0/) · [대화](docs/chat-logs/2026-10-17/workbench-auth-workspace-0390.md)
 
 ## 계정 비교 응답 분류·차단 규칙 — 0.38.0
 

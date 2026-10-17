@@ -1,0 +1,321 @@
+theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled
+light,1024,720,auth-results.png,인증 탐지 ON,16,13,144,38,true,false,true
+light,1024,720,auth-results.png,요청 비교 OFF,168,13,144,38,true,false,true
+light,1024,720,auth-results.png,선택 요청 비교,320,16,110,32,true,false,true
+light,1024,720,auth-results.png,중지,438,16,50,32,true,false,true
+light,1024,720,auth-results.png,비교 기록 비우기,496,16,123,32,true,false,true
+light,1024,720,auth-results.png,비교 설정,627,16,80,32,true,false,true
+light,1024,720,auth-results.png,세션 검사,715,16,80,32,true,false,true
+light,1024,720,auth-results.png,세션·권한 매트릭스,803,16,136,32,true,false,true
+light,1024,720,auth-results.png,더보기,947,16,63,32,true,false,true
+light,1024,720,auth-candidate.png,JTextField,93,83,910,30,true,false,true
+light,1024,720,auth-candidate.png,JTextField,93,123,910,30,true,false,true
+light,1024,720,auth-candidate.png,JTextField,93,163,910,30,true,false,true
+light,1024,720,auth-candidate.png,JTextField,93,203,910,30,true,false,true
+light,1024,720,auth-candidate.png,JTextField,93,243,910,30,true,false,true
+light,1024,720,auth-candidate.png,매핑 저장,20,671,80,32,true,false,true
+light,1024,720,auth-candidate.png,닫기,108,671,50,32,true,false,true
+light,1024,720,auth-detail.png,JComboBox,152,15,134,32,true,false,true
+light,1024,720,auth-detail.png,Pretty,13,123,76,34,true,false,true
+light,1024,720,auth-detail.png,Raw,89,123,76,34,true,false,true
+light,1024,720,auth-detail.png,Hex,165,123,76,34,true,false,true
+light,1024,720,auth-detail.png,↵,443,125,28,28,true,false,true
+light,1024,720,auth-detail.png,⋯,475,125,28,28,true,false,false
+light,1024,720,auth-detail.png,wb.auth.detail.request.0.search,67,438,221,28,true,false,true
+light,1024,720,auth-detail.png,×,290,438,28,28,true,false,true
+light,1024,720,auth-detail.png,↑,325,438,28,28,true,false,false
+light,1024,720,auth-detail.png,↓,356,438,28,28,true,false,false
+light,1024,720,auth-detail.png,Aa,387,438,32,28,true,false,true
+light,1024,720,auth-detail.png,.*,422,438,28,28,true,false,true
+light,1024,720,auth-detail.png,Pretty,516,123,76,34,true,false,true
+light,1024,720,auth-detail.png,Raw,592,123,76,34,true,false,true
+light,1024,720,auth-detail.png,Hex,668,123,76,34,true,false,true
+light,1024,720,auth-detail.png,↵,946,125,28,28,true,false,true
+light,1024,720,auth-detail.png,⋯,978,125,28,28,true,false,false
+light,1024,720,auth-detail.png,wb.auth.detail.response.0.search,570,438,221,28,true,false,true
+light,1024,720,auth-detail.png,×,793,438,28,28,true,false,true
+light,1024,720,auth-detail.png,↑,828,438,28,28,true,false,false
+light,1024,720,auth-detail.png,↓,859,438,28,28,true,false,false
+light,1024,720,auth-detail.png,Aa,890,438,32,28,true,false,true
+light,1024,720,auth-detail.png,.*,925,438,28,28,true,false,true
+light,1024,720,auth-detail.png,닫기,18,673,50,32,true,false,true
+light,1024,720,auth-settings.png,대용량 응답 해시 비교 · 최대 4MiB,21,18,229,26,true,true,true
+light,1024,720,auth-settings.png,JTextField,145,54,215,30,true,true,true
+light,1024,720,auth-settings.png,쓰기 요청 재전송 허용,368,56,154,26,true,true,true
+light,1024,720,auth-settings.png,JTextField,145,95,215,30,true,true,true
+light,1024,720,auth-settings.png,헤더 적용,368,94,80,32,true,true,true
+light,1024,720,auth-settings.png,차이 색상 표시,456,97,111,26,true,true,true
+light,1024,720,auth-settings.png,요청·응답 정렬,575,97,111,26,true,true,true
+light,1024,720,auth-settings.png,JTextField,175,137,332,30,true,true,true
+light,1024,720,auth-settings.png,쿠키 설정 적용,515,136,110,32,true,true,true
+light,1024,720,auth-settings.png,JTextField,97,196,176,30,true,true,true
+light,1024,720,auth-settings.png,JTextField,328,196,176,30,true,true,true
+light,1024,720,auth-settings.png,JTextField,97,236,176,30,true,true,true
+light,1024,720,auth-settings.png,JTextField,328,236,176,30,true,true,true
+light,1024,720,auth-settings.png,JTextField,97,276,176,30,true,true,true
+light,1024,720,auth-settings.png,JTextField,328,276,176,30,true,true,true
+light,1024,720,auth-settings.png,JTextField,163,316,475,30,true,true,true
+light,1024,720,auth-settings.png,JTextField,123,374,280,30,true,true,true
+light,1024,720,auth-settings.png,JComboBox,115,432,109,32,true,true,true
+light,1024,720,auth-settings.png,설정 확인,13,885,80,32,false,true,true
+light,1024,720,auth-settings.png,닫기,20,671,50,32,true,false,true
+light,1024,720,auth-settings-bottom.png,대용량 응답 해시 비교 · 최대 4MiB,21,-242,229,26,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,145,-206,215,30,false,true,true
+light,1024,720,auth-settings-bottom.png,쓰기 요청 재전송 허용,368,-204,154,26,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,145,-165,215,30,false,true,true
+light,1024,720,auth-settings-bottom.png,헤더 적용,368,-166,80,32,false,true,true
+light,1024,720,auth-settings-bottom.png,차이 색상 표시,456,-163,111,26,false,true,true
+light,1024,720,auth-settings-bottom.png,요청·응답 정렬,575,-163,111,26,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,175,-123,332,30,false,true,true
+light,1024,720,auth-settings-bottom.png,쿠키 설정 적용,515,-124,110,32,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,97,-64,176,30,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,328,-64,176,30,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,97,-24,176,30,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,328,-24,176,30,false,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,97,16,176,30,true,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,328,16,176,30,true,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,163,56,475,30,true,true,true
+light,1024,720,auth-settings-bottom.png,JTextField,123,114,280,30,true,true,true
+light,1024,720,auth-settings-bottom.png,JComboBox,115,172,109,32,true,true,true
+light,1024,720,auth-settings-bottom.png,설정 확인,13,625,80,32,true,true,true
+light,1024,720,auth-settings-bottom.png,닫기,20,671,50,32,true,false,true
+light,1280,800,auth-results.png,인증 탐지 ON,16,13,144,38,true,false,true
+light,1280,800,auth-results.png,요청 비교 OFF,168,13,144,38,true,false,true
+light,1280,800,auth-results.png,선택 요청 비교,320,16,110,32,true,false,true
+light,1280,800,auth-results.png,중지,438,16,50,32,true,false,true
+light,1280,800,auth-results.png,비교 기록 비우기,496,16,123,32,true,false,true
+light,1280,800,auth-results.png,비교 설정,627,16,80,32,true,false,true
+light,1280,800,auth-results.png,세션 검사,715,16,80,32,true,false,true
+light,1280,800,auth-results.png,세션·권한 매트릭스,803,16,136,32,true,false,true
+light,1280,800,auth-results.png,더보기,947,16,63,32,true,false,true
+light,1280,800,auth-candidate.png,JTextField,93,83,1166,30,true,false,true
+light,1280,800,auth-candidate.png,JTextField,93,123,1166,30,true,false,true
+light,1280,800,auth-candidate.png,JTextField,93,163,1166,30,true,false,true
+light,1280,800,auth-candidate.png,JTextField,93,203,1166,30,true,false,true
+light,1280,800,auth-candidate.png,JTextField,93,243,1166,30,true,false,true
+light,1280,800,auth-candidate.png,매핑 저장,20,751,80,32,true,false,true
+light,1280,800,auth-candidate.png,닫기,108,751,50,32,true,false,true
+light,1280,800,auth-detail.png,JComboBox,152,15,134,32,true,false,true
+light,1280,800,auth-detail.png,Pretty,13,123,76,34,true,false,true
+light,1280,800,auth-detail.png,Raw,89,123,76,34,true,false,true
+light,1280,800,auth-detail.png,Hex,165,123,76,34,true,false,true
+light,1280,800,auth-detail.png,↵,571,125,28,28,true,false,true
+light,1280,800,auth-detail.png,⋯,603,125,28,28,true,false,false
+light,1280,800,auth-detail.png,wb.auth.detail.request.0.search,67,494,349,28,true,false,true
+light,1280,800,auth-detail.png,×,418,494,28,28,true,false,true
+light,1280,800,auth-detail.png,↑,453,494,28,28,true,false,false
+light,1280,800,auth-detail.png,↓,484,494,28,28,true,false,false
+light,1280,800,auth-detail.png,Aa,515,494,32,28,true,false,true
+light,1280,800,auth-detail.png,.*,550,494,28,28,true,false,true
+light,1280,800,auth-detail.png,Pretty,644,123,76,34,true,false,true
+light,1280,800,auth-detail.png,Raw,720,123,76,34,true,false,true
+light,1280,800,auth-detail.png,Hex,796,123,76,34,true,false,true
+light,1280,800,auth-detail.png,↵,1202,125,28,28,true,false,true
+light,1280,800,auth-detail.png,⋯,1234,125,28,28,true,false,false
+light,1280,800,auth-detail.png,wb.auth.detail.response.0.search,698,494,349,28,true,false,true
+light,1280,800,auth-detail.png,×,1049,494,28,28,true,false,true
+light,1280,800,auth-detail.png,↑,1084,494,28,28,true,false,false
+light,1280,800,auth-detail.png,↓,1115,494,28,28,true,false,false
+light,1280,800,auth-detail.png,Aa,1146,494,32,28,true,false,true
+light,1280,800,auth-detail.png,.*,1181,494,28,28,true,false,true
+light,1280,800,auth-detail.png,닫기,18,753,50,32,true,false,true
+light,1280,800,auth-settings.png,대용량 응답 해시 비교 · 최대 4MiB,21,18,229,26,true,true,true
+light,1280,800,auth-settings.png,JTextField,145,54,215,30,true,true,true
+light,1280,800,auth-settings.png,쓰기 요청 재전송 허용,368,56,154,26,true,true,true
+light,1280,800,auth-settings.png,JTextField,145,95,215,30,true,true,true
+light,1280,800,auth-settings.png,헤더 적용,368,94,80,32,true,true,true
+light,1280,800,auth-settings.png,차이 색상 표시,456,97,111,26,true,true,true
+light,1280,800,auth-settings.png,요청·응답 정렬,575,97,111,26,true,true,true
+light,1280,800,auth-settings.png,JTextField,175,137,332,30,true,true,true
+light,1280,800,auth-settings.png,쿠키 설정 적용,515,136,110,32,true,true,true
+light,1280,800,auth-settings.png,JTextField,97,196,176,30,true,true,true
+light,1280,800,auth-settings.png,JTextField,328,196,176,30,true,true,true
+light,1280,800,auth-settings.png,JTextField,97,236,176,30,true,true,true
+light,1280,800,auth-settings.png,JTextField,328,236,176,30,true,true,true
+light,1280,800,auth-settings.png,JTextField,97,276,176,30,true,true,true
+light,1280,800,auth-settings.png,JTextField,328,276,176,30,true,true,true
+light,1280,800,auth-settings.png,JTextField,163,316,475,30,true,true,true
+light,1280,800,auth-settings.png,JTextField,123,374,280,30,true,true,true
+light,1280,800,auth-settings.png,JComboBox,115,432,109,32,true,true,true
+light,1280,800,auth-settings.png,설정 확인,13,885,80,32,false,true,true
+light,1280,800,auth-settings.png,닫기,20,751,50,32,true,false,true
+light,1280,800,auth-settings-bottom.png,대용량 응답 해시 비교 · 최대 4MiB,21,-162,229,26,false,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,145,-126,215,30,false,true,true
+light,1280,800,auth-settings-bottom.png,쓰기 요청 재전송 허용,368,-124,154,26,false,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,145,-85,215,30,false,true,true
+light,1280,800,auth-settings-bottom.png,헤더 적용,368,-86,80,32,false,true,true
+light,1280,800,auth-settings-bottom.png,차이 색상 표시,456,-83,111,26,false,true,true
+light,1280,800,auth-settings-bottom.png,요청·응답 정렬,575,-83,111,26,false,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,175,-43,332,30,false,true,true
+light,1280,800,auth-settings-bottom.png,쿠키 설정 적용,515,-44,110,32,false,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,97,16,176,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,328,16,176,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,97,56,176,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,328,56,176,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,97,96,176,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,328,96,176,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,163,136,475,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JTextField,123,194,280,30,true,true,true
+light,1280,800,auth-settings-bottom.png,JComboBox,115,252,109,32,true,true,true
+light,1280,800,auth-settings-bottom.png,설정 확인,13,705,80,32,true,true,true
+light,1280,800,auth-settings-bottom.png,닫기,20,751,50,32,true,false,true
+dark,1024,720,auth-results.png,인증 탐지 ON,16,13,144,38,true,false,true
+dark,1024,720,auth-results.png,요청 비교 OFF,168,13,144,38,true,false,true
+dark,1024,720,auth-results.png,선택 요청 비교,320,16,110,32,true,false,true
+dark,1024,720,auth-results.png,중지,438,16,50,32,true,false,true
+dark,1024,720,auth-results.png,비교 기록 비우기,496,16,123,32,true,false,true
+dark,1024,720,auth-results.png,비교 설정,627,16,80,32,true,false,true
+dark,1024,720,auth-results.png,세션 검사,715,16,80,32,true,false,true
+dark,1024,720,auth-results.png,세션·권한 매트릭스,803,16,136,32,true,false,true
+dark,1024,720,auth-results.png,더보기,947,16,63,32,true,false,true
+dark,1024,720,auth-candidate.png,JTextField,93,83,910,30,true,false,true
+dark,1024,720,auth-candidate.png,JTextField,93,123,910,30,true,false,true
+dark,1024,720,auth-candidate.png,JTextField,93,163,910,30,true,false,true
+dark,1024,720,auth-candidate.png,JTextField,93,203,910,30,true,false,true
+dark,1024,720,auth-candidate.png,JTextField,93,243,910,30,true,false,true
+dark,1024,720,auth-candidate.png,매핑 저장,20,671,80,32,true,false,true
+dark,1024,720,auth-candidate.png,닫기,108,671,50,32,true,false,true
+dark,1024,720,auth-detail.png,JComboBox,152,15,134,32,true,false,true
+dark,1024,720,auth-detail.png,Pretty,13,123,76,34,true,false,true
+dark,1024,720,auth-detail.png,Raw,89,123,76,34,true,false,true
+dark,1024,720,auth-detail.png,Hex,165,123,76,34,true,false,true
+dark,1024,720,auth-detail.png,↵,443,125,28,28,true,false,true
+dark,1024,720,auth-detail.png,⋯,475,125,28,28,true,false,false
+dark,1024,720,auth-detail.png,wb.auth.detail.request.0.search,67,438,221,28,true,false,true
+dark,1024,720,auth-detail.png,×,290,438,28,28,true,false,true
+dark,1024,720,auth-detail.png,↑,325,438,28,28,true,false,false
+dark,1024,720,auth-detail.png,↓,356,438,28,28,true,false,false
+dark,1024,720,auth-detail.png,Aa,387,438,32,28,true,false,true
+dark,1024,720,auth-detail.png,.*,422,438,28,28,true,false,true
+dark,1024,720,auth-detail.png,Pretty,516,123,76,34,true,false,true
+dark,1024,720,auth-detail.png,Raw,592,123,76,34,true,false,true
+dark,1024,720,auth-detail.png,Hex,668,123,76,34,true,false,true
+dark,1024,720,auth-detail.png,↵,946,125,28,28,true,false,true
+dark,1024,720,auth-detail.png,⋯,978,125,28,28,true,false,false
+dark,1024,720,auth-detail.png,wb.auth.detail.response.0.search,570,438,221,28,true,false,true
+dark,1024,720,auth-detail.png,×,793,438,28,28,true,false,true
+dark,1024,720,auth-detail.png,↑,828,438,28,28,true,false,false
+dark,1024,720,auth-detail.png,↓,859,438,28,28,true,false,false
+dark,1024,720,auth-detail.png,Aa,890,438,32,28,true,false,true
+dark,1024,720,auth-detail.png,.*,925,438,28,28,true,false,true
+dark,1024,720,auth-detail.png,닫기,18,673,50,32,true,false,true
+dark,1024,720,auth-settings.png,대용량 응답 해시 비교 · 최대 4MiB,21,18,229,26,true,true,true
+dark,1024,720,auth-settings.png,JTextField,145,54,215,30,true,true,true
+dark,1024,720,auth-settings.png,쓰기 요청 재전송 허용,368,56,154,26,true,true,true
+dark,1024,720,auth-settings.png,JTextField,145,95,215,30,true,true,true
+dark,1024,720,auth-settings.png,헤더 적용,368,94,80,32,true,true,true
+dark,1024,720,auth-settings.png,차이 색상 표시,456,97,111,26,true,true,true
+dark,1024,720,auth-settings.png,요청·응답 정렬,575,97,111,26,true,true,true
+dark,1024,720,auth-settings.png,JTextField,175,137,332,30,true,true,true
+dark,1024,720,auth-settings.png,쿠키 설정 적용,515,136,110,32,true,true,true
+dark,1024,720,auth-settings.png,JTextField,97,196,176,30,true,true,true
+dark,1024,720,auth-settings.png,JTextField,328,196,176,30,true,true,true
+dark,1024,720,auth-settings.png,JTextField,97,236,176,30,true,true,true
+dark,1024,720,auth-settings.png,JTextField,328,236,176,30,true,true,true
+dark,1024,720,auth-settings.png,JTextField,97,276,176,30,true,true,true
+dark,1024,720,auth-settings.png,JTextField,328,276,176,30,true,true,true
+dark,1024,720,auth-settings.png,JTextField,163,316,475,30,true,true,true
+dark,1024,720,auth-settings.png,JTextField,123,374,280,30,true,true,true
+dark,1024,720,auth-settings.png,JComboBox,115,432,109,32,true,true,true
+dark,1024,720,auth-settings.png,설정 확인,13,885,80,32,false,true,true
+dark,1024,720,auth-settings.png,닫기,20,671,50,32,true,false,true
+dark,1024,720,auth-settings-bottom.png,대용량 응답 해시 비교 · 최대 4MiB,21,-242,229,26,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,145,-206,215,30,false,true,true
+dark,1024,720,auth-settings-bottom.png,쓰기 요청 재전송 허용,368,-204,154,26,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,145,-165,215,30,false,true,true
+dark,1024,720,auth-settings-bottom.png,헤더 적용,368,-166,80,32,false,true,true
+dark,1024,720,auth-settings-bottom.png,차이 색상 표시,456,-163,111,26,false,true,true
+dark,1024,720,auth-settings-bottom.png,요청·응답 정렬,575,-163,111,26,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,175,-123,332,30,false,true,true
+dark,1024,720,auth-settings-bottom.png,쿠키 설정 적용,515,-124,110,32,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,97,-64,176,30,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,328,-64,176,30,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,97,-24,176,30,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,328,-24,176,30,false,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,97,16,176,30,true,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,328,16,176,30,true,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,163,56,475,30,true,true,true
+dark,1024,720,auth-settings-bottom.png,JTextField,123,114,280,30,true,true,true
+dark,1024,720,auth-settings-bottom.png,JComboBox,115,172,109,32,true,true,true
+dark,1024,720,auth-settings-bottom.png,설정 확인,13,625,80,32,true,true,true
+dark,1024,720,auth-settings-bottom.png,닫기,20,671,50,32,true,false,true
+dark,1280,800,auth-results.png,인증 탐지 ON,16,13,144,38,true,false,true
+dark,1280,800,auth-results.png,요청 비교 OFF,168,13,144,38,true,false,true
+dark,1280,800,auth-results.png,선택 요청 비교,320,16,110,32,true,false,true
+dark,1280,800,auth-results.png,중지,438,16,50,32,true,false,true
+dark,1280,800,auth-results.png,비교 기록 비우기,496,16,123,32,true,false,true
+dark,1280,800,auth-results.png,비교 설정,627,16,80,32,true,false,true
+dark,1280,800,auth-results.png,세션 검사,715,16,80,32,true,false,true
+dark,1280,800,auth-results.png,세션·권한 매트릭스,803,16,136,32,true,false,true
+dark,1280,800,auth-results.png,더보기,947,16,63,32,true,false,true
+dark,1280,800,auth-candidate.png,JTextField,93,83,1166,30,true,false,true
+dark,1280,800,auth-candidate.png,JTextField,93,123,1166,30,true,false,true
+dark,1280,800,auth-candidate.png,JTextField,93,163,1166,30,true,false,true
+dark,1280,800,auth-candidate.png,JTextField,93,203,1166,30,true,false,true
+dark,1280,800,auth-candidate.png,JTextField,93,243,1166,30,true,false,true
+dark,1280,800,auth-candidate.png,매핑 저장,20,751,80,32,true,false,true
+dark,1280,800,auth-candidate.png,닫기,108,751,50,32,true,false,true
+dark,1280,800,auth-detail.png,JComboBox,152,15,134,32,true,false,true
+dark,1280,800,auth-detail.png,Pretty,13,123,76,34,true,false,true
+dark,1280,800,auth-detail.png,Raw,89,123,76,34,true,false,true
+dark,1280,800,auth-detail.png,Hex,165,123,76,34,true,false,true
+dark,1280,800,auth-detail.png,↵,571,125,28,28,true,false,true
+dark,1280,800,auth-detail.png,⋯,603,125,28,28,true,false,false
+dark,1280,800,auth-detail.png,wb.auth.detail.request.0.search,67,494,349,28,true,false,true
+dark,1280,800,auth-detail.png,×,418,494,28,28,true,false,true
+dark,1280,800,auth-detail.png,↑,453,494,28,28,true,false,false
+dark,1280,800,auth-detail.png,↓,484,494,28,28,true,false,false
+dark,1280,800,auth-detail.png,Aa,515,494,32,28,true,false,true
+dark,1280,800,auth-detail.png,.*,550,494,28,28,true,false,true
+dark,1280,800,auth-detail.png,Pretty,644,123,76,34,true,false,true
+dark,1280,800,auth-detail.png,Raw,720,123,76,34,true,false,true
+dark,1280,800,auth-detail.png,Hex,796,123,76,34,true,false,true
+dark,1280,800,auth-detail.png,↵,1202,125,28,28,true,false,true
+dark,1280,800,auth-detail.png,⋯,1234,125,28,28,true,false,false
+dark,1280,800,auth-detail.png,wb.auth.detail.response.0.search,698,494,349,28,true,false,true
+dark,1280,800,auth-detail.png,×,1049,494,28,28,true,false,true
+dark,1280,800,auth-detail.png,↑,1084,494,28,28,true,false,false
+dark,1280,800,auth-detail.png,↓,1115,494,28,28,true,false,false
+dark,1280,800,auth-detail.png,Aa,1146,494,32,28,true,false,true
+dark,1280,800,auth-detail.png,.*,1181,494,28,28,true,false,true
+dark,1280,800,auth-detail.png,닫기,18,753,50,32,true,false,true
+dark,1280,800,auth-settings.png,대용량 응답 해시 비교 · 최대 4MiB,21,18,229,26,true,true,true
+dark,1280,800,auth-settings.png,JTextField,145,54,215,30,true,true,true
+dark,1280,800,auth-settings.png,쓰기 요청 재전송 허용,368,56,154,26,true,true,true
+dark,1280,800,auth-settings.png,JTextField,145,95,215,30,true,true,true
+dark,1280,800,auth-settings.png,헤더 적용,368,94,80,32,true,true,true
+dark,1280,800,auth-settings.png,차이 색상 표시,456,97,111,26,true,true,true
+dark,1280,800,auth-settings.png,요청·응답 정렬,575,97,111,26,true,true,true
+dark,1280,800,auth-settings.png,JTextField,175,137,332,30,true,true,true
+dark,1280,800,auth-settings.png,쿠키 설정 적용,515,136,110,32,true,true,true
+dark,1280,800,auth-settings.png,JTextField,97,196,176,30,true,true,true
+dark,1280,800,auth-settings.png,JTextField,328,196,176,30,true,true,true
+dark,1280,800,auth-settings.png,JTextField,97,236,176,30,true,true,true
+dark,1280,800,auth-settings.png,JTextField,328,236,176,30,true,true,true
+dark,1280,800,auth-settings.png,JTextField,97,276,176,30,true,true,true
+dark,1280,800,auth-settings.png,JTextField,328,276,176,30,true,true,true
+dark,1280,800,auth-settings.png,JTextField,163,316,475,30,true,true,true
+dark,1280,800,auth-settings.png,JTextField,123,374,280,30,true,true,true
+dark,1280,800,auth-settings.png,JComboBox,115,432,109,32,true,true,true
+dark,1280,800,auth-settings.png,설정 확인,13,885,80,32,false,true,true
+dark,1280,800,auth-settings.png,닫기,20,751,50,32,true,false,true
+dark,1280,800,auth-settings-bottom.png,대용량 응답 해시 비교 · 최대 4MiB,21,-162,229,26,false,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,145,-126,215,30,false,true,true
+dark,1280,800,auth-settings-bottom.png,쓰기 요청 재전송 허용,368,-124,154,26,false,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,145,-85,215,30,false,true,true
+dark,1280,800,auth-settings-bottom.png,헤더 적용,368,-86,80,32,false,true,true
+dark,1280,800,auth-settings-bottom.png,차이 색상 표시,456,-83,111,26,false,true,true
+dark,1280,800,auth-settings-bottom.png,요청·응답 정렬,575,-83,111,26,false,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,175,-43,332,30,false,true,true
+dark,1280,800,auth-settings-bottom.png,쿠키 설정 적용,515,-44,110,32,false,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,97,16,176,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,328,16,176,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,97,56,176,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,328,56,176,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,97,96,176,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,328,96,176,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,163,136,475,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JTextField,123,194,280,30,true,true,true
+dark,1280,800,auth-settings-bottom.png,JComboBox,115,252,109,32,true,true,true
+dark,1280,800,auth-settings-bottom.png,설정 확인,13,705,80,32,true,true,true
+dark,1280,800,auth-settings-bottom.png,닫기,20,751,50,32,true,false,true

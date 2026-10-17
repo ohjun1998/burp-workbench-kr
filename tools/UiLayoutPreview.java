@@ -225,8 +225,12 @@ public final class UiLayoutPreview extends WorkbenchTest {
             try {
                 var auth=(AuthComparePanel)get(ext,"authCompare");
                 edt(()->{
-                    auth.profileNames[0].setText("Bob");auth.profileNames[1].setText("비로그인");auth.profileNames[2].setText("관리자");
-                    auth.slots[0]=new AuthComparePanel.Candidate(1,"demo-auth-session","https://auth.test:443",java.util.Map.of("cookie","SID=DEMO"),1,"");
+                    auth.setDetection(true);
+                    auth.observe(AuthRecordTest.q("ALICE"),response(200,"{}"));auth.observe(AuthRecordTest.q("BOB"),response(200,"{}"));
+                    var credentials=new java.util.ArrayList<>(auth.credentials.values());
+                    auth.mapCandidate(credentials.get(0),new AuthAccount("Alice","alice","101","관리자","alice@example.test"));
+                    auth.mapCandidate(credentials.get(1),new AuthAccount("Bob","bob","102","일반 사용자","bob@example.test"));
+                    auth.assign(0,credentials.get(1));auth.assign(1,credentials.get(0));auth.anonymous(2);
                     var original=AuthRecordTest.q("ALICE");var baseline=response(200,"{\"secret\":\"alice\"}");
                     var run=new AuthComparePanel.Run(1,original,baseline,auth.context());
                     String[] notes={"우회 의심 · 비교 대상 JSON 필드 동일 · 실제 접근 확인","차단 근거 확인 · HTTP 403","판정 보류 · HTTP 500"};
@@ -235,6 +239,10 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     installHeaders(auth);auth.setVisible(true);
                     try {
                         render(auth,out.resolve("auth-results.png"),width,height);
+                        auth.candidateDetails.load(credentials.get(1));installHeaders(auth.candidateDetails);auth.candidateDetails.setVisible(true);
+                        render(auth.candidateDetails,out.resolve("auth-candidate.png"),width,height);
+                        auth.detailRun=run;installHeaders(auth.packetDetails);auth.packetDetails.setVisible(true);
+                        render(auth.packetDetails,out.resolve("auth-detail.png"),width,height);
                         auth.responseDenialRules.setText("BODY: 접근 권한이 없습니다\nBODY_REGEX: (?i)access\\s+denied\nHEADER: X-Access: denied");
                         JPanel settings=WorkbenchUi.settingsBody(auth.settingsContent(),()->{});installHeaders(settings);
                         render(settings,out.resolve("auth-settings.png"),width,height);

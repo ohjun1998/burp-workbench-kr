@@ -1,0 +1,73 @@
+theme,width,height,view,kind,label,selected,textWidth,allocatedWidth,allocatedHeight,fullyVisible,textFits
+light,1024,720,auth-results.png,heading,비교 기록 1 · 비교 작업 0 · 제외 0,true,205,227,30,true,true
+light,1024,720,auth-results.png,heading,인증 정보 후보,true,101,1006,31,true,true
+light,1024,720,auth-results.png,heading,비교 기록 · 더블클릭하여 패킷·판정 근거 보기,true,314,1006,31,true,true
+light,1024,720,auth-candidate.png,heading,사용자 계정,true,82,998,31,true,true
+light,1024,720,auth-candidate.png,heading,인증 정보,true,66,998,31,true,true
+light,1024,720,auth-detail.png,tab,Bob · bob,true,60,97,21,true,true
+light,1024,720,auth-detail.png,tab,Alice · alice,false,72,109,21,true,true
+light,1024,720,auth-detail.png,tab,비교 계정 3,false,68,105,21,true,true
+light,1024,720,auth-detail.png,tab,원본,false,26,47,21,true,true
+light,1024,720,auth-detail.png,heading,요청 REQUEST,true,110,494,31,true,true
+light,1024,720,auth-detail.png,heading,응답 RESPONSE,true,119,494,31,true,true
+light,1024,720,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1002,31,true,true
+light,1024,720,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+light,1024,720,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+light,1024,720,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,979,31,false,true
+light,1024,720,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+light,1024,720,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+light,1024,720,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,979,31,true,true
+light,1280,800,auth-results.png,heading,비교 기록 1 · 비교 작업 0 · 제외 0,true,205,227,30,true,true
+light,1280,800,auth-results.png,heading,인증 정보 후보,true,101,1262,31,true,true
+light,1280,800,auth-results.png,heading,비교 기록 · 더블클릭하여 패킷·판정 근거 보기,true,314,1262,31,true,true
+light,1280,800,auth-candidate.png,heading,사용자 계정,true,82,1254,31,true,true
+light,1280,800,auth-candidate.png,heading,인증 정보,true,66,1254,31,true,true
+light,1280,800,auth-detail.png,tab,Bob · bob,true,60,97,21,true,true
+light,1280,800,auth-detail.png,tab,Alice · alice,false,72,109,21,true,true
+light,1280,800,auth-detail.png,tab,비교 계정 3,false,68,105,21,true,true
+light,1280,800,auth-detail.png,tab,원본,false,26,47,21,true,true
+light,1280,800,auth-detail.png,heading,요청 REQUEST,true,110,622,31,true,true
+light,1280,800,auth-detail.png,heading,응답 RESPONSE,true,119,622,31,true,true
+light,1280,800,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1258,31,true,true
+light,1280,800,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+light,1280,800,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+light,1280,800,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,1235,31,false,true
+light,1280,800,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+light,1280,800,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+light,1280,800,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1235,31,true,true
+dark,1024,720,auth-results.png,heading,비교 기록 1 · 비교 작업 0 · 제외 0,true,205,227,30,true,true
+dark,1024,720,auth-results.png,heading,인증 정보 후보,true,101,1006,31,true,true
+dark,1024,720,auth-results.png,heading,비교 기록 · 더블클릭하여 패킷·판정 근거 보기,true,314,1006,31,true,true
+dark,1024,720,auth-candidate.png,heading,사용자 계정,true,82,998,31,true,true
+dark,1024,720,auth-candidate.png,heading,인증 정보,true,66,998,31,true,true
+dark,1024,720,auth-detail.png,tab,Bob · bob,true,60,97,21,true,true
+dark,1024,720,auth-detail.png,tab,Alice · alice,false,72,109,21,true,true
+dark,1024,720,auth-detail.png,tab,비교 계정 3,false,68,105,21,true,true
+dark,1024,720,auth-detail.png,tab,원본,false,26,47,21,true,true
+dark,1024,720,auth-detail.png,heading,요청 REQUEST,true,110,494,31,true,true
+dark,1024,720,auth-detail.png,heading,응답 RESPONSE,true,119,494,31,true,true
+dark,1024,720,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1002,31,true,true
+dark,1024,720,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+dark,1024,720,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+dark,1024,720,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,979,31,false,true
+dark,1024,720,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,979,31,true,true
+dark,1024,720,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,979,31,true,true
+dark,1024,720,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,979,31,true,true
+dark,1280,800,auth-results.png,heading,비교 기록 1 · 비교 작업 0 · 제외 0,true,205,227,30,true,true
+dark,1280,800,auth-results.png,heading,인증 정보 후보,true,101,1262,31,true,true
+dark,1280,800,auth-results.png,heading,비교 기록 · 더블클릭하여 패킷·판정 근거 보기,true,314,1262,31,true,true
+dark,1280,800,auth-candidate.png,heading,사용자 계정,true,82,1254,31,true,true
+dark,1280,800,auth-candidate.png,heading,인증 정보,true,66,1254,31,true,true
+dark,1280,800,auth-detail.png,tab,Bob · bob,true,60,97,21,true,true
+dark,1280,800,auth-detail.png,tab,Alice · alice,false,72,109,21,true,true
+dark,1280,800,auth-detail.png,tab,비교 계정 3,false,68,105,21,true,true
+dark,1280,800,auth-detail.png,tab,원본,false,26,47,21,true,true
+dark,1280,800,auth-detail.png,heading,요청 REQUEST,true,110,622,31,true,true
+dark,1280,800,auth-detail.png,heading,응답 RESPONSE,true,119,622,31,true,true
+dark,1280,800,auth-detail.png,heading,판정 근거 · JSON 필드 차이,true,192,1258,31,true,true
+dark,1280,800,auth-settings.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+dark,1280,800,auth-settings.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+dark,1280,800,auth-settings.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,false,253,1235,31,false,true
+dark,1280,800,auth-settings-bottom.png,heading,경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY,true,470,1235,31,true,true
+dark,1280,800,auth-settings-bottom.png,heading,차단 규칙 · JSON 경로=값 (행별 OR),true,259,1235,31,true,true
+dark,1280,800,auth-settings-bottom.png,heading,응답 차단 규칙 · 행별 OR · 선택 사항,true,253,1235,31,true,true

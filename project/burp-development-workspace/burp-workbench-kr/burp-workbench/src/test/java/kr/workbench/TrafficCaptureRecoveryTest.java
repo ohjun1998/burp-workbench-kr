@@ -156,14 +156,21 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
                 ((AuthComparePanel)get(fixture.ext,"authCompare")).observe(malformed(),response);
             }catch(RuntimeException expected){rejected.set(true);}catch(Exception ex){throw new IllegalStateException(ex);}});
             check(rejected.get(),"native-scoped invalid credential metadata triggers the real auth candidate observer failure");
-            fixture.send(malformed(),response);fixture.awaitRows(146);
+            AuthComparePanel auth=(AuthComparePanel)get(fixture.ext,"authCompare");edt(()->auth.setDetection(true));
+            HttpRequest bad=malformed();
+            HttpRequestToBeSent outgoing=proxy(HttpRequestToBeSent.class,(p,m,a)->switch(m.getName()){
+                case "toolSource"->SOURCE;case "messageId"->102;case "annotations"->null;
+                default->delegate(bad,HttpRequest.class,m,a);
+            });
+            check(fixture.ext.handleHttpRequestToBeSent(outgoing)==fixture.requestAction,"independent auth detector failure still returns continueWith");
+            fixture.send(bad,response);fixture.awaitRows(146);
             fixture.send(plain("after-malformed"),response);fixture.awaitRows(147);
             check(fixture.urls().contains("https://capture.test/api/profile")&&fixture.urls().get(146).endsWith("after-malformed"),
                 "failed auth observation retains its packet and the next timer tick captures a normal packet");
             check(fixture.metric("processingErrors")==1&&fixture.dropped()==0,
                 "observer failure counts as processing error without reporting a retained packet as dropped");
             check(fixture.metric("received")==147&&fixture.queue().isEmpty(),"all 147 response callbacks drain through the real timer");
-            check(fixture.errors.stream().anyMatch(log->log.contains("인증 후보 관찰")),"observer failure identifies its stage in the host error log");
+            check(fixture.errors.stream().anyMatch(log->log.contains("독립 인증 탐지")),"observer failure identifies its stage in the host error log");
         }
     }
 
@@ -257,7 +264,8 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
             edt(()->((JMenuItem)((JMenu)fixture.ext.provideMenuItems(menuEvent).get(0)).getMenuComponent(0)).doClick());fixture.awaitRows(2);
             check(fixture.rows()==2&&fixture.urls().get(1).endsWith("manual-good"),
                 "one manual import skips inaccessible and invalid packets, retaining the observer-fault packet and later valid packet");
-            check(fixture.metric("processingErrors")==3&&fixture.dropped()==2,"manual import separates observer errors from actual packet exclusions");
+            check(fixture.metric("processingErrors")==2&&fixture.dropped()==2,"manual import reports packet failures without running independent auth detection");
+            check(((AuthComparePanel)get(fixture.ext,"authCompare")).credentials.isEmpty(),"History import does not backfill credentials with detection OFF");
             check(fixture.metric("received")==0,"manual imports do not inflate the live response count");
         }
     }

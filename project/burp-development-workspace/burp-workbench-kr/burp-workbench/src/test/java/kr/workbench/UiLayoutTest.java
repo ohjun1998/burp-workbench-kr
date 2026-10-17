@@ -25,7 +25,7 @@ public final class UiLayoutTest {
   check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
   check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"traffic requests and responses side by side below list");
   check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.environment.lists")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"environment left stacked lists and right stacked packets");
-  check(((JSplitPane)named(root,"wb.auth.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.auth.lists")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"auth credentials/history left and packets right");
+  check(((JSplitPane)named(root,"wb.auth.tables")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&named(root,"wb.auth.workspace")==null,"auth main stacks credentials and history without embedded packets");
   check(named(root,"wb.js.messages")==null&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS has no embedded packet area and passive keeps the shared packet layout");
   check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"payload editors and results above packets in reference layout");
   check(requestResponseTabs(root)==0,"request and response are persistent panes, not switching tabs");

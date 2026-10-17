@@ -10,17 +10,22 @@ final class JsRepeaterShortcuts implements AutoCloseable {
   private final JButton send;
   private final KeyboardFocusManager manager=KeyboardFocusManager.getCurrentKeyboardFocusManager();
   private final KeyEventDispatcher dispatcher;
-  private boolean installed,pressed;
+  private boolean installed,pressed,suppressed;
 
   JsRepeaterShortcuts(JComponent root,JButton send){
     this.root=root;this.send=send;
     dispatcher=event->root.isShowing()&&handle(event,manager.getFocusOwner());
   }
+  void suppressUntilRelease(){suppressed=true;}
   void install(){if(!installed){manager.addKeyEventDispatcher(dispatcher);installed=true;}}
-  @Override public void close(){if(installed){manager.removeKeyEventDispatcher(dispatcher);installed=false;}pressed=false;}
+  @Override public void close(){if(installed){manager.removeKeyEventDispatcher(dispatcher);installed=false;}pressed=false;suppressed=false;}
 
   boolean handle(KeyEvent event,Component focused){
     if(focused==null||!(focused==root||SwingUtilities.isDescendingFrom(focused,root))){pressed=false;return false;}
+    if(suppressed&&(event.getKeyCode()==KeyEvent.VK_SPACE||event.getID()==KeyEvent.KEY_TYPED&&event.getKeyChar()==' ')) {
+      if(event.getID()==KeyEvent.KEY_RELEASED){suppressed=false;pressed=false;}
+      event.consume();return true;
+    }
     if(event.getID()==KeyEvent.KEY_TYPED&&pressed&&event.getKeyChar()==' '){event.consume();return true;}
     if(event.getKeyCode()!=KeyEvent.VK_SPACE)return false;
     if(event.getID()==KeyEvent.KEY_RELEASED&&pressed){pressed=false;event.consume();return true;}

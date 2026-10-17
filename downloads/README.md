@@ -1,18 +1,17 @@
 # 테스트 파일 다운로드
 
-GitHub에 로그인한 뒤 파일을 열고 **Download raw file**을 누르세요. 처음 사용한다면 최신 확장 JAR와 표에 안내된 PDF부터 받으세요. 개발하거나 로컬 사이트에서 실습할 때만 소스·Docker ZIP을 추가로 받으면 됩니다.
+파일을 열고 **Download raw file**을 누르세요. 처음 사용한다면 최신 확장 JAR와 표에 안내된 PDF부터 받으세요. 개발하거나 로컬 사이트에서 실습할 때만 소스·Docker ZIP을 추가로 받으면 됩니다.
 
 ## 최신 테스트 배포
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| Burp 확장 JAR | 0.39.2 | [burp-workbench-kr-0.39.2.jar](extensions/0.39.2/burp-workbench-kr-0.39.2.jar) |
-| 확장 소스·빌드 의존성 | 0.39.2 | [burp-workbench-kr-0.39.2-source.zip](extensions/0.39.2/burp-workbench-kr-0.39.2-source.zip) |
+| 최신 확장 · 굴림·Render·판정 근거·우클릭 메뉴 | 0.40.0 | [JAR](extensions/0.40.0/burp-workbench-kr-0.40.0.jar) · [소스](extensions/0.40.0/burp-workbench-kr-0.40.0-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.8.0 | [community-security-lab-3.8.0-docker.zip](docker/3.8.0/community-security-lab-3.8.0-docker.zip) |
 | Feature Mapper JAR·브라우저 도우미·소스 | 0.3.1 | [다운로드](feature-mapper/0.3.1/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
-[0.39.2 계정별 응답 코드·종합 결과](../docs/RELEASE_0.39.2_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.39.2.json)
+[0.40.0 사용성 개선](../docs/RELEASE_0.40.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.40.0.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
@@ -20,12 +19,13 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 소스 ZIP: 확장 폴더의 `python build_all.py --test`로 확장 회귀 검사를 실행합니다. `dev.py check`의 전체 사이트 HTTP·모의 진단에는 저장소 전체 소스와 실습 런타임이 필요하므로 저장소 체크아웃을 사용하세요.
 
-각 버전 폴더의 `SHA256SUMS`로 무결성을 확인합니다. 저장소가 비공개이므로 다운로드에도 저장소 접근 권한이 필요합니다.
+각 버전 폴더의 `SHA256SUMS`로 무결성을 확인합니다. 공개 저장소에서 다운로드할 수 있습니다.
 
 ## 이전 버전
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
+| 이전 확장 · 종합 결과 | 0.39.2 | [JAR](extensions/0.39.2/burp-workbench-kr-0.39.2.jar) · [소스](extensions/0.39.2/burp-workbench-kr-0.39.2-source.zip) |
 | 이전 확장 | 0.37.4 | [JAR](extensions/0.37.4/burp-workbench-kr-0.37.4.jar) · [소스](extensions/0.37.4/burp-workbench-kr-0.37.4-source.zip) |
 | 이전 커뮤니티 Docker | 3.7.1 | [Docker ZIP](docker/3.7.1/community-security-lab-3.7.1-docker.zip) |
 | 이전 커뮤니티 Docker | 3.7.0 | [Docker ZIP](docker/3.7.0/community-security-lab-3.7.0-docker.zip) |
@@ -69,5 +69,5 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 별도 기능 매핑 확장: [Feature Mapper KR 설치와 다운로드](../feature-mapper/README_KR.md). Workbench JAR에 포함되지 않습니다.
 
 
-최신 확장은 0.39.2입니다. JS·JSON·XML·텍스트 자동 분석, 분석 목록·패킷 팝업과 Ctrl+R 사용법은 [0.39.2 안내](../docs/RELEASE_0.39.2_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
+최신 확장은 0.40.0입니다. JS·JSON·XML·텍스트 자동 분석, 분석 목록·패킷 팝업과 Ctrl+R 사용법은 [0.40.0 안내](../docs/RELEASE_0.40.0_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
 

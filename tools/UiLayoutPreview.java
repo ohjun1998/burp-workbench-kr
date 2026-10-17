@@ -248,6 +248,10 @@ public final class UiLayoutPreview extends WorkbenchTest {
                         auth.detailRun=run;installHeaders(auth.packetDetails);auth.packetDetails.setVisible(true);
                         renderAt(auth.packetDetails,out.resolve("auth-detail.png"),1180,780);
                         renderAt(auth.packetDetails,out.resolve("auth-detail-minimum.png"),840,520);
+                        WorkbenchUi.style(auth.expandedEvidence);renderAt(auth.expandedEvidence,out.resolve("auth-evidence.png"),960,560);
+                        var fieldRun=new AuthComparePanel.Run(2,original,response(200,"{\"ownerId\":101,\"title\":\"관리 문서\",\"optional\":null}"),auth.context());fieldRun.note="완료";
+                        fieldRun.packets[0].request=run.packets[0].request;fieldRun.packets[0].response=response(200,"{\"ownerId\":102,\"title\":\"일반 문서\",\"items\":[]}");fieldRun.packets[0].note="판정 보류 · JSON 필드 차이 · 데이터/실행 결과 확인";
+                        auth.show(fieldRun);auth.expandedEvidence.tabs.setSelectedIndex(1);renderAt(auth.expandedEvidence,out.resolve("auth-fields.png"),960,560);auth.show(run);
                         auth.responseDenialRules.setText("BODY: 접근 권한이 없습니다\nBODY_REGEX: (?i)access\\s+denied\nHEADER: X-Access: denied");
                         JPanel settings=WorkbenchUi.settingsBody(auth.settingsContent(),()->{});installHeaders(settings);
                         render(settings,out.resolve("auth-settings.png"),width,height);
@@ -357,11 +361,12 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     parent.setColumnHeaderView(history.getTableHeader());
                     history.setRowSelectionInterval(3,3);
                 });
-                for(int mode=0;mode<3;mode++) {
+                for(int mode=0;mode<4;mode++) {
                     int selected=mode;
+                    if(mode==3)edt(()->{String html="HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<html><body><h1>계정 페이지</h1><p>저장된 응답을 Render로 확인합니다.</p><table><tr><th>사용자</th><th>역할</th></tr><tr><td>Demo</td><td>일반</td></tr></table></body></html>";response.setPacket(html.getBytes(java.nio.charset.StandardCharsets.UTF_8),html);});
                     edt(()->{request.tabs.get(selected).doClick(0);response.tabs.get(selected).doClick(0);request.search.setText(selected==2?"75 73 65 72":"userId");response.search.setText(selected==2?"75 73 65 72":"userId");});
                     PacketInspectorTest.idle(request);PacketInspectorTest.idle(response);
-                    edt(()->{try{render(root,out.resolve(selected==0?"packet-pretty-search.png":selected==1?"packet-raw.png":"packet-hex.png"),width,height);}catch(Exception ex){throw new RuntimeException(ex);}});
+                    edt(()->{try{render(root,out.resolve(selected==0?"packet-pretty-search.png":selected==1?"packet-raw.png":selected==2?"packet-hex.png":"packet-render.png"),width,height);}catch(Exception ex){throw new RuntimeException(ex);}});
                 }
                 writeMeasurements(out);
             }finally{unload();}

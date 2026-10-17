@@ -46,7 +46,7 @@ public final class AuthWorkspaceTest extends WorkbenchTest {
         p.assign(0,b);check(!p.label(0).contains("Alice")&&p.profileOwners[0].getText().isEmpty(),"reassignment clears previous user's metadata");
         p.mapCandidate(b,new AuthAccount("Bob","bob","202","사용자",""));
         check(p.candidateModel.getValueAt(1,1).toString().contains("Bob"),"candidate table shows mapped account");
-        check(!p.candidateModel.getValueAt(0,4).toString().contains("alice-secret")&&!p.candidateModel.getValueAt(0,4).toString().contains("alice-token"),"candidate list masks Cookie and token values");
+        check(p.candidateModel.getValueAt(0,4).toString().contains("alice-secret")&&p.candidateModel.getValueAt(0,4).toString().contains("alice-token"),"candidate list displays requested Cookie and token values");
         check(!SwingUtilities.isDescendingFrom(p.packetDetails,p),"packet and verdict panel only lives in detached detail window");
         check(PacketUiTest.buttons(p.packetDetails).stream().noneMatch(s->s.contains("Repeater")),"detail window has no Repeater button");
         var original=AuthRecordTest.q("original");var response=response(200,"{\"owner\":\"alice\"}");

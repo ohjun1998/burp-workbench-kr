@@ -5,12 +5,12 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-/** One pinned credential's editable account card and masked authentication summary. */
+/** One pinned credential's editable account card and authentication values. */
 final class AuthCandidateDetails extends JPanel {
   final AuthComparePanel owner;
   final JLabel identity=new JLabel(),origin=new JLabel();
   final JTextField name=new JTextField(18),login=new JTextField(18),userId=new JTextField(18),role=new JTextField(18),email=new JTextField(24);
-  final DefaultTableModel headers=AuthComparePanel.model("인증 헤더","값 · 마스킹");
+  final DefaultTableModel headers=AuthComparePanel.model("인증 헤더","값");
   final JTable table=new AuthLayout.Table(headers);
   final JLabel feedback=new JLabel("직접 매핑한 정보이며 신원 검증 완료를 의미하지 않습니다.");
   AuthComparePanel.Candidate candidate;
@@ -36,7 +36,7 @@ final class AuthCandidateDetails extends JPanel {
   void load(AuthComparePanel.Candidate candidate) {
     this.candidate=candidate;AuthAccount account=owner.accounts.getOrDefault(candidate.key(),new AuthAccount("","","","",""));
     identity.setText(account.label());identity.putClientProperty("wb.font.heading",true);identity.putClientProperty("wb.font.size",20);origin.setText(candidate.origin());name.setText(account.name());login.setText(account.login());userId.setText(account.userId());role.setText(account.role());email.setText(account.email());
-    headers.setRowCount(0);candidate.headers().forEach((key,value)->headers.addRow(new Object[]{key,AuthComparePanel.maskCredential(key,value)}));
+    headers.setRowCount(0);candidate.headers().forEach((key,value)->headers.addRow(new Object[]{key,value}));
     feedback.setText("직접 매핑한 정보이며 신원 검증 완료를 의미하지 않습니다.");
   }
   void clear(){candidate=null;for(JTextField f:new JTextField[]{name,login,userId,role,email})f.setText("");identity.setText("");origin.setText("");headers.setRowCount(0);}

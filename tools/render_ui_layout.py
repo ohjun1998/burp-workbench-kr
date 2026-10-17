@@ -28,7 +28,7 @@ def main():
     p.add_argument('--sizes',nargs='+',help='Default: 1024x720 1280x800 1440x920; guide-only: 760x480 560x300')
     p.add_argument('--guide-only',action='store_true',help='Check the production feature-guide dialog wrapper separately')
     p.add_argument('--scope-only',action='store_true',help='Check the production Scope editor at default and minimum dialog sizes')
-    p.add_argument('--packet-only',action='store_true',help='Render Pretty/search, Raw and Hex in the production packet panes')
+    p.add_argument('--packet-only',action='store_true',help='Render Pretty/search, Raw, Hex and static Render in production packet panes')
     p.add_argument('--js-only',action='store_true',help='Render JS/text analysis workspace and its modeless list/packet windows')
     p.add_argument('--auth-only',action='store_true',help='Render authorization verdicts and response fingerprint settings')
     p.add_argument('--session-only',action='store_true',help='Render the production cookie/session inspector with synthetic findings')
@@ -83,8 +83,10 @@ def main():
     if args.guide_only:required={}
     if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
     if args.packet_only:required={(view,'wb.traffic.'+side+'.text'):100 for view in ['packet-pretty-search.png','packet-raw.png','packet-hex.png'] for side in ['request','response']}
+    if args.packet_only:required.update({('packet-render.png','wb.traffic.'+side+'.render'):100 for side in ['request','response']})
     if args.auth_only:
         required={(view,name):60 for view in ['auth-results.png','auth-desktop.png','auth-empty-desktop.png'] for name in ['wb.auth.history','wb.auth.credentials']}
+        required.update({('auth-evidence.png','wb.auth.evidence.summary'):200})
         required.update({('auth-candidate-minimum.png','wb.auth.candidate.headers'):80})
         required.update({('auth-detail-minimum.png','wb.auth.detail.'+side+'.0.text'):100 for side in ['request','response']})
     if args.session_only:required={('session-cookies.png','wb.auth.session.cookies'):60,('session-trials.png','wb.auth.session.trials'):60}
@@ -115,6 +117,8 @@ def main():
                 if args.js_only and view in {'js-details.png','js-details-small.png'}:
                     expected_w,expected_h=('620','400') if 'small' in view else ('980','640')
                     copies=len(args.sizes)
+                if args.auth_only and view=='auth-evidence.png':
+                    expected_w,expected_h=('960','560');copies=len(args.sizes)
                 if args.auth_only and view in {'auth-candidate-minimum.png','auth-detail-minimum.png'}:
                     expected_w,expected_h=('700','520') if view=='auth-candidate-minimum.png' else ('840','520')
                     copies=len(args.sizes)

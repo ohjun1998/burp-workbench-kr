@@ -14,9 +14,12 @@ import javax.swing.text.*;
 
 /** Read-only packet views. Formatting and search never modify retained HTTP bytes. */
 final class PacketInspector extends JPanel implements AutoCloseable {
-  enum Mode { PRETTY, RAW, HEX }
+  enum Mode { PRETTY, RAW, HEX, RENDER }
   static final int PREVIEW_BYTES = 65536, MAX_MATCHES = 2000;
   final JTextPane text;
+  final JEditorPane rendered = PacketRender.pane();
+  final JLabel renderNotice = new JLabel("정적 HTML · 외부 요청 없음");
+  final JPanel renderPanel = new JPanel(new BorderLayout());
   final JTextField search = new JTextField();
   final JToggleButton caseSensitive = new JToggleButton("Aa"), regex = new JToggleButton(".*"), wrap = new ToolToggle("↵", "wrap");
   final JButton previous = new ToolButton("↑", "up"), next = new ToolButton("↓", "down"), clear = new JButton("×"), more = new ToolButton("⋯", "more");
@@ -35,7 +38,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   volatile Future<?> pending;
   private volatile boolean closed;
   private byte[] rawBytes = new byte[0];
-  private String raw = "", pretty = "";
+  private String raw = "", pretty = "", renderSource = "";
   private Mode mode = Mode.PRETTY;
   private List<Span> matches = List.of();
   private int current = -1;
@@ -74,13 +77,14 @@ final class PacketInspector extends JPanel implements AutoCloseable {
         return mode != Mode.HEX && wrap.isSelected() || getParent() != null && getUI().getPreferredSize(this).width <= getParent().getWidth();
       }
     };
+    rendered.setName(name+".render");rendered.getAccessibleContext().setAccessibleName("받은 HTML 본문 정적 Render");
     text.setName(name + ".text");text.setEditable(false);
     text.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty,"\n");
     text.getAccessibleContext().setAccessibleName("읽기 전용 요청·응답 패킷");
     JPanel choices = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 0, 0));
     ButtonGroup group = new ButtonGroup();
     for (Mode value : Mode.values()) {
-      String title = switch (value) { case PRETTY -> "Pretty"; case RAW -> "Raw"; case HEX -> "Hex"; };
+      String title = switch (value) { case PRETTY -> "Pretty"; case RAW -> "Raw"; case HEX -> "Hex"; case RENDER -> "Render"; };
       JToggleButton tab = new Tab(title);tab.setName(name + "." + title.toLowerCase());
       group.add(tab);choices.add(tab);tabs.add(tab);tab.setSelected(value == mode);
       tab.addActionListener(e -> { commitEdits();mode = value; render(); });
@@ -89,6 +93,8 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     JPanel actions = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 4, 2));actions.add(wrap);actions.add(more);
     toolbar.add(actions, BorderLayout.EAST);add(toolbar, BorderLayout.NORTH);
     scroll = new JScrollPane(text);lines = new Lines();scroll.setRowHeaderView(lines);add(scroll);
+    renderNotice.setToolTipText("스크립트·외부 이미지·CSS·프레임 제외 · 앞 64 KiB 본문 미리보기");
+    renderPanel.add(renderNotice,BorderLayout.NORTH);renderPanel.add(new JScrollPane(rendered));
     wrap.setToolTipText("긴 줄 자동 줄바꿈");wrap.addActionListener(e -> { text.revalidate(); lines.revalidate(); text.repaint(); });
     more.setToolTipText("Burp 기본 편집기 열기");more.setEnabled(false);
     more.addActionListener(e -> { if(nativeAction != null) nativeAction.run(); });
@@ -150,7 +156,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     if(!editable || mode!=Mode.RAW || truncated || text.getText().equals(raw))return;
     raw=text.getText();rawBytes=raw.getBytes(java.nio.charset.StandardCharsets.UTF_8);
     // Raw is authoritative. Formatting is a view and is never a transmission source.
-    pretty=raw;
+    pretty=raw;renderSource=raw;
     if(raw.length()<=PREVIEW_BYTES)try { pretty=PacketFormat.pretty(raw); } catch(StackOverflowError ignored) {}
   }
 
@@ -170,6 +176,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     raw = PacketFormat.decode(rawBytes);
     String display = decoded == null ? raw : decoded.substring(0, Math.min(decoded.length(), PREVIEW_BYTES));
     if(decoded != null && decoded.length() > PREVIEW_BYTES)truncated = true;
+    renderSource=display;
     // Bound nesting before invoking the existing display-only JSON/XML formatter.
     pretty = display;
     int depth = 0;boolean quoted = false, escaped = false, safe = true;
@@ -201,16 +208,21 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   private void render() {
-    wrap.setEnabled(mode != Mode.HEX);
+    boolean html=mode==Mode.RENDER;
+    remove(html?scroll:renderPanel);add(html?renderPanel:scroll,BorderLayout.CENTER);
+    for(JComponent control:new JComponent[]{search,caseSensitive,regex,clear})control.setEnabled(!html);
+    searchBar.setVisible(!html);wrap.setEnabled(mode != Mode.HEX && !html);
+    if(html){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
+    revalidate();repaint();
     wrap.setToolTipText(mode == Mode.HEX ? "Hex는 바이트 열을 고정하고 가로 스크롤로 표시합니다." : "긴 줄 자동 줄바꿈");
-    String value = switch(mode) { case PRETTY -> pretty;case RAW -> raw;case HEX -> hex(rawBytes); };
+    String value = switch(mode) { case PRETTY -> pretty;case RAW -> raw;case HEX -> hex(rawBytes);case RENDER -> ""; };
     rendering=true;
     try { text.getDocument().remove(0, text.getDocument().getLength());text.getDocument().insertString(0, value, null); }
     catch(BadLocationException ex) { throw new IllegalStateException(ex); }
     finally { rendering=false; }
     text.setEditable(editable && mode==Mode.RAW && !truncated);
     if(editable)text.getAccessibleContext().setAccessibleName(mode==Mode.RAW?"요청 Raw 편집":"요청 표시 전용 · Raw에서 편집");
-    if(editable)text.setToolTipText("요청은 Raw에서 편집 · Pretty와 Hex는 표시 전용");
+    if(editable)text.setToolTipText("요청은 Raw에서 편집 · Pretty·Hex·Render는 표시 전용");
     text.setCaretPosition(0);colorize();lines.revalidate();lines.repaint();scheduleSearch();
   }
 
@@ -227,6 +239,8 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     text.setFont(WorkbenchUi.textFont(text.getText()));text.setMargin(new Insets(8,8,8,8));text.setBorder(null);
     text.setBackground(WorkbenchUi.surface());text.setForeground(WorkbenchUi.ink());text.setCaretColor(WorkbenchUi.ink());
     text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());
+    WorkbenchUi.style(renderPanel);rendered.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES,true);
+    if(mode==Mode.RENDER){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
     colorize();lines.repaint();toolbar.repaint();
   }
 
@@ -261,7 +275,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     generation.incrementAndGet();debounce.stop();if(pending!=null)pending.cancel(true);worker.getQueue().clear();
     matches=List.of();current=-1;currentHighlight=null;text.getHighlighter().removeAllHighlights();
     count.setText("0 / 0");count.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));count.setToolTipText(null);previous.setEnabled(false);next.setEnabled(false);
-    if(!search.getText().isEmpty()){count.setText("…");debounce.restart();}
+    if(mode!=Mode.RENDER&&!search.getText().isEmpty()){count.setText("…");debounce.restart();}
   }
 
   private void beginSearch() {
@@ -322,7 +336,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
 
   @Override public void close() {
     if(closed)return;closed=true;generation.incrementAndGet();debounce.stop();syntaxDebounce.stop();editedAction=null;if(pending!=null)pending.cancel(true);worker.shutdownNow();
-    rawBytes=new byte[0];raw="";pretty="";matches=List.of();current=-1;nativeAction=null;
+    rawBytes=new byte[0];raw="";pretty="";renderSource="";rendered.setText("");matches=List.of();current=-1;nativeAction=null;
     text.setText("");search.setText("");text.getHighlighter().removeAllHighlights();count.setText("0 / 0");
   }
 
@@ -338,7 +352,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
 
   private static final class Tab extends JToggleButton {
     Tab(String title){super(title);}
-    @Override public Dimension getPreferredSize(){return new Dimension(76,34);}
+    @Override public Dimension getPreferredSize(){return new Dimension(66,34);}
     @Override protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN));g.setColor(isSelected()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(getText(),(getWidth()-g.getFontMetrics().stringWidth(getText()))/2,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRect(0,getHeight()-(isSelected()?3:1),getWidth(),isSelected()?3:1);if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}g.dispose();}
   }
 

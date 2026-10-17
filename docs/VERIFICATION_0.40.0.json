@@ -1,0 +1,317 @@
+{
+  "version": "0.40.0",
+  "dateAsiaSeoul": "2026-10-18",
+  "baseCommit": "65c59a8b8db1edd568c14a322b644352dd1e5ec1",
+  "result": "local passed; remote pending",
+  "command": "python dev.py release",
+  "checks": {
+    "version": "0.40.0",
+    "groups": {
+      "BuildInfoTest": 3,
+      "JsUpgradeTest": 36,
+      "JsArchiveWorkflowTest": 8,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 52,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 29,
+      "PacketInspectorTest": 42,
+      "RenderAuthUiTest": 27,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsDraftMappingTest": 19,
+      "JsDetailsWorkflowTest": 26,
+      "PacketStyleTest": 30,
+      "TextAnalysisTest": 23,
+      "JsResponseWorkflowTest": 51,
+      "JsRepeaterWorkflowTest": 95,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "AuthWorkspaceTest": 21,
+      "AuthLayoutFitTest": 102,
+      "AuthRunSummaryTest": 23,
+      "AuthResponseWorkflowTest": 47,
+      "CookieSessionProbeTest": 50,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 43,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95,
+      "FolderNavigationTest": 40,
+      "DiagnosticsWorkflowTest": 28,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 64,
+    "regressionChecks": 2184,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 2684,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "newRegressionGroup": "RenderAuthUiTest: 27 checks passed",
+  "packaging": {
+    "regressionTests": 4,
+    "fingerprints": "passed"
+  },
+  "layout": {
+    "auth": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
+      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800"
+      ],
+      "renderedViews": 44,
+      "controlsMeasured": 548,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 280,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "auth-results.png:wb.auth.history": 60,
+        "auth-results.png:wb.auth.credentials": 60,
+        "auth-desktop.png:wb.auth.history": 60,
+        "auth-desktop.png:wb.auth.credentials": 60,
+        "auth-empty-desktop.png:wb.auth.history": 60,
+        "auth-empty-desktop.png:wb.auth.credentials": 60,
+        "auth-evidence.png:wb.auth.evidence.summary": 200,
+        "auth-candidate-minimum.png:wb.auth.candidate.headers": 80,
+        "auth-detail-minimum.png:wb.auth.detail.request.0.text": 100,
+        "auth-detail-minimum.png:wb.auth.detail.response.0.text": 100
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "packet": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
+      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800"
+      ],
+      "renderedViews": 16,
+      "controlsMeasured": 448,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 272,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "packet-pretty-search.png:wb.traffic.request.text": 100,
+        "packet-pretty-search.png:wb.traffic.response.text": 100,
+        "packet-raw.png:wb.traffic.request.text": 100,
+        "packet-raw.png:wb.traffic.response.text": 100,
+        "packet-hex.png:wb.traffic.request.text": 100,
+        "packet-hex.png:wb.traffic.response.text": 100,
+        "packet-render.png:wb.traffic.request.render": 100,
+        "packet-render.png:wb.traffic.response.render": 100
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "js": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
+      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800"
+      ],
+      "renderedViews": 64,
+      "controlsMeasured": 1172,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 500,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "js-workspace.png:wb.js.source": 80,
+        "js-analysis-off.png:wb.js.source": 80,
+        "js-packets.png:wb.js.packet.request.text": 80,
+        "js-packets.png:wb.js.packet.response.text": 80,
+        "js-packets-small.png:wb.js.packet.request.text": 50,
+        "js-packets-small.png:wb.js.packet.response.text": 50,
+        "js-analysis-list.png:wb.js.history.table": 60,
+        "js-analysis-list-small.png:wb.js.history.table": 40,
+        "js-repeater.png:wb.js.repeater.request.text": 160,
+        "js-repeater.png:wb.js.repeater.response.text": 160,
+        "js-repeater-small.png:wb.js.repeater.request.text": 100,
+        "js-repeater-small.png:wb.js.repeater.response.text": 100,
+        "js-repeater-method-required.png:wb.js.repeater.request.text": 100,
+        "js-repeater-method-required.png:wb.js.repeater.response.text": 100,
+        "js-repeater-method-required.png:wb.js.repeater.note": 28,
+        "js-details.png:wb.js.details.api.table": 100,
+        "js-repeater-auto-method.png:wb.js.repeater.request.text": 100,
+        "js-repeater-auto-method.png:wb.js.repeater.response.text": 100,
+        "js-repeater-auto-method-small.png:wb.js.repeater.request.text": 100,
+        "js-repeater-auto-method-small.png:wb.js.repeater.response.text": 100,
+        "js-repeater-default-get.png:wb.js.repeater.request.text": 100,
+        "js-repeater-default-get.png:wb.js.repeater.response.text": 100,
+        "js-repeater-default-get-small.png:wb.js.repeater.request.text": 100,
+        "js-repeater-default-get-small.png:wb.js.repeater.response.text": 100
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "all": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
+      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "1024x720",
+        "1280x800"
+      ],
+      "renderedViews": 100,
+      "controlsMeasured": 1764,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 1760,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {
+        "tool-00.png:wb.traffic.request.text": 100,
+        "tool-00.png:wb.traffic.response.text": 100,
+        "tool-03.png:preview.js.source": 80,
+        "js-horizontal.png:preview.js.source": 80,
+        "bounty-1.png:preview.workflow.input": 80,
+        "bounty-1.png:preview.workflow.detail": 80,
+        "bounty-3.png:preview.evidence.impact": 70,
+        "bounty-3.png:preview.evidence.repro": 70
+      },
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 0,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    },
+    "guide": {
+      "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+      "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.40.0.jar",
+      "releaseJarSha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23",
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "sizes": [
+        "760x480",
+        "560x300"
+      ],
+      "renderedViews": 48,
+      "controlsMeasured": 144,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "tabAndHeadingLabelsMeasured": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "minimumWorkAreas": {},
+      "failures": [],
+      "textFailures": [],
+      "guideBodiesMeasured": 48,
+      "guideLayoutFailures": 0,
+      "guideFailures": []
+    }
+  },
+  "layoutTotals": {
+    "renderedViews": 272,
+    "controlsMeasured": 4076,
+    "tabAndHeadingLabelsMeasured": 2812,
+    "clippedControlsOutsideScrollers": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "clippedSelectedTabOrHeadingLabels": 0,
+    "smallControls": 0
+  },
+  "artifacts": {
+    "manifest.json": {
+      "bytes": 40973,
+      "sha256": "1dc157bc2b9c1e5f98f6560a2f7b62e42789a72e11046ae3c90ed31762871cc1"
+    },
+    "burp-workbench-kr-0.40.0.jar": {
+      "bytes": 3456773,
+      "sha256": "0c9929e208e521b4f49edc3cc203718af5859ad3f4fa0daa8c6ac48f594dfc23"
+    },
+    "SHA256SUMS": {
+      "bytes": 197,
+      "sha256": "54e212a93b8347d65dd66d113d1aa39543810d075d252f9b8e47cae0354661cf"
+    },
+    "burp-workbench-kr-0.40.0-source.zip": {
+      "bytes": 3235383,
+      "sha256": "75791cc88c25c5b6a54545b0a3cd864d73a25bed70e9d22bedb22adb3bb31df8"
+    }
+  },
+  "preflightCorrections": [
+    "기존 마스킹·하위 메뉴·3개 탭 기대값을 새 요구사항으로 갱신했습니다.",
+    "최소 크기의 패킷 영역 72px 문제를 분할 비율과 크게 보기로 보정한 뒤 모든 화면 게이트를 재검증했습니다.",
+    "반복 빌드·회귀 수를 합산하지 않고 최종 소스 1회 검사 수를 기록합니다."
+  ],
+  "limitations": [
+    "실제 native Burp GUI·Windows DPI/IME 미수행.",
+    "Linux에는 GulimChe/Gulim이 없어 포함된 한글 대체 글꼴을 사용했습니다. 설치된 Windows 환경에서는 굴림체를 우선합니다.",
+    "Render는 정적 HTML이며 JavaScript·외부 CSS/이미지·프레임·폼 동작을 실행하지 않습니다.",
+    "합성 인증값과 API 어댑터·격리된 loopback HTTP를 사용했으며 실제 계정 자격정보를 공개하지 않았습니다."
+  ],
+  "remote": {
+    "status": "pending",
+    "note": "PR 생성 후 별도 확인"
+  }
+}

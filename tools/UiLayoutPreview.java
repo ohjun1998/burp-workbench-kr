@@ -219,6 +219,22 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("session")) {
+            try {
+                var auth=(AuthComparePanel)get(ext,"authCompare");var inspector=auth.cookieSessions;
+                edt(()->{
+                    auth.slots[0]=new AuthComparePanel.Candidate(1,"demo-session-fingerprint","https://app.example.test:443",java.util.Map.of("cookie","SID=DEMO; XSRF-TOKEN=DEMO; tracking_id=DEMO"),1,"");
+                    inspector.loadSlot();inspector.url.setText("https://app.example.test/api/me");inspector.expected.setText("demo-user");
+                    inspector.show(new CookieSessionProbe.Report(true,true,"신원 확인 완료 · 검증된 쿠키 조합 적용 가능",
+                        List.of(new CookieSessionProbe.Finding("SID","조건 불일치","신원 일치","인증에 필요"),new CookieSessionProbe.Finding("XSRF-TOKEN","신원 일치","조건 불일치","CSRF 이름 후보 · 인증 기여 미관측"),new CookieSessionProbe.Finding("tracking_id","신원 일치","조건 불일치","이 검사에서 제외 가능")),
+                        List.of(new CookieSessionProbe.Trial("전체 세션",List.of("SID","XSRF-TOKEN","tracking_id"),200,CookieSessionProbe.Outcome.MATCH,"설정한 사용자 식별값 일치"),new CookieSessionProbe.Trial("비로그인 대조",List.of(),401,CookieSessionProbe.Outcome.DIFFERENT,"인증 거부 응답"),new CookieSessionProbe.Trial("제외: SID",List.of("XSRF-TOKEN","tracking_id"),401,CookieSessionProbe.Outcome.DIFFERENT,"인증 거부 응답")),Set.of("SID"),true));
+                    JPanel body=WorkbenchUi.settingsBody(inspector,()->{});installHeaders(body);
+                    try {render(body,out.resolve("session-cookies.png"),width,height);inspector.results.setSelectedIndex(1);render(body,out.resolve("session-trials.png"),width,height);}catch(Exception e){throw new RuntimeException(e);}
+                });writeMeasurements(out);
+            } finally {unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("Session inspector preview failed");
+            System.out.println("Session inspector rendered: "+theme+" "+width+"x"+height+"; synthetic findings, zero HTTP.");return;
+        }
         if(args.length>5&&args[5].equals("js")) {
             try {
                 var js=(JsAnalysisPanel)get(ext,"jsAnalysis");

@@ -1,5 +1,25 @@
 # 현재 개발 상태
 
+기준: 2026-10-17 (한국 시간) / Workbench 0.37.0 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.1.
+
+## 쿠키 식별·세션 신원 검사 0.37.0
+
+계정 권한 비교에 세션 검사 창을 추가했습니다. 계정별 사용자 확인 GET URL·JSON 경로·기대 사용자 값을 설정하고 전체 인증과 비로그인 대조, 쿠키 제외·단독·순차 조합 축소를 실행합니다. HTTP 200만으로 로그인 성공을 판정하지 않으며, 여러 쿠키가 필요한 경우와 Bearer 등 다른 인증 헤더의 기여를 구분합니다.
+
+검증한 조합은 명시적 적용으로 해당 계정에만 반영하고, 비교 전 신원 검사를 켜면 각 비교 직전에 신원과 비로그인 대조를 다시 확인합니다. 실패 시 해당 계정의 비교 요청을 보내지 않고 재검토로 남깁니다. 같은 Origin/SCOPE GET, 전송 직전 범위 확인, 자동 리다이렉트 금지와 취소·변경 시 늦은 결과 차단을 적용합니다.
+
+로컬 정식 release 2,442개(쿠키·세션 50개 포함), 운영 화면 266개와 패키징 4개를 통과했습니다.
+
+[사용법·한계·화면](docs/RELEASE_0.37.0_KR.md) · [실제 검증](docs/VERIFICATION_0.37.0.json) · [다운로드](downloads/README.md) · [대화](docs/chat-logs/2026-10-17/workbench-cookie-session-0370.md)
+
+최신 main 98538d0의 JS 분석 고도화와 배포 0.36.0을 보존해 재적용했습니다. [PR #40](https://github.com/ohjun1998/burp-workbench-kr/pull/40)이 기존 구 main 기반의 미병합 후보 PR #39를 대체합니다.
+
+0.37.0 코드 head `0add0a7`의 원격 Build and verify/check, Linux 격리 디스크 고갈·복구와 180초 연속 수집, Windows 전체 Java 회귀·저장/캐시 10회 반복·Mapper·180초 수집·PowerShell 검사가 모두 성공했습니다. [빌드·화면·패키징](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38990649436) · [Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38990649479). 이어가기에서 배포 소스·파일 203개의 Git blob 일치와 다운로드 해시·소스 지문을 재확인했습니다. 이 확인은 새 제품 회귀 검사로 합산하지 않습니다. 실제 Burp GUI·OS DPI·IME는 미실행입니다.
+
+최종 문서 커밋·병합 및 main 자동 검사 상태는 PR #40을 기준으로 확인합니다. [이번 이어가기 대화](docs/chat-logs/2026-10-17/workbench-cookie-session-0370-continuation.md)를 함께 보존합니다.
+
+이하 0.36.0 기록은 이전 배포로 보존합니다.
+
 ## JS 전체 고도화 0.36.0
 
 2026-10-17 / account-a / Issue #35 / [PR #36](https://github.com/ohjun1998/burp-workbench-kr/pull/36). 현재 배포 기준은 0.36.0입니다. PR에서 코드 검증과 main 반영 이력을 확인할 수 있습니다. 기존 레이아웃·표 열·연속 스크롤을 유지한 API 해석, Axios/래퍼, 큰 JS/압축, 소스맵, 디스크 이력, 실제 패킷 연결, GraphQL·검토 우선순위·중복 통합을 구현했습니다. [사용법·한계](docs/RELEASE_0.36.0_KR.md)와 [실행 검증](docs/VERIFICATION_0.36.0.json)을 기준으로 확인하세요.

@@ -12,7 +12,11 @@
 
 [사용법·한계·화면](docs/RELEASE_0.37.0_KR.md) · [실제 검증](docs/VERIFICATION_0.37.0.json) · [다운로드](downloads/README.md) · [대화](docs/chat-logs/2026-10-17/workbench-cookie-session-0370.md)
 
-최신 main 98538d0의 JS 분석 고도화와 배포 0.36.0을 보존하고 재적용합니다. 기존 PR #39는 구 main에서 만든 미병합 후보이며 0.37.0 PR로 대체합니다.
+최신 main 98538d0의 JS 분석 고도화와 배포 0.36.0을 보존해 재적용했습니다. [PR #40](https://github.com/ohjun1998/burp-workbench-kr/pull/40)이 기존 구 main 기반의 미병합 후보 PR #39를 대체합니다.
+
+0.37.0 코드 head `0add0a7`의 원격 Build and verify/check, Linux 격리 디스크 고갈·복구와 180초 연속 수집, Windows 전체 Java 회귀·저장/캐시 10회 반복·Mapper·180초 수집·PowerShell 검사가 모두 성공했습니다. [빌드·화면·패키징](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38990649436) · [Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38990649479). 이어가기에서 배포 소스·파일 203개의 Git blob 일치와 다운로드 해시·소스 지문을 재확인했습니다. 이 확인은 새 제품 회귀 검사로 합산하지 않습니다. 실제 Burp GUI·OS DPI·IME는 미실행입니다.
+
+최종 문서 커밋·병합 및 main 자동 검사 상태는 PR #40을 기준으로 확인합니다. [이번 이어가기 대화](docs/chat-logs/2026-10-17/workbench-cookie-session-0370-continuation.md)를 함께 보존합니다.
 
 이하 0.36.0 기록은 이전 배포로 보존합니다.
 

@@ -313,5 +313,39 @@
     "jsSourcePolicy": "All main JS production sources and tests retained byte-for-byte; only auth guide, auth panel, test registration, version and cookie feature change.",
     "supersedesPr": 39
   },
-  "remoteChecks": "See the final PR Checks and main merge. This JSON records executed local verification."
+  "remoteChecks": "See the final PR Checks and main merge. This JSON records executed local verification.",
+  "continuationVerification": {
+    "date": "2026-10-17",
+    "timezone": "Asia/Seoul",
+    "verifiedCodeHead": "0add0a7e3f7f639a497336597714902641787baa",
+    "remote": {
+      "buildAndVerify": {
+        "runId": 38990649436,
+        "result": "success",
+        "jobs": [
+          "check"
+        ]
+      },
+      "durabilityAndWindows": {
+        "runId": 38990649479,
+        "result": "success",
+        "jobs": [
+          "windows",
+          "isolated-disk-and-soak"
+        ]
+      }
+    },
+    "localRecheck": {
+      "remoteGitBlobMatches": 203,
+      "mismatches": 0,
+      "versionedDownloadHashesAndSourceFingerprints": "passed",
+      "productRegressionRerun": false
+    },
+    "scope": "Existing code CI was read directly from GitHub; prior local regression counts remain historical. Final documentation-only head and merge status are tracked by PR #40.",
+    "notExecuted": [
+      "Native Burp GUI",
+      "OS DPI",
+      "IME key delivery"
+    ]
+  }
 }

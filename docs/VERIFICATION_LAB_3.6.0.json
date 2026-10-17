@@ -561,11 +561,26 @@
     "files": {
       "community-security-lab-3.6.0-docker.zip": "fd64e8b1b9a815e0c73491888262e901544e93a38295449319fd39a98e1e1ae4"
     },
-    "sourceInputCount": 79
+    "sourceInputCount": 79,
+    "checks": 6
   },
   "notExecuted": [
     "Browser DOM and screenshots",
     "Native Burp GUI extension test",
-    "Docker/Oracle/Nginx full stack"
-  ]
+    "Windows Docker Desktop full stack"
+  ],
+  "remoteDocker": {
+    "headCommit": "5a67a37fbdc542c8527d6b97a0a758be5522a3d7",
+    "runId": 38996673370,
+    "result": "passed",
+    "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38996673370",
+    "scope": "Current source Docker/Oracle/Nginx stack smoke test and loopback publication/TLS/HTTP2 checks. New role endpoint matrix remains the separately executed isolated H2 HTTP test."
+  },
+  "releaseAuditFix": {
+    "initialRunId": 38996675583,
+    "failure": "Fresh-output verifier selected a hardcoded 3.5.2 ZIP after successfully producing 3.6.0; current POM version now selects the archive.",
+    "regressions": 2,
+    "downloadRestorationOnMismatch": "passed",
+    "artifactChanges": "none"
+  }
 }

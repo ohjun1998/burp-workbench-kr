@@ -34,10 +34,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final MontoyaApi api;
   final Supplier<List<HttpRequestResponse>> selected;
   final DefaultTableModel candidateModel = model("NO", "사용자 계정", "역할", "Origin", "인증 헤더 / 값", "최근 탐지"),
-      historyModel = model("NO", "URL", "계정 1", "계정 2", "계정 3", "실행 상태");
-  final JTable candidates = new JTable(candidateModel),
+      historyModel = model("NO", "URL", "계정 1", "계정 2", "계정 3", "실행 상태", "메서드");
+  final JTable candidates = new AuthLayout.Table(candidateModel),
       history =
-          new JTable(historyModel) {
+          new AuthLayout.Table(historyModel) {
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
               Component component = super.prepareRenderer(renderer, row, column);
@@ -48,9 +48,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                 String note = run.packets[modelColumn - 2].note;
                 AuthVerdict verdict = AuthVerdict.of(note);
                 cell.setIcon(verdict.icon());
+                cell.setText(run.packets[modelColumn-2].response==null?note:run.packets[modelColumn-2].response.statusCode()+" · "+verdict.label);
                 cell.setForeground(WorkbenchUi.toneInk(verdict.tone));
                 cell.setBackground(isCellSelected(row, column) ? WorkbenchUi.selected() : WorkbenchUi.toneFill(verdict.tone));
-                cell.setToolTipText(verdict.label + " · " + note);
+                cell.setToolTipText(run.context.labels[modelColumn-2]+" · "+verdict.label+" · "+note);
                 cell.getAccessibleContext().setAccessibleDescription(verdict.label + " · " + note);
               }
               return component;
@@ -86,6 +87,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   Run detailRun;
   final JCheckBox writes = new JCheckBox("쓰기 요청 재전송 허용"), colors = new JCheckBox("차이 색상 표시", true);
   final JTextField extra = new JTextField(15), urlFilter = new JTextField(15);
+  final JLabel counts = new JLabel("인증 후보 0 · 비교 기록 0");
   final JLabel state = new JLabel("인증 후보 우클릭 → 비교 계정 지정 → 선택 요청 비교"),
       detail = new JLabel("비교 기록에서 항목을 선택하세요");
   final JCheckBox largeFiles = new JCheckBox("대용량 응답 해시 비교 · 최대 4MiB");
@@ -364,26 +366,25 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     moreMenu.add(csv);
     moreMenu.add(clear);
     more.addActionListener(e -> moreMenu.show(more, 0, more.getHeight()));
-    top.add(
-        WorkbenchUi.row(
-            detection,
-            record,
-            button("선택 요청 비교", this::compareSelection),
-            button("중지", this::stop),
-            button("비교 기록 비우기", this::clearHistory),
-            settings,
-            button("세션 검사", ()->{cookieSessions.loadSlot();cookieSessionWindow.open();}),
-            button("세션·권한 매트릭스", sessionSettings::open),
-            more));
-    top.add(new JLabel("인증 탐지는 수집 OFF / SCOPE와 독립 · 비교 요청은 SCOPE 안에서 실행"));
-    top.add(state);
+    JMenuItem session=new JMenuItem("세션 검사"),matrix=new JMenuItem("세션·권한 매트릭스");
+    session.addActionListener(e->{cookieSessions.loadSlot();cookieSessionWindow.open();});
+    matrix.addActionListener(e->sessionSettings.open());
+    moreMenu.insert(session,0);moreMenu.insert(matrix,1);moreMenu.insert(new JSeparator(),2);
+    JPanel actions=WorkbenchUi.row(detection,record,button("선택 요청 비교",this::compareSelection),button("중지",this::stop),settings,more);
+    actions.setName("wb.auth.actions");top.add(actions);
+    JPanel summary=new JPanel(new BorderLayout(8,0));summary.setBorder(BorderFactory.createEmptyBorder(3,8,8,8));
+    summary.add(new JLabel("인증 탐지는 수집 OFF / SCOPE와 별도 동작"));summary.add(counts,BorderLayout.EAST);top.add(summary);
+    ((AuthLayout.Table)candidates).emptyMessage="인증 탐지를 ON으로 켠 뒤 사이트를 이용하면 인증 후보가 표시됩니다.";
+    ((AuthLayout.Table)history).emptyMessage="인증 후보를 계정에 지정하고 선택 요청 비교를 실행하세요.";
     candidates.setName("wb.auth.credentials");
     candidates.setAutoCreateRowSorter(true);
     candidates.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     candidates.putClientProperty("wb.table.compact",true);
-    candidates.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    int[] widths={45,200,110,240,400,100};
-    for(int i=0;i<widths.length;i++)candidates.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+    candidates.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    int[] widths={48,180,100,240,300,100};
+    int[] minimums={48,130,80,180,210,95};
+    for(int i=0;i<widths.length;i++){var column=candidates.getColumnModel().getColumn(i);column.setPreferredWidth(widths[i]);column.setMinWidth(minimums[i]);}
+    candidates.getColumnModel().getColumn(0).setMaxWidth(70);candidates.getColumnModel().getColumn(5).setMaxWidth(120);
     JPopupMenu popup = new JPopupMenu();
     for (int i = 0; i < 3; i++) {
       final int slot = i;
@@ -441,18 +442,22 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
             });
     JScrollPane candidateScroll = new JScrollPane(candidates);
     candidateScroll.setPreferredSize(new Dimension(900, 95));
-    JPanel candidateCard = WorkbenchUi.card("인증 정보 후보", candidateScroll);
+    JPanel candidateCard = AuthLayout.card("인증 정보 후보","더블클릭하여 계정 상세 보기",candidateScroll,null);
     candidateCard.setName("wb.card.수집한 인증 정보 · 중복 제거 · 우클릭으로 인가 지정");
     history.setName("wb.auth.history");
     history.putClientProperty("wb.table.compact",true);
     history.setAutoCreateRowSorter(true);
-    history.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    history.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     history.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     history.getColumnModel().getColumn(0).setPreferredWidth(45);
     history.getColumnModel().getColumn(1).setPreferredWidth(320);
     for (int i = 2; i < 5; i++) history.getColumnModel().getColumn(i).setPreferredWidth(210);
     history.getColumnModel().getColumn(5).setPreferredWidth(90);
-    history.getColumnModel().getColumn(0).setMaxWidth(65);
+    history.getColumnModel().getColumn(0).setMaxWidth(70);
+    int[] historyMinimums={48,180,130,130,130,80,65};
+    for(int i=0;i<7;i++)history.getColumnModel().getColumn(i).setMinWidth(historyMinimums[i]);
+    history.getColumnModel().getColumn(6).setPreferredWidth(70);history.getColumnModel().getColumn(6).setMaxWidth(90);
+    history.moveColumn(6,1);
     history
         .getSelectionModel()
         .addListSelectionListener(
@@ -477,14 +482,15 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     details.setName("wb.auth.comparison.detail");
     details.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
     details.add(
-        WorkbenchUi.row(detail, mode, new JLabel("Ctrl+Space · 현재 계정 패킷을 Repeater 창으로"), legend()),
+        TargetWindow.options(WorkbenchUi.row(detail,mode),WorkbenchUi.row(new JLabel("Ctrl+Space · 현재 계정 패킷을 Repeater 창으로"),legend())),
         BorderLayout.NORTH);
     judgementDetails.setEditable(false);
     judgementDetails.setLineWrap(true);
     judgementDetails.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
     details.add(WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, packets,
         WorkbenchUi.card("판정 근거 · JSON 필드 차이", new JScrollPane(judgementDetails)), .70));
-    JPanel historyCard = WorkbenchUi.card("비교 기록 · 더블클릭하여 패킷·판정 근거 보기", new JScrollPane(history));
+    JPanel historyCard = AuthLayout.card("비교 기록","더블클릭하여 패킷·판정 근거 보기",new JScrollPane(history),button("기록 비우기",this::clearHistory));
+    historyCard.add(AuthLayout.verdictLegend(),BorderLayout.SOUTH);
     historyCard.setName("wb.card.Record History");
     JButton closeDetails=button("닫기",comparisonWindow::closeWindow);
     details.add(WorkbenchUi.row(closeDetails),BorderLayout.SOUTH);
@@ -494,6 +500,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         WorkbenchUi.header(FeatureGuide.title("auth"), "비교 계정 지정 → 선택 요청 비교 → 응답·근거 확인", top),
         BorderLayout.NORTH);
     add(lists);
+    JPanel footer=new JPanel(new BorderLayout());footer.setBorder(BorderFactory.createEmptyBorder(4,8,0,8));footer.add(state,BorderLayout.EAST);add(footer,BorderLayout.SOUTH);
     record.setToolTipText("ON이면 이후 조건에 맞는 Proxy·Repeater 요청을 비교 계정으로 자동 재전송합니다. 단순 기록 기능이 아닙니다.");
     record.addActionListener(
         e ->
@@ -507,7 +514,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     pretty.addActionListener(e -> show(detailRun==null?current():detailRun));
     WorkbenchUi.style(this);
     WorkbenchUi.style(packetDetails);
-    WorkbenchUi.status(state);
+    state.putClientProperty("wb.font.size",12);state.setFont(WorkbenchUi.font().deriveFont(12f));
     WorkbenchUi.feedback(state);
     show(null);
   }
@@ -628,7 +635,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
   void applyAccountToSlot(int slot,Candidate candidate){AuthAccount a=accounts.get(candidate.key());if(a!=null){profileNames[slot].setText(a.label());profileOwners[slot].setText(a.userId());profileRoles[slot].setText(a.role());}}
   void copyAccount(Candidate from,Candidate to){AuthAccount account=accounts.get(from.key());if(account!=null)accounts.put(to.key(),account);}
-  void updateHistoryHeaders(Run run){if(history==null||history.getColumnCount()<5)return;for(int i=0;i<3;i++)history.getColumnModel().getColumn(i+2).setHeaderValue(run==null?slots[i]==null?"미지정 "+(char)('A'+i):label(i):run.context.labels[i]);history.getTableHeader().repaint();}
+  void updateHistoryHeaders(Run run){if(history==null||history.getColumnCount()<5)return;for(int i=0;i<3;i++)history.getColumnModel().getColumn(history.convertColumnIndexToView(i+2)).setHeaderValue(run==null?slots[i]==null?"미지정 "+(char)('A'+i):label(i):run.context.labels[i]);history.getTableHeader().repaint();}
   void openComparison(Run run){if(run==null)return;detailRun=run;WorkbenchUi.style(packetDetails);show(run);detailShortcuts.install();comparisonWindow.open();}
   static void loadInspector(PacketInspector view,HttpRequest request,HttpResponse response) {
     if(request==null&&response==null){view.setPacket(null,null);return;}
@@ -742,7 +749,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     applyObservation(prepareObservation(q, response));
   }
 
+  void refreshCounts(){counts.setText("인증 후보 "+credentials.size()+" · 비교 기록 "+runs.size());}
+
   void refreshCandidates(String selected) {
+    refreshCounts();
     candidateModel.setRowCount(0);
     int model = 0;
     for (Candidate c : credentials.values()) {
@@ -1169,7 +1179,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       historyModel.removeRow(0);
     }
     runs.add(run);
-    historyModel.addRow(new Object[] {run.no, Core.safeUrl(q.url()), "대기", "대기", "대기", run.note});
+    historyModel.addRow(new Object[] {run.no, Core.safeUrl(q.url()), "대기", "대기", "대기", run.note,q.method()});
     if (history.getSelectedRow() < 0)
       history.setRowSelectionInterval(history.getRowCount() - 1, history.getRowCount() - 1);
     active.incrementAndGet();
@@ -1531,6 +1541,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
           index,
           2 + i);
     historyModel.setValueAt(run.note, index, 5);
+    historyModel.setValueAt(run.original.method(),index,6);refreshCounts();
     if (detailRun == run || detailRun==null && current() == run) show(run);
     state.setText("비교 기록 " + runs.size() + " · 비교 작업 " + active.get() + " · 제외 " + dropped);
   }
@@ -1658,7 +1669,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     detailRun=null;comparisonWindow.closeWindow();detailShortcuts.close();
     runs.clear();
     historyModel.setRowCount(0);
-    show(null);
+    refreshCounts();show(null);
   }
 
   void export() {

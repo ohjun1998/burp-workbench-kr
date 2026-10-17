@@ -79,7 +79,7 @@ public final class AuthResponseWorkflowTest extends WorkbenchTest {
       check(panel.runs.get(1).packets[0].note.contains("응답 차단 규칙 1"), "custom rule applied to real controller result");
       edt(() -> {
         panel.history.setRowSelectionInterval(1,1);
-        var cell = (JLabel)panel.history.prepareRenderer(panel.history.getCellRenderer(1,2),1,2);
+        var cell = (JLabel)panel.history.prepareRenderer(panel.history.getCellRenderer(1,3),1,3);
         check(cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)) && cell.getIcon()!=null, "green verdict appears in history even for HTTP 200");
         panel.show(panel.runs.get(1));
         check(panel.packets.getIconAt(0)!=null && panel.judgementDetails.getText().contains("차단 응답 확인"), "packet tab and text show same verdict");
@@ -103,7 +103,7 @@ public final class AuthResponseWorkflowTest extends WorkbenchTest {
       check(panel.runs.get(4).packets[0].note.contains("응답 차단 규칙 1"), "in-flight comparison keeps fingerprint snapshot");
       edt(() -> {
         panel.history.getRowSorter().toggleSortOrder(0); panel.history.getRowSorter().toggleSortOrder(0);
-        var cell=(JLabel)panel.history.prepareRenderer(panel.history.getCellRenderer(0,2),0,2);
+        var cell=(JLabel)panel.history.prepareRenderer(panel.history.getCellRenderer(0,3),0,3);
         check(cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)),"sorted history uses correct run verdict");
       });
       currentBaseline.set(response(200,"{\"error\":\"FORBIDDEN\"}")); body.set("{\"secret\":\"alice\"}");

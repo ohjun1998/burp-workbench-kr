@@ -83,7 +83,10 @@ def main():
     if args.guide_only:required={}
     if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
     if args.packet_only:required={(view,'wb.traffic.'+side+'.text'):100 for view in ['packet-pretty-search.png','packet-raw.png','packet-hex.png'] for side in ['request','response']}
-    if args.auth_only:required={('auth-results.png','wb.auth.history'):60}
+    if args.auth_only:
+        required={(view,name):60 for view in ['auth-results.png','auth-desktop.png','auth-empty-desktop.png'] for name in ['wb.auth.history','wb.auth.credentials']}
+        required.update({('auth-candidate-minimum.png','wb.auth.candidate.headers'):80})
+        required.update({('auth-detail-minimum.png','wb.auth.detail.'+side+'.0.text'):100 for side in ['request','response']})
     if args.session_only:required={('session-cookies.png','wb.auth.session.cookies'):60,('session-trials.png','wb.auth.session.trials'):60}
     if args.js_only:
         required={('js-workspace.png','wb.js.source'):80,('js-analysis-off.png','wb.js.source'):80,
@@ -111,6 +114,9 @@ def main():
                     copies=len(args.sizes)
                 if args.js_only and view in {'js-details.png','js-details-small.png'}:
                     expected_w,expected_h=('620','400') if 'small' in view else ('980','640')
+                    copies=len(args.sizes)
+                if args.auth_only and view in {'auth-candidate-minimum.png','auth-detail-minimum.png'}:
+                    expected_w,expected_h=('700','520') if view=='auth-candidate-minimum.png' else ('840','520')
                     copies=len(args.sizes)
                 matches=[r for r in content_rows if (r['theme'],r['width'],r['height'],r['view'],r['name'])==(theme,expected_w,expected_h,view,name)]
                 if len(matches)!=copies or any(int(r['visibleHeight'])<minimum or int(r['visibleWidth'])<160 for r in matches):

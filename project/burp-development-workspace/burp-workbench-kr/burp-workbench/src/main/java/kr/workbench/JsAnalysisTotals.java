@@ -34,6 +34,12 @@ final class JsAnalysisTotals extends JPanel {
     }
     api.count(apis.size());secret.count(secrets.size());domain.count(domains.size());cloud.count(clouds.size());
   }
+  void updateArchive(Collection<JsArchive.Summary> summaries,Collection<JsSourceCache.Entry> sources){
+    Set<String> apis=new HashSet<>(),secrets=new HashSet<>(),domains=new HashSet<>(),clouds=new HashSet<>();
+    for(var summary:summaries){apis.addAll(summary.apiKeys());secrets.addAll(summary.secretKeys());domains.addAll(summary.domains());clouds.addAll(summary.clouds());}
+    for(var source:sources){var result=source.result();if(result==null)continue;for(var item:result.endpoints())apis.add(JsFindingGroups.key(item));for(var item:result.secrets())secrets.add(item.fingerprint());for(var item:result.miner().domains())domains.add(item.host());for(var item:result.miner().clouds())clouds.add(item.url());}
+    api.count(apis.size());secret.count(secrets.size());domain.count(domains.size());cloud.count(clouds.size());
+  }
   static final class Lamp extends JLabel {
     final String caption;int count;
     Lamp(String caption,String fullCaption,String name){this.caption=caption;setName(name);putClientProperty("wb.font.size",11);setOpaque(false);count(0);setToolTipText(fullCaption+" · 전체 분석 목록에서 중복 제외 · 후보의 유효성은 미확인");}
@@ -59,3 +65,4 @@ final class JsAnalysisTotals extends JPanel {
     }
   }
 }
+

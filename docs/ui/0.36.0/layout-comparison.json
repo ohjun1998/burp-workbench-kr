@@ -1,0 +1,36 @@
+{
+  "baselineVersion": "0.35.1",
+  "newVersion": "0.36.0",
+  "sizes": [
+    "1024x720",
+    "1280x800"
+  ],
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "mode": "actual Swing components with synthetic packets; not native Burp",
+  "measurements": {
+    "controls.csv": {
+      "baselineRows": 512,
+      "newRows": 512,
+      "identicalMeasurements": true,
+      "differences": 0
+    },
+    "content.csv": {
+      "baselineRows": 96,
+      "newRows": 96,
+      "identicalMeasurements": false,
+      "differences": 20
+    },
+    "text.csv": {
+      "baselineRows": 460,
+      "newRows": 460,
+      "identicalMeasurements": true,
+      "differences": 0
+    }
+  },
+  "geometryIdentical": true,
+  "contentMetadataNote": "20 rows identify anonymous JTable subclasses differently; all 96 content bounds are identical.",
+  "finalJarSha256": "a6ea7bdfd9f98703109bdc22e0c34315367daa2e1eef56a49b7d6ba0309ad4d4"
+}

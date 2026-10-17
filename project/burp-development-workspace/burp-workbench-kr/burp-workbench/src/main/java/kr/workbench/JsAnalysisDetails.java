@@ -10,7 +10,9 @@ final class JsAnalysisDetails extends JPanel implements Scrollable {
   final JTabbedPane sections=new JTabbedPane();
   final JsAnalysis.Result snapshot;
   final String source;
-  final JTable apis=new JTable(JsAnalysisPanel.model("메서드","URL / 경로","사용 맥락","쿼리·params 이름","본문 키","헤더 이름","줄"));
+  final JTable apis=new JTable(JsAnalysisPanel.model("메서드","URL / 경로","사용 맥락","쿼리·params 이름","본문 키","헤더 이름","줄")){
+    public String getToolTipText(java.awt.event.MouseEvent event){int row=rowAtPoint(event.getPoint());if(snapshot==null||row<0)return null;return JsFindingGroups.evidence(snapshot,snapshot.endpoints().get(convertRowIndexToModel(row)));}
+  };
 
   JsAnalysisDetails(String source,JsAnalysis.Result snapshot){
     super(new BorderLayout(10,12));this.source=JsMiner.safeUrl(source);this.snapshot=snapshot;
@@ -29,7 +31,7 @@ final class JsAnalysisDetails extends JPanel implements Scrollable {
     metrics.add(metric("도메인",miner.domains().size(),"wb.js.details.count.domain"));metrics.add(metric("복원 원본",miner.recovered().size(),"wb.js.details.count.recovered"));
     header.add(metrics,BorderLayout.SOUTH);add(header,BorderLayout.NORTH);
     DefaultTableModel apiModel=(DefaultTableModel)apis.getModel();
-    if(snapshot!=null)for(var item:snapshot.endpoints())apiModel.addRow(new Object[]{item.method(),item.url(),item.kind(),item.parameters(),item.bodyKeys(),item.headers(),item.line()});
+    if(snapshot!=null)for(var item:snapshot.endpoints())apiModel.addRow(new Object[]{item.method(),item.url(),item.kind()+" · "+JsFindingGroups.priority(item),item.parameters(),item.bodyKeys(),item.headers(),item.line()});
     apis.setName("wb.js.details.api.table");sections.addTab("URL · API",table(apis,new int[]{75,360,170,170,170,160,50},"발견된 URL·API가 없습니다."));
     JTable tokens=new JTable(JsAnalysisPanel.model("후보 종류","값 · 가림","지문","줄","판단 근거"));
     if(snapshot!=null)for(var item:snapshot.secrets())((DefaultTableModel)tokens.getModel()).addRow(new Object[]{item.rule(),item.masked(),item.fingerprint(),item.line(),item.confidence()});
@@ -73,3 +75,4 @@ final class JsAnalysisDetails extends JPanel implements Scrollable {
   public boolean getScrollableTracksViewportWidth(){return true;}
   public boolean getScrollableTracksViewportHeight(){return getParent()!=null&&getParent().getHeight()>=430;}
 }
+

@@ -64,7 +64,7 @@ public class WorkbenchTest {
         java.net.URI u=java.net.URI.create(url);HttpService s=proxy(HttpService.class,(p,m,a)->switch(m.getName()){case "host"->u.getHost();case "port"->u.getPort()<0?443:u.getPort();case "secure"->u.getScheme().equals("https");default->def(m);});
         HttpRequest created=proxy(HttpRequest.class,(p,m,a)->{
             return switch(m.getName()){
-                case "body"->bytes(new byte[0]);case "bodyToString"->"";case "url"->url;case "method"->method;case "isInScope"->scope;case "httpService"->s;case "headers"->h;case "parameters"->List.of();
+                case "body"->bytes(new byte[0]);case "bodyToString"->"";case "url"->url;case "method"->method;case "isInScope"->scope;case "httpService"->s;case "headers"->h;case "headerValue"->h.stream().filter(v->v.name().equalsIgnoreCase(a[0].toString())).map(HttpHeader::value).findFirst().orElse(null);case "parameters"->List.of();
                 case "toString"->method+" "+u.getRawPath()+" HTTP/1.1\r\n"+h.stream().map(HttpHeader::toString).reduce("",(x,y)->x+y+"\r\n")+"\r\n";
                 case "toByteArray"->bytes((method+" "+u.getRawPath()+(u.getRawQuery()==null?"":"?"+u.getRawQuery())+" HTTP/1.1\r\nHost: "+u.getRawAuthority()+"\r\n"+h.stream().map(HttpHeader::toString).reduce("",(x,y)->x+y+"\r\n")+"\r\n").getBytes(StandardCharsets.UTF_8));
                 case "withRemovedHeader"->{List<HttpHeader> n=new ArrayList<>(h);if(a[0] instanceof HttpHeader)n.remove(a[0]);else n.removeIf(x->x.name().equalsIgnoreCase((String)a[0]));yield request(url,method,scope,n);}

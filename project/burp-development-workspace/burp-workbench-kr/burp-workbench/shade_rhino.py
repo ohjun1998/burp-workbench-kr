@@ -1,6 +1,6 @@
 """Relocate Rhino constant-pool package names to avoid Burp/engine collisions."""
 import struct
-RENAMES=[(b'org/mozilla/javascript',b'kr/workbench/shaded/rhino'),(b'org.mozilla.javascript',b'kr.workbench.shaded.rhino'),(b'org/mozilla/classfile',b'kr/workbench/shaded/classfile'),(b'org.mozilla.classfile',b'kr.workbench.shaded.classfile')]
+RENAMES=[(b'org/brotli/dec',b'kr/workbench/shaded/brotli'),(b'org.brotli.dec',b'kr.workbench.shaded.brotli'),(b'org/mozilla/javascript',b'kr/workbench/shaded/rhino'),(b'org.mozilla.javascript',b'kr.workbench.shaded.rhino'),(b'org/mozilla/classfile',b'kr/workbench/shaded/classfile'),(b'org.mozilla.classfile',b'kr.workbench.shaded.classfile')]
 def rename(value):
  for old,new in RENAMES:value=value.replace(old,new)
  return value
@@ -17,3 +17,4 @@ def relocate(data):
    if tag in (5,6):i+=1
   i+=1
  result+=data[offset:];return bytes(result)
+

@@ -1,6 +1,12 @@
 # 현재 개발 상태
 
-기준: 2026-10-17 (한국 시간) / Workbench 0.35.1 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.1.
+## JS 전체 고도화 0.36.0
+
+2026-10-17 / account-a / Issue #35 / [PR #36](https://github.com/ohjun1998/burp-workbench-kr/pull/36). 현재 배포 기준은 0.36.0입니다. PR에서 코드 검증과 main 반영 이력을 확인할 수 있습니다. 기존 레이아웃·표 열·연속 스크롤을 유지한 API 해석, Axios/래퍼, 큰 JS/압축, 소스맵, 디스크 이력, 실제 패킷 연결, GraphQL·검토 우선순위·중복 통합을 구현했습니다. [사용법·한계](docs/RELEASE_0.36.0_KR.md)와 [실행 검증](docs/VERIFICATION_0.36.0.json)을 기준으로 확인하세요.
+
+기준: 2026-10-17 (한국 시간) / Workbench 0.36.0 / 실습 사이트 3.5.2 / 별도 Feature Mapper KR 0.3.1.
+
+0.36.0 코드의 GitHub Build and verify와 Linux·Windows 내구성 검사가 모두 통과했습니다. 회귀·HTTP 2,392개, 화면·패키징·배포 지문, 격리 디스크 고갈·복구, 180초 수집과 Windows 반복 저장·PowerShell 검사를 포함합니다. 아래 0.35.1 기록은 이전 배포로 보존합니다.
 
 ## JS 버튼 정돈·2×2 빨간 집계 0.35.1
 
@@ -166,3 +172,4 @@ SCOPE 목록에서 체크한 수동 URL도 SCOPE 수집과 History 가져오기�
 실제 Burp GUI 우클릭 전체 흐름, Scope 목록을 내보내지 않는 버전의 관측 전 URL·고급 규칙 전체 열거, 다시간 수집, Pro Collaborator·외부 BApp, Windows Docker Desktop 전체 구동은 별도 검증 범위입니다. 수동 workflow의 2·3시간 옵션은 실제 실행한 시간과 구분합니다.
 
 main에는 병합한 변경을 기록하고 진행 중인 소유권과 검토는 PR에서 관리합니다. GitHub 변경과 관련된 사용자 요청·응답은 [한국 날짜별 대화 기록](docs/chat-logs/README.md)에 함께 남깁니다. [변경 전 전체 소스 검토](docs/SOURCE_REVIEW_2026-10-15_KR.md)는 당시 진단의 역사 기록으로 보존합니다.
+

@@ -220,7 +220,105 @@
     "후속 자동 탐색은 같은 Origin/SCOPE의 구체적인 GET 후보와 설정한 깊이·요청 예산 안에서만 수행합니다."
   ],
   "remote": {
-    "status": "pending",
-    "note": "최종 소스 PR head의 Build·Windows·Linux 검사를 확인한 뒤 병합 기록을 갱신합니다."
+    "status": "passed",
+    "pr": 63,
+    "head": "7eb7ebfcf9a37dd713a14ba4907706b55d6c4cff",
+    "mergeCommit": "d1766196554b44f72e1c4d2ace738ba0b18b9cf3",
+    "mergeTree": "e5b9a860ae0c9bc66baad39147c3b9587440bcd6",
+    "headTreeMatchesMergeTree": true,
+    "runs": [
+      {
+        "id": 39058261398,
+        "name": "Build and verify",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39058261398"
+      },
+      {
+        "id": 39058261358,
+        "name": "Capture durability and Windows verification",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39058261358"
+      }
+    ],
+    "jobs": [
+      {
+        "id": 117470625209,
+        "name": "check",
+        "conclusion": "success"
+      },
+      {
+        "id": 117470625173,
+        "name": "windows",
+        "conclusion": "success"
+      },
+      {
+        "id": 117470625301,
+        "name": "isolated-disk-and-soak",
+        "conclusion": "success"
+      }
+    ],
+    "logVerification": {
+      "totalChecks": 2805,
+      "regressionChecks": 2305,
+      "newEnvironmentChecks": 72,
+      "payloadHttpChecks": 132,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "packagingChecks": 6,
+      "versionedDownloadsAndSources": "passed"
+    },
+    "resumeEnvironment": {
+      "artifactSource": "GitHub checkout of verified PR head",
+      "jarAndSourceZipSha256": "passed",
+      "zipCrc": "passed",
+      "sourceArchiveFingerprints": 227,
+      "currentSourceFingerprint": "passed",
+      "command": "python tools/package_downloads.py --verify",
+      "productRegressionTestsRerun": false,
+      "uiRerun": false,
+      "packagingUnitTests": {
+        "command": "python -m unittest discover -s tools -p 'test_*.py' -v",
+        "tests": 6,
+        "result": "passed",
+        "note": "테스트 내부의 0.37.0/3.6.0 fixture 출력은 현재 제품 release 검사 결과로 집계하지 않습니다."
+      }
+    },
+    "note": "PR head 원격 로그·현재 환경의 배포 파일 무결성을 재확인했습니다. 기존 로컬 제품 회귀·화면 기록은 이번 실행으로 합산하지 않습니다.",
+    "postMerge": {
+      "status": "passed",
+      "commit": "d1766196554b44f72e1c4d2ace738ba0b18b9cf3",
+      "runs": [
+        {
+          "id": 39065627464,
+          "name": "Build and verify",
+          "conclusion": "success",
+          "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39065627464"
+        },
+        {
+          "id": 39065627462,
+          "name": "Capture durability and Windows verification",
+          "conclusion": "success",
+          "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39065627462"
+        }
+      ],
+      "jobs": [
+        {
+          "id": 117492559452,
+          "name": "check",
+          "conclusion": "success"
+        },
+        {
+          "id": 117492559633,
+          "name": "windows",
+          "conclusion": "success"
+        },
+        {
+          "id": 117492559819,
+          "name": "isolated-disk-and-soak",
+          "conclusion": "success"
+        }
+      ],
+      "note": "병합 커밋의 Build·Windows·Linux 별도 자동 재검사가 모두 성공했습니다. 반복 검사는 고유 검사 수에 더하지 않습니다."
+    }
   }
 }

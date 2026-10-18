@@ -1,5 +1,11 @@
 # 공개 실습 앱을 이용한 Workbench 실제 검증
 
+현재 하네스는 기본적으로 소스의 확장 버전을 사용합니다. `--extension-version 0.44.0`으로 이전 JAR를 지정하거나 `--extension-jar /absolute/path/to/built.jar`로 개발 빌드를 지정할 수 있습니다. 최신 하네스는 AU-07의 빈 응답 판정과 JS-03의 main.js 결과 보존 조건을 더 엄격히 검사합니다. 아래 0.44.0 기록은 당시의 검사 결과를 보존한 것입니다.
+
+0.45.0 구현과 재검증은 [변경 안내](../../docs/RELEASE_0.45.0_KR.md)와 `results/0.45.0/`에서 확인합니다. 기능 조건 33개·브라우저 5개를 모두 통과했고, 기본 규칙은 TP6·FP0·TN9·보류3, 대상 규칙 재검사 6칸은 TN6·보류0입니다. 기본 규칙의 빈 200은 확정 차단 대신 보류합니다. 결과 디렉터리의 `account-results.csv`는 기준 계정을 포함한 32칸의 개별 사유를 제공하며 집계에서는 기준 8칸을 제외합니다.
+
+`export_results.py`와 `make_report.py`는 0.44.0 최초 보고서용입니다. 새 버전 결과는 회귀 요약·배포 파일을 인자로 받는 `export_upgrade.py`로 별도 경로에 내보냅니다. `make_upgrade_report.py`는 이 내보내기 결과와 `--font`, `--out`을 받아 0.45.0 전후 비교 PDF를 생성합니다. 재현할 때 `run_lab.py`에 `--extension-version 0.45.0`을 지정하며 기본값은 현재 소스 버전입니다. `--extension-jar`로 정확한 배포 파일도 지정할 수 있습니다.
+
 2026-10-18 KST에 Workbench 0.44.0 배포 JAR를 실제 Burp Community 2026.3.3에 로드하고, 개인용 로컬 Juice Shop 20.3.0을 Chromium 146으로 사용했다. 제품 소스와 기존 배포 파일은 변경하지 않았다.
 
 결과는 `results/2026-10-18/summary.json`, `checks.csv`, `auth-comparisons.json` 순서로 읽는다. **33개 기능 조건 중 28개 충족, 5개 미충족**, 브라우저 흐름 5개 통과. 자체 로컬 실습 대상의 대표 흐름만 확인한 결과다.

@@ -1,0 +1,1 @@
+[{"url":"http://127.0.0.1:24540/","location":"Header: Content-Security-Policy","rule":"HTML 응답 헤더 검토","evidence":"헤더 미관측 · 정책 적합성 수동 검토"},{"url":"http://127.0.0.1:24540/socket.io/","location":"Header: X-Content-Type-Options","rule":"HTML 응답 헤더 검토","evidence":"헤더 미관측 · 정책 적합성 수동 검토"}]

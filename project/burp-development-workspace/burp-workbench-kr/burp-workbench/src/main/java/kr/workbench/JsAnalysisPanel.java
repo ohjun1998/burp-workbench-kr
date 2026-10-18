@@ -902,25 +902,34 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
 
   private void analyzeText(String text, String url, boolean manual, long token, String[] packet, String contentType,String document) {
     if (closed.get() || token != epoch.get()) return;
-    var linked=modules.link(url,text,document);
+    JsModuleLinks.Linked linked;
+    try{linked=modules.link(url,text,document);}catch(RuntimeException|LinkageError|StackOverflowError error){linked=new JsModuleLinks.Linked(text,"",List.of());failed.incrementAndGet();}
     String key = safeSource(url), hash = fingerprint(text+"\nDOCUMENT:"+Objects.toString(document,"")+"\nMODULES:"+linked.prefix());
     if(archive!=null)try{archive.load();key=archive.versionKey(key,hash);}catch(Exception ex){onEdt(()->status.setText("분석 이력 읽기 실패 · 메모리 분석 계속"));}
     final String analysisKey=key;
     JsAnalysis.Result result;
     boolean moduleChanged=false;
+    boolean legacy=manual&&contentType.isBlank()&&document==null;
     try {
-      boolean legacy=manual&&contentType.isBlank()&&document==null;
       result = linked.used()?JsModuleLinks.analyze(linked,url,contentType,document):legacy?JsAnalysis.analyze(text,url,contentType):JsBatchAnalysis.analyze(text,url,contentType,document);
+    } catch (RuntimeException|LinkageError|StackOverflowError error) {
+      failed.incrementAndGet();
+      try{
+        var fallback=JsBatchAnalysis.analyze(text,url,contentType,document);
+        result=partial(fallback,"문맥 분석 실패("+error.getClass().getSimpleName()+") · 원본 구간 후보 보존");
+      }catch(RuntimeException|LinkageError|StackOverflowError fallbackError){
+        result = new JsAnalysis.Result(List.of(), List.of(), "분석 실패 · "+fallbackError.getClass().getSimpleName()+" · 입력/지원 문법 확인", true);
+      }
+    }
+    // Metadata failures must never replace already recovered endpoints with an empty result.
+    try{
       moduleChanged=modules.remember(url,text,document);
       if(archive!=null&&versions.forSource(url).isEmpty()){
         var previous=archive.versions(url);if(!previous.isEmpty()){var prior=previous.get(previous.size()-1);var priorResult=archive.resultMetadata(prior.key());if(priorResult!=null)versions.recordAt(url,prior.fingerprint(),priorResult,archive.time(prior.key()));}
       }
       versions.record(url,hash,result);rememberVersionHash(analysisKey,hash);
       if(!legacy)result=JsFindingGroups.group(result);
-    } catch (Throwable e) {
-      failed.incrementAndGet();
-      result = new JsAnalysis.Result(List.of(), List.of(), "분석 실패 · 입력/지원 문법 확인", true);
-    }
+    }catch(Exception|LinkageError|StackOverflowError error){failed.incrementAndGet();result=partial(result,"이력/묶음 처리 실패("+error.getClass().getSimpleName()+") · 발견 후보 보존");}
     if (token != epoch.get() || closed.get()) return;
     if(moduleChanged)for(var dependent:modules.dependents(url))enqueue(()->analyzeText(dependent.text(),dependent.source(),false,token,null,"application/javascript",dependent.document()),false,JsSourceCache.textBytes(dependent.text()));
     JsAnalysis.Result done = result;
@@ -949,6 +958,10 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
           } else status.setText("History 분석 저장: " + analysisKey + " · 분석 목록에서 선택하세요.");
           refreshProgress();
         });
+  }
+
+  static JsAnalysis.Result partial(JsAnalysis.Result result,String note){
+    return new JsAnalysis.Result(result.endpoints(),result.secrets(),result.status()+" · "+note,true,result.miner(),result.requestDrafts());
   }
 
   void render(JsAnalysis.Result r) {

@@ -1,0 +1,33 @@
+﻿mode,comparison,path,actor,reference,policy,status,protectedDataObserved,verdict,metric,reason
+default,AUTH-01,/api/Users,admin,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+default,AUTH-01,/api/Users,alice,False,DENY,200,True,SUSPECT,TP,우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-01,/api/Users,bob,False,DENY,200,True,SUSPECT,TP,우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-01,/api/Users,anonymous,False,DENY,401,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · HTTP 401
+default,AUTH-02,/rest/basket/6,admin,False,DENY,200,True,SUSPECT,TP,우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-02,/rest/basket/6,alice,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+default,AUTH-02,/rest/basket/6,bob,False,DENY,200,True,SUSPECT,TP,우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-02,/rest/basket/6,anonymous,False,DENY,401,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · HTTP 401
+default,AUTH-03,/rest/basket/7,admin,False,DENY,200,True,SUSPECT,TP,우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-03,/rest/basket/7,alice,False,DENY,200,True,SUSPECT,TP,우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-03,/rest/basket/7,bob,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+default,AUTH-03,/rest/basket/7,anonymous,False,DENY,401,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · HTTP 401
+default,AUTH-04,/api/Addresss/7,admin,False,DENY,400,False,REVIEW,REVIEW,판정 보류 · HTTP 400
+default,AUTH-04,/api/Addresss/7,alice,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+default,AUTH-04,/api/Addresss/7,bob,False,DENY,400,False,REVIEW,REVIEW,판정 보류 · HTTP 400
+default,AUTH-04,/api/Addresss/7,anonymous,False,DENY,401,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · HTTP 401
+default,AUTH-05,/api/Products/1,admin,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+default,AUTH-05,/api/Products/1,alice,False,ALLOW,200,True,BLOCKED,TN,공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-05,/api/Products/1,bob,False,ALLOW,200,True,BLOCKED,TN,공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-05,/api/Products/1,anonymous,False,ALLOW,200,True,BLOCKED,TN,공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-06,/rest/user/whoami,admin,False,ALLOW,200,True,BLOCKED,TN,공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-06,/rest/user/whoami,alice,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+default,AUTH-06,/rest/user/whoami,bob,False,ALLOW,200,True,BLOCKED,TN,공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+default,AUTH-06,/rest/user/whoami,anonymous,False,DENY,200,False,REVIEW,REVIEW,판정 보류 · 성공 응답의 사용자/자료가 비어 있음 · 접근 성공·차단 모두 미확정
+targetSpecificRules,CONF-01,/rest/user/whoami,admin,False,ALLOW,200,True,BLOCKED,TN,공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+targetSpecificRules,CONF-01,/rest/user/whoami,alice,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+targetSpecificRules,CONF-01,/rest/user/whoami,bob,False,ALLOW,200,True,BLOCKED,TN,공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인
+targetSpecificRules,CONF-01,/rest/user/whoami,anonymous,False,DENY,200,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · 응답 차단 규칙 1 · 본문 정규식
+targetSpecificRules,CONF-02,/api/Addresss/7,admin,False,DENY,400,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · 응답 차단 규칙 2 · 본문 문자열
+targetSpecificRules,CONF-02,/api/Addresss/7,alice,True,ALLOW,200,True,NONE,REFERENCE,원본과 동일 인증 · 교차 인가 미검증
+targetSpecificRules,CONF-02,/api/Addresss/7,bob,False,DENY,400,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · 응답 차단 규칙 2 · 본문 문자열
+targetSpecificRules,CONF-02,/api/Addresss/7,anonymous,False,DENY,401,False,BLOCKED,TN,차단 근거 확인 · 기대 DENY · HTTP 401

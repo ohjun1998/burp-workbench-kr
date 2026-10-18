@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Run released Workbench against an isolated, offline OWASP Juice Shop instance."""
-import argparse,base64,hashlib,json,os,socket,subprocess,time,urllib.request,urllib.error,http.client
+import argparse,base64,hashlib,json,os,socket,subprocess,time,urllib.request,urllib.error,http.client,runpy
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-p=argparse.ArgumentParser();p.add_argument('--target',type=Path,required=True);p.add_argument('--preload',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--burp',type=Path);p.add_argument('--java21',type=Path);p.add_argument('--chromium',type=Path);p.add_argument('--probe',action='store_true');args=p.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--target',type=Path,required=True);p.add_argument('--preload',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--burp',type=Path);p.add_argument('--java21',type=Path);p.add_argument('--chromium',type=Path);p.add_argument('--probe',action='store_true');p.add_argument('--extension-version',default=runpy.run_path(str(ROOT/'project/burp-development-workspace/burp-workbench-kr/burp-workbench/release_info.py'))['VERSION']);p.add_argument('--extension-jar',type=Path);args=p.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=True)
 base='http://127.0.0.1:24540';op=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 def req(path,body=None,actor=None,method=None):
  h={'Content-Type':'application/json'}
@@ -54,7 +54,7 @@ try:
  state=out/'private-state.json';state.write_text(json.dumps(dict(base=base,actors=actors,password='LocalWorkbench2026!')));state.chmod(0o600)
  if not args.probe:
   assert args.burp and args.java21 and args.chromium
-  wb=ROOT/'project/burp-development-workspace/burp-workbench-kr/burp-workbench';jar=ROOT/'downloads/extensions/0.44.0/burp-workbench-kr-0.44.0.jar';classes=out/'classes';classes.mkdir(exist_ok=True)
+  wb=ROOT/'project/burp-development-workspace/burp-workbench-kr/burp-workbench';jar=args.extension_jar.resolve() if args.extension_jar else ROOT/'downloads/extensions'/args.extension_version/('burp-workbench-kr-'+args.extension_version+'.jar');classes=out/'classes';classes.mkdir(exist_ok=True)
   cp=os.pathsep.join(map(str,[jar,wb/'deps/montoya-2026.jar',wb/'deps/legacy-api.jar']))
   subprocess.run(['java','com.sun.tools.javac.Main','--release','17','-encoding','UTF-8','-cp',cp,'-d',str(classes),str(ROOT/'audit/oss-lab/NativeOssLab.java')],check=True)
   home=out/'private-home';home.mkdir(exist_ok=True);data=out/'private-burp';data.mkdir(exist_ok=True)

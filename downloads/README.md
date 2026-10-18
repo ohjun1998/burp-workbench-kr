@@ -6,12 +6,12 @@
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| 최신 확장 · 응답 형식·쓰기 보류 사유 개선 | 0.44.0 | [JAR](extensions/0.44.0/burp-workbench-kr-0.44.0.jar) · [소스](extensions/0.44.0/burp-workbench-kr-0.44.0-source.zip) |
+| 최신 확장 · 메뉴 유지·계정·JS·SQL·저장 흐름 개선 | 0.45.0 | [JAR](extensions/0.45.0/burp-workbench-kr-0.45.0.jar) · [소스](extensions/0.45.0/burp-workbench-kr-0.45.0-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.10.0 | [community-security-lab-3.10.0-docker.zip](docker/3.10.0/community-security-lab-3.10.0-docker.zip) |
 | Feature Mapper JAR·브라우저 도우미·소스 | 0.3.1 | [다운로드](feature-mapper/0.3.1/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
-[0.44.0 계정 판정·쓰기 사유 개선](../docs/RELEASE_0.44.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.44.0.json)
+[0.45.0 변경과 Juice Shop 재검증](../docs/RELEASE_0.45.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.45.0.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 

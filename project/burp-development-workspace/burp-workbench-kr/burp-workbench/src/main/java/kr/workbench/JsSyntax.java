@@ -5,16 +5,37 @@ final class JsSyntax {
  record Token(String text,int start,int end,boolean quoted){}
  record Compatible(String text,boolean changed){}
  static List<Token> tokens(String source){
-  List<Token> out=new ArrayList<>();String previous="";
-  for(int i=0;i<source.length()&&out.size()<100000;){char c=source.charAt(i);if(Character.isWhitespace(c)){i++;continue;}
-   if(c=='/'&&i+1<source.length()&&source.charAt(i+1)=='/'){int n=source.indexOf('\n',i+2);i=n<0?source.length():n;continue;}
-   if(c=='/'&&i+1<source.length()&&source.charAt(i+1)=='*'){int n=source.indexOf("*/",i+2);i=n<0?source.length():n+2;continue;}
-   int start=i;
-   if(c=='\''||c=='"'||c=='`'){i++;while(i<source.length()){char x=source.charAt(i++);if(x=='\\'&&i<source.length())i++;else if(x==c)break;}out.add(new Token(source.substring(start,i),start,i,true));previous="literal";continue;}
-   if(c=='/'&&Set.of("","=","(","[",",",":","return","!","&&","||","=>").contains(previous)){boolean bracket=false;i++;while(i<source.length()){char x=source.charAt(i++);if(x=='\\'&&i<source.length())i++;else if(x=='[')bracket=true;else if(x==']')bracket=false;else if(x=='/'&&!bracket)break;else if(x=='\n')break;}while(i<source.length()&&Character.isLetter(source.charAt(i)))i++;previous="regex";continue;}
-   if(Character.isJavaIdentifierStart(c)||c=='$'){i++;while(i<source.length()&&(Character.isJavaIdentifierPart(source.charAt(i))||source.charAt(i)=='$'))i++;}else{i++;if(i<source.length()&&source.substring(start,Math.min(source.length(),start+2)).matches("=>|&&|\\|\\||\\?\\?"))i++;}
-   previous=source.substring(start,i);out.add(new Token(previous,start,i,false));
-  }return out;
+  List<Token> out=new ArrayList<>();Cursor cursor=new Cursor(source);Token token;
+  while(out.size()<100000&&(token=cursor.next())!=null)out.add(token);
+  return out;
+ }
+ /** Streaming lexer for large bundles; callers supply their own time/result budgets. */
+ static final class Cursor {
+  final String source;int position;String previous="";
+  Cursor(String source){this.source=source;}
+  Token next(){
+   while(position<source.length()){
+    char c=source.charAt(position);
+    if(Character.isWhitespace(c)){position++;continue;}
+    if(c=='/'&&position+1<source.length()&&source.charAt(position+1)=='/'){int n=source.indexOf('\n',position+2);position=n<0?source.length():n;continue;}
+    if(c=='/'&&position+1<source.length()&&source.charAt(position+1)=='*'){int n=source.indexOf("*/",position+2);position=n<0?source.length():n+2;continue;}
+    int start=position++;
+    if(c=='\''||c=='"'||c=='`'){
+     while(position<source.length()){char x=source.charAt(position++);if(x=='\\'&&position<source.length())position++;else if(x==c)break;}
+     previous="literal";return new Token(source.substring(start,position),start,position,true);
+    }
+    if(c=='/'&&Set.of("","=","(","[",",",":","return","!","&&","||","=>").contains(previous)){
+     boolean bracket=false;
+     while(position<source.length()){char x=source.charAt(position++);if(x=='\\'&&position<source.length())position++;else if(x=='[')bracket=true;else if(x==']')bracket=false;else if(x=='/'&&!bracket)break;else if(x=='\n')break;}
+     while(position<source.length()&&Character.isLetter(source.charAt(position)))position++;
+     previous="regex";continue;
+    }
+    if(Character.isJavaIdentifierStart(c)||c=='$'){while(position<source.length()&&(Character.isJavaIdentifierPart(source.charAt(position))||source.charAt(position)=='$'))position++;}
+    else if(position<source.length()&&source.substring(start,Math.min(source.length(),start+2)).matches("=>|&&|\\|\\||\\?\\?"))position++;
+    previous=source.substring(start,position);return new Token(previous,start,position,false);
+   }
+   return null;
+  }
  }
  static Compatible compatible(String source){char[] chars=source.toCharArray();boolean changed=false;List<Token> ts=tokens(source);
   for(int i=0;i<ts.size();i++){Token t=ts.get(i);if(t.quoted)continue;String prev=i==0?"":ts.get(i-1).text,next=i+1==ts.size()?"":ts.get(i+1).text;if(prev.equals(".")||next.equals(":"))continue;

@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public final class TrafficSearchUpgradeTest extends WorkbenchTest {
   static void edt(Runnable r)throws Exception{SwingUtilities.invokeAndWait(r);}
-  static void idle(TrafficBrowser browser)throws Exception{long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(8);for(;;){AtomicBoolean done=new AtomicBoolean();edt(()->done.set(browser.idle()));if(done.get())return;if(System.nanoTime()>end)throw new AssertionError("traffic search timeout");Thread.sleep(15);}}
+  static void idle(TrafficBrowser browser)throws Exception{long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(8);for(;;){AtomicBoolean done=new AtomicBoolean();edt(()->done.set(browser.idle()&&browser.scanned==browser.store.get().size()&&browser.text.equals(browser.search.getText().strip())));if(done.get())return;if(System.nanoTime()>end)throw new AssertionError("traffic search timeout");Thread.sleep(15);}}
   public static void main(String[] args)throws Exception{
     installTrafficPacketFactory();
     var q=TrafficQuery.defaults();check(q.matchesMeta("GET","https://t.test/users", "200","","users",()->false),"literal metadata search matches URL");

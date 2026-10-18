@@ -1,0 +1,438 @@
+{
+  "default": [
+    {
+      "baselineActor": "admin",
+      "path": "/api/Users",
+      "id": "AUTH-01",
+      "groundTruthRule": "users",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 2 · 차단 1 · 허용 정책 일치 0 · 확인 필요 0 · 비교 미성립 0 · 실제 권한 위반 여부는 상세 근거로 확인하세요.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "alice",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "SUSPECT",
+          "kind": "SUSPECT",
+          "reason": "우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TP"
+        },
+        {
+          "actor": "bob",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "SUSPECT",
+          "kind": "SUSPECT",
+          "reason": "우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TP"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "DENY",
+          "reference": false,
+          "status": 401,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · HTTP 401",
+          "metric": "TN"
+        }
+      ],
+      "summary": "우회 의심"
+    },
+    {
+      "baselineActor": "alice",
+      "path": "/rest/basket/6",
+      "id": "AUTH-02",
+      "groundTruthRule": "basket",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 2 · 차단 1 · 허용 정책 일치 0 · 확인 필요 0 · 비교 미성립 0 · 실제 권한 위반 여부는 상세 근거로 확인하세요.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "SUSPECT",
+          "kind": "SUSPECT",
+          "reason": "우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TP"
+        },
+        {
+          "actor": "alice",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "bob",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "SUSPECT",
+          "kind": "SUSPECT",
+          "reason": "우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TP"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "DENY",
+          "reference": false,
+          "status": 401,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · HTTP 401",
+          "metric": "TN"
+        }
+      ],
+      "summary": "우회 의심"
+    },
+    {
+      "baselineActor": "bob",
+      "path": "/rest/basket/7",
+      "id": "AUTH-03",
+      "groundTruthRule": "basket",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 2 · 차단 1 · 허용 정책 일치 0 · 확인 필요 0 · 비교 미성립 0 · 실제 권한 위반 여부는 상세 근거로 확인하세요.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "SUSPECT",
+          "kind": "SUSPECT",
+          "reason": "우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TP"
+        },
+        {
+          "actor": "alice",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "SUSPECT",
+          "kind": "SUSPECT",
+          "reason": "우회 의심 · 기대 DENY · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TP"
+        },
+        {
+          "actor": "bob",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "DENY",
+          "reference": false,
+          "status": 401,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · HTTP 401",
+          "metric": "TN"
+        }
+      ],
+      "summary": "우회 의심"
+    },
+    {
+      "baselineActor": "alice",
+      "path": "/api/Addresss/7",
+      "id": "AUTH-04",
+      "groundTruthRule": "address",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 0 · 차단 1 · 허용 정책 일치 0 · 확인 필요 2 · 비교 미성립 0 · 일부 결과가 미확인 상태입니다.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "DENY",
+          "reference": false,
+          "status": 400,
+          "protectedDataObserved": false,
+          "verdict": "REVIEW",
+          "kind": "REVIEW",
+          "reason": "판정 보류 · HTTP 400",
+          "metric": "REVIEW"
+        },
+        {
+          "actor": "alice",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "bob",
+          "policy": "DENY",
+          "reference": false,
+          "status": 400,
+          "protectedDataObserved": false,
+          "verdict": "REVIEW",
+          "kind": "REVIEW",
+          "reason": "판정 보류 · HTTP 400",
+          "metric": "REVIEW"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "DENY",
+          "reference": false,
+          "status": 401,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · HTTP 401",
+          "metric": "TN"
+        }
+      ],
+      "summary": "확인 필요"
+    },
+    {
+      "baselineActor": "admin",
+      "path": "/api/Products/1",
+      "id": "AUTH-05",
+      "groundTruthRule": "public",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 0 · 차단 0 · 허용 정책 일치 3 · 확인 필요 0 · 비교 미성립 0 · 설정한 허용/차단 정책과 관측 결과가 일치합니다.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "alice",
+          "policy": "ALLOW",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "BLOCKED",
+          "kind": "ALLOWED",
+          "reason": "공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TN"
+        },
+        {
+          "actor": "bob",
+          "policy": "ALLOW",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "BLOCKED",
+          "kind": "ALLOWED",
+          "reason": "공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TN"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "ALLOW",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "BLOCKED",
+          "kind": "ALLOWED",
+          "reason": "공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TN"
+        }
+      ],
+      "summary": "정책 일치"
+    },
+    {
+      "baselineActor": "alice",
+      "path": "/rest/user/whoami",
+      "id": "AUTH-06",
+      "groundTruthRule": "identity",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 0 · 차단 0 · 허용 정책 일치 2 · 확인 필요 1 · 비교 미성립 0 · 일부 결과가 미확인 상태입니다.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "ALLOW",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "BLOCKED",
+          "kind": "ALLOWED",
+          "reason": "공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TN"
+        },
+        {
+          "actor": "alice",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "bob",
+          "policy": "ALLOW",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "BLOCKED",
+          "kind": "ALLOWED",
+          "reason": "공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TN"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": false,
+          "verdict": "REVIEW",
+          "kind": "INCOMPLETE",
+          "reason": "판정 보류 · 성공 응답의 사용자/자료가 비어 있음 · 접근 성공·차단 모두 미확정",
+          "metric": "REVIEW"
+        }
+      ],
+      "summary": "확인 필요"
+    }
+  ],
+  "targetSpecificRules": [
+    {
+      "baselineActor": "alice",
+      "path": "/rest/user/whoami",
+      "id": "CONF-01",
+      "groundTruthRule": "identity",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 0 · 차단 1 · 허용 정책 일치 2 · 확인 필요 0 · 비교 미성립 0 · 설정한 허용/차단 정책과 관측 결과가 일치합니다.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "ALLOW",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "BLOCKED",
+          "kind": "ALLOWED",
+          "reason": "공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TN"
+        },
+        {
+          "actor": "alice",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "bob",
+          "policy": "ALLOW",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "BLOCKED",
+          "kind": "ALLOWED",
+          "reason": "공개/공유 허용 · 기대 ALLOW · 성공 응답 관측 · 실제 데이터/처리 결과 확인",
+          "metric": "TN"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "DENY",
+          "reference": false,
+          "status": 200,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · 응답 차단 규칙 1 · 본문 정규식",
+          "metric": "TN"
+        }
+      ],
+      "summary": "정책 일치"
+    },
+    {
+      "baselineActor": "alice",
+      "path": "/api/Addresss/7",
+      "id": "CONF-02",
+      "groundTruthRule": "address",
+      "reason": "기준 계정 제외 · 비교 응답 3개 · 우회 의심 0 · 차단 3 · 허용 정책 일치 0 · 확인 필요 0 · 비교 미성립 0 · 비교 대상 모두에서 차단 근거를 확인했습니다.",
+      "cells": [
+        {
+          "actor": "admin",
+          "policy": "DENY",
+          "reference": false,
+          "status": 400,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · 응답 차단 규칙 2 · 본문 문자열",
+          "metric": "TN"
+        },
+        {
+          "actor": "alice",
+          "policy": "ALLOW",
+          "reference": true,
+          "status": 200,
+          "protectedDataObserved": true,
+          "verdict": "NONE",
+          "kind": "REFERENCE",
+          "reason": "원본과 동일 인증 · 교차 인가 미검증",
+          "metric": "REFERENCE"
+        },
+        {
+          "actor": "bob",
+          "policy": "DENY",
+          "reference": false,
+          "status": 400,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · 응답 차단 규칙 2 · 본문 문자열",
+          "metric": "TN"
+        },
+        {
+          "actor": "anonymous",
+          "policy": "DENY",
+          "reference": false,
+          "status": 401,
+          "protectedDataObserved": false,
+          "verdict": "BLOCKED",
+          "kind": "BLOCKED",
+          "reason": "차단 근거 확인 · 기대 DENY · HTTP 401",
+          "metric": "TN"
+        }
+      ],
+      "summary": "차단 응답 확인"
+    }
+  ]
+}

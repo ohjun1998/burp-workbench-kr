@@ -1,0 +1,1 @@
+{"missing":[],"note":"Actual main.js includes these literal paths; a bounded representative check, not global recall","expected":["/rest/user/login","/rest/basket/","/rest/products/search"]}

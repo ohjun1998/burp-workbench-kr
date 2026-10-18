@@ -1,0 +1,392 @@
+{
+  "engine": "real Chromium via private Burp proxy",
+  "version": "146.0.7680.177",
+  "checks": [
+    {
+      "id": "BR-01",
+      "title": "상품 목록 화면 로드",
+      "status": "PASS",
+      "detail": "Real Chromium DOM; public products rendered"
+    },
+    {
+      "id": "BR-02",
+      "title": "Alice 로그인 화면으로 로그인",
+      "status": "PASS",
+      "detail": "Login submitted by browser UI; token excluded from evidence"
+    },
+    {
+      "id": "BR-03",
+      "title": "검색 결과 화면과 실제 API 호출",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-04",
+      "title": "본인 장바구니 화면 표시",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "BR-05",
+      "title": "DOM XSS 브라우저 실행 대조",
+      "status": "PASS",
+      "detail": "Only a local console marker; no network or data exfiltration"
+    }
+  ],
+  "requests": 70,
+  "responses": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rolldown-runtime-BoHGiXSq.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/chunk-DBPdFzgj.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/polyfills.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/styles.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/scripts.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/chunk-1qQQGal7.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/chunk-Cv2YgWUq.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/main.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/socket.io/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-version",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-configuration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-version",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/i18n/en.json",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-configuration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/material-icons-LEZCGFVT.woff2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-configuration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-configuration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-configuration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/JuiceShop_Logo.png",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/languages",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/socket.io/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/socket.io/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-configuration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/products/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/Challenges/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/continue-code",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/socket.io/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/confetti-CBIxuiwe.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/Challenges/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/Quantitys/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/continue-code",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/continue-code",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/continue-code",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/banana_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/basil_smoothie-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/apple_pressings-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/berry_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/artwork2-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/apple_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/dragonfruit_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/braga-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/elderflower_cordial-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/eggfruit_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/fruit_press-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/carrot_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/green_smoothie-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/permafrost-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/socket.io/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/socket.io/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/lemon_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/grape_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/admin/application-configuration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/user/whoami",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/user/whoami",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/rest/user/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/user/whoami",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/user/whoami",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/products/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/basket/6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/Quantitys/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/apple_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/apple_pressings-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/pineapple_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/user/whoami",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/basket/6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/apple_juice-1x.avif",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/rest/products/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/Quantitys/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/public/images/products/no-results.png",
+      "status": 200
+    }
+  ],
+  "scriptErrors": [],
+  "domXssConsoleMarkerExecuted": true,
+  "credentialsIncluded": false
+}

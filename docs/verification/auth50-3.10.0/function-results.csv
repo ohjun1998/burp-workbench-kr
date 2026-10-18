@@ -1,0 +1,101 @@
+﻿setting,featureId,group,name,method,path,baseline,allowedActors,TP,FP,TN,FN,precision,recall,falsePositiveRate,reviewCount,samples
+unconfigured,1,커뮤니티,공개 게시글 목록,GET,feed,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,42,42
+unconfigured,2,커뮤니티,공지사항 조회,GET,announcements,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,42,42
+unconfigured,3,커뮤니티,공개 도움말 조회,GET,help/articles/101,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,42,42
+unconfigured,4,커뮤니티,공개 주제 검색,GET,search/topics,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,42,42
+unconfigured,5,커뮤니티,회원 디렉터리 조회,GET,members/directory,admin,admin/alice/bob,0,0,42,0,,,0.0,28,42
+unconfigured,6,커뮤니티,게시글 작성,POST,posts,admin,admin/alice/bob,0,0,42,0,,,0.0,28,42
+unconfigured,7,커뮤니티,Alice 비공개 글 조회,GET,posts/701,alice,admin/alice,0,0,35,7,,0.0,0.0,21,42
+unconfigured,8,커뮤니티,Alice 임시 글 편집,PATCH,posts/701,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,9,커뮤니티,Bob 게시글 삭제,DELETE,posts/702,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,10,운영,신고 게시글 숨김,POST,moderation/posts/703/hide,admin,admin,0,0,28,14,,0.0,0.0,28,42
+unconfigured,11,댓글,Bob 비공개 댓글 조회,GET,comments/801,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,12,댓글,Alice 댓글 편집,PATCH,comments/802,alice,admin/alice,0,0,35,7,,0.0,0.0,21,42
+unconfigured,13,댓글,Bob 댓글 삭제,DELETE,comments/803,bob,admin/bob,0,0,35,7,,0.0,0.0,21,42
+unconfigured,14,운영,토론 상단 고정,POST,discussions/704/pin,admin,admin,0,0,28,14,,0.0,0.0,28,42
+unconfigured,15,커뮤니티,Alice 글 수정 이력 조회,GET,posts/701/history,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,16,개인정보,Alice 비공개 프로필 조회,GET,profiles/alice/private,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,17,개인정보,Bob 연락처 변경,PATCH,profiles/bob/contact,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,18,개인정보,Alice 개인정보 내보내기,GET,privacy/alice/export,alice,alice,0,0,28,14,,0.0,0.0,28,42
+unconfigured,19,보안,Bob 등록 기기 해제,POST,devices/bob/revoke,bob,bob,0,0,28,14,,0.0,0.0,14,42
+unconfigured,20,보안,Alice API 키 재발급,POST,keys/alice/rotate,alice,alice,0,0,28,14,,0.0,0.0,28,42
+unconfigured,21,개인정보,Bob 알림함 조회,GET,notifications/bob,bob,bob,0,0,28,14,,0.0,0.0,28,42
+unconfigured,22,개인정보,Alice 알림 읽음 처리,POST,notifications/alice/read,alice,alice,0,0,28,14,,0.0,0.0,28,42
+unconfigured,23,개인정보,Bob 저장 검색 삭제,DELETE,saved-searches/bob/901,bob,bob,0,0,28,14,,0.0,0.0,28,42
+unconfigured,24,보안,Alice 보안 이력 조회,GET,security/alice/audit,alice,alice,0,0,28,14,,0.0,0.0,14,42
+unconfigured,25,운영,사용자 이용 제한,POST,administration/accounts/42/lock,admin,admin,0,0,28,14,,0.0,0.0,14,42
+unconfigured,26,교육,공개 강의 목록,GET,courses/catalog,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,42,42
+unconfigured,27,교육,팀 A 강의 자료 조회,GET,courses/team-a/lesson/11,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,28,교육,강의 수강 신청,POST,enrollments,admin,admin/alice/bob,0,0,42,0,,,0.0,28,42
+unconfigured,29,교육,Alice 수강 신청 취소,POST,enrollments/alice/31/cancel,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,30,교육,Bob 수강 승인,POST,enrollments/bob/32/approve,admin,admin,0,0,28,14,,0.0,0.0,14,42
+unconfigured,31,교육,Bob 수료증 조회,GET,certificates/bob/41,bob,admin/bob,0,0,35,7,,0.0,0.0,21,42
+unconfigured,32,행사,Alice 행사 참가 등록,POST,events/alice/51/register,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,33,행사,Bob 행사 예약 취소,DELETE,events/bob/52/reservation,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,34,결제,Alice 결제 환불,POST,orders/alice/61/refund,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,35,결제,Bob 결제 청구서 조회,GET,invoices/bob/62,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,36,조직,팀 A 비공개 문서 조회,GET,teams/a/documents/71,alice,admin/alice,0,0,35,7,,0.0,0.0,21,42
+unconfigured,37,조직,팀 B 위키 편집,PATCH,teams/b/wiki/72,bob,admin/bob,0,0,35,7,,0.0,0.0,21,42
+unconfigured,38,조직,팀 A 구성원 초대,POST,teams/a/invitations,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,39,조직,팀 B 구성원 내보내기,DELETE,teams/b/members/73,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,40,조직,팀 A 보고서 내보내기,GET,teams/a/reports/export,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,41,파일,Alice 첨부파일 등록,POST,attachments/alice,alice,admin/alice,0,0,35,7,,0.0,0.0,28,42
+unconfigured,42,파일,Bob 비공개 파일 다운로드,GET,files/bob/82/download,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,43,파일,Alice 파일 공유 링크 생성,POST,files/alice/83/share,alice,admin/alice,0,0,35,7,,0.0,0.0,21,42
+unconfigured,44,파일,Bob 파일 공유 링크 폐기,DELETE,files/bob/84/share,bob,admin/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,45,협업,공동 프로젝트 보드 조회,GET,projects/shared/board,alice,alice/bob,0,0,35,7,,0.0,0.0,28,42
+unconfigured,46,운영,관리자 사용 현황 조회,GET,administration/usage,admin,admin,0,0,28,14,,0.0,0.0,28,42
+unconfigured,47,운영,전체 회원 정보 내보내기,GET,administration/members/export,admin,admin,0,0,28,14,,0.0,0.0,28,42
+unconfigured,48,운영,게시판 운영 역할 부여,PUT,administration/roles/43,admin,admin,0,0,28,14,,0.0,0.0,14,42
+unconfigured,49,지원,Alice 문의 내용 조회,GET,support/alice/91,alice,admin/alice,0,0,35,7,,0.0,0.0,21,42
+unconfigured,50,지원,Bob 문의 완료 처리,POST,support/bob/92/close,bob,admin/bob,0,0,35,7,,0.0,0.0,21,42
+configured,1,커뮤니티,공개 게시글 목록,GET,feed,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,0,42
+configured,2,커뮤니티,공지사항 조회,GET,announcements,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,0,42
+configured,3,커뮤니티,공개 도움말 조회,GET,help/articles/101,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,0,42
+configured,4,커뮤니티,공개 주제 검색,GET,search/topics,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,0,42
+configured,5,커뮤니티,회원 디렉터리 조회,GET,members/directory,admin,admin/alice/bob,0,0,42,0,,,0.0,0,42
+configured,6,커뮤니티,게시글 작성,POST,posts,admin,admin/alice/bob,0,0,42,0,,,0.0,14,42
+configured,7,커뮤니티,Alice 비공개 글 조회,GET,posts/701,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,0,42
+configured,8,커뮤니티,Alice 임시 글 편집,PATCH,posts/701,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,9,커뮤니티,Bob 게시글 삭제,DELETE,posts/702,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42
+configured,10,운영,신고 게시글 숨김,POST,moderation/posts/703/hide,admin,admin,14,0,28,0,1.0,1.0,0.0,28,42
+configured,11,댓글,Bob 비공개 댓글 조회,GET,comments/801,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,0,42
+configured,12,댓글,Alice 댓글 편집,PATCH,comments/802,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,13,댓글,Bob 댓글 삭제,DELETE,comments/803,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42
+configured,14,운영,토론 상단 고정,POST,discussions/704/pin,admin,admin,14,0,28,0,1.0,1.0,0.0,28,42
+configured,15,커뮤니티,Alice 글 수정 이력 조회,GET,posts/701/history,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,0,42
+configured,16,개인정보,Alice 비공개 프로필 조회,GET,profiles/alice/private,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,0,42
+configured,17,개인정보,Bob 연락처 변경,PATCH,profiles/bob/contact,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42
+configured,18,개인정보,Alice 개인정보 내보내기,GET,privacy/alice/export,alice,alice,14,14,14,0,0.5,1.0,0.5,0,42
+configured,19,보안,Bob 등록 기기 해제,POST,devices/bob/revoke,bob,bob,14,0,28,0,1.0,1.0,0.0,28,42
+configured,20,보안,Alice API 키 재발급,POST,keys/alice/rotate,alice,alice,14,0,28,0,1.0,1.0,0.0,28,42
+configured,21,개인정보,Bob 알림함 조회,GET,notifications/bob,bob,bob,14,0,28,0,1.0,1.0,0.0,0,42
+configured,22,개인정보,Alice 알림 읽음 처리,POST,notifications/alice/read,alice,alice,14,0,28,0,1.0,1.0,0.0,28,42
+configured,23,개인정보,Bob 저장 검색 삭제,DELETE,saved-searches/bob/901,bob,bob,14,0,28,0,1.0,1.0,0.0,28,42
+configured,24,보안,Alice 보안 이력 조회,GET,security/alice/audit,alice,alice,14,0,28,0,1.0,1.0,0.0,0,42
+configured,25,운영,사용자 이용 제한,POST,administration/accounts/42/lock,admin,admin,14,0,28,0,1.0,1.0,0.0,28,42
+configured,26,교육,공개 강의 목록,GET,courses/catalog,alice,admin/alice/bob/anonymous,0,0,42,0,,,0.0,0,42
+configured,27,교육,팀 A 강의 자료 조회,GET,courses/team-a/lesson/11,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,0,42
+configured,28,교육,강의 수강 신청,POST,enrollments,admin,admin/alice/bob,0,0,42,0,,,0.0,14,42
+configured,29,교육,Alice 수강 신청 취소,POST,enrollments/alice/31/cancel,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,30,교육,Bob 수강 승인,POST,enrollments/bob/32/approve,admin,admin,14,0,28,0,1.0,1.0,0.0,28,42
+configured,31,교육,Bob 수료증 조회,GET,certificates/bob/41,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,0,42
+configured,32,행사,Alice 행사 참가 등록,POST,events/alice/51/register,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,33,행사,Bob 행사 예약 취소,DELETE,events/bob/52/reservation,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42
+configured,34,결제,Alice 결제 환불,POST,orders/alice/61/refund,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,35,결제,Bob 결제 청구서 조회,GET,invoices/bob/62,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,0,42
+configured,36,조직,팀 A 비공개 문서 조회,GET,teams/a/documents/71,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,0,42
+configured,37,조직,팀 B 위키 편집,PATCH,teams/b/wiki/72,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42
+configured,38,조직,팀 A 구성원 초대,POST,teams/a/invitations,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,39,조직,팀 B 구성원 내보내기,DELETE,teams/b/members/73,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42
+configured,40,조직,팀 A 보고서 내보내기,GET,teams/a/reports/export,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,7,42
+configured,41,파일,Alice 첨부파일 등록,POST,attachments/alice,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,42,파일,Bob 비공개 파일 다운로드,GET,files/bob/82/download,bob,admin/bob,7,7,28,0,0.5,1.0,0.2,0,42
+configured,43,파일,Alice 파일 공유 링크 생성,POST,files/alice/83/share,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,21,42
+configured,44,파일,Bob 파일 공유 링크 폐기,DELETE,files/bob/84/share,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42
+configured,45,협업,공동 프로젝트 보드 조회,GET,projects/shared/board,alice,alice/bob,7,0,35,0,1.0,1.0,0.0,0,42
+configured,46,운영,관리자 사용 현황 조회,GET,administration/usage,admin,admin,14,0,28,0,1.0,1.0,0.0,0,42
+configured,47,운영,전체 회원 정보 내보내기,GET,administration/members/export,admin,admin,14,0,28,0,1.0,1.0,0.0,0,42
+configured,48,운영,게시판 운영 역할 부여,PUT,administration/roles/43,admin,admin,14,0,28,0,1.0,1.0,0.0,28,42
+configured,49,지원,Alice 문의 내용 조회,GET,support/alice/91,alice,admin/alice,7,0,35,0,1.0,1.0,0.0,0,42
+configured,50,지원,Bob 문의 완료 처리,POST,support/bob/92/close,bob,admin/bob,7,0,35,0,1.0,1.0,0.0,21,42

@@ -5,6 +5,7 @@ import base64
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import socket
@@ -83,7 +84,7 @@ def main():
                 extension = json.loads((args.out / 'extension-results.json').read_text());assert extension['result'] == 'passed'
                 if args.browser:
                     subprocess.run(['node', str(ROOT / 'tools/auth_lab_ui_checks.mjs'), base, str(args.out)], check=True, cwd=ROOT)
-                summary = {'result': 'passed', 'labVersion': '3.9.0', 'extensionVersion': '0.43.0', 'extensionJarSha256': hashlib.sha256(jar.read_bytes()).hexdigest(), 'transport': extension['transport'], 'nativeExtensionLoaded': extension['nativeExtensionLoaded'], 'httpChecks': http['checks'], 'httpTargetRequests': http['targetHttpRequests'], 'extensionComparisonRuns': extension['comparisonRuns'], 'extensionComparedAccountCells': extension['comparedAccountCells'], 'extensionIdentityChecks': len(extension['identityChecks']), 'extensionTargetRequests': extension['targetHttpRequests'], 'baseUrl': base, 'database': 'isolated H2 in Oracle compatibility mode', 'browserExecuted': args.browser, 'privateProfile': True, 'credentialsIncludedInEvidence': False}
+                summary = {'result': 'passed', 'labVersion': re.search(r'<artifactId>loop-community-lab</artifactId><version>([^<]+)', (LAB/'pom.xml').read_text()).group(1), 'extensionVersion': '0.43.0', 'extensionJarSha256': hashlib.sha256(jar.read_bytes()).hexdigest(), 'transport': extension['transport'], 'nativeExtensionLoaded': extension['nativeExtensionLoaded'], 'httpChecks': http['checks'], 'httpTargetRequests': http['targetHttpRequests'], 'extensionComparisonRuns': extension['comparisonRuns'], 'extensionComparedAccountCells': extension['comparedAccountCells'], 'extensionIdentityChecks': len(extension['identityChecks']), 'extensionTargetRequests': extension['targetHttpRequests'], 'baseUrl': base, 'database': 'isolated H2 in Oracle compatibility mode', 'browserExecuted': args.browser, 'privateProfile': True, 'credentialsIncludedInEvidence': False}
                 if args.mode == 'native':summary.update({'burpVersion': extension['burpVersion'], 'javaVersion':extension['javaVersion'], 'hostUiWarningCount':(args.out/'extension.log').read_text().count('java.lang.Error: no ComponentUI'), 'burpJarSha256': hashlib.sha256(args.burp_jar.read_bytes()).hexdigest()})
                 (args.out / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n');success = True;print(json.dumps(summary, ensure_ascii=False), flush=True)
         finally:

@@ -13,6 +13,7 @@ def main():
     parser.add_argument('--java',default='java')
     parser.add_argument('--node',default='node')
     parser.add_argument('--out',type=Path,default=ROOT/'tmp/community-ui')
+    parser.add_argument('--auth50',action='store_true',help='Run fifty-function authorization UI checks')
     parser.add_argument('--auth-lab',action='store_true',help='Run the authentication lab browser scenarios')
     parser.add_argument('--auth-smoke',action='store_true',help='Run the deployment authentication checks on isolated H2')
     args=parser.parse_args();args.out=args.out.resolve()
@@ -53,7 +54,7 @@ def main():
                 (args.out/'results.json').write_text(json.dumps({'result':'passed','checks':count,'cases':cases,'environment':'isolated H2; Oracle execution is recorded separately'},ensure_ascii=False,indent=2)+'\n')
                 print('Authentication deployment checks:',count,'passed')
             else:
-                checks=ROOT/'tools'/('auth_lab_ui_checks.mjs' if args.auth_lab else 'community_ui_checks.mjs')
+                checks=ROOT/'tools'/('auth50_ui_checks.mjs' if args.auth50 else 'auth_lab_ui_checks.mjs' if args.auth_lab else 'community_ui_checks.mjs')
                 subprocess.run([args.node,str(checks),base,str(args.out)],check=True,cwd=ROOT)
     finally:
         if server is not None:

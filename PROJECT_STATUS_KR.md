@@ -1,7 +1,21 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.43.0 / 실습 사이트 3.9.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.43.0 / 실습 사이트 3.10.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 50개 기능 계정 권한 측정·배포 완료 — 사이트 3.10.0
+
+[PR #69](https://github.com/ohjun1998/burp-workbench-kr/pull/69)를 main에 병합했습니다. 커뮤니티 사이드 메뉴에 50개 업무 기능과 독립 기대 권한표를 추가하고 admin·Alice·Bob·비로그인을 세션·토큰·JWT 및 복합 조합 7개로 정상/의도된 취약 경로에서 비교합니다. 확장 0.43.0과 이전 배포는 그대로 보존합니다.
+
+실제 Burp 측정은 1,400개 비교 기록·기준 계정 제외 4,200개 계정 대조입니다. 권한표·차단 규칙·쓰기 전후 조회 설정 후 TP 392·FP 21·FN 0, 정밀도 94.9%이며 설정 전에는 TP 0·FN 392였습니다. HTTP 200 차단 응답의 오탐과 403 응답 뒤 실제 저장 변경을 함께 공개합니다. 반복 대조를 독립 운영 사이트의 정탐 확률로 일반화하지 않습니다.
+
+검증한 PR head `5c7796ee8f0f49969eb9507a227e69867c6729e1`의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103529195)·[Chromium](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103513946)·[실제 Oracle/Nginx](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103513888)·[Windows/Linux](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103529212)가 모두 성공했습니다. Build의 release 2,851개·패키징 6개, HTTP 2,800개·잘못된 인증 조합 33개, 1,400개 비교 기록·4,200개 계정 대조의 재집계 및 배포 지문을 로그로 확인했습니다. 실제 Oracle에서도 HTTP 2,800개·잘못된 조합 33개와 TLS/HTTP2·loopback 공개·DB 비공개를 검증했습니다. 브라우저는 50개 기능 210개·인증 104개·기존 커뮤니티 66개를 통과했습니다. Windows/Linux 각 180초 연속 수집은 3,632/3,624건 모두 누락·처리 오류 0이며 실제 디스크 부족/복구 13개, 저장소/캐시 10회와 PowerShell 5.1도 통과했습니다. 반복 수를 고유 검사 수에 합산하지 않습니다.
+
+main 병합 커밋 `3cd31c041656f8e50edce7568ec0ecccee154e2e`의 전체 파일 트리 `a5ed4847b70c091eed7edee1ca3b9c6091a6daac`가 검사한 PR head 및 로컬 검증본과 같습니다. 병합 후 main에서 자동으로 시작한 별도 반복 검사는 기록 시점에 진행 중이며 PR 성공과 구분합니다. 이 후속 완료 기록은 상태·검증 JSON·날짜별 대화 세 문서만 갱신하고 소스·배포 ZIP·PDF·근거 ZIP을 보존합니다.
+
+9쪽 PDF의 실제 Burp 상세 측정 DB는 H2 Oracle 호환 모드입니다. 원격 Oracle/Nginx 검사와 API adapter 비교를 native Burp 재실행으로 표현하지 않습니다. 실제 Burp GUI 클릭·Windows DPI/IME는 미수행입니다.
+
+[실습 안내](docs/LAB_3.10.0_KR.md) · [9쪽 PDF](docs/reports/2026-10-18-auth50/Auth50_Report_20261018.pdf) · [가린 근거 ZIP](docs/reports/2026-10-18-auth50/Auth50_Evidence_20261018.zip) · [Docker 실행 ZIP](downloads/docker/3.10.0/community-security-lab-3.10.0-docker.zip) · [검증](docs/VERIFICATION_LAB_3.10.0.json) · [날짜별 대화](docs/chat-logs/2026-10-18/auth-50-functions-3100-closeout.md)
 
 ## 인증 조합·URL 권한 검증과 실제 Burp 보고서 — 사이트 3.9.0
 

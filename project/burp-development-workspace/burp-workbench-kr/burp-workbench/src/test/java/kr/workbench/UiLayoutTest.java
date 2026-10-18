@@ -21,7 +21,7 @@ public final class UiLayoutTest {
   SwingUtilities.invokeAndWait(()->((PassiveScanWorkspace)unchecked(w,"passiveScan")).open("https://ui.test/",false));
   check(named(root,"wb.traffic.clear")==null&&named(root,"wb.traffic.export")==null&&named(root,"wb.traffic.search.clear")==null,"removed traffic controls are absent");
   SwingUtilities.invokeAndWait(()->{JButton action=new JButton("실행");WorkbenchUi.primary(action);WorkbenchUi.style(action);action.setEnabled(false);check(action.getBackground().equals(WorkbenchUi.surface()),"disabled primary action has neutral background");action.setEnabled(true);check(action.getBackground().equals(WorkbenchUi.accent())&&action.getForeground().equals(Color.WHITE),"ready primary action restores accent");});
-  check(table.getColumnCount()==4,"traffic has exactly four visible columns");
+  check(table.getColumnCount()==8,"traffic adds importance account count and note metadata columns");
   check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
   check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"traffic requests and responses side by side below list");
   check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&((JSplitPane)named(root,"wb.environment.lists")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"environment left stacked lists and right stacked packets");
@@ -43,9 +43,13 @@ public final class UiLayoutTest {
    DefaultTableModel m=(DefaultTableModel)table.getModel();check(((Number)m.getValueAt(11,0)).longValue()==12,"stable monotonically increasing traffic NO");
    ((TableRowSorter<?>)table.getRowSorter()).setSortKeys(List.of(new RowSorter.SortKey(0,SortOrder.DESCENDING)));table.setRowSelectionInterval(0,0);
    try{Object current=WorkbenchTest.get(w,"current");var f=current.getClass().getDeclaredMethod("request");f.setAccessible(true);check(f.invoke(current).toString().contains("/route/11"),"sorted NO selection resolves correct captured request");}catch(Exception e){throw new RuntimeException(e);}
-   ((JTextField)unchecked(w,"filter")).setText("/route/2");check(table.getRowCount()==1,"typing filters traffic immediately");((JTextField)unchecked(w,"filter")).setText("");check(table.getRowCount()==12,"empty input restores all rows without reset button");
-   ((JTextField)unchecked(w,"filter")).setText("");table.clearSelection();check(unchecked(w,"current")==null,"cleared selection resets stale request");
+   ((JTextField)unchecked(w,"filter")).setText("/route/2");
+
   });
+  TrafficSearchUpgradeTest.idle(w.trafficBrowser);
+  SwingUtilities.invokeAndWait(()->{check(table.getRowCount()==1,"typing schedules background traffic filtering");((JTextField)unchecked(w,"filter")).setText("");});
+  TrafficSearchUpgradeTest.idle(w.trafficBrowser);
+  SwingUtilities.invokeAndWait(()->{check(table.getRowCount()==12,"empty input restores all rows without reset button");table.clearSelection();check(unchecked(w,"current")==null,"cleared selection resets stale request");});
   SwingUtilities.invokeAndWait(()->{check(table.getRowCount()==12&&named(root,"wb.traffic.clear")==null&&named(root,"wb.traffic.export")==null,"traffic stays retained without removed file action controls");});
   Color old=UIManager.getColor("Panel.background");UIManager.put("Panel.background",new Color(30,30,30));check(WorkbenchUi.dark()&&WorkbenchUi.ink().getRed()>200,"dark palette has readable foreground");UIManager.put("Panel.background",old);
   for(var h:PayloadIntegrationTest.modernUnloads)h.extensionUnloaded();for(var h:PayloadIntegrationTest.legacyUnloads)h.extensionUnloaded();SwingUtilities.invokeAndWait(()->{});System.out.println("UiLayoutTest: "+checks+" checks passed");

@@ -133,10 +133,10 @@ public final class JsRepeaterWorkflowTest {
         verify(secondary.getY()>=primary.getY()+primary.getHeight()+8&&panel.passive.getWidth()>60,"separate action rows remain visible with a breathing gap alongside aggregate counters");
         verify(panel.progress.getFont().getSize()==11&&panel.progress.getHorizontalAlignment()==SwingConstants.RIGHT&&!panel.progress.isOpaque(),"analysis counters are small, unboxed and right aligned");
         verify(!Boolean.TRUE.equals(panel.status.getClientProperty("wb.status")),"analysis messages no longer occupy a large colored footer");
-        verify(panel.resultTabs.previous.isVisible()&&panel.resultTabs.next.isVisible(),"both tab-scroll arrows remain present");
+        verify(!panel.resultTabs.previous.isVisible()&&!panel.resultTabs.next.isVisible(),"tab-scroll arrows are replaced by wheel navigation");
         panel.setSize(1000,780);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
-        panel.resultTabs.next.doClick(0);verify(panel.resultTabs.viewport.getViewPosition().x>0,"right arrow scrolls the result titles");
-        panel.resultTabs.previous.doClick(0);verify(panel.resultTabs.viewport.getViewPosition().x==0,"left arrow returns to the first result titles");
+        panel.resultTabs.scrollPixels(120);verify(panel.resultTabs.viewport.getViewPosition().x>0,"wheel scroll moves the result titles");
+        panel.resultTabs.scrollPixels(-9999);verify(panel.resultTabs.viewport.getViewPosition().x==0,"reverse wheel scroll returns to the first result titles");
         panel.results.setSelectedIndex(6);
       });edt(()->{});
       edt(()->{

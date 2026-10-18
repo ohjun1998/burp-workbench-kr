@@ -6,8 +6,9 @@ import javax.swing.table.DefaultTableModel;
 
 /** One virtual metadata row per captured packet; no duplicate Object[] row storage. */
 final class CaptureTableModel extends DefaultTableModel {
-  private static final String[] COLUMNS = {"NO", "메서드", "URL", "상태", "시간", "도구", "본문 bytes"};
+  private static final String[] COLUMNS = {"NO", "메서드", "URL", "상태", "시간", "도구", "본문 bytes", "중요", "계정", "횟수", "메모"};
   private IntFunction<DiskTrafficStore.PacketRef> source;
+  java.util.function.BiFunction<Integer,Integer,Object> extra=(row,column)->"";
   private volatile int visible;
   private boolean publicationFailed;
 
@@ -39,7 +40,7 @@ final class CaptureTableModel extends DefaultTableModel {
       case 4 -> packet.time();
       case 5 -> packet.source();
       case 6 -> packet.responseBodyLength();
-      default -> throw new IndexOutOfBoundsException(Integer.toString(column));
+      default -> extra.apply(row,column);
     };
   }
 

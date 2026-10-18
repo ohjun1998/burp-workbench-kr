@@ -155,6 +155,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             }
           });
   private JTable logTable;
+  TrafficBrowser trafficBrowser;
   private final JLabel captureInfo = new JLabel();
   private Component payloadPage;
   private JDialog featureHelpWindow;
@@ -276,6 +277,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     } catch (RuntimeException error) {
       captureFailure("서버 환경 관찰", error);
     }
+    try{if(jsAnalysis!=null)jsAnalysis.trafficIndex.observe(request,response);}catch(RuntimeException error){captureFailure("JS 트래픽 대조 관찰",error);}
     final EnvironmentPanel.Observation preparedEnvironment = environment;
     // Only compact metadata crosses back to Swing; the original bytes become reclaimable here.
     return () -> {
@@ -295,6 +297,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       trafficStore = replacement;
       generation.incrementAndGet();
       traffic.clear();
+      if(trafficBrowser!=null)trafficBrowser.clear();
       current = null;
       captureStage("임시 저장소 정리", previous::close);
       startCaptureObservations();
@@ -336,6 +339,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (structuredCompare != null) structuredCompare.clearSources();
                     if (responseRecon != null) responseRecon.close();
                     if (jsAnalysis != null) jsAnalysis.close();
+                    if (trafficBrowser != null) trafficBrowser.close();
                     if (authCompare != null) authCompare.close();
                     if (bountySupport != null) bountySupport.close();
                     traffic.clear();
@@ -782,10 +786,19 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         "클릭: OFF ↔ SCOPE · OFF 수집 중지 / SCOPE 목록에서 체크한 Burp Scope·수동 URL 수집");
     logTable =
         new JTable(logModel) {
+          @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer,int row,int column){
+            Component component=super.prepareRenderer(renderer,row,column);
+            if(component instanceof JLabel label&&convertColumnIndexToModel(column)==2&&trafficBrowser!=null){
+              int raw=convertRowIndexToModel(row);label.setText(trafficBrowser.displayUrl(raw,Objects.toString(logModel.getValueAt(raw,2),"")));
+            }
+            return component;
+          }
+
           public String getToolTipText(java.awt.event.MouseEvent e) {
             int row = rowAtPoint(e.getPoint());
             if (row < 0) return null;
             int index = convertRowIndexToModel(row);
+            if(trafficBrowser!=null&&trafficBrowser.view!=null){var g=trafficBrowser.view.groups().get(index);if(g!=null&&g.members().size()>1)return "원본 "+g.members().size()+"건 · 상태 "+g.statuses()+" · 더블클릭으로 펼치기/접기";}
             return index < traffic.size()
                 ? WorkbenchScope.reason(api, traffic.get(index).request())
                 : null;
@@ -886,30 +899,20 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     filter.setName("wb.traffic.search");
     filter.setColumns(20);
     filter.setToolTipText("메서드·URL·상태 검색 · Ctrl+F");
-    filter
-        .getDocument()
-        .addDocumentListener(
-            new DocumentListener() {
-              public void insertUpdate(DocumentEvent e) {
-                change();
-              }
-
-              public void removeUpdate(DocumentEvent e) {
-                change();
-              }
-
-              public void changedUpdate(DocumentEvent e) {
-                change();
-              }
-
-              void change() {
-                sorter.setRowFilter(
-                    filter.getText().isEmpty()
-                        ? null
-                        : RowFilter.regexFilter("(?i)" + Pattern.quote(filter.getText()), 1, 2, 3));
-                refreshTrafficInfo();
-              }
-            });
+    trafficBrowser=new TrafficBrowser(logTable,logModel,filter,api,()->trafficStore,this::refreshTrafficInfo);
+    trafficBrowser.identities=()->{
+      if(authCompare==null)return List.of();List<TrafficBrowser.Identity> profiles=new ArrayList<>();
+      for(var entry:authCompare.accounts.entrySet()){var credential=authCompare.credentials.get(entry.getKey());if(credential!=null)profiles.add(new TrafficBrowser.Identity(credential.origin(),entry.getValue().label(),credential.headers()));}
+      for(int i=0;i<3;i++){var credential=authCompare.slots[i];if(credential!=null)profiles.add(new TrafficBrowser.Identity(credential.origin(),authCompare.label(i),credential.headers()));}
+      return profiles;
+    };
+    trafficMenu.addSeparator();
+    trafficMenu.add(trafficAction("중요 표시 / 해제",()->{for(int row:logTable.getSelectedRows())trafficBrowser.toggleStar(logTable.convertRowIndexToModel(row));}));
+    trafficMenu.add(trafficAction("메모 편집",()->{int row=logTable.getSelectedRow();if(row<0)return;int raw=logTable.convertRowIndexToModel(row);String note=JOptionPane.showInputDialog(logTable,"메모",Objects.toString(logModel.getValueAt(raw,10),""));if(note!=null)trafficBrowser.note(raw,note);}));
+    trafficMenu.add(trafficAction("묶음 펼치기 / 접기",()->{int row=logTable.getSelectedRow();if(row>=0)trafficBrowser.toggleGroup(logTable.convertRowIndexToModel(row));}));
+    logTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    int[] extraWidths={45,110,55,130};for(int i=0;i<4;i++)logTable.getColumnModel().getColumn(i+4).setPreferredWidth(extraWidths[i]);
+    trafficBrowser.updateColumns();
     logTable
         .getSelectionModel()
         .addListSelectionListener(
@@ -923,7 +926,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     actions.add(captureButton);
     JPanel top = new JPanel(new BorderLayout(10, 0));
     top.setName("wb.traffic.controls");
-    top.add(filter, BorderLayout.CENTER);
+    JPanel searching=new JPanel(new BorderLayout(6,0));searching.add(filter);searching.add(trafficBrowser.settingsButton,BorderLayout.EAST);
+    top.add(searching, BorderLayout.CENTER);
     top.add(actions, BorderLayout.EAST);
     JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
         res = WorkbenchUi.card("응답  RESPONSE", responsePacket);
@@ -1546,6 +1550,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     // Publish every committed metadata row once per tick, regardless of observer backlog.
     // JTable reads only visible/filter/sort metadata cells, never raw HTTP packet bodies.
     logModel.publish(Math.toIntExact(trafficStore.size()));
+    if(trafficBrowser!=null)trafficBrowser.refresh();
     stats.setText(
         "수신 "
             + received.get()

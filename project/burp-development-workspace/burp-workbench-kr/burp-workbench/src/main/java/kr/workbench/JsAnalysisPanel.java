@@ -20,12 +20,15 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final JTextField sourceUrl = new JTextField(40);
   final JToggleButton passive = new JToggleButton("분석 ON", true);
   final DefaultTableModel
-      endpoints = model("URL / 경로", "메서드", "사용 맥락", "쿼리·params 이름", "헤더 이름", "본문 키", "줄", "해결 상태"),
+      endpoints = model("URL / 경로", "메서드", "사용 맥락", "쿼리·params 이름", "헤더 이름", "본문 키", "줄", "호출 상태", "변경"),
       secrets = model("시크릿 후보", "값 (가림)", "지문", "줄", "근거");
   final DefaultTableModel historyModel = model("출처 URL", "주요 경로", "민감한 정보", "분석 상태");
   final JTable historyTable = new JTable(historyModel);
   final JTable urlTable = new JTable(endpoints){
-    public String getToolTipText(MouseEvent event){int view=rowAtPoint(event.getPoint());if(current==null||view<0)return super.getToolTipText(event);var item=current.endpoints().get(convertRowIndexToModel(view));return "<html>"+JsFindingGroups.evidence(current,item).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")+"</html>";}
+    public String getToolTipText(MouseEvent event){int view=rowAtPoint(event.getPoint());if(current==null||view<0)return super.getToolTipText(event);var item=current.endpoints().get(convertRowIndexToModel(view));return "<html>"+item.url().replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")+"<br>"+JsFindingGroups.evidence(current,item).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")+"</html>";}
+    @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer,int row,int column){
+      Component component=super.prepareRenderer(renderer,row,column);if(component instanceof JLabel label){int col=convertColumnIndexToModel(column);String value=Objects.toString(getValueAt(row,column),"");if(col==0){try{var uri=URI.create(value);if(uri.getHost()!=null)label.setText(uri.getRawPath());}catch(Exception ignored){}label.setToolTipText(value);}if(col==7||col==8){WorkbenchUi.Tone tone=value.equals("실제 호출")||value.equals("동일")?WorkbenchUi.Tone.SUCCESS:value.contains("충돌")?WorkbenchUi.Tone.ERROR:value.equals("신규")||value.contains("발견")?WorkbenchUi.Tone.WARNING:WorkbenchUi.Tone.NEUTRAL;label.setForeground(WorkbenchUi.toneInk(tone));label.setToolTipText(value);}}return component;
+    }
   }, secretTable = new JTable(secrets);
   final JLabel status = new JLabel("분석 목록에서 응답을 선택하세요.");
   final Action toRepeater = new AbstractAction("선택 URL → Repeater") {
@@ -37,6 +40,14 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       locate = new JButton("원본 위치");
   private final MontoyaApi api;
   private JsAnalysis.Result current;
+  final JsTrafficIndex trafficIndex=new JsTrafficIndex();
+  final JsVersions versions=new JsVersions();
+  final Map<String,String> versionHashes=new ConcurrentHashMap<>();
+  final JsModuleLinks modules=new JsModuleLinks();
+  JsResultsView resultView;
+  JsAnalysis.Result currentResult(){return current;}
+  String currentSourceKey(){return currentSource;}
+
   java.util.function.BiConsumer<JsAnalysis.Result, String> coverage = (result, source) -> {};
   java.util.function.BiFunction<String,String,burp.api.montoya.http.message.HttpRequestResponse> trafficLookup=(method,url)->null;
   java.util.function.Function<JsAnalysis.Endpoint, String> observation = item -> "발견만 함";
@@ -166,7 +177,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     historyTable.setName("wb.js.history.table");
     urlTable.setAutoCreateRowSorter(true);
     urlTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    int[] widths = {380, 85, 170, 170, 140, 150, 55, 150};
+    int[] widths = {380, 85, 170, 170, 140, 150, 55, 150, 90};
     for (int i = 0; i < widths.length; i++)
       urlTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
     urlTable.moveColumn(7, 2);
@@ -204,7 +215,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             });
     JSplitPane workspace = WorkbenchUi.split(
         JSplitPane.HORIZONTAL_SPLIT,
-        WorkbenchUi.card("분석 원문", sourcePane()), resultTabs=new ResultTabs(results), .40);
+        WorkbenchUi.card("분석 원문", sourcePane()), newResultsView(), .40);
     workspace.setName("wb.js.findings");
     results.setName("wb.js.results");
     add(workspace);
@@ -235,6 +246,11 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                 JOptionPane.PLAIN_MESSAGE));
     toolMenu.add(npm);
     JMenuItem observed=new JMenuItem("관찰된 API 패킷 보기");observed.addActionListener(e->openObservedPacket());toolMenu.add(observed);
+    JMenuItem matchTraffic=new JMenuItem("트래픽 대조"),compareVersions=new JMenuItem("버전 비교");
+    matchTraffic.setName("wb.js.traffic.compare");compareVersions.setName("wb.js.version.compare");
+    matchTraffic.addActionListener(e->resultView.openTraffic());compareVersions.addActionListener(e->openVersionComparison());
+    moreMenu.add(matchTraffic);moreMenu.add(compareVersions);moreMenu.addSeparator();
+    more.putClientProperty("wb.js.more.menu",moreMenu);
     menu(moreMenu, "History 다시 분석", rescan);
     menu(moreMenu, "URL 목록 복사", copy);
     menu(moreMenu, "가림 결과 복사", report);
@@ -356,6 +372,20 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     discoverMaps.addActionListener(e -> discover());
     checkNpm.addActionListener(e -> checkRegistry());
     refreshProgress();
+  }
+
+  private Component newResultsView(){resultTabs=new ResultTabs(results);resultView=new JsResultsView(this,resultTabs);resultView.configureTable();return resultView;}
+
+  private void rememberVersionHash(String source,String hash){versionHashes.put(source,hash);if(versionHashes.size()>128)for(String key:new ArrayList<>(versionHashes.keySet())){if(versionHashes.size()<=128)break;if(!key.equals(currentSource)&&!key.equals(source))versionHashes.remove(key);}}
+
+  void openVersionComparison(){
+    if(archive==null){resultView.versionWindow.closeWindow();resultView.versionWindow.open();return;}
+    String source=currentSource;long token=epoch.get();
+    enqueue(()->{try{
+      var snapshots=archive.versions(source);
+      for(var snapshot:snapshots.subList(Math.max(0,snapshots.size()-8),snapshots.size())){if(token!=epoch.get()||closed.get())return;var metadata=archive.resultMetadata(snapshot.key());if(metadata!=null){versions.recordAt(source,snapshot.fingerprint(),metadata,archive.time(snapshot.key()));rememberVersionHash(snapshot.key(),snapshot.fingerprint());}}
+      onEdt(()->{if(token!=epoch.get()||closed.get()||!source.equals(currentSource))return;resultView.refresh();resultView.versionWindow.closeWindow();resultView.versionWindow.open();});
+    }catch(Exception ex){onEdt(()->status.setText("버전 이력 읽기 실패 · 저장 기록 확인"));}},true);
   }
 
   void prepareRepeater() {
@@ -577,6 +607,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   void refreshActions() {
     boolean endpoint =
         current != null && results.getSelectedIndex() == 0 && urlTable.getSelectedRow() >= 0;
+    if(resultView!=null)resultView.selection();
     toRepeater.setEnabled(endpoint);
     resolve.setEnabled(endpoint);
     locate.setEnabled(
@@ -604,13 +635,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   private void refreshProgress() {
-    if (current != null) {
-      for (int i = 0; i < current.endpoints().size() && i < endpoints.getRowCount(); i++) {
-        var item = current.endpoints().get(i);
-        String state = item.complete() ? observation.apply(item) : (item.evidence().contains("실행 페이지 미확정")?"실행 페이지 미확정":"동적 값 미해결");
-        if (!state.equals(endpoints.getValueAt(i, 7))) endpoints.setValueAt(state, i, 7);
-      }
-    }
+    if(resultView!=null)resultView.refresh();
     String counters =
         (watching.get() ? "분석 ON" : "분석 OFF")
             + " · 대기/분석 "
@@ -804,7 +829,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       String text = readBody(snapshot.body(), snapshot.encoding(), snapshot.contentType());
       if (text.isBlank() || !TextCandidates.textual(text)) { unsupported.incrementAndGet(); return; }
       String key = safeSource(snapshot.url());
-      String hash=fingerprint(text+"\nDOCUMENT:"+Objects.toString(snapshot.document(),""));
+      String hash=fingerprint(text+"\nDOCUMENT:"+Objects.toString(snapshot.document(),"")+"\nMODULES:"+modules.link(snapshot.url(),text,snapshot.document()).prefix());
       if (Objects.equals(cache.fingerprint(key),hash)||(archive!=null&&archive.has(archive.versionKey(key,hash),hash))) {
         duplicates.incrementAndGet();
         return;
@@ -877,19 +902,27 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
 
   private void analyzeText(String text, String url, boolean manual, long token, String[] packet, String contentType,String document) {
     if (closed.get() || token != epoch.get()) return;
-    String key = safeSource(url), hash = fingerprint(text+"\nDOCUMENT:"+Objects.toString(document,""));
+    var linked=modules.link(url,text,document);
+    String key = safeSource(url), hash = fingerprint(text+"\nDOCUMENT:"+Objects.toString(document,"")+"\nMODULES:"+linked.prefix());
     if(archive!=null)try{archive.load();key=archive.versionKey(key,hash);}catch(Exception ex){onEdt(()->status.setText("분석 이력 읽기 실패 · 메모리 분석 계속"));}
     final String analysisKey=key;
     JsAnalysis.Result result;
+    boolean moduleChanged=false;
     try {
       boolean legacy=manual&&contentType.isBlank()&&document==null;
-      result = legacy?JsAnalysis.analyze(text,url,contentType):JsBatchAnalysis.analyze(text,url,contentType,document);
+      result = linked.used()?JsModuleLinks.analyze(linked,url,contentType,document):legacy?JsAnalysis.analyze(text,url,contentType):JsBatchAnalysis.analyze(text,url,contentType,document);
+      moduleChanged=modules.remember(url,text,document);
+      if(archive!=null&&versions.forSource(url).isEmpty()){
+        var previous=archive.versions(url);if(!previous.isEmpty()){var prior=previous.get(previous.size()-1);var priorResult=archive.resultMetadata(prior.key());if(priorResult!=null)versions.recordAt(url,prior.fingerprint(),priorResult,archive.time(prior.key()));}
+      }
+      versions.record(url,hash,result);rememberVersionHash(analysisKey,hash);
       if(!legacy)result=JsFindingGroups.group(result);
     } catch (Throwable e) {
       failed.incrementAndGet();
       result = new JsAnalysis.Result(List.of(), List.of(), "분석 실패 · 입력/지원 문법 확인", true);
     }
     if (token != epoch.get() || closed.get()) return;
+    if(moduleChanged)for(var dependent:modules.dependents(url))enqueue(()->analyzeText(dependent.text(),dependent.source(),false,token,null,"application/javascript",dependent.document()),false,JsSourceCache.textBytes(dependent.text()));
     JsAnalysis.Result done = result;
     String source = text.substring(0, Math.min(text.length(), JsAnalysis.SOURCE_LIMIT));
     documents.put(analysisKey,Objects.toString(document,manual?url:""));
@@ -906,6 +939,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             refreshProgress();
             return;
           }
+          for(String evicted:change.evicted()){documents.remove(evicted);versionHashes.remove(evicted);}
           coverage.accept(done, analysisKey);
           syncSources();
           if (manual || current == null || Objects.equals(sources.getSelectedItem(), analysisKey)) {
@@ -941,13 +975,15 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             item.headers(),
             item.bodyKeys(),
             item.line(),
-            item.complete() ? observation.apply(item) : (item.evidence().contains("실행 페이지 미확정")?"실행 페이지 미확정":"동적 값 미해결")
+            item.complete() ? observation.apply(item) : (item.evidence().contains("실행 페이지 미확정")?"실행 페이지 미확정":"동적 값 미해결"),
+            "기준 없음"
           });
     for (var item : r.secrets())
       secrets.addRow(
           new Object[] {
             item.rule(), item.masked(), item.fingerprint(), item.line(), item.confidence()
           });
+    if(resultView!=null)resultView.refresh();
     renderMiner(r.miner());
     status.setText(r.status());
     String code = cache.source(currentSource);
@@ -1072,6 +1108,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     enqueue(()->{try{
       var saved=archive.read(chosen);if(saved==null)return;
       String source=chosen.split("#wb-version=",2)[0];var fresh=JsBatchAnalysis.analyze(saved.source(),source,saved.type(),saved.page());
+      for(var snapshot:archive.versions(chosen)){var metadata=archive.resultMetadata(snapshot.key());if(metadata!=null){versions.recordAt(chosen,snapshot.fingerprint(),metadata,archive.time(snapshot.key()));rememberVersionHash(snapshot.key(),snapshot.fingerprint());}}
       var restored=saved.result().status().startsWith("미분석")?saved.result():JsFindingGroups.group(JsMapRecovery.merge(fresh,saved.result().miner(),source,saved.page()));
       onEdt(()->{if(closed.get()||token!=epoch.get()||selection!=selectionGeneration.get())return;
         var change=cache.analysis(chosen,saved.source().substring(0,Math.min(saved.source().length(),JsAnalysis.SOURCE_LIMIT)),null,restored,saved.packet());
@@ -1341,6 +1378,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     historyModel.setRowCount(0);
     cache.clear();
     documents.clear();
+    modules.clear();versions.clear();versionHashes.clear();trafficIndex.clear();
     if(archive!=null&&!closed.get())enqueue(()->{try{archive.clear();}catch(Exception ex){onEdt(()->status.setText("분석 이력 삭제 실패 · 파일 권한 확인"));}},true);
     totals.update(List.of());
     selectSource("");
@@ -1358,6 +1396,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
 
   @Override
   public void close() {
+    if(resultView!=null)resultView.close();
     targetSettings.close();
     repeater.close();
     analysisWindow.close();

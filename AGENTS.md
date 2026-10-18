@@ -5,7 +5,7 @@
 - Deliver changes through a PR with actual checks and a short Korean handoff. Keep merged project status in `PROJECT_STATUS_KR.md`; track in-progress ownership in Issues and PRs.
 - GitHub synchronization covers commits and work records, not the other ChatGPT account's conversation or usage quota. Never claim repository connection supplies terminal credentials automatically.
 
-- Communicate in Korean. Current extension version: 0.42.0; Feature Mapper: 0.3.1; lab: 3.8.0.
+- Communicate in Korean. Current extension version: 0.43.0; Feature Mapper: 0.3.1; lab: 3.8.0.
 - Read `DEVELOPMENT_SETUP_KR.md`, `이어가기_인수인계.md` and the current release guide before changing features.
 - Main source: `project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java`.
 - Tests: the adjacent `src/test/java`; lab source: `project/burp-development-workspace/community-security-lab`.

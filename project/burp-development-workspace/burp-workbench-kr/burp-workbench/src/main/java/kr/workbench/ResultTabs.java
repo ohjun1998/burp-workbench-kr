@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
-/** Scrollable result titles with a permanent, accessible pair of navigation arrows. */
+/** Wheel-scrolled result titles; only tab-bar gestures move horizontally. */
 final class ResultTabs extends JPanel {
   final JTabbedPane content;
   final JPanel strip = new JPanel();
   final JViewport viewport = new JViewport();
   final JButton previous = new Arrow(false), next = new Arrow(true);
   final List<JToggleButton> titles = new ArrayList<>();
+  final JPanel extras=new JPanel(new FlowLayout(FlowLayout.RIGHT,4,0));
 
   ResultTabs(JTabbedPane content) {
     super(new BorderLayout(0, 4));
@@ -37,8 +38,16 @@ final class ResultTabs extends JPanel {
     previous.getAccessibleContext().setAccessibleName("결과 탭 왼쪽 이동");
     next.getAccessibleContext().setAccessibleName("결과 탭 오른쪽 이동");
     previous.addActionListener(event -> scroll(-1));next.addActionListener(event -> scroll(1));
-    JPanel arrows=new JPanel(new GridLayout(1,2,2,0));arrows.add(previous);arrows.add(next);
-    JPanel header=new JPanel(new BorderLayout(4,0));header.add(viewport);header.add(arrows,BorderLayout.EAST);
+    previous.setVisible(false);next.setVisible(false);
+    MouseWheelListener wheel=event->{if(event.getPreciseWheelRotation()!=0){scrollPixels((int)Math.round(event.getPreciseWheelRotation()*72));event.consume();}};
+    viewport.addMouseWheelListener(wheel);strip.addMouseWheelListener(wheel);
+    for(var title:titles){title.addMouseWheelListener(wheel);title.setToolTipText(title.getText()+" · 휠로 좌우 이동");}
+    viewport.setToolTipText("마우스 휠: 결과 탭 좌우 이동 · 탭 클릭: 결과 선택");
+    strip.getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,InputEvent.ALT_DOWN_MASK),"nextTab");
+    strip.getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,InputEvent.ALT_DOWN_MASK),"previousTab");
+    strip.getActionMap().put("nextTab",new AbstractAction(){public void actionPerformed(ActionEvent e){content.setSelectedIndex(Math.min(content.getTabCount()-1,content.getSelectedIndex()+1));}});
+    strip.getActionMap().put("previousTab",new AbstractAction(){public void actionPerformed(ActionEvent e){content.setSelectedIndex(Math.max(0,content.getSelectedIndex()-1));}});
+    JPanel header=new JPanel(new BorderLayout(4,0));header.add(viewport);header.add(extras,BorderLayout.EAST);
     add(header,BorderLayout.NORTH);add(content);
     viewport.addChangeListener(event -> updateArrows());
     content.addChangeListener(event -> selectTitle());
@@ -49,6 +58,7 @@ final class ResultTabs extends JPanel {
   }
 
   private int limit() { return Math.max(0,strip.getPreferredSize().width-viewport.getExtentSize().width); }
+  void scrollPixels(int pixels){int x=Math.max(0,Math.min(limit(),viewport.getViewPosition().x+pixels));viewport.setViewPosition(new Point(x,0));updateArrows();}
   private void scroll(int direction) {
     int x=Math.max(0,Math.min(limit(),viewport.getViewPosition().x+direction*Math.max(80,viewport.getWidth()/2)));
     viewport.setViewPosition(new Point(x,0));updateArrows();

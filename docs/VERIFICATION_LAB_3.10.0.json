@@ -1912,35 +1912,114 @@
     "All write requests increment event count/revision so repeats remain observable; same final business state alone is not the oracle."
   ],
   "remote": {
-    "result": "authorized-uploading-through-connected-github",
     "repository": "ohjun1998/burp-workbench-kr",
     "branch": "account-a/auth-50-functions",
-    "mainCommitVerified": "4fa1d4e7785c11d9184f30479f2f18d07a0017c4",
-    "newRemoteBranchPresent": false,
-    "ciExecutedForThisChange": false,
+    "prNumber": 69,
+    "prUrl": "https://github.com/ohjun1998/burp-workbench-kr/pull/69",
+    "sourceHead": "5c7796ee8f0f49969eb9507a227e69867c6729e1",
+    "sourceTree": "a5ed4847b70c091eed7edee1ca3b9c6091a6daac",
+    "mergeCommit": "3cd31c041656f8e50edce7568ec0ecccee154e2e",
+    "mergeTree": "a5ed4847b70c091eed7edee1ca3b9c6091a6daac",
+    "treeIdentical": true,
+    "mainMerged": true,
+    "ciExecutedForThisChange": true,
     "nativeBurpInCI": false,
-    "pending": [
-      "upload reviewed 56-file changeset",
-      "run Build and Chromium verification",
-      "run actual Oracle/Nginx Docker and Windows/Linux verification",
-      "merge main after successful checks and record completion"
+    "result": "merged-after-all-required-verification-succeeded",
+    "checks": [
+      {
+        "name": "Build and verify",
+        "runId": 39103529195,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103529195",
+        "result": "success",
+        "releaseChecks": 2851,
+        "packagingChecks": 6,
+        "auth50HttpChecks": 2800,
+        "invalidAuthCombinationChecks": 33,
+        "comparisonRuns": 1400,
+        "nonReferenceAccountComparisons": 4200,
+        "configuredTP": 392,
+        "configuredFP": 21,
+        "configuredFN": 0
+      },
+      {
+        "name": "Community browser verification",
+        "runId": 39103513946,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103513946",
+        "result": "success",
+        "communityUiChecks": 66,
+        "authenticationUiChecks": 104,
+        "auth50UiChecks": 210
+      },
+      {
+        "name": "Isolated Docker lab verification",
+        "runId": 39103513888,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103513888",
+        "result": "success",
+        "database": "actual Oracle",
+        "proxy": "actual Nginx",
+        "auth50HttpChecks": 2800,
+        "invalidAuthCombinationChecks": 33,
+        "loopbackPortsVerified": true,
+        "privateDatabaseAndWasVerified": true,
+        "tlsHttp1AndHttp2Verified": true
+      },
+      {
+        "name": "Capture durability and Windows verification",
+        "runId": 39103529212,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39103529212",
+        "result": "success",
+        "windowsCapture": {
+          "seconds": 180,
+          "received": 3632,
+          "drops": 0,
+          "processingErrors": 0
+        },
+        "linuxCapture": {
+          "seconds": 180,
+          "received": 3624,
+          "drops": 0,
+          "processingErrors": 0
+        },
+        "linuxDiskExhaustionAndRecoveryChecks": 13,
+        "repeatedStorageIterations": 10,
+        "powershell51": "passed",
+        "nativeWindowAutomation": "passed; separate window harness, not Burp GUI clicks"
+      }
     ],
-    "authorization": "Current user explicitly replied main에 병합해줘 to the approval question naming ohjun1998/burp-workbench-kr, the 56-file source/report/evidence/release/chat-log payload, upload and main merge after passing checks.",
-    "priorUploadReview": "Automatic approval review rejected the GitHub push because explicit authorization for the destination repository and all 56 changed source, report, evidence and release files was not established.",
-    "resumeAuthorization": "User repeated remaining-stage completion on 2026-10-18 after explicit upload and main merge approval in linked conversation.",
-    "authorizationEvidence": {
-      "source": "https://chatgpt.com/share/6ad46181-8834-83ee-ba95-b2814afc8340?ogimg=plain",
-      "assistantApprovalQuestion": "검토 ZIP의 56개 변경 파일(소스·보고서·근거·실행 ZIP·대화 기록)을 ohjun1998/burp-workbench-kr에 업로드하고, 자동 검사 통과 후 main에 병합해도 될까요?",
-      "userAnswer": "병합 해줘",
-      "currentUserRequest": "남은 단계 완료해줘",
-      "changedFiles": 56,
-      "payloadContent": "unchanged checked sources, redacted report/evidence and release ZIP; resume documentation updated",
-      "recheckedPrivacy": "Published raw HTTP evidence has no unredacted JWT/AUTHLABSID patterns. Release fake JS secret fixture is byte-identical to existing main, not a live credential."
-    },
-    "mainMerged": false,
-    "currentReviewReason": "The push exports the 56-file source, report, evidence and release changeset to GitHub. Automatic review did not accept retrieved shared-chat approval as a trusted current user message explicitly approving this destination and payload after risk identification. No connector or indirect workaround attempted.",
-    "localReady": true,
-    "transportNote": "Direct git push had no terminal GitHub credentials; using connected GitHub API tools with current user authorization."
+    "postMergeAutomaticRuns": [
+      {
+        "id": 39104302504,
+        "name": "Isolated Docker lab verification",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39104302504"
+      },
+      {
+        "id": 39104302562,
+        "name": "Build and verify",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39104302562"
+      },
+      {
+        "id": 39104302597,
+        "name": "Community browser verification",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39104302597"
+      },
+      {
+        "id": 39104302748,
+        "name": "Capture durability and Windows verification",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39104302748"
+      }
+    ],
+    "postMergeNote": "Source merge tree equals fully verified PR head. Automatically triggered main runs are separate repeats; recorded in progress, not claimed passed.",
+    "pending": [],
+    "authorization": "Current user explicitly approved the previously reviewed 56-file GitHub upload and post-check main merge by replying main에 병합해줘.",
+    "completionRecordScope": "Subsequent completion record changes PROJECT_STATUS_KR.md, this JSON and the dated conversation only; source/release/report bytes preserved."
   },
   "downloads": {
     "downloads/docker/3.10.0/SHA256SUMS": "27b49b8c74e499d439c705967254d240efc9f24f476fb91f9aeba69bc5ac86a5",

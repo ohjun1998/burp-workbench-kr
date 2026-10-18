@@ -3,15 +3,19 @@
 기준: 2026-10-18 (한국 시간) / Workbench 0.44.0 / 실습 사이트 3.10.0 / 별도 Feature Mapper KR 0.3.1.
 
 
-## 계정 응답 판정·쓰기 보류 사유 고도화 — 0.44.0
+## 계정 응답 판정·쓰기 보류 사유 고도화·배포 완료 — 0.44.0
 
-`account-a/auth-response-0440`에서 CSV·파일 기준의 JSON 거부 응답 검사와 쓰기 판정 사유 구분을 구현했습니다. 전체 회귀·HTTP 2,890개(신규 39개 포함), 패키징 6개와 배포 소스 지문을 확인했습니다.
+[PR #71](https://github.com/ohjun1998/burp-workbench-kr/pull/71)을 main에 병합했습니다. CSV·파일 기준에서도 대상 JSON 차단 응답을 검사하고, 쓰기 검증 미설정·지연·미변경·기대 상태 미도달·조회 실패를 구분합니다. 차단 응답에 실제 데이터가 함께 있으면 보류하고, HTTP 403 뒤 실제 저장 변경은 계속 우회 의심으로 탐지합니다.
 
-실제 Burp Community 2026.3.3/Java 21에 새 JAR를 불러와 50개 기능·7개 인증 방식의 1,400기록·4,200계정 대조를 재실행했습니다. 독립 HTTP 2,800개·잘못된 조합 33개·신원 21개도 확인했습니다. 이전 입력과 메서드·기대 권한·응답 코드·정답이 모두 같은 조건입니다. 설정 후 TP392·FP0·FN0·REVIEW91이며 이전 FP21을 없애고 보류를 532개 줄였습니다. 운영 성능 확률로 일반화하지 않습니다.
+실제 Burp Community 2026.3.3/Java 21의 기존 0.44.0 재측정은 50개 기능·7개 인증 방식, 비교 1,400기록·계정 대조 4,200개입니다. 설정 후 2,100개 대조에서 TP392·FP0·FN0·REVIEW91이며 이전 FP21을 없애고 보류를 532개 줄였습니다. 이번 재개에서는 측정 원본을 독립 재집계해 게시한 분석 JSON과 완전히 일치함을 확인했습니다. Burp 재실행으로 표현하지 않으며 운영 성능 확률로 일반화하지 않습니다.
 
-11쪽 보고서 전 쪽을 렌더링해 검토했고, 4,200개 대조에 개별 판정·정답·보류 사유를 기록했습니다. 실제 Burp GUI·Windows DPI/IME·외부 SSO·실제 Oracle/Nginx는 이번 로컬 재검증 범위 밖입니다. 사용자가 2026-10-18 GitHub 공개 업로드를 명시적으로 승인했습니다. 준비한 설치 파일·소스·보고서·검증 근거와 날짜별 대화를 작업 브랜치에 업로드하고 PR 검사를 확인합니다. 원격 CI는 아직 성공으로 표시하지 않습니다.
+검증한 PR head `cbd7df647dbffe3b33bda5606b82eafdbc84e32c`의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39108917156)와 [Windows/Linux](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39108917171)가 모두 성공했습니다. 회귀·HTTP 2,890개(신규 39개 포함), 인증 조합·50개 기능 API adapter 비교, 화면 배치·패키징·다운로드 소스 지문을 확인했습니다. Windows/Linux의 연속 수집·디스크 부족 복구와 Windows Repeater·PowerShell 검사도 통과했습니다. 원격 API adapter 검사를 native Burp로 표현하지 않습니다. 상세 수치는 검증 JSON의 원격 근거에 기록합니다.
 
-[변경 안내](docs/RELEASE_0.44.0_KR.md) · [PDF](docs/reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Report_0.44.0_KR.pdf) · [사유 CSV](docs/verification/auth50-0.44.0/account-results.csv) · [검증](docs/VERIFICATION_0.44.0.json)
+main 소스 병합 커밋 `f2ede22978a54c1b6c56a8aebf440de9b785c4cb`의 전체 파일 트리 `49f24dd7aa8bf8eaf19ce115596e101484d2765c`는 검사한 PR head 및 로컬 검증본과 같습니다. 41개 변경 파일·설치 JAR·소스 ZIP·11쪽 PDF·인증값을 가린 상세 근거·한국 시간 날짜별 대화를 업로드했습니다. 후속 완료 기록은 상태·검증 JSON·README·날짜별 대화 네 문서만 갱신하며 동일 코드의 CI를 반복하지 않습니다.
+
+보고서는 정탐·오탐·미탐·보류의 개별 사유와 4,200개 대조 CSV를 제공합니다. 실제 Burp GUI·Windows DPI/IME·외부 SSO·실제 Oracle/Nginx는 이번 변경에서 다시 검증하지 않았습니다. 과거 검증은 별도로 보존합니다.
+
+[변경 안내](docs/RELEASE_0.44.0_KR.md) · [PDF](docs/reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Report_0.44.0_KR.pdf) · [사유 CSV](docs/verification/auth50-0.44.0/account-results.csv) · [검증](docs/VERIFICATION_0.44.0.json) · [날짜별 대화](docs/chat-logs/2026-10-18/auth-response-0440.md)
 
 ## 50개 기능 계정 권한 측정·배포 완료 — 사이트 3.10.0
 

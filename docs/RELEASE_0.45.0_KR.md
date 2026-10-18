@@ -40,3 +40,9 @@ JS에서 확정하지 못한 호스트·경로 값·본문은 편집기의 미�
 이번 검증은 개인용 로컬 Juice Shop 20.3.0과 headless Burp Community·실제 Chromium을 사용합니다. Burp 패널은 하네스가 컨트롤러를 호출했으며 수동 GUI 클릭은 검사하지 않았습니다. crAPI·실제 Oracle·Windows DPI/IME·외부 OAST/BApps/아카이브는 이번 실행 범위 밖입니다. JS의 전체 최신 문법 해석, SQL 주입 확정, 서버 영구 저장과 브라우저 실행은 별도 근거가 필요합니다.
 
 [재현 절차](../audit/oss-lab/README_KR.md) · [기능별 체크 CSV](../audit/oss-lab/results/0.45.0/checks.csv) · [계정별 판정](../audit/oss-lab/results/0.45.0/auth-comparisons.json) · [작업 대화](chat-logs/2026-10-18/juice-logic-upgrade.md)
+
+## GitHub 반영과 원격 검사
+
+[PR #74](https://github.com/ohjun1998/burp-workbench-kr/pull/74)의 Build 및 Windows/Linux 내구성 검사가 모두 성공했고 main에 병합했습니다. 원격의 50개 기능 API adapter 비교도 설정 후 TP392·FP0·FN0·보류91을 유지했습니다. Windows/Linux 3분 수집은 3,634/3,623건 모두 누락·처리 오류 0이며, 디스크 부족 복구·반복 저장·Repeater 창·PowerShell도 통과했습니다. 실측 Juice Shop과 API adapter 수치를 합치지 않습니다.
+
+병합 소스 트리는 검증한 PR과 같음을 확인했습니다. 이번 후속 기록은 제품 소스·JAR·소스 ZIP·보고서·가림 근거를 바꾸지 않습니다. 근거 ZIP은 로컬 검증 시점의 스냅샷이며 원격 CI·병합 상태는 최신 검증 JSON과 프로젝트 상태에 별도로 기록합니다.

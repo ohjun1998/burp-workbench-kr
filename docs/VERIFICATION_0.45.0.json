@@ -3,7 +3,7 @@
   "dateKST": "2026-10-18",
   "baseMainCommit": "b63175a3f311e978f5290b4c5cbff5d58797b8fc",
   "baselineValidationCommit": "4afe0b8650da3ca0c8edb60bc7adfc28a031959e",
-  "result": "passed-local-awaiting-remote-ci",
+  "result": "passed",
   "provenance": "Continued the same task. Final native execution and full release completed before the interruption; this continuation rechecked package integrity, reaggregated the original final run and authored the report. No new native Burp execution is claimed.",
   "regression": {
     "version": "0.45.0",
@@ -230,10 +230,327 @@
     "Modern JS syntax is partially recovered, not fully parsed; unknown origins and values stay unresolved",
     "A redirect and a readback marker establish a candidate link, not durable storage or browser execution",
     "SQL error and boolean differences remain candidates requiring confirmation",
-    "crAPI, public hosted demos, external OAST/BApps/archives and manual Burp GUI were not exercised",
-    "Windows/Linux remote CI results are recorded separately after completion"
+    "crAPI, public hosted demos, external OAST/BApps/archives and manual Burp GUI were not exercised"
   ],
   "github": {
-    "state": "not-uploaded-yet"
+    "state": "merged",
+    "pullRequest": 74,
+    "url": "https://github.com/ohjun1998/burp-workbench-kr/pull/74",
+    "testedHead": "3dc08cc21a9690ef8f1a0b0a1bd3340b6c1b28eb",
+    "sourceMergeCommit": "cb6314f3b5917fe90e611414ec2573327295e0b1",
+    "testedTree": "03bc245c44d9a1dc5a768db7f93d70963ddae9ed",
+    "mergedTree": "03bc245c44d9a1dc5a768db7f93d70963ddae9ed",
+    "identicalSourceAndReleaseTree": true,
+    "baselinePullRequest73MergedByAncestry": true,
+    "workflows": [
+      {
+        "id": 39121260779,
+        "name": "Capture durability and Windows verification",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39121260779"
+      },
+      {
+        "id": 39121260750,
+        "name": "Build and verify",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39121260750"
+      }
+    ],
+    "jobs": [
+      {
+        "id": 117657172962,
+        "name": "check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 117657173226,
+        "name": "windows",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 117657173506,
+        "name": "isolated-disk-and-soak",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "duplicateSourceMergeCI": "Skipped only after both PR workflows succeeded and the merged tree was verified identical; completion-record changes do not alter product sources."
+  },
+  "remoteCI": {
+    "auth50": {
+      "result": "completed",
+      "labVersion": "3.10.0",
+      "extensionVersion": "0.45.0",
+      "extensionJarSha256": "7181be222604bfa5a6b0f735014f19973ef33b800c9922b8ea6d46b1a91be201",
+      "transport": "real loopback HTTP with Montoya API adapters",
+      "nativeExtensionLoaded": false,
+      "httpChecks": 2800,
+      "httpTargetRequests": 5879,
+      "uniqueFunctions": 50,
+      "invalidCombinationChecks": 33,
+      "detectionMetrics": {
+        "unconfigured": {
+          "account": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 1708,
+            "FN": 392,
+            "precision": null,
+            "recall": 0,
+            "falsePositiveRate": 0,
+            "reviewCount": 1316,
+            "samples": 2100
+          },
+          "run": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 406,
+            "FN": 294,
+            "precision": null,
+            "recall": 0,
+            "falsePositiveRate": 0,
+            "reviewCount": 686,
+            "samples": 700
+          }
+        },
+        "configured": {
+          "account": {
+            "TP": 392,
+            "FP": 0,
+            "TN": 1708,
+            "FN": 0,
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "reviewCount": 91,
+            "samples": 2100
+          },
+          "run": {
+            "TP": 294,
+            "FP": 0,
+            "TN": 406,
+            "FN": 0,
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "reviewCount": 77,
+            "samples": 700
+          }
+        }
+      },
+      "extensionComparisonRuns": 1400,
+      "extensionComparedAccountCells": 4200,
+      "extensionIdentityChecks": 21,
+      "extensionTargetRequests": 10822,
+      "database": "isolated H2 in Oracle compatibility mode",
+      "browserExecuted": false,
+      "nativeControllerInstances": 7,
+      "productionTimingUnchanged": true,
+      "privateProfile": true,
+      "credentialsIncludedInEvidence": false
+    },
+    "auth50Verification": {
+      "result": "passed",
+      "nativeComparisons": 1400,
+      "accountComparisons": 4200,
+      "httpCases": 2800,
+      "metrics": {
+        "unconfigured": {
+          "account": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 1708,
+            "FN": 392,
+            "precision": null,
+            "recall": 0,
+            "falsePositiveRate": 0,
+            "reviewCount": 1316,
+            "samples": 2100
+          },
+          "run": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 406,
+            "FN": 294,
+            "precision": null,
+            "recall": 0,
+            "falsePositiveRate": 0,
+            "reviewCount": 686,
+            "samples": 700
+          }
+        },
+        "configured": {
+          "account": {
+            "TP": 392,
+            "FP": 0,
+            "TN": 1708,
+            "FN": 0,
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "reviewCount": 91,
+            "samples": 2100
+          },
+          "run": {
+            "TP": 294,
+            "FP": 0,
+            "TN": 406,
+            "FN": 0,
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "reviewCount": 77,
+            "samples": 700
+          }
+        }
+      },
+      "review": {
+        "unconfigured": {
+          "total": 1316,
+          "violations": 385,
+          "definiteBlockedViolations": 7
+        },
+        "configured": {
+          "total": 91,
+          "violations": 0,
+          "definiteBlockedViolations": 0
+        }
+      }
+    },
+    "linux": [
+      {
+        "result": "passed",
+        "command": "python dev.py release",
+        "freshOutputDirectory": true,
+        "committedDownloadsPreserved": true,
+        "dockerVersion": "3.10.0",
+        "dockerZipSha256": "c9f60b472b288c5509f1ce223a493aa9258650a71170a248004a00c27739e77f",
+        "freshDockerZipMatchesCommitted": true,
+        "version": "0.45.0",
+        "regressionGroups": 70,
+        "regressionChecks": 2442,
+        "payloadHttpChecks": 132,
+        "allFeaturesHttpChecks": 102,
+        "bountyHttpChecks": 266,
+        "totalChecks": 2942
+      },
+      {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Linux",
+        "java": "17.0.20.1",
+        "mode": "disk-full",
+        "fileSystemType": "tmpfs",
+        "fileSystemBytes": 16777216,
+        "retainedRows": 12,
+        "expectedDrops": 2,
+        "expectedProcessingErrors": 2,
+        "recovered": true,
+        "result": "passed",
+        "checks": 13,
+        "passedChecks": [
+          "disk exhaustion is confined to an explicitly selected tmpfs of at most 64 MiB",
+          "real filesystem capacity causes a capture write failure",
+          "OS reports ENOSPC on the isolated filesystem",
+          "failed partial append rolls back file length and packet count",
+          "retained packet restores exact request and response bytes",
+          "repeated write failures count exactly two dropped packets without breaking callbacks",
+          "repeated failures preserve all previously accepted records",
+          "freeing disk space resumes capture without reloading the extension",
+          "received counters and live Swing timer survive disk exhaustion",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "host error diagnostics contain no synthetic packet text or target URL",
+          "unload removes the traffic file after disk recovery"
+        ]
+      },
+      {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Linux",
+        "java": "17.0.20.1",
+        "mode": "soak",
+        "received": 3623,
+        "drops": 0,
+        "processingErrors": 0,
+        "errorStages": [],
+        "acceptedResponses": 3623,
+        "retainedRows": 3623,
+        "diskBytes": 15625819,
+        "heapBeforeBytes": 1791104,
+        "heapAfterBytes": 68827168,
+        "elapsedSeconds": 181.203252815,
+        "requestedSeconds": 180,
+        "intervalMillis": 50,
+        "result": "passed",
+        "checks": 8,
+        "passedChecks": [
+          "collection exceeds the former 250-row limit",
+          "every accepted packet remains in disk and UI",
+          "all response callbacks complete with zero drops and processing errors",
+          "real Swing collection timer remains active",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "unload deletes the active private traffic store"
+        ]
+      }
+    ],
+    "windows": [
+      {
+        "result": "passed",
+        "version": "0.45.0",
+        "iterations": 10,
+        "groups": [
+          "CapturePipelineTest",
+          "TrafficCaptureRecoveryTest"
+        ],
+        "executions": 20,
+        "note": "Repeated executions are not additional unique check counts."
+      },
+      {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Windows Server 2025",
+        "java": "17.0.20.1",
+        "mode": "soak",
+        "received": 3634,
+        "drops": 0,
+        "processingErrors": 0,
+        "errorStages": [],
+        "acceptedResponses": 3634,
+        "retainedRows": 3634,
+        "diskBytes": 15673262,
+        "heapBeforeBytes": 1594936,
+        "heapAfterBytes": 104974944,
+        "elapsedSeconds": 181.996172,
+        "requestedSeconds": 180,
+        "intervalMillis": 50,
+        "result": "passed",
+        "checks": 8,
+        "passedChecks": [
+          "collection exceeds the former 250-row limit",
+          "every accepted packet remains in disk and UI",
+          "all response callbacks complete with zero drops and processing errors",
+          "real Swing collection timer remains active",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "unload deletes the active private traffic store"
+        ]
+      }
+    ],
+    "windowsPowerShell": {
+      "result": "passed",
+      "checks": 6
+    },
+    "note": "Remote authorization/capture use API adapters, not native Burp. REVIEW counts overlap the strict binary TN/FN metrics in the auth50 audit and must not be added to those metrics; the separate Juice Shop report excludes REVIEW from TP/FP/TN/FN."
   }
 }

@@ -326,5 +326,6 @@
     "docs/reports/2026-10-18/Auth_Comparison_Report_20261018.md": "1294bc4465be3075e60446b46ffe127998266b8bc5286db51f6a0549a0545948",
     "docs/reports/2026-10-18/Auth_Comparison_Report_20261018.pdf": "8c27f108c607ee0061cd2b3481f60860a052037c446d12be9fbaa7bbd5b668b8",
     "pdfPages": 8
-  }
+  },
+  "testMetadataCorrection": "Legacy community role checks now compare OpenAPI with current POM version. Browser evidence reads the server manifest version. Rechecked 384 HTTP and 66 browser cases with reported 3.9.0."
 }

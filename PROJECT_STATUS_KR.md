@@ -1,11 +1,11 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.45.0 / 실습 사이트 3.10.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.46.1 / 실습 사이트 3.10.0 / 별도 Feature Mapper KR 0.3.1.
 
 
-## Vuln Bank 판정 공백 보완 — 0.46.1 검토 요청 (미병합)
+## Vuln Bank 판정 공백 보완 — 0.46.1 main 병합 완료
 
-현재 main의 완료 배포는 위 0.45.0입니다. `account-a/vulnbank-0461` 브랜치에서 GraphQL 단일 query·권한 거부 분류, SQL 200/404 참·거짓 반복 비교, 숫자 전후 변화 경계 검증을 구현했습니다. 독립 메뉴 10개와 주요 배치는 유지합니다.
+현재 main의 완료 배포는 0.46.1입니다. `account-a/vulnbank-0461` 브랜치에서 GraphQL 단일 query·권한 거부 분류, SQL 200/404 참·거짓 반복 비교, 숫자 전후 변화 경계 검증을 구현했습니다. 독립 메뉴 10개와 주요 배치는 유지합니다.
 
 최종 0.46.1 JAR를 실제 Burp Community2026.3.3/Java21에 로드한 결과 기능 조건 32개·Chromium 흐름 5개가 통과했습니다. 브라우저 보조 확장 클릭 연동 1개는 기존 환경 제약 때문에 NOT_RUN입니다. 같은 PGlite/순차 Flask 환경에서 이전0.45.0도 다시 대조했고, 15개 계정 대조는 TP5/TN8/보류2에서 TP5/TN10/보류0으로 바뀌었습니다. 양쪽 FP0/FN0이며 기준5칸은 별도입니다. SQL 거짓 조건 반복과 음수 송금의 잔액1005→1010 후보를 실제 확장 화면으로 보존했습니다.
 
@@ -13,7 +13,7 @@
 
 [4쪽 핵심 보고서](docs/reports/2026-10-18-vulnbank-upgrade/Workbench_0.46.1_VulnBank_Summary_KR.pdf) · [검증 기록](docs/VERIFICATION_0.46.1.json) · [변경 안내](docs/RELEASE_0.46.1_KR.md) · [날짜별 대화](docs/chat-logs/2026-10-18/vulnbank-0461.md)
 
-원격 PR/CI는 제출 후 상태를 확인합니다. main 병합 완료로 표현하지 않습니다.
+PR #76을 main에 병합했습니다. 검사한 head는 `1c19524f4e3e004a001acbaa560ee1c8e7673141`, 병합 커밋은 `a03df806154c337ca78ac65e534a629080dbdd87`이며 병합 트리 `36d931e0ad0badd073a4cbc76438269fc8719fc8`이 로컬 검증본 및 검사한 PR과 같습니다. [Build and verify](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39130928743)와 [Windows/Linux 내구성 검사](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39130928665)가 모두 성공했습니다. 원격 50개 기능 계정 비교·화면·패키징·다운로드 소스 일치 검사도 통과했습니다. 원격 API adapter 검사는 실제 Burp 검증과 구분합니다. 성공한 동일 소스의 병합 CI 중복 실행은 생략했습니다.
 
 ## 메뉴를 유지한 로직 고도화·배포 완료 — 0.45.0
 

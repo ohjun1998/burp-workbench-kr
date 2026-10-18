@@ -136,5 +136,27 @@
       "TN": 10,
       "TP": 5
     }
+  },
+  "github": {
+    "state": "merged",
+    "pullRequest": 76,
+    "testedHead": "1c19524f4e3e004a001acbaa560ee1c8e7673141",
+    "mergeCommit": "a03df806154c337ca78ac65e534a629080dbdd87",
+    "testedTree": "36d931e0ad0badd073a4cbc76438269fc8719fc8",
+    "mergedTree": "36d931e0ad0badd073a4cbc76438269fc8719fc8",
+    "identicalTree": true,
+    "workflows": [
+      {
+        "id": 39130928743,
+        "name": "Build and verify",
+        "conclusion": "success"
+      },
+      {
+        "id": 39130928665,
+        "name": "Capture durability and Windows verification",
+        "conclusion": "success"
+      }
+    ],
+    "note": "Remote API adapter checks are distinct from previous native Burp execution. Duplicate CI on identical merged source skipped after PR checks succeeded."
   }
 }

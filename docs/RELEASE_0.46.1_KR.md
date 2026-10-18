@@ -28,3 +28,7 @@ Vuln Bank 점검에서 드러난 세 가지 판정 공백을 보완했습니다.
 Vuln Bank 대상 소스는 변경하지 않았습니다. 이 환경은 일반 PostgreSQL을 비관리자 프로세스로 시작할 수 없어 PGlite 0.5.10(PostgreSQL 18.6) TCP 서버와 순차 Flask를 사용했습니다. 공식 Compose/PostgreSQL 13 환경과 다르며 동시성·성능 검증으로 해석하지 않습니다. 브라우저 보조 확장 클릭 연동은 이전 환경 제약으로 이번 실행에서 제외했습니다. 외부 BApps·OAST·실제 AI 서비스는 범위 밖입니다.
 
 [검증 기록](VERIFICATION_0.46.1.json) · [4쪽 핵심 보고서](reports/2026-10-18-vulnbank-upgrade/Workbench_0.46.1_VulnBank_Summary_KR.pdf) · [JAR와 소스](../downloads/README.md) · [전체 화면·CSV 증빙 ZIP](reports/2026-10-18-vulnbank-upgrade/Workbench_0.46.1_VulnBank_Evidence.zip)
+
+## GitHub 반영 완료
+
+PR #76을 main에 병합했습니다. 검사한 head는 `1c19524f4e3e004a001acbaa560ee1c8e7673141`, 병합 커밋은 `a03df806154c337ca78ac65e534a629080dbdd87`이며 병합 트리 `36d931e0ad0badd073a4cbc76438269fc8719fc8`이 로컬 검증본 및 검사한 PR과 같습니다. [Build and verify](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39130928743)와 [Windows/Linux 내구성 검사](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39130928665)가 모두 성공했습니다. 원격 50개 기능 계정 비교·화면·패키징·다운로드 소스 일치 검사도 통과했습니다. 원격 API adapter 검사는 실제 Burp 검증과 구분합니다. 성공한 동일 소스의 병합 CI 중복 실행은 생략했습니다.

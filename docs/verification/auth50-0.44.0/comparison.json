@@ -1,0 +1,218 @@
+{
+  "baselineVersion": "0.43.0",
+  "currentVersion": "0.44.0",
+  "matchedAccountCells": 4200,
+  "sameMethodsExpectedPoliciesStatusesAndGroundTruth": true,
+  "baselineMetrics": {
+    "unconfigured": {
+      "account": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 1708,
+        "FN": 392,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 1337,
+        "samples": 2100
+      },
+      "run": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 406,
+        "FN": 294,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 693,
+        "samples": 700
+      }
+    },
+    "configured": {
+      "account": {
+        "TP": 392,
+        "FP": 21,
+        "TN": 1687,
+        "FN": 0,
+        "precision": 0.9491525423728814,
+        "recall": 1.0,
+        "falsePositiveRate": 0.012295081967213115,
+        "reviewCount": 623,
+        "samples": 2100
+      },
+      "run": {
+        "TP": 294,
+        "FP": 14,
+        "TN": 392,
+        "FN": 0,
+        "precision": 0.9545454545454546,
+        "recall": 1.0,
+        "falsePositiveRate": 0.034482758620689655,
+        "reviewCount": 210,
+        "samples": 700
+      }
+    }
+  },
+  "currentMetrics": {
+    "unconfigured": {
+      "account": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 1708,
+        "FN": 392,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 1316,
+        "samples": 2100
+      },
+      "run": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 406,
+        "FN": 294,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 686,
+        "samples": 700
+      }
+    },
+    "configured": {
+      "account": {
+        "TP": 392,
+        "FP": 0,
+        "TN": 1708,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 91,
+        "samples": 2100
+      },
+      "run": {
+        "TP": 294,
+        "FP": 0,
+        "TN": 406,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 77,
+        "samples": 700
+      }
+    }
+  },
+  "configuredReviewReduction": 532,
+  "migrations": [
+    {
+      "setting": "configured",
+      "oldVerdict": "BLOCKED",
+      "newVerdict": "BLOCKED",
+      "oldFinding": "ALLOWED",
+      "newFinding": "ALLOWED",
+      "count": 686
+    },
+    {
+      "setting": "configured",
+      "oldVerdict": "BLOCKED",
+      "newVerdict": "BLOCKED",
+      "oldFinding": "BLOCKED",
+      "newFinding": "BLOCKED",
+      "count": 378
+    },
+    {
+      "setting": "configured",
+      "oldVerdict": "REVIEW",
+      "newVerdict": "BLOCKED",
+      "oldFinding": "REVIEW",
+      "newFinding": "BLOCKED",
+      "count": 532
+    },
+    {
+      "setting": "configured",
+      "oldVerdict": "REVIEW",
+      "newVerdict": "REVIEW",
+      "oldFinding": "REVIEW",
+      "newFinding": "REVIEW",
+      "count": 7
+    },
+    {
+      "setting": "configured",
+      "oldVerdict": "REVIEW",
+      "newVerdict": "REVIEW",
+      "oldFinding": "REVIEW",
+      "newFinding": "WRITE_UNCHANGED",
+      "count": 84
+    },
+    {
+      "setting": "configured",
+      "oldVerdict": "SUSPECT",
+      "newVerdict": "BLOCKED",
+      "oldFinding": "SUSPECT",
+      "newFinding": "BLOCKED",
+      "count": 21
+    },
+    {
+      "setting": "configured",
+      "oldVerdict": "SUSPECT",
+      "newVerdict": "SUSPECT",
+      "oldFinding": "SUSPECT",
+      "newFinding": "SUSPECT",
+      "count": 392
+    },
+    {
+      "setting": "unconfigured",
+      "oldVerdict": "BLOCKED",
+      "newVerdict": "BLOCKED",
+      "oldFinding": "BLOCKED",
+      "newFinding": "BLOCKED",
+      "count": 763
+    },
+    {
+      "setting": "unconfigured",
+      "oldVerdict": "REVIEW",
+      "newVerdict": "BLOCKED",
+      "oldFinding": "REVIEW",
+      "newFinding": "BLOCKED",
+      "count": 21
+    },
+    {
+      "setting": "unconfigured",
+      "oldVerdict": "REVIEW",
+      "newVerdict": "REVIEW",
+      "oldFinding": "HIDDEN",
+      "newFinding": "HIDDEN",
+      "count": 35
+    },
+    {
+      "setting": "unconfigured",
+      "oldVerdict": "REVIEW",
+      "newVerdict": "REVIEW",
+      "oldFinding": "MISSING",
+      "newFinding": "MISSING",
+      "count": 84
+    },
+    {
+      "setting": "unconfigured",
+      "oldVerdict": "REVIEW",
+      "newVerdict": "REVIEW",
+      "oldFinding": "REVIEW",
+      "newFinding": "REVIEW",
+      "count": 1197
+    }
+  ],
+  "inputHashes": {
+    "before": {
+      "expected-policy.csv": "de8329a01bbe16257842119d870f4081920fafe5dee72ee43d2f0acffcacffb9",
+      "extension-results.json": "518ea385005f19f20b00027240c9619d3da4fbeb73ac4d436c1d07267e2c6429",
+      "http-results.json": "ece659f4467c9df1fbf0fbb2b1174eda97e2354a28f52d56aa23b7ee144761e1"
+    },
+    "after": {
+      "expected-policy.csv": "de8329a01bbe16257842119d870f4081920fafe5dee72ee43d2f0acffcacffb9",
+      "extension-results.json": "afedf3bfbf4a01752bfb8d819c6cf31789f34a60e32aff8688ad99bc01ad6b82",
+      "http-results.json": "70d44dda1240dfe585bfeb1dd02669733e45b3d2c6a9ede2f1f2c6024498f188"
+    }
+  },
+  "interpretation": "Matched repeated fixture measurements; not independent production accuracy probabilities. REVIEW overlaps TN/FN."
+}

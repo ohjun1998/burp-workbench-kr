@@ -1,0 +1,11 @@
+﻿setting,finding,status,reason,count
+unconfigured,HIDDEN,410,접근 정책 미설정: 응답만으로 공개·공유 허용과 권한 위반을 구분할 수 없음,35
+unconfigured,MISSING,404,접근 정책 미설정: 응답만으로 공개·공유 허용과 권한 위반을 구분할 수 없음,63
+unconfigured,MISSING,410,접근 정책 미설정: 응답만으로 공개·공유 허용과 권한 위반을 구분할 수 없음,21
+unconfigured,REVIEW,200,접근 정책 미설정: 응답만으로 공개·공유 허용과 권한 위반을 구분할 수 없음,1050
+unconfigured,REVIEW,202,접근 정책 미설정: 응답만으로 공개·공유 허용과 권한 위반을 구분할 수 없음,21
+unconfigured,REVIEW,204,접근 정책 미설정: 응답만으로 공개·공유 허용과 권한 위반을 구분할 수 없음,119
+unconfigured,REVIEW,302,리다이렉트: HTTP 302의 이동 위치와 로그인/업무 결과 확인 필요,7
+configured,REVIEW,302,리다이렉트: HTTP 302의 이동 위치와 로그인/업무 결과 확인 필요,7
+configured,WRITE_UNCHANGED,404,"처리 결과 미확인: HTTP 404, 지정 조회 항목은 미변경이나 명시적 차단 근거 또는 업무 결과가 부족함",63
+configured,WRITE_UNCHANGED,410,"처리 결과 미확인: HTTP 410, 지정 조회 항목은 미변경이나 명시적 차단 근거 또는 업무 결과가 부족함",21

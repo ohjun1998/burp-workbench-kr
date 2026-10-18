@@ -7,7 +7,7 @@ import burp.api.montoya.http.message.responses.HttpResponse;
 final class AuthComparison {
   static AuthFinding assess(AuthComparePanel.Run run,int slot,HttpRequest request,HttpResponse response,boolean exists)throws Exception{
     var result=assessResponse(run,slot,request,response,exists);
-    if(!Core.readMethod(request.method())&&(result.verdict()==AuthVerdict.SUSPECT||result.kind()==AuthFinding.Kind.ALLOWED))return new AuthFinding(AuthFinding.Kind.REVIEW,"쓰기 응답만으로 처리 성공 미확정 · 전후 조회 필요",result.changes());
+    if(!Core.readMethod(request.method())&&(result.verdict()==AuthVerdict.SUSPECT||result.kind()==AuthFinding.Kind.ALLOWED))return new AuthFinding(AuthFinding.Kind.WRITE_UNVERIFIED,"쓰기 응답만으로 처리 성공 미확정 · 전후 조회 필요",result.changes());
     return result;
   }
   private static AuthFinding assessResponse(AuthComparePanel.Run run,int slot,HttpRequest request,HttpResponse response,boolean exists)throws Exception{
@@ -30,11 +30,11 @@ final class AuthComparison {
     var result=AuthJudgement.compare(baseline.statusCode(),original,response.statusCode(),body,rules,c.owners()[slot],exists);
     var fingerprint=c.responseRules().assess(baseline.statusCode(),AuthComparePanel.responseHeaders(baseline),original,response.statusCode(),AuthComparePanel.responseHeaders(response),body);
     var expected=c.matrix().expected(request.method(),request.url(),slot);
-    if(fingerprint!=null&&result.kind()!=AuthFinding.Kind.BASELINE){
+    if(fingerprint!=null&&result.kind()!=AuthFinding.Kind.BASELINE&&result.kind()!=AuthFinding.Kind.DENIAL_DATA){
       if(fingerprint.kind()==AuthFinding.Kind.BLOCKED&&expected==BountyMatrix.Expected.ALLOW)return new AuthFinding(AuthFinding.Kind.CONFLICT,"기대 ALLOW · 차단 관측 · 세션/정책 재검토 · "+fingerprint.reason(),result.changes());
       result=new AuthJudgement.Result(fingerprint.kind(),fingerprint.reason(),result.changes());
     }
-    if(result.kind()==AuthFinding.Kind.BASELINE||result.kind()==AuthFinding.Kind.INCOMPLETE)return result.finding();
+    if(result.kind()==AuthFinding.Kind.BASELINE||result.kind()==AuthFinding.Kind.INCOMPLETE||result.kind()==AuthFinding.Kind.DENIAL_DATA)return result.finding();
     if(expected!=BountyMatrix.Expected.UNKNOWN){
       if(expected==BountyMatrix.Expected.ALLOW&&access==AuthPolicy.Access.OWNER_ONLY)return new AuthFinding(AuthFinding.Kind.CONFLICT,"기대 ALLOW와 소유자 전용 정책 충돌 · 설정 재검토",result.changes());
       if(result.kind()==AuthFinding.Kind.BLOCKED)return new AuthFinding(expected==BountyMatrix.Expected.DENY?AuthFinding.Kind.BLOCKED:AuthFinding.Kind.CONFLICT,"기대 "+expected+" · "+result.reason(),result.changes());

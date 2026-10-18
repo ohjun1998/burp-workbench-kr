@@ -7,6 +7,10 @@ record AuthFinding(Kind kind,String reason,String changes) {
     NO_RESPONSE("응답 없음",AuthVerdict.NONE),ERROR("전송 오류",AuthVerdict.NONE),CANCELLED("중지 / 미전송",AuthVerdict.NONE),
     SESSION("신원 검사 실패",AuthVerdict.NONE),REFRESH("갱신 실패",AuthVerdict.NONE),CHANGED("전송 세션 변경",AuthVerdict.NONE),
     BASELINE("판정 보류",AuthVerdict.REVIEW),INCOMPLETE("판정 보류",AuthVerdict.REVIEW),REVIEW("판정 보류",AuthVerdict.REVIEW),CONFLICT("설정 충돌",AuthVerdict.REVIEW),
+    DENIAL_DATA("차단 응답과 데이터 충돌",AuthVerdict.REVIEW),
+    WRITE_UNVERIFIED("쓰기 검증 미설정",AuthVerdict.REVIEW),WRITE_UNCHANGED("처리 결과 미확인",AuthVerdict.REVIEW),
+    WRITE_PENDING("지연 처리 확인 필요",AuthVerdict.REVIEW),WRITE_PARTIAL("기대 상태 미도달",AuthVerdict.REVIEW),
+    WRITE_READ_FAILED("후속 조회 실패",AuthVerdict.REVIEW),WRITE_SETUP_FAILED("전후 조회 준비 실패",AuthVerdict.REVIEW),
     BLOCKED("차단 근거 확인",AuthVerdict.BLOCKED),ALLOWED("공개/공유 허용",AuthVerdict.BLOCKED),
     SUSPECT("우회 의심",AuthVerdict.SUSPECT),OWNER("타인 객체 접근 의심",AuthVerdict.SUSPECT),
     OWNER_UNKNOWN("소유값 불일치 · 정책 확인",AuthVerdict.REVIEW),HIDDEN("은닉형 접근 차단 후보",AuthVerdict.REVIEW),MISSING("은닉형 차단/미발견 후보",AuthVerdict.REVIEW);

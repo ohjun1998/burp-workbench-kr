@@ -1316,7 +1316,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         if (!eligible(q, c)) throw new IllegalArgumentException("전송 직전 Scope/Origin 변경");
         final int slot = i;
         AuthEffectCheck.Snapshot beforeEffect=null;
-        if(c.effect.matches(q))try{HttpRequest observer=AuthEffectCheck.observer(c.effect,run.original,c.names);beforeEffect=AuthEffectCheck.before(c.effect,observer,read->sendRead(read,c));}catch(Exception ex){final String message=ex.getMessage();publish(run,()->{run.packets[slot].request=q;run.packets[slot].result(new AuthFinding(AuthFinding.Kind.REVIEW,"전후 조회 준비 실패 · 비교 미전송 · "+message,""));});continue;}
+        if(c.effect.matches(q))try{HttpRequest observer=AuthEffectCheck.observer(c.effect,run.original,c.names);beforeEffect=AuthEffectCheck.before(c.effect,observer,read->sendRead(read,c));}catch(Exception ex){final String message=ex.getMessage();publish(run,()->{run.packets[slot].request=q;run.packets[slot].result(new AuthFinding(AuthFinding.Kind.WRITE_SETUP_FAILED,"비교 미전송 · "+message,""));});continue;}
         HttpRequestResponse rr;
         try {
           rr =
@@ -1355,7 +1355,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
           }catch(Exception ex){finding=new AuthFinding(AuthFinding.Kind.REVIEW,"응답 디코딩/구조 또는 재조회 확인 필요","");}
         }
         AuthEffectCheck.Evidence effectEvidence=null;
-        if(beforeEffect!=null&&response!=null&&rr.request()!=null&&WorkbenchScope.contains(api,actual)&&sameTarget(actual,q)&&credentialValues(actual,c.names).equals(credentialValues(q,c.names)))try{effectEvidence=AuthEffectCheck.after(c.effect,beforeEffect,read->sendRead(read,c),()->closed.get()||c.epoch!=epoch.get());finding=AuthEffectCheck.finding(effectEvidence,c.matrix.expected(q.method(),q.url(),slot),finding);}catch(Exception ex){effectEvidence=new AuthEffectCheck.Evidence(c.effect,beforeEffect,null,AuthEffectCheck.Outcome.UNKNOWN,"후속 조회 실패/중지");finding=new AuthFinding(AuthFinding.Kind.REVIEW,"후속 조회 실패 · 처리 결과 확인 필요",finding.changes());}
+        if(beforeEffect!=null&&response!=null&&rr.request()!=null&&WorkbenchScope.contains(api,actual)&&sameTarget(actual,q)&&credentialValues(actual,c.names).equals(credentialValues(q,c.names)))try{effectEvidence=AuthEffectCheck.after(c.effect,beforeEffect,read->sendRead(read,c),()->closed.get()||c.epoch!=epoch.get());finding=AuthEffectCheck.finding(effectEvidence,c.matrix.expected(q.method(),q.url(),slot),finding,response);}catch(Exception ex){effectEvidence=new AuthEffectCheck.Evidence(c.effect,beforeEffect,null,AuthEffectCheck.Outcome.UNKNOWN,"후속 조회 실패/중지");finding=new AuthFinding(AuthFinding.Kind.WRITE_READ_FAILED,"후속 조회 실패 · 처리 결과 확인 필요",finding.changes());}
         final AuthEffectCheck.Evidence observedEffect=effectEvidence;
         final AuthFinding decision=finding;
         boolean review=finding.verdict()!=AuthVerdict.BLOCKED&&finding.kind()!=AuthFinding.Kind.REFERENCE;

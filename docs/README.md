@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.44.0 계정 판정 고도화·쓰기 보류 사유](RELEASE_0.44.0_KR.md) · [초급자용 재검증 PDF](reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Report_0.44.0_KR.pdf) · [검증 기록](VERIFICATION_0.44.0.json)
+
 - [사이트 3.10.0 · 50개 기능 권한 검증](LAB_3.10.0_KR.md) · [실제 Burp 정탐·오탐 PDF](reports/2026-10-18-auth50/Auth50_Report_20261018.pdf) · [검증 기록](VERIFICATION_LAB_3.10.0.json)
 
 - [사이트 3.9.0 인증 조합·URL 권한 검증](LAB_3.9.0_KR.md) · [실제 Burp PDF 보고서](reports/2026-10-18/Auth_Comparison_Report_20261018.pdf) · [검증 기록](VERIFICATION_LAB_3.9.0.json)

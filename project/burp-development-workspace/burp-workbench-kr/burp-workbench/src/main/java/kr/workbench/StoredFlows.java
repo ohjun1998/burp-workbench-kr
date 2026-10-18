@@ -1,6 +1,9 @@
 package kr.workbench;
 
 import java.time.Instant;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /** Bounded marker observations. Response text is neither persisted nor proof of browser execution. */
@@ -11,7 +14,8 @@ final class StoredFlows {
              boolean writeAccepted,boolean readbackObserved,boolean htmlObserved,boolean escapedCandidate,
              String browserEvidence,String browserRecordedAt,Source writeSource,Source readSource) {}
  private final LinkedHashSet<String> markers=new LinkedHashSet<>();
- private final LinkedHashMap<String,Source> writes=new LinkedHashMap<>();
+ private record Write(Source source,String target,int redirects) {}
+ private final LinkedHashMap<String,Write> writes=new LinkedHashMap<>();
  private final LinkedHashMap<String,Flow> flows=new LinkedHashMap<>();
  private long nextSource,nextFlow;
 
@@ -23,6 +27,10 @@ final class StoredFlows {
 
  /** Returns a source ID only when this request contributed an observation. */
  synchronized String observe(String url,String method,String requestBody,int status,String type,String responseBody){
+  return observe(url,method,requestBody,status,type,responseBody,"");
+ }
+
+ synchronized String observe(String url,String method,String requestBody,int status,String type,String responseBody,String location){
   String safe=ActivityTracker.safeUrl(url);
   if(safe==null||method==null||!method.matches("[A-Za-z]{1,20}"))return "";
   String verb=method.toUpperCase(Locale.ROOT),body=Objects.toString(requestBody,""),response=Objects.toString(responseBody,"");
@@ -33,15 +41,23 @@ final class StoredFlows {
    if(!Core.readMethod(verb)&&body.contains(marker)){
     // A new attempt must not inherit earlier successful storage or browser evidence.
     removeGroup(key);boolean accepted=status>=200&&status<300;
-    if(accepted){
+    String target=redirectTarget(url,status,location,marker);
+    if(accepted||!target.isEmpty()){
      if(writes.size()>=MAX_WRITES)removeGroup(writes.keySet().iterator().next());
-     writes.put(key,source);
+     writes.put(key,new Write(source,accepted?"":target,0));
     }
-    put(key+"|write",new Flow("SF-F"+(++nextFlow),marker,safe,"",accepted?"쓰기 성공 응답 관측 · 저장 미확정":"쓰기 실패/차단 · 저장 미확정",status,accepted,false,false,false,"","",source,null));
+    String state=accepted?"쓰기 성공 응답 관측 · 저장 미확정":status>=300&&status<400?"리다이렉트 관측 · 후속 조회/저장 미확정":"쓰기 실패/차단 · 저장 미확정";
+    put(key+"|write",new Flow("SF-F"+(++nextFlow),marker,safe,"",state,status,accepted,false,false,false,"","",source,null));
     contributed=true;
    }
    // OPTIONS cannot establish that a stored object was retrieved.
-   if((verb.equals("GET")||verb.equals("HEAD"))&&response.contains(marker)&&writes.containsKey(key)){
+   Write pending=writes.get(key);
+   if(pending!=null&&!pending.target().isEmpty()&&(verb.equals("GET")||verb.equals("HEAD"))&&pending.target().equals(safe)){
+    String next=redirectTarget(url,status,location,marker);
+    if(!next.isEmpty()&&pending.redirects()<3){writes.put(key,new Write(pending.source(),next,pending.redirects()+1));contributed=true;continue;}
+   }
+   if((verb.equals("GET")||verb.equals("HEAD"))&&response.contains(marker)&&pending!=null
+       &&(pending.target().isEmpty()||pending.target().equals(safe)&&!echoedMarker(url,marker))){
     boolean readback=status>=200&&status<300;
     String media=Objects.toString(type,"").split(";",2)[0].strip().toLowerCase(Locale.ROOT);
     boolean html=readback&&(media.equals("text/html")||media.equals("application/xhtml+xml"));
@@ -50,13 +66,32 @@ final class StoredFlows {
     boolean escaped=html&&(around.contains("&lt;")||around.contains("&#60;")||around.toLowerCase(Locale.ROOT).contains("&#x3c;"));
     String state=!readback?"조회 오류 응답의 마커 · 저장 확인 보류":html?(escaped?"HTML 문자 표시 후보 · 실행 미검증":"HTML 조회 출력 · 실행 미검증"):"JSON/문자열 조회 · 화면 출력 미검증";
     String flowKey=key+"|read|"+safe;Flow previous=flows.get(flowKey);
-    Source write=writes.get(key);
+    Source write=pending.source();boolean writeAccepted=write.status()>=200&&write.status()<300;
+    if(!writeAccepted)state="리다이렉트 후 "+state+" · 쓰기 2xx 미관측";
     // A repeated URL is a new observation; old manual evidence is not carried forward.
-    put(flowKey,new Flow(previous==null?"SF-F"+(++nextFlow):previous.id(),marker,write.url(),safe,state,status,true,readback,html,escaped,"","",write,source));
+    put(flowKey,new Flow(previous==null?"SF-F"+(++nextFlow):previous.id(),marker,write.url(),safe,state,status,writeAccepted,readback,html,escaped,"","",write,source));
     contributed=true;
    }
   }
   return contributed?source.id():"";
+ }
+
+ private static boolean echoedMarker(String url,String marker){
+  try{return URLDecoder.decode(url,StandardCharsets.UTF_8).contains(marker);}catch(IllegalArgumentException error){return true;}
+ }
+ private static String redirectTarget(String from,int status,String location,String marker){
+  if(!Set.of(301,302,303,307,308).contains(status)||location==null||location.isBlank()||location.length()>2048)return "";
+  try{
+   URI target=URI.create(from).resolve(location);
+   if(target.getUserInfo()!=null||!ApiInventory.origin(from).equals(ApiInventory.origin(target.toString()))||echoedMarker(target.toString(),marker))return "";
+   String safe=ActivityTracker.safeUrl(target.toString());return safe==null?"":safe;
+  }catch(IllegalArgumentException error){return "";}
+ }
+
+ static String writeState(Flow flow){
+  if(flow.writeAccepted())return "2xx 관측 · 저장 미확정";
+  if(flow.writeSource()!=null&&flow.writeSource().status()>=300&&flow.writeSource().status()<400)return "리다이렉트 · 쓰기 성공 미확정";
+  return "실패/차단";
  }
 
  synchronized void recordBrowserEvidence(String flowId,String readSourceId,String sha256){

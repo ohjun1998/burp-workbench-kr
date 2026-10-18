@@ -29,6 +29,7 @@ final class AuthJudgement {
   if(original.isBlank()||body.isBlank())return result(AuthFinding.Kind.REVIEW,"빈 성공 응답 · 데이터/실행 결과 확인","");
   // A CSV/file baseline must not prevent an explicit JSON denial from being inspected.
   if(candidate!=null&&denied(candidate,rules))return result(denialWithData(candidate,rules)?AuthFinding.Kind.DENIAL_DATA:AuthFinding.Kind.BLOCKED,denialWithData(candidate,rules)?"설정한 JSON 차단 규칙과 데이터 필드 동시 관측 · 자료 노출 수동 확인":"설정한 JSON 차단 규칙 일치","");
+  if(AuthResponseData.emptyPayload(candidate))return result(AuthFinding.Kind.INCOMPLETE,"성공 응답의 사용자/자료가 비어 있음 · 접근 성공·차단 모두 미확정",baseline==null?"":changes(baseline,candidate,rules.ignored));
   if(rules.policy==AuthPolicy.Access.PUBLIC){Map<String,Object> publicBaseline=json(original,rules),publicJson=json(body,rules);if(publicBaseline!=null&&denied(publicBaseline,rules))return result(AuthFinding.Kind.BASELINE,"기준 응답에 차단 규칙 일치","");if(publicJson!=null&&denied(publicJson,rules))return result(AuthFinding.Kind.BLOCKED,"설정한 JSON 차단 규칙 일치","");return result(AuthFinding.Kind.ALLOWED,"설정한 경로·메서드 정책 · 성공 응답 관측","");}
   Map<String,Object> a=json(original,rules),b=json(body,rules);
   if((a==null||b==null)&&!rules.important.isEmpty())return result(AuthFinding.Kind.INCOMPLETE,"중요 JSON 필드 검증 불가 · JSON 응답 확인", "");

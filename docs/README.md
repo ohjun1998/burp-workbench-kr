@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.45.0 메뉴 유지·계정·JS·SQL·저장 흐름 고도화](RELEASE_0.45.0_KR.md) · [Juice Shop 재검증 기록](VERIFICATION_0.45.0.json)
+
 - [0.44.0 계정 판정 고도화·쓰기 보류 사유](RELEASE_0.44.0_KR.md) · [초급자용 재검증 PDF](reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Report_0.44.0_KR.pdf) · [검증 기록](VERIFICATION_0.44.0.json)
 
 - [사이트 3.10.0 · 50개 기능 권한 검증](LAB_3.10.0_KR.md) · [실제 Burp 정탐·오탐 PDF](reports/2026-10-18-auth50/Auth50_Report_20261018.pdf) · [검증 기록](VERIFICATION_LAB_3.10.0.json)

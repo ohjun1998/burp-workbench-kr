@@ -1,0 +1,34 @@
+{
+  "dateKST": "2026-10-18T18:23:14.954875+09:00",
+  "workbenchVersion": "0.44.0",
+  "workbenchCommit": "b63175a3f311e978f5290b4c5cbff5d58797b8fc",
+  "workbenchJarSha256": "646049d0b9ec7df6fd3e135005b4f539f0b8c93f37b4944c74869d9b75df9837",
+  "juiceShopVersion": "20.3.0",
+  "juiceShopArchiveSha256": "47420604f215eb412cc02890973ee208a63fc0c62fe7da1d64ac5743b12c1186",
+  "juiceShopMainJsBytes": 1242633,
+  "juiceShopMainJsSha256": "a029a0ee1822c924fe7eef8aa9316e4c196ff54f3279c0286abb472971b375a4",
+  "crapiSourceCommit": "b5fc307f3e5f875809b095b771108ef342a33724",
+  "crapiExecuted": false,
+  "crapiBlockers": [
+    "Docker/Podman runtime and socket absent",
+    "unprivileged user namespace unavailable",
+    "PRoot ptrace denied; no escalation attempted"
+  ],
+  "targetContainment": "Loopback-only listener and Node external fetch/socket rejection; no public target attacks",
+  "targetSourcePatched": false,
+  "limitations": [
+    "Headless native Burp; no manual Burp GUI interaction",
+    "External AI, Web3, public archive, external OAST and BApps not exercised"
+  ],
+  "completedAtKST": "2026-10-18T18:35:39.254999+09:00",
+  "regressionCheck": {
+    "command": "python dev.py check",
+    "result": "passed",
+    "totalChecks": 2890,
+    "regressionChecks": 2390,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "note": "Internal regression and HTTP fixture checks; distinct from the new Juice Shop run"
+  }
+}

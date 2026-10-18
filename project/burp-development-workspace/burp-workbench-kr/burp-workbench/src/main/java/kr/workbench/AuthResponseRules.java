@@ -52,18 +52,45 @@ final class AuthResponseRules {
 
   AuthJudgement.Result assess(int baselineStatus, String baselineHeaders, String baseline,
                               int status, String headers, String body) {
+    return assess(baselineStatus, baselineHeaders, baseline, status, headers, body, null);
+  }
+
+  AuthJudgement.Result assess(int baselineStatus, String baselineHeaders, String baseline,
+                              int status, String headers, String body, AuthJudgement.Rules criteria) {
     if (rules.isEmpty() || baselineStatus < 200 || baselineStatus >= 300) return null;
     try {
       if (!match(baselineHeaders, baseline).isEmpty())
         return new AuthJudgement.Result(AuthFinding.Kind.BASELINE, "기준 응답에 응답 차단 규칙 일치 · 규칙/기준 확인", "");
-      // Redirects, missing objects and server errors stay uncertain even when a phrase matches.
-      if (status == 401 || status == 403 || status >= 200 && status < 300) {
+      // A configured denial may explain 400/422, but not redirects, missing objects or server errors.
+      if (status == 400 || status == 422 || status == 401 || status == 403 || status >= 200 && status < 300) {
         String evidence = match(headers, body);
-        if (!evidence.isEmpty()) return new AuthJudgement.Result(AuthFinding.Kind.BLOCKED, evidence, "");
+        if (!evidence.isEmpty()) {
+          var data = AuthJudgement.json(body);
+          if (AuthResponseData.protectedData(data, criteria, this::denialScalar))
+            return new AuthJudgement.Result(AuthFinding.Kind.DENIAL_DATA,
+                evidence + " · 차단 문구와 자료 필드 동시 관측 · 실제 노출 확인", "");
+          if ((status == 400 || status == 422) && data == null && !denialScalar(body.strip()))
+            return new AuthJudgement.Result(AuthFinding.Kind.REVIEW,
+                "HTTP " + status + " · 차단 문구만 관측 · 오류 본문/입력 검증 구분 필요", "");
+          return new AuthJudgement.Result(AuthFinding.Kind.BLOCKED, evidence, "");
+        }
       }
       return null;
     } catch (IllegalArgumentException e) {
       return new AuthJudgement.Result(AuthFinding.Kind.REVIEW, e.getMessage(), "");
     }
+  }
+
+  private boolean denialScalar(String text) {
+    for (Rule rule : rules) {
+      if (!rule.target.equals("본문")) continue;
+      if (!rule.regex && text.equals(rule.value)) return true;
+      if (rule.regex) {
+        var result = PacketInspector.find(text, rule.value, true, true, Thread.currentThread()::isInterrupted);
+        if (result.error() != null) throw new IllegalArgumentException("응답 차단 정규식 검사 제한 · 확인 필요");
+        if (result.spans().stream().anyMatch(span -> span.start() == 0 && span.end() == text.length())) return true;
+      }
+    }
+    return false;
   }
 }

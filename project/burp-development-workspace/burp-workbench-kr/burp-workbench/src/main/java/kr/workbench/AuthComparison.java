@@ -28,7 +28,7 @@ final class AuthComparison {
     var access=c.policy().forRequest(run.original.method(),run.original.url());
     var rules=c.rules().withPolicy(access);
     var result=AuthJudgement.compare(baseline.statusCode(),original,response.statusCode(),body,rules,c.owners()[slot],exists);
-    var fingerprint=c.responseRules().assess(baseline.statusCode(),AuthComparePanel.responseHeaders(baseline),original,response.statusCode(),AuthComparePanel.responseHeaders(response),body);
+    var fingerprint=c.responseRules().assess(baseline.statusCode(),AuthComparePanel.responseHeaders(baseline),original,response.statusCode(),AuthComparePanel.responseHeaders(response),body,rules);
     var expected=c.matrix().expected(request.method(),request.url(),slot);
     if(fingerprint!=null&&result.kind()!=AuthFinding.Kind.BASELINE&&result.kind()!=AuthFinding.Kind.DENIAL_DATA){
       if(fingerprint.kind()==AuthFinding.Kind.BLOCKED&&expected==BountyMatrix.Expected.ALLOW)return new AuthFinding(AuthFinding.Kind.CONFLICT,"기대 ALLOW · 차단 관측 · 세션/정책 재검토 · "+fingerprint.reason(),result.changes());

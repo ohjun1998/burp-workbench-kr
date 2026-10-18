@@ -47,7 +47,7 @@ public final class Engine {
  public static String stopReason(int status){return "HTTP "+status+" · 인증/차단/부하 응답으로 후속 요청 중단 · 취약점 부재를 의미하지 않음";}
  public static List<String> defaults(Profile p){return switch(p){
   case XSS->List.of("{{MARKER}}","<svg onload=console.log('{{MARKER}}')>","<img src=x onerror=console.log('{{MARKER}}')>","\"><svg onload=console.log('{{MARKER}}')>","'><img src=x onerror=console.log('{{MARKER}}')>","</textarea><svg onload=console.log('{{MARKER}}')>","<b data-probe=\"{{MARKER}}\">{{MARKER}}</b>");
-  case SQLI->List.of("'","\"","{{BASE}}' AND '1'='1' -- ","{{BASE}}' AND '1'='2' -- ","{{BASE}} AND 1=1","{{BASE}} AND 1=2","{{BASE}}') AND ('1'='1","{{BASE}}') AND ('1'='2");
+  case SQLI->List.of("'","\"","{{BASE}}' AND '1'='1' -- ","{{BASE}}' AND '1'='2' -- ","{{BASE}} AND 1=1","{{BASE}} AND 1=2","{{BASE}}') AND ('1'='1","{{BASE}}') AND ('1'='2", "{{BASE}}%')) AND 1=1 -- ", "{{BASE}}%')) AND 1=2 -- ", "{{BASE}}%') AND 1=1 -- ", "{{BASE}}%') AND 1=2 -- ");
   case UPLOAD_NAME->List.of("probe-{{MARKER}}.txt","probe-{{MARKER}}.html","probe-{{MARKER}}.svg","probe-{{MARKER}}.jpg.txt","../probe-{{MARKER}}.txt","probe-{{MARKER}}.TXT");
   case UPLOAD_BODY->List.of("{{MARKER}}","<!doctype html><title>{{MARKER}}</title><b>{{MARKER}}</b>","<svg xmlns=\"http://www.w3.org/2000/svg\"><text y=\"20\">{{MARKER}}</text></svg>");
   case DOWNLOAD->List.of("../fixtures/download-marker.txt","../../../../etc/passwd","/etc/passwd","..\\..\\..\\..\\Windows\\win.ini","C:\\Windows\\win.ini");
@@ -94,7 +94,7 @@ public final class Engine {
  }
  static byte[] dechunk(byte[] bytes)throws IOException{var out=new ByteArrayOutputStream();int pos=0;while(pos<bytes.length){int end=pos;while(end+1<bytes.length&&!(bytes[end]==13&&bytes[end+1]==10))end++;if(end+1>=bytes.length)throw new IOException("chunked 크기 줄 누락");String line=new String(bytes,pos,end-pos,StandardCharsets.US_ASCII).split(";",2)[0];int size;try{size=Integer.parseInt(line.strip(),16);}catch(Exception e){throw new IOException("chunked 크기 오류");}pos=end+2;if(size==0)return out.toByteArray();if(size<0||size>16_777_216||size>bytes.length-pos-2||out.size()+size>16_777_216)throw new IOException("chunked 본문 크기 제한/잘림");out.write(bytes,pos,size);pos+=size;if(bytes[pos]!=13||bytes[pos+1]!=10)throw new IOException("chunked 경계 오류");pos+=2;}throw new IOException("chunked 종료 누락");}
  static String header(String h,String n){var m=Pattern.compile("(?im)^"+Pattern.quote(n)+":\\s*([^\r\n]*)").matcher(h);return m.find()?m.group(1).strip():"";}
- static final Pattern SQL=Pattern.compile("(?i)(org\\.springframework\\.jdbc\\.BadSqlGrammarException[^\\n]{0,120}|Syntax error in SQL statement[^\\n]{0,120}|SQL syntax[^\\n]{0,120}|ORA-\\d{5}[^\\n]{0,120}|org\\.h2\\.jdbc[^\\n]{0,120}|Unclosed quotation mark[^\\n]{0,120}|unterminated quoted string[^\\n]{0,120}|SQLite(?:Exception|3?::SQLException)[^\\n]{0,120}|You have an error in your SQL syntax[^\\n]{0,120}|SQLSTATE(?:\\[|:)[^\\n]{0,120}|PSQLException[^\\n]{0,120})");
+ static final Pattern SQL=kr.workbench.SqlErrors.PATTERN;
  static final Pattern FILE=Pattern.compile("(?m)^(root:[^:\\r\\n]*:0:0:[^\\r\\n]*|\\[fonts\\]|\\[extensions\\])\\s*$");
  static final Pattern XPATH_ERROR=Pattern.compile("(?i)(XPathExpressionException|Invalid XPath expression|XPathEvalError|XPathSyntaxError)[^\\r\\n]{0,120}");
  static final Pattern LDAP_ERROR=Pattern.compile("(?i)(LDAPException|LdapException|javax\\.naming\\.directory\\.InvalidSearchFilterException|Bad search filter|LDAP filter syntax error)[^\\r\\n]{0,120}");

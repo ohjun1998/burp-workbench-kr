@@ -1,0 +1,16 @@
+{
+  "dateKST": "2026-10-18T19:48:42.111329+09:00",
+  "workbenchVersion": "0.45.0",
+  "baseCommit": "b63175a3f311e978f5290b4c5cbff5d58797b8fc",
+  "workbenchJarSha256": "7181be222604bfa5a6b0f735014f19973ef33b800c9922b8ea6d46b1a91be201",
+  "sourceZipSha256": "8fd35707ab211eeabe77ff32b8ae3b723c64a08d74fd6834bb7acd5ceb1a459c",
+  "burpVersion": "Burp Suite Community Edition 2026 3.3",
+  "javaVersion": "21.0.8",
+  "browserVersion": "146.0.7680.177",
+  "juiceShopVersion": "20.3.0",
+  "juiceShopArchiveSha256": "47420604f215eb412cc02890973ee208a63fc0c62fe7da1d64ac5743b12c1186",
+  "juiceShopMainJsSha256": "a029a0ee1822c924fe7eef8aa9316e4c196ff54f3279c0286abb472971b375a4",
+  "targetContainment": "Loopback-only listener and external Node fetch/socket rejection",
+  "targetSourcePatched": false,
+  "scope": "Native headless Burp controllers and Montoya HTTP; real Chromium via private proxy; no manual Burp GUI"
+}

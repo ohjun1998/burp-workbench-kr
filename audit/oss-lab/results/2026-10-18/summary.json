@@ -1,0 +1,41 @@
+{
+  "workbenchVersion": "0.44.0",
+  "target": "OWASP Juice Shop 20.3.0",
+  "nativeBurp": "Burp Suite Community Edition 2026 3.3",
+  "nativeHarnessCompleted": true,
+  "testedFeatureCount": 10,
+  "functionalChecks": {
+    "PASS": 28,
+    "FAIL": 5
+  },
+  "browserChecks": {
+    "PASS": 5
+  },
+  "defaultPolicyCells": {
+    "REFERENCE": 6,
+    "TP": 6,
+    "TN": 9,
+    "REVIEW": 2,
+    "FP": 1
+  },
+  "targetSpecificRuleCells": {
+    "TN": 4,
+    "REFERENCE": 2,
+    "REVIEW": 2
+  },
+  "referenceCellsExcluded": true,
+  "knownIssues": [
+    "F01: anonymous 200 empty user response causes one default-policy false positive; targeted regex resolves it",
+    "F02: three representative API paths absent from all retained main.js result versions",
+    "F03: SQLITE_ERROR absent from passive and payload error patterns; target-specific boolean SQL test does find a candidate",
+    "F04: stored readback is not connected after a 302 write; 201/200 control works"
+  ],
+  "additionalUnmetGoal": "AU-08: configured response rules remove the false positive but two HTTP 400 cells stay REVIEW",
+  "crapiExecuted": false,
+  "separateRegressionCheck": {
+    "command": "python dev.py check",
+    "passed": true,
+    "checks": 2890
+  },
+  "rawCredentialsIncluded": false
+}

@@ -42,15 +42,15 @@ SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다.
 
 인증 방식별 로그인·권한 검증 메뉴는 세션, 불투명 토큰, JWT와 네 가지 복합 조합을 제공합니다. 관리자·일반 사용자·비로그인으로 정상/취약 URL을 비교하고 인증값 누락·혼합·변조·만료와 실제 쓰기 상태를 확인합니다. [실제 Burp 검증 보고서](docs/reports/2026-10-18/Auth_Comparison_Report_20261018.pdf)와 [세부 근거](docs/VERIFICATION_LAB_3.9.0.json)를 함께 제공합니다.
 
-50개 업무 기능을 admin·Alice·Bob·비로그인과 인증 조합 7개로 대조했습니다. 정상/취약 경로의 독립 HTTP 2,800개와 실제 Burp 비교 기록 1,400개를 실행했습니다. 권한표·판정 규칙 설정 후 계정 대조에서 정탐 392건·오탐 21건·미탐 0건, 정밀도 94.9%·재현율 100.0%였습니다. 확인 필요 623건은 별도로 남깁니다. 설정 전에는 확인 필요를 포함한 엄격한 미탐 392건입니다. 이는 공통 실습 서버의 측정이며 운영 정탐 확률이 아닙니다. [50개 기능 보고서](docs/reports/2026-10-18-auth50/Auth50_Report_20261018.pdf) · [가린 원본 근거 ZIP](docs/reports/2026-10-18-auth50/Auth50_Evidence_20261018.zip) · [검증 기록](docs/VERIFICATION_LAB_3.10.0.json)
+50개 업무 기능을 admin·Alice·Bob·비로그인과 인증 조합 7개로 대조했습니다. **0.44.0 재측정**은 정상/취약 경로의 독립 HTTP 2,800개와 실제 Burp 비교 기록 1,400개·계정 대조 4,200개입니다. 권한표·차단 규칙·전후 조회를 설정한 2,100개 계정 대조에서 정탐 392건·오탐 0건·미탐 0건·보류 91건입니다. 이전 0.43.0의 오탐 21건을 없애고 보류 532건을 줄였습니다. 설정 전에는 엄격한 집계의 미탐 392건이며, 보류는 TN/FN과 겹치므로 합산하지 않습니다. 같은 실습 서버의 반복 측정이며 운영 정탐 확률로 일반화하지 않습니다. [고도화 재검증 보고서](docs/reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Report_0.44.0_KR.pdf) · [판정별 사유 CSV](docs/verification/auth50-0.44.0/account-results.csv) · [0.44.0 검증](docs/VERIFICATION_0.44.0.json) · [이전 0.43.0 측정 보고서](docs/reports/2026-10-18-auth50/Auth50_Report_20261018.pdf)
 
 ## 변경과 검증 확인하기
 
 | 찾는 자료 | 위치 |
 |---|---|
 | JAR·소스 ZIP·Docker ZIP·PDF | [테스트 파일 다운로드](downloads/README.md) |
-| 수집 모드·Scope와 배포 변경점 | [0.43.0 변경 안내](docs/RELEASE_0.43.0_KR.md) |
-| 실제 실행한 검사와 남은 범위 | [0.43.0 검증 기록](docs/VERIFICATION_0.43.0.json) |
+| 계정 응답 판정·쓰기 보류 사유와 배포 변경점 | [0.44.0 변경 안내](docs/RELEASE_0.44.0_KR.md) |
+| 실제 실행한 검사와 남은 범위 | [0.44.0 검증 기록](docs/VERIFICATION_0.44.0.json) |
 | 소스·도구·과거 자료 위치 | [저장소 안내](docs/REPOSITORY_MAP_KR.md) |
 
 이전 버전 파일과 검증 기록은 보존합니다. `main`에 합쳐진 상태는 [프로젝트 상태](PROJECT_STATUS_KR.md), 진행 중인 변경과 CI는 [Pull requests](https://github.com/ohjun1998/burp-workbench-kr/pulls)에서 확인합니다. 자동 검사·Swing 화면 렌더링과 실제 Burp GUI·브라우저·Docker 실행은 구분하며, 수행한 범위는 버전별 검증 기록을 기준으로 읽습니다.

@@ -2,7 +2,7 @@
   "version": "0.44.0",
   "dateAsiaSeoul": "2026-10-18",
   "baseCommit": "af3014a8b346364273836c515a469ff20869b40a",
-  "result": "passed-local-remote-ci-pending",
+  "result": "passed-local-remote-ci-main-merged",
   "improvements": [
     "CSV/file baseline independent JSON denial inspection",
     "Typed write verification review reasons; explicit denial with unchanged observation retains denial evidence"
@@ -432,6 +432,602 @@
     "Actual Burp GUI, Windows DPI/IME, external OAuth/OIDC/SAML, actual Oracle/Nginx not rerun for this change",
     "Two headless Burp ComponentUI startup warnings; HTTP and normal shutdown passed"
   ],
-  "remoteChecks": "pending upload and PR checks; public GitHub upload explicitly authorized by user on 2026-10-18 Asia/Seoul",
-  "publicationAuthorization": "사용자 원문: 업로드 해줘"
+  "remoteChecks": {
+    "result": "passed",
+    "sourceCommit": "cbd7df647dbffe3b33bda5606b82eafdbc84e32c",
+    "prNumber": 71,
+    "prUrl": "https://github.com/ohjun1998/burp-workbench-kr/pull/71",
+    "mergeCommit": "f2ede22978a54c1b6c56a8aebf440de9b785c4cb",
+    "tree": "49f24dd7aa8bf8eaf19ce115596e101484d2765c",
+    "mainTreeEqualsVerifiedPrTree": true,
+    "jobs": [
+      {
+        "id": 117620624830,
+        "name": "check",
+        "status": "completed",
+        "conclusion": "success",
+        "runId": 39108917156,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39108917156/job/117620624830",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-java@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check development prerequisites",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build and run regression and loopback HTTP checks",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify role-separated community portals with real HTTP sessions",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify authentication combinations through the production comparison controller",
+            "conclusion": "success"
+          },
+          {
+            "name": "Measure 50 operations through the production comparison controller (API adapter)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify standalone login form and redirect lifecycle",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify responsive Swing layouts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify traffic list and compact search settings",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify beginner guidance at default and minimum window sizes",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Scope editor at default and minimum window sizes",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Pretty Raw Hex and packet Search layouts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify JS text analysis workspace and modeless windows",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify cookie session inspector at default and minimum sizes",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify authorization policy and effect verification layouts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify server discovery controls evidence and history layouts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check packaging invariants",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify versioned downloads match current sources",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload verified extension",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload verification logs",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-java@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 117620625101,
+        "name": "windows",
+        "status": "completed",
+        "conclusion": "success",
+        "runId": 39108917171,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39108917171/job/117620625101",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-java@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build and execute every Java regression group on Windows",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify native Repeater titlebar maximize restore and close on Windows",
+            "conclusion": "success"
+          },
+          {
+            "name": "Repeat concurrent storage and cache-eviction regressions ten times",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Mapper indexes and concurrent project save on Windows",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute production capture and Swing timer on Windows",
+            "conclusion": "success"
+          },
+          {
+            "name": "Parse and execute startup script under Windows PowerShell 5.1 with controlled commands",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v7",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-java@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 117620625452,
+        "name": "isolated-disk-and-soak",
+        "status": "completed",
+        "conclusion": "success",
+        "runId": 39108917171,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39108917171/job/117620625452",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-java@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build, run complete release checks and verify the new Docker archive",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify actual ENOSPC, rollback and recovery on a private 16 MiB filesystem",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify sustained capture",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v7",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-java@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v6",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "build": {
+      "regression": {
+        "version": "0.44.0",
+        "regressionGroups": 69,
+        "regressionChecks": 2390,
+        "payloadHttpChecks": 132,
+        "allFeaturesHttpChecks": 102,
+        "bountyHttpChecks": 266,
+        "totalChecks": 2890,
+        "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+        "result": "passed"
+      },
+      "authLabAdapter": {
+        "result": "passed",
+        "labVersion": "3.10.0",
+        "extensionVersion": "0.44.0",
+        "extensionJarSha256": "646049d0b9ec7df6fd3e135005b4f539f0b8c93f37b4944c74869d9b75df9837",
+        "transport": "real loopback HTTP with Montoya API adapters",
+        "nativeExtensionLoaded": false,
+        "httpChecks": 420,
+        "httpTargetRequests": 497,
+        "extensionComparisonRuns": 42,
+        "extensionComparedAccountCells": 126,
+        "extensionIdentityChecks": 22,
+        "extensionTargetRequests": 353,
+        "baseUrl": "http://127.0.0.1:41497",
+        "database": "isolated H2 in Oracle compatibility mode",
+        "browserExecuted": false,
+        "privateProfile": true,
+        "credentialsIncludedInEvidence": false
+      },
+      "auth50Adapter": {
+        "result": "completed",
+        "labVersion": "3.10.0",
+        "extensionVersion": "0.44.0",
+        "extensionJarSha256": "646049d0b9ec7df6fd3e135005b4f539f0b8c93f37b4944c74869d9b75df9837",
+        "transport": "real loopback HTTP with Montoya API adapters",
+        "nativeExtensionLoaded": false,
+        "httpChecks": 2800,
+        "httpTargetRequests": 5879,
+        "uniqueFunctions": 50,
+        "invalidCombinationChecks": 33,
+        "detectionMetrics": {
+          "unconfigured": {
+            "run": {
+              "TP": 0,
+              "FP": 0,
+              "TN": 406,
+              "FN": 294,
+              "precision": null,
+              "recall": 0,
+              "falsePositiveRate": 0,
+              "reviewCount": 686,
+              "samples": 700
+            },
+            "account": {
+              "TP": 0,
+              "FP": 0,
+              "TN": 1708,
+              "FN": 392,
+              "precision": null,
+              "recall": 0,
+              "falsePositiveRate": 0,
+              "reviewCount": 1316,
+              "samples": 2100
+            }
+          },
+          "configured": {
+            "run": {
+              "TP": 294,
+              "FP": 0,
+              "TN": 406,
+              "FN": 0,
+              "precision": 1,
+              "recall": 1,
+              "falsePositiveRate": 0,
+              "reviewCount": 77,
+              "samples": 700
+            },
+            "account": {
+              "TP": 392,
+              "FP": 0,
+              "TN": 1708,
+              "FN": 0,
+              "precision": 1,
+              "recall": 1,
+              "falsePositiveRate": 0,
+              "reviewCount": 91,
+              "samples": 2100
+            }
+          }
+        },
+        "extensionComparisonRuns": 1400,
+        "extensionComparedAccountCells": 4200,
+        "extensionIdentityChecks": 21,
+        "extensionTargetRequests": 10822,
+        "baseUrl": "http://127.0.0.1:51221",
+        "database": "isolated H2 in Oracle compatibility mode",
+        "browserExecuted": false,
+        "nativeControllerInstances": 7,
+        "productionTimingUnchanged": true,
+        "privateProfile": true,
+        "credentialsIncludedInEvidence": false
+      },
+      "independentAuth50Analysis": {
+        "result": "passed",
+        "nativeComparisons": 1400,
+        "accountComparisons": 4200,
+        "httpCases": 2800,
+        "metrics": {
+          "unconfigured": {
+            "account": {
+              "TP": 0,
+              "FP": 0,
+              "TN": 1708,
+              "FN": 392,
+              "precision": null,
+              "recall": 0,
+              "falsePositiveRate": 0,
+              "reviewCount": 1316,
+              "samples": 2100
+            },
+            "run": {
+              "TP": 0,
+              "FP": 0,
+              "TN": 406,
+              "FN": 294,
+              "precision": null,
+              "recall": 0,
+              "falsePositiveRate": 0,
+              "reviewCount": 686,
+              "samples": 700
+            }
+          },
+          "configured": {
+            "account": {
+              "TP": 392,
+              "FP": 0,
+              "TN": 1708,
+              "FN": 0,
+              "precision": 1,
+              "recall": 1,
+              "falsePositiveRate": 0,
+              "reviewCount": 91,
+              "samples": 2100
+            },
+            "run": {
+              "TP": 294,
+              "FP": 0,
+              "TN": 406,
+              "FN": 0,
+              "precision": 1,
+              "recall": 1,
+              "falsePositiveRate": 0,
+              "reviewCount": 77,
+              "samples": 700
+            }
+          }
+        },
+        "review": {
+          "unconfigured": {
+            "total": 1316,
+            "violations": 385,
+            "definiteBlockedViolations": 7
+          },
+          "configured": {
+            "total": 91,
+            "violations": 0,
+            "definiteBlockedViolations": 0
+          }
+        }
+      },
+      "packagingUnitChecks": 6,
+      "versionedDownloadsAndSourceFingerprints": "passed"
+    },
+    "windows": {
+      "storageRepeat": {
+        "result": "passed",
+        "version": "0.44.0",
+        "iterations": 10,
+        "groups": [
+          "CapturePipelineTest",
+          "TrafficCaptureRecoveryTest"
+        ],
+        "executions": 20,
+        "note": "Repeated executions are not additional unique check counts."
+      },
+      "capture": {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Windows Server 2025",
+        "java": "17.0.20.1",
+        "mode": "soak",
+        "received": 3619,
+        "drops": 0,
+        "processingErrors": 0,
+        "errorStages": [],
+        "acceptedResponses": 3619,
+        "retainedRows": 3619,
+        "diskBytes": 15608567,
+        "heapBeforeBytes": 1597144,
+        "heapAfterBytes": 62043648,
+        "elapsedSeconds": 181.1467482,
+        "requestedSeconds": 180,
+        "intervalMillis": 50,
+        "result": "passed",
+        "checks": 8,
+        "passedChecks": [
+          "collection exceeds the former 250-row limit",
+          "every accepted packet remains in disk and UI",
+          "all response callbacks complete with zero drops and processing errors",
+          "real Swing collection timer remains active",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "unload deletes the active private traffic store"
+        ]
+      },
+      "nativeSwingRepeaterWindowChecks": 6,
+      "powershellVersion": "5.1.26100.33438"
+    },
+    "linux": {
+      "release": {
+        "result": "passed",
+        "command": "python dev.py release",
+        "freshOutputDirectory": true,
+        "committedDownloadsPreserved": true,
+        "dockerVersion": "3.10.0",
+        "dockerZipSha256": "c9f60b472b288c5509f1ce223a493aa9258650a71170a248004a00c27739e77f",
+        "freshDockerZipMatchesCommitted": true,
+        "version": "0.44.0",
+        "regressionGroups": 69,
+        "regressionChecks": 2390,
+        "payloadHttpChecks": 132,
+        "allFeaturesHttpChecks": 102,
+        "bountyHttpChecks": 266,
+        "totalChecks": 2890
+      },
+      "diskFull": {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Linux",
+        "java": "17.0.20.1",
+        "mode": "disk-full",
+        "fileSystemType": "tmpfs",
+        "fileSystemBytes": 16777216,
+        "retainedRows": 12,
+        "expectedDrops": 2,
+        "expectedProcessingErrors": 2,
+        "recovered": true,
+        "result": "passed",
+        "checks": 13,
+        "passedChecks": [
+          "disk exhaustion is confined to an explicitly selected tmpfs of at most 64 MiB",
+          "real filesystem capacity causes a capture write failure",
+          "OS reports ENOSPC on the isolated filesystem",
+          "failed partial append rolls back file length and packet count",
+          "retained packet restores exact request and response bytes",
+          "repeated write failures count exactly two dropped packets without breaking callbacks",
+          "repeated failures preserve all previously accepted records",
+          "freeing disk space resumes capture without reloading the extension",
+          "received counters and live Swing timer survive disk exhaustion",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "host error diagnostics contain no synthetic packet text or target URL",
+          "unload removes the traffic file after disk recovery"
+        ]
+      },
+      "capture": {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Linux",
+        "java": "17.0.20.1",
+        "mode": "soak",
+        "received": 3619,
+        "drops": 0,
+        "processingErrors": 0,
+        "errorStages": [],
+        "acceptedResponses": 3619,
+        "retainedRows": 3619,
+        "diskBytes": 15608570,
+        "heapBeforeBytes": 1791088,
+        "heapAfterBytes": 65420024,
+        "elapsedSeconds": 180.98055715,
+        "requestedSeconds": 180,
+        "intervalMillis": 50,
+        "result": "passed",
+        "checks": 8,
+        "passedChecks": [
+          "collection exceeds the former 250-row limit",
+          "every accepted packet remains in disk and UI",
+          "all response callbacks complete with zero drops and processing errors",
+          "real Swing collection timer remains active",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "unload deletes the active private traffic store"
+        ]
+      }
+    },
+    "scope": "Remote real loopback HTTP with Montoya API adapters and actual Windows/Linux OS checks; not a native Burp rerun, browser DOM test, or Oracle/Nginx rerun.",
+    "duplicateMainWorkflow": "Validated exact PR tree merged with [skip ci]; no duplicate main check claimed."
+  },
+  "publicationAuthorization": "사용자 원문: 업로드 해줘",
+  "resumeVerification": {
+    "changedFileCount": 41,
+    "gitBlobHashes": "all matched verified upload manifest before publication; conversation extended for resume",
+    "uploadedTreeMatchesLocalVerifiedTree": true,
+    "downloadSha256AndSourceFingerprints": "passed",
+    "archiveCrc": "passed",
+    "packagingUnitChecks": 4,
+    "independentReaggregation": "exactly equals published analysis.json for all 4200 account comparisons",
+    "newNativeBurpRunDuringResume": false,
+    "documentationCloseout": "Four documentation files only; validated source, JAR, ZIP, PDF and evidence preserved; skip duplicate CI"
+  }
 }

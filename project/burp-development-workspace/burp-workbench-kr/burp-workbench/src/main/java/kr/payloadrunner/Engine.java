@@ -132,12 +132,27 @@ public final class Engine {
   for(int i=0;i<c.payloads.size()&&requests<c.budget&&!stop.get()&&!halted;i++){
    delay(c.intervalMs,stop);if(stop.get())break;String marker="PR_"+UUID.randomUUID().toString().replace("-","").substring(0,16);String payload=expand(c.payloads.get(i),c.baseline,marker);byte[] request=render(c.template,payload,c.encoding);t=System.nanoTime();Response response=null;String verdict,evidence;
    requests++;try{response=parse(transport.send(request));failures=0;String[] f=classify(c,baseline,response,payload,marker);verdict=f[0];evidence=f[1];}catch(Exception e){failures++;if(e instanceof InterruptedException){Thread.currentThread().interrupt();stop.set(true);}if(isTimeout(e)||failures>=3){halted=true;reason=isTimeout(e)?"응답 대기시간 초과/응답 없음":"연속 전송/분석 오류 3회";}verdict="전송/분석 오류";evidence=e.getClass().getSimpleName()+": "+Objects.toString(e.getMessage(),"");}
-   if(c.profile==Profile.SQLI&&response!=null&&payload.contains("1=2")){Row truth=pairs.get(payload.replace("1=2","1=1"));if(truth!=null&&stable&&baseline.status>=200&&baseline.status<300&&truth.response.status==baseline.status&&response.status==baseline.status&&sameBody(truth.response.text,truth.payload,baseline.text,c.baseline)&&!sameBody(truth.response.text,truth.payload,response.text,payload)){verdict="SQL 조건 차이 후보";evidence="같은 입력의 1=1/1=2 응답 차이. 기준은 2회 동일; SQLi 확정에는 Repeater 재검증 필요";}}
-   if(c.profile==Profile.SQLI&&response!=null&&payload.contains("'1'='2'")){Row truth=pairs.get(payload.replace("'1'='2'","'1'='1'"));if(truth!=null&&stable&&baseline.status>=200&&baseline.status<300&&truth.response.status==baseline.status&&response.status==baseline.status&&sameBody(truth.response.text,truth.payload,baseline.text,c.baseline)&&!sameBody(truth.response.text,truth.payload,response.text,payload)){verdict="SQL 조건 차이 후보";evidence="같은 입력의 참/거짓 응답 차이. 기준은 2회 동일; 반사·WAF·로그인 영향을 확인하세요";}}
+   if(c.profile==Profile.SQLI&&response!=null){
+    String truePayload=payload.contains("'1'='2'")?payload.replace("'1'='2'","'1'='1'"):payload.contains("1=2")?payload.replace("1=2","1=1"):null;
+    Row truth=truePayload==null?null:pairs.get(truePayload);
+    if(truth!=null&&truth.response!=null&&stable&&usable(baseline)&&usable(truth.response)&&usable(response)&&baseline.status>=200&&baseline.status<300&&truth.response.status==baseline.status&&(response.status==baseline.status||response.status==404||response.status==410)&&sameBody(truth.response.text,truth.payload,baseline.text,c.baseline)&&(response.status!=truth.response.status||!sameBody(truth.response.text,truth.payload,response.text,payload))){
+      if(response.status==baseline.status){verdict="SQL 조건 차이 후보";evidence="기준 2회 동일 · 참 응답은 기준과 동일 · 거짓 본문 차이 · SQLi 확정에는 Repeater 재검증 필요";}
+      else if(requests<c.budget&&!stop.get()){
+        delay(c.intervalMs,stop);if(!stop.get()){
+          requests++;try{Response repeat=parse(transport.send(request));boolean repeated=usable(repeat)&&repeat.status==response.status&&repeat.text.equals(response.text);
+            receive.accept(new Row(-2,payload,0,compact(repeat),"거짓 조건 재검증",repeated?"거짓 상태/본문 2회 동일":"거짓 응답 불안정 · 조건 후보 판정 보류",request));
+            if(repeated){verdict="SQL 조건 차이 후보";evidence="기준 2회/거짓 2회 동일 · 참 "+truth.response.status+" = 기준 · 거짓 "+response.status+" · WAF/일반 필터 가능성 포함, SQLi 확정 아님";}
+            if(stopStatus(repeat.status)){halted=true;reason=stopReason(repeat.status);}
+          }catch(Exception ex){verdict="조건 재검증 불가";evidence="거짓 조건 반복 실패 · SQL 조건 후보 판정 보류";if(isTimeout(ex)||ex instanceof InterruptedException){halted=true;reason=evidence;if(ex instanceof InterruptedException){Thread.currentThread().interrupt();stop.set(true);}}}
+        }
+      }else evidence+=" · 재검증 예산 부족/중지: 상태 차이만으로 SQL 조건 후보를 판정하지 않음";
+    }
+   }
    Row row=new Row(i+1,payload,(System.nanoTime()-t)/1_000_000,response,verdict,evidence,request);if(payload.contains("1=1")||payload.contains("'1'='1'"))pairs.put(payload,row);receive.accept(new Row(row.index,row.payload,row.millis,compact(row.response),row.verdict,row.evidence,row.request));complete++;if(response!=null&&stopStatus(response.status)){halted=true;reason=stopReason(response.status);}
   }
   return new Summary(requests,complete,stop.get()||halted,requests>=c.budget&&complete<c.payloads.size(),reason);
  }
+ static boolean usable(Response r){return r.decoded&&!r.truncated;}
  static boolean sameBody(String a,String pa,String b,String pb){return a.equals(b)||normalized(a,pa).equals(normalized(b,pb));}
  static String normalized(String text,String payload){if(payload.isEmpty())return text;return text.replace(payload, "").replace(urlEncode(payload), "").replace(payload.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\"","&quot;"), "");}
  static Response compact(Response r){return r==null?null:new Response(r.status,r.wireLength,r.mime,r.text.substring(0,Math.min(RETAIN,r.text.length())),r.truncated||r.text.length()>RETAIN,r.raw,r.decoded);}

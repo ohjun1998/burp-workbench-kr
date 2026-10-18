@@ -1171,7 +1171,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     try {
       return WorkbenchScope.contains(api, q)
           && origin(q).equals(c.origin)
-          && (c.writes || Core.readMethod(q.method()))
+          && (c.writes || GraphqlSemantics.read(q))
           && (c.filter.isEmpty() || q.url().contains(c.filter));
     } catch (Exception e) {
       return false;
@@ -1347,7 +1347,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
           else if(credentialValues(q,c.names).equals(credentialValues(run.original,c.names)))finding=referenceFinding(run,response);
           else try{
             boolean exists=false;
-            if((response.statusCode()==404||response.statusCode()==410)&&Core.readMethod(run.original.method())&&!closed.get()&&c.epoch==epoch.get()){
+            if((response.statusCode()==404||response.statusCode()==410)&&GraphqlSemantics.read(run.original)&&!closed.get()&&c.epoch==epoch.get()){
               var check=sendRead(run.original,c);
               exists=check!=null&&check.statusCode()>=200&&check.statusCode()<300&&run.baseline()!=null&&JsAnalysisPanel.readBody(check).equals(JsAnalysisPanel.readBody(run.baseline()));
             }
@@ -1403,12 +1403,13 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   AuthFinding referenceFinding(Run run,HttpResponse response)throws Exception{
     boolean valid=response.statusCode()>=200&&response.statusCode()<300;
     if(valid&&response.body().length()<=MESSAGE_LIMIT){String body=JsAnalysisPanel.readBody(response);var json=AuthJudgement.json(body);valid=(json==null||!AuthJudgement.denied(json,run.context.rules()))&&run.context.responseRules().match(responseHeaders(response),body).isEmpty();}
+    if(valid&&GraphqlSemantics.query(run.original))valid=GraphqlSemantics.response(JsAnalysisPanel.readBody(response))==GraphqlSemantics.Result.DATA;
     if(!valid){run.baselineState=Run.Baseline.INVALID;run.baselineNote="기준 계정의 재전송 응답이 비정상 · HTTP "+response.statusCode();}
     return new AuthFinding(AuthFinding.Kind.REFERENCE,valid?"교차 인가 미검증":"현재 기준 세션 확인 필요","");
   }
 
   HttpResponse sendRead(HttpRequest request,Context c)throws Exception{
-    if(!Set.of("GET","HEAD").contains(request.method())||!origin(request).equals(c.origin)||!WorkbenchScope.contains(api,request)||closed.get()||c.epoch!=epoch.get())throw new IllegalArgumentException("기준/조회 요청 범위·취소 상태 확인");
+    if(!(Set.of("GET","HEAD").contains(request.method())||GraphqlSemantics.query(request))||!origin(request).equals(c.origin)||!WorkbenchScope.contains(api,request)||closed.get()||c.epoch!=epoch.get())throw new IllegalArgumentException("기준/조회 요청 범위·취소 상태 확인");
     burp.api.montoya.http.message.HttpRequestResponse rr;try{rr=api.http().sendRequest(request,RequestOptions.requestOptions().withResponseTimeout(10000).withRedirectionMode(RedirectionMode.NEVER));}catch(Exception ex){throw new IllegalArgumentException("기준/조회 전송 오류");}
     if(closed.get()||c.epoch!=epoch.get())throw new IllegalArgumentException("중지");
     if(rr==null||rr.request()==null||rr.response()==null||!sameTarget(rr.request(),request)||!WorkbenchScope.contains(api,rr.request())||!credentialValues(rr.request(),c.names).equals(credentialValues(request,c.names))||!bounded(rr.request(),rr.response(),c.largeFiles))throw new IllegalArgumentException("현재 기준 응답 없음 또는 실제 전송 변경");
@@ -1416,11 +1417,12 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
   boolean checkBaseline(Run run){
     run.baselineState=Run.Baseline.CHECKING;
-    if(!Set.of("GET","HEAD").contains(run.original.method())){run.baselineState=Run.Baseline.WRITE;run.baselineNote="기준 요청은 추가 재전송하지 않음 · 후속 조회로 처리 결과 확인";return true;}
+    if(!(Set.of("GET","HEAD").contains(run.original.method())||GraphqlSemantics.query(run.original))){run.baselineState=Run.Baseline.WRITE;run.baselineNote="기준 요청은 추가 재전송하지 않음 · 후속 조회로 처리 결과 확인";return true;}
     try{
       HttpResponse response=sendRead(run.original,run.context);run.currentBaseline=response;
       if(response.statusCode()<200||response.statusCode()>=300)throw new IllegalArgumentException("현재 기준 HTTP "+response.statusCode());
       if(response.body().length()<=MESSAGE_LIMIT){String body=JsAnalysisPanel.readBody(response);var json=AuthJudgement.json(body);if(json!=null&&AuthJudgement.denied(json,run.context.rules()))throw new IllegalArgumentException("현재 기준의 JSON 차단 규칙 일치");if(!run.context.responseRules().match(responseHeaders(response),body).isEmpty())throw new IllegalArgumentException("현재 기준의 응답 차단 규칙 일치");}
+      if(GraphqlSemantics.query(run.original)&&GraphqlSemantics.response(JsAnalysisPanel.readBody(response))!=GraphqlSemantics.Result.DATA)throw new IllegalArgumentException("현재 기준 GraphQL 성공 데이터 없음/오류");
       run.baselineState=Run.Baseline.VALID;run.baselineNote="현재 기준 HTTP "+response.statusCode()+" · 비교 직전 재확인";return true;
     }catch(Exception ex){if(closed.get()||run.context.epoch()!=epoch.get()){run.baselineNote="기준 검증 중지";run.baselineState=Run.Baseline.LEGACY;}else{run.baselineNote="세션 확인 필요 · "+(ex instanceof java.io.IOException?"기준 응답 디코딩 확인":ex.getMessage());run.baselineState=Run.Baseline.INVALID;}return false;}
   }

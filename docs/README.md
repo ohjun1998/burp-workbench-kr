@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [사이트 3.9.0 인증 조합·URL 권한 검증](LAB_3.9.0_KR.md) · [실제 Burp PDF 보고서](reports/2026-10-18/Auth_Comparison_Report_20261018.pdf) · [검증 기록](VERIFICATION_LAB_3.9.0.json)
+
 - [0.40.0 굴림·Render·읽기 쉬운 근거·우클릭 삭제](RELEASE_0.40.0_KR.md) · [검증 기록](VERIFICATION_0.40.0.json)
 - [0.39.2 요청당 종합 결과 하나·계정별 응답 코드](RELEASE_0.39.2_KR.md) · [검증 기록](VERIFICATION_0.39.2.json)
 - [0.39.1 계정 비교 시안 정렬·반응형 표·두 열 상세](RELEASE_0.39.1_KR.md) · [검증 기록](VERIFICATION_0.39.1.json)

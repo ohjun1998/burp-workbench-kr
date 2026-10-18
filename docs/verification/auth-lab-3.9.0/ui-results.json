@@ -1,0 +1,433 @@
+{
+  "result": "passed",
+  "browser": "146.0.7680.177",
+  "checks": 104,
+  "cases": [
+    {
+      "name": "community sidebar links to authentication lab",
+      "passed": true
+    },
+    {
+      "name": "all seven authentication pages in sidebar",
+      "passed": true
+    },
+    {
+      "name": "selected authentication page session",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/session alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session admin/users 403",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session requests/902 404",
+      "passed": true
+    },
+    {
+      "name": "browser logout session",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session member 401",
+      "passed": true
+    },
+    {
+      "name": "selected authentication page token",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/token alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token admin/users 403",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token requests/902 404",
+      "passed": true
+    },
+    {
+      "name": "browser logout token",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token member 401",
+      "passed": true
+    },
+    {
+      "name": "selected authentication page jwt",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/jwt alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/jwt member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/jwt admin/users 403",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/jwt requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/jwt requests/902 404",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/jwt alice",
+      "passed": true
+    },
+    {
+      "name": "browser logout jwt",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "selected authentication page session-token",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/session-token alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-token member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-token admin/users 403",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-token requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-token requests/902 404",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-token member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/session-token alice",
+      "passed": true
+    },
+    {
+      "name": "browser logout session-token",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-token member 401",
+      "passed": true
+    },
+    {
+      "name": "selected authentication page session-jwt",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/session-jwt alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-jwt member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-jwt admin/users 403",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-jwt requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-jwt requests/902 404",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/session-jwt alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/session-jwt alice",
+      "passed": true
+    },
+    {
+      "name": "browser logout session-jwt",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/session-jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "selected authentication page token-jwt",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/token-jwt alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token-jwt member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token-jwt admin/users 403",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token-jwt requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token-jwt requests/902 404",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token-jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/token-jwt alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token-jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/token-jwt alice",
+      "passed": true
+    },
+    {
+      "name": "browser logout token-jwt",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/token-jwt member 401",
+      "passed": true
+    },
+    {
+      "name": "selected authentication page all",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all admin/users 403",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all requests/902 404",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all me 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 401",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 401",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 401",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 200",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all alice",
+      "passed": true
+    },
+    {
+      "name": "browser logout all",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 401",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all admin/users 200",
+      "passed": true
+    },
+    {
+      "name": "vulnerable control visibly marked",
+      "passed": true
+    },
+    {
+      "name": "browser owner write succeeds",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all bob",
+      "passed": true
+    },
+    {
+      "name": "browser non-owner write denied",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all requests/901 200",
+      "passed": true
+    },
+    {
+      "name": "browser denied write preserved stored value",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all admin",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all admin/users 200",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/jwt alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/jwt me 401",
+      "passed": true
+    },
+    {
+      "name": "expired browser JWT is rejected",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 200",
+      "passed": true
+    },
+    {
+      "name": "no page horizontal overflow 1024",
+      "passed": true
+    },
+    {
+      "name": "browser login /auth-lab/all alice",
+      "passed": true
+    },
+    {
+      "name": "visible URL request /auth-lab/all member 200",
+      "passed": true
+    },
+    {
+      "name": "no page horizontal overflow 390",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation selects authentication page",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation closes",
+      "passed": true
+    },
+    {
+      "name": "no browser JavaScript errors",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "auth-lab-session-desktop.png",
+    "auth-lab-all-desktop.png",
+    "auth-lab-vulnerable-control.png",
+    "auth-lab-admin-access.png",
+    "auth-lab-all-1024.png",
+    "auth-lab-login-panel.png",
+    "auth-lab-all-390.png"
+  ],
+  "errors": []
+}

@@ -5,6 +5,7 @@ import hashlib
 import http.cookiejar
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import socket
@@ -18,6 +19,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 LAB = ROOT / 'project/burp-development-workspace/community-security-lab'
 WB = ROOT / 'project/burp-development-workspace/burp-workbench-kr/burp-workbench'
+LAB_VERSION = re.search(r'<artifactId>loop-community-lab</artifactId><version>([^<]+)', (LAB / 'pom.xml').read_text()).group(1)
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -168,7 +170,7 @@ def main():
             for asset in ['role-portal.js','role-portal.css']:
                 status('asset available ' + asset, guest, '/assets/'+asset, 200)
             data, _ = status('OpenAPI includes new endpoints', guest, '/v3/api-docs', 200)
-            check('OpenAPI version and portal path', data['info']['version']=='3.8.0' and '/api/access/fixed/admin/members' in data['paths'])
+            check('OpenAPI version and portal path', data['info']['version']==LAB_VERSION and '/api/access/fixed/admin/members' in data['paths'])
             from community_workspace_checks import run_workspace_checks
             run_workspace_checks(Client, status, check, guest, alice, bob, admin, moderator)
             from community_policy_checks import run_policy_checks
@@ -185,7 +187,7 @@ def main():
                 server.kill(); server.wait(timeout=5)
         with socket.socket() as probe:
             closed = probe.connect_ex(('127.0.0.1', args.port)) != 0
-        report = {'version':'3.8.0', 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
+        report = {'version':LAB_VERSION, 'passed':sum(c['passed'] for c in checks), 'failed':sum(not c['passed'] for c in checks), 'checks':checks,
                   'method':'Current Spring MVC/Tomcat sources, isolated H2 Oracle mode, separate real HTTP cookie jars on loopback',
                   'serverPortClosed':closed, 'browserDOM':False, 'nativeBurp':False, 'docker':False}
         (args.out/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

@@ -1,0 +1,296 @@
+{
+  "siteVersion": "3.9.0",
+  "browserVersion": "146.0.7680.177",
+  "passed": 66,
+  "failed": 0,
+  "method": "Actual isolated Chromium against current compiled Spring MVC/Tomcat sources and fresh H2 database",
+  "checks": [
+    {
+      "name": "password visibility control",
+      "passed": true
+    },
+    {
+      "name": "wrong selected role stays on login",
+      "passed": true
+    },
+    {
+      "name": "general login has no administration menu",
+      "passed": true
+    },
+    {
+      "name": "header search returns real matching posts",
+      "passed": true
+    },
+    {
+      "name": "category filter only renders security posts",
+      "passed": true
+    },
+    {
+      "name": "profile lists actual granted permissions",
+      "passed": true
+    },
+    {
+      "name": "all eight training cases remain available",
+      "passed": true
+    },
+    {
+      "name": "fixed training request enforces feature permission",
+      "passed": true
+    },
+    {
+      "name": "explicit vulnerable training comparison remains available",
+      "passed": true
+    },
+    {
+      "name": "author sees server-authorized edit",
+      "passed": true
+    },
+    {
+      "name": "browser comment workflow",
+      "passed": true
+    },
+    {
+      "name": "actual login role menu bob",
+      "passed": true
+    },
+    {
+      "name": "other member cannot read private post",
+      "passed": true
+    },
+    {
+      "name": "forced management navigation is rejected",
+      "passed": true
+    },
+    {
+      "name": "direct API remains protected",
+      "passed": true
+    },
+    {
+      "name": "actual login role menu admin",
+      "passed": true
+    },
+    {
+      "name": "role policy matrix renders",
+      "passed": true
+    },
+    {
+      "name": "access audit shows denial",
+      "passed": true
+    },
+    {
+      "name": "access audit does not expose query values",
+      "passed": true
+    },
+    {
+      "name": "authorized manager can read private post",
+      "passed": true
+    },
+    {
+      "name": "manager creates course through UI",
+      "passed": true
+    },
+    {
+      "name": "member course application appears in activity",
+      "passed": true
+    },
+    {
+      "name": "manager approval updates state",
+      "passed": true
+    },
+    {
+      "name": "member sees approved course",
+      "passed": true
+    },
+    {
+      "name": "actual login role menu moderator",
+      "passed": true
+    },
+    {
+      "name": "moderator has scoped navigation",
+      "passed": true
+    },
+    {
+      "name": "moderation list excludes private content",
+      "passed": true
+    },
+    {
+      "name": "assigned board exposes allowed edit",
+      "passed": true
+    },
+    {
+      "name": "other board does not expose edit",
+      "passed": true
+    },
+    {
+      "name": "no page overflow community/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed community/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens community/1024",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer community/1024",
+      "passed": true
+    },
+    {
+      "name": "no page overflow community/390",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed community/390",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens community/390",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer community/390",
+      "passed": true
+    },
+    {
+      "name": "no page overflow admin-users/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed admin-users/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens admin-users/1024",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer admin-users/1024",
+      "passed": true
+    },
+    {
+      "name": "no page overflow admin-users/390",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed admin-users/390",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens admin-users/390",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer admin-users/390",
+      "passed": true
+    },
+    {
+      "name": "no page overflow permissions/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed permissions/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens permissions/1024",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer permissions/1024",
+      "passed": true
+    },
+    {
+      "name": "no page overflow permissions/390",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed permissions/390",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens permissions/390",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer permissions/390",
+      "passed": true
+    },
+    {
+      "name": "no page overflow moderation/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed moderation/1024",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens moderation/1024",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer moderation/1024",
+      "passed": true
+    },
+    {
+      "name": "no page overflow moderation/390",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation starts closed moderation/390",
+      "passed": true
+    },
+    {
+      "name": "mobile drawer opens moderation/390",
+      "passed": true
+    },
+    {
+      "name": "escape closes mobile drawer moderation/390",
+      "passed": true
+    },
+    {
+      "name": "desktop navigation can collapse",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation selects page and closes",
+      "passed": true
+    },
+    {
+      "name": "logout returns to standalone login",
+      "passed": true
+    },
+    {
+      "name": "login fits mobile viewport",
+      "passed": true
+    },
+    {
+      "name": "no browser JavaScript exceptions",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "login-desktop.png",
+    "community-desktop.png",
+    "profile-desktop.png",
+    "training-desktop.png",
+    "admin-users-desktop.png",
+    "admin-permissions-desktop.png",
+    "admin-audit-desktop.png",
+    "admin-courses-desktop.png",
+    "moderation-desktop.png",
+    "community-1024.png",
+    "community-390.png",
+    "admin-users-1024.png",
+    "admin-users-390.png",
+    "permissions-1024.png",
+    "permissions-390.png",
+    "moderation-1024.png",
+    "moderation-390.png",
+    "login-mobile.png"
+  ],
+  "browserErrors": [],
+  "nativeBurp": false,
+  "serverPortClosed": true
+}

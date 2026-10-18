@@ -1,0 +1,1555 @@
+{
+  "result": "passed",
+  "checks": 197,
+  "cases": [
+    {
+      "name": "auth page session",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session admin",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session alice",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session bob",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth boundary session admin fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session admin fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session admin fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session admin fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session admin vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session admin vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session alice fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session alice fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary session alice fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session alice fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary session alice vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session alice vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session bob fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session bob fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary session bob fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary session bob fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session bob vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session bob vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session anonymous fixed/member",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session anonymous fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session anonymous fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session anonymous fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session anonymous vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session anonymous vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth page token",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login token admin",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login token alice",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login token bob",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth boundary token admin fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token admin fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token admin fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token admin fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token admin vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token admin vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token alice fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token alice fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary token alice fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token alice fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary token alice vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token alice vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token bob fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token bob fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary token bob fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary token bob fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token bob vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token bob vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token anonymous fixed/member",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token anonymous fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token anonymous fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token anonymous fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token anonymous vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token anonymous vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth page jwt",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login jwt admin",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login jwt alice",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login jwt bob",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt admin fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt admin fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt admin fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt admin fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt admin vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt admin vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt alice fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt alice fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary jwt alice fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt alice fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary jwt alice vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt alice vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt bob fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt bob fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary jwt bob fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary jwt bob fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt bob vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt bob vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary jwt anonymous fixed/member",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary jwt anonymous fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary jwt anonymous fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary jwt anonymous fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary jwt anonymous vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary jwt anonymous vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth page session-token",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session-token admin",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session-token alice",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session-token bob",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token admin fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token admin fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token admin fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token admin fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token admin vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token admin vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token alice fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token alice fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary session-token alice fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token alice fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary session-token alice vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token alice vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token bob fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token bob fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary session-token bob fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary session-token bob fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token bob vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token bob vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-token anonymous fixed/member",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-token anonymous fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-token anonymous fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-token anonymous fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-token anonymous vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-token anonymous vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth page session-jwt",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session-jwt admin",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session-jwt alice",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login session-jwt bob",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt admin fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt admin fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt admin fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt admin fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt admin vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt admin vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt alice fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt alice fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary session-jwt alice fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt alice fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary session-jwt alice vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt alice vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt bob fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt bob fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary session-jwt bob fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary session-jwt bob fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt bob vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt bob vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary session-jwt anonymous fixed/member",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-jwt anonymous fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-jwt anonymous fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-jwt anonymous fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-jwt anonymous vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary session-jwt anonymous vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth page token-jwt",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login token-jwt admin",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login token-jwt alice",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login token-jwt bob",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt admin fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt admin fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt admin fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt admin fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt admin vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt admin vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt alice fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt alice fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary token-jwt alice fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt alice fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary token-jwt alice vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt alice vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt bob fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt bob fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary token-jwt bob fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary token-jwt bob fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt bob vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt bob vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary token-jwt anonymous fixed/member",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token-jwt anonymous fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token-jwt anonymous fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token-jwt anonymous fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token-jwt anonymous vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary token-jwt anonymous vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth page all",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login all admin",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login all alice",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth login all bob",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "name": "auth boundary all admin fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all admin fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all admin fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all admin fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all admin vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all admin vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all alice fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all alice fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary all alice fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all alice fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary all alice vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all alice vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all bob fixed/member",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all bob fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "name": "auth boundary all bob fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 404,
+        "expected": 404
+      }
+    },
+    {
+      "name": "auth boundary all bob fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all bob vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all bob vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "expected": 200
+      }
+    },
+    {
+      "name": "auth boundary all anonymous fixed/member",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary all anonymous fixed/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary all anonymous fixed/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary all anonymous fixed/requests/902",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary all anonymous vuln/admin/users",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth boundary all anonymous vuln/requests/901",
+      "passed": true,
+      "details": {
+        "status": 401,
+        "expected": 401
+      }
+    },
+    {
+      "name": "auth origin preserves published host port",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    }
+  ],
+  "environment": "isolated H2; Oracle execution is recorded separately",
+  "serverPortClosed": true
+}

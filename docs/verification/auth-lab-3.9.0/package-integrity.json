@@ -1,0 +1,10 @@
+{
+  "result": "passed",
+  "zipSha256": "a9d32758e06950e6135a9498a2d3d68c6951c53c89aecf129f5cb8ac7076817c",
+  "archiveEntries": 92,
+  "sourceFilesMatched": 90,
+  "crc": "passed",
+  "pathSafety": "passed",
+  "prebuiltWarIncluded": false,
+  "extensionJarUnchanged": "0b6a1147ae8cad653e7f6995aaf55f80082cb2dd49fe333a0b871224404134e1"
+}

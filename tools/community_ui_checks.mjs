@@ -6,7 +6,7 @@ import path from 'node:path';
 const require=createRequire(process.env.PLAYWRIGHT_MODULE_ROOT?path.join(process.env.PLAYWRIGHT_MODULE_ROOT,'package.json'):import.meta.url);
 const {chromium}=require('playwright');
 const [base,out]=process.argv.slice(2),checks=[],screenshots=[],errors=[],contexts=[];
-let browser,current;
+let browser,current,siteVersion=null;
 const check=(name,passed)=>{checks.push({name,passed:!!passed});assert.ok(passed,name);};
 async function ready(page){await page.locator('#view[aria-busy="false"]').waitFor();await page.evaluate(()=>document.fonts.ready);}
 async function visit(page,view='feed'){await page.goto(base+'/?view='+encodeURIComponent(view));await ready(page);}
@@ -23,6 +23,7 @@ try{
  await mkdir(out,{recursive:true});browser=await chromium.launch({headless:true,...(process.env.COMMUNITY_BROWSER_EXECUTABLE?{executablePath:process.env.COMMUNITY_BROWSER_EXECUTABLE,args:JSON.parse(process.env.COMMUNITY_BROWSER_ARGS||'[]')}:{})});
  const guestContext=await browser.newContext({viewport:{width:1440,height:1000},locale:'ko-KR',reducedMotion:'reduce'});contexts.push(guestContext);
  const guest=await guestContext.newPage();current=guest;guest.on('pageerror',error=>errors.push(error.message));
+ siteVersion=(await (await guest.request.get(base+'/api/bounty/manifest')).json()).version;
  await guest.goto(base+'/login');await guest.evaluate(()=>document.fonts.ready);await capture(guest,'login-desktop');
  await guest.locator('#password-toggle').click();check('password visibility control',await guest.locator('#password').getAttribute('type')==='text');
  await guest.locator('#password-toggle').click();
@@ -90,7 +91,7 @@ try{
  if(current)await current.screenshot({path:path.join(out,'failure.png'),fullPage:true}).catch(()=>{});
  process.exitCode=1;console.error(error);
 }finally{
- await writeFile(path.join(out,'results.json'),JSON.stringify({siteVersion:'3.8.0',browserVersion:browser?.version(),passed:checks.filter(c=>c.passed).length,failed:checks.filter(c=>!c.passed).length,method:'Actual isolated Chromium against current compiled Spring MVC/Tomcat sources and fresh H2 database',checks,screenshots,browserErrors:errors,nativeBurp:false},null,2)+'\n');
+ await writeFile(path.join(out,'results.json'),JSON.stringify({siteVersion,browserVersion:browser?.version(),passed:checks.filter(c=>c.passed).length,failed:checks.filter(c=>!c.passed).length,method:'Actual isolated Chromium against current compiled Spring MVC/Tomcat sources and fresh H2 database',checks,screenshots,browserErrors:errors,nativeBurp:false},null,2)+'\n');
  for(const context of contexts)await context.close();if(browser)await browser.close();
  console.log('Community Chromium checks:',checks.filter(c=>c.passed).length,'passed;',checks.filter(c=>!c.passed).length,'failed;',screenshots.length,'screenshots');
 }

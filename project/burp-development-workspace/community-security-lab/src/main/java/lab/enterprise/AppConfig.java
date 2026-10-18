@@ -9,5 +9,9 @@ public class AppConfig implements WebMvcConfigurer {
  @Bean public JdbcTemplate jdbc(){var d=new DriverManagerDataSource();String url=env("DB_URL","jdbc:h2:mem:lab;MODE=Oracle;DB_CLOSE_DELAY=-1");d.setDriverClassName(url.startsWith("jdbc:oracle")?"oracle.jdbc.OracleDriver":"org.h2.Driver");d.setUrl(url);d.setUsername(env("DB_USER","sa"));d.setPassword(env("DB_PASSWORD",""));return new JdbcTemplate(d);}
  @Override public void addResourceHandlers(ResourceHandlerRegistry r){r.addResourceHandler("/assets/**").addResourceLocations("classpath:/static/");}
  @Bean public CommunityAccessPolicy accessPolicy(){return new CommunityAccessPolicy(jdbc());}
- @Override public void addInterceptors(InterceptorRegistry registry){registry.addInterceptor(new CommunityAccessInterceptor(accessPolicy()));}
+ @Bean public AuthenticationLab authenticationLab(){return new AuthenticationLab(jdbc(),accessPolicy());}
+ @Override public void addInterceptors(InterceptorRegistry registry){
+  registry.addInterceptor(new AuthenticationLabInterceptor(authenticationLab())).addPathPatterns("/api/auth-lab/**");
+  registry.addInterceptor(new CommunityAccessInterceptor(accessPolicy())).excludePathPatterns("/api/auth-lab/**");
+ }
 }

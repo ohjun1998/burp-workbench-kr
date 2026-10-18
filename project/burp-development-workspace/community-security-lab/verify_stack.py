@@ -3,6 +3,32 @@ from pathlib import Path
 import argparse,datetime,json,shutil,subprocess,sys,tempfile,traceback
 import http_test_client as http
 
+def authentication_checks(base,check):
+ profiles=['session','token','jwt','session-token','session-jwt','token-jwt','all'];count=0
+ def verify(name,ok,details):
+  nonlocal count
+  count+=1;check(name,ok,details)
+ for profile in profiles:
+  page=http.get(base+'/auth-lab/'+profile)
+  verify('auth page '+profile,page.status_code==200 and 'auth-login-form' in page.text,{'status':page.status_code})
+  actors={}
+  for actor in ['admin','alice','bob']:
+   client=http.Session();login=client.request('POST',base+'/api/auth-lab/login',data={'profile':profile,'username':actor,'password':'LabOnly!2026'})
+   verify('auth login '+profile+' '+actor,login.status_code==200,{'status':login.status_code})
+   actors[actor]=(client,login.json()['headers'])
+  actors['anonymous']=(http.Session(),{})
+  for actor,(client,headers) in actors.items():
+   for mode,path,expected in [('fixed','member',401 if actor=='anonymous' else 200),('fixed','admin/users',401 if actor=='anonymous' else 200 if actor=='admin' else 403),('fixed','requests/901',401 if actor=='anonymous' else 200 if actor in ['admin','alice'] else 404),('fixed','requests/902',401 if actor=='anonymous' else 200 if actor in ['admin','bob'] else 404),('vuln','admin/users',401 if actor=='anonymous' else 200),('vuln','requests/901',401 if actor=='anonymous' else 200)]:
+    response=client.get(base+'/api/auth-lab/'+profile+'/'+mode+'/'+path,headers=headers)
+    okay=response.status_code==expected
+    if expected>=400:okay=okay and 'AUTHLAB_PRIVATE_' not in response.text and 'AUTHLAB_ADMIN_DIRECTORY' not in response.text
+    if expected==200 and path.startswith('requests/'):okay=okay and response.json()['data']['ownerId']==(1 if path.endswith('901') else 2)
+    verify('auth boundary '+profile+' '+actor+' '+mode+'/'+path,okay,{'status':response.status_code,'expected':expected})
+ # Simulate the externally published port through Nginx. Host must retain its port.
+ response=http.Session().request('POST',base+'/api/auth-lab/login',headers={'Host':'127.0.0.1:8088','Origin':'http://127.0.0.1:8088'},data={'profile':'session','username':'alice','password':'LabOnly!2026'})
+ verify('auth origin preserves published host port',response.status_code==200,{'status':response.status_code})
+ return count
+
 def main():
  p=argparse.ArgumentParser();p.add_argument('--url',default='http://web');p.add_argument('--output',default='/results');a=p.parse_args();base=a.url.rstrip('/');out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
  report={'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'target':base,'status':'FAILED','checks':[],'oracle_http_suite_completed':False}
@@ -31,6 +57,7 @@ def main():
   check('Extension training manifest',manifest.status_code==200 and len(manifest.json().get('engines',[]))==9,{'status_code':manifest.status_code})
   sm=http.get(base+'/assets/extensions-fixtures.js.map',timeout=10)
   check('JS source map training fixture',sm.status_code==200 and sm.json().get('version')==3,{'status_code':sm.status_code})
+  report['authentication_lab_checks']=authentication_checks(base,check)
   report['oracle_http_suite_completed']=True;report['status']='PASSED';return 0
  except Exception as e:
   report['error']=str(e);report['traceback']=traceback.format_exc();print('Verification FAILED: '+str(e),file=sys.stderr);return 1

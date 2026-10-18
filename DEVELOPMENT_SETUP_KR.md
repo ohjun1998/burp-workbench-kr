@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.43.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.8.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.43.0 검증 기록](docs/VERIFICATION_0.43.0.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.43.0**, Feature Mapper **0.3.1**과 실습 사이트 **3.9.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.43.0 검증 기록](docs/VERIFICATION_0.43.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -224,3 +224,9 @@ python tools/render_ui_layout.py --auth-only --sizes 1024x720 1280x800 --check -
 ## 0.39.0 계정 비교 화면
 
 인증 탐지·요청 비교를 각각 ON/OFF로 제어합니다. 사용자 매핑과 상세 창, Ctrl+Space 전달은 [변경 안내](docs/RELEASE_0.39.0_KR.md)를 확인하세요. 인증 탐지는 Scope와 독립하며 실제 비교 요청은 기존 범위 검사를 유지합니다.
+
+## 인증 조합·계정 권한 비교 검사
+
+`python tools/check_auth_lab.py --mode adapter`는 격리된 H2 서버와 운영 비교 컨트롤러를 사용합니다. `python tools/check_community_ui.py --auth-lab`은 일곱 로그인 페이지와 실제 브라우저 조작을 검사합니다. `--auth-smoke`는 Docker·Oracle 검증에서 사용하는 동일한 인증 경계 대조를 H2에서 실행합니다.
+
+실제 Burp 검사는 `check_auth_lab.py --mode native --burp-jar <별도 Burp JAR> --burp-java <Java 21 이상> --accept-community-license`로 실행합니다. 임시 프로필·별도 DB·loopback 서버를 만들며 기존 Burp·브라우저·프록시를 변경하지 않습니다. `--browser`는 native 검사 후 웹 페이지도 검증합니다. 브라우저 런타임은 위의 기존 Community UI 설정을 사용합니다. 보고서는 `tools/build_auth_lab_report.py`가 저장된 성공 근거를 읽어 생성합니다.

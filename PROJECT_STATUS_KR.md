@@ -1,7 +1,21 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.43.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.43.0 / 실습 사이트 3.9.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 인증 조합·URL 권한 검증과 실제 Burp 보고서 — 사이트 3.9.0
+
+[PR #67](https://github.com/ohjun1998/burp-workbench-kr/pull/67)을 main에 병합했습니다. 커뮤니티 사이드 메뉴에 세션·불투명 토큰·JWT와 복합 조합 7개 로그인 페이지를 추가했습니다. 로그인 묶음·필수 인증값·현재 DB 역할·계정 상태·CSRF·관리자 권한·객체 소유권을 검사합니다. 정상 URL과 의도된 인가 누락 대조를 함께 제공합니다. 확장 0.43.0 소스·JAR·소스 ZIP과 기존 수집 OFF/SCOPE·기본 OFF는 유지합니다.
+
+실제 Burp Community 2026.3.3에서 운영 비교 컨트롤러로 42개 기록·기준 제외 계정 대조 126개와 신원/만료 기준 보호 22개를 확인했습니다. 정상 대조 28개는 기대 정책과 일치했고 의도된 두 결함 유형을 7개 방식에서 실행한 14개는 우회 의심으로 구분했습니다. 독립 HTTP 420개·브라우저 104개, 기존 커뮤니티 HTTP 384개·브라우저 66개, release 2,851개와 패키징 6개가 통과했습니다. 실제 쓰기 전후 저장 상태, 인증값 누락·혼합·JWT 변조·만료·폐기도 대조했습니다.
+
+최종 검사 커밋 `3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db`의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096237334)·[Chromium](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096234982)이 성공했습니다. [Oracle/Nginx](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096001482)는 새 인증 경계 197개·기존 HTTP 54개·외부 포트 Origin·loopback 공개를 확인했습니다. [Windows/Linux 안정성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096002995)도 성공했으며 해당 커밋의 런타임·검사 입력 373개가 최종 소스와 바이트 단위로 같습니다. 반복 검사 수는 합산하지 않습니다.
+
+소스 병합 커밋 `5610a1c57f0b786b730972caa5b437bc874dde96`의 트리 `ca4f4e706c4d99b6573b78fbafaaf929c3e82e79`가 최종 PR head와 일치합니다. 후속 기록은 상태·검증 JSON·날짜별 대화만 갱신하고 사이트·배포 ZIP·PDF·근거 ZIP을 보존합니다. 문서 갱신 후 main 전체 CI를 별도로 실행한 것으로 표현하지 않습니다.
+
+PDF는 8쪽이며 모든 쪽을 렌더링해 확인했습니다. 실행 ZIP의 소스 90개와 압축 CRC·해시가 일치합니다. 상세 420개와 실제 Burp의 DB는 H2 Oracle 호환 모드이며, Burp GUI 클릭·Windows DPI/IME는 미수행입니다. Burp 헤드리스 내부 UI 경고 2건과 기존 비동기 검색 회귀 1회 실패·분리 재실행/최종 release 통과 이력은 상세 검증에 남깁니다.
+
+[PDF 보고서](docs/reports/2026-10-18/Auth_Comparison_Report_20261018.pdf) · [요청·응답 근거 ZIP](docs/reports/2026-10-18/Auth_Comparison_Evidence_20261018.zip) · [실습 안내](docs/LAB_3.9.0_KR.md) · [검증 기록](docs/VERIFICATION_LAB_3.9.0.json) · [Docker ZIP](downloads/docker/3.9.0/community-security-lab-3.9.0-docker.zip) · [날짜별 대화](docs/chat-logs/2026-10-18/authentication-combinations-lab-390.md)
 
 ## 요청·응답 목록·JS 분석 고도화 — 0.43.0
 

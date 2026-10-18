@@ -32,6 +32,7 @@ final class AuthEvidencePanel extends JPanel {
   }
   static String observation(String note){if(note.startsWith("기준 계정")||note.equals("비교 대상에 지정하지 않음"))return note;int at=note.indexOf(" · ");return at<0?note:note.substring(at+3);}
   static String explanation(AuthRunSummary.Result result){
+    if(result.label().equals("업무 규칙 위반 후보"))return result.reason();
     if(result.label().equals("정책 일치"))return "다른 계정의 허용·차단 응답이 실행 당시 설정한 접근 정책과 일치했습니다.";
     if(result.label().equals("비교 중"))return "응답을 수집하고 있습니다. 모든 비교가 끝나면 종합 결과를 표시합니다.";
     return switch(result.verdict()){
@@ -41,7 +42,8 @@ final class AuthEvidencePanel extends JPanel {
       case NONE->"다른 인증으로 비교할 수 있는 유효한 응답이 없습니다. 기준 계정만으로는 교차 권한을 판단하지 않습니다.";
     };
   }
-  static String nextStep(AuthRunSummary.Result result){return switch(result.verdict()){
+  static String nextStep(AuthRunSummary.Result result){
+    if(result.label().equals("업무 규칙 위반 후보"))return "아래 전후 값과 변화 경계를 확인하고, 동시 요청 없는 초기 상태에서 재현하세요. 업무 규칙 위반 후보이며 확정 판정이 아닙니다.";return switch(result.verdict()){
     case SUSPECT->"대상 계정에 이 데이터의 조회·실행 권한이 있는지 확인하세요. 응답 코드나 본문 일치만으로 취약점을 확정하지 않습니다.";
     case BLOCKED->result.label().equals("정책 일치")?"설정한 허용 정책이 실제 업무 권한과 맞는지 확인하세요.":"관측한 비교 응답이 차단 근거와 일치합니다. 필요한 다른 계정·객체도 같은 정책으로 확인하세요.";
     case NONE->"다른 인증 후보를 비교 계정에 지정한 뒤 다시 비교하세요. 전송되지 않은 항목은 요청·세션 상태를 확인하세요.";
@@ -66,7 +68,7 @@ final class AuthEvidencePanel extends JPanel {
     }
     return out.toString();
   }
-  static String effectValue(AuthEffectCheck.Snapshot s){return s==null?"미관측":!s.present()?"[대상·필드 없음]":shortValue(s.value());}
+  static String effectValue(AuthEffectCheck.Snapshot s){return s==null?"미관측":!s.present()?"[대상·필드 없음]":shortValue(s.value() instanceof java.math.BigDecimal?AuthEffectCheck.display(s.value()):s.value());}
   static String shortValue(Object value){String text=String.valueOf(value);return text.length()>160?text.substring(0,160)+"…":text;}
   static String readBody(burp.api.montoya.http.message.responses.HttpResponse response)throws java.io.IOException{return JsBodyDecoder.decode(response.body().getBytes(),response.headerValue("Content-Encoding"),response.headerValue("Content-Type"),128*1024);}
   static String value(Map<String,Object> map,String key){if(!map.containsKey(key))return "[필드 없음]";Object value=map.get(key);if(value==AuthJudgement.Empty.OBJECT)return "{}";if(value==AuthJudgement.Empty.ARRAY)return "[]";String s=MetadataExport.json(value);return s.length()>160?s.substring(0,160)+"…":s;}

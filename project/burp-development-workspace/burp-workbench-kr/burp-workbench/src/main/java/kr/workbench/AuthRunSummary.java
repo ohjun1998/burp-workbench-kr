@@ -25,6 +25,7 @@ final class AuthRunSummary {
     if(compared==0)return new Result("비교 미성립",AuthVerdict.NONE,"기준 계정을 제외한 유효한 비교 응답이 없습니다. 상세에서 미전송·세션 상태를 확인하세요.");
     if(run.baseline()==null||run.baseline().statusCode()<200||run.baseline().statusCode()>=300)return new Result("확인 필요",AuthVerdict.REVIEW,"기준 응답이 정상 성공 응답이 아닙니다. 기준 계정·세션을 확인하세요.");
     String counts="기준 계정 제외 · 비교 응답 "+compared+"개 · 우회 의심 "+suspect+" · 차단 "+blocked+" · 허용 정책 일치 "+allowed+" · 확인 필요 "+uncertain+" · 비교 미성립 "+missing;
+    if(suspect>0&&java.util.Arrays.stream(run.packets).anyMatch(p->p.finding().verdict()==AuthVerdict.SUSPECT&&p.effect!=null&&AuthEffectCheck.numeric(p.effect.config().mode())&&p.effect.outcome()==AuthEffectCheck.Outcome.OBSERVED))return new Result("업무 규칙 위반 후보",AuthVerdict.SUSPECT,"설정한 숫자 변화 경계를 넘는 전후 상태를 관측했습니다. 권한 정책과 별개로 실제 업무 규칙과 동시 변경을 확인하세요.");
     if(suspect>0)return new Result("우회 의심",AuthVerdict.SUSPECT,counts+" · 실제 권한 위반 여부는 상세 근거로 확인하세요.");
     if(uncertain>0||missing>0||!run.note.equals("완료"))return new Result("확인 필요",AuthVerdict.REVIEW,counts+" · 일부 결과가 미확인 상태입니다.");
     if(run.baselineState==AuthComparePanel.Run.Baseline.WRITE&&java.util.Arrays.stream(run.packets).noneMatch(p->p.effect!=null&&p.effect.outcome()==AuthEffectCheck.Outcome.OBSERVED))return new Result("확인 필요",AuthVerdict.REVIEW,counts+" · 쓰기 기준 세션/실제 처리 결과 재검증 필요");

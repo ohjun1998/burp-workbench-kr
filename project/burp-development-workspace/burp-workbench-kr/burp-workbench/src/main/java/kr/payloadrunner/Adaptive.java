@@ -49,6 +49,7 @@ public final class Adaptive {
  boolean comparable(Row r){return r!=null&&r.response()!=null&&r.response().decoded()&&!r.response().truncated()&&r.response().status()>=200&&r.response().status()<300;}
  String norm(Row r){return normalized(r.response().text(),r.payload());}
  boolean pair(Row truth,Row falsehood){return stable&&comparable(truth)&&comparable(falsehood)&&truth.response().status()==baseline.status()&&falsehood.response().status()==baseline.status()&&sameBody(truth.response().text(),truth.payload(),baseline.text(),c.baseline())&&!sameBody(truth.response().text(),truth.payload(),falsehood.response().text(),falsehood.payload());}
+ boolean sqlPair(Row truth,Row falsehood){return stable&&comparable(truth)&&falsehood!=null&&falsehood.response()!=null&&usable(falsehood.response())&&truth.response().status()==baseline.status()&&(falsehood.response().status()==baseline.status()||falsehood.response().status()==404||falsehood.response().status()==410)&&sameBody(truth.response().text(),truth.payload(),baseline.text(),c.baseline())&&(truth.response().status()!=falsehood.response().status()||!sameBody(truth.response().text(),truth.payload(),falsehood.response().text(),falsehood.payload()));}
  Result execute(){
   LinkedHashSet<String> unique=new LinkedHashSet<>();for(String p:c.payloads())if(!p.isBlank())unique.add(p);
   // Exact concrete duplicates, including a repeated baseline, need no new request.
@@ -98,11 +99,11 @@ public final class Adaptive {
    List<String> truths=plan.stream().filter(p->p.contains("1=1")||p.contains("'1'='1'")).toList();
    for(String truth:truths){String falsity=truth.replace("1=1","1=2").replace("'1'='1'","'1'='2'");if(!unique.contains(falsity)||!available())continue;
     Row tr=send(truth,"SQL 참 조건"),fa=send(falsity,"SQL 거짓 조건");if(tr!=null)used.add(truth);if(fa!=null)used.add(falsity);
-    if(pair(tr,fa)&&available()){
+    if(sqlPair(tr,fa)&&available()){
      // Reverse order rejects transient/order-dependent differences. A control catches late session drift.
      Row fa2=send(falsity,"SQL 역순 거짓 재검증"),tr2=send(truth,"SQL 역순 참 재검증"),control=send(c.baseline(),"SQL 기준 재확인");
-     if(pair(tr2,fa2)&&comparable(control)&&norm(fa).equals(norm(fa2))&&norm(tr).equals(norm(tr2))&&control.response().status()==baseline.status()&&control.response().text().equals(baseline.text())){
-      note(fa2,"SQL 조건 차이 재현 후보","참/거짓 차이 2회, 역순 재현, 기준 재확인 · SQL 처리 여부는 수동 확인 필요");reason="SQL 조건 차이 재현 · 나머지 변형 생략";return result(unique.size(),countUsed(plan,used));
+     if(sqlPair(tr2,fa2)&&fa.response().status()==fa2.response().status()&&comparable(control)&&norm(fa).equals(norm(fa2))&&norm(tr).equals(norm(tr2))&&control.response().status()==baseline.status()&&control.response().text().equals(baseline.text())){
+      note(fa2,"SQL 조건 차이 재현 후보","참/거짓 상태·본문 차이 2회, 역순 재현, 기준 재확인 · WAF/일반 필터 가능성 포함, SQLi 확정 아님");reason="SQL 조건 차이 재현 · 나머지 변형 생략";return result(unique.size(),countUsed(plan,used));
      }
     }
    }

@@ -7,7 +7,7 @@ import burp.api.montoya.http.message.responses.HttpResponse;
 final class AuthComparison {
   static AuthFinding assess(AuthComparePanel.Run run,int slot,HttpRequest request,HttpResponse response,boolean exists)throws Exception{
     var result=assessResponse(run,slot,request,response,exists);
-    if(!Core.readMethod(request.method())&&(result.verdict()==AuthVerdict.SUSPECT||result.kind()==AuthFinding.Kind.ALLOWED))return new AuthFinding(AuthFinding.Kind.WRITE_UNVERIFIED,"쓰기 응답만으로 처리 성공 미확정 · 전후 조회 필요",result.changes());
+    if(!GraphqlSemantics.read(request)&&(result.verdict()==AuthVerdict.SUSPECT||result.kind()==AuthFinding.Kind.ALLOWED))return new AuthFinding(AuthFinding.Kind.WRITE_UNVERIFIED,"쓰기 응답만으로 처리 성공 미확정 · 전후 조회 필요",result.changes());
     return result;
   }
   private static AuthFinding assessResponse(AuthComparePanel.Run run,int slot,HttpRequest request,HttpResponse response,boolean exists)throws Exception{
@@ -30,6 +30,13 @@ final class AuthComparison {
     var result=AuthJudgement.compare(baseline.statusCode(),original,response.statusCode(),body,rules,c.owners()[slot],exists);
     var fingerprint=c.responseRules().assess(baseline.statusCode(),AuthComparePanel.responseHeaders(baseline),original,response.statusCode(),AuthComparePanel.responseHeaders(response),body,rules);
     var expected=c.matrix().expected(request.method(),request.url(),slot);
+    if(GraphqlSemantics.query(request)&&result.kind()!=AuthFinding.Kind.BASELINE&&result.kind()!=AuthFinding.Kind.DENIAL_DATA){
+      if(GraphqlSemantics.response(original)!=GraphqlSemantics.Result.DATA)return new AuthFinding(AuthFinding.Kind.BASELINE,"기준 GraphQL 성공 데이터 없음/오류",result.changes());
+      var graph=GraphqlSemantics.response(body);
+      if(graph==GraphqlSemantics.Result.DENIED)return new AuthFinding(expected==BountyMatrix.Expected.ALLOW?AuthFinding.Kind.CONFLICT:AuthFinding.Kind.BLOCKED,"GraphQL errors 권한 거부 · data 보호 데이터 없음",result.changes());
+      if(graph==GraphqlSemantics.Result.ERROR)return new AuthFinding(AuthFinding.Kind.REVIEW,"GraphQL 오류/부분 데이터 · 반환 필드와 권한 수동 확인",result.changes());
+      if(graph==GraphqlSemantics.Result.UNKNOWN&&response.statusCode()>=200&&response.statusCode()<300)return new AuthFinding(AuthFinding.Kind.REVIEW,"GraphQL 성공 데이터 확인 불가",result.changes());
+    }
     if(fingerprint!=null&&result.kind()!=AuthFinding.Kind.BASELINE&&result.kind()!=AuthFinding.Kind.DENIAL_DATA){
       if(fingerprint.kind()==AuthFinding.Kind.BLOCKED&&expected==BountyMatrix.Expected.ALLOW)return new AuthFinding(AuthFinding.Kind.CONFLICT,"기대 ALLOW · 차단 관측 · 세션/정책 재검토 · "+fingerprint.reason(),result.changes());
       result=new AuthJudgement.Result(fingerprint.kind(),fingerprint.reason(),result.changes());

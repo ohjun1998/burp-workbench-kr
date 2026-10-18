@@ -7,7 +7,7 @@
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
 | 최신 확장 · 요청·응답 목록과 JS 분석 고도화 | 0.43.0 | [JAR](extensions/0.43.0/burp-workbench-kr-0.43.0.jar) · [소스](extensions/0.43.0/burp-workbench-kr-0.43.0-source.zip) |
-| 커뮤니티 실습 Docker 실행 ZIP | 3.8.0 | [community-security-lab-3.8.0-docker.zip](docker/3.8.0/community-security-lab-3.8.0-docker.zip) |
+| 커뮤니티 실습 Docker 실행 ZIP | 3.9.0 | [community-security-lab-3.9.0-docker.zip](docker/3.9.0/community-security-lab-3.9.0-docker.zip) |
 | Feature Mapper JAR·브라우저 도우미·소스 | 0.3.1 | [다운로드](feature-mapper/0.3.1/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
@@ -15,7 +15,7 @@
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
-Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 로그인 주소는 http://127.0.0.1:8088/login 입니다. 일반 사용자는 게시글 목록, 관리자는 같은 커뮤니티의 사용자 관리 화면으로 연결됩니다. [공통 권한·새 화면·실행 방법](../docs/LAB_3.8.0_KR.md)을 참고하세요. 동시 계정 비교는 서로 다른 브라우저 프로필을 사용합니다. [현재 버전의 실제 검증 범위](../docs/VERIFICATION_LAB_3.8.0.json)를 확인하세요.
+Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴더에 풀고 Windows는 `start.ps1`, Linux/macOS는 `sh start.sh`를 실행합니다. 첫 실행에는 이미지와 Maven 의존성을 다운로드하며 Oracle 준비에 시간이 걸립니다. 로그인 주소는 http://127.0.0.1:8088/login 입니다. 일반 사용자는 게시글 목록, 관리자는 같은 커뮤니티의 사용자 관리 화면으로 연결됩니다. [인증 방식별 로그인·권한 검증·실행 방법](../docs/LAB_3.9.0_KR.md)을 참고하세요. 동시 계정 비교는 서로 다른 브라우저 프로필을 사용합니다. [현재 버전의 실제 검증 범위](../docs/VERIFICATION_LAB_3.9.0.json)를 확인하세요.
 
 소스 ZIP: 확장 폴더의 `python build_all.py --test`로 확장 회귀 검사를 실행합니다. `dev.py check`의 전체 사이트 HTTP·모의 진단에는 저장소 전체 소스와 실습 런타임이 필요하므로 저장소 체크아웃을 사용하세요.
 
@@ -28,6 +28,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 | 이전 확장 · 세션·권한 판정 | 0.41.0 | [JAR](extensions/0.41.0/burp-workbench-kr-0.41.0.jar) · [소스](extensions/0.41.0/burp-workbench-kr-0.41.0-source.zip) |
 | 이전 확장 · 종합 결과 | 0.39.2 | [JAR](extensions/0.39.2/burp-workbench-kr-0.39.2.jar) · [소스](extensions/0.39.2/burp-workbench-kr-0.39.2-source.zip) |
 | 이전 확장 | 0.37.4 | [JAR](extensions/0.37.4/burp-workbench-kr-0.37.4.jar) · [소스](extensions/0.37.4/burp-workbench-kr-0.37.4-source.zip) |
+| 이전 커뮤니티 Docker | 3.8.0 | [Docker ZIP](docker/3.8.0/community-security-lab-3.8.0-docker.zip) |
 | 이전 커뮤니티 Docker | 3.7.1 | [Docker ZIP](docker/3.7.1/community-security-lab-3.7.1-docker.zip) |
 | 이전 커뮤니티 Docker | 3.7.0 | [Docker ZIP](docker/3.7.0/community-security-lab-3.7.0-docker.zip) |
 | 이전 커뮤니티 Docker | 3.6.0 | [Docker ZIP](docker/3.6.0/community-security-lab-3.6.0-docker.zip) |
@@ -72,3 +73,5 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 최신 확장은 0.42.0입니다. JS·JSON·XML·텍스트 자동 분석, 분석 목록·패킷 팝업과 Ctrl+R 사용법은 [0.42.0 안내](../docs/RELEASE_0.42.0_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
 
+
+[인증 조합·계정 권한 비교 PDF 보고서](../docs/reports/2026-10-18/Auth_Comparison_Report_20261018.pdf) · [가린 요청·응답 근거 ZIP](../docs/reports/2026-10-18/Auth_Comparison_Evidence_20261018.zip)

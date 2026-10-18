@@ -37,6 +37,8 @@ jobs:
         run: python dev.py check
       - name: Verify role-separated community portals with real HTTP sessions
         run: python tools/check_role_portals.py
+      - name: Verify authentication combinations through the production comparison controller
+        run: python tools/check_auth_lab.py --mode adapter --out tmp/auth-lab-ci
       - name: Verify standalone login form and redirect lifecycle
         run: node --test tools/test_community_login.mjs
       - name: Verify responsive Swing layouts
@@ -86,6 +88,10 @@ jobs:
             audit/0.23.0/.run/server.log
             tmp/role-portals/results.json
             tmp/role-portals/server.log
+            tmp/auth-lab-ci/summary.json
+            tmp/auth-lab-ci/http-results.json
+            tmp/auth-lab-ci/extension-results.json
+            tmp/auth-lab-ci/extension-history.png
             tmp/ui-layout-ci/controls.csv
             tmp/ui-layout-ci/content.csv
             tmp/ui-layout-ci/layout-report.json

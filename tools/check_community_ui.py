@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Compile current lab sources and exercise the actual UI in isolated Chromium."""
-import argparse, hashlib, json, os, shutil, socket, subprocess, time, urllib.request, uuid
+import argparse, hashlib, json, os, shutil, socket, subprocess, sys, time, urllib.request, uuid
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -13,6 +13,8 @@ def main():
     parser.add_argument('--java',default='java')
     parser.add_argument('--node',default='node')
     parser.add_argument('--out',type=Path,default=ROOT/'tmp/community-ui')
+    parser.add_argument('--auth-lab',action='store_true',help='Run the authentication lab browser scenarios')
+    parser.add_argument('--auth-smoke',action='store_true',help='Run the deployment authentication checks on isolated H2')
     args=parser.parse_args();args.out=args.out.resolve()
     with socket.socket() as probe:probe.bind(('127.0.0.1',args.port))
     hashes=json.loads((RUNTIME/'runtime-hashes.json').read_text());jars=[]
@@ -40,7 +42,19 @@ def main():
                 except OSError:pass
                 time.sleep(.2)
             else:raise RuntimeError('Lab startup timeout')
-            subprocess.run([args.node,str(ROOT/'tools/community_ui_checks.mjs'),base,str(args.out)],check=True,cwd=ROOT)
+            if args.auth_smoke:
+                sys.path.insert(0,str(LAB))
+                from verify_stack import authentication_checks
+                cases=[]
+                def check(name,passed,details):
+                    cases.append({'name':name,'passed':bool(passed),'details':details})
+                    if not passed:raise AssertionError(name)
+                count=authentication_checks(base,check)
+                (args.out/'results.json').write_text(json.dumps({'result':'passed','checks':count,'cases':cases,'environment':'isolated H2; Oracle execution is recorded separately'},ensure_ascii=False,indent=2)+'\n')
+                print('Authentication deployment checks:',count,'passed')
+            else:
+                checks=ROOT/'tools'/('auth_lab_ui_checks.mjs' if args.auth_lab else 'community_ui_checks.mjs')
+                subprocess.run([args.node,str(checks),base,str(args.out)],check=True,cwd=ROOT)
     finally:
         if server is not None:
             server.terminate()

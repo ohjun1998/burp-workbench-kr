@@ -16,3 +16,5 @@
 
 .table-wrap:focus-visible{outline:3px solid #91a2ff;outline-offset:3px}.messages{min-width:640px}.table-hint{display:none;color:#8b9ab0;font-size:11px;margin:0 0 9px}.policy-panel .messages td:first-child{min-width:210px;width:42%}.policy-panel .messages td:not(:first-child),.policy-panel .messages th:not(:first-child){text-align:center}
 @media(max-width:760px){.table-hint{display:block}.messages td{line-height:1.8}}
+
+.sidebox>.auth-lab-link{display:block;padding:12px 14px;margin:4px 0;border-radius:8px;text-decoration:none;color:inherit;font-size:13px;line-height:1.6;background:#edf2fa}.sidebox>.auth-lab-link:hover{background:#dfe9f7}

@@ -1,7 +1,21 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.44.0 / 실습 사이트 3.10.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.45.0 / 실습 사이트 3.10.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 메뉴를 유지한 로직 고도화·배포 완료 — 0.45.0
+
+[PR #74](https://github.com/ohjun1998/burp-workbench-kr/pull/74)를 main에 병합했습니다. 선행 최초 검증 [PR #73](https://github.com/ohjun1998/burp-workbench-kr/pull/73)도 이력에 포함해 병합됐습니다. 독립 메뉴 10개와 배치는 유지하면서 빈 사용자·자료 응답 판정, 대상 차단 규칙의 400·422 처리, Angular·대형 JS API 후보 보존, SQLite·Sequelize 오류 탐지와 302 뒤 조회 연결을 개선했습니다. 메뉴·배치 소스 5개는 기준과 같습니다.
+
+같은 작업에서 완료한 실제 Burp Community·Chromium의 로컬 Juice Shop 최종 검증은 기능 조건 33/33·브라우저 5/5입니다. 이전 실패 5개를 해소했고, 기본 규칙 18칸은 TP6·FP0·TN9·FN0·보류3입니다. 빈 200의 FP1을 보류로 바꿨으며 대상 차단 규칙 재검사 6칸은 TN6·보류0입니다. 이번 재개는 이 최종 원본 복구·독립 재집계·배포 확인으로, 새 native Burp 실행을 주장하지 않습니다.
+
+검증한 PR head `3dc08cc21a9690ef8f1a0b0a1bd3340b6c1b28eb`의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39121260750)와 [Windows/Linux](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39121260779)가 모두 성공했습니다. 회귀·HTTP 2,942개(신규 52개), 패키징 6개, 인증 조합·50개 기능 API adapter 비교, 전체 화면 배치와 배포 소스 지문을 확인했습니다. 50개 기능의 설정 후 2,100개 대조는 TP392·FP0·FN0·REVIEW91이며 이전 결과를 유지했습니다. 이 감사의 REVIEW는 엄격한 TN/FN과 중복될 수 있어 합산하지 않으며, Juice Shop의 보류 제외 집계와도 구별합니다.
+
+Windows/Linux 3분 수집은 각각 3,634/3,623건 모두 누락·처리 오류 0입니다. 실제 ENOSPC·복구 13개, Windows 저장·캐시 10회, Repeater 창 제어·PowerShell 6개도 통과했습니다. API adapter 검사를 native Burp GUI로 표현하지 않습니다.
+
+main 소스 병합 커밋 `cb6314f3b5917fe90e611414ec2573327295e0b1`의 트리 `03bc245c44d9a1dc5a768db7f93d70963ddae9ed`는 원격 검사한 소스·배포 파일 및 로컬 검증본과 같습니다. 성공한 PR의 동일 소스 병합 CI와 문서 완료 기록의 CI는 중복 실행하지 않습니다. 설치 JAR·소스 ZIP·5쪽 PDF·개별 판정 사유 CSV·가림 근거 ZIP·한국 시간 날짜별 대화를 함께 제공합니다. crAPI·수동 Burp GUI·Windows DPI/IME·외부 OAST/BApps/아카이브·대규모 성능은 이번 로컬 범위 밖이며 SQL·저장·브라우저 실행의 후보와 확정을 구분합니다.
+
+[변경 안내](docs/RELEASE_0.45.0_KR.md) · [JAR·소스](downloads/README.md) · [보고서](docs/reports/2026-10-18-logic-upgrade/Workbench_Logic_Upgrade_0.45.0_KR.pdf) · [판정 사유 CSV](audit/oss-lab/results/0.45.0/account-results.csv) · [검증](docs/VERIFICATION_0.45.0.json) · [날짜별 대화](docs/chat-logs/2026-10-18/juice-logic-upgrade.md)
 
 ## 계정 응답 판정·쓰기 보류 사유 고도화·배포 완료 — 0.44.0
 

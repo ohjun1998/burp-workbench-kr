@@ -8,6 +8,8 @@ on:
       - 'tools/check_community_ui.py'
       - 'tools/community_ui_checks.mjs'
       - 'tools/auth_lab_ui_checks.mjs'
+      - 'tools/auth50_ui_checks.mjs'
+      - 'audit/auth50/expected-policy.csv'
       - '.github/workflows/community-ui.yml'
   workflow_dispatch:
 
@@ -52,6 +54,10 @@ jobs:
         env:
           PLAYWRIGHT_MODULE_ROOT: ${{ github.workspace }}/tmp/browser
         run: python tools/check_community_ui.py --auth-lab --port 18740 --out tmp/auth-lab-ui
+      - name: Exercise 50 operations, four actors and seven authentication combinations
+        env:
+          PLAYWRIGHT_MODULE_ROOT: ${{ github.workspace }}/tmp/browser
+        run: python tools/check_community_ui.py --auth50 --port 18741 --out tmp/auth50-ui
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -63,5 +69,8 @@ jobs:
             tmp/auth-lab-ui/*.png
             tmp/auth-lab-ui/ui-results.json
             tmp/auth-lab-ui/server.log
+            tmp/auth50-ui/*.png
+            tmp/auth50-ui/ui-results.json
+            tmp/auth50-ui/server.log
           if-no-files-found: warn
           retention-days: 14

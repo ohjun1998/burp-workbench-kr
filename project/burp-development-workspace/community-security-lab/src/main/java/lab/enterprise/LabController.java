@@ -118,7 +118,7 @@ public class LabController {
  document(paths,"/api/workspace/reset","post",Set.of(),Set.of());
  document(paths,"/api/access/reset","post",Set.of(),Set.of());
  document(paths,"/api/auth/login","post",Set.of("username","password","accountType"),Set.of());
- return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.9.0"),"paths",paths);
+ return Map.of("openapi","3.0.3","info",Map.of("title","LOOP Community API","version","3.10.0"),"paths",paths);
  }
  private static void document(Map<String,Object> paths,String path,String method,Set<String> fields,Set<String> query){
  @SuppressWarnings("unchecked") Map<String,Object> item=(Map<String,Object>)paths.computeIfAbsent(path,k->new LinkedHashMap<>());

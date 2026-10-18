@@ -1,0 +1,51 @@
+id,group,name,method,path,baseline,admin,alice,bob,anonymous
+1,커뮤니티,공개 게시글 목록,GET,feed,alice,ALLOW,ALLOW,ALLOW,ALLOW
+2,커뮤니티,공지사항 조회,GET,announcements,alice,ALLOW,ALLOW,ALLOW,ALLOW
+3,커뮤니티,공개 도움말 조회,GET,help/articles/101,alice,ALLOW,ALLOW,ALLOW,ALLOW
+4,커뮤니티,공개 주제 검색,GET,search/topics,alice,ALLOW,ALLOW,ALLOW,ALLOW
+5,커뮤니티,회원 디렉터리 조회,GET,members/directory,admin,ALLOW,ALLOW,ALLOW,DENY
+6,커뮤니티,게시글 작성,POST,posts,admin,ALLOW,ALLOW,ALLOW,DENY
+7,커뮤니티,Alice 비공개 글 조회,GET,posts/701,alice,ALLOW,ALLOW,DENY,DENY
+8,커뮤니티,Alice 임시 글 편집,PATCH,posts/701,alice,ALLOW,ALLOW,DENY,DENY
+9,커뮤니티,Bob 게시글 삭제,DELETE,posts/702,bob,ALLOW,DENY,ALLOW,DENY
+10,운영,신고 게시글 숨김,POST,moderation/posts/703/hide,admin,ALLOW,DENY,DENY,DENY
+11,댓글,Bob 비공개 댓글 조회,GET,comments/801,bob,ALLOW,DENY,ALLOW,DENY
+12,댓글,Alice 댓글 편집,PATCH,comments/802,alice,ALLOW,ALLOW,DENY,DENY
+13,댓글,Bob 댓글 삭제,DELETE,comments/803,bob,ALLOW,DENY,ALLOW,DENY
+14,운영,토론 상단 고정,POST,discussions/704/pin,admin,ALLOW,DENY,DENY,DENY
+15,커뮤니티,Alice 글 수정 이력 조회,GET,posts/701/history,alice,ALLOW,ALLOW,DENY,DENY
+16,개인정보,Alice 비공개 프로필 조회,GET,profiles/alice/private,alice,ALLOW,ALLOW,DENY,DENY
+17,개인정보,Bob 연락처 변경,PATCH,profiles/bob/contact,bob,ALLOW,DENY,ALLOW,DENY
+18,개인정보,Alice 개인정보 내보내기,GET,privacy/alice/export,alice,DENY,ALLOW,DENY,DENY
+19,보안,Bob 등록 기기 해제,POST,devices/bob/revoke,bob,DENY,DENY,ALLOW,DENY
+20,보안,Alice API 키 재발급,POST,keys/alice/rotate,alice,DENY,ALLOW,DENY,DENY
+21,개인정보,Bob 알림함 조회,GET,notifications/bob,bob,DENY,DENY,ALLOW,DENY
+22,개인정보,Alice 알림 읽음 처리,POST,notifications/alice/read,alice,DENY,ALLOW,DENY,DENY
+23,개인정보,Bob 저장 검색 삭제,DELETE,saved-searches/bob/901,bob,DENY,DENY,ALLOW,DENY
+24,보안,Alice 보안 이력 조회,GET,security/alice/audit,alice,DENY,ALLOW,DENY,DENY
+25,운영,사용자 이용 제한,POST,administration/accounts/42/lock,admin,ALLOW,DENY,DENY,DENY
+26,교육,공개 강의 목록,GET,courses/catalog,alice,ALLOW,ALLOW,ALLOW,ALLOW
+27,교육,팀 A 강의 자료 조회,GET,courses/team-a/lesson/11,alice,ALLOW,ALLOW,DENY,DENY
+28,교육,강의 수강 신청,POST,enrollments,admin,ALLOW,ALLOW,ALLOW,DENY
+29,교육,Alice 수강 신청 취소,POST,enrollments/alice/31/cancel,alice,ALLOW,ALLOW,DENY,DENY
+30,교육,Bob 수강 승인,POST,enrollments/bob/32/approve,admin,ALLOW,DENY,DENY,DENY
+31,교육,Bob 수료증 조회,GET,certificates/bob/41,bob,ALLOW,DENY,ALLOW,DENY
+32,행사,Alice 행사 참가 등록,POST,events/alice/51/register,alice,ALLOW,ALLOW,DENY,DENY
+33,행사,Bob 행사 예약 취소,DELETE,events/bob/52/reservation,bob,ALLOW,DENY,ALLOW,DENY
+34,결제,Alice 결제 환불,POST,orders/alice/61/refund,alice,ALLOW,ALLOW,DENY,DENY
+35,결제,Bob 결제 청구서 조회,GET,invoices/bob/62,bob,ALLOW,DENY,ALLOW,DENY
+36,조직,팀 A 비공개 문서 조회,GET,teams/a/documents/71,alice,ALLOW,ALLOW,DENY,DENY
+37,조직,팀 B 위키 편집,PATCH,teams/b/wiki/72,bob,ALLOW,DENY,ALLOW,DENY
+38,조직,팀 A 구성원 초대,POST,teams/a/invitations,alice,ALLOW,ALLOW,DENY,DENY
+39,조직,팀 B 구성원 내보내기,DELETE,teams/b/members/73,bob,ALLOW,DENY,ALLOW,DENY
+40,조직,팀 A 보고서 내보내기,GET,teams/a/reports/export,alice,ALLOW,ALLOW,DENY,DENY
+41,파일,Alice 첨부파일 등록,POST,attachments/alice,alice,ALLOW,ALLOW,DENY,DENY
+42,파일,Bob 비공개 파일 다운로드,GET,files/bob/82/download,bob,ALLOW,DENY,ALLOW,DENY
+43,파일,Alice 파일 공유 링크 생성,POST,files/alice/83/share,alice,ALLOW,ALLOW,DENY,DENY
+44,파일,Bob 파일 공유 링크 폐기,DELETE,files/bob/84/share,bob,ALLOW,DENY,ALLOW,DENY
+45,협업,공동 프로젝트 보드 조회,GET,projects/shared/board,alice,DENY,ALLOW,ALLOW,DENY
+46,운영,관리자 사용 현황 조회,GET,administration/usage,admin,ALLOW,DENY,DENY,DENY
+47,운영,전체 회원 정보 내보내기,GET,administration/members/export,admin,ALLOW,DENY,DENY,DENY
+48,운영,게시판 운영 역할 부여,PUT,administration/roles/43,admin,ALLOW,DENY,DENY,DENY
+49,지원,Alice 문의 내용 조회,GET,support/alice/91,alice,ALLOW,ALLOW,DENY,DENY
+50,지원,Bob 문의 완료 처리,POST,support/bob/92/close,bob,ALLOW,DENY,ALLOW,DENY

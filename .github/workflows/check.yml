@@ -16,7 +16,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
@@ -39,6 +39,10 @@ jobs:
         run: python tools/check_role_portals.py
       - name: Verify authentication combinations through the production comparison controller
         run: python tools/check_auth_lab.py --mode adapter --out tmp/auth-lab-ci
+      - name: Measure 50 operations through the production comparison controller (API adapter)
+        run: |
+          python tools/check_auth50.py --mode adapter --out tmp/auth50-ci
+          python tools/verify_auth50_results.py --run-dir tmp/auth50-ci --out tmp/auth50-analysis-ci
       - name: Verify standalone login form and redirect lifecycle
         run: node --test tools/test_community_login.mjs
       - name: Verify responsive Swing layouts
@@ -92,6 +96,10 @@ jobs:
             tmp/auth-lab-ci/http-results.json
             tmp/auth-lab-ci/extension-results.json
             tmp/auth-lab-ci/extension-history.png
+            tmp/auth50-ci/summary.json
+            tmp/auth50-ci/http-results.json
+            tmp/auth50-ci/extension-results.json
+            tmp/auth50-analysis-ci/*
             tmp/ui-layout-ci/controls.csv
             tmp/ui-layout-ci/content.csv
             tmp/ui-layout-ci/layout-report.json

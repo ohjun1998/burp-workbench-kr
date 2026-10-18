@@ -58,6 +58,12 @@ def main():
   sm=http.get(base+'/assets/extensions-fixtures.js.map',timeout=10)
   check('JS source map training fixture',sm.status_code==200 and sm.json().get('version')==3,{'status_code':sm.status_code})
   report['authentication_lab_checks']=authentication_checks(base,check)
+  sys.path.insert(0,str(Path(__file__).parent/'protocols'))
+  from auth50_http_checks import run as fifty_run
+  fifty=fifty_run(base)
+  (out/'auth50-http-results.json').write_text(json.dumps(fifty,ensure_ascii=False,indent=2),encoding='utf-8')
+  check('Fifty operations x seven profiles x four actors x paired controls (2800 cases)',fifty['checks']==2800 and all(c['passed'] for c in fifty['cases']),{'checks':fifty['checks'],'invalid_combinations':len(fifty['invalidCombinationChecks']),'write_cases':fifty['writesChecked']})
+  report['fifty_operation_cases']=fifty['checks']
   report['oracle_http_suite_completed']=True;report['status']='PASSED';return 0
  except Exception as e:
   report['error']=str(e);report['traceback']=traceback.format_exc();print('Verification FAILED: '+str(e),file=sys.stderr);return 1

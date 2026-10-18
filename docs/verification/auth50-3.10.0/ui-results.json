@@ -1,0 +1,855 @@
+{
+  "result": "passed",
+  "labVersion": "3.10.0",
+  "checks": 210,
+  "cases": [
+    {
+      "name": "community has fifty-function sidebar link",
+      "passed": true
+    },
+    {
+      "name": "all fifty distinct functions rendered",
+      "passed": true
+    },
+    {
+      "name": "seven authentication choices",
+      "passed": true
+    },
+    {
+      "name": "four identity choices",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session/admin",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session/bob",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session/anonymous",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token/admin",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token/bob",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token/anonymous",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared jwt/admin",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared jwt/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared jwt/bob",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared jwt/anonymous",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-token/admin",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-token/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-token/bob",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-token/anonymous",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-jwt/admin",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-jwt/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-jwt/bob",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared session-jwt/anonymous",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token-jwt/admin",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token-jwt/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token-jwt/bob",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared token-jwt/anonymous",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/admin",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/admin/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/bob",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/bob/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/anonymous",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/anonymous/fixed",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 1/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 2/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 3/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 4/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 5/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 6/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 7/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 8/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 9/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 10/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 11/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 12/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 13/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 14/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 15/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 16/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 17/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 18/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 19/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 20/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 21/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 22/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 23/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 24/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 25/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 26/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 27/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 28/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 29/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 30/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 31/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 32/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 33/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 34/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 35/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 36/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 37/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 38/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 39/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 40/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 41/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 42/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 43/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 44/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 45/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 46/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 47/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 48/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 49/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "visible result 50/alice/fixed",
+      "passed": true
+    },
+    {
+      "name": "keyword filters functions",
+      "passed": true
+    },
+    {
+      "name": "method filter",
+      "passed": true
+    },
+    {
+      "name": "sidebar filters business category",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/bob",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/alice",
+      "passed": true
+    },
+    {
+      "name": "visible result 50/alice/vuln",
+      "passed": true
+    },
+    {
+      "name": "browser account prepared all/bob",
+      "passed": true
+    },
+    {
+      "name": "403-looking vulnerable write really changed state",
+      "passed": true
+    },
+    {
+      "name": "page fits viewport 1024",
+      "passed": true
+    },
+    {
+      "name": "fifty rows remain available 1024",
+      "passed": true
+    },
+    {
+      "name": "page fits viewport 390",
+      "passed": true
+    },
+    {
+      "name": "fifty rows remain available 390",
+      "passed": true
+    },
+    {
+      "name": "mobile sidebar opens",
+      "passed": true
+    },
+    {
+      "name": "mobile sidebar closes with Escape",
+      "passed": true
+    },
+    {
+      "name": "no browser script errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "auth50-desktop.png",
+    "auth50-denial-after-write.png",
+    "auth50-1024.png",
+    "auth50-390.png"
+  ],
+  "browser": "146.0.7680.177"
+}

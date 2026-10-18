@@ -533,5 +533,25 @@
   "testMetadataCorrection": "Legacy community role checks now compare OpenAPI with current POM version. Browser evidence reads the server manifest version. Rechecked 384 HTTP and 66 browser cases with reported 3.9.0.",
   "verifiedSourceHead": "3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db",
   "runtimeEquivalenceEvidence": "docs/verification/auth-lab-3.9.0/runtime-equivalence.json",
-  "pullRequest": "https://github.com/ohjun1998/burp-workbench-kr/pull/67"
+  "pullRequest": "https://github.com/ohjun1998/burp-workbench-kr/pull/67",
+  "mainSourceMerge": {
+    "pullRequest": 67,
+    "commit": "5610a1c57f0b786b730972caa5b437bc874dde96",
+    "tree": "ca4f4e706c4d99b6573b78fbafaaf929c3e82e79",
+    "prHead": "01b8e18bf468b1629914f2e6fe1274b4c6419c74",
+    "treeMatchesFinalPrHead": true,
+    "verifiedCodeHead": "3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db",
+    "documentationOnlyAfterChecks": true
+  },
+  "mainCi": {
+    "repeated": false,
+    "reason": "Final updates only changed report, evidence and conversation documents; runtime and all relevant inputs are preserved. Recorded PR CI and exact 373-input equivalence are the validation source. No claim of a separate main CI run."
+  },
+  "additionalRunStatusAtCloseout": {
+    "id": 39096237402,
+    "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096237402",
+    "head": "3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db",
+    "status": "in_progress",
+    "conclusion": null
+  }
 }

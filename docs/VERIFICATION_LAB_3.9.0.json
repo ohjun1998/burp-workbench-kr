@@ -284,8 +284,211 @@
     "두 인가 누락 유형은 별도 취약 실습 URL에서 의도한 대조 사례입니다. 검사한 정상 경로의 결과를 사이트 전체 보증으로 확대하지 않습니다."
   ],
   "remote": {
-    "status": "pending",
-    "note": "원격 Build·브라우저·Oracle 검증 뒤 결과를 기록합니다."
+    "result": "passed",
+    "sourceHead": "3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db",
+    "runtimeEvidenceHead": "e82f85cd589e396aa131eccdcb3be332be243765",
+    "runtimeFilesUnchanged": true,
+    "description": "실제 Docker·Oracle·Nginx의 인증 경계 197개·기존 HTTP 54개, 최종 소스 Build·Chromium 검사와 동일 런타임의 Windows·Linux 안정성 검사가 성공했습니다. 안정성 검사 입력 373개는 최종 소스와 바이트가 같습니다. 반복 수는 합산하지 않았습니다.",
+    "oracleAuthChecks": 197,
+    "oracleRegressionChecks": 54,
+    "browserChecks": 104,
+    "communityBrowserChecks": 66,
+    "runs": [
+      {
+        "id": 39096237334,
+        "name": "Build and verify",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096237334",
+        "head": "3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db",
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "id": 117583164780,
+            "name": "check",
+            "status": "completed",
+            "conclusion": "success",
+            "passedSteps": [
+              "Set up job",
+              "Run actions/checkout@v6",
+              "Run actions/setup-java@v6",
+              "Run actions/setup-python@v6",
+              "Run actions/setup-node@v6",
+              "Check development prerequisites",
+              "Build and run regression and loopback HTTP checks",
+              "Verify role-separated community portals with real HTTP sessions",
+              "Verify authentication combinations through the production comparison controller",
+              "Verify standalone login form and redirect lifecycle",
+              "Verify responsive Swing layouts",
+              "Verify traffic list and compact search settings",
+              "Verify beginner guidance at default and minimum window sizes",
+              "Verify Scope editor at default and minimum window sizes",
+              "Verify Pretty Raw Hex and packet Search layouts",
+              "Verify JS text analysis workspace and modeless windows",
+              "Verify cookie session inspector at default and minimum sizes",
+              "Verify authorization policy and effect verification layouts",
+              "Verify server discovery controls evidence and history layouts",
+              "Check packaging invariants",
+              "Verify versioned downloads match current sources",
+              "Upload verified extension",
+              "Upload verification logs",
+              "Post Run actions/setup-node@v6",
+              "Post Run actions/setup-python@v6",
+              "Post Run actions/setup-java@v6",
+              "Post Run actions/checkout@v6",
+              "Complete job"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 39096234982,
+        "name": "Community browser verification",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096234982",
+        "head": "3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db",
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "id": 117583157087,
+            "name": "chromium",
+            "status": "completed",
+            "conclusion": "success",
+            "passedSteps": [
+              "Set up job",
+              "Run actions/checkout@v6",
+              "Run actions/setup-java@v6",
+              "Run actions/setup-python@v6",
+              "Run actions/setup-node@v6",
+              "Prepare checked HTTP runtime",
+              "Install isolated browser test runtime",
+              "Exercise real community UI and responsive layouts",
+              "Exercise seven authentication pages and credential combinations",
+              "Run actions/upload-artifact@v7",
+              "Post Run actions/setup-node@v6",
+              "Post Run actions/setup-python@v6",
+              "Post Run actions/setup-java@v6",
+              "Post Run actions/checkout@v6",
+              "Complete job"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 39096001482,
+        "name": "Isolated Docker lab verification",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096001482",
+        "head": "e82f85cd589e396aa131eccdcb3be332be243765",
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "id": 117582454401,
+            "name": "oracle-nginx",
+            "status": "completed",
+            "conclusion": "success",
+            "passedSteps": [
+              "Set up job",
+              "Run actions/checkout@v6",
+              "Build current source and verify the isolated Oracle and Nginx stack",
+              "Verify loopback publication and private database services",
+              "Collect final status before removing this job's containers",
+              "Run actions/upload-artifact@v7",
+              "Post Run actions/checkout@v6",
+              "Complete job"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 39096002995,
+        "name": "Capture durability and Windows verification",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096002995",
+        "head": "e82f85cd589e396aa131eccdcb3be332be243765",
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": [
+          {
+            "id": 117582458886,
+            "name": "windows",
+            "status": "completed",
+            "conclusion": "success",
+            "passedSteps": [
+              "Set up job",
+              "Run actions/checkout@v6",
+              "Run actions/setup-java@v6",
+              "Run actions/setup-python@v6",
+              "Run actions/setup-node@v6",
+              "Build and execute every Java regression group on Windows",
+              "Verify native Repeater titlebar maximize restore and close on Windows",
+              "Repeat concurrent storage and cache-eviction regressions ten times",
+              "Verify Mapper indexes and concurrent project save on Windows",
+              "Execute production capture and Swing timer on Windows",
+              "Parse and execute startup script under Windows PowerShell 5.1 with controlled commands",
+              "Run actions/upload-artifact@v7",
+              "Post Run actions/setup-node@v6",
+              "Post Run actions/setup-python@v6",
+              "Post Run actions/setup-java@v6",
+              "Post Run actions/checkout@v6",
+              "Complete job"
+            ]
+          },
+          {
+            "id": 117582458976,
+            "name": "isolated-disk-and-soak",
+            "status": "completed",
+            "conclusion": "success",
+            "passedSteps": [
+              "Set up job",
+              "Run actions/checkout@v6",
+              "Run actions/setup-java@v6",
+              "Run actions/setup-python@v6",
+              "Run actions/setup-node@v6",
+              "Build, run complete release checks and verify the new Docker archive",
+              "Verify actual ENOSPC, rollback and recovery on a private 16 MiB filesystem",
+              "Verify sustained capture",
+              "Run actions/upload-artifact@v7",
+              "Post Run actions/setup-node@v6",
+              "Post Run actions/setup-python@v6",
+              "Post Run actions/setup-java@v6",
+              "Post Run actions/checkout@v6",
+              "Complete job"
+            ]
+          }
+        ]
+      }
+    ],
+    "logEvidence": {
+      "oracle": [
+        "2026-10-18T04:09:07.1413261Z PASS Oracle-backed application health",
+        "2026-10-18T04:09:07.1413856Z PASS Nginx reverse proxy",
+        "2026-10-18T04:09:07.1532762Z PASS Nginx stub_status",
+        "2026-10-18T04:09:10.7128392Z PASS Oracle HTTP regression suite (54 checks)",
+        "2026-10-18T04:09:20.8554193Z PASS auth origin preserves published host port",
+        "2026-10-18T04:09:20.9641528Z Verification passed. Open http://127.0.0.1:8088",
+        "2026-10-18T04:09:21.4336253Z Loopback publication verified for all four ports; DB and WAS have no published ports."
+      ],
+      "browser": [
+        "2026-10-18T04:12:36.8400655Z Community Chromium checks: 66 passed; 0 failed; 18 screenshots",
+        "2026-10-18T04:12:50.4036995Z AUTH_LAB_UI_CHECKS 104 passed; Chromium 151.0.7922.34"
+      ],
+      "build": [
+        "2026-10-18T04:14:38.3318644Z WORKBENCH_CHECK_SUMMARY {\"version\": \"0.43.0\", \"regressionGroups\": 68, \"regressionChecks\": 2351, \"payloadHttpChecks\": 132, \"allFeaturesHttpChecks\": 102, \"bountyHttpChecks\": 266, \"totalChecks\": 2851, \"mapper\": \"Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt\", \"result\": \"passed\"}",
+        "2026-10-18T04:14:45.3962256Z Role portal HTTP checks: 384 passed; 0 failed",
+        "2026-10-18T04:14:56.2845758Z HTTP authentication checks passed: 420",
+        "2026-10-18T04:18:29.2377894Z Ran 6 tests in 0.019s",
+        "2026-10-18T04:18:29.3770172Z Versioned download hashes and source fingerprints verified."
+      ]
+    },
+    "runtimeEquivalenceEvidence": "runtime-equivalence.json",
+    "durabilityInputsMatched": 373,
+    "additionalSameInputRun": {
+      "id": 39096237402,
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39096237402",
+      "status": "in_progress",
+      "conclusion": null,
+      "requiredForRecordedResults": false,
+      "reason": "All 373 inputs already succeeded in the recorded durability run; additional automatically queued repeat is not counted."
+    }
   },
   "evidenceEncoding": {
     "responseSha256": "SHA-256 over Montoya bodyToString encoded UTF-8; not wire byte digest",
@@ -322,10 +525,13 @@
     "downloads/docker/3.9.0/manifest.json": "c8e67ac1c45b804e61b37080779b8aacead71e31268dd8b427c26853b36bfb99"
   },
   "reportArtifacts": {
-    "docs/reports/2026-10-18/Auth_Comparison_Evidence_20261018.zip": "1a83e50b511602c82029e7d9caa7600f73500945b60817e7d78a2d594e4115b2",
+    "docs/reports/2026-10-18/Auth_Comparison_Evidence_20261018.zip": "9d663e57d63fa3b9e75d61e786b9521068994526d5ecae47eeaa9f057ba7732c",
     "docs/reports/2026-10-18/Auth_Comparison_Report_20261018.md": "1294bc4465be3075e60446b46ffe127998266b8bc5286db51f6a0549a0545948",
-    "docs/reports/2026-10-18/Auth_Comparison_Report_20261018.pdf": "8c27f108c607ee0061cd2b3481f60860a052037c446d12be9fbaa7bbd5b668b8",
+    "docs/reports/2026-10-18/Auth_Comparison_Report_20261018.pdf": "ebd4da51ad4fb2762a1200ad20935a0fc3020ef0bcd6daf59fea3adae6c358a1",
     "pdfPages": 8
   },
-  "testMetadataCorrection": "Legacy community role checks now compare OpenAPI with current POM version. Browser evidence reads the server manifest version. Rechecked 384 HTTP and 66 browser cases with reported 3.9.0."
+  "testMetadataCorrection": "Legacy community role checks now compare OpenAPI with current POM version. Browser evidence reads the server manifest version. Rechecked 384 HTTP and 66 browser cases with reported 3.9.0.",
+  "verifiedSourceHead": "3c0eb540ecba1a05a673e0ebe54e3247ecdbb8db",
+  "runtimeEquivalenceEvidence": "docs/verification/auth-lab-3.9.0/runtime-equivalence.json",
+  "pullRequest": "https://github.com/ohjun1998/burp-workbench-kr/pull/67"
 }

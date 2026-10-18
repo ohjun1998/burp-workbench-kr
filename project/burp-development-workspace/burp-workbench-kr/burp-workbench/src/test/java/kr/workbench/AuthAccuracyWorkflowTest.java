@@ -81,7 +81,7 @@ public final class AuthAccuracyWorkflowTest {
    ok(AuthEffectCheck.finding(evidence,BountyMatrix.Expected.DENY,typed).kind()==AuthFinding.Kind.SUSPECT,"state mutation can expose denied operation despite response wording");
    rejects(()->AuthEffectCheck.before(effect,observer,reader),"already expected state blocks another write");
    state.set(0);mutate.set(false);prior=AuthEffectCheck.before(effect,observer,reader);api.http().sendRequest(write);evidence=AuthEffectCheck.after(effect,prior,reader,()->false);
-   ok(evidence.outcome()==AuthEffectCheck.Outcome.UNCHANGED&&AuthEffectCheck.finding(evidence,BountyMatrix.Expected.ALLOW,typed).kind()==AuthFinding.Kind.REVIEW,"HTTP 200 without actual mutation stays inconclusive");
+   ok(evidence.outcome()==AuthEffectCheck.Outcome.UNCHANGED&&AuthEffectCheck.finding(evidence,BountyMatrix.Expected.ALLOW,typed).kind()==AuthFinding.Kind.WRITE_UNCHANGED,"HTTP 200 without actual mutation stays inconclusive");
    final var stable=prior;rejects(()->AuthEffectCheck.after(effect,stable,reader,()->true),"cancel prevents followup reads");
    rejects(()->AuthEffectCheck.observer(new AuthEffectCheck.Config(true,"POST","/write","http://other.test/state","$.value","1",AuthEffectCheck.Mode.EQUALS,1),write,AuthComparePanel.DEFAULT_AUTH),"observer rejects cross origin");
    rejects(()->new AuthEffectCheck.Config(true,"POST","/write",origin+"/state","$.value","1",AuthEffectCheck.Mode.EQUALS,4),"followup reads bounded to three");

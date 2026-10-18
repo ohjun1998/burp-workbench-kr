@@ -21,12 +21,14 @@ final class AuthJudgement {
  static Result compare(int originalStatus,String original,int status,String body,Rules rules,String expectedOwner){return compare(originalStatus,original,status,body,rules,expectedOwner,false);}
  static Result compare(int originalStatus,String original,int status,String body,Rules rules,String expectedOwner,boolean existenceVerified){
   if(originalStatus<200||originalStatus>=300)return result(AuthFinding.Kind.BASELINE,"기준 응답 확인 필요","");
-  Map<String,Object> baseline=json(original,rules);if(baseline!=null&&denied(baseline,rules))return result(AuthFinding.Kind.BASELINE,"기준 응답에 차단 규칙 일치","");
-  if(status==401||status==403)return result(AuthFinding.Kind.BLOCKED,"HTTP "+status,"");
+  Map<String,Object> baseline=json(original,rules),candidate=json(body,rules);if(baseline!=null&&denied(baseline,rules))return result(AuthFinding.Kind.BASELINE,"기준 응답에 차단 규칙 일치","");
+  if(status==401||status==403)return result(denialWithData(candidate,rules)?AuthFinding.Kind.DENIAL_DATA:AuthFinding.Kind.BLOCKED,denialWithData(candidate,rules)?"HTTP "+status+"와 데이터 필드 동시 관측 · 자료 노출 수동 확인":"HTTP "+status,"");
   if(status==404||status==410)return result(existenceVerified?AuthFinding.Kind.HIDDEN:AuthFinding.Kind.MISSING,existenceVerified?"소유자 재조회 2xx 동일 · 대상 HTTP "+status:"기준 2xx · 대상 HTTP "+status+" · 존재/삭제 여부 재검증 필요","");
   if(status>=300&&status<400)return result(AuthFinding.Kind.REVIEW,"리다이렉트 · 로그인 여부 확인","");
   if(status<200||status>=300)return result(AuthFinding.Kind.REVIEW,"HTTP "+status,"");
   if(original.isBlank()||body.isBlank())return result(AuthFinding.Kind.REVIEW,"빈 성공 응답 · 데이터/실행 결과 확인","");
+  // A CSV/file baseline must not prevent an explicit JSON denial from being inspected.
+  if(candidate!=null&&denied(candidate,rules))return result(denialWithData(candidate,rules)?AuthFinding.Kind.DENIAL_DATA:AuthFinding.Kind.BLOCKED,denialWithData(candidate,rules)?"설정한 JSON 차단 규칙과 데이터 필드 동시 관측 · 자료 노출 수동 확인":"설정한 JSON 차단 규칙 일치","");
   if(rules.policy==AuthPolicy.Access.PUBLIC){Map<String,Object> publicBaseline=json(original,rules),publicJson=json(body,rules);if(publicBaseline!=null&&denied(publicBaseline,rules))return result(AuthFinding.Kind.BASELINE,"기준 응답에 차단 규칙 일치","");if(publicJson!=null&&denied(publicJson,rules))return result(AuthFinding.Kind.BLOCKED,"설정한 JSON 차단 규칙 일치","");return result(AuthFinding.Kind.ALLOWED,"설정한 경로·메서드 정책 · 성공 응답 관측","");}
   Map<String,Object> a=json(original,rules),b=json(body,rules);
   if((a==null||b==null)&&!rules.important.isEmpty())return result(AuthFinding.Kind.INCOMPLETE,"중요 JSON 필드 검증 불가 · JSON 응답 확인", "");
@@ -57,6 +59,17 @@ final class AuthJudgement {
  static Object normalize(Object value){if(value instanceof Map<?,?> map){Map<String,Object> next=new TreeMap<>();map.forEach((k,v)->next.put(k.toString(),normalize(v)));return next;}if(value instanceof List<?> array){List<Object> next=new ArrayList<>();for(Object v:array)next.add(normalize(v));next.sort(Comparator.comparing(MetadataExport::json));return next;}return value;}
  static boolean match(String path,String rule){String full=rule.startsWith("$")?rule:"$."+rule;if(path.equals(full))return true;if(full.contains("[*]")){String regex=java.util.Arrays.stream(full.split("\\[\\*\\]",-1)).map(java.util.regex.Pattern::quote).collect(java.util.stream.Collectors.joining("\\[[0-9]+\\]"));return path.matches(regex);}return !rule.startsWith("$")&&path.endsWith("."+rule);}
  static Map<String,Object> important(Map<String,Object> map,Set<String> fields){Map<String,Object> out=new TreeMap<>();map.forEach((k,v)->{if(fields.stream().anyMatch(f->match(k,f)))out.put(k,v);});return out;}
+ static boolean denialWithData(Map<String,Object> map,Rules rules){
+  if(map==null)return false;
+  for(var entry:map.entrySet()){
+   String key=entry.getKey();Object value=entry.getValue();
+   if(value==null||value==Empty.OBJECT||value==Empty.ARRAY||value instanceof String s&&s.isBlank())continue;
+   if(rules.denied.stream().anyMatch(rule->match(key,rule.path())))continue;
+   if(!rules.ownerPath.isBlank()&&match(key,rules.ownerPath)||rules.important.stream().anyMatch(field->match(key,field)))return true;
+   if(key.matches("\\$\\.(data|result|payload|items|records|content|file)(\\..*|\\[.*|$)"))return true;
+  }
+  return false;
+ }
  static Set<String> paths(String text){if(text.length()>2048)throw new IllegalArgumentException("중요 필드 2KiB 제한");Set<String> fields=new LinkedHashSet<>();for(String s:text.split(","))if(!s.isBlank()){s=s.strip();if(s.length()>256||!s.startsWith("$"))throw new IllegalArgumentException("중요 필드는 $.ownerId, $.items[*].id 형식");fields.add(s);}if(fields.size()>32)throw new IllegalArgumentException("중요 필드 최대 32개");return fields;}
  static Object value(Map<String,Object> map,String path){String key=path.startsWith("$")?path:"$."+path;return map.get(key);}
  static boolean denied(Map<String,Object> map,Rules r){for(var rule:r.denied)for(var e:map.entrySet())if(match(e.getKey(),rule.path())&&text(e.getValue()).equals(rule.value()))return true;return false;}

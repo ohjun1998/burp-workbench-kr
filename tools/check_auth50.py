@@ -5,6 +5,7 @@ import base64
 import hashlib
 import json
 import os
+import runpy
 from pathlib import Path
 import shutil
 import socket
@@ -24,6 +25,7 @@ def main():
     p.add_argument('--mode', choices=['native', 'adapter'], default='adapter')
     p.add_argument('--port', type=int, default=0)
     p.add_argument('--java', default='java')
+    p.add_argument('--extension-version', default=runpy.run_path(str(WB / 'release_info.py'))['VERSION'])
     p.add_argument('--burp-jar', type=Path)
     p.add_argument('--burp-java')
     p.add_argument('--browser', action='store_true')
@@ -41,8 +43,9 @@ def main():
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
             raise RuntimeError('Prepare verified HTTP runtime with python dev.py http-test: ' + name)
         jars.append(str(path))
-    version = json.loads((ROOT / 'downloads/extensions/0.43.0/manifest.json').read_text())
-    jar = ROOT / 'downloads/extensions/0.43.0/burp-workbench-kr-0.43.0.jar'
+    release = ROOT / 'downloads/extensions' / args.extension_version
+    version = json.loads((release / 'manifest.json').read_text())
+    jar = release / f'burp-workbench-kr-{args.extension_version}.jar'
     assert hashlib.sha256(jar.read_bytes()).hexdigest() == version['files'][jar.name]
     server = None;success = False
     with tempfile.TemporaryDirectory(prefix='auth-lab-', dir=args.out) as private:
@@ -80,10 +83,10 @@ def main():
                 with (args.out / 'extension.log').open('w') as native_log:
                     result = subprocess.run(command, input='y\n' if args.accept_community_license else None, text=True, stdout=native_log, stderr=subprocess.STDOUT, timeout=1800)
                 if result.returncode:raise RuntimeError('Extension check failed; inspect extension.log')
-                extension = json.loads((args.out / 'extension-results.json').read_text());assert extension['result'] == 'completed'
+                extension = json.loads((args.out / 'extension-results.json').read_text());assert extension['extensionVersion'] == args.extension_version;assert extension['result'] == 'completed'
                 if args.browser:
                     subprocess.run(['node', str(ROOT / 'tools/auth50_ui_checks.mjs'), base, str(args.out), str(ROOT/'audit/auth50/expected-policy.csv')], check=True, cwd=ROOT)
-                summary = {'result': 'completed', 'labVersion': '3.10.0', 'extensionVersion': '0.43.0', 'extensionJarSha256': hashlib.sha256(jar.read_bytes()).hexdigest(), 'transport': extension['transport'], 'nativeExtensionLoaded': extension['nativeExtensionLoaded'], 'httpChecks': http['checks'], 'httpTargetRequests': http['targetHttpRequests'], 'uniqueFunctions':50, 'invalidCombinationChecks':len(http['invalidCombinationChecks']), 'detectionMetrics':extension['metrics'], 'extensionComparisonRuns': extension['comparisonRuns'], 'extensionComparedAccountCells': extension['comparedAccountCells'], 'extensionIdentityChecks': len(extension['identityChecks']), 'extensionTargetRequests': extension['targetHttpRequests'], 'baseUrl': base, 'database': 'isolated H2 in Oracle compatibility mode', 'browserExecuted': args.browser, 'nativeControllerInstances':7, 'productionTimingUnchanged':True, 'privateProfile': True, 'credentialsIncludedInEvidence': False}
+                summary = {'result': 'completed', 'labVersion': '3.10.0', 'extensionVersion': args.extension_version, 'extensionJarSha256': hashlib.sha256(jar.read_bytes()).hexdigest(), 'transport': extension['transport'], 'nativeExtensionLoaded': extension['nativeExtensionLoaded'], 'httpChecks': http['checks'], 'httpTargetRequests': http['targetHttpRequests'], 'uniqueFunctions':50, 'invalidCombinationChecks':len(http['invalidCombinationChecks']), 'detectionMetrics':extension['metrics'], 'extensionComparisonRuns': extension['comparisonRuns'], 'extensionComparedAccountCells': extension['comparedAccountCells'], 'extensionIdentityChecks': len(extension['identityChecks']), 'extensionTargetRequests': extension['targetHttpRequests'], 'baseUrl': base, 'database': 'isolated H2 in Oracle compatibility mode', 'browserExecuted': args.browser, 'nativeControllerInstances':7, 'productionTimingUnchanged':True, 'privateProfile': True, 'credentialsIncludedInEvidence': False}
                 if args.mode == 'native':summary.update({'burpVersion': extension['burpVersion'], 'javaVersion':extension['javaVersion'], 'hostUiWarningCount':(args.out/'extension.log').read_text().count('java.lang.Error: no ComponentUI'), 'burpJarSha256': hashlib.sha256(args.burp_jar.read_bytes()).hexdigest()})
                 (args.out / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n');success = True;print(json.dumps(summary, ensure_ascii=False), flush=True)
         finally:

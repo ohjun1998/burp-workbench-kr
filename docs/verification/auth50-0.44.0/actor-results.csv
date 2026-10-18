@@ -1,0 +1,9 @@
+﻿setting,actor,TP,FP,TN,FN,precision,recall,falsePositiveRate,reviewCount,samples
+unconfigured,admin,0,0,504,56,,0.0,0.0,539,560
+unconfigured,alice,0,0,196,154,,0.0,0.0,287,350
+unconfigured,bob,0,0,308,182,,0.0,0.0,420,490
+unconfigured,anonymous,0,0,700,0,,,0.0,70,700
+configured,admin,56,0,504,0,1.0,1.0,0.0,7,560
+configured,alice,154,0,196,0,1.0,1.0,0.0,42,350
+configured,bob,182,0,308,0,1.0,1.0,0.0,42,490
+configured,anonymous,0,0,700,0,,,0.0,0,700

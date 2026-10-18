@@ -1,0 +1,437 @@
+{
+  "version": "0.44.0",
+  "dateAsiaSeoul": "2026-10-18",
+  "baseCommit": "af3014a8b346364273836c515a469ff20869b40a",
+  "result": "passed-local-remote-ci-pending",
+  "improvements": [
+    "CSV/file baseline independent JSON denial inspection",
+    "Typed write verification review reasons; explicit denial with unchanged observation retains denial evidence"
+  ],
+  "checks": {
+    "version": "0.44.0",
+    "groups": {
+      "BuildInfoTest": 3,
+      "JsUpgradeTest": 36,
+      "TrafficSearchUpgradeTest": 23,
+      "JsCompactUpgradeTest": 23,
+      "JsArchiveWorkflowTest": 8,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 52,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "EnvironmentUpgradeTest": 72,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 29,
+      "PacketInspectorTest": 42,
+      "RenderAuthUiTest": 28,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsDraftMappingTest": 19,
+      "JsDetailsWorkflowTest": 26,
+      "PacketStyleTest": 30,
+      "TextAnalysisTest": 23,
+      "JsResponseWorkflowTest": 51,
+      "JsRepeaterWorkflowTest": 95,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 62,
+      "AuthRecordTest": 37,
+      "AuthWorkspaceTest": 21,
+      "AuthLayoutFitTest": 106,
+      "AuthRunSummaryTest": 23,
+      "AuthResponseWorkflowTest": 47,
+      "AuthAccuracyWorkflowTest": 44,
+      "AuthResponseRefinementTest": 39,
+      "CookieSessionProbeTest": 50,
+      "UiCleanupTest": 38,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 43,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 18,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 95,
+      "FolderNavigationTest": 40,
+      "DiagnosticsWorkflowTest": 28,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 69,
+    "regressionChecks": 2390,
+    "payloadHttpChecks": 132,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 2890,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "newResponseRefinementChecks": 39,
+  "packagingChecks": 6,
+  "native": {
+    "result": "completed",
+    "labVersion": "3.10.0",
+    "extensionVersion": "0.44.0",
+    "extensionJarSha256": "646049d0b9ec7df6fd3e135005b4f539f0b8c93f37b4944c74869d9b75df9837",
+    "transport": "actual Burp Montoya HTTP",
+    "nativeExtensionLoaded": true,
+    "httpChecks": 2800,
+    "httpTargetRequests": 5879,
+    "uniqueFunctions": 50,
+    "invalidCombinationChecks": 33,
+    "detectionMetrics": {
+      "unconfigured": {
+        "account": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 1708,
+          "FN": 392,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 1316,
+          "samples": 2100
+        },
+        "run": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 406,
+          "FN": 294,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 686,
+          "samples": 700
+        }
+      },
+      "configured": {
+        "account": {
+          "TP": 392,
+          "FP": 0,
+          "TN": 1708,
+          "FN": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 91,
+          "samples": 2100
+        },
+        "run": {
+          "TP": 294,
+          "FP": 0,
+          "TN": 406,
+          "FN": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 77,
+          "samples": 700
+        }
+      }
+    },
+    "extensionComparisonRuns": 1400,
+    "extensionComparedAccountCells": 4200,
+    "extensionIdentityChecks": 21,
+    "extensionTargetRequests": 10822,
+    "baseUrl": "http://127.0.0.1:46469",
+    "database": "isolated H2 in Oracle compatibility mode",
+    "browserExecuted": false,
+    "nativeControllerInstances": 7,
+    "productionTimingUnchanged": true,
+    "privateProfile": true,
+    "credentialsIncludedInEvidence": false,
+    "burpVersion": "Burp Suite Community Edition 2026 3.3",
+    "javaVersion": "21.0.8",
+    "hostUiWarningCount": 2,
+    "burpJarSha256": "46b60895b2488bc76911795c53a85ae2ef2f5d6ff734b6ec6f5dd616b2b99875",
+    "ownedServerStopped": true
+  },
+  "independentAnalysis": {
+    "result": "passed",
+    "comparisons": 1400,
+    "accountCells": 4200,
+    "inputsSha256": {
+      "expected-policy.csv": "de8329a01bbe16257842119d870f4081920fafe5dee72ee43d2f0acffcacffb9",
+      "extension-results.json": "afedf3bfbf4a01752bfb8d819c6cf31789f34a60e32aff8688ad99bc01ad6b82",
+      "http-results.json": "70d44dda1240dfe585bfeb1dd02669733e45b3d2c6a9ede2f1f2c6024498f188"
+    }
+  },
+  "comparison": {
+    "baselineVersion": "0.43.0",
+    "currentVersion": "0.44.0",
+    "matchedAccountCells": 4200,
+    "sameMethodsExpectedPoliciesStatusesAndGroundTruth": true,
+    "baselineMetrics": {
+      "unconfigured": {
+        "account": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 1708,
+          "FN": 392,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 1337,
+          "samples": 2100
+        },
+        "run": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 406,
+          "FN": 294,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 693,
+          "samples": 700
+        }
+      },
+      "configured": {
+        "account": {
+          "TP": 392,
+          "FP": 21,
+          "TN": 1687,
+          "FN": 0,
+          "precision": 0.9491525423728814,
+          "recall": 1.0,
+          "falsePositiveRate": 0.012295081967213115,
+          "reviewCount": 623,
+          "samples": 2100
+        },
+        "run": {
+          "TP": 294,
+          "FP": 14,
+          "TN": 392,
+          "FN": 0,
+          "precision": 0.9545454545454546,
+          "recall": 1.0,
+          "falsePositiveRate": 0.034482758620689655,
+          "reviewCount": 210,
+          "samples": 700
+        }
+      }
+    },
+    "currentMetrics": {
+      "unconfigured": {
+        "account": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 1708,
+          "FN": 392,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 1316,
+          "samples": 2100
+        },
+        "run": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 406,
+          "FN": 294,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 686,
+          "samples": 700
+        }
+      },
+      "configured": {
+        "account": {
+          "TP": 392,
+          "FP": 0,
+          "TN": 1708,
+          "FN": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 91,
+          "samples": 2100
+        },
+        "run": {
+          "TP": 294,
+          "FP": 0,
+          "TN": 406,
+          "FN": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 77,
+          "samples": 700
+        }
+      }
+    },
+    "configuredReviewReduction": 532,
+    "migrations": [
+      {
+        "setting": "configured",
+        "oldVerdict": "BLOCKED",
+        "newVerdict": "BLOCKED",
+        "oldFinding": "ALLOWED",
+        "newFinding": "ALLOWED",
+        "count": 686
+      },
+      {
+        "setting": "configured",
+        "oldVerdict": "BLOCKED",
+        "newVerdict": "BLOCKED",
+        "oldFinding": "BLOCKED",
+        "newFinding": "BLOCKED",
+        "count": 378
+      },
+      {
+        "setting": "configured",
+        "oldVerdict": "REVIEW",
+        "newVerdict": "BLOCKED",
+        "oldFinding": "REVIEW",
+        "newFinding": "BLOCKED",
+        "count": 532
+      },
+      {
+        "setting": "configured",
+        "oldVerdict": "REVIEW",
+        "newVerdict": "REVIEW",
+        "oldFinding": "REVIEW",
+        "newFinding": "REVIEW",
+        "count": 7
+      },
+      {
+        "setting": "configured",
+        "oldVerdict": "REVIEW",
+        "newVerdict": "REVIEW",
+        "oldFinding": "REVIEW",
+        "newFinding": "WRITE_UNCHANGED",
+        "count": 84
+      },
+      {
+        "setting": "configured",
+        "oldVerdict": "SUSPECT",
+        "newVerdict": "BLOCKED",
+        "oldFinding": "SUSPECT",
+        "newFinding": "BLOCKED",
+        "count": 21
+      },
+      {
+        "setting": "configured",
+        "oldVerdict": "SUSPECT",
+        "newVerdict": "SUSPECT",
+        "oldFinding": "SUSPECT",
+        "newFinding": "SUSPECT",
+        "count": 392
+      },
+      {
+        "setting": "unconfigured",
+        "oldVerdict": "BLOCKED",
+        "newVerdict": "BLOCKED",
+        "oldFinding": "BLOCKED",
+        "newFinding": "BLOCKED",
+        "count": 763
+      },
+      {
+        "setting": "unconfigured",
+        "oldVerdict": "REVIEW",
+        "newVerdict": "BLOCKED",
+        "oldFinding": "REVIEW",
+        "newFinding": "BLOCKED",
+        "count": 21
+      },
+      {
+        "setting": "unconfigured",
+        "oldVerdict": "REVIEW",
+        "newVerdict": "REVIEW",
+        "oldFinding": "HIDDEN",
+        "newFinding": "HIDDEN",
+        "count": 35
+      },
+      {
+        "setting": "unconfigured",
+        "oldVerdict": "REVIEW",
+        "newVerdict": "REVIEW",
+        "oldFinding": "MISSING",
+        "newFinding": "MISSING",
+        "count": 84
+      },
+      {
+        "setting": "unconfigured",
+        "oldVerdict": "REVIEW",
+        "newVerdict": "REVIEW",
+        "oldFinding": "REVIEW",
+        "newFinding": "REVIEW",
+        "count": 1197
+      }
+    ],
+    "inputHashes": {
+      "before": {
+        "expected-policy.csv": "de8329a01bbe16257842119d870f4081920fafe5dee72ee43d2f0acffcacffb9",
+        "extension-results.json": "518ea385005f19f20b00027240c9619d3da4fbeb73ac4d436c1d07267e2c6429",
+        "http-results.json": "ece659f4467c9df1fbf0fbb2b1174eda97e2354a28f52d56aa23b7ee144761e1"
+      },
+      "after": {
+        "expected-policy.csv": "de8329a01bbe16257842119d870f4081920fafe5dee72ee43d2f0acffcacffb9",
+        "extension-results.json": "afedf3bfbf4a01752bfb8d819c6cf31789f34a60e32aff8688ad99bc01ad6b82",
+        "http-results.json": "70d44dda1240dfe585bfeb1dd02669733e45b3d2c6a9ede2f1f2c6024498f188"
+      }
+    },
+    "interpretation": "Matched repeated fixture measurements; not independent production accuracy probabilities. REVIEW overlaps TN/FN."
+  },
+  "report": {
+    "path": "docs/reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Report_0.44.0_KR.pdf",
+    "pages": 11,
+    "allPagesRenderedAndVisuallyReviewed": true,
+    "sha256": "07ce476dd80cd7e885c0e7b13a57a46eb388a08a0f5cbe81afaa8b638e298c99"
+  },
+  "evidence": {
+    "path": "docs/reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Evidence_0.44.0.zip",
+    "zipCrc": "passed",
+    "sha256": "2a1d928322c769d43e975af8fc5ae8aa5444882a493f7e5d673ecb0bab339a1d"
+  },
+  "artifacts": {
+    "SHA256SUMS": {
+      "bytes": 197,
+      "sha256": "1affada30f5b0151f4405bca172f6d9661bd614329a37115cecc2e4b25e2556a"
+    },
+    "burp-workbench-kr-0.44.0-source.zip": {
+      "bytes": 3308913,
+      "sha256": "ecf236e09534f7ee4cf8e560d78a20df0de71d5ddb8dcbbab9856ac3f3194cb8"
+    },
+    "burp-workbench-kr-0.44.0.jar": {
+      "bytes": 3598074,
+      "sha256": "646049d0b9ec7df6fd3e135005b4f539f0b8c93f37b4944c74869d9b75df9837"
+    },
+    "manifest.json": {
+      "bytes": 45014,
+      "sha256": "ce9f2cc55c78a7195d3e5a86ce015e30fb822003ae704c8f4421326ed312979c"
+    }
+  },
+  "limitations": [
+    "Repeated fixture measurements, not independent production accuracy",
+    "REVIEW overlaps TN/FN; TN is not confirmed secure",
+    "Actual Burp GUI, Windows DPI/IME, external OAuth/OIDC/SAML, actual Oracle/Nginx not rerun for this change",
+    "Two headless Burp ComponentUI startup warnings; HTTP and normal shutdown passed"
+  ],
+  "remoteChecks": "pending upload and PR checks; public GitHub upload explicitly authorized by user on 2026-10-18 Asia/Seoul",
+  "publicationAuthorization": "사용자 원문: 업로드 해줘"
+}

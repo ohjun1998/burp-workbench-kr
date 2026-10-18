@@ -1,0 +1,15 @@
+﻿setting,profile,TP,FP,TN,FN,precision,recall,falsePositiveRate,reviewCount,samples
+unconfigured,session,0,0,244,56,,0.0,0.0,188,300
+unconfigured,token,0,0,244,56,,0.0,0.0,188,300
+unconfigured,jwt,0,0,244,56,,0.0,0.0,188,300
+unconfigured,session-token,0,0,244,56,,0.0,0.0,188,300
+unconfigured,session-jwt,0,0,244,56,,0.0,0.0,188,300
+unconfigured,token-jwt,0,0,244,56,,0.0,0.0,188,300
+unconfigured,all,0,0,244,56,,0.0,0.0,188,300
+configured,session,56,0,244,0,1.0,1.0,0.0,13,300
+configured,token,56,0,244,0,1.0,1.0,0.0,13,300
+configured,jwt,56,0,244,0,1.0,1.0,0.0,13,300
+configured,session-token,56,0,244,0,1.0,1.0,0.0,13,300
+configured,session-jwt,56,0,244,0,1.0,1.0,0.0,13,300
+configured,token-jwt,56,0,244,0,1.0,1.0,0.0,13,300
+configured,all,56,0,244,0,1.0,1.0,0.0,13,300

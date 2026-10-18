@@ -1,7 +1,19 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.42.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-18 (한국 시간) / Workbench 0.43.0 / 실습 사이트 3.8.0 / 별도 Feature Mapper KR 0.3.1.
 
+
+## 요청·응답 목록·JS 분석 고도화 — 0.43.0
+
+[PR #65](https://github.com/ohjun1998/burp-workbench-kr/pull/65)를 main에 병합했습니다. 요청·응답 목록은 검색창 오른쪽 톱니바퀴의 간소화한 설정 창, 백그라운드 패킷 검색·세션별 묶기·중요 표시·메모를 제공합니다. JS는 ⋯ 안의 트래픽 대조·버전 비교, 네 열 목록·하단 한 줄 근거·Ctrl+R, 복합 필터·탭 영역 휠 이동과 수집한 정적 ES 모듈 연계를 적용했습니다. 계정 권한 비교의 소스·판정·재전송 정책과 수집 OFF/SCOPE·기본 OFF를 보존합니다.
+
+최종 release **2,851개**(Java 2,351·HTTP 132/102/266), 새 트래픽 **23개**·JS **23개**(전체 수치에 포함), 패키징 **6개**와 배포 해시·소스 **236개** 파일 지문·압축 CRC가 통과했습니다. 최종 JAR로 운영 Swing 합성 화면 **240개**·컨트롤 **3,380개**·탭/제목 **2,328개**를 측정해 배치 게이트를 통과했습니다. 실제 native Burp GUI·Windows DPI/IME 검증과 구분합니다.
+
+PR head `0d5610d9438eb6373587a6d804c2b726c4a9b421`의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39074514859)·[Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39074514956)이 모두 성공했습니다. 병합 커밋 `c495305b25e93845bc96d20ca3e849618db67bd3`의 파일 트리 `c4f1f208a449b3ff2da72b48557323df04f4ef35`는 검증한 PR head와 같습니다. 병합 후 main의 [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39082445212)·[Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39082445160) 자동 재검사도 **모두 성공**했습니다. 원격 로그에서 2,851개·새 트래픽/JS 46개·패키징 6개와 현재 소스 지문 검증 성공을 다시 확인했습니다. 반복 검사를 고유 검사 수에 합산하지 않습니다.
+
+요청·응답 검색은 원본별 앞 2 MiB, 중요 표시·메모는 현재 수집 세션 동안 유지합니다. 파일 연계는 보관 중인 같은 Origin의 정적 named import/export에 한정합니다. 자동 외부 모듈 요청·JS 실행·취약점 확정을 수행하지 않습니다. 후속 완료 기록은 상태·검증 JSON·날짜별 대화만 갱신합니다.
+
+[사용법·화면](docs/RELEASE_0.43.0_KR.md) · [검증 기록](docs/VERIFICATION_0.43.0.json) · [JAR·소스 ZIP](downloads/extensions/0.43.0/) · [날짜별 대화](docs/chat-logs/2026-10-18/traffic-js-upgrade-0430.md)
 
 ## 서버·경로 탐색 고도화 — 0.42.0
 

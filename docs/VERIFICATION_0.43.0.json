@@ -282,7 +282,104 @@
     "트래픽 관찰·응답 필드 이름·메서드 충돌·변경 여부는 검토 근거이며 취약점 확정을 뜻하지 않습니다."
   ],
   "remote": {
-    "status": "pending",
-    "note": "PR 원격 검사 결과는 확인 후 이 기록에 추가합니다."
+    "status": "passed",
+    "pr": 65,
+    "head": "0d5610d9438eb6373587a6d804c2b726c4a9b421",
+    "mergeCommit": "c495305b25e93845bc96d20ca3e849618db67bd3",
+    "mergeTree": "c4f1f208a449b3ff2da72b48557323df04f4ef35",
+    "headTreeMatchesMergeTree": true,
+    "runs": [
+      {
+        "id": 39074514859,
+        "name": "Build and verify",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39074514859"
+      },
+      {
+        "id": 39074514956,
+        "name": "Capture durability and Windows verification",
+        "conclusion": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39074514956"
+      }
+    ],
+    "jobs": [
+      {
+        "id": 117518786606,
+        "name": "check",
+        "conclusion": "success"
+      },
+      {
+        "id": 117518787020,
+        "name": "isolated-disk-and-soak",
+        "conclusion": "success"
+      },
+      {
+        "id": 117518787104,
+        "name": "windows",
+        "conclusion": "success"
+      }
+    ],
+    "logVerification": {
+      "totalChecks": 2851,
+      "regressionChecks": 2351,
+      "newTrafficChecks": 23,
+      "newJsCompactChecks": 23,
+      "payloadHttpChecks": 132,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "packagingChecks": 6,
+      "versionedDownloadsAndSources": "passed"
+    },
+    "resumeEnvironment": {
+      "command": "python tools/package_downloads.py --verify",
+      "result": "passed",
+      "productRegressionTestsRerun": false,
+      "uiRerun": false,
+      "note": "재개 후 원격 PR head의 성공 로그와 현재 파일의 소스 지문을 확인했습니다. 앞서 실행한 로컬 제품 검사·화면 수치를 반복 실행한 것으로 합산하지 않습니다."
+    },
+    "postMerge": {
+      "status": "passed",
+      "commit": "c495305b25e93845bc96d20ca3e849618db67bd3",
+      "runs": [
+        {
+          "id": 39082445212,
+          "name": "Build and verify",
+          "conclusion": "success",
+          "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39082445212"
+        },
+        {
+          "id": 39082445160,
+          "name": "Capture durability and Windows verification",
+          "conclusion": "success",
+          "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39082445160"
+        }
+      ],
+      "jobs": [
+        {
+          "id": 117542020616,
+          "name": "check",
+          "conclusion": "success"
+        },
+        {
+          "id": 117542020401,
+          "name": "isolated-disk-and-soak",
+          "conclusion": "success"
+        },
+        {
+          "id": 117542020532,
+          "name": "windows",
+          "conclusion": "success"
+        }
+      ],
+      "logVerification": {
+        "totalChecks": 2851,
+        "regressionChecks": 2351,
+        "newTrafficChecks": 23,
+        "newJsCompactChecks": 23,
+        "packagingChecks": 6,
+        "versionedDownloadsAndSources": "passed"
+      },
+      "note": "병합 커밋의 Build·Windows·Linux 자동 재검사가 모두 성공했습니다. 반복 검사는 고유 검사 수에 더하지 않습니다."
+    }
   }
 }

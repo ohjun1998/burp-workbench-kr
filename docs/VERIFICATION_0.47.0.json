@@ -74,5 +74,15 @@
     "browserHelper": "downloads/feature-mapper/0.3.2/feature-mapper-browser-0.3.2.zip",
     "screenshots": "docs/ui/0.47.0/",
     "chat": "docs/chat-logs/2026-10-19/feature-mapper-integration.md"
+  },
+  "remoteVerification": {
+    "pullRequest": "https://github.com/ohjun1998/burp-workbench-kr/pull/78",
+    "initialHead": "6b5858a755a179803a22775100b8a006414e1f2d",
+    "initialBuild": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39246563584",
+    "initialMapper": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39246563567",
+    "initialDurability": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39246563555",
+    "initialResult": "Build, Mapper and Windows passed; Linux disk-full assertion assumed total processingErrors equaled capture failures only.",
+    "correction": "Durability harness waits for observation drain, checks exactly two capture drops and per-stage capture failures, accounts for Mapper storage failures separately, and verifies Mapper resumes after disk recovery. Product sources and versioned binaries unchanged.",
+    "finalResult": "pending"
   }
 }

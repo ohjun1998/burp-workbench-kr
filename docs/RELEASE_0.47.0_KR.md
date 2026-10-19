@@ -25,6 +25,8 @@
 
 새 통합 회귀는 공통 수집, Burp 제외 범위, History 가져오기, 요청 시작 시각, 실제 loopback 브라우저 메타데이터 연결, `.fmkr` 원본 복원과 종료 정리를 확인합니다. 전체 검사 수와 실행 범위는 [검증 기록](VERIFICATION_0.47.0.json)에 기록합니다. 자동 검사는 API 어댑터·헤드리스 Swing·격리 HTTP 서버이며, 실제 Burp GUI 및 Chrome/Edge 보조 확장의 실제 DOM 동작과 구분합니다.
 
+[PR #78](https://github.com/ohjun1998/burp-workbench-kr/pull/78)의 Build·Mapper·Windows/Linux 검사가 모두 성공한 뒤 main에 병합했습니다. 원격 실제 Chromium 도우미 DOM 검사 13개는 운영 Mapper/Bridge를 사용하는 테스트 서버에서 통과했으며 실제 Burp 인스턴스는 아닙니다. 180초 수집은 Linux 3,624건·Windows 3,622건 모두 누락·처리 오류 0이고, 실제 디스크 부족 뒤 내장 Mapper의 저장 재개도 확인했습니다. 상세 근거는 검증 기록의 `remoteVerification`에 있습니다.
+
 ## 설치 파일
 
 - [Workbench 0.47.0 JAR](../downloads/extensions/0.47.0/burp-workbench-kr-0.47.0.jar)

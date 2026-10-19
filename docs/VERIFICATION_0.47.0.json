@@ -61,12 +61,13 @@
     "Production Java code with Montoya and legacy API adapters",
     "Isolated loopback HTTP fixtures",
     "Real authenticated loopback browser metadata bridge",
-    "Production Swing panels rendered headlessly with demonstration data"
+    "Production Swing panels rendered headlessly with demonstration data",
+    "Remote CI: actual Chromium Manifest V3 helper with production Mapper/Bridge fixture; 13 checks; not a Burp instance"
   ],
   "notRun": [
     "Native Burp GUI load and manual desktop interaction",
-    "Chrome/Edge helper DOM flow in a real browser",
-    "Windows DPI/IME and native Windows Burp"
+    "Full embedded Workbench + helper flow inside an actual Burp instance",
+    "Edge, Windows DPI/IME and native Windows Burp"
   ],
   "artifacts": {
     "jar": "downloads/extensions/0.47.0/burp-workbench-kr-0.47.0.jar",
@@ -83,6 +84,168 @@
     "initialDurability": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39246563555",
     "initialResult": "Build, Mapper and Windows passed; Linux disk-full assertion assumed total processingErrors equaled capture failures only.",
     "correction": "Durability harness waits for observation drain, checks exactly two capture drops and per-stage capture failures, accounts for Mapper storage failures separately, and verifies Mapper resumes after disk recovery. Product sources and versioned binaries unchanged.",
-    "finalResult": "pending"
+    "finalResult": "passed",
+    "testedHead": "eb1dec09cbcfbd8875ee4f21722dd39c7cd3e893",
+    "testedTree": "b84b158bb94a81d1051b57fd2b9e222b547c4ac1",
+    "mergeCommit": "6a117bcc01e5c7e2e8da655d095f3bc4ab85bc16",
+    "mergedTree": "b84b158bb94a81d1051b57fd2b9e222b547c4ac1",
+    "mergedTreeMatchesVerified": true,
+    "ci": {
+      "build": {
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39251537984"
+      },
+      "durability": {
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39251537845"
+      },
+      "mapper": {
+        "result": "success",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39251538029"
+      }
+    },
+    "linuxRelease": {
+      "result": "passed",
+      "command": "python dev.py release",
+      "freshOutputDirectory": true,
+      "committedDownloadsPreserved": true,
+      "dockerVersion": "3.10.0",
+      "dockerZipSha256": "c9f60b472b288c5509f1ce223a493aa9258650a71170a248004a00c27739e77f",
+      "freshDockerZipMatchesCommitted": true,
+      "version": "0.47.0",
+      "regressionGroups": 72,
+      "regressionChecks": 2545,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 3049
+    },
+    "linuxDiskFull": {
+      "host": "Montoya adapter; production callback, Swing timer and disk store",
+      "nativeBurp": false,
+      "nativeGuiClicks": false,
+      "os": "Linux",
+      "java": "17.0.20.1",
+      "mode": "disk-full",
+      "fileSystemType": "tmpfs",
+      "fileSystemBytes": 16777216,
+      "errorStages": {
+        "기능 자동 매핑 · 패킷 보관·매핑": 6,
+        "응답 수집": 2
+      },
+      "retainedRows": 9,
+      "expectedDrops": 2,
+      "expectedProcessingErrors": 8,
+      "recovered": true,
+      "result": "passed",
+      "checks": 15,
+      "passedChecks": [
+        "disk exhaustion is confined to an explicitly selected tmpfs of at most 64 MiB",
+        "real filesystem capacity causes a capture write failure",
+        "OS reports ENOSPC on the isolated filesystem",
+        "failed partial append rolls back file length and packet count",
+        "retained packet restores exact request and response bytes",
+        "repeated write failures count exactly two capture drops without breaking callbacks",
+        "shared diagnostics account separately for capture and Mapper storage failures",
+        "repeated failures preserve all previously accepted records",
+        "freeing disk space resumes capture without reloading the extension",
+        "embedded Mapper also resumes storage after disk space is freed",
+        "received counters and live Swing timer survive disk exhaustion",
+        "retained packet restores exact request and response bytes",
+        "retained packet restores exact request and response bytes",
+        "host error diagnostics contain no synthetic packet text or target URL",
+        "unload removes the traffic file after disk recovery"
+      ]
+    },
+    "linuxSoak": {
+      "host": "Montoya adapter; production callback, Swing timer and disk store",
+      "nativeBurp": false,
+      "nativeGuiClicks": false,
+      "os": "Linux",
+      "java": "17.0.20.1",
+      "mode": "soak",
+      "received": 3624,
+      "drops": 0,
+      "processingErrors": 0,
+      "errorStages": [],
+      "acceptedResponses": 3624,
+      "retainedRows": 3624,
+      "diskBytes": 15630132,
+      "heapBeforeBytes": 1804112,
+      "heapAfterBytes": 27980880,
+      "elapsedSeconds": 181.223197308,
+      "requestedSeconds": 180,
+      "intervalMillis": 50,
+      "result": "passed",
+      "checks": 8,
+      "passedChecks": [
+        "collection exceeds the former 250-row limit",
+        "every accepted packet remains in disk and UI",
+        "all response callbacks complete with zero drops and processing errors",
+        "real Swing collection timer remains active",
+        "retained packet restores exact request and response bytes",
+        "retained packet restores exact request and response bytes",
+        "retained packet restores exact request and response bytes",
+        "unload deletes the active private traffic store"
+      ]
+    },
+    "windowsRepeatStorage": {
+      "result": "passed",
+      "version": "0.47.0",
+      "iterations": 10,
+      "groups": [
+        "CapturePipelineTest",
+        "TrafficCaptureRecoveryTest"
+      ],
+      "executions": 20,
+      "note": "Repeated executions are not additional unique check counts."
+    },
+    "windowsSoak": {
+      "host": "Montoya adapter; production callback, Swing timer and disk store",
+      "nativeBurp": false,
+      "nativeGuiClicks": false,
+      "os": "Windows Server 2025",
+      "java": "17.0.20.1",
+      "mode": "soak",
+      "received": 3622,
+      "drops": 0,
+      "processingErrors": 0,
+      "errorStages": [],
+      "acceptedResponses": 3622,
+      "retainedRows": 3622,
+      "diskBytes": 15621506,
+      "heapBeforeBytes": 1594016,
+      "heapAfterBytes": 46641576,
+      "elapsedSeconds": 181.2488468,
+      "requestedSeconds": 180,
+      "intervalMillis": 50,
+      "result": "passed",
+      "checks": 8,
+      "passedChecks": [
+        "collection exceeds the former 250-row limit",
+        "every accepted packet remains in disk and UI",
+        "all response callbacks complete with zero drops and processing errors",
+        "real Swing collection timer remains active",
+        "retained packet restores exact request and response bytes",
+        "retained packet restores exact request and response bytes",
+        "retained packet restores exact request and response bytes",
+        "unload deletes the active private traffic store"
+      ]
+    },
+    "windowsPowerShellChecks": 6,
+    "browserFixture": {
+      "checks": 13,
+      "result": "passed",
+      "method": "Actual Chromium Manifest V3 helper with production Mapper/Bridge fixture; not native Burp",
+      "run": 39251538029
+    },
+    "mergeCI": "Successful PR checks reused for the identical merged file tree; duplicate merge CI skipped.",
+    "localHarnessSoak": {
+      "seconds": 15,
+      "accepted": 323,
+      "drops": 0,
+      "processingErrors": 0,
+      "result": "passed"
+    }
   }
 }

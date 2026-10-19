@@ -18,7 +18,11 @@ final class CaptureObservations implements AutoCloseable {
   }
 
   private final DiskTrafficStore store;
-  private final Observer observer;
+  interface IndexedObserver {
+    Runnable prepare(DiskTrafficStore.PacketRef ref, HttpRequestResponse packet);
+  }
+
+  private final IndexedObserver observer;
   private final BiConsumer<String, RuntimeException> errors;
   private final AtomicBoolean closed = new AtomicBoolean();
   private final Semaphore wake = new Semaphore(0);
@@ -28,6 +32,11 @@ final class CaptureObservations implements AutoCloseable {
 
   CaptureObservations(
       DiskTrafficStore store, Observer observer, BiConsumer<String, RuntimeException> errors) {
+    this(store, (ref, packet) -> observer.prepare(packet), errors);
+  }
+
+  CaptureObservations(DiskTrafficStore store, IndexedObserver observer,
+      BiConsumer<String, RuntimeException> errors) {
     this.store = store;
     this.observer = observer;
     this.errors = errors;
@@ -63,7 +72,8 @@ final class CaptureObservations implements AutoCloseable {
         signalled.set(false);
         while (!closed.get() && cursor < store.size()) {
           try {
-            Runnable prepared = observer.prepare(store.ref(cursor).packet());
+            DiskTrafficStore.PacketRef ref = store.ref(cursor);
+            Runnable prepared = observer.prepare(ref, ref.packet());
             if (!closed.get() && prepared != null)
               SwingUtilities.invokeAndWait(
                   () -> {

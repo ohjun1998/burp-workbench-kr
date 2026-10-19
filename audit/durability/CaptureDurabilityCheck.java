@@ -67,6 +67,15 @@ public final class CaptureDurabilityCheck extends WorkbenchTest {
         }
         DiskTrafficStore store()throws Exception{return (DiskTrafficStore)get(ext,"trafficStore");}
         long metric(String name)throws Exception{return ((AtomicLong)get(ext,name)).get();}
+        Map<String,Long> stageErrors()throws Exception {
+            Map<String,Long> result=new TreeMap<>();
+            ((Map<String,AtomicLong>)get(ext,"captureErrorCounts"))
+                    .forEach((stage,count)->result.put(stage,count.get()));
+            return result;
+        }
+        int mapped()throws Exception {
+            return ((Map<?,?>)get(get(get(ext,"featureMapper"),"mapper"),"packets")).size();
+        }
         int dropped()throws Exception{return ((AtomicInteger)get(ext,"dropped")).get();}
         int rows()throws Exception {
             AtomicInteger n=new AtomicInteger();edt(()->{try{n.set(((List<?>)get(ext,"traffic")).size());}
@@ -82,7 +91,11 @@ public final class CaptureDurabilityCheck extends WorkbenchTest {
         }
         void drain(int count)throws Exception {
             long until=System.nanoTime()+TimeUnit.SECONDS.toNanos(30);
-            while(System.nanoTime()<until){if(rows()==count)return;Thread.sleep(20);}
+            CaptureObservations observations=(CaptureObservations)get(ext,"captureObservations");
+            while(System.nanoTime()<until){
+                if(rows()==count&&observations.pending()==0)return;
+                Thread.sleep(20);
+            }
             throw new AssertionError("UI failed to retain all accepted packets: "+rows()+" / "+count);
         }
         boolean running()throws Exception{return ((javax.swing.Timer)get(ext,"timer")).isRunning();}
@@ -155,13 +168,24 @@ public final class CaptureDurabilityCheck extends WorkbenchTest {
                         "failed partial append rolls back file length and packet count");
                 f.drain((int)beforeCount);exact(f.ref(0),q,small);
                 f.send(q,large);
-                require(f.dropped()==2&&f.metric("processingErrors")==2,
-                        "repeated write failures count exactly two dropped packets without breaking callbacks");
+                Map<String,Long> stages=f.stageErrors();
+                report.put("errorStages",stages);
+                long captureErrors=stages.getOrDefault("응답 수집",0L);
+                long mapperErrors=stages.getOrDefault("기능 자동 매핑 · 패킷 보관·매핑",0L);
+                require(f.dropped()==2&&captureErrors==2,
+                        "repeated write failures count exactly two capture drops without breaking callbacks");
+                require(f.metric("processingErrors")==captureErrors+mapperErrors,
+                        "shared diagnostics account separately for capture and Mapper storage failures");
                 require(f.store().size()==beforeCount&&f.store().diskBytes()==beforeBytes,
                         "repeated failures preserve all previously accepted records");
+                int mappedBeforeRecovery=f.mapped();
+                long errorsBeforeRecovery=f.metric("processingErrors");
                 Files.delete(reserve);f.send(q,large);f.drain((int)beforeCount+1);
-                require(f.store().size()==beforeCount+1&&f.dropped()==2&&f.metric("processingErrors")==2,
+                require(f.store().size()==beforeCount+1&&f.dropped()==2
+                                &&f.metric("processingErrors")==errorsBeforeRecovery,
                         "freeing disk space resumes capture without reloading the extension");
+                require(f.mapped()==mappedBeforeRecovery+1,
+                        "embedded Mapper also resumes storage after disk space is freed");
                 require(f.metric("received")==beforeCount+3&&f.running(),"received counters and live Swing timer survive disk exhaustion");
                 exact(f.ref(0),q,small);exact(f.ref((int)beforeCount),q,large);
                 require(f.errors.stream().allMatch(s->!s.contains("unchanged")&&!s.contains("disk-full.invalid")),

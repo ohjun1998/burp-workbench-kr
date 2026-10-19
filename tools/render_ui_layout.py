@@ -81,6 +81,9 @@ def main():
         ('bounty-1.png','preview.workflow.detail'):80,
         ('bounty-3.png','preview.evidence.impact'):70,
         ('bounty-3.png','preview.evidence.repro'):70,
+        ('tool-10.png','fm.history'):80,
+        ('tool-10.png','fm.request'):70,
+        ('tool-10.png','fm.response'):70,
     }
     if args.guide_only:required={}
     if args.traffic_only:required={("traffic-workspace.png","wb.traffic."+side+".text"):100 for side in ["request","response"]}

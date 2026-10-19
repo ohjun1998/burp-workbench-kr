@@ -1,6 +1,6 @@
 # 개발 환경과 검증 명령
 
-확장 **0.46.1**, Feature Mapper **0.3.1**과 실습 사이트 **3.10.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.46.1 검증 기록](docs/VERIFICATION_0.46.1.json)과 해당 PR의 Actions 결과를 확인합니다.
+확장 **0.47.0**, 내장 Feature Mapper **0.3.2**과 실습 사이트 **3.10.0**의 개발 안내입니다. 처음 복원한 0.21.0 환경의 원문과 당시 Burp·브라우저 검증 기록은 [이전 개발 환경 문서](docs/archive/DEVELOPMENT_SETUP_0.21.0_KR.md)에 보존합니다. 현재 실행 결과는 [0.47.0 검증 기록](docs/VERIFICATION_0.47.0.json)과 해당 PR의 Actions 결과를 확인합니다.
 
 [저장소 안내](docs/REPOSITORY_MAP_KR.md) · [다운로드](downloads/README.md) · [모의 진단 절차](docs/TEST_WORKFLOW_KR.md) · [협업 안내](docs/COLLABORATION_KR.md)
 
@@ -57,7 +57,7 @@ python dev.py bounty-test --port 18399
 | 버전별 Docker 실행 ZIP | `downloads/docker/<사이트 버전>/` |
 | 버전별 PDF 가이드 | `downloads/guides/<확장 버전>/` |
 
-다운로드 소스 ZIP은 확장 구현과 독립 빌드에 필요한 파일을 묶습니다. 확장 폴더에서 `python build_all.py --test`를 실행할 수 있습니다. 전체 `dev.py check`의 사이트·모의 진단까지 실행하려면 실습 사이트와 `audit/`을 포함한 저장소 전체가 필요합니다.
+다운로드 소스 ZIP은 확장 구현, 내장 Mapper의 공유 소스·브라우저 도우미·검사와 독립 빌드에 필요한 파일을 묶습니다. `build_all.py`는 `feature-mapper/src/main/java/kr/featuremapper`를 함께 컴파일하되 별도 Burp 진입점 `FeatureMapperExtension`은 제외합니다. 확장 폴더에서 `python build_all.py --test`를 실행할 수 있습니다. 전체 `dev.py check`의 사이트·모의 진단까지 실행하려면 실습 사이트와 `audit/`을 포함한 저장소 전체가 필요합니다.
 
 기존 버전 파일은 덮어쓰지 않습니다. 기능이 바뀌면 확장 또는 사이트 버전을 올리고 `release`로 새 폴더를 생성합니다. 생성한 파일과 소스를 함께 PR에 올립니다. CI는 소스가 바뀌었는데 배포 파일이 갱신되지 않은 경우 무결성 검사에서 실패합니다. 확장과 사이트는 버전을 독립적으로 관리합니다.
 

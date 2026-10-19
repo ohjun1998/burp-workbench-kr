@@ -68,7 +68,7 @@ final class FolderNavigation extends JPanel {
     hidden = Boolean.parseBoolean(read("hidden"));
 
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("도구");
-    folder(root, "트래픽", "traffic");
+    folder(root, "트래픽", "traffic", "mapper");
     folder(root, "탐색·정보 수집", "js", "environment", "passive");
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
     folder(root, "데이터 도구", "data");

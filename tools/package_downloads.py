@@ -39,6 +39,7 @@ def source_files():
     files.extend(WB / name for name in ['build_all.py', 'release_info.py', 'shade_rhino.py', 'engine-lock.json', 'LICENSE', 'THIRD_PARTY_NOTICES.md'])
     files.extend(p for p in (WB / 'validation/all-features').glob('*') if p.is_file())
     files.extend(p for p in (ROOT / 'audit/0.23.0').glob('*') if p.is_file() and p.suffix in ('.java', '.py'))
+    files.extend(mapper_info()['source_files']())
     return sorted(files)
 
 

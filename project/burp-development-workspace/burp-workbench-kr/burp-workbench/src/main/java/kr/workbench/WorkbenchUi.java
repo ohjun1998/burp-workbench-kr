@@ -50,6 +50,7 @@ public final class WorkbenchUi {
  public static void primary(JButton b){b.putClientProperty("wb.primary",true);buttonPaint(b);}
  private static void buttonPaint(AbstractButton b){if(Boolean.TRUE.equals(b.getClientProperty("wb.state.toggle"))){boolean lamp=Boolean.TRUE.equals(b.getClientProperty("wb.analysis.lamp"));b.setBackground(b.isSelected()?(lamp?new Color(23,58,39):new Color(23,125,70)):(lamp?new Color(55,25,30):new Color(181,45,58)));b.setForeground(Color.WHITE);return;}boolean active=b.isEnabled()&&Boolean.TRUE.equals(b.getClientProperty("wb.primary"));b.setBackground(active?accent():surface());b.setForeground(active?Color.WHITE:b.isEnabled()?ink():toneInk(Tone.NEUTRAL));}
  public static void style(Component c){
+  if(c instanceof JComponent embedded && embedded.getClientProperty("wb.embedded.style") instanceof Runnable style){style.run();return;}
   if(c instanceof PacketInspector inspector){inspector.applyTheme();return;}
   if(c instanceof JComponent aa)aa.putClientProperty(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
   if(c instanceof JComponent j&&Boolean.TRUE.equals(j.getClientProperty("wb.nativeEditor")))return;

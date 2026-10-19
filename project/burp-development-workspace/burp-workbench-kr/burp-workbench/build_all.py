@@ -29,10 +29,13 @@ brotli=root/'deps/brotli-dec-0.1.2.jar'
 brotli_sha='615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52'
 if not brotli.exists():download('https://repo.maven.apache.org/maven2/org/brotli/dec/0.1.2/dec-0.1.2.jar',brotli,brotli_sha)
 if sha(brotli)!=brotli_sha:raise RuntimeError('Brotli checksum mismatch')
+mapper=root.parents[3]/'feature-mapper'
+mapper_sources=[p for p in sorted((mapper/'src/main/java/kr/featuremapper').rglob('*.java')) if p.name!='FeatureMapperExtension.java']
+if not mapper_sources:raise RuntimeError('Missing embedded Feature Mapper sources; use the complete Workbench source package')
 classes=root/'build/classes'  ;shutil.rmtree(classes,ignore_errors=True);classes.mkdir(parents=True)
 compiler=[a.java,'-jar',str(a.compiler.resolve()),'-17','-warn:none']if a.compiler else ([a.javac or shutil.which('javac'),'--release','17'] if a.javac or shutil.which('javac') else [a.java,'com.sun.tools.javac.Main','--release','17'])
 cp=os.pathsep.join(map(str,[api,legacy,rhino,brotli]))
-subprocess.run(compiler+['-encoding','UTF-8','-cp',cp,'-d',str(classes)]+[str(p)for p in sorted((root/'src/main/java').rglob('*.java'))],check=True)
+subprocess.run(compiler+['-encoding','UTF-8','-cp',cp,'-d',str(classes)]+[str(p)for p in sorted((root/'src/main/java').rglob('*.java'))]+[str(p)for p in mapper_sources],check=True)
 output=root/f'dist/burp-workbench-kr-{VERSION}.jar';output.parent.mkdir(exist_ok=True)
 temporary_output=output.with_suffix('.building')
 class ReleaseZip(zipfile.ZipFile):
@@ -53,6 +56,7 @@ with ReleaseZip(temporary_output,'w',zipfile.ZIP_DEFLATED)as z:
     z.writestr(rename(name.encode()).decode(),relocate(dependency.read(name)))
  for path in sorted((root/'src/main/resources').rglob('*')):
   if path.is_file() and "engines" not in path.relative_to(root/"src/main/resources").parts:z.write(path,path.relative_to(root/'src/main/resources').as_posix())
+ z.write(mapper/'LICENSE','META-INF/feature-mapper/LICENSE');z.write(mapper/'THIRD_PARTY_NOTICES.md','META-INF/feature-mapper/THIRD_PARTY_NOTICES.md')
  z.write(root/'LICENSE','LICENSE');z.write(root/'THIRD_PARTY_NOTICES.md','THIRD_PARTY_NOTICES.md')
 temporary_output.replace(output)
 print('Built',output,output.stat().st_size,'bytes',flush=True)
@@ -65,7 +69,7 @@ if a.test:
  if font:options.append('-Dworkbench.qaFont='+font)
  full_cp=cp+os.pathsep+str(output)+os.pathsep+str(tests)
  reports=[];group_counts={}
- for name in ['BuildInfoTest','BankUpgradeTest','OssLogicUpgradeTest','JsUpgradeTest','TrafficSearchUpgradeTest','JsCompactUpgradeTest','JsArchiveWorkflowTest','IncrementalCoverageTest','CapturePipelineTest','EvidenceStorageTest','JsMemoryBudgetTest','StructuredCompareTest','WorkbenchTest','EnvironmentTest','EnvironmentPanelTest','EnvironmentBatchTest','EnvironmentDiscoveryTest','EnvironmentFeedbackTest','EnvironmentUpgradeTest','TextEncodingTest','DisplayWorkflowTest','PacketUiTest','PacketInspectorTest','RenderAuthUiTest','PassiveScanTest','LayoutPassiveWorkflowTest','JsAnalysisTest','JsDraftMappingTest','JsDetailsWorkflowTest','PacketStyleTest','TextAnalysisTest','JsResponseWorkflowTest','JsRepeaterWorkflowTest','JsAnalysisPanelTest','JsNavigationTest','JsHistoryTest','PayloadIntegrationTest','UiLayoutTest','AuthRecordTest','AuthWorkspaceTest','AuthLayoutFitTest','AuthRunSummaryTest','AuthResponseWorkflowTest','AuthAccuracyWorkflowTest','AuthResponseRefinementTest','CookieSessionProbeTest','UiCleanupTest','ActivityReconTest','TrafficScopeTest','TrafficScopeModesTest','TrafficCaptureRecoveryTest','PopupWorkflowTest','TargetCleanupTest','ReviewWorkflowTest','OtherImprovementsTest','AuditRepairsTest','BountyFeaturesTest','CompletenessTest','IntegrationEdgesTest','AccountTasksTest','ReviewConditionsTest','StoredFlowStagesTest','EvidenceLinkTest','EvidencePreviewTest','AssessmentUiOptimizationTest','UiPanelsOptimizationTest','JsUiOptimizationTest','FeatureGuideWorkflowTest','FolderNavigationTest','DiagnosticsWorkflowTest','AppearanceWorkflowTest']:
+ for name in ['BuildInfoTest','MapperIntegrationTest','BankUpgradeTest','OssLogicUpgradeTest','JsUpgradeTest','TrafficSearchUpgradeTest','JsCompactUpgradeTest','JsArchiveWorkflowTest','IncrementalCoverageTest','CapturePipelineTest','EvidenceStorageTest','JsMemoryBudgetTest','StructuredCompareTest','WorkbenchTest','EnvironmentTest','EnvironmentPanelTest','EnvironmentBatchTest','EnvironmentDiscoveryTest','EnvironmentFeedbackTest','EnvironmentUpgradeTest','TextEncodingTest','DisplayWorkflowTest','PacketUiTest','PacketInspectorTest','RenderAuthUiTest','PassiveScanTest','LayoutPassiveWorkflowTest','JsAnalysisTest','JsDraftMappingTest','JsDetailsWorkflowTest','PacketStyleTest','TextAnalysisTest','JsResponseWorkflowTest','JsRepeaterWorkflowTest','JsAnalysisPanelTest','JsNavigationTest','JsHistoryTest','PayloadIntegrationTest','UiLayoutTest','AuthRecordTest','AuthWorkspaceTest','AuthLayoutFitTest','AuthRunSummaryTest','AuthResponseWorkflowTest','AuthAccuracyWorkflowTest','AuthResponseRefinementTest','CookieSessionProbeTest','UiCleanupTest','ActivityReconTest','TrafficScopeTest','TrafficScopeModesTest','TrafficCaptureRecoveryTest','PopupWorkflowTest','TargetCleanupTest','ReviewWorkflowTest','OtherImprovementsTest','AuditRepairsTest','BountyFeaturesTest','CompletenessTest','IntegrationEdgesTest','AccountTasksTest','ReviewConditionsTest','StoredFlowStagesTest','EvidenceLinkTest','EvidencePreviewTest','AssessmentUiOptimizationTest','UiPanelsOptimizationTest','JsUiOptimizationTest','FeatureGuideWorkflowTest','FolderNavigationTest','DiagnosticsWorkflowTest','AppearanceWorkflowTest']:
   r=subprocess.run(options+['-cp',full_cp,'kr.workbench.TestLauncher','kr.workbench.'+name],cwd=root,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=120)
   text=r.stdout+r.stderr;(root/'build'/('test-'+name+'.txt')).write_text(text,encoding='utf-8');print(text,end='');reports.append(text)
   if r.returncode:raise SystemExit(r.returncode)

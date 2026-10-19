@@ -280,15 +280,15 @@ final class MapperOptimizationTest {
   }
 
   private static void differentialTableRefresh() throws Exception {
-    FeatureMapperExtension extension = new FeatureMapperExtension();
+    FeatureMapperWorkspace extension = new FeatureMapperWorkspace();
     extension.mapper = new Mapper();
     try {
       long time = System.currentTimeMillis();
       extension.mapper.accept(
           MapperTest.input(time, "GET", "https://lab.test/ui/one", "", "{}", "A"));
-      var method = FeatureMapperExtension.class.getDeclaredMethod("fillRows");
+      var method = FeatureMapperWorkspace.class.getDeclaredMethod("fillRows");
       method.setAccessible(true);
-      var rowsField = FeatureMapperExtension.class.getDeclaredField("rows");
+      var rowsField = FeatureMapperWorkspace.class.getDeclaredField("rows");
       rowsField.setAccessible(true);
       var rows = (javax.swing.table.DefaultTableModel) rowsField.get(extension);
       List<javax.swing.event.TableModelEvent> events = new ArrayList<>();
@@ -324,12 +324,12 @@ final class MapperOptimizationTest {
               && events.get(0).getType() == javax.swing.event.TableModelEvent.INSERT
               && rows.getRowCount() == 2,
           "new capture appends one UI row without rebuilding existing rows");
-      var tableField = FeatureMapperExtension.class.getDeclaredField("table");
+      var tableField = FeatureMapperWorkspace.class.getDeclaredField("table");
       tableField.setAccessible(true);
       var table = (javax.swing.JTable) tableField.get(extension);
       List<javax.swing.JTextArea> details = new ArrayList<>();
       for (String name : List.of("requestText", "responseText", "explanation")) {
-        var field = FeatureMapperExtension.class.getDeclaredField(name);
+        var field = FeatureMapperWorkspace.class.getDeclaredField(name);
         field.setAccessible(true);
         details.add((javax.swing.JTextArea) field.get(extension));
       }
@@ -381,7 +381,7 @@ final class MapperOptimizationTest {
               && Arrays.equals(extension.mapper.raw(packet.id)[1], input.response()),
           "bounded preview leaves large original request and response byte-exact");
     } finally {
-      var unload = FeatureMapperExtension.class.getDeclaredMethod("unload");
+      var unload = FeatureMapperWorkspace.class.getDeclaredMethod("unload");
       unload.setAccessible(true);
       unload.invoke(extension);
     }

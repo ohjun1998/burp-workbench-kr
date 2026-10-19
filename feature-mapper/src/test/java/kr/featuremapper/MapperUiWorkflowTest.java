@@ -26,7 +26,7 @@ final class MapperUiWorkflowTest {
   static void layout(Container c){c.doLayout();for(Component child:c.getComponents())if(child instanceof Container container)layout(container);}
   static void edt(Runnable work)throws Exception {SwingUtilities.invokeAndWait(work);}
   static final class Fixture implements AutoCloseable {
-    final FeatureMapperExtension ext=new FeatureMapperExtension();
+    final FeatureMapperWorkspace ext=new FeatureMapperWorkspace();
     final JPanel root;
     final List<Component> opened=new ArrayList<>();final List<String> titles=new ArrayList<>();
     Fixture()throws Exception {
@@ -35,7 +35,7 @@ final class MapperUiWorkflowTest {
       long time=System.currentTimeMillis();for(String path:List.of("/api/posts/102","/api/posts/103","/api/profile","/js-lab"))ext.mapper.accept(MapperTest.input(time,"GET","http://127.0.0.1:8088"+path,"","{\"note\":\"UI demonstration\"}","UI_DEMO"));
       edt(()->{try{call(ext,"refresh");}catch(Exception e){throw new RuntimeException(e);}});
     }
-    void failure()throws Exception {Method m=FeatureMapperExtension.class.getDeclaredMethod("failure",String.class,Exception.class);m.setAccessible(true);m.invoke(ext,"프로젝트 저장",new java.io.IOException("PRIVATE_PACKET_CONTENT"));}
+    void failure()throws Exception {Method m=FeatureMapperWorkspace.class.getDeclaredMethod("failure",String.class,Exception.class);m.setAccessible(true);m.invoke(ext,"프로젝트 저장",new java.io.IOException("PRIVATE_PACKET_CONTENT"));}
     public void close()throws Exception {call(ext,"unload");edt(()->{});}
   }
   static void run()throws Exception {

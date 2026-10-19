@@ -19,3 +19,7 @@ tmp/
 !.env.example
 *.burp
 *.burpproject
+
+# Mapper development outputs; versioned downloads are the published artifacts.
+feature-mapper/dist/feature-mapper-*.jar
+feature-mapper/dist/feature-mapper-*.zip

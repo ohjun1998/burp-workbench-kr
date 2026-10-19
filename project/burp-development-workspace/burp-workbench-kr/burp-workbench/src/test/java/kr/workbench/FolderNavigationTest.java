@@ -65,9 +65,9 @@ public final class FolderNavigationTest extends WorkbenchTest {
         }
         check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "데이터 도구", "점검 관리·증거")),
             "exactly the five agreed folders in order");
-        check(leaves.equals(List.of("요청·응답 목록", "JS에서 API 찾기", "서버·경로 탐색", "URL 후보 수집",
+        check(leaves.equals(List.of("요청·응답 목록", "기능 자동 매핑", "JS에서 API 찾기", "서버·경로 탐색", "URL 후보 수집",
             "계정 권한 비교", "응답 보안 분석", "입력값 보안 검사", "데이터 변환·비교", "점검 진행 현황", "재현·증거 정리")),
-            "exactly the ten existing tools in their agreed folders; no SCOPE or extra extension entry");
+            "eleven integrated tools in their agreed folders; SCOPE remains inside traffic");
         JTable traffic = (JTable) unchecked(extension, "logTable");
         traffic.setRowSelectionInterval(0, 0);
         Object source = unchecked(extension, "current");

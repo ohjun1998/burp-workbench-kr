@@ -6,12 +6,12 @@
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| 최신 확장 · 메뉴 유지·계정·JS·SQL·저장 흐름 개선 | 0.45.0 | [JAR](extensions/0.45.0/burp-workbench-kr-0.45.0.jar) · [소스](extensions/0.45.0/burp-workbench-kr-0.45.0-source.zip) |
+| 최신 확장 · Feature Mapper 통합·11개 도구 | 0.47.0 | [JAR](extensions/0.47.0/burp-workbench-kr-0.47.0.jar) · [소스](extensions/0.47.0/burp-workbench-kr-0.47.0-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.10.0 | [community-security-lab-3.10.0-docker.zip](docker/3.10.0/community-security-lab-3.10.0-docker.zip) |
-| Feature Mapper JAR·브라우저 도우미·소스 | 0.3.1 | [다운로드](feature-mapper/0.3.1/) |
+| 기능 매핑 브라우저 도우미 · 내장 Mapper의 선택 연동 | 0.3.2 | [Chrome/Edge ZIP](feature-mapper/0.3.2/feature-mapper-browser-0.3.2.zip) · [독립 호환 배포](feature-mapper/0.3.2/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
-[0.45.0 변경과 Juice Shop 재검증](../docs/RELEASE_0.45.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.45.0.json)
+[0.47.0 기능 자동 매핑 통합](../docs/RELEASE_0.47.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.45.0.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
@@ -27,6 +27,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
+| 이전 확장 · Vuln Bank 판정 고도화 | 0.46.1 | [JAR](extensions/0.46.1/burp-workbench-kr-0.46.1.jar) · [소스](extensions/0.46.1/burp-workbench-kr-0.46.1-source.zip) |
 | 이전 확장 · 요청·응답 목록·JS 분석 | 0.43.0 | [JAR](extensions/0.43.0/burp-workbench-kr-0.43.0.jar) · [소스](extensions/0.43.0/burp-workbench-kr-0.43.0-source.zip) |
 | 이전 확장 · 세션·권한 판정 | 0.41.0 | [JAR](extensions/0.41.0/burp-workbench-kr-0.41.0.jar) · [소스](extensions/0.41.0/burp-workbench-kr-0.41.0-source.zip) |
 | 이전 확장 · 종합 결과 | 0.39.2 | [JAR](extensions/0.39.2/burp-workbench-kr-0.39.2.jar) · [소스](extensions/0.39.2/burp-workbench-kr-0.39.2-source.zip) |
@@ -72,10 +73,10 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 개발자는 `python dev.py release`로 검증 후 새 버전 폴더를 생성하고 소스와 함께 PR에 포함합니다. 기존 버전은 덮어쓰지 않습니다. 확장과 실습 사이트는 버전을 따로 관리합니다. PDF도 기존 파일을 보존하고 새 문서 개정판 폴더에 추가합니다. 이번 문서 개정판은 `python tools/build_readable_guide.py`로 생성합니다.
 
-별도 기능 매핑 확장: [Feature Mapper KR 설치와 다운로드](../feature-mapper/README_KR.md). Workbench JAR에 포함되지 않습니다.
+기능 자동 매핑은 Workbench 0.47.0 JAR에 포함됩니다. [내장 기능과 브라우저 도우미 사용법](../feature-mapper/README_KR.md)을 확인하세요.
 
 
-최신 확장은 0.44.0입니다. 계정 판정·쓰기 보류 사유 개선은 [0.44.0 안내](../docs/RELEASE_0.44.0_KR.md)를 확인하세요. JS·JSON·XML·텍스트 자동 분석, 분석 목록·패킷 팝업과 Ctrl+R 사용법은 [0.43.0 안내](../docs/RELEASE_0.43.0_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
+이전 0.44.0의 계정 판정·쓰기 보류 사유 개선은 [0.44.0 안내](../docs/RELEASE_0.44.0_KR.md)를 확인하세요. JS·JSON·XML·텍스트 자동 분석, 분석 목록·패킷 팝업과 Ctrl+R 사용법은 [0.43.0 안내](../docs/RELEASE_0.43.0_KR.md)를 먼저 읽으세요. 0.25.4 PDF는 이전 상단 탭 화면을 기준으로 한 도구 사용 참고 자료입니다.
 
 
 [인증 조합·계정 권한 비교 PDF 보고서](../docs/reports/2026-10-18/Auth_Comparison_Report_20261018.pdf) · [가린 요청·응답 근거 ZIP](../docs/reports/2026-10-18/Auth_Comparison_Evidence_20261018.zip)

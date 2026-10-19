@@ -1,11 +1,23 @@
 # 현재 개발 상태
 
-기준: 2026-10-18 (한국 시간) / Workbench 0.46.1 / 실습 사이트 3.10.0 / 별도 Feature Mapper KR 0.3.1.
+기준: 2026-10-19 (한국 시간) / Workbench 0.47.0 / 내장 Feature Mapper 0.3.2 / 실습 사이트 3.10.0.
 
+
+## Feature Mapper 통합 — 0.47.0 main 병합 완료
+
+[PR #78](https://github.com/ohjun1998/burp-workbench-kr/pull/78)을 main에 병합했습니다. 별도 Feature Mapper를 **트래픽 → 기능 자동 매핑** 메뉴로 통합해 Workbench JAR 하나에서 11개 도구를 사용합니다. 공통 OFF/SCOPE·체크한 Scope·History 가져오기·관찰 작업자·종료 흐름을 공유하며 `.fmkr` 원본 저장/복원과 브라우저 연결을 지원합니다.
+
+검사한 head는 `eb1dec09cbcfbd8875ee4f21722dd39c7cd3e893`, 병합 커밋은 `6a117bcc01e5c7e2e8da655d095f3bc4ab85bc16`입니다. 병합 트리 `b84b158bb94a81d1051b57fd2b9e222b547c4ac1`가 로컬 검증본 및 성공한 PR과 일치합니다. [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39251537984) · [Windows/Linux](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39251537845) · [Mapper/Chromium](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39251538029)이 모두 성공했습니다. 같은 파일 트리에 대한 병합 CI 중복 실행은 생략했습니다.
+
+회귀·HTTP **3,049개**(내장 통합 36개 포함), 별도 Mapper Java94·Node7·패키징6개와 통합 화면156개·안내52개·독립 Mapper 화면30개를 확인했습니다. 소스 ZIP을 새 폴더에서 재빌드한 JAR는 배포본과 바이트 단위로 일치합니다. 원격 180초 수집은 Linux3,624건·Windows3,622건 모두 누락·처리 오류0입니다. 실제 16 MiB ENOSPC·복구15개에는 내장 Mapper의 저장 재개를 포함하며, 트래픽 저장 실패와 Mapper 오류를 단계별로 집계합니다. Windows 저장/조회10회·PowerShell6개와 실제 Chromium 도우미 fixture13개도 통과했습니다.
+
+API 어댑터·격리 HTTP·실제 Chromium과 운영 Mapper/Bridge fixture·Swing 화면 렌더링 결과입니다. 실제 Burp GUI에서 통합 확장을 수동 조작하는 전체 흐름, Edge 및 Windows DPI/IME는 이번 범위 밖입니다. 설치할 때 이전 Workbench와 별도 Mapper JAR를 해제한 뒤 0.47.0 JAR 하나를 로드합니다.
+
+[설치 JAR·소스](downloads/README.md) · [변경 안내](docs/RELEASE_0.47.0_KR.md) · [검증 기록](docs/VERIFICATION_0.47.0.json) · [날짜별 대화](docs/chat-logs/2026-10-19/feature-mapper-integration.md)
 
 ## Vuln Bank 판정 공백 보완 — 0.46.1 main 병합 완료
 
-현재 main의 완료 배포는 0.46.1입니다. `account-a/vulnbank-0461` 브랜치에서 GraphQL 단일 query·권한 거부 분류, SQL 200/404 참·거짓 반복 비교, 숫자 전후 변화 경계 검증을 구현했습니다. 독립 메뉴 10개와 주요 배치는 유지합니다.
+이전 main의 완료 배포는 0.46.1입니다. `account-a/vulnbank-0461` 브랜치에서 GraphQL 단일 query·권한 거부 분류, SQL 200/404 참·거짓 반복 비교, 숫자 전후 변화 경계 검증을 구현했습니다. 독립 메뉴 10개와 주요 배치는 유지합니다.
 
 최종 0.46.1 JAR를 실제 Burp Community2026.3.3/Java21에 로드한 결과 기능 조건 32개·Chromium 흐름 5개가 통과했습니다. 브라우저 보조 확장 클릭 연동 1개는 기존 환경 제약 때문에 NOT_RUN입니다. 같은 PGlite/순차 Flask 환경에서 이전0.45.0도 다시 대조했고, 15개 계정 대조는 TP5/TN8/보류2에서 TP5/TN10/보류0으로 바뀌었습니다. 양쪽 FP0/FN0이며 기준5칸은 별도입니다. SQL 거짓 조건 반복과 음수 송금의 잔액1005→1010 후보를 실제 확장 화면으로 보존했습니다.
 

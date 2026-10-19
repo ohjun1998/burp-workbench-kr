@@ -49,6 +49,8 @@ SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다.
 
 | 찾는 자료 | 위치 |
 |---|---|
+| Feature Mapper 통합·11개 도구 설치와 사용법 | [0.47.0 변경 안내](docs/RELEASE_0.47.0_KR.md) |
+| 통합 회귀·Windows/Linux·Chromium 검사와 main 병합 근거 | [0.47.0 검증 기록](docs/VERIFICATION_0.47.0.json) |
 | JAR·소스 ZIP·Docker ZIP·PDF | [테스트 파일 다운로드](downloads/README.md) |
 | GraphQL·SQL 상태 차이·숫자 업무 규칙 개선 | [0.46.1 변경 안내](docs/RELEASE_0.46.1_KR.md) |
 | Vuln Bank 실제 확장 재검증과 4쪽 화면 보고서 | [0.46.1 검증 기록](docs/VERIFICATION_0.46.1.json) |

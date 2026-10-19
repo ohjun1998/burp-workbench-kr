@@ -52,7 +52,7 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
         void send(String url)throws Exception {
             HttpRequest q=request(url,"GET",false,List.of());HttpResponse r=response(200,"{}");
             ToolSource source=proxy(ToolSource.class,(p,m,a)->m.getName().equals("toolType")?ToolType.PROXY:def(m));
-            var event=proxy(HttpResponseReceived.class,(p,m,a)->switch(m.getName()){case "initiatingRequest"->q;case "toolSource"->source;case "annotations"->null;default->{if(Set.of("body","bodyToString","toByteArray").contains(m.getName()))responseReads.incrementAndGet();yield HttpResponse.class.getMethod(m.getName(),m.getParameterTypes()).invoke(r,a);}});
+            var event=proxy(HttpResponseReceived.class,(p,m,a)->switch(m.getName()){case "messageId"->0;case "initiatingRequest"->q;case "toolSource"->source;case "annotations"->null;default->{if(Set.of("body","bodyToString","toByteArray").contains(m.getName()))responseReads.incrementAndGet();yield HttpResponse.class.getMethod(m.getName(),m.getParameterTypes()).invoke(r,a);}});
             ext.handleHttpResponseReceived(event);
         }
         int rows(){return ((List<?>)unchecked(ext,"traffic")).size();}

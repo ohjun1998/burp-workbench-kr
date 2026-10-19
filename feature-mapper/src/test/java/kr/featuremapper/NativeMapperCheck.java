@@ -13,7 +13,7 @@ import java.util.concurrent.*;
 
 /** Test-only real Burp entry point. Isolated loopback fixtures and profile. */
 public final class NativeMapperCheck implements BurpExtension {
-    private final FeatureMapperExtension extension=new FeatureMapperExtension();
+    private final FeatureMapperWorkspace extension=new FeatureMapperWorkspace();
     private final List<String> checks=new ArrayList<>();
     private HttpServer lab;
     private MontoyaApi api;

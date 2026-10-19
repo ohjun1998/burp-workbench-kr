@@ -1,0 +1,78 @@
+{
+  "version": "0.47.0",
+  "embeddedMapperVersion": "0.3.2",
+  "dateKST": "2026-10-19",
+  "result": "passed",
+  "baseCommit": "f852371114ac014929a22551053978bd2f909688",
+  "scope": "Feature Mapper is the eleventh Workbench tool; one Workbench Burp entry point and shared OFF/SCOPE admission.",
+  "implementation": [
+    "Shared FeatureMapperWorkspace used by embedded and standalone builds",
+    "Standalone Montoya entry point excluded from Workbench JAR",
+    "Admitted disk captures and History imports relayed once on the existing observation worker",
+    "Request start timestamps preserved for browser matching",
+    "Browser events filtered by shared mode and Scope",
+    "fmkr format and originals preserved; shared unload closes stores, bridge, workers and timers",
+    "Unavailable timing metadata and null header metadata cannot abort original capture"
+  ],
+  "checks": {
+    "version": "0.47.0",
+    "regressionGroups": 72,
+    "regressionChecks": 2545,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 3049,
+    "result": "passed"
+  },
+  "integrationChecks": 36,
+  "standaloneMapperJavaChecks": 94,
+  "browserHelperNodeTests": 7,
+  "packagingUnitTests": 6,
+  "workbenchUi": {
+    "renderedViews": 156,
+    "controlsMeasured": 2724,
+    "clippedControlsOutsideScrollers": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "tabAndHeadingLabelsMeasured": 2892,
+    "clippedSelectedTabOrHeadingLabels": 0
+  },
+  "featureGuide": {
+    "views": 52,
+    "bodiesMeasured": 52,
+    "failures": 0
+  },
+  "standaloneMapperUi": {
+    "views": 30,
+    "controlsMeasured": 150,
+    "clipped": 0,
+    "small": 0
+  },
+  "sourceArchiveRebuild": {
+    "result": "passed",
+    "method": "Extract source ZIP into a fresh directory and build with bundled dependencies",
+    "version": "0.47.0",
+    "sourceZipSha256": "1095ea455c291c4547de7cfc44c34678714f8bc1ca281df36382c2d5781f5a8b",
+    "rebuiltJarSha256": "bcd4b0190ce86b5beca4980d51bf79df3772725bea29ee87bc70c8c973922abc",
+    "matchesReleaseJar": true
+  },
+  "releaseJarSha256": "bcd4b0190ce86b5beca4980d51bf79df3772725bea29ee87bc70c8c973922abc",
+  "sourceFingerprintVerification": "passed",
+  "methods": [
+    "Production Java code with Montoya and legacy API adapters",
+    "Isolated loopback HTTP fixtures",
+    "Real authenticated loopback browser metadata bridge",
+    "Production Swing panels rendered headlessly with demonstration data"
+  ],
+  "notRun": [
+    "Native Burp GUI load and manual desktop interaction",
+    "Chrome/Edge helper DOM flow in a real browser",
+    "Windows DPI/IME and native Windows Burp"
+  ],
+  "artifacts": {
+    "jar": "downloads/extensions/0.47.0/burp-workbench-kr-0.47.0.jar",
+    "source": "downloads/extensions/0.47.0/burp-workbench-kr-0.47.0-source.zip",
+    "browserHelper": "downloads/feature-mapper/0.3.2/feature-mapper-browser-0.3.2.zip",
+    "screenshots": "docs/ui/0.47.0/",
+    "chat": "docs/chat-logs/2026-10-19/feature-mapper-integration.md"
+  }
+}

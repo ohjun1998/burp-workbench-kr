@@ -21,6 +21,7 @@
 |---|---|
 | 공통 실행 진입점 | [`dev.py`](../dev.py) |
 | 확장 구현 | [`project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/`](../project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java/) |
+| 내장 Mapper 공유 소스·독립 호환 배포 | [`feature-mapper/`](../feature-mapper/) · Workbench 빌드가 작업 화면을 함께 컴파일 |
 | 확장 회귀 검사 | [`project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/`](../project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/test/java/) |
 | 공식 확장 빌드 | [`project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py`](../project/burp-development-workspace/burp-workbench-kr/burp-workbench/build_all.py) |
 | 전체 기능 HTTP 하네스 | [`project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/`](../project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/) |

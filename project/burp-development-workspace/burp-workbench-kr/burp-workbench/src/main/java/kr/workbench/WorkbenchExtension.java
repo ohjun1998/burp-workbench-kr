@@ -222,6 +222,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JsAnalysisPanel jsAnalysis;
   private AuthComparePanel authCompare;
   private BountySupportPanel bountySupport;
+  private kr.featuremapper.FeatureMapperWorkspace featureMapper;
   private JLabel selectionInfo = new JLabel("요청을 선택하세요");
   private JLabel status = new JLabel("준비됨"), stats = new JLabel();
   private JTextField filter = new WorkbenchSkin.SearchField(24);
@@ -256,8 +257,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private Traffic storeTraffic(String source, HttpRequest request, HttpResponse response) {
+    return storeTraffic(source, request, response, System.currentTimeMillis());
+  }
+
+  private Traffic storeTraffic(String source, HttpRequest request, HttpResponse response, long started) {
     DiskTrafficStore.PacketRef packet =
-        trafficStore.append(LocalTime.now().withNano(0).toString(), source, request, response);
+        trafficStore.append(LocalTime.now().withNano(0).toString(), source, request, response, started);
     if (captureObservations != null) captureObservations.signal();
     return new Traffic(packet.time(), source, packet);
   }
@@ -268,9 +273,11 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             trafficStore, this::prepareCaptureObservation, this::captureFailure);
   }
 
-  private Runnable prepareCaptureObservation(HttpRequestResponse packet) {
+  private Runnable prepareCaptureObservation(DiskTrafficStore.PacketRef ref, HttpRequestResponse packet) {
     HttpRequest request = packet.request();
     HttpResponse response = packet.response();
+    if (featureMapper != null)
+      featureMapper.observeCaptured(ref.capturedAt(), ref.source(), request, response);
     EnvironmentPanel.Observation environment = null;
     try {
       if (environments != null) environment = environments.prepareObservation(request, response);
@@ -321,6 +328,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                 unloaded.set(true);
                 generation.incrementAndGet();
                 if (captureObservations != null) captureObservations.close();
+                if (featureMapper != null) featureMapper.close();
                 captureStage("임시 저장소 종료", trafficStore::close);
               }
               SwingUtilities.invokeLater(
@@ -370,6 +378,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           .logToOutput("Burp Workbench KR loaded. 계정 비교 재전송은 선택 실행 또는 요청 비교 ON에서 실행합니다.");
     } catch (Exception e) {
       if (captureObservations != null) captureObservations.close();
+      if (featureMapper != null) featureMapper.close();
       captureStage("초기화 실패 저장소 정리", trafficStore::close);
       api.logging().logToError(e.toString());
       throw new IllegalStateException(e);
@@ -515,6 +524,21 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           bountySupport.captureObservedWithImage(packets, note, image, sha);
           tabs.setSelectedComponent(bountySupport);
         };
+    featureMapper = new kr.featuremapper.FeatureMapperWorkspace();
+    JPanel mapperPage = featureMapper.initializeEmbedded(api,
+        new kr.featuremapper.FeatureMapperWorkspace.EmbeddedHost() {
+          public String captureMode() { return WorkbenchExtension.this.captureMode.get().name(); }
+          public void toggleCapture() { captureButton.doClick(0); }
+          public boolean acceptsUrl(String url) {
+            return !unloaded.get() && WorkbenchExtension.this.captureMode.get() == CaptureMode.SCOPE
+                && localScope.matchesTraffic(url);
+          }
+          public void failure(String stage, Exception error) {
+            captureFailure("기능 자동 매핑 · " + stage,
+                error instanceof RuntimeException runtime ? runtime : new IllegalStateException(error));
+          }
+        });
+    addPage("기능 자동 매핑", "mapper", mapperPage, false);
     addPage("설정", "settings", settingsPanel(), false);
     settingsActionReady = true;
     featureHelp.setName("wb.feature.help");
@@ -1009,6 +1033,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void refreshTrafficInfo() {
+    if (featureMapper != null) featureMapper.refreshCaptureState();
     if (logTable == null) return;
     CaptureMode mode = captureMode.get();
     if (captureButton != null) {
@@ -1431,6 +1456,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   @Override
   public RequestToBeSentAction handleHttpRequestToBeSent(HttpRequestToBeSent r) {
     if (!unloaded.get()) {
+      captureStage("매핑 요청 시각", () -> {
+        if (featureMapper != null && acceptsTraffic(r)) featureMapper.requestStarted(r.messageId());
+      });
       captureStage("독립 인증 탐지",()->{if(authCompare!=null&&authCompare.detectionEnabled)authCompare.offerCredential(r,r.toolSource().toolType());});
       captureStage(
           "요청 활동 관찰",
@@ -1450,6 +1478,11 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   @Override
   public ResponseReceivedAction handleHttpResponseReceived(HttpResponseReceived r) {
     if (!unloaded.get()) {
+      long requestTime = System.currentTimeMillis();
+      try {
+        if (featureMapper != null) requestTime = featureMapper.requestFinished(r.messageId());
+      } catch (RuntimeException error) { captureFailure("매핑 응답 시각", error); }
+      final long started = requestTime;
       received.incrementAndGet();
       lastResponse = LocalTime.now().withNano(0).toString();
       // Passive observers only receive admitted traffic. An observer must never block Burp's action.
@@ -1464,7 +1497,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               if (!acceptsTraffic(q)) return;
               admitted.set(true);
               try {
-                incoming.offer(storeTraffic(r.toolSource().toolType().toString(), q, r));
+                incoming.offer(storeTraffic(r.toolSource().toolType().toString(), q, r, started));
               } catch (RuntimeException ex) {
                 dropped.incrementAndGet();
                 throw ex;

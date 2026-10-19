@@ -232,6 +232,11 @@ final class DiskTrafficStore implements AutoCloseable {
 
   synchronized PacketRef append(
       String time, String source, HttpRequest request, HttpResponse response) {
+    return append(time, source, request, response, System.currentTimeMillis());
+  }
+
+  synchronized PacketRef append(String time, String source, HttpRequest request,
+      HttpResponse response, long capturedAt) {
     lifecycle.readLock().lock();
     try {
       ensureOpen();
@@ -261,7 +266,7 @@ final class DiskTrafficStore implements AutoCloseable {
                 requestBytes.length,
                 start + requestBytes.length,
                 responseBytes.length,
-                response != null, System.currentTimeMillis());
+                response != null, capturedAt);
         byte[] metadata = encode(ref);
         data.seek(start);
         data.write(requestBytes);

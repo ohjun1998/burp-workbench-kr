@@ -131,7 +131,7 @@ public class WorkbenchTest {
 
         ObjectFactoryLocator.FACTORY=proxy(MontoyaObjectFactory.class,(p,m,a)->def(m));
         MontoyaApi api=(MontoyaApi)PayloadIntegrationTest.host(MontoyaApi.class);WorkbenchExtension ext=new WorkbenchExtension();ext.initialize(api);
-        JTabbedPane tabs=(JTabbedPane)get(ext,"tabs");check(tabs.getTabCount()==10,"nine core tools including bounty support plus shared Settings tab");
+        JTabbedPane tabs=(JTabbedPane)get(ext,"tabs");check(tabs.getTabCount()==11,"ten built-in tools including Mapper plus shared Settings action");
         check(java.util.stream.IntStream.range(0,tabs.getTabCount()).noneMatch(i->tabs.getTitleAt(i).equals("공통 세션")),"common session tab removed");
         HttpRequest q=request("https://example.test/api","GET",true,List.of(header("Cookie","admin")));HttpResponse reply=response(200,"body");
         seedTraffic(ext,q,reply);check(((List<?>)get(ext,"traffic")).size()==1,"synthetic UI packet loaded");

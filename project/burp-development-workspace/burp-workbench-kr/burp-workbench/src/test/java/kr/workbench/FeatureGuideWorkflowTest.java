@@ -44,6 +44,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
                 routes.put("응답 보안 분석",(Component)unchecked(extension,"responseRecon"));
                 routes.put("입력값 보안 검사",(Component)unchecked(runner,"panel"));
                 routes.put("재현·증거 정리",(Component)unchecked(extension,"bountySupport"));
+                routes.put("기능 자동 매핑",((kr.featuremapper.FeatureMapperWorkspace)unchecked(extension,"featureMapper")).component());
                 for(var route:routes.entrySet()) {
                     int index=tabs.indexOfTab(route.getKey());
                     check(index>=0,"task-oriented navigation exists: "+route.getKey());

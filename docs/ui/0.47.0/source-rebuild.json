@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "method": "Extract source ZIP into a fresh directory and build with bundled dependencies",
+  "version": "0.47.0",
+  "sourceZipSha256": "1095ea455c291c4547de7cfc44c34678714f8bc1ca281df36382c2d5781f5a8b",
+  "rebuiltJarSha256": "bcd4b0190ce86b5beca4980d51bf79df3772725bea29ee87bc70c8c973922abc",
+  "matchesReleaseJar": true
+}

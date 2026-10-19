@@ -505,6 +505,14 @@ public final class UiLayoutPreview extends WorkbenchTest {
                         continue;
                     }
                     tabs.setSelectedIndex(i);
+                    if(tabs.getComponentAt(i) instanceof javax.swing.JComponent page
+                            && "mapper".equals(page.getClientProperty("wb.feature.id"))) {
+                        var mapper=unchecked(ext,"featureMapper");
+                        var refresh=mapper.getClass().getDeclaredMethod("refresh");
+                        refresh.setAccessible(true);refresh.invoke(mapper);
+                        var packets=(JTable)UiLayoutTest.named(page,"fm.history");
+                        if(packets.getRowCount()>0)packets.setRowSelectionInterval(0,0);
+                    }
                     render(root, out.resolve(String.format("tool-%02d.png", i)), 1440, 920);
                 }
                 tabs.setSelectedIndex(2);

@@ -193,9 +193,38 @@
   "cleanSourceRebuild": "New extraction of the published source ZIP produced a byte-identical release JAR with the same JDK",
   "releaseEvidenceScreens": "Recorded current HTTP results replayed into production Swing models; API adapters, no manual Burp desktop",
   "publication": {
-    "status": "APPROVED_PENDING_PR",
-    "authorization": "User explicitly approved public GitHub publication and main integration with “반영해줘” after reviewing the prepared files and publication request.",
+    "status": "MERGED",
+    "authorization": "User explicitly approved public GitHub publication and main integration with “반영해줘”, then requested continuation with “남은 작업 계속 진행해줘”.",
     "localImplementationCommit": "e87cee6b061547069398c092d5923e1b06a671e5",
-    "remoteBranchCreated": false
+    "pullRequest": 80,
+    "pullRequestUrl": "https://github.com/ohjun1998/burp-workbench-kr/pull/80",
+    "verifiedHead": "3e76e604ab0e8e64d51f264a1b4239c30bd03bf9",
+    "mergeCommit": "fee25e84a152a8e34614b4cfb955b445c0559a66",
+    "verifiedTree": "6e62caaf46fd90334d5ed19a71ddc597bbe2a8f5",
+    "mergeTreeMatchesVerified": true,
+    "remoteBranchCreated": true,
+    "remoteCI": [
+      {
+        "name": "Build and verify",
+        "runId": 39345938292,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39345938292",
+        "conclusion": "success",
+        "jobs": [
+          "check"
+        ]
+      },
+      {
+        "name": "Capture durability and Windows verification",
+        "runId": 39345938209,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39345938209",
+        "conclusion": "success",
+        "jobs": [
+          "windows",
+          "isolated-disk-and-soak"
+        ]
+      }
+    ],
+    "remoteScope": "Java17 Linux and Windows production regressions; fresh release packaging, source fingerprints, role/session/50-operation API adapter checks, responsive Swing layouts, real 16MiB ENOSPC recovery, 180-second capture and Windows storage/PowerShell checks. All applicable steps succeeded. Native Burp manual operation and MV3/Edge are not claimed.",
+    "duplicateMergeCI": "Skipped only after both PR workflows succeeded and the merge tree exactly matched the verified tree. Handoff documentation changes preserve all code and download blobs."
   }
 }

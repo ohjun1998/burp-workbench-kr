@@ -3,9 +3,11 @@
 기준: 2026-10-20 (한국 시간) / Workbench 0.48.0 / 내장 Feature Mapper 0.3.2 / 실습 사이트 3.10.0.
 
 
-## 미탐 보강과 실제 대상 재검증 — 0.48.0
+## 미탐 보강과 실제 대상 재검증 — 0.48.0 main 병합 완료
 
-현재 구현·배포 파일·로컬 재검증은 완료했습니다. 사용자가 공개 GitHub 업로드와 검증 후 main 반영을 승인하여 PR 게시·자동 검증·병합을 진행합니다. 완료한 원격 검증과 병합 근거는 이 항목에 기록합니다.
+[PR #80](https://github.com/ohjun1998/burp-workbench-kr/pull/80)을 main에 병합했습니다. 검사한 head는 `3e76e604ab0e8e64d51f264a1b4239c30bd03bf9`, 병합 커밋은 `fee25e84a152a8e34614b4cfb955b445c0559a66`입니다. 병합 트리 `6e62caaf46fd90334d5ed19a71ddc597bbe2a8f5`가 로컬 검증본과 같습니다. [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39345938292) · [Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39345938209)이 모두 성공했습니다. 같은 파일 트리의 병합 CI 중복 실행만 생략했습니다.
+
+원격 Java17 빌드·회귀·새 배포 생성과 지문, 역할·세션·50개 기능 API 어댑터, 화면 배치, 실제 16 MiB ENOSPC·복구와 180초 수집, Windows 저장 반복·PowerShell 검사도 통과했습니다. 실제 Burp 수동 조작·MV3·Edge 검사와 구분합니다. [날짜별 대화](docs/chat-logs/2026-10-20/assessment-hardening.md)도 함께 반영합니다.
 
 변형 XSS·JSON 진단 구조·서비스별 시크릿 이름을 보강하고 SQL 일반 안내 문구를 DB 오류에서 제외했습니다. 기존 11개 메뉴와 화면 구조를 유지합니다. `python dev.py release` 3,094개(신규45개), Mapper94개·Node7개, 156개 Swing 화면 및 패키지 검사를 확인했습니다.
 

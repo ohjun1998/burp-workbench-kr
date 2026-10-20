@@ -860,7 +860,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             () -> {
               selectedTraffic();
               tabs.setSelectedIndex(1);
-              authCompare.compareSelection();
+              authCompare.reviewSelection();
             }));
     trafficMenu.add(
         trafficAction(

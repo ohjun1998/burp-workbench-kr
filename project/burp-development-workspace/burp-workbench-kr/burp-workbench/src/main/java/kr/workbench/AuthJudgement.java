@@ -25,6 +25,7 @@ final class AuthJudgement {
   if(status==401||status==403)return result(denialWithData(candidate,rules)?AuthFinding.Kind.DENIAL_DATA:AuthFinding.Kind.BLOCKED,denialWithData(candidate,rules)?"HTTP "+status+"와 데이터 필드 동시 관측 · 자료 노출 수동 확인":"HTTP "+status,"");
   if(status==404||status==410)return result(existenceVerified?AuthFinding.Kind.HIDDEN:AuthFinding.Kind.MISSING,existenceVerified?"소유자 재조회 2xx 동일 · 대상 HTTP "+status:"기준 2xx · 대상 HTTP "+status+" · 존재/삭제 여부 재검증 필요","");
   if(status>=300&&status<400)return result(AuthFinding.Kind.REVIEW,"리다이렉트 · 로그인 여부 확인","");
+  if((status==400||status==422)&&candidate!=null&&denied(candidate,rules))return result(denialWithData(candidate,rules)?AuthFinding.Kind.DENIAL_DATA:AuthFinding.Kind.BLOCKED,denialWithData(candidate,rules)?"HTTP "+status+" · 설정한 JSON 차단 규칙과 자료 필드 동시 관측":"HTTP "+status+" · 설정한 JSON 차단 규칙 일치","");
   if(status<200||status>=300)return result(AuthFinding.Kind.REVIEW,"HTTP "+status,"");
   if(original.isBlank()||body.isBlank())return result(AuthFinding.Kind.REVIEW,"빈 성공 응답 · 데이터/실행 결과 확인","");
   // A CSV/file baseline must not prevent an explicit JSON denial from being inspected.

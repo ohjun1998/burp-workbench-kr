@@ -94,6 +94,15 @@ def verify(folder, expected_sources):
         raise RuntimeError(f'SHA256SUMS mismatch: {folder}')
 
 
+def preserve_component(folder, payloads, sources):
+    # A different JDK may emit different class bytes for unchanged component sources.
+    # Preserve the verified existing component release; changed sources still require a version bump.
+    if (folder / 'manifest.json').exists():
+        verify(folder, sources)
+    else:
+        publish(folder, payloads, sources)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--verify', action='store_true')
@@ -126,7 +135,7 @@ def main():
     mapper_payloads = {name: (MAPPER / 'dist' / name).read_bytes() for name in mapper_artifacts}
     if {name: sha(data) for name, data in mapper_payloads.items()} != built_mapper['artifacts']:
         raise RuntimeError('Mapper artifact checksums do not match its build manifest')
-    publish(mapper_folder, mapper_payloads, mapper_sources)
+    preserve_component(mapper_folder, mapper_payloads, mapper_sources)
     files = {p.relative_to(LAB).as_posix(): p.read_bytes() for p in docker_files()}
     # Compile the current source in Docker; never ship a stale prebuilt WAR.
     files['Dockerfile'] = files['Dockerfile.source']

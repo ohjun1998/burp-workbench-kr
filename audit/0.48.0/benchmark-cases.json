@@ -1,0 +1,146 @@
+[
+  {
+    "id": "BenchmarkTest00375",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00375"
+  },
+  {
+    "id": "BenchmarkTest00376",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00376"
+  },
+  {
+    "id": "BenchmarkTest00377",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00377"
+  },
+  {
+    "id": "BenchmarkTest00378",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00378"
+  },
+  {
+    "id": "BenchmarkTest00379",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00379"
+  },
+  {
+    "id": "BenchmarkTest00380",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00380"
+  },
+  {
+    "id": "BenchmarkTest00381",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00381"
+  },
+  {
+    "id": "BenchmarkTest00382",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00382"
+  },
+  {
+    "id": "BenchmarkTest00383",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00383"
+  },
+  {
+    "id": "BenchmarkTest00384",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00384"
+  },
+  {
+    "id": "BenchmarkTest00385",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00385"
+  },
+  {
+    "id": "BenchmarkTest00386",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00386"
+  },
+  {
+    "id": "BenchmarkTest00387",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00387"
+  },
+  {
+    "id": "BenchmarkTest00388",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00388"
+  },
+  {
+    "id": "BenchmarkTest00389",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00389"
+  },
+  {
+    "id": "BenchmarkTest00390",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00390"
+  },
+  {
+    "id": "BenchmarkTest00391",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00391"
+  },
+  {
+    "id": "BenchmarkTest00392",
+    "mode": "xss",
+    "truth": true,
+    "path": "/xss-00/BenchmarkTest00392"
+  },
+  {
+    "id": "BenchmarkTest00393",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00393"
+  },
+  {
+    "id": "BenchmarkTest00394",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-00/BenchmarkTest00394"
+  },
+  {
+    "id": "BenchmarkTest01251",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-02/BenchmarkTest01251"
+  },
+  {
+    "id": "BenchmarkTest01252",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-02/BenchmarkTest01252"
+  },
+  {
+    "id": "BenchmarkTest01255",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-02/BenchmarkTest01255"
+  },
+  {
+    "id": "BenchmarkTest01256",
+    "mode": "xss",
+    "truth": false,
+    "path": "/xss-02/BenchmarkTest01256"
+  }
+]

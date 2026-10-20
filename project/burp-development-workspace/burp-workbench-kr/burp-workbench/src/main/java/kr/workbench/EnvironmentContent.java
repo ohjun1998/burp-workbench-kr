@@ -12,7 +12,10 @@ final class EnvironmentContent {
       &&Pattern.compile("(?is)<form\\b").matcher(body).find();}
   static boolean challenge(String body){return Pattern.compile("(?is)(<title>[^<]*(?:just a moment|attention required|access denied)|cf-chl-|g-recaptcha|hcaptcha)").matcher(body).find();}
   static Finding inspect(String url,int status,String headers,String body,String comparison){
-    if(body.length()>MAX)return f("LIMIT","내용 확인 보류","본문 분석 한도 초과","원본 응답을 직접 확인하세요.");
+    if(body.length()>MAX){
+      if(status==404||status==410)return f("MISSING","미발견 응답 · 본문 일부 미검사","HTTP "+status+" · 본문 앞 "+MAX+"자 한도 / 전체 "+body.length()+"자 · 상태코드와 내용 분석 분리","오류 본문 후반의 정보 노출은 원본에서 확인하세요.");
+      return f("LIMIT","내용 확인 보류","본문 앞 "+MAX+"자 한도 / 전체 "+body.length()+"자 · 내용 미판정","원본 응답 후반을 직접 확인하세요.");
+    }
     if(status==429)return f("RATE","요청 제한","HTTP 429","대기 후 명시적으로 재개하세요.");
     if(challenge(body))return f("CHALLENGE","보안 확인 화면 의심","챌린지 화면 표식","정상 브라우저 응답과 비교하세요.");
     if(status==401||status==403)return f("DENIED","접근 제한 응답","HTTP "+status,"경로 존재와 계정 권한은 별도로 확인하세요.");

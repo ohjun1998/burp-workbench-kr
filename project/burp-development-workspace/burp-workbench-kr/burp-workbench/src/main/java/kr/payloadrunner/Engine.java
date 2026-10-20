@@ -40,13 +40,14 @@ public final class Engine {
  }
  public record Row(int index,String payload,long millis,Response response,String verdict,String evidence,byte[] request) {
   public Row {request=request.clone();}
+  public String browserExecutionStatus(){return "NOT_RUN";}
  }
  public record Summary(int requests,int completed,boolean stopped,boolean budgetReached,String reason){public Summary(int r,int c,boolean s,boolean b){this(r,c,s,b,"");}}
  public static boolean isTimeout(Throwable error){for(int i=0;error!=null&&i<20;i++,error=error.getCause())if(error instanceof java.util.concurrent.TimeoutException||error instanceof java.net.SocketTimeoutException||error instanceof java.net.http.HttpTimeoutException)return true;return false;}
  public static boolean stopStatus(int status){return status==401||status==403||status==429||status==503;}
  public static String stopReason(int status){return "HTTP "+status+" · 인증/차단/부하 응답으로 후속 요청 중단 · 취약점 부재를 의미하지 않음";}
  public static List<String> defaults(Profile p){return switch(p){
-  case XSS->List.of("{{MARKER}}","<svg onload=console.log('{{MARKER}}')>","<img src=x onerror=console.log('{{MARKER}}')>","\"><svg onload=console.log('{{MARKER}}')>","'><img src=x onerror=console.log('{{MARKER}}')>","</textarea><svg onload=console.log('{{MARKER}}')>","<b data-probe=\"{{MARKER}}\">{{MARKER}}</b>");
+  case XSS->List.of("{{MARKER}}","<svg onload=console.log('{{MARKER}}')>","<img src=x onerror=console.log('{{MARKER}}')>","\"><svg onload=console.log('{{MARKER}}')>","'><img src=x onerror=console.log('{{MARKER}}')>","</textarea><svg onload=console.log('{{MARKER}}')>","<b data-probe=\"{{MARKER}}\">{{MARKER}}</b>","<svg/onload=console.log('{{MARKER}}')>//","\"><svg/onload=console.log('{{MARKER}}')>//","'><svg/onload=console.log('{{MARKER}}')>//");
   case SQLI->List.of("'","\"","{{BASE}}' AND '1'='1' -- ","{{BASE}}' AND '1'='2' -- ","{{BASE}} AND 1=1","{{BASE}} AND 1=2","{{BASE}}') AND ('1'='1","{{BASE}}') AND ('1'='2", "{{BASE}}%')) AND 1=1 -- ", "{{BASE}}%')) AND 1=2 -- ", "{{BASE}}%') AND 1=1 -- ", "{{BASE}}%') AND 1=2 -- ");
   case UPLOAD_NAME->List.of("probe-{{MARKER}}.txt","probe-{{MARKER}}.html","probe-{{MARKER}}.svg","probe-{{MARKER}}.jpg.txt","../probe-{{MARKER}}.txt","probe-{{MARKER}}.TXT");
   case UPLOAD_BODY->List.of("{{MARKER}}","<!doctype html><title>{{MARKER}}</title><b>{{MARKER}}</b>","<svg xmlns=\"http://www.w3.org/2000/svg\"><text y=\"20\">{{MARKER}}</text></svg>");
@@ -103,7 +104,7 @@ public final class Engine {
  static boolean fresh(Response b,Response r,String payload,String value){return !value.isEmpty()&&!payload.contains(value)&&r.text.contains(value)&&!b.text.contains(value);}
  static String hostOf(String value){try{return Objects.toString(new java.net.URI(value).getHost(),"").toLowerCase(Locale.ROOT);}catch(Exception e){return "";}}
  static String[] classify(Config c,Response b,Response r,String payload,String marker){
-  if(r.status==401||r.status==403)return new String[]{"인증/인가 응답","세션·CSRF·권한을 확인하세요. 취약점 판정 불가"};
+  if(r.status==401||r.status==403)return new String[]{"인증/인가 응답","HTTP 상태만으로 세션 만료·안전 확정 불가 · 사용자 확인 API·CSRF·업무 오류를 별도 대조하세요"};
   if(c.profile==Profile.REDIRECT&&r.status>=300&&r.status<400){String location=header(responseHeaders(r),"Location");String expected=hostOf(payload);if(!expected.isBlank()&&expected.equals(hostOf(location))&&!expected.equals(hostOf(header(responseHeaders(b),"Location"))))return new String[]{"리다이렉트 목적지 제어 후보","Location: "+location+" · 허용된 외부 이동인지 Repeater에서 확인"};}
   if(c.profile==Profile.CRLF&&header(responseHeaders(r),"X-PR-Probe").equals(marker)&&!header(responseHeaders(b),"X-PR-Probe").equals(marker))return new String[]{"응답 헤더 삽입 후보","응답 헤더 X-PR-Probe에 요청별 마커 발견. 본문 반사는 제외"};
   if(r.status>=300&&r.status<400)return new String[]{"리다이렉트","자동 추적하지 않음. 로그인 이동 여부를 확인하세요"};
@@ -114,7 +115,7 @@ public final class Engine {
   Pattern error=switch(c.profile){case XPATH->XPATH_ERROR;case LDAP->LDAP_ERROR;case NOSQL->NOSQL_ERROR;default->null;};
   if(error!=null){Matcher m=error.matcher(r.text);if(m.find()&&!error.matcher(b.text).find()&&!payload.contains(m.group()))return new String[]{label(c.profile)+" 오류 후보",m.group()+" · 오류 노출이며 인젝션 성공 확정 아님"};}
   if((c.profile==Profile.SSRF||c.profile==Profile.CUSTOM)&&r.status>=200&&r.status<300&&!c.proof.isBlank()&&fresh(b,r,payload,c.proof))return new String[]{"지정 응답 문자열 후보",c.proof+(c.profile==Profile.SSRF?" · 수신 서버 로그에서 요청 출처/마커 확인 필요":" · 일반 문자열 관찰이며 취약점 확정 아님")};
-  if(c.profile==Profile.XSS&&payload.contains("<")&&r.mime.toLowerCase(Locale.ROOT).contains("text/html")&&r.text.contains(payload))return new String[]{"XSS 반사 후보","HTML 응답에 페이로드가 그대로 반사됨. 브라우저 실행·컨텍스트 확인 필요"};
+  if(c.profile==Profile.XSS&&payload.contains("<")&&payload.contains(marker)&&!b.text.contains(marker)&&r.mime.toLowerCase(Locale.ROOT).contains("text/html")){String context=XssReflection.context(r.text,marker);if(!context.isEmpty())return new String[]{"XSS 반사 후보","단계=후보 · 브라우저 실행=미확인 · "+context+" · 전체 입력의 동일 반사 없이 출력 문맥 관찰"};}
   if(c.profile==Profile.SQLI){Matcher m=SQL.matcher(r.text);if(m.find()&&!SQL.matcher(b.text).find()&&!payload.contains(m.group()))return new String[]{"SQL 오류 후보",m.group().substring(0,Math.min(160,m.group().length()))};}
   if(c.profile==Profile.DOWNLOAD||c.profile==Profile.TRAVERSAL||c.profile==Profile.XXE){if(!c.proof.isBlank()&&r.status==200&&fresh(b,r,payload,c.proof))return new String[]{"지정 파일 내용 발견",c.proof};Matcher m=FILE.matcher(r.text);if(r.status==200&&m.find()&&!FILE.matcher(b.text).find()&&!r.mime.toLowerCase(Locale.ROOT).contains("html")&&!payload.contains(m.group()))return new String[]{"파일 내용 후보",m.group().substring(0,Math.min(160,m.group().length()))};}
   if((c.profile==Profile.UPLOAD_BODY||c.profile==Profile.UPLOAD_NAME)&&r.status>=200&&r.status<300)return new String[]{"업로드 수락 후보","2xx 응답만 확인. 저장·접근·MIME·실행 여부는 후속 확인 필요"};
@@ -130,7 +131,7 @@ public final class Engine {
   Map<String,Row> pairs=new HashMap<>();boolean stable=true,halted=false;int failures=0;String reason="검사 목록 완료";
   if(c.profile==Profile.SQLI&&c.budget>1&&!stop.get()) {delay(c.intervalMs,stop);if(stop.get())return new Summary(requests,complete,true,false);Response again=parse(transport.send(baselineRequest));requests++;stable=baseline.status==again.status&&baseline.text.equals(again.text);receive.accept(new Row(-1,c.baseline,0,compact(again),"기준 재검증",stable?"기준 본문/상태가 동일":"동적 응답: 조건 차이는 보수적으로 해석",baselineRequest));if(stopStatus(again.status))return new Summary(requests,0,true,false,stopReason(again.status));}
   for(int i=0;i<c.payloads.size()&&requests<c.budget&&!stop.get()&&!halted;i++){
-   delay(c.intervalMs,stop);if(stop.get())break;String marker="PR_"+UUID.randomUUID().toString().replace("-","").substring(0,16);String payload=expand(c.payloads.get(i),c.baseline,marker);byte[] request=render(c.template,payload,c.encoding);t=System.nanoTime();Response response=null;String verdict,evidence;
+   delay(c.intervalMs,stop);if(stop.get())break;String marker="PR_"+UUID.randomUUID().toString().replace("-","").substring(0,16);String payload=expand(c.payloads.get(i),c.baseline,marker);if(c.profile==Profile.XXE&&c.encoding==Encoding.RAW)payload=XmlProbe.adapt(payload,c.baseline);byte[] request=render(c.template,payload,c.encoding);t=System.nanoTime();Response response=null;String verdict,evidence;
    requests++;try{response=parse(transport.send(request));failures=0;String[] f=classify(c,baseline,response,payload,marker);verdict=f[0];evidence=f[1];}catch(Exception e){failures++;if(e instanceof InterruptedException){Thread.currentThread().interrupt();stop.set(true);}if(isTimeout(e)||failures>=3){halted=true;reason=isTimeout(e)?"응답 대기시간 초과/응답 없음":"연속 전송/분석 오류 3회";}verdict="전송/분석 오류";evidence=e.getClass().getSimpleName()+": "+Objects.toString(e.getMessage(),"");}
    if(c.profile==Profile.SQLI&&response!=null){
     String truePayload=payload.contains("'1'='2'")?payload.replace("'1'='2'","'1'='1'"):payload.contains("1=2")?payload.replace("1=2","1=1"):null;

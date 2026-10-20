@@ -104,8 +104,8 @@ public final class BountyWorkflowAudit extends CommunityExtensionAudit {
         for (String mode : List.of("vuln", "fixed")) {
             var sql = scan(mode + "-bounty-sql-control", Engine.Profile.SQLI, template("GET", "/api/community/" + mode + "/search?q=§PAYLOAD§", alice, "", ""), "Burp", List.of("'"), "", true);
             verify(mode + " actual SQL positive/negative control", candidate(sql, "SQL 오류 후보") == mode.equals("vuln"));
-            var xss = scan(mode + "-bounty-xss-control", Engine.Profile.XSS, template("GET", "/" + mode + "/preview?text=§PAYLOAD§", alice, "", ""), "normal", List.of("<b>{{MARKER}}</b>"), "", true);
-            verify(mode + " actual reflected marker positive/negative control", candidate(xss, "XSS 반사 후보") == mode.equals("vuln"));
+            var xss = scan(mode + "-bounty-xss-control", Engine.Profile.XSS, template("GET", "/" + mode + "/preview?text=§PAYLOAD§", alice, "", ""), "normal", List.of("<svg onload=console.log('{{MARKER}}')>"), "", true);
+            verify(mode + " actual event-handler reflection positive/negative control", candidate(xss, "XSS 반사 후보") == mode.equals("vuln"));
         }
     }
     public static void main(String[] args) throws Exception {

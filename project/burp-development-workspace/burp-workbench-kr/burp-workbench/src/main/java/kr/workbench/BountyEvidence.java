@@ -131,7 +131,27 @@ final class BountyEvidence {
 
   static final Pattern SECRET =
       Pattern.compile(
-          "(?i)(password|passwd|secret|token|authorization|api[-_]?key|csrf|xsrf|session|cookie|credential)");
+          "(?i)(password|passwd|passphrase|secret|token|authorization|api[-_]?key|private[-_]?key|stream[-_]?key|signing[-_]?key|access[-_]?key|csrf|xsrf|session|cookie|credential|^pin$|^pwd$|^jwt$)");
+
+  static boolean sensitiveName(String name, Set<String> extra) {
+    return SECRET.matcher(name).find()
+        || extra.stream().anyMatch(value -> value.equalsIgnoreCase(name));
+  }
+
+  /** Explicit extra names apply to both headers and structured JSON/form fields. */
+  static Set<String> extraNames(String text) {
+    if (text.length() > 2048) throw new IllegalArgumentException("추가 가림 이름은 2,048자 이내로 입력하세요.");
+    Set<String> names = new LinkedHashSet<>();
+    for (String name : text.split(",", -1)) {
+      String value = name.strip();
+      if (value.isEmpty()) continue;
+      if (value.length() > 128 || value.codePoints().anyMatch(Character::isISOControl))
+        throw new IllegalArgumentException("가림 이름은 제어 문자 없이 128자 이내로 입력하세요.");
+      names.add(value.toLowerCase(Locale.ROOT));
+    }
+    if (names.size() > 32) throw new IllegalArgumentException("추가 가림 이름은 최대 32개입니다.");
+    return Set.copyOf(names);
+  }
 
   static String esc(String s) {
     return s.replace("&", "&amp;")
@@ -155,6 +175,14 @@ final class BountyEvidence {
       Collection<String> secrets,
       boolean bodies,
       boolean truncated) {
+    return packetText(raw, extra, secrets, bodies, truncated).text();
+  }
+
+  record PacketText(String text, String bodyState) {}
+
+  private static PacketText packetText(
+      String raw, Set<String> extra, Collection<String> secrets, boolean bodies, boolean truncated) {
+    Set<String> secretValues = prepared(secrets);
     String s = Objects.toString(raw, "");
     if (s.length() > 128 * 1024) {
       s = s.substring(0, 128 * 1024);
@@ -169,19 +197,28 @@ final class BountyEvidence {
     for (String line : head.split("\n"))
       if (line.toLowerCase(Locale.ROOT).startsWith("content-type:"))
         type = line.substring(13).strip().split(";", 2)[0].toLowerCase(Locale.ROOT);
+    boolean hiddenHeader = false;
     for (String line : head.split("\n", -1)) {
       int colon = line.indexOf(':');
-      if (colon > 0
-          && (SECRET.matcher(line.substring(0, colon)).find()
-              || extra.contains(line.substring(0, colon).toLowerCase(Locale.ROOT))))
+      boolean continuation = line.startsWith(" ") || line.startsWith("\t");
+      if (continuation && hiddenHeader) line = " [REDACTED]";
+      else if (!continuation) hiddenHeader = colon > 0 && sensitiveName(line.substring(0, colon), extra);
+      if (!continuation && hiddenHeader)
         line = line.substring(0, colon) + ": [REDACTED]";
       line = line.replaceAll("([?#&][^=\\s&]+)=([^\\s&]*)", "$1=[REDACTED]");
-      out.append(line).append('\n');
+      out.append(known(line, secretValues)).append('\n');
     }
     out.append('\n');
-    if (truncated) out.append("[미리보기 128 KiB 한도 · 본문 제외 · 원본 길이/해시로 확인]");
+    String bodyState = "EMPTY";
+    if (truncated) {
+      bodyState = "OMITTED_PREVIEW_LIMIT";
+      out.append("[미리보기 128 KiB 한도 · 본문 제외 · 원본 길이/해시로 확인]");
+    }
     else if (!body.isEmpty()) {
-      if (!bodies) out.append("[본문 제외 · 재현 시 원본을 로컬에서 확인]");
+      if (!bodies) {
+        bodyState = "OMITTED_BY_SETTING";
+        out.append("[본문 제외 · 재현 시 원본을 로컬에서 확인]");
+      }
       else if (type.equals("application/x-www-form-urlencoded")) {
         try {
           StringJoiner form = new StringJoiner("&");
@@ -191,28 +228,34 @@ final class BountyEvidence {
                 value =
                     java.net.URLDecoder.decode(p.length == 2 ? p[1] : "", StandardCharsets.UTF_8);
             value =
-                SECRET.matcher(key).find() || fragments(secrets).contains(value)
+                sensitiveName(key, extra) || secretValues.contains(value)
                     ? "[REDACTED]"
-                    : known(value, secrets);
+                    : known(value, secretValues);
             form.add(
-                java.net.URLEncoder.encode(key, StandardCharsets.UTF_8)
+                java.net.URLEncoder.encode(redactedKey(key, secretValues), StandardCharsets.UTF_8)
                     + "="
                     + java.net.URLEncoder.encode(value, StandardCharsets.UTF_8));
           }
           out.append(form);
+          bodyState = "REDACTED_FORM";
         } catch (Exception ex) {
+          bodyState = "OMITTED_INVALID_FORM";
           out.append("[폼 디코딩 실패 · 본문 제외]");
         }
       } else
         try {
           out.append(
               MetadataExport.json(
-                  scrub(MinerJson.parse(body, 128 * 1024, 20000), "", fragments(secrets))));
+                  scrub(MinerJson.parse(body, 128 * 1024, 20000), "", secretValues, extra)));
+          bodyState = "REDACTED_JSON";
         } catch (Exception e) {
+          bodyState = "OMITTED_UNSUPPORTED_OR_INVALID_BODY";
           out.append("[비 JSON 본문 제외 · 바이트 수/해시로 원본 확인]");
         }
     }
-    return known(out.toString(), secrets);
+    // JSON and form values were scrubbed before encoding. Replacing serialized text here can
+    // corrupt numeric/boolean JSON tokens and cannot match escaped string credentials reliably.
+    return new PacketText(out.toString(), bodyState);
   }
 
   static Set<String> fragments(Collection<String> secrets) {
@@ -235,35 +278,166 @@ final class BountyEvidence {
   }
 
   static Object scrub(Object value, String key, Set<String> secrets) {
-    if (SECRET.matcher(key).find() || value instanceof String text && secrets.contains(text))
+    return scrub(value, key, prepared(secrets), Set.of());
+  }
+
+  private static Object scrub(Object value, String key, Set<String> secrets, Set<String> extra) {
+    if (sensitiveName(key, extra)
+        || value instanceof String text && secrets.contains(text)
+        || value instanceof Number number && knownNumber(number, secrets))
       return "[REDACTED]";
     if (value instanceof Map<?, ?> m) {
       Map<String, Object> out = new LinkedHashMap<>();
-      m.forEach((k, v) -> out.put(k.toString(), scrub(v, k.toString(), secrets)));
+      scrubFields(m, out, secrets, extra);
       return out;
     }
-    if (value instanceof List<?> l) return l.stream().map(v -> scrub(v, key, secrets)).toList();
+    if (value instanceof List<?> l) return l.stream().map(v -> scrub(v, key, secrets, extra)).toList();
+    if (value instanceof String text) return known(text, secrets);
     return value;
   }
 
+  private static String redactedKey(String key, Set<String> secrets) {
+    return secrets.contains(key) ? "[REDACTED]" : known(key, secrets);
+  }
+
+  private static void scrubFields(
+      Map<?, ?> source, Map<String, Object> target, Set<String> secrets, Set<String> extra) {
+    source.forEach((key, value) -> {
+      String originalKey = key.toString(), hiddenKey = redactedKey(originalKey, secrets), uniqueKey = hiddenKey;
+      // Several credential-shaped keys may collapse to the same label; retain every value.
+      for (int n = 2; target.containsKey(uniqueKey); n++) uniqueKey = hiddenKey + " [" + n + "]";
+      target.put(uniqueKey, scrub(value, originalKey, secrets, extra));
+    });
+  }
+
+  private static boolean knownNumber(Number value, Set<String> secrets) {
+    if (secrets.contains(value.toString())) return true;
+    java.math.BigDecimal number = new java.math.BigDecimal(value.toString()).stripTrailingZeros();
+    // MinerJson canonicalizes numbers, while callers can supply ordinary Integer/Long values.
+    return secrets.contains(number.toString())
+        || (long) number.precision() + Math.abs((long) number.scale()) + 3 <= 256 * 1024
+            && secrets.contains(number.toPlainString());
+  }
+
+  /** Prepare fragments and replacement order once per export/preview, not once per JSON leaf. */
+  private static final class Redactions extends AbstractSet<String> {
+    private final Set<String> values;
+    private final List<String> replacements;
+
+    Redactions(Collection<String> secrets) {
+      values = Collections.unmodifiableSet(fragments(secrets));
+      replacements = values.stream().filter(v -> v.length() >= 4)
+          .sorted(Comparator.comparingInt(String::length).reversed()).toList();
+    }
+
+    @Override public Iterator<String> iterator() { return values.iterator(); }
+    @Override public int size() { return values.size(); }
+    @Override public boolean contains(Object value) { return values.contains(value); }
+
+    String replace(String text) {
+      for (String value : replacements) text = text.replace(value, "[REDACTED]");
+      return text;
+    }
+  }
+
+  private static Redactions prepared(Collection<String> secrets) {
+    return secrets instanceof Redactions redactions ? redactions : new Redactions(secrets);
+  }
+
   static String known(String s, Collection<String> secrets) {
-    Set<String> values = new LinkedHashSet<>();
-    for (String value : secrets) {
-      if (value == null) continue;
+    return prepared(secrets).replace(s);
+  }
+
+  /** Discover newly issued/returned credentials at export time, including reflected values. */
+  private static Set<String> exportSecrets(
+      List<Item> items, Set<String> extra, Collection<String> supplied) {
+    SecretSet values = new SecretSet();
+    for (String value : fragments(supplied)) values.add(value);
+    for (Item item : items) {
+      // The caller pins every source once for the whole operation. A second retain would fail
+      // after concurrent unload, even though the existing lease still protects readable bytes.
+      collectPacketSecrets(item.request(), item.requestTruncated(), extra, values);
+      collectPacketSecrets(item.response(), item.responseTruncated(), extra, values);
+    }
+    return prepared(values.values);
+  }
+
+  private static final class SecretSet {
+    final Set<String> values = new LinkedHashSet<>();
+    int characters;
+
+    void add(String value) {
+      if (value == null || value.isEmpty() || value.equals("[REDACTED]") || values.contains(value)) return;
+      if (values.size() >= 1024 || characters + value.length() > 256 * 1024)
+        throw new IllegalArgumentException("증거 가림 값 한도 초과 · 패킷을 나눠 저장하세요. 저장은 중단됩니다.");
       values.add(value);
-      if (value.matches("(?i)Bearer .+|Basic .+"))
-        values.add(value.substring(value.indexOf(' ') + 1));
-      for (String pair : value.split(";")) {
-        int n = pair.indexOf('=');
-        if (n > 0) values.add(pair.substring(n + 1).strip());
+      characters += value.length();
+    }
+  }
+
+  private static void collectPacketSecrets(
+      String raw, boolean truncated, Set<String> extra, SecretSet values) {
+    String text = Objects.toString(raw, "");
+    if (text.length() > EvidencePacketStore.PREVIEW_BYTES) {
+      text = text.substring(0, EvidencePacketStore.PREVIEW_BYTES);
+      truncated = true;
+    }
+    text = text.replace("\r\n", "\n");
+    int separator = text.indexOf("\n\n");
+    String head = separator < 0 ? text : text.substring(0, separator);
+    String type = "";
+    for (String line : head.replaceAll("\n[\t ]+", " ").split("\n")) {
+      int colon = line.indexOf(':');
+      if (colon > 0) {
+        String name = line.substring(0, colon), value = line.substring(colon + 1).strip();
+        if (sensitiveName(name, extra)) {
+          // Request Cookie carries several credentials; response Set-Cookie carries one cookie
+          // followed by public attributes such as Domain, Path and Max-Age.
+          String credential = name.equalsIgnoreCase("Set-Cookie") ? value.split(";", 2)[0] : value;
+          for (String fragment : fragments(List.of(credential))) values.add(fragment);
+        }
+        if (name.equalsIgnoreCase("Content-Type")) type = value.split(";", 2)[0].toLowerCase(Locale.ROOT);
+      }
+      var query = Pattern.compile("[?#&]([^=\\s&]+)=([^\\s&]*)").matcher(line);
+      while (query.find()) {
+        String name, value;
+        try {
+          name = java.net.URLDecoder.decode(query.group(1), StandardCharsets.UTF_8);
+          value = java.net.URLDecoder.decode(query.group(2), StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException ignored) {
+          // Malformed URL escapes remain redacted in the exported packet header.
+          continue;
+        }
+        if (sensitiveName(name, extra)) values.add(value);
       }
     }
-    for (String v :
-        values.stream()
-            .filter(v -> v.length() >= 4)
-            .sorted(Comparator.comparingInt(String::length).reversed())
-            .toList()) s = s.replace(v, "[REDACTED]");
-    return s;
+    if (separator < 0 || truncated) return;
+    String body = text.substring(separator + 2);
+    if (type.equals("application/x-www-form-urlencoded")) {
+      for (String pair : body.split("&", -1)) {
+        String[] parts = pair.split("=", 2);
+        String key, value;
+        try {
+          key = java.net.URLDecoder.decode(parts[0], StandardCharsets.UTF_8);
+          value = java.net.URLDecoder.decode(parts.length == 2 ? parts[1] : "", StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException invalid) { continue; }
+        if (sensitiveName(key, extra)) values.add(value);
+      }
+    } else {
+      Object parsed;
+      try { parsed = MinerJson.parse(body, EvidencePacketStore.PREVIEW_BYTES, 20000); }
+      catch (Exception invalid) { return; } // Unsupported/invalid bodies are excluded from the ZIP.
+      collectStructuredSecrets(parsed, false, extra, values);
+    }
+  }
+
+  private static void collectStructuredSecrets(
+      Object value, boolean hidden, Set<String> extra, SecretSet values) {
+    if (value instanceof Map<?, ?> map)
+      map.forEach((key, child) -> collectStructuredSecrets(child, hidden || sensitiveName(key.toString(), extra), extra, values));
+    else if (value instanceof List<?> list)
+      list.forEach(child -> collectStructuredSecrets(child, hidden, extra, values));
+    else if (hidden && (value instanceof String || value instanceof Number)) values.add(value.toString());
   }
 
   static String preview(
@@ -275,36 +449,44 @@ final class BountyEvidence {
       Collection<String> secrets,
       boolean bodies,
       boolean image) {
-    StringBuilder out = new StringBuilder("증거 가림 미리보기 · 원본 HTTP 바이트가 아닌 텍스트\n");
-    out.append("제목: ")
-        .append(known(title, secrets))
-        .append("\n영향: ")
-        .append(known(impact, secrets))
-        .append("\n재현: ")
-        .append(known(steps, secrets))
-        .append("\n");
-    int i = 0;
-    for (Item item : items) {
-      try (var retained = item.retain()) {
-        out.append("\n--- ")
-            .append(++i)
-            .append(". ")
-            .append(known(item.label, secrets))
-            .append(" ---\n")
-            .append(known(Objects.toString(ActivityTracker.safeUrl(item.url), ""), secrets))
-            .append("\n")
-            .append(known(item.note, secrets))
-            .append("\n패킷 ID: ")
-            .append(item.packetId())
-            .append("\nREQUEST\n")
-            .append(packet(item.request(), headers, secrets, bodies, item.requestTruncated()))
-            .append("\nRESPONSE\n")
-            .append(packet(item.response(), headers, secrets, bodies, item.responseTruncated()))
-            .append("\n");
+    List<EvidencePacketStore.Lease> retained = new ArrayList<>();
+    try {
+      for (Item item : items) {
+        var lease = item.retain();
+        if (lease != null) retained.add(lease);
       }
+      secrets = exportSecrets(items, headers, secrets);
+      StringBuilder out = new StringBuilder("증거 가림 미리보기 · 원본 HTTP 바이트가 아닌 텍스트\n");
+      out.append("제목: ")
+          .append(known(title, secrets))
+          .append("\n영향: ")
+          .append(known(impact, secrets))
+          .append("\n재현: ")
+          .append(known(steps, secrets))
+          .append("\n");
+      int i = 0;
+      for (Item item : items) {
+          out.append("\n--- ")
+              .append(++i)
+              .append(". ")
+              .append(known(item.label, secrets))
+              .append(" ---\n")
+              .append(known(Objects.toString(ActivityTracker.safeUrl(item.url), ""), secrets))
+              .append("\n")
+              .append(known(item.note, secrets))
+              .append("\n패킷 ID: ")
+              .append(item.packetId())
+              .append("\nREQUEST\n")
+              .append(packet(item.request(), headers, secrets, bodies, item.requestTruncated()))
+              .append("\nRESPONSE\n")
+              .append(packet(item.response(), headers, secrets, bodies, item.responseTruncated()))
+              .append("\n");
+      }
+      if (image) out.append("\n브라우저 이미지 첨부 있음 · 이미지 내용은 자동 가림되지 않습니다. 직접 확인하세요.\n");
+      return out.toString();
+    } finally {
+      for (int n = retained.size() - 1; n >= 0; n--) retained.get(n).close();
     }
-    if (image) out.append("\n브라우저 이미지 첨부 있음 · 이미지 내용은 자동 가림되지 않습니다. 직접 확인하세요.\n");
-    return out.toString();
   }
 
   static byte[] imageBytes(Path image, String expected) throws Exception {
@@ -401,6 +583,10 @@ final class BountyEvidence {
         var lease = item.retain();
         if (lease != null) retained.add(lease);
       }
+      Set<String> redactions = exportSecrets(items, headers, secrets);
+      // Match the activity import bounds and reject malformed snapshots before replacing a ZIP.
+      String safeCoverage = MetadataExport.json(
+          scrub(MinerJson.parse(coverage, 32 * 1024 * 1024, 3000000), "", redactions, headers));
       byte[] imageData = image == null ? null : imageBytes(image, expectedImageHash);
       String imageFormat = imageData == null ? null : validateImageBytes(imageData);
       temp = Files.createTempFile(path.toAbsolutePath().getParent(), "wb-evidence-", ".tmp");
@@ -411,12 +597,18 @@ final class BountyEvidence {
         for (Item item : items) {
           i++;
           String sourceRequest = item.request(), sourceResponse = item.response();
-          String request = packet(sourceRequest, headers, secrets, bodies, item.requestTruncated());
-          String response =
-              packet(sourceResponse, headers, secrets, bodies, item.responseTruncated());
+          PacketText requestText = packetText(sourceRequest, headers, redactions, bodies, item.requestTruncated());
+          PacketText responseText = packetText(sourceResponse, headers, redactions, bodies, item.responseTruncated());
+          String request = requestText.text(), response = responseText.text();
           writeText(zip, "requests/" + i + ".http", request);
           writeText(zip, "responses/" + i + ".http", response);
-          metadata.add(metadata(item, sourceRequest, sourceResponse, request, response, secrets));
+          Map<String, Object> row = metadata(item, sourceRequest, sourceResponse, request, response, redactions);
+          row.put("requestExportBodyState", requestText.bodyState());
+          row.put("responseExportBodyState", responseText.bodyState());
+          row.put("extraRedactedNames", headers.stream().sorted().toList());
+          row.put("exportReplayable", false);
+          row.put("redactionPolicy", "민감 이름·추가 지정 이름·확인한 민감값의 반사 가림 · 개인정보 전체 탐지 아님");
+          metadata.add(row);
         }
         writeReport(
             zip,
@@ -424,11 +616,11 @@ final class BountyEvidence {
             writer -> {
               writer.write(
                   "# "
-                      + known(title, secrets)
+                      + known(title, redactions)
                       + "\n\n## 영향 (진단자 작성)\n"
-                      + known(impact, secrets)
+                      + known(impact, redactions)
                       + "\n\n## 재현 절차\n"
-                      + known(steps, secrets)
+                      + known(steps, redactions)
                       + "\n\n");
               int n = 0;
               for (Item item : items) {
@@ -437,13 +629,13 @@ final class BountyEvidence {
                     "## "
                         + n
                         + ". "
-                        + known(item.label, secrets)
+                        + known(item.label, redactions)
                         + "\n"
                         + item.method
                         + " "
-                        + safeUrl(item, secrets)
+                        + safeUrl(item, redactions)
                         + "\n\n"
-                        + known(item.note, secrets)
+                        + known(item.note, redactions)
                         + "\n\n패킷 ID: "
                         + item.packetId()
                         + "\n요청: requests/"
@@ -465,11 +657,11 @@ final class BountyEvidence {
                   "<!doctype html><html lang=ko><meta charset=utf-8><title>점검"
                       + " 증거</title><style>body{font-family:system-ui;max-width:1100px;margin:40px"
                       + " auto;padding:20px}pre{white-space:pre-wrap;background:#f0f5f8;padding:18px}h2{color:#126078}</style><h1>"
-                      + esc(known(title, secrets))
+                      + esc(known(title, redactions))
                       + "</h1><h2>영향</h2><pre>"
-                      + esc(known(impact, secrets))
+                      + esc(known(impact, redactions))
                       + "</pre><h2>재현 절차</h2><pre>"
-                      + esc(known(steps, secrets))
+                      + esc(known(steps, redactions))
                       + "</pre>");
               int n = 0;
               for (Item item : items) {
@@ -478,21 +670,21 @@ final class BountyEvidence {
                     "<h2>"
                         + n
                         + ". "
-                        + esc(known(item.label, secrets))
+                        + esc(known(item.label, redactions))
                         + "</h2><p>"
-                        + esc(item.method + " " + safeUrl(item, secrets))
+                        + esc(item.method + " " + safeUrl(item, redactions))
                         + "</p><p>"
-                        + esc(known(item.note, secrets))
+                        + esc(known(item.note, redactions))
                         + "</p><p>패킷 ID: "
                         + esc(item.packetId())
                         + "</p><h3>요청</h3><pre>");
                 writer.write(
-                    esc(packet(item.request(), headers, secrets, bodies, item.requestTruncated())));
+                    esc(packet(item.request(), headers, redactions, bodies, item.requestTruncated())));
                 writer.write("</pre><h3>응답</h3><pre>");
                 writer.write(
                     esc(
                         packet(
-                            item.response(), headers, secrets, bodies, item.responseTruncated())));
+                            item.response(), headers, redactions, bodies, item.responseTruncated())));
                 writer.write("</pre>");
               }
               writer.write("<p>가린 텍스트 증거 · 원본 HTTP 바이트는 ZIP에 포함되지 않습니다.</p></html>");
@@ -511,10 +703,11 @@ final class BountyEvidence {
                     BuildInfo.VERSION,
                     "items",
                     metadata)));
-        writeText(zip, "coverage.json", known(coverage, secrets));
+        writeText(zip, "coverage.json", safeCoverage);
         List<Map<String, Object>> linked = new ArrayList<>();
         for (var event : oast) {
-          Map<String, Object> row = new LinkedHashMap<>(event);
+          Map<String, Object> row = new LinkedHashMap<>();
+          scrubFields(event, row, redactions, headers);
           List<Integer> refs = new ArrayList<>();
           List<String> ids = new ArrayList<>();
           for (int n = 0; n < items.size(); n++)
@@ -530,7 +723,7 @@ final class BountyEvidence {
           row.put("correlation", "제공 URL/메서드 연결 · 해당 패킷이 콜백을 유발했는지 수동 확인");
           linked.add(row);
         }
-        writeText(zip, "oast.json", known(MetadataExport.json(linked), secrets));
+        writeText(zip, "oast.json", MetadataExport.json(linked));
         if (imageData != null) {
           writeBytes(zip, "browser-evidence." + imageFormat, imageData);
           writeText(

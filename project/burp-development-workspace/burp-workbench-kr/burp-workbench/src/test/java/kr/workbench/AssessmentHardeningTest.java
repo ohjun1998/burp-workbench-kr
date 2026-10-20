@@ -61,7 +61,7 @@ public final class AssessmentHardeningTest extends WorkbenchTest {
     check(AuthJudgement.compare(200,"{\"data\":{\"id\":1}}",400,"{\"error\":\"Forbidden\",\"data\":{\"id\":1}}",denied,"").kind()==AuthFinding.Kind.DENIAL_DATA,"400 denial with protected data never becomes green");
     check(AuthJudgement.compare(200,"{\"data\":{\"id\":1}}",400,"{\"error\":\"validation failed\"}",denied,"").kind()==AuthFinding.Kind.REVIEW,"unrecognized 400 remains review");
     var missing=EnvironmentContent.inspect("https://app.test/missing",404,"Content-Type: text/html","x".repeat(70000),"");
-    check(missing.kind().equals("MISSING")&&missing.reason().contains("70000")&&missing.title().contains("미검사"),"large 404 preserves status and explicitly limits content inspection");
+    check(missing.kind().equals("MISSING")&&missing.reason().contains("70000")&&missing.reason().contains("전체 검사"),"70k 404 preserves status with complete bounded content inspection");
 
     String large="const baseURL='https://api.test/v2';"+";".repeat(JsAnalysis.SOURCE_LIMIT)+"fetch(baseURL+'/orders',{method:'POST'});";
     var batch=JsBatchAnalysis.analyze(large,"https://cdn.test/app.js","application/javascript","https://app.test/");

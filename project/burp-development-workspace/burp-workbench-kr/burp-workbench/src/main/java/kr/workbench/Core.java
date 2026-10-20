@@ -100,7 +100,7 @@ public final class Core {
         StringBuilder out=new StringBuilder("HEADER\n").append(header);
         if(p.length==5) return out.append("\n\nJWE: 암호화된 토큰입니다. 이 버전에서는 복호화하지 않습니다.").toString();
         String payload=new String(Base64.getUrlDecoder().decode(p[1]),StandardCharsets.UTF_8);
-        out.append("\n\nPAYLOAD\n").append(payload).append("\n\n서명 검증: 수행하지 않음. 디코딩만으로 신뢰할 수 없습니다.");
+        out.append("\n\nPAYLOAD\n").append(payload).append("\n\n내용 해석: Base64URL 디코딩만 수행\n서명 검증: 수행하지 않음. 디코딩만으로 신뢰할 수 없습니다.\n권한 효과: 미확인. role·scope·sub 주장값은 서버의 실제 권한 검증 결과가 아닙니다.");
         if(Pattern.compile("\"alg\"\\s*:\\s*\"none\"",Pattern.CASE_INSENSITIVE).matcher(header).find()) out.append("\n검토 항목: alg=none. 서버가 실제로 수용하는지 별도 확인하세요.");
         if(p[2].isEmpty()) out.append("\n검토 항목: 서명 구간이 비어 있습니다.");
         return out.append(JwtTimes.describe(payload,java.time.Instant.now())).toString();

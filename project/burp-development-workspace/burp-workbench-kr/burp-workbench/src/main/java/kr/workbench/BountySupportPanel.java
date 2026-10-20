@@ -58,6 +58,9 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       new TargetWindow(this, "업무 흐름 · 실행 설정", this::flowSettingsContent);
   EvidencePacketStore evidenceStore = new EvidencePacketStore();
   final JTextField evidenceTitle = new JTextField("취약점 재현 증거", 28);
+  final JTextField evidenceExtraNames = new JTextField(28);
+  final TargetWindow evidenceRedactionSettings =
+      new TargetWindow(this, "증거 가림 설정", this::evidenceRedactionContent);
   final JTextArea impact = area(3), repro = area(4);
   final List<BountyEvidence.Item> evidence = new ArrayList<>();
   final Set<String> evidenceHeaders = new LinkedHashSet<>();
@@ -405,7 +408,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceTitle.setColumns(24);
     includeBodies.setText("JSON/폼 본문 포함");
     includeBodies.setToolTipText("JSON/폼 본문을 증거에 포함합니다. 민감 키는 가리지만 직접 작성한 영향·재현 문장은 저장 전에 확인하세요.");
-    top.add(WorkbenchUi.row(new JLabel("제목"), evidenceTitle, includeBodies));
+    top.add(WorkbenchUi.row(new JLabel("제목"), evidenceTitle, includeBodies,
+        action("가림 설정", evidenceRedactionSettings::open)));
     evidenceSave.setName("wb.bounty.evidence.save");
     evidencePreview.setName("wb.bounty.evidence.preview");
     evidenceClear.setName("wb.bounty.evidence.clear");
@@ -440,6 +444,22 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     for (int i = 0; i < widths.length; i++)
       evidenceTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
     return p;
+  }
+
+  JPanel evidenceRedactionContent() {
+    evidenceExtraNames.setName("wb.bounty.evidence.redaction.names");
+    evidenceExtraNames.setToolTipText("헤더·JSON 중첩 키·폼 이름에 대소문자 구분 없이 적용합니다. 값이나 토큰을 입력하지 마세요.");
+    return TargetWindow.options(
+        WorkbenchUi.row(new JLabel("추가 가림 이름"), evidenceExtraNames),
+        new JLabel("쉼표로 구분 · 예: customerCode, otp, X-Custom-Auth"),
+        new JLabel("기본 민감 키와 지정한 이름의 값은 본문·반사 내용에서도 가립니다."),
+        new JLabel("이미지와 이름이 알려지지 않은 개인정보는 가림 미리보기에서 직접 확인하세요."));
+  }
+
+  Set<String> evidenceRedactedNames() {
+    Set<String> names = new LinkedHashSet<>(evidenceHeaders);
+    names.addAll(BountyEvidence.extraNames(evidenceExtraNames.getText()));
+    return Set.copyOf(names);
   }
 
   void remember(HttpRequestResponse rr, String label, String note) {
@@ -502,7 +522,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         impact.getText(),
         repro.getText(),
         List.copyOf(evidence),
-        Set.copyOf(evidenceHeaders),
+        evidenceRedactedNames(),
         Set.copyOf(evidenceSecrets),
         includeBodies.isSelected(),
         browserImage != null);
@@ -679,7 +699,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         && JOptionPane.showConfirmDialog(this, "기존 ZIP을 덮어쓸까요?", "증거 저장", JOptionPane.YES_NO_OPTION)
             != JOptionPane.YES_OPTION) return;
     List<BountyEvidence.Item> items = List.copyOf(evidence);
-    Set<String> headers = Set.copyOf(evidenceHeaders), secrets = Set.copyOf(evidenceSecrets);
+    Set<String> headers = evidenceRedactedNames(), secrets = Set.copyOf(evidenceSecrets);
     String title = evidenceTitle.getText(),
         effect = impact.getText(),
         steps = repro.getText(),
@@ -920,6 +940,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     worker.shutdownNow();
     evidenceStore.close();
     flowSettings.close();
+    evidenceRedactionSettings.close();
     flowResults.clear();
     evidence.clear();
     evidenceSecrets.clear();

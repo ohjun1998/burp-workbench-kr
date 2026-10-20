@@ -1,0 +1,182 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launchPersistentContext: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-extensions-except=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --load-extension=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --user-data-dir=/tmp/mapper-browser-DO9NQv --remote-debugging-pipe about:blank
+<launched> pid=116
+[pid=116][err] [116:116:1020/032120.142452:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+[pid=116][err] [1020/032120.142663:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)
+[pid=116][err] [1020/032120.142846:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142857:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142862:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142867:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142870:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142873:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142876:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142878:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142881:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142883:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] Received signal [1020/032120.142886:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] 6
+[pid=116][err] [1020/032120.142888:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142890:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] [1020/032120.142893:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)
+[pid=116][err] #0 0x55eceae5bcfa (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5cb8cf9)
+[pid=116][err] #1 0x55ecef7c8724 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa625723)
+[pid=116][err] #2 0x7f5006908330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4532f)
+[pid=116][err] #3 0x7f500690827e (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4527d)
+[pid=116][err] #4 0x7f50068eb8ff (/usr/lib/x86_64-linux-gnu/libc.so.6+0x288fe)
+[pid=116][err] #5 0x55ecef7bfac5 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa61cac4)
+[pid=116][err] #6 0x55ecef77fdad (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcdac)
+[pid=116][err] #7 0x55ecef77fd3e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcd3d)
+[pid=116][err] #8 0x55eceafe401e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e4101d)
+[pid=116][err] #9 0x55ece83a7fc9 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3204fc8)
+[pid=116][err] #10 0x55ecef77ff20 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcf1f)
+[pid=116][err] #11 0x55ece9ab0369 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x490d368)
+[pid=116][err] #12 0x55eceb01ac69 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e77c68)
+[pid=116][err] #13 0x55eceb019e47 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76e46)
+[pid=116][err] #14 0x55eceb019bb2 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76bb1)
+[pid=116][err] #15 0x55eceb019b74 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b73)
+[pid=116][err] #16 0x55eceb019b37 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b36)
+[pid=116][err] #17 0x55ece906f216 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3ecc215)
+[pid=116][err] #18 0x55ecea0f32e3 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x4f502e2)
+[pid=116][err] #19 0x55ece906ffd6 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3eccfd5)
+[pid=116][err] #20 0x55ecea9fdf2e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x585af2d)
+[pid=116][err] #21 0x55ecea9fcc3f (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5859c3e)
+[pid=116][err] #22 0x7f50068ed1ca (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9)
+[pid=116][err] #23 0x7f50068ed28b (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a28a)
+[pid=116][err] #24 0x55eceb7b482a (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x6611829)
+[pid=116][err]   r8: 000026c80006862d  r9: 0000000000000001 r10: 0000000000000008 r11: 0000000000000246
+[pid=116][err]  r12: 0000000000000006 r13: 000000000000008e r14: 0000000000000016 r15: 000026c8000d0640
+[pid=116][err]   di: 0000000000000074  si: 0000000000000074  bp: 00007ffe268cb890  bx: 0000000000000074
+[pid=116][err]   dx: 0000000000000006  ax: 0000000000000000  cx: 00007f5006961b2c  sp: 00007ffe268cb850
+[pid=116][err]   ip: 00007f5006961b2c efl: 0000000000000246 cgf: 002b000000000033 erf: 0000000000000000
+[pid=116][err]  trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000
+[pid=116][err] [end of stack trace]
+Call log:
+[2m  - <launching> /workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-extensions-except=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --load-extension=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --user-data-dir=/tmp/mapper-browser-DO9NQv --remote-debugging-pipe about:blank[22m
+[2m  - <launched> pid=116[22m
+[2m  - [pid=116][err] [116:116:1020/032120.142452:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)[22m
+[2m  - [pid=116][err] [1020/032120.142663:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)[22m
+[2m  - [pid=116][err] [1020/032120.142846:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142857:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142862:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142867:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142870:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142873:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142876:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142878:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142881:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142883:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] Received signal [1020/032120.142886:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] 6[22m
+[2m  - [pid=116][err] [1020/032120.142888:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142890:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] [1020/032120.142893:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)[22m
+[2m  - [pid=116][err] #0 0x55eceae5bcfa (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5cb8cf9)[22m
+[2m  - [pid=116][err] #1 0x55ecef7c8724 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa625723)[22m
+[2m  - [pid=116][err] #2 0x7f5006908330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4532f)[22m
+[2m  - [pid=116][err] #3 0x7f500690827e (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4527d)[22m
+[2m  - [pid=116][err] #4 0x7f50068eb8ff (/usr/lib/x86_64-linux-gnu/libc.so.6+0x288fe)[22m
+[2m  - [pid=116][err] #5 0x55ecef7bfac5 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa61cac4)[22m
+[2m  - [pid=116][err] #6 0x55ecef77fdad (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcdac)[22m
+[2m  - [pid=116][err] #7 0x55ecef77fd3e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcd3d)[22m
+[2m  - [pid=116][err] #8 0x55eceafe401e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e4101d)[22m
+[2m  - [pid=116][err] #9 0x55ece83a7fc9 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3204fc8)[22m
+[2m  - [pid=116][err] #10 0x55ecef77ff20 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcf1f)[22m
+[2m  - [pid=116][err] #11 0x55ece9ab0369 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x490d368)[22m
+[2m  - [pid=116][err] #12 0x55eceb01ac69 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e77c68)[22m
+[2m  - [pid=116][err] #13 0x55eceb019e47 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76e46)[22m
+[2m  - [pid=116][err] #14 0x55eceb019bb2 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76bb1)[22m
+[2m  - [pid=116][err] #15 0x55eceb019b74 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b73)[22m
+[2m  - [pid=116][err] #16 0x55eceb019b37 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b36)[22m
+[2m  - [pid=116][err] #17 0x55ece906f216 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3ecc215)[22m
+[2m  - [pid=116][err] #18 0x55ecea0f32e3 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x4f502e2)[22m
+[2m  - [pid=116][err] #19 0x55ece906ffd6 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3eccfd5)[22m
+[2m  - [pid=116][err] #20 0x55ecea9fdf2e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x585af2d)[22m
+[2m  - [pid=116][err] #21 0x55ecea9fcc3f (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5859c3e)[22m
+[2m  - [pid=116][err] #22 0x7f50068ed1ca (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9)[22m
+[2m  - [pid=116][err] #23 0x7f50068ed28b (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a28a)[22m
+[2m  - [pid=116][err] #24 0x55eceb7b482a (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x6611829)[22m
+[2m  - [pid=116][err]   r8: 000026c80006862d  r9: 0000000000000001 r10: 0000000000000008 r11: 0000000000000246[22m
+[2m  - [pid=116][err]  r12: 0000000000000006 r13: 000000000000008e r14: 0000000000000016 r15: 000026c8000d0640[22m
+[2m  - [pid=116][err]   di: 0000000000000074  si: 0000000000000074  bp: 00007ffe268cb890  bx: 0000000000000074[22m
+[2m  - [pid=116][err]   dx: 0000000000000006  ax: 0000000000000000  cx: 00007f5006961b2c  sp: 00007ffe268cb850[22m
+[2m  - [pid=116][err]   ip: 00007f5006961b2c efl: 0000000000000246 cgf: 002b000000000033 erf: 0000000000000000[22m
+[2m  - [pid=116][err]  trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000[22m
+[2m  - [pid=116][err] [end of stack trace][22m
+[2m  - [pid=116] <gracefully close start>[22m
+[2m  - [pid=116] <kill>[22m
+[2m  - [pid=116] <will force kill>[22m
+[2m  - [pid=116] <process did exit: exitCode=null, signal=SIGABRT>[22m
+[2m  - [pid=116] starting temporary directories cleanup[22m
+[2m  - [pid=116] finished temporary directories cleanup[22m
+[2m  - [pid=116] <gracefully close end>[22m
+
+    at async file:///workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/tests/browser-native.mjs:17:13 {
+  log: [
+    '  - <launching> /workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-extensions-except=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --load-extension=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --user-data-dir=/tmp/mapper-browser-DO9NQv --remote-debugging-pipe about:blank',
+    '  - <launched> pid=116',
+    '  - [pid=116][err] [116:116:1020/032120.142452:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)',
+    '  - [pid=116][err] [1020/032120.142663:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)',
+    '  - [pid=116][err] [1020/032120.142846:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142857:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142862:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142867:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142870:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142873:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142876:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142878:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142881:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142883:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] Received signal [1020/032120.142886:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] 6',
+    '  - [pid=116][err] [1020/032120.142888:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142890:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] [1020/032120.142893:ERROR:third_party/crashpad/crashpad/handler/linux/exception_handler_server.cc:142] tgkill: No such process (3)',
+    '  - [pid=116][err] #0 0x55eceae5bcfa (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5cb8cf9)',
+    '  - [pid=116][err] #1 0x55ecef7c8724 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa625723)',
+    '  - [pid=116][err] #2 0x7f5006908330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4532f)',
+    '  - [pid=116][err] #3 0x7f500690827e (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4527d)',
+    '  - [pid=116][err] #4 0x7f50068eb8ff (/usr/lib/x86_64-linux-gnu/libc.so.6+0x288fe)',
+    '  - [pid=116][err] #5 0x55ecef7bfac5 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa61cac4)',
+    '  - [pid=116][err] #6 0x55ecef77fdad (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcdac)',
+    '  - [pid=116][err] #7 0x55ecef77fd3e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcd3d)',
+    '  - [pid=116][err] #8 0x55eceafe401e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e4101d)',
+    '  - [pid=116][err] #9 0x55ece83a7fc9 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3204fc8)',
+    '  - [pid=116][err] #10 0x55ecef77ff20 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcf1f)',
+    '  - [pid=116][err] #11 0x55ece9ab0369 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x490d368)',
+    '  - [pid=116][err] #12 0x55eceb01ac69 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e77c68)',
+    '  - [pid=116][err] #13 0x55eceb019e47 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76e46)',
+    '  - [pid=116][err] #14 0x55eceb019bb2 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76bb1)',
+    '  - [pid=116][err] #15 0x55eceb019b74 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b73)',
+    '  - [pid=116][err] #16 0x55eceb019b37 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b36)',
+    '  - [pid=116][err] #17 0x55ece906f216 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3ecc215)',
+    '  - [pid=116][err] #18 0x55ecea0f32e3 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x4f502e2)',
+    '  - [pid=116][err] #19 0x55ece906ffd6 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3eccfd5)',
+    '  - [pid=116][err] #20 0x55ecea9fdf2e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x585af2d)',
+    '  - [pid=116][err] #21 0x55ecea9fcc3f (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5859c3e)',
+    '  - [pid=116][err] #22 0x7f50068ed1ca (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9)',
+    '  - [pid=116][err] #23 0x7f50068ed28b (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a28a)',
+    '  - [pid=116][err] #24 0x55eceb7b482a (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x6611829)',
+    '  - [pid=116][err]   r8: 000026c80006862d  r9: 0000000000000001 r10: 0000000000000008 r11: 0000000000000246',
+    '  - [pid=116][err]  r12: 0000000000000006 r13: 000000000000008e r14: 0000000000000016 r15: 000026c8000d0640',
+    '  - [pid=116][err]   di: 0000000000000074  si: 0000000000000074  bp: 00007ffe268cb890  bx: 0000000000000074',
+    '  - [pid=116][err]   dx: 0000000000000006  ax: 0000000000000000  cx: 00007f5006961b2c  sp: 00007ffe268cb850',
+    '  - [pid=116][err]   ip: 00007f5006961b2c efl: 0000000000000246 cgf: 002b000000000033 erf: 0000000000000000',
+    '  - [pid=116][err]  trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000',
+    '  - [pid=116][err] [end of stack trace]',
+    '  - [pid=116] <gracefully close start>',
+    '  - [pid=116] <kill>',
+    '  - [pid=116] <will force kill>',
+    '  - [pid=116] <process did exit: exitCode=null, signal=SIGABRT>',
+    '  - [pid=116] starting temporary directories cleanup',
+    '  - [pid=116] finished temporary directories cleanup',
+    '  - [pid=116] <gracefully close end>'
+  ]
+}
+
+Node.js v24.19.0

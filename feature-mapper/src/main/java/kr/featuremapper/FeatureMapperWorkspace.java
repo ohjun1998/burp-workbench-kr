@@ -87,6 +87,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   private JDialog helpWindow, settingsWindow, logWindow;
   private JPanel settingsContent, logContent;
   private final JLabel status = new JLabel("사이트를 사용하면 기능을 자동으로 분류합니다.");
+  private final JTextArea browserStatus = new JTextArea(4, 48);
   private final JCheckBox scopeOnly = new JCheckBox("Burp Scope만 수집", false);
   private final JCheckBox enabled = new JCheckBox("자동 수집", true);
   private final AtomicBoolean collect = new AtomicBoolean(true), scope = new AtomicBoolean(false);
@@ -383,6 +384,10 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     String label = diagnostics.size() == 0 ? "로그" : "로그 (" + diagnostics.size() + ")";
     if (!label.equals(logButton.getText())) logButton.setText(label);
     logButton.setForeground(diagnostics.size() == 0 ? MapperUi.ink() : new Color(210,70,80));
+    if (bridge != null && mapper != null) {
+      String summary = browserSummary();
+      if (!summary.equals(browserStatus.getText())) browserStatus.setText(summary);
+    }
   }
 
   private void showHelp() {
@@ -401,6 +406,10 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       if (embeddedHost == null) settingsContent.add(MapperUi.row(enabled,scopeOnly));
       else settingsContent.add(new JLabel("수집 범위는 Workbench 요청·응답 목록의 OFF / SCOPE를 따릅니다."));
       settingsContent.add(MapperUi.row(button("브라우저 연결",this::showBridge),button("새 프로젝트",this::newProject)));
+      browserStatus.setName("fm.browser.status");
+      browserStatus.setEditable(false); browserStatus.setLineWrap(true); browserStatus.setWrapStyleWord(true);
+      browserStatus.setText(browserSummary());
+      settingsContent.add(browserStatus);
     }
     settingsWindow=dialogOpener.open(root,"Feature Mapper · 설정",settingsContent,()->settingsWindow=null);
   }
@@ -674,6 +683,12 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
         });
   }
 
+  String browserSummary() {
+    return bridge.snapshot().description(System.currentTimeMillis())
+        + "\nHTTP 자동 분류 " + mapper.count() + "건 · 브라우저 연결 근거 " + mapper.browserMappedPackets() + "건"
+        + "\n이벤트 수신과 수집 반영은 별개입니다. OFF·범위 밖·중복 요청은 연결되지 않을 수 있습니다.";
+  }
+
   private void showBridge() {
     JTextArea text =
         new JTextArea(
@@ -681,6 +696,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
                 + bridge.baseUrl()
                 + "\n연결 토큰: "
                 + bridge.token
+                + "\n\n" + browserSummary()
                 + "\n\n브라우저 보조 확장의 연결 설정에 입력하세요.\n브라우저 보조 확장에서 분석할 사이트를 활성화한 뒤 새로고침합니다.",
             7,
             70);

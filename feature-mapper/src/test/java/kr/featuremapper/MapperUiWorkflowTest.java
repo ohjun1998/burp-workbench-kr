@@ -59,6 +59,9 @@ final class MapperUiWorkflowTest {
         MapperTest.check(table.getRowHeight()>=32&&table.getRowCount()==4,"Mapper keeps readable rows and every captured item");
         ((JButton)named(root,"fm.navigation.settings")).doClick(0);
         MapperTest.check(fixture.titles.get(0).endsWith("설정")&&named(fixture.opened.get(0),"fm.settings")!=null,"Mapper settings open separately from the current traffic view");
+        JTextArea connection=(JTextArea)named(fixture.opened.get(0),"fm.browser.status");
+        MapperTest.check(connection.getText().contains("인증 연결 대기")&&connection.getText().contains("HTTP 자동 분류 4건")&&connection.getText().contains("브라우저 연결 근거 0건"),"settings distinguish HTTP classification from actual helper authentication and linkage");
+        MapperTest.check(!connection.getText().contains(ext.bridge.token),"connection status never displays the pairing token");
         try {((JCheckBox)get(ext,"scopeOnly")).doClick(0);}catch(Exception e){throw new RuntimeException(e);}
         ((JButton)named(root,"fm.capture")).doClick(0);
         MapperTest.check(((JButton)named(root,"fm.capture")).getText().equals("OFF"),"compact capture button can stop collection");

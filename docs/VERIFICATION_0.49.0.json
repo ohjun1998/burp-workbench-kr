@@ -1,0 +1,735 @@
+{
+  "version": "0.49.0",
+  "mapperVersion": "0.3.3",
+  "labVersion": "3.10.0",
+  "date": "2026-10-20",
+  "timezone": "Asia/Seoul",
+  "sourceRef": "main",
+  "baseCommit": "ee1ac6a1f36b6b22c946aa03728e93e274b3057d",
+  "githubStatus": "2026-10-20 사용자가 로컬·원격 검사 중단과 main 병합을 명시적으로 요청했습니다. 원격 Mapper 검사는 실패 상태입니다. PR #82의 0.49.0을 병합하며 로컬 미완성 0.49.1 패치는 포함하지 않습니다.",
+  "result": "USER_REQUESTED_MERGE_WITH_REMOTE_VERIFICATION_NOT_PASSED",
+  "releaseJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+  "releaseCheck": {
+    "version": "0.49.0",
+    "groups": {
+      "BuildInfoTest": 3,
+      "PassiveProvenanceTest": 27,
+      "CaptureProvenanceTest": 13,
+      "JsBatchContextTest": 58,
+      "EvidenceHardeningTest": 50,
+      "ResponseHardeningTest": 90,
+      "ResponseAnalysisLimitsTest": 9,
+      "LargeResponseJsonTest": 17,
+      "AssessmentHardeningTest": 45,
+      "MapperIntegrationTest": 36,
+      "BankUpgradeTest": 54,
+      "OssLogicUpgradeTest": 52,
+      "JsUpgradeTest": 36,
+      "TrafficSearchUpgradeTest": 23,
+      "JsCompactUpgradeTest": 23,
+      "JsArchiveWorkflowTest": 8,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 52,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "EnvironmentUpgradeTest": 72,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 29,
+      "PacketInspectorTest": 42,
+      "RenderAuthUiTest": 28,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsDraftMappingTest": 19,
+      "JsDetailsWorkflowTest": 26,
+      "PacketStyleTest": 30,
+      "TextAnalysisTest": 23,
+      "JsResponseWorkflowTest": 51,
+      "JsRepeaterWorkflowTest": 95,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 65,
+      "AuthRecordTest": 37,
+      "AuthWorkspaceTest": 21,
+      "AuthLayoutFitTest": 106,
+      "AuthRunSummaryTest": 23,
+      "AuthResponseWorkflowTest": 47,
+      "AuthAccuracyWorkflowTest": 44,
+      "AuthResponseRefinementTest": 39,
+      "CookieSessionProbeTest": 50,
+      "UiCleanupTest": 39,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 43,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 21,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 102,
+      "FolderNavigationTest": 41,
+      "DiagnosticsWorkflowTest": 29,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 80,
+    "regressionChecks": 2857,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 3361,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "mapper": {
+    "javaChecks": 114,
+    "nodeChecks": 8,
+    "nativeBrowserLocal": "BLOCKED_SOCKET_PERMISSION"
+  },
+  "ui": {
+    "totalViews": 420,
+    "mapperViews": 30,
+    "releaseJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+    "method": "Production Swing components using synthetic metadata and API test adapters; no native Burp GUI execution.",
+    "results": [
+      {
+        "mode": "auth",
+        "exitCode": 0,
+        "seconds": 18.5,
+        "renderedViews": 60,
+        "controlsMeasured": 736,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "base",
+        "exitCode": 0,
+        "seconds": 37.8,
+        "renderedViews": 156,
+        "controlsMeasured": 2730,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "environment",
+        "exitCode": 0,
+        "seconds": 14.2,
+        "renderedViews": 32,
+        "controlsMeasured": 224,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "guide",
+        "exitCode": 0,
+        "seconds": 15.0,
+        "renderedViews": 52,
+        "controlsMeasured": 156,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "js",
+        "exitCode": 0,
+        "seconds": 19.3,
+        "renderedViews": 76,
+        "controlsMeasured": 1184,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "packet",
+        "exitCode": 0,
+        "seconds": 18.3,
+        "renderedViews": 16,
+        "controlsMeasured": 448,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "scope",
+        "exitCode": 0,
+        "seconds": 13.8,
+        "renderedViews": 4,
+        "controlsMeasured": 24,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "session",
+        "exitCode": 0,
+        "seconds": 12.8,
+        "renderedViews": 8,
+        "controlsMeasured": 96,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      },
+      {
+        "mode": "traffic",
+        "exitCode": 0,
+        "seconds": 19.1,
+        "renderedViews": 16,
+        "controlsMeasured": 292,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "guideLayoutFailures": 0
+      }
+    ]
+  },
+  "authLab": {
+    "result": "passed",
+    "labVersion": "3.10.0",
+    "extensionVersion": "0.49.0",
+    "extensionJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+    "transport": "real loopback HTTP with Montoya API adapters",
+    "nativeExtensionLoaded": false,
+    "httpChecks": 420,
+    "httpTargetRequests": 497,
+    "extensionComparisonRuns": 42,
+    "extensionComparedAccountCells": 126,
+    "extensionIdentityChecks": 22,
+    "extensionTargetRequests": 353,
+    "baseUrl": "http://127.0.0.1:40573",
+    "database": "isolated H2 in Oracle compatibility mode",
+    "browserExecuted": false,
+    "privateProfile": true,
+    "credentialsIncludedInEvidence": false,
+    "ownedServerStopped": true
+  },
+  "auth50": {
+    "result": "completed",
+    "labVersion": "3.10.0",
+    "extensionVersion": "0.49.0",
+    "extensionJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+    "transport": "real loopback HTTP with Montoya API adapters",
+    "nativeExtensionLoaded": false,
+    "httpChecks": 2800,
+    "httpTargetRequests": 5879,
+    "uniqueFunctions": 50,
+    "invalidCombinationChecks": 33,
+    "detectionMetrics": {
+      "unconfigured": {
+        "run": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 406,
+          "FN": 294,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 686,
+          "samples": 700
+        },
+        "account": {
+          "TP": 0,
+          "FP": 0,
+          "TN": 1708,
+          "FN": 392,
+          "precision": null,
+          "recall": 0.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 1316,
+          "samples": 2100
+        }
+      },
+      "configured": {
+        "run": {
+          "TP": 294,
+          "FP": 0,
+          "TN": 406,
+          "FN": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 77,
+          "samples": 700
+        },
+        "account": {
+          "TP": 392,
+          "FP": 0,
+          "TN": 1708,
+          "FN": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "falsePositiveRate": 0.0,
+          "reviewCount": 91,
+          "samples": 2100
+        }
+      }
+    },
+    "extensionComparisonRuns": 1400,
+    "extensionComparedAccountCells": 4200,
+    "extensionIdentityChecks": 21,
+    "extensionTargetRequests": 10822,
+    "baseUrl": "http://127.0.0.1:54885",
+    "database": "isolated H2 in Oracle compatibility mode",
+    "browserExecuted": false,
+    "nativeControllerInstances": 7,
+    "productionTimingUnchanged": true,
+    "privateProfile": true,
+    "credentialsIncludedInEvidence": false,
+    "ownedServerStopped": true
+  },
+  "auth50Metrics": {
+    "unconfigured": {
+      "account": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 1708,
+        "FN": 392,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 1316,
+        "samples": 2100
+      },
+      "run": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 406,
+        "FN": 294,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 686,
+        "samples": 700
+      }
+    },
+    "configured": {
+      "account": {
+        "TP": 392,
+        "FP": 0,
+        "TN": 1708,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 91,
+        "samples": 2100
+      },
+      "run": {
+        "TP": 294,
+        "FP": 0,
+        "TN": 406,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 77,
+        "samples": 700
+      }
+    }
+  },
+  "metricInterpretation": "auth50는 0.49.0 최종 JAR의 앞선 실행 자료를 이번 재개에서 재집계했다. API 어댑터이며 native Burp가 아니다. REVIEW는 TP/FP/TN/FN과 중복될 수 있어 합산하지 않는다. 미설정 392 FN 중 385는 보류이며 7건은 차단 응답 뒤 실제 저장 변화가 있었다. 설정 후 REVIEW 91건은 302 7건, 404 63건, 410 21건이며 위반 사례와 겹치지 않는다.",
+  "reviewFixes": [
+    {
+      "problem": "같은 클릭·밀리초·URL의 다른 메서드/본문 이벤트가 덮어써질 수 있음",
+      "resolution": "이벤트 키에 메서드와 본문 해시를 포함하고 모호한 매핑은 취소"
+    },
+    {
+      "problem": "worker 초기화 전에 받은 클릭과 이전 연결 오류가 새 연결에 섞임",
+      "resolution": "설정 초기화를 기다리고 성공 시 오류 상태 초기화, 종료된 탭의 세션 정보 정리"
+    },
+    {
+      "problem": "변경·별칭·조건부 함수의 JS 값을 확정하거나 요청 원본 위치가 흐려짐",
+      "resolution": "보수적인 정적 문맥 검사와 미확정 처리, 요청 객체의 호출 위치·메서드 보존"
+    },
+    {
+      "problem": "신원 확인과 기준 요청 사이 간격 누락, 큰 익명 응답을 음성 대조로 오인",
+      "resolution": "모든 경계에 간격 적용. 불완전·미지원·동일 신원 익명 응답은 검사값 미전송"
+    },
+    {
+      "problem": "큰 본문의 미검사 범위가 전체 무근거 판정으로 오해됨",
+      "resolution": "일반 문자열/JSON/수신 한도를 분리하고 미검사·큐 제외·처리 오류를 표시"
+    },
+    {
+      "problem": "숫자 비밀값 가림 후 JSON이 깨지거나 공개 쿠키 속성이 가려짐",
+      "resolution": "구조를 보존하는 가림과 쿠키 속성 구분. 재검증에서 두 JSON 유효 및 공개 도메인 보존"
+    },
+    {
+      "problem": "이스케이프된 비밀값이 coverage/OAST 증거에 남음",
+      "resolution": "민감값의 표현을 정규화하여 가림. 두 저장 경로에서 잔류 없음 확인"
+    },
+    {
+      "problem": "증거 저장과 종료가 겹치거나 미리보기 비용이 과도함",
+      "resolution": "종료 경합 회귀 수정. 동일 72,912바이트 입력 관찰에서 1,748ms→198ms; 일반 성능 보장 수치 아님"
+    },
+    {
+      "problem": "URL 대표군이 메서드·쿼리와 발견 출처를 잃을 수 있음",
+      "resolution": "관측/정적/아카이브/수동과 GET 확인 기록 분리, 경로·쿼리·중복 키 보존"
+    }
+  ],
+  "verificationRows": [
+    {
+      "name": "원격 전체 검증",
+      "result": "미통과 · 사용자 중단 요청",
+      "detail": "Mapper Chromium fixture 실패. 진행 중 검사 취소는 직접 완료하지 못했으며 새 검사는 실행하지 않음. 사용자 요청에 따라 PR #82 병합."
+    },
+    {
+      "name": "전체 회귀·격리 HTTP 재실행",
+      "result": "통과",
+      "detail": "80개 회귀 묶음 2,857 + 페이로드 HTTP 136 + 전체 기능 HTTP 102 + 업무 HTTP 266. 합계 3,361."
+    },
+    {
+      "name": "Mapper Java / Node",
+      "result": "통과",
+      "detail": "114개 / 8개. 실제 Chrome 실행과 별도인 격리 검사."
+    },
+    {
+      "name": "50개 업무 기능 계정 비교",
+      "result": "앞선 동일 JAR 실행·이번 재집계 통과",
+      "detail": "HTTP 2,800개·비교 1,400기록·계정 대조 4,200개. 설정 후 2,100개 대조에서 TP392·FP0·TN1708·FN0, 보류91(중복)."
+    },
+    {
+      "name": "역할·인증 경계",
+      "result": "앞선 동일 버전 실행 통과",
+      "detail": "역할 HTTP384개. 인증 조합 HTTP420개 및 운영 컨트롤러 42회·126계정 대조. native Burp 아님."
+    },
+    {
+      "name": "화면 배치",
+      "result": "앞선 최종 JAR 렌더 통과",
+      "detail": "Workbench420개·Mapper30개 화면, 확인 대상 잘림·핵심 작업 영역 붕괴0. 실제 데스크톱 DPI/IME 아님."
+    },
+    {
+      "name": "Linux 연속 수집",
+      "result": "앞선 180초 검사 통과",
+      "detail": "3,632건·누락0·처리 오류0. API 어댑터와 실제 Swing 타이머·디스크 저장; 장시간 실사용은 별도."
+    },
+    {
+      "name": "배포 무결성",
+      "result": "통과",
+      "detail": "현재 소스 지문과 다운로드 일치. 같은 Java17로 소스 ZIP을 새 폴더에서 재빌드한 JAR 바이트 일치."
+    },
+    {
+      "name": "로컬 실제 Chrome / 실제 Burp",
+      "result": "미완료",
+      "detail": "Chrome 시작의 socket 권한 거부. 이전 Burp 시도는 라이선스 안내에서 중단했으며 최종 JAR와 해시가 달라 최종 버전의 근거에서 제외."
+    },
+    {
+      "name": "기존 7개 외부 실습 사이트 전체 재측정",
+      "result": "미수행",
+      "detail": "이전 단계에서 추가 취약점 재현이 실행 보안 검사에 차단됨. 준비된 소스/아카이브를 결과로 세지 않음. Docker/Podman 부재."
+    }
+  ],
+  "remaining": [
+    {
+      "priority": "P1 · 검증",
+      "scope": "실제 Burp 11개 도구 연결 및 기존 7개 사이트 전후 재측정",
+      "acceptance": "허용된 실행 환경에서 최종 JAR 로드, 대상 소스·요청 조건 고정, 도구별 패킷·판정·정탐/오탐/미탐/보류 기록"
+    },
+    {
+      "priority": "P1 · 사용성",
+      "scope": "계정 비교의 권한표·쓰기 조회 설정 의존성",
+      "acceptance": "설정 공백을 시작 전에 명확히 안내하고, 사용자 확인을 거친 정책 설정 흐름을 제공. 현재 표본의 미설정 미탐 392건과 설정 후 보류 91건을 별도로 추적"
+    },
+    {
+      "priority": "P1 · 검증",
+      "scope": "Chrome/Edge MV3의 실제 도우미 연결·클릭 귀속",
+      "acceptance": "도우미 설치→인증→클릭→요청 메서드/본문 대조→중복·재시작·해제까지 실제 브라우저 검사"
+    },
+    {
+      "priority": "P2 · 분석",
+      "scope": "JS의 복잡한 객체·별칭·동적 호출 및 한도를 넘는 응답",
+      "acceptance": "정상/오탐 대조를 갖춘 지원 범위 확대와 시간·메모리 예산 유지. 지원하지 않는 구간은 계속 미확정으로 표시"
+    },
+    {
+      "priority": "P2 · 검증",
+      "scope": "Windows DPI/IME·장시간 사용·실제 디스크 부족 복구",
+      "acceptance": "Windows 화면 조작 및 시간·OS를 명시한 수집/복구 검사. 현재 Linux 약 3분의 어댑터 결과를 장시간 실사용으로 확대하지 않음"
+    },
+    {
+      "priority": "P2 · 판정",
+      "scope": "401/403 원인과 저장·리다이렉트의 실제 효과",
+      "acceptance": "세션·권한·CSRF·업무 오류를 대상별 근거로 분리. 상태 코드만으로 판단하지 않고 조회·브라우저 실행·서버 상태를 확인"
+    },
+    {
+      "priority": "P3 · 연동",
+      "scope": "외부 AI·OAST·BApp, Docker 스택 및 Microsoft eShop",
+      "acceptance": "실제 의존 환경에서 검증. 모의 콜백과 원본 소스 준비를 실연동 완료로 계산하지 않음"
+    },
+    {
+      "priority": "P3 · 증거",
+      "scope": "사용자 첨부 이미지와 알려지지 않은 개인정보 가림",
+      "acceptance": "내보내기 미리보기와 수동 확인 유지. 자동 가림이 원본의 모든 개인정보를 제거한다고 보장하지 않음"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/verification/full-0.49.0/tool-10.png",
+      "caption": "기능 자동 매핑 · 최종 JAR 운영 Swing 렌더 · 합성 입력/API 어댑터"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/tool-08.png",
+      "caption": "입력값 보안 검사 · 최종 JAR 운영 Swing 렌더 · 합성 입력/API 어댑터"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/bounty-3.png",
+      "caption": "재현·증거 정리 · 최종 JAR 운영 Swing 렌더 · 합성 입력/API 어댑터"
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "burp-workbench-kr-0.49.0.jar",
+      "path": "downloads/extensions/0.49.0/burp-workbench-kr-0.49.0.jar",
+      "sha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47"
+    },
+    {
+      "name": "burp-workbench-kr-0.49.0-source.zip",
+      "path": "downloads/extensions/0.49.0/burp-workbench-kr-0.49.0-source.zip",
+      "sha256": "94258e6e8bb9f1583f4276985d628df6c1dd0b61e64691827a41540151e47413"
+    },
+    {
+      "name": "feature-mapper-browser-0.3.3.zip",
+      "path": "downloads/feature-mapper/0.3.3/feature-mapper-browser-0.3.3.zip",
+      "sha256": "c8eb32a0cafe415b1f1e375acab05888ed78917ec2113c2a38fc466b454c24ee"
+    }
+  ],
+  "historicalNativeAttempt": {
+    "scope": "installation, 11 pages, OFF/SCOPE, owned loopback hello GET, raw byte storage and unload only",
+    "workbenchSha256": "10e2c6206283de61024ae305553bb8d319dbe83f32ecee46a6637fb33133e058",
+    "burpSha256": "46b60895b2488bc76911795c53a85ae2ef2f5d6ff734b6ec6f5dd616b2b99875",
+    "manualDesktopClicks": false,
+    "licenseAcceptedByHarness": false,
+    "existingProfileUsed": false,
+    "ownedPid": 35,
+    "returncode": 11,
+    "timedOut": false,
+    "ownedProcessGroupStopped": true,
+    "checksPassed": 0,
+    "status": "BLOCKED_OR_FAILED",
+    "licensePromptObserved": true,
+    "temporaryProfileRemoved": true,
+    "durationSeconds": 7.93
+  },
+  "historicalNativeAttemptMatchesFinalJar": false,
+  "historicalResultsNotRecounted": [
+    "0.48.0 Benchmark XSS 24 cases",
+    "0.48.0 OopsSec JSON 4 cases",
+    "0.48.0 Juice Shop/DVBank/native Burp observations"
+  ],
+  "commands": {
+    "resumedCheck": "python3 dev.py check --port 18109 --bounty-port 18409",
+    "auth50Aggregation": "python3 tools/verify_auth50_results.py --run-dir tmp/auth50-049 --out tmp/auth50-analysis-049",
+    "downloadVerification": "python3 tools/package_downloads.py --verify"
+  },
+  "evidenceFiles": [
+    {
+      "path": "docs/verification/full-0.49.0/all-features-http.json",
+      "sha256": "b67fc7a469083fa56d2a9bc21fa3804ac0f69cbd006948f3de02e8885d3ea888"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/auth-lab-summary.json",
+      "sha256": "a2f0e78b97bd69996b9841a4d2fecc67d3c2182eedf4e052c29152f878e93174"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/auth50-account-results.csv",
+      "sha256": "1c6be4caa58d9c83308a5d17258ecf1017eb5f783db1814e5e73b1ca76dcb625"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/auth50-analysis.json",
+      "sha256": "7c409b8e43b4c0957657c57a585d617765b83e1793362693297fadc6b4f05701"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/auth50-classification-reasons.csv",
+      "sha256": "6f95a04e30393db67a4b20fc88fc9e03f5c2ad59b88510ff03bfc8f687efc86a"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/auth50-review-reasons.csv",
+      "sha256": "44507b7962ebf17c151b45387523a3f2af214c2b17ede038210f2ce23e243de2"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/auth50-summary.json",
+      "sha256": "78e2a02723709c65963af3fdb587191130f7766fdb032e6bc1762e2c39269566"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/bounty-3.png",
+      "sha256": "33f07580500a503d42040672c7784c174cfb4aa5d19a432b7e092a6dd9d50a11"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/bounty-http.json",
+      "sha256": "11a80d0c24196754dfa73ca1fddb85fea80b6f8e6bae81a54087cf9e55e5b948"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/chrome-startup.log",
+      "sha256": "103cbbefedad31f0c0221d577da58b0fc66281de0b12aa63ed9b4aa2b14eca40"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/evidence-preview-after.log",
+      "sha256": "ea6a7ed08c44b8918d0ac5a41de47fa85baa5cc98dbef217078ce5136fce9de1"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/evidence-preview-before.log",
+      "sha256": "3980134edadf8b322365e8b8373765eaa856b51c6a95d3560306e304a65dd05c"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/evidence-review-after.log",
+      "sha256": "0c4df770f095fdf92803e721dde411ab84628e014d8ff15a36d61454c60f618a"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/evidence-review-before.log",
+      "sha256": "02f1f81861639ea36490c24ec614127efdf090f4d7ad88b50be1d8aa94d0c820"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/linux-soak.json",
+      "sha256": "829ef9981b2192431047c606616014d5ce244358f6c0ddfbcbdc3e1dde0cb697"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/mapper-tests.txt",
+      "sha256": "5dea2f69de2393a2d8e5e9eacdd992ba5a8ef532b903a1f1e4f7c8c98022a3d0"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/native-attempt.json",
+      "sha256": "3e2fb302bc9ae0d227329ae3055786f861d7481f0959556a0b7f87086bd9942e"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/native-burp.log",
+      "sha256": "ff0bc5ec1026c53161f4eaf804d9586200be7908f3b478bce2f5462223d5ad07"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/package-tests.log",
+      "sha256": "d0c3c7a607e5ebf75ebcd62c3ae2b0828fe95597a87079f20a906bd318d98fee"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/release-check-summary.json",
+      "sha256": "31804ac0211db8d34feafa8e6865ecf212c00b6b3d977e397d5d15e969ecd52b"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/release.log",
+      "sha256": "cf012dde8547fd659ba13b5b2d81d3936712a5c0327b395fa64998e3fff76883"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/resumed-all-features-http.json",
+      "sha256": "67506095dff215df50e8d9a65e807a9bd7c89795998a0af5df8c6984d149ef49"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/resumed-bounty-http.json",
+      "sha256": "31c380bfead5b1a7cf2b1549f5b172602aea92cefd140126d272616754a5047a"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/resumed-browser-startup.log",
+      "sha256": "00e7ac10cc18d1cdea2e07ac7917fba5a7ae2b692da748c376fd76ebcf5f886e"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/resumed-check-summary.json",
+      "sha256": "31804ac0211db8d34feafa8e6865ecf212c00b6b3d977e397d5d15e969ecd52b"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/resumed-check.log",
+      "sha256": "218fc5ee45cb79e75c8ca19c559a6a1d3499876c9b19cc5765025ce86b1b60b5"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/resumed-package-tests.log",
+      "sha256": "c27b88df0425d4b00dd9287c0aec6ce5746629d855e3becdcc4b954c7f4fba89"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/role-portals.json",
+      "sha256": "6ecf44873eac206f59b5ac150e15c2698a7ec3cc1438f8cbf97283892bec9a19"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/source-rebuild.json",
+      "sha256": "431c58eeb5917ca54c8ad2ce40ce142c45b496e1c56079307664250d5ce4b3fb"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/target-preparation.json",
+      "sha256": "021df9a97043fcd601e678bc88a2b3dede6c8854447a58bb72074ed5003d75cf"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/tool-08.png",
+      "sha256": "9d680dffb9d230c2808aae2594e3d8f7b639622c23b51275c2569c6c23cfcf8f"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/tool-10.png",
+      "sha256": "80d45bc9179fb9a6e05959b07813c16802f240ad5dcbb95428ff8e6036029709"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/ui-mapper-summary.json",
+      "sha256": "eca69759e11459a289e68044299fc71c07bc91daf2e718e5873fcdecd5bca8dd"
+    },
+    {
+      "path": "docs/verification/full-0.49.0/ui-workbench-summary.json",
+      "sha256": "0b4736853d48915ed1b32e15baea4c211106fc7a92f2e72955c3763a480d2a9f"
+    }
+  ],
+  "githubPublished": true,
+  "localImplementationCommit": "c13d9c93ce7c129898a7f3655edd93ae191cedf7",
+  "githubDestination": "https://github.com/ohjun1998/burp-workbench-kr",
+  "pullRequestCreated": true,
+  "publicationAuthorized": true,
+  "remoteVerification": {
+    "testedHead": "48b99714227efa66a1b7aca26400322731a34901",
+    "result": "NOT_PASSED_USER_REQUESTED_STOP",
+    "pullRequest": "https://github.com/ohjun1998/burp-workbench-kr/pull/82",
+    "runs": [
+      {
+        "id": 39401219643,
+        "name": "Feature Mapper verification",
+        "conclusion": "failure"
+      },
+      {
+        "id": 39401219849,
+        "name": "Build and verify",
+        "statusAtStopRequest": "in_progress"
+      },
+      {
+        "id": 39401219833,
+        "name": "Capture durability and Windows verification",
+        "statusAtStopRequest": "in_progress"
+      }
+    ],
+    "stopReason": "사용자 요청",
+    "localRelease0491": "INTERRUPTED_EXIT_130_NOT_PUBLISHED",
+    "remoteCancellation": "직접 취소 기능 없음; GitHub 브라우저 페이지 로딩 실패. 취소 완료로 주장하지 않음.",
+    "knownIssues": [
+      "0.3.3 팝업 초기화 중 입력·초기 클릭 경합 가능",
+      "브라우저 fixture가 PATCH 본문 해시 일치를 요구한 잘못된 검증 가정. Chrome raw 본문 지원은 POST/PUT이며 0.3.3 운영 Mapper는 본문 미확인으로 표시."
+    ],
+    "mergePolicy": "사용자가 검사 통과 조건을 변경하고 병합을 직접 요청함. 보호 설정 변경 없이 GitHub의 병합 허용 여부를 따름."
+  }
+}

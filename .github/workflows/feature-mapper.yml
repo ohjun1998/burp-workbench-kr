@@ -51,6 +51,7 @@ jobs:
       - name: Real browser helper to production mapping bridge
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/mapper-node/node_modules/playwright-core
+          NODE_OPTIONS: --import=./audit/0.49.0/browser-ci-diagnostics.mjs
         run: python feature-mapper/tests/run_browser.py --browser "$RUNNER_TEMP/mapper-chrome/chrome-linux64/chrome" --output feature-mapper/build/browser-verification
       - uses: actions/upload-artifact@v7
         if: always()

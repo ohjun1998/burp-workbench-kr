@@ -1,0 +1,17 @@
+{
+  "scope": "installation, 11 pages, OFF/SCOPE, owned loopback hello GET, raw byte storage and unload only",
+  "workbenchSha256": "10e2c6206283de61024ae305553bb8d319dbe83f32ecee46a6637fb33133e058",
+  "burpSha256": "46b60895b2488bc76911795c53a85ae2ef2f5d6ff734b6ec6f5dd616b2b99875",
+  "manualDesktopClicks": false,
+  "licenseAcceptedByHarness": false,
+  "existingProfileUsed": false,
+  "ownedPid": 35,
+  "returncode": 11,
+  "timedOut": false,
+  "ownedProcessGroupStopped": true,
+  "checksPassed": 0,
+  "status": "BLOCKED_OR_FAILED",
+  "licensePromptObserved": true,
+  "temporaryProfileRemoved": true,
+  "durationSeconds": 7.93
+}

@@ -1,0 +1,114 @@
+{
+  "method": "Production Swing components using synthetic metadata and API test adapters; no native Burp GUI execution.",
+  "releaseJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+  "results": [
+    {
+      "mode": "auth",
+      "exitCode": 0,
+      "seconds": 18.5,
+      "renderedViews": 60,
+      "controlsMeasured": 736,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "base",
+      "exitCode": 0,
+      "seconds": 37.8,
+      "renderedViews": 156,
+      "controlsMeasured": 2730,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "environment",
+      "exitCode": 0,
+      "seconds": 14.2,
+      "renderedViews": 32,
+      "controlsMeasured": 224,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "guide",
+      "exitCode": 0,
+      "seconds": 15.0,
+      "renderedViews": 52,
+      "controlsMeasured": 156,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "js",
+      "exitCode": 0,
+      "seconds": 19.3,
+      "renderedViews": 76,
+      "controlsMeasured": 1184,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "packet",
+      "exitCode": 0,
+      "seconds": 18.3,
+      "renderedViews": 16,
+      "controlsMeasured": 448,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "scope",
+      "exitCode": 0,
+      "seconds": 13.8,
+      "renderedViews": 4,
+      "controlsMeasured": 24,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "session",
+      "exitCode": 0,
+      "seconds": 12.8,
+      "renderedViews": 8,
+      "controlsMeasured": 96,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    },
+    {
+      "mode": "traffic",
+      "exitCode": 0,
+      "seconds": 19.1,
+      "renderedViews": 16,
+      "controlsMeasured": 292,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "guideLayoutFailures": 0
+    }
+  ]
+}

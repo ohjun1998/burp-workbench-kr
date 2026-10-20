@@ -1,0 +1,6 @@
+numeric-secret packet JSON valid=false
+numeric-secret coverage JSON valid=false
+cookie-attribute packet JSON valid=true
+public-domain preserved=false
+escaped secret remains in coverage=true
+escaped secret remains in OAST=true

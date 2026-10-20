@@ -38,6 +38,14 @@ public final class AssessmentUiOptimizationTest extends WorkbenchTest {
     ui.detailTable.setRowSelectionInterval(0,0);check(ui.taskRemove.isEnabled()&&ui.taskTarget.isEnabled(),"detail selection enables the related API actions");
     ui.taskTable.clearSelection();check(!ui.taskEdit.isEnabled()&&!ui.taskRemove.isEnabled(),"clearing task selection clears detail action availability");
     ui.accountTable.clearSelection();check(!ui.operationFinish.isEnabled()&&!ui.inputFinish.isEnabled(),"clearing account API selection clears input action availability");
+    ui.tracker.complete(alice,"GET","https://auth.test/items?id=1",Set.of("URL:id"),true);ui.refresh();
+    ui.accountFilter.setSelectedItem("검사 시도 없음");
+    check(ui.accountModel.getRowCount()==1&&ui.operations.get(0).state().equals("점검 완료"),"manual completion cannot hide an API with no recorded inspection");
+    ui.tracker.inspected(alice,"GET","https://auth.test/items?id=1",Set.of("URL:id"),"one profile attempted",false);ui.refresh();
+    check(ui.accountModel.getRowCount()==0,"recorded inspection leaves only the no-attempt filter");
+    ui.accountFilter.setSelectedItem("증거 미저장");
+    check(ui.accountModel.getRowCount()==1&&ui.operations.get(0).inspections()==1&&ui.operations.get(0).evidence()==0,"executed and manually completed API still appears without saved evidence");
+    ui.accountFilter.setSelectedIndex(0);
    } finally {panel.close();}
   });
   System.out.println("AssessmentUiOptimizationTest: "+checks+" checks passed");

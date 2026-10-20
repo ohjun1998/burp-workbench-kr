@@ -65,5 +65,17 @@
     "source": "docs/VERIFICATION_0.49.0.json",
     "measuredInThisChange": false
   },
-  "chatLog": "docs/chat-logs/2026-10-20/auth-readiness.md"
+  "chatLog": "docs/chat-logs/2026-10-20/auth-readiness.md",
+  "delivery": {
+    "status": "MERGED_TO_MAIN",
+    "pullRequest": "https://github.com/ohjun1998/burp-workbench-kr/pull/83",
+    "headCommit": "cfd223d3daa943d5d445aa72de0b8c74a4383a7a",
+    "mergeCommit": "365bded1ecb485b510801595fc910d7f6b3fefc0",
+    "mergedAt": "2026-10-20T22:19:51+09:00",
+    "preparedAndMergedTree": "587bf55a886f39df5f1ee1eda6a0a603a4a410b7",
+    "treeMatchesPreparedArtifacts": true,
+    "completionActions": "저장소 상태·트리·배포 해시 확인, main 병합 및 날짜별 대화·완료 상태 기록",
+    "testsResumed": false,
+    "extensionSimplificationImplemented": false
+  }
 }

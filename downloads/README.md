@@ -6,12 +6,12 @@
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| 최신 확장 · Feature Mapper 통합·11개 도구 | 0.47.0 | [JAR](extensions/0.47.0/burp-workbench-kr-0.47.0.jar) · [소스](extensions/0.47.0/burp-workbench-kr-0.47.0-source.zip) |
+| 최신 확장 · XSS·JSON 미탐 보강·11개 도구 | 0.48.0 | [JAR](extensions/0.48.0/burp-workbench-kr-0.48.0.jar) · [소스](extensions/0.48.0/burp-workbench-kr-0.48.0-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.10.0 | [community-security-lab-3.10.0-docker.zip](docker/3.10.0/community-security-lab-3.10.0-docker.zip) |
 | 기능 매핑 브라우저 도우미 · 내장 Mapper의 선택 연동 | 0.3.2 | [Chrome/Edge ZIP](feature-mapper/0.3.2/feature-mapper-browser-0.3.2.zip) · [독립 호환 배포](feature-mapper/0.3.2/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
-[0.47.0 기능 자동 매핑 통합](../docs/RELEASE_0.47.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.45.0.json)
+[0.48.0 미탐 보강·재검증](../docs/RELEASE_0.48.0_KR.md) · [0.47.0 기능 자동 매핑 통합](../docs/RELEASE_0.47.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.45.0.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
@@ -27,6 +27,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
+| 이전 확장 · Feature Mapper 통합·11개 도구 | 0.47.0 | [JAR](extensions/0.47.0/burp-workbench-kr-0.47.0.jar) · [소스](extensions/0.47.0/burp-workbench-kr-0.47.0-source.zip) |
 | 이전 확장 · Vuln Bank 판정 고도화 | 0.46.1 | [JAR](extensions/0.46.1/burp-workbench-kr-0.46.1.jar) · [소스](extensions/0.46.1/burp-workbench-kr-0.46.1-source.zip) |
 | 이전 확장 · 요청·응답 목록·JS 분석 | 0.43.0 | [JAR](extensions/0.43.0/burp-workbench-kr-0.43.0.jar) · [소스](extensions/0.43.0/burp-workbench-kr-0.43.0-source.zip) |
 | 이전 확장 · 세션·권한 판정 | 0.41.0 | [JAR](extensions/0.41.0/burp-workbench-kr-0.41.0.jar) · [소스](extensions/0.41.0/burp-workbench-kr-0.41.0-source.zip) |

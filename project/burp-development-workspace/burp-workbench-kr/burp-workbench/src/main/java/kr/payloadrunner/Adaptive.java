@@ -23,7 +23,7 @@ public final class Adaptive {
   if(!available())return null;
   String marker="PR_"+UUID.randomUUID().toString().replace("-","").substring(0,16);
   if(pattern.contains("{{CALLBACK}}")){if(options.callback()==null)throw new IllegalArgumentException("로컬 콜백 수신기를 활성화하세요");pattern=pattern.replace("{{CALLBACK}}",options.callback().url(marker));}
-  String payload=expand(pattern,c.baseline(),marker);byte[] req=render(c.template(),payload,c.encoding());
+  String payload=expand(pattern,c.baseline(),marker);if(c.profile()==Profile.XXE&&c.encoding()==Encoding.RAW)payload=XmlProbe.adapt(payload,c.baseline());byte[] req=render(c.template(),payload,c.encoding());
   return exchange(req,payload,marker,stage,true);
  }
  Row exchange(byte[] req,String payload,String marker,String stage,boolean judge){

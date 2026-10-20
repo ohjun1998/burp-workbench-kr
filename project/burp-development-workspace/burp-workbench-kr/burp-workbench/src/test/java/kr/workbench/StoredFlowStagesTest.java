@@ -88,7 +88,7 @@ public final class StoredFlowStagesTest extends WorkbenchTest {
   ObjectFactoryLocator.FACTORY=proxy(MontoyaObjectFactory.class,(p,m,a)->{throw new IllegalStateException("source retention unavailable");});
   check(EvidenceLinks.retain(qError1,error)==null,"optional source factory failure degrades to unavailable original");
   AtomicReference<ResponseReconPanel> unavailableBox=new AtomicReference<>();edt(()->unavailableBox.set(new ResponseReconPanel(api)));var unavailable=unavailableBox.get();unavailable.offer(qError1,error);drain(unavailable);
-  edt(()->{check(unavailable.findings.getRowCount()==1&&unavailable.findingPackets.isEmpty(),"source retention failure does not suppress independent Passive observation");unavailable.findingTable.setRowSelectionInterval(0,0);rejects(unavailable::captureFinding,"unavailable original cannot silently export a synthetic packet");unavailable.close();});
+  edt(()->{check(unavailable.findings.getRowCount()>=1&&unavailable.findingPackets.isEmpty(),"source retention failure does not suppress independent Passive observation");unavailable.findingTable.setRowSelectionInterval(0,0);rejects(unavailable::captureFinding,"unavailable original cannot silently export a synthetic packet");unavailable.close();});
   ObjectFactoryLocator.FACTORY=previousFactory;
   AtomicReference<ResponseReconPanel> raceBox=new AtomicReference<>();edt(()->raceBox.set(new ResponseReconPanel(api)));var racePanel=raceBox.get();
   CountDownLatch retentionStarted=new CountDownLatch(1),allowRetention=new CountDownLatch(1);

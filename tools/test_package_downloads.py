@@ -24,6 +24,16 @@ class PackageChecks(unittest.TestCase):
     def test_archive_is_reproducible(self):
         self.assertEqual(p.archive({'b': b'2', 'a': b'1'}), p.archive({'a': b'1', 'b': b'2'}))
 
+    def test_unchanged_component_preserves_verified_release(self):
+        with tempfile.TemporaryDirectory() as directory:
+            dest = Path(directory) / 'component'
+            p.preserve_component(dest, {'test.jar': b'original-jdk'}, [])
+            p.preserve_component(dest, {'test.jar': b'other-jdk'}, [])
+            self.assertEqual((dest / 'test.jar').read_bytes(), b'original-jdk')
+            (dest / 'test.jar').write_bytes(b'tampered')
+            with self.assertRaises(RuntimeError):
+                p.preserve_component(dest, {'test.jar': b'other-jdk'}, [])
+
     def test_docker_source_inputs_are_complete(self):
         names = {f.relative_to(p.LAB).as_posix() for f in p.docker_files()}
         for name in ['pom.xml', 'Dockerfile.source', 'compose.yaml', 'infra/nginx.conf', 'infra/HealthCheck.java', 'protocols/Dockerfile', 'protocols/requirements.txt', 'protocols/run.py', 'start.sh', 'start.ps1']:

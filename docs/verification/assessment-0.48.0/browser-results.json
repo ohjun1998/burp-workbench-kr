@@ -1,0 +1,194 @@
+[
+  {
+    "id": "BenchmarkTest00375",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00376",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00377",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00378",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00379",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00380",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00381",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00382",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00383",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00384",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00385",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00386",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00387",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00388",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00389",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00390",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00391",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00392",
+    "sourceTruth": true,
+    "candidate": true,
+    "execution": true,
+    "attempts": 1,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00393",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest00394",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest01251",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest01252",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest01255",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  },
+  {
+    "id": "BenchmarkTest01256",
+    "sourceTruth": false,
+    "candidate": false,
+    "execution": false,
+    "attempts": 8,
+    "method": "Actual HTTP response body rendered in isolated Chrome 146; external requests blocked"
+  }
+]

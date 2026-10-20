@@ -8,13 +8,16 @@ import javax.swing.*;
 final class AuthEvidencePanel extends JPanel {
   final JTabbedPane tabs=new JTabbedPane();
   final JEditorPane summary=PacketRender.pane(),differences=PacketRender.pane();
+  final JTextArea readiness=AuthReadiness.note("비교 기록을 선택하면 실행 당시의 설정 적용 범위가 표시됩니다.",6);
   AuthComparePanel.Run run;
-  AuthEvidencePanel(){super(new BorderLayout());setName("wb.auth.evidence");summary.setName("wb.auth.evidence.summary");differences.setName("wb.auth.evidence.fields");tabs.addTab("판정 요약",new JScrollPane(summary));tabs.addTab("JSON 필드 차이",new JScrollPane(differences));add(tabs);showRun(null);}
+  AuthEvidencePanel(){super(new BorderLayout());setName("wb.auth.evidence");summary.setName("wb.auth.evidence.summary");differences.setName("wb.auth.evidence.fields");readiness.setName("wb.auth.evidence.readiness");tabs.addTab("판정 요약",new JScrollPane(summary));tabs.addTab("JSON 필드 차이",new JScrollPane(differences));tabs.addTab("비교 전 설정",new JScrollPane(readiness));add(tabs);showRun(null);}
   static String e(String value){return PacketRender.escape(value);}
   static String color(Color c){return String.format("#%02x%02x%02x",c.getRed(),c.getGreen(),c.getBlue());}
   String page(String content){return "<html><head><style>body{font-family:'"+WorkbenchUi.font().getFamily()+"';font-size:13pt;color:"+color(WorkbenchUi.ink())+";background-color:"+color(WorkbenchUi.surface())+";margin:12px}h2{font-size:17pt;margin-top:4px}h3{font-size:14pt;margin-bottom:5px}p{margin-top:5px;margin-bottom:9px}td,th{padding:7px;border-bottom:1px solid "+color(WorkbenchUi.line())+"}th{background-color:"+color(WorkbenchUi.raised())+";text-align:left}pre{font-family:'"+WorkbenchUi.font().getFamily()+"'}</style></head><body>"+content+"</body></html>";}
   void showRun(AuthComparePanel.Run next){
     boolean changed=run!=next;run=next;
+    readiness.setText(run==null?"비교 기록을 선택하면 실행 당시의 설정 적용 범위가 표시됩니다.":run.readiness.text());
+    if(changed)readiness.setCaretPosition(0);
     if(run==null){summary.setText(page("<p>비교 기록을 선택하면 종합 결과와 판단 이유가 표시됩니다.</p>"));differences.setText(page("<p>비교 기록을 선택하세요.</p>"));return;}
     var result=AuthRunSummary.of(run);
     StringBuilder out=new StringBuilder("<h2 style='color:").append(color(WorkbenchUi.toneInk(result.verdict().tone))).append("'>").append(e(result.label())).append("</h2><p><b>판단 이유</b><br>").append(e(run.baselineState==AuthComparePanel.Run.Baseline.INVALID?run.baselineNote:explanation(result))).append("</p>");

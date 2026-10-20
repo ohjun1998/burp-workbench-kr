@@ -4,14 +4,16 @@
 
 ## 최신 테스트 배포
 
+0.49.1은 컴파일·패키징한 배포입니다. 사용자 요청에 따라 이번 버전의 회귀·HTTP·GUI·원격 CI 검사는 실행하지 않았습니다.
+
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| 최신 확장 · 매핑·JS·신원·증거·분석 범위 고도화 | 0.49.0 | [JAR](extensions/0.49.0/burp-workbench-kr-0.49.0.jar) · [소스](extensions/0.49.0/burp-workbench-kr-0.49.0-source.zip) |
+| 최신 확장 · 계정 비교 전 설정·판정 한계 안내 | 0.49.1 | [JAR](extensions/0.49.1/burp-workbench-kr-0.49.1.jar) · [소스](extensions/0.49.1/burp-workbench-kr-0.49.1-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.10.0 | [community-security-lab-3.10.0-docker.zip](docker/3.10.0/community-security-lab-3.10.0-docker.zip) |
 | 기능 매핑 브라우저 도우미 · 내장 Mapper의 선택 연동 | 0.3.3 | [Chrome/Edge ZIP](feature-mapper/0.3.3/feature-mapper-browser-0.3.3.zip) · [독립 호환 배포](feature-mapper/0.3.3/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |
 
-[0.49.0 전체 고도화·재검증](../docs/RELEASE_0.49.0_KR.md) · [0.48.0 미탐 보강·재검증](../docs/RELEASE_0.48.0_KR.md) · [0.47.0 기능 자동 매핑 통합](../docs/RELEASE_0.47.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.45.0.json)
+[0.49.1 비교 전 설정 안내](../docs/RELEASE_0.49.1_KR.md) · [0.49.0 전체 고도화·재검증](../docs/RELEASE_0.49.0_KR.md) · [0.48.0 미탐 보강·재검증](../docs/RELEASE_0.48.0_KR.md) · [0.47.0 기능 자동 매핑 통합](../docs/RELEASE_0.47.0_KR.md) · [0.25.0 기능 안내](../docs/RELEASE_0.25.0_KR.md) · [단계별 모의 진단](../docs/TEST_WORKFLOW_KR.md) · [실제 검증 범위](../docs/VERIFICATION_0.45.0.json)
 
 확장: Burp → Extensions → Add → Java에서 JAR를 선택합니다. 이전 Workbench는 먼저 해제하세요. 새 화면 이름과 첫 사용 순서는 [저장소 첫 안내](../README.md#설치하고-첫-요청-확인하기)를 참고합니다.
 
@@ -27,6 +29,7 @@ Docker: Docker Desktop/Engine과 Compose v2가 필요합니다. ZIP을 한 폴�
 
 | 종류 | 버전 | 파일 |
 |---|---|---|
+| 이전 확장 · 전체 고도화 | 0.49.0 | [JAR](extensions/0.49.0/burp-workbench-kr-0.49.0.jar) · [소스](extensions/0.49.0/burp-workbench-kr-0.49.0-source.zip) |
 | 이전 확장 · XSS·JSON 미탐 보강 | 0.48.0 | [JAR](extensions/0.48.0/burp-workbench-kr-0.48.0.jar) · [소스](extensions/0.48.0/burp-workbench-kr-0.48.0-source.zip) |
 | 이전 Feature Mapper | 0.3.2 | [다운로드](feature-mapper/0.3.2/) |
 | 이전 확장 · Feature Mapper 통합·11개 도구 | 0.47.0 | [JAR](extensions/0.47.0/burp-workbench-kr-0.47.0.jar) · [소스](extensions/0.47.0/burp-workbench-kr-0.47.0-source.zip) |

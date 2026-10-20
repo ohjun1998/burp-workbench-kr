@@ -1,8 +1,8 @@
 <!doctype html><html lang="ko"><meta charset="utf-8"><title>Feature Mapper 연결</title>
-<style>body{width:350px;margin:18px;font:14px system-ui;color:#202d42;background:#f7f9fc}h1{font-size:19px}label{display:block;margin:12px 0 5px}input{box-sizing:border-box;width:100%;padding:9px;border:1px solid #bbc8d8;border-radius:6px}button{padding:9px 12px;margin:10px 5px 0 0;border:0;border-radius:6px;background:#2357b4;color:white}p{line-height:1.5}#status{white-space:pre-wrap}</style>
+<style>body{width:350px;margin:18px;font:14px system-ui;color:#202d42;background:#f7f9fc}h1{font-size:19px}label{display:block;margin:12px 0 5px}input{box-sizing:border-box;width:100%;padding:9px;border:1px solid #bbc8d8;border-radius:6px}button{padding:9px 12px;margin:10px 5px 0 0;border:0;border-radius:6px;background:#2357b4;color:white}p{line-height:1.5}#status,#diagnostics{white-space:pre-wrap}#diagnostics{font-size:12px;color:#526177}</style>
 <h1>Feature Mapper 연결</h1><p>Burp의 ‘브라우저 연결’에 표시된 주소와 토큰을 입력하세요.</p>
 <label for="base">연결 주소</label><input id="base" placeholder="http://127.0.0.1:포트">
 <label for="token">연결 토큰</label><input id="token" type="password" autocomplete="off">
 <button id="connect">연결 확인·저장</button><button id="enable">현재 사이트 활성화</button><button id="disable">현재 사이트 해제</button>
-<p>활성화한 사이트에서 버튼·화면 정보와 요청 메타데이터를 연결합니다. 활성화 후 페이지를 새로고침하세요.</p><p id="status" role="status"></p>
+<p>활성화한 사이트에서 버튼·화면 정보와 요청 메타데이터를 연결합니다. 활성화 후 페이지를 새로고침하세요.</p><p id="status" role="status"></p><p id="diagnostics" aria-live="polite"></p>
 <script type="module" src="popup.js"></script></html>

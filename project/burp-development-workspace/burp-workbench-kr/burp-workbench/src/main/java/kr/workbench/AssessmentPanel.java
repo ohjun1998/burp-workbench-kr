@@ -16,7 +16,7 @@ final class AssessmentPanel implements AutoCloseable {
       tasksPage = new JPanel(new BorderLayout(6, 6));
   final JComboBox<AssessmentTracker.Account> accountChoice = new JComboBox<>();
   final JComboBox<String> accountFilter =
-      new JComboBox<>(new String[] {"전체", "미점검", "재검토 필요", "점검 완료"});
+      new JComboBox<>(new String[] {"전체", "미점검", "재검토 필요", "점검 완료", "검사 시도 없음", "증거 미저장"});
   final DefaultTableModel
       accountModel =
           EnvironmentPanel.model(
@@ -139,7 +139,7 @@ final class AssessmentPanel implements AutoCloseable {
     accountChoice.setPrototypeDisplayValue(
         new AssessmentTracker.Account("", "점검 계정 선택 · 비로그인", "", "", "", false));
     accountChoice.setToolTipText("계정을 선택하면 해당 계정의 점검 상태만 표시합니다.");
-    accountFilter.setToolTipText("선택 계정의 API 상태로 필터링");
+    accountFilter.setToolTipText("수동 완료 상태와 별개로 검사 시도·증거 저장이 없는 API를 찾습니다. 검사 시도는 전체 프로필 검증 완료를 뜻하지 않습니다.");
     accountEdit = action("account.edit", "계정 설정", "선택 계정의 이름·역할·조직을 편집합니다.", this::editAccount);
     accountBind =
         action("account.bind", "트래픽 연결", "트래픽 탭에서 선택한 요청 1~20개를 이 계정에 연결합니다.", this::bindSelected);
@@ -572,7 +572,9 @@ final class AssessmentPanel implements AutoCloseable {
         if (choice == 0
             || choice == 1 && operation.state().equals("미점검")
             || choice == 2 && operation.state().equals("재검토 필요")
-            || choice == 3 && operation.state().equals("점검 완료")) rows.add(operation);
+            || choice == 3 && operation.state().equals("점검 완료")
+            || choice == 4 && operation.inspections() == 0
+            || choice == 5 && operation.evidence() == 0) rows.add(operation);
       }
     }
     updatingTables = true;

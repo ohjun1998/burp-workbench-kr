@@ -4,6 +4,7 @@ import burp.*;
 import kr.workbench.WorkbenchUi;import kr.workbench.FeatureGuide;
 import kr.workbench.PacketView;
 import kr.workbench.PacketFormat;
+import kr.workbench.PayloadSessionCheck;
 
 import kr.payloadrunner.Engine;
 import kr.payloadrunner.Adaptive;
@@ -38,6 +39,8 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
  final JCheckBox uploadReadback=new JCheckBox("업로드 반환 URL 재조회 · 같은 대상",true),callbackMode=new JCheckBox("SSRF · 로컬 HTTP 콜백 2회 검증(목록 대신)",false);
  final JSpinner callbackPort=new JSpinner(new SpinnerNumberModel(19112,1,65535,1));
  final JCheckBox scope=new JCheckBox("Workbench SCOPE 내 요청만",true);
+ final JCheckBox sessionControl=new JCheckBox("검사 전·401/403 후 신원 대조 GET · 요청 한도 포함",false);
+ final JTextField identityPath=new JTextField("/api/me",20),identityField=new JTextField("$.id",12),identityValue=new JTextField("",14);
  final JTextArea request=new JTextArea("GET /api/community/vuln/search?q=§PAYLOAD§ HTTP/1.1\r\nHost: 127.0.0.1:8088\r\nAccept: application/json\r\n\r\n",10,70),payloads=new JTextArea(8,35),detail=new JTextArea();
  final JButton start=new JButton("Start"),stopButton=new JButton("중지"),mark=new JButton("선택 영역 → §PAYLOAD§"),reset=new JButton("기본 페이로드"),export=new JButton("CSV 내보내기"),repeater=new JButton("선택 요청 → Repeater"),clear=new JButton("결과 지우기");
  final JButton background=new JButton("작업 창 열기"),settingsButton=new JButton("검사 설정"),moreButton=new JButton("더보기"),helpButton=new JButton("유형 설명");final JToggleButton requestPreview=new JToggleButton("정렬 미리보기");
@@ -87,7 +90,7 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
   background.addActionListener(e->openTaskWindow());
   export.addActionListener(e->exportCSV());callbacks.customizeUiComponent(panel);WorkbenchUi.primary(start);WorkbenchUi.style(panel);WorkbenchUi.status(status);
  }
- JPanel inspectionSettings(){JPanel options=new JPanel();options.setName("wb.payload.inspection.settings");options.setLayout(new BoxLayout(options,BoxLayout.Y_AXIS));options.add(WorkbenchUi.group("대상",scheme,host,new JLabel("포트"),port,scope));options.add(WorkbenchUi.group("검사 유형",profile,new JLabel("인코딩"),encoding,new JLabel("기준값"),base,helpButton));options.add(WorkbenchUi.group("실행",mode,new JLabel("간격(ms)"),interval,new JLabel("총 요청 한도"),budget));options.add(WorkbenchUi.row(new JLabel("응답 대기시간(초)"),responseTimeout,new JLabel("두 모드 공통 · 401/403/429/503 후속 요청 중단")));options.add(WorkbenchUi.row(new JLabel("기대 응답 문자열"),proof));options.add(WorkbenchUi.row(uploadReadback));options.add(WorkbenchUi.row(callbackMode,new JLabel("콜백 포트"),callbackPort));WorkbenchUi.style(options);return options;}
+ JPanel inspectionSettings(){JPanel options=new JPanel();options.setName("wb.payload.inspection.settings");options.setLayout(new BoxLayout(options,BoxLayout.Y_AXIS));options.add(WorkbenchUi.group("대상",scheme,host,new JLabel("포트"),port,scope));options.add(WorkbenchUi.group("검사 유형",profile,new JLabel("인코딩"),encoding,new JLabel("기준값"),base,helpButton));options.add(WorkbenchUi.group("실행",mode,new JLabel("간격(ms)"),interval,new JLabel("총 요청 한도"),budget));options.add(WorkbenchUi.row(new JLabel("응답 대기시간(초)"),responseTimeout,new JLabel("두 모드 공통 · 401/403/429/503 후속 요청 중단")));options.add(WorkbenchUi.row(new JLabel("기대 응답 문자열"),proof));options.add(WorkbenchUi.row(sessionControl));options.add(WorkbenchUi.group("신원 대조",identityPath,new JLabel("JSON 경로"),identityField,new JLabel("기대 사용자"),identityValue));options.add(WorkbenchUi.row(uploadReadback));options.add(WorkbenchUi.row(callbackMode,new JLabel("콜백 포트"),callbackPort));WorkbenchUi.style(options);return options;}
  void updateSummary(){String full=scheme.getSelectedItem()+"://"+host.getText()+":"+port.getValue()+" · "+Engine.label((Engine.Profile)profile.getSelectedItem())+" · "+mode.getSelectedItem();String target=host.getText();if(target.length()>35)target=target.substring(0,35)+"…";configSummary.setText(Engine.label((Engine.Profile)profile.getSelectedItem())+" · "+(mode.getSelectedIndex()==0?"적응형":"순차 전송")+" · "+target+":"+port.getValue());configSummary.setToolTipText(full);}
  JPanel detailPane(JTextArea source){
   PacketView req=new PacketView(),res=new PacketView();JTextArea evidence=new JTextArea(2,70);evidence.putClientProperty("wb.prose",true);evidence.setEditable(false);evidence.setLineWrap(true);evidence.setWrapStyleWord(true);
@@ -119,10 +122,11 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
  String decodeOriginal(String s){try{return encoding.getSelectedItem()==Engine.Encoding.URL?URLDecoder.decode(s,StandardCharsets.UTF_8):new String(s.getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);}catch(Exception e){return s;}}
  Entry selected(){int i=table.getSelectedRow();if(i<0)return null;int row=table.convertRowIndexToModel(i);return row<entries.size()?entries.get(row):null;}
  void message(String s){JOptionPane.showMessageDialog(panel,s,"입력값 보안 검사",JOptionPane.INFORMATION_MESSAGE);}
- void setBusy(boolean b){running=b;settingsButton.setEnabled(!b);for(JComponent c:new JComponent[]{start,mark,reset,clear,host,scheme,port,profile,encoding,base,payloads,request,interval,budget,proof,scope,mode,uploadReadback,callbackMode,callbackPort,responseTimeout})c.setEnabled(!b);stopButton.setEnabled(b);}
+ void setBusy(boolean b){running=b;settingsButton.setEnabled(!b);for(JComponent c:new JComponent[]{start,mark,reset,clear,host,scheme,port,profile,encoding,base,payloads,request,interval,budget,proof,scope,mode,uploadReadback,callbackMode,callbackPort,responseTimeout,sessionControl,identityPath,identityField,identityValue})c.setEnabled(!b);stopButton.setEnabled(b);}
  void startScan(){if(running||closed)return;try{if(transport!=null&&transport.busy())throw new IllegalArgumentException("이전 Legacy 요청이 실제로 종료된 뒤 다시 시작하세요.");
   List<String> lines=Arrays.stream(payloads.getText().split("\\r?\\n",-1)).filter(s->!s.isBlank()).toList();
   var config=new Engine.Config((Engine.Profile)profile.getSelectedItem(),(Engine.Encoding)encoding.getSelectedItem(),request.getText(),base.getText(),lines,(Integer)interval.getValue(),(Integer)budget.getValue(),proof.getText());
+  PayloadSessionCheck.Config identityCheck=sessionControl.isSelected()?new PayloadSessionCheck.Config(identityPath.getText().strip(),identityField.getText().strip(),identityValue.getText()):null;
   String hostname=host.getText().strip();if(hostname.isBlank()||hostname.contains("/")||hostname.contains(" "))throw new IllegalArgumentException("대상 호스트를 확인하세요");
   IHttpService service=callbacks.getHelpers().buildHttpService(hostname,(Integer)port.getValue(),scheme.getSelectedItem().equals("https"));
   byte[] original=Engine.render(config.template(),config.baseline(),config.encoding());
@@ -132,7 +136,8 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
   worker.submit(()->{try{Engine.Transport transport=bytes->{if(closed||cancel.get())throw new InterruptedException("중지");if(enforceScope&&!inScope(callbacks.getHelpers().analyzeRequest(service,bytes).getUrl()))throw new SecurityException("후속 요청이 SCOPE 밖입니다");return this.transport.send(service,bytes,timeoutMs,cancel);};
    java.util.function.Consumer<Engine.Row> receive=row->{if(!closed)SwingUtilities.invokeLater(()->{entries.add(new Entry(row,service));model.addRow(new Object[]{row.index(),row.payload(),row.response()==null?"—":row.response().status(),row.response()==null?0:row.response().wireLength(),row.millis(),row.verdict(),row.evidence()});progress.setValue(Math.min(lines.size(),Math.max(0,row.index())));progress.setString(adaptive?"적응형 · 관찰 "+entries.size():Math.max(0,row.index())+" / "+lines.size());status.setText("백그라운드 · "+row.verdict());});};
    String finished;
-   if(adaptive){if(localCallback)collector=new CallbackProbe(listenPort);var summary=Adaptive.run(config,transport,cancel,receive,new Adaptive.Options(readback,collector,3000));finished=(summary.stopped()?"중지":summary.budgetReached()?"요청 한도 도달":"완료")+" · 실제 요청 "+summary.requests()+"회 · 목록 생략/중복 "+summary.skipped()+"개 · "+summary.reason();}
+   if(identityCheck!=null){if(localCallback)collector=new CallbackProbe(listenPort);var summary=PayloadSessionCheck.run(config,transport,cancel,receive,identityCheck,adaptive,new Adaptive.Options(readback,collector,3000));finished=(summary.stopped()?"중지":summary.budgetReached()?"요청 한도 도달":"완료")+" · 신원 대조 포함 실제 요청 "+summary.requests()+"회 · "+summary.reason();}
+   else if(adaptive){if(localCallback)collector=new CallbackProbe(listenPort);var summary=Adaptive.run(config,transport,cancel,receive,new Adaptive.Options(readback,collector,3000));finished=(summary.stopped()?"중지":summary.budgetReached()?"요청 한도 도달":"완료")+" · 실제 요청 "+summary.requests()+"회 · 목록 생략/중복 "+summary.skipped()+"개 · "+summary.reason();}
    else{var summary=Engine.run(config,transport,cancel,receive);finished=(summary.stopped()?"중지":summary.budgetReached()?"요청 한도 도달":"완료")+" · 총 "+summary.requests()+"회 / 페이로드 "+summary.completed()+"개 · "+summary.reason();}
    if(!closed)SwingUtilities.invokeLater(()->{status.setText(finished);progress.setString("완료/중지");});}catch(Exception ex){kr.workbench.Diagnostics.failure(panel,"입력값 보안 검사",ex);if(!closed)SwingUtilities.invokeLater(()->status.setText("검사 중단: "+ex.getMessage()));}finally{CallbackProbe active=collector;collector=null;if(active!=null)active.close();if(!closed)SwingUtilities.invokeLater(()->setBusy(false));}});
  }catch(Exception e){kr.workbench.Diagnostics.failure(panel,"입력값 보안 검사",e);message(e.getMessage());}}

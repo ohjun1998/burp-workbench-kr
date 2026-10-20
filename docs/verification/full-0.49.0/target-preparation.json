@@ -1,0 +1,44 @@
+{
+  "note": "Sources or archives prepared only. Additional vulnerability reproduction task stopped by security inspection; no new multisite detection results claimed.",
+  "targets": [
+    {
+      "target": "BenchmarkJava",
+      "sourceCheckout": "bc5ffeb09fb18ab039806d84ca1f718c2e332c54",
+      "status": "SOURCE_PREPARED_NOT_REVALIDATED"
+    },
+    {
+      "target": "DVBLab",
+      "sourceCheckout": "cdcd3174a5712d58aaa99b059b76ef2504a75aee",
+      "status": "SOURCE_PREPARED_NOT_REVALIDATED"
+    },
+    {
+      "target": "VulnerableApp",
+      "sourceCheckout": "668ab14704b63d286bc73f5ec302885a5f192c2e",
+      "status": "SOURCE_PREPARED_NOT_REVALIDATED"
+    },
+    {
+      "target": "oopssec",
+      "sourceCheckout": "ed7ae9b8b17dc17fd8617e9c79bd7222ca842374",
+      "status": "SOURCE_PREPARED_NOT_REVALIDATED"
+    },
+    {
+      "target": "vuln-bank",
+      "sourceCheckout": "4bb7cd5f46921959f034455e5615782481966177",
+      "status": "SOURCE_PREPARED_NOT_REVALIDATED"
+    },
+    {
+      "target": "Juice Shop",
+      "status": "ARCHIVE_PREPARED_NOT_REVALIDATED"
+    },
+    {
+      "target": "crAPI",
+      "status": "NOT_RUN",
+      "reason": "Docker/Podman unavailable in this environment"
+    },
+    {
+      "target": "Microsoft eShop",
+      "status": "NOT_RUN",
+      "reason": ".NET/Aspire and container runtime unavailable in this environment"
+    }
+  ]
+}

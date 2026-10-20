@@ -6,16 +6,24 @@ import java.util.regex.*;
 /** Content evidence, not a vulnerability verdict. Never returns captured values. */
 final class EnvironmentContent {
   record Finding(String kind,String title,String reason,String next) {}
-  static final int MAX=65536;
+  static final int MAX=1024*1024;
   static boolean html(String body){return body.matches("(?is).*<(?:!doctype\\s+html|html|body|head)(?:\\s|>).*");}
   static boolean login(String body){return Pattern.compile("(?is)<input\\b[^>]*type\\s*=\\s*['\"]?password(?:['\"\\s>])").matcher(body).find()
       &&Pattern.compile("(?is)<form\\b").matcher(body).find();}
   static boolean challenge(String body){return Pattern.compile("(?is)(<title>[^<]*(?:just a moment|attention required|access denied)|cf-chl-|g-recaptcha|hcaptcha)").matcher(body).find();}
   static Finding inspect(String url,int status,String headers,String body,String comparison){
-    if(body.length()>MAX){
-      if(status==404||status==410)return f("MISSING","미발견 응답 · 본문 일부 미검사","HTTP "+status+" · 본문 앞 "+MAX+"자 한도 / 전체 "+body.length()+"자 · 상태코드와 내용 분석 분리","오류 본문 후반의 정보 노출은 원본에서 확인하세요.");
-      return f("LIMIT","내용 확인 보류","본문 앞 "+MAX+"자 한도 / 전체 "+body.length()+"자 · 내용 미판정","원본 응답 후반을 직접 확인하세요.");
-    }
+    int length=body.length();boolean partial=length>MAX;
+    String inspected=partial?body.substring(0,MAX/2)+"\n[검사하지 않은 중간 구간]\n"+body.substring(length-MAX/2):body;
+    String range=partial?"본문 앞/뒤 각 "+(MAX/2)+"자 검사 · 중간 "+(length-MAX)+"자 미검사 / 전체 "+length+"자":"본문 "+length+"자 전체 검사";
+    String hints=SqlErrors.PATTERN.matcher(inspected).find()?" · DB 고유 오류 단서 있음(취약점 확정 아님)":"";
+    if(status==404||status==410)return f("MISSING",partial?"미발견 응답 · 본문 일부 미검사":"미발견 응답", "HTTP "+status+" · "+range+hints,"미발견 상태와 오류 본문의 정보 노출은 별도로 확인하세요.");
+    if(status==401||status==403)return f("DENIED","접근 제한 응답","HTTP "+status+" · "+range+hints,"상태코드만으로 세션 만료·안전 확정 불가 · 신원·업무 오류를 별도로 확인하세요.");
+    if(status==429)return f("RATE","요청 제한","HTTP 429 · "+range,"대기 후 명시적으로 재개하세요.");
+    if(partial)return f("LIMIT","내용 확인 보류",range+hints+" · 구조/미존재 대조 미완료","원본 중간 구간을 확인하세요. 부분 일치로 경로 노출·부재를 확정하지 않습니다.");
+    Finding finding=inspectComplete(url,status,headers,body,comparison);
+    return f(finding.kind(),finding.title(),finding.reason()+" · "+range,finding.next());
+  }
+  private static Finding inspectComplete(String url,int status,String headers,String body,String comparison){
     if(status==429)return f("RATE","요청 제한","HTTP 429","대기 후 명시적으로 재개하세요.");
     if(challenge(body))return f("CHALLENGE","보안 확인 화면 의심","챌린지 화면 표식","정상 브라우저 응답과 비교하세요.");
     if(status==401||status==403)return f("DENIED","접근 제한 응답","HTTP "+status,"경로 존재와 계정 권한은 별도로 확인하세요.");

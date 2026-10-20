@@ -1,0 +1,20 @@
+{
+  "result": "passed",
+  "labVersion": "3.10.0",
+  "extensionVersion": "0.49.0",
+  "extensionJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+  "transport": "real loopback HTTP with Montoya API adapters",
+  "nativeExtensionLoaded": false,
+  "httpChecks": 420,
+  "httpTargetRequests": 497,
+  "extensionComparisonRuns": 42,
+  "extensionComparedAccountCells": 126,
+  "extensionIdentityChecks": 22,
+  "extensionTargetRequests": 353,
+  "baseUrl": "http://127.0.0.1:40573",
+  "database": "isolated H2 in Oracle compatibility mode",
+  "browserExecuted": false,
+  "privateProfile": true,
+  "credentialsIncludedInEvidence": false,
+  "ownedServerStopped": true
+}

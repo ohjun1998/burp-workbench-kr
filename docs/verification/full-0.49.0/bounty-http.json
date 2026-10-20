@@ -1,0 +1,1549 @@
+{
+  "extensionVersion" : "0.49.0",
+  "labVersion" : "3.10.0",
+  "mode" : "current release JAR + current lab Java source + loopback Spring/Tomcat/H2 HTTP; API adapters; no native Burp, Docker or browser DOM",
+  "httpRequests" : 259,
+  "checks" : [ {
+    "test" : "new lab page served",
+    "passed" : true
+  }, {
+    "test" : "new lab manifest version",
+    "passed" : true
+  }, {
+    "test" : "live login alice",
+    "passed" : true
+  }, {
+    "test" : "live login bob",
+    "passed" : true
+  }, {
+    "test" : "live login admin",
+    "passed" : true
+  }, {
+    "test" : "live login moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln owner baseline 201",
+    "passed" : true
+  }, {
+    "test" : "vuln object 201 account alice",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 201 alice",
+    "passed" : true
+  }, {
+    "test" : "vuln PUBLIC no owner false positive alice",
+    "passed" : true
+  }, {
+    "test" : "vuln object 201 account bob",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 201 bob",
+    "passed" : true
+  }, {
+    "test" : "vuln PUBLIC no owner false positive bob",
+    "passed" : true
+  }, {
+    "test" : "vuln object 201 account moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 201 moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln PUBLIC no owner false positive moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln object 201 account admin",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 201 admin",
+    "passed" : true
+  }, {
+    "test" : "vuln PUBLIC no owner false positive admin",
+    "passed" : true
+  }, {
+    "test" : "vuln object 201 account guest",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 201 guest",
+    "passed" : true
+  }, {
+    "test" : "vuln PUBLIC no owner false positive guest",
+    "passed" : true
+  }, {
+    "test" : "vuln owner baseline 202",
+    "passed" : true
+  }, {
+    "test" : "vuln object 202 account alice",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 202 alice",
+    "passed" : true
+  }, {
+    "test" : "vuln object 202 account bob",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 202 bob",
+    "passed" : true
+  }, {
+    "test" : "vuln object 202 account moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 202 moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln object 202 account admin",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 202 admin",
+    "passed" : true
+  }, {
+    "test" : "vuln object 202 account guest",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 202 guest",
+    "passed" : true
+  }, {
+    "test" : "vuln owner baseline 203",
+    "passed" : true
+  }, {
+    "test" : "vuln object 203 account alice",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 203 alice",
+    "passed" : true
+  }, {
+    "test" : "vuln object 203 account bob",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 203 bob",
+    "passed" : true
+  }, {
+    "test" : "vuln object 203 account moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 203 moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln object 203 account admin",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 203 admin",
+    "passed" : true
+  }, {
+    "test" : "vuln object 203 account guest",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 203 guest",
+    "passed" : true
+  }, {
+    "test" : "vuln owner baseline 204",
+    "passed" : true
+  }, {
+    "test" : "vuln object 204 account alice",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 204 alice",
+    "passed" : true
+  }, {
+    "test" : "vuln object 204 account bob",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 204 bob",
+    "passed" : true
+  }, {
+    "test" : "vuln object 204 account moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 204 moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln object 204 account admin",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 204 admin",
+    "passed" : true
+  }, {
+    "test" : "vuln object 204 account guest",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 204 guest",
+    "passed" : true
+  }, {
+    "test" : "vuln owner baseline 205",
+    "passed" : true
+  }, {
+    "test" : "vuln object 205 account alice",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 205 alice",
+    "passed" : true
+  }, {
+    "test" : "vuln object 205 account bob",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 205 bob",
+    "passed" : true
+  }, {
+    "test" : "vuln object 205 account moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 205 moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln object 205 account admin",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 205 admin",
+    "passed" : true
+  }, {
+    "test" : "vuln object 205 account guest",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 205 guest",
+    "passed" : true
+  }, {
+    "test" : "vuln owner baseline 206",
+    "passed" : true
+  }, {
+    "test" : "vuln object 206 account alice",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 206 alice",
+    "passed" : true
+  }, {
+    "test" : "vuln object 206 account bob",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 206 bob",
+    "passed" : true
+  }, {
+    "test" : "vuln object 206 account moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 206 moderator",
+    "passed" : true
+  }, {
+    "test" : "vuln object 206 account admin",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 206 admin",
+    "passed" : true
+  }, {
+    "test" : "vuln object 206 account guest",
+    "passed" : true
+  }, {
+    "test" : "vuln matrix policy 206 guest",
+    "passed" : true
+  }, {
+    "test" : "fixed owner baseline 201",
+    "passed" : true
+  }, {
+    "test" : "fixed object 201 account alice",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 201 alice",
+    "passed" : true
+  }, {
+    "test" : "fixed PUBLIC no owner false positive alice",
+    "passed" : true
+  }, {
+    "test" : "fixed object 201 account bob",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 201 bob",
+    "passed" : true
+  }, {
+    "test" : "fixed PUBLIC no owner false positive bob",
+    "passed" : true
+  }, {
+    "test" : "fixed object 201 account moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 201 moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed PUBLIC no owner false positive moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed object 201 account admin",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 201 admin",
+    "passed" : true
+  }, {
+    "test" : "fixed PUBLIC no owner false positive admin",
+    "passed" : true
+  }, {
+    "test" : "fixed object 201 account guest",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 201 guest",
+    "passed" : true
+  }, {
+    "test" : "fixed PUBLIC no owner false positive guest",
+    "passed" : true
+  }, {
+    "test" : "fixed owner baseline 202",
+    "passed" : true
+  }, {
+    "test" : "fixed object 202 account alice",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 202 alice",
+    "passed" : true
+  }, {
+    "test" : "fixed object 202 account bob",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 202 bob",
+    "passed" : true
+  }, {
+    "test" : "fixed object 202 account moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 202 moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed object 202 account admin",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 202 admin",
+    "passed" : true
+  }, {
+    "test" : "fixed object 202 account guest",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 202 guest",
+    "passed" : true
+  }, {
+    "test" : "fixed owner baseline 203",
+    "passed" : true
+  }, {
+    "test" : "fixed object 203 account alice",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 203 alice",
+    "passed" : true
+  }, {
+    "test" : "fixed object 203 account bob",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 203 bob",
+    "passed" : true
+  }, {
+    "test" : "fixed object 203 account moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 203 moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed object 203 account admin",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 203 admin",
+    "passed" : true
+  }, {
+    "test" : "fixed object 203 account guest",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 203 guest",
+    "passed" : true
+  }, {
+    "test" : "fixed owner baseline 204",
+    "passed" : true
+  }, {
+    "test" : "fixed object 204 account alice",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 204 alice",
+    "passed" : true
+  }, {
+    "test" : "fixed object 204 account bob",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 204 bob",
+    "passed" : true
+  }, {
+    "test" : "fixed object 204 account moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 204 moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed object 204 account admin",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 204 admin",
+    "passed" : true
+  }, {
+    "test" : "fixed object 204 account guest",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 204 guest",
+    "passed" : true
+  }, {
+    "test" : "fixed owner baseline 205",
+    "passed" : true
+  }, {
+    "test" : "fixed object 205 account alice",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 205 alice",
+    "passed" : true
+  }, {
+    "test" : "fixed object 205 account bob",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 205 bob",
+    "passed" : true
+  }, {
+    "test" : "fixed object 205 account moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 205 moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed object 205 account admin",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 205 admin",
+    "passed" : true
+  }, {
+    "test" : "fixed object 205 account guest",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 205 guest",
+    "passed" : true
+  }, {
+    "test" : "fixed owner baseline 206",
+    "passed" : true
+  }, {
+    "test" : "fixed object 206 account alice",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 206 alice",
+    "passed" : true
+  }, {
+    "test" : "fixed object 206 account bob",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 206 bob",
+    "passed" : true
+  }, {
+    "test" : "fixed object 206 account moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 206 moderator",
+    "passed" : true
+  }, {
+    "test" : "fixed object 206 account admin",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 206 admin",
+    "passed" : true
+  }, {
+    "test" : "fixed object 206 account guest",
+    "passed" : true
+  }, {
+    "test" : "fixed matrix policy 206 guest",
+    "passed" : true
+  }, {
+    "test" : "nonexistent object stays review without valid owner baseline",
+    "passed" : true
+  }, {
+    "test" : "invalid mode rejected",
+    "passed" : true
+  }, {
+    "test" : "vuln stored creation accepted",
+    "passed" : true
+  }, {
+    "test" : "vuln write stage does not prove readback",
+    "passed" : true
+  }, {
+    "test" : "vuln readback links HTML stage",
+    "passed" : true
+  }, {
+    "test" : "vuln escaping control classified without execution claim",
+    "passed" : true
+  }, {
+    "test" : "vuln stored actual bytes",
+    "passed" : true
+  }, {
+    "test" : "vuln stored cross-account policy",
+    "passed" : true
+  }, {
+    "test" : "vuln stored anonymous policy",
+    "passed" : true
+  }, {
+    "test" : "vuln cross-mode object isolation",
+    "passed" : true
+  }, {
+    "test" : "vuln other account cannot delete fixtures",
+    "passed" : true
+  }, {
+    "test" : "vuln owner deletion accepted",
+    "passed" : true
+  }, {
+    "test" : "vuln owner recheck detects deleted data",
+    "passed" : true
+  }, {
+    "test" : "vuln upload accepted",
+    "passed" : true
+  }, {
+    "test" : "vuln download body retains marker",
+    "passed" : true
+  }, {
+    "test" : "vuln download disposition control",
+    "passed" : true
+  }, {
+    "test" : "vuln download MIME control",
+    "passed" : true
+  }, {
+    "test" : "vuln download cross-account control",
+    "passed" : true
+  }, {
+    "test" : "vuln upload readback stage honors MIME",
+    "passed" : true
+  }, {
+    "test" : "fixed stored creation accepted",
+    "passed" : true
+  }, {
+    "test" : "fixed write stage does not prove readback",
+    "passed" : true
+  }, {
+    "test" : "fixed readback links HTML stage",
+    "passed" : true
+  }, {
+    "test" : "fixed escaping control classified without execution claim",
+    "passed" : true
+  }, {
+    "test" : "fixed stored actual bytes",
+    "passed" : true
+  }, {
+    "test" : "fixed stored cross-account policy",
+    "passed" : true
+  }, {
+    "test" : "fixed stored anonymous policy",
+    "passed" : true
+  }, {
+    "test" : "fixed cross-mode object isolation",
+    "passed" : true
+  }, {
+    "test" : "fixed other account cannot delete fixtures",
+    "passed" : true
+  }, {
+    "test" : "fixed owner deletion accepted",
+    "passed" : true
+  }, {
+    "test" : "fixed owner recheck detects deleted data",
+    "passed" : true
+  }, {
+    "test" : "fixed upload accepted",
+    "passed" : true
+  }, {
+    "test" : "fixed download body retains marker",
+    "passed" : true
+  }, {
+    "test" : "fixed download disposition control",
+    "passed" : true
+  }, {
+    "test" : "fixed download MIME control",
+    "passed" : true
+  }, {
+    "test" : "fixed download cross-account control",
+    "passed" : true
+  }, {
+    "test" : "fixed upload readback stage honors MIME",
+    "passed" : true
+  }, {
+    "test" : "fixed stored requires CSRF",
+    "passed" : true
+  }, {
+    "test" : "fixed HTML filename rejected",
+    "passed" : true
+  }, {
+    "test" : "anonymous cannot create stored fixture",
+    "passed" : true
+  }, {
+    "test" : "stored body bound",
+    "passed" : true
+  }, {
+    "test" : "upload byte bound",
+    "passed" : true
+  }, {
+    "test" : "reset requires CSRF",
+    "passed" : true
+  }, {
+    "test" : "reset requires login",
+    "passed" : true
+  }, {
+    "test" : "owner reset succeeds",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 0",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 1",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 2",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 3",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 4",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 5",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 6",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 7",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 8",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 9",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 10",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 11",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 12",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 13",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 14",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 15",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 16",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 17",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 18",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 19",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 20",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 21",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 22",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 23",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 24",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 25",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 26",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 27",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 28",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 29",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 30",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 31",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 32",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 33",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 34",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 35",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 36",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 37",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 38",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 39",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 40",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 41",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 42",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 43",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 44",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 45",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 46",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 47",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 48",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 49",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 50",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 51",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 52",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 53",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 54",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 55",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 56",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 57",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 58",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 59",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 60",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 61",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 62",
+    "passed" : true
+  }, {
+    "test" : "bounded fixture allocation 63",
+    "passed" : true
+  }, {
+    "test" : "65th owner fixture rejected",
+    "passed" : true
+  }, {
+    "test" : "reset removes exactly owner's 64 items",
+    "passed" : true
+  }, {
+    "test" : "reset preserves another account data",
+    "passed" : true
+  }, {
+    "test" : "reset makes capacity reusable",
+    "passed" : true
+  }, {
+    "test" : "vuln actual SQL positive/negative control",
+    "passed" : true
+  }, {
+    "test" : "vuln actual event-handler reflection positive/negative control",
+    "passed" : true
+  }, {
+    "test" : "fixed actual SQL positive/negative control",
+    "passed" : true
+  }, {
+    "test" : "fixed actual event-handler reflection positive/negative control",
+    "passed" : true
+  }, {
+    "test" : "export strips live account secrets",
+    "passed" : true
+  }, {
+    "test" : "export preserves observed stored marker",
+    "passed" : true
+  } ],
+  "passed" : 266,
+  "failed" : 0,
+  "auth" : [ {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "moderator",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "guest",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 202,
+    "expected" : "DENY",
+    "account" : "alice",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 202,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 202,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 202,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 202,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 203,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 203,
+    "expected" : "DENY",
+    "account" : "bob",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 203,
+    "expected" : "ALLOW",
+    "account" : "moderator",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 203,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 203,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 204,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 204,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 204,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 204,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 204,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 205,
+    "expected" : "DENY",
+    "account" : "alice",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 205,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 205,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 205,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 205,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 206,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 206,
+    "expected" : "DENY",
+    "account" : "bob",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 성공 응답 관측 · 권한 위반 후보, 수동 확인",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 206,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 206,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 206,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "vuln"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "moderator",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 201,
+    "expected" : "ALLOW",
+    "account" : "guest",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 202,
+    "expected" : "DENY",
+    "account" : "alice",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 202,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 202,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 202,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 202,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 203,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 203,
+    "expected" : "DENY",
+    "account" : "bob",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 203,
+    "expected" : "ALLOW",
+    "account" : "moderator",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 203,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 203,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 204,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 204,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 204,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 204,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 204,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 205,
+    "expected" : "DENY",
+    "account" : "alice",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 205,
+    "expected" : "ALLOW",
+    "account" : "bob",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 205,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 205,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 205,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 206,
+    "expected" : "ALLOW",
+    "account" : "alice",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 206,
+    "expected" : "DENY",
+    "account" : "bob",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 206,
+    "expected" : "DENY",
+    "account" : "moderator",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 ALLOW · 성공 응답 관측",
+    "ownerRechecked" : true,
+    "status" : 200,
+    "id" : 206,
+    "expected" : "ALLOW",
+    "account" : "admin",
+    "mode" : "fixed"
+  }, {
+    "assessment" : "기대 DENY · 차단 근거 일치 · 소유자 재조회 2xx 동일 · 대상 HTTP 404",
+    "ownerRechecked" : true,
+    "status" : 404,
+    "id" : 206,
+    "expected" : "DENY",
+    "account" : "guest",
+    "mode" : "fixed"
+  } ],
+  "storedFlows" : [ {
+    "state" : "HTML 조회 출력 · 실행 미검증",
+    "escapedCandidate" : false,
+    "browserEvidence" : "",
+    "htmlObserved" : true,
+    "writeAccepted" : true,
+    "readbackObserved" : true,
+    "kind" : "stored",
+    "mode" : "vuln"
+  }, {
+    "state" : "HTML 문자 표시 후보 · 실행 미검증",
+    "escapedCandidate" : true,
+    "browserEvidence" : "",
+    "htmlObserved" : true,
+    "writeAccepted" : true,
+    "readbackObserved" : true,
+    "kind" : "stored",
+    "mode" : "fixed"
+  } ],
+  "payload" : [ {
+    "id" : "vuln-bounty-sql-control",
+    "profile" : "SQLI",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 5,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "SQL 오류 재현 · 조건/변형 검사 생략"
+    },
+    "rows" : [ {
+      "bodySha256" : "3fe94f4c56bf192d6e92c6c1e69e8ae9560bfccd262022a109ccc8610d100adf",
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 171,
+      "payload" : "Burp"
+    }, {
+      "bodySha256" : "3fe94f4c56bf192d6e92c6c1e69e8ae9560bfccd262022a109ccc8610d100adf",
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 171,
+      "payload" : "Burp"
+    }, {
+      "bodySha256" : "3fe94f4c56bf192d6e92c6c1e69e8ae9560bfccd262022a109ccc8610d100adf",
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 171,
+      "payload" : "Burp"
+    }, {
+      "bodySha256" : "9ca084fa559432d8a1bf8f5b3314f1d594f7b44efb21de35267caa9079936d6b",
+      "evidence" : "SQL 구문 오류 탐색 · org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT p.*,u.username FROM community_posts p JOIN lab_users u ON u.id=p.own",
+      "status" : 500,
+      "verdict" : "SQL 오류 후보",
+      "bodyChars" : 203,
+      "payload" : "'"
+    }, {
+      "bodySha256" : "9ca084fa559432d8a1bf8f5b3314f1d594f7b44efb21de35267caa9079936d6b",
+      "evidence" : "SQL 오류 재검증 · org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT p.*,u.username FROM community_posts p JOIN lab_users u ON u.id=p.own",
+      "status" : 500,
+      "verdict" : "SQL 오류 후보",
+      "bodyChars" : 203,
+      "payload" : "'"
+    }, {
+      "bodySha256" : "3fe94f4c56bf192d6e92c6c1e69e8ae9560bfccd262022a109ccc8610d100adf",
+      "evidence" : "SQL 오류 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 171,
+      "payload" : "Burp"
+    }, {
+      "bodySha256" : "9ca084fa559432d8a1bf8f5b3314f1d594f7b44efb21de35267caa9079936d6b",
+      "evidence" : "DB 고유 오류 2회, 기준에는 없음 · 실제 인젝션 성공은 수동 확인 필요",
+      "status" : 500,
+      "verdict" : "SQL 오류 후보 · 재현",
+      "bodyChars" : 203,
+      "payload" : "'"
+    } ]
+  }, {
+    "id" : "vuln-bounty-xss-control",
+    "profile" : "XSS",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 6,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "유형별 증거 재현 · 나머지 변형 생략"
+    },
+    "rows" : [ {
+      "bodySha256" : "0c8618f92c81814d7625dfcad9ce5e845644a862a17a2ebb94ea6d8b33cace07",
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 96,
+      "payload" : "normal"
+    }, {
+      "bodySha256" : "0c8618f92c81814d7625dfcad9ce5e845644a862a17a2ebb94ea6d8b33cace07",
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 96,
+      "payload" : "normal"
+    }, {
+      "bodySha256" : "0c8618f92c81814d7625dfcad9ce5e845644a862a17a2ebb94ea6d8b33cace07",
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 96,
+      "payload" : "normal"
+    }, {
+      "bodySha256" : "e32a72ee055cbd54beaa476f177c7480eb959b22c707d963b213f973f5fa61a7",
+      "evidence" : "문자열 반사 탐색 · 실행 가능한 XSS 근거 아님",
+      "status" : 200,
+      "verdict" : "문자열 반사",
+      "bodyChars" : 109,
+      "payload" : "PR_f4415b7f8aca460c"
+    }, {
+      "bodySha256" : "e32a72ee055cbd54beaa476f177c7480eb959b22c707d963b213f973f5fa61a7",
+      "evidence" : "문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인",
+      "status" : 200,
+      "verdict" : "반사 위치 관찰",
+      "bodyChars" : 109,
+      "payload" : "PR_f4415b7f8aca460c"
+    }, {
+      "bodySha256" : "32a296ba8cf8f82b39d65c35ee9066c66e75791d905320bc6d6e35233282f7c8",
+      "evidence" : "후보 탐색 · 단계=후보 · 브라우저 실행=미확인 · <svg> 이벤트 속성 · Body: 84 · 전체 입력의 동일 반사 없이 출력 문맥 관찰",
+      "status" : 200,
+      "verdict" : "XSS 반사 후보",
+      "bodyChars" : 137,
+      "payload" : "<svg onload=console.log('PR_6b04c0b5b969406e')>"
+    }, {
+      "bodySha256" : "e968752108a0c10e6f2bbdf308840f8423e9464e9302fcc8753fcf6d692ff596",
+      "evidence" : "새 마커/동일 입력 재검증 · 단계=후보 · 브라우저 실행=미확인 · <svg> 이벤트 속성 · Body: 84 · 전체 입력의 동일 반사 없이 출력 문맥 관찰",
+      "status" : 200,
+      "verdict" : "XSS 반사 후보",
+      "bodyChars" : 137,
+      "payload" : "<svg onload=console.log('PR_7aac829dbdf94f47')>"
+    }, {
+      "bodySha256" : "0c8618f92c81814d7625dfcad9ce5e845644a862a17a2ebb94ea6d8b33cace07",
+      "evidence" : "후속 기준 재확인 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 96,
+      "payload" : "normal"
+    }, {
+      "bodySha256" : "e968752108a0c10e6f2bbdf308840f8423e9464e9302fcc8753fcf6d692ff596",
+      "evidence" : "같은 종류의 증거 2회 + 기준 재확인 · 새 마커/동일 입력 재검증 · 단계=후보 · 브라우저 실행=미확인 · <svg> 이벤트 속성 · Body: 84 · 전체 입력의 동일 반사 없이 출력 문맥 관찰 · 자동 확정 아님",
+      "status" : 200,
+      "verdict" : "XSS 반사 후보 · 재현",
+      "bodyChars" : 137,
+      "payload" : "<svg onload=console.log('PR_7aac829dbdf94f47')>"
+    } ]
+  }, {
+    "id" : "fixed-bounty-sql-control",
+    "profile" : "SQLI",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 3,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "검사 목록 완료 · 미탐 가능"
+    },
+    "rows" : [ {
+      "bodySha256" : "3fe94f4c56bf192d6e92c6c1e69e8ae9560bfccd262022a109ccc8610d100adf",
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 171,
+      "payload" : "Burp"
+    }, {
+      "bodySha256" : "3fe94f4c56bf192d6e92c6c1e69e8ae9560bfccd262022a109ccc8610d100adf",
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 171,
+      "payload" : "Burp"
+    }, {
+      "bodySha256" : "3fe94f4c56bf192d6e92c6c1e69e8ae9560bfccd262022a109ccc8610d100adf",
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 171,
+      "payload" : "Burp"
+    }, {
+      "bodySha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidence" : "SQL 구문 오류 탐색 · 기준 200 / 171자 → 200 / 2자",
+      "status" : 200,
+      "verdict" : "응답 변화",
+      "bodyChars" : 2,
+      "payload" : "'"
+    } ]
+  }, {
+    "id" : "fixed-bounty-xss-control",
+    "profile" : "XSS",
+    "adaptive" : true,
+    "summary" : {
+      "requests" : 4,
+      "uniquePayloads" : 1,
+      "skipped" : 0,
+      "stopped" : false,
+      "budgetReached" : false,
+      "reason" : "HTML 텍스트의 인코딩 관찰 · 남은 정형 태그 변형 생략; 우회/stored/DOM 미검사 · 전체 목록 모드로 확대 가능"
+    },
+    "rows" : [ {
+      "bodySha256" : "82da93e36076c12c7c2a2174acd6a42d9f5fdab7e6c36f70380dd7ef045b82be",
+      "evidence" : "기준 수집 · 원래 값",
+      "status" : 200,
+      "verdict" : "기준 응답",
+      "bodyChars" : 97,
+      "payload" : "normal"
+    }, {
+      "bodySha256" : "82da93e36076c12c7c2a2174acd6a42d9f5fdab7e6c36f70380dd7ef045b82be",
+      "evidence" : "기준 안정성 검사 · 검사한 응답에서 유형별 근거가 발견되지 않음",
+      "status" : 200,
+      "verdict" : "근거 없음",
+      "bodyChars" : 97,
+      "payload" : "normal"
+    }, {
+      "bodySha256" : "82da93e36076c12c7c2a2174acd6a42d9f5fdab7e6c36f70380dd7ef045b82be",
+      "evidence" : "기준 2회 동일 · 조건 차이 비교 가능",
+      "status" : 200,
+      "verdict" : "기준 재검증",
+      "bodyChars" : 97,
+      "payload" : "normal"
+    }, {
+      "bodySha256" : "f8dc4a02cb9279280a77e656af96a5fcb86deb03e1abc23c853b26d518d2e9c3",
+      "evidence" : "문자열 반사 탐색 · 실행 가능한 XSS 근거 아님",
+      "status" : 200,
+      "verdict" : "문자열 반사",
+      "bodyChars" : 110,
+      "payload" : "PR_ade884d27fba4e12"
+    }, {
+      "bodySha256" : "f8dc4a02cb9279280a77e656af96a5fcb86deb03e1abc23c853b26d518d2e9c3",
+      "evidence" : "문자열 반사 확인 · 인접 태그/따옴표로 검사 순서 조정(휴리스틱); 실행 여부는 미확인",
+      "status" : 200,
+      "verdict" : "반사 위치 관찰",
+      "bodyChars" : 110,
+      "payload" : "PR_ade884d27fba4e12"
+    }, {
+      "bodySha256" : "f38b0e573bdbaa049894422cf08fe8d62b1c20bf6110758d101f9e5d4ab2b7eb",
+      "evidence" : "후보 탐색 · 실행 가능한 XSS 근거 아님",
+      "status" : 200,
+      "verdict" : "문자열 반사",
+      "bodyChars" : 152,
+      "payload" : "<svg onload=console.log('PR_aa1c407cc4c34343')>"
+    }, {
+      "bodySha256" : "f38b0e573bdbaa049894422cf08fe8d62b1c20bf6110758d101f9e5d4ab2b7eb",
+      "evidence" : "HTML 텍스트 위치에서 전체 입력이 엔티티 인코딩됨 · 다른 컨텍스트/우회는 미검사",
+      "status" : 200,
+      "verdict" : "메타문자 인코딩 관찰",
+      "bodyChars" : 152,
+      "payload" : "<svg onload=console.log('PR_aa1c407cc4c34343')>"
+    } ]
+  } ]
+}

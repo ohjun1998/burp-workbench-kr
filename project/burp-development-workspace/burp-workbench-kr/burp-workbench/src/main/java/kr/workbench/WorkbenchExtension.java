@@ -82,6 +82,19 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       sizeExcluded = new AtomicLong(),
       queueOverflow = new AtomicLong(),
       processingErrors = new AtomicLong();
+  // Policy exclusions are intentional: never count them as lost packets or retain their contents.
+  // Live callbacks and History imports are separate populations; current disk rows may be cleared.
+  private final AtomicLong offExcluded = new AtomicLong(),
+      scopeExcluded = new AtomicLong(),
+      storedResponses = new AtomicLong(),
+      responseStoreFailures = new AtomicLong(),
+      captureDecisionErrors = new AtomicLong(),
+      shutdownExcluded = new AtomicLong(),
+      importAttempts = new AtomicLong(),
+      importStored = new AtomicLong(),
+      importOffExcluded = new AtomicLong(),
+      importScopeExcluded = new AtomicLong(),
+      importFailures = new AtomicLong();
   private final ConcurrentMap<String, AtomicLong> captureErrorCounts = new ConcurrentHashMap<>();
   private volatile String lastResponse = "없음", lastCaptureError = "없음";
   // Compatibility views expose only the disk index; neither duplicates row metadata.
@@ -685,8 +698,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
 
   private void openLogs() {
     if (unloaded.get()) return;
-    logContent = diagnostics.panel(() -> "모드 " + captureMode.get() + " · 수신 " + received.get() + " · 보관 " + trafficStore.size() + " · 대기 " + incoming.size()
-        + "\n분석 대기 " + (captureObservations == null ? 0 : captureObservations.pending()) + " · 누락 " + dropped.get() + " · 처리 오류 " + processingErrors.get() + " · 마지막 응답 " + lastResponse);
+    logContent = diagnostics.panel(this::captureDiagnostics);
     WorkbenchUi.style(logContent);
     if (logWindow != null && logWindow.isDisplayable()) { logWindow.toFront(); return; }
     logWindow = dialogOpener.open(root, "Workbench KR · 로그", logContent, false, () -> logWindow = null);
@@ -1042,6 +1054,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         case OFF -> "빨강 · 트래픽 수집 중지";
         case SCOPE -> "주황 · SCOPE 목록에서 체크한 범위만 수집";
       });
+      captureButton.setToolTipText(captureTooltip());
       captureButton.repaint();
     }
     captureInfo.setText(
@@ -1054,7 +1067,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               case OFF -> "수집 중지";
               case SCOPE -> "체크된 SCOPE 수집";
             });
-    captureInfo.setToolTipText(captureDiagnostics());
+    captureInfo.setToolTipText(captureTooltip());
   }
 
   private boolean acceptsTraffic(HttpRequest request) {
@@ -1491,14 +1504,22 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           "응답 수집",
           () -> {
             synchronized (captureLock) {
-              if (unloaded.get()) return;
-              if (captureMode.get() == CaptureMode.OFF) return;
-              HttpRequest q = r.initiatingRequest();
-              if (!acceptsTraffic(q)) return;
+              if (unloaded.get()) { shutdownExcluded.incrementAndGet(); return; }
+              if (captureMode.get() == CaptureMode.OFF) { offExcluded.incrementAndGet(); return; }
+              HttpRequest q;
+              try {
+                q = r.initiatingRequest();
+                if (!acceptsTraffic(q)) { scopeExcluded.incrementAndGet(); return; }
+              } catch (RuntimeException ex) {
+                captureDecisionErrors.incrementAndGet();
+                throw ex;
+              }
               admitted.set(true);
               try {
                 incoming.offer(storeTraffic(r.toolSource().toolType().toString(), q, r, started));
+                storedResponses.incrementAndGet();
               } catch (RuntimeException ex) {
+                responseStoreFailures.incrementAndGet();
                 dropped.incrementAndGet();
                 throw ex;
               }
@@ -1560,9 +1581,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private String captureDiagnostics() {
-    return "건수·패킷 크기 제한 없음 · 원본은 임시 디스크 보관 · 응답 없는 요청은 자동 수집 제외"
-        + " · 수신 "
-        + received.get()
+    return "모드 " + captureMode.get() + " · 현재 보관 " + (trafficStore == null ? 0 : trafficStore.size())
+        + "\n자동 응답 수신 " + received.get() + " · 보관 성공 " + storedResponses.get()
+        + " · OFF 제외 " + offExcluded.get() + " · SCOPE 제외 " + scopeExcluded.get()
+        + " · 저장 실패 " + responseStoreFailures.get() + " · 수집 판정 오류 " + captureDecisionErrors.get()
+        + " · 종료 중 제외 " + shutdownExcluded.get()
+        + "\n수동 가져오기 시도 " + importAttempts.get() + " · 보관 성공 " + importStored.get()
+        + " · OFF 제외 " + importOffExcluded.get() + " · SCOPE 제외 " + importScopeExcluded.get()
+        + " · 가져오기 실패 " + importFailures.get()
         + " · 마지막 응답 "
         + lastResponse
         + " · 대기 "
@@ -1575,7 +1601,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         + processingErrors.get()
         + " · 마지막 오류 "
         + lastCaptureError
-        + " · SCOPE는 체크된 URL만 수집 · 수신/오류는 확장 로드 이후 누적";
+        + "\n정책 제외 원본은 보관하지 않음 · 수신/판정/성공/오류는 확장 로드 이후 누적"
+        + " · 현재 보관은 목록 초기화 후 달라질 수 있음 · 수동 가져오기는 자동 수신에 합산하지 않음"
+        + " · 건수·패킷 크기 제한 없음 · 원본은 임시 디스크 보관 · 응답 없는 요청은 자동 수집 제외";
+  }
+
+  private String captureTooltip() {
+    return "<html><body style='width:520px'>" + Core.html(captureDiagnostics()).replace("\n", "<br>") + "</body></html>";
   }
 
   private void drain() {
@@ -1595,7 +1627,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             + dropped.get()
             + " · 오류 "
             + processingErrors.get());
-    stats.setToolTipText(captureDiagnostics());
+    stats.setToolTipText(captureTooltip());
     updateLogButton();
     refreshTrafficInfo();
   }
@@ -1628,11 +1660,20 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                   int count = 0;
                   for (HttpRequestResponse rr : picked) {
                     if (count >= 20) break;
+                    importAttempts.incrementAndGet();
                     try {
-                      HttpRequest q = rr.request();
-                      HttpResponse response = rr.response();
-                      if (!acceptsTraffic(q)) continue;
-                      if (!addTraffic(storeTraffic("가져오기", q, response))) continue;
+                      HttpRequest q;
+                      HttpResponse response;
+                      Traffic stored;
+                      synchronized (captureLock) {
+                        if (captureMode.get() == CaptureMode.OFF) { importOffExcluded.incrementAndGet(); continue; }
+                        q = rr.request();
+                        if (!acceptsTraffic(q)) { importScopeExcluded.incrementAndGet(); continue; }
+                        response = rr.response();
+                        stored = storeTraffic("가져오기", q, response);
+                        importStored.incrementAndGet();
+                      }
+                      if (!addTraffic(stored)) continue;
                       count++;
                       captureStage(
                           "가져온 응답 보안 관찰",
@@ -1650,6 +1691,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                             if (activity != null) activity.response(q, response);
                           });
                     } catch (RuntimeException ex) {
+                      importFailures.incrementAndGet();
                       dropped.incrementAndGet();
                       captureFailure("목록 가져오기", ex);
                     }

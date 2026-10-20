@@ -1,0 +1,13 @@
+test_archive_is_reproducible (test_package_downloads.PackageChecks.test_archive_is_reproducible) ... ok
+test_compose_builds_current_source (test_package_downloads.PackageChecks.test_compose_builds_current_source) ... ok
+test_docker_source_inputs_are_complete (test_package_downloads.PackageChecks.test_docker_source_inputs_are_complete) ... ok
+test_existing_version_is_immutable (test_package_downloads.PackageChecks.test_existing_version_is_immutable) ... ok
+test_unchanged_component_preserves_verified_release (test_package_downloads.PackageChecks.test_unchanged_component_preserves_verified_release) ... ok
+test_current_version_and_history_preserved (test_release_audit.FreshReleaseChecks.test_current_version_and_history_preserved) ... ok
+test_mismatched_fresh_archive_restores_all_committed_downloads (test_release_audit.FreshReleaseChecks.test_mismatched_fresh_archive_restores_all_committed_downloads) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.011s
+
+OK
+{"result": "passed", "command": "python dev.py release", "freshOutputDirectory": true, "committedDownloadsPreserved": true, "dockerVersion": "3.6.0", "dockerZipSha256": "112e802096d39072beb3ff0b15433030d7b777604ca24d2377ac983f04f99c05", "freshDockerZipMatchesCommitted": true, "version": "0.37.0", "regressionGroups": 59, "regressionChecks": 1943, "payloadHttpChecks": 132, "allFeaturesHttpChecks": 101, "bountyHttpChecks": 266, "totalChecks": 2442}

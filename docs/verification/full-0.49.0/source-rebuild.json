@@ -1,0 +1,6 @@
+{
+  "method": "Fresh extraction of versioned source ZIP; Java 17 build_all.py with same local toolchain",
+  "publishedJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+  "rebuiltJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+  "byteIdentical": true
+}

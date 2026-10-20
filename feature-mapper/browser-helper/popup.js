@@ -3,6 +3,17 @@ const byId = id => document.getElementById(id);
 const saved = await chrome.storage.local.get({base: '', token: '', origins: []});
 byId('base').value = saved.base; byId('token').value = saved.token;
 function report(text) { byId('status').textContent = text; }
+async function diagnostics() {
+  const state = await chrome.storage.session.get({deliveryCount: 0, lastDeliveryAt: 0, lastError: ''});
+  const {origins = []} = await chrome.storage.local.get('origins');
+  byId('diagnostics').textContent = '활성 사이트 ' + origins.length + '개 · 이벤트 전달 ' + state.deliveryCount + '건\n'
+    + (state.lastError ? '최근 전달 실패: ' + state.lastError
+      : state.lastDeliveryAt ? '마지막 전달: ' + new Date(state.lastDeliveryAt).toLocaleTimeString()
+      : '클릭 요청 전달 대기')
+    + '\n전달 성공은 Burp의 SCOPE 수집·기능 연결 완료와 별개입니다.';
+}
+chrome.storage.onChanged.addListener(() => { diagnostics().catch(() => {}); });
+await diagnostics();
 byId('connect').addEventListener('click', async () => {
   try {
     const base = validateConnection(byId('base').value.trim(), byId('token').value.trim());

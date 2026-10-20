@@ -156,11 +156,12 @@ public final class Mapper implements AutoCloseable {
   private final LinkedHashMap<EventKey, BrowserEvent> browserEvents = new LinkedHashMap<>();
   private final PriorityQueue<BrowserEvent> eventExpiry =
       new PriorityQueue<>(Comparator.comparingLong(e -> num(e.values, "time")));
-  private long browserCandidatesExamined;
+  private long browserCandidatesExamined, browserMappedPackets;
 
   record RequestKey(String method, String url, String hash) {}
 
-  record EventKey(String tab, String frame, String action, String url, long time) {}
+  // One click can issue several requests to the same URL in one millisecond.
+  record EventKey(String tab, String frame, String action, String method, String url, String hash, long time) {}
 
   record BrowserEvent(EventKey key, Map<String, Object> values) {}
 
@@ -429,10 +430,17 @@ public final class Mapper implements AutoCloseable {
     return browserCandidatesExamined;
   }
 
+  synchronized long browserMappedPackets() { return browserMappedPackets; }
+
   synchronized void browser(Map<String, Object> event) {
     if (!"network".equals(str(event, "type")))
       throw new IllegalArgumentException("network 이벤트만 지원합니다.");
     Signals.origin(str(event, "url"));
+    String bodyHash = str(event, "bodyHash");
+    if (!bodyHash.isEmpty() && !bodyHash.matches("[a-f0-9]{64}"))
+      throw new IllegalArgumentException("잘못된 본문 해시");
+    if (!str(event, "method").matches("[!#$%&'*+.^_`|~0-9A-Za-z-]{1,32}"))
+      throw new IllegalArgumentException("잘못된 요청 메서드");
     if (str(event, "actionId").isBlank() || str(event, "label").isBlank()) return;
     long now = System.currentTimeMillis();
     if (num(event, "time") < now - LINK_WINDOW || num(event, "time") > now + LINK_WINDOW)
@@ -457,7 +465,9 @@ public final class Mapper implements AutoCloseable {
             str(clean, "tab"),
             str(clean, "frame"),
             str(clean, "actionId"),
+            str(clean, "method"),
             str(clean, "url"),
+            str(clean, "bodyHash"),
             num(clean, "time"));
     Set<BrowserEvent> affected = prune(now);
     BrowserEvent old = browserEvents.get(key);
@@ -515,6 +525,7 @@ public final class Mapper implements AutoCloseable {
               "화면 기능",
               label + " · " + route);
       p.browserAction = str(e, "actionId");
+      browserMappedPackets++;
       p.browserTab = str(e, "tab");
       p.browserFrame = str(e, "frame");
       if (!corrections.containsKey(correctionKey(p))) p.primary = f.id;
@@ -527,6 +538,9 @@ public final class Mapper implements AutoCloseable {
       p.links.put(f.id, p.run);
       p.reasons.add(
           "브라우저 화면·동작: " + label + " (탭 " + p.browserTab + " / 프레임 " + p.browserFrame + ")");
+      p.reasons.add("브라우저 요청 대조: URL·메서드 일치 · 시각 차이 "
+          + Math.abs(p.time - num(e, "time")) + "ms · "
+          + (str(e, "bodyHash").isEmpty() ? "본문 해시 미확인" : "본문 SHA-256 일치"));
       p.confidence = p.parents.isEmpty() ? "중간" : "높음";
       // Temporal browser attribution is context, never proof of JS causality.
       attachAncestors(p, f.id, p.run, 0);
@@ -559,11 +573,12 @@ public final class Mapper implements AutoCloseable {
       item.primary = correction == null ? intrinsic : correction;
       item.run = item.links.getOrDefault(item.primary, "실행-" + item.id);
       if (correction != null) link(item, correction, item.run);
+      if (!item.browserAction.isBlank()) browserMappedPackets--;
       item.browserAction = "";
       item.browserTab = "";
       item.browserFrame = "";
       item.confidence = correction == null ? "낮음" : "높음";
-      item.reasons.removeIf(x -> x.startsWith("브라우저 화면·동작:"));
+      item.reasons.removeIf(x -> x.startsWith("브라우저 화면·동작:") || x.startsWith("브라우저 요청 대조:"));
       item.reasons.add("동시 동일 요청·브라우저 동작 중복으로 화면 매핑 보류");
     }
   }
@@ -775,6 +790,7 @@ public final class Mapper implements AutoCloseable {
           || !features.keySet().containsAll(p.links.keySet())
           || packets.put(p.id, p) != null) throw new IOException("잘못된 패킷 참조");
     }
+    browserMappedPackets = packets.values().stream().filter(p -> !p.browserAction.isBlank()).count();
     for (Packet p : packets.values())
       for (String feature : p.links.keySet())
         featurePackets.computeIfAbsent(feature, k -> new TreeMap<>()).put(p.id, p);

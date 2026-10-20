@@ -1,8 +1,8 @@
 from pathlib import Path
 import argparse,subprocess,tempfile,time,os,json
-p=argparse.ArgumentParser();p.add_argument('--browser',required=True,type=Path);p.add_argument('--java',default='java');p.add_argument('--output',type=Path,default=Path('build/browser-verification'));a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--browser',required=True,type=Path);p.add_argument('--java',default='java');p.add_argument('--classes',type=Path);p.add_argument('--tests',type=Path);p.add_argument('--output',type=Path,default=Path('build/browser-verification'));a=p.parse_args()
 r=Path(__file__).resolve().parents[1];a.output.mkdir(parents=True,exist_ok=True)
-cp=os.pathsep.join(map(str,[r/'build/classes',r/'build/tests',r/'deps/montoya-api-2026.7.jar']))
+cp=os.pathsep.join(map(str,[a.classes or r/'build/classes',a.tests or r/'build/tests',r/'deps/montoya-api-2026.7.jar']))
 with tempfile.TemporaryDirectory(prefix='mapper-browser-fixture-') as folder:
  t=Path(folder)
  with (a.output/'fixture.log').open('w') as log:

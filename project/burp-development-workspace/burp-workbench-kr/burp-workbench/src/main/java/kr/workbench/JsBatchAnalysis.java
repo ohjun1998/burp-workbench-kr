@@ -8,11 +8,11 @@ final class JsBatchAnalysis {
     if(text.length()<=JsAnalysis.SOURCE_LIMIT)return JsAnalysis.analyzeUnit(text,source,type,document,true);
     List<JsAnalysis.Endpoint> endpoints=new ArrayList<>();List<JsAnalysis.Secret> secrets=new ArrayList<>();
     Map<String,JsRequestDraft.Draft> drafts=new LinkedHashMap<>();JsMiner.Result miner=null;
-    boolean partial=false,contextLost=false;int units=0,forced=0,baseLine=0;JsBatchContext context=new JsBatchContext();
+    boolean partial=false,contextLost=false;int units=0,forced=0,baseLine=0;JsBatchContext context=new JsBatchContext(text);
     for(int start=0;start<text.length();){
       if(Thread.currentThread().isInterrupted()){partial=true;break;}
       Cut cut=cut(text,start);int end=cut.end();String unit=text.substring(start,end);
-      contextLost|=!cut.safe();partial|=contextLost;String prelude=contextLost?"":context.prelude();int prefix=prelude.length(),prefixLines=(int)prelude.chars().filter(c->c=='\n').count();
+      contextLost|=!cut.safe();partial|=contextLost;String prelude=contextLost?"":context.prelude(start);int prefix=prelude.length(),prefixLines=(int)prelude.chars().filter(c->c=='\n').count();
       var result=JsAnalysis.analyzeUnit(prelude+unit,source,type,document,true);units++;partial|=result.truncated();
       if(result.status().contains("AST 실패"))forced++;
       for(var endpoint:result.endpoints()){
@@ -22,13 +22,12 @@ final class JsBatchAnalysis {
       }
       for(var secret:result.secrets())if(secret.start()<0||secret.start()>=prefix)secrets.add(new JsAnalysis.Secret(secret.rule(),secret.masked(),secret.length(),secret.fingerprint(),(secret.start()<0?secret.line():secret.line()-prefixLines+baseLine),secret.start()<0?secret.start():secret.start()-prefix+start,secret.sourceLength(),secret.confidence()));
       miner=miner==null?result.miner():merge(miner,result.miner());
-      if(!contextLost)context.capture(unit);
       baseLine+=(int)unit.chars().filter(c->c=='\n').count();start=end;
     }
     if(miner==null)miner=new JsMiner.Result(List.of(),List.of(),List.of(),List.of(),List.of(),"");
     String status="분할 분석 "+units+"구간 · URL/API "+endpoints.size()+" · 시크릿 후보 "+secrets.size()+" · "+text.length()+"자 확인";
     if(forced>0){partial=true;status+=" · 문맥 미확정 구간 "+forced+"개 · 구간 간 변수는 수동 확인";}
-    if(units>1){partial=true;status+=" · 구간 간 문자열 상수만 연계 · 객체/함수 문맥 미확정";}
+    if(units>1){partial=true;status+=" · "+context.note();}
     if(partial)status+=" · 일부 구문/시간 제한, 미확정 결과 포함";
     return new JsAnalysis.Result(List.copyOf(endpoints),List.copyOf(secrets),status,partial,miner,Map.copyOf(drafts));
   }

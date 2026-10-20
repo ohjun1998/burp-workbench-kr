@@ -1,0 +1,143 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launchPersistentContext: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-extensions-except=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --load-extension=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --user-data-dir=/tmp/mapper-browser-djSCCy --remote-debugging-pipe about:blank
+<launched> pid=41
+[pid=41][err] [41:41:1020/050307.068780:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+[pid=41][err] [1020/050307.069047:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)
+[pid=41][err] [1020/050307.069206:ERROR:third_party/crashpad/crashpad/util/file/directory_reader_posix.cc:43] opendir /proc/41/task: No such file or directory (2)
+[pid=41][err] Received signal 6
+[pid=41][err] #0 0x555a320cdcfa (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5cb8cf9)
+[pid=41][err] #1 0x555a36a3a724 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa625723)
+[pid=41][err] #2 0x7f1a859b9330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4532f)
+[pid=41][err] #3 0x7f1a859b927e (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4527d)
+[pid=41][err] #4 0x7f1a8599c8ff (/usr/lib/x86_64-linux-gnu/libc.so.6+0x288fe)
+[pid=41][err] #5 0x555a36a31ac5 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa61cac4)
+[pid=41][err] #6 0x555a369f1dad (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcdac)
+[pid=41][err] #7 0x555a369f1d3e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcd3d)
+[pid=41][err] #8 0x555a3225601e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e4101d)
+[pid=41][err] #9 0x555a2f619fc9 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3204fc8)
+[pid=41][err] #10 0x555a369f1f20 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcf1f)
+[pid=41][err] #11 0x555a30d22369 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x490d368)
+[pid=41][err] #12 0x555a3228cc69 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e77c68)
+[pid=41][err] #13 0x555a3228be47 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76e46)
+[pid=41][err] #14 0x555a3228bbb2 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76bb1)
+[pid=41][err] #15 0x555a3228bb74 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b73)
+[pid=41][err] #16 0x555a3228bb37 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b36)
+[pid=41][err] #17 0x555a302e1216 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3ecc215)
+[pid=41][err] #18 0x555a313652e3 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x4f502e2)
+[pid=41][err] #19 0x555a302e1fd6 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3eccfd5)
+[pid=41][err] #20 0x555a31c6ff2e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x585af2d)
+[pid=41][err] #21 0x555a31c6ec3f (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5859c3e)
+[pid=41][err] #22 0x7f1a8599e1ca (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9)
+[pid=41][err] #23 0x7f1a8599e28b (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a28a)
+[pid=41][err] #24 0x555a32a2682a (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x6611829)
+[pid=41][err]   r8: 000039300006862b  r9: 0000000000000001 r10: 0000000000000008 r11: 0000000000000246
+[pid=41][err]  r12: 0000000000000006 r13: 000000000000008c r14: 0000000000000016 r15: 00003930000d0640
+[pid=41][err]   di: 0000000000000029  si: 0000000000000029  bp: 00007fffe29ea9d0  bx: 0000000000000029
+[pid=41][err]   dx: 0000000000000006  ax: 0000000000000000  cx: 00007f1a85a12b2c  sp: 00007fffe29ea990
+[pid=41][err]   ip: 00007f1a85a12b2c efl: 0000000000000246 cgf: 002b000000000033 erf: 0000000000000000
+[pid=41][err]  trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000
+[pid=41][err] [end of stack trace]
+Call log:
+[2m  - <launching> /workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-extensions-except=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --load-extension=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --user-data-dir=/tmp/mapper-browser-djSCCy --remote-debugging-pipe about:blank[22m
+[2m  - <launched> pid=41[22m
+[2m  - [pid=41][err] [41:41:1020/050307.068780:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)[22m
+[2m  - [pid=41][err] [1020/050307.069047:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)[22m
+[2m  - [pid=41][err] [1020/050307.069206:ERROR:third_party/crashpad/crashpad/util/file/directory_reader_posix.cc:43] opendir /proc/41/task: No such file or directory (2)[22m
+[2m  - [pid=41][err] Received signal 6[22m
+[2m  - [pid=41][err] #0 0x555a320cdcfa (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5cb8cf9)[22m
+[2m  - [pid=41][err] #1 0x555a36a3a724 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa625723)[22m
+[2m  - [pid=41][err] #2 0x7f1a859b9330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4532f)[22m
+[2m  - [pid=41][err] #3 0x7f1a859b927e (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4527d)[22m
+[2m  - [pid=41][err] #4 0x7f1a8599c8ff (/usr/lib/x86_64-linux-gnu/libc.so.6+0x288fe)[22m
+[2m  - [pid=41][err] #5 0x555a36a31ac5 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa61cac4)[22m
+[2m  - [pid=41][err] #6 0x555a369f1dad (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcdac)[22m
+[2m  - [pid=41][err] #7 0x555a369f1d3e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcd3d)[22m
+[2m  - [pid=41][err] #8 0x555a3225601e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e4101d)[22m
+[2m  - [pid=41][err] #9 0x555a2f619fc9 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3204fc8)[22m
+[2m  - [pid=41][err] #10 0x555a369f1f20 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcf1f)[22m
+[2m  - [pid=41][err] #11 0x555a30d22369 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x490d368)[22m
+[2m  - [pid=41][err] #12 0x555a3228cc69 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e77c68)[22m
+[2m  - [pid=41][err] #13 0x555a3228be47 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76e46)[22m
+[2m  - [pid=41][err] #14 0x555a3228bbb2 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76bb1)[22m
+[2m  - [pid=41][err] #15 0x555a3228bb74 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b73)[22m
+[2m  - [pid=41][err] #16 0x555a3228bb37 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b36)[22m
+[2m  - [pid=41][err] #17 0x555a302e1216 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3ecc215)[22m
+[2m  - [pid=41][err] #18 0x555a313652e3 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x4f502e2)[22m
+[2m  - [pid=41][err] #19 0x555a302e1fd6 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3eccfd5)[22m
+[2m  - [pid=41][err] #20 0x555a31c6ff2e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x585af2d)[22m
+[2m  - [pid=41][err] #21 0x555a31c6ec3f (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5859c3e)[22m
+[2m  - [pid=41][err] #22 0x7f1a8599e1ca (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9)[22m
+[2m  - [pid=41][err] #23 0x7f1a8599e28b (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a28a)[22m
+[2m  - [pid=41][err] #24 0x555a32a2682a (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x6611829)[22m
+[2m  - [pid=41][err]   r8: 000039300006862b  r9: 0000000000000001 r10: 0000000000000008 r11: 0000000000000246[22m
+[2m  - [pid=41][err]  r12: 0000000000000006 r13: 000000000000008c r14: 0000000000000016 r15: 00003930000d0640[22m
+[2m  - [pid=41][err]   di: 0000000000000029  si: 0000000000000029  bp: 00007fffe29ea9d0  bx: 0000000000000029[22m
+[2m  - [pid=41][err]   dx: 0000000000000006  ax: 0000000000000000  cx: 00007f1a85a12b2c  sp: 00007fffe29ea990[22m
+[2m  - [pid=41][err]   ip: 00007f1a85a12b2c efl: 0000000000000246 cgf: 002b000000000033 erf: 0000000000000000[22m
+[2m  - [pid=41][err]  trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000[22m
+[2m  - [pid=41][err] [end of stack trace][22m
+[2m  - [pid=41] <gracefully close start>[22m
+[2m  - [pid=41] <kill>[22m
+[2m  - [pid=41] <will force kill>[22m
+[2m  - [pid=41] <process did exit: exitCode=null, signal=SIGABRT>[22m
+[2m  - [pid=41] starting temporary directories cleanup[22m
+[2m  - [pid=41] finished temporary directories cleanup[22m
+[2m  - [pid=41] <gracefully close end>[22m
+
+    at async file:///workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/tests/browser-native.mjs:17:13 {
+  log: [
+    '  - <launching> /workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-dev-shm-usage --disable-extensions-except=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --load-extension=/workspace/scratch/7e318661b6ec/burp-workbench-kr/feature-mapper/browser-helper --user-data-dir=/tmp/mapper-browser-djSCCy --remote-debugging-pipe about:blank',
+    '  - <launched> pid=41',
+    '  - [pid=41][err] [41:41:1020/050307.068780:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)',
+    '  - [pid=41][err] [1020/050307.069047:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)',
+    '  - [pid=41][err] [1020/050307.069206:ERROR:third_party/crashpad/crashpad/util/file/directory_reader_posix.cc:43] opendir /proc/41/task: No such file or directory (2)',
+    '  - [pid=41][err] Received signal 6',
+    '  - [pid=41][err] #0 0x555a320cdcfa (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5cb8cf9)',
+    '  - [pid=41][err] #1 0x555a36a3a724 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa625723)',
+    '  - [pid=41][err] #2 0x7f1a859b9330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4532f)',
+    '  - [pid=41][err] #3 0x7f1a859b927e (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4527d)',
+    '  - [pid=41][err] #4 0x7f1a8599c8ff (/usr/lib/x86_64-linux-gnu/libc.so.6+0x288fe)',
+    '  - [pid=41][err] #5 0x555a36a31ac5 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa61cac4)',
+    '  - [pid=41][err] #6 0x555a369f1dad (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcdac)',
+    '  - [pid=41][err] #7 0x555a369f1d3e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcd3d)',
+    '  - [pid=41][err] #8 0x555a3225601e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e4101d)',
+    '  - [pid=41][err] #9 0x555a2f619fc9 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3204fc8)',
+    '  - [pid=41][err] #10 0x555a369f1f20 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0xa5dcf1f)',
+    '  - [pid=41][err] #11 0x555a30d22369 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x490d368)',
+    '  - [pid=41][err] #12 0x555a3228cc69 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e77c68)',
+    '  - [pid=41][err] #13 0x555a3228be47 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76e46)',
+    '  - [pid=41][err] #14 0x555a3228bbb2 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76bb1)',
+    '  - [pid=41][err] #15 0x555a3228bb74 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b73)',
+    '  - [pid=41][err] #16 0x555a3228bb37 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5e76b36)',
+    '  - [pid=41][err] #17 0x555a302e1216 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3ecc215)',
+    '  - [pid=41][err] #18 0x555a313652e3 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x4f502e2)',
+    '  - [pid=41][err] #19 0x555a302e1fd6 (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x3eccfd5)',
+    '  - [pid=41][err] #20 0x555a31c6ff2e (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x585af2d)',
+    '  - [pid=41][err] #21 0x555a31c6ec3f (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x5859c3e)',
+    '  - [pid=41][err] #22 0x7f1a8599e1ca (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9)',
+    '  - [pid=41][err] #23 0x7f1a8599e28b (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a28a)',
+    '  - [pid=41][err] #24 0x555a32a2682a (/workspace/scratch/7e318661b6ec/revalidation-env/browsers/chrome-linux64/chrome+0x6611829)',
+    '  - [pid=41][err]   r8: 000039300006862b  r9: 0000000000000001 r10: 0000000000000008 r11: 0000000000000246',
+    '  - [pid=41][err]  r12: 0000000000000006 r13: 000000000000008c r14: 0000000000000016 r15: 00003930000d0640',
+    '  - [pid=41][err]   di: 0000000000000029  si: 0000000000000029  bp: 00007fffe29ea9d0  bx: 0000000000000029',
+    '  - [pid=41][err]   dx: 0000000000000006  ax: 0000000000000000  cx: 00007f1a85a12b2c  sp: 00007fffe29ea990',
+    '  - [pid=41][err]   ip: 00007f1a85a12b2c efl: 0000000000000246 cgf: 002b000000000033 erf: 0000000000000000',
+    '  - [pid=41][err]  trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000',
+    '  - [pid=41][err] [end of stack trace]',
+    '  - [pid=41] <gracefully close start>',
+    '  - [pid=41] <kill>',
+    '  - [pid=41] <will force kill>',
+    '  - [pid=41] <process did exit: exitCode=null, signal=SIGABRT>',
+    '  - [pid=41] starting temporary directories cleanup',
+    '  - [pid=41] finished temporary directories cleanup',
+    '  - [pid=41] <gracefully close end>'
+  ]
+}
+
+Node.js v24.19.0

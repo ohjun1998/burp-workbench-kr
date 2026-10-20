@@ -33,7 +33,7 @@ public final class Adaptive {
   long t=System.nanoTime();sent++;
   try{
    Response r=parse(tx.send(req));failures=0;
-   String[] judgement=!judge?new String[]{"후속 조회 응답",stage}:baseline==null?new String[]{"기준 응답","원래 값"}:classify(c,baseline,r,payload,marker);
+   String[] judgement=stopStatus(r.status())?new String[]{r.status()==401||r.status()==403?"인증/인가 응답":"요청 제한/부하 응답",stopReason(r.status())}:!judge?new String[]{"후속 조회 응답",stage}:baseline==null?new String[]{"기준 응답","원래 값"}:classify(c,baseline,r,payload,marker);
    Row row=new Row(++index,payload,(System.nanoTime()-t)/1_000_000,r,judgement[0],stage+" · "+judgement[1],req);
    emit(row);
    if(stopStatus(r.status())){halted=true;reason=stopReason(r.status());}

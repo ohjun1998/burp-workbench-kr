@@ -3,6 +3,16 @@
 기준: 2026-10-20 (한국 시간) / Workbench 0.48.0 / 내장 Feature Mapper 0.3.2 / 실습 사이트 3.10.0.
 
 
+## 전체 고도화와 최종 검증 정리 — 0.49.0 작업 브랜치
+
+최신 main `ee1ac6a1f36b6b22c946aa03728e93e274b3057d`에서 이어간 `account-a/full-hardening-20261020` 작업입니다. 기존 11개 메뉴를 유지하며 수집 출처·Mapper 요청 구분·JS 정적 문맥·선택적 신원 대조·대형 응답 범위·증거 가림을 보강했습니다. **사용자가 2026-10-20 코드·설치파일·보고서·날짜별 대화의 기존 저장소 게시와 원격 검증 후 main 병합을 명시적으로 승인했습니다. 원격 검증과 병합을 진행합니다.**
+
+재개 후 전체 회귀·격리 HTTP 3,361개 및 Mapper Java114개·Node8개를 새로 통과했습니다. 최종 JAR와 동일 해시의 앞선 화면420개·별도 Mapper30개, 180초 수집3,632건(누락0·오류0), 역할/인증 검사 근거를 복구했습니다. 같은 JAR의 50개 업무 기능 결과를 재집계한 설정 후 2,100계정 대조는 TP392·FP0·TN1708·FN0, 보류91(중복)입니다. **미설정 상태는 미탐392건**이므로 설정 안내·정책/쓰기 조회 보완을 잔여 과제로 기록합니다.
+
+로컬 실제 Chrome은 다시 시작을 시도했지만 소켓 권한 제한으로 실패했습니다. 앞선 Burp 실행은 라이선스 단계에서 중단했고 최종 JAR와 해시도 달라 최종 버전의 근거로 세지 않습니다. 기존7개 사이트 전체 재측정·실제 Burp 11개 도구 전체 연결·Windows DPI/IME·외부 AI/OAST/BApp·Docker 검증은 완료로 주장하지 않습니다.
+
+[변경 안내](docs/RELEASE_0.49.0_KR.md) · [검증 JSON](docs/VERIFICATION_0.49.0.json) · [HTML 결과 보고서](docs/reports/2026-10-20-full-hardening/Workbench_Full_Hardening_0.49.0_KR.html) · [날짜별 대화](docs/chat-logs/2026-10-20/full-hardening.md)
+
 ## 미탐 보강과 실제 대상 재검증 — 0.48.0 main 병합 완료
 
 [PR #80](https://github.com/ohjun1998/burp-workbench-kr/pull/80)을 main에 병합했습니다. 검사한 head는 `3e76e604ab0e8e64d51f264a1b4239c30bd03bf9`, 병합 커밋은 `fee25e84a152a8e34614b4cfb955b445c0559a66`입니다. 병합 트리 `6e62caaf46fd90334d5ed19a71ddc597bbe2a8f5`가 로컬 검증본과 같습니다. [Build](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39345938292) · [Windows/Linux 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/39345938209)이 모두 성공했습니다. 같은 파일 트리의 병합 CI 중복 실행만 생략했습니다.

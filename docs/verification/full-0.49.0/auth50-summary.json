@@ -1,0 +1,74 @@
+{
+  "result": "completed",
+  "labVersion": "3.10.0",
+  "extensionVersion": "0.49.0",
+  "extensionJarSha256": "a1cda51a946cb308daed291a7cf15a370d82ea6bf8d502e4eb049bf77b7f5b47",
+  "transport": "real loopback HTTP with Montoya API adapters",
+  "nativeExtensionLoaded": false,
+  "httpChecks": 2800,
+  "httpTargetRequests": 5879,
+  "uniqueFunctions": 50,
+  "invalidCombinationChecks": 33,
+  "detectionMetrics": {
+    "unconfigured": {
+      "run": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 406,
+        "FN": 294,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 686,
+        "samples": 700
+      },
+      "account": {
+        "TP": 0,
+        "FP": 0,
+        "TN": 1708,
+        "FN": 392,
+        "precision": null,
+        "recall": 0.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 1316,
+        "samples": 2100
+      }
+    },
+    "configured": {
+      "run": {
+        "TP": 294,
+        "FP": 0,
+        "TN": 406,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 77,
+        "samples": 700
+      },
+      "account": {
+        "TP": 392,
+        "FP": 0,
+        "TN": 1708,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositiveRate": 0.0,
+        "reviewCount": 91,
+        "samples": 2100
+      }
+    }
+  },
+  "extensionComparisonRuns": 1400,
+  "extensionComparedAccountCells": 4200,
+  "extensionIdentityChecks": 21,
+  "extensionTargetRequests": 10822,
+  "baseUrl": "http://127.0.0.1:54885",
+  "database": "isolated H2 in Oracle compatibility mode",
+  "browserExecuted": false,
+  "nativeControllerInstances": 7,
+  "productionTimingUnchanged": true,
+  "privateProfile": true,
+  "credentialsIncludedInEvidence": false,
+  "ownedServerStopped": true
+}

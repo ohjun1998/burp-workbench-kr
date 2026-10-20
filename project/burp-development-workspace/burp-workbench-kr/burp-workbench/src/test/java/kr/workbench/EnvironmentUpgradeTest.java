@@ -32,7 +32,7 @@ public final class EnvironmentUpgradeTest extends WorkbenchTest {
     check(kind("https://x/readme",200,"ref: refs/heads/main").equals("REVIEW"),"Git marker constrained to actual HEAD path");
     check(kind("https://x/a.map",200,"{\"version\":3,\"sources\":[],\"mappings\":\"\"}").equals("SOURCEMAP"),"source map structure");
     check(kind("https://x/",200,"<title>Just a moment...</title>cf-chl-test").equals("CHALLENGE"),"challenge detected");
-    check(kind("https://x/",200,"x".repeat(65537)).equals("LIMIT"),"large response classification withheld");
+    check(kind("https://x/",200,"x".repeat(EnvironmentContent.MAX+1)).equals("LIMIT"),"large response classification withheld");
     String a="<html><head><title>Not found</title></head><body><p>Request id: abcdef12345</p><span>2026-10-18T03:00:00Z</span></body></html>",b=a.replace("abcdef12345","987654fedcb").replace("03:00:00","03:00:01");
     var first=EnvironmentControls.sample(200,"Content-Type: text/html",a,"https://x/a",Set.of());var second=EnvironmentControls.sample(200,"Content-Type: text/html",b,"https://x/b",Set.of());
     var ref=EnvironmentControls.reference(first,second,true,"");check(ref.stable(),"dynamic trace and timestamp preserve stable HTML reference");

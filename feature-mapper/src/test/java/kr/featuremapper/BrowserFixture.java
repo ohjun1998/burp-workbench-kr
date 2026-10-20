@@ -37,6 +37,9 @@ public final class BrowserFixture {
                 if(post.parents.size()!=1)throw new AssertionError("missing upload data dependency");checks.add("PASS browser-generated file ID joins upload and post save");
                 if(mapper.packetList(post.primary).size()<3)throw new AssertionError("incomplete registration workflow");checks.add("PASS one automatic function includes upload, save and follow-up read");
                 if(patch.run.equals(post.run))throw new AssertionError("two clicks merged");checks.add("PASS separate browser actions produce separate execution cases");
+                if(bridge.snapshot().lastAuthenticated()==0||bridge.snapshot().receivedEvents()<4)throw new AssertionError("missing helper transport evidence");checks.add("PASS authenticated helper transport and event delivery recorded separately");
+                if(mapper.browserMappedPackets()<4)throw new AssertionError("insufficient mapped browser packets");checks.add("PASS received events have distinct confirmed request correlations");
+                if(patch.reasons.stream().noneMatch(s->s.contains("본문 SHA-256 일치"))||post.reasons.stream().noneMatch(s->s.contains("본문 SHA-256 일치")))throw new AssertionError("body hashes not verified");checks.add("PASS actual browser POST and PATCH match method URL time and body SHA-256");
                 Files.writeString(folder.resolve("browser-fixture-result.txt"),String.join("\n",checks)+"\nBROWSER_FIXTURE_SUCCESS\n");
                 System.out.println(String.join("\n",checks));
             }finally{server.stop(0);threads.shutdownNow();}

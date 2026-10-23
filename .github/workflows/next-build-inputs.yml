@@ -26,3 +26,27 @@ jobs:
             feature-mapper/deps/*.jar
             feature-mapper/src/main/resources/fonts/NanumGothic-Regular.ttf
             reproduction/http-runtime-cache/*.jar
+      - name: Export tracked laboratory runtime archive
+        uses: actions/upload-artifact@v7
+        with:
+          name: lab-runtime
+          retention-days: 7
+          if-no-files-found: error
+          path: project/burp-development-workspace/community-security-lab/dist/ROOT.war
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Export Java release API symbols and provenance
+        run: |
+          mkdir -p "$RUNNER_TEMP/jdk-api-symbols"
+          cp "$JAVA_HOME/lib/ct.sym" "$RUNNER_TEMP/jdk-api-symbols/ct.sym"
+          java -version 2> "$RUNNER_TEMP/jdk-api-symbols/java-version.txt"
+          sha256sum "$JAVA_HOME/lib/ct.sym" > "$RUNNER_TEMP/jdk-api-symbols/ct.sym.sha256"
+      - name: Upload Java release API symbols
+        uses: actions/upload-artifact@v7
+        with:
+          name: jdk-api-symbols
+          retention-days: 7
+          if-no-files-found: error
+          path: ${{ runner.temp }}/jdk-api-symbols/

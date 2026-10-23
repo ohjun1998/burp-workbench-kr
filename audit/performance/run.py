@@ -34,6 +34,8 @@ def run_variant(source, dependencies, output, label, component, java):
         sources = sorted((base / "src/main/java").rglob("*.java"))
         # Compile adapter support from the same snapshot without running the regression suite.
         sources += sorted((base / "src/test/java").rglob("*.java"))
+        sources += [path for path in sorted((source / "feature-mapper/src/main/java/kr/featuremapper").rglob("*.java"))
+                    if path.name != "FeatureMapperExtension.java"]
         jars = sorted((dependencies / WB / "deps").glob("*.jar"))
         harness, main = "CapturePerformanceCheck.java", "kr.workbench.CapturePerformanceCheck"
     else:

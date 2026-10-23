@@ -25,6 +25,11 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     void toggleCapture();
     boolean acceptsUrl(String url);
     void failure(String stage, Exception error);
+    default boolean supportsAssessmentTasks() { return false; }
+    default boolean allowsAssessmentUrl(String url) { return acceptsUrl(url); }
+    default void assessmentDraft(String sourceId, String title, List<String> endpoints) {
+      throw new UnsupportedOperationException("점검 업무 연결을 지원하지 않는 호스트입니다.");
+    }
   }
 
   private EmbeddedHost embeddedHost;
@@ -38,6 +43,17 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   public JPanel component() { return root; }
 
   public void refreshCaptureState() { updateIndicators(); }
+
+  public boolean isAssessmentSourceCurrent(String sourceId) {
+    if (closed.get() || selectedFeature == null || mapper == null) return false;
+    return Objects.equals(sourceId, mapper.assessmentSourceId(selectedFeature));
+  }
+
+  public boolean isAssessmentSourceCurrent(String sourceId, List<String> endpoints) {
+    if (!isAssessmentSourceCurrent(sourceId)) return false;
+    try { return mapper.assessmentCandidate(selectedFeature).endpoints().equals(endpoints); }
+    catch (IllegalArgumentException expired) { return false; }
+  }
 
   @Override public void close() { unload(); }
   volatile Mapper mapper;
@@ -283,6 +299,12 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
     actions.add(button("기능 이름·상태·메모", this::editFeature));
     actions.add(button("선택 패킷 분류 수정", this::movePackets));
+    if (embeddedHost != null && embeddedHost.supportsAssessmentTasks()) {
+      JButton assessment = button("점검 업무로 연결", this::linkAssessment);
+      assessment.setName("fm.assessment.link");
+      assessment.setToolTipText("선택 기능의 API로 업무 초안을 만듭니다. 계정·범위 검토 후 연결하며 완료로 표시하지 않습니다.");
+      actions.add(assessment);
+    }
     left.add(actions, BorderLayout.SOUTH);
     table.setName("fm.history");
     table.setAutoCreateRowSorter(true);
@@ -781,6 +803,38 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
             failure("새 프로젝트", e);
           }
         });
+  }
+
+  private void linkAssessment() {
+    if (closed.get() || embeddedHost == null || !embeddedHost.supportsAssessmentTasks()) return;
+    String feature = selectedFeature;
+    if (feature == null) throw new IllegalArgumentException("왼쪽에서 연결할 기능을 선택하세요.");
+    Mapper owner = mapper;
+    status.setText("선택 기능의 API를 준비하고 있습니다.");
+    io.execute(() -> {
+      try {
+        Mapper.AssessmentCandidate candidate = owner.assessmentCandidate(feature);
+        if (candidate.endpoints().isEmpty()) throw new IllegalArgumentException("연결할 API가 없습니다.");
+        SwingUtilities.invokeLater(() -> {
+          if (closed.get() || owner != mapper || !Objects.equals(feature, selectedFeature)
+              || !isAssessmentSourceCurrent(candidate.sourceId(), candidate.endpoints())) {
+            status.setText("선택 기능이나 프로젝트가 변경됐습니다. 다시 연결하세요.");
+            return;
+          }
+          try {
+            for (String endpoint : candidate.endpoints())
+              if (!embeddedHost.allowsAssessmentUrl(endpoint.substring(endpoint.indexOf(' ') + 1)))
+                throw new IllegalArgumentException("현재 SCOPE 밖 API가 포함되어 있습니다. 범위를 확인한 뒤 다시 연결하세요.");
+            embeddedHost.assessmentDraft(candidate.sourceId(), candidate.title(), candidate.endpoints());
+            status.setText("업무 연결 검토 종료 · 점검 진행 현황에서 계정·API·근거를 확인하세요.");
+          } catch (Exception ex) { failure("점검 업무 연결", ex); }
+        });
+      } catch (Exception ex) {
+        SwingUtilities.invokeLater(() -> {
+          if (!closed.get() && owner == mapper) failure("점검 업무 준비", ex);
+        });
+      }
+    });
   }
 
   private void editFeature() {

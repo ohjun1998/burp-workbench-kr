@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -62,6 +63,7 @@ final class AssessmentPanel implements AutoCloseable {
   String editingTask = "", editingAccount = "", pendingMethod = "", pendingUrl = "";
   final JLabel targetPreview = new JLabel();
   final TargetWindow accountWindow, taskWindow, targetWindow, historyWindow;
+  TargetWindow mapperDraftWindow;
   final JButton accountEdit,
       accountBind,
       accountUnbind,
@@ -84,6 +86,7 @@ final class AssessmentPanel implements AutoCloseable {
   int shownFilter = -1;
   boolean updatingTables;
   Supplier<List<HttpRequestResponse>> selectedTraffic = List::of;
+  Predicate<AssessmentTracker.CompletionReview> completionReviewer = this::confirmCompletion;
   Supplier<Set<String>> authNames = () -> AuthComparePanel.DEFAULT_AUTH, cookieNames = Set::of;
 
   AssessmentPanel(ActivityPanel owner) {
@@ -444,8 +447,15 @@ final class AssessmentPanel implements AutoCloseable {
   void finish(boolean value) {
     var v = selected();
     if (v == null) throw new IllegalArgumentException("계정별 API를 선택하세요.");
-    tracker.complete(
-        v.account(), v.method(), v.url(), owner.tracker.parameterNames(v.method(), v.url()), value);
+    if (value) {
+      var review = tracker.completionReview(
+          v.account(), v.method(), v.url(), owner.tracker.parameterNames(v.method(), v.url()));
+      if (!completionReviewer.test(review)) return;
+      tracker.completeReviewed(review, owner.tracker.parameterNames(v.method(), v.url()));
+    } else {
+      tracker.complete(v.account(), v.method(), v.url(),
+          owner.tracker.parameterNames(v.method(), v.url()), false);
+    }
     refreshOperations();
   }
 
@@ -635,6 +645,63 @@ final class AssessmentPanel implements AutoCloseable {
     taskWindow.open();
   }
 
+  void upsertMapperDraft(String sourceId, String title, List<String> endpoints) {
+    upsertMapperDraft(sourceId, title, endpoints, () -> true);
+  }
+
+  void upsertMapperDraft(String sourceId, String title, List<String> endpoints,
+                        java.util.function.BooleanSupplier stillValid) {
+    if (!SwingUtilities.isEventDispatchThread()) throw new IllegalStateException("업무 연결은 화면 스레드에서 실행하세요.");
+    if (!stillValid.getAsBoolean()) throw new IllegalArgumentException("기능 매핑 원본이 변경되었습니다. 다시 연결하세요.");
+    var draft = tracker.mapperDraft(sourceId, title, endpoints);
+    for (String endpoint : draft.endpoints())
+      if (!owner.allowedUrl(endpoint.substring(endpoint.indexOf(' ') + 1))) throw new IllegalArgumentException("기능 API에 SCOPE 밖 대상이 있습니다.");
+    DefaultListModel<AssessmentTracker.Account> choices = new DefaultListModel<>();
+    for (var account : tracker.accounts()) choices.addElement(account);
+    if (choices.isEmpty()) throw new IllegalArgumentException("점검 진행 현황에서 대상 Origin의 계정을 먼저 등록하세요.");
+    JList<AssessmentTracker.Account> required = new JList<>(choices);
+    required.setName("wb.assessment.mapper.accounts"); required.setVisibleRowCount(5);
+    required.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    Set<String> selected = draft.taskId().isEmpty() ? Set.of() : tracker.taskAccounts(draft.taskId());
+    for (int i = 0; i < choices.size(); i++) if (selected.contains(choices.get(i).id())) required.addSelectionInterval(i, i);
+    JTextArea changes = new JTextArea(10, 64); changes.setEditable(false); changes.setLineWrap(true); changes.setWrapStyleWord(true);
+    changes.setText((draft.taskId().isEmpty() ? "새 업무 초안" : "기존 업무 업데이트") + " · " + draft.title()
+        + "\n\n추가 API " + draft.added().size() + "개\n" + String.join("\n", draft.added())
+        + "\n\n기능에서 빠진 API " + draft.removed().size() + "개\n" + String.join("\n", draft.removed())
+        + "\n\n요구 계정과 API를 확인한 뒤 연결합니다. 기능 분류는 실행 성공이나 점검 완료가 아닙니다.");
+    JCheckBox remove = new JCheckBox("기능에서 빠진 API 제외");
+    remove.setToolTipText("선택하면 기능에서 빠진 API를 이 업무에서도 제외합니다. 기본은 기존 대상 보존입니다.");
+    remove.setEnabled(!draft.removed().isEmpty());
+    JLabel feedback = new JLabel("요구 계정을 선택하고 추가·제외 범위를 확인하세요.");
+    feedback.setName("wb.assessment.mapper.feedback");
+    JPanel content = new WindowPanel();
+    JPanel accountPicker = new JPanel(new BorderLayout(4, 4));
+    accountPicker.add(new JLabel("요구 계정 · 여러 계정 선택"), BorderLayout.NORTH);
+    accountPicker.add(new JScrollPane(required));
+    content.add(WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(changes), accountPicker, .58));
+    TargetWindow window = new TargetWindow(owner, "기능 매핑 → 점검 업무 검토", () -> content);
+    JButton apply = new JButton("검토한 범위로 업무 연결"); apply.setName("wb.assessment.mapper.apply");
+    apply.addActionListener(e -> {
+      try {
+        if (!stillValid.getAsBoolean()) throw new IllegalArgumentException("검토 중 프로젝트·선택·SCOPE가 변경되었습니다. 연결 창을 다시 여세요.");
+        for (String endpoint : draft.endpoints()) if (!owner.allowedUrl(endpoint.substring(endpoint.indexOf(' ') + 1)))
+          throw new IllegalArgumentException("검토 중 대상 SCOPE가 변경되었습니다.");
+        Set<String> ids = new LinkedHashSet<>(); for (var account : required.getSelectedValuesList()) ids.add(account.id());
+        String id = tracker.applyMapperDraft(draft, ids, remove.isSelected());
+        refresh(); owner.refresh();
+        for (int i = 0; i < tasks.size(); i++) if (tasks.get(i).id().equals(id)) {
+          int row = taskTable.convertRowIndexToView(i); if (row >= 0) taskTable.setRowSelectionInterval(row, row);
+        }
+        owner.summary.setText("기능 매핑 업무 연결 완료 · 요구 계정/API와 증거 조건을 확인하세요.");
+        window.closeWindow();
+      } catch (Exception ex) { feedback.setText(Objects.toString(ex.getMessage(), "업무 연결 실패")); }
+    });
+    content.add(TargetWindow.options(remove, feedback, WorkbenchUi.row(apply)), BorderLayout.SOUTH);
+    WorkbenchUi.style(content);
+    if (mapperDraftWindow != null) mapperDraftWindow.close();
+    mapperDraftWindow = window; window.open();
+  }
+
   void saveTask() {
     Set<String> critical =
         AssessmentTracker.validateCritical(
@@ -713,8 +780,28 @@ final class AssessmentPanel implements AutoCloseable {
   void finishTask(boolean value) {
     var task = selectedTask();
     if (task == null) throw new IllegalArgumentException("업무를 선택하세요.");
-    tracker.completeTask(task.id(), value);
+    if (value) {
+      var review = tracker.taskCompletionReview(task.id());
+      if (!completionReviewer.test(review)) return;
+      tracker.completeTaskReviewed(review);
+    } else tracker.completeTask(task.id(), false);
     refresh();
+  }
+
+  private boolean confirmCompletion(AssessmentTracker.CompletionReview review) {
+    // A headless host cannot supply a manual confirmation. Tests inject a reviewer explicitly.
+    if (GraphicsEnvironment.isHeadless()) return false;
+    JTextArea text = new JTextArea(review.summary(), 13, 65);
+    text.setName("wb.assessment.completion.review");
+    text.setEditable(false);
+    text.setLineWrap(true);
+    text.setWrapStyleWord(true);
+    text.setCaretPosition(0);
+    JScrollPane content = new JScrollPane(text);
+    WorkbenchUi.style(content);
+    return JOptionPane.showOptionDialog(owner, content, "완료 전 결과·근거 검토",
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+        new String[]{"검토 후 완료", "취소"}, "취소") == 0;
   }
 
   void showEvidenceFiles() {
@@ -789,8 +876,40 @@ final class AssessmentPanel implements AutoCloseable {
           });
     JTable table = new JTable(model);
     table.setAutoCreateRowSorter(true);
-    return TargetWindow.options(
-        new JLabel("최근 최대 5,000개 메타데이터 · 인증값/요청 본문 없음"), new JScrollPane(table));
+    JTabbedPane tabs = new JTabbedPane();
+    JPanel history = new JPanel(new BorderLayout(4, 4));
+    history.add(new JLabel("최근 최대 5,000개 메타데이터 · 인증값/요청 본문 없음"), BorderLayout.NORTH);
+    history.add(new JScrollPane(table));
+    tabs.addTab("작업 이력", history);
+    var runs = tracker.executionHistory();
+    var executions = EnvironmentPanel.model("시작", "메서드", "URL", "상태", "연결 계정", "증거 ZIP", "실행 ID");
+    for (var run : runs) executions.addRow(new Object[]{run.started(), run.method(), run.url(),
+        ExecutionLedger.label(run.state()), run.bindings().size(), run.evidence().size(), run.id()});
+    JTable runTable = new JTable(executions); runTable.setName("wb.assessment.executions"); runTable.setAutoCreateRowSorter(true);
+    JTextArea details = new JTextArea(9, 60); details.setName("wb.assessment.execution.details"); details.setEditable(false); details.setLineWrap(true); details.setWrapStyleWord(true);
+    details.setText("실행을 선택하면 업무 → 원본 ID → 실행 ID → 조건 revision → 증거 ZIP 연결을 확인합니다. 실행 종료는 보안 판정의 성공을 뜻하지 않습니다.");
+    runTable.getSelectionModel().addListSelectionListener(e -> {
+      if (e.getValueIsAdjusting() || runTable.getSelectedRow() < 0) return;
+      details.setText(tracker.executionSummary(runs.get(runTable.convertRowIndexToModel(runTable.getSelectedRow())).id()));
+    });
+    tabs.addTab("실행·증거 연결", WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,
+        new JScrollPane(runTable), new JScrollPane(details), .58));
+    JPanel content = new WindowPanel();
+    content.add(WorkbenchUi.row(button("목록 새로고침", this::openHistory),
+        new JLabel("현재 저장된 실행 연결 · 실행 종료와 점검 완료는 별도")), BorderLayout.NORTH);
+    content.add(tabs);
+    WorkbenchUi.style(content);
+    return content;
+  }
+
+  /** Inner controls scroll within the actual settings viewport, including minimum-size dialogs. */
+  private static final class WindowPanel extends JPanel implements Scrollable {
+    WindowPanel() { super(new BorderLayout(6, 6)); }
+    public Dimension getPreferredScrollableViewportSize() { return new Dimension(700, 380); }
+    public int getScrollableUnitIncrement(Rectangle r, int orientation, int direction) { return 20; }
+    public int getScrollableBlockIncrement(Rectangle r, int orientation, int direction) { return 100; }
+    public boolean getScrollableTracksViewportWidth() { return true; }
+    public boolean getScrollableTracksViewportHeight() { return true; }
   }
 
   void openHistory() {
@@ -799,6 +918,7 @@ final class AssessmentPanel implements AutoCloseable {
   }
 
   public void close() {
+    if (mapperDraftWindow != null) mapperDraftWindow.close();
     for (var w : List.of(accountWindow, taskWindow, targetWindow, historyWindow)) w.close();
     operationRows.clear();
     inputRows.clear();

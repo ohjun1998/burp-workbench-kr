@@ -4,6 +4,7 @@ import java.util.*;
 final class JsSyntax {
  record Token(String text,int start,int end,boolean quoted){}
  record Compatible(String text,boolean changed){}
+ static final JsStaticContentCache CONTENT_CACHE=new JsStaticContentCache(JsStaticContentCache.DEFAULT_BUDGET);
  static List<Token> tokens(String source){
   List<Token> out=new ArrayList<>();Cursor cursor=new Cursor(source);Token token;
   while(out.size()<100000&&(token=cursor.next())!=null)out.add(token);
@@ -37,7 +38,8 @@ final class JsSyntax {
    return null;
   }
  }
- static Compatible compatible(String source){char[] chars=source.toCharArray();boolean changed=false;List<Token> ts=tokens(source);
+ static Compatible compatible(String source){return CONTENT_CACHE.get(source,JsStaticContentCache.PARSER_CONFIG,()->normalize(source));}
+ private static Compatible normalize(String source){char[] chars=source.toCharArray();boolean changed=false;List<Token> ts=tokens(source);
   for(int i=0;i<ts.size();i++){Token t=ts.get(i);if(t.quoted)continue;String prev=i==0?"":ts.get(i-1).text,next=i+1==ts.size()?"":ts.get(i+1).text;if(prev.equals(".")||next.equals(":"))continue;
    boolean mask=t.text.equals("await")&&!Set.of("var","let","const","function").contains(prev)
     ||t.text.equals("async")&&(next.equals("function")||next.equals("(")||i+2<ts.size()&&ts.get(i+2).text.equals("=>"))

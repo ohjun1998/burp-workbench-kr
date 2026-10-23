@@ -50,7 +50,7 @@ public final class GuidePreview extends WorkbenchTest {
         var graphics=image.createGraphics();root.paint(graphics);graphics.dispose();ImageIO.write(image,"png",path.toFile());
     }
     static void render(Container root,Path path)throws Exception{render(root,path,WIDTH,HEIGHT);}
-    static void show(JTabbedPane tabs,java.awt.Component target,JPanel root,Path out,String name)throws Exception{tabs.setSelectedComponent(target);render(root,out.resolve(name+".png"));}
+    static void show(WorkbenchExtension extension,String feature,JPanel root,Path out,String name)throws Exception{extension.openFeature(feature);render(root,out.resolve(name+".png"));}
 
     public static void main(String[] args)throws Exception{
         Path out=Path.of(args[0]);Files.createDirectories(out);
@@ -102,21 +102,22 @@ public final class GuidePreview extends WorkbenchTest {
         edt(()->{
             try{
                 activity.refresh();root.addNotify();
-                tabs.setSelectedIndex(0);render(root,out.resolve("traffic.png"));
-                show(tabs,(java.awt.Component)get(ext,"authCompare"),root,out,"auth");
+                ext.openFeature("traffic");render(root,out.resolve("traffic.png"));
+                show(ext,"mapper",root,out,"mapper");
+                show(ext,"auth",root,out,"auth");
                 JTextArea raw=(JTextArea)get(payload,"request");raw.setText("GET /api/community/vuln/search?q=§PAYLOAD§ HTTP/1.1\r\nHost: 127.0.0.1:8088\r\nAccept: application/json\r\n\r\n");raw.setCaretPosition(0);
-                show(tabs,(java.awt.Component)get(payload,"panel"),root,out,"payload");
-                show(tabs,js,root,out,"js");
-                show(tabs,(java.awt.Component)get(ext,"environments"),root,out,"environment");
+                show(ext,"payload",root,out,"payload");
+                show(ext,"js",root,out,"js");
+                show(ext,"environment",root,out,"environment");
                 PassiveScanWorkspace urls=(PassiveScanWorkspace)get(ext,"passiveScan");urls.open(origin,false);
-                show(tabs,urls,root,out,"urls");
-                show(tabs,activity,root,out,"activity");
+                show(ext,"passive",root,out,"urls");
+                show(ext,"activity",root,out,"activity");
                 activity.coveragePages.setSelectedComponent(activity.assessmentPanel.accountsPage);render(root,out.resolve("accounts.png"));
                 activity.coveragePages.setSelectedComponent(activity.assessmentPanel.tasksPage);activity.assessmentPanel.taskTable.setRowSelectionInterval(0,0);render(root,out.resolve("tasks.png"));
                 var panel=activity.assessmentPanel;panel.taskTitle.setText("비공개 글 읽기");panel.taskNote.setText("Bob 정상 읽기 · Alice 차단 · 현재 파일 증거");
                 for(var account:tracker.accounts())panel.requiredModel.addElement(account);panel.requiredAccounts.setSelectionInterval(0,1);panel.strictInputs.setSelected(true);panel.allEvidence.setSelected(true);panel.criticalInputs.setText("URL:id, BODY:ownerId");
                 render((Container)panel.taskWindow.content.get(),out.resolve("task-settings.png"),1024,580);
-                tabs.setSelectedComponent(recon);
+                ext.openFeature("response.recon");
                 for(var component:recon.getComponents())if(component instanceof JTabbedPane reconTabs){
                     reconTabs.setSelectedIndex(0);render(root,out.resolve("response-findings.png"));
                     reconTabs.setSelectedIndex(1);render(root,out.resolve("response-api.png"));
@@ -124,9 +125,9 @@ public final class GuidePreview extends WorkbenchTest {
                 }
                 if(recon.flowTable.getRowCount()>0)recon.flowTable.setRowSelectionInterval(0,0);
                 render(root,out.resolve("stored-flow.png"));
-                tabs.setSelectedIndex(2);var dataTabs=(JTabbedPane)get(ext,"dataTabs");dataTabs.setSelectedIndex(2);
+                ext.openFeature("data");var dataTabs=(JTabbedPane)get(ext,"dataTabs");dataTabs.setSelectedIndex(2);
                 var comparison=(StructuredComparePanel)dataTabs.getSelectedComponent();comparison.leftInput.setText("{\"ID\":102,\"OWNER_ID\":2,\"VISIBILITY\":\"private\"}");comparison.rightInput.setText("{\"error\":\"not found\"}");comparison.compare();render(root,out.resolve("data-compare.png"));
-                var bounty=(BountySupportPanel)get(ext,"bountySupport");tabs.setSelectedComponent(bounty);
+                var bounty=(BountySupportPanel)get(ext,"bountySupport");ext.openFeature("bounty");
                 bounty.flowOrigin.setText(origin);bounty.workflow.setText(bob.toString()+"\n===STEP===\n"+alice.toString());bounty.workflow.setCaretPosition(0);
                 bounty.pages.setSelectedIndex(1);render(root,out.resolve("bounty-1.png"));
                 bounty.captureObserved(List.of(pair(bob,owned),pair(alice,reply(404,"application/json","{\"error\":\"not found\"}"))),"가상 예시: Bob 정상 읽기 / Alice 수정 경로 차단");

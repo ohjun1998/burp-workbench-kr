@@ -5,7 +5,7 @@ import java.util.List;
 /** Stable feature IDs keep names, navigation and the beginner guide in agreement. */
 public final class FeatureGuide {
   public static final String EXTENSION_NAME = BuildInfo.DISPLAY_NAME;
-  public static final String SUITE_TAB = "Workbench KR · 웹 보안 점검";
+  public static final String SUITE_TAB = "Workbench Next";
 
   public record Feature(String id, String title, String summary, String steps, String traffic) {
     @Override
@@ -20,7 +20,7 @@ public final class FeatureGuide {
               "start",
               "처음 시작하기",
               "사이트의 정상 요청을 모으고, 필요한 검사만 직접 실행합니다.",
-              "1. Burp 브라우저로 사이트를 사용하고 ‘요청·응답 목록’에서 요청을 선택합니다. 기존 History는 Burp 우클릭 메뉴에서 가져옵니다.\n"
+              "1. Workbench Next는 8개 기본 메뉴로 시작합니다. ‘요청·응답 목록’ 안에 변환·비교, ‘서버·경로 탐색’ 안에 URL 후보 수집, ‘기능 자동 매핑’ 안에 점검 진행 현황이 있습니다. Burp 브라우저로 사이트를 사용하고 ‘요청·응답 목록’에서 요청을 선택합니다. 기존 History는 Burp 우클릭의 Workbench Next 메뉴에서 가져옵니다.\n"
                   + "2. Burp HTTP history의 Add to scope 또는 Workbench SCOPE 목록의 URL 추가로 등록하고 체크 상태를"
                   + " 확인합니다.\n"
                   + "3. 이 안내에서 필요한 기능을 고르고 ‘이 기능 열기’를 누릅니다. 검사 후 실제 요청·응답을 비교하고 증거를 저장합니다.",
@@ -33,7 +33,7 @@ public final class FeatureGuide {
               "traffic",
               "요청·응답 목록",
               "사이트에서 발생한 요청을 고르고 다른 점검 도구로 연결합니다.",
-              "1. Burp 브라우저로 사이트를 사용합니다. 기존 History는 Burp에서 요청 우클릭 → Workbench KR → 요청·응답 목록에 가져오기를"
+              "1. Burp 브라우저로 사이트를 사용합니다. 기존 History는 Burp에서 요청 우클릭 → Workbench Next → 요청·응답 목록에 가져오기를"
                   + " 선택합니다.\n"
                   + "2. SCOPE 목록에서 URL을 추가하거나 Burp HTTP history → Add to scope로 등록합니다. 수집할 범위를 체크하고 OFF를 SCOPE로 바꿉니다."
                   + " 수동 URL은 행 선택 → 아래 URL 변경 → URL 수정으로 편집합니다. OFF에서는 수동 가져오기도 수집하지 않습니다.\n"
@@ -55,7 +55,7 @@ public final class FeatureGuide {
               "data",
               "데이터 변환·비교",
               "인코딩을 풀거나 JWT 내용을 읽고 두 응답의 차이를 비교합니다.",
-              "1. 인코딩·변환에서 입력과 변환 방식을 고르거나 JWT 내용 확인에서 토큰을 확인합니다.\n"
+              "1. ‘요청·응답 목록 → 변환·비교’를 엽니다. 인코딩·변환에서 입력과 변환 방식을 고르거나 JWT 내용 확인에서 토큰을 확인합니다.\n"
                   + "2. 응답·데이터 비교에서 기준·대조 요청을 각각 선택해 왼쪽과 오른쪽으로 가져옵니다.\n"
                   + "3. 비교 실행 후 차이를 읽고, 원본이 연결되어 있으면 ‘원본 → 증거’로 전달합니다.",
               "로컬 계산만 합니다. JWT 내용 확인은 서명 검증이 아니며, 응답 차이는 취약점 확정이 아닙니다. 입력을 편집하면 해당 원본 증거 연결이"
@@ -74,7 +74,7 @@ public final class FeatureGuide {
               "서버·경로 탐색",
               "응답에서 서버 환경을 추정하고 관련 경로 후보를 확인합니다.",
               "1. SCOPE 내 응답을 수집하고 대상 설정에서 관측된 사이트를 고릅니다. 후보 설정에서 경로 범위·검증 계정을 확인합니다.\n"
-                  + "2. 관찰한 환경과 추천 경로에서 필요한 후보를 고릅니다.\n"
+                  + "2. ‘서버·경로 확인’ 탭에서 관찰한 환경과 추천 경로를 고릅니다. ‘URL 후보 수집’ 탭은 History·JS·API 문서 등의 후보를 모으는 화면이며, GET 확인은 직접 실행합니다.\n"
                   + "3. ‘선택 경로 GET 확인’ 또는 ‘후보 목록 GET 확인’으로 공통 화면·로그인·API 명세·설정 형식을 구분합니다. 판정 근거에서 이유와 다음 확인을 봅니다.\n"
                   + "4. 후보 설정에서 요청 간격·타임아웃·전체 요청 한도·후속 깊이를 정합니다. 일시정지/재개와 더보기의 남은 경로 이어서 확인을 사용할 수 있습니다.\n"
                   + "5. 더보기에서 결과를 저장·불러오고 변경 기록을 확인합니다. 저장에는 판정·후보·남은 경로만 포함하며 인증값과 본문은 포함하지 않습니다.",
@@ -84,7 +84,7 @@ public final class FeatureGuide {
               "passive",
               "URL 후보 수집",
               "기존 트래픽·JS·API 문서·공개 아카이브에서 경로를 모읍니다.",
-              "1. 대상 설정에서 사이트를 열고 수집 출처를 고릅니다. 로컬 기록만 보려면 ‘Burp History / JS’를 선택합니다.\n"
+              "1. ‘서버·경로 탐색 → URL 후보 수집’을 엽니다. 대상 설정에서 사이트를 열고 수집 출처를 고릅니다. 로컬 기록만 보려면 ‘Burp History / JS’를 선택합니다.\n"
                   + "2. URL 수집을 시작한 뒤 출처·메서드·분류로 후보를 좁힙니다.\n"
                   + "3. 필요한 URL에 ‘선택 URL GET 확인’ 또는 ‘표시 URL GET 확인’을 실행하고 실제 응답을 검토합니다.",
               "수집은 대상 URL에 GET을 보내지 않지만 자동·Wayback·gau 모드는 외부 서비스에 도메인을 조회할 수 있습니다. GET 확인은 별도 서버"
@@ -93,7 +93,7 @@ public final class FeatureGuide {
               "activity",
               "점검 진행 현황",
               "발견한 URL·입력·계정·업무에서 아직 확인하지 않은 항목을 찾습니다.",
-              "1. URL 점검 현황에서 관측한 요청과 JS 발견 후보를 구분합니다.\n"
+              "1. ‘기능 자동 매핑 → 점검 진행 현황’을 엽니다. URL 점검 현황에서 관측한 요청과 JS 발견 후보를 구분합니다.\n"
                   + "2. 계정별 점검에서 실제 로그인 계정을 연결하고 업무별 현황에서 필요한 계정·API를 정합니다.\n"
                   + "3. 검증과 증거 저장 후 입력·URL·업무를 직접 완료 처리합니다. 재검토 이유가 생기면 다시 확인합니다.",
               "현황 수집·완료 표시·파일 확인은 대상 요청을 보내지 않습니다. Repeater 초안도 준비만 합니다. 요청 관측이나 검사 실행이 자동 점검 완료를"
@@ -131,7 +131,7 @@ public final class FeatureGuide {
               "사이트 요청·응답을 로그인·게시글 작성 같은 기능과 실행 사례별로 묶습니다.",
               "1. 요청·응답 목록에서 Burp Scope를 지정하고 공통 수집을 SCOPE로 바꾼 뒤 사이트를 사용합니다.\n"
                   + "2. 왼쪽 기능을 고르고 실행·세션·검색으로 패킷을 좁힙니다. 매핑 근거에서 분류 이유를 확인합니다.\n"
-                  + "3. 기능 이름·상태·메모를 기록하고 프로젝트 저장/열기로 기존 .fmkr 원본을 이어서 사용합니다.\n"
+                  + "3. 기능 이름·상태·메모를 기록하고 프로젝트 저장/열기로 기존 .fmkr 원본을 이어서 사용합니다. 점검 진행 현황 탭에서 계정·URL·업무 완료를 따로 관리합니다. 자동 분류와 점검 완료는 별개입니다.\n"
                   + "4. 매핑 설정의 브라우저 연결에서 주소·토큰을 확인해 Chrome/Edge 보조 확장에 연결합니다.",
               "별도 Mapper JAR 없이 Workbench에 포함됩니다. OFF/SCOPE는 요청·응답 목록과 함께 바뀌며 OFF와 범위 밖의 새 패킷·브라우저 이벤트는 수집하지 않습니다. "
                   + "기능 분류는 추정이며 실제 사용자나 취약점 확정이 아닙니다. 프로젝트에는 원본 쿠키·토큰·본문이 포함됩니다. "
@@ -162,9 +162,21 @@ public final class FeatureGuide {
     return feature(id).title();
   }
 
+  public static String location(String id) {
+    return switch (id) {
+      case "data" -> "요청·응답 목록 → 변환·비교";
+      case "passive" -> "서버·경로 탐색 → URL 후보 수집";
+      case "activity" -> "기능 자동 매핑 → 점검 진행 현황";
+      case "settings" -> "상단 설정 버튼";
+      case "start" -> "상단 기능 안내 · F1";
+      default -> feature(id).title();
+    };
+  }
+
   public static String helpText(String id) {
     Feature f = feature(id);
     return f.title()
+        + "\n위치: " + location(id)
         + "\n\n어떤 기능인가요?\n"
         + f.summary()
         + "\n\n시작 순서\n"

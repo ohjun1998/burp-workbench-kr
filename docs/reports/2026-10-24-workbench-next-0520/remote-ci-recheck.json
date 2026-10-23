@@ -1,0 +1,42 @@
+{
+  "version": "0.52.0",
+  "dateAsiaSeoul": "2026-10-24T03:08:11.340344+09:00",
+  "testedCommit": "158bee07f6cfa4e900551d8e6c0e6162501c0589",
+  "publishedJarSha256": "72b97318aca25fd48986f4165b1cea28210cb5f5e7f9ff7e8e0e08b17e079995",
+  "packageFingerprintVerification": "passed",
+  "previousVersionsAndMainPreserved": true,
+  "checks": [
+    {
+      "name": "Build and verify",
+      "runId": 39993644029,
+      "conclusion": "success"
+    },
+    {
+      "name": "isolated-disk-and-soak",
+      "runId": 39993644021,
+      "conclusion": "success"
+    },
+    {
+      "name": "Windows Java regressions",
+      "runId": 39993644021,
+      "conclusion": "failure",
+      "attempts": 2,
+      "firstFailure": "expanding a cached group changes projection without re-evaluating originals",
+      "retryFailure": "star changes invalidate the prior membership result",
+      "causeConfirmed": false
+    },
+    {
+      "name": "Feature Mapper real browser bridge",
+      "runId": 39993643920,
+      "conclusion": "failure",
+      "attempts": 2,
+      "failure": "body hashes not verified",
+      "causeConfirmed": false
+    }
+  ],
+  "limitations": [
+    "Linux/API-adapter checks and Swing layouts do not establish Windows or real-browser compatibility.",
+    "No source or published JAR/ZIP was changed in this verification follow-up.",
+    "No main merge was performed."
+  ]
+}

@@ -20,6 +20,9 @@ final class JsSourceCache {
 
   record Change(boolean accepted, List<String> evicted) {}
 
+  record Metrics(long estimatedBytes, long budgetBytes, int entries, int results,
+      long evictions, long rejected) {}
+
   private final long budget;
   private final LinkedHashMap<String, Entry> entries = new LinkedHashMap<>(16, .75f, true);
   private long bytes;
@@ -160,6 +163,23 @@ final class JsSourceCache {
 
   synchronized long rejected() {
     return rejected;
+  }
+
+  synchronized Metrics metrics() {
+    return new Metrics(bytes, budget, entries.size(), resultCount(), evictions, rejected);
+  }
+
+  String diagnostics() {
+    Metrics value = metrics();
+    return "캐시 추정 " + RuntimeMetrics.memory(value.estimatedBytes()) + " / "
+        + RuntimeMetrics.memory(value.budgetBytes()) + " · 항목 " + value.entries()
+        + " · 결과 " + value.results() + " · 퇴출 " + value.evictions()
+        + " · 보관 거부 " + value.rejected()
+        + " (UTF-16·레코드 추정, 편집기·실행 중 분석기 제외)";
+  }
+
+  synchronized void remove(String key) {
+    Entry old=entries.remove(key);if(old!=null)bytes-=weight(key,old);if(key.equals(selected))selected="";
   }
 
   synchronized void clear() {

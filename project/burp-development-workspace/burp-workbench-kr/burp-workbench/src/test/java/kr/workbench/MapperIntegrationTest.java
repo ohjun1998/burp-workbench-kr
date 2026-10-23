@@ -85,7 +85,7 @@ public final class MapperIntegrationTest extends WorkbenchTest {
       JPanel root = (JPanel) get(f.ext, "root");
       JTabbedPane pages = (JTabbedPane) get(f.ext, "tabs");
       JButton mapperCapture = (JButton) UiLayoutTest.named(root, "fm.capture");
-      check(pages.getComponentAt(pages.indexOfTab("기능 자동 매핑")) == workspace.component(),
+      check(SwingUtilities.isDescendingFrom(workspace.component(), pages.getComponentAt(pages.indexOfTab("기능 자동 매핑"))),
           "Workbench navigation hosts the actual Mapper workspace");
       check(PayloadIntegrationTest.suiteTabs.get() == 1, "embedding registers one Burp suite tab");
       check(PayloadIntegrationTest.names.stream().noneMatch(name -> name.startsWith("Feature Mapper")),

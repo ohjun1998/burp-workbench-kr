@@ -1,0 +1,182 @@
+{
+  "version": "0.50.0",
+  "product": "Workbench Next",
+  "dateAsiaSeoul": "2026-10-24",
+  "baseMainCommit": "e835940c9c08f38dde2938781b93eaf56a08fb42",
+  "branch": "account-a/workbench-next-0500",
+  "release": {
+    "version": "0.50.0",
+    "groups": {
+      "BuildInfoTest": 3,
+      "NextIsolationTest": 10,
+      "TrafficCancellationTest": 9,
+      "RuntimeMetricsTest": 19,
+      "WorkContextTest": 22,
+      "AuthSetupSuggestionsTest": 26,
+      "AnalysisRetryTest": 33,
+      "CompletionEvidenceNextTest": 22,
+      "PassiveProvenanceTest": 27,
+      "CaptureProvenanceTest": 13,
+      "JsBatchContextTest": 58,
+      "EvidenceHardeningTest": 50,
+      "ResponseHardeningTest": 90,
+      "ResponseAnalysisLimitsTest": 9,
+      "LargeResponseJsonTest": 17,
+      "AssessmentHardeningTest": 45,
+      "MapperIntegrationTest": 36,
+      "BankUpgradeTest": 54,
+      "OssLogicUpgradeTest": 52,
+      "JsUpgradeTest": 36,
+      "TrafficSearchUpgradeTest": 23,
+      "JsCompactUpgradeTest": 23,
+      "JsArchiveWorkflowTest": 8,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 52,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "EnvironmentUpgradeTest": 72,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 29,
+      "PacketInspectorTest": 42,
+      "RenderAuthUiTest": 28,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsDraftMappingTest": 19,
+      "JsDetailsWorkflowTest": 26,
+      "PacketStyleTest": 30,
+      "TextAnalysisTest": 23,
+      "JsResponseWorkflowTest": 51,
+      "JsRepeaterWorkflowTest": 95,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 56,
+      "AuthRecordTest": 37,
+      "AuthWorkspaceTest": 21,
+      "AuthLayoutFitTest": 106,
+      "AuthRunSummaryTest": 23,
+      "AuthResponseWorkflowTest": 47,
+      "AuthAccuracyWorkflowTest": 44,
+      "AuthResponseRefinementTest": 39,
+      "CookieSessionProbeTest": 50,
+      "UiCleanupTest": 36,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 43,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 46,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 21,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 102,
+      "FolderNavigationTest": 44,
+      "DiagnosticsWorkflowTest": 26,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 87,
+    "regressionChecks": 2986,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 3490,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "commands": [
+    {
+      "command": "python dev.py doctor",
+      "result": "passed"
+    },
+    {
+      "command": "python dev.py release --port 18159 --bounty-port 18459",
+      "result": "passed"
+    },
+    {
+      "command": "python -m unittest discover -s tools -p 'test_*.py' -v",
+      "result": "passed",
+      "tests": 7
+    },
+    {
+      "command": "python tools/render_ui_layout.py --check --out tmp/ui-layout-final",
+      "result": "passed"
+    },
+    {
+      "command": "python tools/package_downloads.py --verify",
+      "result": "passed"
+    }
+  ],
+  "ui": {
+    "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "sizes": [
+      "1024x720",
+      "1280x800",
+      "1440x920"
+    ],
+    "renderedViews": 222,
+    "controlsMeasured": 3204,
+    "clippedControlsOutsideScrollers": 0,
+    "smallControls": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "tabAndHeadingLabelsMeasured": 3324,
+    "clippedSelectedTabOrHeadingLabels": 0
+  },
+  "artifacts": {
+    "burp-workbench-kr-0.50.0.jar": {
+      "sha256": "1204cb4faaa926be0c76dbcf6e0e6c96cbed0e809ad8b541e36eec9d04827888",
+      "bytes": 3874989
+    },
+    "burp-workbench-kr-0.50.0-source.zip": {
+      "sha256": "e08c38fec73e8f985b524067df10141cb9b520ca551d38c7f179ceed3ccd34ef",
+      "bytes": 4365875
+    }
+  },
+  "preservation": {
+    "stableVersion": "0.49.1",
+    "stableJarSha256": "9a083651c78679eee406a7532d3d884f6714ec6b40fab2f581ac6862918eb5fe",
+    "unchangedPaths": [
+      "release/",
+      "history/",
+      "downloads/extensions/0.49.1/",
+      "PROJECT_STATUS_KR.md"
+    ],
+    "mainNotMerged": true
+  },
+  "evidence": [
+    "reports/2026-10-24-workbench-next/release-check-summary.json",
+    "reports/2026-10-24-workbench-next/ui-layout-report.json"
+  ],
+  "limitations": [
+    "HTTP checks use isolated loopback fixtures and test API adapters, not native Burp.",
+    "UI renders real production Swing components with synthetic metadata in a headless JVM. Native Burp and simultaneous stable/Next loading were not tested.",
+    "Minimum dialog sizes use scroll panes where needed; the layout gate does not assert all content is visible at once.",
+    "Docker, real browser DOM, live Collaborator, external BApp integration and long-duration native load tests were not run.",
+    "Metrics are instrumentation, not a measured throughput improvement or memory reduction claim.",
+    "The source archive follows the repository packaging script; branch documentation and screenshots are distributed separately."
+  ]
+}

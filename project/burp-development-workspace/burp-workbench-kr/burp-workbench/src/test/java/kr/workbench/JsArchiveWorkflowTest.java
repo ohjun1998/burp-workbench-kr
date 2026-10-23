@@ -32,7 +32,7 @@ public final class JsArchiveWorkflowTest extends WorkbenchTest {
       SwingUtilities.invokeAndWait(()->panel.offer(request("https://cdn.test/large.js","GET",true,List.of(header("Referer",page))),JsResponseWorkflowTest.response("application/javascript",large)));JsAnalysisPanelTest.waitDone(panel);
       check(panel.archive.snapshot().values().stream().anyMatch(s->s.key().contains("large.js")&&s.apis()==1),"response above the former 2 MiB exclusion is analyzed and archived");
       Path archivePath=panel.archive.directory;SwingUtilities.invokeAndWait(panel::close);
-      check(Files.list(archivePath).anyMatch(p->p.toString().endsWith(".data")),"unloading the extension preserves project analysis history");
+      check(Files.walk(archivePath).anyMatch(p->p.toString().endsWith(".data")),"unloading the extension preserves project analysis history");
       SwingUtilities.invokeAndWait(()->holder.set(new JsAnalysisPanel(api,()->{})));var reopened=holder.get();
       SwingUtilities.invokeAndWait(reopened::startHistory);JsAnalysisPanelTest.waitDone(reopened);
       check(reopened.sources.getItemCount()==3,"a new panel restores all project analyses without Proxy history availability");

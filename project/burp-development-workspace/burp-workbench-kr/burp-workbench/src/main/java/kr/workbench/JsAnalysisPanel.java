@@ -24,6 +24,19 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       secrets = model("시크릿 후보", "값 (가림)", "지문", "줄", "근거");
   final DefaultTableModel historyModel = model("출처 URL", "주요 경로", "민감한 정보", "분석 상태");
   final JTable historyTable = new JTable(historyModel);
+  final JTextField historySearch = new JTextField(12);
+  final JButton historyPrevious = new JButton("이전 200개"), historyNext = new JButton("다음 200개");
+  final JLabel historyPageLabel = new JLabel("200개씩 표시"), archiveUsage = new JLabel("디스크 이력 · 자동 삭제 없음");
+  private volatile int historyOffset;
+  private volatile String historyQuery = "";
+  private volatile JsArchive.Page archivePage = new JsArchive.Page(List.of(),0,0,false);
+  private volatile JsArchive.Counts archiveCounts = new JsArchive.Counts(0,0,0,0);
+  private volatile long displayedArchiveRevision = -1;
+  private final AtomicLong historyQueryGeneration = new AtomicLong();
+  private final AtomicBoolean archiveRefreshPending = new AtomicBoolean();
+  private int sourceWindowStart;
+  private String sourceWindowKey = "";
+  final TargetWindow archiveSettings = new TargetWindow(this,"JS 이력 보존·디스크",this::archiveSettingsContent);
   final JTable urlTable = new JTable(endpoints){
     public String getToolTipText(MouseEvent event){int view=rowAtPoint(event.getPoint());if(current==null||view<0)return super.getToolTipText(event);var item=current.endpoints().get(convertRowIndexToModel(view));return "<html>"+item.url().replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")+"<br>"+JsFindingGroups.evidence(current,item).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")+"</html>";}
     @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer,int row,int column){
@@ -71,6 +84,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final JsArchive archive;
   private final Map<String,String> documents=new ConcurrentHashMap<>();
   private final JsWorkQueue jobs;
+  final AnalysisRetries retries = new AnalysisRetries();
+  final TargetWindow retryWindow = new TargetWindow(this, "분석 처리·재시도", () -> retries.content(this::retryOriginal));
   final AtomicLong truncated = new AtomicLong();
   final AtomicLong processed = new AtomicLong(),
       duplicates = new AtomicLong(),
@@ -155,13 +170,14 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       passive.setText(enabled ? "분석 ON" : "분석 OFF");
       if (!enabled) {
         epoch.incrementAndGet();
-        jobs.cancelQueued();
+        jobs.cancelQueued();archiveRefreshPending.set(false);
+        retries.cancelPending();
       } else if (historyMonitor != null) historyMonitor.rescan();
       WorkbenchUi.style(passive);
       refreshProgress();
     });
     analysisList.setName("wb.js.analysis.list");
-    analysisList.addActionListener(e -> analysisWindow.open());
+    analysisList.addActionListener(e -> {requestArchivePage();analysisWindow.open();});
     analysisDetails.setName("wb.js.analysis.details");
     detailsWindow.opener=JsAnalysisDetails::window;
     analysisDetails.addActionListener(e->{detailsWindow.closeWindow();detailsWindow.open();});
@@ -175,6 +191,11 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     urlTable.setName("wb.js.url.table");
     secretTable.setName("wb.js.secret.table");
     historyTable.setName("wb.js.history.table");
+    historySearch.setName("wb.js.history.search");historyPrevious.setName("wb.js.history.previous");historyNext.setName("wb.js.history.next");
+    historySearch.setToolTipText("출처 URL·분석 상태 검색 · 원문/인증값은 검색하지 않습니다.");
+    historySearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){change();}public void removeUpdate(javax.swing.event.DocumentEvent e){change();}public void changedUpdate(javax.swing.event.DocumentEvent e){change();}private void change(){historyQuery=historySearch.getText();historyOffset=0;historyQueryGeneration.incrementAndGet();requestArchivePage();if(archive==null)syncSources();}});
+    historyPrevious.addActionListener(e->{historyOffset=Math.max(0,historyOffset-JsArchive.PAGE_SIZE);historyQueryGeneration.incrementAndGet();requestArchivePage();});
+    historyNext.addActionListener(e->{if(archivePage.more()){historyOffset+=JsArchive.PAGE_SIZE;historyQueryGeneration.incrementAndGet();requestArchivePage();}});
     urlTable.setAutoCreateRowSorter(true);
     urlTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     int[] widths = {380, 85, 170, 170, 140, 150, 55, 150, 90};
@@ -251,6 +272,10 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     matchTraffic.addActionListener(e->resultView.openTraffic());compareVersions.addActionListener(e->openVersionComparison());
     moreMenu.add(matchTraffic);moreMenu.add(compareVersions);moreMenu.addSeparator();
     more.putClientProperty("wb.js.more.menu",moreMenu);
+    JMenuItem retryItem = new JMenuItem("분석 처리·재시도");
+    retryItem.setName("wb.js.retry.open");
+    retryItem.addActionListener(e -> retryWindow.open());
+    moreMenu.add(retryItem);
     menu(moreMenu, "History 다시 분석", rescan);
     menu(moreMenu, "URL 목록 복사", copy);
     menu(moreMenu, "가림 결과 복사", report);
@@ -303,18 +328,11 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             render(r);
           }
         });
-    copy.addActionListener(
-        e ->
-            copy(
-                current == null
-                    ? ""
-                    : String.join(
-                        "\n",
-                        current.endpoints().stream()
-                            .map(JsAnalysis.Endpoint::url)
-                            .distinct()
-                            .toList())));
-    report.addActionListener(e -> copy(maskedReport()));
+    copy.addActionListener(e -> {
+      String text=current==null?"":String.join("\n",current.endpoints().stream().map(JsAnalysis.Endpoint::url).distinct().toList());
+      afterProtectingHistory(currentSource,()->copy(text));
+    });
+    report.addActionListener(e -> {String text=maskedReport();afterProtectingHistory(currentSource,()->copy(text));});
     locate.addActionListener(
         e -> {
           prepareNavigation();
@@ -322,7 +340,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
           if (tab == 0 && urlTable.getSelectedRow() >= 0)
             locateEndpoint(urlTable.convertRowIndexToModel(urlTable.getSelectedRow()));
           else if (tab == 1 && secretTable.getSelectedRow() >= 0)
-            navigator.at(1, secretTable.convertRowIndexToModel(secretTable.getSelectedRow()));
+            locateSecret(secretTable.convertRowIndexToModel(secretTable.getSelectedRow()));
         });
     urlTable
         .getSelectionModel()
@@ -343,7 +361,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
               if (!e.getValueIsAdjusting()) {
                 if (!navigating && secretTable.getSelectedRow() >= 0) {
                   prepareNavigation();
-                  navigator.at(1, secretTable.convertRowIndexToModel(secretTable.getSelectedRow()));
+                  locateSecret(secretTable.convertRowIndexToModel(secretTable.getSelectedRow()));
                 }
                 refreshActions();
               }
@@ -401,8 +419,10 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             Map<String,Set<String>> observed=unknown.isEmpty()?Map.of():observedMethods.apply(unknown);
             List<JsMethodSelection.Choice> choices=new ArrayList<>();
             for(var draft:drafts){String key=ActivityTracker.safeUrl(draft.url());choices.add(JsMethodSelection.choose(draft,key==null?Set.of():observed.get(key)));}
-            repeater.openPrepared(choices);
-            status.setText("Repeater 창 열림 · 메서드 선택 근거와 Raw의 경로·값·인증 확인 · 전송 없음");
+            afterProtectingHistory(currentSource,()->{
+              repeater.openPrepared(choices);
+              status.setText("Repeater 창 열림 · 메서드 선택 근거와 Raw의 경로·값·인증 확인 · 전송 없음");
+            });
           } catch (Exception ex) {
             Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",ex);
             status.setText(ex.getMessage());
@@ -410,12 +430,43 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   JPanel analysisContent() {
-    JPanel panel=new WindowPanel();
-    panel.setName("wb.js.analysis.window");
-    panel.add(new JLabel("항목 선택: 분석 결과 보기 · 더블클릭: 발견 출처 패킷"),BorderLayout.NORTH);
-    JScrollPane scroll=new JScrollPane(historyTable);
-    scroll.setPreferredSize(new Dimension(690,330));
-    panel.add(scroll);
+    JPanel panel=new WindowPanel();panel.setName("wb.js.analysis.window");
+    JButton protect=new JButton("선택 이력 보존"),remove=new JButton("선택 이력 삭제"),settings=new JButton("보존·디스크 설정");
+    protect.setName("wb.js.history.protect");remove.setName("wb.js.history.delete");settings.setName("wb.js.history.storage");
+    protect.setEnabled(archive!=null);remove.setEnabled(archive!=null);settings.setEnabled(archive!=null);
+    protect.addActionListener(e->{String key=selectedHistoryKey();if(!key.isEmpty())protectHistory(key);});
+    remove.addActionListener(e->{String key=selectedHistoryKey();if(key.isEmpty())return;if(!GraphicsEnvironment.isHeadless()&&JOptionPane.showConfirmDialog(this,"선택 이력만 삭제합니다. 보존 표시·이전 버전 기록은 제외됩니다.","JS 이력 삭제",JOptionPane.OK_CANCEL_OPTION)!=JOptionPane.OK_OPTION)return;
+      enqueue(()->{try{archive.delete(key);onEdt(()->{cache.remove(key);displayedArchiveRevision=-1;requestArchivePage();status.setText("보존 미지정 이력 삭제 완료 · 열려 있는 결과는 다음 선택까지 유지");});}catch(Exception ex){onEdt(()->status.setText(ex.getMessage()));}},true);});
+    settings.addActionListener(e->{archiveSettings.closeWindow();archiveSettings.open();});
+    panel.add(TargetWindow.options(new JLabel("항목 선택: 분석 결과 보기 · 더블클릭: 발견 출처 패킷"),
+        WorkbenchUi.row(new JLabel("검색"),historySearch,historyPrevious,historyNext,historyPageLabel),
+        WorkbenchUi.row(protect,remove,settings),archiveUsage),BorderLayout.NORTH);
+    JScrollPane scroll=new JScrollPane(historyTable);scroll.setPreferredSize(new Dimension(740,330));panel.add(scroll);return panel;
+  }
+
+  private String selectedHistoryKey(){int row=historyTable.getSelectedRow();return row<0?"":Objects.toString(historyModel.getValueAt(historyTable.convertRowIndexToModel(row),0),"");}
+
+  public void protectHistory(String key){
+    afterProtectingHistory(key,()->status.setText("JS 이력 보존 표시 · 외부 작업 연결 기록은 정리에서 제외"));
+  }
+
+  private void afterProtectingHistory(String key,Runnable action){
+    if(archive==null||key==null||key.isBlank()){action.run();return;}
+    long token=epoch.get();
+    enqueue(()->{try{archive.protect(key);onEdt(()->{if(!closed.get()&&token==epoch.get())action.run();});}catch(Exception ex){onEdt(()->status.setText("이력 보존 표시 실패 · 디스크 확인 후 다시 실행"));}},true);
+  }
+
+  private JPanel archiveSettingsContent(){
+    JCheckBox enabled=new JCheckBox("보존 기간 기준 사용 · 자동 삭제 없음");
+    JSpinner days=new JSpinner(new SpinnerNumberModel(90,1,3650,1)),warning=new JSpinner(new SpinnerNumberModel(2048,1,65536,128));
+    JLabel usage=new JLabel("디스크 사용량 확인 중");JButton save=new JButton("기준 저장"),prune=new JButton("기간이 지난 이력 정리");
+    enabled.setName("wb.js.retention.enabled");days.setName("wb.js.retention.days");warning.setName("wb.js.retention.warning");usage.setName("wb.js.retention.usage");save.setName("wb.js.retention.save");prune.setName("wb.js.retention.prune");
+    JPanel panel=TargetWindow.options(usage,enabled,WorkbenchUi.row(new JLabel("보존 일수"),days,new JLabel("디스크 알림 MiB"),warning),
+        new JLabel("<html>보존 표시·이전 버전 이력은 삭제하지 않습니다.<br>증거 연결을 추적하지 못한 이력은 직접 보존 표시하세요.</html>"),WorkbenchUi.row(save,prune));
+    enqueue(()->{try{var policy=archive.retention();var size=archive.usage();onEdt(()->{enabled.setSelected(policy.enabled());days.setValue(policy.days());warning.setValue((int)(policy.warningBytes()/(1024*1024)));usage.setText("디스크 "+memory(size.bytes())+" · 이력 "+size.records()+" · 보존/이전 버전 "+size.protectedRecords()+(size.bytes()>=policy.warningBytes()?" · 디스크 알림 기준 초과":""));archiveUsage.setText(usage.getText()+" · 자동 삭제 없음");});}catch(Exception ex){onEdt(()->usage.setText("디스크 정보 읽기 실패"));}},true);
+    save.addActionListener(e->{var policy=new JsArchive.Retention(enabled.isSelected(),(Integer)days.getValue(),((Integer)warning.getValue()).longValue()*1024*1024);enqueue(()->{try{archive.retention(policy);onEdt(()->usage.setText("보존 기준 저장 · 정리는 버튼으로 직접 실행"));}catch(Exception ex){onEdt(()->usage.setText("설정 저장 실패"));}},true);});
+    prune.addActionListener(e->{var policy=new JsArchive.Retention(enabled.isSelected(),(Integer)days.getValue(),((Integer)warning.getValue()).longValue()*1024*1024);if(!policy.enabled()){usage.setText("보존 기간 기준을 먼저 선택하세요.");return;}if(GraphicsEnvironment.isHeadless()||JOptionPane.showConfirmDialog(this,"기간이 지난 보존 미지정 이력을 삭제할까요? 이전 버전·보존 표시는 유지됩니다.","JS 이력 정리",JOptionPane.OK_CANCEL_OPTION)!=JOptionPane.OK_OPTION)return;
+      enqueue(()->{try{int removed=archive.prune(policy);onEdt(()->{usage.setText(removed+"개 정리 완료");cache.clear();displayedArchiveRevision=-1;historyOffset=0;historyQueryGeneration.incrementAndGet();requestArchivePage();});}catch(Exception ex){onEdt(()->usage.setText("이력 정리 실패 · 디스크 확인"));}},true);});
     return panel;
   }
 
@@ -505,7 +556,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       short status,
       byte[] body,
       String request,
-      String raw) {
+      String raw,
+      String retryId) {
     long bytes() {
       return 160L
           + body.length
@@ -519,45 +571,45 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     }
   }
 
+  private void requestArchivePage(){
+    if(archive==null||closed.get()||!archiveRefreshPending.compareAndSet(false,true))return;
+    long queryVersion=historyQueryGeneration.get(),token=epoch.get();int offset=historyOffset;String query=historyQuery;
+    var cached=cache.snapshot();
+    boolean accepted=enqueue(()->{try{
+      var page=archive.page(offset,query,()->closed.get()||token!=epoch.get()||queryVersion!=historyQueryGeneration.get());
+      if(page.cancelled())return;
+      if(page.rows().isEmpty()&&offset>0){onEdt(()->{if(queryVersion==historyQueryGeneration.get()){historyOffset=(int)(Math.max(0,page.total()-1)/JsArchive.PAGE_SIZE)*JsArchive.PAGE_SIZE;historyQueryGeneration.incrementAndGet();}});return;}
+      var counts=archive.countsWith(cached.values());long version=archive.revision();
+      onEdt(()->{if(closed.get()||token!=epoch.get()||queryVersion!=historyQueryGeneration.get())return;archivePage=page;archiveCounts=counts;displayedArchiveRevision=version;syncSources();});
+    }catch(Exception ex){onEdt(()->status.setText("분석 목록 읽기 실패 · 디스크 상태 확인"));}
+    finally{archiveRefreshPending.set(false);if(queryVersion!=historyQueryGeneration.get()&&!closed.get())onEdt(this::requestArchivePage);}},true);
+    if(!accepted)archiveRefreshPending.set(false);
+  }
+
   private void syncSources() {
-    Object selected = sources.getSelectedItem();
-    syncingSources = true;
-    try {
-      var snapshot = cache.snapshot();
-      totals.update(snapshot.values());
-      var keys =
-          snapshot.entrySet().stream()
-              .filter(e -> e.getValue().result() != null)
-              .map(Map.Entry::getKey)
-              .toList();
-      if(archive!=null){var combined=new LinkedHashSet<String>(archive.snapshot().keySet());combined.addAll(keys);keys=new ArrayList<>(combined);}
-      for (int i = sources.getItemCount() - 1; i >= 0; i--)
-        if (!keys.contains(sources.getItemAt(i))) sources.removeItemAt(i);
-      for (String key : keys) {
-        boolean exists = false;
-        for (int i = 0; i < sources.getItemCount(); i++)
-          if (key.equals(sources.getItemAt(i))) {
-            exists = true;
-            break;
-          }
-        if (!exists) sources.addItem(key);
-      }
-      if (selected != null && keys.contains(selected)) sources.setSelectedItem(selected);
-      String selectedHistory = historyTable.getSelectedRow()<0?null:Objects.toString(historyModel.getValueAt(historyTable.convertRowIndexToModel(historyTable.getSelectedRow()),0),null);
+    Object selected=sources.getSelectedItem();String selectedHistory=selectedHistoryKey();syncingSources=true;
+    try{
+      var snapshot=cache.snapshot();LinkedHashSet<String> keys=new LinkedHashSet<>();
+      if(archive!=null)for(var row:archivePage.rows())keys.add(row.key());
+      for(var entry:snapshot.entrySet())if(entry.getValue().result()!=null)keys.add(entry.getKey());
+      if(!currentSource.isBlank()&&current!=null)keys.add(currentSource);
+      for(int i=sources.getItemCount()-1;i>=0;i--)if(!keys.contains(sources.getItemAt(i)))sources.removeItemAt(i);
+      for(String key:keys){boolean exists=false;for(int i=0;i<sources.getItemCount();i++)if(key.equals(sources.getItemAt(i))){exists=true;break;}if(!exists)sources.addItem(key);}
+      if(selected!=null&&keys.contains(selected))sources.setSelectedItem(selected);
       historyModel.setRowCount(0);
-      for (var entry : snapshot.entrySet()) {
-        var result = entry.getValue().result();
-        if (result != null)
-          historyModel.addRow(
-              new Object[] {
-                entry.getKey(), result.endpoints().size(), result.secrets().size(), result.status()
-              });
+      if(archive!=null){
+        for(var row:archivePage.rows())historyModel.addRow(new Object[]{row.key(),row.apis(),row.secrets(),row.status()+" · 디스크 보관"});
+        totals.api.count((int)Math.min(Integer.MAX_VALUE,archiveCounts.apis()));totals.secret.count((int)Math.min(Integer.MAX_VALUE,archiveCounts.secrets()));totals.domain.count((int)Math.min(Integer.MAX_VALUE,archiveCounts.domains()));totals.cloud.count((int)Math.min(Integer.MAX_VALUE,archiveCounts.clouds()));
+        historyPrevious.setEnabled(historyOffset>0);historyNext.setEnabled(archivePage.more());
+        historyPageLabel.setText((archivePage.rows().isEmpty()?0:historyOffset+1)+"–"+(historyOffset+archivePage.rows().size())+" / "+archivePage.total());
+        if(displayedArchiveRevision!=archive.revision())requestArchivePage();
+      }else{
+        String query=historyQuery.toLowerCase(Locale.ROOT);
+        for(var entry:snapshot.entrySet()){var result=entry.getValue().result();if(result!=null&&(entry.getKey()+" "+result.status()).toLowerCase(Locale.ROOT).contains(query))historyModel.addRow(new Object[]{entry.getKey(),result.endpoints().size(),result.secrets().size(),result.status()});}
+        totals.update(snapshot.values());historyPrevious.setEnabled(false);historyNext.setEnabled(false);historyPageLabel.setText(historyModel.getRowCount()+"개 · 메모리 목록");
       }
-      if(archive!=null){Set<String> present=new HashSet<>();for(int row=0;row<historyModel.getRowCount();row++)present.add(historyModel.getValueAt(row,0).toString());for(var summary:archive.snapshot().values())if(!present.contains(summary.key()))historyModel.addRow(new Object[]{summary.key(),summary.apis(),summary.secrets(),summary.status()+" · 디스크 보관"});totals.updateArchive(archive.snapshot().values(),snapshot.values());}
-      if(selectedHistory!=null)for(int row=0;row<historyModel.getRowCount();row++)if(selectedHistory.equals(historyModel.getValueAt(row,0))){int view=historyTable.convertRowIndexToView(row);if(view>=0)historyTable.setRowSelectionInterval(view,view);break;}
-    } finally {
-      syncingSources = false;
-    }
+      if(!selectedHistory.isEmpty())for(int row=0;row<historyModel.getRowCount();row++)if(selectedHistory.equals(historyModel.getValueAt(row,0))){int view=historyTable.convertRowIndexToView(row);if(view>=0)historyTable.setRowSelectionInterval(view,view);break;}
+    }finally{syncingSources=false;}
   }
 
   private void onEdt(Runnable action) {
@@ -617,14 +669,17 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                 && secretTable.getSelectedRow() >= 0);
   }
 
-  public void startHistory() {
+  public void startHistory() { startHistory(true); }
+
+  /** Embedded capture supplies exact original references; polling still backfills history. */
+  public void startHistory(boolean observeLive) {
     if (api == null) return;
     if(archive!=null)enqueue(()->{try{archive.load();onEdt(this::syncSources);}catch(Exception ex){onEdt(()->status.setText("분석 이력 불러오기 실패"));}},true);
     try {
       var proxy = api.proxy();
       if (proxy == null) return;
       historyMonitor =
-          new JsHistoryMonitor(proxy, this::offer, () -> watching.get() && !closed.get());
+          new JsHistoryMonitor(proxy, this::offer, () -> watching.get() && !closed.get(), observeLive);
       historyMonitor.start();
       progressTimer = new javax.swing.Timer(500, e -> refreshProgress());
       progressTimer.start();
@@ -686,7 +741,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             + " · 절단 "
             + truncated.get());
     progress.setToolTipText(
-        counters + memory + " · 캐시 보관 제외 " + cache.rejected() + " · 기존 개별 분석/미리보기 제한 유지");
+        "<html>" + Core.html(counters + memory + " · 캐시 보관 제외 " + cache.rejected() + " · 기존 개별 분석/미리보기 제한 유지"
+            + "\n" + jobs.diagnostics() + "\n" + cache.diagnostics() + "\n" + RuntimeMetrics.heapSummary()).replace("\n", "<br>") + "</html>");
   }
 
   boolean idle() {
@@ -754,48 +810,86 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   public boolean offer(HttpRequest request, HttpResponse response) {
+    return offer(request, response, null);
+  }
+
+  boolean offer(HttpRequest request, HttpResponse response, DiskTrafficStore.PacketRef original) {
     if (closed.get() || !watching.get()) return false;
     if (response == null || request == null) return true;
+    String retryId = null;
     try {
-      if (!WorkbenchScope.contains(api, request)) {
-        excluded.incrementAndGet();
-        return true;
+      if (!WorkbenchScope.contains(api, request)) { excluded.incrementAndGet(); return true; }
+      if (original != null) {
+        var previous = retries.get(original.id());
+        if (previous != null && (previous.state() == AnalysisRetries.State.QUEUED || previous.state() == AnalysisRetries.State.RUNNING)) return true;
       }
-      String type = response.headerValue("Content-Type"), url = request.url();
-      String mime = type == null ? "" : type.toLowerCase(Locale.ROOT);
-      if (!TextCandidates.accepts(mime, url)) {
-        unsupported.incrementAndGet();
-        return true;
-      }
-      if (response.body().length() > JsBodyDecoder.WORK_LIMIT) {
-        unsupported.incrementAndGet();
-        recordFailure(url,"응답 작업 메모리 한도",epoch.get());
-        return true;
-      }
-      String requestText = "", raw = "";
-      try {
-        requestText = packetPreview(request.toByteArray());
-        raw = packetPreview(response.toByteArray());
-      } catch (Exception ignored) {
-      }
-      AnalysisInput snapshot =
-          new AnalysisInput(
-              url,
-              mime,
-              response.headerValue("Content-Encoding"),
-              type,
-              request.headerValue("Referer"),
-              response.statusCode(),
-              response.body().getBytes(),
-              requestText,
-              raw);
+      retryId = retries.record(original, request.method(), request.url(), AnalysisRetries.State.QUEUED, "로컬 분석 대기");
+      AnalysisInput snapshot = snapshot(request, response, retryId);
+      if (snapshot == null) return true;
       long token = epoch.get();
-      if(snapshot.bytes()>jobs.budget()){unsupported.incrementAndGet();recordFailure(url,"대기/실행 작업 메모리 한도",token);return true;}
-      return enqueue(() -> analyzeSnapshot(snapshot, token), false, snapshot.bytes());
-    } catch (Exception e) {
+      boolean accepted = enqueue(() -> analyzeSnapshot(snapshot, token, false), false, snapshot.bytes());
+      if (!accepted) retries.state(retryId, AnalysisRetries.State.QUEUE_FULL, "개수/바이트 한도 · 대기가 줄어든 뒤 선택 원본 재시도");
+      return accepted;
+    } catch (Exception error) {
       failed.incrementAndGet();
+      if (retryId != null) retries.state(retryId, AnalysisRetries.State.FAILED, "원본 읽기/분석 준비 실패 · 선택 원본 재시도");
       return true;
     }
+  }
+
+  private AnalysisInput snapshot(HttpRequest request, HttpResponse response, String retryId) {
+    String type = response.headerValue("Content-Type"), url = request.url();
+    String mime = type == null ? "" : type.toLowerCase(Locale.ROOT);
+    if (!TextCandidates.accepts(mime, url)) {
+      unsupported.incrementAndGet();
+      retries.state(retryId, AnalysisRetries.State.UNSUPPORTED, "지원 텍스트 응답이 아닙니다. 원본 트래픽에서 형식을 확인하세요.");
+      return null;
+    }
+    if (response.body().length() > JsBodyDecoder.WORK_LIMIT) {
+      unsupported.incrementAndGet();
+      retries.state(retryId, AnalysisRetries.State.TOO_LARGE, "응답 작업 메모리 한도 초과 · 한도를 우회하지 않습니다.");
+      recordFailure(url, "응답 작업 메모리 한도", epoch.get());
+      return null;
+    }
+    String requestText = "", raw = "";
+    try { requestText = packetPreview(request.toByteArray()); raw = packetPreview(response.toByteArray()); } catch (Exception ignored) {}
+    AnalysisInput snapshot = new AnalysisInput(url, mime, response.headerValue("Content-Encoding"), type,
+        request.headerValue("Referer"), response.statusCode(), response.body().getBytes(), requestText, raw, retryId);
+    if (snapshot.bytes() > jobs.budget()) {
+      unsupported.incrementAndGet();
+      retries.state(retryId, AnalysisRetries.State.TOO_LARGE, "단일 작업이 대기/실행 바이트 한도 초과 · 원본에서 별도 확인");
+      recordFailure(url, "대기/실행 작업 메모리 한도", epoch.get());
+      return null;
+    }
+    return snapshot;
+  }
+
+  /** Resolves only the selected immutable disk reference; never calls an HTTP transport. */
+  void retryOriginal(String id) {
+    if (closed.get()) return;
+    if (!watching.get()) { status.setText("분석 ON으로 전환한 뒤 선택 원본을 다시 분석하세요."); return; }
+    var entry = retries.begin(id);
+    if (entry == null) return;
+    var original = entry.original();
+    // Reserve raw restoration + body copy + bounded previews before reading disk packets.
+    long retained = 2L * (original.requestLength() + (long) original.responseLength()) + 512 * 1024L;
+    if (original.responseBodyLength() > JsBodyDecoder.WORK_LIMIT || retained > jobs.budget()) {
+      retries.state(id, AnalysisRetries.State.TOO_LARGE, "보관 원본 복원/분석이 작업 바이트 한도를 초과합니다. 원본에서 별도 확인하세요.");
+      return;
+    }
+    long token = epoch.get();
+    boolean accepted = enqueue(() -> {
+      if (closed.get() || token != epoch.get()) return;
+      if (!WorkbenchScope.contains(api, original.url())) { retries.state(id, AnalysisRetries.State.SCOPE_EXCLUDED, "현재 Scope 밖 원본입니다. 분석하지 않았습니다."); return; }
+      burp.api.montoya.http.message.HttpRequestResponse packet;
+      try { packet = original.packet(); }
+      catch (RuntimeException error) { retries.state(id, AnalysisRetries.State.EXPIRED, "원본 트래픽이 초기화/만료되었습니다. 다시 수집하세요."); return; }
+      try {
+        AnalysisInput input = snapshot(packet.request(), packet.response(), id);
+        if (input != null) analyzeSnapshot(input, token, true);
+      } catch (RuntimeException error) { if (token == epoch.get() && !closed.get()) retries.state(id, AnalysisRetries.State.FAILED, "로컬 재시도 실패 · 원본/지원 형식을 확인하세요."); }
+    }, true, retained);
+    if (!accepted) retries.state(id, AnalysisRetries.State.QUEUE_FULL, "재시도 대기열 한도 · 대기가 줄어든 뒤 다시 선택하세요.");
   }
 
   static String packetPreview(burp.api.montoya.core.ByteArray packet) {
@@ -823,15 +917,18 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     return EnvironmentPanel.preview(text) + (limited ? "\n[미리보기 64 KiB 제한]" : "");
   }
 
-  private void analyzeSnapshot(AnalysisInput snapshot, long token) {
+  private void analyzeSnapshot(AnalysisInput snapshot, long token, boolean retry) {
     if (token != epoch.get() || closed.get()) return;
+    retries.state(snapshot.retryId(), AnalysisRetries.State.RUNNING, "보관 응답을 로컬에서 분석 중");
     try {
       String text = readBody(snapshot.body(), snapshot.encoding(), snapshot.contentType());
-      if (text.isBlank() || !TextCandidates.textual(text)) { unsupported.incrementAndGet(); return; }
+      if (token != epoch.get() || closed.get()) return;
+      if (text.isBlank() || !TextCandidates.textual(text)) { unsupported.incrementAndGet(); retries.state(snapshot.retryId(), AnalysisRetries.State.UNSUPPORTED, "빈 본문/지원 텍스트 형식 아님"); return; }
       String key = safeSource(snapshot.url());
       String hash=fingerprint(text+"\nDOCUMENT:"+Objects.toString(snapshot.document(),"")+"\nMODULES:"+modules.link(snapshot.url(),text,snapshot.document()).prefix());
-      if (Objects.equals(cache.fingerprint(key),hash)||(archive!=null&&archive.has(archive.versionKey(key,hash),hash))) {
+      if (!retry && (Objects.equals(cache.fingerprint(key),hash)||(archive!=null&&archive.has(archive.versionKey(key,hash),hash)))) {
         duplicates.incrementAndGet();
+        if (token == epoch.get() && !closed.get()) retries.state(snapshot.retryId(), AnalysisRetries.State.REUSED, "동일 내용·문맥의 분석 이력이 있습니다. 기존 결과의 분석 범위를 확인하세요.");
         return;
       }
       String decoded =
@@ -841,14 +938,19 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                   snapshot.status(),
                   "",
                   text));
-      analyzeText(
+      JsAnalysis.Result analyzed = analyzeText(
           text,
           snapshot.url(),
           false,
           token,
           new String[] {snapshot.request(), snapshot.raw(), decoded}, snapshot.contentType(), snapshot.document());
+      if (token != epoch.get() || closed.get()) return;
+      if (analyzed != null) retries.state(snapshot.retryId(), analyzed.status().contains("분석 실패") ? AnalysisRetries.State.FAILED : analyzed.truncated() ? AnalysisRetries.State.PARTIAL : AnalysisRetries.State.COMPLETE, analyzed.status());
+
     } catch (Exception e) {
+      if (token != epoch.get() || closed.get()) return;
       failed.incrementAndGet();
+      retries.state(snapshot.retryId(), AnalysisRetries.State.FAILED, "압축 해제/디코딩 실패 · 원본 형식 확인 후 재시도");
       recordFailure(snapshot.url(),"압축 해제/디코딩 실패 · "+Objects.toString(snapshot.encoding(),"identity"),token);
     }
   }
@@ -900,8 +1002,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     analyzeText(text,url,manual,token,packet,contentType,null);
   }
 
-  private void analyzeText(String text, String url, boolean manual, long token, String[] packet, String contentType,String document) {
-    if (closed.get() || token != epoch.get()) return;
+  private JsAnalysis.Result analyzeText(String text, String url, boolean manual, long token, String[] packet, String contentType,String document) {
+    if (closed.get() || token != epoch.get()) return null;
     JsModuleLinks.Linked linked;
     try{linked=modules.link(url,text,document);}catch(RuntimeException|LinkageError|StackOverflowError error){linked=new JsModuleLinks.Linked(text,"",List.of());failed.incrementAndGet();}
     String key = safeSource(url), hash = fingerprint(text+"\nDOCUMENT:"+Objects.toString(document,"")+"\nMODULES:"+linked.prefix());
@@ -930,7 +1032,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       versions.record(url,hash,result);rememberVersionHash(analysisKey,hash);
       if(!legacy)result=JsFindingGroups.group(result);
     }catch(Exception|LinkageError|StackOverflowError error){failed.incrementAndGet();result=partial(result,"이력/묶음 처리 실패("+error.getClass().getSimpleName()+") · 발견 후보 보존");}
-    if (token != epoch.get() || closed.get()) return;
+    if (token != epoch.get() || closed.get()) return null;
     if(moduleChanged)for(var dependent:modules.dependents(url))enqueue(()->analyzeText(dependent.text(),dependent.source(),false,token,null,"application/javascript",dependent.document()),false,JsSourceCache.textBytes(dependent.text()));
     JsAnalysis.Result done = result;
     String source = text.substring(0, Math.min(text.length(), JsAnalysis.SOURCE_LIMIT));
@@ -958,6 +1060,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
           } else status.setText("History 분석 저장: " + analysisKey + " · 분석 목록에서 선택하세요.");
           refreshProgress();
         });
+    return done;
   }
 
   static JsAnalysis.Result partial(JsAnalysis.Result result,String note){
@@ -1001,6 +1104,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     status.setText(r.status());
     String code = cache.source(currentSource);
     if (code == null) code = input.getText();
+    sourceWindowStart=0;sourceWindowKey="";
     navigator.bind(code, r, Objects.equals(input.getText(), code));
     navigating = false;
     refreshActions();
@@ -1027,24 +1131,27 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             if (!WorkbenchScope.contains(api, draft.url()))
               throw new IllegalArgumentException(
                   "Scope 밖 URL입니다. · " + WorkbenchScope.reason(api, draft.url()));
+            String draftSource=resolvingSource;
+            afterProtectingHistory(draftSource,()->{
             repeater.open(List.of(draft));
             var item =
                 new JsAnalysis.Endpoint(
                     draft.url().split("\\?",2)[0],
                     draft.method(),
-                    resolving.kind(),
-                    resolving.parameters(),
-                    resolving.headers(),
-                    resolving.bodyKeys(),
-                    resolving.line(),
-                    resolving.start(),
-                    resolving.length(),
+                    confirmed.kind(),
+                    confirmed.parameters(),
+                    confirmed.headers(),
+                    confirmed.bodyKeys(),
+                    confirmed.line(),
+                    confirmed.start(),
+                    confirmed.length(),
                     true,
-                    resolving.evidence());
+                    confirmed.evidence());
             coverage.accept(
                 new JsAnalysis.Result(List.of(item), List.of(), "동적 값 수동 확정", false),
-                resolvingSource);
+                draftSource);
             status.setText("초안 준비 · 값/인증/본문 형식 확인 필요 · 전송 없음");
+            });
           } catch (Exception ex) {
             Diagnostics.failure(JsAnalysisPanel.this,"JS에서 API 찾기",ex);
             status.setText(ex.getMessage());
@@ -1112,17 +1219,40 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
 
   private void locateEndpoint(int row){
     if(current==null||row<0||row>=current.endpoints().size())return;var endpoint=current.endpoints().get(row);
-    if(endpoint.kind().startsWith("source map: ")){navigateSource(currentSource,endpoint.line(),endpoint.kind());int start=-1-endpoint.start();if(start>=0&&start<input.getDocument().getLength())input.setCaretPosition(start);}
-    else {String full=cache.source(currentSource);if(endpoint.start()>=input.getDocument().getLength()&&archive!=null){String chosen=currentSource;long generation=selectionGeneration.get();enqueue(()->{try{var saved=archive.read(chosen);if(saved!=null)onEdt(()->{if(Objects.equals(currentSource,chosen)&&generation==selectionGeneration.get()){preparingSource=true;try{input.setText(saved.source());navigator.bind(saved.source(),current,true);navigator.at(0,row);}finally{preparingSource=false;}}});}catch(Exception ex){onEdt(()->status.setText("원문 위치 불러오기 실패"));}},true);}else navigator.at(0,row);}
+    if(endpoint.kind().startsWith("source map: ")){navigateSource(currentSource,endpoint.line(),endpoint.kind());int start=-1-endpoint.start();if(start>=0&&start<input.getDocument().getLength())input.setCaretPosition(start);return;}
+    locatePosition(endpoint.start(),0,row);
+  }
+
+  private void locateSecret(int row){
+    if(current==null||row<0||row>=current.secrets().size())return;
+    locatePosition(current.secrets().get(row).start(),1,row);
+  }
+
+  private void locatePosition(int offset,int tab,int row){
+    int local=offset-sourceWindowStart;
+    if(archive!=null&&(local<0||local>=input.getDocument().getLength())){
+      String chosen=currentSource;long generation=selectionGeneration.get();
+      enqueue(()->{try{var slice=archive.sourceSlice(chosen,Math.max(0,offset),JsAnalysis.SOURCE_LIMIT);if(slice!=null)onEdt(()->{
+        if(!Objects.equals(currentSource,chosen)||generation!=selectionGeneration.get())return;
+        preparingSource=true;try{sourceWindowStart=slice.start();sourceWindowKey=chosen;input.setText(slice.text());navigator.bind(slice.text(),navigationSlice(current,slice.start()),true);navigator.at(tab,row);status.setText("원문 구간 "+slice.start()+"–"+(slice.start()+slice.text().length())+" / "+slice.total()+"자 · 원본 위치 "+offset);}finally{preparingSource=false;}
+      });}catch(Exception ex){onEdt(()->status.setText("원문 위치 불러오기 실패 · 기록/읽기 한도 확인"));}},true);
+    }else navigator.at(tab,row);
+  }
+
+  private static JsAnalysis.Result navigationSlice(JsAnalysis.Result result,int start){
+    var endpoints=result.endpoints().stream().map(e->new JsAnalysis.Endpoint(e.url(),e.method(),e.kind(),e.parameters(),e.headers(),e.bodyKeys(),e.line(),e.start()<0?e.start():e.start()-start,e.length(),e.complete(),e.evidence())).toList();
+    var secrets=result.secrets().stream().map(e->new JsAnalysis.Secret(e.rule(),e.masked(),e.length(),e.fingerprint(),e.line(),e.start()<0?e.start():e.start()-start,e.sourceLength(),e.confidence())).toList();
+    return new JsAnalysis.Result(endpoints,secrets,result.status(),result.truncated(),result.miner());
   }
 
   private void restore(String chosen){
     if(archive==null||chosen.isBlank())return;long token=epoch.get();long selection=selectionGeneration.incrementAndGet();status.setText("분석 이력 불러오는 중");
     enqueue(()->{try{
-      var saved=archive.read(chosen);if(saved==null)return;
+      var saved=archive.readPreview(chosen);if(saved==null)return;
       String source=chosen.split("#wb-version=",2)[0];var fresh=JsBatchAnalysis.analyze(saved.source(),source,saved.type(),saved.page());
       for(var snapshot:archive.versions(chosen)){var metadata=archive.resultMetadata(snapshot.key());if(metadata!=null){versions.recordAt(chosen,snapshot.fingerprint(),metadata,archive.time(snapshot.key()));rememberVersionHash(snapshot.key(),snapshot.fingerprint());}}
-      var restored=saved.result().status().startsWith("미분석")?saved.result():JsFindingGroups.group(JsMapRecovery.merge(fresh,saved.result().miner(),source,saved.page()));
+      // Persisted findings retain full-bundle offsets; only visible-prefix draft values are rebuilt.
+      var kept=saved.result();var restored=new JsAnalysis.Result(kept.endpoints(),kept.secrets(),kept.status(),kept.truncated(),kept.miner(),fresh.requestDrafts());
       onEdt(()->{if(closed.get()||token!=epoch.get()||selection!=selectionGeneration.get())return;
         var change=cache.analysis(chosen,saved.source().substring(0,Math.min(saved.source().length(),JsAnalysis.SOURCE_LIMIT)),null,restored,saved.packet());
         if(!change.accepted()){status.setText("분석 이력은 디스크에 보존되어 있습니다. 선택 결과가 메모리 예산을 초과했습니다.");return;}
@@ -1135,6 +1265,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     if (current == null) return;
     String code = cache.source(currentSource);
     if (code == null) return;
+    if(sourceWindowStart>0&&sourceWindowKey.equals(currentSource)&&navigator.active)return;
     if (!navigator.active || !input.getText().equals(code)) {
       preparingSource = true;
       try {
@@ -1222,6 +1353,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   private void selectSource(String key) {
     if (!Objects.equals(currentSource, key)) {
       currentSource = key;
+      sourceWindowStart=0;sourceWindowKey="";
       selectionGeneration.incrementAndGet();
     }
     cache.select(key);
@@ -1274,7 +1406,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
 
   void applyMiner(String key, JsAnalysis.Result original, JsMiner.Result updated, long token) {
     var result=JsFindingGroups.group(JsMapRecovery.merge(original,updated,key,documents.get(key)));
-    if(archive!=null)try{var saved=archive.read(key);var summary=archive.snapshot().get(key);if(saved!=null&&summary!=null)archive.save(key,saved.source(),saved.page(),saved.type(),result,saved.packet(),summary.fingerprint());}catch(Exception ex){onEdt(()->status.setText("소스맵 분석 이력 저장 실패"));}
+    if(archive!=null)try{archive.updateResult(key,result);}catch(Exception ex){onEdt(()->status.setText("소스맵 분석 이력 저장 실패"));}
     onEdt(
         () -> {
           if (closed.get() || token != epoch.get() || cache.result(key) != original) return;
@@ -1376,7 +1508,10 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   public void clear() {
+    retries.clear();
+    retryWindow.closeWindow();
     analysisWindow.closeWindow();
+    archiveSettings.closeWindow();
     detailsWindow.closeWindow();
     packetWindow.closeWindow();
     openedPacket=null;openedSource="";openedFinding="";
@@ -1384,15 +1519,16 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     resolving = null;resolvingDraft=null;
     navigator.reset();
     epoch.incrementAndGet();
-    jobs.cancelQueued();
+    jobs.cancelQueued();archiveRefreshPending.set(false);
     requestPacket.setPacket(null);
     responsePacket.setPacket(null);
     current = null;
     historyModel.setRowCount(0);
+    archivePage=new JsArchive.Page(List.of(),0,0,false);historyOffset=0;historyQueryGeneration.incrementAndGet();
     cache.clear();
     documents.clear();
     modules.clear();versions.clear();versionHashes.clear();trafficIndex.clear();
-    if(archive!=null&&!closed.get())enqueue(()->{try{archive.clear();}catch(Exception ex){onEdt(()->status.setText("분석 이력 삭제 실패 · 파일 권한 확인"));}},true);
+    if(archive!=null&&!closed.get())enqueue(()->{try{archive.clear();onEdt(()->{archivePage=new JsArchive.Page(List.of(),0,0,false);displayedArchiveRevision=-1;requestArchivePage();});}catch(Exception ex){onEdt(()->status.setText("분석 이력 삭제 실패 · 파일 권한 확인"));}},true);
     totals.update(List.of());
     selectSource("");
     renderMiner(new JsMiner.Result(List.of(), List.of(), List.of(), List.of(), List.of(), ""));
@@ -1413,6 +1549,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     targetSettings.close();
     repeater.close();
     analysisWindow.close();
+    archiveSettings.close();
+    retryWindow.close();
     detailsWindow.close();
     packetWindow.close();
     resolveWindow.close();

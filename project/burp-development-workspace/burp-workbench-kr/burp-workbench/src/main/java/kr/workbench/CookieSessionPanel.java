@@ -62,7 +62,7 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
     results.setPreferredSize(new Dimension(700,220));add(results);
     add(WorkbenchUi.row(filterCookies,beforeCompare,apply),BorderLayout.SOUTH);
     run.addActionListener(e->safe(this::start));stop.addActionListener(e->cancel());apply.addActionListener(e->safe(this::apply));
-    disable.addActionListener(e->safe(()->{owner.editable();owner.sessionChecks[account.getSelectedIndex()]=null;owner.refreshSlots();summary.setText("해당 계정의 비교 전 신원 검사를 해제했습니다.");}));
+    disable.addActionListener(e->safe(()->{owner.editable();owner.sessionChecks[account.getSelectedIndex()]=null;owner.workConfigurationEdited();owner.refreshSlots();summary.setText("해당 계정의 비교 전 신원 검사를 해제했습니다.");}));
     account.addActionListener(e->{if(!loading)loadSlot();});
     var listener=new javax.swing.event.DocumentListener() {
       void changed(){if(!loading)invalidateResult();}
@@ -153,7 +153,7 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
     var reduced=new AuthComparePanel.Candidate(testedCandidate.no(),key,testedCandidate.origin(),headers,testedCandidate.count(),testedCandidate.used());
     owner.copyAccount(testedCandidate,reduced);owner.assign(testedSlot,reduced);
     owner.trackingAccounts[testedSlot]=linked;owner.refreshTracking();
-    owner.sessionChecks[testedSlot]=beforeCompare.isSelected()?testedConfig:null;owner.refreshSlots();
+    owner.sessionChecks[testedSlot]=beforeCompare.isSelected()?testedConfig:null;owner.workConfigurationEdited();owner.refreshSlots();
     invalidateResult();summary.setText("계정에 검사 결과 적용 · 다음 비교부터 "+(beforeCompare.isSelected()?"신원 확인 후 전송":"현재 인증 조합 사용"));
     owner.state.setText("세션 검사 결과 적용 · "+owner.label(testedSlot));
   }

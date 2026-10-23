@@ -82,6 +82,12 @@ final class AuthSetupBundles {
   synchronized List<Bundle> snapshot() { return List.copyOf(bundles.values()); }
   synchronized Bundle get(String key) { return bundles.get(key); }
 
+  synchronized void replace(List<Bundle> values) {
+    List<Bundle> valid = decode(encode(values));
+    if (valid.stream().anyMatch(bundle -> bundle.revision() < 1)) throw invalid("저장 목록의 revision은 1 이상이어야 합니다.");
+    bundles.clear(); for (Bundle bundle : valid) bundles.put(bundle.key(), bundle);
+  }
+
   /** Compare-and-save makes reviewable revisions, without silent last-writer overwrite. */
   synchronized Bundle save(Bundle draft, long expectedRevision) {
     Bundle previous = bundles.get(draft.key());
@@ -169,7 +175,11 @@ final class AuthSetupBundles {
     try {
       try { Files.setPosixFilePermissions(temporary, Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE)); }
       catch (UnsupportedOperationException ignored) { }
-      Files.write(temporary, bytes);
+      try (var channel = java.nio.channels.FileChannel.open(temporary, StandardOpenOption.WRITE)) {
+        var data = java.nio.ByteBuffer.wrap(bytes);
+        while (data.hasRemaining()) channel.write(data);
+        channel.force(true);
+      }
       try { Files.move(temporary, destination, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING); }
       catch (AtomicMoveNotSupportedException ignored) { Files.move(temporary, destination, StandardCopyOption.REPLACE_EXISTING); }
     } finally { Files.deleteIfExists(temporary); }

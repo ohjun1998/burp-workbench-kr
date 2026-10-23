@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 
@@ -24,14 +26,23 @@ final class JsArchive {
     Retention{if(days<1||days>3650||warningBytes<1024*1024)throw new IllegalArgumentException("보존 설정 범위 확인");}
   }
   final Path directory;
-  private final Path store,index,order,dirty,complete,countsFile;
+  private final Path store,index,order,dirty,complete,countsFile,dataGeneration;
   private boolean loaded;
   private volatile long revision;
   private long recordCount;
+  private String observedGeneration;
+  // Only one search result is cached on disk; no unbounded list of history rows is retained.
+  static final long QUERY_CACHE_BYTES=8L*1024*1024;
+  static final int PAGE_CHECKPOINTS=64;
+  private long pageRevision=-1,queryTotal;
+  private String cachedQuery;
+  private byte[] cachedQueryDigest;
+  private final String queryOwner=UUID.randomUUID().toString();
+  private final NavigableMap<Integer,Long> pagePositions=new TreeMap<>();
   JsArchive(Path directory){
     this.directory=directory;store=directory.resolve("v2");index=store.resolve("index");
     order=index.resolve("order.bin");dirty=index.resolve("dirty");complete=index.resolve("complete");
-    countsFile=index.resolve("findings.bin");
+    countsFile=index.resolve("findings.bin");dataGeneration=index.resolve("data-generation");
   }
   static JsArchive project(MontoyaApi api){
     try{
@@ -63,28 +74,122 @@ final class JsArchive {
           }
         }
       }
-      atomic(index.resolve("records"),Long.toString(recordCount));atomic(complete,legacyStamp);Files.deleteIfExists(dirty);
+      atomic(index.resolve("records"),Long.toString(recordCount));publishGeneration();atomic(complete,legacyStamp);Files.deleteIfExists(dirty);
     }
+    if(!Files.isRegularFile(dataGeneration))publishGeneration();
+    observedGeneration=readGeneration();
     recordCount=Long.parseLong(Files.readString(index.resolve("records")));loaded=true;revision++;
   }
   long revision(){return revision;}
   synchronized Page page(int offset,String query)throws IOException{return page(offset,query,()->false);}
   synchronized Page page(int offset,String query,BooleanSupplier cancelled)throws IOException{
-    load();if(offset<0)throw new IllegalArgumentException("negative page offset");
+    load();refreshGeneration();if(offset<0)throw new IllegalArgumentException("negative page offset");
     String needle=Objects.toString(query,"").strip().toLowerCase(Locale.ROOT);if(needle.length()>512)needle=needle.substring(0,512);
-    List<Row> selected=new ArrayList<>(PAGE_SIZE);long matched=0;
+    if(cancelled.getAsBoolean())return cancelledPage(offset);
+    if(pageRevision!=revision){pageRevision=revision;cachedQuery=null;cachedQueryDigest=null;pagePositions.clear();}
+    if(needle.isEmpty())return unfilteredPage(offset,cancelled);
+    if(needle.equals(cachedQuery)){
+      Page cached=cachedPage(offset,cancelled);
+      if(cached!=null)return cached;
+      cachedQuery=null;
+    }
+    return searchPage(offset,needle,cancelled);
+  }
+  /** Observe completed sequential writes by another instance without trusting timestamp granularity. */
+  private void refreshGeneration()throws IOException{
+    if(!Files.isRegularFile(dataGeneration)){loaded=false;load();return;}
+    String generation=readGeneration();
+    if(!generation.equals(observedGeneration)){
+      recordCount=Long.parseLong(readText(index.resolve("records"),128));
+      observedGeneration=generation;revision++;
+    }
+  }
+  private String readGeneration()throws IOException{
+    String value=readText(dataGeneration,128);
+    if(!value.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))throw new IOException("분석 기록 세대 정보 오류");
+    return value;
+  }
+  private void publishGeneration()throws IOException{
+    String value=UUID.randomUUID().toString();atomic(dataGeneration,value);observedGeneration=value;
+  }
+  private Page cancelledPage(int offset){return new Page(List.of(),0,offset,true);}
+  private Page unfilteredPage(int offset,BooleanSupplier cancelled)throws IOException{
+    List<Row> selected=new ArrayList<>(PAGE_SIZE);
     try(var in=new RandomAccessFile(order.toFile(),"r")){
-      byte[] raw=new byte[64];long records=in.length()/65;
-      for(long at=records-1;at>=0;at--){
-        if(cancelled.getAsBoolean())return new Page(List.of(),0,offset,true);
+      var checkpoint=pagePositions.floorEntry(offset);
+      long matched=checkpoint==null?0:checkpoint.getKey();
+      long at=checkpoint==null?in.length()/65-1:checkpoint.getValue();
+      byte[] raw=new byte[64];
+      for(;at>=0;at--){
+        if(cancelled.getAsBoolean())return cancelledPage(offset);
         in.seek(at*65);in.readFully(raw);Row row=readRow(new String(raw,StandardCharsets.US_ASCII));if(row==null)continue;
-        if(!needle.isEmpty()&&!(row.key()+" "+row.status()).toLowerCase(Locale.ROOT).contains(needle))continue;
-        if(matched>=offset&&selected.size()<PAGE_SIZE)selected.add(row);matched++;
-        if(needle.isEmpty()&&selected.size()==PAGE_SIZE)break;
+        if(matched>=offset)selected.add(row);matched++;
+        if(selected.size()==PAGE_SIZE){at--;break;}
+      }
+      if(cancelled.getAsBoolean())return cancelledPage(offset);
+      if(matched<=Integer.MAX_VALUE){
+        pagePositions.put((int)matched,at);
+        // Retain bounded recent checkpoints, including the latest page for sequential navigation.
+        if(pagePositions.size()>PAGE_CHECKPOINTS)pagePositions.pollFirstEntry();
       }
     }
-    return new Page(selected,needle.isEmpty()?recordCount:matched,offset,false);
+    return new Page(selected,recordCount,offset,false);
   }
+  private Page cachedPage(int offset,BooleanSupplier cancelled)throws IOException{
+    Path path=index.resolve("query-page.bin");
+    List<Row> selected=new ArrayList<>(PAGE_SIZE);
+    try(var in=new RandomAccessFile(path.toFile(),"r")){
+      if(cachedQueryDigest==null||in.length()!=64+queryTotal*64||in.length()>QUERY_CACHE_BYTES)return null;
+      // Another archive instance shares this path. Verify identity and complete contents on the
+      // same handle used for paging; a same-size replacement/corruption must never change results.
+      MessageDigest digest=newQueryDigest();byte[] block=new byte[16384];int read;
+      while((read=in.read(block))>=0){if(cancelled.getAsBoolean())return cancelledPage(offset);digest.update(block,0,read);}
+      if(!MessageDigest.isEqual(cachedQueryDigest,digest.digest()))return null;
+      in.seek(64+Math.min((long)offset,queryTotal)*64);byte[] raw=new byte[64];
+      for(long at=offset;at<queryTotal&&selected.size()<PAGE_SIZE;at++){
+        if(cancelled.getAsBoolean())return cancelledPage(offset);
+        in.readFully(raw);Row row=readRow(new String(raw,StandardCharsets.US_ASCII));
+        if(row==null)return null; // Rebuild if a cached row was removed outside this instance.
+        selected.add(row);
+      }
+    }catch(IOException ex){return null;}
+    return cancelled.getAsBoolean()?cancelledPage(offset):new Page(selected,queryTotal,offset,false);
+  }
+  private Page searchPage(int offset,String needle,BooleanSupplier cancelled)throws IOException{
+    List<Row> selected=new ArrayList<>(PAGE_SIZE);long matched=0;
+    Path temporary=index.resolve("query-page.building");OutputStream cache=null;MessageDigest digest=newQueryDigest();
+    try{
+      try{
+        cache=new BufferedOutputStream(Files.newOutputStream(temporary));privatePath(temporary,false);
+        byte[] identity=JsMiner.hash(queryOwner+"\n"+needle+"\n"+revision).getBytes(StandardCharsets.US_ASCII);
+        cache.write(identity);digest.update(identity);
+      }catch(IOException ex){closeCache(cache);cache=null;}
+      try(var in=new RandomAccessFile(order.toFile(),"r")){
+        byte[] raw=new byte[64];
+        for(long at=in.length()/65-1;at>=0;at--){
+          if(cancelled.getAsBoolean())return cancelledPage(offset);
+          in.seek(at*65);in.readFully(raw);Row row=readRow(new String(raw,StandardCharsets.US_ASCII));if(row==null)continue;
+          if(!(row.key()+" "+row.status()).toLowerCase(Locale.ROOT).contains(needle))continue;
+          if(matched>=offset&&selected.size()<PAGE_SIZE)selected.add(row);matched++;
+          if(cache!=null){
+            if(matched>(QUERY_CACHE_BYTES-64)/64){closeCache(cache);cache=null;}
+            else try{cache.write(raw);digest.update(raw);}catch(IOException ex){closeCache(cache);cache=null;}
+          }
+        }
+      }
+      if(cancelled.getAsBoolean())return cancelledPage(offset);
+      if(cache!=null)try{
+        cache.close();cache=null;
+        Path destination=index.resolve("query-page.bin");
+        try{Files.move(temporary,destination,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}
+        catch(AtomicMoveNotSupportedException ex){Files.move(temporary,destination,StandardCopyOption.REPLACE_EXISTING);}
+        cachedQuery=needle;queryTotal=matched;cachedQueryDigest=digest.digest();
+      }catch(IOException ex){/* Cache failure must not hide otherwise readable history. */}
+      return new Page(selected,matched,offset,false);
+    }finally{closeCache(cache);try{Files.deleteIfExists(temporary);}catch(IOException ignored){}}
+  }
+  private static MessageDigest newQueryDigest(){try{return MessageDigest.getInstance("SHA-256");}catch(NoSuchAlgorithmException ex){throw new IllegalStateException(ex);}}
+  private static void closeCache(OutputStream stream){if(stream!=null)try{stream.close();}catch(IOException ignored){}}
   /** Compatibility view for callers/tests: never more than a single page. */
   synchronized Map<String,Summary> snapshot(){
     Map<String,Summary> out=new LinkedHashMap<>();if(!loaded&&!Files.exists(store))return out;try{for(Row row:page(0,"").rows()){Summary s=summary(row.key());if(s!=null)out.put(s.key(),s);}}catch(IOException ignored){}
@@ -112,7 +217,7 @@ final class JsArchive {
   }
   synchronized boolean has(String key,String hash){try{load();Row row=readRow(JsMiner.hash(key));return row!=null&&row.fingerprint().equals(hash);}catch(IOException ex){return false;}}
   synchronized void save(String key,String source,String page,String type,JsAnalysis.Result result,String[] packet,String hash)throws IOException{
-    load();Summary old=summary(key);Row oldRow=readRow(JsMiner.hash(key));String savedAt=Instant.now().toString();Files.writeString(dirty,"save");
+    load();refreshGeneration();Summary old=summary(key);Row oldRow=readRow(JsMiner.hash(key));String savedAt=Instant.now().toString();Files.writeString(dirty,"save");
     try{
       Summary summary=new Summary(key,result.endpoints().size(),result.secrets().size(),result.status(),hash,
           result.endpoints().stream().map(JsFindingGroups::key).distinct().toList(),result.secrets().stream().map(JsAnalysis.Secret::fingerprint).distinct().toList(),
@@ -126,15 +231,15 @@ final class JsArchive {
       writeIndex(summary,savedAt,false,old==null);
       if(oldRow!=null&&oldRow.legacy())atomic(store.resolve(JsMiner.hash(key)+".pin"),"이전 버전에서 연결한 이력 보존");
       try(var counts=new JsArchiveCounts(countsFile)){if(old!=null)counts.apply(old,-1);counts.apply(summary,1);}
-      atomic(index.resolve("records"),Long.toString(recordCount));Files.deleteIfExists(dirty);revision++;
+      atomic(index.resolve("records"),Long.toString(recordCount));publishGeneration();Files.deleteIfExists(dirty);revision++;
     }catch(IOException|RuntimeException ex){loaded=false;throw ex;}
   }
   synchronized void updateResult(String key,JsAnalysis.Result result)throws IOException {
-    load();Row row=readRow(JsMiner.hash(key));if(row==null)return;
+    load();refreshGeneration();Row row=readRow(JsMiner.hash(key));if(row==null)return;
     if(row.legacy()){Saved saved=readLegacy(key);save(key,saved.source(),saved.page(),saved.type(),result,saved.packet(),row.fingerprint());protect(key);return;}
     Summary old=summary(key);Summary next=new Summary(key,result.endpoints().size(),result.secrets().size(),result.status(),row.fingerprint(),
         result.endpoints().stream().map(JsFindingGroups::key).distinct().toList(),result.secrets().stream().map(JsAnalysis.Secret::fingerprint).distinct().toList(),result.miner().domains().stream().map(JsMiner.Domain::host).distinct().toList(),result.miner().clouds().stream().map(JsMiner.Cloud::url).distinct().toList());
-    Files.writeString(dirty,"result update");try{atomic(file(key,".result",false),MetadataExport.json(encode(result)));atomic(file(key,".meta",false),MetadataExport.json(encode(next)));writeIndex(next,row.time(),false,false);try(var counts=new JsArchiveCounts(countsFile)){counts.apply(old,-1);counts.apply(next,1);}Files.deleteIfExists(dirty);revision++;}catch(IOException|RuntimeException ex){loaded=false;throw ex;}
+    Files.writeString(dirty,"result update");try{atomic(file(key,".result",false),MetadataExport.json(encode(result)));atomic(file(key,".meta",false),MetadataExport.json(encode(next)));writeIndex(next,row.time(),false,false);try(var counts=new JsArchiveCounts(countsFile)){counts.apply(old,-1);counts.apply(next,1);}publishGeneration();Files.deleteIfExists(dirty);revision++;}catch(IOException|RuntimeException ex){loaded=false;throw ex;}
   }
   synchronized Saved read(String key)throws IOException{
     load();Row row=readRow(JsMiner.hash(key));if(row==null)return null;
@@ -208,7 +313,7 @@ final class JsArchive {
   synchronized void protect(String key)throws IOException{load();if(readRow(JsMiner.hash(key))!=null)atomic(store.resolve(JsMiner.hash(key)+".pin"),"사용자 보존 또는 외부 작업 연결");}
   synchronized boolean protectedRecord(String key)throws IOException{load();Row row=readRow(JsMiner.hash(key));return row!=null&&(row.legacy()||Files.exists(store.resolve(JsMiner.hash(key)+".pin")));}
   synchronized boolean delete(String key)throws IOException{
-    load();Row row=readRow(JsMiner.hash(key));if(row==null)return false;if(protectedRecord(key))throw new IOException("보존 표시·이전 버전 이력은 정리에서 제외합니다.");
+    load();refreshGeneration();Row row=readRow(JsMiner.hash(key));if(row==null)return false;if(protectedRecord(key))throw new IOException("보존 표시·이전 버전 이력은 정리에서 제외합니다.");
     Summary old=summary(key);Files.writeString(dirty,"delete");
     try{
       String digest=JsMiner.hash(key);Path position=index.resolve(digest+".position");
@@ -216,7 +321,7 @@ final class JsArchive {
       Files.deleteIfExists(position);Files.deleteIfExists(rowPath(digest));recordCount--;
       try(var counts=new JsArchiveCounts(countsFile)){counts.apply(old,-1);}
       for(String suffix:List.of(".data",".meta",".source",".result",".packet",".packet0",".packet1",".packet2",".packet3"))Files.deleteIfExists(file(key,suffix,false));
-      atomic(index.resolve("records"),Long.toString(recordCount));Files.deleteIfExists(dirty);revision++;return true;
+      atomic(index.resolve("records"),Long.toString(recordCount));publishGeneration();Files.deleteIfExists(dirty);revision++;return true;
     }catch(IOException|RuntimeException ex){loaded=false;throw ex;}
   }
   synchronized Usage usage()throws IOException{

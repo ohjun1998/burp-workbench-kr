@@ -27,7 +27,7 @@ final class AuthEffectPanel extends JPanel {
   final JComboBox<String> ruleChoice = new JComboBox<>();
   final List<AuthEffectRules.Rule> savedRules = new ArrayList<>();
   String loadedKey = "";
-  record SetupStamp(String target, long selection, long configuration, String settings, String scope) {}
+  record SetupStamp(String target, long selection, long focus, long configuration, String settings, String scope) {}
   record FieldResult(AuthSetupSuggestions.Read read, List<AuthSetupSuggestions.Field> fields) {}
   final JLabel feedback = new JLabel("① 대상 연결 → ② 관측 GET 선택 → ③ JSON 필드·기대값 지정 → 비교 전 적용 확인");
 
@@ -95,7 +95,7 @@ final class AuthEffectPanel extends JPanel {
 
   SetupStamp setupStamp() {
     HttpRequest request = selectedWrite();
-    return new SetupStamp(request.method() + " " + request.url(), owner.workSelectionRevision(), owner.workConfigurationRevision(),
+    return new SetupStamp(request.method() + " " + request.url(), owner.workSelectionRevision(), owner.preparationFocusRevision, owner.workConfigurationRevision(),
         method.getSelectedItem() + "|" + path.getText() + "|" + url.getText() + "|" + jsonPath.getText() + "|" + expected.getText()
             + "|" + mode.getSelectedIndex() + "|" + attempts.getValue() + "|" + enabled.isSelected() + "|" + ruleOrigin.getText(),
         WorkbenchScope.registeredRules(owner.api).toString());

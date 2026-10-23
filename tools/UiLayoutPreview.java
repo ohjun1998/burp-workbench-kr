@@ -365,6 +365,24 @@ public final class UiLayoutPreview extends WorkbenchTest {
         scenario("next-execution-links.png","Execution evidence linkage",executions.getRowCount()==2&&tracker.execution("preview-run-completed").evidence().size()==1&&tracker.execution("preview-run-completed").bindings().stream().anyMatch(binding->binding.tasks().contains(task)),"Synthetic original → execution → policy revision → task → ZIP hash");
         dialogPair(WorkbenchUi.settingsBody(history,()->{}),out,"next-execution-links");
 
+        var assessment=activity.assessmentPanel;
+        activity.refresh();
+        activity.coveragePages.setSelectedComponent(assessment.tasksPage);
+        for(int i=0;i<assessment.tasks.size();i++)if(assessment.tasks.get(i).id().equals(task)) {
+            int row=assessment.taskTable.convertRowIndexToView(i);assessment.taskTable.setRowSelectionInterval(row,row);break;
+        }
+        assessment.taskDetailPages.setSelectedIndex(1);
+        assessment.remainingTable.setRowSelectionInterval(0,0);
+        var navigation=(JTabbedPane)get(ext,"tabs");
+        var mapperTools=(JTabbedPane)get(ext,"mapperTools");
+        navigation.setSelectedComponent(mapperTools);mapperTools.setSelectedComponent(activity);
+        scenario("next-remaining-checks.png","Remaining work and explicit next step",
+            assessment.remaining.size()>=2&&assessment.remainingNext.isEnabled()
+                &&assessment.remaining.stream().anyMatch(row->row.reasons().contains(AssessmentTracker.RemainingReason.CANCELLED))
+                &&assessment.remaining.stream().anyMatch(row->row.reasons().contains(AssessmentTracker.RemainingReason.NOT_INSPECTED)),
+            "Unrun and cancelled requests expose concrete reasons and exact execution IDs without sending requests");
+        render((Container)get(ext,"root"),out.resolve("next-remaining-checks.png"),width,height);
+
         int before=tracker.tasks().size();
         activity.assessmentPanel.upsertMapperDraft("preview-notice-feature","공지 관리",List.of("GET "+origin+"/api/notices/101","DELETE "+origin+"/api/notices/101"));
         var draft=(Container)activity.assessmentPanel.mapperDraftWindow.content.get();

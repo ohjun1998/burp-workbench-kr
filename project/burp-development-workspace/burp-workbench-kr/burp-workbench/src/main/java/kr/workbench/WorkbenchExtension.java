@@ -56,6 +56,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private WorkbenchScope.Rule scopeEditingRule;
   private JDialog scopeWindow;
   private boolean settingsActionReady;
+  private long assessmentNavigationRevision;
 
   @FunctionalInterface
   interface DialogOpener {
@@ -470,6 +471,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             super.setSelectedIndex(index);
           }
         };
+    tabs.addChangeListener(e -> assessmentNavigationRevision++);
     requestView = api.userInterface().createHttpRequestEditor(EditorOptions.READ_ONLY);
     responseView = api.userInterface().createHttpResponseEditor(EditorOptions.READ_ONLY);
     requestEditorComponent = requestView == null ? null : requestView.uiComponent();
@@ -537,6 +539,24 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             authCompare,
             activity);
     addPage("점검 지원", "bounty", bountySupport, false);
+    activity.assessmentPanel.preparationNavigator = this::prepareRemainingCheck;
+    activity.assessmentPanel.executionNavigator = id -> {
+      AuthComparePanel.Run run = selectAssessmentExecution(id);
+      if (run == null) {
+        activity.assessmentPanel.showExecutionMetadata(id);
+        return;
+      }
+      tabs.setSelectedComponent(authCompare);
+      authCompare.openComparison(run);
+    };
+    activity.assessmentPanel.evidenceNavigator = id -> {
+      AuthComparePanel.Run run = selectAssessmentExecution(id);
+      tabs.setSelectedComponent(bountySupport);
+      bountySupport.pages.setSelectedIndex(3);
+      bountySupport.state.setText(run == null
+          ? "연결 실행의 패킷이 현재 비교 이력에 없습니다. 저장 ZIP을 확인하거나 원본을 직접 준비하세요."
+          : "실행 " + id + " 선택 · ‘권한 비교 추가’와 ZIP 저장은 직접 실행하세요.");
+    };
     structuredCompare.evidenceSink = this::captureObserved;
     passiveScan.evidenceSink = this::captureObserved;
     responseRecon.evidenceSink = this::captureObserved;
@@ -1437,6 +1457,99 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       return List.copyOf(recent);
     });
     return authCompare;
+  }
+
+  /** Select by immutable execution ID, never by URL or by the last visible history row. */
+  private AuthComparePanel.Run selectAssessmentExecution(String id) {
+    authCompare.history.clearSelection();
+    for (int i = 0; i < authCompare.runs.size(); i++) {
+      AuthComparePanel.Run run = authCompare.runs.get(i);
+      if (!run.executionId.equals(id)) continue;
+      int view = authCompare.history.convertRowIndexToView(i);
+      if (view < 0) return null;
+      authCompare.history.setRowSelectionInterval(view, view);
+      authCompare.history.scrollRectToVisible(authCompare.history.getCellRect(view, 0, true));
+      return run;
+    }
+    return null;
+  }
+
+  private void prepareRemainingCheck(AssessmentTracker.RemainingCheck check) {
+    if (unloaded.get()) return;
+    if (check.originalId().isEmpty()) {
+      tabs.setSelectedIndex(0);
+      status.setText("연결 원본 없음 · " + check.method() + " " + check.url()
+          + "의 정확한 요청·응답을 직접 선택한 뒤 비교 준비를 여세요.");
+      return;
+    }
+    DiskTrafficStore store = trafficStore;
+    AssessmentPanel.RemainingNavigation navigation = activity.assessmentPanel.remainingNavigation(check);
+    WorkContext.Snapshot selection = workContext.snapshot();
+    long navigationRevision = ++assessmentNavigationRevision;
+    status.setText("선택 실행의 원본을 로컬에서 읽는 중 · 요청 전송 없음");
+    activity.submit(() -> {
+      try {
+        DiskTrafficStore.PacketRef ref = assessmentOriginal(store, check);
+        if (!localScope.matchesTraffic(ref.url())) throw new IllegalArgumentException("연결 원본이 현재 SCOPE 밖입니다.");
+        if ((long) ref.requestLength() + ref.responseLength() > 8L * 1024 * 1024)
+          throw new IllegalArgumentException("연결 원본이 비교 준비의 8MiB 복원 한도를 넘습니다. 원본을 직접 확인하세요.");
+        HttpRequestResponse packet = ref.packet();
+        SwingUtilities.invokeLater(() -> {
+          if (!assessmentNavigationCurrent(store, navigation, selection, navigationRevision)) return;
+          try {
+            if (!activity.tracker.assessments.remainingChecks(check.task()).contains(check))
+              throw new IllegalArgumentException("업무·실행 조건이 바뀌었습니다. 남은 점검을 다시 선택하세요.");
+            if (!localScope.matchesTraffic(ref.url())) throw new IllegalArgumentException("연결 원본이 현재 SCOPE 밖입니다.");
+            comparisonOriginalIds.remember(packet.request(), ref.id());
+            tabs.setSelectedComponent(authCompare);
+            authCompare.stageReadiness(List.of(packet));
+            authCompare.state.setText("업무 원본 준비 · 점검 계정 "
+                + activity.tracker.assessments.account(check.account()).label()
+                + "의 비교 계정 연결을 확인하고 ‘준비한 요청 다시 확인’을 누르세요. 요청 전송 없음.");
+            for (int slot = 0; slot < authCompare.trackingAccounts.length; slot++)
+              if (authCompare.trackingAccounts[slot].equals(check.account())) {
+                JComboBox<?> choice = authCompare.trackingChoices[slot];
+                choice.requestFocusInWindow();
+                choice.scrollRectToVisible(new Rectangle(0, 0, choice.getWidth(), choice.getHeight()));
+                break;
+              }
+            status.setText("정확한 원본 " + ref.id() + " 비교 준비 · 설정 확인 후 명시적으로 시작하세요.");
+          } catch (IllegalArgumentException error) { status.setText(error.getMessage()); }
+        });
+      } catch (RuntimeException error) {
+        SwingUtilities.invokeLater(() -> {
+          if (assessmentNavigationCurrent(store, navigation, selection, navigationRevision))
+            status.setText("연결 원본을 준비할 수 없습니다 · " + error.getMessage());
+        });
+      }
+    });
+  }
+
+  private boolean assessmentNavigationCurrent(DiskTrafficStore store,
+      AssessmentPanel.RemainingNavigation navigation, WorkContext.Snapshot selection, long revision) {
+    return !unloaded.get() && trafficStore == store && assessmentNavigationMatches(activity.assessmentPanel,
+        navigation, selection, workContext, revision, assessmentNavigationRevision);
+  }
+
+  static boolean assessmentNavigationMatches(AssessmentPanel panel,
+      AssessmentPanel.RemainingNavigation navigation, WorkContext.Snapshot selection,
+      WorkContext context, long expectedRevision, long currentRevision) {
+    return expectedRevision == currentRevision && context.snapshot().equals(selection)
+        && panel.remainingNavigationCurrent(navigation);
+  }
+
+  static DiskTrafficStore.PacketRef assessmentOriginal(DiskTrafficStore store, AssessmentTracker.RemainingCheck check) {
+    try {
+      int separator = check.originalId().lastIndexOf(':');
+      if (separator < 0) throw new IllegalArgumentException();
+      long sequence = Long.parseLong(check.originalId().substring(separator + 1));
+      DiskTrafficStore.PacketRef ref = store.ref(sequence);
+      if (!ref.id().equals(check.originalId()) || !ref.method().equals(check.method())
+          || !Objects.equals(ActivityTracker.safeUrl(ref.url()), check.url())) throw new IllegalArgumentException();
+      return ref;
+    } catch (RuntimeException error) {
+      throw new IllegalArgumentException("연결 원본이 만료되었거나 현재 프로젝트에 없습니다. 같은 URL의 다른 요청으로 대체하지 않습니다.");
+    }
   }
 
   private JPanel codecPanel() {

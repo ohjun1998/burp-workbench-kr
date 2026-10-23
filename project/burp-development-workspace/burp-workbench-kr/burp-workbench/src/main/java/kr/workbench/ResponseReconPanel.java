@@ -3,7 +3,7 @@ import burp.api.montoya.MontoyaApi;import burp.api.montoya.http.message.HttpRequ
 import javax.swing.*;import javax.swing.table.DefaultTableModel;import java.awt.*;import java.util.*;import java.util.List;import java.util.concurrent.*;import java.util.concurrent.atomic.*;
 /** Scope-only response analysis; all work is passive and bounded. Repeater is explicit preparation only. */
 final class ResponseReconPanel extends JPanel implements AutoCloseable {
- final MontoyaApi api;final DefaultTableModel findings=model("규칙","URL (쿼리 제외)","근거 위치","관찰 근거","관측 횟수"),documents=model("메서드","경로 템플릿","쿼리 이름","본문 이름","관찰 결과"),flowModel=model("마커","쓰기 URL","조회 URL","쓰기 응답","조회 재출력","HTML 출력","브라우저 실행","HTTP");
+ final MontoyaApi api;final ObservationTableModel findings=model("규칙","URL (쿼리 제외)","근거 위치","관찰 근거","관측 횟수"),documents=model("메서드","경로 템플릿","쿼리 이름","본문 이름","관찰 결과"),flowModel=model("마커","쓰기 URL","조회 URL","쓰기 응답","조회 재출력","HTML 출력","브라우저 실행","HTTP");
  final JTable findingTable=new JTable(findings),apiTable=new JTable(documents),flowTable=new JTable(flowModel);final JLabel status=new JLabel("SCOPE 내 응답 자동 관찰 · 취약점 확정/추가 요청 없음");
  final StoredFlows flows=new StoredFlows();final LinkedHashMap<String,PassiveFindings.Finding> issues=new LinkedHashMap<>();final Map<String,Integer> counts=new HashMap<>();final Map<String,Set<String>> affected=new LinkedHashMap<>();volatile Map<String,Set<String>> displayedAffected=Map.of();final JTextArea findingDetail=new JTextArea(7,70);final LinkedHashMap<String,ApiInventory.Endpoint> inventory=new LinkedHashMap<>();final LinkedHashMap<String,Set<String>> observed=new LinkedHashMap<>();final Map<String,Set<String>> observedTemplates=new HashMap<>();
  final ThreadPoolExecutor worker=new ThreadPoolExecutor(1,1,0,TimeUnit.MILLISECONDS,new ArrayBlockingQueue<>(50),r->{Thread t=new Thread(r,"Workbench-response-recon");t.setDaemon(true);return t;});final AtomicLong generation=new AtomicLong();final AtomicBoolean closed=new AtomicBoolean(),counterUpdatePending=new AtomicBoolean();final AtomicInteger dropped=new AtomicInteger(),oversized=new AtomicInteger(),queueRejected=new AtomicInteger(),analysisErrors=new AtomicInteger();
@@ -21,7 +21,23 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
  @FunctionalInterface interface StoredEvidenceSink{void accept(List<HttpRequestResponse> packets,String note,Path image,String expectedHash);}
  StoredEvidenceSink storedEvidenceSink=(packets,note,image,sha)->{throw new IllegalArgumentException("브라우저 증거 연결이 준비되지 않았습니다.");};
  final JButton findingCapture=action("선택 관찰 → 증거",this::captureFinding),flowCapture=action("선택 흐름 → 증거",this::captureStored),flowBrowser=action("브라우저 실행 확인",this::chooseBrowserEvidence),flowClear=action("실행 근거 해제",()->{var f=selectedFlow();flows.clearBrowserEvidence(f.id());synchronized(browserImages){browserImages.remove(f.id());}submit(()->refresh(generation.get()));}),apiDraft=new JButton("Repeater 초안");
- private static DefaultTableModel model(String... names){return new DefaultTableModel(names,0){public boolean isCellEditable(int r,int c){return false;}};}
+ final AtomicReference<ViewSnapshot> pendingView=new AtomicReference<>();
+ final AtomicBoolean viewUpdatePending=new AtomicBoolean();
+ final RuntimeMetrics.Window viewLatency=new RuntimeMetrics.Window();
+ static final class ObservationTableModel extends DefaultTableModel {
+  ObservationTableModel(String... names){super(names,0);}
+  @Override public boolean isCellEditable(int row,int column){return false;}
+  void replaceRows(List<Object[]> rows){
+   dataVector.clear();
+   for(Object[] row:rows)dataVector.add(convertToVector(row));
+   fireTableDataChanged();
+  }
+ }
+ private static ObservationTableModel model(String... names){return new ObservationTableModel(names);}
+ record ViewSnapshot(long token,List<Object[]> findings,List<Object[]> apis,List<Object[]> flowRows,
+   Map<String,ApiInventory.Endpoint> inventory,Map<String,Set<String>> affected,
+   Map<String,HttpRequestResponse> findingPackets,Map<String,HttpRequestResponse> flowPackets,
+   List<String> findingKeys,List<StoredFlows.Flow> flows){}
  ResponseReconPanel(MontoyaApi api){super(new BorderLayout(8,8));this.api=api;setName("wb.response.recon");setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
   markerWindow=new TargetWindow(this,"저장/조회 · 고유 마커 등록",()->{JButton register=new JButton("마커 등록");register.addActionListener(e->{try{flows.register(marker.getText().strip());status.setText("마커 등록 · 실제 쓰기/조회 요청을 관찰합니다. 요청을 자동 전송하지 않습니다.");}catch(Exception ex){Diagnostics.failure(ResponseReconPanel.this,"응답 보안 분석",ex);status.setText(ex.getMessage());}});return TargetWindow.options(WorkbenchUi.row(new JLabel("고유 마커"),marker),new JLabel("WB_ / PR_ 접두어 · 최대 20개 · 원문 페이로드/인증값은 저장하지 않습니다."),WorkbenchUi.row(register));});
   draftWindow=new TargetWindow(this,"OpenAPI 초안 · 경로 변수 확정",()->{JButton send=new JButton("Repeater 초안 준비");send.addActionListener(e->{try{if(drafting==null)throw new IllegalArgumentException("API를 선택하세요.");if(drafting.contentType().equals("multipart/form-data"))throw new IllegalArgumentException("Multipart는 실제 트래픽을 가져와 파일 본문을 확인하세요.");var d=ApiInventory.draft(drafting,resolved.getText());HttpRequest q=HttpRequest.httpRequestFromUrl(d.url()).withMethod(d.method());if(!d.body().isEmpty())q=q.withHeader("Content-Type",drafting.contentType().isEmpty()?"application/json":drafting.contentType()).withBody(d.body());if(!WorkbenchScope.contains(api,q))throw new IllegalArgumentException("Scope 제외 · "+WorkbenchScope.reason(api,q));api.repeater().sendToRepeater(q,"OpenAPI 검토");status.setText("Repeater 초안 준비 · 인증/값/문서와 실제 메서드를 확인하세요.");}catch(Exception ex){Diagnostics.failure(ResponseReconPanel.this,"응답 보안 분석",ex);status.setText(ex.getMessage());}});return TargetWindow.options(WorkbenchUi.row(new JLabel("확정할 URL"),resolved),new JLabel("같은 Origin · 쿼리값/인증을 복사하지 않음 · 준비는 전송/완료 처리 아님"),WorkbenchUi.row(send));});
@@ -81,7 +97,7 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
    SwingUtilities.invokeLater(()->{try{if(closed.get()||token!=generation.get())return;var current=flows.views().stream().filter(v->v.id().equals(f.id())).findFirst().orElseThrow(()->new IllegalArgumentException("관측 만료"));if(!current.equals(f))throw new IllegalArgumentException("관측이 갱신되었습니다. 다시 선택하세요.");storedEvidenceSink.accept(EvidenceLinks.checked(api,checked),note,image,f.browserEvidence());status.setText("쓰기/조회 원본과 수동 브라우저 이미지 연결 · 증거 ZIP 저장 필요");}catch(Exception ex){Diagnostics.failure(ResponseReconPanel.this,"응답 보안 분석",ex);status.setText(ex.getMessage());}});
   }catch(Exception ex){Diagnostics.failure(ResponseReconPanel.this,"응답 보안 분석",ex);SwingUtilities.invokeLater(()->{if(!closed.get()&&token==generation.get())status.setText(ex.getMessage());});}});
  }
- void updateCounters(){status.setText("Passive "+findings.getRowCount()+" · API "+documents.getRowCount()+" · 흐름 "+flowModel.getRowCount()+" · 처리 제외 "+dropped.get()+" · 본문 한도 "+oversized.get()+" · 관찰/후보");status.setToolTipText("<html><body style='width:560px'>"+Core.html("수신 본문 2 MiB · 원본 복원 5 MiB · JSON 순차 구조 2 Mi 문자 · 일반 문자열 규칙 앞 1 Mi 문자 · 큐 제외 "+queueRejected.get()+" · 처리 오류 "+analysisErrors.get()+" · 누적 수치는 확장 로드 이후 · 취약점 확정 아님\n"+analysisBudget.diagnostics()).replace("\n","<br>")+"</body></html>");}
+ void updateCounters(){status.setText("Passive "+findings.getRowCount()+" · API "+documents.getRowCount()+" · 흐름 "+flowModel.getRowCount()+" · 처리 제외 "+dropped.get()+" · 본문 한도 "+oversized.get()+" · 관찰/후보");status.setToolTipText("<html><body style='width:560px'>"+Core.html("수신 본문 2 MiB · 원본 복원 5 MiB · JSON 순차 구조 2 Mi 문자 · 일반 문자열 규칙 앞 1 Mi 문자 · 큐 제외 "+queueRejected.get()+" · 처리 오류 "+analysisErrors.get()+" · 누적 수치는 확장 로드 이후 · 취약점 확정 아님\n"+analysisBudget.diagnostics()+"\n화면 갱신 "+viewLatency.snapshot().summary()).replace("\n","<br>")+"</body></html>");}
  void countersChanged(){if(closed.get()||!counterUpdatePending.compareAndSet(false,true))return;SwingUtilities.invokeLater(()->{counterUpdatePending.set(false);if(!closed.get())updateCounters();});}
  void submit(Runnable task){if(closed.get())return;try{worker.execute(task);}catch(RejectedExecutionException e){dropped.incrementAndGet();queueRejected.incrementAndGet();countersChanged();}}
  void offer(HttpRequest q,HttpResponse s){offer(q,s,null);}
@@ -169,6 +185,77 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   }catch(Exception error){analysisFailure(token,retryId);}
  }
 
- void refresh(long token){Map<String,Set<String>> affectedSnapshot=new LinkedHashMap<>();List<Object[]> fs=new ArrayList<>(),apis=new ArrayList<>(),stored=new ArrayList<>();List<String> findingKeys=new ArrayList<>();for(var entry:issues.entrySet()){var f=entry.getValue();findingKeys.add(entry.getKey());String group=ApiInventory.origin(f.url())+"|"+f.rule()+"|"+f.location()+"|"+f.evidence();affectedSnapshot.put(group,Set.copyOf(affected.getOrDefault(entry.getKey(),Set.of())));fs.add(new Object[]{f.rule(),f.url(),f.location(),f.evidence(),counts.get(entry.getKey())});}Map<String,Set<String>> documented=new HashMap<>();for(var e:inventory.values())documented.computeIfAbsent(e.url(),k->new HashSet<>()).add(e.method());for(var e:inventory.values()){Set<String> methods=new TreeSet<>(observedTemplates.getOrDefault(e.url(),Set.of()));methods.removeAll(documented.get(e.url()));String note=methods.isEmpty()?e.note():"문서/관측 메서드 불일치: "+String.join(",",methods);if(e.template())note+=" · 변수 미확정";apis.add(new Object[]{e.method(),e.url(),String.join(", ",new TreeSet<>(e.query())),String.join(", ",new TreeSet<>(e.body())),note});}List<StoredFlows.Flow> flowSnapshot=flows.views();for(var f:flowSnapshot)stored.add(new Object[]{f.marker(),f.writeUrl(),f.readUrl(),StoredFlows.writeState(f),f.readbackObserved()?"2xx에서 마커 관측":"미확인",f.htmlObserved()?(f.escapedCandidate()?"문자 표시 후보":"출력 관측"):"미확인",f.browserEvidence().isEmpty()?"실행 미검증":"사용자 수동 확인",f.status()});Map<String,ApiInventory.Endpoint> snapshot=Map.copyOf(inventory);Map<String,HttpRequestResponse> findingSourceSnapshot=snapshotPackets(findingPackets),flowSourceSnapshot=snapshotPackets(flowPackets);SwingUtilities.invokeLater(()->{if(closed.get()||token!=generation.get())return;String selectedFlowId=selectedFlowId();displayedInventory=snapshot;displayedAffected=Map.copyOf(affectedSnapshot);displayedFindingPackets=findingSourceSnapshot;displayedFlowPackets=flowSourceSnapshot;displayedFindingKeys=List.copyOf(findingKeys);displayedFlows=flowSnapshot;findings.setRowCount(0);documents.setRowCount(0);flowModel.setRowCount(0);fs.forEach(findings::addRow);apis.forEach(documents::addRow);stored.forEach(flowModel::addRow);for(int i=0;i<displayedFlows.size();i++)if(displayedFlows.get(i).id().equals(selectedFlowId)){int view=flowTable.convertRowIndexToView(i);if(view>=0)flowTable.setRowSelectionInterval(view,view);break;}showFlowDetail();refreshActions();updateCounters();});}
- @Override public void close(){closed.set(true);retries.clear();generation.incrementAndGet();analysisQueue.close();markerWindow.close();draftWindow.close();flows.clear();clearPackets();displayedFindingPackets=Map.of();displayedFlowPackets=Map.of();displayedFlows=List.of();displayedFindingKeys=List.of();synchronized(browserImages){browserImages.clear();}flowDetail.setText("");}
+ void refresh(long token){
+  if(closed.get()||token!=generation.get())return;
+  Map<String,Set<String>> affectedSnapshot=new LinkedHashMap<>();
+  List<Object[]> fs=new ArrayList<>(),apis=new ArrayList<>(),stored=new ArrayList<>();
+  List<String> findingKeys=new ArrayList<>();
+  for(var entry:issues.entrySet()){
+   var f=entry.getValue();findingKeys.add(entry.getKey());
+   String group=ApiInventory.origin(f.url())+"|"+f.rule()+"|"+f.location()+"|"+f.evidence();
+   affectedSnapshot.put(group,Set.copyOf(affected.getOrDefault(entry.getKey(),Set.of())));
+   fs.add(new Object[]{f.rule(),f.url(),f.location(),f.evidence(),counts.get(entry.getKey())});
+  }
+  Map<String,Set<String>> documented=new HashMap<>();
+  for(var e:inventory.values())documented.computeIfAbsent(e.url(),k->new HashSet<>()).add(e.method());
+  for(var e:inventory.values()){
+   Set<String> methods=new TreeSet<>(observedTemplates.getOrDefault(e.url(),Set.of()));
+   methods.removeAll(documented.get(e.url()));
+   String note=methods.isEmpty()?e.note():"문서/관측 메서드 불일치: "+String.join(",",methods);
+   if(e.template())note+=" · 변수 미확정";
+   apis.add(new Object[]{e.method(),e.url(),String.join(", ",new TreeSet<>(e.query())),String.join(", ",new TreeSet<>(e.body())),note});
+  }
+  List<StoredFlows.Flow> flowSnapshot=flows.views();
+  for(var f:flowSnapshot)stored.add(new Object[]{f.marker(),f.writeUrl(),f.readUrl(),StoredFlows.writeState(f),
+    f.readbackObserved()?"2xx에서 마커 관측":"미확인",f.htmlObserved()?(f.escapedCandidate()?"문자 표시 후보":"출력 관측"):"미확인",
+    f.browserEvidence().isEmpty()?"실행 미검증":"사용자 수동 확인",f.status()});
+  if(closed.get()||token!=generation.get())return;
+  // Keep one latest immutable view while EDT is busy; analysis/evidence are never dropped.
+  ViewSnapshot view=new ViewSnapshot(token,List.copyOf(fs),List.copyOf(apis),List.copyOf(stored),
+    Map.copyOf(inventory),Map.copyOf(affectedSnapshot),snapshotPackets(findingPackets),snapshotPackets(flowPackets),
+    List.copyOf(findingKeys),flowSnapshot);
+  pendingView.set(view);
+  if(closed.get()||token!=generation.get()){pendingView.compareAndSet(view,null);return;}
+  scheduleView();
+ }
+
+ void scheduleView(){
+  if(closed.get())return;
+  if(viewUpdatePending.compareAndSet(false,true))SwingUtilities.invokeLater(this::applyPendingView);
+ }
+
+ void applyPendingView(){
+  try{
+   ViewSnapshot snapshot=pendingView.getAndSet(null);
+   if(snapshot==null||closed.get()||snapshot.token()!=generation.get())return;
+   long started=System.nanoTime();
+   int selectedFinding=findingTable.getSelectedRow();
+   int modelFinding=selectedFinding<0?-1:findingTable.convertRowIndexToModel(selectedFinding);
+   String selectedKey=modelFinding<0||modelFinding>=displayedFindingKeys.size()?null:displayedFindingKeys.get(modelFinding);
+   int selectedApi=apiTable.getSelectedRow();
+   int modelApi=selectedApi<0?-1:apiTable.convertRowIndexToModel(selectedApi);
+   String selectedApiKey=modelApi<0?null:documents.getValueAt(modelApi,0)+" "+documents.getValueAt(modelApi,1);
+   String selectedFlow=selectedFlowId();
+   displayedInventory=snapshot.inventory();displayedAffected=snapshot.affected();
+   displayedFindingPackets=snapshot.findingPackets();displayedFlowPackets=snapshot.flowPackets();
+   displayedFindingKeys=snapshot.findingKeys();displayedFlows=snapshot.flows();
+   // One data event preserves column widths and sorting without per-row sorter rebuilds.
+   findings.replaceRows(snapshot.findings());documents.replaceRows(snapshot.apis());flowModel.replaceRows(snapshot.flowRows());
+   if(selectedKey!=null)restoreSelection(findingTable,displayedFindingKeys.indexOf(selectedKey));
+   if(selectedApiKey!=null)for(int row=0;row<documents.getRowCount();row++)
+    if(selectedApiKey.equals(documents.getValueAt(row,0)+" "+documents.getValueAt(row,1))){restoreSelection(apiTable,row);break;}
+   for(int row=0;row<displayedFlows.size();row++)if(displayedFlows.get(row).id().equals(selectedFlow)){restoreSelection(flowTable,row);break;}
+   showFlowDetail();refreshActions();viewLatency.since(started);updateCounters();
+  }finally{
+   viewUpdatePending.set(false);
+   if(pendingView.get()!=null&&!closed.get())scheduleView();
+  }
+ }
+
+ private static void restoreSelection(JTable table,int modelRow){
+  if(modelRow<0)return;
+  int view=table.convertRowIndexToView(modelRow);
+  if(view>=0)table.setRowSelectionInterval(view,view);
+ }
+ @Override public void close(){closed.set(true);pendingView.set(null);retries.clear();generation.incrementAndGet();analysisQueue.close();markerWindow.close();draftWindow.close();flows.clear();clearPackets();displayedFindingPackets=Map.of();displayedFlowPackets=Map.of();displayedFlows=List.of();displayedFindingKeys=List.of();synchronized(browserImages){browserImages.clear();}flowDetail.setText("");}
 }

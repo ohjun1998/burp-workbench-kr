@@ -96,6 +96,8 @@ def main():
         ('next-js-retries.png','wb.analysis.retry.table'):80,
         ('next-js-retries-minimum.png','wb.analysis.retry.table'):40,
         ('next-response-retries.png','wb.analysis.retry.table'):80,
+        ('next-remaining-checks.png','wb.assessment.remaining'):60,
+        ('next-remaining-checks.png','wb.assessment.remaining.explanation'):50,
     }
     for view,name,default_minimum,small_minimum in [
         ('next-auth-get-loading','wb.auth.effect.read.candidates',80,40),
@@ -145,7 +147,7 @@ def main():
             for (view,name),minimum in required.items():
                 expected_w,expected_h=w,h
                 copies=1
-                if (full_mode or args.next_only) and (view,name) in next_required and view!='next-response-retries.png':
+                if (full_mode or args.next_only) and (view,name) in next_required and view not in {'next-response-retries.png','next-remaining-checks.png'}:
                     expected_w,expected_h=('560','300') if '-minimum' in view else ('760','480')
                     copies=len(args.sizes)
                 if args.js_only and view in {'js-packets.png','js-analysis-list.png','js-packets-small.png','js-analysis-list-small.png'}:
@@ -173,6 +175,7 @@ def main():
         'GET candidates loading','GET candidates ready','JSON candidates loading','JSON candidates ready',
         'Multiple write rules','Setup bundle review','Readiness row edit','Execution evidence linkage',
         'Mapper update review','JS first page','JS second page','JS full disk search','JS retention policy',
+        'Remaining work and explicit next step',
     } if full_mode or args.next_only else set()
     for theme in args.themes:
         for size in args.sizes:

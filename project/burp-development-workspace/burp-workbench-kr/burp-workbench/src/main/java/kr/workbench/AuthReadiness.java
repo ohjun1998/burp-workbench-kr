@@ -129,6 +129,10 @@ final class AuthReadiness {
   }
   static JPanel content(AuthComparePanel.Context c, Report report, List<String> blocked,
       java.util.function.BiConsumer<Row, String> edit) {
+    return content(c, report, blocked, edit, -1, -1);
+  }
+  static JPanel content(AuthComparePanel.Context c, Report report, List<String> blocked,
+      java.util.function.BiConsumer<Row, String> edit, int focusedRequest, int focusedSlot) {
     JPanel panel = new JPanel(new BorderLayout(8, 8));
     panel.setName("wb.auth.readiness");
     String introduction = report.summary() + "\n① 설정됨: 입력값 보관 → ② 적용됨: 선택 요청에 규칙 일치 → ③ 실행 확인: 비교 후 근거에서 확인\n이 화면은 설정 유무와 적용 범위를 확인합니다. 실제 신원·접근 결과·조회 성공을 검증한 상태는 아닙니다. 원본과 동일 인증인 계정은 실행 시 기준 계정으로 구분합니다.";
@@ -180,7 +184,15 @@ final class AuthReadiness {
     panel.add(bottom, BorderLayout.SOUTH);
     panel.setPreferredSize(new Dimension(880, 500));
     WorkbenchUi.style(panel);
-    if (!report.rows().isEmpty()) table.setRowSelectionInterval(0, 0);
+    if (!report.rows().isEmpty()) {
+      int selectedRow = 0;
+      for (int i = 0; i < report.rows().size(); i++) {
+        Row row = report.rows().get(i);
+        if (row.requestIndex() == focusedRequest && row.slot() == focusedSlot) { selectedRow = i; break; }
+      }
+      table.setRowSelectionInterval(selectedRow, selectedRow);
+      table.scrollRectToVisible(table.getCellRect(selectedRow, 0, true));
+    }
     return panel;
   }
 

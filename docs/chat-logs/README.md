@@ -1,5 +1,7 @@
 # 날짜별 작업 대화 기록
 
+- [2026-10-24 · Next 0.52.0 main 병합](2026-10-24/workbench-next-0520-main.md)
+
 - [2026-10-24 · Next 0.52.0 구현·원격 검사 재확인](2026-10-24/workbench-next-0520.md)
 
 - [2026-10-24 · Next 0.52.0 GitHub 상태 확인과 업로드](2026-10-24/workbench-next-0520-upload.md)

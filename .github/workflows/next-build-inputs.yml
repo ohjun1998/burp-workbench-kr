@@ -1,0 +1,28 @@
+name: Next build input transfer
+on:
+  push:
+    branches: [account-a/next-0530-optimization]
+    paths: [.github/workflows/next-build-inputs.yml]
+permissions:
+  contents: read
+jobs:
+  inputs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Export repository build inputs
+        uses: actions/upload-artifact@v7
+        with:
+          name: next-build-inputs
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/deps/*.jar
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/fonts/NanumGothic-Regular.ttf
+            project/burp-development-workspace/community-security-lab/src/main/resources/static/lab-korean.woff
+            feature-mapper/deps/*.jar
+            feature-mapper/src/main/resources/fonts/NanumGothic-Regular.ttf
+            reproduction/http-runtime-cache/*.jar

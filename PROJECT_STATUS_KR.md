@@ -1,6 +1,19 @@
 # 현재 개발 상태
 
-기준: 2026-10-20 (한국 시간) / Workbench 0.49.1 / 내장 Feature Mapper 0.3.3 / 실습 사이트 3.10.0.
+기준: 2026-10-24 (한국 시간) / Workbench Next 0.52.0 / 내장 Feature Mapper 0.3.4 / 실습 사이트 3.10.0.
+
+## Workbench Next 0.52.0 main 병합 완료
+
+사용자가 알려진 CI 실패를 안내받은 뒤 **“main에도 업로드 해줘”**라고 요청해 [PR #86](https://github.com/ohjun1998/burp-workbench-kr/pull/86)을 **2026-10-24 03:26:34 (한국 시간)**에 main에 병합했습니다. 병합 커밋은 `4741ef507c8223a18df47fb70f4d9679004f7ac1`, PR head는 `9f66f2f21a2851466a2f18b1600e1bdb46b20e39`입니다. 병합된 파일 트리는 PR head와 같은 `d7ed38fe36908205009382073ca646a4f9a4a969`입니다. 후속 문서 정리는 소스·배포 파일을 바꾸지 않습니다.
+
+Next의 8개 주요 메뉴, 권한 설정 묶음·여러 쓰기 조회 규칙, 비동기 GET/JSON 후보, Mapper 기능→업무 검토, 원본→실행→조건 revision→증거 ZIP 연결, 증분 트래픽 검색·JS 디스크 페이지·응답 분석 예약 예산을 반영했습니다. 기존 0.49.1·Next 0.50.0 버전별 JAR·소스와 `release/`, `history/`는 보존합니다. 새 버전은 Next 이름·설정 저장 공간을 유지합니다.
+
+배포 기록의 로컬 회귀·격리 HTTP **3,707개**, Mapper Java **114개**·Node **8개**, 합성 Swing 화면 **180개**·흐름 상태 **78개** 통과를 보존합니다. **이번 main 병합 작업에서는 배포 파일 해시·소스 지문과 보존 여부만 확인했으며, 이 수치를 새로 실행한 검사로 합산하지 않습니다.** 원격 기본 Build와 격리 디스크·부하 작업은 통과했지만, **Windows 검색 회귀와 실제 브라우저 도우미 본문 해시 연결은 재시도에서도 실패**했습니다. 원인은 확정하지 않았으며 실제 Burp GUI·전 환경 검증 완료로 표시하지 않습니다. 보호 설정은 변경하지 않았습니다.
+
+0.52.0 JAR SHA-256: `72b97318aca25fd48986f4165b1cea28210cb5f5e7f9ff7e8e0e08b17e079995`.
+
+[설치 JAR·소스](downloads/extensions/0.52.0/) · [기능별 상세 가이드](docs/RELEASE_0.52.0_NEXT_KR.md) · [로컬 검증 기록](docs/VERIFICATION_0.52.0.json) · [원격 CI 실패·재시도](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md) · [main 병합 요청 대화](docs/chat-logs/2026-10-24/workbench-next-0520-main.md)
+
 
 
 ## 계정 비교 전 설정·판정 한계 안내 — 0.49.1 main 병합 완료

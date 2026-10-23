@@ -1,5 +1,9 @@
 # 최신 문서
 
+- [Workbench Next 0.52.0 설치·기능별 상세 가이드](RELEASE_0.52.0_NEXT_KR.md) · [이번 검증과 제한사항](VERIFICATION_0.52.0.json) · [최종 코드의 화면 자료](reports/2026-10-24-workbench-next-0520/ui/README.md)
+
+- [Workbench Next 0.50.0 최초 분리 버전 · 보존](RELEASE_0.50.0_NEXT_KR.md) · [당시 검증](VERIFICATION_0.50.0.json)
+
 - [0.45.0 메뉴 유지·계정·JS·SQL·저장 흐름 고도화](RELEASE_0.45.0_KR.md) · [Juice Shop 재검증 기록](VERIFICATION_0.45.0.json)
 
 - [0.44.0 계정 판정 고도화·쓰기 보류 사유](RELEASE_0.44.0_KR.md) · [초급자용 재검증 PDF](reports/2026-10-18-auth50-upgrade/Auth50_Upgrade_Report_0.44.0_KR.pdf) · [검증 기록](VERIFICATION_0.44.0.json)

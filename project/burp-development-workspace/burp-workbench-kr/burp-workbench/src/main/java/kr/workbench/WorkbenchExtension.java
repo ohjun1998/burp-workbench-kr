@@ -184,6 +184,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private FolderNavigation navigation;
   private JTabbedPane dataTabs, trafficTools, explorationTools, mapperTools;
   private final WorkContext workContext = new WorkContext();
+  private final OriginalRequestIds comparisonOriginalIds = new OriginalRequestIds();
   private final WorkContextPanel workContextPanel = new WorkContextPanel(workContext);
   private LayoutSettings commonSettings;
   private JPanel commonSettingsContent;
@@ -499,6 +500,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     authCompare.trackingCreate = activity.tracker.assessments::register;
     authCompare.trackingBind = activity.tracker.assessments::bind;
     authCompare.trackingSink = activity::accountInspection;
+    authCompare.onExecutionTracker(activity.tracker.assessments, comparisonOriginalIds::find);
     jsAnalysis.coverage = (result, source) -> activity.analyzed(result, source);
     jsAnalysis.observation = activity::observation;
     jsAnalysis.observedMethods = activity.tracker::observedMethods;
@@ -555,6 +557,17 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           public void failure(String stage, Exception error) {
             captureFailure("기능 자동 매핑 · " + stage,
                 error instanceof RuntimeException runtime ? runtime : new IllegalStateException(error));
+          }
+          public boolean supportsAssessmentTasks() { return true; }
+          public boolean allowsAssessmentUrl(String url) {
+            return !unloaded.get() && localScope.matchesTraffic(url);
+          }
+          public void assessmentDraft(String sourceId, String title, List<String> endpoints) {
+            activity.assessmentPanel.upsertMapperDraft(sourceId, title, endpoints,
+                () -> !unloaded.get() && featureMapper.isAssessmentSourceCurrent(sourceId, endpoints)
+                    && endpoints.stream().allMatch(endpoint ->
+                        localScope.matchesTraffic(endpoint.substring(endpoint.indexOf(' ') + 1))));
+            mapperTools.setSelectedComponent(activity);
           }
         });
     mapperTools = new JTabbedPane();
@@ -1406,24 +1419,20 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     authCompare =
         new AuthComparePanel(
             api,
-            () ->
-                selectedTraffic().stream()
-                    .map(t -> HttpRequestResponse.httpRequestResponse(t.request(), t.response()))
-                    .toList());
+            () -> selectedTraffic().stream().map(t -> {
+              HttpRequest request = t.request();
+              comparisonOriginalIds.remember(request, t.packet().id());
+              return HttpRequestResponse.httpRequestResponse(request, t.response());
+            }).toList());
     authCompare.onWorkContext(workContext);
-    authCompare.onObservedRequests(() -> {
+    authCompare.onObservedRequestRefs(() -> {
       DiskTrafficStore store = trafficStore;
-      List<HttpRequestResponse> recent = new ArrayList<>();
-      long end = store.size(), retainedBytes = 0;
-      // Candidate helpers run on Swing: inspect at most 100 recent metadata rows and restore only
-      // GET responses within an 8 MiB total / 2 MiB per-packet budget.
+      List<DiskTrafficStore.PacketRef> recent = new ArrayList<>();
+      long end = store.size();
+      // Metadata only here. The helper restores eligible originals on its bounded background worker.
       for (long index = end - 1; index >= Math.max(0, end - 100) && !unloaded.get(); index--) {
         DiskTrafficStore.PacketRef ref = store.ref(index);
-        long bytes = (long) ref.requestLength() + ref.responseLength();
-        if (!ref.method().equals("GET") || !ref.hasResponse() || bytes > 2L * 1024 * 1024
-            || retainedBytes + bytes > 8L * 1024 * 1024) continue;
-        recent.add(ref.packet());
-        retainedBytes += bytes;
+        if (ref.method().equals("GET") && ref.hasResponse()) recent.add(ref);
       }
       return List.copyOf(recent);
     });
@@ -1611,7 +1620,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       captureStage(
           "계정 자동 비교 응답",
           () -> {
-            if (authCompare != null) authCompare.received(r.messageId(), r.initiatingRequest(), r);
+            if (authCompare != null) authCompare.received(r.messageId(), r.initiatingRequest(), r, original.get());
           });
     }
     return ResponseReceivedAction.continueWith(r, r.annotations());

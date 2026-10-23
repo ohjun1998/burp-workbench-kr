@@ -20,13 +20,13 @@ public final class StoredFlowStagesTest extends WorkbenchTest {
  static void read(StoredFlows f,String url,int status,String type,String body){f.observe(url,"GET","",status,type,body);}
  static HttpRequest withBody(String url,String method,String body){
   HttpRequest base=request(url,method,true,List.of(header("Authorization","Bearer SECRET")));
-  return proxy(HttpRequest.class,(p,m,a)->switch(m.getName()){
+  HttpRequest created=proxy(HttpRequest.class,(p,m,a)->switch(m.getName()){
    case "body"->bytes(body.getBytes(StandardCharsets.UTF_8));case "bodyToString"->body;
    case "toString"->base.toString()+body;case "toByteArray"->bytes((base.toString()+body).getBytes(StandardCharsets.UTF_8));
    default->m.invoke(base,a);
-  });
+  });registerTrafficPacket(created,null);return created;
  }
- static HttpResponse typed(int code,String type,String body){HttpResponse base=response(code,body);return proxy(HttpResponse.class,(p,m,a)->m.getName().equals("toString")?"HTTP/1.1 "+code+"\r\nContent-Type: "+type+"\r\n\r\n"+body:m.invoke(base,a));}
+ static HttpResponse typed(int code,String type,String body){HttpResponse base=response(code,body);HttpResponse created=proxy(HttpResponse.class,(p,m,a)->m.getName().equals("toString")?"HTTP/1.1 "+code+"\r\nContent-Type: "+type+"\r\n\r\n"+body:m.invoke(base,a));registerTrafficPacket(null,created);return created;}
  static HttpRequestResponse pair(HttpRequest q,HttpResponse s){return proxy(HttpRequestResponse.class,(p,m,a)->switch(m.getName()){case "request"->q;case "response"->s;default->def(m);});}
  static void drain(ResponseReconPanel panel)throws Exception{CountDownLatch done=new CountDownLatch(1);panel.submit(done::countDown);if(!done.await(10,TimeUnit.SECONDS))throw new AssertionError("response observer queue did not finish");edt(()->{});}
  public static void main(String[] args)throws Exception{
@@ -69,15 +69,16 @@ public final class StoredFlowStagesTest extends WorkbenchTest {
   write(f,"https://test/store",200);check(f.views().isEmpty(),"cleared marker is not silently re-registered");
 
   ObjectFactoryLocator.FACTORY=proxy(MontoyaObjectFactory.class,(p,m,a)->m.getName().equals("httpRequestResponse")?pair((HttpRequest)a[0],(HttpResponse)a[1]):def(m));
-  MontoyaApi api=proxy(MontoyaApi.class,(p,m,a)->def(m));AtomicReference<ResponseReconPanel> box=new AtomicReference<>();
+  var scope=proxy(burp.api.montoya.scope.Scope.class,(p,m,a)->m.getName().equals("isInScope")?a[0].toString().startsWith("https://test/"):def(m));
+  MontoyaApi api=proxy(MontoyaApi.class,(p,m,a)->m.getName().equals("scope")?scope:def(m));AtomicReference<ResponseReconPanel> box=new AtomicReference<>();
   AtomicReference<List<HttpRequestResponse>> exported=new AtomicReference<>();AtomicReference<String> note=new AtomicReference<>();
   edt(()->{var panel=new ResponseReconPanel(api);box.set(panel);panel.flows.register(MARKER);panel.evidenceSink=(packets,text)->{exported.set(packets);note.set(text);};});
   var panel=box.get();HttpRequest qWrite=withBody("https://test/store?token=SECRET","POST",MARKER),qRead=withBody("https://test/read?token=SECRET","GET","");HttpResponse sWrite=typed(201,"application/json","{}"),sRead=typed(200,"text/html","<b>"+MARKER+"</b>");
   panel.offer(qWrite,sWrite);panel.offer(qRead,sRead);drain(panel);
-  edt(()->{check(panel.flowModel.getColumnCount()==8&&panel.displayedFlows.size()==2,"actual response UI exposes separate write/read/HTML/browser stages");panel.flowTable.setRowSelectionInterval(1,1);panel.captureStored();check(exported.get().size()==2&&exported.get().get(0).request()==qWrite&&exported.get().get(1).response()==sRead,"stored evidence uses exact original ordered write/read packets");check(!note.get().contains("SECRET")&&note.get().contains("실행: 미검증"),"stored evidence note preserves uncertainty and excludes original credentials");check(panel.flowDetail.getText().contains("SF-P")&&!panel.flowDetail.getText().contains("SECRET"),"UI details expose safe source IDs without request values");});
+  edt(()->{check(panel.flowModel.getColumnCount()==8&&panel.displayedFlows.size()==2,"actual response UI exposes separate write/read/HTML/browser stages");panel.flowTable.setRowSelectionInterval(1,1);panel.captureStored();check(exported.get().size()==2&&Arrays.equals(exported.get().get(0).request().toByteArray().getBytes(),qWrite.toByteArray().getBytes())&&Arrays.equals(exported.get().get(1).response().toByteArray().getBytes(),sRead.toByteArray().getBytes()),"stored evidence uses exact original ordered write/read packets");check(!note.get().contains("SECRET")&&note.get().contains("실행: 미검증"),"stored evidence note preserves uncertainty and excludes original credentials");check(panel.flowDetail.getText().contains("SF-P")&&!panel.flowDetail.getText().contains("SECRET"),"UI details expose safe source IDs without request values");});
   HttpRequest qError1=withBody("https://test/error-one","GET",""),qError2=withBody("https://test/error-two","GET","");var error=typed(500,"application/json","BadSqlGrammarException");
   panel.offer(qError1,error);panel.offer(qError2,error);drain(panel);
-  edt(()->{int model=-1;for(int i=0;i<panel.findings.getRowCount();i++)if(panel.findings.getValueAt(i,1).toString().endsWith("/error-two"))model=i;check(model>=0,"grouped Passive finding displays current representative URL");panel.findingTable.getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(1,SortOrder.DESCENDING)));int view=panel.findingTable.convertRowIndexToView(model);panel.findingTable.setRowSelectionInterval(view,view);panel.captureFinding();check(exported.get().size()==1&&exported.get().get(0).request()==qError2,"sorted/grouped Passive finding sends matching current original packet");});
+  edt(()->{int model=-1;for(int i=0;i<panel.findings.getRowCount();i++)if(panel.findings.getValueAt(i,1).toString().endsWith("/error-two"))model=i;check(model>=0,"grouped Passive finding displays current representative URL");panel.findingTable.getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(1,SortOrder.DESCENDING)));int view=panel.findingTable.convertRowIndexToView(model);panel.findingTable.setRowSelectionInterval(view,view);panel.captureFinding();check(exported.get().size()==1&&Arrays.equals(exported.get().get(0).request().toByteArray().getBytes(),qError2.toByteArray().getBytes()),"sorted/grouped Passive finding sends matching current original packet");});
   WorkbenchScope local=WorkbenchScope.install(api);local.add("https://test/allowed-only",false);
   edt(()->{rejects(panel::captureFinding,"scope narrowing blocks Passive original export");rejects(panel::captureStored,"scope narrowing blocks whole stored-flow source pair");});WorkbenchScope.release(api);
   panel.offer(qError2,typed(500,"application/json","BadSqlGrammarException"+"x".repeat(EvidenceLinks.PACKET_LIMIT)));drain(panel);
@@ -93,8 +94,8 @@ public final class StoredFlowStagesTest extends WorkbenchTest {
   AtomicReference<ResponseReconPanel> raceBox=new AtomicReference<>();edt(()->raceBox.set(new ResponseReconPanel(api)));var racePanel=raceBox.get();
   CountDownLatch retentionStarted=new CountDownLatch(1),allowRetention=new CountDownLatch(1);
   HttpRequest delayed=proxy(HttpRequest.class,(p,m,a)->{if(m.getName().equals("toByteArray")){retentionStarted.countDown();boolean released=false;while(!released){try{allowRetention.await();released=true;}catch(InterruptedException ignored){}}}return m.invoke(qError1,a);});
-  racePanel.offer(delayed,error);check(retentionStarted.await(10,TimeUnit.SECONDS),"unload race reaches pending raw packet retention");
-  edt(racePanel::close);allowRetention.countDown();check(racePanel.worker.awaitTermination(10,TimeUnit.SECONDS),"interrupted observer completes after blocked packet read is released");edt(()->{});
+  Thread snapshotThread=new Thread(()->racePanel.offer(delayed,error),"manual-response-snapshot-fixture");snapshotThread.start();check(retentionStarted.await(10,TimeUnit.SECONDS),"unload race reaches bounded manual input snapshot");
+  edt(racePanel::close);allowRetention.countDown();snapshotThread.join(10000);check(!snapshotThread.isAlive()&&racePanel.analysisBudget.metrics().queuedBytes()==0,"closing during manual snapshot releases its reservation without queueing work");check(racePanel.worker.awaitTermination(10,TimeUnit.SECONDS),"interrupted observer completes after blocked packet read is released");edt(()->{});
   check(racePanel.flowPackets.isEmpty()&&racePanel.findingPackets.isEmpty()&&racePanel.displayedFindingPackets.isEmpty(),"in-flight observation cannot repopulate sensitive packet caches after unload");
   System.out.println("StoredFlowStagesTest: "+checks+" checks passed");
  }

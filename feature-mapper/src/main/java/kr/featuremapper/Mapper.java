@@ -649,6 +649,25 @@ public final class Mapper implements AutoCloseable {
   record FeatureSummary(
       String id, String origin, String entity, String name, String state, int packets) {}
 
+  record AssessmentCandidate(String sourceId, String title, List<String> endpoints) {}
+
+  synchronized String assessmentSourceId(String featureId) {
+    return features.containsKey(featureId) ? "mapper-" + Signals.digest(salt + "|" + featureId) : "";
+  }
+
+  synchronized AssessmentCandidate assessmentCandidate(String featureId) {
+    Feature feature = features.get(featureId);
+    if (feature == null) throw new IllegalArgumentException("선택 기능이 더 이상 존재하지 않습니다.");
+    Set<String> endpoints = new LinkedHashSet<>();
+    for (Packet packet : packetList(featureId)) {
+      String url = Signals.safePage(packet.url);
+      if (!url.isBlank() && Signals.origin(url).equals(feature.origin))
+        endpoints.add(packet.method + " " + url);
+    }
+    return new AssessmentCandidate(assessmentSourceId(featureId),
+        feature.name, List.copyOf(endpoints));
+  }
+
   synchronized List<FeatureSummary> featureSummaries() {
     List<FeatureSummary> out = new ArrayList<>();
     for (Feature f : features.values())

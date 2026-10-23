@@ -22,9 +22,18 @@ record TrafficQuery(String method,String status,int range,boolean sensitive,bool
     return matchesText(verb+" "+url+" "+code,query,cancelled);
   }
   boolean matchesText(String text,String query,BooleanSupplier cancelled){
+    if(cancelled.getAsBoolean())throw new java.util.concurrent.CancellationException();
     if(query.isBlank())return true;
     var r=PacketInspector.find(text,query,regex,sensitive,cancelled);
+    if(cancelled.getAsBoolean())throw new java.util.concurrent.CancellationException();
     if(r.error()!=null)throw new IllegalArgumentException(r.error());return !r.spans().isEmpty();
+  }
+  /** The boundary is inclusive, matching the original recent-period filter. */
+  boolean includesTime(long capturedAt,long now){return minutes==0||now<=expiresAt(capturedAt)-1;}
+  long expiresAt(long capturedAt){
+    if(minutes==0)return Long.MAX_VALUE;
+    long duration=minutes*60_000L+1;
+    return capturedAt>Long.MAX_VALUE-duration?Long.MAX_VALUE:capturedAt+duration;
   }
   String groupKey(String method,String url,String identity){
     try {URI u=URI.create(url);String path=u.getRawPath();

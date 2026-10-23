@@ -46,6 +46,21 @@ final class AuthSetupSuggestions {
     return found.values().stream().sorted(Comparator.comparingInt(Read::relation)).toList();
   }
 
+  static List<Read> readsFromRefs(HttpRequest target, List<DiskTrafficStore.PacketRef> refs,
+      Predicate<HttpRequest> scope) {
+    List<HttpRequestResponse> packets = new ArrayList<>(); long bytes = 0;
+    for (int i = 0; i < Math.min(MAX_PACKETS, refs.size()); i++) {
+      if (Thread.currentThread().isInterrupted()) throw new java.util.concurrent.CancellationException();
+      var ref = refs.get(i); long retained = (long) ref.requestLength() + ref.responseLength();
+      if (!"GET".equals(ref.method()) || ref.responseBodyLength() > MAX_BODY || retained > 512 * 1024
+          || !AuthEffectRules.canonicalOrigin(ref.url()).equals(AuthComparePanel.origin(target))) continue;
+      if (bytes + retained > 8L * 1024 * 1024) break;
+      bytes += retained;
+      try { packets.add(ref.packet()); } catch (RuntimeException ignored) { /* Expired original is never fetched again. */ }
+    }
+    return reads(target, packets, scope);
+  }
+
   private static String parent(String path) { return path.substring(0, Math.max(0, path.lastIndexOf('/'))); }
   private static boolean hasCredentialQuery(URI uri) {
     if (uri.getRawQuery() == null) return false;

@@ -127,6 +127,8 @@ final class AssessmentTracker {
   final LinkedHashMap<String, Operation> operations = new LinkedHashMap<>();
   final LinkedHashMap<String, Task> tasks = new LinkedHashMap<>();
   final LinkedHashMap<String, EvidenceLink> artifacts = new LinkedHashMap<>();
+  final ExecutionLedger executions = new ExecutionLedger();
+  final LinkedHashMap<String, String> mapperTasks = new LinkedHashMap<>();
   final ArrayDeque<Event> events = new ArrayDeque<>();
   private final Map<String, Path> evidencePaths = new HashMap<>();
   private final Map<String, String> evidenceStatus = new HashMap<>();
@@ -497,8 +499,110 @@ final class AssessmentTracker {
     event(id, endpoint(method, url), "검사 결과", op.result);
   }
 
+  /** Apply only effective conditions for existing account/API pairs; historical runs stay immutable. */
+  synchronized void authConfiguration(AuthComparePanel.Context context) {
+    for (int slot = 0; slot < context.accountIds().length; slot++) {
+      String account = context.accountIds()[slot];
+      if (account.isEmpty() || !accounts.containsKey(account) || context.profiles()[slot] == null) continue;
+      for (Operation op : operations.values()) if (op.account.equals(account)
+          && accounts.get(account).origin.equals(origin(op.url))) {
+        String fingerprint = ExecutionLedger.fingerprint(context, slot, op.method, op.url);
+        if (executions.configure(account, op.method, op.url, fingerprint)) {
+          op.review = "실행 후 권한·조회 조건 변경 · 현재 조건으로 재검토";
+          op.last = now(); reopenTasks(op, op.review); invalidateOperation(op);
+          event(account, endpoint(op.method, op.url), "실행 조건 revision 변경", op.review);
+        }
+      }
+    }
+  }
+
+  synchronized void invalidateAuthOrigin(String targetOrigin, String reason) {
+    String normalized = origin(targetOrigin);
+    String note = text(reason, 512);
+    bindings.removeIf(binding -> binding.origin.equals(normalized));
+    for (Operation op : operations.values()) if (origin(op.url).equals(normalized)) {
+      var policy = executions.policy(op.account, op.method, op.url);
+      if (policy != null) executions.configure(op.account, op.method, op.url,
+          Core.hash(("invalidated:" + UUID.randomUUID()).getBytes(StandardCharsets.UTF_8)));
+      if (policy != null || op.completed) {
+        op.review = note; op.last = now(); reopenTasks(op, note); invalidateOperation(op);
+        event(op.account, endpoint(op.method, op.url), "설정 묶음 조건 재검토", note);
+      }
+    }
+  }
+
+  synchronized void beginAuthExecution(String id, String originalId, HttpRequest request, AuthComparePanel.Context context) {
+    if (executions.runs.containsKey(id)) throw new IllegalArgumentException("이미 등록된 실행 ID입니다.");
+    if (executions.runs.size() >= ExecutionLedger.RUN_LIMIT) throw new IllegalArgumentException("실행 연결 최대 2,000개 · 프로젝트를 저장하고 새 프로젝트를 사용하세요.");
+    String safe = ActivityTracker.safeUrl(request.url());
+    if (safe == null) throw new IllegalArgumentException("실행 대상 URL을 확인하세요.");
+    List<ExecutionLedger.Binding> links = new ArrayList<>();
+    for (int slot = 0; slot < context.accountIds().length; slot++) {
+      String account = context.accountIds()[slot];
+      if (account.isEmpty() || !accounts.containsKey(account) || context.profiles()[slot] == null) continue;
+      if (!accounts.get(account).origin.equals(origin(safe))) continue;
+      Operation op = operation(account, request.method(), safe);
+      String fingerprint = ExecutionLedger.fingerprint(context, slot, request.method(), safe);
+      if (executions.configure(account, request.method(), safe, fingerprint)) {
+        op.review = "권한·조회 조건 변경 · 새 실행 결과 검토 필요"; reopenTasks(op, op.review);
+      }
+      var policy = executions.policy(account, request.method(), safe);
+      Set<String> jobs = new LinkedHashSet<>();
+      for (Task task : tasks.values()) if (task.accounts.contains(account)
+          && task.endpoints.contains(endpoint(request.method(), safe))) jobs.add(task.id);
+      links.add(new ExecutionLedger.Binding(account, policy.revision(), policy.fingerprint(), jobs));
+      if (op.completed) { op.review = "완료 후 새 실행 시작 · 종료 결과 검토 필요"; reopenTasks(op, op.review); }
+      invalidateOperation(op);
+    }
+    executions.begin(id, originalId, request.method(), safe, links);
+    event("", id, "실행 시작", "원본 " + originalId + " · " + request.method() + " " + safe);
+  }
+
+  synchronized void finishAuthExecution(String id, ExecutionLedger.State state, String summary) {
+    var before = executions.runs.get(id);
+    executions.finish(id, state, summary);
+    var run = executions.runs.get(id);
+    if (before == null || run == before) return;
+    for (var binding : run.bindings()) {
+      Operation op = operations.get(opKey(binding.account(), run.method(), run.url()));
+      if (op == null) continue;
+      if (state != ExecutionLedger.State.COMPLETED) {
+        op.review = "연결 실행 " + ExecutionLedger.label(state) + " · 완료 근거로 사용할 수 없음";
+        reopenTasks(op, op.review);
+      }
+      invalidateOperation(op);
+    }
+    event("", id, "실행 종료", ExecutionLedger.label(state));
+  }
+
+  synchronized String executionSummary(String id) { return executions.summary(id); }
+  synchronized ExecutionLedger.Run execution(String id) { return executions.runs.get(id); }
+  synchronized List<ExecutionLedger.Run> executionHistory() { return List.copyOf(executions.runs.values()); }
+  synchronized String latestExecutionSummary(String account, String method, String url) {
+    var run = executions.latest(account, method, url);
+    if (run == null) return "없음 · 수동 점검 기록";
+    var binding = run.bindings().stream().filter(b -> b.account().equals(account)).findFirst().orElseThrow();
+    return run.id() + " · r" + binding.revision() + " · " + ExecutionLedger.label(run.state())
+        + (executions.current(run, account) ? "" : " · 현재 조건과 다름") + " · 증거 ZIP " + run.evidence().size();
+  }
+  synchronized void executionEvidenceSaved(String executionId, String evidenceHash) {
+    executions.evidence(executionId, evidenceHash);
+    var run = executions.runs.get(executionId);
+    if (run != null) {
+      for (var binding : run.bindings()) {
+        Operation op = operations.get(opKey(binding.account(), run.method(), run.url()));
+        if (op != null) invalidateOperation(op);
+      }
+      event("", executionId, "실행 증거 연결", evidenceHash);
+    }
+  }
+
   synchronized void complete(
       String id, String method, String url, Collection<String> names, boolean value) {
+    if (value) {
+      String problem = executions.completionProblem(id, method, url);
+      if (!problem.isEmpty()) throw new IllegalArgumentException(problem);
+    }
     Operation op = operation(id, method, url);
     inputs(op, names);
     if (!value && op.completed) reopenTasks(op, "요구 계정의 URL 완료 해제");
@@ -530,6 +634,7 @@ final class AssessmentTracker {
         + "\n현재 상태: " + view.state + "\n검사 시도: " + view.inspections
         + " · 연결된 증거 ZIP: " + view.evidence + " · 미완료 입력: " + pending
         + "\n최근 검사: " + (view.result.isBlank() ? "기록 없음" : view.result)
+        + "\n실행 연결: " + latestExecutionSummary(id, method, url)
         + "\n재검토 근거: " + (view.review.isBlank() ? "없음" : view.review)
         + "\n\n이 완료 표시는 진단자의 수동 검토 기록입니다. 실제 신원·권한 정책·영향과 증거를 확인하세요."
         + "\n입력별 완료는 별도이며, 증거 개수는 파일 존재나 탐지 성공을 보장하지 않습니다.";
@@ -549,7 +654,7 @@ final class AssessmentTracker {
         view.account, view.method, view.url, view.state, view.inspections,
         view.result, view.review, view.completedAt,
         view.parameters.stream().map(p -> List.of(p.key(), p.state())).toList(), files, sessions,
-        op == null ? Map.of() : new TreeMap<>(op.inputHashes)));
+        op == null ? Map.of() : new TreeMap<>(op.inputHashes), latestExecutionSummary(view.account, view.method, view.url)));
   }
 
   private static String stamp(Object values) {
@@ -655,6 +760,61 @@ final class AssessmentTracker {
     tasks.put(id, task);
     invalidateTask(task);
     event("", id, "업무 등록", task.title);
+    return id;
+  }
+
+  record MapperDraft(String sourceId, String taskId, String title, List<String> endpoints,
+                     List<String> added, List<String> removed, String stamp) {
+    MapperDraft { endpoints = List.copyOf(endpoints); added = List.copyOf(added); removed = List.copyOf(removed); }
+  }
+
+  synchronized MapperDraft mapperDraft(String sourceId, String title, List<String> proposed) {
+    if (sourceId == null || !sourceId.matches("[A-Za-z0-9_-]{1,128}")) throw new IllegalArgumentException("기능 매핑 원본 ID를 확인하세요.");
+    title = text(title, 120);
+    if (title.isBlank() || proposed.isEmpty() || proposed.size() > 32)
+      throw new IllegalArgumentException("기능 이름과 1~32개 API를 선택하세요. 큰 기능은 업무를 나누세요.");
+    Set<String> endpoints = new LinkedHashSet<>();
+    for (String value : proposed) {
+      int split = value.indexOf(' ');
+      if (split < 1) throw new IllegalArgumentException("기능 API는 METHOD URL 형식이어야 합니다.");
+      endpoints.add(endpoint(value.substring(0, split), value.substring(split + 1)));
+    }
+    String id = mapperTasks.getOrDefault(sourceId, "");
+    Task existing = id.isEmpty() ? null : task(id);
+    Set<String> old = existing == null ? Set.of() : existing.endpoints;
+    List<String> added = endpoints.stream().filter(e -> !old.contains(e)).toList();
+    List<String> removed = old.stream().filter(e -> !endpoints.contains(e)).toList();
+    String stamp = stamp(List.of(sourceId, id, new TreeSet<>(endpoints), existing == null ? List.of()
+        : List.of(existing.title, existing.note, new TreeSet<>(existing.accounts), new TreeSet<>(existing.endpoints),
+            existing.completed, existing.requiresEvidence, existing.strictInputs, existing.allEvidence,
+            new TreeSet<>(existing.criticalInputs), existing.review)));
+    return new MapperDraft(sourceId, id, existing == null ? title : existing.title, List.copyOf(endpoints), added, removed, stamp);
+  }
+
+  synchronized String applyMapperDraft(MapperDraft draft, Set<String> required, boolean removeMissing) {
+    MapperDraft fresh = mapperDraft(draft.sourceId, draft.title, draft.endpoints);
+    if (!fresh.stamp.equals(draft.stamp)) throw new IllegalArgumentException("검토 중 연결 업무가 변경되었습니다. 기능 매핑 연결을 다시 여세요.");
+    if (required.isEmpty() || required.size() > ACCOUNT_LIMIT) throw new IllegalArgumentException("요구 계정을 선택하세요.");
+    for (String account : required) account(account);
+    Task existing = draft.taskId.isEmpty() ? null : task(draft.taskId);
+    Set<String> targets = new LinkedHashSet<>(draft.endpoints);
+    if (!removeMissing && existing != null) targets.addAll(existing.endpoints);
+    if (targets.size() > 32) throw new IllegalArgumentException("보존할 기존 API를 포함해 업무당 최대 32개입니다.");
+    for (String target : targets) {
+      String origin = origin(target.substring(target.indexOf(' ') + 1));
+      if (required.stream().noneMatch(id -> accounts.get(id).origin.equals(origin)))
+        throw new IllegalArgumentException("모든 API Origin에 맞는 요구 계정을 선택하세요.");
+    }
+    if (existing != null && existing.accounts.equals(required) && existing.endpoints.equals(targets)) return existing.id;
+    String id = existing == null ? createTask(draft.title, "기능 자동 매핑에서 검토 후 연결한 업무", required, true) : existing.id;
+    Task task = task(id);
+    task.accounts.clear(); task.accounts.addAll(required);
+    task.endpoints.clear(); task.endpoints.addAll(targets);
+    task.completed = false; task.last = now();
+    if (existing != null) task.review = "기능 매핑의 요구 계정/API 변경 · 범위 재검토 필요";
+    mapperTasks.put(draft.sourceId, id);
+    invalidateTask(task);
+    event("", id, "기능 매핑 업무 연결", "추가 " + draft.added.size() + " · 제외 " + (removeMissing ? draft.removed.size() : 0));
     return id;
   }
 
@@ -1029,6 +1189,8 @@ final class AssessmentTracker {
     operations.clear();
     tasks.clear();
     artifacts.clear();
+    executions.clear();
+    mapperTasks.clear();
     events.clear();
     bindings.clear();
     evidencePaths.clear();
@@ -1076,6 +1238,8 @@ final class AssessmentTracker {
               Map.entry("allEvidence", t.allEvidence),
               Map.entry("criticalInputs", t.criticalInputs)));
     return Map.of(
+        "executions", executions.save(),
+        "mapperTasks", new LinkedHashMap<>(mapperTasks),
         "accounts",
         accounts.values().stream()
             .map(
@@ -1253,6 +1417,18 @@ final class AssessmentTracker {
               field(row, "action", 64),
               field(row, "detail", 512)));
     }
+    if (doc.get("executions") instanceof Map<?, ?> executionDoc)
+      imported.executions.load(executionDoc, imported.accounts.keySet(), imported.tasks.keySet());
+    else if (doc.containsKey("executions")) throw new IllegalArgumentException("실행 연결 기록 형식 오류");
+    if (doc.get("mapperTasks") instanceof Map<?, ?> links) {
+      if (links.size() > TASK_LIMIT) throw new IllegalArgumentException("기능 업무 연결 한도 초과");
+      for (var link : links.entrySet()) {
+        String source = Objects.toString(link.getKey(), ""), task = Objects.toString(link.getValue(), "");
+        if (!source.matches("[A-Za-z0-9_-]{1,128}") || !imported.tasks.containsKey(task))
+          throw new IllegalArgumentException("기능 업무 연결 참조 오류");
+        imported.mapperTasks.put(source, task);
+      }
+    } else if (doc.containsKey("mapperTasks")) throw new IllegalArgumentException("기능 업무 연결 형식 오류");
     replace(imported);
   }
 
@@ -1265,12 +1441,19 @@ final class AssessmentTracker {
     tasks.putAll(imported.tasks);
     artifacts.clear();
     artifacts.putAll(imported.artifacts);
+    executions.replace(imported.executions);
+    mapperTasks.clear(); mapperTasks.putAll(imported.mapperTasks);
     evidencePaths.clear();
     evidenceStatus.clear();
     events.clear();
     events.addAll(imported.events);
     bindings.clear();
     new SecureRandom().nextBytes(salt);
+    for (Operation operation : operations.values())
+      if (executions.latest(operation.account, operation.method, operation.url) != null) {
+        operation.review = "가져온 실행 조건 · 계정 재연결 및 현재 정책 확인 필요";
+        reopenTasks(operation, operation.review);
+      }
     inputCount = imported.inputCount;
     rejected = imported.rejected;
     invalidateAll();

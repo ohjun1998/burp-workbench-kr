@@ -209,6 +209,12 @@ final class WorkContext {
     var effect = c.effect();
     f.add(effect.enabled()).add(effect.method()).add(effect.path()).add(effect.url())
         .add(effect.jsonPath()).add(effect.expected()).add(effect.mode()).add(effect.attempts());
+    f.add(c.effectRules().size());
+    for (var rule : c.effectRules()) {
+      var config = rule.config();
+      f.add(rule.name()).add(rule.origin()).add(config.enabled()).add(config.method()).add(config.path())
+          .add(config.url()).add(config.jsonPath()).add(config.expected()).add(config.mode()).add(config.attempts());
+    }
     return f.finish();
   }
 

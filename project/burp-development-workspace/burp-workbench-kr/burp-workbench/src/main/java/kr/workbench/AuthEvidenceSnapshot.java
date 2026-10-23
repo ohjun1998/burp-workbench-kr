@@ -11,7 +11,7 @@ final class AuthEvidenceSnapshot {
   private AuthEvidenceSnapshot() {}
 
   static List<Entry> capture(AuthComparePanel.Run run) {
-    String group = "권한 비교 실행 #" + run.no;
+    String group = "권한 비교 실행 #" + run.no + " · 실행 ID " + run.executionId;
     List<Entry> entries = new ArrayList<>();
     String setup = group + "\n실행 요약: " + run.note
         + "\n기준 검증 상태: " + run.baselineState + " · " + run.baselineNote

@@ -28,6 +28,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
     static final java.util.List<String> rows = new java.util.ArrayList<>();
     static final java.util.List<String> contentRows = new java.util.ArrayList<>();
     static final java.util.List<String> textRows = new java.util.ArrayList<>();
+    static final java.util.List<String> scenarioRows = new java.util.ArrayList<>();
     static final java.util.List<Throwable> renderingErrors = new java.util.concurrent.CopyOnWriteArrayList<>();
     static String theme;
     static int width, height;
@@ -102,7 +103,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
             textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("aggregate"),csv(label.getText()),"true",""+required,""+rect.width,""+rect.height,""+clipped.contains(rect),""+(rect.width>=required&&rect.height>=JsAnalysisTotals.Lamp.ROW_HEIGHT)));
         }
         boolean control=c instanceof javax.swing.AbstractButton b&&b.getText()!=null&&!b.getText().isBlank()||c instanceof javax.swing.JTextField||c instanceof javax.swing.JComboBox;
-        if(c instanceof javax.swing.text.JTextComponent&&!(c instanceof javax.swing.JTextField)||c instanceof javax.swing.JTable){
+        if(c instanceof javax.swing.text.JTextComponent&&!(c instanceof javax.swing.JTextField)||c instanceof javax.swing.JTable||c instanceof javax.swing.JList){
             var rect=javax.swing.SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);
             var visible=new java.awt.Rectangle(rect);
             String card="";
@@ -125,7 +126,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
             visible=visible.intersection(new java.awt.Rectangle(0,0,width,height));
             String label=c instanceof javax.swing.AbstractButton b?b.getText():c.getName()==null?c.getClass().getSimpleName():c.getName();
             boolean fullyVisible=visible.width>=rect.width&&visible.height>=rect.height&&rect.width>0&&rect.height>0;
-            rows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv(label),""+rect.x,""+rect.y,""+rect.width,""+rect.height,""+fullyVisible,""+scrollable,""+c.isEnabled()));
+            rows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv(label),""+rect.x,""+rect.y,""+rect.width,""+rect.height,""+fullyVisible,""+scrollable,""+c.isEnabled(),csv(c.getName()==null?"":c.getName())));
         }
         if(c instanceof Container parent)for(var child:parent.getComponents())inspect(root,child,view);
     }
@@ -176,6 +177,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         Files.write(out.resolve("controls.csv"),rows,java.nio.charset.StandardCharsets.UTF_8);
         Files.write(out.resolve("content.csv"),contentRows,java.nio.charset.StandardCharsets.UTF_8);
         Files.write(out.resolve("text.csv"),textRows,java.nio.charset.StandardCharsets.UTF_8);
+        Files.write(out.resolve("scenarios.csv"),scenarioRows,java.nio.charset.StandardCharsets.UTF_8);
     }
     static void unload()throws Exception {
         for(var unload:PayloadIntegrationTest.modernUnloads)unload.extensionUnloaded();
@@ -186,6 +188,31 @@ public final class UiLayoutPreview extends WorkbenchTest {
     static void renderAt(Container root,Path path,int w,int h)throws Exception {
         int previousWidth=width,previousHeight=height;
         try{width=w;height=h;render(root,path,w,h);}finally{width=previousWidth;height=previousHeight;}
+    }
+    static void awaitUi(java.util.function.BooleanSupplier ready,String reason) {
+        if(!SwingUtilities.isEventDispatchThread())throw new IllegalStateException("EDT preview required");
+        if(ready.getAsBoolean())return;
+        long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(10);
+        var loop=java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();
+        var timer=new javax.swing.Timer(10,event->{if(ready.getAsBoolean()||System.nanoTime()>=deadline)loop.exit();});
+        timer.start();try{loop.enter();}finally{timer.stop();}
+        if(!ready.getAsBoolean())throw new IllegalStateException("Preview fixture timeout: "+reason);
+    }
+    static <T extends Component> List<T> components(Component root,Class<T> type) {
+        var result=new java.util.ArrayList<T>();if(type.isInstance(root))result.add(type.cast(root));
+        if(root instanceof Container parent)for(var child:parent.getComponents())result.addAll(components(child,type));
+        return result;
+    }
+    static JButton action(Component root,String title) {
+        return components(root,JButton.class).stream().filter(button->title.equals(button.getText())).findFirst().orElseThrow();
+    }
+    static void scenario(String view,String name,boolean passed,String detail) {
+        scenarioRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv(name),""+passed,csv(detail)));
+        if(!passed)throw new IllegalStateException("Preview scenario failed: "+name+" · "+detail);
+    }
+    static void dialogPair(Container body,Path out,String name) throws Exception {
+        installHeaders(body);renderAt(body,out.resolve(name+".png"),760,480);
+        renderAt(body,out.resolve(name+"-minimum.png"),560,300);
     }
     static void installHeaders(Component component) {
         if(component instanceof JTable table){var parent=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,table);if(parent!=null)parent.setColumnHeaderView(table.getTableHeader());}
@@ -205,6 +232,16 @@ public final class UiLayoutPreview extends WorkbenchTest {
             response(200,"{\"id\":101,\"title\":\"기존 공지\",\"ownerId\":42,\"status\":\"draft\"}"));
         seedTraffic(ext,request(origin+"/api/notices/101","PATCH",true,List.of(header("Cookie","DEMO_SESSION"))),
             response(200,"{\"accepted\":true}"));
+        var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
+        if(js.archive==null)throw new IllegalStateException("Disk history preview requires the persistence adapter");
+        // Populate real disk indexes, including a second page. These are synthetic local records.
+        var result=new JsAnalysis.Result(List.of(new JsAnalysis.Endpoint(origin+"/api/notices/101","GET","fetch","","","",1,0,5,true,"static")),List.of(),"complete",false);
+        for(int i=0;i<205;i++) {
+            String key=origin+String.format("/preview-history/part-%03d.js",i);
+            js.archive.save(key,"fetch('/api/notices/101');",origin+"/","application/javascript",result,null,JsMiner.hash("preview-source-"+i));
+        }
+        js.archive.protect(origin+"/preview-history/part-000.js");
+        js.archive.retention(new JsArchive.Retention(true,90,2048L*1024*1024));
     }
 
     static void renderNext(WorkbenchExtension ext,Path out) throws Exception {
@@ -217,27 +254,49 @@ public final class UiLayoutPreview extends WorkbenchTest {
         traffic.setRowSelectionInterval(traffic.getRowCount()-1,traffic.getRowCount()-1);
         AuthEffectPanel effect=auth.effectSettings;
         effect.connectSelected(true);
-        effect.openReads();
-        JPanel reads=(JPanel)effect.suggestionWindow.content.get();
+        // Hold the worker, not the EDT: paint the actual pending state deterministically.
+        var readsReleased=new java.util.concurrent.CountDownLatch(1);
+        effect.loader.worker.execute(()->{try{readsReleased.await();}catch(InterruptedException error){Thread.currentThread().interrupt();}});
+        JPanel reads;
+        try {
+            effect.openReads();reads=(JPanel)effect.suggestionWindow.content.get();
+            scenario("next-auth-get-loading.png","GET candidates loading",!action(reads,"선택 URL을 조회 설정에 적용").isEnabled(),"Apply stays disabled while retained packets are read");
+            dialogPair(WorkbenchUi.settingsBody(reads,()->{}),out,"next-auth-get-loading");
+        }finally{readsReleased.countDown();}
+        reads=(JPanel)effect.suggestionWindow.content.get();
         installHeaders(reads);
         JTable readTable=(JTable)UiLayoutTest.named(reads,"wb.auth.effect.read.candidates");
-        if(readTable.getRowCount()==0)throw new IllegalStateException("Next GET chooser has no fixture rows");
+        awaitUi(()->readTable.getRowCount()>0,"GET candidates");
+        scenario("next-auth-get-candidates.png","GET candidates ready",action(reads,"선택 URL을 조회 설정에 적용").isEnabled(),"Retained response candidates completed asynchronously");
         readTable.setRowSelectionInterval(0,0);
         JPanel readBody=WorkbenchUi.settingsBody(reads,()->{});
         renderAt(readBody,out.resolve("next-auth-get-candidates.png"),760,480);
         renderAt(readBody,out.resolve("next-auth-get-candidates-minimum.png"),560,300);
-        var selected=effect.observedReads().stream().filter(candidate->candidate.url().endsWith("/api/notices/101")).findFirst().orElseThrow();
-        effect.applyRead(selected);
-        effect.openFields();
-        JPanel fields=(JPanel)effect.suggestionWindow.content.get();
+        for(int row=0;row<readTable.getRowCount();row++)if(readTable.getValueAt(row,0).toString().endsWith("/api/notices/101"))readTable.setRowSelectionInterval(row,row);
+        action(reads,"선택 URL을 조회 설정에 적용").doClick(0);
+        if(!effect.url.getText().endsWith("/api/notices/101"))throw new IllegalStateException("GET fixture candidate was not applied");
+        var fieldsReleased=new java.util.concurrent.CountDownLatch(1);
+        effect.loader.worker.execute(()->{try{fieldsReleased.await();}catch(InterruptedException error){Thread.currentThread().interrupt();}});
+        JPanel fields;
+        try {
+            effect.openFields();fields=(JPanel)effect.suggestionWindow.content.get();
+            scenario("next-auth-json-loading.png","JSON candidates loading",!action(fields,"선택 경로 적용").isEnabled(),"Apply stays disabled during local JSON parsing");
+            dialogPair(WorkbenchUi.settingsBody(fields,()->{}),out,"next-auth-json-loading");
+        }finally{fieldsReleased.countDown();}
+        fields=(JPanel)effect.suggestionWindow.content.get();
         installHeaders(fields);
         JTable fieldTable=(JTable)UiLayoutTest.named(fields,"wb.auth.effect.json.candidates");
-        if(fieldTable.getRowCount()==0)throw new IllegalStateException("Next JSON chooser has no fixture rows");
+        awaitUi(()->fieldTable.getRowCount()>0,"JSON candidates");
+        scenario("next-auth-json-fields.png","JSON candidates ready",action(fields,"선택 경로 적용").isEnabled(),"Observed JSON paths populated without sending GET");
         fieldTable.setRowSelectionInterval(0,0);
         JPanel fieldBody=WorkbenchUi.settingsBody(fields,()->{});
         renderAt(fieldBody,out.resolve("next-auth-json-fields.png"),760,480);
         renderAt(fieldBody,out.resolve("next-auth-json-fields-minimum.png"),560,300);
         effect.jsonPath.setText("$.title");effect.expected.setText("\"수정 공지\"");effect.enabled.setSelected(true);
+        effect.replaceRules(List.of(
+            new AuthEffectRules.Rule("공지 제목 수정", "https://app.example.test",effect.snapshot()),
+            new AuthEffectRules.Rule("공지 삭제 확인", "https://app.example.test",new AuthEffectCheck.Config(true,"DELETE","/api/notices/101","https://app.example.test/api/notices/101","$.id","",AuthEffectCheck.Mode.ABSENT,1))));
+        scenario("next-auth-effect-setup.png","Multiple write rules",effect.savedRules.size()==2&&effect.ruleChoice.getItemCount()==2,"PATCH and DELETE have separate named observation rules");
         JPanel effectBody=WorkbenchUi.settingsBody(effect,()->{});
         renderAt(effectBody,out.resolve("next-auth-effect-setup.png"),760,480);
         renderAt(effectBody,out.resolve("next-auth-effect-setup-minimum.png"),560,300);
@@ -262,7 +321,76 @@ public final class UiLayoutPreview extends WorkbenchTest {
         render(root,out.resolve("next-response-retries.png"),width,height);
         ext.openFeature("traffic");
         render(root,out.resolve("next-selected-context.png"),width,height);
+        renderNextWorkflows(ext,out);
         effect.closeSuggestions();
+    }
+
+    /** Newly added 0.52 production panels. Synthetic provenance is never a real comparison result. */
+    static void renderNextWorkflows(WorkbenchExtension ext,Path out) throws Exception {
+        String origin="https://app.example.test";
+        var auth=(AuthComparePanel)get(ext,"authCompare");
+        var activity=(ActivityPanel)get(ext,"activity");var tracker=activity.tracker.assessments;
+        var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
+        var bundle=auth.setupBundles.bundles.save(auth.captureBundle().withName("공지 관리 · 계정 권한과 쓰기 조회"),0);
+        auth.setupBundles.refresh(bundle.key());
+        scenario("next-auth-bundles.png","Setup bundle review",auth.setupBundles.model.size()==1&&auth.setupBundles.apply.isEnabled()&&bundle.settings().effects().size()==2,"Selected local bundle has two write rules; no apply/import/export operation is executed");
+        dialogPair(WorkbenchUi.settingsBody(auth.setupBundles,()->{}),out,"next-auth-bundles");
+
+        auth.assign(0,new AuthComparePanel.Candidate(1001,"preview-admin",origin,java.util.Map.of("cookie","sid=DEMO_ADMIN"),1,""));
+        auth.assign(1,new AuthComparePanel.Candidate(1002,"preview-member",origin,java.util.Map.of("cookie","sid=DEMO_MEMBER"),1,""));
+        auth.profileNames[0].setText("관리자");auth.profileNames[1].setText("일반 사용자");
+        auth.matrixRules.setText("PATCH /api/notices/101 ALLOW DENY UNKNOWN UNKNOWN\nDELETE /api/notices/101 ALLOW DENY UNKNOWN UNKNOWN");
+        var write=request(origin+"/api/notices/101","PATCH",true,List.of(header("Cookie","DEMO_ADMIN")));
+        var context=auth.context();var readiness=AuthReadiness.selected(context,List.of(write));
+        var chosen=new java.util.concurrent.atomic.AtomicReference<String>();
+        var ready=AuthReadiness.content(context,readiness,List.of(),(row,kind)->chosen.set(kind+" "+row.method()+" "+row.url()));
+        ((JButton)UiLayoutTest.named(ready,"wb.auth.readiness.fix.effect")).doClick(0);
+        scenario("next-auth-readiness.png","Readiness row edit",readiness.rows().size()==2&&("effect PATCH "+write.url()).equals(chosen.get()),"Row action carries the exact selected method and URL");
+        dialogPair(WorkbenchUi.settingsBody(ready,()->{}),out,"next-auth-readiness");
+
+        String account=tracker.register(new AssessmentTracker.AccountInput("시연 검토자",origin,"관리자","가이드 시연",false));
+        var existing=tracker.mapperDraft("preview-notice-feature","공지 관리",List.of("GET "+origin+"/api/notices/101","PATCH "+origin+"/api/notices/101"));
+        String task=tracker.applyMapperDraft(existing,Set.of(account),false);
+        auth.trackingAccounts[0]=account;
+        tracker.beginAuthExecution("preview-run-completed","preview-original:1",write,auth.context());
+        tracker.finishAuthExecution("preview-run-completed",ExecutionLedger.State.COMPLETED,"synthetic local fixture");
+        tracker.executionEvidenceSaved("preview-run-completed","a".repeat(64));
+        tracker.beginAuthExecution("preview-run-cancelled","preview-original:2",write,auth.context());
+        tracker.finishAuthExecution("preview-run-cancelled",ExecutionLedger.State.CANCELLED,"synthetic local fixture");
+        var history=activity.assessmentPanel.historyContent();
+        components(history,JTabbedPane.class).get(0).setSelectedIndex(1);
+        JTable executions=(JTable)UiLayoutTest.named(history,"wb.assessment.executions");
+        var executionDetails=components(history,javax.swing.JTextArea.class).get(0);executionDetails.setName("preview.assessment.execution.details");
+        executions.setRowSelectionInterval(0,0);
+        scenario("next-execution-links.png","Execution evidence linkage",executions.getRowCount()==2&&tracker.execution("preview-run-completed").evidence().size()==1&&tracker.execution("preview-run-completed").bindings().stream().anyMatch(binding->binding.tasks().contains(task)),"Synthetic original → execution → policy revision → task → ZIP hash");
+        dialogPair(WorkbenchUi.settingsBody(history,()->{}),out,"next-execution-links");
+
+        int before=tracker.tasks().size();
+        activity.assessmentPanel.upsertMapperDraft("preview-notice-feature","공지 관리",List.of("GET "+origin+"/api/notices/101","DELETE "+origin+"/api/notices/101"));
+        var draft=(Container)activity.assessmentPanel.mapperDraftWindow.content.get();
+        var draftText=components(draft,javax.swing.JTextArea.class).get(0);draftText.setName("preview.assessment.mapper.changes");
+        var accounts=(javax.swing.JList<?>)UiLayoutTest.named(draft,"wb.assessment.mapper.accounts");
+        scenario("next-mapper-review.png","Mapper update review",tracker.tasks().size()==before&&accounts.getSelectedIndices().length==1&&draftText.getText().contains("추가 API 1개")&&draftText.getText().contains("기능에서 빠진 API 1개"),"Opening the review neither updates nor completes the task");
+        dialogPair(WorkbenchUi.settingsBody(draft,()->{}),out,"next-mapper-review");
+        activity.assessmentPanel.mapperDraftWindow.close();
+
+        js.historySearch.setText("/preview-history/");js.analysisList.doClick(0);
+        awaitUi(()->js.historyTable.getRowCount()==200&&js.historyNext.isEnabled(),"archive first page");
+        var list=WorkbenchUi.settingsBody(js.analysisContent(),()->{});
+        scenario("next-js-history-page1.png","JS first page",!js.historyPrevious.isEnabled()&&js.historyNext.isEnabled(),"205 disk records; first page holds 200 rows");
+        dialogPair(list,out,"next-js-history-page1");
+        js.historyNext.doClick(0);
+        awaitUi(()->js.historyTable.getRowCount()==5&&js.historyPrevious.isEnabled()&&!js.historyNext.isEnabled(),"archive second page");
+        scenario("next-js-history-page2.png","JS second page",js.historyPageLabel.getText().equals("201–205 / 205"),"Second page retains only five rows; previous page remains available");
+        dialogPair(list,out,"next-js-history-page2");
+        js.historySearch.setText("part-000.js");
+        awaitUi(()->js.historyTable.getRowCount()==1&&js.historyModel.getValueAt(0,0).toString().endsWith("part-000.js"),"archive filtered page");
+        scenario("next-js-history-search.png","JS full disk search",js.historyPageLabel.getText().equals("1–1 / 1"),"Search finds a record outside the original first page");
+        dialogPair(list,out,"next-js-history-search");
+        var storage=(Container)js.archiveSettings.content.get();
+        awaitUi(()->components(storage,javax.swing.JLabel.class).stream().anyMatch(label->label.getText().contains("보존/이전 버전 1")),"archive disk usage");
+        scenario("next-js-retention.png","JS retention policy",components(storage,javax.swing.JCheckBox.class).get(0).isSelected()&&action(storage,"기간이 지난 이력 정리").isEnabled(),"One protected record; saving retention criteria and explicit pruning remain separate");
+        dialogPair(WorkbenchUi.settingsBody(storage,()->{}),out,"next-js-retention");
     }
 
     public static void main(String[] args) throws Exception {
@@ -279,9 +407,10 @@ public final class UiLayoutPreview extends WorkbenchTest {
             UIManager.put("TabbedPane.contentAreaColor",new java.awt.Color(30,33,39));
             for(String key:List.of("Label.foreground","Button.foreground","CheckBox.foreground","ComboBox.foreground","TabbedPane.foreground","textText"))UIManager.put(key,new java.awt.Color(228,233,241));
         }
-        rows.add("theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled");
+        rows.add("theme,width,height,view,label,x,y,controlWidth,controlHeight,fullyVisible,scrollable,enabled,name");
         contentRows.add("theme,width,height,view,kind,name,x,y,visibleWidth,visibleHeight");
         textRows.add("theme,width,height,view,kind,label,selected,textWidth,allocatedWidth,allocatedHeight,fullyVisible,textFits");
+        scenarioRows.add("theme,width,height,view,scenario,passed,detail");
         Files.createDirectories(out);
         Font font = Font.createFont(Font.TRUETYPE_FONT, Path.of(args[1]).toFile());
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
@@ -313,7 +442,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 seedTraffic(ext,request(origin+"/api/users/me","GET",true,List.of(header("Cookie","DEMO_A"))),response(200,"{\"name\":\"일반 A\"}"));
                 seedTraffic(ext,request(origin+"/api/admin/users","GET",true,List.of(header("Cookie","DEMO_ADMIN"))),response(200,"[]"));
                 var browser=ext.trafficBrowser;
-                edt(()->{browser.identities=()->List.of(new TrafficBrowser.Identity(origin,"일반 A",java.util.Map.of("cookie","DEMO_A")),new TrafficBrowser.Identity(origin,"관리자",java.util.Map.of("cookie","DEMO_ADMIN")));browser.group.setSelected(true);browser.normalize.setSelected(true);browser.apply();browser.note(0,"권한 확인");browser.toggleStar(0);});
+                edt(()->{browser.identities=()->List.of(new TrafficBrowser.Identity(origin,"일반 A",java.util.Map.of("cookie","DEMO_A")),new TrafficBrowser.Identity(origin,"관리자",java.util.Map.of("cookie","sid=DEMO_ADMIN")));browser.group.setSelected(true);browser.normalize.setSelected(true);browser.apply();browser.note(0,"권한 확인");browser.toggleStar(0);});
                 TrafficSearchUpgradeTest.idle(browser);
                 edt(()->{
                     try{

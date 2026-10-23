@@ -13,6 +13,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.atomic.AtomicLong;
 
 /** Temporary, append-only original packets and a disk index, with a bounded metadata cache. */
 final class DiskTrafficStore implements AutoCloseable {
@@ -155,6 +156,29 @@ final class DiskTrafficStore implements AutoCloseable {
       };
   private volatile long count;
   private volatile boolean closed;
+  private final RuntimeMetrics.Window appendTotal = new RuntimeMetrics.Window();
+  private final RuntimeMetrics.Window appendLockWait = new RuntimeMetrics.Window();
+  private final RuntimeMetrics.Window appendPrepare = new RuntimeMetrics.Window();
+  private final RuntimeMetrics.Window appendWrite = new RuntimeMetrics.Window();
+  private final AtomicLong appendAttempts = new AtomicLong(), appendFailures = new AtomicLong();
+
+  record AppendMetrics(long attempts, long failures, RuntimeMetrics.Snapshot total,
+      RuntimeMetrics.Snapshot lockWait, RuntimeMetrics.Snapshot prepare, RuntimeMetrics.Snapshot write) {}
+
+  AppendMetrics appendMetrics() {
+    return new AppendMetrics(appendAttempts.get(), appendFailures.get(), appendTotal.snapshot(),
+        appendLockWait.snapshot(), appendPrepare.snapshot(), appendWrite.snapshot());
+  }
+
+  String appendDiagnostics() {
+    AppendMetrics value = appendMetrics();
+    return "원본 저장 시도 " + value.attempts() + " · 실패 " + value.failures()
+        + " · 저장 전체 " + value.total().summary()
+        + "\n저장 잠금 대기 " + value.lockWait().summary()
+        + " · 패킷 준비 " + value.prepare().summary()
+        + " · 디스크 기록·색인 " + value.write().summary()
+        + " (OS 쓰기 반환 기준, 영구 매체 flush 시간 아님)";
+  }
 
   DiskTrafficStore() {
     Path created = null, createdIndex = null;
@@ -230,24 +254,51 @@ final class DiskTrafficStore implements AutoCloseable {
     return append("", "", request, response);
   }
 
-  synchronized PacketRef append(
+  PacketRef append(
       String time, String source, HttpRequest request, HttpResponse response) {
     return append(time, source, request, response, System.currentTimeMillis());
   }
 
-  synchronized PacketRef append(String time, String source, HttpRequest request,
+  PacketRef append(String time, String source, HttpRequest request,
+      HttpResponse response, long capturedAt) {
+    long started = System.nanoTime();
+    appendAttempts.incrementAndGet();
+    try {
+      synchronized (this) {
+        appendLockWait.since(started);
+        return appendLocked(time, source, request, response, capturedAt);
+      }
+    } catch (RuntimeException | Error failure) {
+      appendFailures.incrementAndGet();
+      throw failure;
+    } finally {
+      appendTotal.since(started);
+    }
+  }
+
+  private PacketRef appendLocked(String time, String source, HttpRequest request,
       HttpResponse response, long capturedAt) {
     lifecycle.readLock().lock();
     try {
       ensureOpen();
-      Objects.requireNonNull(request, "request");
-      HttpService service = request.httpService();
-      String method = request.method(), url = request.url();
-      String status = response == null ? "없음" : Short.toString(response.statusCode());
-      int bodyLength = response == null ? 0 : response.body().length();
-      byte[] requestBytes = request.toByteArray().getBytes();
-      byte[] responseBytes = response == null ? new byte[0] : response.toByteArray().getBytes();
+      long preparing = System.nanoTime();
+      HttpService service;
+      String method, url, status;
+      int bodyLength;
+      byte[] requestBytes, responseBytes;
+      try {
+        Objects.requireNonNull(request, "request");
+        service = request.httpService();
+        method = request.method(); url = request.url();
+        status = response == null ? "없음" : Short.toString(response.statusCode());
+        bodyLength = response == null ? 0 : response.body().length();
+        requestBytes = request.toByteArray().getBytes();
+        responseBytes = response == null ? new byte[0] : response.toByteArray().getBytes();
+      } finally {
+        appendPrepare.since(preparing);
+      }
       long start = -1, indexStart = -1;
+      long writing = System.nanoTime();
       try {
         start = data.length();
         indexStart = index.length();
@@ -295,6 +346,8 @@ final class DiskTrafficStore implements AutoCloseable {
             error.addSuppressed(rollback);
           }
         throw new StorageException("트래픽 원본을 임시 저장하지 못했습니다.", error);
+      } finally {
+        appendWrite.since(writing);
       }
     } finally {
       lifecycle.readLock().unlock();

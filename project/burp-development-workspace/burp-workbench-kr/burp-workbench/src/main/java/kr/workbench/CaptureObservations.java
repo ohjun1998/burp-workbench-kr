@@ -94,7 +94,8 @@ final class CaptureObservations implements AutoCloseable {
         + "\n화면 반영 대기 " + value.swingWait().summary()
         + " · 화면 반영 실행 " + value.swingApply().summary()
         + "\n단계 시간은 최근 최대 " + RuntimeMetrics.WINDOW_SIZE
-        + "건 실측 · 원본 경과는 보관 시각 기준(시계 변경 영향 가능)";
+        + "건 실측 · 원본 경과는 보관 시각 기준(시계 변경 영향 가능)"
+        + "\n" + store.appendDiagnostics();
   }
 
   private void run() {

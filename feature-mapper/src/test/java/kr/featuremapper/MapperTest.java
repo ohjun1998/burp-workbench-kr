@@ -136,5 +136,5 @@ public final class MapperTest {
         }finally{bridge.close();}
         try(Socket socket=new Socket()){socket.connect(new InetSocketAddress("127.0.0.1",URI.create(base).getPort()),300);throw new AssertionError("bridge still open");}catch(IOException expected){check(true,"close shuts down the bridge listener");}
     }
-    public static void main(String[] args)throws Exception{relations();semantics();browserAndCorrections();persistenceAndLargePackets();MapperOptimizationTest.run();MapperUiWorkflowTest.run();MapperHardeningTest.run();bridge();System.out.println("MapperTest: "+checks+" checks passed");}
+    public static void main(String[] args)throws Exception{relations();semantics();browserAndCorrections();persistenceAndLargePackets();MapperOptimizationTest.run();MapperUiWorkflowTest.run();MapperHardeningTest.run();MapperAssessmentTest.run();bridge();System.out.println("MapperTest: "+checks+" checks passed");}
 }

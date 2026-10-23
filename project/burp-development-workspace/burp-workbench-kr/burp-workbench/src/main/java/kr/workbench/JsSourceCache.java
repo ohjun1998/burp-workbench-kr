@@ -178,6 +178,10 @@ final class JsSourceCache {
         + " (UTF-16·레코드 추정, 편집기·실행 중 분석기 제외)";
   }
 
+  synchronized void remove(String key) {
+    Entry old=entries.remove(key);if(old!=null)bytes-=weight(key,old);if(key.equals(selected))selected="";
+  }
+
   synchronized void clear() {
     entries.clear();
     bytes = 0;

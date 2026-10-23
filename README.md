@@ -2,20 +2,20 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-이 브랜치는 **Workbench Next 0.50.0**입니다. 기존 **Workbench KR 0.49.1**은 `main`과 기존 다운로드 폴더에 그대로 보존됩니다. Burp 확장 이름·상단 탭·화면 배지에 **Next**를 표시하고, 설정 키와 JS 분석 기록 디렉터리도 기존 버전과 분리했습니다. 내장 Feature Mapper는 0.3.3, 실습 사이트는 3.10.0을 유지합니다.
+이 브랜치는 **Workbench Next 0.52.0**입니다. 기존 **Workbench KR 0.49.1**의 `main`과 **Next 0.50.0**의 배포 파일·브랜치는 그대로 보존합니다. 확장 이름·탭·배지의 **Next** 표시와 기존 버전에서 분리한 설정·기록 저장소를 유지합니다. 내장 Feature Mapper는 **0.3.4**, 실습 사이트는 **3.10.0**입니다.
 
-왼쪽 주요 메뉴를 **11개에서 8개**로 통합했습니다. 데이터 변환은 요청·응답 아래, URL 후보 수집은 서버·경로 아래, 점검 진행 현황은 기능 자동 매핑 아래에서 엽니다. 선택한 원본과 비교 조건 변경 여부를 공통 영역에서 확인하고, 권한표·쓰기 조회 설정 보조, 보관 원본 분석 재시도, 처리 지연 측정, 증거 검토를 이어갑니다.
+0.50.0의 **8개 주요 메뉴**를 유지하면서 검색·응답 분석의 반복 작업과 보유 데이터를 줄였습니다. **권한 설정 묶음·여러 쓰기 조회 규칙**, **Mapper 기능 → 점검 업무**, **원본 → 실행 → 정책 revision → 증거 ZIP** 연결, **JS 기록의 디스크 페이지 탐색·보존 설정**을 추가했습니다. GET·JSON 후보는 창을 먼저 표시한 뒤 백그라운드에서 읽습니다.
 
-[Next 설치·기능별 상세 안내](docs/RELEASE_0.50.0_NEXT_KR.md) · [검증 결과](docs/VERIFICATION_0.50.0.json) · [새 JAR·소스 다운로드](downloads/README.md)
+[Next 설치·기능별 상세 안내](docs/RELEASE_0.52.0_NEXT_KR.md) · [검증 결과](docs/VERIFICATION_0.52.0.json) · [새 JAR·소스 다운로드](downloads/README.md)
 
 기존 버전의 당시 동작과 검사 범위는 [0.49.1 안내](docs/RELEASE_0.49.1_KR.md), [0.49.0 안내](docs/RELEASE_0.49.0_KR.md)에 남깁니다. 해당 문서의 미실행 표시는 그 버전에 대한 기록입니다.
 
 ## 설치하고 첫 요청 확인하기
 
-1. **[Next JAR·소스 다운로드](downloads/README.md)**에서 **0.50.0 Next JAR**를 받습니다. [Next 상세 안내](docs/RELEASE_0.50.0_NEXT_KR.md)에 새 화면과 기능별 순서를 정리했습니다. 기존 JAR는 보관하고 이전 Workbench의 로드만 해제한 뒤 Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다.
+1. **[Next JAR·소스 다운로드](downloads/README.md)**에서 **0.52.0 Next JAR**를 받습니다. [Next 상세 안내](docs/RELEASE_0.52.0_NEXT_KR.md)에 새 화면과 기능별 순서를 정리했습니다. 기존 JAR는 보관하고 이전 Workbench의 로드만 해제한 뒤 Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다.
 2. Workbench **요청·응답 목록 → SCOPE 목록**에서 URL을 추가하거나 Burp **HTTP history → Add to scope**로 대상을 등록합니다. 수집할 범위를 체크하고, 수집 버튼을 **OFF → SCOPE**로 바꾼 뒤 사이트를 다시 사용합니다. 기존 History는 범위 안의 요청을 골라 Workbench로 가져올 수 있습니다. 트래픽 OFF에서는 새 패킷·수동 가져오기·일반 자동 관찰을 수집하지 않습니다. 계정 권한 비교의 인증 탐지는 별도 ON/OFF로 제어합니다. 수동 URL은 해당 경로와 하위 경로에 적용됩니다. 목록에서 행을 선택해 URL을 수정하면 체크 상태를 유지한 채 즉시 반영됩니다.
 3. 왼쪽 폴더를 펼쳐 목적에 맞는 도구를 선택합니다. 메뉴를 숨겨도 상단 **메뉴 보기**로 다시 열 수 있습니다. 선택한 요청·응답을 읽고 목적에 맞는 도구로 이동합니다. 처음에는 **Repeater**로 요청을 준비해 직접 확인하고, 원본이 필요한 비교·증거 기능은 선택한 요청에서 이어갑니다.
-4. 상단 **기능 안내** 버튼(또는 **F1**)과 **[Next 기능별 안내](docs/RELEASE_0.50.0_NEXT_KR.md)**로 준비할 입력과 다음 버튼을 확인합니다. 재현한 결과는 **재현·증거 정리**에 모아 저장합니다.
+4. 상단 **기능 안내** 버튼(또는 **F1**)과 **[Next 기능별 안내](docs/RELEASE_0.52.0_NEXT_KR.md)**로 준비할 입력과 다음 버튼을 확인합니다. 재현한 결과는 **재현·증거 정리**에 모아 저장합니다.
 
 SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다. 추가 요청 전송·계정 비교 실행·수동 검증·취약점 판단·증거 저장은 사용자가 선택합니다. Repeater 창 열기와 Burp Repeater 복사는 요청을 준비하는 동작입니다. 실제 요청은 해당 창의 **Send**를 직접 눌러 전송합니다.
 
@@ -55,7 +55,8 @@ SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다.
 
 | 찾는 자료 | 위치 |
 |---|---|
-| **Next 0.50.0 별도 버전** | [설치·기능별 안내](docs/RELEASE_0.50.0_NEXT_KR.md) · [검증 기록](docs/VERIFICATION_0.50.0.json) |
+| **Next 0.52.0 고도화 버전** | [설치·기능별 안내](docs/RELEASE_0.52.0_NEXT_KR.md) · [검증 기록](docs/VERIFICATION_0.52.0.json) |
+| Next 0.50.0 최초 분리 버전 · 보존 | [설치·기능별 안내](docs/RELEASE_0.50.0_NEXT_KR.md) · [당시 검증](docs/VERIFICATION_0.50.0.json) |
 | 0.49.1 계정 비교 전 설정·판정 한계 안내 | [변경 안내](docs/RELEASE_0.49.1_KR.md) · [빌드·검사 범위](docs/VERIFICATION_0.49.1.json) |
 | 0.49.0 전체 고도화·재검증과 남은 범위 | [변경 안내](docs/RELEASE_0.49.0_KR.md) · [검증 기록](docs/VERIFICATION_0.49.0.json) |
 | Feature Mapper 통합·11개 도구 설치와 사용법 | [0.47.0 변경 안내](docs/RELEASE_0.47.0_KR.md) |
@@ -91,6 +92,6 @@ python dev.py check
 
 Workbench Next 0.50.0의 **트래픽 → 기능 자동 매핑 → 기능 분류·실행**에서 사용합니다. 별도 Mapper JAR를 추가하지 않아도 기능·실행·세션·패킷·분류 근거·메모와 `.fmkr` 프로젝트 저장/열기를 사용할 수 있습니다. 수집 버튼은 요청·응답 목록과 같은 OFF/SCOPE 상태이며, OFF와 Scope 밖의 브라우저 이벤트도 보관하지 않습니다. Chrome/Edge의 버튼 이름까지 연결하려면 [브라우저 도우미 0.3.3](downloads/feature-mapper/0.3.3/feature-mapper-browser-0.3.3.zip)를 브라우저에 설치하고 **매핑 설정 → 브라우저 연결**의 주소·토큰을 입력합니다. 이전 별도 Mapper 확장은 해제하고 통합 Workbench를 사용하세요. [자세한 사용법](feature-mapper/README_KR.md).
 
-[날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 현재 안내서는 [Next 0.50.0 설치·기능별 안내](docs/RELEASE_0.50.0_NEXT_KR.md)입니다. [0.25.4 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)는 이전 화면을 설명하는 보존 자료입니다.
+[날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 현재 안내서는 [Next 0.50.0 설치·기능별 안내](docs/RELEASE_0.52.0_NEXT_KR.md)입니다. [0.25.4 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)는 이전 화면을 설명하는 보존 자료입니다.
 
 

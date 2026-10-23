@@ -63,6 +63,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       new TargetWindow(this, "증거 가림 설정", this::evidenceRedactionContent);
   final JTextArea impact = area(3), repro = area(4);
   final List<BountyEvidence.Item> evidence = new ArrayList<>();
+  final java.util.concurrent.ConcurrentMap<String, String> evidenceExecutions = new java.util.concurrent.ConcurrentHashMap<>();
   final Set<String> evidenceHeaders = new LinkedHashSet<>();
   final Set<String> evidenceSecrets = new LinkedHashSet<>();
   final DefaultTableModel evidenceModel = model("이름", "메서드", "URL", "관찰");
@@ -595,6 +596,9 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   void captureAuth() {
     var r = auth.current();
     if (r == null) throw new IllegalArgumentException("권한 비교 History에서 결과를 선택하세요.");
+    var execution = activity.tracker.assessments.execution(r.executionId);
+    if (execution != null && execution.state() == ExecutionLedger.State.RUNNING)
+      throw new IllegalArgumentException("비교 종료 후 증거를 추가하세요. 진행 중 패킷을 완료 근거로 고정하지 않습니다.");
     var planned = AuthEvidenceSnapshot.capture(r);
     if (evidence.size() + planned.size() > 32)
       throw new IllegalArgumentException("증거 요청 최대 32개 · 이번 비교의 원본/계정/조회 "
@@ -605,7 +609,10 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       String account = entry.account();
       if (entry.label().equals("권한 비교 원본") || entry.label().equals("권한 비교 기준 재조회"))
         account = activity.tracker.assessments.match(entry.request());
-      remember(entry.request(), entry.response(), entry.label(), entry.note(), account);
+      String provenance = execution == null ? "" : "\n\n[작업·원본·실행 연결]\n"
+          + activity.tracker.assessments.executionSummary(r.executionId);
+      remember(entry.request(), entry.response(), entry.label(), entry.note() + provenance, account);
+      if (execution != null) evidenceExecutions.put(evidence.get(evidence.size() - 1).evidenceId(), r.executionId);
     }
     state.setText("선택 권한 비교 " + planned.size() + "개 증거 추가 · 실행 당시 설정·판정·조회 포함");
   }
@@ -658,6 +665,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceStore.close();
     evidenceStore = new EvidencePacketStore();
     evidence.clear();
+    evidenceExecutions.clear();
     evidenceModel.setRowCount(0);
     evidenceHeaders.clear();
     evidenceSecrets.clear();
@@ -759,12 +767,29 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         headers,
         secrets,
         bodies,
-        coverage,
+        executionCoverage(coverage, items),
         image,
         oast,
         expectedImageHash);
     String id = BountyEvidence.fileHash(path);
     activity.evidenceSaved(id, path.getFileName().toString(), items, path);
+    for (String execution : items.stream().map(item -> evidenceExecutions.get(item.evidenceId()))
+        .filter(Objects::nonNull).distinct().toList())
+      activity.tracker.assessments.executionEvidenceSaved(execution, id);
+  }
+
+  String executionCoverage(String coverage, List<BountyEvidence.Item> items) {
+    Object parsed = MinerJson.parse(coverage, 32 * 1024 * 1024, 3000000);
+    if (!(parsed instanceof Map<?, ?> existing)) throw new IllegalArgumentException("점검 기록 JSON 형식을 확인하세요.");
+    Map<String, Object> result = new LinkedHashMap<>();
+    existing.forEach((key, value) -> result.put(key.toString(), value));
+    List<Map<String, String>> links = new ArrayList<>();
+    for (var item : items) {
+      String execution = evidenceExecutions.get(item.evidenceId());
+      if (execution != null) links.add(Map.of("evidenceItemId", item.evidenceId(), "executionId", execution));
+    }
+    result.put("executionEvidenceItems", links);
+    return MetadataExport.json(result);
   }
 
   JPanel browserContent() {
@@ -941,6 +966,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceRedactionSettings.close();
     flowResults.clear();
     evidence.clear();
+    evidenceExecutions.clear();
     evidenceSecrets.clear();
     evidenceHeaders.clear();
     correlations.clear();

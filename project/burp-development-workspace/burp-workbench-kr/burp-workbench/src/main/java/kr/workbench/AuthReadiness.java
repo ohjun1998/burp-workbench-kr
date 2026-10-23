@@ -17,7 +17,7 @@ final class AuthReadiness {
     long incomplete() { return rows.stream().filter(Row::incomplete).count(); }
     String summary() {
       if (automatic) return "자동 비교 준비 · 앞으로 들어올 요청의 설정 적용 범위는 요청마다 다릅니다.";
-      return "선택 요청의 지정 계정 행 " + rows.size() + "개 · 설정 보완 필요 " + incomplete() + "개";
+      return "선택 요청의 지정 계정 행 " + rows.size() + "개 · 설정 보완 필요 " + incomplete() + "개 · 실행 증거 미생성";
     }
     String text() {
       StringBuilder out = new StringBuilder(summary());
@@ -122,7 +122,7 @@ final class AuthReadiness {
   static JPanel content(AuthComparePanel.Context c, Report report, List<String> blocked) {
     JPanel panel = new JPanel(new BorderLayout(8, 8));
     panel.setName("wb.auth.readiness");
-    String introduction = report.summary() + "\n이 화면은 설정 유무와 적용 범위를 확인합니다. 실제 신원·접근 결과·조회 성공을 검증한 상태는 아닙니다. 원본과 동일 인증인 계정은 실행 시 기준 계정으로 구분합니다.";
+    String introduction = report.summary() + "\n① 설정됨: 입력값 보관 → ② 적용됨: 선택 요청에 규칙 일치 → ③ 실행 확인: 비교 후 근거에서 확인\n이 화면은 설정 유무와 적용 범위를 확인합니다. 실제 신원·접근 결과·조회 성공을 검증한 상태는 아닙니다. 원본과 동일 인증인 계정은 실행 시 기준 계정으로 구분합니다.";
     if (!blocked.isEmpty()) introduction += "\n비교를 시작할 수 없는 조건:\n" + String.join("\n", blocked);
     panel.add(note(introduction, 4), BorderLayout.NORTH);
     DefaultTableModel model = new DefaultTableModel(new String[]{"요청", "계정", "적용 권한", "쓰기 결과 조회", "판정 한계", "다음 설정"}, 0) {

@@ -34,6 +34,36 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   static final int SLOTS=4, ORIGINAL=4;
   final MontoyaApi api;
   final Supplier<List<HttpRequestResponse>> selected;
+  Supplier<List<HttpRequestResponse>> observedRequests;
+  private WorkContext workContext;
+
+  public void onWorkContext(WorkContext value) {
+    if (workContext == value) return;
+    workContext = Objects.requireNonNull(value);
+    value.observeSettings(urlFilter, ignoredFields, ownerPath, importantFields, denialRules, policyRules,
+        accessPolicy, responseDenialRules, unorderedArrays, writes, identityCookies, matrixRules, effectSettings,
+        extra, largeFiles, mode);
+    for (Component[] inputs : new Component[][]{profileNames, profileOwners, profileRoles, profileTenants,
+        refreshEnabled, refreshUrls, refreshTokenPaths, refreshCsrfPaths, refreshIdentityPaths,
+        refreshTokenHeaders, refreshPrefixes, refreshCsrfHeaders}) value.observeSettings(inputs);
+  }
+
+  long workSelectionRevision() { return workContext == null ? -1 : workContext.snapshot().selectionRevision(); }
+
+  void workConfigurationEdited() { if (workContext != null) workContext.configurationEdited(); }
+
+  /** Retained recent packets only; this source must never issue network requests. */
+  public void onObservedRequests(Supplier<List<HttpRequestResponse>> source) {
+    observedRequests = Objects.requireNonNull(source);
+  }
+
+  void prefillSelectedPolicy() {
+    editable(); matrixEditor.snapshot();
+    String next = AuthSetupSuggestions.prefillPolicy(matrixRules.getText(), List.copyOf(selected.get()));
+    if (!next.equals(matrixRules.getText())) matrixRules.setText(next);
+    matrixEditor.load();
+    matrixEditor.feedback.setText("선택 요청의 미설정 메서드·경로 사전 입력 · 계정별 허용/차단은 업무 기준으로 지정하세요.");
+  }
   final DefaultTableModel candidateModel = model("NO", "사용자 계정", "역할", "Origin", "인증 헤더 / 값", "최근 탐지"),
       historyModel = model("NO", "URL", "계정 1", "계정 2", "계정 3", "실행 상태", "메서드", "종합 결과", "비로그인");
   final JTable candidates = new AuthLayout.Table(candidateModel),
@@ -189,6 +219,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                 editable();
                 var a = (AssessmentTracker.Account) combo.getSelectedItem();
                 trackingAccounts[slot] = a == null ? "" : a.id();
+                workConfigurationEdited();
               } catch (Exception ex) {
                 Diagnostics.failure(AuthComparePanel.this,"계정 권한 비교",ex);
                 state.setText(ex.getMessage());
@@ -370,6 +401,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     super(new BorderLayout(8, 8));
     this.api = api;
     this.selected = selected;
+    this.observedRequests = selected;
     capturedRepeater=new JsRepeater(packetDetails,api);
     candidateDetails=new AuthCandidateDetails(this);
     candidateWindow=new TargetWindow(this,"인증 정보 상세",()->candidateDetails);
@@ -828,6 +860,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       profileNames[i].setText("");profileOwners[i].setText("");profileRoles[i].setText("");profileTenants[i].setText("");
     }
     slots[i] = c;
+    workConfigurationEdited();
     applyAccountToSlot(i,c);
     sessionChecks[i]=null;
     refreshTracking();
@@ -850,6 +883,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void clearSlot(int i) {
     editable();
     slots[i] = null;
+    workConfigurationEdited();
     sessionChecks[i]=null;
     trackingAccounts[i] = "";
     refreshTracking();
@@ -1136,7 +1170,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                 trackingAccounts[i], slots[i].origin, slots[i].headers, names, cookieNames));
       }
     trackingBind.accept(links);
-    return new Context(
+    Context result = new Context(
         epoch.get(),
         first.origin,
         slots,
@@ -1157,6 +1191,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         trackingAccounts,
         cookieNames,
         sessionChecks,effectSettings.snapshot());
+    if (workContext != null) workContext.configure(WorkContext.authFingerprint(result));
+    return result;
   }
 
   void startRecord() {
@@ -1208,6 +1244,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if (!reviewReadiness(c, report, blocked)) return;
     if (closed.get() || c.epoch != epoch.get()) return;
     for (var rr : list) validate(rr.request(), rr.response(), c);
+    if (workContext != null) workContext.comparisonStarted();
     for (var rr : list) enqueue(rr.request(), rr.response(), c);
   }
 
@@ -1234,9 +1271,12 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if (closed.get() || c.epoch != epoch.get()) return false;
     if ("권한표 설정".equals(choice)) {
       sessionSettings.open();
+      if (!report.automatic()) prefillSelectedPolicy();
       SwingUtilities.invokeLater(() -> matrixEditor.scrollRectToVisible(new Rectangle(0, 0, matrixEditor.getWidth(), 1)));
     } else if ("쓰기 조회 설정".equals(choice)) {
       comparisonSettings.open();
+      if (!report.automatic() && selected.get().size() == 1 && Set.of("POST", "PUT", "PATCH", "DELETE").contains(selected.get().get(0).request().method()))
+        effectSettings.connectSelected(false);
       SwingUtilities.invokeLater(() -> effectSettings.scrollRectToVisible(new Rectangle(0, 0, effectSettings.getWidth(), 1)));
     }
     if (!proceed.equals(choice)) state.setText("비교 시작 전 · 설정을 확인한 뒤 다시 비교하세요. 요청은 전송하지 않았습니다.");
@@ -1296,6 +1336,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if (list.size() > 20) throw new IllegalArgumentException("최대 20개 요청입니다.");
     Context c = context();
     for (var rr : list) validate(rr.request(), rr.response(), c);
+    if (workContext != null) workContext.comparisonStarted();
     for (var rr : list) enqueue(rr.request(), rr.response(), c);
   }
 
@@ -1767,6 +1808,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     for(int i=0;i<SLOTS+1;i++){requestViews[i].close();responseViews[i].close();}
     accounts.clear();detailRun=null;
     comparisonSettings.close();
+    effectSettings.closeSuggestions();
     sessionSettings.close();
     cookieSessionWindow.close();
     cookieSessions.close();

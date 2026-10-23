@@ -82,7 +82,9 @@ public final class UiLayoutPreview extends WorkbenchTest {
             textRows.add(String.join(",",csv(theme),""+width,""+height,csv(view),csv("tab"),csv(tab.getText()),""+tab.isSelected(),""+textWidth,""+rect.width,""+rect.height,""+clipped.contains(textBounds),""+(rect.width>=textWidth+22)));
         }
         if(c instanceof javax.swing.JLabel label&&label.getText()!=null&&!label.getText().isBlank()
-                &&label.getFont().isBold()&&label.getFont().getSize()>=14&&!label.getText().startsWith("<html")) {
+                &&((label.getFont().isBold()&&label.getFont().getSize()>=14)
+                    || Set.of("wb.next.version","wb.work.context.request","wb.work.context.state").contains(java.util.Objects.toString(label.getName(),"")))
+                &&!label.getText().startsWith("<html")) {
             var rect=javax.swing.SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);
             var visible=visible(root,c,rect);var insets=label.getInsets();
             int textWidth=label.getFontMetrics(label.getFont()).stringWidth(label.getText());
@@ -189,6 +191,80 @@ public final class UiLayoutPreview extends WorkbenchTest {
         if(component instanceof JTable table){var parent=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,table);if(parent!=null)parent.setColumnHeaderView(table.getTableHeader());}
         if(component instanceof Container c)for(Component child:c.getComponents())installHeaders(child);
     }
+    /** Production Next forms with synthetic retained packets; no scan or comparison is executed. */
+    static void seedNext(WorkbenchExtension ext) throws Exception {
+        String origin="https://app.example.test";
+        edt(()->{
+            ((WorkbenchScope)unchecked(ext,"localScope")).add(origin,true);
+            try{var refresh=WorkbenchExtension.class.getDeclaredMethod("scopeChanged");refresh.setAccessible(true);refresh.invoke(ext);}
+            catch(Exception error){throw new RuntimeException(error);}
+        });
+        for(String path:List.of("/assets/queued.js","/assets/partial.js","/assets/failed.js"))
+            seedTraffic(ext,request(origin+path,"GET",true,List.of()),response(200,"fetch('/api/notices/101');"));
+        seedTraffic(ext,request(origin+"/api/notices/101","GET",true,List.of(header("Cookie","DEMO_SESSION"))),
+            response(200,"{\"id\":101,\"title\":\"기존 공지\",\"ownerId\":42,\"status\":\"draft\"}"));
+        seedTraffic(ext,request(origin+"/api/notices/101","PATCH",true,List.of(header("Cookie","DEMO_SESSION"))),
+            response(200,"{\"accepted\":true}"));
+    }
+
+    static void renderNext(WorkbenchExtension ext,Path out) throws Exception {
+        JPanel root=(JPanel)get(ext,"root");
+        var auth=(AuthComparePanel)get(ext,"authCompare");
+        var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
+        var recon=(ResponseReconPanel)get(ext,"responseRecon");
+        DiskTrafficStore store=(DiskTrafficStore)get(ext,"trafficStore");
+        JTable traffic=(JTable)get(ext,"logTable");
+        traffic.setRowSelectionInterval(traffic.getRowCount()-1,traffic.getRowCount()-1);
+        AuthEffectPanel effect=auth.effectSettings;
+        effect.connectSelected(true);
+        effect.openReads();
+        JPanel reads=(JPanel)effect.suggestionWindow.content.get();
+        installHeaders(reads);
+        JTable readTable=(JTable)UiLayoutTest.named(reads,"wb.auth.effect.read.candidates");
+        if(readTable.getRowCount()==0)throw new IllegalStateException("Next GET chooser has no fixture rows");
+        readTable.setRowSelectionInterval(0,0);
+        JPanel readBody=WorkbenchUi.settingsBody(reads,()->{});
+        renderAt(readBody,out.resolve("next-auth-get-candidates.png"),760,480);
+        renderAt(readBody,out.resolve("next-auth-get-candidates-minimum.png"),560,300);
+        var selected=effect.observedReads().stream().filter(candidate->candidate.url().endsWith("/api/notices/101")).findFirst().orElseThrow();
+        effect.applyRead(selected);
+        effect.openFields();
+        JPanel fields=(JPanel)effect.suggestionWindow.content.get();
+        installHeaders(fields);
+        JTable fieldTable=(JTable)UiLayoutTest.named(fields,"wb.auth.effect.json.candidates");
+        if(fieldTable.getRowCount()==0)throw new IllegalStateException("Next JSON chooser has no fixture rows");
+        fieldTable.setRowSelectionInterval(0,0);
+        JPanel fieldBody=WorkbenchUi.settingsBody(fields,()->{});
+        renderAt(fieldBody,out.resolve("next-auth-json-fields.png"),760,480);
+        renderAt(fieldBody,out.resolve("next-auth-json-fields-minimum.png"),560,300);
+        effect.jsonPath.setText("$.title");effect.expected.setText("\"수정 공지\"");effect.enabled.setSelected(true);
+        JPanel effectBody=WorkbenchUi.settingsBody(effect,()->{});
+        renderAt(effectBody,out.resolve("next-auth-effect-setup.png"),760,480);
+        renderAt(effectBody,out.resolve("next-auth-effect-setup-minimum.png"),560,300);
+        js.retries.clear();recon.retries.clear();
+        var states=List.of(AnalysisRetries.State.QUEUE_FULL,AnalysisRetries.State.PARTIAL,AnalysisRetries.State.FAILED);
+        var notes=List.of("시연: 대기열 한도 · 원본 다시 분석 가능","시연: 일부 범위 분석 · 원본과 분석 범위 확인","시연: 형식 처리 실패 · 원본 형식 확인 후 재시도");
+        for(int i=0;i<3;i++) {
+            var ref=store.ref(store.size()-5+i);
+            js.retries.record(ref,ref.method(),ref.url(),states.get(i),notes.get(i));
+            recon.retries.record(ref,ref.method(),ref.url(),states.get(i),notes.get(i));
+        }
+        var jsRetry=js.retryWindow.content.get();
+        JPanel jsBody=WorkbenchUi.settingsBody(jsRetry,()->{});jsBody.addNotify();
+        installHeaders(jsBody);
+        renderAt(jsBody,out.resolve("next-js-retries.png"),760,480);
+        if(js.retries.table.getRowCount()>0)js.retries.table.setRowSelectionInterval(0,0);
+        renderAt(jsBody,out.resolve("next-js-retries-minimum.png"),560,300);
+        jsBody.removeNotify();
+        ext.openFeature("response.recon");
+        ((JTabbedPane)UiLayoutTest.named(recon,"wb.response.pages")).setSelectedIndex(3);
+        installHeaders(root);
+        render(root,out.resolve("next-response-retries.png"),width,height);
+        ext.openFeature("traffic");
+        render(root,out.resolve("next-selected-context.png"),width,height);
+        effect.closeSuggestions();
+    }
+
     public static void main(String[] args) throws Exception {
         Thread.setDefaultUncaughtExceptionHandler((thread,error)->{renderingErrors.add(error);error.printStackTrace();});
         Path out = Path.of(args[0]);
@@ -221,6 +297,15 @@ public final class UiLayoutPreview extends WorkbenchTest {
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});
         WorkbenchExtension ext=(WorkbenchExtension)get(entry,"workbench");
+        if(args.length>5&&args[5].equals("next")) {
+            try {
+                seedNext(ext);
+                edt(()->{try{JPanel root=(JPanel)unchecked(ext,"root");root.addNotify();renderNext(ext,out);root.removeNotify();}catch(Exception error){throw new RuntimeException(error);}});
+                writeMeasurements(out);
+            }finally{unload();}
+            if(!renderingErrors.isEmpty())throw new IllegalStateException("Next form preview failed");
+            System.out.println("Next setup helpers, retry tables and shared context rendered with synthetic metadata; zero HTTP.");return;
+        }
         if(args.length>5&&args[5].equals("traffic")) {
             try{
                 String origin="https://app.example.test";
@@ -488,6 +573,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         support.impact.setName("preview.evidence.impact");
         support.repro.setName("preview.evidence.repro");
         });
+        seedNext(ext);
         JPanel root = (JPanel) get(ext, "root");
         JTabbedPane tabs = (JTabbedPane) get(ext, "tabs");
         edt(() -> {
@@ -515,8 +601,14 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     }
                     render(root, out.resolve(String.format("tool-%02d.png", i)), 1440, 920);
                 }
-                tabs.setSelectedIndex(2);
+                ext.openFeature("passive");
+                render(root,out.resolve("url-candidates.png"),1440,920);
+                ext.openFeature("data");
                 var dataTabs=(JTabbedPane)get(ext,"dataTabs");
+                dataTabs.setSelectedIndex(0);
+                render(root,out.resolve("data-codec.png"),1440,920);
+                dataTabs.setSelectedIndex(1);
+                render(root,out.resolve("data-jwt.png"),1440,920);
                 dataTabs.setSelectedIndex(2);
                 var comparison=(StructuredComparePanel)dataTabs.getSelectedComponent();
                 comparison.leftInput.setText("{\"id\":102,\"owner\":\"bob\",\"visibility\":\"private\"}");
@@ -527,7 +619,8 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 for(var component:recon.getComponents()) if(component instanceof JTabbedPane reconTabs)reconTabs.setSelectedIndex(2);
                 if(recon.flowTable.getRowCount()>0){int last=recon.flowTable.getRowCount()-1;recon.flowTable.setRowSelectionInterval(last,last);}
                 render(root,out.resolve("stored-flow.png"),1440,920);
-                tabs.setSelectedComponent(activity);
+                ext.openFeature("activity");
+                render(root,out.resolve("activity-overview.png"),1440,920);
                 activity.coveragePages.setSelectedComponent(activity.assessmentPanel.accountsPage);
                 render(root, out.resolve("accounts.png"), 1440, 920);
                 activity.coveragePages.setSelectedComponent(activity.assessmentPanel.tasksPage);
@@ -553,7 +646,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 WorkbenchUi.packetLayout(root,true);
                 render(root,out.resolve("js-horizontal.png"),1440,920);
                 WorkbenchUi.packetLayout(root,false);
-                tabs.setSelectedIndex(0);
+                ext.openFeature("traffic");
                 var menu=(javax.swing.JButton)UiLayoutTest.named(root,"wb.navigation.toggle");
                 var navigation=(javax.swing.JSplitPane)UiLayoutTest.named(root,"wb.navigation.split");
                 menu.doClick();
@@ -581,6 +674,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 render(WorkbenchUi.settingsBody(settings[0],()->{}),out.resolve("logs.png"),width,height);
                 width=workspaceWidth;height=workspaceHeight;
 
+                renderNext(ext,out);
                 root.removeNotify();
             } catch(Exception e) { throw new RuntimeException(e); }
         });

@@ -46,9 +46,10 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
                 routes.put("재현·증거 정리",(Component)unchecked(extension,"bountySupport"));
                 routes.put("기능 자동 매핑",((kr.featuremapper.FeatureMapperWorkspace)unchecked(extension,"featureMapper")).component());
                 for(var route:routes.entrySet()) {
-                    int index=tabs.indexOfTab(route.getKey());
+                    String id=FeatureGuide.all().stream().filter(f->f.title().equals(route.getKey())).findFirst().orElseThrow().id();
+                    extension.openFeature(id);
+                    int index=tabs.getSelectedIndex();
                     check(index>=0,"task-oriented navigation exists: "+route.getKey());
-                    tabs.setSelectedIndex(index);
                     Component selectedPage=tabs.getSelectedComponent();
                     check(route.getValue()==selectedPage||SwingUtilities.isDescendingFrom(route.getValue(),selectedPage),"renamed tab still opens its actual engine: "+route.getKey());
                     String tip=tabs.getToolTipTextAt(index);
@@ -61,7 +62,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
                 }
                 check(new HashSet<>(guides).size()==routes.size(),"different tools receive their own guidance instead of a reused previous screen");
                 check(guides.get(0).contains("SCOPE")&&guides.get(0).contains("History"),"first-step guidance connects target scope with existing captured requests");
-                tabs.setSelectedIndex(tabs.indexOfTab("데이터 변환·비교"));
+                extension.openFeature("data");
                 JTabbedPane data=(JTabbedPane)unchecked(extension,"dataTabs");data.setSelectedIndex(0);
                 JTextArea input=(JTextArea)unchecked(extension,"codecIn");input.setText("MANUALLY_EDITED_GUIDE_INPUT");
                 help.doClick();help.doClick();
@@ -82,7 +83,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
                 check(tabs.getSelectedComponent()==unchecked(runner,"panel")&&payloadInput.getText().equals("MANUALLY_EDITED_PAYLOAD_INPUT"),"guide opens input testing without importing over edited request content");
                 check(unchecked(extension,"current")==selected&&traffic.getSelectedRow()==0&&PayloadIntegrationTest.sent.get()==0,"guide shortcuts preserve the selected source and never run a check");
                 choice.setSelectedItem(FeatureGuide.feature("data"));openFeature.doClick();
-                check(input.getText().equals("MANUALLY_EDITED_GUIDE_INPUT")&&tabs.getSelectedIndex()==tabs.indexOfTab("데이터 변환·비교"),"guide return to data preserves the user's local work");
+                check(input.getText().equals("MANUALLY_EDITED_GUIDE_INPUT")&&tabs.getSelectedIndex()==tabs.indexOfTab("요청·응답 목록")&&((JTabbedPane)unchecked(extension,"trafficTools")).getSelectedIndex()==1,"guide return to data preserves the user's local work");
                 Component selectedPage=tabs.getSelectedComponent();int before=opened.get();
                 choice.setSelectedItem(FeatureGuide.feature("settings"));openFeature.doClick();
                 check(opened.get()==before+1&&tabs.getSelectedComponent()==selectedPage,"guide settings shortcut opens its dialog and keeps the current tool");

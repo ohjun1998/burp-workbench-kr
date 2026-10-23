@@ -182,7 +182,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JDialog logWindow;
   private JTabbedPane tabs;
   private FolderNavigation navigation;
-  private JTabbedPane dataTabs;
+  private JTabbedPane dataTabs, trafficTools, explorationTools, mapperTools;
+  private final WorkContext workContext = new WorkContext();
+  private final WorkContextPanel workContextPanel = new WorkContextPanel(workContext);
   private LayoutSettings commonSettings;
   private JPanel commonSettingsContent;
   private JDialog commonSettingsWindow;
@@ -319,6 +321,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       traffic.clear();
       if(trafficBrowser!=null)trafficBrowser.clear();
       current = null;
+      workContext.clear();
       captureStage("임시 저장소 정리", previous::close);
       startCaptureObservations();
     }
@@ -384,7 +387,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                           () -> captureStage("Burp Scope 동기화", this::syncBurpScope)));
       if (SwingUtilities.isEventDispatchThread()) syncBurpScope();
       else SwingUtilities.invokeAndWait(this::syncBurpScope);
-      SwingUtilities.invokeLater(jsAnalysis::startHistory);
+      SwingUtilities.invokeLater(() -> jsAnalysis.startHistory(false));
       api.http().registerHttpHandler(this);
       api.userInterface().registerContextMenuItemsProvider(this);
       api.logging()
@@ -474,12 +477,16 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     responsePacket.setNativeAction(responseEditorComponent == null ? null : () -> showNativePacket(false));
     addPage("트래픽", "traffic", trafficPanel(), false);
     addPage("권한 비교", "auth", authPanel(), false);
-    addPage("데이터 도구", "data", dataPanel(), true);
     addPage("JS 추출", "js", jsPanel(), false);
     environments = new EnvironmentPanel(api);
-    addPage("환경 탐색", "environment", environments, false);
     passiveScan = new PassiveScanWorkspace(api);
-    addPage("URL 수집", "passive", passiveScan, false);
+    explorationTools = new JTabbedPane();
+    explorationTools.setName("wb.exploration.tools");
+    explorationTools.addTab("서버·경로 확인", environments);
+    explorationTools.setToolTipTextAt(0, "관측 환경과 경로 후보 확인 · GET 확인은 직접 실행합니다.");
+    explorationTools.addTab("URL 후보 수집", passiveScan);
+    explorationTools.setToolTipTextAt(1, "History·JS·문서·아카이브에서 후보 수집 · 대상 GET 확인과 구분합니다.");
+    addPage("환경 탐색", "environment", explorationTools, false);
     activity = new ActivityPanel(api);
     activity.assessmentPanel.selectedTraffic =
         () ->
@@ -515,7 +522,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             throw new IllegalArgumentException("계정 Origin과 대상이 다릅니다.");
           return candidate.headers();
         };
-    addPage("활동 추적", "activity", activity, false);
     passiveScan.discovery = (url, source) -> activity.discover(url, source);
     responseRecon = new ResponseReconPanel(api);
     addPage("응답 분석", "response.recon", responseRecon, false);
@@ -551,7 +557,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                 error instanceof RuntimeException runtime ? runtime : new IllegalStateException(error));
           }
         });
-    addPage("기능 자동 매핑", "mapper", mapperPage, false);
+    mapperTools = new JTabbedPane();
+    mapperTools.setName("wb.mapper.tools");
+    mapperTools.addTab("기능 분류·실행", mapperPage);
+    mapperTools.setToolTipTextAt(0, "요청을 기능과 실행별로 묶습니다. 분류는 점검 완료가 아닙니다.");
+    mapperTools.addTab("점검 진행 현황", activity);
+    mapperTools.setToolTipTextAt(1, "계정·URL·업무를 직접 검토하고 완료합니다. 자동 분류와 별도 상태입니다.");
+    addPage("기능 자동 매핑", "mapper", mapperTools, false);
     addPage("설정", "settings", settingsPanel(), false);
     settingsActionReady = true;
     featureHelp.setName("wb.feature.help");
@@ -561,6 +573,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logButton.addActionListener(e -> openLogs());
     navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton);
     root.add(navigation);
+    root.add(workContextPanel, BorderLayout.NORTH);
+    trafficTools.addChangeListener(e -> updateFeatureHelp());
+    explorationTools.addChangeListener(e -> updateFeatureHelp());
+    mapperTools.addChangeListener(e -> updateFeatureHelp());
     Diagnostics.bind(root, diagnostics);
     commonSettings.apply();
     tabs.addChangeListener(e -> updateFeatureHelp());
@@ -605,7 +621,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             "search",
             new AbstractAction() {
               public void actionPerformed(java.awt.event.ActionEvent e) {
-                tabs.setSelectedIndex(0);
+                openFeature("traffic");
                 filter.requestFocusInWindow();
                 filter.selectAll();
               }
@@ -619,9 +635,40 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
 
   private String currentFeature() {
     Component selected = tabs.getSelectedComponent();
-    return selected instanceof JComponent component
+    String id = selected instanceof JComponent component
         ? Objects.toString(component.getClientProperty("wb.feature.id"), "traffic")
         : "traffic";
+    if (id.equals("traffic") && trafficTools != null && trafficTools.getSelectedIndex() == 1) return "data";
+    if (id.equals("environment") && explorationTools.getSelectedIndex() == 1) return "passive";
+    if (id.equals("mapper") && mapperTools.getSelectedIndex() == 1) return "activity";
+    return id;
+  }
+
+  /** Stable feature IDs keep old help links working after tools move into focused workspaces. */
+  void openFeature(String id) {
+    if (unloaded.get()) return;
+    String pageId = switch (id) {
+      case "data" -> "traffic";
+      case "passive" -> "environment";
+      case "activity" -> "mapper";
+      default -> id;
+    };
+    for (int i = 0; i < tabs.getTabCount(); i++) {
+      Component target = tabs.getComponentAt(i);
+      if (target instanceof JComponent component && pageId.equals(component.getClientProperty("wb.feature.id"))) {
+        tabs.setSelectedIndex(i);
+        switch (id) {
+          case "traffic" -> trafficTools.setSelectedIndex(0);
+          case "data" -> trafficTools.setSelectedIndex(1);
+          case "environment" -> explorationTools.setSelectedIndex(0);
+          case "passive" -> explorationTools.setSelectedIndex(1);
+          case "mapper" -> mapperTools.setSelectedIndex(0);
+          case "activity" -> mapperTools.setSelectedIndex(1);
+          default -> { }
+        }
+        return;
+      }
+    }
   }
 
   private void updateFeatureHelp() {
@@ -660,14 +707,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             if (unloaded.get()) return;
             FeatureGuide.Feature chosen = (FeatureGuide.Feature) featureChoices.getSelectedItem();
             if (chosen == null) return;
-            for (int i = 0; i < tabs.getTabCount(); i++) {
-              Component target = tabs.getComponentAt(i);
-              if (target instanceof JComponent component
-                  && chosen.id().equals(component.getClientProperty("wb.feature.id"))) {
-                tabs.setSelectedIndex(i);
-                return;
-              }
-            }
+            openFeature(chosen.id());
           });
       featureHelpContent.add(
           WorkbenchUi.row(new JLabel("알아볼 기능"), featureChoices, open), BorderLayout.NORTH);
@@ -684,7 +724,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     featureHelpWindow =
         dialogOpener.open(
             root,
-            "Workbench KR · 기능 안내",
+            "Workbench Next · 기능 안내",
             featureHelpContent,
             false,
             () -> featureHelpWindow = null);
@@ -701,7 +741,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logContent = diagnostics.panel(this::captureDiagnostics);
     WorkbenchUi.style(logContent);
     if (logWindow != null && logWindow.isDisplayable()) { logWindow.toFront(); return; }
-    logWindow = dialogOpener.open(root, "Workbench KR · 로그", logContent, false, () -> logWindow = null);
+    logWindow = dialogOpener.open(root, "Workbench Next · 로그", logContent, false, () -> logWindow = null);
     if (logWindow != null) logWindow.setMinimumSize(new Dimension(680,420));
   }
 
@@ -764,7 +804,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     commonSettingsWindow =
         dialogOpener.open(
             root,
-            "Workbench KR · 공통 설정",
+            "Workbench Next · 공통 설정",
             commonSettingsContent,
             false,
             () -> commonSettingsWindow = null);
@@ -884,7 +924,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             () -> {
               if (current == null) throw new IllegalArgumentException("요청을 선택하세요.");
               codecIn.setText(current.request().toString());
-              tabs.setSelectedIndex(2);
+              openFeature("data");
               dataTabs.setSelectedIndex(0);
             }));
     JMenu scopeMenu = new JMenu("SCOPE 지정");
@@ -977,8 +1017,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     JPanel main = page(top, body);
     main.setBorder(BorderFactory.createEmptyBorder(8, 16, 12, 16));
     main.setName("wb.traffic");
+    trafficTools = new JTabbedPane();
+    trafficTools.setName("wb.traffic.tools");
+    trafficTools.addTab("요청·응답", main);
+    trafficTools.addTab("변환·비교", dataPanel());
+    trafficTools.setToolTipTextAt(1, "선택 원본을 유지하며 인코딩·JWT·응답 차이를 로컬에서 확인합니다.");
+    JPanel workspace = new JPanel(new BorderLayout());
+    workspace.add(trafficTools);
     refreshTrafficInfo();
-    return main;
+    return workspace;
   }
 
   private void showNativePacket(boolean request) {
@@ -1001,6 +1048,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       int index = logTable.convertRowIndexToModel(view);
       if (index < traffic.size()) {
         current = traffic.get(index);
+        workContext.select(current.packet(), Arrays.stream(logTable.getSelectedRows()).map(logTable::convertRowIndexToModel).toArray());
         HttpRequest request = current.request();
         HttpResponse response = current.response();
         if (requestView != null) requestView.setRequest(request);
@@ -1027,6 +1075,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       }
     } else {
       current = null;
+      workContext.clear();
       if (requestView != null) requestView.setRequest(null);
       if (responseView != null) responseView.setResponse(null);
       requestPacket.setPacket(null, null);
@@ -1036,7 +1085,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   void openPassive(String url) {
-    tabs.setSelectedComponent(passiveScan);
+    openFeature("passive");
     try {
       passiveScan.open(url, true);
     } catch (IllegalArgumentException e) {
@@ -1335,7 +1384,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       if (WorkbenchScope.contains(api, t.request())) {
         environments.observe(t.request(), t.response());
 
-        if (responseRecon != null) responseRecon.offer(t.request(), t.response());
+        if (responseRecon != null) responseRecon.offer(t.request(), t.response(), t.packet());
         if (activity != null) {
           activity.observe(t.request(), "트래픽 SCOPE");
           activity.response(t.request(), t.response());
@@ -1345,6 +1394,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void scopeChanged() {
+    workContext.configurationEdited();
     refreshScopeList();
     if (current != null && logTable.getSelectedRow() >= 0) showTraffic(logTable.getSelectedRow());
     if (jsAnalysis != null) jsAnalysis.rescanHistory();
@@ -1360,6 +1410,23 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                 selectedTraffic().stream()
                     .map(t -> HttpRequestResponse.httpRequestResponse(t.request(), t.response()))
                     .toList());
+    authCompare.onWorkContext(workContext);
+    authCompare.onObservedRequests(() -> {
+      DiskTrafficStore store = trafficStore;
+      List<HttpRequestResponse> recent = new ArrayList<>();
+      long end = store.size(), retainedBytes = 0;
+      // Candidate helpers run on Swing: inspect at most 100 recent metadata rows and restore only
+      // GET responses within an 8 MiB total / 2 MiB per-packet budget.
+      for (long index = end - 1; index >= Math.max(0, end - 100) && !unloaded.get(); index--) {
+        DiskTrafficStore.PacketRef ref = store.ref(index);
+        long bytes = (long) ref.requestLength() + ref.responseLength();
+        if (!ref.method().equals("GET") || !ref.hasResponse() || bytes > 2L * 1024 * 1024
+            || retainedBytes + bytes > 8L * 1024 * 1024) continue;
+        recent.add(ref.packet());
+        retainedBytes += bytes;
+      }
+      return List.copyOf(recent);
+    });
     return authCompare;
   }
 
@@ -1445,7 +1512,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       throw new IllegalArgumentException("요청에서 JWS 후보를 찾지 못했습니다. JWT 탭에 직접 붙여넣으세요.");
     jwtIn.setText(token);
     jwtOut.setText(Core.jwt(token));
-    tabs.setSelectedIndex(2);
+    openFeature("data");
     dataTabs.setSelectedIndex(1);
   }
 
@@ -1463,7 +1530,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             PacketFormat.response(
                 response.toByteArray().getBytes(), response.statusCode(), "", text)));
     jsAnalysis.loadContext(text, request.url(),response.headerValue("Content-Type"),request.headerValue("Referer"));
-    tabs.setSelectedIndex(3);
+    openFeature("js");
   }
 
   @Override
@@ -1500,6 +1567,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       lastResponse = LocalTime.now().withNano(0).toString();
       // Passive observers only receive admitted traffic. An observer must never block Burp's action.
       AtomicBoolean admitted = new AtomicBoolean();
+      AtomicReference<DiskTrafficStore.PacketRef> original = new AtomicReference<>();
       captureStage(
           "응답 수집",
           () -> {
@@ -1516,7 +1584,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               }
               admitted.set(true);
               try {
-                incoming.offer(storeTraffic(r.toolSource().toolType().toString(), q, r, started));
+                Traffic stored = storeTraffic(r.toolSource().toolType().toString(), q, r, started);
+                original.set(stored.packet());
+                incoming.offer(stored);
                 storedResponses.incrementAndGet();
               } catch (RuntimeException ex) {
                 responseStoreFailures.incrementAndGet();
@@ -1528,10 +1598,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       captureStage(
           "응답 보안 관찰",
           () -> {
-            if (admitted.get() && responseRecon != null) responseRecon.offer(r.initiatingRequest(), r);
+            if (admitted.get() && responseRecon != null) responseRecon.offer(r.initiatingRequest(), r, original.get());
           });
-      captureStage("JS 비 Proxy 응답 분석",()->{
-        if(admitted.get()&&jsAnalysis!=null&&!r.toolSource().toolType().toString().equalsIgnoreCase("PROXY"))jsAnalysis.offer(r.initiatingRequest(),r);
+      captureStage("JS 보관 응답 분석",()->{
+        if(admitted.get()&&jsAnalysis!=null)jsAnalysis.offer(r.initiatingRequest(),r,original.get());
       });
       captureStage(
           "응답 활동 관찰",
@@ -1603,7 +1673,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         + lastCaptureError
         + "\n정책 제외 원본은 보관하지 않음 · 수신/판정/성공/오류는 확장 로드 이후 누적"
         + " · 현재 보관은 목록 초기화 후 달라질 수 있음 · 수동 가져오기는 자동 수신에 합산하지 않음"
-        + " · 건수·패킷 크기 제한 없음 · 원본은 임시 디스크 보관 · 응답 없는 요청은 자동 수집 제외";
+        + " · 건수·패킷 크기 제한 없음 · 원본은 임시 디스크 보관 · 응답 없는 요청은 자동 수집 제외"
+        + "\n" + (captureObservations == null ? "" : captureObservations.diagnostics())
+        + "\n" + RuntimeMetrics.heapSummary();
   }
 
   private String captureTooltip() {
@@ -1650,7 +1722,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         if (rr.request() != null) rememberScopeCandidate(rr.request().url());
       } catch (RuntimeException ignored) {
       }
-    JMenu menu = new JMenu("Workbench KR");
+    JMenu menu = new JMenu("Workbench Next");
     JMenuItem bring = new JMenuItem("요청·응답 목록에 가져오기");
     bring.addActionListener(
         x ->
@@ -1678,7 +1750,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                       captureStage(
                           "가져온 응답 보안 관찰",
                           () -> {
-                            if (responseRecon != null) responseRecon.offer(q, response);
+                            if (responseRecon != null) responseRecon.offer(q, response, stored.packet());
                           });
                       captureStage(
                           "가져온 요청 활동 관찰",

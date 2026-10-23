@@ -6,7 +6,7 @@ import java.net.*;import java.nio.charset.StandardCharsets;import java.util.*;
 /** Extension-local scope; configuring it replaces the Burp Scope fallback. */
 public final class WorkbenchScope {
  private static final Map<MontoyaApi,WorkbenchScope> scopes=Collections.synchronizedMap(new WeakHashMap<>());
- private static final String STORE="wb.scope.v1";private static final int LIMIT=200;
+ private static final String STORE=BuildInfo.storageKey("wb.scope.v1");private static final int LIMIT=200;
  public record Rule(String url,boolean originOnly,String burpKey){public Rule(String url,boolean originOnly){this(url,originOnly,null);}}
  private final MontoyaApi api;private final LinkedHashSet<Rule> rules=new LinkedHashSet<>();private boolean configured;
  private final Set<Rule> disabled=new HashSet<>();private final Set<String> suppressed=new LinkedHashSet<>();private final Map<String,BurpScopeConfig.Entry> burpEntries=new LinkedHashMap<>();

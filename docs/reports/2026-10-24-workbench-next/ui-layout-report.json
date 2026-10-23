@@ -1,0 +1,46 @@
+{
+  "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+  "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.50.0.jar",
+  "releaseJarSha256": "1204cb4faaa926be0c76dbcf6e0e6c96cbed0e809ad8b541e36eec9d04827888",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1024x720",
+    "1280x800",
+    "1440x920"
+  ],
+  "renderedViews": 222,
+  "controlsMeasured": 3204,
+  "clippedControlsOutsideScrollers": 0,
+  "smallControls": 0,
+  "collapsedRequiredWorkAreas": 0,
+  "tabAndHeadingLabelsMeasured": 3324,
+  "clippedSelectedTabOrHeadingLabels": 0,
+  "minimumWorkAreas": {
+    "tool-00.png:wb.traffic.request.text": 100,
+    "tool-00.png:wb.traffic.response.text": 100,
+    "tool-02.png:preview.js.source": 80,
+    "js-horizontal.png:preview.js.source": 80,
+    "bounty-1.png:preview.workflow.input": 80,
+    "bounty-1.png:preview.workflow.detail": 80,
+    "bounty-3.png:preview.evidence.impact": 70,
+    "bounty-3.png:preview.evidence.repro": 70,
+    "tool-07.png:fm.history": 80,
+    "tool-07.png:fm.request": 70,
+    "tool-07.png:fm.response": 70,
+    "next-auth-get-candidates.png:wb.auth.effect.read.candidates": 80,
+    "next-auth-get-candidates-minimum.png:wb.auth.effect.read.candidates": 40,
+    "next-auth-json-fields.png:wb.auth.effect.json.candidates": 80,
+    "next-auth-json-fields-minimum.png:wb.auth.effect.json.candidates": 40,
+    "next-js-retries.png:wb.analysis.retry.table": 80,
+    "next-js-retries-minimum.png:wb.analysis.retry.table": 40,
+    "next-response-retries.png:wb.analysis.retry.table": 80
+  },
+  "failures": [],
+  "textFailures": [],
+  "guideBodiesMeasured": 0,
+  "guideLayoutFailures": 0,
+  "guideFailures": []
+}

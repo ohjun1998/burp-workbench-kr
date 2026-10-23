@@ -19,9 +19,9 @@ final class JsArchive {
   static JsArchive project(MontoyaApi api){
     try{
       if(api==null||api.persistence()==null||api.persistence().extensionData()==null)return null;
-      var data=api.persistence().extensionData();String id=data.getString("js-analysis-archive-project-v1");
-      if(id==null||!id.matches("[0-9a-f-]{36}")){id=UUID.randomUUID().toString();data.setString("js-analysis-archive-project-v1",id);}
-      return new JsArchive(Path.of(System.getProperty("user.home"),".burp-workbench","js-analysis",id));
+      var data=api.persistence().extensionData();String id=data.getString(BuildInfo.storageKey("js-analysis-archive-project-v1"));
+      if(id==null||!id.matches("[0-9a-f-]{36}")){id=UUID.randomUUID().toString();data.setString(BuildInfo.storageKey("js-analysis-archive-project-v1"),id);}
+      return new JsArchive(Path.of(System.getProperty("user.home"),BuildInfo.STORAGE_DIRECTORY,"js-analysis",id));
     }catch(Exception ex){return null;}
   }
   synchronized void load()throws IOException{

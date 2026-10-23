@@ -27,6 +27,7 @@ def main():
     p.add_argument('--check',action='store_true',help='Fail if visible buttons clip or key work areas collapse')
     p.add_argument('--sizes',nargs='+',help='Default: 1024x720 1280x800 1440x920; guide-only: 760x480 560x300')
     p.add_argument('--guide-only',action='store_true',help='Check the production feature-guide dialog wrapper separately')
+    p.add_argument('--next-only',action='store_true',help='Render Next observed GET/JSON setup helpers, retained-original retry tables and shared context')
     p.add_argument('--traffic-only',action='store_true',help='Render traffic view and compact search settings')
     p.add_argument('--scope-only',action='store_true',help='Check the production Scope editor at default and minimum dialog sizes')
     p.add_argument('--packet-only',action='store_true',help='Render Pretty/search, Raw, Hex and static Render in production packet panes')
@@ -36,7 +37,7 @@ def main():
     p.add_argument('--session-only',action='store_true',help='Render the production cookie/session inspector with synthetic findings')
     p.add_argument('--themes',nargs='+',choices=['light','dark'],default=['light','dark'])
     args=p.parse_args()
-    if sum([args.traffic_only,args.guide_only,args.scope_only,args.packet_only,args.js_only,args.session_only,args.auth_only,args.environment_only])>1:p.error('Choose one preview mode')
+    if sum([args.next_only,args.traffic_only,args.guide_only,args.scope_only,args.packet_only,args.js_only,args.session_only,args.auth_only,args.environment_only])>1:p.error('Choose one preview mode')
     if args.sizes is None:args.sizes=['1024x720','760x480'] if args.session_only else ['760x480','560x300'] if args.guide_only or args.scope_only else ['1024x720','1280x800','1440x920']
     version=runpy.run_path(str(WB/'release_info.py'))['VERSION']
     jar=(args.jar if args.jar else WB/f'dist/burp-workbench-kr-{version}.jar').resolve()
@@ -54,7 +55,7 @@ def main():
     for theme in args.themes:
         for size in args.sizes:
             w,h=size.split('x');out=args.out/theme/size
-            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else ['traffic'] if args.traffic_only else ['environment'] if args.environment_only else ['auth'] if args.auth_only else ['session'] if args.session_only else []),check=True)
+            subprocess.run([args.java,'-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['next'] if args.next_only else ['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else ['traffic'] if args.traffic_only else ['environment'] if args.environment_only else ['auth'] if args.auth_only else ['session'] if args.session_only else []),check=True)
             with (out/'controls.csv').open() as source:
                 all_rows.extend(csv.DictReader(source))
             with (out/'content.csv').open() as source:
@@ -75,16 +76,28 @@ def main():
     required={
         ('tool-00.png','wb.traffic.request.text'):100,
         ('tool-00.png','wb.traffic.response.text'):100,
-        ('tool-03.png','preview.js.source'):80,
+        ('tool-02.png','preview.js.source'):80,
         ('js-horizontal.png','preview.js.source'):80,
         ('bounty-1.png','preview.workflow.input'):80,
         ('bounty-1.png','preview.workflow.detail'):80,
         ('bounty-3.png','preview.evidence.impact'):70,
         ('bounty-3.png','preview.evidence.repro'):70,
-        ('tool-10.png','fm.history'):80,
-        ('tool-10.png','fm.request'):70,
-        ('tool-10.png','fm.response'):70,
+        ('tool-07.png','fm.history'):80,
+        ('tool-07.png','fm.request'):70,
+        ('tool-07.png','fm.response'):70,
     }
+    next_required={
+        ('next-auth-get-candidates.png','wb.auth.effect.read.candidates'):80,
+        ('next-auth-get-candidates-minimum.png','wb.auth.effect.read.candidates'):40,
+        ('next-auth-json-fields.png','wb.auth.effect.json.candidates'):80,
+        ('next-auth-json-fields-minimum.png','wb.auth.effect.json.candidates'):40,
+        ('next-js-retries.png','wb.analysis.retry.table'):80,
+        ('next-js-retries-minimum.png','wb.analysis.retry.table'):40,
+        ('next-response-retries.png','wb.analysis.retry.table'):80,
+    }
+    full_mode=not any([args.next_only,args.traffic_only,args.guide_only,args.scope_only,args.packet_only,args.js_only,args.session_only,args.auth_only,args.environment_only])
+    if full_mode:required.update(next_required)
+    if args.next_only:required=next_required
     if args.guide_only:required={}
     if args.traffic_only:required={("traffic-workspace.png","wb.traffic."+side+".text"):100 for side in ["request","response"]}
     if args.scope_only:required={('scope-list.png','wb.traffic.scope.table'):60}
@@ -115,6 +128,9 @@ def main():
             for (view,name),minimum in required.items():
                 expected_w,expected_h=w,h
                 copies=1
+                if (full_mode or args.next_only) and (view,name) in next_required and view!='next-response-retries.png':
+                    expected_w,expected_h=('560','300') if '-minimum' in view else ('760','480')
+                    copies=len(args.sizes)
                 if args.js_only and view in {'js-packets.png','js-analysis-list.png','js-packets-small.png','js-analysis-list-small.png'}:
                     expected_w,expected_h=('560','300') if 'small' in view else ('760','480')
                     copies=len(args.sizes)

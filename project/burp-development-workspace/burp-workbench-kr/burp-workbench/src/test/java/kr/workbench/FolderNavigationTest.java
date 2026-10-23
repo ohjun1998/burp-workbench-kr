@@ -63,11 +63,11 @@ public final class FolderNavigationTest extends WorkbenchTest {
           groups.add(folder.toString());
           for (int j = 0; j < folder.getChildCount(); j++) leaves.add(folder.getChildAt(j).toString());
         }
-        check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "데이터 도구", "점검 관리·증거")),
-            "exactly the five agreed folders in order");
-        check(leaves.equals(List.of("요청·응답 목록", "기능 자동 매핑", "JS에서 API 찾기", "서버·경로 탐색", "URL 후보 수집",
-            "계정 권한 비교", "응답 보안 분석", "입력값 보안 검사", "데이터 변환·비교", "점검 진행 현황", "재현·증거 정리")),
-            "eleven integrated tools in their agreed folders; SCOPE remains inside traffic");
+        check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "점검 관리·증거")),
+            "four task folders keep eight primary tools visible");
+        check(leaves.equals(List.of("요청·응답 목록", "기능 자동 매핑", "JS에서 API 찾기", "서버·경로 탐색",
+            "계정 권한 비교", "응답 보안 분석", "입력값 보안 검사", "재현·증거 정리")),
+            "eight primary tools; auxiliary tools remain nested and SCOPE stays inside traffic");
         JTable traffic = (JTable) unchecked(extension, "logTable");
         traffic.setRowSelectionInterval(0, 0);
         Object source = unchecked(extension, "current");
@@ -82,7 +82,32 @@ public final class FolderNavigationTest extends WorkbenchTest {
         }
         check(unchecked(extension, "current") == source && traffic.getSelectedRow() == 0
             && codec.getText().equals("UNSAVED_FOLDER_INPUT") && payload.getText().equals("UNSAVED_PAYLOAD_INPUT"),
-            "all ten routes preserve selected traffic and unsaved editor work");
+            "all eight routes preserve selected traffic and unsaved editor work");
+        check(UiLayoutTest.named(panel, "wb.next.version") instanceof JLabel version
+                && version.getText().equals("NEXT " + BuildInfo.VERSION)
+                && FeatureGuide.SUITE_TAB.equals("Workbench Next"),
+            "new channel is visibly distinct in Burp tab and persistent version badge");
+        JTabbedPane trafficTools = (JTabbedPane) unchecked(extension, "trafficTools");
+        JTabbedPane explorationTools = (JTabbedPane) unchecked(extension, "explorationTools");
+        JTabbedPane mapperTools = (JTabbedPane) unchecked(extension, "mapperTools");
+        extension.openFeature("data");
+        check(pages.getSelectedIndex() == pages.indexOfTab("요청·응답 목록") && trafficTools.getSelectedIndex() == 1
+                && codec.getText().equals("UNSAVED_FOLDER_INPUT"),
+            "legacy data feature opens retained auxiliary tab without losing manual content");
+        extension.openFeature("passive");
+        check(pages.getSelectedIndex() == pages.indexOfTab("서버·경로 탐색") && explorationTools.getSelectedIndex() == 1
+                && explorationTools.getSelectedComponent() == unchecked(extension, "passiveScan"),
+            "URL candidate collection opens its existing engine under server and path workspace");
+        extension.openFeature("activity");
+        check(pages.getSelectedIndex() == pages.indexOfTab("기능 자동 매핑") && mapperTools.getSelectedIndex() == 1
+                && mapperTools.getSelectedComponent() == unchecked(extension, "activity"),
+            "progress keeps its existing manual completion engine separate from automatic classification");
+        extension.openFeature("mapper");
+        check(mapperTools.getSelectedIndex() == 0, "Mapper help route returns to classification without completing work");
+        extension.openFeature("traffic");
+        check(trafficTools.getSelectedIndex() == 0 && unchecked(extension, "current") == source
+                && traffic.getSelectedRow() == 0 && PayloadIntegrationTest.sent.get() == 0,
+            "auxiliary navigation returns to exact selected traffic without sending HTTP");
         var auth = path(tree, "계정 권한 비교");
         tree.collapsePath(auth.getParentPath());
         pages.setSelectedIndex(pages.indexOfTab("계정 권한 비교"));
@@ -132,8 +157,8 @@ public final class FolderNavigationTest extends WorkbenchTest {
       });
       edt(() -> {
         Map<String, String> saved = new HashMap<>();
-        saved.put("wb.navigation.width", "305");
-        saved.put("wb.navigation.hidden", "true");
+        saved.put(BuildInfo.storageKey("wb.navigation.width"), "305");
+        saved.put(BuildInfo.storageKey("wb.navigation.hidden"), "true");
         JTabbedPane pages2 = new FolderNavigation.Pages();
         JPanel content = new JPanel();content.putClientProperty("wb.feature.id", "traffic");
         pages2.addTab("요청·응답 목록", content);
@@ -144,14 +169,14 @@ public final class FolderNavigationTest extends WorkbenchTest {
         JButton toggle = (JButton) UiLayoutTest.named(navigation, "wb.navigation.toggle");
         check(!split.getLeftComponent().isVisible() && split.getDividerSize() == 0, "saved hidden state restores without reserving a divider");
         toggle.doClick();layout(navigation, 1280);
-        check(split.getDividerLocation() == 305 && saved.get("wb.navigation.hidden").equals("false"),
+        check(split.getDividerLocation() == 305 && saved.get(BuildInfo.storageKey("wb.navigation.hidden")).equals("false"),
             "show restores saved width and persists visibility");
         split.setDividerLocation(250);
-        check(saved.get("wb.navigation.width").equals("250"), "user width is persisted in Burp preferences");
+        check(saved.get(BuildInfo.storageKey("wb.navigation.width")).equals("250"), "user width is persisted in Burp preferences");
         navigation.getActionMap().get("toggleMenu").actionPerformed(new java.awt.event.ActionEvent(navigation, 0, "toggleMenu"));
-        check(saved.get("wb.navigation.hidden").equals("true"), "keyboard menu shortcut toggles and persists visibility");
-        saved.put("wb.navigation.width", "broken");
-        saved.put("wb.navigation.hidden", "false");
+        check(saved.get(BuildInfo.storageKey("wb.navigation.hidden")).equals("true"), "keyboard menu shortcut toggles and persists visibility");
+        saved.put(BuildInfo.storageKey("wb.navigation.width"), "broken");
+        saved.put(BuildInfo.storageKey("wb.navigation.hidden"), "false");
         FolderNavigation recovered = new FolderNavigation(preferences(saved), new FolderNavigation.Pages(), () -> {});
         recovered.restoreLayout();layout(recovered, 1024);
         check(((JSplitPane) UiLayoutTest.named(recovered, "wb.navigation.split")).getDividerLocation() == 220,

@@ -82,6 +82,10 @@ final class AssessmentTracker {
 
   record EvidenceLink(String id, String filename, String time, Set<String> operations) {}
 
+  /** Review holds metadata and an opaque state stamp, never a credential or request body. */
+  record CompletionReview(String account, String method, String url, String task,
+                          String summary, String stamp) {}
+
   static final class Operation {
     final String account, method, url;
     final LinkedHashMap<String, Boolean> inputs = new LinkedHashMap<>();
@@ -352,7 +356,12 @@ final class AssessmentTracker {
     }
     if (bindings.size() + prepared.stream().distinct().filter(s -> !bindings.contains(s)).count()
         > 512) throw new IllegalArgumentException("세션 연결 최대 512개 · 오래된 계정 세션 연결을 해제하세요.");
-    for (Session s : prepared) if (!bindings.contains(s)) bindings.add(s);
+    Set<String> changed = new LinkedHashSet<>();
+    for (Session s : prepared) if (!bindings.contains(s)) {
+      bindings.add(s);
+      changed.add(s.account);
+    }
+    for (String id : changed) reviewAccountCompletion(id, "완료 후 인증 연결 추가 · 신원/조건 재확인");
     revision++;
   }
 
@@ -365,8 +374,20 @@ final class AssessmentTracker {
 
   synchronized void unbind(String id) {
     account(id);
-    bindings.removeIf(s -> s.account.equals(id));
+    if (bindings.removeIf(s -> s.account.equals(id)))
+      reviewAccountCompletion(id, "완료 후 인증 연결 해제 · 신원/조건 재확인");
     event(id, "", "세션 연결 해제", "점검 이력은 유지");
+  }
+
+  private void reviewAccountCompletion(String id, String reason) {
+    for (Operation op : operations.values()) if (op.account.equals(id) && op.completed) {
+      op.review = reason;
+      op.last = now();
+      reopenTasks(op, reason);
+      invalidateOperation(op);
+      event(id, endpoint(op.method, op.url), "완료 조건 변경", reason);
+    }
+    invalidateAccount(id);
   }
 
   synchronized String match(HttpRequest q) {
@@ -467,8 +488,9 @@ final class AssessmentTracker {
     op.inspections++;
     op.result = safeResult;
     op.last = now();
-    if (review) {
-      op.review = op.result;
+    if (review || op.completed) {
+      String reason = review ? op.result : "완료 후 새 검사 결과 · " + op.result;
+      op.review = reason.substring(0, Math.min(reason.length(), 512));
       reopenTasks(op, op.review);
     }
     invalidateOperation(op);
@@ -496,6 +518,78 @@ final class AssessmentTracker {
     op.last = now();
     invalidateOperation(op);
     event(id, endpoint(method, url), value ? "수동 완료" : "완료 해제", "URL 완료와 입력별 완료는 별도 기록");
+  }
+
+  synchronized CompletionReview completionReview(
+      String id, String method, String url, Collection<String> known) {
+    OperationView view = view(id, method, url, known);
+    Account a = account(id);
+    long pending = view.parameters.stream().filter(p -> !p.state().equals("점검 완료")).count();
+    String summary = "계정: " + a.label + " · 역할: " + a.role + " · 조직: " + a.tenant
+        + "\n대상: " + method + " " + view.url
+        + "\n현재 상태: " + view.state + "\n검사 시도: " + view.inspections
+        + " · 연결된 증거 ZIP: " + view.evidence + " · 미완료 입력: " + pending
+        + "\n최근 검사: " + (view.result.isBlank() ? "기록 없음" : view.result)
+        + "\n재검토 근거: " + (view.review.isBlank() ? "없음" : view.review)
+        + "\n\n이 완료 표시는 진단자의 수동 검토 기록입니다. 실제 신원·권한 정책·영향과 증거를 확인하세요."
+        + "\n입력별 완료는 별도이며, 증거 개수는 파일 존재나 탐지 성공을 보장하지 않습니다.";
+    return new CompletionReview(id, method, view.url, "", summary, operationStamp(view));
+  }
+
+  private String operationStamp(OperationView view) {
+    Account a = account(view.account);
+    Operation op = operations.get(opKey(view.account, view.method, view.url));
+    List<String> files = op == null ? List.of() : op.evidence.stream().sorted()
+        .map(id -> id + ":" + evidenceStatus.getOrDefault(id, "파일 재연결 필요")).toList();
+    List<String> sessions = bindings.stream().filter(b -> b.account.equals(view.account))
+        .map(b -> MetadataExport.json(List.of(b.fingerprint, new TreeSet<>(b.names), new TreeSet<>(b.cookies))))
+        .sorted().toList();
+    // Ordinary background observations do not invalidate a review; changed inputs and results do.
+    return stamp(List.of(List.of(a.id, a.label, a.origin, a.role, a.tenant, a.anonymous),
+        view.account, view.method, view.url, view.state, view.inspections,
+        view.result, view.review, view.completedAt,
+        view.parameters.stream().map(p -> List.of(p.key(), p.state())).toList(), files, sessions,
+        op == null ? Map.of() : new TreeMap<>(op.inputHashes)));
+  }
+
+  private static String stamp(Object values) {
+    return Core.hash(MetadataExport.json(values).getBytes(StandardCharsets.UTF_8));
+  }
+
+  synchronized void completeReviewed(CompletionReview review, Collection<String> known) {
+    if (!review.task.isEmpty()) throw new IllegalArgumentException("URL 완료 검토를 다시 여세요.");
+    CompletionReview current = completionReview(review.account, review.method, review.url, known);
+    if (!current.stamp.equals(review.stamp))
+      throw new IllegalArgumentException("검토 중 계정·검사·입력·증거 조건이 바뀌었습니다. 새 내용을 확인하고 다시 완료하세요.");
+    complete(review.account, review.method, review.url, known, true);
+  }
+
+  synchronized CompletionReview taskCompletionReview(String id) {
+    Task task = task(id);
+    TaskView view = taskView(task);
+    List<String> operations = operationPairs(task).stream().map(this::operationStamp).toList();
+    String summary = "업무: " + view.title + "\n현재 상태: " + view.state
+        + "\n계정 × API: " + view.required + " · 수동 완료: " + view.completed
+        + " · 검사 시도 있음: " + view.inspected
+        + "\n연결된 증거 ZIP: " + view.evidence + " · 파일 확인 조합: " + view.evidenced + " / " + view.required
+        + "\n완료 조건: " + (view.requiresEvidence ? "업무 증거 필요" : "업무 증거 선택")
+        + " / " + (view.allEvidence ? "모든 조합의 파일 확인 필요" : "전체 조합 파일 확인 선택")
+        + " / " + (view.strictInputs ? "모든 입력 완료 필요" : "입력 완료 별도")
+        + "\n재검토 근거: " + (task.review.isBlank() ? "없음" : task.review)
+        + "\n\n요구 계정·대상·입력·증거와 실제 영향을 검토한 뒤 완료하세요."
+        + "\n자동 분류나 검사 시도만으로 업무가 완료되지 않습니다.";
+    String fingerprint = stamp(List.of(task.id, task.title, task.note,
+        new TreeSet<>(task.accounts), new TreeSet<>(task.endpoints), task.completed,
+        task.requiresEvidence, task.strictInputs, task.allEvidence,
+        new TreeSet<>(task.criticalInputs), task.review, operations));
+    return new CompletionReview("", "", "", id, summary, fingerprint);
+  }
+
+  synchronized void completeTaskReviewed(CompletionReview review) {
+    if (review.task.isEmpty()) throw new IllegalArgumentException("업무 완료 검토를 다시 여세요.");
+    if (!taskCompletionReview(review.task).stamp.equals(review.stamp))
+      throw new IllegalArgumentException("검토 중 업무 요구 조건이나 결과가 바뀌었습니다. 새 내용을 확인하고 다시 완료하세요.");
+    completeTask(review.task, true);
   }
 
   synchronized void completeInput(

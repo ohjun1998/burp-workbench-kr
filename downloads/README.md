@@ -1,14 +1,27 @@
-# 테스트 파일 다운로드
+# Workbench Next / 기존 버전 다운로드
 
-파일을 열고 **Download raw file**을 누르세요. 처음 사용한다면 최신 확장 JAR와 표에 안내된 PDF부터 받으세요. 개발하거나 로컬 사이트에서 실습할 때만 소스·Docker ZIP을 추가로 받으면 됩니다.
+파일을 열고 **Download raw file**을 누르세요. Next를 처음 사용한다면 아래 **0.50.0 JAR**와 **Next 설치·기능별 상세 안내**부터 확인하세요. 이전 PDF는 과거 화면의 보존 자료입니다. 개발하거나 로컬 사이트에서 실습할 때만 소스·Docker ZIP을 추가로 받으면 됩니다.
 
-## 최신 테스트 배포
+## 새 버전: Workbench Next 0.50.0
 
-0.49.1은 컴파일·패키징한 배포입니다. 사용자 요청에 따라 이번 버전의 회귀·HTTP·GUI·원격 CI 검사는 실행하지 않았습니다.
+기존 버전과 분리한 새 작업 브랜치 배포입니다. 기존 JAR·소스 파일은 수정하지 않습니다.
+
+| 종류 | 다운로드 |
+|---|---|
+| Next 0.50.0 설치 JAR | [burp-workbench-kr-0.50.0.jar](extensions/0.50.0/burp-workbench-kr-0.50.0.jar) |
+| Next 0.50.0 빌드 가능한 소스 | [burp-workbench-kr-0.50.0-source.zip](extensions/0.50.0/burp-workbench-kr-0.50.0-source.zip) |
+| 설치·기능별 상세 안내 | [Next 변경 안내](../docs/RELEASE_0.50.0_NEXT_KR.md) |
+| 현재 검증 기록 | [VERIFICATION_0.50.0.json](../docs/VERIFICATION_0.50.0.json) |
+
+설치 후 확장 목록과 상단 탭에서 **Workbench Next**를 확인하세요. 기존 JAR는 지우지 말고 이전 확장의 로드만 해제합니다. Next는 별도 저장 설정으로 시작하므로 SCOPE와 계정을 다시 지정합니다. 두 버전 동시 로드 동작은 별도 검증하지 않았습니다.
+
+## 보존한 기존 배포
+
+0.49.1은 컴파일·패키징한 배포입니다. 0.49.1을 배포할 당시에는 사용자 요청에 따라 해당 버전의 회귀·HTTP·GUI·원격 CI 검사를 실행하지 않았습니다. Next 0.50.0의 이번 검사 결과는 위의 현재 검증 기록에 따로 제공합니다.
 
 | 종류 | 버전 | 다운로드 |
 |---|---|---|
-| 최신 확장 · 계정 비교 전 설정·판정 한계 안내 | 0.49.1 | [JAR](extensions/0.49.1/burp-workbench-kr-0.49.1.jar) · [소스](extensions/0.49.1/burp-workbench-kr-0.49.1-source.zip) |
+| 기존 확장 · 계정 비교 전 설정·판정 한계 안내 | 0.49.1 | [JAR](extensions/0.49.1/burp-workbench-kr-0.49.1.jar) · [소스](extensions/0.49.1/burp-workbench-kr-0.49.1-source.zip) |
 | 커뮤니티 실습 Docker 실행 ZIP | 3.10.0 | [community-security-lab-3.10.0-docker.zip](docker/3.10.0/community-security-lab-3.10.0-docker.zip) |
 | 기능 매핑 브라우저 도우미 · 내장 Mapper의 선택 연동 | 0.3.3 | [Chrome/Edge ZIP](feature-mapper/0.3.3/feature-mapper-browser-0.3.3.zip) · [독립 호환 배포](feature-mapper/0.3.3/) |
 | 읽기 쉬운 사용 안내서 | 0.25.4용 · 26쪽 | [Burp_Workbench_KR_0.25.4_guide.pdf](guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf) |

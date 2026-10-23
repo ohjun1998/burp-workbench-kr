@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -84,6 +85,7 @@ final class AssessmentPanel implements AutoCloseable {
   int shownFilter = -1;
   boolean updatingTables;
   Supplier<List<HttpRequestResponse>> selectedTraffic = List::of;
+  Predicate<AssessmentTracker.CompletionReview> completionReviewer = this::confirmCompletion;
   Supplier<Set<String>> authNames = () -> AuthComparePanel.DEFAULT_AUTH, cookieNames = Set::of;
 
   AssessmentPanel(ActivityPanel owner) {
@@ -444,8 +446,15 @@ final class AssessmentPanel implements AutoCloseable {
   void finish(boolean value) {
     var v = selected();
     if (v == null) throw new IllegalArgumentException("계정별 API를 선택하세요.");
-    tracker.complete(
-        v.account(), v.method(), v.url(), owner.tracker.parameterNames(v.method(), v.url()), value);
+    if (value) {
+      var review = tracker.completionReview(
+          v.account(), v.method(), v.url(), owner.tracker.parameterNames(v.method(), v.url()));
+      if (!completionReviewer.test(review)) return;
+      tracker.completeReviewed(review, owner.tracker.parameterNames(v.method(), v.url()));
+    } else {
+      tracker.complete(v.account(), v.method(), v.url(),
+          owner.tracker.parameterNames(v.method(), v.url()), false);
+    }
     refreshOperations();
   }
 
@@ -713,8 +722,28 @@ final class AssessmentPanel implements AutoCloseable {
   void finishTask(boolean value) {
     var task = selectedTask();
     if (task == null) throw new IllegalArgumentException("업무를 선택하세요.");
-    tracker.completeTask(task.id(), value);
+    if (value) {
+      var review = tracker.taskCompletionReview(task.id());
+      if (!completionReviewer.test(review)) return;
+      tracker.completeTaskReviewed(review);
+    } else tracker.completeTask(task.id(), false);
     refresh();
+  }
+
+  private boolean confirmCompletion(AssessmentTracker.CompletionReview review) {
+    // A headless host cannot supply a manual confirmation. Tests inject a reviewer explicitly.
+    if (GraphicsEnvironment.isHeadless()) return false;
+    JTextArea text = new JTextArea(review.summary(), 13, 65);
+    text.setName("wb.assessment.completion.review");
+    text.setEditable(false);
+    text.setLineWrap(true);
+    text.setWrapStyleWord(true);
+    text.setCaretPosition(0);
+    JScrollPane content = new JScrollPane(text);
+    WorkbenchUi.style(content);
+    return JOptionPane.showOptionDialog(owner, content, "완료 전 결과·근거 검토",
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+        new String[]{"검토 후 완료", "취소"}, "취소") == 0;
   }
 
   void showEvidenceFiles() {

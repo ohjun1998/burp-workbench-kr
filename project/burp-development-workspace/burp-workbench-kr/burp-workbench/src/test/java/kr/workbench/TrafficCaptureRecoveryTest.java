@@ -219,9 +219,12 @@ public final class TrafficCaptureRecoveryTest extends WorkbenchTest {
             check(requests.get()>=4&&fixture.metric("processingErrors")==1,
                 "response observer exception permits later activity and auth callback stages");
 
-            Thread callbackThread=Thread.currentThread();AtomicInteger bodyReads=new AtomicInteger();
+            Thread callbackThread=Thread.currentThread();AtomicBoolean activityFault=new AtomicBoolean();
             HttpResponse activityFailure=proxy(HttpResponse.class,(p,m,a)->{
-                if(m.getName().equals("body")&&Thread.currentThread()==callbackThread&&bodyReads.incrementAndGet()==4)
+                // Target the activity stage itself; adding another bounded observer must not move the fault.
+                if(m.getName().equals("body")&&Thread.currentThread()==callbackThread
+                    &&StackWalker.getInstance().walk(frames->frames.anyMatch(f->f.getClassName().equals(ActivityPanel.class.getName())&&f.getMethodName().equals("response")))
+                    &&activityFault.compareAndSet(false,true))
                     throw new IllegalStateException(PRIVATE_TEXT);
                 return delegate(response,HttpResponse.class,m,a);
             });

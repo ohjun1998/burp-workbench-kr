@@ -71,6 +71,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final JsArchive archive;
   private final Map<String,String> documents=new ConcurrentHashMap<>();
   private final JsWorkQueue jobs;
+  final AnalysisRetries retries = new AnalysisRetries();
+  final TargetWindow retryWindow = new TargetWindow(this, "분석 처리·재시도", () -> retries.content(this::retryOriginal));
   final AtomicLong truncated = new AtomicLong();
   final AtomicLong processed = new AtomicLong(),
       duplicates = new AtomicLong(),
@@ -156,6 +158,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       if (!enabled) {
         epoch.incrementAndGet();
         jobs.cancelQueued();
+        retries.cancelPending();
       } else if (historyMonitor != null) historyMonitor.rescan();
       WorkbenchUi.style(passive);
       refreshProgress();
@@ -251,6 +254,10 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     matchTraffic.addActionListener(e->resultView.openTraffic());compareVersions.addActionListener(e->openVersionComparison());
     moreMenu.add(matchTraffic);moreMenu.add(compareVersions);moreMenu.addSeparator();
     more.putClientProperty("wb.js.more.menu",moreMenu);
+    JMenuItem retryItem = new JMenuItem("분석 처리·재시도");
+    retryItem.setName("wb.js.retry.open");
+    retryItem.addActionListener(e -> retryWindow.open());
+    moreMenu.add(retryItem);
     menu(moreMenu, "History 다시 분석", rescan);
     menu(moreMenu, "URL 목록 복사", copy);
     menu(moreMenu, "가림 결과 복사", report);
@@ -505,7 +512,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       short status,
       byte[] body,
       String request,
-      String raw) {
+      String raw,
+      String retryId) {
     long bytes() {
       return 160L
           + body.length
@@ -617,14 +625,17 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                 && secretTable.getSelectedRow() >= 0);
   }
 
-  public void startHistory() {
+  public void startHistory() { startHistory(true); }
+
+  /** Embedded capture supplies exact original references; polling still backfills history. */
+  public void startHistory(boolean observeLive) {
     if (api == null) return;
     if(archive!=null)enqueue(()->{try{archive.load();onEdt(this::syncSources);}catch(Exception ex){onEdt(()->status.setText("분석 이력 불러오기 실패"));}},true);
     try {
       var proxy = api.proxy();
       if (proxy == null) return;
       historyMonitor =
-          new JsHistoryMonitor(proxy, this::offer, () -> watching.get() && !closed.get());
+          new JsHistoryMonitor(proxy, this::offer, () -> watching.get() && !closed.get(), observeLive);
       historyMonitor.start();
       progressTimer = new javax.swing.Timer(500, e -> refreshProgress());
       progressTimer.start();
@@ -686,7 +697,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
             + " · 절단 "
             + truncated.get());
     progress.setToolTipText(
-        counters + memory + " · 캐시 보관 제외 " + cache.rejected() + " · 기존 개별 분석/미리보기 제한 유지");
+        "<html>" + Core.html(counters + memory + " · 캐시 보관 제외 " + cache.rejected() + " · 기존 개별 분석/미리보기 제한 유지"
+            + "\n" + jobs.diagnostics() + "\n" + cache.diagnostics() + "\n" + RuntimeMetrics.heapSummary()).replace("\n", "<br>") + "</html>");
   }
 
   boolean idle() {
@@ -754,48 +766,86 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   public boolean offer(HttpRequest request, HttpResponse response) {
+    return offer(request, response, null);
+  }
+
+  boolean offer(HttpRequest request, HttpResponse response, DiskTrafficStore.PacketRef original) {
     if (closed.get() || !watching.get()) return false;
     if (response == null || request == null) return true;
+    String retryId = null;
     try {
-      if (!WorkbenchScope.contains(api, request)) {
-        excluded.incrementAndGet();
-        return true;
+      if (!WorkbenchScope.contains(api, request)) { excluded.incrementAndGet(); return true; }
+      if (original != null) {
+        var previous = retries.get(original.id());
+        if (previous != null && (previous.state() == AnalysisRetries.State.QUEUED || previous.state() == AnalysisRetries.State.RUNNING)) return true;
       }
-      String type = response.headerValue("Content-Type"), url = request.url();
-      String mime = type == null ? "" : type.toLowerCase(Locale.ROOT);
-      if (!TextCandidates.accepts(mime, url)) {
-        unsupported.incrementAndGet();
-        return true;
-      }
-      if (response.body().length() > JsBodyDecoder.WORK_LIMIT) {
-        unsupported.incrementAndGet();
-        recordFailure(url,"응답 작업 메모리 한도",epoch.get());
-        return true;
-      }
-      String requestText = "", raw = "";
-      try {
-        requestText = packetPreview(request.toByteArray());
-        raw = packetPreview(response.toByteArray());
-      } catch (Exception ignored) {
-      }
-      AnalysisInput snapshot =
-          new AnalysisInput(
-              url,
-              mime,
-              response.headerValue("Content-Encoding"),
-              type,
-              request.headerValue("Referer"),
-              response.statusCode(),
-              response.body().getBytes(),
-              requestText,
-              raw);
+      retryId = retries.record(original, request.method(), request.url(), AnalysisRetries.State.QUEUED, "로컬 분석 대기");
+      AnalysisInput snapshot = snapshot(request, response, retryId);
+      if (snapshot == null) return true;
       long token = epoch.get();
-      if(snapshot.bytes()>jobs.budget()){unsupported.incrementAndGet();recordFailure(url,"대기/실행 작업 메모리 한도",token);return true;}
-      return enqueue(() -> analyzeSnapshot(snapshot, token), false, snapshot.bytes());
-    } catch (Exception e) {
+      boolean accepted = enqueue(() -> analyzeSnapshot(snapshot, token, false), false, snapshot.bytes());
+      if (!accepted) retries.state(retryId, AnalysisRetries.State.QUEUE_FULL, "개수/바이트 한도 · 대기가 줄어든 뒤 선택 원본 재시도");
+      return accepted;
+    } catch (Exception error) {
       failed.incrementAndGet();
+      if (retryId != null) retries.state(retryId, AnalysisRetries.State.FAILED, "원본 읽기/분석 준비 실패 · 선택 원본 재시도");
       return true;
     }
+  }
+
+  private AnalysisInput snapshot(HttpRequest request, HttpResponse response, String retryId) {
+    String type = response.headerValue("Content-Type"), url = request.url();
+    String mime = type == null ? "" : type.toLowerCase(Locale.ROOT);
+    if (!TextCandidates.accepts(mime, url)) {
+      unsupported.incrementAndGet();
+      retries.state(retryId, AnalysisRetries.State.UNSUPPORTED, "지원 텍스트 응답이 아닙니다. 원본 트래픽에서 형식을 확인하세요.");
+      return null;
+    }
+    if (response.body().length() > JsBodyDecoder.WORK_LIMIT) {
+      unsupported.incrementAndGet();
+      retries.state(retryId, AnalysisRetries.State.TOO_LARGE, "응답 작업 메모리 한도 초과 · 한도를 우회하지 않습니다.");
+      recordFailure(url, "응답 작업 메모리 한도", epoch.get());
+      return null;
+    }
+    String requestText = "", raw = "";
+    try { requestText = packetPreview(request.toByteArray()); raw = packetPreview(response.toByteArray()); } catch (Exception ignored) {}
+    AnalysisInput snapshot = new AnalysisInput(url, mime, response.headerValue("Content-Encoding"), type,
+        request.headerValue("Referer"), response.statusCode(), response.body().getBytes(), requestText, raw, retryId);
+    if (snapshot.bytes() > jobs.budget()) {
+      unsupported.incrementAndGet();
+      retries.state(retryId, AnalysisRetries.State.TOO_LARGE, "단일 작업이 대기/실행 바이트 한도 초과 · 원본에서 별도 확인");
+      recordFailure(url, "대기/실행 작업 메모리 한도", epoch.get());
+      return null;
+    }
+    return snapshot;
+  }
+
+  /** Resolves only the selected immutable disk reference; never calls an HTTP transport. */
+  void retryOriginal(String id) {
+    if (closed.get()) return;
+    if (!watching.get()) { status.setText("분석 ON으로 전환한 뒤 선택 원본을 다시 분석하세요."); return; }
+    var entry = retries.begin(id);
+    if (entry == null) return;
+    var original = entry.original();
+    // Reserve raw restoration + body copy + bounded previews before reading disk packets.
+    long retained = 2L * (original.requestLength() + (long) original.responseLength()) + 512 * 1024L;
+    if (original.responseBodyLength() > JsBodyDecoder.WORK_LIMIT || retained > jobs.budget()) {
+      retries.state(id, AnalysisRetries.State.TOO_LARGE, "보관 원본 복원/분석이 작업 바이트 한도를 초과합니다. 원본에서 별도 확인하세요.");
+      return;
+    }
+    long token = epoch.get();
+    boolean accepted = enqueue(() -> {
+      if (closed.get() || token != epoch.get()) return;
+      if (!WorkbenchScope.contains(api, original.url())) { retries.state(id, AnalysisRetries.State.SCOPE_EXCLUDED, "현재 Scope 밖 원본입니다. 분석하지 않았습니다."); return; }
+      burp.api.montoya.http.message.HttpRequestResponse packet;
+      try { packet = original.packet(); }
+      catch (RuntimeException error) { retries.state(id, AnalysisRetries.State.EXPIRED, "원본 트래픽이 초기화/만료되었습니다. 다시 수집하세요."); return; }
+      try {
+        AnalysisInput input = snapshot(packet.request(), packet.response(), id);
+        if (input != null) analyzeSnapshot(input, token, true);
+      } catch (RuntimeException error) { if (token == epoch.get() && !closed.get()) retries.state(id, AnalysisRetries.State.FAILED, "로컬 재시도 실패 · 원본/지원 형식을 확인하세요."); }
+    }, true, retained);
+    if (!accepted) retries.state(id, AnalysisRetries.State.QUEUE_FULL, "재시도 대기열 한도 · 대기가 줄어든 뒤 다시 선택하세요.");
   }
 
   static String packetPreview(burp.api.montoya.core.ByteArray packet) {
@@ -823,15 +873,18 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     return EnvironmentPanel.preview(text) + (limited ? "\n[미리보기 64 KiB 제한]" : "");
   }
 
-  private void analyzeSnapshot(AnalysisInput snapshot, long token) {
+  private void analyzeSnapshot(AnalysisInput snapshot, long token, boolean retry) {
     if (token != epoch.get() || closed.get()) return;
+    retries.state(snapshot.retryId(), AnalysisRetries.State.RUNNING, "보관 응답을 로컬에서 분석 중");
     try {
       String text = readBody(snapshot.body(), snapshot.encoding(), snapshot.contentType());
-      if (text.isBlank() || !TextCandidates.textual(text)) { unsupported.incrementAndGet(); return; }
+      if (token != epoch.get() || closed.get()) return;
+      if (text.isBlank() || !TextCandidates.textual(text)) { unsupported.incrementAndGet(); retries.state(snapshot.retryId(), AnalysisRetries.State.UNSUPPORTED, "빈 본문/지원 텍스트 형식 아님"); return; }
       String key = safeSource(snapshot.url());
       String hash=fingerprint(text+"\nDOCUMENT:"+Objects.toString(snapshot.document(),"")+"\nMODULES:"+modules.link(snapshot.url(),text,snapshot.document()).prefix());
-      if (Objects.equals(cache.fingerprint(key),hash)||(archive!=null&&archive.has(archive.versionKey(key,hash),hash))) {
+      if (!retry && (Objects.equals(cache.fingerprint(key),hash)||(archive!=null&&archive.has(archive.versionKey(key,hash),hash)))) {
         duplicates.incrementAndGet();
+        if (token == epoch.get() && !closed.get()) retries.state(snapshot.retryId(), AnalysisRetries.State.REUSED, "동일 내용·문맥의 분석 이력이 있습니다. 기존 결과의 분석 범위를 확인하세요.");
         return;
       }
       String decoded =
@@ -841,14 +894,19 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                   snapshot.status(),
                   "",
                   text));
-      analyzeText(
+      JsAnalysis.Result analyzed = analyzeText(
           text,
           snapshot.url(),
           false,
           token,
           new String[] {snapshot.request(), snapshot.raw(), decoded}, snapshot.contentType(), snapshot.document());
+      if (token != epoch.get() || closed.get()) return;
+      if (analyzed != null) retries.state(snapshot.retryId(), analyzed.status().contains("분석 실패") ? AnalysisRetries.State.FAILED : analyzed.truncated() ? AnalysisRetries.State.PARTIAL : AnalysisRetries.State.COMPLETE, analyzed.status());
+
     } catch (Exception e) {
+      if (token != epoch.get() || closed.get()) return;
       failed.incrementAndGet();
+      retries.state(snapshot.retryId(), AnalysisRetries.State.FAILED, "압축 해제/디코딩 실패 · 원본 형식 확인 후 재시도");
       recordFailure(snapshot.url(),"압축 해제/디코딩 실패 · "+Objects.toString(snapshot.encoding(),"identity"),token);
     }
   }
@@ -900,8 +958,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     analyzeText(text,url,manual,token,packet,contentType,null);
   }
 
-  private void analyzeText(String text, String url, boolean manual, long token, String[] packet, String contentType,String document) {
-    if (closed.get() || token != epoch.get()) return;
+  private JsAnalysis.Result analyzeText(String text, String url, boolean manual, long token, String[] packet, String contentType,String document) {
+    if (closed.get() || token != epoch.get()) return null;
     JsModuleLinks.Linked linked;
     try{linked=modules.link(url,text,document);}catch(RuntimeException|LinkageError|StackOverflowError error){linked=new JsModuleLinks.Linked(text,"",List.of());failed.incrementAndGet();}
     String key = safeSource(url), hash = fingerprint(text+"\nDOCUMENT:"+Objects.toString(document,"")+"\nMODULES:"+linked.prefix());
@@ -930,7 +988,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       versions.record(url,hash,result);rememberVersionHash(analysisKey,hash);
       if(!legacy)result=JsFindingGroups.group(result);
     }catch(Exception|LinkageError|StackOverflowError error){failed.incrementAndGet();result=partial(result,"이력/묶음 처리 실패("+error.getClass().getSimpleName()+") · 발견 후보 보존");}
-    if (token != epoch.get() || closed.get()) return;
+    if (token != epoch.get() || closed.get()) return null;
     if(moduleChanged)for(var dependent:modules.dependents(url))enqueue(()->analyzeText(dependent.text(),dependent.source(),false,token,null,"application/javascript",dependent.document()),false,JsSourceCache.textBytes(dependent.text()));
     JsAnalysis.Result done = result;
     String source = text.substring(0, Math.min(text.length(), JsAnalysis.SOURCE_LIMIT));
@@ -958,6 +1016,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
           } else status.setText("History 분석 저장: " + analysisKey + " · 분석 목록에서 선택하세요.");
           refreshProgress();
         });
+    return done;
   }
 
   static JsAnalysis.Result partial(JsAnalysis.Result result,String note){
@@ -1376,6 +1435,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   public void clear() {
+    retries.clear();
+    retryWindow.closeWindow();
     analysisWindow.closeWindow();
     detailsWindow.closeWindow();
     packetWindow.closeWindow();
@@ -1413,6 +1474,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     targetSettings.close();
     repeater.close();
     analysisWindow.close();
+    retryWindow.close();
     detailsWindow.close();
     packetWindow.close();
     resolveWindow.close();

@@ -69,10 +69,9 @@ final class FolderNavigation extends JPanel {
 
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("도구");
     folder(root, "트래픽", "traffic", "mapper");
-    folder(root, "탐색·정보 수집", "js", "environment", "passive");
+    folder(root, "탐색·정보 수집", "js", "environment");
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
-    folder(root, "데이터 도구", "data");
-    folder(root, "점검 관리·증거", "activity", "bounty");
+    folder(root, "점검 관리·증거", "bounty");
     tree = new NavigationTree(root);
     tree.setName("wb.navigation.tree");
     tree.setRootVisible(false);
@@ -122,7 +121,12 @@ final class FolderNavigation extends JPanel {
     settings.addActionListener(event -> openSettings.run());
     JPanel toolbar = new JPanel(new BorderLayout(8, 0));
     toolbar.setBorder(BorderFactory.createEmptyBorder(4, 6, 0, 6));
-    toolbar.add(toggle, BorderLayout.WEST);
+    JLabel version = new JLabel("NEXT " + BuildInfo.VERSION);
+    version.setName("wb.next.version");
+    version.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, 13f));
+    version.setForeground(WorkbenchUi.accent());
+    version.setToolTipText("Workbench Next · 별도 배포 채널 · 기존 Workbench와 구분");
+    toolbar.add(WorkbenchUi.row(toggle, version), BorderLayout.WEST);
     toolbar.add(current, BorderLayout.CENTER);
     JPanel actions = new JPanel(new GridLayout(1, 0, 8, 0));
     actions.setName("wb.navigation.actions");
@@ -402,12 +406,12 @@ final class FolderNavigation extends JPanel {
   }
 
   private String read(String suffix) {
-    try { return api.persistence().preferences().getString("wb.navigation." + suffix); }
+    try { return api.persistence().preferences().getString(BuildInfo.storageKey("wb.navigation." + suffix)); }
     catch (Exception ignored) { return null; }
   }
 
   private void write(String suffix, String value) {
-    try { api.persistence().preferences().setString("wb.navigation." + suffix, value); }
+    try { api.persistence().preferences().setString(BuildInfo.storageKey("wb.navigation." + suffix), value); }
     catch (Exception ignored) { /* Layout remains usable if preferences are unavailable. */ }
   }
 }

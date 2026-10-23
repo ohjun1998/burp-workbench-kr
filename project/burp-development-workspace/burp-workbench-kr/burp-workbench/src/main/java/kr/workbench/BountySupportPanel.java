@@ -595,21 +595,19 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   void captureAuth() {
     var r = auth.current();
     if (r == null) throw new IllegalArgumentException("권한 비교 History에서 결과를 선택하세요.");
-    int count = 1;
-    for (var p : r.packets) if (p.request != null) count++;
-    if (evidence.size() + count > 32) throw new IllegalArgumentException("증거 요청 최대 32개");
+    var planned = AuthEvidenceSnapshot.capture(r);
+    if (evidence.size() + planned.size() > 32)
+      throw new IllegalArgumentException("증거 요청 최대 32개 · 이번 비교의 원본/계정/조회 "
+          + planned.size() + "개를 함께 추가할 공간이 필요합니다.");
     evidenceHeaders.addAll(r.context.names());
     for (var c : r.context.profiles()) if (c != null) evidenceSecrets.addAll(c.headers().values());
-    remember(r.original, r.response, "권한 비교 원본", r.note);
-    for (int i = 0; i < 3; i++)
-      if (r.packets[i].request != null)
-        remember(
-            r.packets[i].request,
-            r.packets[i].response,
-            r.context.labels()[i],
-            r.packets[i].note,
-            r.packets[i].note.contains("전송 세션 변경") ? "" : r.context.accountIds()[i]);
-    state.setText("선택 권한 비교 증거 추가");
+    for (var entry : planned) {
+      String account = entry.account();
+      if (entry.label().equals("권한 비교 원본") || entry.label().equals("권한 비교 기준 재조회"))
+        account = activity.tracker.assessments.match(entry.request());
+      remember(entry.request(), entry.response(), entry.label(), entry.note(), account);
+    }
+    state.setText("선택 권한 비교 " + planned.size() + "개 증거 추가 · 실행 당시 설정·판정·조회 포함");
   }
 
   void captureFlow() {

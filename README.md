@@ -10,7 +10,7 @@
 
 [0.52.0 기능별 상세 사용법](docs/RELEASE_0.52.0_NEXT_KR.md)과 당시 검증·실패 기록은 보존합니다.
 
-[PR #86](https://github.com/ohjun1998/burp-workbench-kr/pull/86)을 main에 병합했습니다. Windows 검색·실제 브라우저 도우미 연동 CI의 재시도 실패는 [후속 검증 기록](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남아 있으며, 병합이 해당 실패의 해결을 뜻하지는 않습니다.
+[PR #86](https://github.com/ohjun1998/burp-workbench-kr/pull/86)에서 0.52.0을 main에 병합한 당시의 Windows 검색·브라우저 실패 기록은 [보존 문서](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남깁니다. 후속 **[PR #88](https://github.com/ohjun1998/burp-workbench-kr/pull/88)의 0.52.1 소스는 기본·실제 Chrome·Windows/내구성 CI를 모두 첫 실행에서 통과**했습니다. [원격 검증 상세](docs/reports/2026-10-24-stability-0521/REMOTE_CI_KR.md)
 
 기존 버전의 당시 동작과 검사 범위는 [0.49.1 안내](docs/RELEASE_0.49.1_KR.md), [0.49.0 안내](docs/RELEASE_0.49.0_KR.md)에 남깁니다. 해당 문서의 미실행 표시는 그 버전에 대한 기록입니다.
 

@@ -1,0 +1,20 @@
+Source commit: e4b75694418091f51663557e766f002eeeb0fe17
+Executed: 2026-10-25 (Asia/Seoul)
+Run: https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444579
+Job: 121082491904 (success)
+Selected result lines from completed GitHub Actions logs; timestamps omitted.
+MapperTest: 136 checks passed
+PASS actual Chromium loads the Manifest V3 helper
+PASS real helper popup pairs with the production bridge fixture
+PASS site activation registers a real content script
+PASS a real button performs upload, save and follow-up fetch against the fixture server
+PASS trusted browser click delivers its visible function label
+PASS browser request metadata reaches the bridge without errors
+PASS second screen action has its own function label
+PASS site deactivation removes the target from capture configuration
+BROWSER_NATIVE_SUCCESS
+PASS actual browser PATCH is mapped to its visible button label
+PASS actual browser post is mapped to the registration function
+PASS actual browser POST matches exact observed raw body SHA-256
+PASS actual browser PATCH uses unique method URL time context and explicitly unobserved body evidence
+BROWSER_FIXTURE_SUCCESS

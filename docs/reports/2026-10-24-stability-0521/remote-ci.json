@@ -1,0 +1,781 @@
+{
+  "sourceCommit": "e4b75694418091f51663557e766f002eeeb0fe17",
+  "verifiedDateAsiaSeoul": "2026-10-25",
+  "result": "passed",
+  "scope": "Defined 0.52.1 stabilization exit criteria; no native Burp GUI or real-site accuracy claim.",
+  "runs": [
+    {
+      "id": 40164444579,
+      "name": "Feature Mapper verification",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444579",
+      "headSha": "e4b75694418091f51663557e766f002eeeb0fe17",
+      "event": "pull_request",
+      "runAttempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-25T05:08:30Z",
+      "updatedAt": "2026-10-25T05:09:22Z",
+      "jobs": [
+        {
+          "id": 121082491904,
+          "name": "verify",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 40164444579,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Build and check mapping, storage, helper, and release bytes",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Check responsive Mapper layout and diagnostics",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Install isolated browser test tools",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Real browser helper to production mapping bridge",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Run actions/upload-artifact@v7",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Post Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            },
+            {
+              "name": "Post Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 18
+            },
+            {
+              "name": "Post Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 19
+            },
+            {
+              "name": "Post Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 20
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 40164444580,
+      "name": "Capture durability and Windows verification",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444580",
+      "headSha": "e4b75694418091f51663557e766f002eeeb0fe17",
+      "event": "pull_request",
+      "runAttempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-25T05:08:30Z",
+      "updatedAt": "2026-10-25T05:19:37Z",
+      "jobs": [
+        {
+          "id": 121082492106,
+          "name": "isolated-disk-and-soak",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 40164444580,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Build, run complete release checks and verify the new Docker archive",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Verify actual ENOSPC, rollback and recovery on a private 16 MiB filesystem",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Verify sustained capture",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Run actions/upload-artifact@v7",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Post Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Post Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            },
+            {
+              "name": "Post Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 18
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 19
+            }
+          ]
+        },
+        {
+          "id": 121082492320,
+          "name": "windows",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 40164444580,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Build and execute every Java regression group on Windows",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Verify native Repeater titlebar maximize restore and close on Windows",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Repeat concurrent storage and cache-eviction regressions ten times",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Verify Mapper indexes and concurrent project save on Windows",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Execute production capture and Swing timer on Windows",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Parse and execute startup script under Windows PowerShell 5.1 with controlled commands",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Run actions/upload-artifact@v7",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Post Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            },
+            {
+              "name": "Post Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 22
+            },
+            {
+              "name": "Post Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 23
+            },
+            {
+              "name": "Post Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 24
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 25
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 40164444583,
+      "name": "Build and verify",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444583",
+      "headSha": "e4b75694418091f51663557e766f002eeeb0fe17",
+      "event": "pull_request",
+      "runAttempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-25T05:08:30Z",
+      "updatedAt": "2026-10-25T05:20:37Z",
+      "jobs": [
+        {
+          "id": 121082492054,
+          "name": "check",
+          "status": "completed",
+          "conclusion": "success",
+          "run_id": 40164444583,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Check development prerequisites",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Build and run regression and loopback HTTP checks",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Verify role-separated community portals with real HTTP sessions",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Verify authentication combinations through the production comparison controller",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Measure 50 operations through the production comparison controller (API adapter)",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Verify standalone login form and redirect lifecycle",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Verify responsive Swing layouts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Verify traffic list and compact search settings",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Verify beginner guidance at default and minimum window sizes",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 14
+            },
+            {
+              "name": "Verify Scope editor at default and minimum window sizes",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Verify Pretty Raw Hex and packet Search layouts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Verify JS text analysis workspace and modeless windows",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            },
+            {
+              "name": "Verify cookie session inspector at default and minimum sizes",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 18
+            },
+            {
+              "name": "Verify authorization policy and effect verification layouts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 19
+            },
+            {
+              "name": "Verify server discovery controls evidence and history layouts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 20
+            },
+            {
+              "name": "Check packaging invariants",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 21
+            },
+            {
+              "name": "Verify versioned downloads match current sources",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 22
+            },
+            {
+              "name": "Upload verified extension",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 23
+            },
+            {
+              "name": "Upload verification logs",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 24
+            },
+            {
+              "name": "Post Run actions/setup-node@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 45
+            },
+            {
+              "name": "Post Run actions/setup-python@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 46
+            },
+            {
+              "name": "Post Run actions/setup-java@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 47
+            },
+            {
+              "name": "Post Run actions/checkout@v6",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 48
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 49
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "observations": {
+    "actualBrowser": {
+      "browser": "Chrome for Testing 154.0.8037.57",
+      "manifestV3": true,
+      "postRawSha256Agreement": true,
+      "patchExplicitlyUnobservedMediumConfidence": true,
+      "nativeBurp": false,
+      "excerpt": "remote-browser-excerpt.txt"
+    },
+    "linux": [
+      {
+        "version": "0.52.1",
+        "regressionGroups": 95,
+        "regressionChecks": 3222,
+        "payloadHttpChecks": 136,
+        "allFeaturesHttpChecks": 102,
+        "bountyHttpChecks": 266,
+        "totalChecks": 3726,
+        "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+        "result": "passed"
+      },
+      {
+        "result": "passed",
+        "command": "python dev.py release",
+        "freshOutputDirectory": true,
+        "committedDownloadsPreserved": true,
+        "dockerVersion": "3.10.0",
+        "dockerZipSha256": "c9f60b472b288c5509f1ce223a493aa9258650a71170a248004a00c27739e77f",
+        "freshDockerZipMatchesCommitted": true,
+        "version": "0.52.1",
+        "regressionGroups": 95,
+        "regressionChecks": 3222,
+        "payloadHttpChecks": 136,
+        "allFeaturesHttpChecks": 102,
+        "bountyHttpChecks": 266,
+        "totalChecks": 3726
+      },
+      {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Linux",
+        "java": "17.0.20.1",
+        "mode": "disk-full",
+        "fileSystemType": "tmpfs",
+        "fileSystemBytes": 16777216,
+        "errorStages": {
+          "기능 자동 매핑 · 패킷 보관·매핑": 6,
+          "응답 수집": 2
+        },
+        "retainedRows": 9,
+        "expectedDrops": 2,
+        "expectedProcessingErrors": 8,
+        "recovered": true,
+        "result": "passed",
+        "checks": 15,
+        "passedChecks": [
+          "disk exhaustion is confined to an explicitly selected tmpfs of at most 64 MiB",
+          "real filesystem capacity causes a capture write failure",
+          "OS reports ENOSPC on the isolated filesystem",
+          "failed partial append rolls back file length and packet count",
+          "retained packet restores exact request and response bytes",
+          "repeated write failures count exactly two capture drops without breaking callbacks",
+          "shared diagnostics account separately for capture and Mapper storage failures",
+          "repeated failures preserve all previously accepted records",
+          "freeing disk space resumes capture without reloading the extension",
+          "embedded Mapper also resumes storage after disk space is freed",
+          "received counters and live Swing timer survive disk exhaustion",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "host error diagnostics contain no synthetic packet text or target URL",
+          "unload removes the traffic file after disk recovery"
+        ]
+      },
+      {
+        "host": "Montoya adapter; production callback, Swing timer and disk store",
+        "nativeBurp": false,
+        "nativeGuiClicks": false,
+        "os": "Linux",
+        "java": "17.0.20.1",
+        "mode": "soak",
+        "received": 3619,
+        "drops": 0,
+        "processingErrors": 0,
+        "errorStages": [],
+        "acceptedResponses": 3619,
+        "retainedRows": 3619,
+        "diskBytes": 15608567,
+        "heapBeforeBytes": 1805072,
+        "heapAfterBytes": 90573408,
+        "elapsedSeconds": 180.973229907,
+        "requestedSeconds": 180,
+        "intervalMillis": 50,
+        "result": "passed",
+        "checks": 8,
+        "passedChecks": [
+          "collection exceeds the former 250-row limit",
+          "every accepted packet remains in disk and UI",
+          "all response callbacks complete with zero drops and processing errors",
+          "real Swing collection timer remains active",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "retained packet restores exact request and response bytes",
+          "unload deletes the active private traffic store"
+        ]
+      }
+    ],
+    "windows": {
+      "summaries": [
+        {
+          "result": "passed",
+          "version": "0.52.1",
+          "iterations": 10,
+          "groups": [
+            "CapturePipelineTest",
+            "TrafficCaptureRecoveryTest"
+          ],
+          "executions": 20,
+          "note": "Repeated executions are not additional unique check counts."
+        },
+        {
+          "host": "Montoya adapter; production callback, Swing timer and disk store",
+          "nativeBurp": false,
+          "nativeGuiClicks": false,
+          "os": "Windows Server 2025",
+          "java": "17.0.20.1",
+          "mode": "soak",
+          "received": 3653,
+          "drops": 0,
+          "processingErrors": 0,
+          "errorStages": [],
+          "acceptedResponses": 3653,
+          "retainedRows": 3653,
+          "diskBytes": 15755209,
+          "heapBeforeBytes": 1596648,
+          "heapAfterBytes": 44650096,
+          "elapsedSeconds": 182.745537,
+          "requestedSeconds": 180,
+          "intervalMillis": 50,
+          "result": "passed",
+          "checks": 8,
+          "passedChecks": [
+            "collection exceeds the former 250-row limit",
+            "every accepted packet remains in disk and UI",
+            "all response callbacks complete with zero drops and processing errors",
+            "real Swing collection timer remains active",
+            "retained packet restores exact request and response bytes",
+            "retained packet restores exact request and response bytes",
+            "retained packet restores exact request and response bytes",
+            "unload deletes the active private traffic store"
+          ]
+        }
+      ],
+      "nativeSwingFrameResult": "JsRepeaterWindowTest: 6 checks passed (native Swing frame; no Burp or HTTP)",
+      "powerShell": {
+        "result": "passed",
+        "checks": 6,
+        "powershell": "5.1.26100.33648",
+        "os": "Microsoft Windows NT 10.0.26100.0",
+        "dockerBackendExecuted": false,
+        "browserLaunched": false,
+        "passedChecks": [
+          "Windows PowerShell parsed start.ps1",
+          "Windows PowerShell parsed verify-stack.ps1",
+          "start.ps1 invoked the expected Compose command through a controlled command adapter",
+          "start.ps1 requested the loopback browser URL after successful command completion",
+          "start.ps1 rejects a nonzero Docker exit",
+          "start.ps1 does not request a browser after failed startup"
+        ]
+      },
+      "excerpt": "remote-windows-excerpt.txt"
+    },
+    "auth50": {
+      "transport": "real loopback HTTP with Montoya API adapters",
+      "nativeExtensionLoaded": false,
+      "uniqueFunctions": 50,
+      "comparisonRuns": 1400,
+      "comparedAccountCells": 4200,
+      "httpChecks": 2800,
+      "targetRequests": 10822,
+      "metrics": {
+        "unconfigured": {
+          "account": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 1708,
+            "FN": 392,
+            "precision": null,
+            "recall": 0,
+            "falsePositiveRate": 0,
+            "reviewCount": 1316,
+            "samples": 2100
+          },
+          "run": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 406,
+            "FN": 294,
+            "precision": null,
+            "recall": 0,
+            "falsePositiveRate": 0,
+            "reviewCount": 686,
+            "samples": 700
+          }
+        },
+        "configured": {
+          "account": {
+            "TP": 392,
+            "FP": 0,
+            "TN": 1708,
+            "FN": 0,
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "reviewCount": 91,
+            "samples": 2100
+          },
+          "run": {
+            "TP": 294,
+            "FP": 0,
+            "TN": 406,
+            "FN": 0,
+            "precision": 1,
+            "recall": 1,
+            "falsePositiveRate": 0,
+            "reviewCount": 77,
+            "samples": 700
+          }
+        }
+      },
+      "independentResultAssertions": "passed",
+      "note": "Controlled lab/API adapter observations. Unconfigured/configured fixture branches and repeated platform checks are not added to unique release-check counts; 91 configured review cells remain explicit."
+    }
+  },
+  "limitations": [
+    "3-minute capture runs do not prove long-duration capacity.",
+    "Native Swing frame checks do not substitute for native Burp GUI, Windows DPI/IME or manual Edge checks.",
+    "PowerShell checks use controlled commands; Docker/Oracle/Nginx backend startup was not executed by those checks.",
+    "Synthetic fixture FP/FN counts do not establish accuracy against external sites."
+  ],
+  "docFollowup": "The follow-up commit records results and chat only; production source, build scripts and published artifacts remain identical to the verified source commit."
+}

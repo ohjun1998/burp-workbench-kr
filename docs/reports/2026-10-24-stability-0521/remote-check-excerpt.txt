@@ -1,0 +1,11 @@
+Source commit: e4b75694418091f51663557e766f002eeeb0fe17
+Executed: 2026-10-25 (Asia/Seoul)
+Run: https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444583
+Job: 121082492054 (success)
+Selected results only; unit-test fixture summaries for historical versions are excluded.
+WORKBENCH_CHECK_SUMMARY {"version": "0.52.1", "regressionGroups": 95, "regressionChecks": 3222, "payloadHttpChecks": 136, "allFeaturesHttpChecks": 102, "bountyHttpChecks": 266, "totalChecks": 3726, "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt", "result": "passed"}
+3894 controls measured; 0 clipped outside scrollable containers.
+0 collapsed key work areas; 0 controls below 24px.
+78 synthetic workflow state assertions; 0 missing or failed.
+Versioned download hashes and source fingerprints verified.
+AUTH50: {"transport":"real loopback HTTP with Montoya API adapters","nativeExtensionLoaded":false,"uniqueFunctions":50,"comparisonRuns":1400,"comparedAccountCells":4200,"httpChecks":2800,"targetRequests":10822,"metrics":{"unconfigured":{"account":{"TP":0,"FP":0,"TN":1708,"FN":392,"precision":null,"recall":0,"falsePositiveRate":0,"reviewCount":1316,"samples":2100},"run":{"TP":0,"FP":0,"TN":406,"FN":294,"precision":null,"recall":0,"falsePositiveRate":0,"reviewCount":686,"samples":700}},"configured":{"account":{"TP":392,"FP":0,"TN":1708,"FN":0,"precision":1,"recall":1,"falsePositiveRate":0,"reviewCount":91,"samples":2100},"run":{"TP":294,"FP":0,"TN":406,"FN":0,"precision":1,"recall":1,"falsePositiveRate":0,"reviewCount":77,"samples":700}}},"independentResultAssertions":"passed","note":"Controlled lab/API adapter observations. Unconfigured/configured fixture branches and repeated platform checks are not added to unique release-check counts; 91 configured review cells remain explicit."}

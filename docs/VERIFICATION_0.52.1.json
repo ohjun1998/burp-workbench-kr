@@ -267,12 +267,34 @@
     }
   },
   "remoteCi": {
-    "result": "pending",
-    "required": [
-      "Build and verify",
-      "Feature Mapper verification",
-      "Capture durability and Windows verification"
-    ]
+    "result": "passed",
+    "verifiedDateAsiaSeoul": "2026-10-25",
+    "verifiedSourceCommit": "e4b75694418091f51663557e766f002eeeb0fe17",
+    "report": "reports/2026-10-24-stability-0521/remote-ci.json",
+    "runs": [
+      {
+        "id": 40164444579,
+        "name": "Feature Mapper verification",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444579",
+        "conclusion": "success",
+        "runAttempt": 1
+      },
+      {
+        "id": 40164444580,
+        "name": "Capture durability and Windows verification",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444580",
+        "conclusion": "success",
+        "runAttempt": 1
+      },
+      {
+        "id": 40164444583,
+        "name": "Build and verify",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444583",
+        "conclusion": "success",
+        "runAttempt": 1
+      }
+    ],
+    "documentationOnlyFollowup": true
   },
   "artifacts": [
     {
@@ -339,11 +361,11 @@
   },
   "releaseExitCriteria": {
     "deterministicDefectRegressions": "passed",
-    "defaultAndWindowsRequiredChecks": "local-passed-remote-pending",
-    "actualBrowserPostAndPatchEvidence": "remote-pending-local-launch-blocked",
+    "defaultAndWindowsRequiredChecks": "passed",
+    "actualBrowserPostAndPatchEvidence": "passed",
     "coreDataFlowRegressions": "passed",
     "artifactAndSourceFingerprints": "passed",
-    "overall": "awaiting-remote-ci"
+    "overall": "passed-for-defined-stabilization-scope"
   },
   "evidence": [
     "reports/2026-10-24-stability-0521/release-result.json",
@@ -352,19 +374,27 @@
     "reports/2026-10-24-stability-0521/regressions/README.md",
     "reports/2026-10-24-stability-0521/ui/layout-report.json",
     "reports/2026-10-24-stability-0521/mapper-ui/layout-report.json",
-    "reports/2026-10-24-stability-0521/performance/README.md"
+    "reports/2026-10-24-stability-0521/performance/README.md",
+    "reports/2026-10-24-stability-0521/REMOTE_CI_KR.md",
+    "reports/2026-10-24-stability-0521/remote-ci.json",
+    "reports/2026-10-24-stability-0521/remote-browser-excerpt.txt",
+    "reports/2026-10-24-stability-0521/remote-windows-excerpt.txt",
+    "reports/2026-10-24-stability-0521/remote-linux-excerpt.txt",
+    "reports/2026-10-24-stability-0521/remote-check-excerpt.txt"
   ],
   "limitations": [
     "Local regression and Swing layout checks use synthetic API adapters and isolated loopback servers, not native Burp GUI.",
-    "Local Chrome failed before acceptance checks because the host denied process singleton socket creation; remote browser verification remains required.",
+    "Local Chrome failed before acceptance checks because the host denied process singleton socket creation. The same production helper passed the actual Chrome acceptance test remotely on 2026-10-25.",
     "Windows DPI/IME and Edge manual operation, external live sites/BApps/OAST, Docker startup and long-duration native Burp load were not tested locally.",
     "The first incomplete release attempt with omitted sparse validation files is excluded from final passed counts.",
     "Performance benchmark is a bounded synthetic single run per source/environment, not a speedup or production capacity guarantee.",
-    "0.52.0 and earlier artifacts are preserved; 0.52.1 main merge has not been performed."
+    "0.52.0 and earlier artifacts are preserved; 0.52.1 main merge has not been performed.",
+    "Remote Windows/Linux sustained capture covered 180 requested seconds each. Native Swing frame checks are not native Burp GUI checks. Controlled PowerShell checks did not start Docker backends."
   ],
   "performance": {
     "result": "passed",
     "report": "reports/2026-10-24-stability-0521/performance/summary.json",
     "interpretation": "Synthetic single-run preservation/correctness checks; no speedup claim. Baseline overlapped other local release workload; candidate ran after those checks completed."
-  }
+  },
+  "remoteVerifiedAt": "2026-10-25T14:23:05.155738+09:00"
 }

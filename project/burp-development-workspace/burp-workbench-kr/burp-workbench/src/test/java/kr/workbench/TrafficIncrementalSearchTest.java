@@ -24,11 +24,48 @@ public final class TrafficIncrementalSearchTest extends WorkbenchTest {
   static void same(TrafficBrowser.View expected,TrafficBrowser.View actual,String label){
     check(expected.rows().equals(actual.rows())&&expected.groups().equals(actual.groups())&&expected.accounts().equals(actual.accounts())&&expected.count()==actual.count()&&expected.partial()==actual.partial()&&expected.matched()==actual.matched(),label);
   }
+  /** Hold the EDT until a one-shot timer has posted its action but has not dispatched it. */
+  static void awaitQueuedDebounce(TrafficBrowser browser){
+    try{
+      var field=TrafficBrowser.class.getDeclaredField("debounce");field.setAccessible(true);var timer=(javax.swing.Timer)field.get(browser);
+      long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);
+      while(timer.isRunning()&&System.nanoTime()<deadline)java.util.concurrent.locks.LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(1));
+      check(!timer.isRunning(),"one-shot timer expires while its search action is queued on the held EDT");
+    }catch(ReflectiveOperationException error){throw new IllegalStateException(error);}
+  }
   static TrafficQuery settings(int range,boolean group,boolean normalize,boolean important,String account,int minutes){return new TrafficQuery("전체","전체",range,false,false,group,normalize,important,true,account,minutes);}
   public static void main(String[] args)throws Exception{
     installTrafficPacketFactory();
-    largeAppend();bodyAndGroups();boundedBodies();invalidationsAndTime();cancelAndReplace();
+    queuedDebounce();largeAppend();bodyAndGroups();boundedBodies();invalidationsAndTime();cancelAndReplace();
     System.out.println("TrafficIncrementalSearchTest: "+checks+" checks passed");
+  }
+  static void queuedDebounce()throws Exception{
+    try(var disk=new DiskTrafficStore()){
+      disk.append(request("https://incremental.test/posts/101","GET",true,List.of()),response(200,"a"));
+      disk.append(request("https://incremental.test/posts/102","GET",true,List.of()),response(200,"b"));
+      var browser=browser(new AtomicReference<>(disk));
+      try{
+        var grouped=settings(0,true,true,false,"",0);query(browser,grouped,"");
+        edt(()->{
+          browser.toggleGroup(0);long token=browser.generation.get();awaitQueuedDebounce(browser);
+          check(!browser.idle(),"queued group expansion is pending even after the Swing timer stops running");
+          browser.refresh();check(browser.generation.get()==token&&!browser.busy.get(),"capture refresh leaves a queued debounce action to start exactly once");
+        });
+        idle(browser);
+        check(browser.lastMetrics.incremental()&&browser.lastMetrics.examinedRows()==0&&browser.table.getRowCount()==2,"queued group expansion publishes the complete cached projection before idle");
+        same(browser.scan(disk,2,grouped,"",List.of(),Set.copyOf(browser.expanded),()->false),browser.view,"queued expansion matches independent full evaluation");
+        query(browser,settings(0,false,true,true,"",0),"");
+        edt(()->{browser.toggleStar(1);awaitQueuedDebounce(browser);check(!browser.idle(),"queued important-mark invalidation cannot report the old empty result as idle");});
+        idle(browser);
+        check(!browser.lastMetrics.incremental()&&browser.lastMetrics.examinedRows()==2&&browser.view.rows().equals(BitSet.valueOf(new long[]{2}))&&browser.table.getRowCount()==1,"queued important-mark change publishes the exact original before idle");
+        var previous=browser.view;AtomicLong cancelled=new AtomicLong();
+        edt(()->{browser.toggleStar(0);awaitQueuedDebounce(browser);browser.cancel.doClick();cancelled.set(browser.generation.get());check(browser.idle(),"cancel clears a queued debounce action immediately");});
+        edt(()->check(browser.generation.get()==cancelled.get()&&browser.view==previous&&browser.idle(),"a canceled queued timer cannot restart or replace the published result"));
+        AtomicLong cleared=new AtomicLong();
+        edt(()->{browser.schedule();awaitQueuedDebounce(browser);browser.clear();cleared.set(browser.generation.get());check(browser.idle(),"clear removes queued search work immediately");});
+        edt(()->check(browser.generation.get()==cleared.get()&&browser.view==null&&browser.scanned==-1&&browser.idle(),"a queued timer cannot republish a cleared search"));
+      }finally{edt(browser::close);}
+    }
   }
   static void largeAppend()throws Exception{
     try(var disk=new DiskTrafficStore()){

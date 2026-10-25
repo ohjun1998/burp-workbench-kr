@@ -1,0 +1,16 @@
+{
+  "command": "python dev.py release --port 18189 --bounty-port 18489",
+  "result": "passed",
+  "exitCode": 0,
+  "logSha256": "41b260bf30946e9a11e565b7a0a07e36d652cc7b8c329159debc9eb3ba66882f",
+  "initialAttempt": {
+    "result": "incomplete",
+    "reason": "Sparse checkout omitted validation/all-features/runtime-hashes.json; restored tracked files and repeated complete release."
+  },
+  "localBrowserAttempt": {
+    "result": "environment-blocked-before-checks",
+    "browser": "Chrome for Testing 154.0.8037.57",
+    "archiveSha256": "ceee2972074d441ea7c4ba8bcc0eaab77e7e87680f6653d73d3065851fe10302",
+    "reason": "process_singleton_posix.cc: socket() failed: Operation not permitted (1). No browser acceptance check completed; remote CI remains required."
+  }
+}

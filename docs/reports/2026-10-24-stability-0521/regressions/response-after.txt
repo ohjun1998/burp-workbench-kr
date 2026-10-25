@@ -1,0 +1,13 @@
+# 격리 회귀 실행 로그 발췌: response-after.txt
+# 관련 PASS/실패/요약을 그대로 보존했으며 다른 PASS와 공통 JVM 스택은 생략했습니다.
+PASS clearing reserved and unreserved jobs releases all inputs exactly once
+PASS exceptional analysis releases retained and active work reservations
+PASS unload interrupts active work and releases waiting inputs
+PASS executor rejection cannot leak an already acquired reservation
+PASS worker creation failure also releases the retained-input reservation
+PASS clear race fixture pauses the running worker
+PASS initialization retains the concurrent input reservation until its task executes
+PASS initialization during concurrent admission returns every retained and working reservation
+PASS initialization removes earlier observations and preserves subsequent-generation findings and sources
+PASS initialization leaves no concurrent input permanently waiting after the worker drains
+ResponseBudgetTest: 30 checks passed

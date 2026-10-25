@@ -1,5 +1,7 @@
 # 최신 문서
 
+- [0.52.1 안정화 변경·종료조건](RELEASE_0.52.1_KR.md) · [최종 검증](VERIFICATION_0.52.1.json)
+
 - [Workbench Next 0.52.0 설치·기능별 상세 가이드](RELEASE_0.52.0_NEXT_KR.md) · [이번 검증과 제한사항](VERIFICATION_0.52.0.json) · [최종 코드의 화면 자료](reports/2026-10-24-workbench-next-0520/ui/README.md)
 
 - [Workbench Next 0.50.0 최초 분리 버전 · 보존](RELEASE_0.50.0_NEXT_KR.md) · [당시 검증](VERIFICATION_0.50.0.json)

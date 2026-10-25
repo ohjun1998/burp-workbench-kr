@@ -11,7 +11,41 @@ final class MapperHardeningTest {
 
   static void run() throws Exception {
     correlation();
+    unsupportedBodyObservation();
     transport();
+  }
+
+  private static void unsupportedBodyObservation() throws Exception {
+    long time = System.currentTimeMillis();
+    for (boolean eventFirst : List.of(false, true)) {
+      try (Mapper mapper = new Mapper()) {
+        var input = MapperTest.input(time, "PATCH", "https://lab.test/api/users/123", "{\"displayName\":\"qa\"}", "{}", "A");
+        var event = MapperTest.event(time, "PATCH", input.url(), "", "patch", "1", "내 정보 수정");
+        event.put("bodyHashStatus", "unsupported-method");
+        if (eventFirst) mapper.browser(event);
+        var packet = mapper.accept(input);
+        if (!eventFirst) mapper.browser(event);
+        check(!packet.browserAction.isBlank() && packet.confidence.equals("중간"),
+            "unique hashless PATCH maps as contextual evidence with eventFirst=" + eventFirst);
+        check(packet.reasons.stream().anyMatch(s -> s.contains("본문 해시 미확인") && s.contains("브라우저 API"))
+                && packet.reasons.stream().noneMatch(s -> s.contains("본문 SHA-256 일치")),
+            "PATCH never claims an unobserved body hash with eventFirst=" + eventFirst);
+        var other = mapper.accept(MapperTest.input(time + 1, "PATCH", input.url(), "{\"displayName\":\"other\"}", "{}", "A"));
+        check(packet.browserAction.isBlank() && other.browserAction.isBlank() && mapper.browserMappedPackets() == 0,
+            "different PATCH bodies with identical method URL time context remain ambiguous with eventFirst=" + eventFirst);
+      }
+    }
+    try (Mapper mapper = new Mapper()) {
+      var post = mapper.accept(MapperTest.input(time, "POST", "https://lab.test/api/posts", "{\"title\":\"observed\"}", "{}", "A"));
+      mapper.browser(MapperTest.event(time, "POST", post.url, Signals.digest("{\"title\":\"different\"}"), "wrong", "1", "저장"));
+      check(post.browserAction.isBlank() && post.reasons.stream().noneMatch(s -> s.contains("본문 SHA-256 일치")),
+          "POST mismatched raw SHA-256 cannot fall back to method URL time matching");
+      var exact = MapperTest.event(time, "POST", post.url, post.bodyHash, "exact", "1", "저장");
+      exact.put("bodyHashStatus", "raw");
+      mapper.browser(exact);
+      check(!post.browserAction.isBlank() && post.reasons.stream().anyMatch(s -> s.contains("본문 SHA-256 일치")),
+          "POST exact raw SHA-256 retains verified body evidence");
+    }
   }
 
   private static void correlation() throws Exception {

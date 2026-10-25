@@ -12,7 +12,8 @@ import java.util.concurrent.*;
 public final class BrowserFixture {
     public static void main(String[] args)throws Exception{
         Path folder=Path.of(args[0]);Files.createDirectories(folder);List<String> checks=new ArrayList<>();
-        try(Mapper mapper=new Mapper();BrowserBridge bridge=new BrowserBridge(mapper::browser)){
+        List<Map<String,Object>> events=new CopyOnWriteArrayList<>();
+        try(Mapper mapper=new Mapper();BrowserBridge bridge=new BrowserBridge(event->{mapper.browser(event);events.add(Map.copyOf(event));})){
             HttpServer server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);int port=server.getAddress().getPort();
             ExecutorService threads=Executors.newCachedThreadPool(r->{Thread t=new Thread(r);t.setDaemon(true);return t;});server.setExecutor(threads);
             server.createContext("/",x->{try{
@@ -30,6 +31,7 @@ public final class BrowserFixture {
                 if(!Files.exists(folder.resolve("browser-done.flag")))throw new AssertionError("browser client did not finish");
                 Thread.sleep(300);
                 List<Mapper.Packet> ps=mapper.packetList(null);
+                Files.writeString(folder.resolve("browser-correlation-evidence.json"),JsonWrite.text(Map.of("events",events,"packets",mapper.metadata())));
                 var patch=ps.stream().filter(p->p.method.equals("PATCH")).findFirst().orElseThrow();
                 if(!mapper.features.get(patch.primary).name.startsWith("내 정보 수정"))throw new AssertionError("PATCH button label was not mapped: "+JsonWrite.text(mapper.metadata()));checks.add("PASS actual browser PATCH is mapped to its visible button label");
                 var post=ps.stream().filter(p->p.method.equals("POST")&&p.url.endsWith("/api/posts")).findFirst().orElseThrow();
@@ -39,7 +41,11 @@ public final class BrowserFixture {
                 if(patch.run.equals(post.run))throw new AssertionError("two clicks merged");checks.add("PASS separate browser actions produce separate execution cases");
                 if(bridge.snapshot().lastAuthenticated()==0||bridge.snapshot().receivedEvents()<4)throw new AssertionError("missing helper transport evidence");checks.add("PASS authenticated helper transport and event delivery recorded separately");
                 if(mapper.browserMappedPackets()<4)throw new AssertionError("insufficient mapped browser packets");checks.add("PASS received events have distinct confirmed request correlations");
-                if(patch.reasons.stream().noneMatch(s->s.contains("본문 SHA-256 일치"))||post.reasons.stream().noneMatch(s->s.contains("본문 SHA-256 일치")))throw new AssertionError("body hashes not verified");checks.add("PASS actual browser POST and PATCH match method URL time and body SHA-256");
+                var postEvents=events.stream().filter(e->"POST".equals(e.get("method"))&&post.url.equals(e.get("url"))).toList();
+                if(postEvents.size()!=1||!post.bodyHash.equals(postEvents.get(0).get("bodyHash"))||!"raw".equals(postEvents.get(0).get("bodyHashStatus"))||post.reasons.stream().noneMatch(s->s.contains("본문 SHA-256 일치")))throw new AssertionError("POST raw body hash not verified: "+post.reasons);checks.add("PASS actual browser POST matches exact observed raw body SHA-256");
+                var patchEvents=events.stream().filter(e->"PATCH".equals(e.get("method"))&&patch.url.equals(e.get("url"))).toList();
+                if(patchEvents.size()!=1||!"".equals(patchEvents.get(0).get("bodyHash"))||!"unsupported-method".equals(patchEvents.get(0).get("bodyHashStatus")))throw new AssertionError("PATCH body observation limitation was not preserved: "+JsonWrite.text(patchEvents));
+                if(patch.browserAction.isBlank()||!patch.confidence.equals("중간")||patch.reasons.stream().noneMatch(s->s.contains("본문 해시 미확인")&&s.contains("브라우저 API"))||patch.reasons.stream().anyMatch(s->s.contains("본문 SHA-256 일치")))throw new AssertionError("PATCH fallback falsely claims verified body: "+patch.reasons);checks.add("PASS actual browser PATCH uses unique method URL time context and explicitly unobserved body evidence");
                 Files.writeString(folder.resolve("browser-fixture-result.txt"),String.join("\n",checks)+"\nBROWSER_FIXTURE_SUCCESS\n");
                 System.out.println(String.join("\n",checks));
             }finally{server.stop(0);threads.shutdownNow();}

@@ -1,0 +1,8 @@
+# 격리 회귀 실행 로그 발췌: search-before.txt
+# 관련 PASS/실패/요약을 그대로 보존했으며 다른 PASS와 공통 JVM 스택은 생략했습니다.
+PASS one-shot timer expires while its search action is queued on the held EDT
+	at kr.workbench.TrafficIncrementalSearchTest.queuedDebounce(TrafficIncrementalSearchTest.java:49)
+	at kr.workbench.TrafficIncrementalSearchTest.main(TrafficIncrementalSearchTest.java:39)
+Caused by: java.lang.AssertionError: queued group expansion is pending even after the Swing timer stops running
+	at kr.workbench.WorkbenchTest.check(WorkbenchTest.java:59)
+	at kr.workbench.TrafficIncrementalSearchTest.lambda$queuedDebounce$8(TrafficIncrementalSearchTest.java:51)

@@ -30,3 +30,17 @@ export function permissionPattern(url) {
 export function pickAction(actions, request) {
   return [...actions].filter(a => a.time <= request.timeStamp + 5 && actionContext(a, request)).sort((a, b) => b.time - a.time)[0] || null;
 }
+
+/** Chrome exposes raw request bodies only for POST/PUT; never reconstruct a missing body. */
+export async function requestBodySignal(details, cryptoApi = globalThis.crypto) {
+  if (!['POST', 'PUT'].includes(details.method)) return {bodyHash: '', bodyHashStatus: 'unsupported-method'};
+  const raw = details.requestBody?.raw;
+  if (!raw?.length || !raw.every(x => x.bytes && typeof x.bytes.byteLength === 'number'))
+    return {bodyHash: '', bodyHashStatus: 'unavailable'};
+  const size = raw.reduce((n, x) => n + x.bytes.byteLength, 0);
+  if (size > 512 * 1024) return {bodyHash: '', bodyHashStatus: 'too-large'};
+  const bytes = new Uint8Array(size); let offset = 0;
+  for (const item of raw) { bytes.set(new Uint8Array(item.bytes), offset); offset += item.bytes.byteLength; }
+  const digest = await cryptoApi.subtle.digest('SHA-256', bytes);
+  return {bodyHash: Array.from(new Uint8Array(digest), x => x.toString(16).padStart(2, '0')).join(''), bodyHashStatus: 'raw'};
+}

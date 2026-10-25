@@ -1,8 +1,22 @@
 # Workbench Next / 기존 버전 다운로드
 
-파일을 열고 **Download raw file**을 누르세요. Next를 처음 사용한다면 아래 **0.52.0 JAR**와 **Next 설치·기능별 상세 안내**부터 확인하세요. 이전 PDF는 과거 화면의 보존 자료입니다. 개발하거나 로컬 사이트에서 실습할 때만 소스·Docker ZIP을 추가로 받으면 됩니다.
+파일을 열고 **Download raw file**을 누르세요. Next를 처음 사용한다면 아래 **0.52.1 JAR**와 **Next 설치·기능별 상세 안내**부터 확인하세요. 이전 PDF는 과거 화면의 보존 자료입니다. 개발하거나 로컬 사이트에서 실습할 때만 소스·Docker ZIP을 추가로 받으면 됩니다.
 
-## 새 버전: Workbench Next 0.52.0
+## 새 버전: Workbench Next 0.52.1
+
+0.52.0의 검색 예약·응답 초기화 예약 누수·브라우저 본문 근거를 보완한 안정화 배포입니다. 기존 버전 파일은 보존합니다.
+
+| 종류 | 다운로드 |
+|---|---|
+| Next 0.52.1 설치 JAR | [burp-workbench-kr-0.52.1.jar](extensions/0.52.1/burp-workbench-kr-0.52.1.jar) |
+| Next 0.52.1 소스 ZIP | [burp-workbench-kr-0.52.1-source.zip](extensions/0.52.1/burp-workbench-kr-0.52.1-source.zip) |
+| 변경·안정화 종료조건 | [0.52.1 안내](../docs/RELEASE_0.52.1_KR.md) |
+| 최종 검증 기록 | [VERIFICATION_0.52.1.json](../docs/VERIFICATION_0.52.1.json) |
+| 선택 사항: Mapper 도우미 0.3.5 | [브라우저 도우미·독립 배포](feature-mapper/0.3.5/) |
+
+Burp Extensions에서 이전 Workbench/Next의 로드를 해제한 뒤 새 JAR를 로드합니다. Next 설정·기록 계열은 유지되며, 기존 프로젝트와 필요한 설정은 교체 전에 보관합니다. 화면 사용법은 [0.52.0 상세 가이드](../docs/RELEASE_0.52.0_NEXT_KR.md)를 함께 참고하세요.
+
+## 보존: Workbench Next 0.52.0
 
 0.50.0 개선안을 반영해 `main`에 병합한 배포입니다. 기존 0.49.1·0.50.0 설치 JAR와 소스 ZIP은 보존합니다.
 

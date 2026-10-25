@@ -19,7 +19,7 @@ final class ResponseAnalysisQueue {
 
   void cancelQueued() {
     for (Runnable candidate : worker.getQueue().toArray(Runnable[]::new))
-      if (candidate instanceof Task task && worker.remove(task)) task.release();
+      if (worker.remove(candidate) && candidate instanceof Task task) task.release();
   }
 
   void close() {

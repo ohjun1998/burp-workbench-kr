@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import {webcrypto} from 'node:crypto';
-import {originOf, pageOf, actionContext, validateConnection, permissionPattern, pickAction} from '../browser-helper/mapping.js';
+import {webcrypto, createHash} from 'node:crypto';
+import {originOf, pageOf, actionContext, validateConnection, permissionPattern, pickAction, requestBodySignal} from '../browser-helper/mapping.js';
 const token = 'a'.repeat(64);
 test('loopback pairing excludes remote endpoints and credentials', () => {
   assert.equal(validateConnection('http://127.0.0.1:1234', token), 'http://127.0.0.1:1234');
@@ -52,6 +52,22 @@ test('a delayed network callback selects its original action, not a newer click'
   assert.equal(pickAction([original, newer], {...request, timeStamp: 1110}), newer);
 });
 
+test('body evidence hashes exact POST bytes and keeps PATCH API limitations explicit', async () => {
+  const bytes = new TextEncoder().encode('{"displayName":"한글 😀"}\r\n');
+  const post = await requestBodySignal({method: 'POST', requestBody: {raw: [
+    {bytes: bytes.slice(0, 9).buffer}, {bytes: bytes.slice(9).buffer}
+  ]}}, webcrypto);
+  assert.deepEqual(post, {bodyHash: createHash('sha256').update(bytes).digest('hex'), bodyHashStatus: 'raw'});
+  assert.deepEqual(await requestBodySignal({method: 'PATCH'}, webcrypto),
+    {bodyHash: '', bodyHashStatus: 'unsupported-method'});
+  assert.deepEqual(await requestBodySignal({method: 'POST', requestBody: {formData: {a: ['b']}}}, webcrypto),
+    {bodyHash: '', bodyHashStatus: 'unavailable'}, 'parsed form values cannot reconstruct wire bytes');
+  assert.deepEqual(await requestBodySignal({method: 'PUT', requestBody: {raw: [{file: '/private/file'}]}}, webcrypto),
+    {bodyHash: '', bodyHashStatus: 'unavailable'}, 'file paths never become body bytes');
+  assert.deepEqual(await requestBodySignal({method: 'POST', requestBody: {raw: [{bytes: new ArrayBuffer(512 * 1024 + 1)}]}}, webcrypto),
+    {bodyHash: '', bodyHashStatus: 'too-large'});
+});
+
 test('worker startup waits for saved settings and delivery recovers after an earlier error', async () => {
   let onMessage, onRequest, onRemoved, resolveSettings;
   const session = {deliveryCount: 7, lastError: 'earlier failure'};
@@ -74,7 +90,7 @@ test('worker startup waits for saved settings and delivery recovers after an ear
     webRequest: {onBeforeRequest: {addListener: fn => {onRequest = fn;}}}
   };
   const context = {chrome, crypto: webcrypto, Date, setTimeout, AbortSignal,
-    originOf, pageOf, pickAction, validateConnection,
+    originOf, pageOf, pickAction, validateConnection, requestBodySignal,
     fetch: async (url, options) => {transmitted.push(JSON.parse(options.body)); return {ok: true, status: 200};}};
   vm.createContext(context);
   const source = fs.readFileSync(new URL('../browser-helper/background.js', import.meta.url), 'utf8').replace(/^import[^\n]+\n/, '');
@@ -98,6 +114,13 @@ test('worker startup waits for saved settings and delivery recovers after an ear
   assert.equal(transmitted.length, 1);
   assert.equal(transmitted[0].label, '등록');
   assert.equal(transmitted[0].bodyHash, '7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed');
+  assert.equal(transmitted[0].bodyHashStatus, 'raw');
+  onRequest({tabId: 1, frameId: 0, timeStamp: time + 20, method: 'PATCH', url: 'https://test/api/users/123', type: 'xmlhttprequest'});
+  for (let attempt = 0; attempt < 30 && session.deliveryCount === 8; attempt++) await new Promise(resolve => setTimeout(resolve, 10));
+  assert.equal(session.deliveryCount, 9, 'unsupported body observation must not drop PATCH request metadata');
+  assert.equal(transmitted[1].method, 'PATCH');
+  assert.equal(transmitted[1].bodyHash, '');
+  assert.equal(transmitted[1].bodyHashStatus, 'unsupported-method');
   onRemoved(1);
   await Promise.resolve(); await Promise.resolve();
   assert(!Object.keys(session).some(key => key.startsWith('action:1:') || key.startsWith('history:1:')),

@@ -1,4 +1,4 @@
-import {originOf, pageOf, pickAction, validateConnection} from './mapping.js';
+import {originOf, pageOf, pickAction, validateConnection, requestBodySignal} from './mapping.js';
 const active = new Map();
 const history = new Map();
 let delivered = 0;
@@ -56,15 +56,8 @@ async function requestEvent(details) {
   const list = history.get(key) || (await chrome.storage.session.get('history:' + key))['history:' + key] || [];
   const action = pickAction(list, details);
   if (!action) return;
-  let bodyHash = '';
-  const raw = details.requestBody?.raw;
-  if (raw?.length && raw.every(x => x.bytes) && raw.reduce((n, x) => n + x.bytes.byteLength, 0) <= 512 * 1024) {
-    const bytes = new Uint8Array(raw.reduce((n, x) => n + x.bytes.byteLength, 0)); let offset = 0;
-    for (const item of raw) { bytes.set(new Uint8Array(item.bytes), offset); offset += item.bytes.byteLength; }
-    const digest = await crypto.subtle.digest('SHA-256', bytes);
-    bodyHash = Array.from(new Uint8Array(digest), x => x.toString(16).padStart(2, '0')).join('');
-  }
-  await deliver({type: 'network', time: details.timeStamp, method: details.method, url: details.url, bodyHash, actionId: action.id, label: action.label, title: action.title, page: action.page, tab: String(details.tabId), frame: String(details.frameId)});
+  const body = await requestBodySignal(details);
+  await deliver({type: 'network', time: details.timeStamp, method: details.method, url: details.url, ...body, actionId: action.id, label: action.label, title: action.title, page: action.page, tab: String(details.tabId), frame: String(details.frameId)});
 }
 // Observe only. This listener does not block, replay, or modify any target request.
 chrome.webRequest.onBeforeRequest.addListener(details => {

@@ -1,0 +1,400 @@
+{
+  "version": "0.52.1",
+  "product": "Workbench Next",
+  "dateAsiaSeoul": "2026-10-24",
+  "generatedAt": "2026-10-24T20:31:30.832711+09:00",
+  "baseMainCommit": "45d79f91f1cfd217c1e41b81b408001a8c62a04e",
+  "branch": "account-a/stabilize-0520-20261024",
+  "release": {
+    "version": "0.52.1",
+    "groups": {
+      "BuildInfoTest": 3,
+      "OriginalRequestIdsTest": 5,
+      "JsArchivePagingTest": 32,
+      "AuthSetupWorkflowTest": 30,
+      "AuthSetupBundlesTest": 40,
+      "ExecutionLink052Test": 30,
+      "MapperTaskDraft052Test": 21,
+      "TrafficIncrementalSearchTest": 47,
+      "ResponseBudgetTest": 30,
+      "NextIsolationTest": 10,
+      "TrafficCancellationTest": 9,
+      "RuntimeMetricsTest": 19,
+      "WorkContextTest": 22,
+      "AuthSetupSuggestionsTest": 26,
+      "AnalysisRetryTest": 33,
+      "CompletionEvidenceNextTest": 22,
+      "PassiveProvenanceTest": 27,
+      "CaptureProvenanceTest": 13,
+      "JsBatchContextTest": 58,
+      "EvidenceHardeningTest": 50,
+      "ResponseHardeningTest": 90,
+      "ResponseAnalysisLimitsTest": 9,
+      "LargeResponseJsonTest": 17,
+      "AssessmentHardeningTest": 45,
+      "MapperIntegrationTest": 36,
+      "BankUpgradeTest": 54,
+      "OssLogicUpgradeTest": 52,
+      "JsUpgradeTest": 36,
+      "TrafficSearchUpgradeTest": 23,
+      "JsCompactUpgradeTest": 23,
+      "JsArchiveWorkflowTest": 8,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 32,
+      "JsMemoryBudgetTest": 52,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "EnvironmentUpgradeTest": 72,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 29,
+      "PacketInspectorTest": 42,
+      "RenderAuthUiTest": 28,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsDraftMappingTest": 19,
+      "JsDetailsWorkflowTest": 26,
+      "PacketStyleTest": 30,
+      "TextAnalysisTest": 23,
+      "JsResponseWorkflowTest": 51,
+      "JsRepeaterWorkflowTest": 95,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 56,
+      "AuthRecordTest": 37,
+      "AuthWorkspaceTest": 21,
+      "AuthLayoutFitTest": 106,
+      "AuthRunSummaryTest": 23,
+      "AuthResponseWorkflowTest": 47,
+      "AuthAccuracyWorkflowTest": 44,
+      "AuthResponseRefinementTest": 39,
+      "CookieSessionProbeTest": 50,
+      "UiCleanupTest": 36,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 43,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 47,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 21,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 102,
+      "FolderNavigationTest": 44,
+      "DiagnosticsWorkflowTest": 26,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 95,
+    "regressionChecks": 3222,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 3726,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "mapper": {
+    "version": "0.3.5",
+    "javaChecks": 136,
+    "nodeTests": 9,
+    "result": "passed"
+  },
+  "commands": [
+    {
+      "command": "python dev.py release --port 18189 --bounty-port 18489",
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "command": "python tools/render_ui_layout.py --check --out tmp/stability-0521/ui-final",
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "command": "python feature-mapper/tests/render_ui.py --check --out tmp/stability-0521/mapper-ui",
+      "result": "passed",
+      "exitCode": 0
+    },
+    {
+      "command": "python -m unittest discover -s tools -p 'test_*.py' -v",
+      "result": "passed",
+      "checks": 7
+    },
+    {
+      "command": "python tools/package_downloads.py --verify",
+      "result": "passed",
+      "exitCode": 0
+    }
+  ],
+  "ui": {
+    "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+    "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.52.1.jar",
+    "releaseJarSha256": "a1a30a07d7a02ed4b85508ed14b18ed547f44a82768f55f09d3e96b717660b44",
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "sizes": [
+      "1024x720",
+      "1280x800",
+      "1440x920"
+    ],
+    "renderedViews": 342,
+    "controlsMeasured": 3894,
+    "clippedControlsOutsideScrollers": 0,
+    "smallControls": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "tabAndHeadingLabelsMeasured": 3348,
+    "clippedSelectedTabOrHeadingLabels": 0,
+    "minimumWorkAreas": {
+      "tool-00.png:wb.traffic.request.text": 100,
+      "tool-00.png:wb.traffic.response.text": 100,
+      "tool-02.png:preview.js.source": 80,
+      "js-horizontal.png:preview.js.source": 80,
+      "bounty-1.png:preview.workflow.input": 80,
+      "bounty-1.png:preview.workflow.detail": 80,
+      "bounty-3.png:preview.evidence.impact": 70,
+      "bounty-3.png:preview.evidence.repro": 70,
+      "tool-07.png:fm.history": 80,
+      "tool-07.png:fm.request": 70,
+      "tool-07.png:fm.response": 70,
+      "next-auth-get-candidates.png:wb.auth.effect.read.candidates": 80,
+      "next-auth-get-candidates-minimum.png:wb.auth.effect.read.candidates": 40,
+      "next-auth-json-fields.png:wb.auth.effect.json.candidates": 80,
+      "next-auth-json-fields-minimum.png:wb.auth.effect.json.candidates": 40,
+      "next-js-retries.png:wb.analysis.retry.table": 80,
+      "next-js-retries-minimum.png:wb.analysis.retry.table": 40,
+      "next-response-retries.png:wb.analysis.retry.table": 80,
+      "next-auth-get-loading.png:wb.auth.effect.read.candidates": 80,
+      "next-auth-get-loading-minimum.png:wb.auth.effect.read.candidates": 40,
+      "next-auth-json-loading.png:wb.auth.effect.json.candidates": 80,
+      "next-auth-json-loading-minimum.png:wb.auth.effect.json.candidates": 40,
+      "next-auth-bundles.png:wb.auth.setup.bundle.preview": 80,
+      "next-auth-bundles-minimum.png:wb.auth.setup.bundle.preview": 40,
+      "next-auth-readiness.png:wb.auth.readiness.table": 60,
+      "next-auth-readiness-minimum.png:wb.auth.readiness.table": 40,
+      "next-execution-links.png:wb.assessment.executions": 60,
+      "next-execution-links-minimum.png:wb.assessment.executions": 40,
+      "next-execution-links.png:preview.assessment.execution.details": 60,
+      "next-execution-links-minimum.png:preview.assessment.execution.details": 40,
+      "next-mapper-review.png:preview.assessment.mapper.changes": 80,
+      "next-mapper-review-minimum.png:preview.assessment.mapper.changes": 40,
+      "next-mapper-review.png:wb.assessment.mapper.accounts": 60,
+      "next-mapper-review-minimum.png:wb.assessment.mapper.accounts": 40,
+      "next-js-history-page1.png:wb.js.history.table": 80,
+      "next-js-history-page1-minimum.png:wb.js.history.table": 40,
+      "next-js-history-page2.png:wb.js.history.table": 80,
+      "next-js-history-page2-minimum.png:wb.js.history.table": 40,
+      "next-js-history-search.png:wb.js.history.table": 80,
+      "next-js-history-search-minimum.png:wb.js.history.table": 40
+    },
+    "failures": [],
+    "textFailures": [],
+    "scenariosChecked": 78,
+    "requiredScenarios": [
+      "Execution evidence linkage",
+      "GET candidates loading",
+      "GET candidates ready",
+      "JS first page",
+      "JS full disk search",
+      "JS retention policy",
+      "JS second page",
+      "JSON candidates loading",
+      "JSON candidates ready",
+      "Mapper update review",
+      "Multiple write rules",
+      "Readiness row edit",
+      "Setup bundle review"
+    ],
+    "scenarioFailures": [],
+    "guideBodiesMeasured": 0,
+    "guideLayoutFailures": 0,
+    "guideFailures": []
+  },
+  "mapperUi": {
+    "version": "0.3.5",
+    "jarSha256": "817be5c1c2bd9100411a92a98f53a5000e4b007c3146d14d7d62862effa92634",
+    "method": "Production Swing; API adapters and synthetic metadata, no native Burp GUI.",
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "sizes": [
+      "1024x720",
+      "1280x800",
+      "1440x920"
+    ],
+    "renderedViews": 30,
+    "controlsMeasured": 150,
+    "clippedControls": [],
+    "smallControls": [],
+    "result": "passed"
+  },
+  "localExecution": {
+    "command": "python dev.py release --port 18189 --bounty-port 18489",
+    "result": "passed",
+    "exitCode": 0,
+    "logSha256": "41b260bf30946e9a11e565b7a0a07e36d652cc7b8c329159debc9eb3ba66882f",
+    "initialAttempt": {
+      "result": "incomplete",
+      "reason": "Sparse checkout omitted validation/all-features/runtime-hashes.json; restored tracked files and repeated complete release."
+    },
+    "localBrowserAttempt": {
+      "result": "environment-blocked-before-checks",
+      "browser": "Chrome for Testing 154.0.8037.57",
+      "archiveSha256": "ceee2972074d441ea7c4ba8bcc0eaab77e7e87680f6653d73d3065851fe10302",
+      "reason": "process_singleton_posix.cc: socket() failed: Operation not permitted (1). No browser acceptance check completed; remote CI remains required."
+    }
+  },
+  "remoteCi": {
+    "result": "passed",
+    "verifiedDateAsiaSeoul": "2026-10-25",
+    "verifiedSourceCommit": "e4b75694418091f51663557e766f002eeeb0fe17",
+    "report": "reports/2026-10-24-stability-0521/remote-ci.json",
+    "runs": [
+      {
+        "id": 40164444579,
+        "name": "Feature Mapper verification",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444579",
+        "conclusion": "success",
+        "runAttempt": 1
+      },
+      {
+        "id": 40164444580,
+        "name": "Capture durability and Windows verification",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444580",
+        "conclusion": "success",
+        "runAttempt": 1
+      },
+      {
+        "id": 40164444583,
+        "name": "Build and verify",
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444583",
+        "conclusion": "success",
+        "runAttempt": 1
+      }
+    ],
+    "documentationOnlyFollowup": true
+  },
+  "artifacts": [
+    {
+      "path": "downloads/extensions/0.52.1/SHA256SUMS",
+      "size": 197,
+      "sha256": "393ac9b4001e507f5231dc7f50522ae5f8aaa4306286a6a4abf99b69168d86d7"
+    },
+    {
+      "path": "downloads/extensions/0.52.1/burp-workbench-kr-0.52.1-source.zip",
+      "size": 4449216,
+      "sha256": "6e3103ba9e03ffa997fc5d0c616e3fa9c0c4ba333ba4f8b1fd5c6c1760c76741"
+    },
+    {
+      "path": "downloads/extensions/0.52.1/burp-workbench-kr-0.52.1.jar",
+      "size": 4001886,
+      "sha256": "a1a30a07d7a02ed4b85508ed14b18ed547f44a82768f55f09d3e96b717660b44"
+    },
+    {
+      "path": "downloads/extensions/0.52.1/manifest.json",
+      "size": 60798,
+      "sha256": "db1df7e94b26633ed641c902ae9f447f132d337121f0fd94ee90ce47e5451370"
+    },
+    {
+      "path": "downloads/feature-mapper/0.3.5/SHA256SUMS",
+      "size": 294,
+      "sha256": "55d1610ea96f170c947dd61d8ef9b449ed8f20463a15b463f8dab35ce5f85a38"
+    },
+    {
+      "path": "downloads/feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip",
+      "size": 6859,
+      "sha256": "4b2e9e8ca4fbe96b163b8a5652474d1168f24a9246cfc01a345f888fcace9ca4"
+    },
+    {
+      "path": "downloads/feature-mapper/0.3.5/feature-mapper-kr-0.3.5-source.zip",
+      "size": 935366,
+      "sha256": "f55278d1794415827cd42ea2635372fe4651234468ab80787c7b6408d0f72436"
+    },
+    {
+      "path": "downloads/feature-mapper/0.3.5/feature-mapper-kr-0.3.5.jar",
+      "size": 827700,
+      "sha256": "817be5c1c2bd9100411a92a98f53a5000e4b007c3146d14d7d62862effa92634"
+    },
+    {
+      "path": "downloads/feature-mapper/0.3.5/manifest.json",
+      "size": 5447,
+      "sha256": "5034d3da3ed7fd17a1eb156c499ac07b7f020ef63472ec776da48389985c2b6d"
+    }
+  ],
+  "preservation": {
+    "baseCommit": "45d79f91f1cfd217c1e41b81b408001a8c62a04e",
+    "unchangedPaths": [
+      "release",
+      "history",
+      "downloads/extensions/0.49.1",
+      "downloads/extensions/0.50.0",
+      "downloads/extensions/0.52.0",
+      "downloads/feature-mapper/0.3.3",
+      "downloads/feature-mapper/0.3.4",
+      "downloads/docker/3.10.0",
+      "PROJECT_STATUS_KR.md"
+    ],
+    "result": "passed",
+    "mainNotMerged": true
+  },
+  "releaseExitCriteria": {
+    "deterministicDefectRegressions": "passed",
+    "defaultAndWindowsRequiredChecks": "passed",
+    "actualBrowserPostAndPatchEvidence": "passed",
+    "coreDataFlowRegressions": "passed",
+    "artifactAndSourceFingerprints": "passed",
+    "overall": "passed-for-defined-stabilization-scope"
+  },
+  "evidence": [
+    "reports/2026-10-24-stability-0521/release-result.json",
+    "reports/2026-10-24-stability-0521/release-check-summary.json",
+    "reports/2026-10-24-stability-0521/mapper-test-results.txt",
+    "reports/2026-10-24-stability-0521/regressions/README.md",
+    "reports/2026-10-24-stability-0521/ui/layout-report.json",
+    "reports/2026-10-24-stability-0521/mapper-ui/layout-report.json",
+    "reports/2026-10-24-stability-0521/performance/README.md",
+    "reports/2026-10-24-stability-0521/REMOTE_CI_KR.md",
+    "reports/2026-10-24-stability-0521/remote-ci.json",
+    "reports/2026-10-24-stability-0521/remote-browser-excerpt.txt",
+    "reports/2026-10-24-stability-0521/remote-windows-excerpt.txt",
+    "reports/2026-10-24-stability-0521/remote-linux-excerpt.txt",
+    "reports/2026-10-24-stability-0521/remote-check-excerpt.txt"
+  ],
+  "limitations": [
+    "Local regression and Swing layout checks use synthetic API adapters and isolated loopback servers, not native Burp GUI.",
+    "Local Chrome failed before acceptance checks because the host denied process singleton socket creation. The same production helper passed the actual Chrome acceptance test remotely on 2026-10-25.",
+    "Windows DPI/IME and Edge manual operation, external live sites/BApps/OAST, Docker startup and long-duration native Burp load were not tested locally.",
+    "The first incomplete release attempt with omitted sparse validation files is excluded from final passed counts.",
+    "Performance benchmark is a bounded synthetic single run per source/environment, not a speedup or production capacity guarantee.",
+    "0.52.0 and earlier artifacts are preserved; 0.52.1 main merge has not been performed.",
+    "Remote Windows/Linux sustained capture covered 180 requested seconds each. Native Swing frame checks are not native Burp GUI checks. Controlled PowerShell checks did not start Docker backends."
+  ],
+  "performance": {
+    "result": "passed",
+    "report": "reports/2026-10-24-stability-0521/performance/summary.json",
+    "interpretation": "Synthetic single-run preservation/correctness checks; no speedup claim. Baseline overlapped other local release workload; candidate ran after those checks completed."
+  },
+  "remoteVerifiedAt": "2026-10-25T14:23:05.155738+09:00"
+}

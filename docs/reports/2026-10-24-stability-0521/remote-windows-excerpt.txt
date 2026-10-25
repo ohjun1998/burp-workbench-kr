@@ -1,0 +1,14 @@
+Source commit: e4b75694418091f51663557e766f002eeeb0fe17
+Executed: 2026-10-25 (Asia/Seoul)
+Run: https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40164444580
+Job: 121082492320 (success)
+JsRepeaterWindowTest: 6 checks passed (native Swing frame; no Burp or HTTP)
+Windows PowerShell controlled startup checks: 6 passed; Docker backend executed: false.
+Selected result lines from completed GitHub Actions logs; timestamps omitted.
+TrafficIncrementalSearchTest: 47 checks passed
+ResponseBudgetTest: 30 checks passed
+TEST_SUMMARY passed=136 failed=0 (HTTP fixture/API adapter; not actual Burp runtime)
+STORAGE_REPEAT 10/10
+{"result": "passed", "version": "0.52.1", "iterations": 10, "groups": ["CapturePipelineTest", "TrafficCaptureRecoveryTest"], "executions": 20, "note": "Repeated executions are not additional unique check counts."}
+MapperTest: 136 checks passed
+{"host":"Montoya adapter; production callback, Swing timer and disk store","nativeBurp":false,"nativeGuiClicks":false,"os":"Windows Server 2025","java":"17.0.20.1","mode":"soak","received":3653,"drops":0,"processingErrors":0,"errorStages":[],"acceptedResponses":3653,"retainedRows":3653,"diskBytes":15755209,"heapBeforeBytes":1596648,"heapAfterBytes":44650096,"elapsedSeconds":182.745537,"requestedSeconds":180,"intervalMillis":50,"result":"passed","checks":8,"passedChecks":["collection exceeds the former 250-row limit","every accepted packet remains in disk and UI","all response callbacks complete with zero drops and processing errors","real Swing collection timer remains active","retained packet restores exact request and response bytes","retained packet restores exact request and response bytes","retained packet restores exact request and response bytes","unload deletes the active private traffic store"]}

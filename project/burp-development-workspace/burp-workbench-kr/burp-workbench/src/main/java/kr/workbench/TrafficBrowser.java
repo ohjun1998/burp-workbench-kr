@@ -53,6 +53,8 @@ final class TrafficBrowser implements AutoCloseable {
   volatile boolean closed;private boolean paused;volatile View view;volatile int scanned=-1;volatile TrafficQuery query=TrafficQuery.defaults();
   volatile String text="";private Future<?> pending;
   private final javax.swing.Timer debounce;
+  // A one-shot Swing timer stops running before its queued EDT action is dispatched.
+  private boolean debouncePending;
   final JComboBox<String> method=new JComboBox<>(new String[]{"전체","GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS"});
   final JComboBox<String> response=new JComboBox<>(new String[]{"전체","2xx","3xx","4xx","5xx","200","201","204","301","302","400","401","403","404","429","500"});
   final JToggleButton[] ranges={new JToggleButton("목록"),new JToggleButton("요청 포함"),new JToggleButton("전체 패킷")};
@@ -67,7 +69,7 @@ final class TrafficBrowser implements AutoCloseable {
     try{if(api!=null&&api.persistence()!=null)query=TrafficQuery.read(api.persistence().extensionData().getString(BuildInfo.storageKey("traffic-view-v1")));}catch(Exception ignored){}
     settings=new TargetWindow(table,"검색·목록 설정",this::content);settings.opener=TrafficBrowser::window;settingsButton.addActionListener(e->{loadControls();settings.open();});
     debounce=new javax.swing.Timer(220,e->begin());debounce.setRepeats(false);
-    cancel.setName("wb.traffic.search.cancel");cancel.addActionListener(e->{generation.incrementAndGet();debounce.stop();cancelPending();paused=true;busy.set(false);feedback.setText("검색 취소 · 이전 결과 유지");});
+    cancel.setName("wb.traffic.search.cancel");cancel.addActionListener(e->{generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=true;busy.set(false);feedback.setText("검색 취소 · 이전 결과 유지");});
     search.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){schedule();}public void removeUpdate(javax.swing.event.DocumentEvent e){schedule();}public void changedUpdate(javax.swing.event.DocumentEvent e){schedule();}});
     model.extra=(row,col)->extra(row,col);
     table.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e){int row=table.rowAtPoint(e.getPoint()),col=table.columnAtPoint(e.getPoint());if(row<0||col<0||!SwingUtilities.isLeftMouseButton(e))return;int raw=table.convertRowIndexToModel(row);if(table.convertColumnIndexToModel(col)==7){toggleStar(raw);return;}if(e.getClickCount()==2&&query.group()){toggleGroup(raw);}}});
@@ -75,9 +77,9 @@ final class TrafficBrowser implements AutoCloseable {
     loadControls();
   }
   private void cancelPending(){if(pending!=null)pending.cancel(true);worker.getQueue().clear();}
-  void schedule(){if(closed)return;generation.incrementAndGet();cancelPending();paused=false;busy.set(false);scanned=-1;debounce.restart();}
+  void schedule(){if(closed)return;generation.incrementAndGet();cancelPending();paused=false;busy.set(false);scanned=-1;debouncePending=true;debounce.restart();}
   void refresh(){
-    if(closed||paused||debounce.isRunning())return;
+    if(closed||paused||debouncePending)return;
     DiskTrafficStore disk=store.get();if(disk==null)return;
     SearchKey key=key(disk,search.getText().strip(),List.copyOf(identities.get()));
     if(busy.get()){
@@ -88,11 +90,11 @@ final class TrafficBrowser implements AutoCloseable {
     SearchSnapshot prior=snapshot;
     if(prior==null||!prior.key().equals(key)||prior.count()!=disk.size()||clock.getAsLong()>=prior.expiresAt())begin();
   }
-  boolean idle(){return !busy.get()&&!debounce.isRunning();}
+  boolean idle(){return !busy.get()&&!debouncePending;}
   private SearchKey key(DiskTrafficStore disk,String requested,List<Identity> profiles){return new SearchKey(disk,query,requested,profiles,marksVersion.get());}
   private boolean stillCurrent(SearchKey key){return key.equals(key(store.get(),search.getText().strip(),List.copyOf(identities.get())));}
   private void begin(){
-    if(closed)return;debounce.stop();cancelPending();busy.set(false);String requested=search.getText().strip();if(requested.length()>512){paused=true;feedback.setText("검색어 512자 제한 · 이전 결과 유지");return;}
+    if(closed)return;debounce.stop();debouncePending=false;cancelPending();busy.set(false);String requested=search.getText().strip();if(requested.length()>512){paused=true;feedback.setText("검색어 512자 제한 · 이전 결과 유지");return;}
     text=requested;TrafficQuery settings=query;
     if(settings.regex()&&!requested.isBlank())try{java.util.regex.Pattern.compile(requested);}catch(java.util.regex.PatternSyntaxException ex){paused=true;feedback.setText("정규식 오류 · 이전 결과 유지");return;}
     long token=generation.incrementAndGet();DiskTrafficStore disk=store.get();if(disk==null)return;int count=Math.toIntExact(disk.size());
@@ -230,6 +232,6 @@ final class TrafficBrowser implements AutoCloseable {
     updateColumns();schedule();
   }
   void updateColumns(){int view=table.convertColumnIndexToView(10);if(view>=0){var c=table.getColumnModel().getColumn(view);c.setMinWidth(0);c.setMaxWidth(query.memo()?400:0);c.setPreferredWidth(query.memo()?130:0);} }
-  void clear(){marks.clear();marksVersion.incrementAndGet();expanded.clear();view=null;snapshot=null;runningKey=null;scanned=-1;generation.incrementAndGet();cancelPending();paused=false;busy.set(false);}
-  @Override public void close(){closed=true;snapshot=null;runningKey=null;generation.incrementAndGet();debounce.stop();settings.close();if(pending!=null)pending.cancel(true);worker.shutdownNow();}
+  void clear(){marks.clear();marksVersion.incrementAndGet();expanded.clear();view=null;snapshot=null;runningKey=null;scanned=-1;generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=false;busy.set(false);}
+  @Override public void close(){closed=true;snapshot=null;runningKey=null;generation.incrementAndGet();debounce.stop();debouncePending=false;settings.close();if(pending!=null)pending.cancel(true);worker.shutdownNow();}
 }

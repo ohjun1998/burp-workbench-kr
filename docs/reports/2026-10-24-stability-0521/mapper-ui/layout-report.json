@@ -1,0 +1,19 @@
+{
+  "version": "0.3.5",
+  "jarSha256": "817be5c1c2bd9100411a92a98f53a5000e4b007c3146d14d7d62862effa92634",
+  "method": "Production Swing; API adapters and synthetic metadata, no native Burp GUI.",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1024x720",
+    "1280x800",
+    "1440x920"
+  ],
+  "renderedViews": 30,
+  "controlsMeasured": 150,
+  "clippedControls": [],
+  "smallControls": [],
+  "result": "passed"
+}

@@ -2,19 +2,21 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-현재 `main`은 **Workbench Next 0.52.0**입니다. 기존 **Workbench KR 0.49.1**과 **Next 0.50.0**의 배포 파일·소스와 과거 커밋은 그대로 보존합니다. 확장 이름·탭·배지의 **Next** 표시와 기존 버전에서 분리한 설정·기록 저장소를 유지합니다. 내장 Feature Mapper는 **0.3.4**, 실습 사이트는 **3.10.0**입니다.
+이 작업 브랜치는 **Workbench Next 0.52.1 안정화판**입니다. 현재 `main`의 0.52.0에서 검색 예약·응답 초기화·브라우저 본문 관측 근거를 보완합니다. 기존 **Workbench KR 0.49.1**과 **Next 0.50.0**의 배포 파일·소스와 과거 커밋은 그대로 보존합니다. 확장 이름·탭·배지의 **Next** 표시와 기존 버전에서 분리한 설정·기록 저장소를 유지합니다. 내장 Feature Mapper는 **0.3.5**, 실습 사이트는 **3.10.0**입니다.
 
 0.50.0의 **8개 주요 메뉴**를 유지하면서 검색·응답 분석의 반복 작업과 보유 데이터를 줄였습니다. **권한 설정 묶음·여러 쓰기 조회 규칙**, **Mapper 기능 → 점검 업무**, **원본 → 실행 → 정책 revision → 증거 ZIP** 연결, **JS 기록의 디스크 페이지 탐색·보존 설정**을 추가했습니다. GET·JSON 후보는 창을 먼저 표시한 뒤 백그라운드에서 읽습니다.
 
-[Next 설치·기능별 상세 안내](docs/RELEASE_0.52.0_NEXT_KR.md) · [검증 결과](docs/VERIFICATION_0.52.0.json) · [새 JAR·소스 다운로드](downloads/README.md)
+[0.52.1 안정화 변경·종료조건](docs/RELEASE_0.52.1_KR.md) · [최종 검증](docs/VERIFICATION_0.52.1.json) · [JAR·소스 다운로드](downloads/README.md)
 
-[PR #86](https://github.com/ohjun1998/burp-workbench-kr/pull/86)을 main에 병합했습니다. Windows 검색·실제 브라우저 도우미 연동 CI의 재시도 실패는 [후속 검증 기록](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남아 있으며, 병합이 해당 실패의 해결을 뜻하지는 않습니다.
+[0.52.0 기능별 상세 사용법](docs/RELEASE_0.52.0_NEXT_KR.md)과 당시 검증·실패 기록은 보존합니다.
+
+[PR #86](https://github.com/ohjun1998/burp-workbench-kr/pull/86)에서 0.52.0을 main에 병합한 당시의 Windows 검색·브라우저 실패 기록은 [보존 문서](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남깁니다. 후속 **[PR #88](https://github.com/ohjun1998/burp-workbench-kr/pull/88)의 0.52.1 소스는 기본·실제 Chrome·Windows/내구성 CI를 모두 첫 실행에서 통과**했습니다. [원격 검증 상세](docs/reports/2026-10-24-stability-0521/REMOTE_CI_KR.md)
 
 기존 버전의 당시 동작과 검사 범위는 [0.49.1 안내](docs/RELEASE_0.49.1_KR.md), [0.49.0 안내](docs/RELEASE_0.49.0_KR.md)에 남깁니다. 해당 문서의 미실행 표시는 그 버전에 대한 기록입니다.
 
 ## 설치하고 첫 요청 확인하기
 
-1. **[Next JAR·소스 다운로드](downloads/README.md)**에서 **0.52.0 Next JAR**를 받습니다. [Next 상세 안내](docs/RELEASE_0.52.0_NEXT_KR.md)에 새 화면과 기능별 순서를 정리했습니다. 기존 JAR는 보관하고 이전 Workbench의 로드만 해제한 뒤 Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다.
+1. **[Next JAR·소스 다운로드](downloads/README.md)**에서 **0.52.1 Next JAR**를 받습니다. [Next 상세 안내](docs/RELEASE_0.52.0_NEXT_KR.md)에 새 화면과 기능별 순서를 정리했습니다. 기존 JAR는 보관하고 이전 Workbench의 로드만 해제한 뒤 Burp의 **Extensions → Add → Java**에서 JAR를 선택합니다.
 2. Workbench **요청·응답 목록 → SCOPE 목록**에서 URL을 추가하거나 Burp **HTTP history → Add to scope**로 대상을 등록합니다. 수집할 범위를 체크하고, 수집 버튼을 **OFF → SCOPE**로 바꾼 뒤 사이트를 다시 사용합니다. 기존 History는 범위 안의 요청을 골라 Workbench로 가져올 수 있습니다. 트래픽 OFF에서는 새 패킷·수동 가져오기·일반 자동 관찰을 수집하지 않습니다. 계정 권한 비교의 인증 탐지는 별도 ON/OFF로 제어합니다. 수동 URL은 해당 경로와 하위 경로에 적용됩니다. 목록에서 행을 선택해 URL을 수정하면 체크 상태를 유지한 채 즉시 반영됩니다.
 3. 왼쪽 폴더를 펼쳐 목적에 맞는 도구를 선택합니다. 메뉴를 숨겨도 상단 **메뉴 보기**로 다시 열 수 있습니다. 선택한 요청·응답을 읽고 목적에 맞는 도구로 이동합니다. 처음에는 **Repeater**로 요청을 준비해 직접 확인하고, 원본이 필요한 비교·증거 기능은 선택한 요청에서 이어갑니다.
 4. 상단 **기능 안내** 버튼(또는 **F1**)과 **[Next 기능별 안내](docs/RELEASE_0.52.0_NEXT_KR.md)**로 준비할 입력과 다음 버튼을 확인합니다. 재현한 결과는 **재현·증거 정리**에 모아 저장합니다.

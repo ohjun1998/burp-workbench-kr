@@ -16,6 +16,7 @@ public final class ResponseBudgetTest extends WorkbenchTest {
   public static void main(String[] args) throws Exception {
     reservations();
     queueLifecycle();
+    clearDuringAdmission();
     referenceAndSnapshot();
     rejectionAndExpiry();
     appendMetrics();
@@ -54,9 +55,10 @@ public final class ResponseBudgetTest extends WorkbenchTest {
     check(entered.await(5,TimeUnit.SECONDS), "queue lifecycle fixture blocks the running worker");
     check(queue.offer(() -> {}, budget.queued(600)) && queue.offer(() -> {}, budget.queued(400)),
         "queued work reserves retained inputs before execution");
+    executor.execute(() -> { throw new AssertionError("cancelled unreserved work ran"); });
     queue.cancelQueued(); queue.cancelQueued();
     check(budget.metrics().queuedBytes() == 0 && executor.getQueue().isEmpty(),
-        "clearing queued jobs releases all inputs exactly once");
+        "clearing reserved and unreserved jobs releases all inputs exactly once");
     release.countDown();
     queue.offer(() -> { try(var working = budget.working(800)) { throw new IllegalArgumentException("fixture"); } },budget.queued(300));
     executor.submit(() -> {}).get(5,TimeUnit.SECONDS);
@@ -118,6 +120,65 @@ public final class ResponseBudgetTest extends WorkbenchTest {
           disk.ref(0).response().toByteArray().getBytes(),response.toByteArray().getBytes()),
           "passive analysis preserves retained source identity and exact original response bytes");
     } finally {release.countDown();panel.close();}
+  }
+
+  static void clearDuringAdmission() throws Exception {
+    installTrafficPacketFactory();
+    var waiting = new AdmissionQueue();
+    var executor = new ThreadPoolExecutor(1,1,0,TimeUnit.MILLISECONDS,waiting);
+    var panel = new ResponseReconPanel(api(new AtomicBoolean(true)),executor);
+    CountDownLatch entered = new CountDownLatch(1), release = new CountDownLatch(1);
+    executor.execute(() -> await(entered,release));
+    check(entered.await(5,TimeUnit.SECONDS), "clear race fixture pauses the running worker");
+    try {
+      panel.offer(request("https://budget.test/before-clear","GET",true,List.of()),
+          response(500,"BadSqlGrammarException"));
+      waiting.afterSnapshot.set(() -> {
+        // A real producer admits a new-generation input after cancellation took its snapshot.
+        var producer = CompletableFuture.runAsync(() -> panel.offer(
+            request("https://budget.test/during-clear","GET",true,List.of()),
+            response(500,"BadSqlGrammarException")));
+        try { producer.get(5,TimeUnit.SECONDS); }
+        catch (Exception failure) { throw new AssertionError("concurrent admission failed",failure); }
+      });
+      edt(() -> clearButton(panel).doClick());
+      check(panel.analysisBudget.metrics().queuedBytes() > 0,
+          "initialization retains the concurrent input reservation until its task executes");
+      panel.offer(request("https://budget.test/after-clear","GET",true,List.of()),
+          response(500,"BadSqlGrammarException"));
+      release.countDown();drain(panel);
+      check(panel.analysisBudget.metrics().queuedBytes() == 0
+          && panel.analysisBudget.metrics().workingBytes() == 0,
+          "initialization during concurrent admission returns every retained and working reservation");
+      check(panel.observed.keySet().equals(java.util.Set.of("https://budget.test/after-clear"))
+          && panel.findings.getRowCount() > 0
+          && panel.findingPackets.values().stream().allMatch(p -> p.request().url().endsWith("/after-clear")),
+          "initialization removes earlier observations and preserves subsequent-generation findings and sources");
+      check(panel.retries.snapshot().stream().noneMatch(e -> e.state() == AnalysisRetries.State.QUEUED
+          || e.state() == AnalysisRetries.State.RUNNING),
+          "initialization leaves no concurrent input permanently waiting after the worker drains");
+    } finally {release.countDown();panel.close();executor.awaitTermination(5,TimeUnit.SECONDS);}
+  }
+
+  static final class AdmissionQueue extends ArrayBlockingQueue<Runnable> {
+    final AtomicReference<Runnable> afterSnapshot = new AtomicReference<>();
+    AdmissionQueue() {super(50);}
+    @Override public <T> T[] toArray(T[] array) {
+      T[] snapshot = super.toArray(array);
+      Runnable hook = afterSnapshot.getAndSet(null);
+      if (hook != null) hook.run();
+      return snapshot;
+    }
+  }
+
+  static javax.swing.JButton clearButton(java.awt.Container parent) {
+    for (java.awt.Component child : parent.getComponents()) {
+      if (child instanceof javax.swing.JButton button && button.getText().equals("관찰 초기화")) return button;
+      if (child instanceof java.awt.Container nested) {
+        var button = clearButton(nested);if (button != null) return button;
+      }
+    }
+    return null;
   }
 
   static void rejectionAndExpiry() throws Exception {

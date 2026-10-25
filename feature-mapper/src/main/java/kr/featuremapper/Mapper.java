@@ -452,6 +452,7 @@ public final class Mapper implements AutoCloseable {
             "url",
             "method",
             "bodyHash",
+            "bodyHashStatus",
             "actionId",
             "label",
             "page",
@@ -540,14 +541,23 @@ public final class Mapper implements AutoCloseable {
           "브라우저 화면·동작: " + label + " (탭 " + p.browserTab + " / 프레임 " + p.browserFrame + ")");
       p.reasons.add("브라우저 요청 대조: URL·메서드 일치 · 시각 차이 "
           + Math.abs(p.time - num(e, "time")) + "ms · "
-          + (str(e, "bodyHash").isEmpty() ? "본문 해시 미확인" : "본문 SHA-256 일치"));
-      p.confidence = p.parents.isEmpty() ? "중간" : "높음";
+          + bodyHashEvidence(e));
+      p.confidence = p.parents.isEmpty() || str(e, "bodyHash").isEmpty() ? "중간" : "높음";
       // Temporal browser attribution is context, never proof of JS causality.
       attachAncestors(p, f.id, p.run, 0);
     }
   }
 
   record EventAction(String tab, String frame, String action) {}
+
+  private static String bodyHashEvidence(Map<String, Object> event) {
+    if (!str(event, "bodyHash").isEmpty()) return "본문 SHA-256 일치";
+    return switch (str(event, "bodyHashStatus")) {
+      case "unsupported-method" -> "본문 해시 미확인 · 브라우저 API에서 이 메서드의 본문을 제공하지 않음";
+      case "too-large" -> "본문 해시 미확인 · 브라우저 해시 한도 512KiB 초과";
+      default -> "본문 해시 미확인 · 브라우저 원본 바이트 미관측";
+    };
+  }
 
   private void unmapAmbiguousBrowser(Packet p) {
     if (p.browserAction.isBlank()) return;

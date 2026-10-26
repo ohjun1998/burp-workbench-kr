@@ -29,6 +29,8 @@ final class TrafficBrowser implements AutoCloseable {
   record SearchKey(DiskTrafficStore disk,TrafficQuery query,String text,List<Identity> profiles,long marksVersion){}
   record SearchSnapshot(SearchKey key,View view,int count,long expiresAt){}
   record SearchMetrics(boolean incremental,int examinedRows,int reusedRows,int totalRows,long elapsedNanos){}
+  /** Ephemeral navigation/undo state, never written to project metadata. */
+  record SearchPosition(TrafficQuery query,String text,String project){}
   private record ScanResult(View view,int examinedRows,long expiresAt,BitSet changedRows){}
   private volatile SearchSnapshot snapshot;
   private volatile SearchKey runningKey;
@@ -69,25 +71,38 @@ final class TrafficBrowser implements AutoCloseable {
   private final JComboBox<String> savedConditions=new JComboBox<>();
   private final JButton presetApply=new JButton("조건 적용"),presetSave=new JButton("조건 저장"),presetDelete=new JButton("삭제");
   private final JLabel listFeedback=new JLabel(" ");
+  final JLabel inputProblem=new JLabel(),settingsProblem=new JLabel();
+  final JComboBox<RelaxChoice> relaxChoices=new JComboBox<>();
+  final JButton relaxCondition=new JButton("이 조건만 해제"),undoRelaxation=new JButton("이전 조건으로");
+  final JPanel recoveryActions=new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
+  private JButton settingsApply;
+  private SearchPosition relaxedBefore,relaxedAfter;
+  private final AtomicLong contextRevision=new AtomicLong();
+  private PacketInspector linkedRequest,linkedResponse;
+  record RelaxChoice(String key,String label){@Override public String toString(){return label;}}
+  BackgroundJobs backgroundJobs;
   private List<TrafficSearchPresets.Preset> presets=List.of();
   private String projectIdentity="",settingsProject="",storedPresets;
   private boolean projectLoaded,presetLoadFailure;
   private Runnable searchStateChanged=()->{};
+  private Runnable viewPublished=()->{};
 
   TrafficBrowser(JTable table,CaptureTableModel model,JTextField search,MontoyaApi api,Supplier<DiskTrafficStore> store,Runnable changed){
     this.table=table;this.model=model;this.search=search;this.api=api;this.store=store;this.changed=changed;
     try{if(api!=null&&api.persistence()!=null)query=TrafficQuery.read(api.persistence().extensionData().getString(BuildInfo.storageKey("traffic-view-v1")));}catch(Exception ignored){}
     settings=new TargetWindow(table,"검색·목록 설정",this::content);settings.opener=TrafficBrowser::window;settingsButton.addActionListener(e->{ensureProjectState();settingsProject=projectIdentity;loadControls();settings.open();});
     debounce=new javax.swing.Timer(220,e->begin());debounce.setRepeats(false);
-    cancel.setName("wb.traffic.search.cancel");cancel.addActionListener(e->{generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=true;busy.set(false);feedback.setText("검색 취소 · 이전 결과 유지");});
+    cancel.setName("wb.traffic.search.cancel");cancel.addActionListener(e->{generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=true;busy.set(false);feedback.setText("검색 취소 · 이전 결과 유지");refreshRecoveryControls();});
     search.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){schedule();}public void removeUpdate(javax.swing.event.DocumentEvent e){schedule();}public void changedUpdate(javax.swing.event.DocumentEvent e){schedule();}});
     model.extra=(row,col)->extra(row,col);
     table.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e){int row=table.rowAtPoint(e.getPoint()),col=table.columnAtPoint(e.getPoint());if(row<0||col<0||!SwingUtilities.isLeftMouseButton(e))return;int raw=table.convertRowIndexToModel(row);if(table.convertColumnIndexToModel(col)==7){toggleStar(raw);return;}if(e.getClickCount()==2&&query.group()){toggleGroup(raw);}}});
     method.setPreferredSize(new Dimension(120,32));response.setPreferredSize(new Dimension(120,32));period.setPreferredSize(new Dimension(150,32));
+    regex.addActionListener(e->refreshInputValidation());
+    account.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){refreshInputValidation();}public void removeUpdate(javax.swing.event.DocumentEvent e){refreshInputValidation();}public void changedUpdate(javax.swing.event.DocumentEvent e){refreshInputValidation();}});
     buildConditionBar();ensureProjectState();loadControls();refreshConditionChips();
   }
   private void cancelPending(){if(pending!=null)pending.cancel(true);worker.getQueue().clear();}
-  void schedule(){if(closed)return;generation.incrementAndGet();cancelPending();paused=false;busy.set(false);scanned=-1;debouncePending=true;debounce.restart();refreshConditionChips();}
+  void schedule(){if(closed)return;invalidateLinkedContexts();generation.incrementAndGet();cancelPending();paused=false;busy.set(false);scanned=-1;debouncePending=true;debounce.restart();refreshConditionChips();refreshInputValidation();refreshRecoveryControls();}
   void refresh(){
     if(closed)return;ensureProjectState();if(paused||debouncePending)return;
     DiskTrafficStore disk=store.get();if(disk==null)return;
@@ -111,23 +126,26 @@ final class TrafficBrowser implements AutoCloseable {
     long token=generation.incrementAndGet();DiskTrafficStore disk=store.get();if(disk==null)return;int count=Math.toIntExact(disk.size());
     List<Identity> profiles=List.copyOf(identities.get());Set<String> open=Set.copyOf(expanded);SearchKey key=key(disk,requested,profiles);
     Map<String,Mark> markSnapshot=Map.copyOf(marks);long now=clock.getAsLong();SearchSnapshot prior=snapshot;
+    if(prior==null||!prior.key().equals(key))invalidateLinkedContexts();
     if(requested.isBlank()&&settings.equals(TrafficQuery.defaults())&&profiles.isEmpty()){
       scanned=count;view=null;snapshot=new SearchSnapshot(key,null,count,Long.MAX_VALUE);runningKey=null;busy.set(false);
       lastMetrics=new SearchMetrics(prior!=null&&prior.key().equals(key),0,prior==null?0:Math.min(count,prior.count()),count,0);
       var sorter=(TableRowSorter<?>)table.getRowSorter();if(sorter.getRowFilter()!=null)sorter.setRowFilter(null);
-      feedback.setText("전체 "+count+"건");changed.run();return;
+      feedback.setText(count==0?"수집된 트래픽이 없습니다 · SCOPE와 수집 상태를 확인하고 요청을 관찰하세요.":"전체 "+count+"건");changed.run();refreshRecoveryControls();viewPublished.run();return;
     }
     boolean incremental=prior!=null&&prior.view()!=null&&prior.key().equals(key)&&prior.count()<=count&&settings.minutes()==0;
     View previous=incremental?prior.view():null;int from=incremental?prior.count():0;
     runningKey=key;busy.set(true);feedback.setText("검색 중 · "+(incremental?"신규 "+(count-from)+" / 전체 ":"")+count+"건");
     pending=worker.submit(()->{
+      BackgroundJobs.Handle job=BackgroundJobs.begin(backgroundJobs,"트래픽 검색","traffic",()->SwingUtilities.invokeLater(()->{if(!closed&&token==generation.get()&&disk==store.get())cancel.doClick();}));
       long started=System.nanoTime();
       try{
-        ScanResult result=evaluate(disk,count,settings,requested,profiles,open,markSnapshot,now,previous,from,()->closed||token!=generation.get()||Thread.currentThread().isInterrupted());
+        job.progress("수집된 트래픽 검사",from,count);
+        ScanResult result=evaluate(disk,count,settings,requested,profiles,open,markSnapshot,now,previous,from,()->closed||token!=generation.get()||Thread.currentThread().isInterrupted(),processed->job.progress("수집된 트래픽 검사",processed,count));
         View next=result.view();SearchMetrics metrics=new SearchMetrics(incremental,result.examinedRows(),from,count,System.nanoTime()-started);
         SwingUtilities.invokeLater(()->{
-          if(closed||token!=generation.get()||disk!=store.get())return;
-          if(!stillCurrent(key)){schedule();return;}
+          if(closed||token!=generation.get()||disk!=store.get()){job.cancelled("검색 교체/종료");return;}
+          if(!stillCurrent(key)){job.cancelled("검색 조건 변경");schedule();return;}
           view=next;scanned=count;snapshot=new SearchSnapshot(key,next,count,result.expiresAt());lastMetrics=metrics;
           @SuppressWarnings("unchecked") TableRowSorter<CaptureTableModel> sorter=(TableRowSorter<CaptureTableModel>)table.getRowSorter();
           boolean plain=requested.isBlank()&&settings.method().equals("전체")&&settings.status().equals("전체")&&settings.account().isBlank()&&settings.minutes()==0&&!settings.group()&&!settings.important();
@@ -136,12 +154,15 @@ final class TrafficBrowser implements AutoCloseable {
           if(filterChanged)sorter.setRowFilter(filter);
           else if(incremental)publishRows(result.changedRows(),sorter);
           else model.fireTableDataChanged();
-          feedback.setText("표시 "+next.rows().cardinality()+" / 일치 "+next.matched()+" / 전체 "+count+(next.partial()>0?" · 본문 일부 검사 "+next.partial()+"건 (2 MiB)":""));
+          feedback.setText(resultFeedback(next));
           settingsButton.setToolTipText("검색·목록 설정 · "+feedback.getText()+" · "+(incremental?"증분":"전체")+" 평가 "+metrics.examinedRows()+"건 · 이전 결과 재사용 "+metrics.reusedRows()+"건");
-          if(filterChanged)table.repaint();changed.run();
+          // Selection events during sorter publication see the old busy state. Notify once the
+          // complete view is ready, even when Swing retained the same selected original row.
+          runningKey=null;busy.set(false);
+          if(filterChanged)table.repaint();changed.run();refreshRecoveryControls();job.progress("검색 결과 반영",count,count);job.complete("검색 결과 반영 완료");viewPublished.run();
         });
-      }catch(CancellationException ignored){}catch(Exception ex){SwingUtilities.invokeLater(()->{if(!closed&&token==generation.get()){paused=true;feedback.setText("검색 실패 · 검색 조건을 바꿔 재시도: "+Objects.toString(ex.getMessage(),ex.getClass().getSimpleName()));}});}
-      finally{SwingUtilities.invokeLater(()->{if(token==generation.get()){runningKey=null;busy.set(false);}});}
+      }catch(CancellationException ignored){job.cancelled("검색 중지 완료");}catch(Exception ex){job.fail("검색 조건/저장소 확인 필요");SwingUtilities.invokeLater(()->{if(!closed&&token==generation.get()){paused=true;feedback.setText("검색 실패 · 검색 조건을 바꿔 재시도: "+Objects.toString(ex.getMessage(),ex.getClass().getSimpleName()));}});}
+      finally{if(closed||token!=generation.get()||Thread.currentThread().isInterrupted())job.cancelled("검색 중지 완료");SwingUtilities.invokeLater(()->{if(token==generation.get()){runningKey=null;busy.set(false);refreshRecoveryControls();}});}
     });
   }
   /** Re-evaluate only changed filter/extra-column rows; avoid full sorter resets on append. */
@@ -151,9 +172,9 @@ final class TrafficBrowser implements AutoCloseable {
     finally{sorter.setSortsOnUpdates(previous);}
   }
   View scan(DiskTrafficStore disk,int count,TrafficQuery q,String text,List<Identity> profiles,Set<String> open,BooleanSupplier cancelled){
-    return evaluate(disk,count,q,text,List.copyOf(profiles),open,Map.copyOf(marks),clock.getAsLong(),null,0,cancelled).view();
+    return evaluate(disk,count,q,text,List.copyOf(profiles),open,Map.copyOf(marks),clock.getAsLong(),null,0,cancelled,processed->{}).view();
   }
-  private ScanResult evaluate(DiskTrafficStore disk,int count,TrafficQuery q,String text,List<Identity> profiles,Set<String> open,Map<String,Mark> markSnapshot,long now,View previous,int from,BooleanSupplier cancelled){
+  private ScanResult evaluate(DiskTrafficStore disk,int count,TrafficQuery q,String text,List<Identity> profiles,Set<String> open,Map<String,Mark> markSnapshot,long now,View previous,int from,BooleanSupplier cancelled,IntConsumer progress){
     TrafficQuery.SearchPredicate predicate=q.prepare(text);
     BitSet visible=previous==null?new BitSet():(BitSet)previous.rows().clone();
     Map<String,List<Integer>> members=new LinkedHashMap<>();Map<Integer,String> labels=previous==null?new HashMap<>():new HashMap<>(previous.accounts());
@@ -164,6 +185,7 @@ final class TrafficBrowser implements AutoCloseable {
     int partial=previous==null?0:previous.partial(),matched=previous==null?0:previous.matched(),examined=0;long expiresAt=Long.MAX_VALUE;
     for(int row=from;row<count;row++){
       if(cancelled.getAsBoolean())throw new CancellationException();evaluatedRows.incrementAndGet();examined++;
+      if((row&127)==0)progress.accept(row+1);
       var ref=disk.ref(row);Mark mark=markSnapshot.getOrDefault(ref.id(),new Mark(false,""));
       if(q.important()&&!mark.star())continue;
       if(!q.includesTime(ref.capturedAt(),now))continue;
@@ -220,11 +242,94 @@ final class TrafficBrowser implements AutoCloseable {
   void toggleGroup(int raw){View v=view;if(v==null)return;Group g=v.groups().get(raw);if(g==null)return;if(!expanded.add(g.key()))expanded.remove(g.key());schedule();}
 
   JPanel conditionBar(){return conditionBar;}
+  SearchPosition capturePosition(){ensureProjectState();return new SearchPosition(query,search.getText(),projectIdentity);}
+  void restorePosition(SearchPosition position){
+    Objects.requireNonNull(position);requireProject(position.project());
+    position.query().prepare(position.text().strip());search.setText(position.text());commitQuery(position.query(),position.project());
+  }
+  boolean positionReady(SearchPosition expected){return expected!=null&&expected.equals(capturePosition())&&!paused&&idle()&&searchViewCurrent();}
+
+  /** Called after the usual original packet previews have been loaded by the host. */
+  String revealSelectionMatches(int raw,PacketInspector request,PacketInspector response){
+    if(closed||raw<0||search.getText().isBlank())return "";
+    if(!searchViewCurrent()||busy.get()||debouncePending||paused)return "검색 갱신/중지 상태 · 표시된 이전 결과와 현재 조건을 확인하세요.";
+    invalidateLinkedContexts();
+    if(query.range()==0)return "검색 일치: 목록 메타데이터(메서드·URL·상태)";
+    DiskTrafficStore disk=store.get();if(disk==null||raw>=disk.size())return "검색 원본 연결 없음";
+    var ref=disk.ref(raw);String requested=search.getText().strip();long revision=contextRevision.get();
+    linkedRequest=request;linkedResponse=response;
+    java.util.function.BooleanSupplier valid=()->!closed&&revision==contextRevision.get()&&disk==store.get();
+    if(request!=null)request.followTrafficSearch(ref,false,query,requested,valid);
+    if(response!=null&&query.range()==2)response.followTrafficSearch(ref,true,query,requested,valid);
+    return "검색 일치 위치: 아래 패킷의 ‘목록 검색 문맥’ 확인 · 원본 변경 없음";
+  }
+
+  private void invalidateLinkedContexts(){contextRevision.incrementAndGet();if(linkedRequest!=null)linkedRequest.invalidateTrafficSearch();if(linkedResponse!=null&&linkedResponse!=linkedRequest)linkedResponse.invalidateTrafficSearch();linkedRequest=null;linkedResponse=null;}
+
+  static String resultFeedback(View result){
+    if(result.count()==0)return "수집된 트래픽이 없습니다 · SCOPE와 수집 상태를 확인하고 요청을 관찰하세요.";
+    String bounds=result.partial()>0?" · 본문 일부 검사 "+result.partial()+"건 (원문 앞 2 MiB)":"";
+    if(result.matched()==0)return "현재 검색 조건에 맞는 항목이 없습니다 · 전체 "+result.count()+"건"+bounds
+        +(result.partial()>0?" · 검사 범위 밖의 일치 여부는 미확인":"");
+    return "표시 "+result.rows().cardinality()+" / 일치 "+result.matched()+" / 전체 "+result.count()+bounds;
+  }
+
+  static String searchProblem(String value,boolean expression){
+    if(value.strip().length()>512)return "검색어는 512자까지 입력할 수 있습니다.";
+    if(expression&&!value.isBlank())try{java.util.regex.Pattern.compile(value.strip());}
+    catch(java.util.regex.PatternSyntaxException error){return "정규식 문법을 확인하세요"+(error.getIndex()>=0?" · 위치 "+(error.getIndex()+1):"")+" · 예: users/[0-9]+";}
+    return "";
+  }
+
+  private void refreshInputValidation(){
+    String main=searchProblem(search.getText(),query.regex());inputProblem.setText(main);inputProblem.setVisible(!main.isEmpty());
+    String settings=searchProblem(search.getText(),regex.isSelected());
+    if(settings.isEmpty()&&(account.getText().strip().length()>128||account.getText().chars().anyMatch(Character::isISOControl)))settings="계정 필터는 제어문자 없이 128자까지 입력하세요.";
+    settingsProblem.setText(settings);settingsProblem.setVisible(!settings.isEmpty());
+    if(settingsApply!=null){settingsApply.setEnabled(settings.isEmpty());settingsApply.setToolTipText(settings.isEmpty()?"입력한 검색 조건 적용":settings);}
+  }
+
+  private List<RelaxChoice> relaxationChoices(){
+    List<RelaxChoice> choices=new ArrayList<>();
+    if(!query.method().equals("전체"))choices.add(new RelaxChoice("method","메서드 조건"));
+    if(!query.status().equals("전체"))choices.add(new RelaxChoice("status","응답 상태 조건"));
+    if(!query.account().isBlank())choices.add(new RelaxChoice("account","계정 조건"));
+    if(query.minutes()>0)choices.add(new RelaxChoice("minutes","기간 조건"));
+    if(query.important())choices.add(new RelaxChoice("important","중요 표시 조건"));
+    if(!search.getText().isBlank())choices.add(new RelaxChoice("text","검색어 조건"));
+    return choices;
+  }
+
+  private void refreshRecoveryControls(){
+    if(!SwingUtilities.isEventDispatchThread()){SwingUtilities.invokeLater(this::refreshRecoveryControls);return;}
+    boolean zero=!closed&&!busy.get()&&!debouncePending&&!paused&&searchViewCurrent()&&table.getRowCount()==0;
+    RelaxChoice selected=(RelaxChoice)relaxChoices.getSelectedItem();relaxChoices.removeAllItems();
+    for(RelaxChoice choice:relaxationChoices())relaxChoices.addItem(choice);
+    if(selected!=null)for(int i=0;i<relaxChoices.getItemCount();i++)if(relaxChoices.getItemAt(i).key().equals(selected.key()))relaxChoices.setSelectedIndex(i);
+    boolean canUndo=relaxedBefore!=null&&relaxedAfter!=null&&relaxedAfter.equals(new SearchPosition(query,search.getText(),projectIdentity));
+    relaxChoices.setEnabled(zero&&relaxChoices.getItemCount()>0);relaxCondition.setEnabled(zero&&relaxChoices.getItemCount()>0);
+    undoRelaxation.setEnabled(canUndo&&!busy.get()&&!debouncePending);recoveryActions.setVisible(zero||canUndo);
+  }
+
+  void relaxOneCondition(String key){
+    ensureProjectState();
+    if(relaxationChoices().stream().noneMatch(choice->choice.key().equals(key)))throw new IllegalArgumentException("해제할 검색 조건을 다시 선택하세요.");
+    SearchPosition before=capturePosition();
+    if(key.equals("text"))search.setText("");else commitQuery(TrafficSearchPresets.clear(query,key),projectIdentity);
+    relaxedBefore=before;relaxedAfter=capturePosition();refreshRecoveryControls();
+  }
+
+  void undoRelaxation(){
+    SearchPosition before=relaxedBefore,after=relaxedAfter;
+    if(before==null||after==null||!after.equals(capturePosition()))throw new IllegalArgumentException("조건이 바뀌었습니다. 현재 검색 조건을 유지합니다.");
+    relaxedBefore=null;relaxedAfter=null;restorePosition(before);refreshRecoveryControls();
+  }
   String captureSearchState(){ensureProjectState();return TrafficSearchPresets.capture(query);}
   void restoreSearchState(String json){ensureProjectState();commitQuery(TrafficSearchPresets.restore(json),projectIdentity);}
   void restoreSearchState(String json,String expectedProject){ensureProjectState();commitQuery(TrafficSearchPresets.restore(json),expectedProject);}
   String projectIdentity(){ensureProjectState();return projectIdentity;}
   void onSearchStateChanged(Runnable listener){searchStateChanged=Objects.requireNonNull(listener);}
+  void onViewPublished(Runnable listener){viewPublished=Objects.requireNonNull(listener);}
 
   private void buildConditionBar(){
     conditionBar.setName("wb.traffic.conditions");conditionChips.setName("wb.traffic.conditions.chips");
@@ -239,8 +344,18 @@ final class TrafficBrowser implements AutoCloseable {
         WorkbenchUi.hint("검색어 제외 · 조건만 저장")),BorderLayout.NORTH);
     conditionBar.add(conditionChips,BorderLayout.CENTER);
     listFeedback.setName("wb.traffic.conditions.feedback");WorkbenchUi.feedback(listFeedback);
-    feedback.addPropertyChangeListener("text",e->listFeedback.setText(Objects.toString(e.getNewValue()," ")));
-    conditionBar.add(listFeedback,BorderLayout.SOUTH);refreshPresetChoices("");
+    feedback.addPropertyChangeListener("text",e->{listFeedback.setText(Objects.toString(e.getNewValue()," "));refreshRecoveryControls();});
+    inputProblem.setName("wb.traffic.search.validation");settingsProblem.setName("wb.traffic.settings.validation");
+    inputProblem.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.ERROR));settingsProblem.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.ERROR));
+    relaxChoices.setName("wb.traffic.zero.condition");relaxChoices.setPreferredSize(new Dimension(150,30));
+    relaxCondition.setName("wb.traffic.zero.relax");undoRelaxation.setName("wb.traffic.zero.undo");
+    relaxCondition.setToolTipText("선택한 목록 필터 하나만 해제 · SCOPE나 수집 설정은 바꾸지 않습니다.");
+    undoRelaxation.setToolTipText("이번에 해제한 조건과 검색어를 복원 · 현재 프로젝트/조건이 같은 동안에만 사용");
+    relaxCondition.addActionListener(e->presetAction(()->{RelaxChoice choice=(RelaxChoice)relaxChoices.getSelectedItem();if(choice!=null)relaxOneCondition(choice.key());}));
+    undoRelaxation.addActionListener(e->presetAction(this::undoRelaxation));
+    recoveryActions.setName("wb.traffic.zero.actions");recoveryActions.add(new JLabel("조건 하나씩 확인"));recoveryActions.add(relaxChoices);recoveryActions.add(relaxCondition);recoveryActions.add(undoRelaxation);recoveryActions.setVisible(false);
+    JPanel status=new JPanel();status.setLayout(new BoxLayout(status,BoxLayout.Y_AXIS));status.add(inputProblem);status.add(listFeedback);status.add(recoveryActions);
+    conditionBar.add(status,BorderLayout.SOUTH);refreshPresetChoices("");refreshInputValidation();
   }
 
   private void presetAction(Runnable action){try{action.run();}catch(RuntimeException error){feedback.setText(error.getMessage());}}
@@ -258,7 +373,7 @@ final class TrafficBrowser implements AutoCloseable {
     String id;try{id=currentProjectIdentity();}catch(RuntimeException error){id="";}
     if(projectLoaded&&id.equals(projectIdentity))return false;
     boolean changed=projectLoaded;projectLoaded=true;projectIdentity=id;presetLoadFailure=false;storedPresets=null;presets=List.of();query=TrafficQuery.defaults();
-    if(changed){clear();search.setText("");settings.closeWindow();}
+    if(changed){clear();search.setText("");settings.closeWindow();relaxedBefore=null;relaxedAfter=null;}
     if(!id.isEmpty()){
       try{
         var data=api.persistence().extensionData();query=TrafficQuery.read(data.getString(BuildInfo.storageKey("traffic-view-v1")));
@@ -300,7 +415,7 @@ final class TrafficBrowser implements AutoCloseable {
       String expected=projectIdentity;
       reset.addActionListener(e->presetAction(()->{requireProject(expected);search.setText("");commitQuery(TrafficQuery.defaults(),expected);}));conditionChips.add(reset);
     }
-    WorkbenchUi.style(conditionChips);conditionChips.revalidate();conditionChips.repaint();
+    WorkbenchUi.style(conditionChips);conditionChips.revalidate();conditionChips.repaint();refreshRecoveryControls();
   }
 
   private void addChip(String key,String label){
@@ -376,9 +491,9 @@ final class TrafficBrowser implements AutoCloseable {
     advanced.removeAll();advanced.add(WorkbenchUi.row(new JLabel("계정"),account,new JLabel("기간"),period));advanced.add(WorkbenchUi.row(sensitive,regex));advanced.add(WorkbenchUi.row(normalize,memo));advanced.setVisible(advancedToggle.isSelected());body.add(advanced);
     for(ActionListener l:advancedToggle.getActionListeners())advancedToggle.removeActionListener(l);
     advancedToggle.addActionListener(e->{advanced.setVisible(advancedToggle.isSelected());advancedToggle.setText((advanced.isVisible()?"▾ ":"▸ ")+"고급 설정");body.revalidate();});
-    JButton reset=new JButton("초기화"),apply=new JButton("적용"),close=new JButton("닫기");reset.setName("wb.traffic.search.reset");apply.setName("wb.traffic.search.apply");
+    JButton reset=new JButton("초기화"),apply=new JButton("적용"),close=new JButton("닫기");settingsApply=apply;reset.setName("wb.traffic.search.reset");apply.setName("wb.traffic.search.apply");
     reset.addActionListener(e->{query=TrafficQuery.defaults();loadControls();search.setText("");apply();});apply.addActionListener(e->{try{apply();settings.closeWindow();}catch(Exception ex){feedback.setText(ex.getMessage());}});close.addActionListener(e->settings.closeWindow());
-    feedback.setName("wb.traffic.search.progress");body.add(feedback);
+    feedback.setName("wb.traffic.search.progress");body.add(settingsProblem);body.add(feedback);refreshInputValidation();
     JPanel shell=new JPanel(new BorderLayout(0,8));shell.setName("wb.traffic.search.window");shell.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));JScrollPane scroll=new JScrollPane(body);scroll.setBorder(null);scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);shell.add(scroll);shell.add(WorkbenchUi.row(reset,cancel,close,apply),BorderLayout.SOUTH);WorkbenchUi.style(shell);return shell;
   }
   static JDialog window(Component owner,String title,Component content,boolean modal,Runnable closed){
@@ -394,7 +509,7 @@ final class TrafficBrowser implements AutoCloseable {
     commitQuery(next,settingsProject);
   }
   void updateColumns(){int view=table.convertColumnIndexToView(10);if(view>=0){var c=table.getColumnModel().getColumn(view);c.setMinWidth(0);c.setMaxWidth(query.memo()?400:0);c.setPreferredWidth(query.memo()?130:0);} }
-  void clear(){marks.clear();marksVersion.incrementAndGet();expanded.clear();view=null;snapshot=null;runningKey=null;scanned=-1;generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=false;busy.set(false);}
-  @Override public void close(){closed=true;snapshot=null;runningKey=null;generation.incrementAndGet();debounce.stop();debouncePending=false;busy.set(false);settings.close();if(pending!=null)pending.cancel(true);worker.shutdownNow();}
+  void clear(){invalidateLinkedContexts();relaxedBefore=null;relaxedAfter=null;marks.clear();marksVersion.incrementAndGet();expanded.clear();view=null;snapshot=null;runningKey=null;scanned=-1;generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=false;busy.set(false);refreshRecoveryControls();}
+  @Override public void close(){closed=true;invalidateLinkedContexts();snapshot=null;runningKey=null;relaxedBefore=null;relaxedAfter=null;viewPublished=()->{};generation.incrementAndGet();debounce.stop();debouncePending=false;busy.set(false);settings.close();if(pending!=null)pending.cancel(true);worker.shutdownNow();}
 }
 

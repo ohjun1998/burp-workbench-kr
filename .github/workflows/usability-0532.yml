@@ -1,0 +1,142 @@
+name: Usability 0.53.3 release candidate verification
+on:
+  push:
+    branches: [account-a/usability-0532-20261027]
+    paths:
+      - 'project/**'
+      - 'feature-mapper/**'
+      - 'tools/**'
+      - 'dev.py'
+      - 'audit/usability0533/**'
+      - '.github/workflows/usability-0532.yml'
+permissions:
+  contents: read
+concurrency:
+  group: usability0533-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Build, regressions, loopback HTTP, and immutable release packages
+        run: python dev.py release --port 19532 --bounty-port 19533
+      - name: Check release fingerprints and packaging invariants
+        run: |
+          python tools/package_downloads.py --verify
+          python -m unittest discover -s tools -p 'test_*.py' -v
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0533-candidate-packages
+          retention-days: 14
+          path: |
+            downloads/extensions/0.53.3/
+            downloads/feature-mapper/0.3.5/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0533-linux-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/test-*.txt
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/*summary.json
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json
+            audit/0.23.0/.run/results.json
+            feature-mapper/build/test-results.txt
+  layout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Build current packaged UI and compile its test adapters
+        run: |
+          python dev.py build
+          python - <<'PYTHON'
+          from pathlib import Path
+          import os, subprocess
+          wb = Path('project/burp-development-workspace/burp-workbench-kr/burp-workbench').resolve()
+          classes = wb / 'build/tests'
+          classes.mkdir(parents=True, exist_ok=True)
+          cp = os.pathsep.join(str(p) for p in [wb / 'dist/burp-workbench-kr-0.53.3.jar', *sorted((wb / 'deps').glob('*.jar'))])
+          subprocess.run(['javac', '--release', '17', '-encoding', 'UTF-8', '-cp', cp, '-d', str(classes), *map(str, (wb / 'src/test/java').rglob('*.java'))], check=True)
+          PYTHON
+      - name: Check current usability views and remaining-work navigation
+        run: |
+          python tools/render_ui_layout.py --next-only --check --out tmp/usability0533-ui
+          python tools/render_ui_layout.py --check --out tmp/usability0533-full-ui
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0533-layout-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: tmp/usability0533-ui/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0533-full-layout-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            tmp/usability0533-full-ui/layout-report.json
+            tmp/usability0533-full-ui/controls.csv
+            tmp/usability0533-full-ui/content.csv
+            tmp/usability0533-full-ui/text.csv
+            tmp/usability0533-full-ui/scenarios.csv
+            tmp/usability0533-full-ui/light/1024x720/next-remaining-checks.png
+            tmp/usability0533-full-ui/dark/1024x720/next-remaining-checks.png
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Windows Java and loopback regression checks
+        run: python dev.py check --port 19532 --bounty-port 19533
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0533-windows-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/test-*.txt
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/*summary.json
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json
+            audit/0.23.0/.run/results.json
+            feature-mapper/build/test-results.txt

@@ -30,6 +30,9 @@ final class AuthEffectPanel extends JPanel {
   record SetupStamp(String target, long selection, long focus, long configuration, String settings, String scope) {}
   record FieldResult(AuthSetupSuggestions.Read read, List<AuthSetupSuggestions.Field> fields) {}
   final JLabel feedback = new JLabel("① 대상 연결 → ② 관측 GET 선택 → ③ JSON 필드·기대값 지정 → 비교 전 적용 확인");
+  final AuthFieldValidation.Group validation = new AuthFieldValidation.Group();
+  final JLabel applyReason = new AuthFieldValidation.MessageLabel();
+  final JButton saveRuleButton;
 
   AuthEffectPanel(AuthComparePanel owner) {
     super(new BorderLayout()); this.owner = owner; setName("wb.auth.effect.settings");
@@ -38,18 +41,52 @@ final class AuthEffectPanel extends JPanel {
     JButton connect = owner.button("선택 요청 연결", () -> connectSelected(true));
     JButton reads = owner.button("관측 GET 후보", this::openReads), fields = owner.button("보관 JSON 필드", this::openFields);
     reads.setName("wb.auth.effect.observed.reads"); fields.setName("wb.auth.effect.observed.fields");
+    validation.watch(ruleName, "wb.auth.effect.name.validation", () ->
+        ruleName.getText().isBlank() || ruleName.getText().strip().length() > 64 || ruleName.getText().chars().anyMatch(c -> c < 32)
+            ? "규칙 이름을 1~64자로 입력하세요. 예: 게시글 수정 조회" : "");
+    validation.watch(ruleOrigin, "wb.auth.effect.origin.validation", () -> ruleOrigin.getText().isBlank() ? ""
+        : AuthFieldValidation.check(() -> AuthEffectRules.canonicalOrigin(ruleOrigin.getText().strip()), "HTTP(S) Origin을 입력하세요. 예: https://example.test"));
+    validation.watch(path, "wb.auth.effect.path.validation", () -> AuthFieldValidation.check(
+        () -> AuthPolicy.parse(method.getSelectedItem() + " " + path.getText().strip() + " PUBLIC", AuthPolicy.Access.UNSPECIFIED),
+        "/로 시작하는 대상 경로를 입력하세요. 예: /api/items/{id}"));
+    validation.watch(url, "wb.auth.effect.url.validation", () -> AuthFieldValidation.scopedUrl(url.getText(), validationOrigin(), owner.api));
+    validation.watch(jsonPath, "wb.auth.effect.jsonpath.validation", () ->
+        AuthFieldValidation.jsonPath(jsonPath.getText(), mode.getSelectedIndex() != AuthEffectCheck.Mode.ABSENT.ordinal(), 256));
+    validation.watch(expected, "wb.auth.effect.expected.validation", () -> {
+      if (expected.getText().length() > 256) return "기대값·변화 경계는 256자 이하로 입력하세요.";
+      return AuthEffectCheck.numeric(AuthEffectCheck.Mode.values()[mode.getSelectedIndex()])
+          ? AuthFieldValidation.check(() -> AuthEffectCheck.number(expected.getText()), "숫자 변화 경계를 입력하세요. 예: 1 또는 -1") : "";
+    });
+    saveRuleButton = owner.button("규칙 저장·갱신", this::saveRule);
+    saveRuleButton.setName("wb.auth.effect.rule.save"); applyReason.setName("wb.auth.effect.apply.reason");
+    validation.bind("save", saveRuleButton, applyReason, () -> {
+      owner.editable();
+      AuthEffectRules.Rule draft = draftRule(AuthComparePanel.origin(selectedWrite()));
+      List<AuthEffectRules.Rule> next = new ArrayList<>(savedRules);
+      if (!loadedKey.isEmpty()) next.removeIf(rule -> rule.key().equals(loadedKey));
+      next.add(draft); AuthEffectRules.validate(next); return true;
+    }, "쓰기 원본 1개를 선택하고 진행 중인 비교를 마치세요. 중복·겹치는 규칙도 확인하세요.");
+    method.addActionListener(event -> refreshValidation()); mode.addActionListener(event -> refreshValidation());
+    enabled.addActionListener(event -> refreshValidation()); attempts.addChangeListener(event -> refreshValidation());
     JPanel body = TargetWindow.options(
         WorkbenchUi.row(new JLabel("저장된 조회 규칙"), ruleChoice,
             owner.button("규칙 불러오기", this::loadSelectedRule), owner.button("선택 규칙 삭제", this::deleteSelectedRule)),
-        WorkbenchUi.row(new JLabel("규칙 이름"), ruleName, owner.button("규칙 저장·갱신", this::saveRule),
+        WorkbenchUi.row(new JLabel("규칙 이름"), ruleName, saveRuleButton,
             owner.button("새 규칙", () -> { owner.editable(); loadedKey = ""; ruleName.setText("쓰기 조회 " + (savedRules.size() + 1)); enabled.setSelected(false); feedback.setText("새 규칙 초안 · 대상과 조회 설정을 입력한 뒤 저장하세요."); })),
+        validation.message(ruleName),
         WorkbenchUi.row(new JLabel("대상 Origin"), ruleOrigin),
+        validation.message(ruleOrigin),
         WorkbenchUi.row(enabled),
         WorkbenchUi.row(new JLabel("① 대상 요청"), method, path, connect),
+        validation.message(path),
         WorkbenchUi.row(new JLabel("② 조회 GET URL"), url, reads),
+        validation.message(url),
         WorkbenchUi.row(new JLabel("③ 결과 JSON"), jsonPath, fields),
+        validation.message(jsonPath),
         WorkbenchUi.row(new JLabel("기대값 / 변화 경계"), expected, mode),
+        validation.message(expected),
         WorkbenchUi.row(new JLabel("최대 조회"), attempts),
+        applyReason,
         feedback,
         new JLabel("후보 선택은 보관 응답만 읽습니다. 실제 GET·쓰기는 비교 시작 후 전송됩니다."),
         new JLabel("관측값은 과거 값이며 기대값을 자동 지정하지 않습니다. 업무상 목표값을 직접 입력하세요."),
@@ -57,6 +94,13 @@ final class AuthEffectPanel extends JPanel {
         new JLabel("같은 Origin/SCOPE · 최대 128KiB · 최대 32개 Origin·메서드·경로 규칙 · 겹치는 규칙은 실행 전에 차단합니다."));
     add(body);
   }
+
+  String validationOrigin() {
+    if (!ruleOrigin.getText().isBlank()) return ruleOrigin.getText().strip();
+    try { return AuthComparePanel.origin(selectedWrite()); } catch (RuntimeException error) { return ""; }
+  }
+
+  void refreshValidation() { validation.refresh(); }
 
   HttpRequest selectedWrite() {
     List<HttpRequestResponse> requests = owner.setupRequests();
@@ -74,6 +118,7 @@ final class AuthEffectPanel extends JPanel {
     }
     method.setSelectedItem(request.method()); path.setText(URI.create(request.url()).getPath());
     ruleOrigin.setText(AuthComparePanel.origin(request));
+    refreshValidation();
     feedback.setText("대상 사전 입력 · 조회 URL·필드·기대값과 사용 체크를 확인하세요. 요청은 전송하지 않았습니다.");
   }
 
@@ -225,6 +270,7 @@ final class AuthEffectPanel extends JPanel {
     if (!loadedKey.isEmpty()) next.removeIf(rule -> rule.key().equals(loadedKey));
     next.add(draft); AuthEffectRules.validate(next);
     savedRules.clear(); savedRules.addAll(next); loadedKey = draft.key(); refreshRuleChoices(draft.name());
+    refreshValidation();
     owner.workConfigurationEdited(); owner.refreshPreparedConfiguration();
     feedback.setText("조회 규칙 저장 · " + savedRules.size() + "개 · 실행 요청마다 Origin·메서드·경로를 대조합니다.");
   }
@@ -241,17 +287,20 @@ final class AuthEffectPanel extends JPanel {
     loadedKey = rule.key(); var config = rule.config(); ruleName.setText(rule.name()); ruleOrigin.setText(rule.origin());
     enabled.setSelected(config.enabled()); method.setSelectedItem(config.method()); path.setText(config.path()); url.setText(config.url());
     jsonPath.setText(config.jsonPath()); expected.setText(config.expected()); mode.setSelectedIndex(config.mode().ordinal()); attempts.setValue(config.attempts());
+    refreshValidation();
   }
   void replaceRules(List<AuthEffectRules.Rule> rules) {
     AuthEffectRules.validate(rules); savedRules.clear(); savedRules.addAll(rules); loadedKey = "";
     if (rules.isEmpty()) { enabled.setSelected(false); refreshRuleChoices(""); }
     else { loadRule(rules.get(0)); refreshRuleChoices(rules.get(0).name()); }
+    refreshValidation();
   }
   void deleteSelectedRule() {
     owner.editable(); String name = Objects.toString(ruleChoice.getSelectedItem(), "");
     var rule = savedRules.stream().filter(row -> row.name().equals(name)).findFirst().orElseThrow(() -> new IllegalArgumentException("삭제할 규칙을 선택하세요."));
     savedRules.remove(rule); if (loadedKey.equals(rule.key())) { loadedKey = ""; enabled.setSelected(false); }
     refreshRuleChoices(""); owner.workConfigurationEdited(); owner.refreshPreparedConfiguration();
+    refreshValidation();
   }
 
   private static DefaultTableModel readOnly(String... columns) {

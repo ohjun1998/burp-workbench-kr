@@ -1,0 +1,138 @@
+{
+  "version": "0.53.2",
+  "sourceBase": "6737746f1a0c29c42c91a246a8161192c7d279d6",
+  "status": "candidate-not-merged-full-layout-regression",
+  "local": {
+    "status": "passed",
+    "command": "python3 dev.py check --java .dev-tools/java-release --javac .dev-tools/javac-release --port 19532 --bounty-port 19533",
+    "compiler": "OpenJDK21 with official --release17 symbols",
+    "summary": {
+      "version": "0.53.2",
+      "regressionGroups": 113,
+      "regressionChecks": 3970,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4474,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "scope": "Headless production Swing/API adapters and isolated loopback HTTP; not native Burp GUI. Platform repeats are not unique added checks."
+  },
+  "remote": {
+    "status": "passed",
+    "runId": 40409443813,
+    "runUrl": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813",
+    "sourceCommit": "ba04e3ff96114bddbc14d83015c2cb920477ebbd",
+    "jobs": {
+      "release": {
+        "id": 121875857003,
+        "status": "success"
+      },
+      "windows": {
+        "id": 121875857081,
+        "status": "success"
+      },
+      "layout": {
+        "id": 121875856832,
+        "status": "success"
+      }
+    },
+    "linux": {
+      "version": "0.53.2",
+      "regressionGroups": 113,
+      "regressionChecks": 3970,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4474,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "windows": {
+      "version": "0.53.2",
+      "regressionGroups": 113,
+      "regressionChecks": 3970,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4474,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "newRegressionGroups": {
+      "TrafficUsability0532Test": 46,
+      "EvidenceEditingTest": 58,
+      "AuthInlineValidationTest": 52,
+      "Navigation0532Test": 41,
+      "ResponseDifferenceTest": 49,
+      "ResponseDifferenceUiTest": 21,
+      "BackgroundJobsTest": 37,
+      "GettingStartedPanelTest": 9,
+      "UsabilityIntegration0532Test": 19
+    },
+    "layout": {
+      "renderedViews": 288,
+      "controlsMeasured": 2202,
+      "scenariosChecked": 162,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "countingNote": "Linux/Windows repeat the same suite; repeated platforms, focused checks and overlapping groups are not added as unique tests.",
+    "artifacts": {
+      "linux": 12693296318,
+      "windows": 12692212418,
+      "layout": 12691819019,
+      "packages": 12693281347
+    },
+    "mapper": {
+      "javaChecks": 134,
+      "nodeTests": 15,
+      "status": "passed"
+    },
+    "packaging": {
+      "sourceFingerprints": "passed",
+      "unitTests": 7,
+      "zipCrc": "passed",
+      "uiTestedJarMatchesPublishedJar": true
+    }
+  },
+  "main": {
+    "merged": false
+  },
+  "notExecuted": [
+    "Actual Burp GUI interaction",
+    "Windows DPI/IME",
+    "Manual browser interaction",
+    "External target services",
+    "Docker/Oracle/Nginx stack",
+    "Long-duration native Burp load"
+  ],
+  "validatedSourceCommit": "ba04e3ff96114bddbc14d83015c2cb920477ebbd",
+  "packages": {
+    "version": "0.53.2",
+    "directory": "downloads/extensions/0.53.2",
+    "files": {
+      "burp-workbench-kr-0.53.2.jar": "17f450d27dee4b5b996945729218132babc8e7f9d7c6f2b6c7d6cebd4628b290",
+      "burp-workbench-kr-0.53.2-source.zip": "a35f23b4925a388514f846194bee49c29d59fde6931589a5f2ee8fc7e1b2b884"
+    },
+    "sourceFiles": 367,
+    "sourceZipCrc": "passed",
+    "sourceFingerprints": "passed",
+    "unchangedMapperRelease": "0.3.5",
+    "priorReleases": "preserved",
+    "uiTestedJarMatchesPublishedJar": true,
+    "artifactId": 12693281347,
+    "artifactArchiveSha256": "89e1b73ce1844c265d6128994e20861b8db116b5a3d091bae61ef3d08d45502e"
+  },
+  "additionalPullRequestValidation": {
+    "pullRequest": 91,
+    "buildRun": 40410777042,
+    "buildConclusion": "failure",
+    "durabilityRun": 40410777058,
+    "durabilityConclusion": "success",
+    "reason": "Full UI scene with 285px menu at1024x720 leaves37px remaining-check explanation viewport; required50px. Both light/dark themes fail. Published0.53.2candidate artifacts are preserved unchanged; correction will ship as0.53.3."
+  }
+}

@@ -30,6 +30,15 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   final javax.swing.Timer debounce;
   final javax.swing.Timer syntaxDebounce;
   private final JPanel toolbar = new JPanel(new BorderLayout()), searchBar = new JPanel(new BorderLayout(4, 0));
+  final JPanel trafficContextBar = new JPanel(new BorderLayout(4, 2));
+  final JLabel trafficContextNotice = new JLabel();
+  final JButton trafficPrevious = new JButton("이전 일치"), trafficNext = new JButton("다음 일치"), trafficReturn = new JButton("앞부분 보기");
+  private final AtomicLong packetGeneration = new AtomicLong();
+  private volatile Future<?> trafficPending;
+  private TrafficMatchContext.Result trafficContext;
+  private int trafficPage;
+  private boolean displayingTrafficContext,trafficSearchActive;
+  private final ButtonGroup modeChoices = new ButtonGroup();
   private final JScrollPane scroll;
   private final Lines lines;
   private final AtomicLong generation = new AtomicLong();
@@ -82,16 +91,24 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     text.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty,"\n");
     text.getAccessibleContext().setAccessibleName("읽기 전용 요청·응답 패킷");
     JPanel choices = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 0, 0));
-    ButtonGroup group = new ButtonGroup();
     for (Mode value : Mode.values()) {
       String title = switch (value) { case PRETTY -> "Pretty"; case RAW -> "Raw"; case HEX -> "Hex"; case RENDER -> "Render"; };
       JToggleButton tab = new Tab(title);tab.setName(name + "." + title.toLowerCase());
-      group.add(tab);choices.add(tab);tabs.add(tab);tab.setSelected(value == mode);
-      tab.addActionListener(e -> { commitEdits();mode = value; render(); });
+      modeChoices.add(tab);choices.add(tab);tabs.add(tab);tab.setSelected(value == mode);
+      tab.addActionListener(e -> { clearTrafficContext();commitEdits();mode = value; render(); });
     }
     toolbar.add(choices, BorderLayout.WEST);
     JPanel actions = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 4, 2));actions.add(wrap);actions.add(more);
-    toolbar.add(actions, BorderLayout.EAST);add(toolbar, BorderLayout.NORTH);
+    toolbar.add(actions, BorderLayout.EAST);
+    JPanel header = new JPanel(new BorderLayout(0, 2));header.add(toolbar, BorderLayout.NORTH);
+    trafficContextBar.setName(name + ".traffic.context");trafficContextNotice.setName(name + ".traffic.context.notice");
+    trafficContextNotice.setMinimumSize(new Dimension(20, 22));
+    trafficContextBar.add(trafficContextNotice);
+    trafficContextBar.add(WorkbenchUi.row(trafficPrevious, trafficNext, trafficReturn), BorderLayout.SOUTH);
+    trafficPrevious.setName(name + ".traffic.previous");trafficNext.setName(name + ".traffic.next");trafficReturn.setName(name + ".traffic.return");
+    trafficPrevious.addActionListener(e -> moveTrafficContext(-1));trafficNext.addActionListener(e -> moveTrafficContext(1));
+    trafficReturn.addActionListener(e -> { clearTrafficContext();render(); });
+    trafficContextBar.setVisible(false);header.add(trafficContextBar, BorderLayout.SOUTH);add(header, BorderLayout.NORTH);
     scroll = new JScrollPane(text);lines = new Lines();scroll.setRowHeaderView(lines);add(scroll);
     renderNotice.setToolTipText("스크립트·외부 이미지·CSS·프레임 제외 · 앞 64 KiB 본문 미리보기");
     renderPanel.add(renderNotice,BorderLayout.NORTH);renderPanel.add(new JScrollPane(rendered));
@@ -171,6 +188,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
 
   void setPacket(byte[] original, String decoded, int originalLength) {
     if(closed)return;
+    packetGeneration.incrementAndGet();clearTrafficContext();
     rawBytes = original == null ? new byte[0] : Arrays.copyOf(original, Math.min(original.length, PREVIEW_BYTES));
     truncated = originalLength > PREVIEW_BYTES;
     raw = PacketFormat.decode(rawBytes);
@@ -192,6 +210,86 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     render();
   }
 
+  /** Read only bounded, ephemeral excerpts after a list result is selected. */
+  void followTrafficSearch(DiskTrafficStore.PacketRef ref, boolean response, TrafficQuery settings, String query) {
+    followTrafficSearch(ref,response,settings,query,()->true);
+  }
+
+  void followTrafficSearch(DiskTrafficStore.PacketRef ref, boolean response, TrafficQuery settings, String query,
+                           java.util.function.BooleanSupplier currentSearch) {
+    if (closed || editable || query.isBlank()) return;
+    clearTrafficContext();long ticket = packetGeneration.get();
+    generation.incrementAndGet();debounce.stop();if(pending!=null)pending.cancel(true);worker.getQueue().clear();
+    trafficSearchActive=true;searchBar.setVisible(false);
+    trafficContextNotice.setText("목록 검색 문맥 · " + (response ? "응답" : "요청") + " 확인 중 · 원본 변경 없음");
+    trafficPrevious.setEnabled(false);trafficNext.setEnabled(false);trafficContextBar.setVisible(true);
+    trafficPending = worker.submit(() -> {
+      try {
+        TrafficMatchContext.Result found = TrafficMatchContext.locate(ref, response, settings, query,
+            () -> closed || packetGeneration.get() != ticket || !currentSearch.getAsBoolean() || Thread.currentThread().isInterrupted());
+        SwingUtilities.invokeLater(() -> {
+          if (closed || packetGeneration.get() != ticket || !currentSearch.getAsBoolean()) return;
+          trafficContext = found;trafficPage = 0;
+          if (found.pages().isEmpty()) {
+            trafficSearchActive=false;render();
+            trafficContextNotice.setText("목록 검색 문맥 · " + found.source() + " · " + (found.note().isEmpty() ? "검사 범위에서 일치 없음" : found.note())
+                + (found.partial() ? " · 원문 앞 2 MiB 일부 검사" : ""));
+            trafficContextNotice.setToolTipText(trafficContextNotice.getText());
+          } else showTrafficContext();
+        });
+      } catch (CancellationException ignored) {
+      } catch (RuntimeException error) {
+        SwingUtilities.invokeLater(() -> { if (!closed && packetGeneration.get() == ticket && currentSearch.getAsBoolean()) {
+          trafficSearchActive=false;render();trafficContextNotice.setText("검색 원본을 읽을 수 없습니다 · 현재 트래픽을 다시 선택하세요.");
+        } });
+      }
+    });
+  }
+
+  private void clearTrafficContext() {
+    packetGeneration.incrementAndGet();
+    if (trafficPending != null) trafficPending.cancel(true);
+    trafficPending = null;trafficContext = null;trafficPage = 0;displayingTrafficContext = false;trafficSearchActive=false;
+    trafficContextBar.setVisible(false);
+  }
+
+  void invalidateTrafficSearch(){
+    if(!SwingUtilities.isEventDispatchThread()){SwingUtilities.invokeLater(this::invalidateTrafficSearch);return;}
+    boolean restore=displayingTrafficContext||trafficSearchActive||trafficContextBar.isVisible();
+    clearTrafficContext();if(restore&&!closed)render();
+  }
+
+  private void moveTrafficContext(int delta) {
+    if (trafficContext == null || trafficContext.pages().isEmpty()) return;
+    trafficPage = Math.floorMod(trafficPage + delta, trafficContext.pages().size());showTrafficContext();
+  }
+
+  private void showTrafficContext() {
+    if (trafficContext == null || trafficContext.pages().isEmpty()) return;
+    displayingTrafficContext = true;
+    trafficSearchActive = true;
+    generation.incrementAndGet();debounce.stop();if (pending != null) pending.cancel(true);syntaxDebounce.stop();
+    remove(renderPanel);add(scroll, BorderLayout.CENTER);searchBar.setVisible(false);
+    modeChoices.clearSelection();
+    TrafficMatchContext.Page page = trafficContext.pages().get(trafficPage);
+    rendering = true;try { text.setText(page.text());text.setEditable(false); } finally { rendering = false; }
+    text.getHighlighter().removeAllHighlights();matches = List.of();current = -1;currentHighlight = null;
+    SimpleAttributeSet normal = new SimpleAttributeSet();StyleConstants.setForeground(normal, WorkbenchUi.ink());
+    text.getStyledDocument().setCharacterAttributes(0, text.getDocument().getLength(), normal, true);
+    try {
+      if (page.end() > page.start()) text.getHighlighter().addHighlight(page.start(), page.end(),
+          new DefaultHighlighter.DefaultHighlightPainter(WorkbenchUi.dark() ? new Color(154,100,34) : new Color(255,190,92)));
+    } catch (BadLocationException error) { throw new IllegalStateException(error); }
+    text.setCaretPosition(Math.min(page.start(), text.getDocument().getLength()));
+    String label = "목록 검색 문맥 · " + page.location() + " · 일치 " + (trafficPage + 1) + "/" + trafficContext.pages().size()
+        + (trafficContext.capped() ? "+" : "") + " · 문자 위치 " + (page.sourceOffset() + page.start() + 1)
+        + (trafficContext.partial() ? " · 원문 앞 2 MiB 일부 검사" : "") + " · 문맥 일부 표시";
+    trafficContextNotice.setText(label);trafficContextNotice.setToolTipText(label + " · 바이트 위치가 아닙니다. 전체 원본은 ⋯에서 확인하세요.");
+    trafficPrevious.setEnabled(trafficContext.pages().size() > 1);trafficNext.setEnabled(trafficContext.pages().size() > 1);
+    trafficContextBar.setVisible(true);text.setToolTipText("목록 검색에서 일치한 원문/디코딩 본문의 주변 문맥 · 원본 패킷은 변경하지 않습니다.");
+    revalidate();repaint();
+  }
+
   static String hex(byte[] bytes) {
     StringBuilder out = new StringBuilder(bytes.length * 5);char[] digits = "0123456789ABCDEF".toCharArray();
     for(int offset=0; offset<bytes.length; offset+=16) {
@@ -208,6 +306,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   private void render() {
+    displayingTrafficContext = false;
     boolean html=mode==Mode.RENDER;
     remove(html?scroll:renderPanel);add(html?renderPanel:scroll,BorderLayout.CENTER);
     for(JComponent control:new JComponent[]{search,caseSensitive,regex,clear})control.setEnabled(!html);
@@ -216,6 +315,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     revalidate();repaint();
     wrap.setToolTipText(mode == Mode.HEX ? "Hex는 바이트 열을 고정하고 가로 스크롤로 표시합니다." : "긴 줄 자동 줄바꿈");
     String value = switch(mode) { case PRETTY -> pretty;case RAW -> raw;case HEX -> hex(rawBytes);case RENDER -> ""; };
+    for (int i = 0; i < tabs.size(); i++) tabs.get(i).setSelected(Mode.values()[i] == mode);
     rendering=true;
     try { text.getDocument().remove(0, text.getDocument().getLength());text.getDocument().insertString(0, value, null); }
     catch(BadLocationException ex) { throw new IllegalStateException(ex); }
@@ -272,6 +372,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
 
   private void scheduleSearch() {
     if(closed)return;
+    if(displayingTrafficContext||trafficSearchActive)return;
     generation.incrementAndGet();debounce.stop();if(pending!=null)pending.cancel(true);worker.getQueue().clear();
     matches=List.of();current=-1;currentHighlight=null;text.getHighlighter().removeAllHighlights();
     count.setText("0 / 0");count.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));count.setToolTipText(null);previous.setEnabled(false);next.setEnabled(false);
@@ -279,7 +380,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   private void beginSearch() {
-    if(closed)return;
+    if(closed||trafficSearchActive||displayingTrafficContext)return;
     long ticket=generation.get();String value=text.getText(),query=search.getText();boolean expression=regex.isSelected(),sensitive=caseSensitive.isSelected();
     pending=worker.submit(()->{
       SearchResult result=find(value,query,expression,sensitive,()->closed||generation.get()!=ticket||Thread.currentThread().isInterrupted());
@@ -303,6 +404,31 @@ final class PacketInspector extends JPanel implements AutoCloseable {
       return new SearchResult(List.copyOf(found),false,null);
     }catch(PatternSyntaxException ex){return new SearchResult(List.of(),false,"정규식 오류");}
     catch(SearchBudget|StackOverflowError ex){return new SearchResult(List.of(),false,"검색 제한");}
+  }
+
+  /** Retain already observed contexts if the bounded scan cannot enumerate every later match. */
+  static SearchResult findContexts(String value, String query, boolean expression, boolean sensitive,
+                                   java.util.function.BooleanSupplier cancelled) {
+    if (query.isBlank()) return new SearchResult(List.of(), false, null);
+    if (query.length() > 512) return new SearchResult(List.of(), false, "검색어 512자 제한");
+    List<Span> found = new ArrayList<>();
+    try {
+      Pattern pattern = Pattern.compile(expression ? query : Pattern.quote(query),
+          Pattern.MULTILINE | (sensitive ? 0 : Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE));
+      long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(200);
+      Matcher matcher = pattern.matcher(new GuardedText(value, deadline, cancelled));
+      while (matcher.find()) {
+        if (cancelled.getAsBoolean()) throw new CancellationException();
+        if (matcher.start() == matcher.end()) continue;
+        if (found.size() == TrafficMatchContext.MAX_PAGES) return new SearchResult(List.copyOf(found), true, null);
+        found.add(new Span(matcher.start(), matcher.end()));
+        if (System.nanoTime() > deadline) throw new SearchBudget();
+      }
+      return new SearchResult(List.copyOf(found), false, null);
+    } catch (PatternSyntaxException error) { return new SearchResult(List.of(), false, "정규식 오류"); }
+    catch (SearchBudget | StackOverflowError error) {
+      return found.isEmpty() ? new SearchResult(List.of(), false, "검색 제한") : new SearchResult(List.copyOf(found), true, null);
+    }
   }
 
   private static final class SearchBudget extends RuntimeException {}
@@ -335,7 +461,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   @Override public void close() {
-    if(closed)return;closed=true;generation.incrementAndGet();debounce.stop();syntaxDebounce.stop();editedAction=null;if(pending!=null)pending.cancel(true);worker.shutdownNow();
+    if(closed)return;closed=true;packetGeneration.incrementAndGet();clearTrafficContext();generation.incrementAndGet();debounce.stop();syntaxDebounce.stop();editedAction=null;if(pending!=null)pending.cancel(true);worker.shutdownNow();
     rawBytes=new byte[0];raw="";pretty="";renderSource="";rendered.setText("");matches=List.of();current=-1;nativeAction=null;
     text.setText("");search.setText("");text.getHighlighter().removeAllHighlights();count.setText("0 / 0");
   }

@@ -14,6 +14,7 @@ final class JsWorkQueue {
   private int count;
   private int running;
   private long accepted, rejected, completed, failed, cancelled;
+  volatile Runnable onChange = () -> {};
   private final RuntimeMetrics.Window queueWait = new RuntimeMetrics.Window();
   private final RuntimeMetrics.Window execution = new RuntimeMetrics.Window();
 
@@ -28,6 +29,10 @@ final class JsWorkQueue {
   }
 
   boolean offer(Runnable work, long retainedBytes) {
+    return offer(work,retainedBytes,()->{});
+  }
+
+  boolean offer(Runnable work,long retainedBytes,Runnable cancelledCallback) {
     Objects.requireNonNull(work, "work");
     long cost = Math.max(128, retainedBytes);
     synchronized (this) {
@@ -39,9 +44,10 @@ final class JsWorkQueue {
       count++;
       accepted++;
     }
-    Task task = new Task(work, cost);
+    Task task = new Task(work, cost, cancelledCallback);
     try {
       executor.execute(task);
+      changed();
       return true;
     } catch (RejectedExecutionException ex) {
       synchronized (this) {
@@ -49,6 +55,7 @@ final class JsWorkQueue {
         rejected++;
       }
       task.release(false);
+      changed();
       return false;
     }
   }
@@ -75,6 +82,8 @@ final class JsWorkQueue {
   long budget() {
     return budget;
   }
+
+  private void changed() { try { onChange.run(); } catch(RuntimeException ignored) {} }
 
   Metrics metrics() {
     long now = System.nanoTime(), oldest = 0;
@@ -104,12 +113,14 @@ final class JsWorkQueue {
   private final class Task implements Runnable {
     private Runnable work;
     private final long cost;
+    private final Runnable cancelledCallback;
     private final AtomicBoolean released = new AtomicBoolean();
     private final long queuedAt = System.nanoTime();
 
-    Task(Runnable work, long cost) {
+    Task(Runnable work, long cost, Runnable cancelledCallback) {
       this.work = work;
       this.cost = cost;
+      this.cancelledCallback=cancelledCallback;
     }
 
     @Override
@@ -144,6 +155,8 @@ final class JsWorkQueue {
           count--;
           if (wasCancelled) cancelled++;
         }
+        if(wasCancelled)try{cancelledCallback.run();}catch(RuntimeException ignored){}
+        changed();
       }
     }
   }

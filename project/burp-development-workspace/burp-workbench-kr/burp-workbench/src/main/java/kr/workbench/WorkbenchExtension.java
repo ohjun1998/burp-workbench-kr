@@ -188,6 +188,16 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private final OriginalRequestIds comparisonOriginalIds = new OriginalRequestIds();
   private final WorkContextPanel workContextPanel = new WorkContextPanel(workContext);
   private final JButton resumeWorkButton = new JButton("작업 이어가기");
+  private final BackgroundJobs backgroundJobs = new BackgroundJobs();
+  private JobMonitorPanel jobMonitor;
+  private GettingStartedPanel gettingStarted;
+  private TargetWindow jobMonitorWindow, gettingStartedWindow;
+  private javax.swing.Timer navigationSelectionTimer;
+  private long navigationRestoreRevision, navigationInteractionRevision;
+  private DiskTrafficStore checklistTrafficBaselineStore;
+  private long checklistTrafficBaseline;
+  private TrafficBrowser.SearchPosition revealedTrafficSearch;
+  private String revealedTrafficOriginal = "", selectionMatchNote = "";
   private WorkspaceResume workspaceResume;
   private JDialog resumeWorkWindow;
   private String workspaceProject = "";
@@ -326,6 +336,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       if (captureObservations != null) captureObservations.close();
       DiskTrafficStore previous = trafficStore;
       trafficStore = replacement;
+      checklistTrafficBaselineStore = replacement;
+      checklistTrafficBaseline = 0;
       generation.incrementAndGet();
       traffic.clear();
       if(trafficBrowser!=null)trafficBrowser.clear();
@@ -360,6 +372,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                   () -> {
                     rememberWorkspace();
                     if (resumeSelectionTimer != null) resumeSelectionTimer.stop();
+                    if (navigationSelectionTimer != null) navigationSelectionTimer.stop();
+                    if (navigation != null) navigation.close();
+                    if (jobMonitorWindow != null) jobMonitorWindow.close();
+                    if (gettingStartedWindow != null) gettingStartedWindow.close();
+                    if (jobMonitor != null) jobMonitor.close();
+                    if (gettingStarted != null) gettingStarted.close();
+                    backgroundJobs.close();
                     if (resumeWorkWindow != null) resumeWorkWindow.dispose();
                     if (featureHelpWindow != null) featureHelpWindow.dispose();
                     if (logWindow != null) logWindow.dispose();
@@ -619,7 +638,17 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     resumeWorkButton.setName("wb.workspace.resume.open");
     resumeWorkButton.setToolTipText("마지막 화면·업무·검색 조건과 다시 확인할 항목 보기");
     resumeWorkButton.addActionListener(e -> openWorkspaceResume());
-    workContextPanel.add(resumeWorkButton, BorderLayout.EAST);
+    JButton workflowHelp = new JButton("도우미");
+    workflowHelp.setName("wb.workflow.help");
+    workflowHelp.setToolTipText("시작 준비 체크리스트 · 진행 중인 작업 현황");
+    workflowHelp.addActionListener(e -> {
+      JPopupMenu menu = new JPopupMenu();
+      JMenuItem preparation = new JMenuItem("시작 준비 체크리스트"), jobs = new JMenuItem("진행 중인 작업 현황");
+      preparation.setName("wb.getting.started.open");jobs.setName("wb.jobs.open");
+      preparation.addActionListener(a -> openGettingStarted());jobs.addActionListener(a -> openJobMonitor());
+      menu.add(preparation);menu.add(jobs);WorkbenchUi.style(menu);menu.show(workflowHelp,0,workflowHelp.getHeight());
+    });
+    workContextPanel.add(WorkbenchUi.row(resumeWorkButton, workflowHelp), BorderLayout.EAST);
     root.add(workContextPanel, BorderLayout.NORTH);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
@@ -635,6 +664,11 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     WorkbenchSkin.install(root, navigation::restoreLayout);
     workspaceResume = WorkspaceResume.forApi(api);
     workspaceProject = workspaceResume.project();
+    trafficBrowser.backgroundJobs = backgroundJobs;
+    authCompare.backgroundJobs = backgroundJobs;
+    bountySupport.backgroundJobs = backgroundJobs;
+    jsAnalysis.backgroundJobs = backgroundJobs;
+    configureUsabilityNavigation();
     workContext.onChange(this::rememberWorkspace);
     trafficBrowser.onSearchStateChanged(this::rememberWorkspace);
     tabs.addChangeListener(e -> rememberWorkspace());
@@ -709,6 +743,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       workspaceProject = project;
       restoringWorkspace = true;
       try {
+        navigationRestoreRevision++;
+        if (navigationSelectionTimer != null) navigationSelectionTimer.stop();
+        backgroundJobs.reset();
+        if (navigation != null) navigation.resetHistory();
+        if(bountySupport!=null)bountySupport.resetEvidenceProject();
+        if(authCompare!=null)authCompare.resetChecklistProject();
+        if(jsAnalysis!=null)jsAnalysis.resetBackgroundProject();
+        checklistTrafficBaselineStore=trafficStore;
+        checklistTrafficBaseline=trafficStore==null?0:trafficStore.size();
         if (logTable != null) logTable.clearSelection();
         workContext.clear();
         activity.assessmentPanel.clearResumeTaskSelection();
@@ -855,6 +898,115 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if (id.equals("environment") && explorationTools.getSelectedIndex() == 1) return "passive";
     if (id.equals("mapper") && mapperTools.getSelectedIndex() == 1) return "activity";
     return id;
+  }
+
+  private String currentNavigationRoute() {
+    String route=currentFeature();
+    if(route.equals("data") && dataTabs!=null && dataTabs.getSelectedIndex()==1)return "jwt";
+    if(route.equals("bounty") && bountySupport!=null && bountySupport.pages.getSelectedIndex()==3)return "evidence";
+    return route;
+  }
+
+  private void openUsabilityRoute(String route) {
+    if(unloaded.get())return;
+    switch(route) {
+      case "scope" -> showScopeList();
+      case "auth.settings" -> { openFeature("auth");authCompare.comparisonSettings.open(); }
+      case "jwt" -> { openFeature("data");dataTabs.setSelectedIndex(1); }
+      case "evidence" -> { openFeature("bounty");bountySupport.pages.setSelectedIndex(3); }
+      default -> openFeature(route);
+    }
+  }
+
+  private void openJobMonitor() {
+    if(unloaded.get())return;
+    if(jobMonitor==null) {
+      jobMonitor=new JobMonitorPanel(backgroundJobs,this::openUsabilityRoute);
+      jobMonitorWindow=new TargetWindow(root,"진행 중인 작업 현황",()->jobMonitor);
+      jobMonitorWindow.opener=(owner,title,content,modal,closed)->dialogOpener.open(owner,title,content,modal,closed);
+    }
+    jobMonitor.refresh();jobMonitorWindow.open();
+  }
+
+  private void openGettingStarted() {
+    if(unloaded.get())return;
+    if(gettingStarted==null) {
+      gettingStarted=new GettingStartedPanel(this::gettingStartedReadiness,this::openUsabilityRoute);
+      gettingStartedWindow=new TargetWindow(root,"시작 준비 체크리스트",()->gettingStarted);
+      gettingStartedWindow.opener=(owner,title,content,modal,closed)->dialogOpener.open(owner,title,content,modal,closed);
+    }
+    gettingStarted.refresh();gettingStartedWindow.open();
+  }
+
+  GettingStartedPanel.Readiness gettingStartedReadiness() {
+    boolean scoped=localScope!=null && localScope.rules().stream().anyMatch(localScope::enabled);
+    long projectTraffic=trafficStore==null?0:Math.max(0,trafficStore.size()-(checklistTrafficBaselineStore==trafficStore?checklistTrafficBaseline:0));
+    return new GettingStartedPanel.Readiness(scoped,captureMode.get()==CaptureMode.SCOPE,
+        projectTraffic,authCompare==null?0:authCompare.currentChecklistAccountCount(),
+        authCompare==null?0:authCompare.currentChecklistCompletedCount(),bountySupport!=null && bountySupport.hasSavedEvidence());
+  }
+
+  private record NavigationPosition(TrafficBrowser.SearchPosition search,String project,String route,
+                                    String[] originals,Point viewport) {}
+
+  private void configureUsabilityNavigation() {
+    navigation.configureRoutes(this::openUsabilityRoute,this::currentNavigationRoute,
+        () -> workspaceResume==null?"":workspaceResume.project());
+    navigation.setViewStateHooks(this::captureNavigationPosition,this::restoreNavigationPosition);
+    for(JTabbedPane inner:new JTabbedPane[]{trafficTools,explorationTools,mapperTools,dataTabs,
+        activity.coveragePages,bountySupport.pages})if(inner!=null)inner.addChangeListener(e->navigation.navigationChanged());
+    logTable.addMouseListener(new java.awt.event.MouseAdapter(){public void mousePressed(java.awt.event.MouseEvent e){navigationInteractionRevision++;}});
+    logTable.addKeyListener(new java.awt.event.KeyAdapter(){public void keyPressed(java.awt.event.KeyEvent e){navigationInteractionRevision++;}});
+  }
+
+  private Object captureNavigationPosition(String route) {
+    if(trafficBrowser==null || logTable==null || trafficStore==null)return null;
+    int[] selected=logTable.getSelectedRows();String[] originals=new String[selected.length<=200?selected.length:0];
+    for(int i=0;i<originals.length;i++)originals[i]=trafficStore.ref(logTable.convertRowIndexToModel(selected[i])).id();
+    JViewport viewport=(JViewport)SwingUtilities.getAncestorOfClass(JViewport.class,logTable);
+    return new NavigationPosition(trafficBrowser.capturePosition(),workspaceProject,route,originals,
+        viewport==null?new Point():new Point(viewport.getViewPosition()));
+  }
+
+  private void restoreNavigationPosition(Object value) {
+    if(!(value instanceof NavigationPosition saved) || !saved.project().equals(workspaceProject))return;
+    long revision=++navigationRestoreRevision;
+    if(navigationSelectionTimer!=null)navigationSelectionTimer.stop();
+    long interaction=navigationInteractionRevision,page=assessmentNavigationRevision;
+    long configuration=workContext.snapshot().configurationRevision();
+    trafficBrowser.restorePosition(saved.search());
+    // The navigation component restores retained tabs/table state before this queued checkpoint.
+    SwingUtilities.invokeLater(()->selectNavigationOriginals(saved,revision,interaction,page,configuration));
+  }
+
+  private void selectNavigationOriginals(NavigationPosition saved,long revision,long interaction,long page,long configuration) {
+    if(unloaded.get() || revision!=navigationRestoreRevision)return;
+    long started=System.nanoTime();
+    navigationSelectionTimer=new javax.swing.Timer(60,event->{
+      javax.swing.Timer timer=(javax.swing.Timer)event.getSource();
+      try {
+        if(unloaded.get() || revision!=navigationRestoreRevision || interaction!=navigationInteractionRevision
+            || page!=assessmentNavigationRevision || configuration!=workContext.snapshot().configurationRevision()
+            || !saved.project().equals(WorkspaceResume.projectIdentity(api))
+            || !saved.route().equals(currentNavigationRoute())
+            || !saved.search().equals(trafficBrowser.capturePosition())) {timer.stop();return;}
+        if(!trafficBrowser.positionReady(saved.search())){
+          if(System.nanoTime()-started>TimeUnit.SECONDS.toNanos(15)){timer.stop();status.setText("이전 검색 결과가 아직 준비되지 않았습니다. 완료 후 원본을 직접 선택하세요.");}
+          return;
+        }
+        timer.stop();int[] views=new int[saved.originals().length];
+        for(int i=0;i<views.length;i++) {
+          var original=WorkspaceResume.original(trafficStore,saved.originals()[i]);
+          if(original==null || (views[i]=logTable.convertRowIndexToView(Math.toIntExact(original.sequence())))<0){
+            status.setText("이전 선택 원본이 없거나 현재 검색에서 숨겨져 있습니다. 원본을 직접 선택하세요.");return;
+          }
+        }
+        if(views.length>0){logTable.getSelectionModel().setValueIsAdjusting(true);try{logTable.clearSelection();for(int row:views)logTable.addRowSelectionInterval(row,row);}finally{logTable.getSelectionModel().setValueIsAdjusting(false);}}
+        JViewport viewport=(JViewport)SwingUtilities.getAncestorOfClass(JViewport.class,logTable);
+        if(viewport!=null){Point point=saved.viewport();int max=Math.max(0,logTable.getHeight()-viewport.getHeight());viewport.setViewPosition(new Point(Math.max(0,point.x),Math.min(Math.max(0,point.y),max)));}
+      } catch(RuntimeException error){timer.stop();status.setText("이전 화면의 선택을 복원하지 못했습니다. 현재 조건과 원본을 확인하세요.");}
+    });
+    navigationSelectionTimer.start();
   }
 
   /** Stable feature IDs keep old help links working after tools move into focused workspaces. */
@@ -1189,6 +1341,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     filter.setColumns(20);
     filter.setToolTipText("메서드·URL·상태 검색 · Ctrl+F");
     trafficBrowser=new TrafficBrowser(logTable,logModel,filter,api,()->trafficStore,this::refreshTrafficInfo);
+    trafficBrowser.onViewPublished(this::refreshSelectedSearchContext);
     trafficBrowser.identities=()->{
       if(authCompare==null)return List.of();List<TrafficBrowser.Identity> profiles=new ArrayList<>();
       for(var entry:authCompare.accounts.entrySet()){var credential=authCompare.credentials.get(entry.getKey());if(credential!=null)profiles.add(new TrafficBrowser.Identity(credential.origin(),entry.getValue().label(),credential.headers()));}
@@ -1287,6 +1440,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     : response.statusCode() + " · " + response.body().length() + " bytes"));
         selectionInfo.setText(
             selectionInfo.getText() + " · " + WorkbenchScope.reason(api, request));
+        selectionMatchNote="";
+        updateSelectionMatchNote(trafficBrowser.revealSelectionMatches(index,requestPacket,responsePacket));
+        var position=trafficBrowser.capturePosition();
+        if(trafficBrowser.positionReady(position)){revealedTrafficSearch=position;revealedTrafficOriginal=current.packet().id();}
         selectionInfo.setToolTipText(selectionInfo.getText());
       }
     } else {
@@ -1297,7 +1454,28 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       requestPacket.setPacket(null, null);
       responsePacket.setPacket(null, null);
       selectionInfo.setText("목록에서 요청을 선택하세요 · 요청과 응답을 함께 표시합니다.");
+      selectionMatchNote="";revealedTrafficSearch=null;revealedTrafficOriginal="";
     }
+  }
+
+  /** A retained selection may not fire a JTable event after a new search view is published. */
+  private void refreshSelectedSearchContext() {
+    if(unloaded.get() || trafficBrowser==null || logTable==null || trafficStore==null)return;
+    var position=trafficBrowser.capturePosition();
+    if(!trafficBrowser.positionReady(position))return;
+    int selected=logTable.getSelectedRow();if(selected<0)return;
+    int raw=logTable.convertRowIndexToModel(selected);String id=trafficStore.ref(raw).id();
+    if(current==null || !id.equals(current.packet().id())){showTraffic(selected);return;}
+    if(id.equals(revealedTrafficOriginal)&&position.equals(revealedTrafficSearch))return;
+    updateSelectionMatchNote(trafficBrowser.revealSelectionMatches(raw,requestPacket,responsePacket));
+    revealedTrafficSearch=position;revealedTrafficOriginal=id;
+  }
+
+  private void updateSelectionMatchNote(String note) {
+    String text=selectionInfo.getText(),suffix=" · "+selectionMatchNote;
+    if(!selectionMatchNote.isBlank()&&text.endsWith(suffix))text=text.substring(0,text.length()-suffix.length());
+    selectionMatchNote=note;selectionInfo.setText(text+(note.isBlank()?"":" · "+note));
+    selectionInfo.setToolTipText(selectionInfo.getText());
   }
 
   void openPassive(String url) {

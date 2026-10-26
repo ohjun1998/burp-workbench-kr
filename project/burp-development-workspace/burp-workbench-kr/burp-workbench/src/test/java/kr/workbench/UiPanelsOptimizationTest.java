@@ -93,7 +93,9 @@ public final class UiPanelsOptimizationTest extends WorkbenchTest {
             });
         }
         CountDownLatch finish = new CountDownLatch(1), started = new CountDownLatch(1);
-        edt(() -> support.get().task(() -> { started.countDown(); try { finish.await(5, TimeUnit.SECONDS); } catch(InterruptedException e) { Thread.currentThread().interrupt(); } }));
+        // Model a cancellable request workflow. Atomic evidence saves intentionally expose no
+        // ineffective stop action; that separate contract is covered by EvidenceEditingTest.
+        edt(() -> support.get().task("제어된 재현 작업", true, () -> { started.countDown(); try { finish.await(5, TimeUnit.SECONDS); } catch(InterruptedException e) { Thread.currentThread().interrupt(); } }));
         check(started.await(5,TimeUnit.SECONDS), "fixture worker started");
         edt(() -> check(!support.get().flowRun.isEnabled() && support.get().flowStop.isEnabled(), "busy worker disables duplicate run and offers stop"));
         finish.countDown(); BountyFeaturesTest.idle(support.get());

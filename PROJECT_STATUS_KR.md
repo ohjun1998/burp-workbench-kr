@@ -331,6 +331,20 @@ JS에서 확인한 메서드를 우선하고, 미확정 초안은 활동 추적�
 
 0.36.0 코드의 GitHub Build and verify와 Linux·Windows 내구성 검사가 모두 통과했습니다. 회귀·HTTP 2,392개, 화면·패키징·배포 지문, 격리 디스크 고갈·복구, 180초 수집과 Windows 반복 저장·PowerShell 검사를 포함합니다. 아래 0.35.1 기록은 이전 배포로 보존합니다.
 
+## 진행 중 작업 확인 · 2026-10-17
+
+확인 기준 main: `c6ae458d479f99b0c9bd850c032633405fe29c37` (Workbench 0.35.1). 이번 확인은 GitHub 소스·Issue·PR·Actions 조회이며 제품을 새로 빌드하거나 실제 Burp GUI를 실행한 결과가 아닙니다.
+
+| 작업 | 확인한 현재 상태 | 남은 단계 |
+|---|---|---|
+| 기존 Scope 수집기 | main에서 기본 OFF ↔ SCOPE, 디스크 누적·연속 스크롤 구현 확인. 0.30.0 이후 체크한 수동 URL도 수집 범위에 포함 | 과거 미업로드 0.25.7 수정본은 최신 main에 덮어쓰지 않음 |
+| JS 분석 고도화 [#35](https://github.com/ohjun1998/burp-workbench-kr/issues/35) / [PR #36](https://github.com/ohjun1998/burp-workbench-kr/pull/36) | head `b7e7aa0`의 check·Windows·Linux 내구성 검사 모두 성공; PR은 open, draft 아님, 충돌 없음 | 검토·main 병합. 배포 0.36.0은 PR 브랜치에 있고 아직 main의 최신 배포가 아님 |
+| 쿠키·세션 신원 검증 [#37](https://github.com/ohjun1998/burp-workbench-kr/issues/37) | account-a 담당 Issue 등록, 조회 시 관련 열린 PR 없음 | 구현·loopback 및 화면 검사·배포·PR·CI·main 반영. Issue의 0.36.0 계획은 PR #36의 같은 버전과 조정 필요 |
+
+main 0.35.1의 [빌드·화면·패키징](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38942696516) 및 [Linux/Windows 수집 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38942696537) 검사는 모두 성공했습니다. PR #36도 [빌드](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38986307865)와 [Linux/Windows 내구성](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/38986307830)이 성공했습니다. 기존 로컬 검증 수치는 각 버전 VERIFICATION 문서를 기준으로 읽으며 이번 조회의 새 테스트 수로 합산하지 않습니다.
+
+실제 Burp GUI·OS DPI·IME, 다시간 native 수집, Windows Docker Desktop·Pro/외부 BApp의 미확인 범위는 기존 기록을 유지합니다. [이번 연결·진행 확인 기록](docs/chat-logs/2026-10-17/workbench-progress-resume.md).
+
 ## JS 버튼 정돈·2×2 빨간 집계 0.35.1
 
 승인된 최종 시안을 반영해 분석 ON·대상 설정·분석 목록/상세를 첫 줄에, 요청 설정·원본 위치·추가 도구·더보기를 둘째 줄에 배치했습니다. 분석 목록과 상세는 공통 프레임으로 묶고 앞 구분선은 짧고 옅게 유지합니다. 기존 URL·메서드 확인은 요청 설정으로 줄였으며 동작과 Ctrl+R·Ctrl+Space는 유지합니다.

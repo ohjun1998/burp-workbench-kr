@@ -29,7 +29,10 @@
     "note": "Final source verification is pending. Earlier integration failures were fixed; the generic worker UI fixture now explicitly models a cancellable task while preserving its busy/stop/idle assertions."
   },
   "remote": {
-    "status": "pending"
+    "status": "rerun-pending",
+    "priorRunId": 40408452846,
+    "priorSourceCommit": "3011bfc6654ef31d1d8a8ea7d577962f0e7a597a",
+    "priorResult": "layout passed; release failed existing toolbar order regression; toolbar corrected without weakening assertions"
   },
   "main": {
     "merged": false

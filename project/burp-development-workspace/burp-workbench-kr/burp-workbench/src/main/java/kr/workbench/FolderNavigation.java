@@ -162,11 +162,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     version.setToolTipText("Workbench Next · 별도 배포 채널 · 기존 Workbench와 구분");
     JPanel navigationLine = new JPanel(new BorderLayout(8, 0));
     navigationLine.setName("wb.navigation.toolbar.line");
-    navigationLine.add(WorkbenchUi.row(toggle, version, back, forward), BorderLayout.WEST);
+    navigationLine.add(WorkbenchUi.row(toggle, version, back, forward, quick), BorderLayout.WEST);
     navigationLine.add(current, BorderLayout.CENTER);
     JPanel actions = new JPanel(new GridLayout(1, 0, 8, 0));
     actions.setName("wb.navigation.actions");
-    actions.add(quick);
     if (help != null) actions.add(help);
     actions.add(settings);
     if (logs != null) actions.add(logs);

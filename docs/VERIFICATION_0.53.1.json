@@ -1,7 +1,7 @@
 {
   "version": "0.53.1",
   "sourceBase": "8b548422f12d498aef7334ebb86b55762c1a1569",
-  "status": "candidate-remote-verification-pending",
+  "status": "candidate-remote-verification-passed",
   "local": {
     "version": "0.53.1",
     "groups": {
@@ -27,16 +27,110 @@
     "productionBuild": "passed",
     "allTestSourcesCompile": "passed",
     "fullRegression": "blocked by local BrowserBridge loopback socket creation: Operation not permitted",
-    "uiRender": "blocked by same loopback socket restriction"
+    "uiRender": "blocked by same loopback socket restriction",
+    "evidenceNote": "Preserved focused checks from the prior implementation session; not rerun during this upload completion and not added to the final remote totals."
   },
   "remote": {
-    "status": "pending",
-    "workflow": "usability-release-candidate.yml"
+    "status": "passed",
+    "workflow": "usability-release-candidate.yml",
+    "runId": 40334451367,
+    "runUrl": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40334451367",
+    "sourceCommit": "5704f48a9d12282ec3f7ea48ec7a78065aa78695",
+    "observedDate": "2026-10-26",
+    "jobs": {
+      "release": {
+        "id": 121612160864,
+        "status": "success"
+      },
+      "windows": {
+        "id": 121612161074,
+        "status": "success"
+      },
+      "layout": {
+        "id": 121612160831,
+        "status": "success"
+      },
+      "browser": {
+        "id": 121612160214,
+        "status": "success"
+      }
+    },
+    "linux": {
+      "status": "passed",
+      "regressionGroups": 104,
+      "regressionChecks": 3638,
+      "payloadHttp": 136,
+      "allFeaturesHttp": 102,
+      "bountyHttp": 266,
+      "totalChecks": 4142
+    },
+    "windows": {
+      "status": "passed",
+      "regressionGroups": 104,
+      "regressionChecks": 3638,
+      "payloadHttp": 136,
+      "allFeaturesHttp": 102,
+      "bountyHttp": 266,
+      "totalChecks": 4142
+    },
+    "mapper": {
+      "javaChecks": 134,
+      "nodeTests": 15,
+      "status": "passed"
+    },
+    "layout": {
+      "syntheticSwingStateAssertions": 108,
+      "status": "passed"
+    },
+    "browser": {
+      "engine": "Chromium",
+      "passItems": 20,
+      "status": "passed",
+      "scope": "Real isolated Chromium with production Mapper/Bridge fixture; includes exact observed POST/PATCH raw-body correlation, not native Burp GUI or manual Edge testing"
+    },
+    "packaging": {
+      "downloadHashes": "passed",
+      "sourceFingerprints": "passed",
+      "unitTests": 7,
+      "status": "passed"
+    },
+    "countingNote": "Linux/Windows repeat the same suite; repeated platforms, prior focused checks and overlapping subgroups are not added as unique tests.",
+    "report": "docs/reports/2026-10-26-usability-0531/REMOTE_CI_KR.md"
   },
   "notExecuted": [
     "Actual Burp GUI interaction",
     "Windows DPI/IME",
+    "Manual Edge interaction",
     "Docker/Oracle/Nginx stack",
-    "External target services"
-  ]
+    "External target services",
+    "Long-duration native Burp load"
+  ],
+  "validatedSourceCommit": "5704f48a9d12282ec3f7ea48ec7a78065aa78695",
+  "packages": {
+    "artifactId": 12656112683,
+    "artifactName": "usability0531-candidate-packages",
+    "archiveSha256": "1475bdc865b61ae31e15c8a9d8168b866c88e778ab2c7ca0131b92644ef9344a",
+    "workbench": {
+      "version": "0.53.1",
+      "directory": "downloads/extensions/0.53.1",
+      "jarSha256": "f67d2baed0ca1e0b1972b200673cd8b5dce57543694d87e002daff8331d87fa0",
+      "sourceZipSha256": "36e152a028c92dc037bba2330820f86d75c40080c00de774593d8bd30b55b59d"
+    },
+    "mapper": {
+      "version": "0.3.5",
+      "directory": "downloads/feature-mapper/0.3.5",
+      "jarSha256": "e1269ee34f3d32023c4c39857c1f71a87623682c10202ba2be1788d4f67db484",
+      "browserZipSha256": "cb35335ebec9e1e447607b74e8084772f4a44c94b52760989328939cacdbdd56",
+      "sourceZipSha256": "423bad65487f28d0b5b597a409f1c1af47c6bc7f2e11ef5b880566311e4bc0a2"
+    },
+    "publicationIntegrity": {
+      "archiveAndFileChecksums": "passed",
+      "workbenchSourceFilesComparedToValidatedGitBlobs": 349,
+      "mapperSourceFilesComparedToValidatedGitBlobs": 42,
+      "browserHelperFilesComparedToValidatedGitBlobs": 8,
+      "packageVersions": "passed",
+      "java17Bytecode": "passed",
+      "scope": "Read-only integrity checks while completing upload; no functional suite rerun. Production source and build scripts remain identical to the validated commit."
+    }
+  }
 }

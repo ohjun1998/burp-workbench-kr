@@ -1,0 +1,71 @@
+{
+  "sourceCommit": "5704f48a9d12282ec3f7ea48ec7a78065aa78695",
+  "checks": {
+    "burp-workbench-kr-0.53.1.jar": {
+      "manifestVersion": "0.53.1",
+      "classMajorCounts": {
+        "61": 648,
+        "55": 707,
+        "49": 19
+      },
+      "projectClassMajorCounts": {
+        "61": 623
+      },
+      "archiveEntries": 1400
+    },
+    "burp-workbench-kr-0.53.1-source.zip": {
+      "sourceEntries": 349,
+      "manifestSourceHashesMatched": true,
+      "remoteGitBlobsMatched": true
+    },
+    "feature-mapper-kr-0.3.5.jar": {
+      "manifestVersion": "0.3.5",
+      "classMajorCounts": {
+        "61": 60
+      },
+      "projectClassMajorCounts": {
+        "61": 60
+      },
+      "archiveEntries": 64
+    },
+    "feature-mapper-kr-0.3.5-source.zip": {
+      "sourceEntries": 42,
+      "manifestSourceHashesMatched": true,
+      "remoteGitBlobsMatched": true
+    },
+    "browserHelper": {
+      "sourceFiles": 8,
+      "version": "0.3.5"
+    }
+  },
+  "artifacts": {
+    "downloads/extensions/0.53.1/burp-workbench-kr-0.53.1.jar": {
+      "sha256": "f67d2baed0ca1e0b1972b200673cd8b5dce57543694d87e002daff8331d87fa0",
+      "bytes": 4093088,
+      "gitBlobSha1": "5713162d65a966ab54400bb191e7a76f9e19190e"
+    },
+    "downloads/extensions/0.53.1/burp-workbench-kr-0.53.1-source.zip": {
+      "sha256": "36e152a028c92dc037bba2330820f86d75c40080c00de774593d8bd30b55b59d",
+      "bytes": 4527494,
+      "gitBlobSha1": "b8fd0a90e41efc17027cab05ab73270c934388fb"
+    },
+    "downloads/feature-mapper/0.3.5/feature-mapper-kr-0.3.5.jar": {
+      "sha256": "e1269ee34f3d32023c4c39857c1f71a87623682c10202ba2be1788d4f67db484",
+      "bytes": 827630,
+      "gitBlobSha1": "1630d0bd3d548995e3cb182e2cc93b8fb3898640"
+    },
+    "downloads/feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip": {
+      "sha256": "cb35335ebec9e1e447607b74e8084772f4a44c94b52760989328939cacdbdd56",
+      "bytes": 10789,
+      "gitBlobSha1": "056db11027cf152be45b632d422a566e1947919f"
+    },
+    "downloads/feature-mapper/0.3.5/feature-mapper-kr-0.3.5-source.zip": {
+      "sha256": "423bad65487f28d0b5b597a409f1c1af47c6bc7f2e11ef5b880566311e4bc0a2",
+      "bytes": 942673,
+      "gitBlobSha1": "bcdf2322c10f2bd4844dd05a808e575f0d9c9c89"
+    }
+  },
+  "failures": [],
+  "scope": "Archive integrity, declared hashes, source archive Git blob identity, JAR metadata and bytecode; no recompilation or functional test rerun.",
+  "status": "passed"
+}

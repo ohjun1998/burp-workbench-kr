@@ -8,9 +8,9 @@
 
 [0.53.1 설치·사용 안내와 검증 상태](docs/RELEASE_0.53.1_NEXT_KR.md) · [버전별 JAR·소스 목록](downloads/README.md) · [기존 0.52.0 안내](docs/RELEASE_0.52.0_NEXT_KR.md)
 
-**후보판 검증 진행 중입니다.** 이 문서의 기능 설명과 이전 버전의 검사 수치는 0.53.1 전체 검증 통과를 뜻하지 않습니다. 현재 검사 결과와 미완료 범위는 0.53.1 안내의 검증 상태를 확인하세요.
+**0.53.1 후보판의 원격 자동 검증을 통과하고 JAR·소스 ZIP을 생성했습니다.** 검증 소스 `5704f48a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40334451367)에서 Linux·Windows 각각 4,142개 검사, 합성 Swing 상태 108개와 실제 Chromium 도우미 검사를 통과했습니다. [설치 JAR](downloads/extensions/0.53.1/burp-workbench-kr-0.53.1.jar) · [빌드 가능한 소스 ZIP](downloads/extensions/0.53.1/burp-workbench-kr-0.53.1-source.zip) · [원격 검증 근거와 미실행 범위](docs/reports/2026-10-26-usability-0531/REMOTE_CI_KR.md)를 확인하세요. main 병합과 실제 Burp GUI·DPI/IME·Docker 검증은 별도 상태입니다.
 
-[PR #86](https://github.com/ohjun1998/burp-workbench-kr/pull/86)을 main에 병합했습니다. Windows 검색·실제 브라우저 도우미 연동 CI의 재시도 실패는 [후속 검증 기록](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남아 있으며, 병합이 해당 실패의 해결을 뜻하지는 않습니다.
+기존 0.52.0은 [PR #86](https://github.com/ohjun1998/burp-workbench-kr/pull/86)으로 main에 병합했습니다. 당시 Windows 검색·실제 브라우저 도우미 연동 CI의 재시도 실패는 [0.52.0 후속 검증 기록](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 보존합니다. 이번 0.53.1 결과는 위의 새 CI를 기준으로 확인하세요.
 
 기존 버전의 당시 동작과 검사 범위는 [0.49.1 안내](docs/RELEASE_0.49.1_KR.md), [0.49.0 안내](docs/RELEASE_0.49.0_KR.md)에 남깁니다. 해당 문서의 미실행 표시는 그 버전에 대한 기록입니다.
 

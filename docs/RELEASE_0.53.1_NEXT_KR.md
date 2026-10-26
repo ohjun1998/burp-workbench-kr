@@ -6,18 +6,18 @@
 
 ## 설치할 버전과 검증 상태 확인하기
 
-현재 후보판은 Java 17 대상 빌드와 최신 소스의 집중 검사 674개를 통과했습니다. 전체 회귀·HTTP·화면 배치·배포 지문은 GitHub Actions에서 확인 중입니다. [검증 기록](VERIFICATION_0.53.1.json)에 실제 실행 범위를 구분합니다. 실제 결과가 확정되기 전에는 전체 통과나 실제 Burp GUI 검증 완료를 주장하지 않습니다. 생성된 파일과 검사 결과는 [버전별 다운로드 목록](../downloads/README.md)과 해당 PR에서 확인합니다.
+검증 소스 `5704f48a9d12282ec3f7ea48ec7a78065aa78695`의 [최종 GitHub Actions](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40334451367)가 모두 통과했습니다. Linux·Windows 각각 회귀·격리 HTTP 4,142개, 합성 Swing 상태 108개, Mapper Java 134개·Node 15개와 실제 Chromium 20개 PASS 항목을 확인했습니다. 배포 해시·소스 지문과 패키징 검사 7개도 통과했습니다. 플랫폼 반복 실행을 고유 검사 수에 더하지 않습니다. [검증 기록](VERIFICATION_0.53.1.json)과 [원격 근거·미실행 범위](reports/2026-10-26-usability-0531/REMOTE_CI_KR.md)를 함께 확인하세요. 이전 세션의 로컬 집중 검사 674개는 별도 기록으로 보존하며 최종 원격 검사에 합산하지 않습니다.
 
 | 버전 | 용도 | 보존 상태 |
 |---|---|---|
-| 0.53.1 | 이번 사용자 편의성 개선 후보판 | 새 버전 폴더에 JAR·소스 ZIP을 생성. 검증 상태 별도 확인 |
+| 0.53.1 | 이번 사용자 편의성 개선 후보판 | 최종 원격 자동 검사 통과. 새 버전 폴더의 JAR·소스 ZIP 제공 |
 | 0.53.0 | 이번 작업의 기준 소스 | 작업 커밋·브랜치 이력 보존. 완료 배포로 표시하지 않음 |
 | 0.52.0 | main에 병합된 기존 Next 배포 | 기존 JAR·소스·검증 기록 보존 |
 | 0.50.0·0.49.1 | 이전 Next·Workbench 배포 | 기존 파일과 당시 안내 보존 |
 
 설치 전 현재 JAR와 프로젝트 파일, 설정 JSON, 필요한 증거 ZIP 및 JS 기록 폴더를 보관합니다. Burp **Extensions**에서 기존 Workbench/Next의 로드를 해제한 뒤 **Add → Java**에서 선택한 버전의 JAR를 로드합니다. 확장 이름·상단 **Workbench Next** 탭·버전 배지에 **0.53.1**이 표시되는지 확인하세요.
 
-예정된 새 배포 위치는 `downloads/extensions/0.53.1/burp-workbench-kr-0.53.1.jar`와 같은 폴더의 `burp-workbench-kr-0.53.1-source.zip`입니다. 파일이 생성되기 전에는 이 경로를 설치 완료 안내로 취급하지 않습니다. 설치할 때 [다운로드 목록](../downloads/README.md)의 실제 생성 상태를 먼저 확인하세요.
+새 배포는 [0.53.1 설치 JAR](../downloads/extensions/0.53.1/burp-workbench-kr-0.53.1.jar), [빌드 가능한 소스 ZIP](../downloads/extensions/0.53.1/burp-workbench-kr-0.53.1-source.zip), [SHA256SUMS](../downloads/extensions/0.53.1/SHA256SUMS)로 제공합니다. 브라우저 연동을 쓰려면 [Mapper 도우미 0.3.5](../downloads/feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip)를 선택합니다. Workbench 안에 Mapper가 포함되어 있으므로 별도 Mapper JAR를 함께 추가할 필요는 없습니다. 파일별 목록은 [다운로드 안내](../downloads/README.md)를 확인하세요.
 
 되돌릴 때는 0.53.1의 로드를 해제하고 보관한 이전 JAR를 다시 로드합니다. 이전 버전에 맞춰 보관한 프로젝트·설정·기록을 사용하세요. 새 버전의 저장 형식을 이전 버전에서 그대로 읽을 수 있다고 가정하지 않습니다. 기존 파일을 삭제하거나 덮어쓰는 방식으로 버전을 교체하지 않습니다.
 
@@ -99,15 +99,16 @@
 
 ## 검증 상태와 남은 범위
 
-**작성 시점: 구현·검증 진행 중.** 아래 항목은 실제 실행 결과를 채우기 위한 구분입니다. 통과 수치는 아직 기재하지 않습니다.
+**최종 자동 검증 통과: 2026-10-26, 소스 `5704f48a`.** [CI 실행 40334451367](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40334451367)의 release·windows·layout·browser 작업이 모두 성공했습니다. 후속 문서·다운로드 반영은 검증한 생산 소스와 빌드 입력을 바꾸지 않습니다.
 
 | 확인할 범위 | 현재 기록 |
 |---|---|
-| 0.53.1 소스 컴파일·회귀 | 실행 결과 확정 후 기록 |
-| 격리 loopback HTTP 검사 | 실행 결과 확정 후 기록 |
-| 준비·결과·검색·남은 점검·재개 화면 배치 | 실행 결과 확정 후 기록 |
-| 배포 JAR·소스 ZIP 해시와 소스 지문 | 배포 생성 후 기록 |
-| 실제 Burp GUI, Windows DPI/IME | 이번 문서에서 검증 완료를 주장하지 않음 |
-| 실제 브라우저·Docker·외부 서비스 | 이번 문서에서 검증 완료를 주장하지 않음 |
+| 0.53.1 소스 컴파일·회귀 | Linux·Windows 각각 104개 그룹·3,638개 회귀 통과 |
+| 격리 loopback HTTP 검사 | 플랫폼별 payload 136개·전체 기능 102개·모의 진단 266개 통과. 회귀와 합계 4,142개 |
+| 준비·결과·검색·남은 점검·재개 화면 배치 | 합성 Swing 흐름 상태 108개 통과. 실제 Burp 화면 조작과 구분 |
+| Mapper·브라우저 도우미 | Mapper Java 134개·Node 15개, 실제 Chromium 20개 PASS 항목. 관측 POST/PATCH 원문 본문 연결 포함 |
+| 배포 JAR·소스 ZIP 해시와 소스 지문 | CI 배포 생성·지문 검사 및 패키징 단위 검사 7개 통과 |
+| 실제 Burp GUI, Windows DPI/IME | 미실행 |
+| Edge 수동 조작·Docker/Oracle/Nginx·외부 서비스 | 미실행 |
 
-합성 Swing 화면, API 어댑터 검사와 실제 Burp 화면 조작은 구분합니다. 기존 0.52.0의 Windows 검색·브라우저 도우미 CI 실패 기록은 과거 상태로 보존하며, 이번 후보판의 해결 여부는 새 실행 결과로 판단합니다.
+합성 Swing 화면·API 어댑터와 실제 Burp 화면 조작은 구분합니다. 실제 Chromium 검사는 격리한 production Mapper/Bridge fixture에서 실행했으며 실제 Burp 안의 브라우저 연결이나 Edge 수동 조작의 검증을 뜻하지 않습니다. 기존 0.52.0의 Windows 검색·브라우저 도우미 CI 실패 기록은 당시 상태로 보존합니다. 이번 후보판의 해당 자동 검사는 위 최종 실행에서 통과했으며, 실제 서비스의 탐지 성능이나 장시간 부하 결과로 일반화하지 않습니다.

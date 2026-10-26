@@ -2,16 +2,20 @@
 
 파일을 열고 **Download raw file**을 누르세요. 이 작업 브랜치의 현재 버전은 **0.53.1 사용자 편의성 개선 후보판**, `main`에 병합된 기존 배포는 **0.52.0**입니다. 후보판과 이전 배포의 검증 상태를 구분해 선택하세요. 이전 PDF는 과거 화면의 보존 자료입니다.
 
-## 작업 중 후보판: Workbench Next 0.53.1
+## 자동 검증을 통과한 후보판: Workbench Next 0.53.1
 
-0.53.0 작업 커밋 `8b548422`을 바탕으로 비교 준비·결과·설정 묶음·남은 점검·검색·작업 재개를 개선합니다. **후보판의 빌드·검증·배포 생성은 진행 중이며, 생성 전 파일 경로는 다운로드 링크로 제공하지 않습니다.** 새 파일은 기존 버전 폴더를 덮어쓰지 않고 다음 경로에 생성합니다.
+0.53.0 작업 커밋 `8b548422`을 바탕으로 비교 준비·결과·설정 묶음·남은 점검·검색·작업 재개를 개선합니다. 검증 소스 `5704f48a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40334451367)가 Linux·Windows 회귀·격리 HTTP, 합성 Swing 화면과 실제 Chromium 검사를 통과했고, 아래 배포 파일을 생성했습니다. 기존 버전 파일은 보존합니다. main 병합·실제 Burp GUI·DPI/IME·Docker 검증 상태와 자동 검사 결과는 [검증 기록](../docs/VERIFICATION_0.53.1.json)에서 구분합니다.
 
 | 자료 | 현재 위치·상태 |
 |---|---|
 | 설치·사용 안내 | [0.53.1 단계별 안내와 검증 상태](../docs/RELEASE_0.53.1_NEXT_KR.md) |
-| 설치 JAR | 생성 대상: `extensions/0.53.1/burp-workbench-kr-0.53.1.jar` |
-| 빌드 가능한 소스 ZIP | 생성 대상: `extensions/0.53.1/burp-workbench-kr-0.53.1-source.zip` |
-| 내장 Feature Mapper | 0.3.5. 별도 브라우저 도우미는 해당 버전의 생성·검증 상태 확인 후 사용 |
+| 설치 JAR | [burp-workbench-kr-0.53.1.jar](extensions/0.53.1/burp-workbench-kr-0.53.1.jar) |
+| 빌드 가능한 소스 ZIP | [burp-workbench-kr-0.53.1-source.zip](extensions/0.53.1/burp-workbench-kr-0.53.1-source.zip) |
+| 무결성·소스 지문 | [SHA256SUMS](extensions/0.53.1/SHA256SUMS) · [manifest.json](extensions/0.53.1/manifest.json) |
+| 내장 Feature Mapper 0.3.5의 선택 브라우저 연동 | [Chrome/Edge 도우미 ZIP](feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip) |
+| 별도 Mapper 0.3.5 배포·소스 | [JAR](feature-mapper/0.3.5/feature-mapper-kr-0.3.5.jar) · [소스 ZIP](feature-mapper/0.3.5/feature-mapper-kr-0.3.5-source.zip) · [SHA256SUMS](feature-mapper/0.3.5/SHA256SUMS) |
+
+Workbench JAR SHA-256: `f67d2baed0ca1e0b1972b200673cd8b5dce57543694d87e002daff8331d87fa0`. 소스 ZIP SHA-256: `36e152a028c92dc037bba2330820f86d75c40080c00de774593d8bd30b55b59d`.
 
 0.53.1 JAR를 설치할 때 이전 Next의 로드를 해제하고, 기존 JAR·프로젝트·설정 JSON과 기록 폴더를 보관하세요. 재개 안내는 인증값·원본 패킷·검색어를 보존하는 백업이 아닙니다. 되돌릴 때 새 Next를 해제하고 보관한 JAR와 해당 버전용 백업을 사용합니다. 후보판의 저장 형식을 구버전에서 그대로 읽을 수 있다고 가정하지 마세요.
 

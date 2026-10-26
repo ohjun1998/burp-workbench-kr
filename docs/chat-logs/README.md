@@ -1,5 +1,7 @@
 # 날짜별 작업 대화 기록
 
+- [2026-10-26 · Next 0.53.1 사용자 편의성 개선·검증·업로드](2026-10-26/usability-0531.md)
+
 - [2026-10-24 · Next 0.52.0 main 병합](2026-10-24/workbench-next-0520-main.md)
 
 - [2026-10-24 · Next 0.52.0 구현·원격 검사 재확인](2026-10-24/workbench-next-0520.md)
@@ -15,3 +17,4 @@ python tools/record_chat.py --date 2026-10-15 --topic workbench-remaining --inpu
 ```
 
 입력은 `title`과 `messages`를 가진 JSON 객체입니다. 메시지마다 `role`은 `user` 또는 `assistant`, `content`는 표시한 내용, `kind`는 `verbatim` 또는 `summary`로 지정합니다. 같은 입력을 다시 실행해도 중복 메시지를 추가하지 않습니다. 이 명령은 해당 작업의 기록 도구이며 계정의 다른 채팅을 자동으로 내보내는 기능은 아닙니다.
+

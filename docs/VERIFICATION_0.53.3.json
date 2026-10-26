@@ -1,7 +1,7 @@
 {
   "version": "0.53.3",
   "sourceBase": "6737746f1a0c29c42c91a246a8161192c7d279d6",
-  "status": "candidate-remote-verification-passed",
+  "status": "merged-main-verification-passed",
   "local": {
     "status": "build-and-all-10-layout-modes-passed",
     "compiler": "OpenJDK21 with official --release17 symbols",
@@ -229,7 +229,16 @@
     }
   },
   "main": {
-    "merged": false
+    "merged": true,
+    "pullRequest": 91,
+    "mergeCommit": "5b8b8576a93e7ca15cef5a8e06bc9b93d2d1301f",
+    "headCommit": "84d84b7c931131c7bccdabcb93df81d2e06bd59a",
+    "mergedAtUtc": "2026-10-26T23:11:54Z",
+    "mergedAtAsiaSeoul": "2026-10-27T08:11:54+09:00",
+    "tree": "46ccccb0f7e1f1d6f136f50fe426aa56ccf6a39f",
+    "treeMatchesVerifiedPullRequest": true,
+    "sourceAndArtifactsUnchanged": true,
+    "duplicateMainCi": "Skipped only after final PR Build and Windows/durability passed; merged tree confirmed identical to tested PR head."
   },
   "preservedCandidate": "0.53.2",
   "notExecuted": [
@@ -257,5 +266,20 @@
     "artifactId": 12694747391,
     "artifactArchiveSha256": "e5503901615bc872de0addbb84c13e43df9b82c8e282c989b5dde5d75c8a9fa1",
     "preservedUnmergedCandidate": "0.53.2"
+  },
+  "pullRequestVerification": {
+    "headCommit": "84d84b7c931131c7bccdabcb93df81d2e06bd59a",
+    "build": {
+      "runId": 40416130231,
+      "jobId": 121898791041,
+      "status": "success"
+    },
+    "durability": {
+      "runId": 40416130241,
+      "linuxJobId": 121899261310,
+      "windowsJobId": 121899261583,
+      "status": "success"
+    },
+    "scope": "Full regression/loopback HTTP, role portals, authentication combinations, 50 operations (API adapter), all layout modes, packaging/source fingerprints; Windows native standalone Repeater, repeated storage and 180-second capture; isolated ENOSPC/recovery and sustained capture. Not actual Burp GUI."
   }
 }

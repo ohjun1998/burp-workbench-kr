@@ -27,3 +27,7 @@
 0.53.2의 초기 후보 검사 통과와 뒤이은 전체 화면 회귀 실패는 [당시 기록](../../VERIFICATION_0.53.2.json)에 보존합니다. 해당 배포 파일은 덮어쓰지 않으며0.53.3검증 근거로 대신 사용하지 않습니다.
 
 실제 Burp GUI 조작, Windows DPI/IME, 브라우저 수동 조작, 외부 대상 서비스, Docker/Oracle/Nginx 기동과 장시간 native Burp 부하는 미실행입니다. 자동 Swing/API/격리 HTTP 검증을 이 범위의 완료로 표시하지 않습니다.
+
+## PR·main 반영 확인
+
+최종 게시 head `84d84b7c931131c7bccdabcb93df81d2e06bd59a`의 [Build 40416130231](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40416130231)과 [Windows·디스크/수집 내구성 40416130241](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40416130241)이 모두 통과한 뒤 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)을 main에 병합했습니다. 병합은 2026-10-27 08:11:54(한국 시간), 커밋은 `5b8b8576a93e7ca15cef5a8e06bc9b93d2d1301f`입니다. 병합 트리 `46ccccb0f7e1f1d6f136f50fe426aa56ccf6a39f`가 검증한 PR head와 같음을 확인했습니다. 동일 트리의 중복 main 검사만 생략했으며 후속 문서 정리는 생산 소스·빌드 입력·배포 파일을 바꾸지 않습니다.

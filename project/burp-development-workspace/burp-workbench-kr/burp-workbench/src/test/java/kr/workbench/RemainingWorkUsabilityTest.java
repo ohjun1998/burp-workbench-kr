@@ -2,8 +2,11 @@ package kr.workbench;
 
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.http.Http;
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import javax.swing.*;
 
 /** Next-action filtering keeps exact provenance and never executes work. */
 public final class RemainingWorkUsabilityTest extends WorkbenchTest {
@@ -11,7 +14,7 @@ public final class RemainingWorkUsabilityTest extends WorkbenchTest {
 
   public static void main(String[] args) throws Exception {
     BountyFeaturesTest.factory();
-    projections(); filteredNavigation();
+    projections(); filteredNavigation(); smallWindowLayout();
     System.out.println("RemainingWorkUsabilityTest: " + checks + " checks passed");
   }
 
@@ -106,5 +109,45 @@ public final class RemainingWorkUsabilityTest extends WorkbenchTest {
             "empty cause view explains how to find other work and offers no stale action");
       } finally { owner.close(); }
     });
+  }
+
+  /** Available content area inside the 1024×720 workspace, after navigation and title controls. */
+  static void smallWindowLayout() throws Exception {
+    edt(() -> {
+      var api = proxy(MontoyaApi.class, (p, method, args) -> def(method));
+      var owner = new ActivityPanel(api); owner.timer.stop();
+      try {
+        var ui = owner.assessmentPanel;
+        String task = prepare(ui.tracker); ui.refresh(); ui.restoreTaskSelection(task);
+        ui.taskDetailPages.setSelectedIndex(1);
+        ui.remainingTable.setRowSelectionInterval(0, 0);
+        owner.setSize(780, 590);
+        layoutTree(owner);
+        for (int pass = 0; pass < 3; pass++) {
+          positionSplits(owner);
+          layoutTree(owner);
+        }
+        JViewport tableViewport = (JViewport) ui.remainingTable.getParent();
+        JViewport detailViewport = (JViewport) ui.remainingExplanation.getParent();
+        check(tableViewport.getHeight() >= 60 && ui.remainingTable.getVisibleRect().height >= 60,
+            "small workspace keeps remaining-work rows visible beneath filters and action buttons");
+        check(detailViewport.getHeight() >= 50 && ui.remainingExplanation.getVisibleRect().height >= 50,
+            "selected-item explanation retains a separate readable scrolling viewport");
+        check(ui.remainingTable.getRowCount() == 2 && ui.remainingNext.isEnabled(),
+            "small-window layout preserves selected exact work and available next action");
+      } finally { owner.close(); }
+    });
+  }
+
+  static void layoutTree(Container container) {
+    container.doLayout();
+    for (Component child : container.getComponents()) if (child instanceof Container nested) layoutTree(nested);
+  }
+
+  static void positionSplits(Container container) {
+    if (container instanceof JSplitPane split
+        && split.getClientProperty("wb.split.ratio") instanceof Double ratio)
+      split.setDividerLocation(ratio);
+    for (Component child : container.getComponents()) if (child instanceof Container nested) positionSplits(nested);
   }
 }

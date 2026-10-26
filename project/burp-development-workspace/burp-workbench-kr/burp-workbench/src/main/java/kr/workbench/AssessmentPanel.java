@@ -288,17 +288,26 @@ final class AssessmentPanel implements AutoCloseable {
     remainingControls.add(row(new JLabel("필요한 확인"), remainingFilter, remainingSummary));
     remainingControls.add(row(remainingNext, remainingRun, remainingEvidence));
     remainingPage.add(remainingControls, BorderLayout.NORTH);
-    remainingPage.add(new JScrollPane(remainingTable));
-    remainingPage.add(new JScrollPane(remainingExplanation), BorderLayout.SOUTH);
+    JScrollPane remainingList = new JScrollPane(remainingTable),
+        remainingDetail = new JScrollPane(remainingExplanation);
+    JSplitPane remainingSplit = WorkbenchUi.split(
+        JSplitPane.VERTICAL_SPLIT, remainingList, remainingDetail, .62);
+    remainingSplit.setName("wb.assessment.remaining.split");
+    remainingList.setMinimumSize(new Dimension(80, 100));
+    remainingDetail.setMinimumSize(new Dimension(80, 65));
+    remainingList.setPreferredSize(new Dimension(600, 150));
+    remainingDetail.setPreferredSize(new Dimension(600, 85));
+    remainingPage.add(remainingSplit, BorderLayout.CENTER);
     taskDetailPages.addTab("요구 계정 × API", details);
     taskDetailPages.addTab("남은 점검", remainingPage);
     taskDetailPages.setToolTipTextAt(1, "미실행·조건 변경·판정 검토·입력·증거와 다음 작업을 확인합니다.");
-    tasksPage.add(
-        WorkbenchUi.split(
-            JSplitPane.VERTICAL_SPLIT,
-            new JScrollPane(taskTable),
-            taskDetailPages,
-            .45));
+    JScrollPane taskList = new JScrollPane(taskTable);
+    JSplitPane tasksSplit = WorkbenchUi.split(
+        JSplitPane.VERTICAL_SPLIT, taskList, taskDetailPages, .30);
+    tasksSplit.setName("wb.assessment.tasks.split");
+    taskList.setMinimumSize(new Dimension(80, 90));
+    taskDetailPages.setMinimumSize(new Dimension(80, 310));
+    tasksPage.add(tasksSplit);
     tasksPage.setToolTipText(taskSummary.getText());
     taskSummary.addPropertyChangeListener("text", e -> tasksPage.setToolTipText(taskSummary.getText()));
     accountChoice.addActionListener(

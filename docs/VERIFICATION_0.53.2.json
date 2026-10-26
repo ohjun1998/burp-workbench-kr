@@ -1,0 +1,43 @@
+{
+  "version": "0.53.2",
+  "sourceBase": "6737746f1a0c29c42c91a246a8161192c7d279d6",
+  "status": "candidate-remote-verification-pending",
+  "local": {
+    "status": "integration-and-layout-passed-full-check-in-progress",
+    "compiler": "OpenJDK21 with official --release17 symbols",
+    "newFocusedChecks": {
+      "TrafficUsability0532Test": 46,
+      "EvidenceEditingTest": 58,
+      "AuthInlineValidationTest": 52,
+      "Navigation0532Test": 41,
+      "ResponseDifferenceTest": 49,
+      "ResponseDifferenceUiTest": 21,
+      "BackgroundJobsTest": 37,
+      "GettingStartedPanelTest": 9,
+      "UsabilityIntegration0532Test": 19
+    },
+    "layout": {
+      "controls": 2202,
+      "syntheticStateAssertions": 162,
+      "clippedControls": 0,
+      "collapsedKeyAreas": 0,
+      "smallControls": 0,
+      "clippedSelectedTabsOrHeadings": 0,
+      "scope": "production Swing components with synthetic metadata, light/dark and three main viewports; helper dialogs 760x480/560x300; earlier local build before final retained-selection race fix"
+    },
+    "scope": "Headless API adapters/loopback fixtures, not native Burp GUI",
+    "note": "Final source verification is pending. Earlier integration failures were fixed; the generic worker UI fixture now explicitly models a cancellable task while preserving its busy/stop/idle assertions."
+  },
+  "remote": {
+    "status": "pending"
+  },
+  "main": {
+    "merged": false
+  },
+  "notExecuted": [
+    "Actual Burp GUI interaction",
+    "Windows DPI/IME",
+    "Manual browser interaction",
+    "External target services"
+  ]
+}

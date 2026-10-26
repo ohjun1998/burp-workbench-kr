@@ -144,6 +144,44 @@ final class EvidencePacketStore implements AutoCloseable {
     }
   }
 
+  /** Copy a retained item into a fresh store without decoding or changing its byte identity. */
+  synchronized Ref append(Ref source) {
+    Objects.requireNonNull(source, "source");
+    if (source.store == this) throw new IllegalArgumentException("같은 증거 저장소로 복사할 수 없습니다.");
+    long start = -1;
+    try (Lease ignored = source.retain()) {
+      open();
+      start = data.length();
+      data.seek(start);
+      Part request = copyPart(source, source.request, true);
+      Part response = copyPart(source, source.response, false);
+      return new Ref(this, request, response, source.hasResponse);
+    } catch (IOException | RuntimeException error) {
+      if (start >= 0)
+        try { data.setLength(start); }
+        catch (IOException rollback) { error.addSuppressed(rollback); }
+      throw new IllegalArgumentException("남은 증거 원본을 정리하지 못했습니다.", error);
+    }
+  }
+
+  private Part copyPart(Ref source, Part part, boolean request) throws IOException {
+    long offset = data.getFilePointer();
+    MessageDigest digest = digest();
+    OutputStream out = new OutputStream() {
+      @Override public void write(int value) throws IOException {
+        data.write(value); digest.update((byte) value);
+      }
+      @Override public void write(byte[] bytes, int start, int length) throws IOException {
+        data.write(bytes, start, length); digest.update(bytes, start, length);
+      }
+    };
+    if (request) source.copyRequestTo(out); else source.copyResponseTo(out);
+    String actual = HexFormat.of().formatHex(digest.digest());
+    if (!actual.equals(part.sha256) || data.getFilePointer() - offset != part.length)
+      throw new IOException("증거 원본 길이 또는 SHA-256이 변경되었습니다.");
+    return new Part(offset, part.length, actual);
+  }
+
   private Part write(ByteArray bytes) throws IOException {
     int length = bytes.length();
     long offset = data.getFilePointer();

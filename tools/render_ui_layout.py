@@ -100,6 +100,11 @@ def main():
         ('next-remaining-checks.png','wb.assessment.remaining.explanation'):50,
         ('next-traffic-conditions.png','wb.traffic.request.text'):80,
         ('next-traffic-conditions.png','wb.traffic.response.text'):80,
+        ('usability-response-summary.png','wb.compare.summary'):60,
+        ('usability-response-summary.png','wb.compare.raw.left'):70,
+        ('usability-response-summary.png','wb.compare.raw.right'):70,
+        ('usability-evidence-editor.png','preview.evidence.impact'):70,
+        ('usability-evidence-editor.png','preview.evidence.repro'):70,
     }
     for view,name,default_minimum,small_minimum in [
         ('next-auth-get-loading','wb.auth.effect.read.candidates',80,40),
@@ -116,6 +121,8 @@ def main():
         ('next-js-history-page1','wb.js.history.table',80,40),
         ('next-js-history-page2','wb.js.history.table',80,40),
         ('next-js-history-search','wb.js.history.table',80,40),
+        ('usability-quick-navigation','wb.navigation.quick.results',100,50),
+        ('usability-background-jobs','wb.jobs.table',100,50),
     ]:
         next_required[(view+'.png',name)]=default_minimum
         next_required[(view+'-minimum.png',name)]=small_minimum
@@ -152,7 +159,7 @@ def main():
             for (view,name),minimum in required.items():
                 expected_w,expected_h=w,h
                 copies=1
-                if (full_mode or args.next_only) and (view,name) in next_required and view not in {'next-response-retries.png','next-remaining-checks.png','next-traffic-conditions.png'}:
+                if (full_mode or args.next_only) and (view,name) in next_required and view not in {'next-response-retries.png','next-remaining-checks.png','next-traffic-conditions.png','usability-response-summary.png','usability-evidence-editor.png'}:
                     expected_w,expected_h=('560','300') if '-minimum' in view else ('760','480')
                     copies=len(args.sizes)
                 if args.js_only and view in {'js-packets.png','js-analysis-list.png','js-packets-small.png','js-analysis-list-small.png'}:

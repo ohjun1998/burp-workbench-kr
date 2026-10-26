@@ -124,6 +124,12 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       new TargetWindow(this, "발견 출처 · 요청/응답 패킷", this::packetContent);
   private String[] openedPacket;
   private String openedSource = "", openedFinding = "";
+  BackgroundJobs backgroundJobs;
+  private BackgroundJobs.Handle backgroundBatch;
+  private long batchCompleted, batchFailed, batchCancelled, batchAnalysisFailed, batchEpoch;
+  private long backgroundBatchSequence;
+  private long monitorProjectGeneration, monitorAccepted, monitorCompleted, monitorFailed, monitorRunning, monitorCancelled;
+  private final java.util.concurrent.atomic.AtomicBoolean backgroundRefreshPending = new java.util.concurrent.atomic.AtomicBoolean();
 
   static DefaultTableModel model(String... columns) {
     return new DefaultTableModel(columns, 0) {
@@ -144,6 +150,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     repeater = new JsRepeater(this, api);
     cache = new JsSourceCache(cacheBytes);
     jobs = new JsWorkQueue(worker, queueBytes);
+    jobs.onChange = this::scheduleBackgroundRefresh;
     targetSettings =
         new TargetWindow(
             this,
@@ -690,6 +697,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   }
 
   private void refreshProgress() {
+    refreshBackgroundJob();
     if(resultView!=null)resultView.refresh();
     String counters =
         (watching.get() ? "분석 ON" : "분석 OFF")
@@ -959,15 +967,74 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     return enqueue(job, manual, 128);
   }
 
-  private boolean enqueue(Runnable job, boolean manual, long bytes) {
+  private synchronized boolean enqueue(Runnable job, boolean manual, long bytes) {
     if (closed.get()) return false;
-    if (jobs.offer(job, bytes)) {
+    beginBackgroundJob();
+    long project=monitorProjectGeneration;
+    monitorAccepted++;
+    if (jobs.offer(()->{
+      synchronized(JsAnalysisPanel.this){if(project!=monitorProjectGeneration)return;monitorRunning++;}
+      boolean success=false;
+      try{job.run();success=true;}
+      finally{synchronized(JsAnalysisPanel.this){if(project==monitorProjectGeneration){monitorRunning--;monitorCompleted++;if(!success)monitorFailed++;}}}
+    }, bytes,()->{synchronized(JsAnalysisPanel.this){if(project==monitorProjectGeneration)monitorCancelled++;}})) {
       if (manual) status.setText("분석 대기열에 추가했습니다.");
       return true;
     }
+    monitorAccepted--;
     overflow.incrementAndGet();
+    scheduleBackgroundRefresh();
     if (manual) status.setText("대기열 개수/바이트 한도에 도달했습니다. 잠시 후 다시 분석하세요.");
     return false;
+  }
+
+  private synchronized void beginBackgroundJob() {
+    if(backgroundJobs==null || backgroundBatch!=null)return;
+    var metrics=jobs.metrics();batchCompleted=monitorCompleted;batchFailed=monitorFailed;
+    batchCancelled=metrics.cancelled();batchAnalysisFailed=failed.get();batchEpoch=epoch.get();
+    long batch=++backgroundBatchSequence;
+    backgroundBatch=BackgroundJobs.begin(backgroundJobs,"JS 분석·이력 작업 묶음","js",()->cancelBackgroundAnalysis(batch));
+  }
+
+  private void cancelBackgroundAnalysis(long batch) {
+    Runnable stop=()->{
+      synchronized(JsAnalysisPanel.this){if(backgroundBatch==null || backgroundBatchSequence!=batch)return;}
+      if(passive.isSelected())passive.setSelected(false);
+      else { epoch.incrementAndGet();jobs.cancelQueued();retries.cancelPending(); }
+      scheduleBackgroundRefresh();
+    };
+    if(SwingUtilities.isEventDispatchThread())stop.run();else SwingUtilities.invokeLater(stop);
+  }
+
+  private void scheduleBackgroundRefresh() {
+    if(backgroundRefreshPending.compareAndSet(false,true))SwingUtilities.invokeLater(()->{
+      backgroundRefreshPending.set(false);refreshBackgroundJob();
+    });
+  }
+
+  private synchronized void refreshBackgroundJob() {
+    if(backgroundBatch==null)return;
+    var metrics=jobs.metrics();long completed=Math.max(0,monitorCompleted-batchCompleted);
+    long errors=Math.max(0,monitorFailed-batchFailed)+Math.max(0,failed.get()-batchAnalysisFailed);
+    if(epoch.get()!=batchEpoch || closed.get())backgroundBatch.stopping("JS 중지 요청 · 시작한 처리 종료 대기");
+    long waiting=Math.max(0,monitorAccepted-monitorCompleted-monitorRunning-monitorCancelled);
+    backgroundBatch.progress("대기 "+waiting+"개 · 실행 "+monitorRunning+"개 · 실패 "+errors+"개",completed,-1);
+    if(jobs.count()==0){
+      if(backgroundBatch.cancelRequested() || metrics.cancelled()>batchCancelled || closed.get())backgroundBatch.cancelled("JS 작업 중지 · 이미 완료한 분석 이력은 유지");
+      else if(errors>0)backgroundBatch.fail("일부 분석·이력 처리 실패 · 분석 화면에서 근거 확인");
+      else backgroundBatch.complete("현재 JS 분석·이력 대기열 처리 완료");
+      backgroundBatch=null;
+    }
+  }
+
+  void resetBackgroundProject() {
+    synchronized(this) {
+      monitorProjectGeneration++;backgroundBatchSequence++;backgroundBatch=null;
+      monitorAccepted=monitorCompleted=monitorFailed=monitorRunning=monitorCancelled=0;
+    }
+    // Existing raw work is cancelled rather than being attributed to the new project's task group.
+    if(passive.isSelected())passive.setSelected(false);
+    else {epoch.incrementAndGet();jobs.cancelQueued();retries.cancelPending();}
   }
 
   static String memory(long bytes) {

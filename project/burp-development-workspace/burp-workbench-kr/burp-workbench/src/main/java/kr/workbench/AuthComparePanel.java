@@ -174,6 +174,25 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final AtomicLong epoch = new AtomicLong();
   final AtomicBoolean closed = new AtomicBoolean();
   final AtomicInteger active = new AtomicInteger();
+  BackgroundJobs backgroundJobs;
+  private final boolean[] checklistAccountsConfirmed = new boolean[SLOTS];
+  private long checklistCompletedAfter;
+  private final Map<Run, ComparisonBatch> comparisonJobs = new IdentityHashMap<>();
+  private ComparisonBatch comparisonBatch;
+  private static final class ComparisonBatch {
+    final long epoch;
+    final boolean automatic;
+    final BackgroundJobs.Handle handle;
+    final List<String> executionIds = new ArrayList<>();
+    long admitted, completed, pending;
+    boolean failed, stopping, finished;
+    ComparisonBatch(long epoch, boolean automatic, BackgroundJobs.Handle handle) { this.epoch = epoch; this.automatic = automatic; this.handle = handle; }
+  }
+  private final class ComparisonTask implements Runnable {
+    final Run run;
+    ComparisonTask(Run run) { this.run = run; }
+    public void run() { execute(run); }
+  }
   final ConcurrentHashMap<Integer, Context> tickets = new ConcurrentHashMap<>();
   final ThreadPoolExecutor worker =
       new ThreadPoolExecutor(
@@ -338,6 +357,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final TargetWindow sessionSettings =
       new TargetWindow(this, "계정 세션 · 역할/조직 권한", this::sessionSettingsContent);
   final CookieSessionProbe.Config[] sessionChecks=new CookieSessionProbe.Config[SLOTS];
+  final AuthFieldValidation.Group comparisonValidation = new AuthFieldValidation.Group(), sessionValidation = new AuthFieldValidation.Group();
+  final JLabel comparisonApplyReason = new AuthFieldValidation.MessageLabel(), sessionApplyReason = new AuthFieldValidation.MessageLabel();
+  JLabel comparisonRuleConflict;
+  boolean inlineValidationReady;
   CookieSessionPanel cookieSessions;
   final TargetWindow cookieSessionWindow=new TargetWindow(this,"쿠키·세션 검사",()->cookieSessions);
 
@@ -457,6 +480,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     this.api = api;
     this.selected = selected;
     this.observedRequests = selected;
+    initializeInlineValidation();
     setupBundles = new AuthSetupBundlePanel(this, this::captureBundle, this::applyBundle, AuthSetupBundleStore.project(api));
     setupBundles.onReconnect = this::openAccountPreparation;
     setupBundleWindow = new TargetWindow(this, "계정 비교 · 이름 있는 설정 묶음", () -> setupBundles);
@@ -676,6 +700,143 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     WorkbenchUi.feedback(state);
     show(null);
     filterHistory();
+    refreshInlineValidation();
+  }
+
+  void initializeInlineValidation() {
+    comparisonApplyReason.setName("wb.auth.settings.apply.reason");
+    sessionApplyReason.setName("wb.auth.session.apply.reason");
+    comparisonValidation.watch(extra, "wb.auth.headers.validation", () -> {
+      for (String name : extra.getText().split(",")) {
+        name = name.strip().toLowerCase(Locale.ROOT);
+        if (!name.isEmpty() && (!name.matches("[a-z0-9-]+") || CSRF.contains(name)))
+          return "인증 헤더 이름을 쉼표로 구분하세요. 예: authorization,x-api-key";
+      }
+      return "";
+    });
+    comparisonValidation.watch(identityCookies, "wb.auth.cookies.validation", () -> {
+      for (String name : identityCookies.getText().split(","))
+        if (!name.isBlank() && !name.strip().matches("[A-Za-z0-9_!#$%&'*+.^`|~-]{1,128}"))
+          return "쿠키 이름만 쉼표로 구분하세요. 예: sessionid,JSESSIONID";
+      return "";
+    });
+    for (int slot = 0; slot < SLOTS; slot++) {
+      final int i = slot;
+      comparisonValidation.watch(profileOwners[i], "wb.auth.owner." + i + ".validation", () ->
+          profileOwners[i].getText().strip().length() > 256 ? "계정 소유값은 256자 이하로 입력하세요." : "");
+      sessionValidation.watch(refreshUrls[i], "wb.auth.session.url." + i + ".validation", () -> {
+        if (!refreshEnabled[i].isSelected()) return "";
+        Candidate candidate = slots[i];
+        if (candidate == null || candidate.headers().isEmpty()) return "갱신할 인증 계정을 먼저 연결하세요. 비로그인은 갱신할 수 없습니다.";
+        return AuthFieldValidation.scopedUrl(refreshUrls[i].getText(), candidate.origin(), api);
+      });
+      for (JTextField field : new JTextField[]{refreshTokenPaths[i], refreshCsrfPaths[i], refreshIdentityPaths[i]})
+        sessionValidation.watch(field, "wb.auth.session.path." + i + "." + (field == refreshTokenPaths[i] ? "token" : field == refreshCsrfPaths[i] ? "csrf" : "identity") + ".validation",
+            () -> AuthFieldValidation.jsonPath(field.getText(), false, 2048));
+      for (JTextField field : new JTextField[]{refreshTokenHeaders[i], refreshCsrfHeaders[i]})
+        sessionValidation.watch(field, "wb.auth.session.header." + i + "." + (field == refreshTokenHeaders[i] ? "token" : "csrf") + ".validation", () -> {
+          String header = field.getText().strip();
+          return !header.matches("[A-Za-z][A-Za-z0-9-]{0,63}") || Set.of("host", "content-length", "connection", "transfer-encoding", "cookie").contains(header.toLowerCase(Locale.ROOT))
+              ? "인증·CSRF 헤더 이름을 입력하세요. 예: authorization 또는 x-csrf-token" : "";
+        });
+      sessionValidation.watch(refreshPrefixes[i], "wb.auth.session.prefix." + i + ".validation", () ->
+          refreshPrefixes[i].getText().length() > 2048 || refreshPrefixes[i].getText().contains("\r") || refreshPrefixes[i].getText().contains("\n")
+              ? "접두사는 한 줄로 입력하세요. 예: Bearer 뒤 공백" : "");
+      refreshEnabled[i].addActionListener(event -> refreshInlineValidation());
+    }
+    comparisonValidation.watch(ignoredFields, "wb.auth.ignored.validation", () -> AuthFieldValidation.check(() -> AuthJudgement.rules(ignoredFields.getText(), "", ""),
+        "비교 제외 필드는 쉼표로 구분해 최대 32개 입력하세요. 예: $.requestId"));
+    comparisonValidation.watch(importantFields, "wb.auth.important.validation", () -> AuthFieldValidation.check(() -> AuthJudgement.paths(importantFields.getText()),
+        "중요 필드 형식을 확인하세요. 예: $.ownerId,$.items[*].id"));
+    comparisonValidation.watch(ownerPath, "wb.auth.owner.path.validation", () -> AuthFieldValidation.check(() -> AuthJudgement.rules("", "", ownerPath.getText()),
+        "소유 경로는 128자 이하로 입력하세요. 예: $.ownerId"));
+    comparisonValidation.watch(denialRules, "wb.auth.denial.validation", () -> AuthFieldValidation.check(() -> AuthJudgement.rules("", denialRules.getText(), ""),
+        "JSON 차단 규칙은 경로=값 형식입니다. 예: error=FORBIDDEN"));
+    comparisonValidation.watch(policyRules, "wb.auth.policy.validation", () -> AuthFieldValidation.policyRows(policyRules.getText(), false));
+    comparisonValidation.watch(responseDenialRules, "wb.auth.response.validation", () -> AuthFieldValidation.responseRules(responseDenialRules.getText()));
+    comparisonRuleConflict = comparisonValidation.issue("wb.auth.rules.conflict.validation", () -> {
+      // Grammar errors belong only to their own fields; cross-field conflicts have a separate reason.
+      try {
+        AuthJudgement.rules(ignoredFields.getText(), "", ""); AuthJudgement.paths(importantFields.getText());
+        AuthJudgement.rules("", "", ownerPath.getText()); AuthJudgement.rules("", denialRules.getText(), "");
+      } catch (RuntimeException error) { return ""; }
+      return AuthFieldValidation.check(this::ruleSnapshot, "소유·중요 필드를 비교 제외에 함께 지정할 수 없습니다. 해당 제외 항목을 해제하세요.");
+    });
+    inlineValidationReady = true;
+  }
+
+  /** Refresh passive reasons after selection or Scope changes; never applies settings or sends requests. */
+  void refreshInlineValidation() {
+    if (!inlineValidationReady || closed.get()) return;
+    comparisonValidation.refresh(); sessionValidation.refresh(); effectSettings.refreshValidation();
+  }
+
+  boolean settingsEditable() { return !closed.get() && recording.get() == null && active.get() == 0; }
+
+  int currentChecklistAccountCount() { int count = 0; for (int i = 0; i < SLOTS; i++) if (checklistAccountsConfirmed[i] && slots[i] != null && !slots[i].headers().isEmpty()) count++; return count; }
+  int currentChecklistCompletedCount() { return (int) runs.stream().filter(run -> run.no > checklistCompletedAfter && !run.note.equals("진행 중") && executionState(run) == ExecutionLedger.State.COMPLETED).count(); }
+  void resetChecklistProject() { Arrays.fill(checklistAccountsConfirmed, false); checklistCompletedAfter = historyNo; }
+
+  private synchronized ComparisonBatch beginComparisonBatch(Context context, boolean automatic) {
+    if (comparisonBatch == null || comparisonBatch.finished || comparisonBatch.epoch != context.epoch()) {
+      BackgroundJobs.Handle handle = BackgroundJobs.begin(backgroundJobs, automatic ? "신규 요청 자동 비교" : "선택 요청 계정 비교", "auth", () -> {
+        if (SwingUtilities.isEventDispatchThread()) stop(); else SwingUtilities.invokeLater(this::stop);
+      });
+      comparisonBatch = new ComparisonBatch(context.epoch(), automatic, handle);
+    }
+    return comparisonBatch;
+  }
+
+  private synchronized void admitComparisonJob(Run run) {
+    ComparisonBatch batch = beginComparisonBatch(run.context, recording.get() == run.context);
+    batch.admitted++; batch.pending++; comparisonJobs.put(run, batch);
+    if (batch.executionIds.size() >= LIMIT) batch.executionIds.remove(0);
+    batch.executionIds.add(run.executionId);
+    List<String> ids = List.copyOf(batch.executionIds);
+    batch.handle.result(() -> openComparisonJob(ids));
+    batch.handle.progress("계정 비교 대기·실행 중", batch.completed, batch.automatic ? -1 : batch.admitted);
+  }
+
+  private synchronized void finishComparisonJob(Run run, ExecutionLedger.State result) {
+    ComparisonBatch batch = comparisonJobs.remove(run); if (batch == null || batch.finished) return;
+    batch.pending--; batch.completed++; batch.failed |= result == ExecutionLedger.State.FAILED;
+    batch.stopping |= result == ExecutionLedger.State.CANCELLED;
+    batch.handle.progress(batch.stopping ? "중지 요청 · 시작한 요청의 종료 대기" : batch.pending == 0 && batch.automatic ? "신규 요청 대기" : "계정 비교 처리 중",
+        batch.completed, batch.automatic ? -1 : batch.admitted);
+    if (batch.pending == 0 && (!batch.automatic || recording.get() == null || batch.stopping || closed.get())) finishComparisonBatch(batch);
+  }
+
+  private void finishComparisonBatch(ComparisonBatch batch) {
+    batch.finished = true;
+    if (batch.stopping || closed.get() || batch.epoch != epoch.get()) batch.handle.cancelled("비교 종료 · 미전송 항목은 기록에서 확인");
+    else if (batch.failed) batch.handle.fail("일부 비교 실패 · 계정·응답·조회 근거 확인");
+    else batch.handle.complete("비교 종료 · 보안 판정은 결과에서 검토");
+  }
+
+  /** Resolve only this job's immutable IDs. Expired records never fall back to the latest comparison. */
+  void openComparisonJob(List<String> executionIds) {
+    if (closed.get()) return;
+    Run found = runs.stream().filter(run -> executionIds.contains(run.executionId)).findFirst().orElse(null);
+    if (found == null) {
+      detailRun = null; comparisonWindow.closeWindow(); show(null);
+      state.setText("이 작업의 비교 기록이 현재 이력에 없습니다. 저장 증거를 확인하거나 원본을 다시 준비하세요.");
+      return;
+    }
+    historyFilter.setSelectedIndex(0); historySearch.setText(""); filterHistory();
+    int view = history.convertRowIndexToView(runs.indexOf(found));
+    if (view >= 0) history.setRowSelectionInterval(view, view);
+    openComparison(found);
+    state.setText("선택 작업의 보관 비교 기록 열기 · 같은 배치의 이력 " + executionIds.size() + "개 · 전송 없음");
+  }
+
+  private synchronized void stopComparisonJobs() {
+    Set<ComparisonBatch> batches = Collections.newSetFromMap(new IdentityHashMap<>());
+    batches.addAll(comparisonJobs.values()); if (comparisonBatch != null) batches.add(comparisonBatch);
+    for (ComparisonBatch batch : batches) if (!batch.finished) {
+      batch.stopping = true;
+      batch.handle.stopping("중지 요청 · 시작한 요청의 종료 대기");
+      if (batch.pending == 0) finishComparisonBatch(batch);
+    }
   }
 
   static JLabel legend() {
@@ -981,6 +1142,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       profileNames[i].setText("");profileOwners[i].setText("");profileRoles[i].setText("");profileTenants[i].setText("");
     }
     slots[i] = c;
+    checklistAccountsConfirmed[i] = true;
     workConfigurationEdited();
     applyAccountToSlot(i,c);
     sessionChecks[i]=null;
@@ -1004,6 +1166,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void clearSlot(int i) {
     editable();
     slots[i] = null;
+    checklistAccountsConfirmed[i] = false;
     workConfigurationEdited();
     sessionChecks[i]=null;
     trackingAccounts[i] = "";
@@ -1053,33 +1216,43 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                   clearCandidates();
                   state.setText("쿠키 식별 설정 적용 · 신규 트래픽에서 후보 재수집");
                 })));
+    panel.add(comparisonValidation.message(extra));
+    panel.add(comparisonValidation.message(identityCookies));
     panel.add(new JLabel("빈 값: 모든 쿠키로 구분 · 지정 시 해당 쿠키로 후보 구분, 전송에는 전체 쿠키 유지"));
-    for (int i = 0; i < SLOTS; i++)
+    for (int i = 0; i < SLOTS; i++) {
       panel.add(
           WorkbenchUi.row(
               new JLabel("계정 " + (i + 1) + " 이름"),
               profileNames[i],
               new JLabel("소유값"),
               profileOwners[i]));
+      panel.add(comparisonValidation.message(profileOwners[i]));
+    }
     panel.add(WorkbenchUi.row(new JLabel("JSON 비교 제외 (쉼표)"), ignoredFields,button("동적 필드 후보",this::dynamicFields)));
+    panel.add(comparisonValidation.message(ignoredFields));
     panel.add(WorkbenchUi.row(new JLabel("중요 JSON 필드"),importantFields,unorderedArrays));
+    panel.add(comparisonValidation.message(importantFields));
     panel.add(new JLabel("예: $.requestId, $.meta.timestamp · 원본 응답은 변경하지 않습니다."));
     panel.add(WorkbenchUi.row(new JLabel("소유 JSON 경로"), ownerPath));
+    panel.add(comparisonValidation.message(ownerPath));
     panel.add(new JLabel("예: $.ownerId · 소유값은 같은 응답 필드 기준. 비로그인은 비워두세요."));
     panel.add(WorkbenchUi.row(new JLabel("기본 접근 정책"), accessPolicy));
     panel.add(
         WorkbenchUi.card(
             "경로별 접근 정책 · METHOD /path PUBLIC 또는 OWNER_ONLY", new JScrollPane(policyRules)));
+    panel.add(comparisonValidation.message(policyRules));
     panel.add(
         new JLabel("예: GET /api/posts/101 PUBLIC · GET /api/posts/{id} OWNER_ONLY · 정확한 경로 규칙 우선"));
     panel.add(WorkbenchUi.card("차단 규칙 · JSON 경로=값 (행별 OR)", new JScrollPane(denialRules)));
+    panel.add(comparisonValidation.message(denialRules));
     panel.add(WorkbenchUi.card("응답 차단 규칙 · 행별 OR · 선택 사항", new JScrollPane(responseDenialRules)));
+    panel.add(comparisonValidation.message(responseDenialRules));
+    panel.add(comparisonRuleConflict);
     panel.add(new JLabel("BODY: 접근 권한이 없습니다 · HEADER: X-Access: denied"));
     panel.add(new JLabel("BODY_REGEX: (?i)access\\s+denied · HEADER_REGEX: 정규식 · 대소문자 구분, 정규식 (?i) 지원"));
     panel.add(WorkbenchUi.card("처리 결과 확인",effectSettings));
     panel.add(WorkbenchUi.row(button("준비한 요청 다시 확인", this::reviewPreparedSelection), button("설정 묶음 · 저장/불러오기", setupBundleWindow::open)));
-    panel.add(
-        button(
+    JButton confirm = button(
             "설정 확인",
             () -> {
               editable();
@@ -1091,7 +1264,13 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
               refreshSlots();
               state.setText("설정 확인 · 다음 비교부터 적용, 기존 결과는 당시 설정 유지");
               refreshPreparedConfiguration();
-            }));
+            });
+    confirm.setName("wb.auth.settings.confirm");
+    comparisonValidation.bind("confirm", confirm, comparisonApplyReason, () -> {
+      if (!settingsEditable()) return false;
+      effectSettings.snapshot(); return true;
+    }, "진행 중인 비교를 마치고 처리 결과 조회 입력을 확인하세요.");
+    panel.add(comparisonApplyReason); panel.add(confirm); refreshInlineValidation();
     return panel;
   }
 
@@ -1169,6 +1348,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     anonymousItem.setEnabled(idle&&(selected!=null||Arrays.stream(slots).anyMatch(Objects::nonNull)));
     unassignItem.setEnabled(idle&&selected!=null&&Arrays.stream(slots).anyMatch(c->c!=null&&c.key().equals(selected.key())));
     deleteCandidateItem.setEnabled(idle&&selected!=null);
+    refreshInlineValidation();
   }
 
   void refreshAutomaticScope() {
@@ -1244,6 +1424,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                   new JLabel("조직"),
                   profileTenants[i]),
               WorkbenchUi.row(refreshEnabled[i], new JLabel("GET URL"), refreshUrls[i]),
+              sessionValidation.message(refreshUrls[i]),
               WorkbenchUi.row(
                   new JLabel("토큰 JSON"),
                   refreshTokenPaths[i],
@@ -1251,13 +1432,19 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                   refreshTokenHeaders[i],
                   new JLabel("접두사"),
                   refreshPrefixes[i]),
+              sessionValidation.message(refreshTokenPaths[i]),
+              sessionValidation.message(refreshTokenHeaders[i]),
+              sessionValidation.message(refreshPrefixes[i]),
               WorkbenchUi.row(
                   new JLabel("CSRF JSON"),
                   refreshCsrfPaths[i],
                   new JLabel("헤더"),
                   refreshCsrfHeaders[i],
                   new JLabel("신원 JSON"),
-                  refreshIdentityPaths[i]));
+                  refreshIdentityPaths[i]),
+              sessionValidation.message(refreshCsrfPaths[i]),
+              sessionValidation.message(refreshCsrfHeaders[i]),
+              sessionValidation.message(refreshIdentityPaths[i]));
       panel.add(WorkbenchUi.card("계정 " + (i + 1), account));
     }
     panel.add(new JLabel("같은 Origin/SCOPE GET 갱신 · 신원 JSON은 비교 설정의 소유값과 대조 · 비로그인 갱신 금지"));
@@ -1265,8 +1452,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     panel.add(WorkbenchUi.row(button("준비한 요청 다시 확인", this::reviewPreparedSelection), button("설정 묶음 · 저장/불러오기", setupBundleWindow::open)));
     panel.add(
         new JLabel("선택 요청을 표에 추가한 뒤 계정별 허용·차단을 선택하세요. 원문 규칙도 지원합니다."));
-    panel.add(
-        button(
+    JButton confirm = button(
             "설정 확인",
             () -> {
               editable();
@@ -1275,7 +1461,13 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
               refreshed.clear();
               state.setText("세션·매트릭스 확인 · 다음 비교부터 적용 · 설정/토큰 파일 저장 없음");
               refreshPreparedConfiguration();
-            }));
+            });
+    confirm.setName("wb.auth.session.confirm");
+    sessionValidation.bind("confirm", confirm, sessionApplyReason, () -> {
+      if (!settingsEditable()) return false;
+      sessionConfigs(); return matrixEditor.validationProblem().isEmpty();
+    }, "진행 중인 비교를 마치고 세션·권한 표의 입력을 확인하세요.");
+    panel.add(sessionApplyReason); panel.add(confirm); refreshInlineValidation();
     WorkbenchUi.style(panel);
     return panel;
   }
@@ -1381,6 +1573,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void activateRecord(Context c) {
     if (closed.get() || c.epoch != epoch.get()) return;
     recording.set(c);
+    ComparisonBatch batch = beginComparisonBatch(c, true);
+    batch.handle.progress("신규 요청 대기", batch.completed, -1);
     record.setSelected(true);
     record.setText("신규 요청 자동 비교 ON");record.repaint();refreshAutomaticScope();
     state.setText("자동 비교 중 · Proxy/Repeater 신규 요청 재전송 · " + c.origin + " · 프로필 고정");
@@ -1824,13 +2018,15 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if (history.getSelectedRow() < 0)
       history.setRowSelectionInterval(history.getRowCount() - 1, history.getRowCount() - 1);
     active.incrementAndGet();
+    admitComparisonJob(run); refreshInlineValidation();
     try {
-      worker.execute(() -> execute(run));
+      worker.execute(new ComparisonTask(run));
     } catch (RejectedExecutionException e) {
       active.decrementAndGet();
       run.note = "대기열 거부";
       if (executionTracker != null) executionTracker.finishAuthExecution(run.executionId, ExecutionLedger.State.FAILED, run.note);
       refresh(run);
+      finishComparisonJob(run, ExecutionLedger.State.FAILED); refreshInlineValidation();
     }
   }
 
@@ -1982,6 +2178,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
               refresh(run);
             }
             if (executionTracker != null) executionTracker.finishAuthExecution(run.executionId, executionState(run), run.note);
+            finishComparisonJob(run, executionState(run)); refreshInlineValidation();
           });
     }
   }
@@ -2243,6 +2440,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void stop() {
     recording.set(null);
     epoch.incrementAndGet();
+    stopComparisonJobs();
     closeReadiness();
     clearPreparation();
     if(cookieSessions.busy)cookieSessions.cancel();
@@ -2250,6 +2448,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     record.setSelected(false);
     record.setText("신규 요청 자동 비교 OFF");record.repaint();refreshAutomaticScope();
     state.setText("중지 · 이미 발송한 요청은 응답/타임아웃 후 종료합니다.");
+    refreshInlineValidation();
   }
 
   void clearHistory() {
@@ -2303,8 +2502,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     refreshed.clear();
     recording.set(null);
     epoch.incrementAndGet();
+    stopComparisonJobs();
     tickets.clear();
-    worker.shutdownNow();
+    for (Runnable discarded : worker.shutdownNow()) if (discarded instanceof ComparisonTask task) {
+      active.decrementAndGet(); finishComparisonJob(task.run, ExecutionLedger.State.CANCELLED);
+    }
     SwingUtilities.invokeLater(
         () -> {
           runs.clear();

@@ -488,7 +488,86 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 &&restored.get()==0,
             "Actual resume panel explains missing originals/tasks, saved filters and account reconnection without restoring automatically");
         dialogPair(resume,out,"next-workspace-resume");
+
         browser.restoreSearchState(previous);
+        renderUsability0532(ext,out);
+    }
+
+    /** 0.53.2 components, real UI actions and bounded synthetic metadata; zero target HTTP. */
+    static void renderUsability0532(WorkbenchExtension ext,Path out)throws Exception {
+        var opened=new java.util.ArrayList<String>();
+        var quick=new QuickNavigationPanel(()->List.of("traffic","auth"),opened::add,()->{});
+        quick.query.setText("JWT");
+        scenario("usability-quick-navigation.png","Purpose search finds JWT without executing a request",
+            quick.model.size()==1&&opened.isEmpty(),"Keyboard search resolves a feature route only");
+        quick.openSelected();
+        scenario("usability-quick-navigation.png","Selected purpose opens one route",opened.size()==1,
+            "Enter and mouse share the navigation callback; this fixture records the route only");
+        dialogPair(quick,out,"usability-quick-navigation");
+
+        var jobs=new BackgroundJobs();var stops=new java.util.concurrent.atomic.AtomicInteger();
+        var search=jobs.start("트래픽 검색","traffic",stops::incrementAndGet);
+        search.progress("본문 검색",7,20);
+        var finished=jobs.start("증거 ZIP 저장","evidence",null);finished.complete("파일 저장 완료");
+        var waiting=jobs.start("계정 비교","auth",stops::incrementAndGet);
+        var waitingView=jobs.snapshot().stream().filter(v->v.title().equals("계정 비교")).findFirst().orElseThrow();
+        jobs.requestCancel(waitingView.id());
+        var monitor=new JobMonitorPanel(jobs,opened::add);
+        scenario("usability-background-jobs.png","Task monitor distinguishes cancel request from termination",
+            jobs.snapshot().stream().anyMatch(v->v.state()==BackgroundJobs.State.CANCEL_REQUESTED)
+                &&monitor.table.getRowCount()==3&&stops.get()==1,
+            "Observed counters are shown; cancellation remains pending until worker acknowledges");
+        dialogPair(monitor,out,"usability-background-jobs");monitor.close();jobs.close();
+
+        var readiness=new GettingStartedPanel(()->new GettingStartedPanel.Readiness(true,false,12,1,1,false),opened::add);
+        int before=opened.size();readiness.actions[0].doClick(0);
+        scenario("usability-getting-started.png","Setup checklist opens settings without automatic requests",
+            opened.size()==before+1&&readiness.states[1].getText().contains("12")
+                &&readiness.states[4].getText().contains("ZIP"),
+            "Production checklist derives status from supplied current workspace metadata");
+        dialogPair(readiness,out,"usability-getting-started");readiness.close();
+
+        var compare=new StructuredComparePanel();
+        compare.leftInput.setText("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nX-Role: reader\r\n\r\n{\"user\":{\"role\":\"reader\",\"active\":true}}");
+        compare.rightInput.setText("HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\nX-Role: reviewer\r\n\r\n{\"user\":{\"role\":\"reviewer\",\"active\":false},\"reason\":\"policy\"}");
+        compare.compare();compare.summaryTable.setRowSelectionInterval(0,0);
+        scenario("usability-response-summary.png","Response summary preserves raw evidence and field differences",
+            compare.summaryTable.getRowCount()>=4&&compare.leftRaw.getText().contains("200 OK")
+                &&compare.rightRaw.getText().contains("403 Forbidden"),
+            "Status, header and JSON changes are display-only, with untouched original text");
+        render(compare,out.resolve("usability-response-summary.png"),width,height);
+
+        var bounty=(BountySupportPanel)get(ext,"bountySupport");
+        bounty.clearEvidence();
+        bounty.captureObserved(List.of(
+            AuthRecordTest.rr(request("https://app.example.test/api/notices/101","GET",true,List.of()),response(200,"{\"id\":101}")),
+            AuthRecordTest.rr(request("https://app.example.test/api/notices/101","PATCH",true,List.of()),response(200,"{\"accepted\":true}"))),"화면 검증용 합성 원본");
+        bounty.evidenceTable.setRowSelectionInterval(0,0);bounty.removeSelectedEvidence();
+        scenario("usability-evidence-editor.png","Selected evidence removal preserves other packet",bounty.evidenceCount()==1,
+            "Production item removal updates the bundle without touching the source traffic");
+        bounty.undoEvidenceEdit();
+        scenario("usability-evidence-editor.png","Undo restores both exact evidence items",bounty.evidenceCount()==2,
+            "The original retained packet references and bundle order are restored");
+        bounty.impact.setText("화면 검증용 합성 설명 · 실제 서비스의 보안 영향 판정이 아닙니다.");
+        bounty.repro.setText("1. 기준 원본 확인\n2. 변경 요청·응답 대조\n3. 가림 미리보기 후 파일 저장");
+        bounty.impact.setName("preview.evidence.impact");bounty.repro.setName("preview.evidence.repro");
+        ext.openFeature("bounty");bounty.pages.setSelectedIndex(3);
+        scenario("usability-evidence-editor.png","Evidence editing actions available in production workspace",
+            UiLayoutTest.named(bounty,"wb.bounty.evidence.save")!=null,
+            "Item editing preserves original traffic; exported content still requires redaction review");
+        render((Container)get(ext,"root"),out.resolve("usability-evidence-editor.png"),width,height);
+
+
+        var validationOwner=new AuthComparePanel((MontoyaApi)get(ext,"api"),List::of);
+        try {
+            var effect=validationOwner.effectSettings;effect.path.setText("/api/items/{id}");effect.url.setText("invalid URL");
+            effect.jsonPath.setText("ownerId");effect.refreshValidation();
+            scenario("usability-inline-validation.png","Invalid fields explain disabled apply before any request",
+                !effect.saveRuleButton.isEnabled()&&!effect.validation.message(effect.url).getText().isBlank()
+                    &&effect.validation.message(effect.jsonPath).getText().contains("JSON"),
+                "URL and JSON-path examples remain beside their inputs; no settings are applied");
+            dialogPair(WorkbenchUi.settingsBody(effect,()->{}),out,"usability-inline-validation");
+        } finally { validationOwner.close(); }
     }
 
     public static void main(String[] args) throws Exception {

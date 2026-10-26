@@ -28,6 +28,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   final JLabel state = new JLabel("도구를 선택해 요청을 준비하세요. 자동 실행 없음");
   final AtomicBoolean closed = new AtomicBoolean(), cancel = new AtomicBoolean();
   volatile boolean running;
+  volatile boolean runningCancellable;
   final ExecutorService worker =
       Executors.newSingleThreadExecutor(
           r -> {
@@ -64,10 +65,22 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   final JTextArea impact = area(3), repro = area(4);
   final List<BountyEvidence.Item> evidence = new ArrayList<>();
   final java.util.concurrent.ConcurrentMap<String, String> evidenceExecutions = new java.util.concurrent.ConcurrentHashMap<>();
+  final java.util.concurrent.ConcurrentMap<String, Set<String>> evidenceExecutionSources = new java.util.concurrent.ConcurrentHashMap<>();
+  final java.util.concurrent.ConcurrentMap<String, String> evidenceExecutionParts = new java.util.concurrent.ConcurrentHashMap<>();
   final Set<String> evidenceHeaders = new LinkedHashSet<>();
   final Set<String> evidenceSecrets = new LinkedHashSet<>();
+  static final int EVIDENCE_REDACTION_VALUES = 256, EVIDENCE_REDACTION_CHARACTERS = 256 * 1024;
   final DefaultTableModel evidenceModel = model("이름", "메서드", "URL", "관찰");
   final JTable evidenceTable = new JTable(evidenceModel);
+  final JLabel evidenceCount = new JLabel("증거 0 / 32개");
+  record EvidenceEdit(List<BountyEvidence.Item> items, Map<String, String> executions,
+      Map<String, String> parts, List<Integer> selected, EvidencePacketStore store, String project, boolean compact) {}
+  EvidenceEdit evidenceUndo;
+  boolean evidenceCompactionNeeded;
+  volatile String evidenceProject;
+  final AtomicLong evidenceEpoch = new AtomicLong();
+  final AtomicInteger successfulEvidenceSaves = new AtomicInteger();
+  BackgroundJobs backgroundJobs;
   Path browserImage;
   String browserImageSha256;
   final JButton flowRun = action("순차 실행", this::runFlow),
@@ -81,7 +94,11 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       flowCapture = action("결과 → 증거", this::captureFlow),
       evidencePreview = action("가림 미리보기", this::previewEvidence),
       evidenceSave = action("증거 ZIP 저장", this::saveEvidence),
-      evidenceClear = action("비우기", this::clearEvidence);
+      evidenceClear = action("비우기", this::clearEvidence),
+      evidenceRemove = action("선택 제거", this::removeSelectedEvidence),
+      evidenceUp = action("위로", () -> moveSelectedEvidence(-1)),
+      evidenceDown = action("아래로", () -> moveSelectedEvidence(1)),
+      evidenceUndoAction = action("실행 취소", this::undoEvidenceEdit);
   CollaboratorClient collaborator;
   final LinkedHashMap<String, OastRequest> correlations = new LinkedHashMap<>();
   final Set<String> seenInteractions = new HashSet<>();
@@ -138,15 +155,27 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   }
 
   void task(Runnable r) {
+    task("재현·외부 연결 작업", false, r);
+  }
+
+  void task(String title, boolean cancellable, Runnable r) {
     if (closed.get() || running) throw new IllegalArgumentException("진행 중 작업을 끝내거나 중지하세요.");
     running = true;
+    runningCancellable = cancellable;
     refreshActions();
     cancel.set(false);
-    worker.execute(
+    var background = BackgroundJobs.begin(backgroundJobs, title, "bounty",
+        cancellable ? () -> { cancel.set(true); later(() -> state.setText("후속 단계 중지 요청 · 현재 요청 종료 대기")); } : null);
+    background.progress("대기", 0, -1);
+    try { worker.execute(
         () -> {
           try {
+            background.progress("처리 중", 0, -1);
             r.run();
+            if (cancel.get() || closed.get()) background.cancelled("작업 중지");
+            else background.complete("작업 완료");
           } catch (Exception ex) {Diagnostics.failure(BountySupportPanel.this,"재현·증거 정리",ex);
+            background.fail("작업 실패 · 해당 화면에서 원인 확인");
             later(
                 () ->
                     state.setText(
@@ -155,11 +184,16 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
             later(
                 () -> {
                   running = false;
+                  runningCancellable = false;
                   refreshActions();
                 });
-            if (closed.get()) running = false;
+            if (closed.get()) { running = false; runningCancellable = false; }
           }
-        });
+        }); } catch (RuntimeException error) {
+      running = false; runningCancellable = false; refreshActions();
+      background.fail("작업을 시작하지 못했습니다.");
+      throw error;
+    }
   }
 
   HttpRequestResponse one() {
@@ -181,6 +215,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     this.selected = selected;
     this.auth = auth;
     this.activity = activity;
+    evidenceProject = WorkspaceResume.projectIdentity(api);
     setName("wb.bounty.support");
     setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
     pages.addTab("외부 도구", toolsContent());
@@ -196,6 +231,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     add(state, BorderLayout.SOUTH);
     flowModel.addTableModelListener(e -> refreshActions());
     evidenceModel.addTableModelListener(e -> refreshActions());
+    evidenceTable.getSelectionModel().addListSelectionListener(e -> refreshActions());
     refreshActions();
     WorkbenchUi.style(this);
     WorkbenchUi.status(state);
@@ -279,11 +315,18 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
 
   void refreshActions() {
     flowRun.setEnabled(!running);
-    flowStop.setEnabled(running);
+    flowStop.setEnabled(running && runningCancellable);
     flowCapture.setEnabled(!running && flowModel.getRowCount() > 0);
     evidencePreview.setEnabled(evidenceModel.getRowCount() > 0);
     evidenceSave.setEnabled(!running && evidenceModel.getRowCount() > 0);
     evidenceClear.setEnabled(!running && (evidenceModel.getRowCount() > 0 || browserImage != null));
+    int[] selected = evidenceTable.getSelectedRows();
+    boolean editable = !closed.get() && !running;
+    evidenceRemove.setEnabled(editable && selected.length > 0);
+    evidenceUp.setEnabled(editable && canMoveEvidence(-1));
+    evidenceDown.setEnabled(editable && canMoveEvidence(1));
+    evidenceUndoAction.setEnabled(editable && evidenceUndo != null);
+    evidenceCount.setText("증거 " + evidenceModel.getRowCount() + " / 32개 · 선택 " + selected.length + "개");
   }
 
   JPanel workflowContent() {
@@ -374,7 +417,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     flowResults.clear();
     flowModel.setRowCount(0);
     state.setText("순차 실행 중");
-    task(
+    task("여러 요청 재현", true,
         () -> {
           try {
             BountyWorkflow.run(
@@ -424,6 +467,15 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
             evidencePreview,
             evidenceSave,
             evidenceClear));
+    evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    evidenceTable.setToolTipText("Ctrl/Shift로 여러 증거 선택 · 화면 순서대로 ZIP에 저장합니다.");
+    evidenceRemove.setName("wb.bounty.evidence.remove");
+    evidenceUp.setName("wb.bounty.evidence.up");
+    evidenceDown.setName("wb.bounty.evidence.down");
+    evidenceUndoAction.setName("wb.bounty.evidence.undo");
+    evidenceCount.setName("wb.bounty.evidence.count");
+    evidenceUndoAction.setToolTipText("마지막 제거·순서 변경 1회 복구 · 새 증거 추가·비우기·프로젝트 변경 시 해제");
+    top.add(WorkbenchUi.row(evidenceRemove, evidenceUp, evidenceDown, evidenceUndoAction, evidenceCount));
     p.add(top, BorderLayout.NORTH);
     for (JTextArea area : List.of(impact, repro)) {
       area.setLineWrap(true);
@@ -482,8 +534,26 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       String note,
       String account) {
     if (closed.get()) throw new IllegalArgumentException("확장이 종료되었습니다.");
+    if (running) throw new IllegalArgumentException("진행 중 작업이 끝난 뒤 증거를 추가하세요.");
+    ensureEvidenceProject();
     if (evidence.size() >= 32) throw new IllegalArgumentException("증거 요청 최대 32개");
     if (q == null) throw new IllegalArgumentException("요청 없음");
+    Set<String> names = new LinkedHashSet<>(), secrets = new LinkedHashSet<>();
+    long incomingCharacters = 0;
+    for (var h : q.headers())
+      if (auth.authNames.contains(h.name().toLowerCase(Locale.ROOT))
+          || AuthComparePanel.CSRF.contains(h.name().toLowerCase(Locale.ROOT))
+          || BountyEvidence.SECRET.matcher(h.name()).find()) {
+        String name = h.name().toLowerCase(Locale.ROOT), value = h.value();
+        if (names.add(name)) incomingCharacters += name.length();
+        if (value != null && secrets.add(value)) incomingCharacters += value.length();
+        if (names.size() > EVIDENCE_REDACTION_VALUES || secrets.size() > EVIDENCE_REDACTION_VALUES
+            || incomingCharacters > EVIDENCE_REDACTION_CHARACTERS)
+          throw new IllegalArgumentException("추가할 증거의 가림 정보가 보관 한도를 초과했습니다. 필요한 원본을 나누어 저장하세요. 기존 증거는 유지합니다.");
+      }
+    retainEvidenceRedactions(names, secrets);
+    evidenceUndo = null;
+    compactEvidenceStore();
     // The packet is copied once in bounded chunks. No full request/response String survives
     // capture.
     var stored = evidenceStore.append(q, response);
@@ -493,17 +563,159 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
               + stored.response().length()
               + " bytes · SHA-256 "
               + stored.response().sha256();
-    for (var h : q.headers())
-      if (auth.authNames.contains(h.name().toLowerCase(Locale.ROOT))
-          || AuthComparePanel.CSRF.contains(h.name().toLowerCase(Locale.ROOT))
-          || BountyEvidence.SECRET.matcher(h.name()).find()) {
-        evidenceHeaders.add(h.name().toLowerCase(Locale.ROOT));
-        evidenceSecrets.add(h.value());
-      }
     BountyEvidence.Item item =
         new BountyEvidence.Item(label, q.method(), q.url(), note, account, stored);
     evidence.add(item);
     evidenceModel.addRow(new Object[] {label, q.method(), Core.safeUrl(q.url()), note});
+  }
+
+  int evidenceCount() { return evidence.size(); }
+
+  /** Removed credentials may still be reflected elsewhere, so keep the union with a hard budget. */
+  void retainEvidenceRedactions(Collection<String> names, Collection<String> secrets) {
+    Set<String> nextNames = new LinkedHashSet<>(evidenceHeaders), nextSecrets = new LinkedHashSet<>(evidenceSecrets);
+    long characters = nextNames.stream().mapToLong(String::length).sum()
+        + nextSecrets.stream().mapToLong(String::length).sum();
+    for (int kind = 0; kind < 2; kind++)
+      for (String value : kind == 0 ? names : secrets) {
+        if (value == null || value.isEmpty()) continue;
+        Set<String> target = kind == 0 ? nextNames : nextSecrets;
+        if (target.add(value)) characters += value.length();
+        if (target.size() > EVIDENCE_REDACTION_VALUES || characters > EVIDENCE_REDACTION_CHARACTERS)
+          throw new IllegalArgumentException("증거 가림 정보 보관 한도에 도달했습니다. 현재 증거를 저장하고 비운 뒤 새 묶음을 시작하세요. 기존 가림 정보는 유지합니다.");
+      }
+    evidenceHeaders.clear(); evidenceHeaders.addAll(nextNames);
+    evidenceSecrets.clear(); evidenceSecrets.addAll(nextSecrets);
+  }
+
+  boolean hasSavedEvidence() { return successfulEvidenceSaves.get() > 0; }
+
+  /** Integration calls this when the active Burp project changes. No undo may cross this boundary. */
+  void resetEvidenceProject() {
+    evidenceEpoch.incrementAndGet();
+    evidenceUndo = null;
+    evidenceCompactionNeeded = false;
+    evidenceStore.close();
+    evidenceStore = new EvidencePacketStore();
+    evidence.clear(); evidenceExecutions.clear(); evidenceExecutionSources.clear(); evidenceExecutionParts.clear(); evidenceModel.setRowCount(0);
+    evidenceHeaders.clear(); evidenceSecrets.clear();
+    browserImage = null; browserImageSha256 = null;
+    successfulEvidenceSaves.set(0);
+    evidenceProject = WorkspaceResume.projectIdentity(api);
+    refreshActions();
+  }
+
+  private void ensureEvidenceProject() {
+    String project = WorkspaceResume.projectIdentity(api);
+    if (!Objects.equals(project, evidenceProject)) {
+      resetEvidenceProject();
+      throw new IllegalArgumentException("프로젝트가 변경되어 이전 증거와 실행 취소를 비웠습니다. 현재 원본을 다시 선택하세요.");
+    }
+  }
+
+  private void requireEvidenceEdit() {
+    if (closed.get()) throw new IllegalArgumentException("확장이 종료되었습니다.");
+    if (running) throw new IllegalArgumentException("저장 작업이 끝난 뒤 증거를 편집하세요.");
+    ensureEvidenceProject();
+  }
+
+  private List<Integer> selectedEvidenceRows() {
+    return Arrays.stream(evidenceTable.getSelectedRows()).filter(row -> row >= 0 && row < evidenceTable.getRowCount())
+        .map(evidenceTable::convertRowIndexToModel)
+        .sorted().boxed().toList();
+  }
+
+  private void rememberEvidenceEdit() {
+    evidenceUndo = new EvidenceEdit(List.copyOf(evidence), Map.copyOf(evidenceExecutions),
+        Map.copyOf(evidenceExecutionParts), selectedEvidenceRows(), evidenceStore, evidenceProject, evidenceCompactionNeeded);
+  }
+
+  private void rebuildEvidenceRows(Collection<String> selectedIds) {
+    // Edited visible order is the archive order, even if a host has installed a column sorter.
+    if (evidenceTable.getRowSorter() != null) evidenceTable.getRowSorter().setSortKeys(List.of());
+    evidenceModel.setRowCount(0);
+    for (var item : evidence)
+      evidenceModel.addRow(new Object[] {item.label(), item.method(), Core.safeUrl(item.url()), item.note()});
+    evidenceTable.clearSelection();
+    for (int row = 0; row < evidence.size(); row++)
+      if (selectedIds.contains(evidence.get(row).evidenceId())) {
+        int view = evidenceTable.convertRowIndexToView(row);
+        if (view >= 0) evidenceTable.addRowSelectionInterval(view, view);
+      }
+    refreshActions();
+  }
+
+  void removeSelectedEvidence() {
+    requireEvidenceEdit();
+    List<Integer> selected = selectedEvidenceRows();
+    if (selected.isEmpty()) throw new IllegalArgumentException("제거할 증거를 선택하세요.");
+    rememberEvidenceEdit();
+    for (int i = selected.size() - 1; i >= 0; i--) {
+      var removed = evidence.remove((int) selected.get(i));
+      evidenceExecutions.remove(removed.evidenceId());
+      evidenceExecutionParts.remove(removed.evidenceId());
+    }
+    // Keep the accumulated redaction names/values: a removed packet's credential can still be
+    // reflected in another retained packet or a user-written note.
+    evidenceCompactionNeeded = true;
+    rebuildEvidenceRows(List.of());
+    if (!evidence.isEmpty()) {
+      int next = Math.min(selected.get(0), evidence.size() - 1);
+      evidenceTable.setRowSelectionInterval(next, next);
+    }
+    state.setText("선택 증거 " + selected.size() + "개 제거 · 실행 취소로 복구 · 원래 트래픽/실행 결과 유지");
+  }
+
+  private boolean canMoveEvidence(int direction) {
+    Set<Integer> rows = new HashSet<>(selectedEvidenceRows());
+    return rows.stream().anyMatch(row -> row + direction >= 0 && row + direction < evidence.size()
+        && !rows.contains(row + direction));
+  }
+
+  void moveSelectedEvidence(int direction) {
+    requireEvidenceEdit();
+    if (direction != -1 && direction != 1) throw new IllegalArgumentException("증거 이동 방향 오류");
+    if (!canMoveEvidence(direction)) throw new IllegalArgumentException("이 방향으로 이동할 선택 증거가 없습니다.");
+    List<String> selected = selectedEvidenceRows().stream().map(row -> evidence.get(row).evidenceId()).toList();
+    rememberEvidenceEdit();
+    Set<String> chosen = new HashSet<>(selected);
+    for (int i = direction < 0 ? 1 : evidence.size() - 2;
+        direction < 0 ? i < evidence.size() : i >= 0; i -= direction)
+      if (chosen.contains(evidence.get(i).evidenceId()) && !chosen.contains(evidence.get(i + direction).evidenceId()))
+        Collections.swap(evidence, i, i + direction);
+    rebuildEvidenceRows(selected);
+    state.setText("선택 증거 " + selected.size() + "개 " + (direction < 0 ? "위로" : "아래로") + " 이동 · ZIP 저장 순서에 반영");
+  }
+
+  void undoEvidenceEdit() {
+    requireEvidenceEdit();
+    EvidenceEdit previous = evidenceUndo;
+    if (previous == null || previous.store() != evidenceStore || !previous.project().equals(evidenceProject))
+      throw new IllegalArgumentException("복구할 증거 편집이 없습니다.");
+    evidenceUndo = null;
+    evidence.clear(); evidence.addAll(previous.items());
+    evidenceExecutions.clear(); evidenceExecutions.putAll(previous.executions());
+    evidenceExecutionParts.clear(); evidenceExecutionParts.putAll(previous.parts());
+    evidenceCompactionNeeded = previous.compact();
+    var ids = previous.selected().stream().map(row -> evidence.get(row).evidenceId()).toList();
+    rebuildEvidenceRows(ids);
+    state.setText("마지막 증거 편집 복구 · 원본·실행 연결과 순서 유지");
+  }
+
+  private void compactEvidenceStore() {
+    if (!evidenceCompactionNeeded) return;
+    EvidencePacketStore next = new EvidencePacketStore();
+    List<BountyEvidence.Item> copied = new ArrayList<>();
+    try {
+      for (var item : evidence) copied.add(item.copyTo(next));
+    } catch (RuntimeException error) { next.close(); throw error; }
+    EvidencePacketStore previous = evidenceStore;
+    evidenceStore = next;
+    evidence.clear(); evidence.addAll(copied);
+    evidenceCompactionNeeded = false;
+    previous.close();
+    evidenceExecutionSources.keySet().retainAll(new HashSet<>(evidenceExecutions.values()));
+    evidenceExecutionParts.keySet().retainAll(new HashSet<>(evidenceExecutions.keySet()));
   }
 
   void captureObserved(List<HttpRequestResponse> packets, String note) {
@@ -543,7 +755,9 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   }
 
   void attachBrowserEvidence(Path image, String expected) {
+    requireEvidenceEdit();
     String hash = browserProofHash(image, expected);
+    evidenceUndo = null;
     browserImage = image;
     browserImageSha256 = hash;
     refreshActions();
@@ -603,8 +817,11 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     if (evidence.size() + planned.size() > 32)
       throw new IllegalArgumentException("증거 요청 최대 32개 · 이번 비교의 원본/계정/조회 "
           + planned.size() + "개를 함께 추가할 공간이 필요합니다.");
-    evidenceHeaders.addAll(r.context.names());
-    for (var c : r.context.profiles()) if (c != null) evidenceSecrets.addAll(c.headers().values());
+    Set<String> profileSecrets = new LinkedHashSet<>();
+    for (var c : r.context.profiles()) if (c != null) profileSecrets.addAll(c.headers().values());
+    retainEvidenceRedactions(r.context.names(), profileSecrets);
+    Set<String> originalPackets = new LinkedHashSet<>();
+    int sourceIndex = 0;
     for (var entry : planned) {
       String account = entry.account();
       if (entry.label().equals("권한 비교 원본") || entry.label().equals("권한 비교 기준 재조회"))
@@ -612,8 +829,18 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       String provenance = execution == null ? "" : "\n\n[작업·원본·실행 연결]\n"
           + activity.tracker.assessments.executionSummary(r.executionId);
       remember(entry.request(), entry.response(), entry.label(), entry.note() + provenance, account);
-      if (execution != null) evidenceExecutions.put(evidence.get(evidence.size() - 1).evidenceId(), r.executionId);
+      if (execution != null) {
+        var item = evidence.get(evidence.size() - 1);
+        evidenceExecutions.put(item.evidenceId(), r.executionId);
+        // Source position identifies original/baseline/account/before/after observations even
+        // when two distinct roles happened to have byte-identical HTTP packets.
+        String sourcePart = sourceIndex + ":" + item.packetId();
+        evidenceExecutionParts.put(item.evidenceId(), sourcePart);
+        originalPackets.add(sourcePart);
+      }
+      sourceIndex++;
     }
+    if (execution != null) evidenceExecutionSources.put(r.executionId, Set.copyOf(originalPackets));
     state.setText("선택 권한 비교 " + planned.size() + "개 증거 추가 · 실행 당시 설정·판정·조회 포함");
   }
 
@@ -661,11 +888,17 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   }
 
   void clearEvidence() {
+    if (closed.get()) throw new IllegalArgumentException("확장이 종료되었습니다.");
     if (running) throw new IllegalArgumentException("저장 작업 종료 후 증거를 비우세요.");
+    evidenceUndo = null;
+    evidenceCompactionNeeded = false;
+    evidenceEpoch.incrementAndGet();
     evidenceStore.close();
     evidenceStore = new EvidencePacketStore();
     evidence.clear();
     evidenceExecutions.clear();
+    evidenceExecutionSources.clear();
+    evidenceExecutionParts.clear();
     evidenceModel.setRowCount(0);
     evidenceHeaders.clear();
     evidenceSecrets.clear();
@@ -696,6 +929,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   }
 
   void saveEvidence() {
+    requireEvidenceEdit();
     if (evidence.isEmpty()) throw new IllegalArgumentException("증거를 먼저 추가하세요.");
     JFileChooser f = new JFileChooser();
     f.setSelectedFile(new java.io.File("workbench-evidence.zip"));
@@ -714,7 +948,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     Path image = browserImage;
     String imageHash = browserImageSha256;
     var oast = oastSnapshot();
-    task(
+    task("증거 ZIP 저장", false,
         () -> {
           try {
             writeEvidence(
@@ -758,6 +992,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       List<Map<String, Object>> oast,
       String expectedImageHash)
       throws Exception {
+    String savingProject = evidenceProject;
+    long savingEpoch = evidenceEpoch.get();
     BountyEvidence.save(
         path,
         title,
@@ -772,10 +1008,28 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         oast,
         expectedImageHash);
     String id = BountyEvidence.fileHash(path);
+    // A completed file still belongs to the project selected when the save started. Never attach
+    // its proof or readiness flag to a newly opened project or an unloaded workspace.
+    if (closed.get() || savingEpoch != evidenceEpoch.get() || !Objects.equals(savingProject, evidenceProject)
+        || !Objects.equals(savingProject, WorkspaceResume.projectIdentity(api))) return;
+    successfulEvidenceSaves.incrementAndGet();
     activity.evidenceSaved(id, path.getFileName().toString(), items, path);
-    for (String execution : items.stream().map(item -> evidenceExecutions.get(item.evidenceId()))
-        .filter(Objects::nonNull).distinct().toList())
-      activity.tracker.assessments.executionEvidenceSaved(execution, id);
+    for (var entry : includedExecutionPackets(items).entrySet()) {
+      Set<String> required = evidenceExecutionSources.get(entry.getKey());
+      if (required != null && !required.isEmpty() && entry.getValue().containsAll(required))
+        activity.tracker.assessments.executionEvidenceSaved(entry.getKey(), id);
+    }
+  }
+
+  Map<String, Set<String>> includedExecutionPackets(List<BountyEvidence.Item> items) {
+    Map<String, Set<String>> included = new LinkedHashMap<>();
+    for (var item : items) {
+      String execution = evidenceExecutions.get(item.evidenceId());
+      String part = evidenceExecutionParts.get(item.evidenceId());
+      if (execution != null) included.computeIfAbsent(execution, ignored -> new LinkedHashSet<>())
+          .add(part == null ? "unverified:" + item.evidenceId() : part);
+    }
+    return included;
   }
 
   String executionCoverage(String coverage, List<BountyEvidence.Item> items) {
@@ -789,6 +1043,14 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       if (execution != null) links.add(Map.of("evidenceItemId", item.evidenceId(), "executionId", execution));
     }
     result.put("executionEvidenceItems", links);
+    List<Map<String, Object>> completeness = new ArrayList<>();
+    includedExecutionPackets(items).forEach((execution, included) -> {
+      Set<String> required = evidenceExecutionSources.get(execution);
+      completeness.add(Map.of("executionId", execution, "includedOriginalPackets", included.size(),
+          "expectedOriginalPackets", required == null ? 0 : required.size(),
+          "complete", required != null && !required.isEmpty() && included.containsAll(required)));
+    });
+    result.put("executionEvidenceCompleteness", completeness);
     return MetadataExport.json(result);
   }
 
@@ -957,6 +1219,10 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   @Override
   public void close() {
     closed.set(true);
+    evidenceEpoch.incrementAndGet();
+    evidenceUndo = null;
+    evidenceCompactionNeeded = false;
+    successfulEvidenceSaves.set(0);
     for (var window : List.copyOf(previewWindows)) window.dispose();
     previewWindows.clear();
     cancel.set(true);
@@ -967,6 +1233,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     flowResults.clear();
     evidence.clear();
     evidenceExecutions.clear();
+    evidenceExecutionSources.clear();
+    evidenceExecutionParts.clear();
     evidenceSecrets.clear();
     evidenceHeaders.clear();
     correlations.clear();

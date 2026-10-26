@@ -54,6 +54,12 @@ final class BountyEvidence {
         String note,
         String account,
         EvidencePacketStore.Ref packet) {
+      this(label, method, url, request, response, note, account, packet, UUID.randomUUID().toString());
+    }
+
+    private Item(
+        String label, String method, String url, String request, String response,
+        String note, String account, EvidencePacketStore.Ref packet, String evidenceId) {
       this.label = Objects.toString(label, "");
       this.method = Objects.toString(method, "");
       this.url = Objects.toString(url, "");
@@ -62,7 +68,13 @@ final class BountyEvidence {
       this.packet = packet;
       requestText = packet == null ? Objects.toString(request, "") : null;
       responseText = packet == null ? Objects.toString(response, "") : null;
-      evidenceId = UUID.randomUUID().toString();
+      this.evidenceId = evidenceId;
+    }
+
+    Item copyTo(EvidencePacketStore destination) {
+      if (packet == null) return this;
+      return new Item(label, method, url, null, null, note, account,
+          destination.append(packet), evidenceId);
     }
 
     String label() {

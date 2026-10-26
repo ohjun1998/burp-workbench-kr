@@ -6,13 +6,19 @@ import java.awt.event.*;
 import java.awt.geom.Path2D;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.*;
 
 /** Folder navigation over the existing page instances and their shared selection model. */
-final class FolderNavigation extends JPanel {
+final class FolderNavigation extends JPanel implements AutoCloseable {
   private static final int DEFAULT_WIDTH = 220;
   private static final int MIN_WIDTH = 160;
   private static final int MAX_WIDTH = 420;
@@ -25,6 +31,27 @@ final class FolderNavigation extends JPanel {
   private final JSplitPane split;
   private final JButton toggle = new JButton();
   private final JLabel current = new JLabel();
+  private final JButton back = new JButton("←"), forward = new JButton("→"), quick = new JButton("기능 찾기");
+  private final NavigationViewState.ModelVersions modelVersions = new NavigationViewState.ModelVersions();
+  private final List<Visit> visits = new ArrayList<>();
+  private final List<String> recent = new ArrayList<>();
+  private final TargetWindow quickWindow;
+  private QuickNavigationPanel quickPanel;
+  private Consumer<String> routeOpener = this::openLocalRoute;
+  private Supplier<String> routeProvider = this::selectedRoute, projectProvider = () -> "";
+  private Function<String, Object> captureExtra = route -> null;
+  private Consumer<Object> restoreExtra = state -> {};
+  private String historyProject = "";
+  private int visitIndex = -1;
+  private long historyGeneration;
+  private boolean changingHistory, recordPending, closed;
+  private static final int HISTORY_LIMIT = 24, RECENT_LIMIT = 8;
+  private static final class Visit {
+    final String route;
+    NavigationViewState view;
+    Object extra;
+    Visit(String route, NavigationViewState view, Object extra) { this.route = route; this.view = view; this.extra = extra; }
+  }
   private int menuWidth = DEFAULT_WIDTH;
   private boolean hidden;
   private boolean adjusting;
@@ -58,6 +85,7 @@ final class FolderNavigation extends JPanel {
     super(new BorderLayout(0, 6));
     this.api = api;
     this.pages = pages;
+    quickWindow = new TargetWindow(this, "기능 바로 찾기 · Ctrl+K", this::quickPanel);
     setName("wb.navigation");
     pages.setName("wb.navigation.pages");
     pages.setMinimumSize(new Dimension(360, 100));
@@ -89,7 +117,7 @@ final class FolderNavigation extends JPanel {
       Object chosen = tree.getLastSelectedPathComponent();
       if (chosen instanceof DefaultMutableTreeNode node && node.getUserObject() instanceof Tool tool) {
         int index = indexOf(tool.id());
-        if (index >= 0) pages.setSelectedIndex(index);
+        if (index >= 0) navigate(tool.id());
       }
       tree.repaint();
     });
@@ -114,26 +142,36 @@ final class FolderNavigation extends JPanel {
     });
     toggle.setName("wb.navigation.toggle");
     toggle.addActionListener(event -> setMenuHidden(!hidden));
+    back.setName("wb.navigation.back"); forward.setName("wb.navigation.forward");
+    quick.setName("wb.navigation.quick");
+    back.setToolTipText("이전 작업 화면 · Alt+←"); forward.setToolTipText("다음 작업 화면 · Alt+→");
+    quick.setToolTipText("기능 이름이나 목적으로 찾기 · Ctrl+K");
+    back.getAccessibleContext().setAccessibleName("이전 작업 화면");
+    forward.getAccessibleContext().setAccessibleName("다음 작업 화면");
+    back.addActionListener(e -> goBack()); forward.addActionListener(e -> goForward());
+    quick.addActionListener(e -> openQuickNavigation());
     current.setName("wb.navigation.current");
     current.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 6));
     JButton settings = new JButton("설정");
     settings.setName("wb.navigation.settings");
     settings.addActionListener(event -> openSettings.run());
-    JPanel toolbar = new JPanel(new BorderLayout(8, 0));
-    toolbar.setBorder(BorderFactory.createEmptyBorder(4, 6, 0, 6));
     JLabel version = new JLabel("NEXT " + BuildInfo.VERSION);
     version.setName("wb.next.version");
     version.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, 13f));
     version.setForeground(WorkbenchUi.accent());
     version.setToolTipText("Workbench Next · 별도 배포 채널 · 기존 Workbench와 구분");
-    toolbar.add(WorkbenchUi.row(toggle, version), BorderLayout.WEST);
-    toolbar.add(current, BorderLayout.CENTER);
+    JPanel navigationLine = new JPanel(new BorderLayout(8, 0));
+    navigationLine.setName("wb.navigation.toolbar.line");
+    navigationLine.add(WorkbenchUi.row(toggle, version, back, forward), BorderLayout.WEST);
+    navigationLine.add(current, BorderLayout.CENTER);
     JPanel actions = new JPanel(new GridLayout(1, 0, 8, 0));
     actions.setName("wb.navigation.actions");
+    actions.add(quick);
     if (help != null) actions.add(help);
     actions.add(settings);
     if (logs != null) actions.add(logs);
-    toolbar.add(actions, BorderLayout.EAST);
+    navigationLine.add(actions, BorderLayout.EAST);
+    JPanel toolbar = new ResponsiveToolbar(navigationLine, actions);
     add(toolbar, BorderLayout.NORTH);
     add(split, BorderLayout.CENTER);
     getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
@@ -141,8 +179,192 @@ final class FolderNavigation extends JPanel {
     getActionMap().put("toggleMenu", new AbstractAction() {
       public void actionPerformed(ActionEvent event) { setMenuHidden(!hidden); }
     });
-    pages.addChangeListener(event -> refreshSelection());
+    bindNavigation("control K", "quickNavigation", this::openQuickNavigation);
+    bindNavigation("alt LEFT", "navigationBack", this::goBack);
+    bindNavigation("alt RIGHT", "navigationForward", this::goForward);
+    pages.addChangeListener(event -> { refreshSelection(); navigationChanged(); });
     refreshSelection();
+    updateHistoryActions();
+  }
+
+  /** Route callbacks only open retained UI components; the host must not execute network actions. */
+  void configureRoutes(Consumer<String> opener, Supplier<String> currentRoute, Supplier<String> projectIdentity) {
+    routeOpener = Objects.requireNonNull(opener); routeProvider = Objects.requireNonNull(currentRoute);
+    projectProvider = Objects.requireNonNull(projectIdentity); resetHistory();
+  }
+
+  /** Additional in-memory traffic query/original-ID checkpoint; never serialized by navigation. */
+  void setViewStateHooks(Supplier<Object> capture, Consumer<Object> restore) {
+    Objects.requireNonNull(capture); setViewStateHooks(route -> capture.get(), restore);
+  }
+  /** A page-change event is delivered after selection changed, so capture uses the bookmarked route. */
+  void setViewStateHooks(Function<String, Object> capture, Consumer<Object> restore) {
+    captureExtra = Objects.requireNonNull(capture); restoreExtra = Objects.requireNonNull(restore);
+    if (visitIndex >= 0) visits.get(visitIndex).extra = captureExtra.apply(visits.get(visitIndex).route);
+  }
+
+  /** The host calls this after changes in nested work tabs, using the same event coalescing as pages. */
+  void navigationChanged() {
+    if (closed || changingHistory) return;
+    ensureProject(); captureCurrent();
+    if (recordPending) return;
+    recordPending = true;
+    long token = historyGeneration;
+    SwingUtilities.invokeLater(() -> {
+      if (token != historyGeneration) return;
+      recordPending = false;
+      if (!closed && !changingHistory) recordDestination(currentRoute());
+    });
+  }
+
+  void navigate(String route) {
+    if (closed || NavigationTargets.target(route) == null) return;
+    ensureProject(); captureCurrent(); historyGeneration++; recordPending = false; changingHistory = true;
+    try { routeOpener.accept(route); }
+    finally { changingHistory = false; }
+    String actualRoute = currentRoute();
+    recordDestination(NavigationTargets.target(actualRoute) == null ? route : actualRoute); refreshSelection();
+  }
+
+  void goBack() { moveHistory(-1); }
+  void goForward() { moveHistory(1); }
+  boolean canGoBack() { ensureProject(); return visitIndex > 0; }
+  boolean canGoForward() { ensureProject(); return visitIndex >= 0 && visitIndex + 1 < visits.size(); }
+  List<String> recentRoutes() { ensureProject(); return List.copyOf(recent); }
+
+  private void moveHistory(int direction) {
+    if (closed) return;
+    ensureProject(); int next = visitIndex + direction;
+    if (next < 0 || next >= visits.size() || historyProject.isBlank()) return;
+    captureCurrent(); Visit visit = visits.get(next); String expectedProject = historyProject;
+    long token = ++historyGeneration; recordPending = false; changingHistory = true;
+    try {
+      routeOpener.accept(visit.route);
+      if (!expectedProject.equals(currentProject())) { resetHistory(); return; }
+      if (visit.extra != null) restoreExtra.accept(visit.extra);
+      visit.view.restore(modelVersions); visitIndex = next;
+      rememberRecent(visit.route); refreshSelection();
+    } finally { changingHistory = false; updateHistoryActions(); }
+    SwingUtilities.invokeLater(() -> {
+      if (!closed && token == historyGeneration && expectedProject.equals(currentProject())
+          && visitIndex >= 0 && visits.get(visitIndex) == visit) visit.view.restoreScrolls();
+    });
+  }
+
+  private void captureCurrent() {
+    if (visitIndex < 0 || visitIndex >= visits.size()) return;
+    Visit currentVisit = visits.get(visitIndex);
+    currentVisit.view = currentVisit.view.refresh(modelVersions); currentVisit.extra = captureExtra.apply(currentVisit.route);
+  }
+
+  private void recordDestination(String route) {
+    ensureProject();
+    if (closed || historyProject.isBlank() || NavigationTargets.target(route) == null
+        || pages.getSelectedComponent() == null) { updateHistoryActions(); return; }
+    NavigationViewState view = NavigationViewState.capture(pages.getSelectedComponent(), modelVersions);
+    if (visitIndex >= 0 && visits.get(visitIndex).route.equals(route) && visits.get(visitIndex).view.sameTabs(view)) {
+      visits.get(visitIndex).view = view; visits.get(visitIndex).extra = captureExtra.apply(route);
+    } else {
+      while (visits.size() > visitIndex + 1) visits.remove(visits.size() - 1);
+      visits.add(new Visit(route, view, captureExtra.apply(route)));
+      if (visits.size() > HISTORY_LIMIT) visits.remove(0);
+      visitIndex = visits.size() - 1;
+    }
+    rememberRecent(route); updateHistoryActions();
+  }
+
+  private void rememberRecent(String route) {
+    recent.remove(route); recent.add(0, route);
+    if (recent.size() > RECENT_LIMIT) recent.remove(recent.size() - 1);
+  }
+
+  void resetHistory() {
+    historyGeneration++; recordPending = false; visits.clear(); recent.clear(); visitIndex = -1;
+    historyProject = currentProject();
+    modelVersions.close(); quickWindow.closeWindow(); if (quickPanel != null) quickPanel.reset();
+    if (!closed && !changingHistory && !historyProject.isBlank() && pages.getSelectedComponent() != null)
+      recordDestination(currentRoute());
+    updateHistoryActions();
+  }
+
+  private void ensureProject() {
+    if (!historyProject.equals(currentProject())) {
+      historyGeneration++; recordPending = false; visits.clear(); recent.clear(); visitIndex = -1;
+      historyProject = currentProject();
+      modelVersions.close(); quickWindow.closeWindow();
+      // This guard can run from the palette's DocumentListener. Reset outside that notification.
+      long token = historyGeneration;
+      if (quickPanel != null) SwingUtilities.invokeLater(() -> {
+        if (token == historyGeneration && quickPanel != null) quickPanel.reset();
+      });
+      updateHistoryActions();
+    }
+  }
+
+  private String currentProject() {
+    try { return Objects.toString(projectProvider.get(), ""); }
+    catch (RuntimeException error) { return ""; }
+  }
+  private String currentRoute() {
+    try { return Objects.toString(routeProvider.get(), ""); }
+    catch (RuntimeException error) { return ""; }
+  }
+  private String selectedRoute() {
+    return pages.getSelectedComponent() instanceof JComponent page
+        ? Objects.toString(page.getClientProperty("wb.feature.id"), "") : "";
+  }
+  private void openLocalRoute(String route) {
+    String primary = switch (route) {
+      case "data", "jwt" -> "traffic";
+      case "passive" -> "environment";
+      case "activity" -> "mapper";
+      case "evidence" -> "bounty";
+      default -> route;
+    };
+    int index = indexOf(primary); if (index >= 0) pages.setSelectedIndex(index);
+  }
+  private void updateHistoryActions() {
+    back.setEnabled(!closed && visitIndex > 0);
+    forward.setEnabled(!closed && visitIndex >= 0 && visitIndex + 1 < visits.size());
+  }
+  QuickNavigationPanel quickPanel() {
+    if (quickPanel == null) quickPanel = new QuickNavigationPanel(this::recentRoutes, this::navigate, () -> {
+      quickWindow.closeWindow(); if (quickPanel != null) quickPanel.reset();
+    });
+    return quickPanel;
+  }
+  void openQuickNavigation() {
+    if (closed) return;
+    ensureProject(); quickPanel().reset(); quickWindow.open();
+    SwingUtilities.invokeLater(() -> { if (quickPanel != null && quickPanel.isShowing()) quickPanel.query.requestFocusInWindow(); });
+  }
+  void setQuickWindowOpener(WorkbenchExtension.DialogOpener opener) { quickWindow.opener = Objects.requireNonNull(opener); }
+  private void bindNavigation(String key, String name, Runnable action) {
+    getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(key), name);
+    getActionMap().put(name, new AbstractAction() {
+      public void actionPerformed(ActionEvent event) { action.run(); }
+    });
+  }
+  public void close() { closed = true; resetHistory(); quickWindow.close(); }
+
+  /** Relayout is synchronous so a small window never needs a resize-event round trip to expose actions. */
+  private static final class ResponsiveToolbar extends JPanel {
+    private final JPanel line, actions;
+    private boolean compact;
+    ResponsiveToolbar(JPanel line, JPanel actions) {
+      super(new BorderLayout(8, 4)); this.line = line; this.actions = actions;
+      setName("wb.navigation.toolbar");
+      setBorder(BorderFactory.createEmptyBorder(4, 6, 0, 6)); add(line, BorderLayout.NORTH);
+    }
+    private void adapt() {
+      boolean next = getWidth() > 0 && getWidth() < 900;
+      if (compact == next) return;
+      compact = next;
+      if (next) { line.remove(actions); add(actions, BorderLayout.SOUTH); }
+      else { remove(actions); line.add(actions, BorderLayout.EAST); }
+    }
+    @Override public void doLayout() { adapt(); super.doLayout(); }
+    @Override public Dimension getPreferredSize() { if (line != null) adapt(); return super.getPreferredSize(); }
   }
 
   private boolean active(Object value) {

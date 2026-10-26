@@ -52,3 +52,7 @@ main은 0.52.0, 작업 브랜치 account-a/next-0530-optimization의 BuildInfo�
 ## 12. 도우미 · 요약
 
 8개 개선안 구현 및 교차 검토를 완료했다. 최종 소스의 Java17 대상 JAR 빌드와 15개 집중 검사 묶음 총674개를 통과했다. 로컬 전체 회귀와 화면 렌더링은 BrowserBridge 소켓 생성 제한으로 차단되어 원격 Linux·Windows·실제Chromium 검사로 이어간다.
+
+## 13. 도우미 · 요약
+
+원격 실제Chromium 도우미 검사는 통과했다. 첫 전체 검사에서 작업 이어가기 버튼 추가가 UiCleanupTest의 상단 컴포넌트 계약과 충돌해 실패했다. 기존 WorkContextPanel을 상단으로 유지하도록 배치를 수정했고 관련54개 검사를 통과했다. 화면 배치 검사를 독립 CI작업으로 병렬 실행하며 전체검사를 재개한다.

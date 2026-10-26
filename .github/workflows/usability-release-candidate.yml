@@ -6,6 +6,7 @@ on:
       - 'project/**'
       - 'feature-mapper/**'
       - 'tools/**'
+      - 'dev.py'
       - 'audit/usability0531/**'
       - '.github/workflows/usability-release-candidate.yml'
 permissions:
@@ -33,8 +34,6 @@ jobs:
           node-version: '24'
       - name: Build, regressions, loopback HTTP, and immutable release packages
         run: python dev.py release --port 19453 --bounty-port 19454
-      - name: Check Next views and remaining-work navigation
-        run: python tools/render_ui_layout.py --next-only --check --out tmp/usability0531-ui
       - name: Check release fingerprints and packaging invariants
         run: |
           python tools/package_downloads.py --verify
@@ -59,7 +58,41 @@ jobs:
             project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json
             audit/0.23.0/.run/results.json
             feature-mapper/build/test-results.txt
-            tmp/usability0531-ui/
+  layout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Build current packaged UI and compile its test adapters
+        run: |
+          python dev.py build
+          python - <<'PYTHON'
+          from pathlib import Path
+          import os, subprocess
+          wb = Path('project/burp-development-workspace/burp-workbench-kr/burp-workbench').resolve()
+          classes = wb / 'build/tests'
+          classes.mkdir(parents=True, exist_ok=True)
+          cp = os.pathsep.join(str(p) for p in [wb / 'dist/burp-workbench-kr-0.53.1.jar', *sorted((wb / 'deps').glob('*.jar'))])
+          subprocess.run(['javac', '--release', '17', '-encoding', 'UTF-8', '-cp', cp, '-d', str(classes), *map(str, (wb / 'src/test/java').rglob('*.java'))], check=True)
+          PYTHON
+      - name: Check current usability views and remaining-work navigation
+        run: python tools/render_ui_layout.py --next-only --check --out tmp/usability0531-ui
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0531-layout-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: tmp/usability0531-ui/
   windows:
     runs-on: windows-latest
     timeout-minutes: 25

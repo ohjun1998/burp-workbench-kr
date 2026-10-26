@@ -616,13 +616,11 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logButton.addActionListener(e -> openLogs());
     navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton);
     root.add(navigation);
-    JPanel workStrip = new JPanel(new BorderLayout(6, 0));
-    workStrip.add(workContextPanel, BorderLayout.CENTER);
     resumeWorkButton.setName("wb.workspace.resume.open");
     resumeWorkButton.setToolTipText("마지막 화면·업무·검색 조건과 다시 확인할 항목 보기");
     resumeWorkButton.addActionListener(e -> openWorkspaceResume());
-    workStrip.add(resumeWorkButton, BorderLayout.EAST);
-    root.add(workStrip, BorderLayout.NORTH);
+    workContextPanel.add(resumeWorkButton, BorderLayout.EAST);
+    root.add(workContextPanel, BorderLayout.NORTH);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
     mapperTools.addChangeListener(e -> updateFeatureHelp());

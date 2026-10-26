@@ -6,9 +6,9 @@
 
 0.53.2는 **검색 일치 위치와 주변 문맥**, **증거 개별 제거·순서 변경·실행 취소**, **검색 0건의 원인 안내와 조건 복원**, **입력 옆 오류·버튼 비활성 사유**, **Ctrl+K 기능 찾기와 이전·다음 화면**, **검색·분석·비교·저장 작업 현황**, **상태·헤더·JSON 항목별 응답 차이**, **첫 사용 준비 체크리스트**를 추가합니다. 0.53.1의 비교 준비·검색 조건 저장·작업 이어가기는 유지합니다.
 
-[0.53.2 설치·사용 안내](docs/RELEASE_0.53.2_NEXT_KR.md) · [배포 준비·버전별 다운로드](downloads/README.md) · [0.53.2 검증 상태](docs/VERIFICATION_0.53.2.json)
+[0.53.2 설치·사용 안내](docs/RELEASE_0.53.2_NEXT_KR.md) · [설치 JAR·소스·버전별 다운로드](downloads/README.md) · [0.53.2 검증 상태](docs/VERIFICATION_0.53.2.json)
 
-**0.53.2의 최종 검증·배포 준비를 진행 중입니다.** 빌드·회귀·격리 HTTP·화면·플랫폼 검사는 실행한 소스와 결과를 [검증 기록](docs/VERIFICATION_0.53.2.json)에 남깁니다. main 병합은 확인 전이며, 실제 Burp GUI·Windows DPI/IME·Edge 수동·Docker·외부 서비스 검증을 완료한 것으로 표시하지 않습니다.
+**0.53.2 후보판의 최종 자동 검증을 통과하고 JAR·소스 ZIP을 생성했습니다.** 소스 `ba04e3ff`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813)에서 Linux·Windows 각각 4,474개 검사와 합성 Swing 288개 화면·162개 상태를 통과했습니다. 화면 배치 문제는 0건이며 검사한 JAR와 배포 JAR의 SHA-256이 일치합니다. [설치 JAR](downloads/extensions/0.53.2/burp-workbench-kr-0.53.2.jar) · [소스 ZIP](downloads/extensions/0.53.2/burp-workbench-kr-0.53.2-source.zip) · [검증 기록](docs/VERIFICATION_0.53.2.json)을 확인하세요. main은 아직 0.53.1이며, 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스는 미실행입니다.
 
 현재 main의 0.53.1은 [PR #89](https://github.com/ohjun1998/burp-workbench-kr/pull/89)로 병합했습니다. [0.53.1 JAR·소스](downloads/extensions/0.53.1/) · [0.53.1 안내](docs/RELEASE_0.53.1_NEXT_KR.md) · [당시 CI·미실행 범위](docs/reports/2026-10-26-usability-0531/REMOTE_CI_KR.md)를 함께 보존합니다. 이전 0.52.0의 Windows·브라우저 CI 실패 기록도 [당시 검증 문서](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남깁니다.
 

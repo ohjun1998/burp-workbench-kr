@@ -1,11 +1,66 @@
 {
   "version": "0.53.2",
   "sourceBase": "6737746f1a0c29c42c91a246a8161192c7d279d6",
-  "status": "candidate-remote-verification-pending",
+  "status": "candidate-remote-verification-passed",
   "local": {
-    "status": "integration-and-layout-passed-full-check-in-progress",
+    "status": "passed",
+    "command": "python3 dev.py check --java .dev-tools/java-release --javac .dev-tools/javac-release --port 19532 --bounty-port 19533",
     "compiler": "OpenJDK21 with official --release17 symbols",
-    "newFocusedChecks": {
+    "summary": {
+      "version": "0.53.2",
+      "regressionGroups": 113,
+      "regressionChecks": 3970,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4474,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "scope": "Headless production Swing/API adapters and isolated loopback HTTP; not native Burp GUI. Platform repeats are not unique added checks."
+  },
+  "remote": {
+    "status": "passed",
+    "runId": 40409443813,
+    "runUrl": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813",
+    "sourceCommit": "ba04e3ff96114bddbc14d83015c2cb920477ebbd",
+    "jobs": {
+      "release": {
+        "id": 121875857003,
+        "status": "success"
+      },
+      "windows": {
+        "id": 121875857081,
+        "status": "success"
+      },
+      "layout": {
+        "id": 121875856832,
+        "status": "success"
+      }
+    },
+    "linux": {
+      "version": "0.53.2",
+      "regressionGroups": 113,
+      "regressionChecks": 3970,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4474,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "windows": {
+      "version": "0.53.2",
+      "regressionGroups": 113,
+      "regressionChecks": 3970,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4474,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "newRegressionGroups": {
       "TrafficUsability0532Test": 46,
       "EvidenceEditingTest": 58,
       "AuthInlineValidationTest": 52,
@@ -17,22 +72,32 @@
       "UsabilityIntegration0532Test": 19
     },
     "layout": {
-      "controls": 2202,
-      "syntheticStateAssertions": 162,
-      "clippedControls": 0,
-      "collapsedKeyAreas": 0,
+      "renderedViews": 288,
+      "controlsMeasured": 2202,
+      "scenariosChecked": 162,
+      "clippedControlsOutsideScrollers": 0,
       "smallControls": 0,
-      "clippedSelectedTabsOrHeadings": 0,
-      "scope": "production Swing components with synthetic metadata, light/dark and three main viewports; helper dialogs 760x480/560x300; earlier local build before final retained-selection race fix"
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
     },
-    "scope": "Headless API adapters/loopback fixtures, not native Burp GUI",
-    "note": "Final source verification is pending. Earlier integration failures were fixed; the generic worker UI fixture now explicitly models a cancellable task while preserving its busy/stop/idle assertions."
-  },
-  "remote": {
-    "status": "rerun-pending",
-    "priorRunId": 40408452846,
-    "priorSourceCommit": "3011bfc6654ef31d1d8a8ea7d577962f0e7a597a",
-    "priorResult": "layout passed; release failed existing toolbar order regression; toolbar corrected without weakening assertions"
+    "countingNote": "Linux/Windows repeat the same suite; repeated platforms, focused checks and overlapping groups are not added as unique tests.",
+    "artifacts": {
+      "linux": 12693296318,
+      "windows": 12692212418,
+      "layout": 12691819019,
+      "packages": 12693281347
+    },
+    "mapper": {
+      "javaChecks": 134,
+      "nodeTests": 15,
+      "status": "passed"
+    },
+    "packaging": {
+      "sourceFingerprints": "passed",
+      "unitTests": 7,
+      "zipCrc": "passed",
+      "uiTestedJarMatchesPublishedJar": true
+    }
   },
   "main": {
     "merged": false
@@ -41,6 +106,25 @@
     "Actual Burp GUI interaction",
     "Windows DPI/IME",
     "Manual browser interaction",
-    "External target services"
-  ]
+    "External target services",
+    "Docker/Oracle/Nginx stack",
+    "Long-duration native Burp load"
+  ],
+  "validatedSourceCommit": "ba04e3ff96114bddbc14d83015c2cb920477ebbd",
+  "packages": {
+    "version": "0.53.2",
+    "directory": "downloads/extensions/0.53.2",
+    "files": {
+      "burp-workbench-kr-0.53.2.jar": "17f450d27dee4b5b996945729218132babc8e7f9d7c6f2b6c7d6cebd4628b290",
+      "burp-workbench-kr-0.53.2-source.zip": "a35f23b4925a388514f846194bee49c29d59fde6931589a5f2ee8fc7e1b2b884"
+    },
+    "sourceFiles": 367,
+    "sourceZipCrc": "passed",
+    "sourceFingerprints": "passed",
+    "unchangedMapperRelease": "0.3.5",
+    "priorReleases": "preserved",
+    "uiTestedJarMatchesPublishedJar": true,
+    "artifactId": 12693281347,
+    "artifactArchiveSha256": "89e1b73ce1844c265d6128994e20861b8db116b5a3d091bae61ef3d08d45502e"
+  }
 }

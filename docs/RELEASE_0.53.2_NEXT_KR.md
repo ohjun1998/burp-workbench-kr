@@ -2,19 +2,19 @@
 
 **0.53.2는 사용자 편의성 개선 후보판입니다.** 0.53.1 main 커밋 `6737746f1a0c29c42c91a246a8161192c7d279d6`에서 검색 근거 찾기, 증거 수정, 입력 오류 보완과 화면 이동을 개선합니다. 내장 Feature Mapper는 **0.3.5**, 실습 사이트는 **3.10.0**을 유지합니다. 현재 main 배포는 **0.53.1**이며 이전 버전의 파일과 검증 기록은 보존합니다.
 
-최종 검증·배포 준비를 진행 중입니다. 실행한 소스와 검사 결과·CI·파일 해시는 [0.53.2 검증 기록](VERIFICATION_0.53.2.json)에 남깁니다. PR·main 반영은 실제 확인 후 [프로젝트 상태](../PROJECT_STATUS_KR.md)에 기록합니다. 이전 버전의 통과 수치를 이번 버전의 새 검사 결과로 합산하지 않습니다.
+**최종 자동 검증을 통과하고 배포 JAR·소스 ZIP을 생성했습니다.** 소스 `ba04e3ff96114bddbc14d83015c2cb920477ebbd`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813)에서 Linux·Windows·화면 검사 작업이 모두 성공했습니다. [검증 기록](VERIFICATION_0.53.2.json)에 검사 범위·파일 해시를 남깁니다. PR·main 반영은 실제 확인 후 [프로젝트 상태](../PROJECT_STATUS_KR.md)에 기록하며 현재는 미병합입니다.
 
 ## 설치할 버전 확인하기
 
 | 버전 | 현재 상태 | 안내 |
 |---|---|---|
-| 0.53.2 | 이 작업 브랜치의 개선 후보판, 최종 검증·배포 준비 중 | 이 문서와 [검증 기록](VERIFICATION_0.53.2.json) |
+| 0.53.2 | 자동 검증 통과·JAR 및 소스 ZIP 생성, main 미병합 | 이 문서와 [검증 기록](VERIFICATION_0.53.2.json) |
 | 0.53.1 | 현재 main 배포, 기존 파일 보존 | [0.53.1 안내](RELEASE_0.53.1_NEXT_KR.md) |
 | 0.52.0 이하 | 이전 배포와 당시 검증·가이드 보존 | [버전별 다운로드](../downloads/README.md) |
 
 기존 JAR·프로젝트·설정·증거 파일을 보관합니다. Burp **Extensions**에서 이전 Workbench의 로드를 해제하고 **Add → Java**로 선택한 버전의 JAR를 로드합니다. 후보판은 확장 이름과 버전 배지에 **0.53.2**가 표시되는지 확인하세요. 내장 Mapper를 사용하므로 별도 Mapper JAR를 함께 로드할 필요는 없습니다.
 
-0.53.2의 배포 경로는 [설치 JAR](../downloads/extensions/0.53.2/burp-workbench-kr-0.53.2.jar), [빌드 가능한 소스 ZIP](../downloads/extensions/0.53.2/burp-workbench-kr-0.53.2-source.zip), [SHA256SUMS](../downloads/extensions/0.53.2/SHA256SUMS)입니다. 파일 게시·검증 상태를 먼저 확인하세요. 브라우저 연동에는 기존 [Mapper 도우미 0.3.5](../downloads/feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip)를 사용합니다. 되돌릴 때는 새 JAR의 로드를 해제하고 이전 JAR와 해당 버전용 백업을 사용합니다.
+0.53.2의 배포 경로는 [설치 JAR](../downloads/extensions/0.53.2/burp-workbench-kr-0.53.2.jar), [빌드 가능한 소스 ZIP](../downloads/extensions/0.53.2/burp-workbench-kr-0.53.2-source.zip), [SHA256SUMS](../downloads/extensions/0.53.2/SHA256SUMS)입니다. 해시와 실제 검증 범위를 함께 확인하세요. 브라우저 연동에는 기존 [Mapper 도우미 0.3.5](../downloads/feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip)를 사용합니다. 되돌릴 때는 새 JAR의 로드를 해제하고 이전 JAR와 해당 버전용 백업을 사용합니다.
 
 ## 1. 검색 결과에서 일치한 위치 읽기
 
@@ -80,9 +80,11 @@
 
 | 항목 | 현재 기록 |
 |---|---|
-| 기능 구현 | 새 개선안 8개 반영, 최종 검증 진행 중 |
-| 빌드·자동 검사·CI와 검증 소스 | 실행 결과를 [검증 JSON](VERIFICATION_0.53.2.json)에 갱신 |
-| 배포 파일·해시 | [새 버전 전용 경로](../downloads/README.md)로 생성·확인 |
-| PR·main 병합 | 확인 후 [프로젝트 상태](../PROJECT_STATUS_KR.md)에 기록 |
+| Linux·Windows | 각각 회귀 113그룹·3,970개 + 격리 HTTP 136/102/266개, 총 4,474개 통과 |
+| Mapper | Java 134개·Node 15개 통과, 버전 0.3.5 유지 |
+| 합성 Swing 화면 | 288개 화면·2,202개 컨트롤·162개 상태, 잘림·작업 영역 붕괴 등 배치 게이트 모두 0건 |
+| 검증 소스·CI | `ba04e3ff` · [실행 40409443813](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813) |
+| 배포 무결성 | 화면 검사 JAR와 배포 JAR 일치, 소스 ZIP 367개 파일 CRC·지문 확인 |
+| PR·main 병합 | 현재 미병합, 확인 후 [프로젝트 상태](../PROJECT_STATUS_KR.md)에 기록 |
 
-헤드리스 Swing·API fixture·격리 HTTP와 실제 Burp GUI 조작은 구분합니다. 실제 Burp GUI·Windows DPI/IME·Edge 수동·Docker·외부 서비스의 완료를 주장하지 않습니다. 기존 0.53.1의 자동 검사 결과와 0.52.0 당시 실패 기록은 각 버전의 역사 자료로 보존합니다.
+Linux·Windows는 같은 검사 묶음의 반복이며 Mapper·집중 검사 등 중첩 하위 묶음을 고유 검사 수에 더하지 않습니다. [화면 근거](reports/2026-10-27-usability-0532/ui/layout-report.json)와 [배포 해시](../downloads/extensions/0.53.2/SHA256SUMS)를 함께 제공합니다. 헤드리스 Swing·API fixture·격리 HTTP와 실제 Burp GUI 조작은 구분합니다. 실제 Burp GUI·Windows DPI/IME·Edge 수동·Docker·외부 서비스의 완료를 주장하지 않습니다. 기존 0.53.1의 자동 검사 결과와 0.52.0 당시 실패 기록은 각 버전의 역사 자료로 보존합니다.

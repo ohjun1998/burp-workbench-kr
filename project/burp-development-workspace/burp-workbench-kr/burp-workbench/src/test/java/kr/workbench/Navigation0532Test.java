@@ -89,6 +89,24 @@ public final class Navigation0532Test extends WorkbenchTest {
       check(opened.size() == before && palette.choices.getSelectedIndex() < 0, "no-match Enter has no navigation side effect");
       palette.getActionMap().get("dismiss").actionPerformed(new ActionEvent(palette, 0, "escape"));
       check(palette.query.getText().isEmpty(), "Escape closes and resets palette");
+      JTabbedPane recoveredPages = new FolderNavigation.Pages();
+      recoveredPages.addTab(FeatureGuide.title("traffic"), page("traffic", new JPanel()));
+      FolderNavigation recovered = new FolderNavigation(null, recoveredPages, () -> {}, new JButton("기능 안내"), new JButton("로그"));
+      // Host docking/theme replacement can briefly lay out a component before its usable width is restored.
+      recovered.setSize(280, 600); WorkbenchUi.style(recovered);
+      for (int i = 0; i < 5; i++) UiLayoutTest.layout(recovered);
+      SwingUtilities.updateComponentTreeUI(recovered); WorkbenchUi.style(recovered); recovered.restoreLayout();
+      recovered.setSize(1024, 720); for (int i = 0; i < 6; i++) UiLayoutTest.layout(recovered);
+      Component recoveredBack = UiLayoutTest.named(recovered, "wb.navigation.back");
+      Component recoveredQuick = UiLayoutTest.named(recovered, "wb.navigation.quick");
+      check(SwingUtilities.convertPoint(recoveredBack, 0, 0, recovered).y
+          == SwingUtilities.convertPoint(recoveredQuick, 0, 0, recovered).y,
+          "restoring wide host after temporary narrow layout and theme recovery keeps navigation controls on one row");
+      recovered.setSize(560, 600); for (int i = 0; i < 6; i++) UiLayoutTest.layout(recovered);
+      Point quickPoint = SwingUtilities.convertPoint(recoveredQuick, 0, 0, recovered);
+      check(quickPoint.x >= 0 && quickPoint.x + recoveredQuick.getWidth() <= 560,
+          "recovered navigation still exposes feature search at560minimum width");
+      recovered.close();
       navigation.setSize(560, 600); for (int i = 0; i < 5; i++) UiLayoutTest.layout(navigation);
       for (String name : List.of("wb.navigation.back", "wb.navigation.forward", "wb.navigation.quick", "wb.navigation.settings")) {
         Component button = UiLayoutTest.named(navigation, name);

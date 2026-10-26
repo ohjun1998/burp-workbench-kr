@@ -2,22 +2,24 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-이 작업 브랜치는 **Workbench Next 0.53.2 사용자 편의성 개선 후보판**입니다. **0.53.1 main 커밋 `6737746f`**을 기준으로 개발하며, 현재 main 배포는 **0.53.1**입니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 기존 버전의 JAR·소스·검증 기록은 보존합니다.
+이 작업 브랜치는 **Workbench Next 0.53.3 사용자 편의성 개선 후보판**입니다. **0.53.1 main 커밋 `6737746f`**을 기준으로 개발하며, 현재 main 배포는 **0.53.1**입니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 기존 버전의 JAR·소스·검증 기록은 보존합니다.
 
-0.53.2는 **검색 일치 위치와 주변 문맥**, **증거 개별 제거·순서 변경·실행 취소**, **검색 0건의 원인 안내와 조건 복원**, **입력 옆 오류·버튼 비활성 사유**, **Ctrl+K 기능 찾기와 이전·다음 화면**, **검색·분석·비교·저장 작업 현황**, **상태·헤더·JSON 항목별 응답 차이**, **첫 사용 준비 체크리스트**를 추가합니다. 0.53.1의 비교 준비·검색 조건 저장·작업 이어가기는 유지합니다.
+0.53.3은 **검색 일치 위치와 주변 문맥**, **증거 개별 제거·순서 변경·실행 취소**, **검색 0건의 원인 안내와 조건 복원**, **입력 옆 오류·버튼 비활성 사유**, **Ctrl+K 기능 찾기와 이전·다음 화면**, **검색·분석·비교·저장 작업 현황**, **상태·헤더·JSON 항목별 응답 차이**, **첫 사용 준비 체크리스트**를 추가합니다. 0.53.1의 비교 준비·검색 조건 저장·작업 이어가기는 유지합니다.
 
-[0.53.2 설치·사용 안내](docs/RELEASE_0.53.2_NEXT_KR.md) · [설치 JAR·소스·버전별 다운로드](downloads/README.md) · [0.53.2 검증 상태](docs/VERIFICATION_0.53.2.json)
+[0.53.3 설치·사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md) · [설치 JAR·소스·버전별 다운로드](downloads/README.md) · [0.53.3 검증 상태](docs/VERIFICATION_0.53.3.json)
 
-**0.53.2 후보판의 최종 자동 검증을 통과하고 JAR·소스 ZIP을 생성했습니다.** 소스 `ba04e3ff`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813)에서 Linux·Windows 각각 4,474개 검사와 합성 Swing 288개 화면·162개 상태를 통과했습니다. 화면 배치 문제는 0건이며 검사한 JAR와 배포 JAR의 SHA-256이 일치합니다. [설치 JAR](downloads/extensions/0.53.2/burp-workbench-kr-0.53.2.jar) · [소스 ZIP](downloads/extensions/0.53.2/burp-workbench-kr-0.53.2-source.zip) · [검증 기록](docs/VERIFICATION_0.53.2.json)을 확인하세요. main은 아직 0.53.1이며, 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스는 미실행입니다.
+**0.53.3은 최종 검증·배포 준비 중이며 main 미병합입니다.** 검색·증거·입력·탐색 등 8개 개선에 더해 좁은 작업 영역의 남은 점검 목록·설명 배치를 보완합니다. 새 버전의 검사 소스·결과·배포 해시는 [0.53.3 검증 기록](docs/VERIFICATION_0.53.3.json)에 실제 실행 후 기록합니다. 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스 검증과 자동 검사는 구분합니다.
+
+**0.53.2는 완료 배포가 아닌 보존 후보판입니다.** 초기 후보 CI는 통과했지만 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)의 전체 화면 검사에서 1024px 창·넓은 메뉴 조합의 남은 점검 설명 영역이 최소 높이 기준에 못 미쳤습니다. 기존 [0.53.2 파일](downloads/extensions/0.53.2/)과 [검증 이력](docs/VERIFICATION_0.53.2.json)은 그대로 보존하며, 배치 수정은 새 버전 0.53.3에서 검증합니다.
 
 현재 main의 0.53.1은 [PR #89](https://github.com/ohjun1998/burp-workbench-kr/pull/89)로 병합했습니다. [0.53.1 JAR·소스](downloads/extensions/0.53.1/) · [0.53.1 안내](docs/RELEASE_0.53.1_NEXT_KR.md) · [당시 CI·미실행 범위](docs/reports/2026-10-26-usability-0531/REMOTE_CI_KR.md)를 함께 보존합니다. 이전 0.52.0의 Windows·브라우저 CI 실패 기록도 [당시 검증 문서](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남깁니다.
 
 ## 설치하고 첫 요청 확인하기
 
-1. **[버전별 다운로드](downloads/README.md)**에서 사용하려는 버전과 검증 상태를 먼저 확인합니다. 0.53.2 후보판은 해당 버전의 JAR와 [0.53.2 안내](docs/RELEASE_0.53.2_NEXT_KR.md)를 함께 사용합니다. 현재 main 배포가 필요하면 보존된 0.53.1을 선택합니다. 기존 JAR와 프로젝트·설정 파일은 보관하고 이전 Workbench의 로드를 해제한 뒤 Burp의 **Extensions → Add → Java**에서 새 JAR를 선택합니다.
+1. **[버전별 다운로드](downloads/README.md)**에서 사용하려는 버전과 검증 상태를 먼저 확인합니다. 0.53.3 후보판은 해당 버전의 JAR와 [0.53.3 안내](docs/RELEASE_0.53.3_NEXT_KR.md)를 함께 사용합니다. 현재 main 배포가 필요하면 보존된 0.53.1을 선택합니다. 기존 JAR와 프로젝트·설정 파일은 보관하고 이전 Workbench의 로드를 해제한 뒤 Burp의 **Extensions → Add → Java**에서 새 JAR를 선택합니다.
 2. Workbench **요청·응답 목록 → SCOPE 목록**에서 URL을 추가하거나 Burp **HTTP history → Add to scope**로 대상을 등록합니다. 수집할 범위를 체크하고, 수집 버튼을 **OFF → SCOPE**로 바꾼 뒤 사이트를 다시 사용합니다. 기존 History는 범위 안의 요청을 골라 Workbench로 가져올 수 있습니다. 트래픽 OFF에서는 새 패킷·수동 가져오기·일반 자동 관찰을 수집하지 않습니다. 계정 권한 비교의 인증 탐지는 별도 ON/OFF로 제어합니다. 수동 URL은 해당 경로와 하위 경로에 적용됩니다. 목록에서 행을 선택해 URL을 수정하면 체크 상태를 유지한 채 즉시 반영됩니다.
 3. **기능 찾기** 또는 **Ctrl+K**에서 이름·목적을 입력해 도구를 엽니다. 왼쪽 폴더에서도 선택할 수 있습니다. 메뉴를 숨겨도 상단 **메뉴 보기**로 다시 열 수 있습니다. 선택한 요청·응답을 읽고 목적에 맞는 도구로 이동합니다. 처음에는 **Repeater**로 요청을 준비해 직접 확인하고, 원본이 필요한 비교·증거 기능은 선택한 요청에서 이어갑니다.
-4. 상단 **도우미 → 시작 준비 체크리스트**에서 SCOPE·수집·계정·첫 비교·증거 ZIP의 실제 상태를 확인합니다. **도우미 → 진행 중인 작업 현황**에서 실행 상태를 봅니다. **기능 안내**(**F1**)와 **[0.53.2 사용 안내](docs/RELEASE_0.53.2_NEXT_KR.md)**도 참고하세요. 재현한 결과는 **재현·증거 정리**에 모아 가림 미리보기를 확인하고 저장합니다.
+4. 상단 **도우미 → 시작 준비 체크리스트**에서 SCOPE·수집·계정·첫 비교·증거 ZIP의 실제 상태를 확인합니다. **도우미 → 진행 중인 작업 현황**에서 실행 상태를 봅니다. **기능 안내**(**F1**)와 **[0.53.3 사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md)**도 참고하세요. 재현한 결과는 **재현·증거 정리**에 모아 가림 미리보기를 확인하고 저장합니다.
 
 SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다. 추가 요청 전송·계정 비교 실행·수동 검증·취약점 판단·증거 저장은 사용자가 선택합니다. Repeater 창 열기와 Burp Repeater 복사는 요청을 준비하는 동작입니다. 실제 요청은 해당 창의 **Send**를 직접 눌러 전송합니다.
 
@@ -57,7 +59,8 @@ SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다.
 
 | 찾는 자료 | 위치 |
 |---|---|
-| **Next 0.53.2 편의성 개선 후보판** | [설치·새 작업 흐름](docs/RELEASE_0.53.2_NEXT_KR.md) · [현재 검증 상태](docs/VERIFICATION_0.53.2.json) |
+| **Next 0.53.3 편의성 개선 후보판** | [설치·새 작업 흐름](docs/RELEASE_0.53.3_NEXT_KR.md) · [현재 검증 상태](docs/VERIFICATION_0.53.3.json) |
+| Next 0.53.2 보존 후보판 · PR 화면 검사 미완료 | [당시 안내](docs/RELEASE_0.53.2_NEXT_KR.md) · [검증 이력](docs/VERIFICATION_0.53.2.json) |
 | Next 0.53.1 main 배포 · 보존 | [설치·사용 안내](docs/RELEASE_0.53.1_NEXT_KR.md) · [당시 검증](docs/VERIFICATION_0.53.1.json) |
 | Next 0.52.0 main 병합 배포 · 보존 | [설치·기능별 안내](docs/RELEASE_0.52.0_NEXT_KR.md) · [당시 검증 기록](docs/VERIFICATION_0.52.0.json) |
 | Next 0.50.0 최초 분리 버전 · 보존 | [설치·기능별 안내](docs/RELEASE_0.50.0_NEXT_KR.md) · [당시 검증](docs/VERIFICATION_0.50.0.json) |
@@ -94,9 +97,9 @@ python dev.py check
 
 ## 기능별 패킷 자동 매핑
 
-**트래픽 → 기능 자동 매핑 → 기능 분류·실행**에서 사용합니다. 별도 Mapper JAR를 추가하지 않아도 기능·실행·세션·패킷·분류 근거·메모와 `.fmkr` 프로젝트 저장/열기를 사용할 수 있습니다. 수집 버튼은 요청·응답 목록과 같은 OFF/SCOPE 상태이며, OFF와 Scope 밖의 브라우저 이벤트도 보관하지 않습니다. Chrome/Edge의 버튼 이름까지 연결하려면 [다운로드 목록](downloads/README.md)에서 사용하는 확장 버전에 맞는 브라우저 도우미를 확인하고 **매핑 설정 → 브라우저 연결**의 주소·토큰을 입력합니다. 0.53.2 후보판과 0.53.1의 내장 Mapper는 0.3.5입니다. 이전 별도 Mapper 확장은 해제하고 통합 Workbench를 사용하세요. [자세한 사용법](feature-mapper/README_KR.md).
+**트래픽 → 기능 자동 매핑 → 기능 분류·실행**에서 사용합니다. 별도 Mapper JAR를 추가하지 않아도 기능·실행·세션·패킷·분류 근거·메모와 `.fmkr` 프로젝트 저장/열기를 사용할 수 있습니다. 수집 버튼은 요청·응답 목록과 같은 OFF/SCOPE 상태이며, OFF와 Scope 밖의 브라우저 이벤트도 보관하지 않습니다. Chrome/Edge의 버튼 이름까지 연결하려면 [다운로드 목록](downloads/README.md)에서 사용하는 확장 버전에 맞는 브라우저 도우미를 확인하고 **매핑 설정 → 브라우저 연결**의 주소·토큰을 입력합니다. 0.53.3 후보판과 0.53.1의 내장 Mapper는 0.3.5입니다. 이전 별도 Mapper 확장은 해제하고 통합 Workbench를 사용하세요. [자세한 사용법](feature-mapper/README_KR.md).
 
-[날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 이 후보판의 안내서는 [Next 0.53.2 설치·사용 안내](docs/RELEASE_0.53.2_NEXT_KR.md)입니다. [0.25.4 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)는 이전 화면을 설명하는 보존 자료입니다.
+[날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 이 후보판의 안내서는 [Next 0.53.3 설치·사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md)입니다. [0.25.4 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)는 이전 화면을 설명하는 보존 자료입니다.
 
 
 

@@ -1,10 +1,22 @@
 # Workbench Next / 기존 버전 다운로드
 
-파일을 열고 **Download raw file**을 누르세요. 이 작업 브랜치는 **자동 검증을 통과한 0.53.2 사용자 편의성 개선 후보판**을 제공하며 현재 main 배포는 **0.53.1**입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 JAR·소스와 당시 기록·PDF는 보존합니다.
+파일을 열고 **Download raw file**을 누르세요. 이 작업 브랜치는 **0.53.3 사용자 편의성 개선 후보판**을 준비하며 현재 main 배포는 **0.53.1**입니다. 0.53.2는 PR 화면 회귀가 남은 보존 후보판입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 JAR·소스와 당시 기록·PDF는 보존합니다.
 
-## 자동 검증 통과: Workbench Next 0.53.2 후보판
+## 배포 준비: Workbench Next 0.53.3 후보판
 
-0.53.1 main `6737746f`를 기준으로 검색 일치 문맥, 증거 편집, 검색 0건 복구, 입력 오류, 기능 찾기·화면 이력, 통합 작업 현황, 항목별 응답 차이와 첫 사용 준비 안내를 추가합니다. **최종 자동 검증·배포 파일 생성을 완료했으며 main 미병합입니다.** 소스 `ba04e3ff`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813)에서 Linux·Windows 각각 4,474개와 합성 Swing 화면·상태 검사를 통과했습니다. 검사 JAR와 배포 JAR가 일치하고 소스 ZIP 367개 파일의 CRC·지문도 확인했습니다. [0.53.2 검증 기록](../docs/VERIFICATION_0.53.2.json)에서 실행 범위와 미실행 항목을 확인하세요. 기존 버전 파일은 보존합니다.
+새 사용자 편의성 개선 8개와 좁은 작업 영역의 남은 점검 목록·설명 배치 보완을 포함합니다. **최종 검증·배포 준비 중이며 main 미병합입니다.** 실제 검사 소스·CI·결과·해시는 [0.53.3 검증 기록](../docs/VERIFICATION_0.53.3.json)에 갱신합니다. 이전 0.53.2의 파일은 보존하고 새 버전은 아래 전용 경로를 사용합니다.
+
+| 자료 | 0.53.3 경로 |
+|---|---|
+| 설치·사용 안내 | [0.53.3 단계별 안내](../docs/RELEASE_0.53.3_NEXT_KR.md) |
+| 설치 JAR | [burp-workbench-kr-0.53.3.jar](extensions/0.53.3/burp-workbench-kr-0.53.3.jar) |
+| 빌드 가능한 소스 ZIP | [burp-workbench-kr-0.53.3-source.zip](extensions/0.53.3/burp-workbench-kr-0.53.3-source.zip) |
+| 파일 해시·소스 지문 | [SHA256SUMS](extensions/0.53.3/SHA256SUMS) · [manifest.json](extensions/0.53.3/manifest.json) |
+| 변경 없는 Mapper 0.3.5의 선택 연동 | [Chrome/Edge 도우미 ZIP](feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip) |
+
+## 보존: Workbench Next 0.53.2 미병합 후보판
+
+0.53.1 main `6737746f`를 기준으로 검색 일치 문맥, 증거 편집, 검색 0건 복구, 입력 오류, 기능 찾기·화면 이력, 통합 작업 현황, 항목별 응답 차이와 첫 사용 준비 안내를 추가합니다. **초기 후보 CI 통과 후 PR 전체 화면 검사에서 남은 점검 설명 영역의 최소 높이 회귀가 발견됐습니다. 완료 배포가 아닌 미병합 후보판으로 보존합니다.** 소스 `ba04e3ff`의 [초기 후보 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40409443813)에서 Linux·Windows 각각 4,474개와 합성 Swing 화면·상태 검사를 통과했습니다. 검사 JAR와 배포 JAR가 일치하고 소스 ZIP 367개 파일의 CRC·지문도 확인했습니다. [0.53.2 검증 기록](../docs/VERIFICATION_0.53.2.json)에서 실행 범위와 미실행 항목을 확인하세요. 기존 버전 파일은 보존합니다.
 
 | 자료 | 0.53.2 경로 |
 |---|---|

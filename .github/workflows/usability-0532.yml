@@ -1,4 +1,4 @@
-name: Usability 0.53.2 release candidate verification
+name: Usability 0.53.3 release candidate verification
 on:
   push:
     branches: [account-a/usability-0532-20261027]
@@ -7,12 +7,12 @@ on:
       - 'feature-mapper/**'
       - 'tools/**'
       - 'dev.py'
-      - 'audit/usability0532/**'
+      - 'audit/usability0533/**'
       - '.github/workflows/usability-0532.yml'
 permissions:
   contents: read
 concurrency:
-  group: usability0532-${{ github.ref }}
+  group: usability0533-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   release:
@@ -41,15 +41,15 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: usability0532-candidate-packages
+          name: usability0533-candidate-packages
           retention-days: 14
           path: |
-            downloads/extensions/0.53.2/
+            downloads/extensions/0.53.3/
             downloads/feature-mapper/0.3.5/
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: usability0532-linux-evidence
+          name: usability0533-linux-evidence
           include-hidden-files: true
           retention-days: 14
           path: |
@@ -81,18 +81,34 @@ jobs:
           wb = Path('project/burp-development-workspace/burp-workbench-kr/burp-workbench').resolve()
           classes = wb / 'build/tests'
           classes.mkdir(parents=True, exist_ok=True)
-          cp = os.pathsep.join(str(p) for p in [wb / 'dist/burp-workbench-kr-0.53.2.jar', *sorted((wb / 'deps').glob('*.jar'))])
+          cp = os.pathsep.join(str(p) for p in [wb / 'dist/burp-workbench-kr-0.53.3.jar', *sorted((wb / 'deps').glob('*.jar'))])
           subprocess.run(['javac', '--release', '17', '-encoding', 'UTF-8', '-cp', cp, '-d', str(classes), *map(str, (wb / 'src/test/java').rglob('*.java'))], check=True)
           PYTHON
       - name: Check current usability views and remaining-work navigation
-        run: python tools/render_ui_layout.py --next-only --check --out tmp/usability0532-ui
+        run: |
+          python tools/render_ui_layout.py --next-only --check --out tmp/usability0533-ui
+          python tools/render_ui_layout.py --check --out tmp/usability0533-full-ui
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: usability0532-layout-evidence
+          name: usability0533-layout-evidence
           include-hidden-files: true
           retention-days: 14
-          path: tmp/usability0532-ui/
+          path: tmp/usability0533-ui/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0533-full-layout-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            tmp/usability0533-full-ui/layout-report.json
+            tmp/usability0533-full-ui/controls.csv
+            tmp/usability0533-full-ui/content.csv
+            tmp/usability0533-full-ui/text.csv
+            tmp/usability0533-full-ui/scenarios.csv
+            tmp/usability0533-full-ui/light/1024x720/next-remaining-checks.png
+            tmp/usability0533-full-ui/dark/1024x720/next-remaining-checks.png
   windows:
     runs-on: windows-latest
     timeout-minutes: 25
@@ -115,7 +131,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: usability0532-windows-evidence
+          name: usability0533-windows-evidence
           include-hidden-files: true
           retention-days: 14
           path: |

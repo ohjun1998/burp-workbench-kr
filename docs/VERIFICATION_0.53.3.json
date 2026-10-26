@@ -1,0 +1,41 @@
+{
+  "version": "0.53.3",
+  "sourceBase": "6737746f1a0c29c42c91a246a8161192c7d279d6",
+  "status": "implementation-and-full-layout-verification-in-progress",
+  "local": {
+    "status": "build-and-full-layout-passed-specialized-modes-in-progress",
+    "compiler": "OpenJDK21 with official --release17 symbols",
+    "fullLayout": {
+      "renderedViews": 450,
+      "controlsMeasured": 5934,
+      "clippedControlsOutsideScrollers": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "scenariosChecked": 162
+    },
+    "nextLayout": {
+      "renderedViews": 288,
+      "controlsMeasured": 2202,
+      "clippedControlsOutsideScrollers": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0,
+      "scenariosChecked": 162
+    },
+    "note": "Layouts overlap and are not added as unique counts. Native Burp GUI not executed."
+  },
+  "remote": {
+    "status": "pending"
+  },
+  "main": {
+    "merged": false
+  },
+  "preservedCandidate": "0.53.2",
+  "notExecuted": [
+    "Actual Burp GUI interaction",
+    "Windows DPI/IME",
+    "Manual browser interaction",
+    "External target services"
+  ]
+}

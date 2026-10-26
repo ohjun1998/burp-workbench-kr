@@ -1,19 +1,19 @@
 # Workbench Next 0.53.3 설치·사용 안내
 
-**0.53.3은 사용자 편의성 개선 후보판입니다.** 0.53.1 main 커밋 `6737746f1a0c29c42c91a246a8161192c7d279d6`에서 검색 근거 찾기, 증거 수정, 입력 오류 보완과 화면 이동을 개선합니다. 내장 Feature Mapper는 **0.3.5**, 실습 사이트는 **3.10.0**을 유지합니다. 현재 main 배포는 **0.53.1**이며 이전 버전의 파일과 검증 기록은 보존합니다.
+**0.53.3은 main에 병합한 사용자 편의성 개선판입니다.** 0.53.1 main 커밋 `6737746f1a0c29c42c91a246a8161192c7d279d6`에서 검색 근거 찾기, 증거 수정, 입력 오류 보완과 화면 이동을 개선합니다. 내장 Feature Mapper는 **0.3.5**, 실습 사이트는 **3.10.0**을 유지합니다. [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)로 main에 병합했으며 이전 버전의 파일과 검증 기록은 보존합니다.
 
-**0.53.3은 최종 자동 검증·배포 파일 생성을 완료한 미병합 후보판입니다.** 소스 `511845348ffdea146ee0a01f377c6e427c72390c`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows·전체 및 집중 화면 검사를 통과했습니다. 0.53.2 PR 화면 회귀의 원인이던 탐색 막대 너비 계산을 수정했으며 기존 파일은 보존합니다. 검사 범위·해시는 [0.53.3 검증 기록](VERIFICATION_0.53.3.json), 실제 main 반영 상태는 [프로젝트 상태](../PROJECT_STATUS_KR.md)에서 확인하세요.
+**0.53.3은 최종 자동 검증·배포 파일 게시·main 병합을 완료했습니다.** 소스 `511845348ffdea146ee0a01f377c6e427c72390c`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows·전체 및 집중 화면 검사를 통과했습니다. 0.53.2 PR 화면 회귀의 원인이던 탐색 막대 너비 계산을 수정했으며 기존 파일은 보존합니다. 검사 범위·해시는 [0.53.3 검증 기록](VERIFICATION_0.53.3.json), main 병합 시각과 커밋은 [프로젝트 상태](../PROJECT_STATUS_KR.md)에서 확인하세요.
 
 ## 설치할 버전 확인하기
 
 | 버전 | 현재 상태 | 안내 |
 |---|---|---|
-| 0.53.3 | 자동 검증 통과·JAR 및 소스 ZIP 생성, main 미병합 | 이 문서와 [검증 기록](VERIFICATION_0.53.3.json) |
-| 0.53.2 | PR 전체 화면 검사에서 회귀가 발견된 보존·미병합 후보판 | [당시 안내](RELEASE_0.53.2_NEXT_KR.md) |
-| 0.53.1 | 현재 main 배포, 기존 파일 보존 | [0.53.1 안내](RELEASE_0.53.1_NEXT_KR.md) |
+| 0.53.3 | 현재 main 배포, 자동 검증 통과·JAR 및 소스 ZIP 제공 | 이 문서와 [검증 기록](VERIFICATION_0.53.3.json) |
+| 0.53.2 | PR 전체 화면 검사에서 회귀가 발견된 당시 후보판 보존 | [당시 안내](RELEASE_0.53.2_NEXT_KR.md) |
+| 0.53.1 | 이전 main 배포, 기존 파일 보존 | [0.53.1 안내](RELEASE_0.53.1_NEXT_KR.md) |
 | 0.52.0 이하 | 이전 배포와 당시 검증·가이드 보존 | [버전별 다운로드](../downloads/README.md) |
 
-기존 JAR·프로젝트·설정·증거 파일을 보관합니다. Burp **Extensions**에서 이전 Workbench의 로드를 해제하고 **Add → Java**로 선택한 버전의 JAR를 로드합니다. 후보판은 확장 이름과 버전 배지에 **0.53.3**이 표시되는지 확인하세요. 내장 Mapper를 사용하므로 별도 Mapper JAR를 함께 로드할 필요는 없습니다.
+기존 JAR·프로젝트·설정·증거 파일을 보관합니다. Burp **Extensions**에서 이전 Workbench의 로드를 해제하고 **Add → Java**로 선택한 버전의 JAR를 로드합니다. 설치 후 확장 이름과 버전 배지에 **0.53.3**이 표시되는지 확인하세요. 내장 Mapper를 사용하므로 별도 Mapper JAR를 함께 로드할 필요는 없습니다.
 
 0.53.3의 배포 경로는 [설치 JAR](../downloads/extensions/0.53.3/burp-workbench-kr-0.53.3.jar), [빌드 가능한 소스 ZIP](../downloads/extensions/0.53.3/burp-workbench-kr-0.53.3-source.zip), [SHA256SUMS](../downloads/extensions/0.53.3/SHA256SUMS)입니다. 해시와 실제 검증 범위를 함께 확인하세요. 브라우저 연동에는 기존 [Mapper 도우미 0.3.5](../downloads/feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip)를 사용합니다. 되돌릴 때는 새 JAR의 로드를 해제하고 이전 JAR와 해당 버전용 백업을 사용합니다.
 
@@ -90,6 +90,6 @@
 | 넓은 메뉴·1024px 창 | 남은 점검 설명 높이 63px, 양 테마 통과 |
 | 검증 소스·CI | `51184534` · [실행 40414755887](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887) |
 | 배포 무결성 | 화면 검사 JAR와 배포 JAR 일치, 소스 ZIP 367개 파일 CRC·지문 확인 |
-| PR·main 병합 | 현재 미병합, 확인 후 [프로젝트 상태](../PROJECT_STATUS_KR.md)에 기록 |
+| PR·main 병합 | [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)로 병합 완료 · [시각·커밋](../PROJECT_STATUS_KR.md) |
 
 0.53.2의 초기 후보 검사와 후속 PR 화면 회귀는 [당시 기록](VERIFICATION_0.53.2.json)에 보존합니다. 해당 수치·JAR·소스 지문은 0.53.3의 새 결과가 아닙니다. 전체·집중 화면 검사와 플랫폼 반복은 겹치므로 고유 검사 수에 합산하지 않습니다. [전체 화면 근거](reports/2026-10-27-usability-0533/full-layout-report.json) · [집중 화면 근거](reports/2026-10-27-usability-0533/ui/layout-report.json) · [배포 해시](../downloads/extensions/0.53.3/SHA256SUMS)를 함께 확인하세요. 헤드리스 Swing·API fixture·격리 HTTP와 실제 Burp GUI 조작은 구분하며, 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스의 완료를 주장하지 않습니다.

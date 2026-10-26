@@ -340,6 +340,8 @@ public final class UiLayoutPreview extends WorkbenchTest {
         auth.assign(1,new AuthComparePanel.Candidate(1002,"preview-member",origin,java.util.Map.of("cookie","sid=DEMO_MEMBER"),1,""));
         auth.profileNames[0].setText("관리자");auth.profileNames[1].setText("일반 사용자");
         auth.matrixRules.setText("PATCH /api/notices/101 ALLOW DENY UNKNOWN UNKNOWN\nDELETE /api/notices/101 ALLOW DENY UNKNOWN UNKNOWN");
+        // Capture the real selected-origin draft before later workflow fixtures change selection.
+        var currentSetup=auth.captureBundle();
         var write=request(origin+"/api/notices/101","PATCH",true,List.of(header("Cookie","DEMO_ADMIN")));
         var context=auth.context();var readiness=AuthReadiness.selected(context,List.of(write));
         var chosen=new java.util.concurrent.atomic.AtomicReference<String>();
@@ -409,13 +411,13 @@ public final class UiLayoutPreview extends WorkbenchTest {
         awaitUi(()->components(storage,javax.swing.JLabel.class).stream().anyMatch(label->label.getText().contains("보존/이전 버전 1")),"archive disk usage");
         scenario("next-js-retention.png","JS retention policy",components(storage,javax.swing.JCheckBox.class).get(0).isSelected()&&action(storage,"기간이 지난 이력 정리").isEnabled(),"One protected record; saving retention criteria and explicit pruning remain separate");
         dialogPair(WorkbenchUi.settingsBody(storage,()->{}),out,"next-js-retention");
-        renderNextUsability(ext,out,bundle);
+        renderNextUsability(ext,out,currentSetup,bundle);
     }
 
     /** 0.53.1 production review, project-filter and resume components; all metadata is synthetic. */
-    static void renderNextUsability(WorkbenchExtension ext,Path out,AuthSetupBundles.Bundle bundle) throws Exception {
+    static void renderNextUsability(WorkbenchExtension ext,Path out,AuthSetupBundles.Bundle currentSetup,AuthSetupBundles.Bundle bundle) throws Exception {
         var auth=(AuthComparePanel)get(ext,"authCompare");
-        var review=auth.setupBundles.reviewContent(auth.captureBundle(),bundle);
+        var review=auth.setupBundles.reviewContent(currentSetup,bundle);
         var summary=(javax.swing.JTextArea)UiLayoutTest.named(review,"wb.auth.setup.bundle.review.summary");
         scenario("next-auth-bundle-diff.png","Setup bundle readable diff",summary.getText().contains("현재 활성 설정과의 차이")
             &&summary.getText().contains("쓰기 허용은 해제"),"Production confirmation starts with rule differences and account reconnection guidance");

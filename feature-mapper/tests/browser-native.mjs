@@ -21,6 +21,9 @@ try {
   const id=new URL(worker.url()).host;
   check(!!id,'actual Chromium loads the Manifest V3 helper');
   const popup=await context.newPage();await popup.goto('chrome-extension://'+id+'/popup.html');
+  // The popup restores saved fields and diagnostics before registering handlers.
+  // Await the same module evaluation so it cannot erase fixture input or miss the click.
+  await popup.evaluate(async()=>{await import(chrome.runtime.getURL('popup.js'));});
   await popup.locator('#base').fill(info.base);await popup.locator('#token').fill(info.token);await popup.locator('#connect').click();
   await popup.waitForFunction(()=>document.querySelector('#status').textContent.includes('연결 완료'));
   check(true,info.proxy ? 'real helper popup pairs with the native Burp bridge' : 'real helper popup pairs with the production bridge fixture');

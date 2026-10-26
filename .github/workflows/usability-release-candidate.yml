@@ -12,7 +12,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: next-candidate-${{ github.ref }}
+  group: next-candidate-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 jobs:
   release:

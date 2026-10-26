@@ -138,6 +138,37 @@ public final class UiLayoutPreview extends WorkbenchTest {
     }
     static Object unchecked(Object owner,String name){try{return get(owner,name);}catch(Exception e){throw new RuntimeException(e);}}
 
+    /** A real in-memory project store, while all non-persistence host behavior stays in the shared adapter. */
+    static MontoyaApi previewApi() {
+        var values=new java.util.concurrent.ConcurrentHashMap<String,java.util.Map<String,Object>>();
+        var data=proxy(burp.api.montoya.persistence.PersistedObject.class,(p,m,a)->{
+            String method=m.getName();
+            if(method.equals("equals"))return p==a[0];
+            if(method.equals("hashCode"))return System.identityHashCode(p);
+            if(method.equals("toString"))return "Preview project persistence";
+            String operation=method.startsWith("get")?"get":method.startsWith("set")?"set":method.startsWith("delete")?"delete":"";
+            if(!operation.isEmpty()&&a!=null&&a.length>0) {
+                var store=values.computeIfAbsent(method.substring(operation.length()),ignored->new java.util.concurrent.ConcurrentHashMap<>());
+                String key=a[0].toString();
+                if(operation.equals("get"))return store.get(key);
+                if(operation.equals("delete")){store.remove(key);return null;}
+                if(a[1]==null)store.remove(key);else store.put(key,a[1]);return null;
+            }
+            if(method.endsWith("Keys")) {
+                String kind=method.substring(0,method.length()-4);
+                kind=Character.toUpperCase(kind.charAt(0))+kind.substring(1);
+                return Set.copyOf(values.getOrDefault(kind,java.util.Map.of()).keySet());
+            }
+            return def(m);
+        });
+        data.setString(BuildInfo.storageKey("auth-setup-library-project-v1"),"11111111-1111-4111-8111-111111111111");
+        var fallbackPersistence=PayloadIntegrationTest.host(burp.api.montoya.persistence.Persistence.class);
+        var persistence=proxy(burp.api.montoya.persistence.Persistence.class,(p,m,a)->
+            m.getName().equals("extensionData")?data:m.invoke(fallbackPersistence,a));
+        var fallback=PayloadIntegrationTest.host(MontoyaApi.class);
+        return proxy(MontoyaApi.class,(p,m,a)->m.getName().equals("persistence")?persistence:m.invoke(fallback,a));
+    }
+
     static void renderGuides(WorkbenchExtension extension,Path out)throws Exception {
         java.util.List<String> measurements=new java.util.ArrayList<>();
         measurements.add("theme,width,height,feature,horizontalScroll,viewportWidth,contentWidth,textWidth,textHeight,lastGlyphBottom,maxGlyphRight,controlsVisible");
@@ -331,6 +362,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         var auth=(AuthComparePanel)get(ext,"authCompare");
         var activity=(ActivityPanel)get(ext,"activity");var tracker=activity.tracker.assessments;
         var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
+        awaitUi(()->auth.setupBundles.save.isEnabled(),"project setup library restore");
         var bundle=auth.setupBundles.bundles.save(auth.captureBundle().withName("공지 관리 · 계정 권한과 쓰기 조회"),0);
         auth.setupBundles.refresh(bundle.key());
         scenario("next-auth-bundles.png","Setup bundle review",auth.setupBundles.model.size()==1&&auth.setupBundles.apply.isEnabled()&&bundle.settings().effects().size()==2,"Selected local bundle has two write rules; no apply/import/export operation is executed");
@@ -484,7 +516,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 UIManager.put(key, new FontUIResource(font.deriveFont(14f)));
         }
         ObjectFactoryLocator.FACTORY = proxy(MontoyaObjectFactory.class, (p,m,a) -> def(m));
-        MontoyaApi api = (MontoyaApi) PayloadIntegrationTest.host(MontoyaApi.class);
+        MontoyaApi api = previewApi();
         burp.BurpExtender entry=new burp.BurpExtender();
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});

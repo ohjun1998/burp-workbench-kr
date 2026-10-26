@@ -17,8 +17,19 @@ record TrafficQuery(String method,String status,int range,boolean sensitive,bool
   Map<String,Object> json(){return Map.ofEntries(Map.entry("method",method),Map.entry("status",status),Map.entry("range",range),Map.entry("sensitive",sensitive),Map.entry("regex",regex),Map.entry("group",group),Map.entry("normalize",normalize),Map.entry("important",important),Map.entry("memo",memo),Map.entry("account",account),Map.entry("minutes",minutes));}
   static TrafficQuery read(String json){
     if(json==null||json.length()>4096)return defaults();
-    try {var m=(Map<?,?>)MinerJson.parse(json);return new TrafficQuery((String)m.get("method"),(String)m.get("status"),((Number)m.get("range")).intValue(),(Boolean)m.get("sensitive"),(Boolean)m.get("regex"),(Boolean)m.get("group"),(Boolean)m.get("normalize"),(Boolean)m.get("important"),(Boolean)m.get("memo"),(String)m.get("account"),((Number)m.get("minutes")).intValue());}
+    try {return readStrict(json);}
     catch(RuntimeException ex){return defaults();}
+  }
+  static TrafficQuery readStrict(String json){
+    if(json==null||json.length()>4096)throw new IllegalArgumentException("검색 조건 크기 확인");
+    Object parsed=MinerJson.parse(json,4096,64);
+    if(!(parsed instanceof Map<?,?> m)||!m.keySet().equals(defaults().json().keySet()))throw new IllegalArgumentException("지원하는 검색 조건 형식이 아닙니다.");
+    try{return new TrafficQuery((String)m.get("method"),(String)m.get("status"),integer(m.get("range")),(Boolean)m.get("sensitive"),(Boolean)m.get("regex"),(Boolean)m.get("group"),(Boolean)m.get("normalize"),(Boolean)m.get("important"),(Boolean)m.get("memo"),(String)m.get("account"),integer(m.get("minutes")));}
+    catch(ClassCastException|NullPointerException error){throw new IllegalArgumentException("검색 조건 값 확인",error);}
+  }
+  private static int integer(Object value){
+    if(!(value instanceof Number n)||!Double.isFinite(n.doubleValue())||n.doubleValue()!=n.intValue())throw new IllegalArgumentException("검색 조건 정수 값 확인");
+    return n.intValue();
   }
   boolean matchesMeta(String verb,String url,String code,String who,String query,BooleanSupplier cancelled){
     SearchPredicate predicate=prepare(query);
@@ -89,3 +100,4 @@ record TrafficQuery(String method,String status,int range,boolean sensitive,bool
   }
   String groupPath(String url){String key=groupKey("",url,"");return key.substring(1,key.length()-1).replaceAll("\\?$","");}
 }
+

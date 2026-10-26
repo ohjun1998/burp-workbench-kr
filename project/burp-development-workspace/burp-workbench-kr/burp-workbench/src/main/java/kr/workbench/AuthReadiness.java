@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /** Local configuration coverage only. Building this preview never sends a request. */
 final class AuthReadiness {
@@ -144,10 +145,19 @@ final class AuthReadiness {
     for (Row row : report.rows()) model.addRow(new Object[]{row.request(), row.account(), row.policy(), row.effect(), row.limitation(), row.action()});
     JTable table = new AuthLayout.Table(model);
     table.setName("wb.auth.readiness.table");
-    table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    int[] widths = {240, 130, 290, 320, 470, 460};
+    // Long explanations remain in the selected-row inspector, not six wide columns.
+    table.removeColumn(table.getColumnModel().getColumn(5));
+    table.removeColumn(table.getColumnModel().getColumn(4));
+    int[] widths = {260, 110, 220, 250};
     for (int i = 0; i < widths.length; i++) table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+    table.setRowSorter(sorter);
+    JComboBox<String> filter = new JComboBox<>(new String[]{"전체", "보완 필요", "쓰기 요청"});
+    filter.setName("wb.auth.readiness.filter");
+    JTextField search = new JTextField(18); search.setName("wb.auth.readiness.search");
+    JLabel visible = new JLabel(); visible.setName("wb.auth.readiness.visible");
     JTextArea selected = note("표에서 행을 선택하면 판정 한계와 다음 설정을 아래에서 읽을 수 있습니다.", 5);
     table.getSelectionModel().addListSelectionListener(event -> {
       int at = table.getSelectedRow();
@@ -156,11 +166,34 @@ final class AuthReadiness {
         selected.setText(row.request() + " · " + row.account() + "\n권한: " + row.policy() + "\n조회: " + row.effect()
             + "\n판정 한계: " + row.limitation() + "\n다음 설정: " + row.action());
         selected.setCaretPosition(0);
-      }
+      } else selected.setText("조건에 맞는 행을 선택하세요. 판정 한계와 다음 설정을 여기서 확인합니다.");
+    });
+    Runnable refilter = () -> {
+      int previous = table.getSelectedRow() < 0 ? -1 : table.convertRowIndexToModel(table.getSelectedRow());
+      String query = search.getText().strip().toLowerCase(java.util.Locale.ROOT);
+      int kind = filter.getSelectedIndex();
+      sorter.setRowFilter(new RowFilter<DefaultTableModel, Integer>() {
+        public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
+          Row row = report.rows().get(entry.getIdentifier());
+          return matches(row, kind, query);
+        }
+      });
+      visible.setText(table.getRowCount() + " / " + report.rows().size() + "행");
+      int next = previous < 0 ? -1 : table.convertRowIndexToView(previous);
+      if (next < 0 && table.getRowCount() > 0) next = 0;
+      if (next >= 0) table.setRowSelectionInterval(next, next);
+    };
+    filter.addActionListener(event -> refilter.run());
+    search.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+      public void insertUpdate(javax.swing.event.DocumentEvent event) { refilter.run(); }
+      public void removeUpdate(javax.swing.event.DocumentEvent event) { refilter.run(); }
+      public void changedUpdate(javax.swing.event.DocumentEvent event) { refilter.run(); }
     });
     JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(table), new JScrollPane(selected));
     split.setResizeWeight(.65); split.setBorder(null);
-    panel.add(split);
+    JPanel center = new JPanel(new BorderLayout(4, 4));
+    center.add(WorkbenchUi.row(new JLabel("표시"), filter, new JLabel("요청·계정 찾기"), search, visible), BorderLayout.NORTH);
+    center.add(split); panel.add(center);
     String rules = "JSON 차단 규칙 " + c.rules().denied().size() + "개 · 응답 차단 규칙 " + c.responseRules().rules.size()
         + "개 · 비교 제외 필드 " + c.rules().ignored().size() + "개\n규칙 유무만으로 해당 서비스의 차단 응답을 모두 식별할 수는 없습니다.";
     if (report.automatic()) rules += "\n자동 비교 ON 이후 조건에 맞는 신규 요청을 지정 계정으로 실제 재전송합니다. 설정은 OFF 후 수정합니다.";
@@ -184,16 +217,25 @@ final class AuthReadiness {
     panel.add(bottom, BorderLayout.SOUTH);
     panel.setPreferredSize(new Dimension(880, 500));
     WorkbenchUi.style(panel);
+    refilter.run();
     if (!report.rows().isEmpty()) {
       int selectedRow = 0;
       for (int i = 0; i < report.rows().size(); i++) {
         Row row = report.rows().get(i);
         if (row.requestIndex() == focusedRequest && row.slot() == focusedSlot) { selectedRow = i; break; }
       }
-      table.setRowSelectionInterval(selectedRow, selectedRow);
-      table.scrollRectToVisible(table.getCellRect(selectedRow, 0, true));
+      int view = table.convertRowIndexToView(selectedRow);
+      if (view >= 0) { table.setRowSelectionInterval(view, view); table.scrollRectToVisible(table.getCellRect(view, 0, true)); }
     }
     return panel;
+  }
+
+  static boolean matches(Row row, int filter, String query) {
+    if (filter == 1 && !row.incomplete()) return false;
+    if (filter == 2 && !java.util.Set.of("POST", "PUT", "PATCH", "DELETE").contains(row.method())) return false;
+    String text = (row.request() + " " + row.account() + " " + row.policy() + " " + row.effect())
+        .toLowerCase(java.util.Locale.ROOT);
+    return text.contains(query == null ? "" : query.strip().toLowerCase(java.util.Locale.ROOT));
   }
 
   static JTextArea note(String text, int rows) {
@@ -203,3 +245,4 @@ final class AuthReadiness {
     return area;
   }
 }
+

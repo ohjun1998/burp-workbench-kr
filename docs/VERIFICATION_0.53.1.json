@@ -1,0 +1,42 @@
+{
+  "version": "0.53.1",
+  "sourceBase": "8b548422f12d498aef7334ebb86b55762c1a1569",
+  "status": "candidate-remote-verification-pending",
+  "local": {
+    "version": "0.53.1",
+    "groups": {
+      "BuildInfoTest": 3,
+      "BundleChangeSummaryTest": 20,
+      "RemainingWorkUsabilityTest": 17,
+      "AuthUsability0531Test": 26,
+      "TrafficSearchPresetsTest": 148,
+      "TrafficSearchConditionsUiTest": 23,
+      "WorkspaceResumeTest": 32,
+      "AuthSetupBundlesTest": 64,
+      "RemainingChecks053Test": 33,
+      "AuthSetupWorkflowTest": 47,
+      "TrafficSearchLifecycleTest": 48,
+      "AuthRunSummaryTest": 23,
+      "AuthRecordTest": 37,
+      "AuthLayoutFitTest": 106,
+      "AuthResponseWorkflowTest": 47
+    },
+    "total": 674,
+    "scope": "Java17 target and packaged JAR, headless fixtures; no native Burp GUI or live target HTTP",
+    "compiler": "OpenJDK21 compiler with official Temurin21 ct.sym, --release17",
+    "productionBuild": "passed",
+    "allTestSourcesCompile": "passed",
+    "fullRegression": "blocked by local BrowserBridge loopback socket creation: Operation not permitted",
+    "uiRender": "blocked by same loopback socket restriction"
+  },
+  "remote": {
+    "status": "pending",
+    "workflow": "usability-release-candidate.yml"
+  },
+  "notExecuted": [
+    "Actual Burp GUI interaction",
+    "Windows DPI/IME",
+    "Docker/Oracle/Nginx stack",
+    "External target services"
+  ]
+}

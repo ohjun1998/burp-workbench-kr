@@ -137,7 +137,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final JMenuItem unassignItem=new JMenuItem("해제"),deleteCandidateItem=new JMenuItem("삭제"),deleteHistoryItem=new JMenuItem("삭제");
   final JMenuItem[] slotAssign = new JMenuItem[3];
   final JLabel[] slotLabels = {new JLabel(), new JLabel(), new JLabel(), new JLabel()};
-  final JToggleButton record = new JToggleButton("요청 비교 OFF");
+  final JToggleButton record = new JToggleButton("신규 요청 자동 비교 OFF");
   final JToggleButton detection = new JToggleButton("인증 탐지 OFF");
   volatile boolean detectionEnabled;
   final ArrayBlockingQueue<Observation> credentialQueue=new ArrayBlockingQueue<>(64);
@@ -156,6 +156,12 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final JCheckBox writes = new JCheckBox("쓰기 요청 재전송 허용"), colors = new JCheckBox("차이 색상 표시", true);
   final JTextField extra = new JTextField(15), urlFilter = new JTextField(15);
   final JLabel counts = new JLabel("인증 후보 0 · 비교 기록 0");
+  final JLabel automaticScope = new JLabel("자동 비교 대상 · 계정 미지정");
+  final JComboBox<String> historyFilter = new JComboBox<>(AuthResultTriage.LABELS);
+  final JTextField historySearch = new JTextField(14);
+  final JLabel historyVisible = new JLabel();
+  TableRowSorter<DefaultTableModel> historySorter;
+  Runnable historyRepairState = () -> {};
   final JLabel state = new JLabel("인증 후보 우클릭 → 비교 계정 지정 → 선택 요청 비교"),
       detail = new JLabel("비교 기록에서 항목을 선택하세요");
   final JCheckBox largeFiles = new JCheckBox("대용량 응답 해시 비교 · 최대 4MiB");
@@ -286,6 +292,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final JTextArea denialRules = new JTextArea("error=FORBIDDEN\nerror=UNAUTHORIZED", 3, 35),
       judgementDetails = new JTextArea(6, 60);
   JDialog readinessDialog;
+  JTabbedPane preparationTabs;
+  Runnable preparationRefresh;
+  int preparationStartTab;
+  int preparationRepairFilter;
   final AuthEvidencePanel evidence = new AuthEvidencePanel(),expandedEvidence = new AuthEvidencePanel();
   final TargetWindow evidenceWindow=new TargetWindow(this,"판정 근거 크게 보기",()->expandedEvidence);
   final JComboBox<String> accessPolicy =
@@ -448,7 +458,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     this.selected = selected;
     this.observedRequests = selected;
     setupBundles = new AuthSetupBundlePanel(this, this::captureBundle, this::applyBundle, AuthSetupBundleStore.project(api));
+    setupBundles.onReconnect = this::openAccountPreparation;
     setupBundleWindow = new TargetWindow(this, "계정 비교 · 이름 있는 설정 묶음", () -> setupBundles);
+    setupBundleWindow.opener = (parent, title, content, modal, onClose) ->
+        WorkbenchUi.settingsWindow(preparationOwner(parent), title, content, modal, onClose);
     capturedRepeater=new JsRepeater(packetDetails,api);
     candidateDetails=new AuthCandidateDetails(this);
     candidateWindow=new TargetWindow(this,"인증 정보 상세",()->candidateDetails);
@@ -460,6 +473,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     packetDetails.getActionMap().put("wb.auth.repeater",new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){safe(AuthComparePanel.this::repeater);}});
     detection.setName("wb.auth.detect");record.setName("wb.auth.compare");
     for(JToggleButton toggle:new JToggleButton[]{detection,record}) {toggle.putClientProperty("wb.analysis.lamp",true);toggle.putClientProperty("wb.state.toggle",true);toggle.setPreferredSize(new Dimension(144,38));}
+    record.setPreferredSize(new Dimension(210, 38));
     detection.addActionListener(e->setDetection(detection.isSelected()));
     evidenceWindow.opener=AuthCandidateDetails::window;
     cookieSessions=new CookieSessionPanel(this);
@@ -488,6 +502,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     actions.setName("wb.auth.actions");top.add(actions);
     JPanel summary=new JPanel(new BorderLayout(8,0));summary.setBorder(BorderFactory.createEmptyBorder(3,8,8,8));
     summary.add(new JLabel("인증 탐지는 수집 OFF / SCOPE와 별도 동작"));summary.add(counts,BorderLayout.EAST);top.add(summary);
+    automaticScope.setName("wb.auth.automatic.scope"); top.add(automaticScope);
+    writes.addActionListener(event -> refreshAutomaticScope());
     ((AuthLayout.Table)candidates).emptyMessage="인증 탐지를 ON으로 켠 뒤 사이트를 이용하면 인증 후보가 표시됩니다.";
     ((AuthLayout.Table)history).emptyMessage="인증 후보를 계정에 지정하고 선택 요청 비교를 실행하세요.";
     candidates.setName("wb.auth.credentials");
@@ -558,6 +574,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     history.setName("wb.auth.history");
     history.putClientProperty("wb.table.compact",true);
     history.setAutoCreateRowSorter(true);
+    historySorter = new TableRowSorter<>(historyModel); historySorter.setSortsOnUpdates(true); history.setRowSorter(historySorter);
     history.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     history.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     history.getColumnModel().getColumn(0).setPreferredWidth(45);
@@ -611,7 +628,27 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     details.add(WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, packets,
         AuthLayout.card("판정 근거","", evidence,button("크게 보기",()->{WorkbenchUi.style(expandedEvidence);expandedEvidence.showRun(detailRun==null?current():detailRun);evidenceWindow.open();})), .70));
     JPanel historyCard = AuthLayout.card("비교 기록","더블클릭하여 패킷·판정 근거 보기",new JScrollPane(history),button("기록 비우기",this::clearHistory));
-    historyCard.add(AuthLayout.verdictLegend(),BorderLayout.SOUTH);
+    historyFilter.setName("wb.auth.history.filter"); historySearch.setName("wb.auth.history.search");
+    historyVisible.setName("wb.auth.history.visible");
+    historyFilter.addActionListener(event -> filterHistory());
+    historySearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+      public void insertUpdate(javax.swing.event.DocumentEvent event) { filterHistory(); }
+      public void removeUpdate(javax.swing.event.DocumentEvent event) { filterHistory(); }
+      public void changedUpdate(javax.swing.event.DocumentEvent event) { filterHistory(); }
+    });
+    JPanel triage = new JPanel(); triage.setLayout(new BoxLayout(triage, BoxLayout.Y_AXIS));
+    triage.add(WorkbenchUi.row(new JLabel("결과 표시"), historyFilter, new JLabel("요청·계정 찾기"), historySearch, historyVisible));
+    JButton sessionRepair = button("계정·세션 보완", () -> repairCurrent(3)), policyRepair = button("권한 설정 보완", () -> repairCurrent(4)), writeRepair = button("쓰기 조회 보완", () -> repairCurrent(5));
+    sessionRepair.setName("wb.auth.history.repair.session"); policyRepair.setName("wb.auth.history.repair.policy"); writeRepair.setName("wb.auth.history.repair.write");
+    historyRepairState = () -> {
+      Run selectedRun = current(); boolean editable = selectedRun != null && recording.get() == null && active.get() == 0;
+      sessionRepair.setEnabled(editable); policyRepair.setEnabled(editable);
+      writeRepair.setEnabled(editable && !GraphqlSemantics.read(selectedRun.original));
+    };
+    history.getSelectionModel().addListSelectionListener(event -> historyRepairState.run());
+    historyRepairState.run();
+    triage.add(WorkbenchUi.row(sessionRepair, policyRepair, writeRepair));
+    triage.add(AuthLayout.verdictLegend()); historyCard.add(triage,BorderLayout.SOUTH);
     historyCard.setName("wb.card.Record History");
     JButton closeDetails=button("닫기",comparisonWindow::closeWindow);
     details.add(WorkbenchUi.row(closeDetails),BorderLayout.SOUTH);
@@ -638,6 +675,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     state.putClientProperty("wb.font.size",12);state.setFont(WorkbenchUi.font().deriveFont(12f));
     WorkbenchUi.feedback(state);
     show(null);
+    filterHistory();
   }
 
   static JLabel legend() {
@@ -689,7 +727,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       Diagnostics.failure(this,"계정 권한 비교",e);
       if (recording.get() == null) {
         record.setSelected(false);
-        record.setText("요청 비교 OFF");record.repaint();
+        record.setText("신규 요청 자동 비교 OFF");record.repaint();
       }
       state.setText(e.getMessage());
     }
@@ -863,7 +901,41 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     applyObservation(prepareObservation(q, response));
   }
 
-  void refreshCounts(){counts.setText("인증 후보 "+credentials.size()+" · 비교 기록 "+runs.size());}
+  void refreshCounts(){counts.setText("인증 후보 "+credentials.size()+" · 비교 기록 "+runs.size());filterHistory();historyRepairState.run();}
+
+  void filterHistory() {
+    if (historySorter == null) return;
+    int selected = history.getSelectedRow() < 0 ? -1 : history.convertRowIndexToModel(history.getSelectedRow());
+    int filter = historyFilter.getSelectedIndex(); String query = historySearch.getText();
+    historySorter.setRowFilter(new RowFilter<DefaultTableModel, Integer>() {
+      public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
+        int index = entry.getIdentifier();
+        return index >= 0 && index < runs.size() && AuthResultTriage.matches(runs.get(index), filter, query);
+      }
+    });
+    historyVisible.setText(history.getRowCount() + " / " + runs.size() + "건");
+    int next = selected >= 0 && selected < historyModel.getRowCount() ? history.convertRowIndexToView(selected) : -1;
+    if (next >= 0) history.setRowSelectionInterval(next, next);
+    else if (history.getRowCount() == 0 && detailRun == null) show(null);
+  }
+
+  void repairCurrent(int filter) {
+    Run run = current();
+    stageRepair(run, filter);
+    comparisonWindow.closeWindow();
+    reviewPreparedRequests(List.copyOf(preparationSelection));
+  }
+
+  void stageRepair(Run run, int filter) {
+    editable();
+    if (run == null) throw new IllegalArgumentException("보완할 비교 기록을 먼저 선택하세요.");
+    if (filter == 5 && GraphqlSemantics.read(run.original)) throw new IllegalArgumentException("쓰기 요청의 비교 기록을 선택하세요.");
+    // Preserve the historical source; no new request is sent by opening a repair screen.
+    prepareSelection(List.of(HttpRequestResponse.httpRequestResponse(run.original, run.response)));
+    preparationFocus = 0; preparationSlot = AuthResultTriage.firstSlot(run, filter); preparationFocusRevision++;
+    preparationStartTab = filter == 5 ? 1 : 2;
+    preparationRepairFilter = filter;
+  }
 
   void refreshCandidates(String selected) {
     refreshCounts();
@@ -1024,11 +1096,12 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
 
   final java.util.List<TargetWindow> dynamicWindows=new ArrayList<>();
+  Component preparationOwner(Component fallback) { return preparationTabs == null ? fallback : preparationTabs; }
   void dynamicFields(){
     editable();var suggestions=AuthDynamicFields.suggest(runs);if(suggestions.isEmpty()){state.setText("동적 필드 후보 없음 · 같은 URL·인증의 정상 기준 응답이 두 개 이상 필요합니다.");return;}
     JPanel choices=new JPanel();choices.setLayout(new BoxLayout(choices,BoxLayout.Y_AXIS));java.util.List<JCheckBox> checks=new ArrayList<>();
     choices.add(new JLabel("값이 달라진 필드입니다. 실제 데이터 변경인지 확인한 뒤 제외할 항목만 선택하세요."));for(String path:suggestions){JCheckBox check=new JCheckBox(path);checks.add(check);choices.add(check);}
-    TargetWindow window=new TargetWindow(this,"동적 필드 제외 후보",()->choices);choices.add(button("선택 항목을 비교 제외에 추가",()->{editable();Set<String> fields=new LinkedHashSet<>(Arrays.asList(ignoredFields.getText().split(",")));fields.removeIf(String::isBlank);for(JCheckBox c:checks)if(c.isSelected())fields.add(c.getText());String previous=ignoredFields.getText();ignoredFields.setText(String.join(",",fields));try{ruleSnapshot();}catch(Exception ex){ignoredFields.setText(previous);throw ex;}window.closeWindow();state.setText("선택한 동적 필드 제외 · 다음 비교부터 적용");refreshPreparedConfiguration();}));dynamicWindows.add(window);window.open();
+    TargetWindow window=new TargetWindow(preparationOwner(this),"동적 필드 제외 후보",()->choices);choices.add(button("선택 항목을 비교 제외에 추가",()->{editable();Set<String> fields=new LinkedHashSet<>(Arrays.asList(ignoredFields.getText().split(",")));fields.removeIf(String::isBlank);for(JCheckBox c:checks)if(c.isSelected())fields.add(c.getText());String previous=ignoredFields.getText();ignoredFields.setText(String.join(",",fields));try{ruleSnapshot();}catch(Exception ex){ignoredFields.setText(previous);throw ex;}window.closeWindow();state.setText("선택한 동적 필드 제외 · 다음 비교부터 적용");refreshPreparedConfiguration();}));dynamicWindows.add(window);window.open();
   }
 
   AuthSetupBundles.Bundle captureBundle() {
@@ -1078,6 +1151,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
 
   void refreshSlots() {
+    refreshAutomaticScope();
     matrixEditor.refreshNames();
     updateHistoryHeaders(detailRun==null?current():detailRun);
     for (int i = 0; i < SLOTS; i++) {
@@ -1095,6 +1169,16 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     anonymousItem.setEnabled(idle&&(selected!=null||Arrays.stream(slots).anyMatch(Objects::nonNull)));
     unassignItem.setEnabled(idle&&selected!=null&&Arrays.stream(slots).anyMatch(c->c!=null&&c.key().equals(selected.key())));
     deleteCandidateItem.setEnabled(idle&&selected!=null);
+  }
+
+  void refreshAutomaticScope() {
+    Context running = recording.get();
+    Candidate[] profiles = running == null ? slots : running.profiles();
+    String origin = running == null ? Arrays.stream(profiles).filter(Objects::nonNull).map(Candidate::origin).findFirst().orElse("대상 미지정") : running.origin();
+    long assigned = Arrays.stream(profiles).filter(Objects::nonNull).count();
+    String scope = "자동 비교 " + (running == null ? "준비" : "실행") + " · " + origin + " · " + assigned + "계정 · 쓰기 "
+        + ((running == null ? writes.isSelected() : running.writes()) ? "허용" : "꺼짐");
+    automaticScope.setText(scope); automaticScope.setToolTipText(scope + " · SCOPE 안의 조건 일치 Proxy/Repeater 신규 요청만 재전송");
   }
 
   void unassignSelected(){editable();Candidate c=selectedCandidate();if(c==null)return;for(int i=0;i<SLOTS;i++)if(slots[i]!=null&&slots[i].key().equals(c.key()))clearSlot(i);refreshed.clear();cookieSessions.invalidateResult();refreshSlots();state.setText("선택 후보의 계정 지정 해제");}
@@ -1298,7 +1382,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if (closed.get() || c.epoch != epoch.get()) return;
     recording.set(c);
     record.setSelected(true);
-    record.setText("요청 비교 ON");record.repaint();
+    record.setText("신규 요청 자동 비교 ON");record.repaint();refreshAutomaticScope();
     state.setText("자동 비교 중 · Proxy/Repeater 신규 요청 재전송 · " + c.origin + " · 프로필 고정");
   }
 
@@ -1307,8 +1391,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if (closed.get()) return;
     if (active.get() > 0) throw new IllegalArgumentException("진행 중 비교가 끝난 후 자동 비교를 시작하세요.");
     epoch.incrementAndGet();
-    Context c = context();
-    if (reviewReadiness(c, AuthReadiness.automatic(c), List.of())) activateRecord(c);
+    clearPreparation();
+    ReadinessApproval approval = unifiedReadiness(true, List.of());
+    if (approval != null) activateRecord(approval.context());
   }
 
   /** User-facing entry point. Internal enqueue/compare APIs retain their existing contract. */
@@ -1341,6 +1426,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     }
     preparationSelection = list; preparationIds = List.copyOf(ordered); preparationRevision = workSelectionRevision();
     preparationFocus = preparationSlot = -1; preparationFocusRevision++; preparationGeneration++;
+    preparationStartTab = preparationRepairFilter = 0;
   }
 
   void validatePreparedSelection() {
@@ -1357,6 +1443,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void clearPreparation() {
     preparationSelection = List.of(); preparationIds = List.of();
     preparationFocus = preparationSlot = -1; preparationFocusRevision++; preparationGeneration++;
+    preparationStartTab = preparationRepairFilter = 0;
   }
 
   record PreparedStamp(long selection, long generation, String configuration, String scope,
@@ -1396,7 +1483,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
 
   void reviewPreparedRequests(List<HttpRequestResponse> list) {
-    reviewPreparedRequests(list, this::reviewReadiness);
+    validatePreparedSelection(); requireSamePreparedOriginals(preparationSelection, list);
+    ReadinessApproval approval = unifiedReadiness(false, list);
+    if (approval != null) executePrepared(list, approval.context(), approval.stamp());
   }
 
   @FunctionalInterface
@@ -1423,6 +1512,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     AuthReadiness.Report report = AuthReadiness.selected(c, list.stream().map(HttpRequestResponse::request).toList());
     if (!review.confirm(c, report, blocked)) return;
     if (closed.get() || c.epoch != epoch.get()) return;
+    executePrepared(list, c, stamp);
+  }
+
+  void executePrepared(List<HttpRequestResponse> list, Context c, PreparedStamp stamp) {
+    if (closed.get() || c.epoch != epoch.get()) return;
     validatePreparedExecution(stamp, c, list);
     // Consume the prepared batch before enqueue, so another return action cannot repeat writes.
     List<String> ids = stamp.originalIds();
@@ -1435,13 +1529,178 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
 
   void reviewPreparedSelection() {
+    if (preparationRefresh != null) { preparationRefresh.run(); return; }
     editable();
     validatePreparedSelection();
     comparisonSettings.closeWindow(); sessionSettings.closeWindow();
     reviewPreparedRequests(List.copyOf(preparationSelection));
   }
 
-  record ReadinessEdit(AuthReadiness.Row row, String kind) {}
+  record ReadinessApproval(Context context, PreparedStamp stamp) {}
+
+  /** The displayed preview, not an earlier configuration, is the execution boundary. */
+  static boolean sameReviewedContext(Context reviewed, Context current) {
+    return reviewed != null && reviewed.epoch() == current.epoch()
+        && WorkContext.authFingerprint(reviewed).equals(WorkContext.authFingerprint(current));
+  }
+
+  void openAccountPreparation() {
+    editable();
+    if (preparationTabs != null) { preparationRefresh.run(); preparationTabs.setSelectedIndex(1); return; }
+    if (preparationSelection.isEmpty()) {
+      List<HttpRequestResponse> originals = List.copyOf(selected.get());
+      if (originals.isEmpty()) throw new IllegalArgumentException("계정을 연결할 원본 요청을 먼저 선택하세요.");
+      prepareSelection(originals);
+    }
+    preparationStartTab = 1;
+    reviewPreparedRequests(List.copyOf(preparationSelection));
+  }
+
+  record CandidateChoice(Candidate candidate, String label) {
+    @Override public String toString() { return label; }
+  }
+
+  JPanel preparationAccountChoices() {
+    JPanel panel = new JPanel(); panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setName("wb.auth.preparation.accounts");
+    panel.add(AuthReadiness.note("보관된 인증 후보를 역할에 직접 연결합니다. 연결·설정 수정은 요청을 전송하지 않습니다.", 2));
+    String targetOrigin = !preparationSelection.isEmpty() ? origin(preparationSelection.get(0).request())
+        : Arrays.stream(slots).filter(Objects::nonNull).map(Candidate::origin).findFirst().orElse("");
+    if (!targetOrigin.isEmpty() && Arrays.stream(slots).anyMatch(value -> value != null && !value.origin().equals(targetOrigin)))
+      panel.add(button("다른 대상 계정 연결 해제", () -> {
+        for (int slot = 0; slot < SLOTS; slot++) if (slots[slot] != null && !slots[slot].origin().equals(targetOrigin)) clearSlot(slot);
+        if (preparationRefresh != null) { preparationRefresh.run(); preparationTabs.setSelectedIndex(1); }
+      }));
+    for (int i = 0; i < SLOTS; i++) {
+      final int slot = i;
+      JComboBox<CandidateChoice> choices = new JComboBox<>();
+      choices.setName("wb.auth.preparation.account." + i);
+      choices.addItem(new CandidateChoice(null, "미지정"));
+      if (i == 3) {
+        String anonymousOrigin = targetOrigin.isEmpty() ? credentials.values().stream().map(Candidate::origin).findFirst().orElse("") : targetOrigin;
+        if (!anonymousOrigin.isEmpty()) choices.addItem(new CandidateChoice(new Candidate(0, "anonymous", anonymousOrigin, Map.of(), 1, ""), "비로그인 · " + anonymousOrigin));
+      } else {
+        for (Candidate candidate : credentials.values()) {
+          if (!targetOrigin.isEmpty() && !targetOrigin.equals(candidate.origin())) continue;
+          AuthAccount account = accounts.get(candidate.key());
+          String name = account == null ? "후보 #" + candidate.no() : account.label();
+          choices.addItem(new CandidateChoice(candidate, name + " · " + candidate.origin()));
+        }
+        if (slots[i] != null && (!slots[i].origin().equals(targetOrigin) || !credentials.containsKey(slots[i].key())))
+          choices.addItem(new CandidateChoice(slots[i], label(i) + " · 현재 연결"));
+      }
+      for (int at = 0; at < choices.getItemCount(); at++) {
+        Candidate value = choices.getItemAt(at).candidate();
+        if (slots[i] != null && value != null && value.key().equals(slots[i].key())) choices.setSelectedIndex(at);
+      }
+      choices.addActionListener(event -> safe(() -> {
+        CandidateChoice choice = (CandidateChoice) choices.getSelectedItem();
+        if (choice == null || choice.candidate() == null) clearSlot(slot);
+        else assign(slot, choice.candidate());
+        state.setText("계정 연결 변경 · 적용 상태 다시 확인 후 비교하세요. 요청 전송 없음.");
+      }));
+      panel.add(WorkbenchUi.row(new JLabel(i == 3 ? "비로그인" : "계정 " + (i + 1)), choices));
+    }
+    return panel;
+  }
+
+  ReadinessApproval unifiedReadiness(boolean automatic, List<HttpRequestResponse> originals) {
+    if (GraphicsEnvironment.isHeadless()) throw new IllegalArgumentException("비교 준비는 Burp 화면에서 실행하세요. 요청은 전송하지 않았습니다.");
+    if (readinessDialog != null) { readinessDialog.toFront(); return null; }
+    comparisonSettings.closeWindow(); sessionSettings.closeWindow(); setupBundleWindow.closeWindow();
+    long generation = preparationGeneration;
+    long executionEpoch = epoch.get();
+    JTabbedPane tabs = new JTabbedPane(); tabs.setName("wb.auth.preparation.tabs");
+    JPanel overview = new JPanel(new BorderLayout());
+    JPanel comparison = new JPanel(new BorderLayout(4, 4));
+    comparison.add(preparationAccountChoices(), BorderLayout.NORTH);
+    comparison.add(new JScrollPane(settingsContent()));
+    tabs.addTab("1 적용 상태", overview);
+    tabs.addTab("2 계정·쓰기 조회", comparison);
+    tabs.addTab("3 세션·권한표", new JScrollPane(sessionSettingsContent()));
+    tabs.addChangeListener(event -> {
+      if (tabs.getSelectedIndex() == 1) {
+        Component previous = ((BorderLayout) comparison.getLayout()).getLayoutComponent(BorderLayout.NORTH);
+        if (previous != null) comparison.remove(previous);
+        comparison.add(preparationAccountChoices(), BorderLayout.NORTH); comparison.revalidate();
+      }
+    });
+    preparationTabs = tabs;
+    JLabel feedback = new JLabel("설정을 바꾸면 ‘적용 상태 다시 확인’으로 최신 조건을 검토하세요.");
+    feedback.setName("wb.auth.preparation.feedback"); WorkbenchUi.feedback(feedback);
+    JButton refresh = new JButton("적용 상태 다시 확인"), proceed = new JButton(automatic ? "신규 요청 자동 비교 시작" : "비교 시작");
+    proceed.setName("wb.auth.preparation.start"); refresh.setName("wb.auth.preparation.refresh");
+    JButton cancel = new JButton("닫기");
+    AtomicReference<ReadinessApproval> preview = new AtomicReference<>(), approved = new AtomicReference<>();
+    AtomicReference<String> reviewedScope = new AtomicReference<>("");
+    JPanel root = new JPanel(new BorderLayout(6, 6)); root.add(tabs);
+    JPanel footer = new JPanel(new BorderLayout(4, 4)); footer.add(feedback, BorderLayout.NORTH);
+    footer.add(WorkbenchUi.row(refresh, proceed, cancel), BorderLayout.SOUTH); root.add(footer, BorderLayout.SOUTH);
+    JOptionPane pane = new JOptionPane(root, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[0]);
+    JDialog dialog = pane.createDialog(this, "계정 비교 준비 · 설정과 적용 상태");
+    readinessDialog = dialog; dialog.setResizable(true); dialog.setMinimumSize(new Dimension(760, 480));
+    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+    dialog.setSize(Math.min(1100, Math.max(760, screen.width - 80)), Math.min(760, Math.max(480, screen.height - 100)));
+    dialog.setLocationRelativeTo(this);
+    Runnable update = () -> {
+      preview.set(null); proceed.setEnabled(false); overview.removeAll();
+      try {
+        editable();
+        if (closed.get() || executionEpoch != epoch.get()) throw new IllegalArgumentException("비교 준비가 만료되었습니다. 닫고 다시 여세요.");
+        if (!automatic) { validatePreparedSelection(); requireSamePreparedOriginals(originals, preparationSelection); if (generation != preparationGeneration) throw new IllegalArgumentException("준비 원본이 변경되었습니다."); }
+        Context current = context(); List<String> blocked = new ArrayList<>();
+        if (!automatic) for (var rr : originals) {
+          try {
+            validate(rr.request(), rr.response(), current);
+            var effect = current.effectFor(rr.request());
+            if (effect.enabled() && !WorkbenchScope.contains(api, AuthEffectCheck.observer(effect, rr.request(), current.names())))
+              throw new IllegalArgumentException("처리 결과 GET 조회 URL이 SCOPE 밖입니다.");
+          } catch (IllegalArgumentException error) { blocked.add(rr.request().method() + " " + java.net.URI.create(rr.request().url()).getPath() + " · " + error.getMessage()); }
+        }
+        AuthReadiness.Report report = automatic ? AuthReadiness.automatic(current)
+            : AuthReadiness.selected(current, originals.stream().map(HttpRequestResponse::request).toList());
+        overview.add(AuthReadiness.content(current, report, blocked, this::editReadinessRow, preparationFocus, preparationSlot));
+        preview.set(new ReadinessApproval(current, automatic ? null : preparedStamp(current)));
+        reviewedScope.set(WorkbenchScope.registeredRules(api).toString());
+        proceed.setEnabled(blocked.isEmpty());
+        proceed.setText(automatic ? "신규 요청 자동 비교 시작" : report.incomplete() > 0 ? "제한 확인 후 비교" : "비교 시작");
+        feedback.setText(blocked.isEmpty() ? "최신 설정의 적용 상태를 표시했습니다. 비교 버튼을 눌러야 요청을 전송합니다." : "전송할 수 없는 조건을 보완한 뒤 다시 확인하세요.");
+      } catch (IllegalArgumentException error) {
+        overview.add(AuthReadiness.note(error.getMessage() + "\n계정·쓰기 조회 또는 세션·권한표 탭에서 설정을 보완하세요.", 5)); feedback.setText(error.getMessage());
+      }
+      tabs.setSelectedIndex(0); overview.revalidate(); overview.repaint();
+    };
+    preparationRefresh = update; refresh.addActionListener(event -> update.run());
+    proceed.addActionListener(event -> {
+      try {
+        ReadinessApproval reviewed = preview.get();
+        if (reviewed == null || tabs.getSelectedIndex() != 0 || !sameReviewedContext(reviewed.context(), context())
+            || !reviewedScope.get().equals(WorkbenchScope.registeredRules(api).toString()))
+          throw new IllegalArgumentException("설정이 바뀌었습니다. ‘적용 상태 다시 확인’ 후 비교하세요.");
+        if (!automatic) validatePreparedExecution(reviewed.stamp(), reviewed.context(), originals);
+        approved.set(reviewed); dialog.dispose();
+      } catch (IllegalArgumentException error) { proceed.setEnabled(false); feedback.setText(error.getMessage()); }
+    });
+    cancel.addActionListener(event -> dialog.dispose());
+    WorkbenchUi.style(root); update.run();
+    if (preparationStartTab > 0) tabs.setSelectedIndex(Math.min(preparationStartTab, tabs.getTabCount() - 1));
+    preparationStartTab = 0;
+    int repairFilter = preparationRepairFilter; preparationRepairFilter = 0;
+    if (repairFilter > 0) SwingUtilities.invokeLater(() -> safe(() -> {
+      if (preparationTabs != tabs || !dialog.isDisplayable()) return;
+      if (repairFilter == 5 || repairFilter == 4) {
+        AuthReadiness.Row row = new AuthReadiness.Row("", "", "", "", "", "", true,
+            originals.get(0).request().method(), originals.get(0).request().url(), preparationSlot, 0);
+        editReadinessRow(row, repairFilter == 5 ? "effect" : "policy");
+      } else if (preparationSlot >= 0) {
+        JTextField field = profileRoles[preparationSlot]; field.requestFocusInWindow();
+        field.scrollRectToVisible(new Rectangle(0, 0, field.getWidth(), field.getHeight()));
+      }
+    }));
+    try { dialog.setVisible(true); }
+    finally { dialog.dispose(); if (readinessDialog == dialog) readinessDialog = null; preparationTabs = null; preparationRefresh = null; }
+    return closed.get() || executionEpoch != epoch.get() ? null : approved.get();
+  }
 
   void editReadinessRow(AuthReadiness.Row row, String kind) {
     editable();
@@ -1455,10 +1714,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       preparationFocus = row.requestIndex(); preparationSlot = row.slot(); preparationFocusRevision++;
     }
     if (kind.equals("account")) {
-      comparisonSettings.open();
+      if (preparationTabs != null) preparationTabs.setSelectedIndex(1); else comparisonSettings.open();
       if (row.slot() >= 0) { profileNames[row.slot()].requestFocusInWindow(); profileNames[row.slot()].scrollRectToVisible(new Rectangle(0, 0, profileNames[row.slot()].getWidth(), profileNames[row.slot()].getHeight())); }
     } else if (kind.equals("policy")) {
-      sessionSettings.open(); if (!row.url().isEmpty()) prefillSelectedPolicy();
+      if (preparationTabs != null) preparationTabs.setSelectedIndex(2); else sessionSettings.open();
+      if (!row.url().isEmpty()) prefillSelectedPolicy();
       if (row.slot() >= 0 && !row.url().isEmpty()) {
         String path = java.net.URI.create(row.url()).getPath();
         for (int i = 0; i < matrixEditor.model.getRowCount(); i++) {
@@ -1470,7 +1730,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       }
       matrixEditor.scrollRectToVisible(new Rectangle(0, 0, matrixEditor.getWidth(), 1));
     } else if (kind.equals("effect")) {
-      comparisonSettings.open();
+      if (preparationTabs != null) preparationTabs.setSelectedIndex(1); else comparisonSettings.open();
       var existing = effectSettings.snapshotRules(AuthComparePanel.origin(setupRequests().get(0).request())).stream()
           .filter(rule -> rule.origin().equals(AuthComparePanel.origin(setupRequests().get(0).request()))
               && AuthPolicy.parse(rule.config().method() + " " + rule.config().path() + " PUBLIC", AuthPolicy.Access.UNSPECIFIED)
@@ -1480,52 +1740,6 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       effectSettings.scrollRectToVisible(new Rectangle(0, 0, effectSettings.getWidth(), 1));
     }
     state.setText("해당 요청·계정 설정 수정 · 원본 " + preparationSelection.size() + "개 선택 유지 · ‘준비한 요청 다시 확인’에서 전체 적용 범위를 재검토하세요. 요청 전송 없음.");
-  }
-
-  boolean reviewReadiness(Context c, AuthReadiness.Report report, List<String> blocked) {
-    if (GraphicsEnvironment.isHeadless()) throw new IllegalArgumentException("비교 전 설정 확인은 Burp 화면에서 실행하세요. 요청은 전송하지 않았습니다.");
-    if (readinessDialog != null) { readinessDialog.toFront(); return false; }
-    long reviewedGeneration = preparationGeneration;
-    String proceed = report.automatic() ? "자동 비교 시작" : report.incomplete() > 0 ? "제한 확인 후 비교" : "비교 시작";
-    Object[] choices = blocked.isEmpty()
-        ? new Object[]{"권한표 설정", "쓰기 조회 설정", proceed, "취소"}
-        : new Object[]{"권한표 설정", "쓰기 조회 설정", "닫기"};
-    Object initial = blocked.isEmpty() && report.incomplete() == 0 ? proceed : choices[0];
-    JOptionPane pane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, choices, initial);
-    pane.setMessage(AuthReadiness.content(c, report, blocked, (row, kind) -> pane.setValue(new ReadinessEdit(row, kind)), preparationFocus, preparationSlot));
-    JDialog dialog = pane.createDialog(this, "비교 전 설정 확인");
-    readinessDialog = dialog;
-    dialog.setResizable(true);
-    dialog.setMinimumSize(new Dimension(720, 420));
-    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-    dialog.setSize(Math.min(1000, Math.max(720, screen.width - 80)), Math.min(680, Math.max(420, screen.height - 100)));
-    dialog.setLocationRelativeTo(this);
-    Object choice;
-    try { dialog.setVisible(true); choice = pane.getValue(); }
-    finally { dialog.dispose(); if (readinessDialog == dialog) readinessDialog = null; }
-    if (closed.get() || c.epoch != epoch.get()) return false;
-    if (!report.automatic() && reviewedGeneration != preparationGeneration)
-      throw new IllegalArgumentException("검토 중 준비한 원본 목록이 변경되었습니다. 준비 화면을 다시 여세요.");
-    if (choice instanceof ReadinessEdit edit) { editReadinessRow(edit.row(), edit.kind()); return false; }
-    if ("권한표 설정".equals(choice)) {
-      preparationFocus = preparationSlot = -1; preparationFocusRevision++;
-      sessionSettings.open();
-      if (!report.automatic()) prefillSelectedPolicy();
-      SwingUtilities.invokeLater(() -> matrixEditor.scrollRectToVisible(new Rectangle(0, 0, matrixEditor.getWidth(), 1)));
-    } else if ("쓰기 조회 설정".equals(choice)) {
-      preparationFocus = preparationSlot = -1; preparationFocusRevision++;
-      comparisonSettings.open();
-      if (!report.automatic() && setupRequests().size() == 1 && Set.of("POST", "PUT", "PATCH", "DELETE").contains(setupRequests().get(0).request().method()))
-        effectSettings.connectSelected(false);
-      SwingUtilities.invokeLater(() -> effectSettings.scrollRectToVisible(new Rectangle(0, 0, effectSettings.getWidth(), 1)));
-    }
-    if (!proceed.equals(choice)) state.setText("비교 시작 전 · 설정을 확인한 뒤 다시 비교하세요. 요청은 전송하지 않았습니다.");
-    if (blocked.isEmpty() && proceed.equals(choice)) {
-      if (!WorkContext.authFingerprint(c).equals(WorkContext.authFingerprint(context())))
-        throw new IllegalArgumentException("검토 중 계정·설정이 변경되었습니다. 비교 준비를 다시 확인하세요.");
-      return true;
-    }
-    return false;
   }
 
   void closeReadiness() {
@@ -2034,7 +2248,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if(cookieSessions.busy)cookieSessions.cancel();
     tickets.clear();
     record.setSelected(false);
-    record.setText("요청 비교 OFF");record.repaint();
+    record.setText("신규 요청 자동 비교 OFF");record.repaint();refreshAutomaticScope();
     state.setText("중지 · 이미 발송한 요청은 응답/타임아웃 후 종료합니다.");
   }
 
@@ -2100,8 +2314,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
           candidateModel.setRowCount(0);
           refreshSlots();
           record.setSelected(false);
-          record.setText("요청 비교 OFF");record.repaint();
+          record.setText("신규 요청 자동 비교 OFF");record.repaint();refreshAutomaticScope();
           show(null);
         });
   }
 }
+

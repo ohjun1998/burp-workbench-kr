@@ -95,12 +95,12 @@ def mapper_test(runtime):
 
 
 def write_check_summary():
-    summary = json.loads((WB / 'build/test-summary.json').read_text())
+    summary = json.loads((WB / 'build/test-summary.json').read_text(encoding='utf-8'))
     for key, path in [
         ('allFeaturesHttpChecks', WB / 'validation/all-features/.run/results.json'),
         ('bountyHttpChecks', ROOT / 'audit/0.23.0/.run/results.json'),
     ]:
-        result = json.loads(path.read_text())
+        result = json.loads(path.read_text(encoding='utf-8'))
         if result['failed'] or result['passed'] != len(result['checks']):
             raise RuntimeError('Incomplete or failed check report: ' + str(path))
         summary[key] = result['passed']
@@ -108,7 +108,7 @@ def write_check_summary():
         'regressionChecks', 'payloadHttpChecks', 'allFeaturesHttpChecks', 'bountyHttpChecks'])
     summary['mapper'] = 'Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt'
     summary['result'] = 'passed'
-    (WB / 'build/check-summary.json').write_text(json.dumps(summary, indent=2) + '\n')
+    (WB / 'build/check-summary.json').write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
     print('WORKBENCH_CHECK_SUMMARY', json.dumps({k: v for k, v in summary.items() if k != 'groups'}))
 
 

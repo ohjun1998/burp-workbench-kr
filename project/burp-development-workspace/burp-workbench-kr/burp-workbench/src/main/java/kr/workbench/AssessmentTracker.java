@@ -88,12 +88,60 @@ final class AssessmentTracker {
     INPUTS_PENDING, EVIDENCE_MISSING, EVIDENCE_UNVERIFIED, MANUAL_REVIEW, TASK_REVIEW
   }
 
+  /** Filters are projections of recorded causes, not inferred security judgments. */
+  enum RemainingFocus {
+    ALL("전체"), NOT_INSPECTED("미실행"), CONDITIONS_CHANGED("조건 변경"),
+    EXECUTION("실행 중·중단·실패"), EVIDENCE("증거 보완"),
+    REVIEW("입력·수동 검토"), ORIGINAL_MISSING("원본 연결 필요");
+
+    private final String label;
+    RemainingFocus(String label) { this.label = label; }
+    @Override public String toString() { return label; }
+
+    boolean accepts(RemainingCheck check) {
+      return switch (this) {
+        case ALL -> true;
+        case NOT_INSPECTED -> check.reasons().contains(RemainingReason.NOT_INSPECTED);
+        case CONDITIONS_CHANGED -> check.reasons().contains(RemainingReason.CONDITIONS_CHANGED);
+        case EXECUTION -> check.reasons().stream().anyMatch(reason -> reason == RemainingReason.RUNNING
+            || reason == RemainingReason.CANCELLED || reason == RemainingReason.FAILED);
+        case EVIDENCE -> check.reasons().stream().anyMatch(reason -> reason == RemainingReason.EVIDENCE_MISSING
+            || reason == RemainingReason.EVIDENCE_UNVERIFIED);
+        case REVIEW -> check.reasons().stream().anyMatch(reason -> reason == RemainingReason.INPUTS_PENDING
+            || reason == RemainingReason.MANUAL_REVIEW || reason == RemainingReason.RESULT_REVIEW
+            || reason == RemainingReason.TASK_REVIEW);
+        case ORIGINAL_MISSING -> !check.account().isEmpty() && check.originalId().isEmpty();
+      };
+    }
+
+    List<RemainingCheck> select(List<RemainingCheck> checks) {
+      return checks.stream().filter(this::accepts).toList();
+    }
+
+    long count(List<RemainingCheck> checks) { return checks.stream().filter(this::accepts).count(); }
+  }
+
   /** Derived guidance only: this projection neither completes work nor creates an execution. */
   record RemainingCheck(String task, String account, String method, String url,
                         List<RemainingReason> reasons, String explanation, RemainingAction action,
                         String executionId, String originalId) {
     RemainingCheck { reasons = List.copyOf(reasons); }
     String key() { return task + "\n" + account + "\n" + method + "\n" + url; }
+    String causeLabel() {
+      return String.join(" · ", reasons.stream().map(reason -> switch (reason) {
+        case NOT_INSPECTED -> "미실행";
+        case CONDITIONS_CHANGED -> "조건 변경";
+        case RUNNING -> "실행 중";
+        case CANCELLED -> "중단";
+        case FAILED -> "실행 실패";
+        case RESULT_REVIEW -> "판정 검토";
+        case INPUTS_PENDING -> "입력 미완료";
+        case EVIDENCE_MISSING -> "증거 미저장";
+        case EVIDENCE_UNVERIFIED -> "증거 파일 확인";
+        case MANUAL_REVIEW -> "수동 검토";
+        case TASK_REVIEW -> "업무 검토";
+      }).toList());
+    }
     String nextAction() {
       return switch (action) {
         case PREPARE -> originalId.isEmpty() ? "원본 선택 후 비교 준비" : "같은 원본 비교 준비";
@@ -1645,3 +1693,4 @@ final class AssessmentTracker {
     workbook.put("점검 이력", eventRows);
   }
 }
+

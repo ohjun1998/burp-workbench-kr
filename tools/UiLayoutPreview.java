@@ -409,6 +409,49 @@ public final class UiLayoutPreview extends WorkbenchTest {
         awaitUi(()->components(storage,javax.swing.JLabel.class).stream().anyMatch(label->label.getText().contains("보존/이전 버전 1")),"archive disk usage");
         scenario("next-js-retention.png","JS retention policy",components(storage,javax.swing.JCheckBox.class).get(0).isSelected()&&action(storage,"기간이 지난 이력 정리").isEnabled(),"One protected record; saving retention criteria and explicit pruning remain separate");
         dialogPair(WorkbenchUi.settingsBody(storage,()->{}),out,"next-js-retention");
+        renderNextUsability(ext,out,bundle);
+    }
+
+    /** 0.53.1 production review, project-filter and resume components; all metadata is synthetic. */
+    static void renderNextUsability(WorkbenchExtension ext,Path out,AuthSetupBundles.Bundle bundle) throws Exception {
+        var auth=(AuthComparePanel)get(ext,"authCompare");
+        var review=auth.setupBundles.reviewContent(auth.captureBundle(),bundle);
+        var summary=(javax.swing.JTextArea)UiLayoutTest.named(review,"wb.auth.setup.bundle.review.summary");
+        scenario("next-auth-bundle-diff.png","Setup bundle readable diff",summary.getText().contains("현재 활성 설정과의 차이")
+            &&summary.getText().contains("쓰기 허용은 해제"),"Production confirmation starts with rule differences and account reconnection guidance");
+        dialogPair(review,out,"next-auth-bundle-diff");
+        ((javax.swing.JToggleButton)UiLayoutTest.named(review,"wb.auth.setup.bundle.review.raw")).doClick(0);
+        scenario("next-auth-bundle-json.png","Setup bundle raw toggle",
+            UiLayoutTest.named(review,"wb.auth.setup.bundle.review.json").isVisible(),"Same production confirmation exposes full JSON only on request");
+        dialogPair(review,out,"next-auth-bundle-json");
+
+        var browser=ext.trafficBrowser;String previous=browser.captureSearchState();
+        var filters=new TrafficQuery("PATCH","2xx",0,false,false,false,true,false,true,"",30);
+        browser.restoreSearchState(TrafficSearchPresets.capture(filters));
+        browser.savePreset("공지 수정 · 최근 응답",filters,browser.projectIdentity());
+        ext.openFeature("traffic");
+        Container desktop=(Container)get(ext,"root");
+        scenario("next-traffic-conditions.png","Active filters and saved project conditions",
+            UiLayoutTest.named(desktop,"wb.traffic.conditions")==browser.conditionBar()
+                &&components(browser.conditionBar(),JButton.class).stream().anyMatch(button->button.getText().contains("PATCH"))
+                &&((javax.swing.JComboBox<?>)UiLayoutTest.named(browser.conditionBar(),"wb.traffic.conditions.saved")).getItemCount()>0,
+            "Production traffic workspace displays active conditions and the named project-preset row");
+        render(desktop,out.resolve("next-traffic-conditions.png"),width,height);
+
+        String project="11111111-1111-4111-8111-111111111111";
+        var bookmark=new WorkspaceResume.Snapshot(project,"activity",3,"22222222-2222-4222-8222-222222222222",
+            "33333333-3333-4333-8333-333333333333:17",TrafficSearchPresets.capture(filters),System.currentTimeMillis());
+        var restored=new java.util.concurrent.atomic.AtomicInteger();
+        var resume=new WorkspaceResumePanel(bookmark,"저장된 업무를 찾을 수 없습니다. 점검 기록을 불러오세요.",false,"",
+            ignored->restored.incrementAndGet(),restored::incrementAndGet);
+        scenario("next-workspace-resume.png","Resume missing original and task guidance",
+            resume.details.getText().contains("원본이 현재 임시 저장소에 없습니다")
+                &&resume.details.getText().contains("점검 기록을 불러오세요")
+                &&resume.details.getText().contains("PATCH")&&resume.details.getText().contains("다시 연결")
+                &&restored.get()==0,
+            "Actual resume panel explains missing originals/tasks, saved filters and account reconnection without restoring automatically");
+        dialogPair(resume,out,"next-workspace-resume");
+        browser.restoreSearchState(previous);
     }
 
     public static void main(String[] args) throws Exception {

@@ -64,23 +64,32 @@ final class TrafficBrowser implements AutoCloseable {
   final JPanel advanced=new JPanel(new GridLayout(0,1,0,4));
   final JToggleButton advancedToggle=new JToggleButton("▸ 고급 설정");
   private final Set<Integer> hidden=new HashSet<>();
+  private final JPanel conditionBar=new JPanel(new BorderLayout(0,0));
+  private final JPanel conditionChips=new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT,5,2));
+  private final JComboBox<String> savedConditions=new JComboBox<>();
+  private final JButton presetApply=new JButton("조건 적용"),presetSave=new JButton("조건 저장"),presetDelete=new JButton("삭제");
+  private final JLabel listFeedback=new JLabel(" ");
+  private List<TrafficSearchPresets.Preset> presets=List.of();
+  private String projectIdentity="",settingsProject="",storedPresets;
+  private boolean projectLoaded,presetLoadFailure;
+  private Runnable searchStateChanged=()->{};
 
   TrafficBrowser(JTable table,CaptureTableModel model,JTextField search,MontoyaApi api,Supplier<DiskTrafficStore> store,Runnable changed){
     this.table=table;this.model=model;this.search=search;this.api=api;this.store=store;this.changed=changed;
     try{if(api!=null&&api.persistence()!=null)query=TrafficQuery.read(api.persistence().extensionData().getString(BuildInfo.storageKey("traffic-view-v1")));}catch(Exception ignored){}
-    settings=new TargetWindow(table,"검색·목록 설정",this::content);settings.opener=TrafficBrowser::window;settingsButton.addActionListener(e->{loadControls();settings.open();});
+    settings=new TargetWindow(table,"검색·목록 설정",this::content);settings.opener=TrafficBrowser::window;settingsButton.addActionListener(e->{ensureProjectState();settingsProject=projectIdentity;loadControls();settings.open();});
     debounce=new javax.swing.Timer(220,e->begin());debounce.setRepeats(false);
     cancel.setName("wb.traffic.search.cancel");cancel.addActionListener(e->{generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=true;busy.set(false);feedback.setText("검색 취소 · 이전 결과 유지");});
     search.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){schedule();}public void removeUpdate(javax.swing.event.DocumentEvent e){schedule();}public void changedUpdate(javax.swing.event.DocumentEvent e){schedule();}});
     model.extra=(row,col)->extra(row,col);
     table.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e){int row=table.rowAtPoint(e.getPoint()),col=table.columnAtPoint(e.getPoint());if(row<0||col<0||!SwingUtilities.isLeftMouseButton(e))return;int raw=table.convertRowIndexToModel(row);if(table.convertColumnIndexToModel(col)==7){toggleStar(raw);return;}if(e.getClickCount()==2&&query.group()){toggleGroup(raw);}}});
     method.setPreferredSize(new Dimension(120,32));response.setPreferredSize(new Dimension(120,32));period.setPreferredSize(new Dimension(150,32));
-    loadControls();
+    buildConditionBar();ensureProjectState();loadControls();refreshConditionChips();
   }
   private void cancelPending(){if(pending!=null)pending.cancel(true);worker.getQueue().clear();}
-  void schedule(){if(closed)return;generation.incrementAndGet();cancelPending();paused=false;busy.set(false);scanned=-1;debouncePending=true;debounce.restart();}
+  void schedule(){if(closed)return;generation.incrementAndGet();cancelPending();paused=false;busy.set(false);scanned=-1;debouncePending=true;debounce.restart();refreshConditionChips();}
   void refresh(){
-    if(closed||paused||debouncePending)return;
+    if(closed)return;ensureProjectState();if(paused||debouncePending)return;
     DiskTrafficStore disk=store.get();if(disk==null)return;
     SearchKey key=key(disk,search.getText().strip(),List.copyOf(identities.get()));
     if(busy.get()){
@@ -92,10 +101,11 @@ final class TrafficBrowser implements AutoCloseable {
     if(prior==null||!prior.key().equals(key)||prior.count()!=disk.size()||clock.getAsLong()>=prior.expiresAt())begin();
   }
   boolean idle(){return !busy.get()&&!debouncePending;}
+  boolean searchViewCurrent(){SearchSnapshot current=snapshot;return current!=null&&stillCurrent(current.key());}
   private SearchKey key(DiskTrafficStore disk,String requested,List<Identity> profiles){return new SearchKey(disk,query,requested,profiles,marksVersion.get());}
   private boolean stillCurrent(SearchKey key){return key.equals(key(store.get(),search.getText().strip(),List.copyOf(identities.get())));}
   private void begin(){
-    if(closed)return;debounce.stop();debouncePending=false;cancelPending();busy.set(false);String requested=search.getText().strip();if(requested.length()>512){paused=true;feedback.setText("검색어 512자 제한 · 이전 결과 유지");return;}
+    if(closed)return;ensureProjectState();debounce.stop();debouncePending=false;cancelPending();busy.set(false);String requested=search.getText().strip();if(requested.length()>512){paused=true;feedback.setText("검색어 512자 제한 · 이전 결과 유지");return;}
     text=requested;TrafficQuery settings=query;
     if(settings.regex()&&!requested.isBlank())try{java.util.regex.Pattern.compile(requested);}catch(java.util.regex.PatternSyntaxException ex){paused=true;feedback.setText("정규식 오류 · 이전 결과 유지");return;}
     long token=generation.incrementAndGet();DiskTrafficStore disk=store.get();if(disk==null)return;int count=Math.toIntExact(disk.size());
@@ -208,6 +218,155 @@ final class TrafficBrowser implements AutoCloseable {
   void toggleStar(int raw){var ref=store.get().ref(raw);marks.compute(ref.id(),(k,v)->new Mark(v==null||!v.star(),v==null?"":v.note()));marksVersion.incrementAndGet();schedule();model.fireTableRowsUpdated(raw,raw);}
   void note(int raw,String note){if(note.length()>1000)throw new IllegalArgumentException("메모 1,000자 제한");var ref=store.get().ref(raw);marks.compute(ref.id(),(k,v)->new Mark(v!=null&&v.star(),note));marksVersion.incrementAndGet();schedule();model.fireTableRowsUpdated(raw,raw);}
   void toggleGroup(int raw){View v=view;if(v==null)return;Group g=v.groups().get(raw);if(g==null)return;if(!expanded.add(g.key()))expanded.remove(g.key());schedule();}
+
+  JPanel conditionBar(){return conditionBar;}
+  String captureSearchState(){ensureProjectState();return TrafficSearchPresets.capture(query);}
+  void restoreSearchState(String json){ensureProjectState();commitQuery(TrafficSearchPresets.restore(json),projectIdentity);}
+  void restoreSearchState(String json,String expectedProject){ensureProjectState();commitQuery(TrafficSearchPresets.restore(json),expectedProject);}
+  String projectIdentity(){ensureProjectState();return projectIdentity;}
+  void onSearchStateChanged(Runnable listener){searchStateChanged=Objects.requireNonNull(listener);}
+
+  private void buildConditionBar(){
+    conditionBar.setName("wb.traffic.conditions");conditionChips.setName("wb.traffic.conditions.chips");
+    savedConditions.setName("wb.traffic.conditions.saved");savedConditions.setPreferredSize(new Dimension(170,30));
+    savedConditions.setMaximumRowCount(12);savedConditions.setToolTipText("이 프로젝트에 저장한 필터 조건 · 검색어는 저장하지 않습니다.");
+    presetApply.setName("wb.traffic.conditions.apply");presetSave.setName("wb.traffic.conditions.save");presetDelete.setName("wb.traffic.conditions.delete");
+    presetApply.addActionListener(e->presetAction(this::applySelectedPreset));
+    presetSave.addActionListener(e->presetAction(this::savePresetDialog));
+    presetDelete.addActionListener(e->presetAction(this::deletePresetDialog));
+    savedConditions.addActionListener(e->refreshPresetButtons());
+    conditionBar.add(WorkbenchUi.row(new JLabel("저장한 조건"),savedConditions,presetApply,presetSave,presetDelete,
+        WorkbenchUi.hint("검색어 제외 · 조건만 저장")),BorderLayout.NORTH);
+    conditionBar.add(conditionChips,BorderLayout.CENTER);
+    listFeedback.setName("wb.traffic.conditions.feedback");WorkbenchUi.feedback(listFeedback);
+    feedback.addPropertyChangeListener("text",e->listFeedback.setText(Objects.toString(e.getNewValue()," ")));
+    conditionBar.add(listFeedback,BorderLayout.SOUTH);refreshPresetChoices("");
+  }
+
+  private void presetAction(Runnable action){try{action.run();}catch(RuntimeException error){feedback.setText(error.getMessage());}}
+
+  private String currentProjectIdentity(){
+    if(api==null||api.persistence()==null||api.persistence().extensionData()==null)return "";
+    var data=api.persistence().extensionData();String key=BuildInfo.storageKey("auth-setup-library-project-v1");
+    String id=data.getString(key);
+    if(id==null){id=UUID.randomUUID().toString();data.setString(key,id);if(!id.equals(data.getString(key)))return "";}
+    return id.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")?id:"";
+  }
+
+  /** Every operation resolves the host's current project; a stale dialog cannot write into another project. */
+  private boolean ensureProjectState(){
+    String id;try{id=currentProjectIdentity();}catch(RuntimeException error){id="";}
+    if(projectLoaded&&id.equals(projectIdentity))return false;
+    boolean changed=projectLoaded;projectLoaded=true;projectIdentity=id;presetLoadFailure=false;storedPresets=null;presets=List.of();query=TrafficQuery.defaults();
+    if(changed){clear();search.setText("");settings.closeWindow();}
+    if(!id.isEmpty()){
+      try{
+        var data=api.persistence().extensionData();query=TrafficQuery.read(data.getString(BuildInfo.storageKey("traffic-view-v1")));
+        storedPresets=data.getString(BuildInfo.storageKey("traffic-search-presets-v1"));presets=TrafficSearchPresets.decode(storedPresets);
+      }catch(RuntimeException error){presetLoadFailure=true;feedback.setText("저장한 검색 조건을 읽을 수 없습니다 · 기존 저장 내용 보존");}
+    }
+    settingsProject=id;loadControls();refreshPresetChoices("");refreshConditionChips();updateColumns();
+    return changed;
+  }
+
+  private void requireProject(String expected){
+    ensureProjectState();
+    if(!Objects.equals(expected,projectIdentity))throw new IllegalArgumentException("프로젝트가 바뀌었습니다. 현재 프로젝트의 조건을 다시 선택하세요.");
+  }
+
+  private void commitQuery(TrafficQuery next,String expected){
+    requireProject(expected);next.prepare(search.getText().strip());query=next;
+    if(!projectIdentity.isEmpty())try{
+      TrafficSearchPresets.capture(next);
+      api.persistence().extensionData().setString(BuildInfo.storageKey("traffic-view-v1"),MetadataExport.json(next.json()));
+    }catch(RuntimeException error){feedback.setText("조건 저장 실패 · 현재 창에만 적용 · 계정 이름·프로젝트 저장 상태 확인");}
+    loadControls();updateColumns();refreshConditionChips();schedule();searchStateChanged.run();
+  }
+
+  void clearCondition(String key){
+    ensureProjectState();
+    if(key.equals("text")){search.setText("");return;}
+    commitQuery(TrafficSearchPresets.clear(query,key),projectIdentity);
+  }
+
+  private void refreshConditionChips(){
+    if(!SwingUtilities.isEventDispatchThread()){SwingUtilities.invokeLater(this::refreshConditionChips);return;}
+    conditionChips.removeAll();
+    if(!search.getText().isBlank())addChip("text","검색어 적용");
+    TrafficSearchPresets.conditions(query).forEach(this::addChip);
+    if(conditionChips.getComponentCount()==0)conditionChips.add(WorkbenchUi.hint("적용 조건 없음 · 전체 목록"));
+    else{
+      JButton reset=new JButton("모두 해제");reset.setName("wb.traffic.conditions.clear");
+      String expected=projectIdentity;
+      reset.addActionListener(e->presetAction(()->{requireProject(expected);search.setText("");commitQuery(TrafficQuery.defaults(),expected);}));conditionChips.add(reset);
+    }
+    WorkbenchUi.style(conditionChips);conditionChips.revalidate();conditionChips.repaint();
+  }
+
+  private void addChip(String key,String label){
+    String compact=label.length()>28?label.substring(0,27)+"…":label;
+    JButton chip=new JButton(compact+" ×");chip.setName("wb.traffic.condition."+key);
+    chip.setToolTipText(label+" · 이 조건만 해제");chip.getAccessibleContext().setAccessibleName(label+" 조건 해제");
+    String expected=projectIdentity;
+    chip.addActionListener(e->presetAction(()->{requireProject(expected);clearCondition(key);}));conditionChips.add(chip);
+  }
+
+  private void refreshPresetChoices(String selected){
+    savedConditions.removeAllItems();savedConditions.addItem("저장한 조건 선택");
+    for(var preset:presets)savedConditions.addItem(preset.name());
+    if(!selected.isBlank())savedConditions.setSelectedItem(selected);refreshPresetButtons();
+  }
+
+  private void refreshPresetButtons(){
+    boolean selected=savedConditions.getSelectedIndex()>0;
+    boolean available=api==null||!projectIdentity.isEmpty();
+    presetApply.setEnabled(selected&&!presetLoadFailure&&available);presetDelete.setEnabled(selected&&!presetLoadFailure&&available);presetSave.setEnabled(!presetLoadFailure&&available);
+    presetSave.setToolTipText(available?"현재 검색 조건을 이름 붙여 저장 · 검색어 제외":"프로젝트 저장소를 확인할 수 없어 조건 저장을 사용할 수 없습니다.");
+  }
+
+  private TrafficSearchPresets.Preset selectedPreset(){
+    String selected=Objects.toString(savedConditions.getSelectedItem(),"");
+    return presets.stream().filter(p->p.name().equals(selected)).findFirst().orElseThrow(()->new IllegalArgumentException("저장한 검색 조건을 선택하세요."));
+  }
+
+  void applySelectedPreset(){
+    String expected=projectIdentity;var selected=selectedPreset();requireProject(expected);
+    commitQuery(selected.query(),expected);feedback.setText("‘"+selected.name()+"’ 조건 적용 · 현재 검색어 유지");
+  }
+
+  private void savePresetDialog(){
+    ensureProjectState();String expected=projectIdentity;TrafficQuery planned=query;
+    String value=JOptionPane.showInputDialog(table,"검색 조건 이름 · 검색어는 저장하지 않습니다.","조건 저장",JOptionPane.PLAIN_MESSAGE);
+    if(value==null)return;String name=TrafficSearchPresets.validName(value);requireProject(expected);
+    if(presets.stream().anyMatch(p->p.name().equals(name))&&JOptionPane.showConfirmDialog(table,
+        "‘"+name+"’의 저장 조건을 현재 조건으로 바꿀까요?","조건 갱신",JOptionPane.YES_NO_OPTION)!=JOptionPane.YES_OPTION)return;
+    savePreset(name,planned,expected);feedback.setText("검색 조건 저장 · 검색어·패킷·인증값 제외"+(projectIdentity.isEmpty()?" · 현재 실행 중에만 유지":""));
+  }
+
+  void savePreset(String name,TrafficQuery planned,String expected){
+    requireProject(expected);writePresets(TrafficSearchPresets.put(presets,name,planned),expected);refreshPresetChoices(name);
+  }
+
+  private void deletePresetDialog(){
+    String expected=projectIdentity;var selected=selectedPreset();requireProject(expected);
+    if(JOptionPane.showConfirmDialog(table,"‘"+selected.name()+"’ 저장 조건을 삭제할까요? 현재 검색 조건은 유지합니다.",
+        "검색 조건 삭제",JOptionPane.YES_NO_OPTION)!=JOptionPane.YES_OPTION)return;
+    requireProject(expected);List<TrafficSearchPresets.Preset> next=presets.stream().filter(p->!p.name().equals(selected.name())).toList();
+    writePresets(next,expected);refreshPresetChoices("");feedback.setText("저장 조건 삭제 · 현재 검색 조건 유지");
+  }
+
+  private void writePresets(List<TrafficSearchPresets.Preset> next,String expected){
+    requireProject(expected);if(presetLoadFailure)throw new IllegalArgumentException("읽을 수 없는 기존 저장 조건을 보존합니다. 프로젝트 저장 내용을 확인하세요.");
+    if(api!=null&&projectIdentity.isEmpty())throw new IllegalArgumentException("프로젝트 저장소를 확인할 수 없어 검색 조건을 저장하지 않았습니다.");
+    String encoded=TrafficSearchPresets.encode(next);
+    if(!projectIdentity.isEmpty()){
+      var data=api.persistence().extensionData();String key=BuildInfo.storageKey("traffic-search-presets-v1");
+      if(!Objects.equals(storedPresets,data.getString(key))){projectLoaded=false;ensureProjectState();throw new IllegalArgumentException("다른 창에서 저장 조건이 변경됐습니다. 다시 확인하고 저장하세요.");}
+      data.setString(key,encoded);if(!encoded.equals(data.getString(key)))throw new IllegalArgumentException("검색 조건 저장을 확인할 수 없습니다.");
+    }
+    storedPresets=encoded;presets=List.copyOf(next);
+  }
+
   JPanel content(){
     JPanel body=new JPanel();body.setName("wb.traffic.search.content");body.setLayout(new BoxLayout(body,BoxLayout.Y_AXIS));body.setBorder(BorderFactory.createEmptyBorder(12,12,12,12));
     body.add(section("검색 조건"));body.add(WorkbenchUi.row(new JLabel("메서드"),method,new JLabel("상태"),response));
@@ -226,14 +385,16 @@ final class TrafficBrowser implements AutoCloseable {
     if(GraphicsEnvironment.isHeadless())return null;JDialog dialog=new JDialog(SwingUtilities.getWindowAncestor(owner),title,Dialog.ModalityType.MODELESS);dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);dialog.setContentPane((Container)content);dialog.setSize(550,440);dialog.setMinimumSize(new Dimension(480,360));dialog.setLocationRelativeTo(owner);dialog.addWindowListener(new WindowAdapter(){public void windowClosed(WindowEvent e){closed.run();}});dialog.setVisible(true);return dialog;
   }
   private JLabel section(String text){JLabel l=new JLabel(text);l.setBorder(BorderFactory.createEmptyBorder(12,0,6,0));return l;}
-  void loadControls(){TrafficQuery q=query;method.setSelectedItem(q.method());response.setSelectedItem(q.status());for(int i=0;i<3;i++)ranges[i].setSelected(i==q.range());group.setSelected(q.group());important.setSelected(q.important());normalize.setSelected(q.normalize());memo.setSelected(q.memo());sensitive.setSelected(q.sensitive());regex.setSelected(q.regex());account.setText(q.account());period.setSelectedIndex(q.minutes()==5?1:q.minutes()==30?2:q.minutes()==60?3:q.minutes()==1440?4:0);}
-  void apply(){int range=0;for(int i=0;i<3;i++)if(ranges[i].isSelected())range=i;TrafficQuery next=new TrafficQuery(method.getSelectedItem().toString(),response.getSelectedItem().toString(),range,sensitive.isSelected(),regex.isSelected(),group.isSelected(),normalize.isSelected(),important.isSelected(),memo.isSelected(),account.getText().strip(),new int[]{0,5,30,60,1440}[period.getSelectedIndex()]);
-    if(next.regex()&&!search.getText().isBlank())java.util.regex.Pattern.compile(search.getText());
-    query=next;
-    try{if(api!=null&&api.persistence()!=null)api.persistence().extensionData().setString(BuildInfo.storageKey("traffic-view-v1"),MetadataExport.json(query.json()));}catch(Exception ex){feedback.setText("설정 저장 실패 · 현재 창에 적용");}
-    updateColumns();schedule();
+  void loadControls(){TrafficQuery q=query;method.setSelectedItem(q.method());response.setSelectedItem(q.status());for(int i=0;i<3;i++)ranges[i].setSelected(i==q.range());group.setSelected(q.group());important.setSelected(q.important());normalize.setSelected(q.normalize());memo.setSelected(q.memo());sensitive.setSelected(q.sensitive());regex.setSelected(q.regex());account.setText(q.account());
+    String time=q.minutes()==0?"전체":q.minutes()==60?"최근 1시간":q.minutes()==1440?"최근 24시간":"최근 "+q.minutes()+"분";
+    boolean found=false;for(int i=0;i<period.getItemCount();i++)if(time.equals(period.getItemAt(i)))found=true;if(!found)period.addItem(time);period.setSelectedItem(time);
+  }
+  private int selectedMinutes(){String selected=Objects.toString(period.getSelectedItem(),"전체");return switch(selected){case "전체"->0;case "최근 1시간"->60;case "최근 24시간"->1440;default->Integer.parseInt(selected.replace("최근 ","").replace("분",""));};}
+  void apply(){int range=0;for(int i=0;i<3;i++)if(ranges[i].isSelected())range=i;TrafficQuery next=new TrafficQuery(method.getSelectedItem().toString(),response.getSelectedItem().toString(),range,sensitive.isSelected(),regex.isSelected(),group.isSelected(),normalize.isSelected(),important.isSelected(),memo.isSelected(),account.getText().strip(),selectedMinutes());
+    commitQuery(next,settingsProject);
   }
   void updateColumns(){int view=table.convertColumnIndexToView(10);if(view>=0){var c=table.getColumnModel().getColumn(view);c.setMinWidth(0);c.setMaxWidth(query.memo()?400:0);c.setPreferredWidth(query.memo()?130:0);} }
   void clear(){marks.clear();marksVersion.incrementAndGet();expanded.clear();view=null;snapshot=null;runningKey=null;scanned=-1;generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=false;busy.set(false);}
   @Override public void close(){closed=true;snapshot=null;runningKey=null;generation.incrementAndGet();debounce.stop();debouncePending=false;busy.set(false);settings.close();if(pending!=null)pending.cancel(true);worker.shutdownNow();}
 }
+

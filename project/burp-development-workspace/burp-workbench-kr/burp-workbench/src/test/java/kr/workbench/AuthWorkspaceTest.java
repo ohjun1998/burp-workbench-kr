@@ -67,7 +67,7 @@ public final class AuthWorkspaceTest extends WorkbenchTest {
         check(session.pending==null,"held opening shortcut cannot send request in Repeater");
         session.shortcuts.handle(key(session,KeyEvent.KEY_RELEASED),session.request.text);
         check(!p.detailShortcuts.handle(key(new JPanel(),KeyEvent.KEY_PRESSED),new JPanel()),"detail shortcut is limited to detail focus");
-        check(p.record.getText().equals("요청 비교 OFF"),"request comparison has explicit OFF label");
+        check(p.record.getText().equals("신규 요청 자동 비교 OFF"),"automatic replay comparison has explicit OFF label");
       });
     }
     System.out.println("AuthWorkspaceTest: "+checks+" checks passed");

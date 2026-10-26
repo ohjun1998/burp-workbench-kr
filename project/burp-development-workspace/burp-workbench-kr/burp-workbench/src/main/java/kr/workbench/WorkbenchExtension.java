@@ -187,6 +187,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private final WorkContext workContext = new WorkContext();
   private final OriginalRequestIds comparisonOriginalIds = new OriginalRequestIds();
   private final WorkContextPanel workContextPanel = new WorkContextPanel(workContext);
+  private final JButton resumeWorkButton = new JButton("작업 이어가기");
+  private WorkspaceResume workspaceResume;
+  private JDialog resumeWorkWindow;
+  private String workspaceProject = "";
+  private boolean restoringWorkspace;
+  private javax.swing.Timer resumeSelectionTimer;
+  private long workspaceRestoreRevision;
   private LayoutSettings commonSettings;
   private JPanel commonSettingsContent;
   private JDialog commonSettingsWindow;
@@ -351,6 +358,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               }
               SwingUtilities.invokeLater(
                   () -> {
+                    rememberWorkspace();
+                    if (resumeSelectionTimer != null) resumeSelectionTimer.stop();
+                    if (resumeWorkWindow != null) resumeWorkWindow.dispose();
                     if (featureHelpWindow != null) featureHelpWindow.dispose();
                     if (logWindow != null) logWindow.dispose();
                     diagnostics.close();
@@ -606,7 +616,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logButton.addActionListener(e -> openLogs());
     navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton);
     root.add(navigation);
-    root.add(workContextPanel, BorderLayout.NORTH);
+    JPanel workStrip = new JPanel(new BorderLayout(6, 0));
+    workStrip.add(workContextPanel, BorderLayout.CENTER);
+    resumeWorkButton.setName("wb.workspace.resume.open");
+    resumeWorkButton.setToolTipText("마지막 화면·업무·검색 조건과 다시 확인할 항목 보기");
+    resumeWorkButton.addActionListener(e -> openWorkspaceResume());
+    workStrip.add(resumeWorkButton, BorderLayout.EAST);
+    root.add(workStrip, BorderLayout.NORTH);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
     mapperTools.addChangeListener(e -> updateFeatureHelp());
@@ -619,6 +635,18 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     navigation.restoreLayout();
     api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB, root);
     WorkbenchSkin.install(root, navigation::restoreLayout);
+    workspaceResume = WorkspaceResume.forApi(api);
+    workspaceProject = workspaceResume.project();
+    workContext.onChange(this::rememberWorkspace);
+    trafficBrowser.onSearchStateChanged(this::rememberWorkspace);
+    tabs.addChangeListener(e -> rememberWorkspace());
+    trafficTools.addChangeListener(e -> rememberWorkspace());
+    explorationTools.addChangeListener(e -> rememberWorkspace());
+    mapperTools.addChangeListener(e -> rememberWorkspace());
+    if (dataTabs != null) dataTabs.addChangeListener(e -> rememberWorkspace());
+    activity.coveragePages.addChangeListener(e -> rememberWorkspace());
+    bountySupport.pages.addChangeListener(e -> rememberWorkspace());
+    updateResumeButton();
     // A listener exception can leave Swing Timer coalescing latched and stop all future ticks.
     timer = new javax.swing.Timer(300, e -> captureStage("목록 갱신", this::drain));
     timer.start();
@@ -664,6 +692,160 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private void addPage(String title, String id, Component body, boolean data) {
     if (body instanceof JComponent component) component.putClientProperty("wb.feature.id", id);
     tabs.addTab(FeatureGuide.title(id), null, body, FeatureGuide.feature(id).summary());
+  }
+
+  private void updateResumeButton() {
+    if (workspaceResume == null) return;
+    resumeWorkButton.setText(workspaceResume.pending() ? "이전 작업 이어가기" : "작업 이어가기");
+    String problem = workspaceResume.problem();
+    resumeWorkButton.setToolTipText(problem.isEmpty()
+        ? "마지막 화면·업무·검색 조건 확인 · 인증값·검색어·원본 본문은 저장하지 않음" : problem);
+  }
+
+  /** Metadata only; unresolved startup bookmarks are protected by WorkspaceResume.capture(). */
+  private void rememberWorkspace() {
+    if (workspaceResume == null || restoringWorkspace || tabs == null || trafficBrowser == null || activity == null) return;
+    if (!SwingUtilities.isEventDispatchThread()) { SwingUtilities.invokeLater(this::rememberWorkspace); return; }
+    String project = workspaceResume.project();
+    if (!workspaceProject.equals(project)) {
+      workspaceProject = project;
+      restoringWorkspace = true;
+      try {
+        if (logTable != null) logTable.clearSelection();
+        workContext.clear();
+        activity.assessmentPanel.clearResumeTaskSelection();
+        workspaceRestoreRevision++;
+        if (resumeSelectionTimer != null) resumeSelectionTimer.stop();
+      } finally { restoringWorkspace = false; }
+      updateResumeButton();
+      return;
+    }
+    String feature = currentFeature();
+    try {
+      if (!feature.equals("settings")) workspaceResume.capture(feature, resumeSubtab(feature),
+          activity.assessmentPanel.selectedTaskId(), workContext.snapshot().requestId(), trafficBrowser.captureSearchState());
+    } catch (RuntimeException error) {
+      resumeWorkButton.setToolTipText("작업 위치 저장 보류 · " + error.getMessage());
+      return;
+    }
+    updateResumeButton();
+  }
+
+  private int resumeSubtab(String feature) {
+    if (feature.equals("data") && dataTabs != null) return dataTabs.getSelectedIndex();
+    if (feature.equals("bounty") && bountySupport != null) return bountySupport.pages.getSelectedIndex();
+    if (feature.equals("activity") && activity != null) return activity.coveragePages.getSelectedIndex();
+    return -1;
+  }
+
+  private void openWorkspaceResume() {
+    if (workspaceResume == null || unloaded.get()) return;
+    rememberWorkspace();
+    if (resumeWorkWindow != null && resumeWorkWindow.isDisplayable()) { resumeWorkWindow.toFront(); return; }
+    WorkspaceResume.Snapshot snapshot = workspaceResume.snapshot();
+    String openingProject = workspaceResume.project();
+    String task = snapshot == null || snapshot.task().isEmpty() ? "선택 기록 없음"
+        : activity.assessmentPanel.resumeTaskSummary(snapshot.task());
+    var panel = new WorkspaceResumePanel(snapshot, task,
+        snapshot != null && WorkspaceResume.original(trafficStore, snapshot.original()) != null,
+        workspaceResume.problem(), this::restoreWorkspace, () -> {
+          if (!openingProject.equals(workspaceResume.project())) {
+            if (resumeWorkWindow != null) resumeWorkWindow.dispose();
+            rememberWorkspace();
+            status.setText("프로젝트가 바뀌었습니다. 현재 프로젝트의 작업 이어가기를 다시 여세요.");
+            return;
+          }
+          workspaceRestoreRevision++;
+          if (resumeSelectionTimer != null) resumeSelectionTimer.stop();
+          workspaceResume.startFresh();
+          if (resumeWorkWindow != null) resumeWorkWindow.dispose();
+          rememberWorkspace();
+          status.setText("현재 작업 위치 저장을 시작했습니다. 요청 실행은 직접 선택하세요.");
+        });
+    resumeWorkWindow = dialogOpener.open(root, "Workbench Next · 작업 이어가기", panel, false, () -> resumeWorkWindow = null);
+  }
+
+  private void restoreWorkspace(WorkspaceResume.Snapshot snapshot) {
+    if (!workspaceResume.current(snapshot)) {
+      status.setText("프로젝트·저장 작업이 바뀌었습니다. 작업 이어가기를 다시 여세요.");
+      if (resumeWorkWindow != null) resumeWorkWindow.dispose();
+      return;
+    }
+    restoringWorkspace = true;
+    long restoreRevision = ++workspaceRestoreRevision;
+    if (resumeSelectionTimer != null) resumeSelectionTimer.stop();
+    StringBuilder message = new StringBuilder("화면·검색 조건 복원 · 요청 전송 없음");
+    try {
+      logTable.clearSelection();
+      workContext.clear();
+      activity.assessmentPanel.clearResumeTaskSelection();
+      trafficBrowser.restoreSearchState(snapshot.filters(), snapshot.project());
+      boolean taskRestored = snapshot.task().isEmpty() || activity.assessmentPanel.restoreTaskSelection(snapshot.task());
+      if (!taskRestored) message.append(" · 업무 기록을 불러온 뒤 같은 업무를 다시 선택하세요");
+      openFeature(snapshot.feature());
+      if (snapshot.feature().equals("data") && snapshot.subtab() >= 0 && snapshot.subtab() < dataTabs.getTabCount())
+        dataTabs.setSelectedIndex(snapshot.subtab());
+      if (snapshot.feature().equals("bounty") && snapshot.subtab() >= 0 && snapshot.subtab() < bountySupport.pages.getTabCount())
+        bountySupport.pages.setSelectedIndex(snapshot.subtab());
+      if (snapshot.feature().equals("activity") && snapshot.subtab() >= 0 && snapshot.subtab() < activity.coveragePages.getTabCount())
+        activity.coveragePages.setSelectedIndex(snapshot.subtab());
+      if (!snapshot.original().isEmpty()) {
+        var original = WorkspaceResume.original(trafficStore, snapshot.original());
+        if (original == null) message.append(" · 원본 없음: 다시 수집하거나 직접 선택하세요");
+        else message.append(" · 검색 완료 후 정확한 원본 선택");
+      }
+      if (!workspaceResume.accept(snapshot)) throw new IllegalStateException("프로젝트가 바뀌었습니다. 작업 이어가기를 다시 여세요.");
+      if (resumeWorkWindow != null) resumeWorkWindow.dispose();
+      status.setText(message + " · 계정 연결·증거 파일을 다시 확인하세요");
+      if (!snapshot.original().isEmpty() && WorkspaceResume.original(trafficStore, snapshot.original()) != null)
+        selectResumedOriginal(snapshot, restoreRevision);
+    } catch (RuntimeException error) {
+      status.setText("작업 위치 복원 실패 · " + error.getMessage());
+    } finally { restoringWorkspace = false; updateResumeButton(); }
+  }
+
+  /** Wait for the new filter view, without selecting an old row or overriding later user navigation. */
+  private void selectResumedOriginal(WorkspaceResume.Snapshot saved, long revision) {
+    DiskTrafficStore store = trafficStore;
+    long navigation = assessmentNavigationRevision, selection = workContext.snapshot().selectionRevision();
+    long configuration = workContext.snapshot().configurationRevision();
+    String task = activity.assessmentPanel.selectedTaskId();
+    String searchText = filter.getText(), filters = trafficBrowser.captureSearchState();
+    long started = System.nanoTime();
+    resumeSelectionTimer = new javax.swing.Timer(60, event -> {
+      javax.swing.Timer source = (javax.swing.Timer) event.getSource();
+      try {
+        if (unloaded.get() || revision != workspaceRestoreRevision || store != trafficStore
+            || navigation != assessmentNavigationRevision || selection != workContext.snapshot().selectionRevision()
+            || configuration != workContext.snapshot().configurationRevision()
+            || !task.equals(activity.assessmentPanel.selectedTaskId())
+            || !saved.feature().equals(currentFeature()) || saved.subtab() != resumeSubtab(saved.feature())
+            || !saved.project().equals(WorkspaceResume.projectIdentity(api))
+            || !searchText.equals(filter.getText()) || !filters.equals(trafficBrowser.captureSearchState())) {
+          source.stop(); return;
+        }
+        if (!trafficBrowser.idle()) {
+          if (System.nanoTime() - started > TimeUnit.SECONDS.toNanos(15)) {
+            source.stop(); status.setText("검색이 아직 처리 중입니다. 완료 후 원본을 직접 선택하세요. 요청 전송 없음");
+          }
+          return;
+        }
+        source.stop();
+        if (!trafficBrowser.searchViewCurrent()) {
+          status.setText("검색 조건이 적용되지 않아 원본을 선택하지 않았습니다. 검색 상태를 확인하세요."); return;
+        }
+        var original = WorkspaceResume.original(store, saved.original());
+        if (original == null) { status.setText("연결 원본이 현재 저장소에 없습니다. 원본을 직접 선택하세요."); return; }
+        int view = logTable.convertRowIndexToView(Math.toIntExact(original.sequence()));
+        if (view < 0) { status.setText("이어갈 원본은 현재 검색 조건에서 숨겨져 있습니다. 조건을 조정해 직접 선택하세요."); return; }
+        logTable.setRowSelectionInterval(view, view);
+        logTable.scrollRectToVisible(logTable.getCellRect(view, 0, true));
+        status.setText("저장한 정확한 원본 선택 · 계정 연결·증거 파일 확인 후 실행을 직접 선택하세요.");
+      } catch (RuntimeException error) {
+        source.stop(); status.setText("원본 선택을 완료하지 못했습니다. 현재 검색 조건과 원본을 직접 확인하세요.");
+      }
+    });
+    resumeSelectionTimer.start();
   }
 
   private String currentFeature() {
@@ -1047,7 +1229,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     JSplitPane body =
         WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficListPanel(), messages, .30);
     body.setName("wb.traffic.workspace");
-    JPanel main = page(top, body);
+    JPanel controls = new JPanel(new BorderLayout(0, 5));
+    controls.add(top, BorderLayout.NORTH);
+    controls.add(trafficBrowser.conditionBar(), BorderLayout.CENTER);
+    JPanel main = page(controls, body);
     main.setBorder(BorderFactory.createEmptyBorder(8, 16, 12, 16));
     main.setName("wb.traffic");
     trafficTools = new JTabbedPane();
@@ -1810,6 +1995,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     // JTable reads only visible/filter/sort metadata cells, never raw HTTP packet bodies.
     logModel.publish(Math.toIntExact(trafficStore.size()));
     if(trafficBrowser!=null)trafficBrowser.refresh();
+    rememberWorkspace();
     stats.setText(
         "수신 "
             + received.get()

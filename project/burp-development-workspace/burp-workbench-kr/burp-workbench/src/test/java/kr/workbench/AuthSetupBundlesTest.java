@@ -105,7 +105,7 @@ public final class AuthSetupBundlesTest extends WorkbenchTest {
       closing.applySelected();
       check(applies.get() == 1, "unload during confirmation cannot apply settings after panel closure");
     });
-    check(captures.get() == 2 && reviews.get() == 2, "only explicit reviewed captures execute and no transport API is required");
+    check(captures.get() == 5 && reviews.get() == 2, "registration captures and explicit apply review snapshots execute without a transport API");
     persistence();
     System.out.println("AuthSetupBundlesTest: " + checks + " checks passed");
   }

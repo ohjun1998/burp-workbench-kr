@@ -21,13 +21,19 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
   };
   final JTextArea details = new JTextArea();
   final JLabel status = new JLabel("역할 자리표시자만 저장 · 실제 계정은 적용 후 연결 · 네트워크 전송 없음");
-  final JButton save, apply, read, write, reload, remove;
+  final JButton save, apply, read, write, reload, remove, reconnect;
+  final JToggleButton showJson = new JToggleButton("JSON 원문 펼치기");
+  Runnable onReconnect = () -> {};
   private final AuthSetupBundleStore store;
   private boolean persistenceReady = true;
   private final Supplier<AuthSetupBundles.Bundle> capture;
   private final Consumer<AuthSetupBundles.Bundle> applySettings;
   private SwingWorker<?, ?> fileWork;
   private boolean closed;
+  private boolean reviewingApplication;
+  private AuthSetupBundles.Bundle reviewBaseline;
+  private AuthSetupBundles.Bundle lastApplied;
+  private String lastAppliedSummary = "";
   BiPredicate<String, List<AuthSetupBundles.Bundle>> review = this::confirm;
 
   AuthSetupBundlePanel(Component owner, Supplier<AuthSetupBundles.Bundle> capture,
@@ -50,6 +56,11 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
     write = action("JSON 저장·내보내기", this::chooseWrite);
     reload = action("저장 목록 다시 읽기", this::restore);
     remove = action("선택 묶음 삭제", this::removeSelected); remove.setEnabled(false);
+    reconnect = action("계정 다시 연결", () -> {
+      onReconnect.run();
+      status.setText("계정 준비 화면에서 역할별 인증 후보·소유값·신원 조건을 확인하세요. 비교는 준비 확인 후 직접 시작합니다.");
+    });
+    reconnect.setName("wb.auth.setup.bundle.reconnect"); reconnect.setVisible(false);
     save.setName("wb.auth.setup.bundle.save"); apply.setName("wb.auth.setup.bundle.apply");
     read.setName("wb.auth.setup.bundle.import"); write.setName("wb.auth.setup.bundle.export");
     reload.setName("wb.auth.setup.bundle.reload"); reload.setVisible(store != null);
@@ -58,7 +69,7 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
       if (event.getValueIsAdjusting()) return;
       var selected = choices.getSelectedValue();
       if (selected == null) { details.setText(""); apply.setEnabled(false); remove.setEnabled(false); return; }
-      name.setText(selected.name()); details.setText(AuthSetupBundles.preview(List.of(selected))); details.setCaretPosition(0);
+      name.setText(selected.name()); showPreview(selected);
       apply.setEnabled(!closed && fileWork == null && persistenceReady);
       remove.setEnabled(!closed && fileWork == null && persistenceReady);
     });
@@ -66,7 +77,7 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
     name.setMinimumSize(new Dimension(80, 28));
     nameRow.add(new JLabel("묶음 이름"), BorderLayout.WEST); nameRow.add(name); nameRow.add(save, BorderLayout.EAST);
     JPanel actions = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 8, 0));
-    actions.add(apply); actions.add(read); actions.add(write); actions.add(remove); actions.add(reload);
+    actions.add(apply); actions.add(read); actions.add(write); actions.add(remove); actions.add(reload); actions.add(reconnect);
     JLabel hint = new JLabel(store == null ? "프로젝트 저장소 없음 · 재사용하려면 JSON 저장" : "프로젝트별 목록 자동 보관 · 복원 후에도 적용은 직접 선택");
     hint.setToolTipText(store == null
         ? "이 호스트는 프로젝트 저장소를 제공하지 않습니다. 목록은 현재 실행 중 유지되며 JSON으로 저장해 다시 불러올 수 있습니다."
@@ -74,10 +85,13 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
     JPanel top = new JPanel(new BorderLayout(0, 4));
     top.add(nameRow, BorderLayout.NORTH); top.add(actions); top.add(hint, BorderLayout.SOUTH);
     add(top, BorderLayout.NORTH);
+    showJson.setName("wb.auth.setup.bundle.raw.toggle");
+    showJson.addActionListener(event -> showPreview(choices.getSelectedValue()));
     JScrollPane listScroll = new JScrollPane(choices), previewScroll = new JScrollPane(details);
     listScroll.setPreferredSize(new Dimension(160, 66)); listScroll.setMinimumSize(new Dimension(160, 34));
     previewScroll.setPreferredSize(new Dimension(160, 200)); previewScroll.setMinimumSize(new Dimension(160, 42));
-    JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, listScroll, previewScroll);
+    JPanel preview = new JPanel(new BorderLayout(0, 4)); preview.add(showJson, BorderLayout.NORTH); preview.add(previewScroll);
+    JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, listScroll, preview);
     split.setResizeWeight(.15); split.setBorder(null); add(split); add(status, BorderLayout.SOUTH);
     status.setToolTipText(status.getText()); status.addPropertyChangeListener("text", event -> status.setToolTipText(status.getText()));
     setPreferredSize(new Dimension(900, 600)); WorkbenchUi.style(this);
@@ -115,10 +129,24 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
     requireReady();
     var selected = choices.getSelectedValue();
     if (selected == null) throw new IllegalArgumentException("적용할 설정 묶음을 선택하세요.");
-    if (!review.test("선택 묶음 적용 · 현재 계정 지정과 신원/갱신 연결 해제", List.of(selected)) || closed) return;
+    // An invalid draft must not prevent replacing it with a valid reviewed bundle.
+    AuthSetupBundles.Bundle current;
+    try { current = capture.get(); } catch (RuntimeException unavailable) { current = null; }
+    reviewingApplication = true; reviewBaseline = current;
+    boolean accepted;
+    try { accepted = review.test("선택 묶음 적용 · 변경 요약과 계정 재연결 확인", List.of(selected)); }
+    finally { reviewingApplication = false; reviewBaseline = null; }
+    if (!accepted || closed) return;
     if (!selected.equals(bundles.get(selected.key()))) throw new IllegalArgumentException("묶음이 검토 중 변경되었습니다. 다시 선택하세요.");
+    if (current != null && !current.equals(capture.get()))
+      throw new IllegalArgumentException("현재 설정 또는 기준 요청이 검토 중 변경되었습니다. 변경 요약을 다시 확인하세요.");
     applySettings.accept(selected);
-    status.setText("설정 묶음 r" + selected.revision() + " 적용 · 실제 계정/권한 자리 대응을 확인하고 준비 화면에서 다시 검토하세요. 요청 전송 없음.");
+    reconnect.setVisible(true);
+    status.setText("설정 묶음 r" + selected.revision() + " 적용 · ‘계정 다시 연결’에서 역할 1~3·비로그인과 신원/갱신·쓰기 허용을 확인하세요. 요청 전송 없음.");
+    lastApplied = selected; lastAppliedSummary = BundleChangeSummary.compare(current, selected);
+    details.setText(lastAppliedSummary); details.setCaretPosition(0);
+    showJson.setSelected(false); showJson.setText("JSON 원문 펼치기");
+    revalidate();
   }
 
   void importReviewed(List<AuthSetupBundles.Bundle> imported) {
@@ -236,17 +264,48 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
     write.setEnabled(!closed && !value); reload.setEnabled(!closed && !value); name.setEnabled(!closed && !value);
     choices.setEnabled(!closed && !value); apply.setEnabled(!closed && !value && persistenceReady && choices.getSelectedValue() != null);
     remove.setEnabled(!closed && !value && persistenceReady && choices.getSelectedValue() != null);
+    reconnect.setEnabled(!closed && !value); showJson.setEnabled(!closed && !value);
   }
   private void failed(Exception error) {
     Throwable cause = error instanceof java.util.concurrent.ExecutionException && error.getCause() != null ? error.getCause() : error;
     status.setText(Objects.toString(cause.getMessage(), "설정 파일 작업 실패"));
   }
   private boolean confirm(String title, List<AuthSetupBundles.Bundle> values) {
-    JTextArea text = new JTextArea(AuthSetupBundles.preview(values)); text.setEditable(false); text.setCaretPosition(0);
-    JScrollPane scroll = new JScrollPane(text); scroll.setPreferredSize(new Dimension(850, 530));
-    JPanel content = new JPanel(new BorderLayout(4, 4)); content.add(scroll);
-    content.add(AuthReadiness.note("확인하면 위에 표시된 설정만 저장/가져오기/적용합니다. Cookie·Authorization·실제 계정은 포함하지 않습니다. 사용자 지정 규칙/기대값에 민감값이 없는지 확인하세요.", 3), BorderLayout.SOUTH);
-    return JOptionPane.showConfirmDialog(this, content, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION;
+    return JOptionPane.showConfirmDialog(this, reviewContent(values), title,
+        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION;
+  }
+  JPanel reviewContent(List<AuthSetupBundles.Bundle> values) {
+    return reviewContent(reviewingApplication, reviewBaseline, values);
+  }
+  JPanel reviewContent(AuthSetupBundles.Bundle current, AuthSetupBundles.Bundle incoming) {
+    return reviewContent(true, current, List.of(incoming));
+  }
+  private JPanel reviewContent(boolean application, AuthSetupBundles.Bundle current, List<AuthSetupBundles.Bundle> values) {
+    String summary = application && values.size() == 1
+        ? BundleChangeSummary.compare(current, values.get(0))
+        : values.stream().map(BundleChangeSummary::describe).collect(java.util.stream.Collectors.joining("\n\n────────\n\n"));
+    JTextArea text = reviewText(summary), raw = reviewText(AuthSetupBundles.preview(values));
+    text.setName("wb.auth.setup.bundle.review.summary"); raw.setName("wb.auth.setup.bundle.review.json");
+    JScrollPane scroll = new JScrollPane(text), rawScroll = new JScrollPane(raw);
+    JPanel views = new JPanel(new java.awt.CardLayout()); views.add(scroll, "summary"); views.add(rawScroll, "json");
+    JToggleButton expand = new JToggleButton("JSON 원문 펼치기"); expand.setName("wb.auth.setup.bundle.review.raw");
+    expand.addActionListener(event -> {
+      ((java.awt.CardLayout) views.getLayout()).show(views, expand.isSelected() ? "json" : "summary");
+      expand.setText(expand.isSelected() ? "변경 요약으로 돌아가기" : "JSON 원문 펼치기");
+    });
+    JPanel content = new JPanel(new BorderLayout(4, 4)); content.add(expand, BorderLayout.NORTH); content.add(views);
+    content.setPreferredSize(new Dimension(780, 510));
+    content.add(AuthReadiness.note("확인하면 표시된 설정만 저장/가져오기/적용합니다. 사용자 지정 규칙·조회 URL·기대값에 민감값이 없는지 JSON 원문에서도 확인하세요.", 2), BorderLayout.SOUTH);
+    return content;
+  }
+  private static JTextArea reviewText(String value) {
+    JTextArea text = new JTextArea(value); text.setEditable(false); text.setLineWrap(true); text.setWrapStyleWord(true); text.setCaretPosition(0); return text;
+  }
+  private void showPreview(AuthSetupBundles.Bundle selected) {
+    details.setText(selected == null ? "" : showJson.isSelected()
+        ? AuthSetupBundles.preview(List.of(selected)) : selected.equals(lastApplied)
+            ? lastAppliedSummary : BundleChangeSummary.describe(selected));
+    details.setCaretPosition(0); showJson.setText(showJson.isSelected() ? "요약으로 돌아가기" : "JSON 원문 펼치기");
   }
   void refresh(String key) {
     model.clear(); for (var bundle : bundles.snapshot()) model.addElement(bundle);
@@ -254,3 +313,4 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
   }
   @Override public void close() { closed = true; if (fileWork != null) fileWork.cancel(true); fileWork = null; }
 }
+

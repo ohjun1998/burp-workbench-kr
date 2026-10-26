@@ -1,7 +1,7 @@
 {
   "version": "0.53.1",
   "sourceBase": "8b548422f12d498aef7334ebb86b55762c1a1569",
-  "status": "candidate-remote-verification-passed",
+  "status": "merged-remote-verification-passed",
   "local": {
     "version": "0.53.1",
     "groups": {
@@ -132,5 +132,15 @@
       "java17Bytecode": "passed",
       "scope": "Read-only integrity checks while completing upload; no functional suite rerun. Production source and build scripts remain identical to the validated commit."
     }
+  },
+  "main": {
+    "merged": true,
+    "pullRequest": 89,
+    "mergeCommit": "490e3ed006fc70247623eb5831d4303b0319c74b",
+    "mergedAtUtc": "2026-10-26T21:16:11Z",
+    "mergedAtAsiaSeoul": "2026-10-27T06:16:11+09:00",
+    "headCommit": "68aeeffe2672533b59ca68b6e0d83397ea9ba255",
+    "sourceAndArtifactsUnchanged": true,
+    "note": "Prior verified source and immutable CI packages merged unchanged; this record does not claim a functional test rerun during the merge."
   }
 }

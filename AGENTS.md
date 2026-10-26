@@ -5,9 +5,9 @@
 - Deliver changes through a PR with actual checks and a short Korean handoff. Keep merged project status in `PROJECT_STATUS_KR.md`; track in-progress ownership in Issues and PRs.
 - GitHub synchronization covers commits and work records, not the other ChatGPT account's conversation or usage quota. Never claim repository connection supplies terminal credentials automatically.
 
-- Communicate in Korean. Current main extension: Workbench Next 0.52.0. This task branch is the 0.53.1 usability release candidate based on 0.53.0 commit `8b548422f12d498aef7334ebb86b55762c1a1569`; embedded Feature Mapper: 0.3.5; lab: 3.10.0. Preserve the 0.53.0 work history and prior 0.52.0, 0.50.0 and 0.49.1 release files. Do not describe the candidate as merged or verified without current evidence.
+- Communicate in Korean. Current main extension: Workbench Next 0.53.1, merged through PR #89 on 2026-10-27 (Asia/Seoul); based on 0.53.0 commit `8b548422f12d498aef7334ebb86b55762c1a1569`; embedded Feature Mapper: 0.3.5; lab: 3.10.0. Preserve the 0.53.0 work history and prior 0.52.0, 0.50.0 and 0.49.1 release files. Describe verification only from current evidence.
 - Read `DEVELOPMENT_SETUP_KR.md`, `이어가기_인수인계.md` and the current release guide before changing features.
-- Current candidate guide: `docs/RELEASE_0.53.1_NEXT_KR.md`. Its validation status must be updated from actual checks; prior release counts are historical evidence only.
+- Current release guide: `docs/RELEASE_0.53.1_NEXT_KR.md`. Its validation status must be updated from actual checks; prior release counts are historical evidence only.
 - Main source: `project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/java`.
 - Tests: the adjacent `src/test/java`; lab source: `project/burp-development-workspace/community-security-lab`.
 - Build and verify with `python dev.py check`. `python dev.py doctor` checks prerequisites. Explicit Java/javac paths can be supplied.

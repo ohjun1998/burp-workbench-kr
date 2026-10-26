@@ -1,10 +1,10 @@
 # Workbench Next / 기존 버전 다운로드
 
-파일을 열고 **Download raw file**을 누르세요. 이 작업 브랜치의 현재 버전은 **0.53.1 사용자 편의성 개선 후보판**, `main`에 병합된 기존 배포는 **0.52.0**입니다. 후보판과 이전 배포의 검증 상태를 구분해 선택하세요. 이전 PDF는 과거 화면의 보존 자료입니다.
+파일을 열고 **Download raw file**을 누르세요. 현재 main 배포는 **0.53.1 사용자 편의성 개선판**입니다. 이전 0.52.0 배포와 당시 검증 기록은 보존합니다. 버전별 검증 상태를 확인해 선택하세요. 이전 PDF는 과거 화면의 보존 자료입니다.
 
-## 자동 검증을 통과한 후보판: Workbench Next 0.53.1
+## 현재 main 배포: Workbench Next 0.53.1
 
-0.53.0 작업 커밋 `8b548422`을 바탕으로 비교 준비·결과·설정 묶음·남은 점검·검색·작업 재개를 개선합니다. 검증 소스 `5704f48a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40334451367)가 Linux·Windows 회귀·격리 HTTP, 합성 Swing 화면과 실제 Chromium 검사를 통과했고, 아래 배포 파일을 생성했습니다. 기존 버전 파일은 보존합니다. main 병합·실제 Burp GUI·DPI/IME·Docker 검증 상태와 자동 검사 결과는 [검증 기록](../docs/VERIFICATION_0.53.1.json)에서 구분합니다.
+0.53.0 작업 커밋 `8b548422`을 바탕으로 비교 준비·결과·설정 묶음·남은 점검·검색·작업 재개를 개선합니다. 검증 소스 `5704f48a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40334451367)가 Linux·Windows 회귀·격리 HTTP, 합성 Swing 화면과 실제 Chromium 검사를 통과했고, 아래 배포 파일을 생성했습니다. 기존 버전 파일은 보존합니다. main 병합은 [PR #89](https://github.com/ohjun1998/burp-workbench-kr/pull/89), 자동 검사 결과와 실제 Burp GUI·DPI/IME·Docker 미실행 범위는 [검증 기록](../docs/VERIFICATION_0.53.1.json)에서 확인합니다.
 
 | 자료 | 현재 위치·상태 |
 |---|---|
@@ -17,7 +17,7 @@
 
 Workbench JAR SHA-256: `f67d2baed0ca1e0b1972b200673cd8b5dce57543694d87e002daff8331d87fa0`. 소스 ZIP SHA-256: `36e152a028c92dc037bba2330820f86d75c40080c00de774593d8bd30b55b59d`.
 
-0.53.1 JAR를 설치할 때 이전 Next의 로드를 해제하고, 기존 JAR·프로젝트·설정 JSON과 기록 폴더를 보관하세요. 재개 안내는 인증값·원본 패킷·검색어를 보존하는 백업이 아닙니다. 되돌릴 때 새 Next를 해제하고 보관한 JAR와 해당 버전용 백업을 사용합니다. 후보판의 저장 형식을 구버전에서 그대로 읽을 수 있다고 가정하지 마세요.
+0.53.1 JAR를 설치할 때 이전 Next의 로드를 해제하고, 기존 JAR·프로젝트·설정 JSON과 기록 폴더를 보관하세요. 재개 안내는 인증값·원본 패킷·검색어를 보존하는 백업이 아닙니다. 되돌릴 때 새 Next를 해제하고 보관한 JAR와 해당 버전용 백업을 사용합니다. 0.53.1의 저장 형식을 구버전에서 그대로 읽을 수 있다고 가정하지 마세요.
 
 ## 보존: Workbench Next 0.52.0
 

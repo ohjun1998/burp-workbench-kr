@@ -8,9 +8,9 @@
 
 [0.53.3 설치·사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md) · [설치 JAR·소스·버전별 다운로드](downloads/README.md) · [0.53.3 검증 상태](docs/VERIFICATION_0.53.3.json)
 
-**0.53.3은 최종 검증·배포 준비 중이며 main 미병합입니다.** 검색·증거·입력·탐색 등 8개 개선에 더해 좁은 작업 영역의 남은 점검 목록·설명 배치를 보완합니다. 새 버전의 검사 소스·결과·배포 해시는 [0.53.3 검증 기록](docs/VERIFICATION_0.53.3.json)에 실제 실행 후 기록합니다. 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스 검증과 자동 검사는 구분합니다.
+**0.53.3 후보판의 최종 자동 검증을 통과하고 JAR·소스 ZIP을 생성했습니다.** 소스 `51184534`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows 각각 4,476개 검사와 전체 Swing 450개 화면·162개 상태를 통과했습니다. 화면 배치 게이트는 모두 0건이며 검사 JAR와 배포 JAR의 SHA-256이 일치합니다. 작은 창에서 돌아올 때 탐색 막대가 불필요한 두 줄로 남는 문제를 고쳐 남은 점검 설명 높이를 확보했습니다. [설치 JAR](downloads/extensions/0.53.3/burp-workbench-kr-0.53.3.jar) · [소스 ZIP](downloads/extensions/0.53.3/burp-workbench-kr-0.53.3-source.zip) · [검증 기록](docs/VERIFICATION_0.53.3.json)을 확인하세요. main은 아직 0.53.1이며 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스는 미실행입니다.
 
-**0.53.2는 완료 배포가 아닌 보존 후보판입니다.** 초기 후보 CI는 통과했지만 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)의 전체 화면 검사에서 1024px 창·넓은 메뉴 조합의 남은 점검 설명 영역이 최소 높이 기준에 못 미쳤습니다. 기존 [0.53.2 파일](downloads/extensions/0.53.2/)과 [검증 이력](docs/VERIFICATION_0.53.2.json)은 그대로 보존하며, 배치 수정은 새 버전 0.53.3에서 검증합니다.
+**0.53.2는 완료 배포가 아닌 보존 후보판입니다.** 초기 후보 CI는 통과했지만 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)의 전체 화면 검사에서 1024px 창·넓은 메뉴 조합의 남은 점검 설명 영역이 최소 높이 기준에 못 미쳤습니다. 기존 [0.53.2 파일](downloads/extensions/0.53.2/)과 [검증 이력](docs/VERIFICATION_0.53.2.json)은 그대로 보존하며, 탐색 막대 수정과 전체 화면 재검증은 새 버전 0.53.3에서 완료했습니다.
 
 현재 main의 0.53.1은 [PR #89](https://github.com/ohjun1998/burp-workbench-kr/pull/89)로 병합했습니다. [0.53.1 JAR·소스](downloads/extensions/0.53.1/) · [0.53.1 안내](docs/RELEASE_0.53.1_NEXT_KR.md) · [당시 CI·미실행 범위](docs/reports/2026-10-26-usability-0531/REMOTE_CI_KR.md)를 함께 보존합니다. 이전 0.52.0의 Windows·브라우저 CI 실패 기록도 [당시 검증 문서](docs/reports/2026-10-24-workbench-next-0520/REMOTE_CI_KR.md)에 남깁니다.
 

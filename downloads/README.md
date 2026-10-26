@@ -1,10 +1,10 @@
 # Workbench Next / 기존 버전 다운로드
 
-파일을 열고 **Download raw file**을 누르세요. 이 작업 브랜치는 **0.53.3 사용자 편의성 개선 후보판**을 준비하며 현재 main 배포는 **0.53.1**입니다. 0.53.2는 PR 화면 회귀가 남은 보존 후보판입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 JAR·소스와 당시 기록·PDF는 보존합니다.
+파일을 열고 **Download raw file**을 누르세요. 이 작업 브랜치는 **자동 검증을 통과한 0.53.3 사용자 편의성 개선 후보판**을 제공하며 현재 main 배포는 **0.53.1**입니다. 0.53.2는 PR 화면 회귀가 남은 보존 후보판입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 JAR·소스와 당시 기록·PDF는 보존합니다.
 
-## 배포 준비: Workbench Next 0.53.3 후보판
+## 자동 검증 통과: Workbench Next 0.53.3 후보판
 
-새 사용자 편의성 개선 8개와 좁은 작업 영역의 남은 점검 목록·설명 배치 보완을 포함합니다. **최종 검증·배포 준비 중이며 main 미병합입니다.** 실제 검사 소스·CI·결과·해시는 [0.53.3 검증 기록](../docs/VERIFICATION_0.53.3.json)에 갱신합니다. 이전 0.53.2의 파일은 보존하고 새 버전은 아래 전용 경로를 사용합니다.
+새 사용자 편의성 개선 8개와 탐색 막대 줄바꿈 보완을 포함합니다. **최종 자동 검증·배포 파일 생성을 완료했으며 main 미병합입니다.** 소스 `51184534`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows 각각 4,476개 검사와 전체·집중 화면 검사를 통과했습니다. 검사 JAR와 배포 JAR가 일치하며 소스 ZIP 367개 파일의 CRC·지문도 확인했습니다. [0.53.3 검증 기록](../docs/VERIFICATION_0.53.3.json)에서 실제 범위와 미실행 항목을 확인하세요. 이전 0.53.2의 파일은 그대로 보존합니다.
 
 | 자료 | 0.53.3 경로 |
 |---|---|
@@ -13,6 +13,8 @@
 | 빌드 가능한 소스 ZIP | [burp-workbench-kr-0.53.3-source.zip](extensions/0.53.3/burp-workbench-kr-0.53.3-source.zip) |
 | 파일 해시·소스 지문 | [SHA256SUMS](extensions/0.53.3/SHA256SUMS) · [manifest.json](extensions/0.53.3/manifest.json) |
 | 변경 없는 Mapper 0.3.5의 선택 연동 | [Chrome/Edge 도우미 ZIP](feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip) |
+
+Workbench 0.53.3 JAR SHA-256: `b85c7ea6f4e492167747a4e1f78b6607a975e950aa9d05a670a8b694c2c6ec6c`. 소스 ZIP SHA-256: `bd48061ceee8b22868646d5bdab75b34216112ca13d1dcb43911a63f9c39f154`.
 
 ## 보존: Workbench Next 0.53.2 미병합 후보판
 

@@ -1,9 +1,9 @@
 {
   "version": "0.53.3",
   "sourceBase": "6737746f1a0c29c42c91a246a8161192c7d279d6",
-  "status": "implementation-and-full-layout-verification-in-progress",
+  "status": "candidate-remote-verification-passed",
   "local": {
-    "status": "build-and-full-layout-passed-specialized-modes-in-progress",
+    "status": "build-and-all-10-layout-modes-passed",
     "compiler": "OpenJDK21 with official --release17 symbols",
     "fullLayout": {
       "renderedViews": 450,
@@ -23,10 +23,210 @@
       "clippedSelectedTabOrHeadingLabels": 0,
       "scenariosChecked": 162
     },
-    "note": "Layouts overlap and are not added as unique counts. Native Burp GUI not executed."
+    "note": "All10productionSwing layoutmodes passed usingJava21/--release17; finalJava17release is independentlyverifiedbyremoteCI. Overlappingmodecounts arenotadded. NativeBurpGUI notexecuted.",
+    "modes": [
+      {
+        "mode": "full",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 450,
+        "controlsMeasured": 5934,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 162
+      },
+      {
+        "mode": "next",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 288,
+        "controlsMeasured": 2202,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 162
+      },
+      {
+        "mode": "traffic",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 16,
+        "controlsMeasured": 336,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      },
+      {
+        "mode": "guide",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 52,
+        "controlsMeasured": 156,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      },
+      {
+        "mode": "scope",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 4,
+        "controlsMeasured": 24,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      },
+      {
+        "mode": "packet",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 16,
+        "controlsMeasured": 592,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      },
+      {
+        "mode": "js",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 76,
+        "controlsMeasured": 1292,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      },
+      {
+        "mode": "session",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 8,
+        "controlsMeasured": 96,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      },
+      {
+        "mode": "auth",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 60,
+        "controlsMeasured": 960,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      },
+      {
+        "mode": "environment",
+        "releaseJarSha256": "ffc2f324ee8198b1c741ea34416b6cff9c269a3333bf34efc14f74b8ca68547d",
+        "renderedViews": 32,
+        "controlsMeasured": 224,
+        "clippedControlsOutsideScrollers": 0,
+        "smallControls": 0,
+        "collapsedRequiredWorkAreas": 0,
+        "clippedSelectedTabOrHeadingLabels": 0,
+        "scenariosChecked": 0
+      }
+    ]
   },
   "remote": {
-    "status": "pending"
+    "status": "passed",
+    "runId": 40414755887,
+    "runUrl": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887",
+    "sourceCommit": "511845348ffdea146ee0a01f377c6e427c72390c",
+    "jobs": {
+      "release": {
+        "id": 121894151153,
+        "status": "success"
+      },
+      "windows": {
+        "id": 121894150875,
+        "status": "success"
+      },
+      "layout": {
+        "id": 121894151223,
+        "status": "success"
+      }
+    },
+    "linux": {
+      "version": "0.53.3",
+      "regressionGroups": 113,
+      "regressionChecks": 3972,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4476,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "windows": {
+      "version": "0.53.3",
+      "regressionGroups": 113,
+      "regressionChecks": 3972,
+      "payloadHttpChecks": 136,
+      "allFeaturesHttpChecks": 102,
+      "bountyHttpChecks": 266,
+      "totalChecks": 4476,
+      "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+      "result": "passed"
+    },
+    "newRegressionGroups": {
+      "TrafficUsability0532Test": 46,
+      "EvidenceEditingTest": 58,
+      "AuthInlineValidationTest": 52,
+      "Navigation0532Test": 43,
+      "ResponseDifferenceTest": 49,
+      "ResponseDifferenceUiTest": 21,
+      "BackgroundJobsTest": 37,
+      "GettingStartedPanelTest": 9,
+      "UsabilityIntegration0532Test": 19
+    },
+    "layout": {
+      "renderedViews": 288,
+      "controlsMeasured": 2202,
+      "scenariosChecked": 162,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "countingNote": "Linux/Windows repeat the same suite; repeated platforms, focused checks and overlapping groups are not added as unique tests.",
+    "fullLayout": {
+      "renderedViews": 450,
+      "controlsMeasured": 5934,
+      "scenariosChecked": 162,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "layoutCountingNote": "Full450-view mode includes the288-view focusedmode; views, controls and scenario counts overlap and are not added.",
+    "artifacts": {
+      "packages": 12694747391,
+      "linux": 12694982269,
+      "windows": 12695755915,
+      "layout": 12694382009,
+      "fullLayout": 12695216605
+    },
+    "mapper": {
+      "javaChecks": 134,
+      "nodeTests": 15,
+      "status": "passed"
+    },
+    "packaging": {
+      "sourceFingerprints": "passed",
+      "unitTests": 7,
+      "zipCrc": "passed",
+      "uiTestedJarMatchesPublishedJar": true
+    }
   },
   "main": {
     "merged": false
@@ -36,6 +236,26 @@
     "Actual Burp GUI interaction",
     "Windows DPI/IME",
     "Manual browser interaction",
-    "External target services"
-  ]
+    "External target services",
+    "Docker/Oracle/Nginx stack",
+    "Long-duration native Burp load"
+  ],
+  "validatedSourceCommit": "511845348ffdea146ee0a01f377c6e427c72390c",
+  "packages": {
+    "version": "0.53.3",
+    "directory": "downloads/extensions/0.53.3",
+    "files": {
+      "burp-workbench-kr-0.53.3.jar": "b85c7ea6f4e492167747a4e1f78b6607a975e950aa9d05a670a8b694c2c6ec6c",
+      "burp-workbench-kr-0.53.3-source.zip": "bd48061ceee8b22868646d5bdab75b34216112ca13d1dcb43911a63f9c39f154"
+    },
+    "sourceFiles": 367,
+    "sourceZipCrc": "passed",
+    "sourceFingerprints": "passed",
+    "unchangedMapperRelease": "0.3.5",
+    "priorReleases": "preserved",
+    "uiTestedJarMatchesPublishedJar": true,
+    "artifactId": 12694747391,
+    "artifactArchiveSha256": "e5503901615bc872de0addbb84c13e43df9b82c8e282c989b5dde5d75c8a9fa1",
+    "preservedUnmergedCandidate": "0.53.2"
+  }
 }

@@ -76,22 +76,39 @@ final class AuthSetupBundlePanel extends JPanel implements AutoCloseable, Scroll
     JPanel nameRow = new JPanel(new BorderLayout(8, 0));
     name.setMinimumSize(new Dimension(80, 28));
     nameRow.add(new JLabel("묶음 이름"), BorderLayout.WEST); nameRow.add(name); nameRow.add(save, BorderLayout.EAST);
+    showJson.setName("wb.auth.setup.bundle.raw.toggle");
+    showJson.addActionListener(event -> showPreview(choices.getSelectedValue()));
     JPanel actions = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 8, 0));
-    actions.add(apply); actions.add(read); actions.add(write); actions.add(remove); actions.add(reload); actions.add(reconnect);
+    JButton more = new JButton("더보기"); more.setName("wb.auth.setup.bundle.more");
+    more.setToolTipText("JSON 불러오기·내보내기, 선택 묶음 삭제, 저장 목록 다시 읽기");
+    JPopupMenu management = new JPopupMenu();
+    for (JButton action : new JButton[]{read, write, remove, reload}) {
+      JMenuItem item = new JMenuItem(action.getText()); item.setEnabled(action.isEnabled()); item.setVisible(action.isVisible());
+      item.addActionListener(event -> action.doClick(0));
+      action.addPropertyChangeListener(event -> {
+        if ("enabled".equals(event.getPropertyName())) item.setEnabled(action.isEnabled());
+        else if ("visible".equals(event.getPropertyName())) item.setVisible(action.isVisible());
+      });
+      management.add(item);
+    }
+    more.addActionListener(event -> management.show(more, 0, more.getHeight()));
+    actions.add(apply); actions.add(showJson); actions.add(reconnect); actions.add(more);
     JLabel hint = new JLabel(store == null ? "프로젝트 저장소 없음 · 재사용하려면 JSON 저장" : "프로젝트별 목록 자동 보관 · 복원 후에도 적용은 직접 선택");
     hint.setToolTipText(store == null
         ? "이 호스트는 프로젝트 저장소를 제공하지 않습니다. 목록은 현재 실행 중 유지되며 JSON으로 저장해 다시 불러올 수 있습니다."
         : "검토한 등록·불러오기 목록을 현재 Burp 프로젝트에 연결된 로컬 폴더에 보관합니다. 같은 프로젝트를 다시 열면 목록만 복원합니다. 계정 연결·활성 비교 설정·쓰기 허용은 자동 복원하지 않습니다. JSON 내보내기는 별도 백업·다른 PC 이동에 사용하세요.");
     JPanel top = new JPanel(new BorderLayout(0, 4));
-    top.add(nameRow, BorderLayout.NORTH); top.add(actions); top.add(hint, BorderLayout.SOUTH);
+    top.add(nameRow, BorderLayout.NORTH); top.add(actions);
+    // Keep the list and readable summary in view at the real 560x300 settings minimum.
+    // Persistence details remain available on the name field and in the current status line.
+    name.setToolTipText(hint.getText() + " · " + hint.getToolTipText());
+    top.setToolTipText(hint.getToolTipText());
+    if (store == null) status.setText("프로젝트 저장소 없음 · 현재 실행 중 보관 · 재사용하려면 JSON 저장");
     add(top, BorderLayout.NORTH);
-    showJson.setName("wb.auth.setup.bundle.raw.toggle");
-    showJson.addActionListener(event -> showPreview(choices.getSelectedValue()));
     JScrollPane listScroll = new JScrollPane(choices), previewScroll = new JScrollPane(details);
     listScroll.setPreferredSize(new Dimension(160, 66)); listScroll.setMinimumSize(new Dimension(160, 34));
     previewScroll.setPreferredSize(new Dimension(160, 200)); previewScroll.setMinimumSize(new Dimension(160, 42));
-    JPanel preview = new JPanel(new BorderLayout(0, 4)); preview.add(showJson, BorderLayout.NORTH); preview.add(previewScroll);
-    JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, listScroll, preview);
+    JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, listScroll, previewScroll);
     split.setResizeWeight(.15); split.setBorder(null); add(split); add(status, BorderLayout.SOUTH);
     status.setToolTipText(status.getText()); status.addPropertyChangeListener("text", event -> status.setToolTipText(status.getText()));
     setPreferredSize(new Dimension(900, 600)); WorkbenchUi.style(this);

@@ -463,6 +463,9 @@ public final class UiLayoutPreview extends WorkbenchTest {
         var filters=new TrafficQuery("PATCH","2xx",0,false,false,false,true,false,true,"",30);
         browser.restoreSearchState(TrafficSearchPresets.capture(filters));
         browser.savePreset("공지 수정 · 최근 응답",filters,browser.projectIdentity());
+        awaitUi(()->browser.idle()&&browser.searchViewCurrent(),"saved filter results");
+        if(browser.table.getRowCount()!=1)throw new IllegalStateException("Saved PATCH filter must retain exactly its synthetic original");
+        browser.table.setRowSelectionInterval(0,0);
         ext.openFeature("traffic");
         Container desktop=(Container)get(ext,"root");
         scenario("next-traffic-conditions.png","Active filters and saved project conditions",

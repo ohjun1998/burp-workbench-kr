@@ -4,6 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Rectangle;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /** Setup diffs, cancellation, stale review rejection, and explicit account reconnection. */
 public final class BundleChangeSummaryTest extends WorkbenchTest {
@@ -23,6 +28,30 @@ public final class BundleChangeSummaryTest extends WorkbenchTest {
   static AuthSetupBundles.Bundle bundle(boolean changed) {
     return new AuthSetupBundles.Bundle("권한 설정", "https://example.test", "PATCH", "/same", changed ? 2 : 1,
         AuthSetupBundles.ROLE_PLACEHOLDERS, settings(changed));
+  }
+  static int visibleHeight(Container root, Component component) {
+    Rectangle visible = SwingUtilities.convertRectangle(component.getParent(), component.getBounds(), root);
+    for (Container parent = component.getParent(); parent != null && parent != root; parent = parent.getParent())
+      visible = visible.intersection(SwingUtilities.convertRectangle(parent,
+          new Rectangle(0, 0, parent.getWidth(), parent.getHeight()), root));
+    visible = visible.intersection(new Rectangle(0, 0, root.getWidth(), root.getHeight()));
+    return Math.max(0, visible.height);
+  }
+  static void layout(Container root, int width, int height) {
+    root.setSize(width, height);
+    for (int pass = 0; pass < 6; pass++) {
+      UiLayoutTest.layout(root);
+      var loop = java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();
+      SwingUtilities.invokeLater(loop::exit); loop.enter();
+    }
+  }
+  static void assertLibraryViewport(JPanel shell, AuthSetupBundlePanel panel, String state) {
+    layout(shell, 760, 480);
+    check(visibleHeight(shell, panel.details) >= 80, state + " default settings window keeps at least 80px of summary visible");
+    layout(shell, 560, 300);
+    check(visibleHeight(shell, panel.details) >= 40, state + " minimum settings window keeps at least 40px of summary visible");
+    check(visibleHeight(shell, panel.choices) >= panel.choices.getFontMetrics(panel.choices.getFont()).getHeight(),
+        state + " minimum settings window retains a selectable bundle row");
   }
   public static void main(String[] args) throws Exception {
     var delta = BundleChangeSummary.changes(Map.of("same", "old", "gone", "1"), Map.of("same", "new", "added", "1"));
@@ -52,6 +81,8 @@ public final class BundleChangeSummaryTest extends WorkbenchTest {
       var panel = new AuthSetupBundlePanel(null, current::get, ignored -> applies.incrementAndGet());
       panel.onReconnect = reconnects::incrementAndGet;
       panel.bundles.merge(List.of(after)); panel.refresh(after.key());
+      JPanel shell = WorkbenchUi.settingsBody(panel, () -> {});
+      assertLibraryViewport(shell, panel, "Before apply");
       check(panel.details.getText().contains("포함된 설정") && !panel.showJson.isSelected(), "list preview begins with readable summary");
       panel.showJson.doClick();
       check(panel.details.getText().contains("workbench-auth-setup-1"), "JSON remains available behind explicit expansion");
@@ -65,6 +96,7 @@ public final class BundleChangeSummaryTest extends WorkbenchTest {
       check(applies.get() == 1 && panel.reconnect.isVisible() && reconnects.get() == 0,
           "accepted settings application exposes explicit reconnection without navigating or executing automatically");
       check(panel.details.getText().contains("경로 정책: 추가 1 / 변경 1 / 제거 1"), "applied review retains the before-and-after summary");
+      assertLibraryViewport(shell, panel, "After reconnect button appears");
       panel.reconnect.doClick();
       check(reconnects.get() == 1 && applies.get() == 1, "reconnection button invokes only the account editor callback");
       panel.close();

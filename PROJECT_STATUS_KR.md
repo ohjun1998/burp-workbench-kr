@@ -1,16 +1,18 @@
 # 현재 개발 상태
 
-기준: 2026-10-27 (한국 시간). 현재 main 배포는 **Workbench Next 0.53.1**이며, 이 작업 브랜치의 **0.53.3 후보판**은 최종 자동 검증·배포 파일 생성을 완료했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지하고, 아래 과거 기록과 이전 배포 파일을 보존합니다.
+기준: 2026-10-27 (한국 시간). 현재 main 배포는 **Workbench Next 0.53.3**이며, 최종 자동 검증·배포 파일 게시·main 병합을 완료했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지하고, 아래 과거 기록과 이전 배포 파일을 보존합니다.
 
-## Workbench Next 0.53.3 사용자 편의성 개선 후보판
+## Workbench Next 0.53.3 사용자 편의성 개선 · main 병합 완료
 
 0.53.1 main `6737746f1a0c29c42c91a246a8161192c7d279d6`을 기준으로 검색 일치 문맥, 증거 개별 편집·실행 취소, 검색 0건 복구, 입력 오류 안내, 기능 찾기·화면 이력, 통합 작업 현황, 항목별 응답 차이와 시작 준비 안내를 제공합니다. 0.53.2 PR 전체 화면 검사에서 발견한 탐색 막대의 불필요한 줄바꿈을 고쳐 남은 점검 설명 영역의 높이를 확보했습니다. 목록·설명 방향과 분할 방식은 유지합니다.
 
-**현재 상태: 최종 자동 검증 통과·배포 파일 생성 완료, main 미병합.** 소스 `511845348ffdea146ee0a01f377c6e427c72390c`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows 각각 회귀 113개 그룹·3,972개와 payload HTTP 136개·전체 기능 HTTP 102개·모의 진단 HTTP 266개로 총 **4,476개**를 통과했습니다. 새 9개 검사 그룹 334개는 이 회귀 합계에 포함되며, Mapper Java 134개·Node 15개도 통과했습니다.
+**현재 상태: 최종 자동 검증 통과·배포 파일 게시·main 병합 완료.** 소스 `511845348ffdea146ee0a01f377c6e427c72390c`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows 각각 회귀 113개 그룹·3,972개와 payload HTTP 136개·전체 기능 HTTP 102개·모의 진단 HTTP 266개로 총 **4,476개**를 통과했습니다. 새 9개 검사 그룹 334개는 이 회귀 합계에 포함되며, Mapper Java 134개·Node 15개도 통과했습니다.
 
 전체 화면 검사는 450개 화면·5,934개 컨트롤·162개 상태, 별도 집중 검사는 288개 화면·2,202개 컨트롤·162개 상태의 배치 게이트를 모두 통과했습니다. 두 화면 검사는 겹치므로 합산하지 않습니다. 넓은 메뉴를 둔 1024px 창의 남은 점검 설명은 양 테마에서 63px를 확보했습니다. [전체 화면 근거](docs/reports/2026-10-27-usability-0533/full-layout-report.json) · [집중 화면 근거](docs/reports/2026-10-27-usability-0533/ui/layout-report.json)를 보존합니다.
 
-검사한 JAR와 새 배포 JAR의 SHA-256 `b85c7ea6f4e492167747a4e1f78b6607a975e950aa9d05a670a8b694c2c6ec6c`가 일치하며 소스 ZIP 367개 파일의 CRC·소스 지문도 확인했습니다. [0.53.3 검증 기록](docs/VERIFICATION_0.53.3.json)과 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)에서 결과를 확인합니다. main 병합은 확인 후 기록합니다. 플랫폼 반복과 이전 후보 검사를 고유 검사 수에 더하지 않으며, 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스는 미실행입니다.
+검사한 JAR와 새 배포 JAR의 SHA-256 `b85c7ea6f4e492167747a4e1f78b6607a975e950aa9d05a670a8b694c2c6ec6c`가 일치하며 소스 ZIP 367개 파일의 CRC·소스 지문도 확인했습니다. [0.53.3 검증 기록](docs/VERIFICATION_0.53.3.json)과 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)에서 결과를 확인합니다. main 병합을 완료했습니다. 플랫폼 반복과 이전 후보 검사를 고유 검사 수에 더하지 않으며, 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스는 미실행입니다.
+
+[PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)의 main 병합 시각은 **2026-10-27 08:11:54 (한국 시간)**입니다. 병합 커밋은 `5b8b8576a93e7ca15cef5a8e06bc9b93d2d1301f`, 최종 PR head는 `84d84b7c931131c7bccdabcb93df81d2e06bd59a`입니다. 이 후속 문서 정리는 검증한 생산 소스·빌드 입력·배포 파일을 바꾸지 않으며, 병합 중 기능 검사를 새로 실행한 것으로 표시하지 않습니다.
 
 [0.53.3 설치·사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md) · [설치 JAR·소스·이전 파일](downloads/README.md)
 

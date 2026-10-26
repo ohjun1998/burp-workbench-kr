@@ -16,6 +16,7 @@ public final class ResponseBudgetTest extends WorkbenchTest {
   public static void main(String[] args) throws Exception {
     reservations();
     queueLifecycle();
+    coalescedDrain();
     referenceAndSnapshot();
     rejectionAndExpiry();
     appendMetrics();
@@ -120,6 +121,36 @@ public final class ResponseBudgetTest extends WorkbenchTest {
     } finally {release.countDown();panel.close();}
   }
 
+  static void coalescedDrain() throws Exception {
+    var panel = new ResponseReconPanel(api(new AtomicBoolean(true)));
+    CountDownLatch applying = new CountDownLatch(1), release = new CountDownLatch(1), barrier = new CountDownLatch(1);
+    AtomicBoolean first = new AtomicBoolean(true), newerViewPendingAtBarrier = new AtomicBoolean();
+    AtomicInteger rowsAtBarrier = new AtomicInteger(-1);
+    try {
+      edt(() -> panel.findings.addTableModelListener(event -> {
+        if (first.compareAndSet(true, false)) await(applying, release);
+      }));
+      panel.worker.submit(() -> panel.refresh(panel.generation.get())).get(5, TimeUnit.SECONDS);
+      check(applying.await(5, TimeUnit.SECONDS), "first response view is applying while a newer analysis completes");
+      panel.worker.submit(() -> {
+        panel.issues.put("new-finding", new PassiveFindings.Finding("fixture", "https://budget.test/latest", "Body", "latest"));
+        panel.counts.put("new-finding", 1); panel.refresh(panel.generation.get());
+      }).get(5, TimeUnit.SECONDS);
+      // Reproduce the old drain ordering: its barrier is already queued when the first
+      // publication's finally block schedules the newer coalesced publication.
+      javax.swing.SwingUtilities.invokeLater(() -> {
+        newerViewPendingAtBarrier.set(panel.pendingView.get() != null && panel.viewUpdatePending.get());
+        rowsAtBarrier.set(panel.findings.getRowCount()); barrier.countDown();
+      });
+      release.countDown();
+      check(barrier.await(5, TimeUnit.SECONDS) && newerViewPendingAtBarrier.get() && rowsAtBarrier.get() == 0,
+          "one EDT barrier can precede a rescheduled coalesced response view");
+      drain(panel);
+      edt(() -> check(panel.findings.getRowCount() == 1 && panel.pendingView.get() == null && !panel.viewUpdatePending.get(),
+          "response drain waits for the latest coalesced view before reading result tables"));
+    } finally { release.countDown(); panel.close(); }
+  }
+
   static void rejectionAndExpiry() throws Exception {
     installTrafficPacketFactory();
     AtomicBoolean allowed = new AtomicBoolean(true); var panel = new ResponseReconPanel(api(allowed));
@@ -214,6 +245,13 @@ public final class ResponseBudgetTest extends WorkbenchTest {
     entered.countDown();try{release.await();}catch(InterruptedException interrupted){Thread.currentThread().interrupt();}
   }
   static void drain(ResponseReconPanel panel)throws Exception {
-    panel.worker.submit(()->{}).get(10,TimeUnit.SECONDS);edt(()->{});
+    panel.worker.submit(()->{}).get(10,TimeUnit.SECONDS);
+    long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+    AtomicBoolean settled = new AtomicBoolean();
+    do {
+      edt(() -> settled.set(panel.pendingView.get() == null && !panel.viewUpdatePending.get()));
+      if (settled.get()) return;
+    } while (System.nanoTime() < deadline);
+    throw new AssertionError("response view did not finish publishing after analysis completed");
   }
 }

@@ -82,6 +82,77 @@ final class AssessmentTracker {
 
   record EvidenceLink(String id, String filename, String time, Set<String> operations) {}
 
+  enum RemainingAction { PREPARE, DETAILS, EVIDENCE, ACCOUNT, TASK }
+  enum RemainingReason {
+    NOT_INSPECTED, CONDITIONS_CHANGED, RUNNING, CANCELLED, FAILED, RESULT_REVIEW,
+    INPUTS_PENDING, EVIDENCE_MISSING, EVIDENCE_UNVERIFIED, MANUAL_REVIEW, TASK_REVIEW
+  }
+
+  /** Filters are projections of recorded causes, not inferred security judgments. */
+  enum RemainingFocus {
+    ALL("전체"), NOT_INSPECTED("미실행"), CONDITIONS_CHANGED("조건 변경"),
+    EXECUTION("실행 중·중단·실패"), EVIDENCE("증거 보완"),
+    REVIEW("입력·수동 검토"), ORIGINAL_MISSING("원본 연결 필요");
+
+    private final String label;
+    RemainingFocus(String label) { this.label = label; }
+    @Override public String toString() { return label; }
+
+    boolean accepts(RemainingCheck check) {
+      return switch (this) {
+        case ALL -> true;
+        case NOT_INSPECTED -> check.reasons().contains(RemainingReason.NOT_INSPECTED);
+        case CONDITIONS_CHANGED -> check.reasons().contains(RemainingReason.CONDITIONS_CHANGED);
+        case EXECUTION -> check.reasons().stream().anyMatch(reason -> reason == RemainingReason.RUNNING
+            || reason == RemainingReason.CANCELLED || reason == RemainingReason.FAILED);
+        case EVIDENCE -> check.reasons().stream().anyMatch(reason -> reason == RemainingReason.EVIDENCE_MISSING
+            || reason == RemainingReason.EVIDENCE_UNVERIFIED);
+        case REVIEW -> check.reasons().stream().anyMatch(reason -> reason == RemainingReason.INPUTS_PENDING
+            || reason == RemainingReason.MANUAL_REVIEW || reason == RemainingReason.RESULT_REVIEW
+            || reason == RemainingReason.TASK_REVIEW);
+        case ORIGINAL_MISSING -> !check.account().isEmpty() && check.originalId().isEmpty();
+      };
+    }
+
+    List<RemainingCheck> select(List<RemainingCheck> checks) {
+      return checks.stream().filter(this::accepts).toList();
+    }
+
+    long count(List<RemainingCheck> checks) { return checks.stream().filter(this::accepts).count(); }
+  }
+
+  /** Derived guidance only: this projection neither completes work nor creates an execution. */
+  record RemainingCheck(String task, String account, String method, String url,
+                        List<RemainingReason> reasons, String explanation, RemainingAction action,
+                        String executionId, String originalId) {
+    RemainingCheck { reasons = List.copyOf(reasons); }
+    String key() { return task + "\n" + account + "\n" + method + "\n" + url; }
+    String causeLabel() {
+      return String.join(" · ", reasons.stream().map(reason -> switch (reason) {
+        case NOT_INSPECTED -> "미실행";
+        case CONDITIONS_CHANGED -> "조건 변경";
+        case RUNNING -> "실행 중";
+        case CANCELLED -> "중단";
+        case FAILED -> "실행 실패";
+        case RESULT_REVIEW -> "판정 검토";
+        case INPUTS_PENDING -> "입력 미완료";
+        case EVIDENCE_MISSING -> "증거 미저장";
+        case EVIDENCE_UNVERIFIED -> "증거 파일 확인";
+        case MANUAL_REVIEW -> "수동 검토";
+        case TASK_REVIEW -> "업무 검토";
+      }).toList());
+    }
+    String nextAction() {
+      return switch (action) {
+        case PREPARE -> originalId.isEmpty() ? "원본 선택 후 비교 준비" : "같은 원본 비교 준비";
+        case DETAILS -> "실행·판정 근거 확인";
+        case EVIDENCE -> "증거 정리·파일 확인";
+        case ACCOUNT -> "계정별 수동 점검";
+        case TASK -> "업무 설정·완료 검토";
+      };
+    }
+  }
+
   /** Review holds metadata and an opaque state stamp, never a credential or request body. */
   record CompletionReview(String account, String method, String url, String task,
                           String summary, String stamp) {}
@@ -152,6 +223,12 @@ final class AssessmentTracker {
           return size() > DETAIL_CACHE_LIMIT;
         }
       };
+  private final LinkedHashMap<String, List<RemainingCheck>> remainingSnapshots =
+      new LinkedHashMap<>(32, .75f, true) {
+        protected boolean removeEldestEntry(Map.Entry<String, List<RemainingCheck>> entry) {
+          return size() > DETAIL_CACHE_LIMIT;
+        }
+      };
 
   synchronized int detailCacheSize() {
     return detailSnapshots.size();
@@ -178,6 +255,7 @@ final class AssessmentTracker {
   private void invalidateTask(Task task) {
     task.cachedView = null;
     detailSnapshots.remove(task.id);
+    remainingSnapshots.remove(task.id);
     taskSnapshot = null;
   }
 
@@ -202,6 +280,7 @@ final class AssessmentTracker {
   private void invalidateAll() {
     operationViews.clear();
     detailSnapshots.clear();
+    remainingSnapshots.clear();
     accountSnapshot = null;
     taskSnapshot = null;
     // Existing panels may hold a revision for an ID reused by an import.
@@ -891,6 +970,89 @@ final class AssessmentTracker {
     return rows;
   }
 
+  synchronized List<RemainingCheck> remainingChecks(String id) {
+    Task task = task(id);
+    List<RemainingCheck> cached = remainingSnapshots.get(id);
+    if (cached != null) return cached;
+    List<RemainingCheck> result = new ArrayList<>();
+    List<OperationView> pairs = taskOperations(id);
+    boolean taskEvidenceMissing = task.requiresEvidence && pairs.stream().noneMatch(v -> v.evidence > 0);
+    for (OperationView view : pairs) {
+      Operation operation = operations.get(opKey(view.account, view.method, view.url));
+      ExecutionLedger.Run run = executions.latest(view.account, view.method, view.url);
+      List<RemainingReason> reasons = new ArrayList<>();
+      List<String> notes = new ArrayList<>();
+      RemainingAction action = null;
+      if (run != null && !executions.current(run, view.account)) {
+        reasons.add(RemainingReason.CONDITIONS_CHANGED);
+        notes.add("현재 계정·권한·조회 조건 확인 필요 · 이전 실행 조건을 완료 근거로 사용할 수 없음");
+        action = RemainingAction.PREPARE;
+      }
+      if (run == null && view.inspections == 0) {
+        reasons.add(RemainingReason.NOT_INSPECTED);
+        notes.add("기록된 검사 시도 없음 · 원본을 직접 선택해 비교 준비");
+        action = RemainingAction.PREPARE;
+      }
+      if (run != null && run.state() != ExecutionLedger.State.COMPLETED) {
+        reasons.add(switch (run.state()) {
+          case RUNNING -> RemainingReason.RUNNING;
+          case CANCELLED -> RemainingReason.CANCELLED;
+          case FAILED -> RemainingReason.FAILED;
+          default -> throw new IllegalStateException();
+        });
+        notes.add("최근 실행 " + ExecutionLedger.label(run.state()) + " · 정상 종료한 근거 확인 필요");
+        if (action == null) action = RemainingAction.DETAILS;
+      }
+      if (!view.review.isEmpty()) {
+        reasons.add(RemainingReason.RESULT_REVIEW);
+        notes.add("재검토: " + view.review);
+        if (action == null) action = run == null ? RemainingAction.ACCOUNT : RemainingAction.DETAILS;
+      } else if (run != null && run.state() == ExecutionLedger.State.COMPLETED
+          && view.inspections == 0 && !view.state.equals("점검 완료")) {
+        reasons.add(RemainingReason.RESULT_REVIEW);
+        notes.add("실행은 종료했으나 계정별 판정 근거 확인 필요");
+        if (action == null) action = RemainingAction.DETAILS;
+      }
+      long pendingInputs = view.parameters.stream().filter(p -> !p.state().equals("점검 완료")).count();
+      if (task.strictInputs && pendingInputs > 0) {
+        reasons.add(RemainingReason.INPUTS_PENDING);
+        notes.add("필수 입력 " + pendingInputs + "개 수동 점검 미완료");
+        if (action == null) action = RemainingAction.ACCOUNT;
+      }
+      Set<String> evidence = run == null
+          ? operation == null ? Set.of() : operation.evidence : run.evidence();
+      if (evidence.isEmpty() || taskEvidenceMissing) {
+        reasons.add(RemainingReason.EVIDENCE_MISSING);
+        notes.add((run == null ? "이 계정·API" : "최근 실행") + "의 증거 ZIP 미저장"
+            + (task.allEvidence || taskEvidenceMissing ? " · 업무 완료 조건" : " · 보존 권장"));
+        if (action == null) action = RemainingAction.EVIDENCE;
+      } else if (task.allEvidence && (operation == null || operation.evidence.stream()
+          .filter(evidence::contains).noneMatch(hash -> "확인됨".equals(evidenceStatus.get(hash))))) {
+        reasons.add(RemainingReason.EVIDENCE_UNVERIFIED);
+        notes.add("현재 증거 ZIP의 파일 확인 필요 · 재연결 또는 해시 재검증");
+        if (action == null) action = RemainingAction.EVIDENCE;
+      }
+      if (!view.state.equals("점검 완료")) {
+        reasons.add(RemainingReason.MANUAL_REVIEW);
+        notes.add("계정별 URL 수동 완료 전 판정 검토 필요");
+        if (action == null) action = RemainingAction.ACCOUNT;
+      }
+      if (!reasons.isEmpty()) result.add(new RemainingCheck(id, view.account, view.method, view.url,
+          reasons, String.join("\n", notes), action, run == null ? "" : run.id(), run == null ? "" : run.originalId()));
+    }
+    if (pairs.isEmpty() || !task.review.isEmpty() || !task.completed
+        && pairs.stream().allMatch(v -> v.state.equals("점검 완료"))) {
+      String explanation = pairs.isEmpty() ? "요구 계정과 같은 Origin의 API를 업무에 등록하세요."
+          : !task.review.isEmpty() ? "업무 범위·완료 조건 재검토: " + task.review
+          : "계정별 완료와 업무 완료는 별도 · 요구 범위·입력·증거 조건을 검토하세요.";
+      result.add(new RemainingCheck(id, "", "", "", List.of(RemainingReason.TASK_REVIEW),
+          explanation, RemainingAction.TASK, "", ""));
+    }
+    List<RemainingCheck> snapshot = List.copyOf(result);
+    remainingSnapshots.put(id, snapshot);
+    return snapshot;
+  }
+
   // Summaries retain only counts/state. Detailed pairs are cached for recently
   // opened tasks, not for every potential account × API combination in a project.
   private List<OperationView> operationPairs(Task task) {
@@ -1531,3 +1693,4 @@ final class AssessmentTracker {
     workbook.put("점검 이력", eventRows);
   }
 }
+

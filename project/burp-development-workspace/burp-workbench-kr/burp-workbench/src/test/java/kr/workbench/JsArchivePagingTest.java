@@ -40,9 +40,49 @@ public final class JsArchivePagingTest extends WorkbenchTest {
       check(archive.read(largeKey).source().equals(large),"explicit full compatibility read preserves captured source");
       Files.writeString(root.resolve("v2/index/dirty"),"interrupted index update");var recovered=new JsArchive(root);recovered.load();check(recovered.counts().apis()==4&&recovered.page(0,"").total()==463,"interrupted index update rebuilds bounded records and exact totals");
       var usage=recovered.usage();check(usage.bytes()>large.length()&&usage.records()==463&&usage.protectedRecords()==1,"disk usage distinguishes records and preserved history");
-      legacy(root.resolve("legacy"));cache();panelWorkflow(root.resolve("panel"));
+      cacheInvalidation(root.resolve("query-cache"));legacy(root.resolve("legacy"));cache();panelWorkflow(root.resolve("panel"));
     }finally{Files.walkFileTree(root,new SimpleFileVisitor<Path>(){public FileVisitResult visitFile(Path file,java.nio.file.attribute.BasicFileAttributes attrs)throws java.io.IOException{Files.delete(file);return FileVisitResult.CONTINUE;}public FileVisitResult postVisitDirectory(Path dir,java.io.IOException error)throws java.io.IOException{Files.delete(dir);return FileVisitResult.CONTINUE;}});}
     System.out.println("JsArchivePagingTest: "+checks+" checks passed");
+  }
+  static void cacheInvalidation(Path root)throws Exception{
+    var archive=new JsArchive(root);archive.load();
+    for(int n=0;n<430;n++)archive.save("https://app.test/cache-"+n+".js","x","","",result("/shared"),null,JsMiner.hash("cache-"+n));
+    var first=archive.page(0," CACHE- ");var next=archive.page(200,"cache-");var last=archive.page(400,"cache-");
+    check(first.total()==430&&next.rows().size()==200&&last.rows().size()==30,"normalized query pages preserve total and complete final page");
+    check(first.rows().get(0).key().endsWith("429.js")&&next.rows().get(0).key().endsWith("229.js")&&last.rows().get(0).key().endsWith("29.js"),"cached matching digests preserve newest-first page order");
+    var cancel=new AtomicInteger();check(archive.page(0,"different",()->cancel.incrementAndGet()>30).cancelled(),"cancelled replacement search does not publish a partial total");
+    check(archive.page(400,"cache-").rows().equals(last.rows()),"cancelled other query preserves previous completed result");
+    check(archive.page(0,"cache-",()->true).cancelled(),"cached lookup still observes cancellation");
+    String key="https://app.test/cache-428.js";archive.delete(key);
+    check(archive.page(0,"cache-").total()==429&&archive.page(0,"428.js").total()==0,"deletion invalidates both total and matching rows");
+    archive.save(key,"restored","","",result("/shared"),null,JsMiner.hash("restored"));
+    check(archive.page(0,"cache-").total()==430&&archive.page(0,"cache-").rows().get(0).key().equals(key),"re-added key appears once in newest position");
+    archive.updateResult(key,new JsAnalysis.Result(List.of(),List.of(),"new-status",false));
+    check(archive.page(0,"NEW-STATUS").total()==1&&archive.page(0,"complete").total()==429,"result status update invalidates query membership");
+    archive.protect(key);check(archive.page(0,"new-status").rows().get(0).key().equals(key)&&archive.protectedRecord(key),"protection preserves search and exact selected record");
+    var reopened=new JsArchive(root);reopened.load();
+    check(reopened.page(0,"new-status").total()==1&&reopened.page(400,"cache-").rows().size()==30,"restart rebuilds transient query state from current disk metadata");
+    var all=new ArrayList<String>();for(int offset=0;offset<430;offset+=200)for(var row:archive.page(offset,"").rows())all.add(row.key());
+    check(all.size()==430&&new HashSet<>(all).size()==430&&all.get(0).equals(key),"unfiltered page checkpoints preserve order and uniqueness after tombstones");
+    archive.delete("https://app.test/cache-427.js");
+    check(archive.page(200,"").rows().size()==200&&archive.page(400,"").rows().size()==29,"mutation invalidates blank-page checkpoints before later-page reads");
+    archive.page(0,"cache-");Files.write(root.resolve("v2/index/query-page.bin"),new byte[]{1,2,3});
+    check(archive.page(200,"cache-").rows().size()==200&&archive.page(0,"cache-").total()==429,"damaged optional query cache is rebuilt without losing readable history");
+    var left=archive.page(0,"cache-1");var other=new JsArchive(root);other.load();var right=other.page(0,"cache-2");
+    check(left.total()==right.total()&&archive.page(0,"cache-1").rows().equals(left.rows()),"another instance cannot substitute an equal-size opposite-query cache");
+    Path cacheFile=root.resolve("v2/index/query-page.bin");byte[] damaged=Files.readAllBytes(cacheFile);
+    System.arraycopy(JsMiner.hash("https://app.test/cache-299.js").getBytes(StandardCharsets.US_ASCII),0,damaged,64,64);Files.write(cacheFile,damaged);
+    check(archive.page(0,"cache-1").rows().equals(left.rows()),"same-size corruption containing a valid unrelated record cannot change cached results");
+    archive.page(0,"new-status");other.updateResult("https://app.test/cache-426.js",new JsAnalysis.Result(List.of(),List.of(),"new-status",false));
+    check(archive.page(0,"new-status").total()==2,"completed status update by another instance invalidates membership without a query from the writer");
+    archive.page(0,"");archive.page(200,"");other.save("https://app.test/cache-added.js","new","","",result("/shared"),null,JsMiner.hash("added"));
+    check(archive.page(0,"").total()==430&&archive.page(0,"").rows().get(0).key().endsWith("cache-added.js")&&archive.page(400,"").rows().size()==30,"completed insertion refreshes another instance's count and page checkpoints");
+    archive.page(0,"new-status");other.delete("https://app.test/cache-426.js");
+    check(archive.page(0,"new-status").total()==1&&archive.page(0,"").total()==429,"completed deletion invalidates another instance's filtered and unfiltered views");
+    archive.page(0,"cache-");Files.writeString(root.resolve("v2/index/dirty"),"rebuild elsewhere");var rebuilder=new JsArchive(root);rebuilder.load();
+    check(archive.page(0,"cache-").total()==429&&archive.page(0,"").total()==429,"index rebuild publishes a new generation to existing readers");
+    Files.createDirectory(root.resolve("v2/index/query-page.building"));
+    check(archive.page(0,"428.js").total()==1,"unwritable optional cache falls back to a complete uncached query");
   }
   static void legacy(Path path)throws Exception{
     Files.createDirectories(path);String key="https://old.test/bundle.js",hash=JsMiner.hash("old");var result=result("/old");

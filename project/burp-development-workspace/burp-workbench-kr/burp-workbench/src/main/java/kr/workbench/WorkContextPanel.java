@@ -11,7 +11,7 @@ final class WorkContextPanel extends JPanel {
   private final AtomicBoolean refreshPending = new AtomicBoolean();
 
   WorkContextPanel(WorkContext context) {
-    super(new BorderLayout(0, 3));
+    super(new BorderLayout(6, 0));
     this.context = context;
     setName("wb.work.context");
     request.setName("wb.work.context.request");
@@ -20,8 +20,12 @@ final class WorkContextPanel extends JPanel {
     request.setMinimumSize(new Dimension(100, 18));
     state.setMinimumSize(new Dimension(100, 18));
     setBorder(BorderFactory.createEmptyBorder(5, 9, 5, 9));
-    add(request, BorderLayout.NORTH);
-    add(state, BorderLayout.CENTER);
+    JPanel labels = new JPanel(new BorderLayout(0, 3));
+    labels.setOpaque(false);
+    labels.setMinimumSize(new Dimension(100, 38));
+    labels.add(request, BorderLayout.NORTH);
+    labels.add(state, BorderLayout.CENTER);
+    add(labels, BorderLayout.CENTER);
     setMinimumSize(new Dimension(180, 48));
     context.onChange(this::scheduleRefresh);
     refresh();

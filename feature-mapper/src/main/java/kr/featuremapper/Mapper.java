@@ -439,6 +439,9 @@ public final class Mapper implements AutoCloseable {
     String bodyHash = str(event, "bodyHash");
     if (!bodyHash.isEmpty() && !bodyHash.matches("[a-f0-9]{64}"))
       throw new IllegalArgumentException("잘못된 본문 해시");
+    String hashSource = str(event, "bodyHashSource");
+    if (!Set.of("", "web-request", "page-observation").contains(hashSource))
+      throw new IllegalArgumentException("잘못된 본문 해시 출처");
     if (!str(event, "method").matches("[!#$%&'*+.^_`|~0-9A-Za-z-]{1,32}"))
       throw new IllegalArgumentException("잘못된 요청 메서드");
     if (str(event, "actionId").isBlank() || str(event, "label").isBlank()) return;
@@ -452,6 +455,7 @@ public final class Mapper implements AutoCloseable {
             "url",
             "method",
             "bodyHash",
+            "bodyHashSource",
             "actionId",
             "label",
             "page",
@@ -541,6 +545,8 @@ public final class Mapper implements AutoCloseable {
       p.reasons.add("브라우저 요청 대조: URL·메서드 일치 · 시각 차이 "
           + Math.abs(p.time - num(e, "time")) + "ms · "
           + (str(e, "bodyHash").isEmpty() ? "본문 해시 미확인" : "본문 SHA-256 일치"));
+      if (str(e, "bodyHashSource").equals("page-observation"))
+        p.reasons.add("본문 해시 출처: 페이지 관측값과 보관 원본 대조 · 페이지 코드는 출처 인증 또는 동작 인과관계의 증명이 아님");
       p.confidence = p.parents.isEmpty() ? "중간" : "높음";
       // Temporal browser attribution is context, never proof of JS causality.
       attachAncestors(p, f.id, p.run, 0);
@@ -578,7 +584,8 @@ public final class Mapper implements AutoCloseable {
       item.browserTab = "";
       item.browserFrame = "";
       item.confidence = correction == null ? "낮음" : "높음";
-      item.reasons.removeIf(x -> x.startsWith("브라우저 화면·동작:") || x.startsWith("브라우저 요청 대조:"));
+      item.reasons.removeIf(x -> x.startsWith("브라우저 화면·동작:") || x.startsWith("브라우저 요청 대조:")
+          || x.startsWith("본문 해시 출처:"));
       item.reasons.add("동시 동일 요청·브라우저 동작 중복으로 화면 매핑 보류");
     }
   }

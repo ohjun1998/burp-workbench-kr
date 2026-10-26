@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.Predicate;
+import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -40,6 +41,18 @@ final class AssessmentPanel implements AutoCloseable {
       inputTable = new JTable(inputModel),
       taskTable = new JTable(taskModel),
       detailTable = new JTable(detailModel);
+  final DefaultTableModel remainingModel = EnvironmentPanel.model("계정", "요청", "필요한 확인", "다음 작업");
+  final JTable remainingTable = new JTable(remainingModel);
+  final JTextArea remainingExplanation = new JTextArea(6, 40);
+  final JComboBox<AssessmentTracker.RemainingFocus> remainingFilter =
+      new JComboBox<>(AssessmentTracker.RemainingFocus.values());
+  final JLabel remainingSummary = new JLabel("업무를 선택하면 남은 점검을 표시합니다.");
+  final JTabbedPane taskDetailPages = new JTabbedPane();
+  final JButton remainingNext, remainingRun, remainingEvidence;
+  final KeyedTableRows<String> remainingRows = new KeyedTableRows<>();
+  List<AssessmentTracker.RemainingCheck> allRemaining = List.of(), remaining = List.of();
+  private long remainingNavigationRevision;
+  record RemainingNavigation(long revision, AssessmentTracker.RemainingCheck check) {}
   final JLabel accountSummary = new JLabel(), taskSummary = new JLabel();
   List<AssessmentTracker.OperationView> operations = List.of(), taskDetails = List.of();
   List<AssessmentTracker.TaskView> tasks = List.of();
@@ -63,6 +76,8 @@ final class AssessmentPanel implements AutoCloseable {
   String editingTask = "", editingAccount = "", pendingMethod = "", pendingUrl = "";
   final JLabel targetPreview = new JLabel();
   final TargetWindow accountWindow, taskWindow, targetWindow, historyWindow;
+  final TargetWindow executionWindow;
+  String focusedExecution = "";
   TargetWindow mapperDraftWindow;
   final JButton accountEdit,
       accountBind,
@@ -88,6 +103,11 @@ final class AssessmentPanel implements AutoCloseable {
   Supplier<List<HttpRequestResponse>> selectedTraffic = List::of;
   Predicate<AssessmentTracker.CompletionReview> completionReviewer = this::confirmCompletion;
   Supplier<Set<String>> authNames = () -> AuthComparePanel.DEFAULT_AUTH, cookieNames = Set::of;
+  Consumer<AssessmentTracker.RemainingCheck> preparationNavigator = check -> {
+    throw new IllegalArgumentException("요청·응답 목록에서 해당 API의 정확한 원본을 선택하고 비교 준비를 여세요.");
+  };
+  Consumer<String> executionNavigator = this::showExecutionMetadata;
+  Consumer<String> evidenceNavigator = id -> showEvidenceFiles();
 
   AssessmentPanel(ActivityPanel owner) {
     this.owner = owner;
@@ -129,7 +149,12 @@ final class AssessmentPanel implements AutoCloseable {
                     new JLabel("활동 추적 또는 계정별 목록의 선택 API를 추가합니다. 자동 요청 없음."),
                     row(button("업무에 추가", this::attachTarget))));
     historyWindow = new TargetWindow(owner, "계정·업무 점검 이력", this::historyContent);
-    for (JTable t : List.of(accountTable, inputTable, taskTable, detailTable)) {
+    executionWindow = new TargetWindow(owner, "선택 실행·증거 근거", () -> {
+      JTextArea text = new JTextArea(tracker.executionSummary(focusedExecution), 12, 65);
+      text.setEditable(false); text.setLineWrap(true); text.setWrapStyleWord(true);
+      return new JScrollPane(text);
+    });
+    for (JTable t : List.of(accountTable, inputTable, taskTable, detailTable, remainingTable)) {
       t.setAutoCreateRowSorter(true);
       t.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       t.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -138,6 +163,33 @@ final class AssessmentPanel implements AutoCloseable {
     widths(inputTable, 180, 110);
     widths(taskTable, 220, 65, 65, 105, 105, 90, 110, 145);
     widths(detailTable, 130, 72, 320, 110, 70, 70);
+    widths(remainingTable, 105, 270, 150, 175);
+    remainingTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    remainingTable.setName("wb.assessment.remaining");
+    remainingTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+      @Override public Component getTableCellRendererComponent(JTable table, Object value,
+          boolean selected, boolean focused, int row, int column) {
+        super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+        setToolTipText(Objects.toString(value, ""));
+        return this;
+      }
+    });
+    remainingFilter.setName("wb.assessment.remaining.filter");
+    remainingFilter.setToolTipText("기록된 사유로 남은 점검을 좁힙니다. 한 항목은 여러 사유에 포함될 수 있습니다.");
+    remainingFilter.setRenderer(new DefaultListCellRenderer() {
+      @Override public Component getListCellRendererComponent(JList<?> list, Object value,
+          int index, boolean selected, boolean focused) {
+        super.getListCellRendererComponent(list, value, index, selected, focused);
+        if (value instanceof AssessmentTracker.RemainingFocus focus)
+          setText(focus + " (" + focus.count(allRemaining) + ")");
+        return this;
+      }
+    });
+    remainingSummary.setName("wb.assessment.remaining.summary");
+    remainingExplanation.setName("wb.assessment.remaining.explanation");
+    remainingExplanation.setEditable(false);
+    remainingExplanation.setLineWrap(true);
+    remainingExplanation.setWrapStyleWord(true);
     inputTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     accountChoice.setPrototypeDisplayValue(
         new AssessmentTracker.Account("", "점검 계정 선택 · 비로그인", "", "", "", false));
@@ -228,12 +280,34 @@ final class AssessmentPanel implements AutoCloseable {
         row(taskTarget, taskRemove, WorkbenchUi.hint("선택 API에 적용 · Origin이 같은 계정만 조합")),
         BorderLayout.NORTH);
     details.add(new JScrollPane(detailTable));
-    tasksPage.add(
-        WorkbenchUi.split(
-            JSplitPane.VERTICAL_SPLIT,
-            new JScrollPane(taskTable),
-            WorkbenchUi.card("요구 계정 × API", details),
-            .45));
+    remainingNext = action("remaining.next", "다음 작업 열기", "선택한 사유에 맞는 화면을 엽니다. 이동만으로 요청을 전송하거나 완료하지 않습니다.", this::openRemainingAction);
+    remainingRun = action("remaining.run", "실행 상세", "해당 계정·API의 정확한 실행 ID로 근거를 엽니다.", () -> executionNavigator.accept(currentRemaining().executionId()));
+    remainingEvidence = action("remaining.evidence", "증거 정리", "정확한 실행을 선택하고 증거 정리 화면을 엽니다. 추가·저장은 직접 실행합니다.", () -> evidenceNavigator.accept(currentRemaining().executionId()));
+    JPanel remainingPage = new JPanel(new BorderLayout(4, 4));
+    JPanel remainingControls = new JPanel(new GridLayout(0, 1, 0, 3));
+    remainingControls.add(row(new JLabel("필요한 확인"), remainingFilter, remainingSummary));
+    remainingControls.add(row(remainingNext, remainingRun, remainingEvidence));
+    remainingPage.add(remainingControls, BorderLayout.NORTH);
+    JScrollPane remainingList = new JScrollPane(remainingTable),
+        remainingDetail = new JScrollPane(remainingExplanation);
+    JSplitPane remainingSplit = WorkbenchUi.split(
+        JSplitPane.VERTICAL_SPLIT, remainingList, remainingDetail, .62);
+    remainingSplit.setName("wb.assessment.remaining.split");
+    remainingList.setMinimumSize(new Dimension(80, 100));
+    remainingDetail.setMinimumSize(new Dimension(80, 65));
+    remainingList.setPreferredSize(new Dimension(600, 150));
+    remainingDetail.setPreferredSize(new Dimension(600, 85));
+    remainingPage.add(remainingSplit, BorderLayout.CENTER);
+    taskDetailPages.addTab("요구 계정 × API", details);
+    taskDetailPages.addTab("남은 점검", remainingPage);
+    taskDetailPages.setToolTipTextAt(1, "미실행·조건 변경·판정 검토·입력·증거와 다음 작업을 확인합니다.");
+    JScrollPane taskList = new JScrollPane(taskTable);
+    JSplitPane tasksSplit = WorkbenchUi.split(
+        JSplitPane.VERTICAL_SPLIT, taskList, taskDetailPages, .30);
+    tasksSplit.setName("wb.assessment.tasks.split");
+    taskList.setMinimumSize(new Dimension(80, 90));
+    taskDetailPages.setMinimumSize(new Dimension(80, 310));
+    tasksPage.add(tasksSplit);
     tasksPage.setToolTipText(taskSummary.getText());
     taskSummary.addPropertyChangeListener("text", e -> tasksPage.setToolTipText(taskSummary.getText()));
     accountChoice.addActionListener(
@@ -257,7 +331,7 @@ final class AssessmentPanel implements AutoCloseable {
         .getSelectionModel()
         .addListSelectionListener(
             e -> {
-              if (!updatingTables && !e.getValueIsAdjusting()) showTask();
+              if (!updatingTables && !e.getValueIsAdjusting()) { remainingNavigationRevision++; showTask(); }
             });
     detailTable
         .getSelectionModel()
@@ -265,6 +339,17 @@ final class AssessmentPanel implements AutoCloseable {
             e -> {
               if (!updatingTables && !e.getValueIsAdjusting()) updateActions();
             });
+    remainingTable.getSelectionModel().addListSelectionListener(e -> {
+      if (!updatingTables && !e.getValueIsAdjusting()) { remainingNavigationRevision++; showRemainingExplanation(); }
+    });
+    remainingFilter.addActionListener(e -> {
+      if (!updatingTables) {
+        remainingNavigationRevision++;
+        refreshRemainingRows();
+      }
+    });
+    owner.coveragePages.addChangeListener(e -> remainingNavigationRevision++);
+    taskDetailPages.addChangeListener(e -> remainingNavigationRevision++);
     updateActions();
     WorkbenchUi.style(accountsPage);
     WorkbenchUi.style(tasksPage);
@@ -318,6 +403,91 @@ final class AssessmentPanel implements AutoCloseable {
     taskUndo.setEnabled(task);
     taskTarget.setEnabled(detail && tracker.hasTasks());
     taskRemove.setEnabled(detail);
+    AssessmentTracker.RemainingCheck check = selectedRemaining();
+    remainingNext.setEnabled(check != null);
+    remainingNext.setText(check == null ? "다음 작업 열기" : check.nextAction());
+    remainingRun.setEnabled(check != null && !check.executionId().isEmpty());
+    remainingEvidence.setEnabled(check != null && !check.account().isEmpty());
+  }
+
+  AssessmentTracker.RemainingCheck selectedRemaining() {
+    int row = remainingTable.getSelectedRow();
+    int index = row < 0 ? -1 : remainingTable.convertRowIndexToModel(row);
+    return index < 0 || index >= remaining.size() ? null : remaining.get(index);
+  }
+
+  AssessmentTracker.RemainingCheck currentRemaining() {
+    var selected = selectedRemaining();
+    if (selected == null) throw new IllegalArgumentException("남은 점검 항목을 선택하세요.");
+    if (!tracker.remainingChecks(selected.task()).contains(selected)) {
+      refresh();
+      throw new IllegalArgumentException("업무·실행 조건이 바뀌었습니다. 갱신된 남은 점검을 다시 선택하세요.");
+    }
+    return selected;
+  }
+
+  RemainingNavigation remainingNavigation(AssessmentTracker.RemainingCheck check) {
+    if (!check.equals(currentRemaining())) throw new IllegalArgumentException("남은 점검 선택이 바뀌었습니다.");
+    return new RemainingNavigation(remainingNavigationRevision, check);
+  }
+
+  boolean remainingNavigationCurrent(RemainingNavigation navigation) {
+    if (navigation.revision() != remainingNavigationRevision
+        || !navigation.check().equals(selectedRemaining())) return false;
+    var task = selectedTask();
+    if (task == null || !task.id().equals(navigation.check().task())) return false;
+    try { return tracker.remainingChecks(task.id()).contains(navigation.check()); }
+    catch (IllegalArgumentException removedTask) { return false; }
+  }
+
+  void showRemainingExplanation() {
+    var selected = selectedRemaining();
+    remainingExplanation.setText(selected == null
+        ? remaining.isEmpty() && !allRemaining.isEmpty()
+            ? "현재 조건에 해당하는 항목이 없습니다. ‘전체’에서 다른 남은 점검을 확인하세요."
+            : "항목을 선택하면 미완료 이유와 다음 작업을 확인합니다. 증거 보존 권장과 업무 완료 조건을 구분합니다."
+        : (selected.account().isEmpty() ? "업무 전체" : "계정: " + tracker.account(selected.account()).label()
+            + " · " + selected.method() + " " + selected.url())
+            + "\n필요한 확인: " + selected.causeLabel()
+            + "\n" + selected.explanation() + "\n다음 작업: " + selected.nextAction()
+            + (selected.executionId().isEmpty() ? "" : "\n실행 ID: " + selected.executionId())
+            + (selected.originalId().isEmpty() ? "\n연결 원본 없음 · 같은 URL의 다른 요청으로 대신하지 않습니다."
+                : "\n원본 ID: " + selected.originalId()));
+    remainingExplanation.setCaretPosition(0);
+    updateActions();
+  }
+
+  void openRemainingAction() {
+    var selected = currentRemaining();
+    switch (selected.action()) {
+      case PREPARE -> preparationNavigator.accept(selected);
+      case DETAILS -> executionNavigator.accept(selected.executionId());
+      case EVIDENCE -> evidenceNavigator.accept(selected.executionId());
+      case TASK -> openTask(true);
+      case ACCOUNT -> {
+        owner.coveragePages.setSelectedComponent(accountsPage);
+        refreshAccounts();
+        accountFilter.setSelectedIndex(0);
+        selectAccount(selected.account());
+        refreshOperations();
+        for (int i = 0; i < operations.size(); i++) {
+          var operation = operations.get(i);
+          if (operation.method().equals(selected.method()) && operation.url().equals(selected.url())) {
+            int view = accountTable.convertRowIndexToView(i);
+            accountTable.setRowSelectionInterval(view, view);
+            accountTable.scrollRectToVisible(accountTable.getCellRect(view, 0, true));
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  void showExecutionMetadata(String id) {
+    if (id.isEmpty() || tracker.execution(id) == null) throw new IllegalArgumentException("연결된 실행이 없습니다.");
+    focusedExecution = id;
+    executionWindow.closeWindow();
+    executionWindow.open();
   }
 
   static JPanel row(Component... c) {
@@ -355,6 +525,46 @@ final class AssessmentPanel implements AutoCloseable {
     int row = taskTable.getSelectedRow();
     int index = row < 0 ? -1 : taskTable.convertRowIndexToModel(row);
     return index < 0 || index >= tasks.size() ? null : tasks.get(index);
+  }
+
+  String selectedTaskId() {
+    var selected = selectedTask();
+    return selected == null ? "" : selected.id();
+  }
+
+  /** Project-switch presentation reset only; underlying assessment metadata is retained. */
+  void clearResumeTaskSelection() {
+    remainingNavigationRevision++;
+    taskTable.clearSelection();
+    showTask();
+  }
+
+  /** Explicit resume only changes selection; it never starts a check or completes a task. */
+  boolean restoreTaskSelection(String taskId) {
+    if (taskId == null || tracker.tasks().stream().noneMatch(task -> task.id().equals(taskId))) return false;
+    remainingNavigationRevision++;
+    refresh();
+    for (int index = 0; index < tasks.size(); index++) {
+      if (!tasks.get(index).id().equals(taskId)) continue;
+      int row = taskTable.convertRowIndexToView(index);
+      if (row < 0) return false;
+      owner.coveragePages.setSelectedComponent(tasksPage);
+      taskTable.setRowSelectionInterval(row, row);
+      taskTable.scrollRectToVisible(taskTable.getCellRect(row, 0, true));
+      return true;
+    }
+    return false;
+  }
+
+  /** Metadata summary: a saved evidence link is not a current file-existence guarantee. */
+  String resumeTaskSummary(String taskId) {
+    var task = tracker.tasks().stream().filter(value -> value.id().equals(taskId)).findFirst().orElse(null);
+    if (task == null) return "저장된 업무가 현재 프로젝트에 없습니다.";
+    var checks = tracker.remainingChecks(taskId);
+    return task.title() + " · " + task.state() + " · 남은 점검 " + checks.size()
+        + " · 원본 연결 필요 " + AssessmentTracker.RemainingFocus.ORIGINAL_MISSING.count(checks)
+        + " · 증거 보완 " + AssessmentTracker.RemainingFocus.EVIDENCE.count(checks)
+        + "\n사유 수는 중복될 수 있습니다. 저장된 증거 연결과 현재 파일 확인은 별도입니다.";
   }
 
   void openAccount() {
@@ -829,9 +1039,10 @@ final class AssessmentPanel implements AutoCloseable {
   void showTask() {
     var selected = selectedTask();
     String key = selected == null ? "" : selected.id();
-    if (!key.equals(shownTask)) detailTable.clearSelection();
+    if (!key.equals(shownTask)) { detailTable.clearSelection(); remainingTable.clearSelection(); }
     shownTask = key;
     taskDetails = selected == null ? List.of() : tracker.taskOperations(selected.id());
+    allRemaining = selected == null ? List.of() : tracker.remainingChecks(selected.id());
     updatingTables = true;
     try {
       detailRows.update(
@@ -860,7 +1071,29 @@ final class AssessmentPanel implements AutoCloseable {
         selected == null
             ? taskSummary.getText()
             : selected.note() + " · 검사 관측과 수동 완료/ZIP 저장은 별도 단계");
+    refreshRemainingRows();
     updateActions();
+  }
+
+  void refreshRemainingRows() {
+    AssessmentTracker.RemainingFocus focus = (AssessmentTracker.RemainingFocus) remainingFilter.getSelectedItem();
+    if (focus == null) focus = AssessmentTracker.RemainingFocus.ALL;
+    remaining = focus.select(allRemaining);
+    updatingTables = true;
+    try {
+      remainingRows.update(remainingTable, remaining, AssessmentTracker.RemainingCheck::key, check -> new Object[]{
+          check.account().isEmpty() ? "업무 전체" : tracker.account(check.account()).label(),
+          check.account().isEmpty() ? "업무 범위·완료 조건" : check.method() + " " + check.url(),
+          check.causeLabel(), check.nextAction()});
+    } finally { updatingTables = false; }
+    remainingSummary.setText("표시 " + remaining.size() + " / 전체 " + allRemaining.size());
+    remainingSummary.setToolTipText("사유별 중복 집계 · " + String.join(" · ",
+        Arrays.stream(AssessmentTracker.RemainingFocus.values())
+            .filter(value -> value != AssessmentTracker.RemainingFocus.ALL)
+            .map(value -> value + " " + value.count(allRemaining)).toList()));
+    remainingFilter.repaint();
+    taskDetailPages.setTitleAt(1, "남은 점검 (" + allRemaining.size() + ")");
+    showRemainingExplanation();
   }
 
   JPanel historyContent() {
@@ -919,10 +1152,12 @@ final class AssessmentPanel implements AutoCloseable {
 
   public void close() {
     if (mapperDraftWindow != null) mapperDraftWindow.close();
-    for (var w : List.of(accountWindow, taskWindow, targetWindow, historyWindow)) w.close();
+    for (var w : List.of(accountWindow, taskWindow, targetWindow, historyWindow, executionWindow)) w.close();
     operationRows.clear();
     inputRows.clear();
     taskRows.clear();
     detailRows.clear();
+    remainingRows.clear();
   }
 }
+

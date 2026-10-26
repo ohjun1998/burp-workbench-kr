@@ -138,6 +138,37 @@ public final class UiLayoutPreview extends WorkbenchTest {
     }
     static Object unchecked(Object owner,String name){try{return get(owner,name);}catch(Exception e){throw new RuntimeException(e);}}
 
+    /** A real in-memory project store, while all non-persistence host behavior stays in the shared adapter. */
+    static MontoyaApi previewApi() {
+        var values=new java.util.concurrent.ConcurrentHashMap<String,java.util.Map<String,Object>>();
+        var data=proxy(burp.api.montoya.persistence.PersistedObject.class,(p,m,a)->{
+            String method=m.getName();
+            if(method.equals("equals"))return p==a[0];
+            if(method.equals("hashCode"))return System.identityHashCode(p);
+            if(method.equals("toString"))return "Preview project persistence";
+            String operation=method.startsWith("get")?"get":method.startsWith("set")?"set":method.startsWith("delete")?"delete":"";
+            if(!operation.isEmpty()&&a!=null&&a.length>0) {
+                var store=values.computeIfAbsent(method.substring(operation.length()),ignored->new java.util.concurrent.ConcurrentHashMap<>());
+                String key=a[0].toString();
+                if(operation.equals("get"))return store.get(key);
+                if(operation.equals("delete")){store.remove(key);return null;}
+                if(a[1]==null)store.remove(key);else store.put(key,a[1]);return null;
+            }
+            if(method.endsWith("Keys")) {
+                String kind=method.substring(0,method.length()-4);
+                kind=Character.toUpperCase(kind.charAt(0))+kind.substring(1);
+                return Set.copyOf(values.getOrDefault(kind,java.util.Map.of()).keySet());
+            }
+            return def(m);
+        });
+        data.setString(BuildInfo.storageKey("auth-setup-library-project-v1"),"11111111-1111-4111-8111-111111111111");
+        var fallbackPersistence=PayloadIntegrationTest.host(burp.api.montoya.persistence.Persistence.class);
+        var persistence=proxy(burp.api.montoya.persistence.Persistence.class,(p,m,a)->
+            m.getName().equals("extensionData")?data:m.invoke(fallbackPersistence,a));
+        var fallback=PayloadIntegrationTest.host(MontoyaApi.class);
+        return proxy(MontoyaApi.class,(p,m,a)->m.getName().equals("persistence")?persistence:m.invoke(fallback,a));
+    }
+
     static void renderGuides(WorkbenchExtension extension,Path out)throws Exception {
         java.util.List<String> measurements=new java.util.ArrayList<>();
         measurements.add("theme,width,height,feature,horizontalScroll,viewportWidth,contentWidth,textWidth,textHeight,lastGlyphBottom,maxGlyphRight,controlsVisible");
@@ -331,6 +362,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         var auth=(AuthComparePanel)get(ext,"authCompare");
         var activity=(ActivityPanel)get(ext,"activity");var tracker=activity.tracker.assessments;
         var js=(JsAnalysisPanel)get(ext,"jsAnalysis");
+        awaitUi(()->auth.setupBundles.save.isEnabled(),"project setup library restore");
         var bundle=auth.setupBundles.bundles.save(auth.captureBundle().withName("공지 관리 · 계정 권한과 쓰기 조회"),0);
         auth.setupBundles.refresh(bundle.key());
         scenario("next-auth-bundles.png","Setup bundle review",auth.setupBundles.model.size()==1&&auth.setupBundles.apply.isEnabled()&&bundle.settings().effects().size()==2,"Selected local bundle has two write rules; no apply/import/export operation is executed");
@@ -340,6 +372,8 @@ public final class UiLayoutPreview extends WorkbenchTest {
         auth.assign(1,new AuthComparePanel.Candidate(1002,"preview-member",origin,java.util.Map.of("cookie","sid=DEMO_MEMBER"),1,""));
         auth.profileNames[0].setText("관리자");auth.profileNames[1].setText("일반 사용자");
         auth.matrixRules.setText("PATCH /api/notices/101 ALLOW DENY UNKNOWN UNKNOWN\nDELETE /api/notices/101 ALLOW DENY UNKNOWN UNKNOWN");
+        // Capture the real selected-origin draft before later workflow fixtures change selection.
+        var currentSetup=auth.captureBundle();
         var write=request(origin+"/api/notices/101","PATCH",true,List.of(header("Cookie","DEMO_ADMIN")));
         var context=auth.context();var readiness=AuthReadiness.selected(context,List.of(write));
         var chosen=new java.util.concurrent.atomic.AtomicReference<String>();
@@ -364,6 +398,24 @@ public final class UiLayoutPreview extends WorkbenchTest {
         executions.setRowSelectionInterval(0,0);
         scenario("next-execution-links.png","Execution evidence linkage",executions.getRowCount()==2&&tracker.execution("preview-run-completed").evidence().size()==1&&tracker.execution("preview-run-completed").bindings().stream().anyMatch(binding->binding.tasks().contains(task)),"Synthetic original → execution → policy revision → task → ZIP hash");
         dialogPair(WorkbenchUi.settingsBody(history,()->{}),out,"next-execution-links");
+
+        var assessment=activity.assessmentPanel;
+        activity.refresh();
+        activity.coveragePages.setSelectedComponent(assessment.tasksPage);
+        for(int i=0;i<assessment.tasks.size();i++)if(assessment.tasks.get(i).id().equals(task)) {
+            int row=assessment.taskTable.convertRowIndexToView(i);assessment.taskTable.setRowSelectionInterval(row,row);break;
+        }
+        assessment.taskDetailPages.setSelectedIndex(1);
+        assessment.remainingTable.setRowSelectionInterval(0,0);
+        var navigation=(JTabbedPane)get(ext,"tabs");
+        var mapperTools=(JTabbedPane)get(ext,"mapperTools");
+        navigation.setSelectedComponent(mapperTools);mapperTools.setSelectedComponent(activity);
+        scenario("next-remaining-checks.png","Remaining work and explicit next step",
+            assessment.remaining.size()>=2&&assessment.remainingNext.isEnabled()
+                &&assessment.remaining.stream().anyMatch(row->row.reasons().contains(AssessmentTracker.RemainingReason.CANCELLED))
+                &&assessment.remaining.stream().anyMatch(row->row.reasons().contains(AssessmentTracker.RemainingReason.NOT_INSPECTED)),
+            "Unrun and cancelled requests expose concrete reasons and exact execution IDs without sending requests");
+        render((Container)get(ext,"root"),out.resolve("next-remaining-checks.png"),width,height);
 
         int before=tracker.tasks().size();
         activity.assessmentPanel.upsertMapperDraft("preview-notice-feature","공지 관리",List.of("GET "+origin+"/api/notices/101","DELETE "+origin+"/api/notices/101"));
@@ -391,6 +443,52 @@ public final class UiLayoutPreview extends WorkbenchTest {
         awaitUi(()->components(storage,javax.swing.JLabel.class).stream().anyMatch(label->label.getText().contains("보존/이전 버전 1")),"archive disk usage");
         scenario("next-js-retention.png","JS retention policy",components(storage,javax.swing.JCheckBox.class).get(0).isSelected()&&action(storage,"기간이 지난 이력 정리").isEnabled(),"One protected record; saving retention criteria and explicit pruning remain separate");
         dialogPair(WorkbenchUi.settingsBody(storage,()->{}),out,"next-js-retention");
+        renderNextUsability(ext,out,currentSetup,bundle);
+    }
+
+    /** 0.53.1 production review, project-filter and resume components; all metadata is synthetic. */
+    static void renderNextUsability(WorkbenchExtension ext,Path out,AuthSetupBundles.Bundle currentSetup,AuthSetupBundles.Bundle bundle) throws Exception {
+        var auth=(AuthComparePanel)get(ext,"authCompare");
+        var review=auth.setupBundles.reviewContent(currentSetup,bundle);
+        var summary=(javax.swing.JTextArea)UiLayoutTest.named(review,"wb.auth.setup.bundle.review.summary");
+        scenario("next-auth-bundle-diff.png","Setup bundle readable diff",summary.getText().contains("현재 활성 설정과의 차이")
+            &&summary.getText().contains("쓰기 허용은 해제"),"Production confirmation starts with rule differences and account reconnection guidance");
+        dialogPair(review,out,"next-auth-bundle-diff");
+        ((javax.swing.JToggleButton)UiLayoutTest.named(review,"wb.auth.setup.bundle.review.raw")).doClick(0);
+        scenario("next-auth-bundle-json.png","Setup bundle raw toggle",
+            UiLayoutTest.named(review,"wb.auth.setup.bundle.review.json").isVisible(),"Same production confirmation exposes full JSON only on request");
+        dialogPair(review,out,"next-auth-bundle-json");
+
+        var browser=ext.trafficBrowser;String previous=browser.captureSearchState();
+        var filters=new TrafficQuery("PATCH","2xx",0,false,false,false,true,false,true,"",30);
+        browser.restoreSearchState(TrafficSearchPresets.capture(filters));
+        browser.savePreset("공지 수정 · 최근 응답",filters,browser.projectIdentity());
+        awaitUi(()->browser.idle()&&browser.searchViewCurrent(),"saved filter results");
+        if(browser.table.getRowCount()!=1)throw new IllegalStateException("Saved PATCH filter must retain exactly its synthetic original");
+        browser.table.setRowSelectionInterval(0,0);
+        ext.openFeature("traffic");
+        Container desktop=(Container)get(ext,"root");
+        scenario("next-traffic-conditions.png","Active filters and saved project conditions",
+            UiLayoutTest.named(desktop,"wb.traffic.conditions")==browser.conditionBar()
+                &&components(browser.conditionBar(),JButton.class).stream().anyMatch(button->button.getText().contains("PATCH"))
+                &&((javax.swing.JComboBox<?>)UiLayoutTest.named(browser.conditionBar(),"wb.traffic.conditions.saved")).getItemCount()>0,
+            "Production traffic workspace displays active conditions and the named project-preset row");
+        render(desktop,out.resolve("next-traffic-conditions.png"),width,height);
+
+        String project="11111111-1111-4111-8111-111111111111";
+        var bookmark=new WorkspaceResume.Snapshot(project,"activity",3,"22222222-2222-4222-8222-222222222222",
+            "33333333-3333-4333-8333-333333333333:17",TrafficSearchPresets.capture(filters),System.currentTimeMillis());
+        var restored=new java.util.concurrent.atomic.AtomicInteger();
+        var resume=new WorkspaceResumePanel(bookmark,"저장된 업무를 찾을 수 없습니다. 점검 기록을 불러오세요.",false,"",
+            ignored->restored.incrementAndGet(),restored::incrementAndGet);
+        scenario("next-workspace-resume.png","Resume missing original and task guidance",
+            resume.details.getText().contains("원본이 현재 임시 저장소에 없습니다")
+                &&resume.details.getText().contains("점검 기록을 불러오세요")
+                &&resume.details.getText().contains("PATCH")&&resume.details.getText().contains("다시 연결")
+                &&restored.get()==0,
+            "Actual resume panel explains missing originals/tasks, saved filters and account reconnection without restoring automatically");
+        dialogPair(resume,out,"next-workspace-resume");
+        browser.restoreSearchState(previous);
     }
 
     public static void main(String[] args) throws Exception {
@@ -421,7 +519,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 UIManager.put(key, new FontUIResource(font.deriveFont(14f)));
         }
         ObjectFactoryLocator.FACTORY = proxy(MontoyaObjectFactory.class, (p,m,a) -> def(m));
-        MontoyaApi api = (MontoyaApi) PayloadIntegrationTest.host(MontoyaApi.class);
+        MontoyaApi api = previewApi();
         burp.BurpExtender entry=new burp.BurpExtender();
         entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
         edt(() -> entry.initialize(api));edt(()->{});

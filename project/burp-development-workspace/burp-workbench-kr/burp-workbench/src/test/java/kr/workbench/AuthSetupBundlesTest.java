@@ -105,7 +105,105 @@ public final class AuthSetupBundlesTest extends WorkbenchTest {
       closing.applySelected();
       check(applies.get() == 1, "unload during confirmation cannot apply settings after panel closure");
     });
-    check(captures.get() == 2 && reviews.get() == 2, "only explicit reviewed captures execute and no transport API is required");
+    check(captures.get() == 5 && reviews.get() == 2, "registration captures and explicit apply review snapshots execute without a transport API");
+    persistence();
     System.out.println("AuthSetupBundlesTest: " + checks + " checks passed");
+  }
+
+  static void fileIdle(AuthSetupBundlePanel panel) throws Exception {
+    var finished = new java.util.concurrent.CountDownLatch(1);
+    edt(() -> {
+      try {
+        var worker = (javax.swing.SwingWorker<?, ?>) get(panel, "fileWork");
+        if (worker == null) { finished.countDown(); return; }
+        worker.addPropertyChangeListener(event -> {
+          if (event.getPropertyName().equals("state") && event.getNewValue() == javax.swing.SwingWorker.StateValue.DONE) finished.countDown();
+        });
+      } catch (Exception error) { throw new AssertionError(error); }
+    });
+    if (!finished.await(5, java.util.concurrent.TimeUnit.SECONDS)) throw new AssertionError("bundle file worker did not finish");
+    edt(() -> {});
+  }
+
+  @FunctionalInterface interface FileAction { void run() throws Exception; }
+  static void fileRejects(FileAction action, String label) throws Exception {
+    try { action.run(); throw new AssertionError(label); }
+    catch (java.io.IOException | IllegalArgumentException expected) { check(true, label); }
+  }
+
+  static void persistence() throws Exception {
+    var root = Files.createTempDirectory("auth-bundle-persistence-");
+    var store = new AuthSetupBundleStore(root.resolve("project-a"));
+    var initial = bundle("영구 설정", 1); var revised = initial.withRevision(2);
+    List<AuthSetupBundlePanel> panels = new ArrayList<>();
+    try {
+      check(store.load().bundles().isEmpty(), "new project library starts empty without global fallback");
+      store.commit(List.of(), List.of(initial));
+      check(new AuthSetupBundleStore(store.directory).load().bundles().equals(List.of(initial)), "new library instance restores name target settings and revision");
+      store.commit(List.of(initial), List.of(revised));
+      check(AuthSetupBundles.read(store.backup).equals(List.of(initial)), "last committed generation remains as validated recovery backup");
+      fileRejects(() -> new AuthSetupBundleStore(store.directory).commit(List.of(initial), List.of(initial.withRevision(3))), "stale project writer cannot replace another window's revision");
+      check(store.load().bundles().equals(List.of(revised)), "conflicting save leaves committed snapshot intact");
+      try (var channel = java.nio.channels.FileChannel.open(store.directory.resolve("library.lock"), java.nio.file.StandardOpenOption.WRITE);
+           var held = channel.lock()) {
+        fileRejects(() -> store.commit(List.of(revised), List.of(initial.withRevision(3))), "concurrent file lock causes explicit retry rather than overwrite");
+      }
+      Files.writeString(store.primary, "{broken");
+      check(store.load().recovered() && store.load().bundles().equals(List.of(initial)), "damaged primary recovers complete prior snapshot without partially parsed rows");
+      store.commit(List.of(initial), List.of(revised));
+      check(!store.load().recovered() && AuthSetupBundles.read(store.backup).equals(List.of(initial)), "saving after recovery repairs primary and preserves good backup");
+      Files.writeString(store.primary, AuthSetupBundles.encode(List.of(revised)).replace(AuthSetupBundles.SCHEMA, "workbench-auth-setup-99"));
+      fileRejects(store::load, "future schema preserves data instead of silently rolling back to old backup");
+      AuthSetupBundles.write(store.primary, List.of(revised));
+
+      AtomicInteger applied = new AtomicInteger(); AtomicReference<AuthSetupBundlePanel> box = new AtomicReference<>();
+      edt(() -> {
+        var panel = new AuthSetupBundlePanel(null, () -> initial.withRevision(0), value -> applied.incrementAndGet(), store);
+        panels.add(panel); box.set(panel); panel.review = (title, values) -> true;
+      });
+      var first = box.get(); fileIdle(first);
+      check(first.bundles.snapshot().equals(List.of(revised)) && applied.get() == 0, "automatic project restore populates library only and never applies active settings");
+      edt(() -> { first.name.setText(initial.name()); first.saveCurrent(); }); fileIdle(first);
+      check(first.bundles.get(initial.key()).revision() == 3 && store.load().bundles().get(0).revision() == 3, "reviewed registration publishes memory only after durable project save");
+      check(applied.get() == 0, "project autosave never applies a bundle or enables request replay");
+      edt(first::close);
+      edt(() -> {
+        var panel = new AuthSetupBundlePanel(null, () -> initial.withRevision(0), value -> applied.incrementAndGet(), new AuthSetupBundleStore(store.directory));
+        panels.add(panel); box.set(panel); panel.review = (title, values) -> true;
+      });
+      var reopened = box.get(); fileIdle(reopened);
+      check(reopened.bundles.get(initial.key()).revision() == 3 && applied.get() == 0, "restarted panel restores exact saved revision without account or setting activation");
+      var external = initial.withRevision(4); store.commit(List.of(initial.withRevision(3)), List.of(external));
+      edt(() -> { reopened.name.setText(initial.name()); reopened.saveCurrent(); }); fileIdle(reopened);
+      check(reopened.bundles.get(initial.key()).revision() == 3 && store.load().bundles().equals(List.of(external)), "failed stale async save changes neither in-memory review nor newer disk state");
+      edt(reopened::restore); fileIdle(reopened);
+      check(reopened.bundles.get(initial.key()).revision() == 4, "reload resolves external library update before a new review");
+      edt(() -> reopened.importReviewed(List.of(bundle("불러온 설정", 1)))); fileIdle(reopened);
+      check(store.load().bundles().size() == 2 && applied.get() == 0, "reviewed JSON import persists complete library without applying imported settings");
+      edt(() -> { reopened.review = (title, values) -> false; reopened.removeSelected(); });
+      check(store.load().bundles().size() == 2, "cancelled deletion preserves the durable library");
+      edt(() -> { reopened.review = (title, values) -> true; reopened.removeSelected(); }); fileIdle(reopened);
+      check(store.load().bundles().equals(List.of(external)) && applied.get() == 0, "explicit library deletion frees capacity without changing active settings");
+      String saved = Files.readString(store.primary);
+      check(!saved.contains("Authorization") && !saved.contains("Cookie") && !saved.contains("sessionChecks") && !saved.contains("profileOwners"), "project persistence uses only existing credential-free exchange schema");
+      var other = new AuthSetupBundleStore(root.resolve("project-b"));
+      check(other.load().bundles().isEmpty(), "distinct projects cannot inherit another project's library");
+      Files.writeString(store.primary, "{broken"); Files.writeString(store.backup, "{broken-too");
+      edt(reopened::restore); fileIdle(reopened);
+      check(!reopened.save.isEnabled() && !reopened.read.isEnabled() && reopened.reload.isEnabled(), "unreadable primary and backup block overwrites while exposing retry");
+      check(Files.readString(store.primary).equals("{broken"), "failed restore leaves corrupt source available for recovery");
+      Map<String, String> projectData = new HashMap<>();
+      var data = proxy(burp.api.montoya.persistence.PersistedObject.class, (p, m, a) -> switch (m.getName()) {
+        case "getString" -> projectData.get(a[0]); case "setString" -> { projectData.put((String) a[0], (String) a[1]); yield null; } default -> def(m);
+      });
+      var persistence = proxy(burp.api.montoya.persistence.Persistence.class, (p, m, a) -> m.getName().equals("extensionData") ? data : def(m));
+      var api = proxy(burp.api.montoya.MontoyaApi.class, (p, m, a) -> m.getName().equals("persistence") ? persistence : def(m));
+      var projectStore = AuthSetupBundleStore.project(api);
+      check(projectStore != null && projectStore.directory.equals(AuthSetupBundleStore.project(api).directory), "Burp project identity resolves same local library after restart");
+      check(projectData.size() == 1 && projectData.keySet().iterator().next().startsWith("next."), "project metadata stores only a Next-namespaced UUID rather than credentials or rules");
+    } finally {
+      edt(() -> panels.forEach(AuthSetupBundlePanel::close));
+      try (var paths = Files.walk(root)) { for (var path : paths.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path); }
+    }
   }
 }

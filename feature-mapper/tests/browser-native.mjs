@@ -21,6 +21,9 @@ try {
   const id=new URL(worker.url()).host;
   check(!!id,'actual Chromium loads the Manifest V3 helper');
   const popup=await context.newPage();await popup.goto('chrome-extension://'+id+'/popup.html');
+  // The popup restores saved fields and diagnostics before registering handlers.
+  // Await the same module evaluation so it cannot erase fixture input or miss the click.
+  await popup.evaluate(async()=>{await import(chrome.runtime.getURL('popup.js'));});
   await popup.locator('#base').fill(info.base);await popup.locator('#token').fill(info.token);await popup.locator('#connect').click();
   await popup.waitForFunction(()=>document.querySelector('#status').textContent.includes('연결 완료'));
   check(true,info.proxy ? 'real helper popup pairs with the native Burp bridge' : 'real helper popup pairs with the production bridge fixture');
@@ -30,18 +33,31 @@ try {
   await popup.locator('#enable').click();
   await popup.waitForFunction(()=>document.querySelector('#status').textContent.includes('활성화 완료'));
   check(true,'site activation registers a real content script');
-  await lab.reload();await lab.locator('#post').click();await lab.waitForFunction(()=>document.querySelector('#done').textContent==='등록 완료');
+  await lab.reload();
+  await lab.waitForFunction(()=>globalThis.__featureMapperBodyAttached===true);
+  await lab.evaluate(()=>new Promise((resolve,reject)=>{
+    const timeout=setTimeout(()=>{window.removeEventListener('message',ready);reject(new Error('body observer activation timed out'));},5000);
+    function ready(event) { if(event.source===window && event.origin===location.origin && event.data?.source==='feature-mapper-body-control-v1' && event.data.enabled===true) {
+      clearTimeout(timeout);window.removeEventListener('message',ready);resolve();
+    } }
+    window.addEventListener('message',ready);
+    window.postMessage({source:'feature-mapper-body-ready-v1'},location.origin);
+  }));
+  await lab.locator('#post').click();await lab.waitForFunction(()=>document.querySelector('#done').textContent==='등록 완료');
   check(true,info.proxy ? 'a real button performs upload, save and follow-up fetch through Burp' : 'a real button performs upload, save and follow-up fetch against the fixture server');
   const actions=await worker.evaluate(()=>chrome.storage.session.get(null));
   const action=Object.values(actions).find(x=>x&&x.label==='게시글 등록');
   check(!!action,'trusted browser click delivers its visible function label');
   await lab.locator('#profile').click();await lab.waitForFunction(()=>document.querySelector('#done').textContent==='수정 완료');
-  await new Promise(resolve=>setTimeout(resolve,700));
+  for(let i=0;i<100;i++) { const delivered=await worker.evaluate(()=>chrome.storage.session.get('deliveryCount')); if(delivered.deliveryCount>=4)break; await new Promise(resolve=>setTimeout(resolve,50)); }
+  await lab.locator('#profileSecond').click();await lab.waitForFunction(()=>document.querySelector('#done').textContent==='재수정 완료');
+  for(let i=0;i<100;i++) { const delivered=await worker.evaluate(()=>chrome.storage.session.get('deliveryCount')); if(delivered.deliveryCount>=5)break; await new Promise(resolve=>setTimeout(resolve,50)); }
   const state=await worker.evaluate(()=>chrome.storage.session.get(null));
-  check(!state.lastError && state.deliveryCount >= 4,'browser request metadata reaches the bridge without errors');
+  check(!state.lastError && state.deliveryCount >= 5,'browser request metadata reaches the bridge without errors');
   await popup.waitForFunction(()=>document.querySelector('#diagnostics').textContent.includes('마지막 전달'));
   check(true,'helper displays successful delivery time independently of Burp mapping');
-  check(Object.values(state).some(x=>x&&x.label==='내 정보 수정'),'second screen action has its own function label');
+  check(Object.values(state).some(x=>Array.isArray(x)&&x.some(a=>a.label==='내 정보 수정')),'second screen action has its own function label');
+  check(Object.values(state).some(x=>x&&x.label==='내 정보 재수정'),'repeated same-URL update preserves its separate click label');
   await lab.bringToFront();await popup.locator('#disable').click();await popup.waitForFunction(()=>document.querySelector('#status').textContent.includes('해제 완료'));
   const configured=await worker.evaluate(()=>chrome.storage.local.get('origins'));
   check(!configured.origins.includes(info.lab),'site deactivation removes the target from capture configuration');

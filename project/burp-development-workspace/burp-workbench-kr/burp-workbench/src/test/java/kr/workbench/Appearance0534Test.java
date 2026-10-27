@@ -42,6 +42,9 @@ public final class Appearance0534Test extends WorkbenchTest {
     reject(()->WorkspaceAppearance.decode(WorkspaceAppearance.encode(defaults).replace("\"schema\":1","\"schema\":2")),"future schema preserved through rejection");
     reject(()->WorkspaceAppearance.decode("x".repeat(WorkspaceAppearance.MAX_JSON+1)),"oversized metadata rejected before parsing");
     reject(()->WorkspaceAppearance.decode(WorkspaceAppearance.encode(defaults).replace("\"scale\":100","\"scale\":100.5")),"fractional scale rejected");
+    var subset=new WorkspaceAppearance.Columns("0".repeat(24),List.of(0,1,2,3,7,8,9,10),List.of(56,75,230,65,45,110,55,130));
+    check(subset.order().get(7)==10,"visible subset retains full model indices above its visible column count");
+    reject(()->new WorkspaceAppearance.Columns("0".repeat(24),List.of(64),List.of(100)),"visible model index remains bounded to supported full schemas");
     Memory memory=new Memory();
     edt(()->{
       View first=view();WorkspaceAppearance appearance=new WorkspaceAppearance(memory,first.root,true,null);
@@ -107,6 +110,95 @@ public final class Appearance0534Test extends WorkbenchTest {
       check(mismatch.blocked()&&mismatch.state().project().equals(A),"foreign-project record is rejected");mismatch.close();
       WorkbenchUi.setAppearance(100,false);
     });
+    actualTrafficColumns();
     System.out.println("Appearance0534Test: "+checks+" checks passed");
   }
+  record Running(WorkbenchExtension extension,List<burp.api.montoya.extension.ExtensionUnloadingHandler> modern,List<burp.IExtensionStateListener> legacy) {}
+  static Running workspace(StabilizationIntegration0534Test.Host host)throws Exception {
+    int modern=PayloadIntegrationTest.modernUnloads.size(),legacy=PayloadIntegrationTest.legacyUnloads.size();
+    burp.BurpExtender entry=new burp.BurpExtender();
+    entry.registerExtenderCallbacks((burp.IBurpExtenderCallbacks)PayloadIntegrationTest.host(burp.IBurpExtenderCallbacks.class));
+    edt(()->entry.initialize(host.api));edt(()->{});
+    WorkbenchExtension extension=(WorkbenchExtension)get(entry,"workbench");
+    edt(()->{
+      JTable table=(JTable)unchecked(extension,"logTable");table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+      ((LayoutSettings)unchecked(extension,"commonSettings")).refreshProject();
+    });
+    return new Running(extension,List.copyOf(PayloadIntegrationTest.modernUnloads.subList(modern,PayloadIntegrationTest.modernUnloads.size())),List.copyOf(PayloadIntegrationTest.legacyUnloads.subList(legacy,PayloadIntegrationTest.legacyUnloads.size())));
+  }
+  static void stop(Running running)throws Exception {
+    if(running==null)return;
+    for(var handler:running.modern)handler.extensionUnloaded();
+    for(var handler:running.legacy)handler.extensionUnloaded();
+    edt(()->{});
+  }
+  static List<Integer> visibleModels(JTable table){List<Integer> indices=new ArrayList<>();for(int i=0;i<table.getColumnCount();i++)indices.add(table.getColumnModel().getColumn(i).getModelIndex());return List.copyOf(indices);}
+  static void actualTrafficColumns()throws Exception {
+    burp.api.montoya.internal.ObjectFactoryLocator.FACTORY=proxy(burp.api.montoya.internal.MontoyaObjectFactory.class,(p,m,a)->def(m));
+    StabilizationIntegration0534Test.Host host=new StabilizationIntegration0534Test.Host();
+    Map<String,Object> projectA=host.project.get();projectA.put(WorkspaceResume.PROJECT_KEY,A);
+    Map<String,Object> projectB=new HashMap<>();projectB.put(WorkspaceResume.PROJECT_KEY,B);
+    int sent=PayloadIntegrationTest.sent.get();Running first=null,second=null,third=null;
+    try {
+      first=workspace(host);WorkbenchExtension initial=first.extension;
+      edt(()->{
+        JTable table=(JTable)unchecked(initial,"logTable");LayoutSettings layout=(LayoutSettings)unchecked(initial,"commonSettings");
+        WorkspaceAppearance appearance=(WorkspaceAppearance)unchecked(layout,"appearance");
+        check(table.getModel().getColumnCount()==11&&table.getColumnCount()==8,"production traffic keeps11 model columns with8 visible columns");
+        check(visibleModels(table).equals(List.of(0,1,2,3,7,8,9,10)),"production metadata columns4 through6 are hidden");
+        table.moveColumn(table.convertColumnIndexToView(2),0);table.getColumnModel().getColumn(0).setWidth(231);
+        appearance.capture();
+        WorkspaceAppearance.State saved=WorkspaceAppearance.decode((String)projectA.get(WorkspaceAppearance.KEY));
+        String id=(String)table.getClientProperty("wb.appearance.id");
+        check(saved.columns().containsKey(id)&&saved.columns().get(id).order().equals(List.of(2,0,1,3,7,8,9,10)),"production traffic's actual visible subset is durably captured");
+        check(saved.columns().get(id).widths().get(0)==231,"production URL column width is stored with its exact model index");
+        JTable changedSubset=new JTable(table.getModel());
+        for(int hidden=6;hidden>=4;hidden--)changedSubset.removeColumn(changedSubset.getColumnModel().getColumn(hidden));
+        changedSubset.removeColumn(changedSubset.getColumnModel().getColumn(changedSubset.convertColumnIndexToView(7)));
+        changedSubset.addColumn(new javax.swing.table.TableColumn(4));
+        List<Integer> before=visibleModels(changedSubset);
+        try {
+          var restore=WorkspaceAppearance.class.getDeclaredMethod("restoreColumns",JTable.class,WorkspaceAppearance.Columns.class);restore.setAccessible(true);
+          restore.invoke(null,changedSubset,saved.columns().get(id));
+        }catch(ReflectiveOperationException error){throw new IllegalStateException(error);}
+        check(visibleModels(changedSubset).equals(before),"same full model with a different visible subset rejects stale saved ordering");
+        check(changedSubset.convertColumnIndexToView(7)<0&&changedSubset.convertColumnIndexToView(4)>=0,"restoration never changes tool-owned visible index membership");
+      });
+      stop(first);first=null;
+      second=workspace(host);WorkbenchExtension reopened=second.extension;
+      edt(()->{
+        JTable table=(JTable)unchecked(reopened,"logTable");LayoutSettings layout=(LayoutSettings)unchecked(reopened,"commonSettings");
+        WorkspaceAppearance appearance=(WorkspaceAppearance)unchecked(layout,"appearance");
+        check(visibleModels(table).equals(List.of(2,0,1,3,7,8,9,10)),"recreated production workspace restores hidden-subset column order");
+        check(table.getColumnModel().getColumn(0).getWidth()==231,"recreated production workspace restores URL width");
+        check(table.convertColumnIndexToView(4)<0&&table.convertColumnIndexToView(5)<0&&table.convertColumnIndexToView(6)<0,"restoration never exposes hidden traffic metadata");
+        String aSaved=(String)projectA.get(WorkspaceAppearance.KEY);host.project.set(projectB);layout.refreshProject();
+        check(visibleModels(table).equals(List.of(0,1,2,3,7,8,9,10)),"new project resets traffic order to its own visible subset defaults");
+        check(aSaved.equals(projectA.get(WorkspaceAppearance.KEY)),"project switch preserves the previous project's column metadata");
+        table.moveColumn(table.convertColumnIndexToView(10),0);table.getColumnModel().getColumn(0).setWidth(179);appearance.capture();
+        host.project.set(projectA);layout.refreshProject();
+        check(table.convertColumnIndexToModel(0)==2&&table.getColumnModel().getColumn(0).getWidth()==231,"returning to original project restores its own hidden-subset profile");
+        host.project.set(projectB);layout.refreshProject();
+        check(table.convertColumnIndexToModel(0)==10&&table.getColumnModel().getColumn(0).getWidth()==179,"second project independently retains its memo column placement");
+        host.project.set(projectA);layout.refreshProject();
+        TrafficBrowser browser=(TrafficBrowser)unchecked(reopened,"trafficBrowser");
+        TrafficQuery noMemo=new TrafficQuery("전체","전체",0,false,false,false,true,false,false,"",0);
+        browser.restoreSearchState(TrafficSearchPresets.capture(noMemo));appearance.capture();
+        check(table.getColumnModel().getColumn(table.convertColumnIndexToView(10)).getMaxWidth()==0,"memo visibility remains owned by traffic search settings");
+      });
+      stop(second);second=null;
+      third=workspace(host);WorkbenchExtension memoReopened=third.extension;
+      edt(()->{
+        JTable table=(JTable)unchecked(memoReopened,"logTable");
+        check(table.getColumnModel().getColumn(table.convertColumnIndexToView(10)).getMaxWidth()==0&&table.getColumnModel().getColumn(table.convertColumnIndexToView(10)).getWidth()==0,"reopening saved widths cannot unhide disabled memo column");
+        check(table.convertColumnIndexToView(4)<0&&table.convertColumnIndexToView(5)<0&&table.convertColumnIndexToView(6)<0,"reopening with memo disabled preserves all metadata column exclusions");
+        TrafficBrowser browser=(TrafficBrowser)unchecked(memoReopened,"trafficBrowser");
+        browser.restoreSearchState(TrafficSearchPresets.capture(TrafficQuery.defaults()));
+        check(table.getColumnModel().getColumn(table.convertColumnIndexToView(10)).getMaxWidth()==400,"memo can be explicitly enabled again without restoring hidden metadata");
+      });
+      check(PayloadIntegrationTest.sent.get()==sent,"appearance reopen and project switching send zero HTTP requests");
+    } finally {stop(first);stop(second);stop(third);WorkbenchUi.setAppearance(100,false);}
+  }
+  static Object unchecked(Object owner,String field){try{return get(owner,field);}catch(Exception error){throw new IllegalStateException(error);}}
+
 }

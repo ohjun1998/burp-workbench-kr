@@ -1,6 +1,7 @@
 package kr.workbench;
 
 import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.persistence.PersistedObject;
 import java.awt.*;
 import java.awt.event.*;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +16,19 @@ import javax.swing.table.*;
 final class WorkspaceAppearance implements AutoCloseable {
   static final String KEY = BuildInfo.storageKey("workspace-appearance-v1");
   static final int MAX_SURFACES = 96, MAX_COLUMNS = 64, MAX_JSON = 131072;
-  interface Storage { String project(); String read(); void write(String value); }
+  interface Storage {
+    String project(); String read(); void write(String value);
+    default String read(String expected) {
+      requireProject(expected,project());String value=read();requireProject(expected,project());return value;
+    }
+    default void write(String expected,String value) {
+      requireProject(expected,project());write(value);requireProject(expected,project());
+      if(!Objects.equals(value,read(expected)))throw new IllegalArgumentException("화면 설정 저장 확인 실패");
+    }
+  }
+  private static void requireProject(String expected,String actual) {
+    if(!uuid(expected)||!expected.equals(actual))throw new IllegalArgumentException("프로젝트가 바뀌었습니다. 현재 프로젝트의 화면 설정을 다시 확인하세요.");
+  }
   record Columns(String signature, List<Integer> order, List<Integer> widths) {
     Columns {
       order = List.copyOf(order); widths = List.copyOf(widths);
@@ -23,7 +36,7 @@ final class WorkspaceAppearance implements AutoCloseable {
       if (signature == null || !signature.matches("[0-9a-f]{24}") || n < 1 || n > MAX_COLUMNS || widths.size() != n)
         throw new IllegalArgumentException("열 설정 형식 오류");
       Set<Integer> indices = new HashSet<>(order);
-      if (indices.size() != n || indices.stream().anyMatch(i -> i < 0 || i >= n)
+      if (indices.size() != n || indices.stream().anyMatch(i -> i < 0 || i >= MAX_COLUMNS)
           || widths.stream().anyMatch(i -> i < 24 || i > 2000)) throw new IllegalArgumentException("열 설정 범위 오류");
     }
   }
@@ -110,8 +123,25 @@ final class WorkspaceAppearance implements AutoCloseable {
   static WorkspaceAppearance forApi(MontoyaApi api, Component root, boolean horizontal, Runnable changed) {
     return new WorkspaceAppearance(new Storage() {
       public String project() { return WorkspaceResume.projectIdentity(api); }
-      public String read() { return api.persistence().extensionData().getString(KEY); }
-      public void write(String value) { api.persistence().extensionData().setString(KEY, value); }
+      private PersistedObject data(String expected) {
+        if(api==null||api.persistence()==null)throw new IllegalArgumentException("프로젝트 저장을 사용할 수 없습니다.");
+        PersistedObject data=api.persistence().extensionData();
+        if(data==null)throw new IllegalArgumentException("프로젝트 저장을 사용할 수 없습니다.");
+        requireProject(expected,data.getString(WorkspaceResume.PROJECT_KEY));return data;
+      }
+      public String read() { return read(project()); }
+      public void write(String value) { write(project(),value); }
+      public String read(String expected) {
+        PersistedObject data=data(expected);String value=data.getString(KEY);
+        requireProject(expected,data.getString(WorkspaceResume.PROJECT_KEY));requireProject(expected,project());return value;
+      }
+      public void write(String expected,String value) {
+        // Anchor both the write and verification to the checked project-owned handle.
+        PersistedObject data=data(expected);requireProject(expected,project());data.setString(KEY,value);
+        requireProject(expected,data.getString(WorkspaceResume.PROJECT_KEY));
+        if(!Objects.equals(value,data.getString(KEY)))throw new IllegalArgumentException("화면 설정 저장 확인 실패");
+        requireProject(expected,project());
+      }
     }, root, horizontal, changed);
   }
   State state() { return state; }
@@ -132,7 +162,7 @@ final class WorkspaceAppearance implements AutoCloseable {
     }
     state = defaults(project, initialHorizontal);
     try {
-      String raw = storage.read();
+      String raw = storage.read(project);
       if (raw != null && !raw.isBlank()) {
         State loaded = decode(raw);
         if (!loaded.project.equals(project)) throw new IllegalArgumentException("다른 프로젝트의 화면 설정입니다.");
@@ -245,13 +275,18 @@ final class WorkspaceAppearance implements AutoCloseable {
     if (!next.equals(state)) { state = next; persist(); changed.run(); }
   }
   private static Columns captureColumns(JTable table) {
-    int n = table.getColumnCount(); if (n < 1 || n > MAX_COLUMNS || n != table.getModel().getColumnCount()) return null;
+    int n = table.getColumnCount(), modelColumns = table.getModel().getColumnCount();
+    if (n < 1 || n > MAX_COLUMNS || modelColumns < n || modelColumns > MAX_COLUMNS) return null;
     List<Integer> order = new ArrayList<>(), widths = new ArrayList<>();
     for (int i = 0; i < n; i++) { TableColumn column = table.getColumnModel().getColumn(i); order.add(column.getModelIndex()); widths.add(Math.max(24,Math.min(2000,column.getWidth()))); }
     return new Columns(signature(table), order, widths);
   }
   private static void restoreColumns(JTable table, Columns columns) {
     if (columns == null || table.getColumnCount() != columns.order.size() || !signature(table).equals(columns.signature)) return;
+    Set<Integer> visible = new HashSet<>();
+    for (int i = 0; i < table.getColumnCount(); i++) visible.add(table.getColumnModel().getColumn(i).getModelIndex());
+    // Hidden columns belong to the owning tool. Restore only the same visible subset of this exact model schema.
+    if (!visible.equals(new HashSet<>(columns.order))) return;
     for (int i = 0; i < columns.order.size(); i++) {
       int wanted = columns.order.get(i), index = table.convertColumnIndexToView(wanted);
       if (index >= 0 && index != i) table.moveColumn(index, i);
@@ -265,9 +300,9 @@ final class WorkspaceAppearance implements AutoCloseable {
       if (!project.equals(storage.project())) { refreshProject(); return; }
       String encoded = encode(state);
       if (encoded.length() > MAX_JSON) throw new IllegalArgumentException("화면 설정 저장 크기 제한");
-      storage.write(encoded);
+      storage.write(project,encoded);
       if (!project.equals(storage.project())) { refreshProject(); return; }
-      if (!encoded.equals(storage.read())) throw new IllegalStateException("화면 설정 저장 확인 실패");
+      if (!encoded.equals(storage.read(project))) throw new IllegalStateException("화면 설정 저장 확인 실패");
       problem = "";
     } catch (RuntimeException error) { problem = "화면 설정을 저장하지 못했습니다. 현재 표시에는 적용되며 재시작 후 복원은 보장되지 않습니다."; }
   }

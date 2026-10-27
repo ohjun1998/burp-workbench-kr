@@ -1,0 +1,31 @@
+{
+  "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+  "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.53.4.jar",
+  "releaseJarSha256": "795e6566bcc1f5f7d059383b82d60e3efeb00d873310681c896b45eeddacef9d",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "760x480",
+    "560x300"
+  ],
+  "renderedViews": 4,
+  "controlsMeasured": 24,
+  "clippedControlsOutsideScrollers": 0,
+  "smallControls": 0,
+  "collapsedRequiredWorkAreas": 0,
+  "tabAndHeadingLabelsMeasured": 0,
+  "clippedSelectedTabOrHeadingLabels": 0,
+  "minimumWorkAreas": {
+    "scope-list.png:wb.traffic.scope.table": 60
+  },
+  "failures": [],
+  "textFailures": [],
+  "scenariosChecked": 0,
+  "requiredScenarios": [],
+  "scenarioFailures": [],
+  "guideBodiesMeasured": 0,
+  "guideLayoutFailures": 0,
+  "guideFailures": []
+}

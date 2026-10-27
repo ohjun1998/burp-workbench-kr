@@ -164,9 +164,10 @@ public final class EvidenceStorageTest extends WorkbenchTest {
                 rejects(() -> panel.remember(q, response, "extra", "manual", ""), "existing 32-item manual evidence limit remains explicit");
                 Path retained = panel.evidenceStore.file();
                 panel.clearEvidence();
-                check(panel.evidence.isEmpty() && !Files.exists(retained), "clear removes evidence-owned originals and resets item list");
+                check(panel.evidence.isEmpty() && Files.exists(retained) && panel.evidenceHistory.canUndo(), "clear empties the active list while bounded recovery retains exact originals");
                 check(panel.evidenceStore.file() == null, "cleared evidence store stays lazy");
                 panel.remember(q, response, "after clear", "manual", "");
+                check(!Files.exists(retained), "successful new capture retires incompatible clear recovery originals");
                 Path second = panel.evidenceStore.file();
                 panel.close();
                 check(!Files.exists(second), "panel unload removes newly captured evidence originals");

@@ -23,7 +23,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
 /** Guide illustrations: production Swing UI + synthetic, local demonstration metadata.
- * This is not a native Burp GUI test and sends no network requests. */
+ * This is not a native Burp GUI test and sends no network requests.
+ * Detached panels are painted offscreen without addNotify(): a synthetic lightweight peer
+ * has no Window host and makes JDK accessibility caret events query an invalid native location.
+ * Layout, interactions, accessible metadata and all measured content gates remain enabled. */
 public final class UiLayoutPreview extends WorkbenchTest {
     static final java.util.List<String> rows = new java.util.ArrayList<>();
     static final java.util.List<String> contentRows = new java.util.ArrayList<>();
@@ -183,7 +186,6 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 var choices=(javax.swing.JComboBox<?>)UiLayoutTest.named(content[0],"wb.feature.guide.choice");
                 var open=(javax.swing.JButton)UiLayoutTest.named(content[0],"wb.feature.guide.open");
                 var prose=(javax.swing.JTextArea)UiLayoutTest.named(content[0],"wb.feature.guide.text");
-                body.addNotify();
                 for(var feature:FeatureGuide.all()) {
                     choices.setSelectedItem(feature);scroll.getViewport().setViewPosition(new java.awt.Point());
                     render(body,out.resolve("guide-"+feature.id()+".png"),width,height);
@@ -199,7 +201,6 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     }
                     measurements.add(String.join(",",csv(theme),""+width,""+height,csv(feature.id()),""+scroll.getHorizontalScrollBar().isVisible(),""+scroll.getViewport().getExtentSize().width,""+content[0].getWidth(),""+prose.getWidth(),""+prose.getHeight(),""+(int)Math.ceil(lastBottom),""+(int)Math.ceil(maxRight),""+controlsVisible));
                 }
-                body.removeNotify();
             }catch(Exception error){throw new RuntimeException(error);}
         });
         Files.write(out.resolve("guides.csv"),measurements,java.nio.charset.StandardCharsets.UTF_8);
@@ -340,12 +341,11 @@ public final class UiLayoutPreview extends WorkbenchTest {
             recon.retries.record(ref,ref.method(),ref.url(),states.get(i),notes.get(i));
         }
         var jsRetry=js.retryWindow.content.get();
-        JPanel jsBody=WorkbenchUi.settingsBody(jsRetry,()->{});jsBody.addNotify();
+        JPanel jsBody=WorkbenchUi.settingsBody(jsRetry,()->{});
         installHeaders(jsBody);
         renderAt(jsBody,out.resolve("next-js-retries.png"),760,480);
         if(js.retries.table.getRowCount()>0)js.retries.table.setRowSelectionInterval(0,0);
         renderAt(jsBody,out.resolve("next-js-retries-minimum.png"),560,300);
-        jsBody.removeNotify();
         ext.openFeature("response.recon");
         ((JTabbedPane)UiLayoutTest.named(recon,"wb.response.pages")).setSelectedIndex(3);
         installHeaders(root);
@@ -530,7 +530,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         var compare=new StructuredComparePanel();
         compare.leftInput.setText("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nX-Role: reader\r\n\r\n{\"user\":{\"role\":\"reader\",\"active\":true}}");
         compare.rightInput.setText("HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\nX-Role: reviewer\r\n\r\n{\"user\":{\"role\":\"reviewer\",\"active\":false},\"reason\":\"policy\"}");
-        compare.compare();compare.summaryTable.setRowSelectionInterval(0,0);
+        ComparisonTestSupport.compareAndWait(compare);compare.summaryTable.setRowSelectionInterval(0,0);
         scenario("usability-response-summary.png","Response summary preserves raw evidence and field differences",
             compare.summaryTable.getRowCount()>=4&&compare.leftRaw.getText().contains("200 OK")
                 &&compare.rightRaw.getText().contains("403 Forbidden"),
@@ -568,6 +568,104 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 "URL and JSON-path examples remain beside their inputs; no settings are applied");
             dialogPair(WorkbenchUi.settingsBody(effect,()->{}),out,"usability-inline-validation");
         } finally { validationOwner.close(); }
+        compare.close();
+        renderStabilization0534(ext,out);
+    }
+
+    /** New stabilization actions use production controls and the same unrelaxed layout measurements. */
+    static void renderStabilization0534(WorkbenchExtension ext,Path out)throws Exception {
+        Container desktop=(Container)get(ext,"root");
+        var browser=ext.trafficBrowser;
+        awaitUi(()->browser.positionReady(browser.capturePosition()),"stabilization starting traffic view");
+        ext.openFeature("traffic");
+        if(browser.table.getRowCount()>0)browser.table.setRowSelectionInterval(0,0);
+        int before=browser.model.getRowCount();
+        browser.freezeView.doClick(0);
+        for(int i=0;i<2;i++) {
+            var q=request("https://app.example.test/api/new-capture/"+i,"GET",true,List.of());
+            var s=response(200,"{\"new\":"+i+"}");registerTrafficPacket(q,s);
+            var save=WorkbenchExtension.class.getDeclaredMethod("storeTraffic",String.class,burp.api.montoya.http.message.requests.HttpRequest.class,burp.api.montoya.http.message.responses.HttpResponse.class);
+            save.setAccessible(true);Object row=save.invoke(ext,"화면 검증용 합성 수집",q,s);
+            var add=WorkbenchExtension.class.getDeclaredMethod("addTraffic",row.getClass());add.setAccessible(true);add.invoke(ext,row);
+        }
+        browser.publishCommittedRows();
+        scenario("stabilization-frozen-traffic.png","Frozen reader keeps capture independent",
+            browser.viewFrozen()&&browser.model.getRowCount()==before&&browser.pendingRows()==2
+                &&browser.newTraffic.getText().contains("2"),
+            "Two synthetic originals are committed while the visible reader stays at its prior publication boundary");
+        render(desktop,out.resolve("stabilization-frozen-traffic.png"),width,height);
+        browser.newTraffic.doClick(0);
+        awaitUi(()->browser.positionReady(browser.capturePosition()),"stabilization explicit capture refresh");
+        scenario("stabilization-frozen-traffic.png","Explicit new-request action publishes captured rows",
+            browser.model.getRowCount()==before+2&&browser.pendingRows()==0,"Capture is retained and no request is retransmitted");
+
+        var bounty=(BountySupportPanel)get(ext,"bountySupport");
+        if(bounty.evidence.isEmpty())throw new IllegalStateException("Evidence stabilization needs retained synthetic originals");
+        String evidenceId=bounty.evidence.get(0).evidenceId(),packetId=bounty.evidence.get(0).packetId();
+        bounty.evidenceTable.setRowSelectionInterval(0,0);
+        bounty.editingItemId=evidenceId;
+        bounty.itemName.setText("기준 사용자 원본");
+        bounty.itemNote.setText("직접 작성한 관찰: 기준 응답과 비교 응답을 확인합니다. 합성 화면 예시입니다.");
+        var itemEditor=bounty.itemEditorContent();
+        dialogPair(WorkbenchUi.settingsBody(itemEditor,()->{}),out,"stabilization-evidence-description");
+        bounty.applyEvidenceDescription();
+        scenario("stabilization-evidence-description.png","Authored item description preserves packet identity",
+            bounty.evidence.get(0).evidenceId().equals(evidenceId)&&bounty.evidence.get(0).packetId().equals(packetId)
+                &&bounty.evidence.get(0).label().equals("기준 사용자 원본"),
+            "Display prose is edited separately from retained raw originals and execution provenance");
+        int evidenceCount=bounty.evidenceCount();bounty.clearEvidence();
+        bounty.undoEvidenceEdit();bounty.redoEvidenceEdit();bounty.undoEvidenceEdit();
+        scenario("stabilization-evidence-draft.png","Clear supports undo redo and exact-original recovery",
+            bounty.evidenceCount()==evidenceCount&&bounty.evidence.get(0).evidenceId().equals(evidenceId)
+                &&bounty.evidence.get(0).packetId().equals(packetId),
+            "The bounded history restores exact original identities after a mistaken bundle clear");
+        bounty.evidenceTitle.setText("사용자 권한 비교 · 작성 중 초안");
+        bounty.insertWritingTemplate();
+        String authoredTitle=bounty.evidenceTitle.getText(),authoredImpact=bounty.impact.getText(),authoredRepro=bounty.repro.getText();
+        var reopened=new BountySupportPanel((MontoyaApi)get(ext,"api"),List::of,bounty.auth,bounty.activity);
+        try {
+            scenario("stabilization-evidence-draft.png","Project reopen restores prose without inventing original packets",
+                reopened.evidenceTitle.getText().equals(authoredTitle)&&reopened.impact.getText().equals(authoredImpact)
+                    &&reopened.repro.getText().equals(authoredRepro)&&reopened.evidenceCount()==0
+                    &&reopened.draftState.getText().contains("초안 저장"),
+                "A new production panel reads authored project prose; raw packets require a separate explicit source connection");
+        } finally {reopened.close();}
+        ext.openFeature("bounty");bounty.pages.setSelectedIndex(3);
+        render(desktop,out.resolve("stabilization-evidence-draft.png"),width,height);
+        dialogPair(WorkbenchUi.settingsBody(bounty.writingHelpContent(),()->{}),out,"stabilization-evidence-writing");
+
+        var settings=(LayoutSettings)get(ext,"commonSettings");
+        var dataTabs=(JTabbedPane)get(ext,"dataTabs");
+        var workspaceCompare=(StructuredComparePanel)dataTabs.getComponentAt(2);
+        workspaceCompare.leftInput.setText("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{\"owner\":\"reader\",\"active\":true}");
+        workspaceCompare.rightInput.setText("HTTP/1.1 403 Forbidden\r\nContent-Type: application/json\r\n\r\n{\"owner\":\"reviewer\",\"active\":false}");
+        ComparisonTestSupport.compareAndWait(workspaceCompare);
+        int originalScale=settings.scale.getSelectedIndex(),originalDensity=settings.density.getSelectedIndex();
+        try {
+            for(int scale=0;scale<3;scale++) {
+                settings.scale.setSelectedIndex(scale);
+                var settingsBody=WorkbenchUi.settingsBody(settings,()->{});
+                dialogPair(settingsBody,out,"stabilization-display-"+new int[]{100,125,150}[scale]);
+                ext.openFeature("traffic");
+                render(desktop,out.resolve("stabilization-traffic-"+new int[]{100,125,150}[scale]+".png"),width,height);
+                scenario("stabilization-traffic-"+new int[]{100,125,150}[scale]+".png","Display scale keeps traffic reader active",
+                    browser.table.getFont().getSize2D()>=13f*(1+scale*.25f)
+                        &&browser.table.getRowHeight()>=browser.table.getFontMetrics(browser.table.getFont()).getHeight()+2,
+                    "Production font and row sizing are measured at the selected project display scale");
+                ext.openFeature("bounty");bounty.pages.setSelectedIndex(3);
+                render(desktop,out.resolve("stabilization-evidence-"+new int[]{100,125,150}[scale]+".png"),width,height);
+                scenario("stabilization-evidence-"+new int[]{100,125,150}[scale]+".png","Scaled evidence retains draft and edit recovery",
+                    bounty.evidenceCount()==evidenceCount&&bounty.evidenceTitle.getText().equals(authoredTitle)
+                        &&bounty.evidence.get(0).evidenceId().equals(evidenceId)&&bounty.evidenceUndoAction.isEnabled(),
+                    "Changing display scale preserves authored draft, exact originals and the available bounded undo history");
+                ext.openFeature("data");dataTabs.setSelectedIndex(2);
+                render(desktop,out.resolve("stabilization-comparison-"+new int[]{100,125,150}[scale]+".png"),width,height);
+                scenario("stabilization-comparison-"+new int[]{100,125,150}[scale]+".png","Scaled response comparison retains result and original text",
+                    workspaceCompare.summaryTable.getRowCount()==3&&workspaceCompare.leftRaw.getText().contains("200 OK")
+                        &&workspaceCompare.rightRaw.getText().contains("403 Forbidden"),
+                    "Production comparison stays attached to the same asynchronous result while fonts change");
+            }
+        } finally {settings.scale.setSelectedIndex(originalScale);settings.density.setSelectedIndex(originalDensity);}
     }
 
     public static void main(String[] args) throws Exception {
@@ -606,7 +704,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
         if(args.length>5&&args[5].equals("next")) {
             try {
                 seedNext(ext);
-                edt(()->{try{JPanel root=(JPanel)unchecked(ext,"root");root.addNotify();renderNext(ext,out);root.removeNotify();}catch(Exception error){throw new RuntimeException(error);}});
+                edt(()->{try{JPanel root=(JPanel)unchecked(ext,"root");renderNext(ext,out);}catch(Exception error){throw new RuntimeException(error);}});
                 writeMeasurements(out);
             }finally{unload();}
             if(!renderingErrors.isEmpty())throw new IllegalStateException("Next form preview failed");
@@ -660,7 +758,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
             try {
                 var auth=(AuthComparePanel)get(ext,"authCompare");
                 edt(()->{
-                    JPanel desktop=(JPanel)unchecked(ext,"root");JTabbedPane pages=(JTabbedPane)unchecked(ext,"tabs");pages.setSelectedComponent(auth);desktop.setVisible(true);desktop.addNotify();installHeaders(desktop);
+                    JPanel desktop=(JPanel)unchecked(ext,"root");JTabbedPane pages=(JTabbedPane)unchecked(ext,"tabs");pages.setSelectedComponent(auth);desktop.setVisible(true);installHeaders(desktop);
                     try{render(desktop,out.resolve("auth-empty-desktop.png"),width,height);}catch(Exception e){throw new RuntimeException(e);}
                     auth.setDetection(true);
                     auth.observe(AuthRecordTest.q("ALICE"),response(200,"{}"));auth.observe(AuthRecordTest.q("BOB"),response(200,"{}"));
@@ -675,7 +773,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                     run.baselineState=AuthComparePanel.Run.Baseline.VALID;run.baselineNote="현재 기준 HTTP 200 · 비교 직전 재확인";run.note="완료";auth.runs.add(run);auth.historyModel.addRow(new Object[]{1,original.url(),"","","","완료"});auth.refresh(run);auth.history.setRowSelectionInterval(0,0);auth.show(run);
                     installHeaders(auth);auth.setVisible(true);
                     try {
-                        render(desktop,out.resolve("auth-desktop.png"),width,height);desktop.removeNotify();
+                        render(desktop,out.resolve("auth-desktop.png"),width,height);
                         render(auth,out.resolve("auth-results.png"),width,height);
                         auth.candidateDetails.load(credentials.get(1));installHeaders(auth.candidateDetails);auth.candidateDetails.setVisible(true);
                         renderAt(auth.candidateDetails,out.resolve("auth-candidate.png"),820,600);
@@ -832,10 +930,10 @@ public final class UiLayoutPreview extends WorkbenchTest {
                         ext.dialogOpener=(owner,title,body,modal,closed)->{content[0]=body;return null;};
                         ((JButton)unchecked(ext,"scopeListButton")).doClick(0);
                         JTable table=(JTable)unchecked(ext,"scopeTable");table.setRowSelectionInterval(1,1);
-                        var body=WorkbenchUi.settingsBody(content[0],()->{});body.addNotify();
+                        var body=WorkbenchUi.settingsBody(content[0],()->{});
                         body.setSize(width,height);UiLayoutTest.layout(body);
                         table.scrollRectToVisible(table.getCellRect(1,2,true));
-                        render(body,out.resolve("scope-list.png"),width,height);body.removeNotify();
+                        render(body,out.resolve("scope-list.png"),width,height);
                     }catch(Exception error){throw new RuntimeException(error);}
                 });
                 writeMeasurements(out);
@@ -885,7 +983,6 @@ public final class UiLayoutPreview extends WorkbenchTest {
         edt(() -> {
             try {
                 activity.refresh();
-                root.addNotify();
                 java.awt.Component[] settings={null};
                 ext.dialogOpener=(owner,title,content,modal,closed)->{settings[0]=content;return null;};
                 for (int i=0;i<tabs.getTabCount();i++) {
@@ -919,7 +1016,7 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 var comparison=(StructuredComparePanel)dataTabs.getSelectedComponent();
                 comparison.leftInput.setText("{\"id\":102,\"owner\":\"bob\",\"visibility\":\"private\"}");
                 comparison.rightInput.setText("{\"error\":\"not found\"}");
-                comparison.compare();
+                ComparisonTestSupport.compareAndWait(comparison);
                 render(root,out.resolve("data-compare.png"),1440,920);
                 tabs.setSelectedComponent(recon);
                 for(var component:recon.getComponents()) if(component instanceof JTabbedPane reconTabs)reconTabs.setSelectedIndex(2);
@@ -981,7 +1078,6 @@ public final class UiLayoutPreview extends WorkbenchTest {
                 width=workspaceWidth;height=workspaceHeight;
 
                 renderNext(ext,out);
-                root.removeNotify();
             } catch(Exception e) { throw new RuntimeException(e); }
         });
         } finally {

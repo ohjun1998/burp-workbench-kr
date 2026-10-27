@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipFile;
 
-/** Evidence edits preserve exact originals, provenance, export order and one bounded undo. */
+/** Evidence edits preserve exact originals, provenance, export order and bounded undo/redo. */
 public final class EvidenceEditingTest extends WorkbenchTest {
   static List<String> ids(BountySupportPanel panel) {
     return panel.evidence.stream().map(BountyEvidence.Item::evidenceId).toList();
@@ -63,7 +63,7 @@ public final class EvidenceEditingTest extends WorkbenchTest {
         panel.undoEvidenceEdit();
         check(ids(panel).equals(original) && panel.evidenceExecutions.get(original.get(3)).equals("execution-3"), "undo restores exact items, order and original execution mapping");
         check(Arrays.equals(panel.evidenceTable.getSelectedRows(), new int[]{1, 3}), "undo restores original multiselection");
-        rejects(panel::undoEvidenceEdit, "undo is consumed rather than creating an unlimited history");
+        rejects(panel::undoEvidenceEdit, "the only edit cannot be undone twice without a new change");
 
         select(panel, 1, 2); panel.moveSelectedEvidence(-1);
         check(labels(panel).equals(List.of("B", "C", "A", "D", "E")), "contiguous selection moves up together in stable order");
@@ -117,8 +117,11 @@ public final class EvidenceEditingTest extends WorkbenchTest {
         } finally { Files.deleteIfExists(zip); }
 
         panel.clearEvidence();
-        check(panel.evidenceUndo == null && panel.evidenceStore.file() == null, "clear discards undo and keeps the new raw store lazy");
-        rejects(panel::undoEvidenceEdit, "clearing cannot revive removed sensitive originals");
+        check(panel.evidenceUndo != null && panel.evidenceStore.file() == null, "clear keeps a bounded recovery snapshot and a lazy current store");
+        panel.undoEvidenceEdit();
+        check(panel.evidenceCount() == 5 && panel.evidenceRedoAction.isEnabled(), "clear undo restores exact evidence and offers redo");
+        panel.redoEvidenceEdit();
+        check(panel.evidenceCount() == 0, "redo clear leaves active evidence empty again");
         check(panel.hasSavedEvidence(), "clearing a draft does not erase successful save history for this project");
         Set<String> maximum = new LinkedHashSet<>();
         for (int i = 0; i < BountySupportPanel.EVIDENCE_REDACTION_VALUES; i++) maximum.add("bounded-secret-" + i);

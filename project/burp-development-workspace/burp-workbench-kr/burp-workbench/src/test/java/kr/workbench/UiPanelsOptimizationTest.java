@@ -33,14 +33,14 @@ public final class UiPanelsOptimizationTest extends WorkbenchTest {
             StructuredComparePanel compare = new StructuredComparePanel(api);
             check(!compare.edit.isEnabled() && !compare.next.isEnabled(), "comparison starts with input actions and no stale navigation");
             compare.selectedTraffic = () -> List.of(first); compare.loadLeft.doClick();
-            compare.selectedTraffic = () -> List.of(second); compare.loadRight.doClick(); compare.compare();
+            compare.selectedTraffic = () -> List.of(second); compare.loadRight.doClick(); ComparisonTestSupport.compareAndWait(compare);
             check(compare.leftSource == first && compare.rightSource == second && compare.captureEvidence.isEnabled(), "side-local import buttons preserve original evidence order");
             check(!compare.leftSourceLabels[0].getToolTipText().contains("local-secret"), "compact source tooltip still redacts query values");
             check(compare.edit.isEnabled() && compare.next.isEnabled(), "comparison result enables editing and difference navigation");
             compare.edit.doClick();
             check(!compare.showing && !compare.edit.isEnabled() && !compare.next.isEnabled() && !compare.previous.isEnabled(), "returning to input disables navigation into hidden old results");
             check(compare.leftSource == first && compare.rightSource == second, "changing view alone does not invalidate original evidence");
-            compare.compare(); compare.loadSource(true, first);
+            ComparisonTestSupport.compareAndWait(compare); compare.loadSource(true, first);
             check(!compare.next.isEnabled() && !compare.edit.isEnabled(), "loading another source clears stale result actions");
             compare.clearSources();
             check(!compare.captureEvidence.isEnabled() && compare.leftSourceLabels[0].getText().equals("원본 없음"), "reset clears evidence availability and each side source status");

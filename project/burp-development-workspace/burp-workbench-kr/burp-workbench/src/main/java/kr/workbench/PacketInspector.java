@@ -29,7 +29,12 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   final List<JToggleButton> tabs = new ArrayList<>();
   final javax.swing.Timer debounce;
   final javax.swing.Timer syntaxDebounce;
-  private final JPanel toolbar = new JPanel(new BorderLayout()), searchBar = new JPanel(new BorderLayout(4, 0));
+  private final JPanel toolbar;
+  private final JPanel searchBar = new ResponsiveSearchBar();
+  private final JPanel searchControls = new JPanel();
+  final JButton searchOptions = new ToolButton("검색 옵션", "more");
+  final JComboBox<String> modePicker = new JComboBox<>(new String[]{"Pretty", "Raw", "Hex", "Render"});
+  private boolean compactSearch;
   final JPanel trafficContextBar = new JPanel(new BorderLayout(4, 2));
   final JLabel trafficContextNotice = new JLabel();
   final JButton trafficPrevious = new JButton("이전 일치"), trafficNext = new JButton("다음 일치"), trafficReturn = new JButton("앞부분 보기");
@@ -97,9 +102,10 @@ final class PacketInspector extends JPanel implements AutoCloseable {
       modeChoices.add(tab);choices.add(tab);tabs.add(tab);tab.setSelected(value == mode);
       tab.addActionListener(e -> { clearTrafficContext();commitEdits();mode = value; render(); });
     }
-    toolbar.add(choices, BorderLayout.WEST);
     JPanel actions = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 4, 2));actions.add(wrap);actions.add(more);
-    toolbar.add(actions, BorderLayout.EAST);
+    modePicker.setName(name+".mode");modePicker.getAccessibleContext().setAccessibleName("패킷 표시 방식");
+    modePicker.addActionListener(event->{int index=modePicker.getSelectedIndex();if(index>=0&&Mode.values()[index]!=mode){clearTrafficContext();commitEdits();mode=Mode.values()[index];render();}});
+    toolbar=new ResponsivePacketToolbar(choices,modePicker,actions);
     JPanel header = new JPanel(new BorderLayout(0, 2));header.add(toolbar, BorderLayout.NORTH);
     trafficContextBar.setName(name + ".traffic.context");trafficContextNotice.setName(name + ".traffic.context.notice");
     trafficContextNotice.setMinimumSize(new Dimension(20, 22));
@@ -119,9 +125,15 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     search.setToolTipText("Search · Enter/F3 다음 · Shift+Enter/Shift+F3 이전 · Esc 비우기");
     JPanel input = new JPanel(new BorderLayout(2, 0));input.add(search);input.add(clear, BorderLayout.EAST);
     JLabel label = new JLabel("Search");searchBar.add(label, BorderLayout.WEST);searchBar.add(input);
-    JPanel controls = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 3, 0));
-    for(Component c : new Component[]{previous, next, caseSensitive, regex, count})controls.add(c);
-    searchBar.add(controls, BorderLayout.EAST);add(searchBar, BorderLayout.SOUTH);
+    searchControls.setLayout(new BoxLayout(searchControls,BoxLayout.X_AXIS));
+    rebuildSearchControls(false);
+    searchBar.add(searchControls, BorderLayout.EAST);add(searchBar, BorderLayout.SOUTH);
+    JPopupMenu searchMenu=new JPopupMenu();JCheckBoxMenuItem caseChoice=new JCheckBoxMenuItem("대소문자 구분"),regexChoice=new JCheckBoxMenuItem("정규식 검색");
+    caseChoice.addActionListener(event->caseSensitive.doClick());regexChoice.addActionListener(event->regex.doClick());
+    searchMenu.add(caseChoice);searchMenu.add(regexChoice);searchOptions.setName(name+".search.options");
+    searchOptions.getAccessibleContext().setAccessibleName("검색 옵션: 대소문자 구분·정규식");
+    searchOptions.setToolTipText("검색 옵션 · 대소문자 구분 / 정규식");
+    searchOptions.addActionListener(event->{WorkbenchUi.style(searchMenu);caseChoice.setSelected(caseSensitive.isSelected());regexChoice.setSelected(regex.isSelected());if(searchOptions.isShowing())searchMenu.show(searchOptions,0,searchOptions.getHeight());});
     count.setName(name + ".matches");
     previous.setName(name + ".previous");next.setName(name + ".next");clear.setName(name + ".clear");
     caseSensitive.setName(name + ".case");regex.setName(name + ".regex");
@@ -275,6 +287,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     rendering = true;try { text.setText(page.text());text.setEditable(false); } finally { rendering = false; }
     text.getHighlighter().removeAllHighlights();matches = List.of();current = -1;currentHighlight = null;
     SimpleAttributeSet normal = new SimpleAttributeSet();StyleConstants.setForeground(normal, WorkbenchUi.ink());
+    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(text.getText()).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(14));
     text.getStyledDocument().setCharacterAttributes(0, text.getDocument().getLength(), normal, true);
     try {
       if (page.end() > page.start()) text.getHighlighter().addHighlight(page.start(), page.end(),
@@ -316,6 +329,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     wrap.setToolTipText(mode == Mode.HEX ? "Hex는 바이트 열을 고정하고 가로 스크롤로 표시합니다." : "긴 줄 자동 줄바꿈");
     String value = switch(mode) { case PRETTY -> pretty;case RAW -> raw;case HEX -> hex(rawBytes);case RENDER -> ""; };
     for (int i = 0; i < tabs.size(); i++) tabs.get(i).setSelected(Mode.values()[i] == mode);
+    if(modePicker.getSelectedIndex()!=mode.ordinal())modePicker.setSelectedIndex(mode.ordinal());
     rendering=true;
     try { text.getDocument().remove(0, text.getDocument().getLength());text.getDocument().insertString(0, value, null); }
     catch(BadLocationException ex) { throw new IllegalStateException(ex); }
@@ -328,26 +342,26 @@ final class PacketInspector extends JPanel implements AutoCloseable {
 
   void applyTheme() {
     setBackground(WorkbenchUi.surface());
-    WorkbenchUi.style(toolbar);WorkbenchUi.style(searchBar);WorkbenchUi.style(scroll);
-    for(AbstractButton b : new AbstractButton[]{previous,next,clear,caseSensitive,regex,wrap,more}) {
-      b.setBorder(BorderFactory.createEmptyBorder(3, 4, 3, 4));b.setMargin(new Insets(0,0,0,0));
-      b.setPreferredSize(new Dimension(b==caseSensitive?32:28,28));
+    WorkbenchUi.style(toolbar);WorkbenchUi.style(modePicker);WorkbenchUi.style(searchBar);WorkbenchUi.style(scroll);
+    for(AbstractButton b : new AbstractButton[]{previous,next,clear,caseSensitive,regex,wrap,more,searchOptions}) {
+      b.setFont(WorkbenchUi.font());b.setBorder(BorderFactory.createEmptyBorder(3, 4, 3, 4));b.setMargin(new Insets(0,0,0,0));
+      b.setPreferredSize(new Dimension(b==caseSensitive?Math.max(32,b.getFontMetrics(b.getFont()).stringWidth("Aa")+10):28,b==caseSensitive||b==regex?Math.max(28,b.getFontMetrics(b.getFont()).getHeight()+6):28));b.setMinimumSize(b.getPreferredSize());b.setMaximumSize(b.getPreferredSize());
     }
     searchBar.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,0,0,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(5,6,5,6)));
-    search.setFont(WorkbenchUi.font().deriveFont(12f));search.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(WorkbenchUi.line()),BorderFactory.createEmptyBorder(2,5,2,5)));
-    count.setFont(WorkbenchUi.font().deriveFont(11f));scroll.setBorder(null);
+    search.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12f)));search.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(WorkbenchUi.line()),BorderFactory.createEmptyBorder(2,5,2,5)));
+    count.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));count.setMinimumSize(count.getPreferredSize());count.setMaximumSize(new Dimension(400,28));scroll.setBorder(null);
     text.setFont(WorkbenchUi.textFont(text.getText()));text.setMargin(new Insets(8,8,8,8));text.setBorder(null);
     text.setBackground(WorkbenchUi.surface());text.setForeground(WorkbenchUi.ink());text.setCaretColor(WorkbenchUi.ink());
     text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());
     WorkbenchUi.style(renderPanel);rendered.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES,true);
     if(mode==Mode.RENDER){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
-    colorize();lines.repaint();toolbar.repaint();
+    colorize();lines.repaint();toolbar.revalidate();toolbar.repaint();searchBar.revalidate();
   }
 
   private void colorize() {
     StyledDocument doc=text.getStyledDocument();String value=text.getText();
     SimpleAttributeSet normal=new SimpleAttributeSet();StyleConstants.setForeground(normal,WorkbenchUi.ink());
-    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,14);
+    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(14));
     doc.setCharacterAttributes(0,doc.getLength(),normal,true);
     if(mode==Mode.HEX)return;
     Color blue=WorkbenchUi.dark()?new Color(161,188,239):new Color(47,80,149);
@@ -476,9 +490,39 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     }
   }
 
+  /** Every search action remains available; narrow readers move only optional toggles into a labelled menu. */
+  private void rebuildSearchControls(boolean compact) {
+    compactSearch=compact;searchControls.removeAll();
+    Component[] controls=compact?new Component[]{previous,next,count,searchOptions}:new Component[]{previous,next,caseSensitive,regex,count};
+    for(Component control:controls){if(searchControls.getComponentCount()>0)searchControls.add(Box.createHorizontalStrut(3));searchControls.add(control);}
+    searchControls.revalidate();
+  }
+  private final class ResponsiveSearchBar extends JPanel {
+    ResponsiveSearchBar(){super(new BorderLayout(4,0));}
+    private void adapt(){
+      if(searchControls==null||getWidth()<=0)return;
+      int full=previous.getPreferredSize().width+next.getPreferredSize().width+caseSensitive.getPreferredSize().width+regex.getPreferredSize().width+count.getPreferredSize().width+12;
+      boolean compact=getWidth()<full+120;
+      if(compact!=compactSearch)rebuildSearchControls(compact);
+    }
+    @Override public void doLayout(){adapt();super.doLayout();}
+    @Override public Dimension getPreferredSize(){adapt();return super.getPreferredSize();}
+  }
+  private static final class ResponsivePacketToolbar extends JPanel {
+    private final JPanel choices,actions;private final JComboBox<String> picker;private boolean compact;
+    ResponsivePacketToolbar(JPanel choices,JComboBox<String> picker,JPanel actions){super(new BorderLayout(4,0));this.choices=choices;this.picker=picker;this.actions=actions;add(choices,BorderLayout.WEST);add(actions,BorderLayout.EAST);}
+    private void adapt(){
+      if(getWidth()<=0)return;int intrinsic=0;for(Component choice:choices.getComponents())if(choice.isVisible())intrinsic+=choice.getPreferredSize().width;
+      boolean next=getWidth()<intrinsic+actions.getPreferredSize().width+4;
+      if(next==compact)return;compact=next;remove(next?choices:picker);add(next?picker:choices,BorderLayout.WEST);
+    }
+    @Override public void doLayout(){adapt();super.doLayout();}
+    @Override public Dimension getPreferredSize(){adapt();return super.getPreferredSize();}
+  }
+
   private static final class Tab extends JToggleButton {
     Tab(String title){super(title);}
-    @Override public Dimension getPreferredSize(){return new Dimension(66,34);}
+    @Override public Dimension getPreferredSize(){return new Dimension(Math.max(66,getFontMetrics(WorkbenchUi.font()).stringWidth(getText())+16),Math.max(34,getFontMetrics(WorkbenchUi.font()).getHeight()+8));}
     @Override protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN));g.setColor(isSelected()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(getText(),(getWidth()-g.getFontMetrics().stringWidth(getText()))/2,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRect(0,getHeight()-(isSelected()?3:1),getWidth(),isSelected()?3:1);if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}g.dispose();}
   }
 

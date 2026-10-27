@@ -1,0 +1,39 @@
+{
+  "method": "Production Swing components with synthetic metadata and test API adapters; EDT layout queue drained before painting. No native Burp or browser execution.",
+  "source": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.53.4.jar",
+  "releaseJarSha256": "795e6566bcc1f5f7d059383b82d60e3efeb00d873310681c896b45eeddacef9d",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1024x720",
+    "1280x800",
+    "1440x920"
+  ],
+  "renderedViews": 24,
+  "controlsMeasured": 912,
+  "clippedControlsOutsideScrollers": 0,
+  "smallControls": 0,
+  "collapsedRequiredWorkAreas": 0,
+  "tabAndHeadingLabelsMeasured": 456,
+  "clippedSelectedTabOrHeadingLabels": 0,
+  "minimumWorkAreas": {
+    "packet-pretty-search.png:wb.traffic.request.text": 100,
+    "packet-pretty-search.png:wb.traffic.response.text": 100,
+    "packet-raw.png:wb.traffic.request.text": 100,
+    "packet-raw.png:wb.traffic.response.text": 100,
+    "packet-hex.png:wb.traffic.request.text": 100,
+    "packet-hex.png:wb.traffic.response.text": 100,
+    "packet-render.png:wb.traffic.request.render": 100,
+    "packet-render.png:wb.traffic.response.render": 100
+  },
+  "failures": [],
+  "textFailures": [],
+  "scenariosChecked": 0,
+  "requiredScenarios": [],
+  "scenarioFailures": [],
+  "guideBodiesMeasured": 0,
+  "guideLayoutFailures": 0,
+  "guideFailures": []
+}

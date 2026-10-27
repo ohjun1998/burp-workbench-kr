@@ -1,5 +1,7 @@
 # 날짜별 작업 대화 기록
 
+- [2026-10-27 · Next 0.53.4 사용자 편의성 안정화·main 반영](2026-10-27/usability-stabilization-0534.md)
+
 - [2026-10-27 · Next 0.53.3 사용자 편의성 개선·main 반영](2026-10-27/usability-0532.md)
 
 - [2026-10-27 · Next 0.53.1 main 반영](2026-10-27/usability-0531-main.md)

@@ -5,7 +5,7 @@ results belong to the versioned verification record, not this source module.
 """
 
 KATANA_VERSION = '1.8.0'
-KATANA_SPEC = 'KATANA_SCOPE_1.3.0_SPEC_KR.md'
+KATANA_SPEC = 'KATANA_SCOPE_1.3.1_SPEC_KR.md'
 
 KATANA_INSTALL = [
     'Simple 폴더 또는 독립 소스 ZIP의 루트에서 python tools/install_katana.py --dest 뒤에 쓸 수 있는 외부 절대 경로를 지정합니다. 저장소 루트에서는 simple/tools/install_katana.py를 사용합니다. 공식 Katana 1.8.0 배포와 SHA-256을 확인해 실행 파일·설치 기록을 저장합니다.',

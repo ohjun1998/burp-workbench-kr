@@ -1,0 +1,62 @@
+PASS Katana settings display does not disclose a local executable path
+PASS Katana absolute duration must be bounded
+PASS Katana page budget cannot exceed the shared inspection bound
+PASS executable input cannot inject control characters
+PASS standard Katana command retains required -proxy
+PASS standard Katana command retains required -config
+PASS standard Katana command retains required -flc
+PASS standard Katana command retains required -duc
+PASS standard Katana command retains required -j
+PASS standard Katana command retains required -silent
+PASS standard Katana command retains required -nc
+PASS standard Katana command retains required -jc
+PASS standard Katana command retains required -td
+PASS standard Katana command retains required -fx
+PASS standard Katana command retains required -dr
+PASS standard Katana command retains required -iqp
+PASS standard Katana command retains required -or
+PASS Katana command excludes additional execution flag -hl
+PASS Katana command excludes additional execution flag -hh
+PASS Katana command excludes additional execution flag -cwu
+PASS Katana command excludes additional execution flag -H
+PASS Katana command excludes additional execution flag -aff
+PASS Katana command excludes additional execution flag -al
+PASS Katana command excludes additional execution flag -rf
+PASS Katana command excludes additional execution flag -kb
+PASS Katana command excludes additional execution flag -kb-secrets
+PASS Katana command excludes additional execution flag -kb-validate-secrets
+PASS Katana command excludes additional execution flag -sr
+PASS Katana command excludes additional execution flag -srd
+PASS Katana command excludes additional execution flag -up
+PASS Katana retries and request concurrency stay explicitly bounded
+PASS resume command receives remaining absolute time and page allowance
+PASS JSONL transport excludes credentials and raw response content in addition to omit flags
+PASS Katana JS parsing retains its response body while JSON field projection prevents body output; upstream omit-body mutates before parsing
+PASS CLI Scope expression fixes the exact authority while the proxy enforces live native rules
+PASS application credentials are absent from the process command
+PASS target seed URL is reserved for the private stdin pipe rather than process arguments
+PASS actual Katana endpoint field creates a scoped GET candidate
+PASS candidate records retain explicit Katana parser provenance
+PASS source URL query values and ignored JSONL secrets never enter metadata
+PASS query-dependent results remain redacted observations rather than guessed replays
+PASS htmx write discoveries retain provenance without becoming executable candidates
+PASS actual Katana form extraction preserves a non-executable POST declaration
+PASS form extraction displays parameter names without reading any field values
+PASS bounded technology names surface as non-executable Katana environment clues
+PASS sensitive field names and untrusted technology strings are masked or excluded
+PASS an absent Katana method never silently becomes GET
+PASS metadata Scope validation rejects https://other.test/app
+PASS metadata Scope validation rejects https://scope.test/apple
+PASS metadata Scope validation rejects https://scope.test:444/app
+PASS metadata Scope validation rejects https://scope.test/app/%252fadmin
+PASS metadata Scope validation rejects https://user:[REDACTED]@scope.test/app
+PASS duplicate JSON keys fail the crawler protocol check
+PASS plain URLs and unrelated JSON are not accepted as Katana JSONL results
+PASS crawler JSONL line size is bounded before parsing
+PASS constructing and configuring Katana sends no target requests
+PASS stop reports incomplete once without executing a child
+PASS repeated stop and unload cannot duplicate completion callbacks
+PASS Katana start returns without blocking the UI for executable probing
+PASS an unavailable executable cannot be reported as a completed crawl
+PASS startup failure preserves zero target requests and a generic masked diagnostic
+ScopeKatanaTest: 61 checks passed (bounded CLI/JSONL/lifecycle; real crawler covered separately)

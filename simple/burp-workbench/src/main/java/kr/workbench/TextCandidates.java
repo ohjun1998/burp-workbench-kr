@@ -8,7 +8,9 @@ import java.util.regex.Pattern;
 
 /** Data-only, position-preserving string extraction. XML entities are never resolved externally. */
 final class TextCandidates {
-  record Value(String text, String key, int start, int length) {}
+  record Value(String text, String key, int start, int length, boolean literal) {
+    Value(String text,String key,int start,int length){this(text,key,start,length,true);}
+  }
   record Scan(String format, boolean dataOnly, List<Value> values, boolean limited) {}
   private static final int LIMIT = 2000;
   private static final Pattern ATTRIBUTE = Pattern.compile(
@@ -97,23 +99,24 @@ final class TextCandidates {
         values.add(new Value(group==2?elements.group(group):entities(elements.group(group)), elements.group(1), elements.start(group), elements.end(group)-elements.start(group)));
       }
     } else if (data) {
-      scanPlain(source, values, deadline);
+      scanPlain(source, values, deadline, false);
     }
     return new Scan(format, data, List.copyOf(values), !room(values, deadline));
   }
 
   static Scan fallback(String source, long deadline) {
     List<Value> values = new ArrayList<>();
-    scanPlain(source, values, deadline);
+    scanPlain(source, values, deadline, true);
     return new Scan("텍스트 보조", true, List.copyOf(values), !room(values, deadline));
   }
 
-  private static void scanPlain(String source, List<Value> values, long deadline) {
+  private static void scanPlain(String source, List<Value> values, long deadline, boolean code) {
     Matcher named = NAMED.matcher(source);
     while (named.find() && room(values, deadline)) {
       if(named.group(1).matches("(?i)https?|wss?"))continue;
       int group = named.group(2) != null ? 2 : named.group(3) != null ? 3 : 4;
-      values.add(new Value(named.group(group), named.group(1), named.start(group), named.end(group)-named.start(group)));
+      boolean literal=!code||group!=4&&literalEnd(source,named.end());
+      values.add(new Value(named.group(group), named.group(1), named.start(group), named.end(group)-named.start(group),literal));
     }
     Matcher urls = URL.matcher(source);
     while (urls.find() && room(values, deadline)) {
@@ -125,6 +128,14 @@ final class TextCandidates {
     Matcher paths = PATH_LINE.matcher(source);
     while (paths.find() && room(values, deadline))
       values.add(new Value(paths.group(1), "경로 문자열", paths.start(1), paths.end(1)-paths.start(1)));
+  }
+
+  private static boolean literalEnd(String source,int end){
+    int next=end;boolean newline=false;while(next<source.length()&&Character.isWhitespace(source.charAt(next))){newline|=source.charAt(next)=='\r'||source.charAt(next)=='\n';next++;}
+    if(next==source.length()||";,})]".indexOf(source.charAt(next))>=0||source.startsWith("//",next)||source.startsWith("/*",next))return true;
+    if(!newline||!Character.isJavaIdentifierStart(source.charAt(next)))return false;
+    int word=next+1;while(word<source.length()&&Character.isJavaIdentifierPart(source.charAt(word)))word++;
+    return !List.of("in","instanceof").contains(source.substring(next,word));
   }
 
   private static boolean room(List<Value> values, long deadline) {

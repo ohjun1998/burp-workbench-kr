@@ -81,36 +81,35 @@ final class ScopeInspectionAnalysis {
       if (marker < 0) break;
       if (count == 16) { jsText = text.substring(0, marker); complete = false; }
     }
-    JsAnalysis.Result js = JsAnalysis.analyze(jsText, url, type);
+    JsAnalysis.Result js = jsText.length()>JsAnalysis.SOURCE_LIMIT
+        ? JsBatchAnalysis.analyze(jsText,url,type,url) : JsAnalysis.analyze(jsText, url, type);
     complete &= !js.truncated();
     for (var endpoint : js.endpoints()) {
       boolean method = Set.of("GET", "HEAD").contains(endpoint.method());
       boolean resolved = endpoint.complete() && !unresolved(endpoint.url()) && endpoint.parameters().isBlank();
-      if (!method) {
+      String relative=relativeApi(endpoint.url());
+      if (!method&&!scriptSource(endpoint,text)) {
         // A quoted URL alone does not establish GET when the parser found another or unknown method.
         var generic = candidates.get("GET " + endpoint.url());
         if (generic != null && generic.source().equals("환경 경로") && generic.label().equals("실제 응답 참조"))
           candidates.remove("GET " + endpoint.url());
       }
-      candidate(candidates, endpoint.url(), endpoint.method(), "JS API", endpoint.kind(), method && resolved);
-      add(found, "API", "JS/API 경로 후보", safeUrl(endpoint.url()), endpoint.method(), who,
+      candidate(candidates, endpoint.url(), endpoint.method(), "JS API", endpoint.kind()+(relative.isEmpty()?"":" · 서버/기본 경로 미확정"), relative.isEmpty()&&method && resolved);
+      add(found, "API", "JS/API 경로 후보", relative.isEmpty()?safeUrl(endpoint.url()):safe, endpoint.method(), who,
           endpoint.complete() ? "추정" : "미확인", "정보", method && resolved ? "미관측" : "필수값 필요",
-          display(endpoint.kind(), 120) + " · 메서드 " + display(endpoint.method(), 16) + " · 원본 위치에서 확인 · 실제 도달 여부 미검증",
-          original, endpoint.line(), endpoint.start(), hash(endpoint.method() + " " + safeUrl(endpoint.url())));
+          (relative.isEmpty()?"":"선언 경로: "+display(relative,300)+" · 서버/기본 경로 미확정 · ")+display(endpoint.kind(), 120) + " · 메서드 " + display(endpoint.method(), 16) + " · 원본 위치에서 확인 · 실제 도달 여부 미검증",
+          original, endpoint.line(), endpoint.start(), hash(endpoint.method() + " " + (relative.isEmpty()?safeUrl(endpoint.url()):relative)));
     }
     for (var secret : js.secrets()) {
-      String context = secret.start() < 0 ? "" : text.substring(Math.max(0, secret.start() - 160), Math.min(text.length(), secret.start() + Math.max(0, secret.sourceLength()) + 160));
-      String ownValue = secret.start() < 0 ? "" : text.substring(Math.max(0, secret.start()), Math.min(text.length(), secret.start() + Math.max(0, secret.sourceLength())));
-      boolean example = secret.confidence().contains("예제") || ownValue.startsWith("sk_test_");
+      boolean example = secret.confidence().contains("예제");
       boolean secretProvider = Set.of("GitHub token", "Slack token", "Stripe secret key", "Private key").contains(secret.rule());
-      boolean publicId = !secretProvider && secret.confidence().contains("공개 식별자") || secret.rule().equals("Google API Key")
-          && context.matches("(?is).*(?:firebaseConfig|initializeApp|authDomain|measurementId).*");
+      boolean publicId = !secretProvider && secret.confidence().contains("공개 식별자");
       String state = example ? "예제값 가능" : publicId ? "공개 식별자 가능" : "유효성 미검증";
       add(found, "SECRET", secret.rule(), safe, "GET", who, "형식 후보", example || publicId ? "낮음" : "높음", state,
           secret.masked() + " · " + display(secret.confidence(), 240) + " · 발견한 값을 인증에 사용하거나 외부 검증하지 않음",
           original, secret.line(), secret.start(), secret.fingerprint());
     }
-    complete &= namedFields(text, safe, who, original, found, sensitiveValues);
+    complete &= namedFields(text, type, safe, who, original, found, sensitiveValues);
     complete &= sensitive(text, CONNECTION, "DB 연결 문자열 후보", "중간", safe, who, original, found, sensitiveValues);
     complete &= sensitive(text, PRIVATE_IP, "사설 IP 주소", "낮음", safe, who, original, found, sensitiveValues);
     complete &= sensitive(text, HOST, "내부 호스트 이름", "낮음", safe, who, original, found, sensitiveValues);
@@ -164,7 +163,7 @@ final class ScopeInspectionAnalysis {
       var clean = new ScopeInspection.Finding(value.category(), clean(value.title(), sensitiveValues), maskedKnownUrl(value.url(), sensitiveValues),
           value.method(), clean(value.account(), sensitiveValues), value.confidence(), value.severity(), value.state(),
           clean(value.detail(), sensitiveValues), value.originalId(), value.line(), value.offset(), value.fingerprint());
-      String key = clean.category() + "|" + clean.title() + "|" + clean.url() + "|" + clean.account() + "|" + clean.fingerprint();
+      String key = clean.category() + "|" + (clean.category().equals("SECRET")?"":clean.title()) + "|" + clean.url() + "|" + clean.account() + "|" + clean.fingerprint();
       if (duplicate.add(key)) masked.add(clean);
     }
     List<ScopeInspection.Candidate> cleanCandidates = candidates.values().stream().map(c -> {
@@ -307,23 +306,29 @@ final class ScopeInspectionAnalysis {
     }
   }
 
-  private static boolean namedFields(String body, String url, String account, String original, List<ScopeInspection.Finding> out, Set<String> raw) {
-    Matcher matcher = FIELD.matcher(body); int count = 0;
-    while (matcher.find() && count++ < 5000 && out.size() < FINDING_LIMIT) {
-      String key = matcher.group(1), value = matcher.group(2), lower = key.replaceAll("[_-]", "").toLowerCase(Locale.ROOT);
-      boolean publicId = lower.matches(".*(?:publickey|publishable|clientid|sitekey|measurementid).*");
+  private static boolean namedFields(String body, String type, String url, String account, String original, List<ScopeInspection.Finding> out, Set<String> raw) {
+    long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(2);
+    TextCandidates.Scan scan=TextCandidates.scan(body,type,url,deadline);
+    if(!scan.dataOnly()&&scan.values().isEmpty())scan=TextCandidates.fallback(body,deadline);
+    int count=0;
+    for(var item:scan.values()) {
+      if(++count>2000||out.size()>=FINDING_LIMIT)break;
+      if(!item.literal())continue;
+      String key=item.key(),value=item.text();
+      boolean privateProvider=value.matches("(?s)(?:gh[pousr]_|github_pat_|xox[baprs]-|sk_(?:live|test)_|-----BEGIN .*PRIVATE KEY-----).*");
+      boolean publicId = !privateProvider&&SecretCandidates.publicIdentifier(key);
       if (!SecretCandidates.named(key) && !publicId) continue;
       if (value.length() < 8 || value.equals("[REDACTED]")) continue;
-      boolean example = key.matches("(?is).*(?:test|example|demo).*") || value.matches("(?is).*(?:example|placeholder|changeme|your[_-]|replace_|demo|redacted).*");
+      boolean example = SecretCandidates.example(key,value);
       if (!publicId && !example && !SecretCandidates.plausible(value)) continue;
       raw.add(value);
       add(out, "SECRET", publicId ? "공개 식별자/키 형식" : "이름 문맥 기반 키 후보", url, "GET", account,
           publicId || example ? "미확인" : "형식 후보", publicId || example ? "낮음" : "중간",
           publicId ? "공개 식별자 가능" : example ? "예제값 가능" : "유효성 미검증",
           display(key, 100) + " = [가림 · " + value.length() + "자] · 이름 문맥으로 분류 · 실제 비밀/유효성 미검증",
-          original, line(body, matcher.start(2)), matcher.start(2), hash(value).substring(0, 16));
+          original, line(body, item.start()), item.start(), hash(value).substring(0, 16));
     }
-    return count <= 5000 && out.size() < FINDING_LIMIT;
+    return !scan.limited()&&count <= 2000 && out.size() < FINDING_LIMIT;
   }
 
   private static boolean sensitive(String body, Pattern pattern, String title, String severity, String url, String account,
@@ -457,9 +462,25 @@ final class ScopeInspectionAnalysis {
   private static int line(String body, int position) { int line = 1; for (int i = 0; i < Math.min(position, body.length()); i++) if (body.charAt(i) == '\n') line++; return line; }
   private static int offset(String location) { try { return location.startsWith("Body: ") ? Integer.parseInt(location.substring(6).strip()) : -1; } catch (RuntimeException ignored) { return -1; } }
   private static boolean unresolved(String url) { return url == null || url.contains("{") || url.contains("}") || url.contains("REPLACE_") || url.contains("[동적"); }
+  private static boolean scriptSource(JsAnalysis.Endpoint endpoint,String body){
+    if(!endpoint.kind().equalsIgnoreCase("HTML · src")||endpoint.start()<0)return false;
+    int position=endpoint.start();boolean inside=false;
+    Matcher tags=Pattern.compile("(?is)</?script\\b[^>]{0,4096}>").matcher(body);
+    while(tags.find()&&tags.start()<=position){
+      if(body.lastIndexOf("<!--",tags.start())>body.lastIndexOf("-->",tags.start()))continue;
+      boolean closing=body.charAt(tags.start()+1)=='/';
+      if(!closing&&!inside&&position<tags.end())return true;
+      if(closing)inside=false;else if(!inside)inside=true;
+    }
+    return false;
+  }
+  private static String relativeApi(String value){
+    if(value==null||value.length()>4096||!value.startsWith("/")||value.startsWith("//")||value.matches("(?s).*[\\r\\n\\t\\\\].*"))return "";
+    try{URI uri=URI.create(value.replace("{dynamic}","DYNAMIC"));if(uri.isAbsolute()||uri.getRawAuthority()!=null)return "";String path=value.split("[?#]",2)[0];return display(path,4096);}catch(RuntimeException invalid){return "";}
+  }
   private static void candidate(Map<String, ScopeInspection.Candidate> out, String url, String method, String source, String label, boolean executable) {
     if (out.size() >= 400 || url == null || url.length() > 8192) return;
-    if (!unresolved(url)) try { URI uri = URI.create(url); if (uri.getUserInfo() != null || uri.getHost() == null || !Set.of("http", "https").contains(uri.getScheme())) return; } catch (RuntimeException error) { return; }
+    if (!unresolved(url)&&!(source.equals("JS API")&&!executable&&!relativeApi(url).isEmpty())) try { URI uri = URI.create(url); if (uri.getUserInfo() != null || uri.getHost() == null || !Set.of("http", "https").contains(uri.getScheme())) return; } catch (RuntimeException error) { return; }
     String key = method + " " + url;
     var candidate = new ScopeInspection.Candidate(url, display(method, 16), source, display(label, 160), executable && !unresolved(url));
     var old = out.get(key);

@@ -1,0 +1,50 @@
+PASS proxy binds an ephemeral IPv4 loopback endpoint with a per-run capability
+PASS proxy diagnostics hide the local authentication capability
+PASS unauthenticated local clients cannot dispatch a target request
+PASS authenticated HTTP proxy request reaches only the canonical URL and method Fetcher
+PASS raw compressed response bytes and encoding reach the crawler unchanged
+PASS proxy rebuilds bounded one-response HTTP framing from actual bytes
+PASS hop-by-hop and nominated headers cannot cross the proxy boundary
+PASS crawler credentials and proxy capabilities are never forwarded to Fetcher
+PASS rejected POST retains its attempted URL as masked display metadata without dispatch
+PASS live Scope rejection retains the attempted path without secret query values
+PASS official proxy diagnostic probe remains identifiable after Origin rejection without target traffic
+PASS attempt provenance never retains rejected query credentials
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS hostile authority, path, method or framing is blocked before any target dispatch
+PASS request headers have an explicit 32 KiB limit
+PASS the proxy returns the actual redirect instead of following it itself
+PASS a crawler redirect to another Origin is checked as a new blocked request
+PASS transport failures are explicit and do not leak original exception values
+PASS live Scope revocation blocks requests after the proxy has started
+PASS blocked observations remain masked metadata
+PASS CONNECT cannot become a tunnel to a different host
+PASS CONNECT must match the exact configured TLS port
+PASS TLS termination negotiates HTTP/1.1 instead of an unparsed HTTP/2 tunnel
+PASS HTTPS is terminated locally and the real inner method and path are sent only through Fetcher
+PASS the actual HTTPS response body reaches the crawler
+PASS temporary proxy certificate is a short-lived non-CA leaf
+PASS temporary certificate SAN is bound to the configured Origin host
+PASS TLS inner Host, network-path, method and nested CONNECT cannot escape policy
+PASS TLS inner Host, network-path, method and nested CONNECT cannot escape policy
+PASS TLS inner Host, network-path, method and nested CONNECT cannot escape policy
+PASS TLS inner Host, network-path, method and nested CONNECT cannot escape policy
+PASS HEAD remains HEAD and never invents a response body
+PASS an authenticated open CONNECT cannot bypass later live Scope revocation
+PASS close terminates accepted idle sockets as well as the listener
+PASS closed proxy cannot accept a new crawler connection
+ScopeKatanaProxyTest: 49 checks passed (loopback HTTP/CONNECT/TLS only; no target network or CA installation)

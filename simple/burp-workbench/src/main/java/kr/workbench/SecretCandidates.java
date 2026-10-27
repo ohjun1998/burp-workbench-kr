@@ -19,4 +19,21 @@ final class SecretCandidates {
     if (text.matches("(?is)^(?:[a-z][a-z0-9+.-]*://|/|\\$\\{|<).*")) return false;
     return JsAnalysis.entropy(text) >= 3.0;
   }
+
+  static boolean expression(String value){
+    return value.matches("(?s).*(?:\\$\\{|\\|\\||&&|=>|\\b(?:process\\.env|import\\.meta)\\b).*")
+        ||value.matches("(?:this\\.)?[A-Za-z_$][\\w$]*(?:\\??\\.[A-Za-z_$][\\w$]*)+(?:\\([^;]*\\))?")
+        ||value.matches("[A-Za-z_$][\\w$]*(?:\\.[A-Za-z_$][\\w$]*)*\\([^;]*\\)");
+  }
+
+  static boolean example(String name,String value){
+    String key=name==null?"":name,valueText=value==null?"":value;
+    return valueText.startsWith("sk_test_")||valueText.matches("(?is).*(?:example|placeholder|changeme|your[_ -]|replace_|redacted|(?:^|[_-])demo(?:[_-]|$)).*")
+        ||key.matches("(?s)(?i:test|example|demo)(?:[A-Z_.$-].*|$)")
+        ||key.matches("(?is).*(?:^|[_.$-])(?:test|example|demo)(?:[_.$-]|$).*");
+  }
+
+  static boolean publicIdentifier(String name){
+    return name!=null&&name.replaceAll("[_-]","").matches("(?i).*(?:publickey|publicapikey|publishable|clientid|sitekey|measurementid).*");
+  }
 }

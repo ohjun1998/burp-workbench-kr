@@ -25,6 +25,7 @@ CAPTURES = [
     '20-inspection-coverage.png', '21-inspection-browser.png',
     '22-inspection-original.png',
     '23-katana-settings.png', '24-katana-results.png',
+    '25-inspection-report.png',
 ]
 
 

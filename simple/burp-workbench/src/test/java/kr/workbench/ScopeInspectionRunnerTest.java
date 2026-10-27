@@ -27,6 +27,10 @@ public final class ScopeInspectionRunnerTest extends WorkbenchTest {
     exchange.getResponseHeaders().set("Content-Type", type);
     exchange.sendResponseHeaders(code, bytes.length); exchange.getResponseBody().write(bytes); exchange.close();
   }
+  static int visitIndex(List<ScopeInspectionFixture.Visit> visits, String path) {
+    for (int i = 0; i < visits.size(); i++) if (visits.get(i).path().equals(path)) return i;
+    return -1;
+  }
 
   public static void main(String[] args) throws Exception {
     check(ScopeInspectionRunner.normalized("https://example.test/app/../secret") == null, "literal traversal is excluded before a request");
@@ -263,6 +267,71 @@ public final class ScopeInspectionRunnerTest extends WorkbenchTest {
         runner.registerKatana("anonymous", System.currentTimeMillis() + 500); runner.start();
         await(() -> terminal(runner), "finite crawler completion deadline");
         check(runner.snapshot().findings().stream().anyMatch(f -> f.title().equals("Katana 탐색 미완료")) && runner.snapshot().partial() > 0, "missing crawler completion becomes explicit partial coverage before normal queued work finishes");
+      }
+
+      var alice = fixture.options(true).profiles().stream().filter(p -> p.id().equals("alice")).findFirst().orElseThrow();
+      for (var profile : List.of(alice, new ScopeInspection.Profile("alice", "Alice", alice.headers(), null))) {
+        fixture.visits.clear();
+        try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/form-root", 80, 2, false, List.of(profile)), allowed, value -> {})) {
+          runner.start(); await(() -> terminal(runner) || runner.snapshot().state() == ScopeInspection.State.PAUSED, "registration form is not session expiry");
+          var result = runner.snapshot();
+          check(result.state() == ScopeInspection.State.COMPLETED, "a valid page containing a password form does not auto-pause the authenticated run");
+          check(fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/script-found")), "ordinary registration-page scripts still introduce their observed APIs");
+          var page = result.pages().stream().filter(p -> p.url().endsWith("/app/form-root")).findFirst().orElseThrow();
+          check(!page.classification().equals("LOGIN") && page.note().contains(profile.identity() == null ? "선택 신원 미확인" : "선택 신원 조건 확인"), "password form classification states whether independent identity evidence exists");
+          check(result.findings().stream().anyMatch(f -> f.category().equals("AUTH") && f.originalId().equals(page.original().id())
+              && (profile.identity() == null ? f.confidence().equals("신원 미확인") : f.detail().contains("신원 대조 원본:"))), "the form explanation is linked to its original and never invents identity verification");
+        }
+      }
+      for (String path : List.of("/app/expired", "/app/login-redirect", "/app/auth-redirect", "/app/challenge")) {
+        try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, path, 30, 1, false, List.of(alice)), allowed, value -> {})) {
+          runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED || terminal(runner), "real authentication barrier remains paused");
+          check(runner.snapshot().state() == ScopeInspection.State.PAUSED, "401, explicit login redirects and security challenges keep their pause behavior");
+        }
+      }
+      fixture.visits.clear();
+      var wrongIdentity = new ScopeInspection.Profile("alice", "Alice", alice.headers(), new CookieSessionProbe.Config(fixture.origin + "/app/identity-mismatch", "$.id", "alice"));
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/form-root", 30, 1, false, List.of(wrongIdentity)), allowed, value -> {})) {
+        runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED || terminal(runner), "identity mismatch cannot be excused by a form");
+        check(runner.snapshot().state() == ScopeInspection.State.PAUSED && fixture.visits.stream().noneMatch(v -> v.path().equals("/app/form-root")), "a failed explicit identity condition stops before the ordinary target request");
+      }
+
+      fixture.spaFallback.set(true); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/spa-root", 80, 2, false, List.of(alice)), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner) || runner.snapshot().state() == ScopeInspection.State.PAUSED, "explicit SPA start shell discovery");
+        var result = runner.snapshot();
+        check(result.state() == ScopeInspection.State.COMPLETED && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/script-found")), "a caller-selected SPA start shell keeps actual script/API discovery even when missing routes share its HTML");
+        check(result.pages().stream().anyMatch(p -> p.url().endsWith("/app/spa-root") && p.classification().equals("SOFT404") && !p.complete()), "SPA shell exploration does not turn a soft404 into proven target coverage");
+      }
+      fixture.spaFallback.set(false); fixture.exposedEnv.set(true); fixture.declaredDiscovery.set(true); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/discovery-root", 80, 2, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "meaningful discovery before bounded guesses");
+        var result = runner.snapshot();
+        Set<String> core = Set.of("/app/discovery-root", "/app/discovery.js", "/app/api/script-found", "/app/robots.txt", "/app/sitemap.xml",
+            "/app/api/robots-found", "/app/api/sitemap-found", "/app/.env", "/app/openapi.json", "/app/swagger.json", "/app/v3/api-docs", "/app/.well-known/security.txt");
+        int firstGuess = fixture.visits.size();
+        for (int i = 0; i < fixture.visits.size(); i++) if (!fixture.visits.get(i).path().contains("wb-missing-") && !core.contains(fixture.visits.get(i).path())) { firstGuess = i; break; }
+        for (String path : List.of("/app/api/script-found", "/app/api/robots-found", "/app/api/sitemap-found", "/app/.env"))
+          check(visitIndex(fixture.visits, path) >= 0 && visitIndex(fixture.visits, path) < firstGuess, "observed and declared discovery plus the single env check precede technology guesses");
+        check(fixture.visits.stream().map(ScopeInspectionFixture.Visit::path).filter(p -> !p.contains("wb-missing-") && !core.contains(p)).distinct().count() <= 12, "automatic technology guesses are capped at twelve distinct paths per run");
+        check(fixture.visits.stream().filter(v -> v.path().contains(".env")).allMatch(v -> v.path().equals("/app/.env"))
+            && fixture.visits.stream().filter(v -> v.path().equals("/app/.env")).count() == 1, "env inspection uses one live-scoped GET path rather than environment-file variants");
+        check(result.pages().stream().anyMatch(p -> p.url().endsWith("/app/.env") && p.classification().equals("ENV") && p.complete()), "a stable missing-path baseline distinguishes actual exposed env content");
+        check(result.sent() == fixture.visits.size() && result.sent() <= 80, "prioritized discovery and env checks still share all actual control/target requests in one budget");
+      }
+      fixture.exposedEnv.set(false); fixture.declaredDiscovery.set(false); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/.env", 20, 0, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "fake env 200 remains partial");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.url().endsWith("/app/.env") && p.classification().equals("SOFT404") && !p.complete()), "a fake 200 env response is partial fallback evidence rather than an exposed env file");
+      }
+      fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/guarded-root", 80, 2, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "unresolved API inputs do not become generic GET guesses");
+        check(fixture.visits.stream().noneMatch(v -> v.path().equals("/app/api/not-own-host") || v.path().equals("/app/api/post-observed")), "an unknown API host or POST declaration cannot be re-added as an environment GET guess");
+        check(fixture.visits.stream().anyMatch(v -> v.path().equals("/app/guarded.js"))
+            && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/safe-grounded"))
+            && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/absolute-grounded")), "real script src and grounded relative/absolute GET calls retain automatic discovery");
+        check(runner.snapshot().candidates().stream().anyMatch(c -> c.url().equals("/app/api/not-own-host") && !c.executable()), "an unresolved relative API path stays visible without an invented origin");
       }
     }
     System.out.println("ScopeInspectionRunnerTest: " + checks + " checks passed (production runner, isolated loopback HTTP)");

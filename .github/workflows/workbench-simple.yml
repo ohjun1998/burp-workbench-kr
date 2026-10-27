@@ -2,10 +2,10 @@ name: Workbench Simple
 
 on:
   push:
-    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana']
-    paths: ['simple/**', '.github/workflows/workbench-simple.yml']
+    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana', 'account-a/simple-retest-values']
+    paths: ['simple/**', 'audit/simple-retest/**', '.github/workflows/workbench-simple.yml']
   pull_request:
-    paths: ['simple/**', '.github/workflows/workbench-simple.yml']
+    paths: ['simple/**', 'audit/simple-retest/**', '.github/workflows/workbench-simple.yml']
   workflow_dispatch:
 
 permissions:
@@ -35,6 +35,8 @@ jobs:
           node-version: '22'
       - name: Strict Java 17 build and complete Simple regression profile
         run: python simple/dev.py check
+      - name: Verify exact-value retest report parsing and formats
+        run: python -m unittest discover -s audit/simple-retest -p test_build_report.py -v
       - name: Install pinned external Katana 1.8.0
         run: python simple/tools/install_katana.py --dest "$RUNNER_TEMP/workbench-katana" --platform linux_amd64
       - name: Verify real Katana against the isolated loopback fixture

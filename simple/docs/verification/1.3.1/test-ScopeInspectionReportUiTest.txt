@@ -1,0 +1,13 @@
+PASS export requires a current response original
+PASS completed originals enable categorized report export without selecting a row
+PASS ordinary inspection UI remains masked
+PASS running export is unavailable until the result is stable
+PASS programmatic export also checks active state
+PASS async export exposes busy state and retains current originals
+PASS a new run cannot discard originals while export is reading them
+PASS export gives a completion result
+PASS local report contains the exact parsed value and linked original
+PASS parsing and saving a report never sends a target request
+PASS existing report is preserved and refusal is visible
+PASS closed workspace cannot export stale originals
+ScopeInspectionReportUiTest: 12 checks passed (local production export UI; no target HTTP)

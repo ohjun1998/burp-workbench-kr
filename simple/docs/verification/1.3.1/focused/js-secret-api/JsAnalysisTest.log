@@ -1,0 +1,32 @@
+PASS AST successfully parsed
+PASS constant concat fetch URL and method
+PASS header names and body keys from call options
+PASS query values excluded from results
+PASS Axios post body metadata
+PASS XHR open URL
+PASS WebSocket identified
+PASS location assignment URL
+PASS AWS access key pattern
+PASS Google key pattern
+PASS GitHub token pattern
+PASS placeholder excluded
+PASS secret results masked with fingerprints only
+PASS template unresolved value retained
+PASS dynamic concatenation marked unresolved
+PASS escaped string decoded by parser
+PASS shadowed parameter not resolved from global const
+PASS global const resolved in own scope
+PASS Axios baseURL and params metadata
+PASS HTML inline script original line location
+PASS external script URLs remain static candidates with no inferred request method
+PASS parse failure clearly labeled with secret fallback
+PASS numeric arithmetic not incorrectly concatenated
+PASS URL credentials query and fragment excluded
+PASS source size limit explicit
+PASS endpoint result cap
+PASS JavaScript is parsed without executing throw
+PASS module compatibility retains call metadata without execution
+PASS Request constructor URL metadata
+PASS same URL in separate call sites retains code locations
+PASS window.open target not confused with XHR
+JsAnalysisTest: 31 checks passed

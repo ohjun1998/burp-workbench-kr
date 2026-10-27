@@ -58,3 +58,7 @@ Node의 DOM·Chrome API 어댑터 검사는 실제 Chromium에서 MV3 확장이 
 화면 검사는 기존 Simple 화면 뒤에 `render_scope_inspection.py`로 실제 운영 패널을 별도 렌더링합니다. 합성 패킷·브라우저 관측을 사용한 캡처이며 실제 Burp GUI·대상 사이트 점검·브라우저 DOM 실행 결과로 합산하지 않습니다. 신규 helper ZIP은 manifest·필수 JS·라이선스·CRC·SHA와 소스 지문을 검증합니다.
 
 `python simple/dev.py check`는 선언한 전체 회귀·loopback 페이로드 HTTP·Mapper Java·브라우저 도우미 Node 검사를 실행합니다. 실제 Burp GUI, Windows DPI/IME, 브라우저 수동 조작, Docker 실습 스택, 외부 OAST/BApp/AI 서비스와 기존 실습 사이트 전체 HTTP 하네스는 별도 검증 범위입니다.
+
+## 1.3.1 원문 값 보고서와 발견·세션 보완
+
+`ScopeInspectionReportTest`는 응답 원본의 정확한 값·분류·출처·원본 ID·위치와 HTML 이스케이프·CSV 수식 보호·JSON 값 보존·분석 한도·기존 파일 보존을 확인합니다. `ScopeInspectionReportUiTest`는 실제 패널의 비동기 저장·진행 중 비활성·원본 수명·추가 대상 전송 없음·일반 화면 가림을 확인합니다. 기존 Runner·JS·시크릿 분석 회귀로 정상 폼/실제 세션 실패·환경 후보·표현식·번들·소스맵·분류 경계를 추가 확인합니다. 사이트별 실제 재시험은 이 단위 검사 합계와 별도입니다.

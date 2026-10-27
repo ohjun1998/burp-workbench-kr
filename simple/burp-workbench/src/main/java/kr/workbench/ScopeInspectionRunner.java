@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 /** One explicitly started, bounded inspection. Construction and result navigation send no HTTP. */
 final class ScopeInspectionRunner implements AutoCloseable {
   private static final int MAX_CANDIDATES = 500, MAX_TASKS = 2000, MAX_FINDINGS = 5000;
+  private static final int MAX_ENVIRONMENT_GUESSES = 12;
   private static final Set<String> IGNORED_FIELDS = Set.of("timestamp", "nonce", "csrf", "traceId", "requestId");
   private static final Set<String> FALLBACK = Set.of("SOFT404", "SIMILAR", "LOGIN", "CHALLENGE", "LIMIT");
   private static final Set<String> TEXT_TYPES = Set.of("text/", "json", "javascript", "xml", "yaml", "graphql", "x-www-form-urlencoded");
@@ -43,6 +44,9 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private long conditionRevision = 1;
   private final Map<String, EnvironmentControls.Reference> missingReferences = new HashMap<>();
   private final Map<String, Integer> verifiedAt = new HashMap<>();
+  private final Map<String, String> verifiedOriginals = new HashMap<>();
+  private final Set<String> environmentGuesses = new LinkedHashSet<>();
+  private final Set<String> redirectTargets = new HashSet<>();
   private final Map<String, EnvironmentCatalog> catalogs = new HashMap<>();
   private final Map<String, List<ScopeInspection.Page>> accessComparisons = new HashMap<>();
   private final ArrayDeque<KatanaTask> katanaQueue = new ArrayDeque<>();
@@ -71,6 +75,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private record Received(HttpRequestResponse packet, DiskTrafficStore.PacketRef original, String headers, String body,
                           boolean complete, String note) {}
   private record Identity(boolean match, boolean different, boolean primaryMatch) {}
+  private record DiscoveryInputs(Set<String> blockedPaths, Set<String> groundedGets) {}
   private record KatanaTask(String key, Task task, long condition, CompletableFuture<DiskTrafficStore.PacketRef> result) {}
   private static final class Halt extends RuntimeException { Halt(String text) { super(text); } }
   private static final class Retry extends RuntimeException {}
@@ -205,9 +210,11 @@ final class ScopeInspectionRunner implements AutoCloseable {
       addCandidateLocked(new ScopeInspection.Candidate(options.url(), "GET", "시작 URL", "선택한 SCOPE 시작 URL", true), 0, 0);
       String app = runRoot;
       for (String path : List.of("/robots.txt", "/sitemap.xml", "/.well-known/security.txt", "/openapi.json", "/swagger.json", "/v3/api-docs"))
-        addCandidateLocked(new ScopeInspection.Candidate(origin + app + path, "GET", "공통 경로", "초기 공통 후보", true), 0, 60);
+        addCandidateLocked(new ScopeInspection.Candidate(origin + app + path, "GET", "공통 경로", "초기 공통 후보", true), 0,
+            path.equals("/robots.txt") || path.equals("/sitemap.xml") ? 30 : path.contains("security.txt") ? 70 : 35);
+      addCandidateLocked(new ScopeInspection.Candidate(origin + app + "/.env", "GET", "선별 환경 파일", "허용 앱 루트의 단일 .env 형식 확인", true), 0, 34);
       if (!app.isEmpty()) for (String path : List.of("/robots.txt", "/sitemap.xml"))
-        addCandidateLocked(new ScopeInspection.Candidate(origin + path, "GET", "공통 경로", "사이트 경로 선언", true), 0, 65);
+        addCandidateLocked(new ScopeInspection.Candidate(origin + path, "GET", "공통 경로", "사이트 경로 선언", true), 0, 32);
       if (options.browser()) addFindingLocked(finding("COVERAGE", "브라우저 탐색 대기", options.url(), "GET", "browser-session",
           "미확인", "INFO", "대기", "브라우저 도우미의 별도 세션을 기다립니다. HTTP 계정과 자동으로 같은 신원으로 취급하지 않습니다.", "", "browser-wait"));
       long token = generation.incrementAndGet(); pending = executor.submit(() -> run(token));
@@ -256,7 +263,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
           profiles.put(next.id(), new ScopeInspection.Profile(next.id(), next.label(), normalizedHeaders, next.identity()));
         }
       }
-      verifiedAt.clear(); missingReferences.clear(); retryAt = 0; conditionRevision++;
+      verifiedAt.clear(); verifiedOriginals.clear(); redirectTargets.clear(); missingReferences.clear(); retryAt = 0; conditionRevision++;
       for (var deferred : katanaDeferred.values()) if (!queue.contains(deferred)) queue.add(deferred);
       katanaDeferred.clear();
       boolean restart = state == ScopeInspection.State.STOPPED;
@@ -425,18 +432,21 @@ final class ScopeInspectionRunner implements AutoCloseable {
     String url = received.packet().request().url(), method = received.packet().request().method();
     HttpResponse response = received.packet().response(); int status = response.statusCode();
     var analysis = ScopeInspectionAnalysis.analyze(url, status, received.headers(), received.body(), profile.label(), received.original().id());
+    DiscoveryInputs inputs = discoveryInputs(analysis.candidates());
     rememberSecrets(received, analysis.findings().stream().anyMatch(f -> f.category().equals("SECRET")));
     String comparison = EnvironmentControls.state(status, received.headers(), received.body(), url, reference, IGNORED_FIELDS);
-    var content = received.complete() ? EnvironmentContent.inspect(url, status, received.headers(), received.body(), comparison)
+    boolean incidentalForm = incidentalPasswordForm(profile, url, status, received.body());
+    var content = received.complete() ? EnvironmentContent.inspect(url, status, received.headers(), received.body(), comparison, incidentalForm)
         : new EnvironmentContent.Finding("LIMIT", "본문 분석 미완료", received.note(), "미검사 원본과 범위를 확인하세요.");
     boolean referenceComplete = reference != null && reference.stable();
-    boolean targetCovered = !Set.of("LOGIN", "CHALLENGE", "RATE", "DENIED", "REDIRECT", "LIMIT", "UNKNOWN", "ERROR").contains(content.kind());
+    boolean targetCovered = !Set.of("LOGIN", "CHALLENGE", "RATE", "DENIED", "REDIRECT", "LIMIT", "UNKNOWN", "ERROR", "SOFT404", "SIMILAR").contains(content.kind());
     boolean complete = received.complete() && referenceComplete && targetCovered;
     String note = received.note() + " · " + comparison;
     if (task.candidate().source().contains("Katana")) note += " · Katana 표준 크롤러 · 공통 Montoya 원본";
     if (!targetCovered) note += " · 대상 내용 미확인 · " + content.title() + " · 해당 응답의 정적 단서만 분석";
     if (!profile.headers().isEmpty() && profile.identity() == null) note += " · 선택 계정 신원 미확인";
     if (!referenceComplete) note += " · 공통 응답 대조 미완료";
+    if (incidentalForm) note += identityVerified(profile) ? " · 비밀번호 폼과 별개로 선택 신원 조건 확인" : " · 비밀번호 폼만으로 세션 만료를 판정하지 않음 · 선택 신원 미확인";
     ScopeInspection.Page page = new ScopeInspection.Page(displayUrl(url), method, profile.label(), status, content.kind(), complete,
         note, digest(received.headers(), received.body(), url), received.original(), revisionOf(profile));
     synchronized (lock) {
@@ -446,21 +456,35 @@ final class ScopeInspectionRunner implements AutoCloseable {
     }
     synchronized (lock) {
       for (var item : analysis.findings()) addFindingLocked(item);
+      if (incidentalForm && !profile.headers().isEmpty()) {
+        boolean verified = identityVerified(profile);
+        addFindingLocked(finding("AUTH", verified ? "비밀번호 폼 포함 화면 · 선택 신원 확인" : "비밀번호 폼 · 신원 확인 보류", url, method, profile.label(),
+            verified ? "신원 조건 대조" : "신원 미확인", "INFO", verified ? "조건 확인" : "확인 필요",
+            "회원가입·비밀번호 변경·공통 로그인 모달의 입력 필드만으로 세션 만료를 판단하지 않습니다."
+                + (verified ? " 신원 대조 원본: " + verifiedOriginals.getOrDefault(profile.id(), "") : " 기존 계정의 신원 확인 조건을 연결해 실제 계정을 대조하세요."),
+            received.original().id(), "incidental-password-form"));
+      }
       if (!analysis.complete()) {
         partial++;
         addFindingLocked(finding("COVERAGE", "정적 분석 일부 미완료", url, method, profile.label(), "관측", "INFO", "부분 검사",
             analysis.note(), received.original().id(), "analysis-partial"));
       }
     }
-    if (!FALLBACK.contains(content.kind()) && status >= 200 && status < 300 && received.complete()) {
+    boolean startShell = task.candidate().source().equals("시작 URL") && Set.of("SOFT404", "SIMILAR").contains(content.kind());
+    if ((!FALLBACK.contains(content.kind()) || startShell) && status >= 200 && status < 300 && received.complete()) {
+      List<ScopeInspection.Candidate> discovered = startShell ? analysis.candidates().stream().filter(c -> priority(c) < 20).toList() : analysis.candidates();
       if (task.depth() < options.depth()) {
         synchronized (lock) {
-          for (var candidate : analysis.candidates()) addCandidateLocked(candidate, task.depth() + 1, priority(candidate));
+          for (var candidate : discovered) {
+            if (candidate.source().equals("환경 경로") && blockedReference(candidate.url(), inputs))
+              rememberLimitedCandidateLocked(candidate, "서버·메서드·필수값 미확정 선언과 겹치는 인용 경로 · GET 추정하지 않음");
+            else addCandidateLocked(candidate, task.depth() + 1, priority(candidate));
+          }
         }
       } else synchronized (lock) {
-        for (var candidate : analysis.candidates()) rememberLimitedCandidateLocked(candidate, "탐색 깊이 한도 · 미검사");
+        for (var candidate : discovered) rememberLimitedCandidateLocked(candidate, "탐색 깊이 한도 · 미검사");
       }
-      learnEnvironment(url, received.headers(), received.body(), profile, task.depth());
+      if (!startShell) learnEnvironment(url, received.headers(), received.body(), profile, task.depth(), inputs);
     }
     compareAccess(page, profile);
   }
@@ -660,6 +684,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
     synchronized (lock) { referencesById.put(original.id(), original); }
     HttpResponse response = packet.response();
     String headers = EnvironmentPanel.responseHeaders(response);
+    if (response.statusCode() >= 300 && response.statusCode() < 400) try {
+      String target = normalized(URI.create(url).resolve(EnvironmentResponse.header(headers, "Location")).toString());
+      if (target != null && allowed(target)) synchronized (lock) { redirectTargets.add(profile.id() + "|" + target); }
+    } catch (RuntimeException ignored) { }
     int bytes = response.body() == null ? 0 : response.body().length();
     long declared = contentLength(headers);
     boolean complete = bytes <= options.maxBodyBytes() && (declared < 0 || declared <= options.maxBodyBytes());
@@ -686,7 +714,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
       }
     }
     if (!control && response.statusCode() != 429 && (response.statusCode() != 401 || profile.headers().isEmpty())
-        && !EnvironmentContent.login(body) && !EnvironmentContent.challenge(body)) {
+        && (!EnvironmentContent.login(body) || incidentalPasswordForm(profile, url, response.statusCode(), body)) && !EnvironmentContent.challenge(body)) {
       synchronized (lock) { responseCache.put(responseKey(profile, url, method), original); }
     }
     publish();
@@ -720,7 +748,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
       autoPause("비로그인 신원 대조가 구분되지 않습니다. 계정·신원 조건을 확인한 뒤 재개하세요.", 0);
       throw new Retry();
     }
-    synchronized (lock) { verifiedAt.put(profile.id(), sent); }
+    synchronized (lock) { verifiedAt.put(profile.id(), sent); verifiedOriginals.put(profile.id(), authenticated.original().id() + " / " + without.original().id()); }
   }
 
   private Identity identityOutcome(Received received, CookieSessionProbe.Config config) {
@@ -782,9 +810,14 @@ final class ScopeInspectionRunner implements AutoCloseable {
     if (status == 429) { autoPause("HTTP 429 · Retry-After 이후 직접 재개하세요.", EnvironmentScan.retryTime(headers)); throw new Retry(); }
     if (EnvironmentContent.challenge(body)) { autoPause("보안 확인 화면 감지 · 브라우저와 세션 확인 후 재개하세요.", 0); throw new Retry(); }
     if (!profile.headers().isEmpty()) {
-      if (status == 401 || EnvironmentContent.login(body)) {
+      String location = EnvironmentResponse.header(headers, "Location");
+      boolean loginRedirect = false;
+      if (status >= 300 && status < 400 && !location.isBlank()) try { loginRedirect = loginPath(URI.create(original.url()).resolve(location).toString()); } catch (RuntimeException ignored) { }
+      boolean redirectedForm = status >= 200 && status < 300 && EnvironmentContent.login(body) && dedicatedLoginForm(original.url(), body)
+          && redirectTargets.contains(profile.id() + "|" + original.url());
+      if (status == 401 || loginRedirect || redirectedForm) {
         synchronized (lock) { verifiedAt.remove(profile.id()); }
-        autoPause("로그인 세션 확인 필요 · 새 인증정보 연결 후 재개하세요.", 0); throw new Retry();
+        autoPause(status == 401 ? "로그인 세션 확인 필요 · 새 인증정보 연결 후 재개하세요." : "로그인 경로 이동 감지 · 계정·권한 조건을 확인한 뒤 재개하세요.", 0); throw new Retry();
       }
       Map<String, String> cookies = CookieSessionProbe.cookies(profile.headers());
       for (String line : headers.split("\\r?\\n")) if (line.regionMatches(true, 0, "set-cookie:", 0, 11)) {
@@ -801,17 +834,78 @@ final class ScopeInspectionRunner implements AutoCloseable {
     }
   }
 
-  private void learnEnvironment(String url, String headers, String body, ScopeInspection.Profile profile, int depth) {
+  private boolean identityVerified(ScopeInspection.Profile profile) {
+    synchronized (lock) { return profile.identity() != null && verifiedAt.containsKey(profile.id()) && sent - verifiedAt.get(profile.id()) < 25; }
+  }
+
+  private boolean incidentalPasswordForm(ScopeInspection.Profile profile, String url, int status, String body) {
+    if (status < 200 || status >= 300 || !EnvironmentContent.login(body) || EnvironmentContent.challenge(body)) return false;
+    boolean dedicated = dedicatedLoginForm(url, body);
+    if (dedicated && redirectTargets.contains(profile.id() + "|" + url)) return false;
+    return !dedicated || identityVerified(profile);
+  }
+
+  private static boolean loginPath(String url) {
+    try { return Objects.toString(URI.create(url).getPath(), "").matches("(?i).*/(?:login|log[-_]?in|signin|sign[-_]?in)(?:\\.(?:php|aspx?|jsp|html?))?/?$"); }
+    catch (RuntimeException invalid) { return false; }
+  }
+
+  private static boolean dedicatedLoginForm(String url, String body) {
+    if (loginPath(url)) return true;
+    try {
+      if (!Objects.toString(URI.create(url).getPath(), "").matches("(?i).*/(?:auth|authentication|session)/?")) return false;
+      var form = java.util.regex.Pattern.compile("(?is)<form\\b[^>]{0,4096}\\baction\\s*=\\s*['\"]([^'\"<>]{1,1024})['\"]").matcher(body);
+      return form.find() && loginPath(URI.create(url).resolve(form.group(1)).toString());
+    } catch (RuntimeException invalid) { return false; }
+  }
+
+  private void learnEnvironment(String url, String headers, String body, ScopeInspection.Profile profile, int depth, DiscoveryInputs inputs) {
     synchronized (lock) {
       EnvironmentCatalog catalog = catalogs.computeIfAbsent(profile.id(), key -> new EnvironmentCatalog());
       EnvironmentCatalog.Site site = catalog.observe(url, headers, body);
-      for (var candidate : catalog.candidates(site, runRoot, true, 100)) {
+      for (var candidate : catalog.candidates(site, runRoot, true, 40)) {
         ScopeInspection.Candidate next = new ScopeInspection.Candidate(candidate.url(), "GET", candidate.source(), candidate.purpose(), true);
-        if (depth < options.depth())
-          addCandidateLocked(next, depth + 1, candidate.score() >= 80 ? 20 : 55);
+        if (blockedReference(next.url(), inputs))
+          rememberLimitedCandidateLocked(next, "서버·메서드·필수값 미확정 선언과 겹치는 인용 경로 · GET 추정하지 않음");
+        else if (depth < options.depth())
+          addCandidateLocked(next, depth + 1, priority(next));
         else rememberLimitedCandidateLocked(next, "탐색 깊이 한도 · 환경 후보 미검사");
       }
     }
+  }
+
+  private DiscoveryInputs discoveryInputs(List<ScopeInspection.Candidate> discovered) {
+    Set<String> blocked = new HashSet<>(), grounded = new HashSet<>();
+    for (var candidate : discovered) {
+      String source = Objects.toString(candidate.source(), ""), verb = Objects.toString(candidate.method(), "");
+      String normalized = normalized(candidate.url());
+      if (candidate.executable() && Set.of("GET", "HEAD").contains(verb)
+          && (source.contains("JS") || source.contains("API 문서") || source.contains("관측 링크")) && normalized != null) grounded.add(normalized);
+      if (!candidate.executable() && (source.contains("JS") || source.contains("API 문서"))) {
+        boolean retainedScript = source.contains("JS") && Objects.toString(candidate.label(), "").startsWith("HTML · src")
+            && discovered.stream().anyMatch(other -> other.executable() && other.method().equals("GET") && other.source().equals("환경 경로")
+                && other.label().equals("실제 응답 참조") && Objects.equals(other.url(), candidate.url()));
+        if (retainedScript && normalized != null) grounded.add(normalized);
+        else {
+          String path = referencePath(candidate.url()); if (path != null) blocked.add(path);
+        }
+      }
+    }
+    return new DiscoveryInputs(blocked, grounded);
+  }
+
+  private boolean blockedReference(String url, DiscoveryInputs inputs) {
+    return inputs.blockedPaths().contains(referencePath(url)) && !inputs.groundedGets().contains(normalized(url));
+  }
+
+  /** Project unresolved relative paths only to veto a guessed GET, never to schedule one. */
+  private String referencePath(String raw) {
+    try {
+      URI uri = URI.create(raw.replace("{", "%7B").replace("}", "%7D"));
+      if (uri.getHost() != null) return EnvironmentCatalog.origin(uri) + Objects.toString(uri.getRawPath(), "/");
+      if (uri.getScheme() == null && uri.getRawAuthority() == null && Objects.toString(uri.getRawPath(), "").startsWith("/")) return origin + uri.getRawPath();
+    } catch (RuntimeException invalid) { }
+    return null;
   }
 
   private void compareAccess(ScopeInspection.Page page, ScopeInspection.Profile profile) {
@@ -861,18 +955,27 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private void addCandidateLocked(ScopeInspection.Candidate candidate, int depth, int priority) {
     String raw = normalized(candidate.url());
     String method = Objects.toString(candidate.method(), "?").toUpperCase(Locale.ROOT);
-    String display = displayUrl(candidate.url());
+    String display = candidateDisplay(candidate);
     String key = method + "|" + Objects.toString(raw, display);
     boolean first = !candidateKeys.contains(key);
     if (first && candidates.size() >= MAX_CANDIDATES) { candidateLimitLocked(); return; }
-    if (first) candidateKeys.add(key);
     boolean executable = candidate.executable() && raw != null && Set.of("GET", "HEAD").contains(method) && readOnlyUrl(raw) && allowed(raw) && !secretInput(raw);
+    if (executable && priority >= 80 && !environmentGuesses.contains(raw)) {
+      boolean existingObserved = queue.stream().anyMatch(t -> t.candidate().url().equals(raw) && t.candidate().method().equals(method) && t.priority() < 80);
+      if (!existingObserved) {
+        if (environmentGuesses.size() >= MAX_ENVIRONMENT_GUESSES) {
+          rememberLimitedCandidateLocked(candidate, "환경 추정 경로 자동 확인 한도 12개 · 실제 참조/API 선언 우선"); return;
+        }
+        environmentGuesses.add(raw);
+      }
+    }
+    if (first) candidateKeys.add(key);
     ScopeInspection.Candidate safeCandidate = new ScopeInspection.Candidate(display, method, displayText(candidate.source(), 120), displayText(candidate.label(), 160), executable);
     if (first) candidates.add(safeCandidate);
     else if (executable) {
       for (int i = 0; i < candidates.size(); i++) {
         var old = candidates.get(i);
-        if (old.url().equals(display) && old.method().equals(method) && !old.executable()) { candidates.set(i, safeCandidate); break; }
+        if (old.url().equals(display) && old.method().equals(method) && (!old.executable() || priority < priority(old))) { candidates.set(i, safeCandidate); break; }
       }
     }
     if (!first && !executable) return;
@@ -888,16 +991,22 @@ final class ScopeInspectionRunner implements AutoCloseable {
       if (queued.add(taskKey)) {
         if (queue.size() >= MAX_TASKS) { partial++; continue; }
         queue.add(new Task(new ScopeInspection.Candidate(raw, method, candidate.source(), candidate.label(), true), profile.id(), depth, priority, order++));
+      } else {
+        Task existing = queue.stream().filter(t -> t.profileId().equals(profile.id()) && t.candidate().url().equals(raw) && t.candidate().method().equals(method)).findFirst().orElse(null);
+        if (existing != null && priority < existing.priority()) {
+          queue.remove(existing);
+          queue.add(new Task(new ScopeInspection.Candidate(raw, method, candidate.source(), candidate.label(), true), profile.id(), Math.min(depth, existing.depth()), priority, existing.order()));
+        }
       }
     }
   }
 
   private void rememberLimitedCandidateLocked(ScopeInspection.Candidate candidate, String reason) {
-    String key = candidate.method() + "|" + Objects.toString(normalized(candidate.url()), safe(candidate.url()));
+    String key = candidate.method() + "|" + Objects.toString(normalized(candidate.url()), candidateDisplay(candidate));
     if (candidateKeys.contains(key)) return;
     if (candidates.size() >= MAX_CANDIDATES) { candidateLimitLocked(); return; }
     candidateKeys.add(key);
-    if (candidates.size() < MAX_CANDIDATES) candidates.add(new ScopeInspection.Candidate(displayUrl(candidate.url()), candidate.method(), candidate.source(), displayText(candidate.label(),160), false));
+    if (candidates.size() < MAX_CANDIDATES) candidates.add(new ScopeInspection.Candidate(candidateDisplay(candidate), candidate.method(), candidate.source(), displayText(candidate.label(),160), false));
     excluded++;
     addFindingLocked(finding("COVERAGE", "발견했지만 자동 방문하지 않음", candidate.url(), candidate.method(), "전체", "관측", "INFO", "미검사", reason, "", "limited:" + key));
   }
@@ -1027,6 +1136,19 @@ final class ScopeInspectionRunner implements AutoCloseable {
 
   private String displayUrl(String url) { return secretInput(url) ? origin + "/%5BREDACTED%5D" : safe(url); }
 
+  private String candidateDisplay(ScopeInspection.Candidate candidate) {
+    String raw = candidate.url();
+    if (!candidate.executable() && Objects.toString(candidate.source(), "").contains("JS") && raw != null && raw.startsWith("/") && !raw.startsWith("//") && raw.length() <= 2048) try {
+      URI path = URI.create(raw.replace("{", "%7B").replace("}", "%7D"));
+      if (path.getScheme() == null && path.getRawAuthority() == null) {
+        if (secretInput(raw)) return "/%5BREDACTED%5D";
+        return displayText(Objects.toString(path.getRawPath(), "").replace("%7B", "{").replace("%7D", "}")
+            .replaceAll("(?i)(/(?:token|api[_-]?key|secret|password|authorization)/)[^/]+", "$1%5BREDACTED%5D"), 2048);
+      }
+    } catch (RuntimeException invalid) { }
+    return displayUrl(raw);
+  }
+
   private String displayText(String text, int max) {
     String clean = ScopeInspectionAnalysis.display(text, max);
     synchronized (lock) { for (String value : discoveredSecrets) if (!value.isEmpty()) clean = clean.replace(value, "[가림]"); }
@@ -1098,8 +1220,14 @@ final class ScopeInspectionRunner implements AutoCloseable {
     return sample.signature().isEmpty() ? "" : EnvironmentProject.hash(EnvironmentContent.normalize(sample.signature()));
   }
   private static int priority(ScopeInspection.Candidate candidate) {
-    String source = candidate.source();
-    return source.contains("관측") || source.contains("브라우저") || source.contains("메뉴") ? 5 : source.contains("API 문서") ? 10 : source.contains("JS") ? 15 : source.contains("환경") ? 25 : 50;
+    String source = Objects.toString(candidate.source(), ""), basis = source + " " + Objects.toString(candidate.label(), "");
+    if (source.equals("시작 URL")) return 0;
+    if (basis.contains("소스맵 후보")) return 85;
+    if (source.contains("관측") || source.contains("브라우저") || source.contains("메뉴") || basis.contains("실제 응답 참조") || basis.contains("실제 링크") || basis.contains("실제 선언")) return 5;
+    if (source.contains("API 문서") || basis.contains("OpenAPI GET 선언") || basis.contains("Swagger 명세 참조")) return 10;
+    if (source.contains("JS")) return 15;
+    if (source.equals("선별 환경 파일")) return 34;
+    return basis.contains("공통 탐색") ? 95 : 80;
   }
   private static String severity(String kind) { return Set.of("ENV", "CONFIG_JSON", "GIT", "PHPINFO").contains(kind) ? "MEDIUM" : "INFO"; }
   private ScopeInspection.Finding finding(String category, String title, String url, String method, String account,
@@ -1137,6 +1265,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
       if (pending != null) pending.cancel(true); executor.shutdownNow(); lock.notifyAll();
       queue.clear(); referencesById.clear(); findings.clear(); pages.clear(); candidates.clear();
       responseCache.clear(); katanaDeferred.clear(); analyzedOriginals.clear(); discoveredSecrets.clear(); discoveredSecretBytes = 0;
+      verifiedOriginals.clear(); environmentGuesses.clear(); redirectTargets.clear();
     }
     originals.close();
   }

@@ -138,7 +138,7 @@ INSTALL = [
     '한 확장에서만 수집하려면 기존 Workbench의 로드를 해제하고 Simple을 사용합니다. 기존 확장이나 원본 파일을 삭제할 필요는 없습니다.',
 ]
 REFERENCE = [
-    'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 기존 8개 도구는 직접 선택해 사용할 수 있습니다.',
+    'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 → 결과·원본 확인 → 원문 값 분류 보고서·기존 도구·증거 저장으로 이어갑니다. 기존 8개 도구는 직접 선택해 사용할 수 있습니다.',
     'Katana 수집은 실행용 인증 loopback 프록시를 사용해 같은 SCOPE·HTTP 계정·요청 예산으로 조회합니다. 폼 메타데이터와 기술 탐지 결과는 근거가 필요한 후보로 읽습니다.',
     'Simple은 기존 폴더 탐색·화면 이력·작업 이어가기·도우미 관리 바를 메인 화면에서 제거했습니다. 각 확장의 주요 기능은 유지하고, 도구 이동은 화면만 바꿉니다.',
     '통합 점검 시작은 설정한 SCOPE 안에 조회 요청을 전송합니다. Repeater 준비는 원본을 복사하는 동작이며 실제 전송은 Send로 실행합니다. 입력값 검사·순차 재현은 해당 도구에서 직접 실행합니다.',
@@ -203,7 +203,7 @@ def write_html(images: Path) -> Path:
 def write_markdown(images: Path) -> Path:
     rel = Path(os.path.relpath(images, ROOT/'docs')).as_posix()
     lines = [f'# Workbench Simple {VERSION} 사용 가이드', '', '**기존 8개 도구를 유지하고 Katana와 SCOPE 통합 점검에서 메뉴·환경·경로·API·민감정보를 연결합니다.**', '',
-             'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다.', '', f'> {CAPTURE_NOTE}', '', '## 설치', '']
+             'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 → 결과·원본 확인 → 원문 값 분류 보고서·기존 도구·증거 저장으로 이어갑니다.', '', f'> {CAPTURE_NOTE}', '', '## 설치', '']
     lines += [f'{i}. {text}' for i,text in enumerate(INSTALL,1)]
     lines += ['', 'Simple 설정은 `simple.*`, 저장 폴더는 `.burp-workbench-simple`로 기존 Next와 분리됩니다.', '', '## 확장별 핵심 기능과 부가 흐름 정리', '',
               '| 기존 도구 | 유지한 핵심 기능 | 부가 흐름 정리 |', '|---|---|---|']
@@ -307,7 +307,7 @@ def write_pdf(images: Path) -> Path:
 
 def write_readme() -> Path:
     lines=[f'# Workbench Simple {VERSION}', '',
-           '**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0 JAR·소스·PDF는 보존합니다.', '',
+           '**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0 JAR·소스·PDF는 보존합니다.', '',
            'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.', '',
            '| 필요한 파일 | 위치 |', '|---|---|',
            f'| 설치 JAR | [burp-workbench-simple-{VERSION}.jar](downloads/{VERSION}/burp-workbench-simple-{VERSION}.jar) |',
@@ -327,7 +327,7 @@ def write_readme() -> Path:
     lines += [f'{index}. {text}' for index,text in enumerate(INSTALL,1)]
     lines += ['4. SCOPE 목록에 대상 URL과 경로를 등록하고 허용·제외 범위를 확인합니다. 통합 점검 화면에서 URL·HTTP 계정과 요청 한도를 정합니다.',
               '5. Katana 탐색의 실행 파일·수집 조건을 확인한 뒤 통합 점검을 시작합니다. Katana 수집과 환경·경로·API·키/민감정보·권한 차이·커버리지 결과를 확인합니다. 브라우저 모드는 helper를 준비한 뒤 선택합니다.',
-              '6. 원본과 근거를 읽고 필요한 기존 도구에 연결합니다. 증거에 추가한 뒤 가림 미리보기 → 증거 ZIP 저장으로 저장합니다.', '',
+              '6. 원본과 근거를 읽고 필요한 기존 도구에 연결합니다. 제출할 증거는 가림 미리보기 → 증거 ZIP 저장으로, 파싱한 원문 값은 통합 점검의 분류 보고서 저장으로 각각 저장합니다.', '',
               '화면 열기와 도구 이동은 전송하지 않습니다. 통합 점검 시작은 설정한 범위에 조회 요청을 전송합니다. 일반 트래픽 수집 OFF/SCOPE와 명시적 통합 점검 실행을 구분합니다.', '',
               f'## Katana {KATANA_VERSION} 설치와 수집', '']
     lines += [f'{index}. {text}' for index,text in enumerate(KATANA_INSTALL,1)]
@@ -348,11 +348,11 @@ def write_readme() -> Path:
               '## 캡처와 검증', '', CAPTURE_NOTE+' 예제 URL·계정·판정은 실제 대상 점검의 성공을 뜻하지 않습니다. DOM 어댑터·실제 브라우저·실제 Burp 실행 범위는 버전별 검증 기록에서 구분합니다.', '',
               '## 개발과 가이드 재생성', '',
               '완전한 JDK에서 `python dev.py build`, `python dev.py check`를 사용합니다. 기본 컴파일은 `--release 17`입니다. Node 검사 런처는 설치된 Node가 지원하는 옵션 표기를 확인하며 실제 하위 검사 집계를 검증합니다.', '',
-              '현재 로컬 환경의 Java 21에는 `ct.sym`이 없어 명시적인 `--source-target`으로 소스·바이트코드 수준 17을 지정합니다. 이는 Java 17 플랫폼 API 검증과 구분합니다. 실제 실행한 검사와 제한은 위의 검증 기록을 확인합니다.', '',
+              '이번 로컬 검증은 별도로 준비한 완전한 Temurin JDK 17과 `--release 17`을 사용합니다. 런타임·컴파일 방식과 실제 실행한 검사·제한은 위의 검증 기록을 확인합니다.', '',
               '테스트 어댑터 빌드 후 두 캡처 명령으로 기존 8개 도구와 통합 점검 화면을 같은 버전 디렉터리에 생성합니다. PDF 생성에는 Python `reportlab`, `Pillow`가 필요하고, 구조 검증에는 `PyMuPDF`를 사용합니다.', '',
               '```sh', 'python tools/render_simple.py --check', 'python tools/render_scope_inspection.py --check', 'python tools/build_simple_guide.py', 'python tools/check_simple_guide.py', '```', '',
-              '이 로컬 환경의 컴파일 방식은 `python dev.py check --source-target`과 각 캡처 명령의 `--source-target`으로 재현합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.', '',
-              '[보존한 Simple 1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.2.0 PDF](downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)', '']
+              'Java 17을 PATH에 둔 환경에서 위 명령을 실행하거나 `--java`로 Java 17 경로를 지정합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.', '',
+              '[보존한 Simple 1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)', '']
     output=ROOT/'README_KR.md';output.write_text('\n'.join(lines),encoding='utf-8');return output
 
 
@@ -360,7 +360,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--images',type=Path,default=ROOT/f'docs/images/{VERSION}/light/1280x800')
     args=parser.parse_args();args.images=args.images.resolve()
-    if tuple(map(int,VERSION.split('.'))) < (1,3,0):raise SystemExit('Simple1.0.0/1.1.0/1.2.0 artifacts are immutable. This generator requires Katana Scope inspection 1.3.0 or newer.')
+    if tuple(map(int,VERSION.split('.'))) < (1,3,1):raise SystemExit('Simple1.0.0/1.1.0/1.2.0/1.3.0 artifacts are immutable. This generator requires Simple 1.3.1 or newer.')
     missing=[step['image'] for step in STEPS if not capture_path(args.images,step).is_file()]
     if missing:raise SystemExit('Missing current-version production screenshots: '+', '.join(missing))
     outputs=[write_readme(),write_markdown(args.images),write_html(args.images),write_pdf(args.images)]

@@ -1,0 +1,4 @@
+REAL_BUNDLE_PASS POST /rest/user/login original=actual-juice-bundle offset=360771 line=2767
+REAL_BUNDLE_PASS GET /rest/basket/{dynamic} original=actual-juice-bundle offset=568641 line=3518
+REAL_BUNDLE_PASS GET /rest/products/search original=actual-juice-bundle offset=876517 line=6404
+candidateCount=75 complete=false

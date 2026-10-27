@@ -73,7 +73,7 @@ public final class JsAnalysis {
   if(recoveredCalls>0)state+=" · HTTP 호출 보조 "+recoveredCalls;
   if(compatible>0)state+=" · async/module 구문 호환 보조 "+compatible;if(errors>0)state+=" · AST 실패 "+errors+" (지원 문법 밖/오류; 패턴 탐지만 보조)";if(bounded)state+=" · 입력/시간/결과 제한으로 일부 분석";
   JsMiner.Result miner=JsMiner.analyze(source,base);
-  if(recoveryDepth==0)for(var recovered:miner.recovered()){if(System.nanoTime()>deadline){bounded=true;break;}JsAnalysis child=new JsAnalysis(recovered.content(),base);child.recoveryDepth=1;child.contextual=contextual;child.documentBase=documentBase;Result result=child.run();miner=JsMiner.mergeRecon(miner,result.miner());for(Endpoint e:result.endpoints())if(urls.size()<resultLimit){Endpoint mapped=new Endpoint(e.url,e.method,"source map: "+recovered.name()+(e.kind.contains("GraphQL")?" · "+e.kind.substring(e.kind.indexOf("GraphQL")):""),e.parameters,e.headers,e.bodyKeys,e.line,-1-e.start(),e.length,e.complete,e.evidence+" · 원본 열 "+JsFindingGroups.column(recovered.content(),e.start()));urls.add(mapped);var draft=result.requestDrafts().get(draftKey(e));if(draft!=null)requestDrafts.put(draftKey(mapped),draft);}for(Secret secret:result.secrets())if(secrets.size()<resultLimit&&secretKeys.add(secret.rule+":"+secret.fingerprint))secrets.add(new Secret(secret.rule,secret.masked,secret.length,secret.fingerprint,secret.line,-1,0,"source map: "+recovered.name()+" · "+secret.confidence));}
+  if(recoveryDepth==0)for(var recovered:miner.recovered()){if(System.nanoTime()>deadline){bounded=true;break;}JsAnalysis child=new JsAnalysis(recovered.content(),base);child.recoveryDepth=1;child.contextual=contextual;child.documentBase=documentBase;Result result=child.run();miner=JsMiner.mergeRecon(miner,result.miner());for(Endpoint e:result.endpoints())if(urls.size()<resultLimit){Endpoint mapped=new Endpoint(e.url,e.method,"source map: "+recovered.name()+(e.kind.contains("GraphQL")?" · "+e.kind.substring(e.kind.indexOf("GraphQL")):""),e.parameters,e.headers,e.bodyKeys,e.line,-1-e.start(),e.length,e.complete,e.evidence+" · 원본 열 "+JsFindingGroups.column(recovered.content(),e.start()));urls.add(mapped);var draft=result.requestDrafts().get(draftKey(e));if(draft!=null)requestDrafts.put(draftKey(mapped),draft);}for(Secret secret:result.secrets())if(secrets.size()<resultLimit&&secretKeys.add(secret.rule+":"+secret.fingerprint))secrets.add(new Secret(secret.rule,secret.masked,secret.length,secret.fingerprint,secret.line,-1-Math.max(0,secret.start),secret.sourceLength,"source map: "+recovered.name()+" · "+secret.confidence));}
   return new Result(List.copyOf(urls),List.copyOf(secrets),state.replaceAll("URL/API \\d+","URL/API "+urls.size()).replaceAll("시크릿 후보 \\d+","시크릿 후보 "+secrets.size())+" · 도메인 "+miner.domains().size()+" · map "+miner.maps().size()+" · 원본 "+miner.recovered().size(),bounded,miner,Map.copyOf(requestDrafts));
  }
  private void dataValue(TextCandidates.Value item,String format){
@@ -85,8 +85,8 @@ public final class JsAnalysis {
     if(urls.size()>before){Endpoint e=urls.remove(urls.size()-1);boolean complete=e.complete()&&!value.matches("(?s).*(?:\\{[^}]+}|\\$\\{|/[ :]*:[A-Za-z_]).*");urls.add(new Endpoint(e.url(),e.method(),e.kind(),e.parameters(),e.headers(),e.bodyKeys(),e.line(),e.start(),e.length(),complete,"정적 문자열 · 메서드/도달 여부 미확정 · URL 쿼리 값 제외"));}
    }
   }
-  for(Rule r:RULES){Matcher m=r.pattern.matcher(value);while(m.find()&&secrets.size()<resultLimit)addSecret(r.name,m.group(),item.start(),item.length(),format+" 문자열 패턴 · 유효성 미검증");}
-  secretContext(item.key(),new Value(value,true),node);
+  if(item.literal())for(Rule r:RULES){Matcher m=r.pattern.matcher(value);while(m.find()&&secrets.size()<resultLimit)addSecret(r.name,m.group(),item.start(),item.length(),format+" 문자열 패턴 · 유효성 미검증",item.key());}
+  if(item.literal())secretContext(item.key(),new Value(value,true),node);
  }
  private void budget(){if(Thread.currentThread().isInterrupted()||System.nanoTime()>deadline)throw new IllegalStateException("limit");}
  private static List<Segment> segments(String text){if(!Pattern.compile("(?is)^\\s*(?:<!doctype|<html|<head|<body|<script|<div)").matcher(text).find())return List.of(new Segment(text,0));List<Segment> list=new ArrayList<>();Matcher m=Pattern.compile("(?is)<script\\b([^>]*)>(.*?)</script\\s*>").matcher(text);while(m.find()){String attrs=m.group(1);if(!attrs.matches("(?is).*\\bsrc\\s*=.*")&&!attrs.matches("(?is).*\\btype\\s*=\\s*['\"]application/(?:ld\\+)?json.*"))list.add(new Segment(m.group(2),m.start(2)));}return list;}
@@ -107,7 +107,7 @@ public final class JsAnalysis {
   if(n instanceof ObjectProperty p){String key=key(p.getKey());Value v=value(p.getValue(),0);secretContext(key,v,p.getValue());if(v!=null&&key.matches("(?i)(url|apiurl|baseurl|endpoint|uri|path)")&&urls.stream().noneMatch(e->e.start()==offset+p.getValue().getAbsolutePosition()&&!e.method().equals("?")))endpoint(p.getValue(),"?","config "+key,null,"body");}
   if(n instanceof FunctionNode f&&f.getFunctionName()!=null&&!f.getFunctionName().getIdentifier().isEmpty())functions.computeIfAbsent(f.getEnclosingScope(),x->new HashMap<>()).put(f.getFunctionName().getIdentifier(),f);if(n instanceof VariableInitializer v&&v.getTarget() instanceof Name name){secretContext(name.getIdentifier(),value(v.getInitializer(),0),v.getInitializer());if(name.getIdentifier().matches("(?i)(apiurl|baseurl|endpoint|url|uri)"))endpoint(v.getInitializer(),"?","설정 변수 "+name.getIdentifier(),null,"body");}
   if(n instanceof Assignment a)secretContext(callee(a.getLeft()),value(a.getRight(),0),a.getRight());
-  if(n instanceof StringLiteral literal){String v=literal.getValue();for(Rule rule:RULES){Matcher m=rule.pattern.matcher(v);while(m.find()&&secrets.size()<resultLimit)addSecret(rule.name,m.group(),offset+n.getAbsolutePosition(),n.getLength(),"구문 문자열 + 패턴 · 유효성 미검증");}}
+  if(n instanceof StringLiteral literal){String v=literal.getValue();for(Rule rule:RULES){Matcher m=rule.pattern.matcher(v);while(m.find()&&secrets.size()<resultLimit){int start=offset+n.getAbsolutePosition(),length=n.getLength();int exact=source.indexOf(m.group(),Math.max(0,start));if(exact>=start&&exact+m.group().length()<=start+length){start=exact;length=m.group().length();}addSecret(rule.name,m.group(),start,length,"구문 문자열 + 패턴 · 유효성 미검증",secretName(n));}}}
  }
  private FunctionNode function(Name name){if(dynamicContext)return null;VariableInitializer b=binding(name);if(b!=null&&b.getInitializer() instanceof FunctionNode f)return invalidFunctions.contains(f)?null:f;for(Scope scope=name.getEnclosingScope();scope!=null;scope=scope.getEnclosingScope()){Map<String,FunctionNode> map=functions.get(scope);if(map!=null&&map.containsKey(name.getIdentifier())){FunctionNode f=map.get(name.getIdentifier());return invalidFunctions.contains(f)?null:f;}if(scope instanceof FunctionNode fn&&fn.getParams().stream().anyMatch(p->p instanceof Name param&&param.getIdentifier().equals(name.getIdentifier())))return null;}return null;}
  // Whole-unit invalidation is deliberately conservative: an object that can be changed is never a static URL source.
@@ -280,14 +280,21 @@ public final class JsAnalysis {
  }
 
  private void secretContext(String key,Value v,AstNode n){if(v==null||!v.complete||n==null||!SecretCandidates.named(key)||v.text.length()<8||v.text.length()>16384)return;if(v.text.matches("(?i).*(?:example|placeholder|your[_ -]|changeme|undefined|process\\.env|\\{dynamic\\}).*"))return;for(Rule r:RULES)if(r.pattern.matcher(v.text).find())return;
-  if(!SecretCandidates.plausible(v.text))return;addSecret("시크릿 이름: "+key.replaceAll("[^A-Za-z0-9_.$-]",""),v.text,offset+n.getAbsolutePosition(),n.getLength(),"이름·엔트로피 추정 · 공개 설정값/오탐 가능");}
+  if(!SecretCandidates.plausible(v.text))return;addSecret("시크릿 이름: "+key.replaceAll("[^A-Za-z0-9_.$-]",""),v.text,offset+n.getAbsolutePosition(),n.getLength(),"이름·엔트로피 추정 · 공개 설정값/오탐 가능",key);}
  public static double entropy(String text){Map<Character,Integer> f=new HashMap<>();for(char c:text.toCharArray())f.merge(c,1,Integer::sum);double e=0;for(int n:f.values()){double p=(double)n/text.length();e-=p*Math.log(p)/Math.log(2);}return e;}
- private void addSecret(String rule,String value,int position,int length,String confidence){
-  String nearby=source.substring(Math.max(0,position-96),Math.min(source.length(),position+length+64)).toLowerCase(Locale.ROOT);
-  if(value.matches("(?is).*(?:example|placeholder|your[_-]?key|changeme).*"))confidence+=" · 예제/자리표시자 의심";
-  else if(entropy(value)<2.5)confidence+=" · 반복 패턴 의심";
-  else if(nearby.matches("(?s).*(?:publishable|public[_-]?key|client[_-]?id|measurement[_-]?id).*"))confidence+=" · 공개 식별자 가능";
-  if(secrets.size()>=resultLimit){bounded=true;return;}String hash=hash(value);if(!secretKeys.add(rule+":"+hash))return;secrets.add(new Secret(rule,"[가림 · "+value.length()+"자]",value.length(),hash.substring(0,16),line(position),position,length,confidence+" · Shannon "+String.format(Locale.ROOT,"%.2f",entropy(value))));}
+ private void addSecret(String rule,String value,int position,int length,String confidence){addSecret(rule,value,position,length,confidence,"");}
+ private void addSecret(String rule,String value,int position,int length,String confidence,String name){
+  if(SecretCandidates.example(name,value))confidence+=" · 예제/자리표시자 의심";
+  else if(!Set.of("GitHub token","Slack token","Stripe secret key","Private key").contains(rule)&&SecretCandidates.publicIdentifier(name))confidence+=" · 공개 식별자 가능";
+  if(entropy(value)<2.5)confidence+=" · 반복 패턴 의심";
+  if(secrets.size()>=resultLimit){bounded=true;return;}String hash=hash(value).substring(0,16);if(!secretKeys.add(rule+":"+hash))return;secrets.add(new Secret(rule,"[가림 · "+value.length()+"자]",value.length(),hash,line(position),position,length,confidence+" · Shannon "+String.format(Locale.ROOT,"%.2f",entropy(value))));}
+ private String secretName(AstNode node){
+  AstNode current=node;for(int i=0;i<4&&current.getParent() instanceof ParenthesizedExpression;i++)current=current.getParent();
+  AstNode parent=current.getParent();if(parent instanceof VariableInitializer init&&init.getTarget() instanceof Name name)return name.getIdentifier();
+  if(parent instanceof Assignment assignment&&assignment.getRight()==current)return callee(assignment.getLeft());
+  if(parent instanceof ObjectProperty property&&property.getValue()==current){String name=key(property.getKey());if(name.equalsIgnoreCase("apiKey")&&property.getParent() instanceof ObjectLiteral object&&object.getElements().stream().anyMatch(item->item instanceof ObjectProperty sibling&&Set.of("authDomain","projectId","measurementId","messagingSenderId").contains(key(sibling.getKey()))))return "public_apiKey";return name;}
+  return "";
+ }
  private static String hash(String v){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(v.getBytes(StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException(e);}}
  private int line(int position){if(newlineOffsets==null)newlineOffsets=java.util.stream.IntStream.range(0,source.length()).filter(i->source.charAt(i)=='\n').toArray();int index=Arrays.binarySearch(newlineOffsets,Math.min(position,source.length()));return 1+(index>=0?index:-index-1);}
 }

@@ -30,6 +30,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   final JComboBox<ScopeInspection.Profile> profile = new JComboBox<>();
   final JCheckBox browserMode = new JCheckBox("SPA 메뉴 탐색"), compareAccounts = new JCheckBox("계정별 노출 비교"), katanaMode = new JCheckBox("Katana 탐색");
   final JButton start = new JButton("통합 점검 시작"), pause = new JButton("일시정지"), resume = new JButton("재개"), stop = new JButton("중지");
+  final JButton report = new JButton("분류 보고서 저장");
   final JSpinner budget = new JSpinner(new SpinnerNumberModel(100, 1, 500, 10));
   final JSpinner depth = new JSpinner(new SpinnerNumberModel(2, 0, 3, 1));
   final JSpinner delay = new JSpinner(new SpinnerNumberModel(300, 0, 10000, 100));
@@ -63,6 +64,8 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private final ScopeInspectionHistory history;
   private final ExecutorService historyWorker = Executors.newSingleThreadExecutor(r -> { var t = new Thread(r,"Scope-inspection-history");t.setDaemon(true);return t; });
   private final ExecutorService katanaChecks = Executors.newSingleThreadExecutor(r -> { var t = new Thread(r,"Scope-Katana-install-check");t.setDaemon(true);return t; });
+  private final ExecutorService reportWorker = Executors.newSingleThreadExecutor(r -> { var t = new Thread(r,"Scope-inspection-report");t.setDaemon(true);return t; });
+  private volatile boolean reportBusy;
   private final List<ScopeInspectionRunner> retained = new ArrayList<>();
   private final Set<String> observed = new HashSet<>(), persisted = new HashSet<>();
   private List<ScopeInspection.Finding> changes = List.of();
@@ -100,7 +103,9 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     JPanel top=new JPanel(new BorderLayout(0,7));top.add(WorkbenchUi.row(scopeChoices,reload,katanaMode,browserMode,compareAccounts),BorderLayout.NORTH);top.add(target);
     start.addActionListener(e->safe(this::startInspection));pause.addActionListener(e->safe(()->{if(runner!=null)runner.pause();if(katana!=null)katana.pause();}));
     resume.addActionListener(e->safe(this::resumeInspection));stop.addActionListener(e->safe(this::stopInspection));
-    WorkbenchUi.primary(start);top.add(WorkbenchUi.row(start,pause,resume,stop),BorderLayout.SOUTH);add(top,BorderLayout.NORTH);
+    name(report,"report");report.setToolTipText("현재 응답의 API·토큰·키·민감정보를 원문 값과 위치별로 분류한 로컬 ZIP을 저장합니다.");
+    report.addActionListener(e->safe(this::chooseReport));
+    WorkbenchUi.primary(start);top.add(WorkbenchUi.row(start,pause,resume,stop,report),BorderLayout.SOUTH);add(top,BorderLayout.NORTH);
     name(pages,"pages");
     addFindingsTab("요약","summary");addFindingsTab("환경·DB","environment");addPathsTab();
     addFindingsTab("API·명세 대조","api");addFindingsTab("키·민감정보","secrets");addFindingsTab("응답·내부정보","observations");
@@ -195,6 +200,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   }
   void startInspection(){
     if(closed)throw new IllegalArgumentException("종료된 통합 점검입니다.");
+    if(reportBusy)throw new IllegalArgumentException("현재 보고서 저장이 끝나면 새 점검을 시작할 수 있습니다.");
     if(runner!=null&&(runner.snapshot().state()==ScopeInspection.State.RUNNING||runner.snapshot().state()==ScopeInspection.State.PAUSED))throw new IllegalArgumentException("진행 중 점검을 먼저 중지하세요.");
     String target=url.getText().strip();URI uri=URI.create(target);
     if(!Set.of("http","https").contains(uri.getScheme())||uri.getHost()==null||uri.getUserInfo()!=null||!WorkbenchScope.contains(api,target))throw new IllegalArgumentException("등록된 SCOPE 안의 HTTP(S) URL을 선택하세요.");
@@ -333,7 +339,27 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private DiskTrafficStore.PacketRef requireOriginal(){var ref=selectedOriginal();if(ref==null)throw new IllegalArgumentException("현재 실행의 원본이 연결된 항목을 선택하세요. 이전 요약·제외 항목은 원본을 대신 만들지 않습니다.");return ref;}
   private void selectedChanged(){if(rebuilding)return;var f=selectedFinding();if(f!=null)detail.setText(f.title()+"\n"+f.state()+" · "+f.confidence()+" · "+f.severity()+"\n"+f.detail()+"\n원본: "+f.originalId()+" · 본문 줄 "+f.line()+" · 문자 위치 "+f.offset());else{var ref=selectedOriginal();detail.setText(ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes");}detail.setCaretPosition(0);refreshActions();}
   private void captureEvidence(){var packet=requireOriginal();actions.evidence(List.of(packet),"통합 점검 "+current.id()+" · 선택 계정/원본 연결 · "+(selectedFinding()==null?"경로 응답":selectedFinding().title()));}
-  private void refreshActions(){boolean active=current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED;start.setEnabled(!closed&&!active);pause.setEnabled(!closed&&current.state()==ScopeInspection.State.RUNNING);resume.setEnabled(!closed&&current.state()==ScopeInspection.State.PAUSED);stop.setEnabled(!closed&&active);for(JComponent c:List.of(url,scopeChoices,profile,browserMode,compareAccounts,katanaMode,katanaExecutable,katanaPages,katanaSeconds))c.setEnabled(!active&&!closed);boolean linked=!closed&&selectedOriginal()!=null;for(JButton b:List.of(original,repeater,compare,evidence,js,payload)){b.setEnabled(linked);b.setToolTipText(linked?"선택 원본을 연결합니다. 준비·화면 이동은 대상 요청을 보내지 않습니다.":"원본이 연결된 결과를 먼저 선택하세요.");}}
+  private void chooseReport(){
+    if(GraphicsEnvironment.isHeadless()){feedback.setText("분류 보고서는 데스크톱의 저장 위치 선택 창에서 저장합니다. 원문 값이 포함됩니다.");return;}
+    JFileChooser picker=new JFileChooser();picker.setDialogTitle("분류 보고서 저장 · 응답의 원문 값 포함");
+    picker.setSelectedFile(new java.io.File("Workbench_Simple_"+BuildInfo.VERSION+"_"+current.id()+"_report.zip"));
+    if(picker.showSaveDialog(this)==JFileChooser.APPROVE_OPTION)saveReport(picker.getSelectedFile().toPath());
+  }
+  void saveReport(java.nio.file.Path destination){
+    if(closed||reportBusy)throw new IllegalArgumentException("보고서 저장 상태를 확인하세요.");
+    if(current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED)throw new IllegalArgumentException("점검을 완료하거나 중지한 뒤 현재 결과를 저장하세요.");
+    if(current.pages().stream().noneMatch(p->p.original()!=null))throw new IllegalArgumentException("현재 실행의 응답 원본이 있어야 분류 보고서를 저장할 수 있습니다.");
+    ScopeInspection.Snapshot frozen=current;long token=generation;reportBusy=true;refreshActions();
+    feedback.setText("응답 원문을 API·민감정보·토큰·키·환경별로 분류해 저장합니다…");
+    reportWorker.execute(()->{
+      String message;
+      try{var saved=ScopeInspectionReport.write(destination,frozen);message="분류 보고서 저장 완료 · "+saved.values()+"개 값 · 원문 값 포함"+(saved.complete()?"":" · 부분·미확인 범위 포함");}
+      catch(Exception error){message="분류 보고서 저장 실패 · 원본이나 저장 위치를 확인하세요. 기존 파일은 덮어쓰지 않습니다.";}
+      final String result=message;
+      SwingUtilities.invokeLater(()->{reportBusy=false;if(closed)return;if(token==generation&&current.id().equals(frozen.id()))feedback.setText(result);refreshActions();});
+    });
+  }
+  private void refreshActions(){boolean active=current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED;start.setEnabled(!closed&&!active&&!reportBusy);report.setEnabled(!closed&&!active&&!reportBusy&&current.pages().stream().anyMatch(p->p.original()!=null));pause.setEnabled(!closed&&current.state()==ScopeInspection.State.RUNNING);resume.setEnabled(!closed&&current.state()==ScopeInspection.State.PAUSED);stop.setEnabled(!closed&&active);for(JComponent c:List.of(url,scopeChoices,profile,browserMode,compareAccounts,katanaMode,katanaExecutable,katanaPages,katanaSeconds))c.setEnabled(!active&&!closed);boolean linked=!closed&&selectedOriginal()!=null;for(JButton b:List.of(original,repeater,compare,evidence,js,payload)){b.setEnabled(linked);b.setToolTipText(linked?"선택 원본을 연결합니다. 준비·화면 이동은 대상 요청을 보내지 않습니다.":"원본이 연결된 결과를 먼저 선택하세요.");}}
   JPanel originalContent(DiskTrafficStore.PacketRef packet){
     PacketInspector request=new PacketInspector("wb.scope.inspection.original.request"),response=new PacketInspector("wb.scope.inspection.original.response");inspectors.add(request);inspectors.add(response);
     request.setPacket(packet.requestPrefix(PacketInspector.PREVIEW_BYTES),null,packet.requestLength());response.setPacket(packet.responsePrefix(PacketInspector.PREVIEW_BYTES),null,packet.responseLength());
@@ -344,5 +370,5 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   void closeOriginalContent(JComponent content){Object value=content.getClientProperty("wb.scope.inspection.inspectors");if(value instanceof List<?> list)for(Object item:list)if(item instanceof PacketInspector inspector){inspector.close();inspectors.remove(inspector);}content.putClientProperty("wb.scope.inspection.inspectors",null);}
   private void closeInspectors(){for(var inspector:inspectors)inspector.close();inspectors.clear();}
   private void safe(Runnable action){try{action.run();}catch(RuntimeException error){feedback.setText(Objects.requireNonNullElse(error.getMessage(),"실행 조건을 확인하세요."));}}
-  @Override public void close(){if(closed)return;closed=true;updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();}
+  @Override public void close(){if(closed)return;closed=true;report.setEnabled(false);updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();reportWorker.shutdownNow();}
 }

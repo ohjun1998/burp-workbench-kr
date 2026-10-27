@@ -1,0 +1,37 @@
+PASS CDN script root-relative URL resolves to the observed execution page
+PASS document-relative URL uses document directory
+PASS missing execution context never invents a CDN API host
+PASS unresolved relative host produces only a visibly blocked host placeholder
+PASS explicit absolute API host remains usable without page context
+PASS inline HTML uses its own document URL
+PASS invalid Referer cannot establish document origin
+PASS Axios instance method and data fields are tracked
+PASS Axios instance defaults and JSON constants reach the request draft
+PASS Axios instance joins a path without a leading slash
+PASS local Axios options override instance defaults
+PASS fetch wrapper never changes an internal POST into GET
+PASS wrapper arguments retain body constants
+PASS distinct wrapper call sites preserve their own payloads
+PASS GraphQL operations sharing one endpoint remain separately selectable
+PASS each GraphQL operation carries its selected operationName in the draft
+PASS explicit GraphQL operation selection is respected
+PASS GraphQL strings and comments cannot fabricate operations
+PASS API grouping retains parameter-name variants
+PASS grouping preserves provenance and explains draft selection
+PASS review priority cites relevant endpoint names without a vulnerability verdict
+PASS analysis reaches the tail beyond the old source prefix and preserves draft values
+PASS production analysis does not silently stop at 500 endpoints
+PASS Brotli response is decoded by the bundled relocated decoder
+PASS stacked content encodings are decoded in reverse order
+PASS already decoded host body remains readable with retained gzip header
+PASS raw deflate fallback is supported
+PASS unsupported compression is an explicit failure
+PASS source map findings preserve recovered file and exact local position
+PASS source map request draft values survive merging
+PASS disk history restores full source and findings independently of memory cache
+PASS rich request drafts are not serialized into analysis metadata
+PASS changed source receives a separate version rather than replacing prior findings
+PASS disk analysis history survives more than 100 sources
+PASS archive aggregate counts deduplicate APIs across retained versions
+PASS explicit analysis reset removes project archive files
+JsUpgradeTest: 36 checks passed

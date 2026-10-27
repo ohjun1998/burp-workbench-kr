@@ -28,10 +28,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 final class ScopeInspectionFixture extends WorkbenchTest implements AutoCloseable {
   static final String API_SECRET = "SCOPE_PRIVATE_API_VALUE_0123456789abcdef";
   static final String SESSION = "SID=SCOPE_ALICE_SESSION";
+  static final String MISSING = "<html><title>Missing fixture route</title><body>Not found in this application</body></html>";
+  static final String FORM_SHELL = "<!doctype html><html><title>Account portal</title><body><form action='/app/register'>"
+      + "<input name='password' type='password'><button>Register</button></form><script src='/app/discovery.js'></script></body></html>";
   record Visit(String method, String path, String account) {}
   final List<Visit> visits = new CopyOnWriteArrayList<>();
   final AtomicInteger revision = new AtomicInteger(1);
   final AtomicBoolean rateLimited = new AtomicBoolean();
+  final AtomicBoolean exposedEnv = new AtomicBoolean(), declaredDiscovery = new AtomicBoolean(), spaFallback = new AtomicBoolean();
   final HttpServer server;
   final ExecutorService serverWorkers = Executors.newCachedThreadPool(r -> {
     Thread t = new Thread(r, "scope-inspection-fixture"); t.setDaemon(true); return t;
@@ -51,6 +55,7 @@ final class ScopeInspectionFixture extends WorkbenchTest implements AutoCloseabl
       int code = 200;
       String type = "text/html; charset=UTF-8";
       String body;
+      String missing = spaFallback.get() ? FORM_SHELL : MISSING;
       switch (path) {
         case "/app/", "/app" -> body = "<!doctype html><html><title>Scope fixture</title><nav>"
             + "<a href='/app/config'>Configuration</a><a href='/app/api-docs'>API specification</a>"
@@ -85,6 +90,33 @@ final class ScopeInspectionFixture extends WorkbenchTest implements AutoCloseabl
         case "/app/api/documented", "/app/api/undocumented" -> {
           type = "application/json"; body = "{\"readOnly\":true,\"revision\":" + revision.get() + "}";
         }
+        case "/app/form-root", "/app/spa-root" -> body = FORM_SHELL;
+        case "/app/discovery-root" -> body = "<!doctype html><html><title>Discovery portal</title><script src='/app/discovery.js'></script></html>";
+        case "/app/discovery.js" -> { type = "application/javascript"; body = "fetch('/app/api/script-found');"; }
+        case "/app/guarded-root" -> body = "<html><script src='/app/guarded.js'></script></html>";
+        case "/app/guarded.js" -> {
+          type = "application/javascript";
+          body = "this.http.get(this.otherServer + '/app/api/not-own-host'); this.http.post('/app/api/post-observed', {name:'input'}); "
+              + "fetch('/app/api/safe-grounded'); fetch('http://127.0.0.1:" + exchange.getLocalAddress().getPort() + "/app/api/absolute-grounded');";
+        }
+        case "/app/api/script-found", "/app/api/robots-found", "/app/api/sitemap-found", "/app/api/safe-grounded", "/app/api/absolute-grounded" -> { type = "application/json"; body = "{\"observed\":true}"; }
+        case "/app/identity-mismatch" -> { type = "application/json"; body = "{\"id\":\"another-user\"}"; }
+        case "/app/expired" -> { code = 401; body = FORM_SHELL; }
+        case "/app/login-redirect" -> { code = 302; body = "redirect"; exchange.getResponseHeaders().set("Location", "/app/login"); }
+        case "/app/auth-redirect" -> { code = 302; body = "redirect"; exchange.getResponseHeaders().set("Location", "/app/auth"); }
+        case "/app/login", "/app/auth" -> body = "<html><form action='/app/login'><input type='password'><button>Sign in</button></form></html>";
+        case "/app/.env" -> {
+          type = exposedEnv.get() ? "text/plain" : "text/html";
+          body = exposedEnv.get() ? "APP_ENV=local\nDB_PASSWORD=SCOPE_ENV_LOCAL_VALUE_0123456789\n" : missing;
+        }
+        case "/app/robots.txt" -> {
+          type = declaredDiscovery.get() ? "text/plain" : "text/html";
+          body = declaredDiscovery.get() ? "User-agent: *\nDisallow: /app/api/robots-found\nSitemap: /app/sitemap.xml\n" : missing;
+        }
+        case "/app/sitemap.xml" -> {
+          type = declaredDiscovery.get() ? "application/xml" : "text/html";
+          body = declaredDiscovery.get() ? "<urlset><url><loc>http://127.0.0.1:" + exchange.getLocalAddress().getPort() + "/app/api/sitemap-found</loc></url></urlset>" : missing;
+        }
         case "/app/redirect" -> {
           code = 302; body = "redirect"; exchange.getResponseHeaders().set("Location", "/outside/sensitive");
         }
@@ -98,7 +130,7 @@ final class ScopeInspectionFixture extends WorkbenchTest implements AutoCloseabl
         case "/app/challenge" -> body = "<title>Just a moment...</title>cf-chl-fixture";
         case "/outside/sensitive" -> body = "THIS_MUST_NOT_BE_FETCHED";
         case "/app/logout", "/app/api/write-only" -> { code = 405; body = "DO_NOT_EXECUTE"; }
-        default -> body = "<html><title>Missing fixture route</title><body>Not found in this application</body></html>";
+        default -> body = missing;
       }
       byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
       exchange.getResponseHeaders().set("Content-Type", type);

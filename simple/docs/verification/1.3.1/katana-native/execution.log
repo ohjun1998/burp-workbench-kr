@@ -1,0 +1,103 @@
+PASS explicit native executable exists outside the application artifact
+PASS native executable matches the pinned official 1.8.0 extraction SHA-256
+PASS native-only menu and script input are not supplied by the original static analyzer
+PASS preparing native collection sends zero target requests
+PASS an actual pinned Katana process was observed
+PASS target account values stay out of live Katana argv and owned temporary files
+PASS native producer and coordinator finish their bounded queue
+PASS real native process exits without a launch or parse failure
+PASS native success is backed by JSONL records and actual proxied responses
+PASS all Katana, identity, reference and application requests share the exact displayed HTTP budget
+PASS target receives only read methods and selected Runner account snapshots
+PASS path exclusions, another Origin port and redirect escape never reach a target
+PASS discovered htmx and HTML write actions never execute at the target
+PASS actual Katana discovers an unquoted menu absent from the original analyzer
+PASS actual Katana JS crawling discovers the JS-only endpoint
+PASS native form or htmx POST metadata remains explicitly non-executable
+PASS real native form extraction keeps declarations without submitting them
+PASS real native technology detection contributes separate metadata evidence
+PASS native JS fetch links the exact retained HTTP or cache original through explicit provenance
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS actual native responses feed server, WAS and DB evidence analysis
+PASS native collection preserves API, masked secret and account-difference findings
+PASS raw evidence retains private bytes while result, candidate and native status views remain masked
+PASS excluded routes and write metadata retain meaningful coverage explanations
+PASS real native HTTP passes through the production authenticated proxy
+PASS closing native collection terminates its observed children and removes owned temporary files
+PASS an actual pinned Katana process was observed
+PASS target account values stay out of live Katana argv and owned temporary files
+PASS repeating actual native collection detects changed response content in masked history
+PASS native history comparison stays partitioned by the captured Scope condition
+PASS persisted native history contains metadata without credentials or private body values
+PASS persisted native history contains metadata without credentials or private body values
+PASS persisted native history contains metadata without credentials or private body values
+PASS closing native collection terminates its observed children and removes owned temporary files
+PASS an actual pinned Katana process was observed
+PASS target account values stay out of live Katana argv and owned temporary files
+PASS native producer and coordinator finish their bounded queue
+PASS real native process exits without a launch or parse failure
+PASS native success is backed by JSONL records and actual proxied responses
+PASS all Katana, identity, reference and application requests share the exact displayed HTTP budget
+PASS target receives only read methods and selected Runner account snapshots
+PASS path exclusions, another Origin port and redirect escape never reach a target
+PASS discovered htmx and HTML write actions never execute at the target
+PASS actual Katana discovers an unquoted menu absent from the original analyzer
+PASS actual Katana JS crawling discovers the JS-only endpoint
+PASS native form or htmx POST metadata remains explicitly non-executable
+PASS real native form extraction keeps declarations without submitting them
+PASS real native technology detection contributes separate metadata evidence
+PASS native JS fetch links the exact retained HTTP or cache original through explicit provenance
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS proxied response ID resolves to its exact retained original
+PASS Katana proxy adds only the declared profile through the Runner
+PASS actual native responses feed server, WAS and DB evidence analysis
+PASS native collection preserves API, masked secret and account-difference findings
+PASS raw evidence retains private bytes while result, candidate and native status views remain masked
+PASS excluded routes and write metadata retain meaningful coverage explanations
+PASS real native HTTPS uses CONNECT and fixture-only target TLS trust
+PASS closing native collection terminates its observed children and removes owned temporary files
+PASS pausing real native collection dispatches no additional target requests
+PASS stopping the actual native process prevents further target dispatch
+PASS stop retains uninspected native work and partial coverage
+PASS an actual pinned Katana process was observed
+PASS target account values stay out of live Katana argv and owned temporary files
+PASS closing native collection terminates its observed children and removes owned temporary files
+PASS an actual pinned Katana process was observed
+PASS target account values stay out of live Katana argv and owned temporary files
+PASS a four-request global budget includes native identity and baseline requests without overrun
+PASS native budget exhaustion leaves explicit pending coverage rather than a complete assessment
+PASS closing native collection terminates its observed children and removes owned temporary files
+PASS native HTTPS verification installs no system or user CA and changes no global TLS trust
+ScopeKatanaNativeHarness: 102 checks passed (actual pinned Katana, loopback HTTP/HTTPS CONNECT; not native Burp GUI)

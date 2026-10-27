@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "version": "1.3.1",
+  "createdUtc": "2026-10-27T23:15:59.264814+00:00",
+  "status": "PASS",
+  "checks": 104,
+  "testClass": "kr.workbench.ScopeInspectionRunnerTest",
+  "compilation": {
+    "mode": "strict --release 17",
+    "compiler": "/workspace/tools/jdk17/bin/javac",
+    "runtime": "openjdk version \"17.0.17\" 2025-10-21\nOpenJDK Runtime Environment Temurin-17.0.17+10 (build 17.0.17+10)\nOpenJDK 64-Bit Server VM Temurin-17.0.17+10 (build 17.0.17+10, mixed mode, sharing)"
+  },
+  "execution": {
+    "mode": "temporary production-class overlay before the 1.3.1 base JAR on classpath",
+    "isolatedLoopbackHttp": true,
+    "realMontoyaHost": false,
+    "nativeBurp": false,
+    "nativeKatana": false,
+    "externalTargets": false,
+    "baseJarPath": "simple/burp-workbench/dist/burp-workbench-simple-1.3.1.jar",
+    "baseJarSha256": null,
+    "limitation": "Base JAR hash was not pinned before execution and that workspace path was rebuilt afterward. This focused result proves the hashed overlay classes and sources; it is not a packaged final-JAR verification."
+  },
+  "finalCandidateContext": {
+    "sha256": "64ecdb6aade4506fdf0fbc104857798de18064b0c7109e8a7b7e0065209e8de4",
+    "testedByThisFocusedRun": false,
+    "note": "Parent final full check and seven-target AFTER evidence verify this separate packaged candidate."
+  },
+  "sourceHashes": {
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionRunner.java": "c8789156d9e0d32f01950a677f022a9d537c84fc2701a5b4671a1458db361049",
+    "simple/burp-workbench/src/main/java/kr/workbench/EnvironmentContent.java": "06d53ed400eea8d33b57a0d4ee7713d90795c763cbb8902d15eea4c4e48b9388",
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionAnalysis.java": "a9f53a45a95b0120dded862a2d43732e9f28e6ce03571f417d73c1d1fafb57b2",
+    "simple/burp-workbench/src/test/java/kr/workbench/ScopeInspectionFixture.java": "17a09be5280698f24c1cd11a739d62e8264bf2d368a7b7d65b24312a3da83b9d",
+    "simple/burp-workbench/src/test/java/kr/workbench/ScopeInspectionRunnerTest.java": "39562f2ff284810746e00a69ac82513d6141dcb290f97a3cb553846edfb6bf4e"
+  },
+  "compiledOverlayHashes": {
+    "kr/workbench/EnvironmentContent$Finding.class": "9debdda3228a2f5fe70b019ec3dc92d70cc9e5536128cdfa405bd7c2df86e16d",
+    "kr/workbench/EnvironmentContent.class": "1d1dac01690eb13b9c47d1742cc83d7dd4a7c26907cfe0967afcab9e3c23260c",
+    "kr/workbench/ScopeInspectionAnalysis$1.class": "a22256b7a8546aef62a5bcd0d94c6f032431a7f23ab9104da285a8ad0646e5e8",
+    "kr/workbench/ScopeInspectionAnalysis$Db.class": "f38bb6c174651292e12544a3d08a375187da1e5d94c2993fe1ef28aa77ca4113",
+    "kr/workbench/ScopeInspectionAnalysis$Link.class": "44602e5135fa140d5673d939aade3b8d833a093cfab52e514630da9dbd4ce320",
+    "kr/workbench/ScopeInspectionAnalysis$LinkScan.class": "5b7bda29ec1d79e864c67542c5216b06c573df3e994510f7faaeff583bf90a3a",
+    "kr/workbench/ScopeInspectionAnalysis$Result.class": "f4f3521dd752675f84a29ae544b7e40576b34541b1d5845e6a5879255ba4ff45",
+    "kr/workbench/ScopeInspectionAnalysis.class": "18c4d3d7cab12b74d7092ff94ab2618b8f5f0c0a1739fd158c56a2093f46e728",
+    "kr/workbench/ScopeInspectionFixture$Visit.class": "527458015e7a00726f3e81c3e5263c7555517ab0f810bb4c14ec6ec5936e3743",
+    "kr/workbench/ScopeInspectionFixture.class": "1d7b3eaec8ba72f798068552497528da8ff99468884f544bf7756d5065d1a1fc",
+    "kr/workbench/ScopeInspectionRunner$DiscoveryInputs.class": "15d9922d9a57742aabc590fa5b7acf64127aa8fa6dc43e32c11b7ab3822afbaa",
+    "kr/workbench/ScopeInspectionRunner$Excluded.class": "c0cd58abbf4d73d24ee07b20f7fdb9580173170be3bbf9cb0de91981e6736ef6",
+    "kr/workbench/ScopeInspectionRunner$Halt.class": "767fbebc746c74a2801143261ec6cec9eabd845d3c6e3fb1d03465e7c7514d6c",
+    "kr/workbench/ScopeInspectionRunner$Identity.class": "c67f4f54d54d2f18dbc081fbd3189fb5526b5f9bf22f44a43223b207d1e19030",
+    "kr/workbench/ScopeInspectionRunner$KatanaCancelled.class": "d606b389ba64f504e79258dff4d4729e24736b372c16e66295126ed6f2866039",
+    "kr/workbench/ScopeInspectionRunner$KatanaTask.class": "d173b19aa6c3fe29eefdde4a81bb5a452c0fedf29b683bbefe2e44eb85f71c3e",
+    "kr/workbench/ScopeInspectionRunner$Received.class": "fcf88ea22817565c0426c177ab20d3c91c0e9550ba97ea30685f067f990f2803",
+    "kr/workbench/ScopeInspectionRunner$Retry.class": "727a243ec9a9045463455307e2fa4e3902953773ca8d058360c47f19489f9250",
+    "kr/workbench/ScopeInspectionRunner$Task.class": "e5a60d539b18b64bb84e2042c7ba2baf12d55c3f1598c49a01d45845abb62844",
+    "kr/workbench/ScopeInspectionRunner.class": "c8269dc3bc6fdca67c367e50317bf9d4222aed6eb4e4d2ed6ad2ec2378309984",
+    "kr/workbench/ScopeInspectionRunnerTest.class": "7e305560f85e69b7c9bf8e7542c957f34b4ebbfef1836de939c77ae7c9179f2e"
+  },
+  "sharedTestDependencyHashes": {
+    "WorkbenchTest.class": "33f7b3e57bb8dab7355f09c112a3ed866b1ad56e9e08f58a2b06cba663dca65b",
+    "SimpleWorkflowTest.class": "b84bfe390ebca2eba36ac46704b1246b747df6892d1692c40e49b679a7fd84e7"
+  },
+  "log": {
+    "path": "runner-focused.log",
+    "sha256": "9e9bdac63eaf8c05636118e72d01d44f2999de4b28a939d66ea81bddec9e0a4f"
+  },
+  "coverage": [
+    "password form with verified and unconfigured identities",
+    "401, identity mismatch, login redirects and challenge pause",
+    "selected SPA start shell references despite partial soft404",
+    "observed JS, robots and sitemap paths before technology guesses",
+    "twelve speculative technology URLs per run",
+    "one scoped env GET with real content versus fake200 baseline",
+    "unknown host and POST are not re-added as environment GET guesses",
+    "grounded relative and absolute GET plus script src retained",
+    "existing budget, cancellation, account, original packet and Katana-producer regressions"
+  ],
+  "diffCheck": "PASS (owned Runner/EnvironmentContent/fixture/RunnerTest files)"
+}

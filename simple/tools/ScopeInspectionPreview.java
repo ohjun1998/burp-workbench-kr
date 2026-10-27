@@ -189,6 +189,12 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
           scenario("Captured Katana results use the production partial-state presenter after asynchronous layout updates",panel.katanaStatus.getText().contains("부분 수집")&&!panel.katanaStatus.getText().contains("선택해 통합 점검"));
         });
       });
+      edt(()->{panel.accept(completed);tab(panel,"summary");panel.saveReport(historyDirectory.resolve("categorized-values.zip"));});
+      ScopeInspectionUiTest.await(()->panel.report.isEnabled(),"guide's actual local report export");
+      edt(()->{
+        scenario("Categorized export saves exact values locally while keeping ordinary result views masked",Files.isRegularFile(historyDirectory.resolve("categorized-values.zip"))&&panel.feedback.getText().contains("저장 완료")&&!ScopeInspectionUiTest.visibleText(panel).contains(API_KEY));
+        capture(panel,"25-inspection-report.png");
+      });
       scenario("Synthetic capture never starts the target HTTP coordinator or external Katana", panel.runner == null && panel.katana==null && count.get() == 0);
     } finally {
       edt(panel::close); store.close(); WorkbenchScope.release(api);

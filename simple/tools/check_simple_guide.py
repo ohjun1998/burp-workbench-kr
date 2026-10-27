@@ -61,7 +61,7 @@ def main() -> int:
         raise RuntimeError('Guide captures differ from current JAR')
     image_hashes = {('browser/'+step['image'] if step.get('captureKind')=='browser' else step['image']):sha(guide['capture_path'](args.images,step)) for step in steps}
     preserved = {}
-    for old in ['1.0.0','1.1.0','1.2.0']:
+    for old in ['1.0.0','1.1.0','1.2.0','1.3.0']:
         old_pdf = ROOT/f'downloads/guides/{old}/Workbench_Simple_{old}_Guide_KR.pdf'
         old_qa = ROOT/'docs'/('guide-validation.json' if old == '1.0.0' else f'guide-validation-{old}.json')
         if old == '1.0.0':

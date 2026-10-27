@@ -1,0 +1,742 @@
+package kr.workbench;
+
+import burp.api.montoya.http.message.requests.HttpRequest;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.time.Instant;
+import java.util.*;
+
+/** Bounded coverage metadata. Parameter values are retained only as session-salted hashes. */
+final class ActivityTracker {
+  final AssessmentTracker assessments = new AssessmentTracker();
+  static final int LIMIT = 10000, PARAM_LIMIT = 200, TOTAL_PARAM_LIMIT = 100000;
+
+  static final class Parameter {
+    final String key;
+    String baseline;
+    boolean changed, completed;
+
+    Parameter(String key) {
+      this.key = key;
+    }
+
+    String state() {
+      return completed ? "점검 완료" : changed ? "변경 관찰" : "미점검";
+    }
+  }
+
+  static final class Endpoint {
+    final String key, url, method;
+    final LinkedHashMap<String, Parameter> parameters = new LinkedHashMap<>();
+    final Set<String> sources = new TreeSet<>();
+    final List<Evidence> evidence = new ArrayList<>();
+    String review = "", contentType = "application/json";
+    final Set<String> authContexts = new LinkedHashSet<>();
+    long observed, repeater;
+    boolean completed;
+    String first = Instant.now().toString(), last = first;
+    View cachedView;
+    long incompleteInputs;
+
+    Endpoint(String method, String url) {
+      this.method = method;
+      this.url = url;
+      this.key = method + " " + url;
+    }
+
+    String state() {
+      return !review.isEmpty()
+          ? "재검토 필요"
+          : completed ? "점검 완료" : repeater > 0 ? "Repeater 작업" : observed > 0 ? "요청 관측" : "발견만 함";
+    }
+  }
+
+  record Evidence(String source, int line, String kind) {}
+
+  record ParameterView(String key, String state) {}
+
+  record Pending(
+      String template,
+      String method,
+      String source,
+      int line,
+      String kind,
+      String query,
+      String body) {}
+
+  final LinkedHashMap<String, Pending> pending = new LinkedHashMap<>();
+  private List<Pending> pendingSnapshot;
+  private Snapshot endpointSnapshot;
+  private long structureRevision;
+
+  record Snapshot(List<View> rows, long completed, long incompleteInputs) {}
+
+  synchronized long revision() {
+    return revision;
+  }
+
+  synchronized long structureRevision() {
+    return structureRevision;
+  }
+
+  synchronized long rejected() {
+    return rejected;
+  }
+
+  /** Existing bounded metadata only; discoveries alone are not observed requests. */
+  synchronized Map<String,Set<String>> observedMethods(Collection<String> targets) {
+    if(rejected>0)return Map.of();
+    Set<String> wanted=new HashSet<>();
+    for(String target:targets){String key=safeUrl(target);if(key!=null)wanted.add(key);}
+    Map<String,Set<String>> result=new HashMap<>();
+    for(Endpoint endpoint:endpoints.values())if(endpoint.observed>0&&wanted.contains(endpoint.url))
+      result.computeIfAbsent(endpoint.url,key->new HashSet<>()).add(endpoint.method);
+    result.replaceAll((key,value)->Set.copyOf(value));return Map.copyOf(result);
+  }
+
+  private void invalidate(Endpoint endpoint) {
+    endpoint.cachedView = null;
+    endpointSnapshot = null;
+  }
+
+  private void invalidateAll() {
+    endpointSnapshot = null;
+    pendingSnapshot = null;
+    structureRevision++;
+  }
+
+  synchronized void pending(JsAnalysis.Endpoint e, String source) {
+    String safe = safeUrl(source);
+    if (safe == null) return;
+    String template = safeUrl(e.url().replace("{dynamic}", "WB_DYNAMIC_SEGMENT"));
+    if (template == null || !ApiInventory.origin(template).equals(ApiInventory.origin(safe)))
+      return;
+    template = template.replace("WB_DYNAMIC_SEGMENT", "{dynamic}");
+    String key = e.method() + " " + template + " " + safe + ":" + e.line();
+    if (pending.size() < 1000 || pending.containsKey(key)) {
+      pending.put(
+          key,
+          new Pending(
+              template,
+              e.method(),
+              safe,
+              e.line(),
+              boundedText(e.kind(), 128),
+              boundedText(e.parameters(), 512),
+              boundedText(e.bodyKeys(), 512)));
+      pendingSnapshot = null;
+      revision++;
+    } else rejected++;
+  }
+
+  synchronized List<Pending> pendingViews() {
+    if (pendingSnapshot == null) pendingSnapshot = List.copyOf(pending.values());
+    return pendingSnapshot;
+  }
+
+  synchronized void resolve(Pending p, String url) {
+    if (safeUrl(url) == null
+        || url.contains("{")
+        || url.contains("}")
+        || !ApiInventory.origin(p.source).equals(ApiInventory.origin(url)))
+      throw new IllegalArgumentException("같은 Origin의 확정 URL을 입력하세요.");
+    if (!Set.of("GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE").contains(p.method))
+      throw new IllegalArgumentException("메서드 미확정 · 원본에서 먼저 확인하세요.");
+    discover(
+        new ReconMetadata.Discovery(
+            url,
+            p.method,
+            JsRequestDraft.names(p.query),
+            JsRequestDraft.names(p.body),
+            "JS 수동 확정"));
+    evidence(p.method, url, p.source, p.line, p.kind);
+    pending.entrySet().removeIf(entry -> entry.getValue().equals(p));
+    pendingSnapshot = null;
+    revision++;
+  }
+
+  record View(
+      String key,
+      String method,
+      String url,
+      String state,
+      long observed,
+      long repeater,
+      String sources,
+      String first,
+      String last,
+      List<ParameterView> parameters,
+      List<Evidence> evidence,
+      String review) {}
+
+  final LinkedHashMap<String, Endpoint> endpoints = new LinkedHashMap<>();
+  private final byte[] salt = new byte[32];
+  long rejected, revision;
+  private int parameterCount;
+
+  ActivityTracker() {
+    new SecureRandom().nextBytes(salt);
+  }
+
+  static String safeUrl(String raw) {
+    try {
+      URI u = URI.create(raw);
+      if (u.getUserInfo() != null
+          || u.getHost() == null
+          || !Set.of("http", "https").contains(u.getScheme().toLowerCase(Locale.ROOT))
+          || raw.length() > 8192) return null;
+      int port = u.getPort();
+      String scheme = u.getScheme().toLowerCase(Locale.ROOT),
+          host = u.getHost().toLowerCase(Locale.ROOT);
+      if (host.contains(":")) host = "[" + host + "]";
+      String path = u.getRawPath();
+      return scheme
+          + "://"
+          + host
+          + (port < 0
+                  || port == 80 && scheme.equals("http")
+                  || port == 443 && scheme.equals("https")
+              ? ""
+              : ":" + port)
+          + (path == null || path.isEmpty() ? "/" : path);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  private Endpoint endpoint(String method, String raw) {
+    String url = safeUrl(raw);
+    if (url == null) return null;
+    method = method == null ? "?" : method.toUpperCase(Locale.ROOT);
+    if (!method.matches("[A-Z?]{1,24}")) return null;
+    String key = method + " " + url;
+    Endpoint e = endpoints.get(key);
+    if (e == null && method.equals("?"))
+      e =
+          endpoints.values().stream()
+              .filter(candidate -> candidate.url.equals(url))
+              .findFirst()
+              .orElse(null);
+    if (e == null) {
+      if (endpoints.size() >= LIMIT) {
+        rejected++;
+        return null;
+      }
+      e = new Endpoint(method, url);
+      endpoints.put(key, e);
+      structureRevision++;
+    }
+    if (!method.equals("?")) {
+      Endpoint unknown = endpoints.remove("? " + url);
+      if (unknown != null) {
+        structureRevision++;
+        e.sources.addAll(unknown.sources);
+        for (Evidence item : unknown.evidence)
+          if (e.evidence.size() < 8 && !e.evidence.contains(item)) e.evidence.add(item);
+        if (e.review.isEmpty()) e.review = unknown.review;
+        for (var entry : unknown.parameters.entrySet())
+          if (e.parameters.containsKey(entry.getKey())) parameterCount--;
+          else if (e.parameters.size() < PARAM_LIMIT)
+            e.parameters.put(entry.getKey(), entry.getValue());
+          else parameterCount--;
+      }
+    }
+    invalidate(e);
+    return e;
+  }
+
+  private Parameter parameter(Endpoint e, String key) {
+    if (key == null || key.isBlank() || key.length() > 512) return null;
+    Parameter p = e.parameters.get(key);
+    if (p == null && e.parameters.size() < PARAM_LIMIT && parameterCount < TOTAL_PARAM_LIMIT) {
+      p = new Parameter(key);
+      e.parameters.put(key, p);
+      parameterCount++;
+      structureRevision++;
+      if (e.completed) e.review = "완료 후 새 입력 관측 · " + key;
+      assessments.discovered(e.method, e.url, List.of(key));
+    }
+    return p;
+  }
+
+  synchronized void externalParameter(
+      String method, String url, String location, String name, String source) {
+    Endpoint e = endpoint(method, url);
+    if (e == null) return;
+    e.sources.add(source);
+    parameter(e, location + ":" + name);
+    e.last = Instant.now().toString();
+    revision++;
+  }
+
+  synchronized void discover(ReconMetadata.Discovery d) {
+    Endpoint e = endpoint(d.method(), d.url());
+    if (e == null) return;
+    e.sources.add(d.source());
+    for (String n : d.query()) parameter(e, "URL:" + n);
+    for (String n : d.body()) parameter(e, "BODY:" + n);
+    e.last = Instant.now().toString();
+    revision++;
+  }
+
+  synchronized void discover(String url, String source) {
+    discover(
+        new ReconMetadata.Discovery(url, "?", ReconMetadata.parameters(url), Set.of(), source));
+  }
+
+  synchronized void evidence(String method, String url, String source, int line, String kind) {
+    Endpoint e = endpoint(method, url);
+    if (e == null) return;
+    Evidence item =
+        new Evidence(
+            Objects.toString(safeUrl(source), "직접 입력"),
+            Math.max(1, line),
+            kind.substring(0, Math.min(kind.length(), 128)));
+    if (e.evidence.size() < 8 && !e.evidence.contains(item)) {
+      e.evidence.add(item);
+      revision++;
+    }
+  }
+
+  synchronized void review(String method, String url, String reason) {
+    Endpoint e = endpoint(method, url);
+    if (e != null) {
+      e.review = reason.substring(0, Math.min(reason.length(), 256));
+      revision++;
+    }
+  }
+
+  synchronized void observe(HttpRequest request, String source) {
+    if (request == null) return;
+    Endpoint e = endpoint(request.method(), request.url());
+    if (e == null) return;
+    e.observed++;
+    e.sources.add(source);
+    e.last = Instant.now().toString();
+    boolean manual = "REPEATER".equalsIgnoreCase(source);
+    if (manual) e.repeater++;
+    Map<String, List<String>> values = new LinkedHashMap<>();
+    List<String> auth = new ArrayList<>();
+    for (var h : request.headers()) {
+      String name = h.name().toLowerCase(Locale.ROOT);
+      if (AuthComparePanel.DEFAULT_AUTH.contains(name)) auth.add(name + ":" + h.value());
+      if (name.equals("content-type")) {
+        String type = h.value().split(";", 2)[0].strip().toLowerCase(Locale.ROOT);
+        if (type.length() <= 128) {
+          if (e.observed > 1 && !e.contentType.equals(type) && e.completed)
+            e.review = "완료 후 본문 형식 변경 · 초안 확인";
+          e.contentType = type;
+        }
+      }
+    }
+    Collections.sort(auth);
+    String context = hash(auth);
+    if (e.completed && e.authContexts.isEmpty() && e.observed > 1)
+      e.review = "복원 후 인증 조건 재확인 · 계정별 재점검 필요";
+    if (e.authContexts.size() < 64
+        && e.authContexts.add(context)
+        && e.authContexts.size() > 1
+        && e.completed) e.review = "완료 후 새 인증 조건 관측 · 계정별 재점검 필요";
+    try {
+      String[] segments = URI.create(request.url()).getRawPath().split("/", -1);
+      for (int i = 0; i < segments.length; i++)
+        if (segments[i].matches(
+            "[0-9]+|(?i)[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))
+          add(values, "PATH:segment" + i, segments[i]);
+    } catch (Exception ignored) {
+    }
+    try {
+      var ps = request.parameters();
+      if (ps != null)
+        for (var p : ps) {
+          String type = p.type().toString();
+          if (type.equals("JSON")) type = "BODY";
+          add(values, type + ":" + p.name(), p.value());
+        }
+    } catch (Exception ignored) {
+    }
+    // Some API adapters do not expose parameters; URL parsing also retains duplicate values.
+    if (values.keySet().stream().noneMatch(k -> k.startsWith("URL:")))
+      try {
+        String q = URI.create(request.url()).getRawQuery();
+        if (q != null)
+          for (String pair : q.split("&")) {
+            String[] kv = pair.split("=", 2);
+            add(
+                values,
+                "URL:" + URLDecoder.decode(kv[0], StandardCharsets.UTF_8),
+                URLDecoder.decode(kv.length == 2 ? kv[1] : "", StandardCharsets.UTF_8));
+          }
+      } catch (Exception ignored) {
+      }
+    for (Parameter p : e.parameters.values()) {
+      if (p.key.startsWith("HEADER:")) {
+        for (var h : request.headers())
+          if (h.name().equalsIgnoreCase(p.key.substring(7))) add(values, p.key, h.value());
+      } else if (p.key.startsWith("COOKIE:")) {
+        for (var h : request.headers())
+          if (h.name().equalsIgnoreCase("cookie"))
+            for (String pair : h.value().split(";")) {
+              int n = pair.indexOf('=');
+              if (n > 0 && pair.substring(0, n).strip().equals(p.key.substring(7)))
+                add(values, p.key, pair.substring(n + 1).strip());
+            }
+      }
+    }
+    for (var entry : values.entrySet()) {
+      Parameter p = parameter(e, entry.getKey());
+      if (p == null) continue;
+      String value = hash(entry.getValue());
+      if (p.baseline == null) {
+        if (manual && e.observed > 1) p.changed = true;
+        p.baseline = value;
+      } else if (manual && !p.baseline.equals(value)) p.changed = true;
+    }
+    if (manual)
+      for (Parameter p : e.parameters.values())
+        if (p.baseline != null && !values.containsKey(p.key)) p.changed = true;
+    String account = assessments.match(request);
+    if (!account.isEmpty()) {
+      assessments.observed(account, e.method, e.url, e.parameters.keySet(), source);
+      assessments.observedValues(account, e.method, e.url, values);
+    }
+    revision++;
+  }
+
+  private void add(Map<String, List<String>> values, String key, String value) {
+    if (key.length() > 512 || values.size() >= PARAM_LIMIT && !values.containsKey(key)) return;
+    List<String> list = values.computeIfAbsent(key, k -> new ArrayList<>());
+    if (list.size() < 64)
+      list.add(value == null ? "" : value.substring(0, Math.min(value.length(), 65536)));
+  }
+
+  private String hash(List<String> values) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      digest.update(salt);
+      for (String v : values) {
+        byte[] b = v.getBytes(StandardCharsets.UTF_8);
+        digest.update(Integer.toString(b.length).getBytes(StandardCharsets.UTF_8));
+        digest.update((byte) ':');
+        digest.update(b);
+      }
+      return HexFormat.of().formatHex(digest.digest());
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  synchronized String observation(String method, String url) {
+    String safe = safeUrl(url);
+    Endpoint e = endpoints.get(method + " " + safe);
+    return e == null ? "발견만 함" : e.state();
+  }
+
+  synchronized List<View> views() {
+    return snapshot().rows();
+  }
+
+  synchronized Snapshot snapshot() {
+    if (endpointSnapshot != null) return endpointSnapshot;
+    List<View> rows = new ArrayList<>(endpoints.size());
+    long completed = 0, incomplete = 0;
+    for (Endpoint endpoint : endpoints.values()) {
+      if (endpoint.cachedView == null) {
+        List<ParameterView> parameters =
+            endpoint.parameters.values().stream()
+                .map(parameter -> new ParameterView(parameter.key, parameter.state()))
+                .toList();
+        endpoint.incompleteInputs =
+            parameters.stream().filter(parameter -> !parameter.state().equals("점검 완료")).count();
+        endpoint.cachedView =
+            new View(
+                endpoint.key,
+                endpoint.method,
+                endpoint.url,
+                endpoint.state(),
+                endpoint.observed,
+                endpoint.repeater,
+                String.join(" + ", endpoint.sources),
+                endpoint.first,
+                endpoint.last,
+                parameters,
+                List.copyOf(endpoint.evidence),
+                endpoint.review);
+      }
+      View view = endpoint.cachedView;
+      rows.add(view);
+      if (view.state().equals("점검 완료")) completed++;
+      incomplete += endpoint.incompleteInputs;
+    }
+    endpointSnapshot = new Snapshot(List.copyOf(rows), completed, incomplete);
+    return endpointSnapshot;
+  }
+
+  synchronized List<String> parameterNames(String method, String url) {
+    Endpoint e = endpoints.get(method + " " + safeUrl(url));
+    return e == null ? List.of() : List.copyOf(e.parameters.keySet());
+  }
+
+  synchronized String contentType(String key) {
+    Endpoint e = endpoints.get(key);
+    return e == null ? "application/json" : e.contentType;
+  }
+
+  synchronized boolean completed(String key) {
+    Endpoint e = endpoints.get(key);
+    return e != null && e.completed;
+  }
+
+  synchronized void complete(String key, boolean completed) {
+    Endpoint e = endpoints.get(key);
+    if (e != null) {
+      e.completed = completed;
+      if (completed) e.review = "";
+      invalidate(e);
+      revision++;
+    }
+  }
+
+  synchronized void completeParameter(String key, String param, boolean completed) {
+    Endpoint e = endpoints.get(key);
+    if (e != null && e.parameters.containsKey(param)) {
+      e.parameters.get(param).completed = completed;
+      invalidate(e);
+      revision++;
+    }
+  }
+
+  synchronized void clear() {
+    endpoints.clear();
+    pending.clear();
+    assessments.clear();
+    parameterCount = 0;
+    rejected = 0;
+    new SecureRandom().nextBytes(salt);
+    invalidateAll();
+    revision++;
+  }
+
+  synchronized String save() {
+    List<Object> rows = new ArrayList<>();
+    for (Endpoint e : endpoints.values()) {
+      Map<String, Object> row = new LinkedHashMap<>();
+      row.put("method", e.method);
+      row.put("url", e.url);
+      row.put("sources", e.sources);
+      row.put("observed", e.observed);
+      row.put("repeater", e.repeater);
+      row.put("completed", e.completed);
+      row.put("first", e.first);
+      row.put("last", e.last);
+      List<Object> params = new ArrayList<>();
+      for (Parameter p : e.parameters.values())
+        params.add(Map.of("key", p.key, "changed", p.changed, "completed", p.completed));
+      row.put("parameters", params);
+      row.put(
+          "evidence",
+          e.evidence.stream()
+              .map(x -> Map.of("source", x.source, "line", x.line, "kind", x.kind))
+              .toList());
+      row.put("review", e.review);
+      row.put("contentType", e.contentType);
+      rows.add(row);
+    }
+    return MetadataExport.json(
+        Map.of(
+            "version",
+            3,
+            "assessment",
+            assessments.save(),
+            "endpoints",
+            rows,
+            "pending",
+            pending.values().stream()
+                .map(
+                    p ->
+                        Map.of(
+                            "template",
+                            p.template,
+                            "method",
+                            p.method,
+                            "source",
+                            p.source,
+                            "line",
+                            p.line,
+                            "kind",
+                            p.kind,
+                            "query",
+                            p.query,
+                            "body",
+                            p.body))
+                .toList()));
+  }
+
+  synchronized void load(String data) {
+    Object parsed = MinerJson.parse(data, 32 * 1024 * 1024, 3000000);
+    if (!(parsed instanceof Map<?, ?> doc)
+        || !(doc.get("endpoints") instanceof List<?> rows)
+        || !(doc.get("version") instanceof Number v)
+        || (v.intValue() != 1 && v.intValue() != 2 && v.intValue() != 3))
+      throw new IllegalArgumentException("활동 기록 형식 오류");
+    ActivityTracker imported = new ActivityTracker();
+    for (Object obj : rows) {
+      if (!(obj instanceof Map<?, ?> row)) throw new IllegalArgumentException("활동 기록 행 오류");
+      String raw = Objects.toString(row.get("url"), ""),
+          method = Objects.toString(row.get("method"), "?");
+      Endpoint e = imported.endpoint(method, raw);
+      if (e == null) continue;
+      if (row.get("sources") instanceof List<?> sources)
+        for (Object s : sources)
+          if (e.sources.size() < 32)
+            e.sources.add(s.toString().substring(0, Math.min(s.toString().length(), 128)));
+      e.observed = count(row.get("observed"));
+      e.repeater = count(row.get("repeater"));
+      e.completed = false;
+      e.first = shortText(row.get("first"));
+      e.last = shortText(row.get("last"));
+      e.review = boundedText(row.get("review"), 256);
+      e.contentType =
+          row.get("contentType") instanceof String type
+              ? boundedText(type, 128)
+              : "application/json";
+      if (row.get("evidence") instanceof List<?> evidence)
+        for (Object item : evidence)
+          if (item instanceof Map<?, ?> ev && e.evidence.size() < 8) {
+            String source = safeUrl(Objects.toString(ev.get("source"), ""));
+            if (source != null || "직접 입력".equals(ev.get("source")))
+              e.evidence.add(
+                  new Evidence(
+                      source == null ? "직접 입력" : source,
+                      (int) Math.max(1, count(ev.get("line"))),
+                      boundedText(ev.get("kind"), 128)));
+          }
+      if (row.get("parameters") instanceof List<?> params)
+        for (Object p : params)
+          if (p instanceof Map<?, ?> pm) {
+            Parameter target = imported.parameter(e, Objects.toString(pm.get("key"), ""));
+            if (target != null) {
+              target.changed = Boolean.TRUE.equals(pm.get("changed"));
+              target.completed = Boolean.TRUE.equals(pm.get("completed"));
+            }
+          }
+      e.completed = Boolean.TRUE.equals(row.get("completed"));
+      e.review = boundedText(row.get("review"), 256);
+    }
+    if (doc.get("pending") instanceof List<?> ps)
+      for (Object item : ps)
+        if (item instanceof Map<?, ?> p && imported.pending.size() < 1000) {
+          String source = safeUrl(Objects.toString(p.get("source"), "")),
+              template = boundedText(p.get("template"), 8192);
+          if (source != null
+              && safeUrl(template.replace("{dynamic}", "WB_DYNAMIC_SEGMENT")) != null
+              && ApiInventory.origin(source).equals(ApiInventory.origin(template))) {
+            Pending value =
+                new Pending(
+                    template,
+                    boundedText(p.get("method"), 24),
+                    source,
+                    (int) Math.max(1, count(p.get("line"))),
+                    boundedText(p.get("kind"), 128),
+                    boundedText(p.get("query"), 512),
+                    boundedText(p.get("body"), 512));
+            imported.pending.put(
+                value.method + " " + template + " " + source + ":" + value.line, value);
+          }
+        }
+    if (v.intValue() == 3) imported.assessments.load(doc.get("assessment"));
+    assessments.replace(imported.assessments);
+    pending.clear();
+    pending.putAll(imported.pending);
+    endpoints.clear();
+    endpoints.putAll(imported.endpoints);
+    parameterCount = imported.parameterCount;
+    rejected = imported.rejected;
+    invalidateAll();
+    revision++;
+  }
+
+  private static long count(Object o) {
+    return o instanceof Number n ? Math.max(0, Math.min(n.longValue(), 1000000000)) : 0;
+  }
+
+  private static String boundedText(Object o, int limit) {
+    String s = Objects.toString(o, "");
+    return s.substring(0, Math.min(s.length(), limit));
+  }
+
+  private static String shortText(Object o) {
+    String s = Objects.toString(o, "");
+    return s.substring(0, Math.min(s.length(), 64));
+  }
+
+  synchronized LinkedHashMap<String, List<List<String>>> workbook() {
+    var out = workbook(views(), pendingViews());
+    assessments.appendWorkbook(out, views());
+    return out;
+  }
+
+  static LinkedHashMap<String, List<List<String>>> workbook(
+      List<View> views, List<Pending> pending) {
+    var result = workbook(views);
+    List<List<String>> rows = new ArrayList<>();
+    rows.add(List.of("메서드", "미확정 URL", "소스 (쿼리 값 제외)", "줄", "종류", "쿼리 이름", "본문 이름"));
+    for (Pending p : pending)
+      rows.add(
+          List.of(p.method, p.template, p.source, String.valueOf(p.line), p.kind, p.query, p.body));
+    result.put("미확정 JS", rows);
+    return result;
+  }
+
+  static LinkedHashMap<String, List<List<String>>> workbook(List<View> views) {
+    LinkedHashMap<String, List<List<String>>> result = new LinkedHashMap<>();
+    List<List<String>> urls = new ArrayList<>(), params = new ArrayList<>();
+    urls.add(
+        List.of(
+            "메서드",
+            "URL (쿼리 값 제외)",
+            "점검 상태",
+            "관찰 요청",
+            "Repeater 요청",
+            "발견 출처",
+            "최초 발견",
+            "최근 활동",
+            "JS 근거",
+            "재검토 근거"));
+    params.add(List.of("메서드", "URL", "파라미터 위치:이름", "점검 상태"));
+    for (View e : views) {
+      urls.add(
+          List.of(
+              e.method,
+              e.url,
+              e.state,
+              "" + e.observed,
+              "" + e.repeater,
+              e.sources,
+              e.first,
+              e.last,
+              String.join(
+                  " | ",
+                  e.evidence.stream()
+                      .map(x -> x.source + " : " + x.line + " · " + x.kind)
+                      .toList()),
+              e.review));
+      for (var p : e.parameters) params.add(List.of(e.method, e.url, p.key, p.state));
+    }
+    result.put("엔드포인트", urls);
+    result.put("파라미터", params);
+    result.put(
+        "안내",
+        List.of(
+            List.of("상태 의미", "설명"),
+            List.of("발견만 함", "경로를 발견했지만 해당 메서드의 요청은 미관측"),
+            List.of("요청 관측", "실제 요청 관측 · 검토 완료 아님"),
+            List.of("재검토 필요", "권한 비교 의심/보류 결과 · 수동 확인 필요"),
+            List.of("Repeater 작업", "Repeater에서 실제 요청을 보낸 이력. 점검 완료를 자동 확정하지 않음"),
+            List.of("변경 관찰", "세션 기준값과 다른 값 또는 파라미터 삭제를 관찰. 취약점 입증 아님"),
+            List.of("점검 완료", "진단자가 수동으로 완료 표시"),
+            List.of("추적 범위", "현재 기록된 범위만 표시. 모든 미발견 URL의 완전성을 보장하지 않음")));
+    return result;
+  }
+}

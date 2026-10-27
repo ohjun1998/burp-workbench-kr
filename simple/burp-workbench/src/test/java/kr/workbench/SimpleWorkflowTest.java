@@ -1,0 +1,208 @@
+package kr.workbench;
+
+import burp.BurpExtender;
+import burp.IBurpExtenderCallbacks;
+import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.internal.MontoyaObjectFactory;
+import burp.api.montoya.internal.ObjectFactoryLocator;
+import burp.api.montoya.persistence.PersistedObject;
+import burp.api.montoya.persistence.Persistence;
+import burp.api.montoya.persistence.Preferences;
+import java.awt.Component;
+import java.awt.Container;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.*;
+
+/** Production Simple routes, retained originals and settings isolation; no remote HTTP. */
+public final class SimpleWorkflowTest extends WorkbenchTest {
+  static MontoyaApi previewApi() {
+    Map<String, Map<String, Object>> values = new ConcurrentHashMap<>();
+    var data = proxy(PersistedObject.class, (p, m, a) -> {
+      String name = m.getName();
+      if (name.equals("toString")) return "Isolated Simple preview persistence";
+      for (String operation : List.of("get", "set", "delete")) {
+        if (!name.startsWith(operation) || a == null || a.length == 0) continue;
+        var store = values.computeIfAbsent(name.substring(operation.length()), unused -> new ConcurrentHashMap<>());
+        String key = a[0].toString();
+        if (operation.equals("get")) return store.get(key);
+        if (operation.equals("delete")) { store.remove(key); return null; }
+        if (a[1] == null) store.remove(key); else store.put(key, a[1]);
+        return null;
+      }
+      if (name.endsWith("Keys")) {
+        String kind = name.substring(0, name.length() - 4);
+        kind = Character.toUpperCase(kind.charAt(0)) + kind.substring(1);
+        return Set.copyOf(values.getOrDefault(kind, Map.of()).keySet());
+      }
+      return def(m);
+    });
+    data.setString(BuildInfo.storageKey("auth-setup-library-project-v1"), "22222222-2222-4222-8222-222222222222");
+    var fallbackPersistence = PayloadIntegrationTest.host(Persistence.class);
+    var persistence = proxy(Persistence.class, (p, m, a) ->
+        m.getName().equals("extensionData") ? data : m.invoke(fallbackPersistence, a));
+    var fallback = PayloadIntegrationTest.host(MontoyaApi.class);
+    return proxy(MontoyaApi.class, (p, m, a) ->
+        m.getName().equals("persistence") ? persistence : m.invoke(fallback, a));
+  }
+
+  static Component named(Component root, String name) {
+    if (name.equals(root.getName())) return root;
+    if (root instanceof Container parent) for (var child : parent.getComponents()) {
+      Component result = named(child, name);
+      if (result != null) return result;
+    }
+    return null;
+  }
+
+  static List<Component> visibleComponents(Component root) {
+    if (!root.isVisible()) return List.of();
+    var values = new ArrayList<Component>(); values.add(root);
+    if (root instanceof Container parent) for (var child : parent.getComponents()) values.addAll(visibleComponents(child));
+    return values;
+  }
+
+  static void click(Component root, String name) {
+    Component value = named(root, name);
+    if (!(value instanceof AbstractButton button)) throw new AssertionError("Missing control: " + name);
+    button.doClick(0);
+  }
+
+  static String selectedFeature(JTabbedPane tabs) {
+    return Objects.toString(((JComponent) tabs.getSelectedComponent()).getClientProperty("wb.feature.id"), "");
+  }
+
+  static void unload() throws Exception {
+    for (var handler : PayloadIntegrationTest.modernUnloads) handler.extensionUnloaded();
+    for (var handler : PayloadIntegrationTest.legacyUnloads) handler.extensionUnloaded();
+    edt(() -> {});
+  }
+
+  public static void main(String[] args) throws Exception {
+    check(BuildInfo.DISPLAY_NAME.contains("Simple") && FeatureGuide.SUITE_TAB.contains("Simple"), "Simple identity is visible in extension and suite tab");
+    check(BuildInfo.STORAGE_DIRECTORY.equals(".burp-workbench-simple") && BuildInfo.storageKey("x").equals("simple.x"), "Simple uses its own disk and persistence namespaces");
+    Map<String, Object> saved = new HashMap<>();
+    saved.put("next.wb.layout.horizontal", false);
+    saved.put("next.wb.layout.reference.v1", true);
+    saved.put("wb.layout.horizontal", false);
+    var before = Map.copyOf(saved);
+    var preferences = proxy(Preferences.class, (p, m, a) -> switch (m.getName()) {
+      case "getBoolean", "getString" -> saved.get(a[0]);
+      case "setBoolean", "setString" -> { saved.put(a[0].toString(), a[1]); yield null; }
+      default -> def(m);
+    });
+    var persistence = proxy(Persistence.class, (p, m, a) -> m.getName().equals("preferences") ? preferences : def(m));
+    var settingsApi = proxy(MontoyaApi.class, (p, m, a) -> m.getName().equals("persistence") ? persistence : def(m));
+    edt(() -> {
+      var layout = new LayoutSettings(settingsApi, new JPanel());
+      layout.choice.setSelectedIndex(0);
+      check(Boolean.FALSE.equals(saved.get("simple.wb.layout.horizontal")), "Simple settings write only their own key");
+      layout.close();
+    });
+    for (var entry : before.entrySet()) check(Objects.equals(saved.get(entry.getKey()), entry.getValue()), "existing setting preserved: " + entry.getKey());
+
+    ObjectFactoryLocator.FACTORY = proxy(MontoyaObjectFactory.class, (p, m, a) -> def(m));
+    var entry = new BurpExtender();
+    entry.registerExtenderCallbacks((IBurpExtenderCallbacks) PayloadIntegrationTest.host(IBurpExtenderCallbacks.class));
+    edt(() -> entry.initialize(previewApi())); edt(() -> {});
+    var extension = (WorkbenchExtension) get(entry, "workbench");
+    var root = (JPanel) get(extension, "root");
+    var tabs = (JTabbedPane) get(extension, "tabs");
+    var auth = (AuthComparePanel) get(extension, "authCompare");
+    var evidence = (BountySupportPanel) get(extension, "bountySupport");
+    int sends = PayloadIntegrationTest.sent.get();
+    try {
+      edt(() -> {
+        check(named(root, "wb.simple.navigation") != null, "four-stage navigation is attached to production workspace");
+        var browser = (TrafficBrowser) unchecked(extension, "trafficBrowser");
+        check(!visibleComponents(root).contains(named(root, "wb.traffic.conditions.saved")), "saved-filter management is absent from the running list");
+        check(!browser.recoveryActions.isVisible(), "empty unfiltered list omits meaningless recovery controls");
+        var searchSettings = browser.content();
+        var savedChoice = named(searchSettings, "wb.traffic.conditions.saved");
+        check(savedChoice != null && savedChoice.isVisible(), "saved-filter management remains available in actual search settings");
+        check(!SwingUtilities.isDescendingFrom(savedChoice, root), "search settings do not restore saved-filter clutter in the main list");
+        check(!((JButton) named(root, "wb.simple.traffic.evidence")).isEnabled(), "next-request actions explain disabled state before selecting an original");
+        String[] features = {"traffic", "mapper", "auth", "bounty"};
+        for (int stage = 1; stage <= 4; stage++) {
+          click(root, "wb.simple.step." + stage);
+          check(selectedFeature(tabs).equals(features[stage - 1]), "stage " + stage + " opens its primary retained tool");
+        }
+        check(evidence.pages.getSelectedIndex() == 3, "evidence stage preserves fixed export route index 3");
+        for (int page : new int[] {0, 1, 2, 4}) {
+          evidence.pages.setSelectedIndex(page);
+          check(evidence.pages.getSelectedIndex() == 3, "auxiliary evidence slot " + page + " cannot open an empty workflow");
+        }
+        click(root, "wb.simple.step.2");
+        for (String feature : List.of("mapper", "js", "environment", "response.recon")) {
+          click(root, "wb.simple.tool." + feature);
+          check(selectedFeature(tabs).equals(feature), "analysis tool routes to retained " + feature + " engine");
+        }
+        click(root, "wb.simple.step.3");
+        click(root, "wb.simple.tool.payload");
+        check(selectedFeature(tabs).equals("payload"), "integrated payload engine is reachable");
+        click(root, "wb.simple.tool.auth");
+        check(named(root, "wb.simple.auth.review") != null, "explicit comparison remains available");
+        check(!visibleComponents(root).contains(auth.record), "automatic retransmission control is removed from visible Simple flow");
+        check(!auth.record.isSelected() && auth.recording.get() == null, "Simple starts without automatic retransmission");
+        var names = visibleComponents(root).stream().map(Component::getName).filter(Objects::nonNull).toList();
+        check(!names.contains("wb.workflow.actions") && !names.contains("wb.navigation.tree"), "duplicate helper and folder navigation are absent from visible flow");
+        var input = (JTextArea) unchecked(extension, "codecIn"); input.setText("SIMPLE_PENDING_LOCAL_INPUT");
+        var dialog = new AtomicReference<Component>();
+        extension.dialogOpener = (owner, title, body, modal, closed) -> {
+          check(!modal && title.contains("Simple"), "consolidated utility opens a modeless Simple window");
+          dialog.set(body); return null;
+        };
+        var navigation = (SimpleNavigation) named(root, "wb.simple.navigation");
+        var menu = navigation.optionsMenu();
+        check(menu.getComponentCount() == 3, "one options menu exposes help, appearance and diagnostics");
+        ((JMenuItem) named(menu, "wb.simple.options.0")).doClick(0);
+        check(dialog.get() != null && named(dialog.get(), "wb.feature.guide.text") != null, "current-tool help is reachable from the real options menu");
+        root.getActionMap().get("featureHelp").actionPerformed(new java.awt.event.ActionEvent(root, 0, "F1"));
+        check(named(dialog.get(), "wb.feature.guide.choice") != null, "F1 opens the same retained tool guidance");
+        ((JMenuItem) named(menu, "wb.simple.options.1")).doClick(0);
+        check(named(dialog.get(), "wb.settings.layout.common") != null, "appearance settings remain reachable from options");
+        ((JMenuItem) named(menu, "wb.simple.options.2")).doClick(0);
+        check(named(dialog.get(), "diagnostics.table") != null, "collection and error diagnostics remain reachable from options");
+        check(input.getText().equals("SIMPLE_PENDING_LOCAL_INPUT") && selectedFeature(tabs).equals("auth"), "opening utilities preserves the current tool and unsaved input");
+      });
+      var origin = "https://simple.example.test";
+      edt(() -> ((WorkbenchScope) unchecked(extension, "localScope")).add(origin + "/", true));
+      var original = request(origin + "/api/documents/101", "GET", true,
+          List.of(header("Cookie", "SID=SIMPLE_PRIVATE_SESSION"), header("Accept", "application/json")));
+      var reply = response(200, "{\"id\":101,\"title\":\"검토 문서\"}");
+      check(((JButton) get(extension, "captureButton")).getText().equals("OFF"), "Simple collector starts OFF");
+      importTraffic(extension, original, reply);
+      check(((JTable) get(extension, "logTable")).getRowCount() == 0, "History import does not collect while OFF");
+      edt(() -> ((JButton) unchecked(extension, "captureButton")).doClick(0));
+      importTraffic(extension, original, reply);
+      check(((JTable) get(extension, "logTable")).getRowCount() == 1, "SCOPE mode imports the approved original");
+      var outside = request("https://outside.example.test/api/documents/101", "GET", false, List.of());
+      importTraffic(extension, outside, reply);
+      check(((JTable) get(extension, "logTable")).getRowCount() == 1, "SCOPE mode rejects an outside original");
+      edt(() -> ((JButton) unchecked(extension, "captureButton")).doClick(0));
+      importTraffic(extension, original, reply);
+      check(((JTable) get(extension, "logTable")).getRowCount() == 1, "turning capture OFF prevents another History import");
+      edt(() -> {
+        click(root, "wb.simple.step.1");
+        var table = (JTable) unchecked(extension, "logTable");
+        table.setRowSelectionInterval(0, 0);
+        click(root, "wb.simple.traffic.evidence");
+        check(selectedFeature(tabs).equals("bounty"), "traffic evidence action opens the export stage");
+        check(evidence.evidence.size() == 1, "selected captured original is added to evidence after stage navigation");
+        check(evidence.evidence.get(0).request().contains("SIMPLE_PRIVATE_SESSION"), "private evidence retains exact original request bytes");
+        check(!evidence.evidencePreview().contains("SIMPLE_PRIVATE_SESSION"), "submission preview redacts captured session secret");
+        check(evidence.evidenceSave.isEnabled() && evidence.evidencePreview.isEnabled(), "preview and ZIP actions activate for retained evidence");
+        click(root, "wb.simple.step.1");
+        check(table.getSelectedRow() == 0, "stage navigation preserves selected original row");
+      });
+      check(PayloadIntegrationTest.sent.get() == sends, "loading, navigating, preparing and previewing Simple sends zero HTTP");
+    } finally { unload(); }
+    System.out.println("SimpleWorkflowTest: " + checks + " checks passed");
+  }
+
+  static Object unchecked(Object owner, String field) {
+    try { return get(owner, field); } catch (Exception error) { throw new AssertionError(error); }
+  }
+}

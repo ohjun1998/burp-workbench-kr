@@ -1,0 +1,47 @@
+package kr.workbench;
+import burp.api.montoya.proxy.*;
+import burp.api.montoya.proxy.http.*;
+import burp.api.montoya.http.message.responses.*;
+import burp.api.montoya.core.*;
+import javax.swing.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+public class JsHistoryTest {
+ static int checks;static void check(boolean v,String text){if(!v)throw new AssertionError(text);checks++;System.out.println("PASS "+text);}
+ static void edt(Runnable r)throws Exception{SwingUtilities.invokeAndWait(r);}
+ static void done(JsAnalysisPanel p)throws Exception{
+  // The worker can post its final render after an EDT idle check has already run.
+  // Await all previously queued analysis first, then drain the posted EDT callbacks.
+  var worker=(ThreadPoolExecutor)WorkbenchTest.get(p,"worker");
+  var barrier=new FutureTask<Void>(() -> null);
+  if(!worker.getQueue().offer(barrier,5,TimeUnit.SECONDS))throw new AssertionError("worker barrier queue timeout");
+  barrier.get(5,TimeUnit.SECONDS);
+  edt(()->{if(!p.idle())throw new AssertionError("analysis worker still active after barrier");});
+ }
+ static ProxyHttpRequestResponse item(int id,String url,AtomicReference<HttpResponse> response){return WorkbenchTest.proxy(ProxyHttpRequestResponse.class,(p,m,a)->switch(m.getName()){case "id"->id;case "request"->WorkbenchTest.request(url,"GET",true,List.of());case "response"->response.get();default->WorkbenchTest.def(m);});}
+ public static void main(String[] args)throws Exception{
+  List<ProxyHttpRequestResponse> list=new CopyOnWriteArrayList<>();var pending=new AtomicReference<HttpResponse>();list.add(item(1,"https://history.test/pending.js",pending));list.add(item(2,"https://history.test/ready.js",new AtomicReference<>(WorkbenchTest.response(200,"fetch('/ready');"))));AtomicReference<ProxyResponseHandler> handler=new AtomicReference<>();AtomicInteger deregistered=new AtomicInteger();
+  var proxy=WorkbenchTest.proxy(Proxy.class,(p,m,a)->switch(m.getName()){case "history"->list.stream().filter(i->a.length==0||((ProxyHistoryFilter)a[0]).matches(i)).toList();case "registerResponseHandler"->{handler.set((ProxyResponseHandler)a[0]);yield WorkbenchTest.proxy(Registration.class,(pp,mm,aa)->{if(mm.getName().equals("deregister"))deregistered.incrementAndGet();return WorkbenchTest.def(mm);});}default->WorkbenchTest.def(m);});
+  var panel=new JsAnalysisPanel(null,()->{});var monitor=new JsHistoryMonitor(proxy,panel::offer,()->true);monitor.poll();done(panel);check(panel.sources.getItemCount()==1&&panel.maskedReport().contains("/ready"),"existing History automatically backfilled");pending.set(WorkbenchTest.response(200,"fetch('/late');"));monitor.poll();done(panel);check(panel.sources.getItemCount()==2,"late response with lower history ID not missed");
+  monitor.poll();done(panel);check(panel.processed.get()==2,"unchanged history entries not reanalyzed");
+  list.add(item(3,"https://history.test/new.js",new AtomicReference<>(WorkbenchTest.response(200,"fetch('/new');"))));monitor.poll();done(panel);check(panel.sources.getItemCount()==3,"new History responses processed incrementally");
+  monitor.rescan();monitor.poll();done(panel);check(panel.processed.get()==3&&panel.duplicates.get()>=3,"history rescan deduplicates identical content");check(panel.historyModel.getRowCount()==3,"History source overview updated");
+  list.clear();list.add(item(1,"https://history.test/reset.js",new AtomicReference<>(WorkbenchTest.response(200,"fetch('/reset');"))));monitor.poll();monitor.poll();done(panel);check(panel.sources.getItemCount()==4,"history ID reset recovered");
+  monitor.start();check(handler.get()!=null,"Proxy live response listener registered");
+  burp.api.montoya.internal.ObjectFactoryLocator.FACTORY=WorkbenchTest.proxy(burp.api.montoya.internal.MontoyaObjectFactory.class,(p,m,a)->{if(m.getReturnType()==ProxyResponseReceivedAction.class)return WorkbenchTest.proxy(ProxyResponseReceivedAction.class,(pp,mm,aa)->mm.getName().equals("response")?a[0]:WorkbenchTest.def(mm));if(m.getReturnType()==ProxyResponseToBeSentAction.class)return WorkbenchTest.proxy(ProxyResponseToBeSentAction.class,(pp,mm,aa)->mm.getName().equals("response")?a[0]:WorkbenchTest.def(mm));return WorkbenchTest.def(m);});
+  var live=WorkbenchTest.proxy(InterceptedResponse.class,(p,m,a)->switch(m.getName()){case "initiatingRequest"->WorkbenchTest.request("https://history.test/live.js","GET",true,List.of());case "body"->WorkbenchTest.bytes("fetch('/live-event');".getBytes(java.nio.charset.StandardCharsets.UTF_8));case "bodyToString"->"fetch('/live-event');";default->WorkbenchTest.def(m);});
+  check(handler.get().handleResponseReceived(live).response()==live,"received Proxy response preserved unchanged");check(handler.get().handleResponseToBeSent(live).response()==live,"sent Proxy response preserved unchanged");done(panel);check(panel.sources.getItemCount()==5,"Proxy event analyzed immediately without history polling");monitor.close();check(deregistered.get()==1,"Proxy listener deregistered on close");
+  var batch=new JsAnalysisPanel(null,()->{});edt(()->{for(int i=0;i<25;i++)batch.offer(WorkbenchTest.request("https://history.test/batch"+i+".js","GET",true,List.of()),WorkbenchTest.response(200,"fetch('/batch"+i+"');"));});done(batch);check(batch.sources.getItemCount()==25,"busy worker queues rapid JS responses rather than skipping");check(batch.overflow.get()==0,"normal batch has no queue overflow");
+  edt(()->batch.passive.setSelected(false));check(!batch.offer(WorkbenchTest.request("https://history.test/paused.js","GET",true,List.of()),WorkbenchTest.response(200,"fetch('/paused');")),"watch pause blocks new analysis");
+  var pause=new AtomicBoolean(false);var received=new AtomicInteger();var stopped=new JsHistoryMonitor(proxy,(q,r)->{received.incrementAndGet();return true;},pause::get);stopped.poll();check(received.get()==0,"history scan pauses without advancing cursor");pause.set(true);stopped.poll();check(received.get()==1,"history accumulated during pause recovered");stopped.close();
+  var accepted=new AtomicBoolean(false);var seen=new AtomicInteger();var retry=new JsHistoryMonitor(proxy,(q,r)->{seen.incrementAndGet();return accepted.get();},()->true);retry.poll();accepted.set(true);retry.poll();check(seen.get()==2&&retry.checked.get()==1,"queue rejection retried without cursor loss");retry.close();
+  byte[] gzip;try(var bytes=new java.io.ByteArrayOutputStream()){try(var gz=new java.util.zip.GZIPOutputStream(bytes)){gz.write("fetch('/gzip');".getBytes(java.nio.charset.StandardCharsets.UTF_8));}gzip=bytes.toByteArray();}
+  var compressed=WorkbenchTest.proxy(HttpResponse.class,(p,m,a)->switch(m.getName()){case "headerValue"->"Content-Encoding".equals(a[0])?"gzip":"application/javascript";case "body"->WorkbenchTest.bytes(gzip);case "bodyToString"->"COMPRESSED";default->WorkbenchTest.def(m);});check(JsAnalysisPanel.readBody(compressed).equals("fetch('/gzip');"),"gzip response decoded without network request");
+
+  var large=new JsAnalysisPanel(null,()->{});large.offer(WorkbenchTest.request("https://history.test/large.js","GET",true,List.of()),WorkbenchTest.response(200,"fetch('/large-history');"+" ".repeat(200*1024)));done(large);check(large.processed.get()==1&&large.maskedReport().contains("/large-history"),"history JS larger than 128 KiB traffic capture limit analyzed");
+  var overloaded=new JsAnalysisPanel(null,()->{});var nativeWorker=(java.util.concurrent.ThreadPoolExecutor)WorkbenchTest.get(overloaded,"worker");var gate=new java.util.concurrent.CountDownLatch(1);nativeWorker.execute(()->{try{gate.await();}catch(InterruptedException ignored){}});for(int i=0;i<101;i++)overloaded.offer(WorkbenchTest.request("https://history.test/full"+i+".js","GET",true,List.of()),WorkbenchTest.response(200,"fetch('/ok');"));check(overloaded.overflow.get()==1,"bounded queue pressure explicitly counted");edt(overloaded::clear);gate.countDown();done(overloaded);check(overloaded.sources.getItemCount()==0,"clear invalidates entire queued history batch");
+  edt(()->{large.close();overloaded.close();});
+  edt(()->{panel.close();batch.close();});System.out.println("JsHistoryTest: "+checks+" checks passed");
+ }
+}

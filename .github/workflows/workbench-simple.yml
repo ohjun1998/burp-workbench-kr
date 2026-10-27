@@ -1,0 +1,55 @@
+name: Workbench Simple
+
+on:
+  push:
+    branches: ['account-a/workbench-simple']
+    paths: ['simple/**', '.github/workflows/workbench-simple.yml']
+  pull_request:
+    paths: ['simple/**', '.github/workflows/workbench-simple.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: simple-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simple:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Strict Java 17 build and complete Simple regression profile
+        run: python simple/dev.py check
+      - name: Render and check real Simple Swing components
+        run: python simple/tools/render_simple.py --out tmp/simple-layout --check
+      - name: Verify published Simple artifact and source fingerprints
+        run: python simple/dev.py verify
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: simple-verification-${{ github.sha }}
+          path: |
+            simple/burp-workbench/build/*summary.json
+            simple/burp-workbench/build/test-*.txt
+            simple/burp-workbench/dist/burp-workbench-simple-*.jar
+            simple/feature-mapper/build/*results.txt
+            tmp/simple-layout/**/*.png
+            tmp/simple-layout/*.json
+            tmp/simple-layout/*.csv
+          if-no-files-found: warn
+          retention-days: 14

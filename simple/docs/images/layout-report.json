@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "artifact": "burp-workbench/dist/burp-workbench-simple-1.0.0.jar",
+  "toolchainMode": "explicit-source17-target17-api-unverified",
+  "java17ApiCompatibilityVerified": false,
+  "compilerNote": "Explicit -source/-target fallback on Java 21; --release 17 API compatibility was not validated.",
+  "jarSha256": "379e03d74a9c86e66875adc25801da5f3c4c7d2deea8262929cdc8a94a261b04",
+  "renderedViews": 48,
+  "controls": 912,
+  "scenarios": 32,
+  "clippedControls": [],
+  "collapsedAreas": [],
+  "failedScenarios": [],
+  "scope": "Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.",
+  "result": "passed"
+}

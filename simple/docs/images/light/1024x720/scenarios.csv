@@ -1,0 +1,9 @@
+scenario,passed
+"Scope editor opens exact production body",true
+"Traffic feedback and visible originals share a settled snapshot",true
+"Production response analysis displays a synthetic observation",true
+"Synthetic account candidates are retained",true
+"Original and comparison packets are captured together",true
+"Production preview excludes synthetic session values",true
+"Production redaction preview contains a masked Cookie example",true
+"Guide navigation sends zero HTTP",true

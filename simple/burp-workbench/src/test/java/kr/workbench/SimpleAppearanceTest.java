@@ -28,7 +28,7 @@ public final class SimpleAppearanceTest extends WorkbenchTest {
     var evidence = (BountySupportPanel) get(extension,"bountySupport");
     try {
       edt(() -> {
-        check(WorkbenchUi.font().canDisplayUpTo("수집 · 분석 · 검증 · 증거 저장") < 0, "bundled font displays Simple Korean stage captions");
+        check(WorkbenchUi.font().canDisplayUpTo("요청·응답 목록 · 기능 자동 매핑 · 계정 권한 비교 · 요청 재현·증거") < 0, "bundled font displays the retained tool captions");
         Dimension stable = mode.getPreferredSize();
         for (String expected : new String[]{"OFF","SCOPE"}) {
           mode.setSize(stable);
@@ -52,10 +52,10 @@ public final class SimpleAppearanceTest extends WorkbenchTest {
         var picture=new BufferedImage(mode.getWidth(),mode.getHeight(),BufferedImage.TYPE_INT_RGB);
         var graphics=picture.createGraphics();mode.paint(graphics);graphics.dispose();
         check(picture.getRGB(19,mode.getHeight()/2)==WorkbenchSkin.captureColor("OFF").getRGB(), "capture lamp recovers after host button UI replacement");
-        SimpleWorkflowTest.click(root,"wb.simple.step.4");
-        SimpleWorkflowTest.click(root,"wb.simple.step.1");
-        check(SimpleWorkflowTest.named(root,"wb.simple.step.1") instanceof JToggleButton stage && stage.isSelected(), "stage navigation remains usable after host theme replacement");
-        check(input.getText().equals("SIMPLE_UNSAVED_INPUT"), "moving between stages preserves local conversion input");
+        SimpleWorkflowTest.click(root,"wb.simple.tool.bounty");
+        SimpleWorkflowTest.click(root,"wb.simple.tool.traffic");
+        check(SimpleWorkflowTest.named(root,"wb.simple.tool.traffic") instanceof JToggleButton tool && tool.isSelected(), "direct tool navigation remains usable after host theme replacement");
+        check(input.getText().equals("SIMPLE_UNSAVED_INPUT"), "moving between retained tools preserves local conversion input");
         check(PayloadIntegrationTest.sent.get()==0, "appearance and capture-state changes send zero HTTP");
         check(errors.get()==0, "simulated host look-and-feel change emits no asynchronous UI errors");
       });

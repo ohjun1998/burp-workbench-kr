@@ -24,11 +24,11 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   final AuthComparePanel auth;
   final ActivityPanel activity;
   final Set<JDialog> previewWindows = new HashSet<>();
-  // Preserve the integration contract (evidence is index 3) while removing the
-  // auxiliary tool navigation. Every public route resolves to the evidence workspace.
+  // Preserve the integration contract (replay 1, evidence 3) while removing
+  // auxiliary external-tool, OAST and browser-helper navigation.
   final JTabbedPane pages = new FolderNavigation.Pages() {
     @Override public void setSelectedIndex(int index) {
-      super.setSelectedIndex(getTabCount() > 3 && index >= 0 ? 3 : index);
+      super.setSelectedIndex(getTabCount() > 3 && index >= 0 && index != 1 && index != 3 ? 3 : index);
     }
   };
   final JLabel state = new JLabel("원본 추가 → 영향·재현 작성 → 가림 확인 → ZIP 저장");
@@ -255,13 +255,29 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceStores.add(evidenceStore);
     setName("wb.bounty.support");
     setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-    // Slots stay stable for existing extension evidence links. Auxiliary external
-    // tools, serial workflows, OAST and browser helpers are not constructed in Simple.
+    // Keep replay and evidence as major functions. Stable slots preserve engine
+    // callbacks; external-tool, OAST and browser-helper UI is not constructed.
     pages.addTab("보존 슬롯 0", new JPanel());
-    pages.addTab("보존 슬롯 1", new JPanel());
+    pages.addTab("요청 재현", workflowContent());
     pages.addTab("보존 슬롯 2", new JPanel());
-    pages.addTab("증거 묶음", evidenceContent());
+    pages.addTab("증거 정리", evidenceContent());
     pages.addTab("보존 슬롯 4", new JPanel());
+    JToggleButton replay = new JToggleButton("요청 재현");
+    JToggleButton evidencePage = new JToggleButton("증거 정리");
+    replay.setName("wb.simple.bounty.replay");
+    evidencePage.setName("wb.simple.bounty.evidence");
+    replay.setToolTipText("선택 요청을 단계로 추가하고 설정을 확인한 뒤 직접 순차 실행합니다.");
+    evidencePage.setToolTipText("원본과 실행 결과의 설명·가림을 확인하고 증거 ZIP으로 저장합니다.");
+    ButtonGroup section = new ButtonGroup();section.add(replay);section.add(evidencePage);
+    replay.addActionListener(event -> pages.setSelectedIndex(1));
+    evidencePage.addActionListener(event -> pages.setSelectedIndex(3));
+    pages.addChangeListener(event -> {
+      replay.setSelected(pages.getSelectedIndex() == 1);
+      evidencePage.setSelected(pages.getSelectedIndex() == 3);
+    });
+    JPanel sections = WorkbenchUi.row(replay, evidencePage);
+    sections.setName("wb.simple.bounty.sections");
+    add(sections, BorderLayout.NORTH);
     pages.setSelectedIndex(3);
     add(pages);
     add(state, BorderLayout.SOUTH);
@@ -507,6 +523,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       JPopupMenu menu = new JPopupMenu();
       evidenceMenuItem(menu, "트래픽 추가", !running, this::captureSelected);
       evidenceMenuItem(menu, "권한 비교 추가", !running, this::captureAuth);
+      evidenceMenuItem(menu, "요청 재현 결과 추가", !running && !flowResults.isEmpty(), this::captureFlow);
       return menu;
     });
     JButton moreEvidence = evidenceMenuButton("더 보기", "wb.bounty.evidence.more", () -> {
@@ -517,7 +534,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       return menu;
     });
     top.add(WorkbenchUi.row(addEvidence, evidencePreview, evidenceSave, moreEvidence));
-    addEvidence.setToolTipText("수집한 원본 또는 선택한 계정 비교 기록을 증거에 추가합니다.");
+    addEvidence.setToolTipText("수집한 원본, 계정 비교 또는 요청 재현 결과를 증거에 추가합니다.");
     evidencePreview.setToolTipText("ZIP에 저장할 보고서와 패킷의 민감 정보 가림을 먼저 확인합니다.");
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     evidenceTable.setToolTipText("Ctrl/Shift로 여러 증거 선택 · 화면 순서대로 ZIP에 저장합니다.");
@@ -1164,7 +1181,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     if (evidence.size() + flowResults.size() > 32)
       throw new IllegalArgumentException("증거 요청 최대 32개");
     for (var r : flowResults) remember(r.request(), r.response(), "업무 단계 " + r.step(), r.state());
-    state.setText("업무 흐름 증거 추가");
+    pages.setSelectedIndex(3);
+    state.setText("요청 재현 결과 " + flowResults.size() + "개 증거 추가 · 가림 확인 후 저장하세요.");
   }
 
   void capturePayload(

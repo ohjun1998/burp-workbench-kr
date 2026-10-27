@@ -87,9 +87,10 @@ public final class UiPanelsOptimizationTest extends WorkbenchTest {
             edt(() -> layout(support.get()));
             edt(() -> {
                 var panel=support.get();
-                check(panel.pages.getSelectedIndex()==3, "Simple auxiliary route resolves to evidence at "+width);
-                check(panel.workflow.getParent()==null && panel.workflowDetail.getParent()==null && panel.flowTable.getParent()==null, "Simple does not construct removed serial workflow editors at "+width);
-                check(viewport(panel.evidenceTable).getHeight()>=100, "evidence table retains multiple readable rows at "+width);
+                check(panel.pages.getSelectedIndex()==1, "Simple retains manual request replay as a core workflow at "+width);
+                check(viewport(panel.workflow).getWidth()>=300 && viewport(panel.workflow).getHeight()>=150, "workflow editor remains usable at "+width);
+                check(viewport(panel.workflowDetail).getWidth()>=280 && viewport(panel.workflowDetail).getHeight()>=150, "selected response remains visible below results at "+width);
+                check(viewport(panel.flowTable).getHeight()>=100, "result table retains multiple readable rows at "+width);
             });
         }
         CountDownLatch finish = new CountDownLatch(1), started = new CountDownLatch(1);

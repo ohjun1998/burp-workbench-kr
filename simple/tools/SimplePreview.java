@@ -132,6 +132,8 @@ public final class SimplePreview extends WorkbenchTest {
     final String origin = "https://simple.example.test";
     try {
       edt(() -> {
+        scenario("All eight retained primary tools are directly visible",List.of("traffic","mapper","auth","js","environment","response.recon","payload","bounty").stream()
+            .allMatch(id -> SimpleWorkflowTest.visibleComponents(root).contains(SimpleWorkflowTest.named(root,"wb.simple.tool."+id))));
         var scope = (WorkbenchScope) value(extension,"localScope"); scope.add(origin+"/", true); invoke(extension,"scopeChanged");
         var dialog = new AtomicReference<Component>();
         extension.dialogOpener = (owner,title,body,modal,closed) -> { dialog.set(body); return null; };
@@ -139,7 +141,7 @@ public final class SimplePreview extends WorkbenchTest {
         scenario("Scope editor opens exact production body", dialog.get() != null);
         var body = WorkbenchUi.settingsBody(dialog.get(), () -> {});
         capture(body,"00-scope-editor.png", Math.min(width,900), Math.min(height,600));
-        click(root,"wb.simple.step.1"); capture(root,"00-start.png");
+        click(root,"wb.simple.tool.traffic"); capture(root,"00-start.png");
         ((JButton) value(extension,"captureButton")).doClick(0);
       });
       seedTraffic(extension,request(origin+"/assets/app.js","GET",true,List.of(header("Accept","application/javascript"))),
@@ -160,12 +162,17 @@ public final class SimplePreview extends WorkbenchTest {
         scenario("Traffic feedback and visible originals share a settled snapshot",browser.positionReady(browser.capturePosition())&&table.getRowCount()==3);
         capture(root,"01-capture.png");
         table.setRowSelectionInterval(1,1); capture(root,"02-request.png");
-        click(root,"wb.simple.step.2"); click(root,"wb.simple.tool.response.recon");
+        click(root,"wb.simple.tool.mapper"); click(root,"wb.simple.tool.response.recon");
         scenario("Production response analysis displays a synthetic observation", recon.findingTable.getRowCount() > 0);
         recon.findingTable.setRowSelectionInterval(0,0); capture(root,"03-analysis.png");
+        click(root,"wb.simple.tool.js"); table.setRowSelectionInterval(0,0); invoke(extension,"selectedJs");
+        var js=(JsAnalysisPanel)value(extension,"jsAnalysis");
+        awaitUi(()->{var current=(JsAnalysis.Result)value(js,"current");return current!=null&&!current.endpoints().isEmpty();},"selected original JS analysis");
+        scenario("JS analysis retains the selected HTTP source",js.sourceUrl.getText().startsWith(origin+"/assets/app.js")&&js.input.getText().contains("fetch("));
+        capture(root,"10-js.png"); table.setRowSelectionInterval(1,1);
         click(root,"wb.simple.tool.mapper"); capture(root,"08-mapper.png");
         click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
-        click(root,"wb.simple.step.3"); click(root,"wb.simple.tool.payload"); capture(root,"07-payload.png");
+        click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); capture(root,"07-payload.png");
         click(root,"wb.simple.tool.auth");
         auth.setDetection(true);
         var alice = request(origin+"/api/documents/101","GET",true,List.of(header("Cookie","SID=ALICE_DEMO_SECRET")));
@@ -190,8 +197,13 @@ public final class SimplePreview extends WorkbenchTest {
         auth.historyModel.addRow(new Object[]{1,alice.url(),"","","","예시 · 완료"});
         auth.refresh(run); auth.history.setRowSelectionInterval(0,0); auth.show(run);
         capture(root,"04-auth-results.png");
-        click(root,"wb.simple.step.4");
-        evidence.captureAuth();
+        click(root,"wb.simple.tool.bounty"); click(root,"wb.simple.bounty.replay");
+        SimpleWorkflowTest.clickText(evidence,"선택 요청 추가");
+        scenario("Manual replay prepares the selected request without running",evidence.pages.getSelectedIndex()==1&&evidence.workflow.getText().contains("GET /api/documents/101")&&!evidence.running&&evidence.flowModel.getRowCount()==0);
+        evidence.workflow.setName("wb.simple.replay.request");
+        evidence.workflowDetail.setName("wb.simple.replay.result");
+        capture(root,"11-replay.png");
+        click(root,"wb.simple.bounty.evidence"); evidence.captureAuth();
         evidence.evidenceTitle.setText("문서 접근 권한 비교 · 작성 예시");
         evidence.impact.setText("다른 사용자와 비로그인 응답을 확인하고 접근 정책과 대조했습니다.\n이 가이드 화면의 패킷과 결과는 합성 데이터입니다.");
         evidence.repro.setText("1. 점검 대상 URL을 SCOPE에 추가합니다.\n2. 원본 요청을 선택하고 계정 1/2와 비로그인을 연결합니다.\n3. 비교 결과와 응답 원문을 확인합니다.\n4. 가림 미리보기를 확인한 뒤 ZIP을 저장합니다.");

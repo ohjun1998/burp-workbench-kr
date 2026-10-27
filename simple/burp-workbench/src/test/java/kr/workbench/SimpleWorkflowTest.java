@@ -70,6 +70,12 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
     button.doClick(0);
   }
 
+  static void clickText(Component root, String text) {
+    var action = visibleComponents(root).stream().filter(c -> c instanceof AbstractButton button && text.equals(button.getText()))
+        .map(c -> (AbstractButton)c).findFirst().orElseThrow(() -> new AssertionError("Missing action: " + text));
+    action.doClick(0);
+  }
+
   static String selectedFeature(JTabbedPane tabs) {
     return Objects.toString(((JComponent) tabs.getSelectedComponent()).getClientProperty("wb.feature.id"), "");
   }
@@ -115,7 +121,7 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
     int sends = PayloadIntegrationTest.sent.get();
     try {
       edt(() -> {
-        check(named(root, "wb.simple.navigation") != null, "four-stage navigation is attached to production workspace");
+        check(named(root, "wb.simple.navigation") != null, "eight-tool navigation is attached to production workspace");
         var browser = (TrafficBrowser) unchecked(extension, "trafficBrowser");
         check(!visibleComponents(root).contains(named(root, "wb.traffic.conditions.saved")), "saved-filter management is absent from the running list");
         check(!browser.recoveryActions.isVisible(), "empty unfiltered list omits meaningless recovery controls");
@@ -124,24 +130,42 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
         check(savedChoice != null && savedChoice.isVisible(), "saved-filter management remains available in actual search settings");
         check(!SwingUtilities.isDescendingFrom(savedChoice, root), "search settings do not restore saved-filter clutter in the main list");
         check(!((JButton) named(root, "wb.simple.traffic.evidence")).isEnabled(), "next-request actions explain disabled state before selecting an original");
-        String[] features = {"traffic", "mapper", "auth", "bounty"};
-        for (int stage = 1; stage <= 4; stage++) {
-          click(root, "wb.simple.step." + stage);
-          check(selectedFeature(tabs).equals(features[stage - 1]), "stage " + stage + " opens its primary retained tool");
-        }
-        check(evidence.pages.getSelectedIndex() == 3, "evidence stage preserves fixed export route index 3");
-        for (int page : new int[] {0, 1, 2, 4}) {
-          evidence.pages.setSelectedIndex(page);
-          check(evidence.pages.getSelectedIndex() == 3, "auxiliary evidence slot " + page + " cannot open an empty workflow");
-        }
-        click(root, "wb.simple.step.2");
-        for (String feature : List.of("mapper", "js", "environment", "response.recon")) {
+        String[] features = {"traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty"};
+        var enginePages = new LinkedHashMap<String, Component>();
+        for (String feature : features) {
+          var action = named(root, "wb.simple.tool." + feature);
+          check(action instanceof AbstractButton && visibleComponents(root).contains(action), "direct navigation always exposes retained " + feature + " tool");
           click(root, "wb.simple.tool." + feature);
-          check(selectedFeature(tabs).equals(feature), "analysis tool routes to retained " + feature + " engine");
+          check(selectedFeature(tabs).equals(feature), "direct navigation opens retained " + feature + " engine");
+          enginePages.put(feature, tabs.getSelectedComponent());
         }
-        click(root, "wb.simple.step.3");
-        click(root, "wb.simple.tool.payload");
-        check(selectedFeature(tabs).equals("payload"), "integrated payload engine is reachable");
+        check(Arrays.stream(features).allMatch(feature -> named(root,"wb.simple.tool."+feature)!=null), "all eight existing major tools remain available together");
+        check(evidence.pages.getSelectedIndex() == 3, "replay/evidence tool starts on fixed evidence route index 3");
+        click(root, "wb.simple.bounty.replay");
+        check(evidence.pages.getSelectedIndex() == 1 && named(evidence,"wb.bounty.flow.run") == evidence.flowRun, "manual request replay is a visible core function at stable index 1");
+        click(root, "wb.simple.bounty.evidence");
+        check(evidence.pages.getSelectedIndex() == 3, "evidence mode remains directly accessible at stable index 3");
+        for (int page : new int[] {0, 2, 4}) {
+          evidence.pages.setSelectedIndex(page);
+          check(evidence.pages.getSelectedIndex() == 3, "auxiliary replay/evidence slot " + page + " cannot open an empty helper");
+        }
+        var js = (JsAnalysisPanel) unchecked(extension,"jsAnalysis"); js.input.setText("fetch('/api/retained-source');");
+        var runner = unchecked(entry,"payloadRunner");
+        var payloadInput = (JTextArea) unchecked(runner,"request"); payloadInput.setText("MANUALLY_EDITED_PAYLOAD_INPUT");
+        for (String feature : features) {
+          click(root,"wb.simple.tool."+feature);
+          check(tabs.getSelectedComponent()==enginePages.get(feature), "navigation retains the same " + feature + " engine instance");
+        }
+        check(js.input.getText().equals("fetch('/api/retained-source');") && payloadInput.getText().equals("MANUALLY_EDITED_PAYLOAD_INPUT"), "switching tools preserves JS and payload engine input");
+        click(root,"wb.simple.tool.payload");
+        for (String name : List.of("settings","start","stop","evidence")) check(named(root,"wb.simple.payload."+name)!=null, "input testing keeps direct " + name + " control");
+        check(!((AbstractButton)named(root,"wb.simple.payload.evidence")).isEnabled(), "input-testing evidence remains disabled without completed results");
+        click(root,"wb.simple.tool.js");
+        var toolsMenu=visibleComponents(js).stream().filter(c -> c instanceof JComponent j && j.getClientProperty("wb.simple.js.tools.menu") instanceof JPopupMenu)
+            .map(c -> (JPopupMenu)((JComponent)c).getClientProperty("wb.simple.js.tools.menu")).findFirst().orElseThrow();
+        var menuLabels=Arrays.stream(toolsMenu.getComponents()).filter(c -> c instanceof JMenuItem).map(c -> ((JMenuItem)c).getText()).toList();
+        check(menuLabels.contains("관찰된 API 패킷 보기"), "JS tools retain observed source packet inspection");
+        check(menuLabels.stream().noneMatch(text -> text.toLowerCase(Locale.ROOT).contains("npm") || text.contains("소스맵") || text.toLowerCase(Locale.ROOT).contains("source map")), "JS auxiliary network discovery is absent from the running tools menu");
         click(root, "wb.simple.tool.auth");
         check(named(root, "wb.simple.auth.review") != null, "explicit comparison remains available");
         check(!visibleComponents(root).contains(auth.record), "automatic retransmission control is removed from visible Simple flow");
@@ -185,17 +209,24 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
       importTraffic(extension, original, reply);
       check(((JTable) get(extension, "logTable")).getRowCount() == 1, "turning capture OFF prevents another History import");
       edt(() -> {
-        click(root, "wb.simple.step.1");
+        click(root, "wb.simple.tool.traffic");
         var table = (JTable) unchecked(extension, "logTable");
         table.setRowSelectionInterval(0, 0);
+        click(root,"wb.simple.tool.bounty"); click(root,"wb.simple.bounty.replay");
+        clickText(evidence,"선택 요청 추가");
+        check(evidence.workflow.getText().equals(original.toString()), "manual replay appends the exact selected request without rewriting its source");
+        check(evidence.flowOrigin.getText().equals(origin) && !evidence.running && evidence.flowModel.getRowCount()==0, "replay preparation retains target origin and waits for explicit execution");
+        click(root,"wb.simple.tool.js"); click(root,"wb.simple.tool.bounty");
+        check(evidence.pages.getSelectedIndex()==1 && evidence.workflow.getText().equals(original.toString()), "returning to replay preserves prepared request and mode");
+        click(root,"wb.simple.tool.traffic");
         click(root, "wb.simple.traffic.evidence");
-        check(selectedFeature(tabs).equals("bounty"), "traffic evidence action opens the export stage");
-        check(evidence.evidence.size() == 1, "selected captured original is added to evidence after stage navigation");
+        check(selectedFeature(tabs).equals("bounty"), "traffic evidence action opens the retained replay/evidence tool");
+        check(evidence.evidence.size() == 1, "selected captured original is added to evidence after tool navigation");
         check(evidence.evidence.get(0).request().contains("SIMPLE_PRIVATE_SESSION"), "private evidence retains exact original request bytes");
         check(!evidence.evidencePreview().contains("SIMPLE_PRIVATE_SESSION"), "submission preview redacts captured session secret");
         check(evidence.evidenceSave.isEnabled() && evidence.evidencePreview.isEnabled(), "preview and ZIP actions activate for retained evidence");
-        click(root, "wb.simple.step.1");
-        check(table.getSelectedRow() == 0, "stage navigation preserves selected original row");
+        click(root, "wb.simple.tool.traffic");
+        check(table.getSelectedRow() == 0, "tool navigation preserves selected original row");
       });
       check(PayloadIntegrationTest.sent.get() == sends, "loading, navigating, preparing and previewing Simple sends zero HTTP");
     } finally { unload(); }

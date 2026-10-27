@@ -18,6 +18,16 @@ def run(command, **kwargs):
     subprocess.run(list(map(str, command)), check=True, **kwargs)
 
 
+def node_test_options(help_text):
+    """Use only the isolation spelling advertised by the installed Node parser."""
+    options = ['--test', '--test-reporter=tap']
+    if '--test-isolation' in help_text:
+        options.append('--test-isolation=none')
+    elif '--experimental-test-isolation' in help_text:
+        options.append('--experimental-test-isolation=none')
+    return options
+
+
 def mapper_test(runtime, source_target=False):
     """Exercise the same Mapper classes that are packaged in the Simple JAR."""
     sys.path.insert(0, str(WB))
@@ -46,8 +56,15 @@ def mapper_test(runtime, source_target=False):
     counted = re.search(r'(\d+) checks passed', report)
     if not counted:
         raise RuntimeError('Mapper test count missing')
-    node = subprocess.run(['node', '--test', '--test-reporter=tap', '--test-isolation=none',
-                           str(mapper / 'tests/browser-helper.test.mjs')],
+    node_help = subprocess.run(['node', '--help'], capture_output=True, text=True,
+                               encoding='utf-8', errors='replace', timeout=30)
+    if node_help.returncode:
+        raise subprocess.CalledProcessError(node_help.returncode, ['node', '--help'])
+    node_options = node_test_options(node_help.stdout + node_help.stderr)
+    test_source = mapper / 'tests/browser-helper.test.mjs'
+    expected_node_count = len(re.findall(r'(?m)^\s*test\(', test_source.read_text(encoding='utf-8')))
+    print('+ node ' + ' '.join(node_options) + ' ' + str(test_source), flush=True)
+    node = subprocess.run(['node', *node_options, str(test_source)],
                           cwd=mapper, capture_output=True, text=True, encoding='utf-8',
                           errors='replace', timeout=120)
     node_report = node.stdout + node.stderr
@@ -58,7 +75,11 @@ def mapper_test(runtime, source_target=False):
     node_count = re.search(r'# tests (\d+)', node_report)
     if not node_count:
         raise RuntimeError('Browser-helper test count missing')
-    return int(counted.group(1)), int(node_count.group(1))
+    actual_node_count = int(node_count.group(1))
+    if expected_node_count < 1 or actual_node_count != expected_node_count:
+        raise RuntimeError(f'Browser-helper runner reported {actual_node_count} tests; '
+                           f'expected {expected_node_count} declared tests. A file-level summary is insufficient.')
+    return int(counted.group(1)), actual_node_count, node_options
 
 
 def main():
@@ -97,10 +118,11 @@ def main():
         if args.command in ['check', 'release']:
             if args.group or args.skip_payload:
                 raise RuntimeError('check/release require the complete declared suite; use test for focused checks')
-            count, browser_count = mapper_test(runtime, args.source_target)
+            count, browser_count, node_options = mapper_test(runtime, args.source_target)
             summary = json.loads((WB / 'build/test-summary.json').read_text(encoding='utf-8'))
             summary['mapperJavaChecks'] = count
             summary['mapperBrowserHelperChecks'] = browser_count
+            summary['mapperBrowserHelperNodeOptions'] = node_options
             summary['scope'] = 'Simple packaged-JAR regressions, loopback payload HTTP, Mapper Java and browser-helper Node tests'
             summary['notRun'] = ['Native Burp GUI', 'Windows DPI/IME', 'manual browser operation',
                                   'Docker lab stack', 'live external OAST/BApp/AI services',

@@ -1,12 +1,12 @@
 # Simple 회귀 검사 적용 범위
 
-Simple은 Workbench Next 0.53.4의 통합 엔진을 보존하면서 실행 화면을 네 단계로 재구성합니다. 기존 검사에서 **사용자가 제거하도록 요청한 화면의 모양**과 **계속 동작해야 하는 엔진·원본·증거 계약**을 구분합니다. 이 문서는 검사 선택의 근거이며 통과 결과가 아닙니다. 실제 실행 결과와 건수는 `burp-workbench/build/test-summary.json` 및 `check-summary.json`을 기준으로 확인합니다.
+Simple 1.1.0은 Workbench Next 0.53.4의 통합 엔진과 8개 extension의 주요 기능을 보존하면서 각 도구를 직접 여는 메뉴로 재구성합니다. 주요 흐름인 여러 요청의 수동 재현과 증거 저장은 함께 유지하며, 부가 도구만 실행 화면에서 제외합니다. 이전 Simple 1.0.0의 JAR·소스·가이드는 그대로 보관합니다. 기존 검사에서 **사용자가 제거하도록 요청한 화면의 모양**과 **계속 동작해야 하는 엔진·원본·증거 계약**을 구분합니다. 이 문서는 검사 선택의 근거이며 통과 결과가 아닙니다. 실제 실행 결과와 건수는 `burp-workbench/build/test-summary.json` 및 `check-summary.json`을 기준으로 확인합니다.
 
 ## Simple 검사로 교체한 이전 화면 검사
 
 | 이전 검사 | Simple에 적용하지 않는 구체적 전제 | 대체 확인 |
 |---|---|---|
-| `UiCleanupTest` | 루트 상단이 `WorkContextPanel`이어야 함, 옛 우클릭 메뉴의 15개 항목이 정확히 존재해야 함, 트래픽에 직접 다음 작업 버튼이 없어야 함 | `SimpleWorkflowTest`: 네 단계·선택 원본·직접 작업·제거 메뉴·무전송. 실제 생산 Swing 화면 렌더링: 단계별 배치 |
+| `UiCleanupTest` | 루트 상단이 `WorkContextPanel`이어야 함, 옛 우클릭 메뉴의 15개 항목이 정확히 존재해야 함, 트래픽에 직접 다음 작업 버튼이 없어야 함 | `SimpleWorkflowTest`: 8개 도구의 직접 이동·선택 원본·주요 실행·부가 메뉴 제거·무전송. 실제 생산 Swing 화면 렌더링: 모든 도구 배치 |
 | `FolderNavigationTest` | 화면에 폴더 트리·폭 조절·숨김 토글·NEXT 배지가 있어야 함 | `SimpleWorkflowTest`: 통합 도구 이동, 요청 선택과 입력 보존, Simple 식별·저장 공간 분리 |
 | `AppearanceWorkflowTest` | 제거한 폴더 트리의 주황 아이콘·렌더러·행 높이를 호스트 테마 변경 후 복구해야 함 | `SimpleAppearanceTest`: 실제 Simple에서 테마 복구·트래픽 글꼴/행 높이·OFF/SCOPE 상태등·입력/선택 보존·무전송 |
 
@@ -16,11 +16,12 @@ Simple은 Workbench Next 0.53.4의 통합 엔진을 보존하면서 실행 화�
 
 | 검사 | Simple 복사본에서 바꾼 전제 | 유지한 검사 |
 |---|---|---|
+| `PacketUiTest` | 입력값 검사의 이전 더보기 버튼 대신 설정·시작·중지·직접 증거 버튼의 이름을 확인하고 CSV/별도 작업 창/더보기가 본 실행 화면에 없음을 확인 | 공통 패킷 정렬/Raw 원본·압축 해제·구문 표시·실제 Burp 편집기 전달/스타일·요청 초안 미리보기 원본 보존 |
 | `BuildInfoTest` | JAR 파일명을 `burp-workbench-simple-<버전>.jar`로 확인 | 실제 패키징 JAR의 manifest·런타임 버전·표시 이름 일치 |
 | `NextIsolationTest` | Simple 이름·저장 공간을 확인하고 기존 Next 설정 fixture도 보존 대상으로 추가 | 기존 설정 미변경, Simple의 별도 읽기·쓰기와 JS 디스크 프로젝트 격리 |
-| `FeatureGuideWorkflowTest` | Simple 옵션 메뉴의 실제 도움말 항목, 현재 증거 제목, 네 단계 시작 안내를 사용 | 모든 통합 도구 라우팅, 도움말/설정 열기 후 선택·작성 중 입력 보존, 좁은 안내 창, 종료 후 동작, HTTP 무전송 |
+| `FeatureGuideWorkflowTest` | Simple 옵션 메뉴의 실제 도움말 항목, 현재 재현/증거 제목, 8개 extension 시작 안내를 사용 | 모든 통합 도구 라우팅, 도움말/설정 열기 후 선택·작성 중 입력 보존, 좁은 안내 창, 종료 후 동작, HTTP 무전송 |
 | `DiagnosticsWorkflowTest` | 상시 3개 버튼 대신 실제 Simple 옵션 메뉴에서 로그 열기 | 오류 원문 가림, 동시 기록의 1,000개 상한과 누적 수, 선택·비우기·다시 열기, 종료 정리, HTTP 무전송 |
-| `UiPanelsOptimizationTest` | 삭제한 순차 재현 편집기의 viewport 크기 대신 증거 페이지로의 경로 연결과 부가 편집기 미생성을 확인 | 응답 비교의 원본 연결·가림·편집 상태, 증거 추가/비우기·이미지 해시, 응답 관찰 선택, worker 중지/완료 상태 |
+| `UiPanelsOptimizationTest` | 1.1.0에서 핵심 여러 요청 재현 화면을 유지하므로 원래 viewport 크기 검사를 복원하고 index 1의 재현 경로도 확인 | 응답 비교의 원본 연결·가림·편집 상태, 증거 추가/비우기·이미지 해시, 응답 관찰 선택, worker 중지/완료 상태 |
 | `LayoutPassiveWorkflowTest` | 이전 우클릭 메뉴 0번 위치 대신 보존한 명시적 URL 후보 수집 경로를 사용 | 같은 CLI fixture 수집·대상/패킷 격리·공통 배치 변경·8개 대상 한도·해제 정리 |
 | `TrafficScopeTest` | 삭제한 중복 우클릭 SCOPE 메뉴 대신 실제 상단 SCOPE 목록 버튼과 URL 입력/추가를 사용. 기존 선택 원본 소급 관찰 대신 SCOPE를 켠 뒤 실제 수집 콜백으로 전달 | URL 규칙 등록/수정/삭제·경계/Origin/경로·가림/저장·선택 보존·활동/환경 연결·OFF 차단·Burp 전역 Scope 미변경·대상 요청 무전송 |
 | `AuthLayoutFitTest` | 이전 6개 toolbar 대신 인증 탐지·선택 비교·중지·계정/판정 설정의 정확한 4개 이름·순서를 확인 | 800/1024/1280/1600px 표 최소 너비·viewport 채움·도구 모음 줄바꿈·계정 상세 입력 배치 |
@@ -35,6 +36,6 @@ Simple은 Workbench Next 0.53.4의 통합 엔진을 보존하면서 실행 화�
 
 `BountyFeaturesTest`, `CompletenessTest`, `IntegrationEdgesTest` 등은 화면에서 제거한 부가 도구의 내부 메타데이터·가림·원본 연결도 검사합니다. 해당 엔진이 보존되어 있으므로 계속 실행합니다. 엔진 검사를 통과했다고 해당 부가 도구를 Simple 화면에서 제공한다는 뜻은 아닙니다.
 
-Mapper Java 검사는 별도 Mapper JAR 대신 **Simple JAR 안에 포함한 실제 Mapper 클래스**를 대상으로 실행합니다. 브라우저 도우미 검사는 Node의 TAP 출력으로 실제 하위 검사를 집계합니다. 테스트별 `user.home`은 `build/test-home/<검사명>`으로 격리하며 기존 사용자 설정을 읽거나 바꾸지 않습니다.
+Mapper Java 검사는 별도 Mapper JAR 대신 **Simple JAR 안에 포함한 실제 Mapper 클래스**를 대상으로 실행합니다. 브라우저 도우미 검사는 Node의 TAP 출력으로 현재 선언한 15개 하위 검사가 모두 실행되었는지 확인합니다. 설치된 Node의 `--help`에서 지원을 확인한 뒤 stable `--test-isolation=none` 또는 experimental `--experimental-test-isolation=none`을 사용하며, 둘 다 없으면 기본 동작을 사용합니다. 파일 1개만 검사했다는 요약을 15개 통과로 인정하지 않습니다. 테스트별 `user.home`은 `build/test-home/<검사명>`으로 격리하며 기존 사용자 설정을 읽거나 바꾸지 않습니다.
 
 `python simple/dev.py check`는 선언한 전체 회귀·loopback 페이로드 HTTP·Mapper Java·브라우저 도우미 Node 검사를 실행합니다. 실제 Burp GUI, Windows DPI/IME, 브라우저 수동 조작, Docker 실습 스택, 외부 OAST/BApp/AI 서비스와 기존 실습 사이트 전체 HTTP 하네스는 별도 검증 범위입니다.

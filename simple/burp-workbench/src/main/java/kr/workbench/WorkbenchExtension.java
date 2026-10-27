@@ -637,7 +637,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logButton.setToolTipText("오류 기록과 수집 상태 확인");
     logButton.addActionListener(e -> openLogs());
     navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton);
-    // The retained route adapter keeps engine callbacks compatible; only the four-stage UI is shown.
+    // The retained route adapter keeps engine callbacks compatible; all eight extension entry points stay directly visible.
     simpleNavigation = new SimpleNavigation(tabs, this::openSettings, this::openFeatureHelp, this::openLogs);
     root.add(simpleNavigation);
     trafficTools.addChangeListener(e -> updateFeatureHelp());

@@ -5,82 +5,72 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.*;
 
-/** Four local work stages over the retained engine pages. Navigation never sends a request. */
+/** Direct access to the eight retained extensions, without grouping their entry points. */
 final class SimpleNavigation extends JPanel {
-  private static final String[][] TOOLS = {
-      {"traffic"}, {"mapper", "js", "response.recon", "environment"}, {"auth", "payload"}, {"bounty"}
+  private static final String[] IDS = {
+      "traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty"
   };
-  private static final String[] STAGES = {"1  수집", "2  분석", "3  검증", "4  증거"};
-  private static final String[] HINTS = {
-      "SCOPE 등록 → 수집 켜기 → 요청 선택",
-      "선택한 원본을 유지하며 필요한 분석 도구를 여세요.",
-      "계정·검사 조건을 확인한 뒤 직접 실행하세요.",
-      "원본·결과 추가 → 가림 확인 → ZIP 저장"
+  private static final String[] LABELS = {
+      "요청·응답", "기능 매핑", "계정 비교", "API 찾기", "서버·경로", "응답 분석", "입력값 검사", "재현·증거"
   };
-  private static final String[] NEXT = {"분석으로 →", "검증으로 →", "증거 정리로 →", "수집으로 돌아가기"};
+  private static final Map<String, String> HINTS = Map.of(
+      "traffic", "SCOPE 등록 → 수집 켜기 → 요청 선택 → 필요한 도구로 연결",
+      "mapper", "기능·실행 선택 → 패킷과 분류 근거 확인 → 프로젝트 저장",
+      "auth", "인증 후보를 계정에 지정 → 준비 검토 → 직접 비교 → 근거 확인",
+      "js", "응답 분석 → API와 원본 위치 확인 → Repeater에 요청 준비",
+      "environment", "대상·후보 선택 → 범위와 실행 한도 확인 → 직접 GET → 결과 확인",
+      "response.recon", "응답 관찰 → 원본과 근거 확인 → 필요한 관찰을 증거로 연결",
+      "payload", "요청 연결 → 입력 위치 지정 → 조건 확인 → 검사 실행 → 결과·증거",
+      "bounty", "요청을 순서대로 재현하거나, 원본·결과를 모아 가림 확인 후 ZIP 저장"
+  );
   private final JTabbedPane pages;
   private final Runnable settings, help, logs;
-  private final Map<Integer, JToggleButton> stages = new LinkedHashMap<>();
   private final Map<String, JToggleButton> tools = new LinkedHashMap<>();
-  private final String[] remembered = {"traffic", "mapper", "auth", "bounty"};
-  private final JPanel toolRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+  private final JPanel toolRow = new JPanel(new GridLayout(1, IDS.length, 6, 0));
   private final JLabel hint = new JLabel();
-  private final JButton next = new JButton();
-  private int stage;
 
   SimpleNavigation(JTabbedPane pages, Runnable settings, Runnable help, Runnable logs) {
     super(new BorderLayout(0, 8));
-    this.pages = pages;
-    this.settings = settings; this.help = help; this.logs = logs;
+    this.pages = pages; this.settings = settings; this.help = help; this.logs = logs;
     setName("wb.simple.navigation");
     JPanel header = new JPanel(new BorderLayout(8, 8));
     header.setName("wb.simple.header");
-    header.setBorder(BorderFactory.createEmptyBorder(12, 16, 0, 16));
+    header.setBorder(BorderFactory.createEmptyBorder(10, 16, 0, 16));
     JPanel titleRow = new JPanel(new BorderLayout(8, 0));
-    JLabel title = new JLabel("Workbench Simple");
+    JLabel title = new JLabel("Workbench Simple · 8개 도구");
     title.setName("wb.simple.brand");
     title.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, 17f));
-    title.setToolTipText("Simple " + BuildInfo.VERSION + " · 기존 Workbench와 설정을 별도로 보관합니다.");
+    title.setToolTipText("Simple " + BuildInfo.VERSION + " · 기존 Workbench와 별도 설정을 사용합니다.");
     titleRow.add(title, BorderLayout.WEST);
     JButton options = new JButton("도움말·설정");
     options.setName("wb.simple.options");
-    options.addActionListener(e -> {
-      JPopupMenu menu = optionsMenu();
-      menu.show(options, 0, options.getHeight());
-    });
+    options.addActionListener(e -> optionsMenu().show(options, 0, options.getHeight()));
     titleRow.add(options, BorderLayout.EAST);
     header.add(titleRow, BorderLayout.NORTH);
-    JPanel stepRow = new JPanel(new GridLayout(1, 4, 8, 0));
+    toolRow.setName("wb.simple.tools");
     ButtonGroup group = new ButtonGroup();
-    for (int index = 0; index < STAGES.length; index++) {
-      final int target = index;
-      JToggleButton button = new JToggleButton(STAGES[index]);
-      button.setName("wb.simple.step." + (index + 1));
-      button.getAccessibleContext().setAccessibleDescription(HINTS[index]);
-      button.addActionListener(e -> openStage(target));
-      group.add(button); stages.put(index, button); stepRow.add(button);
-      final String action = "simple.stage." + index;
-      getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("alt " + (index + 1)), action);
+    for (int i = 0; i < IDS.length; i++) {
+      String id = IDS[i];
+      JToggleButton button = new JToggleButton(LABELS[i]);
+      button.setName("wb.simple.tool." + id);
+      button.setToolTipText(FeatureGuide.title(id) + " · Alt+" + (i + 1));
+      button.getAccessibleContext().setAccessibleName(FeatureGuide.title(id));
+      button.getAccessibleContext().setAccessibleDescription(HINTS.get(id));
+      button.addActionListener(e -> select(id));
+      group.add(button); tools.put(id, button); toolRow.add(button);
+      String action = "simple.tool." + id;
+      getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("alt " + (i + 1)), action);
       getActionMap().put(action, new AbstractAction() {
-        public void actionPerformed(java.awt.event.ActionEvent e) { openStage(target); }
+        public void actionPerformed(java.awt.event.ActionEvent event) { select(id); }
       });
     }
-    JPanel workRow = new JPanel(new BorderLayout(8, 6));
-    workRow.add(stepRow, BorderLayout.NORTH);
-    toolRow.setName("wb.simple.tools");
-    JPanel detail = new JPanel(new BorderLayout(8, 0));
     hint.setName("wb.simple.hint");
     hint.setFont(WorkbenchUi.font().deriveFont(12f));
-    next.setName("wb.simple.next");
-    next.addActionListener(e -> openStage((stage + 1) % STAGES.length));
-    detail.add(hint, BorderLayout.CENTER);
-    detail.add(next, BorderLayout.EAST);
-    JPanel below = new JPanel(new BorderLayout(0, 6));
-    below.add(toolRow, BorderLayout.NORTH); below.add(detail, BorderLayout.CENTER);
-    workRow.add(below, BorderLayout.CENTER);
-    header.add(workRow, BorderLayout.CENTER);
+    JPanel navigation = new JPanel(new BorderLayout(0, 7));
+    navigation.add(toolRow, BorderLayout.NORTH); navigation.add(hint, BorderLayout.SOUTH);
+    header.add(navigation, BorderLayout.CENTER);
     add(header, BorderLayout.NORTH);
-    // Pages retain their original identity and indices for engine and evidence callbacks.
+    // Page identities and indices stay stable for all engine and evidence callbacks.
     add(pages, BorderLayout.CENTER);
     pages.addChangeListener(e -> refreshSelection());
     refreshSelection();
@@ -92,22 +82,9 @@ final class SimpleNavigation extends JPanel {
     for (Object[] action : new Object[][] {{"현재 도구 안내", help}, {"화면 설정", settings}, {"오류·수집 기록", logs}}) {
       JMenuItem item = new JMenuItem((String) action[0]);
       item.setName("wb.simple.options." + index++);
-      item.addActionListener(event -> ((Runnable) action[1]).run());
-      menu.add(item);
+      item.addActionListener(e -> ((Runnable) action[1]).run()); menu.add(item);
     }
-    WorkbenchUi.style(menu);
-    return menu;
-  }
-
-  void openStage(int target) {
-    String id = remembered[target];
-    if (indexOf(id) < 0) id = TOOLS[target][0];
-    select(id);
-  }
-
-  private void select(String id) {
-    int index = indexOf(id);
-    if (index >= 0) pages.setSelectedIndex(index);
+    WorkbenchUi.style(menu); return menu;
   }
 
   private int indexOf(String id) {
@@ -117,25 +94,19 @@ final class SimpleNavigation extends JPanel {
     return -1;
   }
 
+  private void select(String id) {
+    int index = indexOf(id);
+    if (index >= 0) pages.setSelectedIndex(index);
+  }
+
   void refreshSelection() {
     String selected = pages.getSelectedComponent() instanceof JComponent component
         ? String.valueOf(component.getClientProperty("wb.feature.id")) : "traffic";
-    for (int i = 0; i < TOOLS.length; i++) for (String id : TOOLS[i])
-      if (id.equals(selected)) { stage = i; remembered[i] = id; }
-    stages.get(stage).setSelected(true);
-    hint.setText(HINTS[stage]); next.setText(NEXT[stage]);
-    toolRow.removeAll(); tools.clear();
-    ButtonGroup group = new ButtonGroup();
-    if (TOOLS[stage].length > 1) for (String id : TOOLS[stage]) {
-      if (indexOf(id) < 0) continue;
-      JToggleButton button = new JToggleButton(FeatureGuide.title(id));
-      button.setName("wb.simple.tool." + id);
-      button.setSelected(id.equals(selected));
-      button.addActionListener(e -> select(id));
-      group.add(button); tools.put(id, button); toolRow.add(button);
-      WorkbenchUi.style(button);
+    for (var entry : tools.entrySet()) {
+      entry.getValue().setEnabled(indexOf(entry.getKey()) >= 0);
+      entry.getValue().setSelected(entry.getKey().equals(selected));
     }
-    toolRow.setVisible(toolRow.getComponentCount() > 0);
+    hint.setText(HINTS.getOrDefault(selected, "필요한 도구를 선택하세요. 화면 이동은 대상 요청을 보내지 않습니다."));
     revalidate(); repaint();
   }
 }

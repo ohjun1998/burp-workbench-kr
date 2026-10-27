@@ -1,0 +1,9 @@
+WARNING: Explicit --source-target compilation uses Java 21 source/target 17 here; Java 17 platform API compatibility is NOT verified. Strict --release 17 remains the default.
+warning: [options] system modules path not set in conjunction with -source 17
+1 warning
+Captured production Simple Swing components: light 1024x720; synthetic packets, zero HTTP, not actual Burp GUI.
+Captured production Simple Swing components: light 1280x800; synthetic packets, zero HTTP, not actual Burp GUI.
+Captured production Simple Swing components: dark 1024x720; synthetic packets, zero HTTP, not actual Burp GUI.
+Captured production Simple Swing components: dark 1280x800; synthetic packets, zero HTTP, not actual Burp GUI.
+{"version": "1.1.0", "artifact": "burp-workbench/dist/burp-workbench-simple-1.1.0.jar", "toolchainMode": "explicit-source17-target17-api-unverified", "java17ApiCompatibilityVerified": false, "compilerNote": "Explicit -source/-target fallback on Java 21; --release 17 API compatibility was not validated.", "jarSha256": "a761ec8ca4df89a5681b72d536043325a431d6ba0a6ec31669bb7741da32aed9", "renderedViews": 56, "controls": 1132, "scenarios": 44, "retainedPrimaryTools": ["traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty"], "replayEvidenceModes": ["manual-request-replay", "evidence-editor"], "failedScenarios": [], "scope": "Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.", "result": "passed"}
+Clipped controls: 0; collapsed required areas: 0

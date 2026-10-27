@@ -7,3 +7,7 @@ Simple 1.0.0의 개발 검사는 **완전한 JDK 17 이상, Python 3.10 이상, 
 후속 CI는 Simple 1.0.0의 로컬 검증에 사용한 Node 24로 맞춥니다. 설치 JAR·독립 소스 ZIP·PDF·해시·manifest는 변경하지 않습니다. 브라우저 도우미의 15개 하위 검사와 화면·배포 무결성 검사를 실제 실행합니다. 이미 생성한 1.0.0 파일을 덮어쓰지 않습니다.
 
 독립 소스 ZIP을 개발할 때 Node 24를 PATH에 준비한 뒤 `python dev.py check`를 사용합니다. 로컬 Java 21의 `ct.sym` 누락으로 수행한 명시적 `--source-target` 검사와, 원격 완전한 JDK 17의 엄격한 API 검사는 별도 근거입니다. 실제 Burp GUI·Windows DPI/IME 검증을 의미하지 않습니다.
+
+## Simple 1.1.0 호환 처리
+
+사용자가 8개 extension과 핵심 기능을 모두 직접 선택하도록 재구성을 요청해 1.1.0을 별도로 생성했습니다. 1.1.0 검사 런처는 설치된 Node의 도움말을 읽어 지원하는 `--test-isolation` 또는 `--experimental-test-isolation` 표기만 사용합니다. 둘 다 없으면 격리 옵션을 생략하며, TAP에 실제 선언된 15개 하위 검사가 모두 집계되어야 통과합니다. 로컬 Node 24에서 15개를 통과했고 새 CI는 Node 22로 이 호환 경로도 검증합니다. 1.0.0 배포 파일은 변경하지 않습니다.

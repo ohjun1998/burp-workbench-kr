@@ -20,7 +20,7 @@ WB = ROOT / 'burp-workbench'
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--out', type=Path, default=ROOT / 'docs/images')
+    parser.add_argument('--out', type=Path, help='Default: docs/images/<current version>; older capture sets remain unchanged')
     parser.add_argument('--java', default='java')
     parser.add_argument('--themes', nargs='+', choices=['light', 'dark'], default=['light', 'dark'])
     parser.add_argument('--sizes', nargs='+', default=['1024x720', '1280x800'])
@@ -34,7 +34,7 @@ def main() -> int:
     jar = WB / f'dist/burp-workbench-simple-{version}.jar'
     if not jar.exists() or not (WB / 'build/tests').exists():
         parser.error('Build Simple and test adapters first: python simple/dev.py test')
-    args.out = args.out.resolve()
+    args.out = (args.out if args.out else ROOT / 'docs/images' / version).resolve()
     classes = args.out / '.classes'
     classes.mkdir(parents=True, exist_ok=True)
     classpath = os.pathsep.join(map(str, [jar, *sorted((WB / 'deps').glob('*.jar')), WB / 'build/tests']))
@@ -72,6 +72,8 @@ def main() -> int:
         ('05-evidence.png', 'wb.simple.evidence.impact'): 55,
         ('05-evidence.png', 'wb.simple.evidence.repro'): 55,
         ('06-redaction.png', 'wb.simple.evidence.preview.text'): 200,
+        ('11-replay.png', 'wb.simple.replay.request'): 90,
+        ('11-replay.png', 'wb.simple.replay.result'): 65,
     }
     collapsed = []
     for (view, name), minimum in required.items():
@@ -92,6 +94,8 @@ def main() -> int:
         'compilerNote': 'Explicit -source/-target fallback on Java 21; --release 17 API compatibility was not validated.' if args.source_target else 'Compiled with --release 17.',
         'jarSha256': hashlib.sha256(jar.read_bytes()).hexdigest(),
         'renderedViews': views, 'controls': len(all_controls), 'scenarios': len(all_scenarios),
+        'retainedPrimaryTools': ['traffic','mapper','auth','js','environment','response.recon','payload','bounty'],
+        'replayEvidenceModes': ['manual-request-replay','evidence-editor'],
         'clippedControls': clipped, 'collapsedAreas': collapsed, 'failedScenarios': failed,
         'scope': 'Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.',
         'result': 'passed' if not clipped and not collapsed and not failed else 'failed',

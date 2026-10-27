@@ -170,7 +170,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     passive.setName("wb.js.analysis.toggle");
     passive.putClientProperty("wb.state.toggle", true);
     passive.putClientProperty("wb.analysis.lamp", true);
-    passive.setToolTipText("SCOPE 내 History의 텍스트 응답을 자동 분석합니다. OFF는 새 분석과 대기 작업을 중지합니다.");
+    passive.setToolTipText("SCOPE 수집으로 들어온 텍스트 응답과 직접 선택한 원본을 분석합니다. OFF는 새 분석과 대기 작업을 중지합니다.");
     passive.addItemListener(e -> {
       boolean enabled = passive.isSelected();
       watching.set(enabled);
@@ -190,11 +190,6 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     analysisDetails.addActionListener(e->{detailsWindow.closeWindow();detailsWindow.open();});
     JPanel header = new JPanel(new BorderLayout());
     add(header, BorderLayout.NORTH);
-    JButton rescan = new JButton("History 다시 분석");
-    rescan.addActionListener(e -> {
-      cache.resetFingerprints();
-      if (historyMonitor != null) historyMonitor.rescan();
-    });
     urlTable.setName("wb.js.url.table");
     secretTable.setName("wb.js.secret.table");
     historyTable.setName("wb.js.history.table");
@@ -262,18 +257,11 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     sourceUrl.setColumns(22);
     JButton tools = new JButton("추가 도구"), more = new JButton("더보기");
     JPopupMenu toolMenu = new JPopupMenu(), moreMenu = new JPopupMenu();
-    menu(toolMenu, "소스맵 탐색", discoverMaps);
-    JMenuItem npm = new JMenuItem("NPM 존재 조회");
-    npm.addActionListener(
-        e ->
-            JOptionPane.showMessageDialog(
-                this,
-                WorkbenchUi.row(
-                    new JLabel("레지스트리"), registry, checkNpm, new JLabel("패키지 이름을 레지스트리에 전송")),
-                "NPM 조회",
-                JOptionPane.PLAIN_MESSAGE));
-    toolMenu.add(npm);
+    // Simple keeps source and observed-packet work local. Optional registry queries
+    // and active source-map discovery are not part of the visible execution path.
     JMenuItem observed=new JMenuItem("관찰된 API 패킷 보기");observed.addActionListener(e->openObservedPacket());toolMenu.add(observed);
+    tools.setToolTipText("선택한 API와 같은 경로에서 실제 관찰한 요청·응답을 확인합니다.");
+    tools.putClientProperty("wb.simple.js.tools.menu", toolMenu);
     JMenuItem matchTraffic=new JMenuItem("트래픽 대조"),compareVersions=new JMenuItem("버전 비교");
     matchTraffic.setName("wb.js.traffic.compare");compareVersions.setName("wb.js.version.compare");
     matchTraffic.addActionListener(e->resultView.openTraffic());compareVersions.addActionListener(e->openVersionComparison());
@@ -283,7 +271,6 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     retryItem.setName("wb.js.retry.open");
     retryItem.addActionListener(e -> retryWindow.open());
     moreMenu.add(retryItem);
-    menu(moreMenu, "History 다시 분석", rescan);
     menu(moreMenu, "URL 목록 복사", copy);
     menu(moreMenu, "가림 결과 복사", report);
     menu(moreMenu, "분석 초기화", clear);

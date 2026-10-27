@@ -43,7 +43,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
                 routes.put("점검 진행 현황",(Component)unchecked(extension,"activity"));
                 routes.put("응답 보안 분석",(Component)unchecked(extension,"responseRecon"));
                 routes.put("입력값 보안 검사",(Component)unchecked(runner,"panel"));
-                routes.put("증거 정리",(Component)unchecked(extension,"bountySupport"));
+                routes.put(FeatureGuide.title("bounty"),(Component)unchecked(extension,"bountySupport"));
                 routes.put("기능 자동 매핑",((kr.featuremapper.FeatureMapperWorkspace)unchecked(extension,"featureMapper")).component());
                 for(var route:routes.entrySet()) {
                     String id=FeatureGuide.all().stream().filter(f->f.title().equals(route.getKey())).findFirst().orElseThrow().id();
@@ -73,7 +73,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
                 check(choice!=null&&openFeature!=null,"feature guide offers direct navigation without closing and searching tabs");
                 choice.setSelectedItem(FeatureGuide.feature("start"));
                 String firstSteps=text(UiLayoutTest.named(guide,"wb.feature.guide.text"));
-                check(firstSteps.contains("SCOPE")&&firstSteps.contains("수집")&&firstSteps.contains("분석")&&firstSteps.contains("검증")&&firstSteps.contains("증거")&&firstSteps.contains("Repeater"),"Simple beginner selection explains scope, all four stages and manual verification");
+                check(firstSteps.contains("SCOPE")&&firstSteps.contains("8개")&&firstSteps.contains("증거")&&firstSteps.contains("Repeater"),"Simple beginner selection explains scope, all eight extension tools and manual verification");
                 Component beforeStart=tabs.getSelectedComponent();openFeature.doClick();
                 check(!openFeature.isEnabled()&&tabs.getSelectedComponent()==beforeStart,"beginner explanation preserves the current work instead of selecting a non-tool page");
                 choice.setSelectedItem(FeatureGuide.feature("auth"));openFeature.doClick();

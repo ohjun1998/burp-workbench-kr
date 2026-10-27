@@ -1,0 +1,33 @@
+{
+  "guideVersion": "1.0.0",
+  "pdf": "downloads/guides/1.0.0/Workbench_Simple_1.0.0_Guide_KR.pdf",
+  "pdfSha256": "2feecd3968f4172df9e044b68939dac22644f423f1886e6b4fb083f147cefd33",
+  "html": "docs/GUIDE_SIMPLE_KR.html",
+  "htmlSha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38",
+  "pdfPages": 11,
+  "pdfOutlineEntries": 11,
+  "pdfScreenshotPages": 9,
+  "pdfPageFormat": "A3 landscape",
+  "pdfFonts": [
+    "AAAAAA+NanumGothic",
+    "AAAAAB+NanumGothic",
+    "Helvetica"
+  ],
+  "outOfPageText": [],
+  "sourceScreenshotJarSha256": "379e03d74a9c86e66875adc25801da5f3c4c7d2deea8262929cdc8a94a261b04",
+  "screenshotLayoutResult": "passed",
+  "usedScreenshots": {
+    "00-start.png": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63",
+    "00-scope-editor.png": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+    "01-capture.png": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f",
+    "02-request.png": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6",
+    "03-analysis.png": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13",
+    "04-auth-accounts.png": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+    "04-auth-results.png": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf",
+    "05-evidence.png": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0",
+    "06-redaction.png": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2"
+  },
+  "visualReview": "All pages reviewed as contact sheet; full account, selected-request, evidence and redaction pages reviewed for readable Korean text and uncut screenshots.",
+  "captureScope": "Production Simple Swing components with synthetic packet/API adapters; not actual Burp GUI screenshots.",
+  "result": "passed"
+}

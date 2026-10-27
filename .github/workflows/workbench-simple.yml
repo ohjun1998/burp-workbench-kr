@@ -32,7 +32,7 @@ jobs:
           python-version: '3.12'
       - uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
       - name: Strict Java 17 build and complete Simple regression profile
         run: python simple/dev.py check
       - name: Render and check real Simple Swing components

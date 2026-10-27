@@ -1,0 +1,949 @@
+theme,width,height,view,label,name,controlWidth,controlHeight,fullyVisible,scrollable
+light,1024,720,12-inspection-setup.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,12-inspection-setup.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,12-inspection-setup.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,12-inspection-setup.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,12-inspection-setup.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,12-inspection-setup.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,12-inspection-setup.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,12-inspection-setup.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,12-inspection-setup.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,12-inspection-setup.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,12-inspection-setup.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,12-inspection-setup.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,12-inspection-setup.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,12-inspection-setup.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,12-inspection-setup.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,12-inspection-setup.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,12-inspection-setup.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,12-inspection-setup.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,13-inspection-progress.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,13-inspection-progress.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,13-inspection-progress.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,13-inspection-progress.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,13-inspection-progress.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,13-inspection-progress.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,13-inspection-progress.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,13-inspection-progress.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,13-inspection-progress.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,13-inspection-progress.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,13-inspection-progress.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,13-inspection-progress.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,13-inspection-progress.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,13-inspection-progress.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,13-inspection-progress.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,13-inspection-progress.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,13-inspection-progress.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,13-inspection-progress.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,14-inspection-environment.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,14-inspection-environment.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,14-inspection-environment.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,14-inspection-environment.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,14-inspection-environment.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,14-inspection-environment.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,14-inspection-environment.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,14-inspection-environment.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,14-inspection-environment.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,14-inspection-environment.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,14-inspection-environment.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,14-inspection-environment.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,14-inspection-environment.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,14-inspection-environment.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,14-inspection-environment.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,14-inspection-environment.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,14-inspection-environment.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,14-inspection-environment.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,15-inspection-paths.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,15-inspection-paths.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,15-inspection-paths.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,15-inspection-paths.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,15-inspection-paths.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,15-inspection-paths.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,15-inspection-paths.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,15-inspection-paths.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,15-inspection-paths.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,15-inspection-paths.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,15-inspection-paths.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,15-inspection-paths.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,15-inspection-paths.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,15-inspection-paths.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,15-inspection-paths.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,15-inspection-paths.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,15-inspection-paths.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,15-inspection-paths.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,16-inspection-api.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,16-inspection-api.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,16-inspection-api.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,16-inspection-api.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,16-inspection-api.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,16-inspection-api.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,16-inspection-api.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,16-inspection-api.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,16-inspection-api.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,16-inspection-api.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,16-inspection-api.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,16-inspection-api.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,16-inspection-api.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,16-inspection-api.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,16-inspection-api.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,16-inspection-api.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,16-inspection-api.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,16-inspection-api.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,17-inspection-secrets.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,17-inspection-secrets.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,17-inspection-secrets.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,17-inspection-secrets.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,17-inspection-secrets.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,17-inspection-secrets.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,17-inspection-secrets.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,17-inspection-secrets.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,17-inspection-secrets.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,17-inspection-secrets.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,17-inspection-secrets.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,17-inspection-secrets.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,17-inspection-secrets.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,17-inspection-secrets.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,17-inspection-secrets.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,17-inspection-secrets.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,17-inspection-secrets.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,17-inspection-secrets.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,18-inspection-access.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,18-inspection-access.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,18-inspection-access.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,18-inspection-access.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,18-inspection-access.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,18-inspection-access.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,18-inspection-access.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,18-inspection-access.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,18-inspection-access.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,18-inspection-access.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,18-inspection-access.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,18-inspection-access.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,18-inspection-access.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,18-inspection-access.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,18-inspection-access.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,18-inspection-access.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,18-inspection-access.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,18-inspection-access.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,19-inspection-changes.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,19-inspection-changes.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,19-inspection-changes.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,19-inspection-changes.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,19-inspection-changes.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,19-inspection-changes.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,19-inspection-changes.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,19-inspection-changes.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,19-inspection-changes.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,19-inspection-changes.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,19-inspection-changes.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,19-inspection-changes.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,19-inspection-changes.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,19-inspection-changes.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,19-inspection-changes.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,19-inspection-changes.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,19-inspection-changes.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,19-inspection-changes.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,20-inspection-coverage.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,20-inspection-coverage.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,20-inspection-coverage.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,20-inspection-coverage.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,20-inspection-coverage.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,20-inspection-coverage.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,20-inspection-coverage.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,20-inspection-coverage.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,20-inspection-coverage.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,20-inspection-coverage.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,20-inspection-coverage.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,20-inspection-coverage.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,20-inspection-coverage.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,20-inspection-coverage.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,20-inspection-coverage.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,20-inspection-coverage.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,20-inspection-coverage.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,20-inspection-coverage.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,21-inspection-browser.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,21-inspection-browser.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,21-inspection-browser.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,21-inspection-browser.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,21-inspection-browser.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,21-inspection-browser.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,21-inspection-browser.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,21-inspection-browser.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,21-inspection-browser.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,21-inspection-browser.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,21-inspection-browser.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,21-inspection-browser.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,21-inspection-browser.png,기능 매핑에서 브라우저 연결,wb.scope.inspection.browser.connect,192,32,true,false
+light,1024,720,21-inspection-browser.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,21-inspection-browser.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,21-inspection-browser.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,21-inspection-browser.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,21-inspection-browser.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,21-inspection-browser.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1024,720,22-inspection-original.png,Pretty,wb.scope.inspection.original.request.pretty,66,34,true,false
+light,1024,720,22-inspection-original.png,Raw,wb.scope.inspection.original.request.raw,66,34,true,false
+light,1024,720,22-inspection-original.png,Hex,wb.scope.inspection.original.request.hex,66,34,true,false
+light,1024,720,22-inspection-original.png,Render,wb.scope.inspection.original.request.render,66,34,true,false
+light,1024,720,22-inspection-original.png,↵,,28,28,true,false
+light,1024,720,22-inspection-original.png,⋯,,28,28,true,false
+light,1024,720,22-inspection-original.png,wb.scope.inspection.original.request.search,wb.scope.inspection.original.request.search,239,28,true,false
+light,1024,720,22-inspection-original.png,×,wb.scope.inspection.original.request.clear,28,28,true,false
+light,1024,720,22-inspection-original.png,↑,wb.scope.inspection.original.request.previous,28,28,true,false
+light,1024,720,22-inspection-original.png,↓,wb.scope.inspection.original.request.next,28,28,true,false
+light,1024,720,22-inspection-original.png,Aa,wb.scope.inspection.original.request.case,32,28,true,false
+light,1024,720,22-inspection-original.png,.*,wb.scope.inspection.original.request.regex,28,28,true,false
+light,1024,720,22-inspection-original.png,Pretty,wb.scope.inspection.original.response.pretty,66,34,true,false
+light,1024,720,22-inspection-original.png,Raw,wb.scope.inspection.original.response.raw,66,34,true,false
+light,1024,720,22-inspection-original.png,Hex,wb.scope.inspection.original.response.hex,66,34,true,false
+light,1024,720,22-inspection-original.png,Render,wb.scope.inspection.original.response.render,66,34,true,false
+light,1024,720,22-inspection-original.png,↵,,28,28,true,false
+light,1024,720,22-inspection-original.png,⋯,,28,28,true,false
+light,1024,720,22-inspection-original.png,wb.scope.inspection.original.response.search,wb.scope.inspection.original.response.search,240,28,true,false
+light,1024,720,22-inspection-original.png,×,wb.scope.inspection.original.response.clear,28,28,true,false
+light,1024,720,22-inspection-original.png,↑,wb.scope.inspection.original.response.previous,28,28,true,false
+light,1024,720,22-inspection-original.png,↓,wb.scope.inspection.original.response.next,28,28,true,false
+light,1024,720,22-inspection-original.png,Aa,wb.scope.inspection.original.response.case,32,28,true,false
+light,1024,720,22-inspection-original.png,.*,wb.scope.inspection.original.response.regex,28,28,true,false
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,100,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,48,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1024,720,23-katana-settings.png,wb.scope.inspection.katana.executable,wb.scope.inspection.katana.executable,475,30,true,true
+light,1024,720,23-katana-settings.png,파일 선택,wb.scope.inspection.katana.choose,80,32,true,true
+light,1024,720,23-katana-settings.png,설치 확인,wb.scope.inspection.katana.check,80,32,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1024,720,24-katana-results.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1024,720,24-katana-results.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1024,720,24-katana-results.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1024,720,24-katana-results.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1024,720,24-katana-results.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1024,720,24-katana-results.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+light,1024,720,24-katana-results.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1024,720,24-katana-results.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1024,720,24-katana-results.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1024,720,24-katana-results.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1024,720,24-katana-results.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1024,720,24-katana-results.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1024,720,24-katana-results.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1024,720,24-katana-results.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1024,720,24-katana-results.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1024,720,24-katana-results.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1024,720,24-katana-results.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1024,720,24-katana-results.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,12-inspection-setup.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,12-inspection-setup.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,12-inspection-setup.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,12-inspection-setup.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,12-inspection-setup.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,12-inspection-setup.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,12-inspection-setup.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,12-inspection-setup.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,12-inspection-setup.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,12-inspection-setup.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,12-inspection-setup.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,12-inspection-setup.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,12-inspection-setup.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,12-inspection-setup.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,12-inspection-setup.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,12-inspection-setup.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,12-inspection-setup.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,12-inspection-setup.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,13-inspection-progress.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,13-inspection-progress.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,13-inspection-progress.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,13-inspection-progress.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,13-inspection-progress.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,13-inspection-progress.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,13-inspection-progress.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,13-inspection-progress.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,13-inspection-progress.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,13-inspection-progress.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,13-inspection-progress.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,13-inspection-progress.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,13-inspection-progress.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,13-inspection-progress.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,13-inspection-progress.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,13-inspection-progress.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,13-inspection-progress.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,13-inspection-progress.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,14-inspection-environment.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,14-inspection-environment.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,14-inspection-environment.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,14-inspection-environment.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,14-inspection-environment.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,14-inspection-environment.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,14-inspection-environment.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,14-inspection-environment.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,14-inspection-environment.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,14-inspection-environment.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,14-inspection-environment.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,14-inspection-environment.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,14-inspection-environment.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,14-inspection-environment.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,14-inspection-environment.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,14-inspection-environment.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,14-inspection-environment.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,14-inspection-environment.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,15-inspection-paths.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,15-inspection-paths.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,15-inspection-paths.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,15-inspection-paths.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,15-inspection-paths.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,15-inspection-paths.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,15-inspection-paths.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,15-inspection-paths.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,15-inspection-paths.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,15-inspection-paths.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,15-inspection-paths.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,15-inspection-paths.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,15-inspection-paths.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,15-inspection-paths.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,15-inspection-paths.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,15-inspection-paths.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,15-inspection-paths.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,15-inspection-paths.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,16-inspection-api.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,16-inspection-api.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,16-inspection-api.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,16-inspection-api.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,16-inspection-api.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,16-inspection-api.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,16-inspection-api.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,16-inspection-api.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,16-inspection-api.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,16-inspection-api.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,16-inspection-api.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,16-inspection-api.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,16-inspection-api.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,16-inspection-api.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,16-inspection-api.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,16-inspection-api.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,16-inspection-api.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,16-inspection-api.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,17-inspection-secrets.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,17-inspection-secrets.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,17-inspection-secrets.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,17-inspection-secrets.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,17-inspection-secrets.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,17-inspection-secrets.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,17-inspection-secrets.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,17-inspection-secrets.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,17-inspection-secrets.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,17-inspection-secrets.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,17-inspection-secrets.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,17-inspection-secrets.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,17-inspection-secrets.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,17-inspection-secrets.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,17-inspection-secrets.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,17-inspection-secrets.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,17-inspection-secrets.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,17-inspection-secrets.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,18-inspection-access.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,18-inspection-access.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,18-inspection-access.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,18-inspection-access.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,18-inspection-access.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,18-inspection-access.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,18-inspection-access.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,18-inspection-access.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,18-inspection-access.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,18-inspection-access.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,18-inspection-access.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,18-inspection-access.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,18-inspection-access.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,18-inspection-access.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,18-inspection-access.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,18-inspection-access.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,18-inspection-access.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,18-inspection-access.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,19-inspection-changes.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,19-inspection-changes.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,19-inspection-changes.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,19-inspection-changes.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,19-inspection-changes.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,19-inspection-changes.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,19-inspection-changes.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,19-inspection-changes.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,19-inspection-changes.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,19-inspection-changes.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,19-inspection-changes.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,19-inspection-changes.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,19-inspection-changes.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,19-inspection-changes.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,19-inspection-changes.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,19-inspection-changes.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,19-inspection-changes.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,19-inspection-changes.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,20-inspection-coverage.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,20-inspection-coverage.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,20-inspection-coverage.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,20-inspection-coverage.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,20-inspection-coverage.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,20-inspection-coverage.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,20-inspection-coverage.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,20-inspection-coverage.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,20-inspection-coverage.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,20-inspection-coverage.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,20-inspection-coverage.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,20-inspection-coverage.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,20-inspection-coverage.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,20-inspection-coverage.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,20-inspection-coverage.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,20-inspection-coverage.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,20-inspection-coverage.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,20-inspection-coverage.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,21-inspection-browser.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,21-inspection-browser.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,21-inspection-browser.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,21-inspection-browser.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,21-inspection-browser.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,21-inspection-browser.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,21-inspection-browser.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,21-inspection-browser.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,21-inspection-browser.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,21-inspection-browser.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,21-inspection-browser.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,21-inspection-browser.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,21-inspection-browser.png,기능 매핑에서 브라우저 연결,wb.scope.inspection.browser.connect,192,32,true,false
+light,1280,800,21-inspection-browser.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,21-inspection-browser.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,21-inspection-browser.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,21-inspection-browser.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,21-inspection-browser.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,21-inspection-browser.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+light,1280,800,22-inspection-original.png,Pretty,wb.scope.inspection.original.request.pretty,66,34,true,false
+light,1280,800,22-inspection-original.png,Raw,wb.scope.inspection.original.request.raw,66,34,true,false
+light,1280,800,22-inspection-original.png,Hex,wb.scope.inspection.original.request.hex,66,34,true,false
+light,1280,800,22-inspection-original.png,Render,wb.scope.inspection.original.request.render,66,34,true,false
+light,1280,800,22-inspection-original.png,↵,,28,28,true,false
+light,1280,800,22-inspection-original.png,⋯,,28,28,true,false
+light,1280,800,22-inspection-original.png,wb.scope.inspection.original.request.search,wb.scope.inspection.original.request.search,367,28,true,false
+light,1280,800,22-inspection-original.png,×,wb.scope.inspection.original.request.clear,28,28,true,false
+light,1280,800,22-inspection-original.png,↑,wb.scope.inspection.original.request.previous,28,28,true,false
+light,1280,800,22-inspection-original.png,↓,wb.scope.inspection.original.request.next,28,28,true,false
+light,1280,800,22-inspection-original.png,Aa,wb.scope.inspection.original.request.case,32,28,true,false
+light,1280,800,22-inspection-original.png,.*,wb.scope.inspection.original.request.regex,28,28,true,false
+light,1280,800,22-inspection-original.png,Pretty,wb.scope.inspection.original.response.pretty,66,34,true,false
+light,1280,800,22-inspection-original.png,Raw,wb.scope.inspection.original.response.raw,66,34,true,false
+light,1280,800,22-inspection-original.png,Hex,wb.scope.inspection.original.response.hex,66,34,true,false
+light,1280,800,22-inspection-original.png,Render,wb.scope.inspection.original.response.render,66,34,true,false
+light,1280,800,22-inspection-original.png,↵,,28,28,true,false
+light,1280,800,22-inspection-original.png,⋯,,28,28,true,false
+light,1280,800,22-inspection-original.png,wb.scope.inspection.original.response.search,wb.scope.inspection.original.response.search,368,28,true,false
+light,1280,800,22-inspection-original.png,×,wb.scope.inspection.original.response.clear,28,28,true,false
+light,1280,800,22-inspection-original.png,↑,wb.scope.inspection.original.response.previous,28,28,true,false
+light,1280,800,22-inspection-original.png,↓,wb.scope.inspection.original.response.next,28,28,true,false
+light,1280,800,22-inspection-original.png,Aa,wb.scope.inspection.original.response.case,32,28,true,false
+light,1280,800,22-inspection-original.png,.*,wb.scope.inspection.original.response.regex,28,28,true,false
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,100,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,48,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1280,800,23-katana-settings.png,wb.scope.inspection.katana.executable,wb.scope.inspection.katana.executable,475,30,true,true
+light,1280,800,23-katana-settings.png,파일 선택,wb.scope.inspection.katana.choose,80,32,true,true
+light,1280,800,23-katana-settings.png,설치 확인,wb.scope.inspection.katana.check,80,32,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+light,1280,800,24-katana-results.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+light,1280,800,24-katana-results.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+light,1280,800,24-katana-results.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+light,1280,800,24-katana-results.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+light,1280,800,24-katana-results.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+light,1280,800,24-katana-results.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+light,1280,800,24-katana-results.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+light,1280,800,24-katana-results.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+light,1280,800,24-katana-results.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+light,1280,800,24-katana-results.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+light,1280,800,24-katana-results.png,재개,wb.scope.inspection.resume,50,32,true,false
+light,1280,800,24-katana-results.png,중지,wb.scope.inspection.stop,50,32,true,false
+light,1280,800,24-katana-results.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+light,1280,800,24-katana-results.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+light,1280,800,24-katana-results.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+light,1280,800,24-katana-results.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+light,1280,800,24-katana-results.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+light,1280,800,24-katana-results.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,12-inspection-setup.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,12-inspection-setup.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,12-inspection-setup.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,12-inspection-setup.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,12-inspection-setup.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,12-inspection-setup.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,12-inspection-setup.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,12-inspection-setup.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,12-inspection-setup.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,12-inspection-setup.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,12-inspection-setup.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,12-inspection-setup.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,12-inspection-setup.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,12-inspection-setup.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,12-inspection-setup.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,12-inspection-setup.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,12-inspection-setup.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,12-inspection-setup.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,13-inspection-progress.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,13-inspection-progress.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,13-inspection-progress.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,13-inspection-progress.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,13-inspection-progress.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,13-inspection-progress.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,13-inspection-progress.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,13-inspection-progress.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,13-inspection-progress.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,13-inspection-progress.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,13-inspection-progress.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,13-inspection-progress.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,13-inspection-progress.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,13-inspection-progress.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,13-inspection-progress.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,13-inspection-progress.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,13-inspection-progress.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,13-inspection-progress.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,14-inspection-environment.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,14-inspection-environment.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,14-inspection-environment.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,14-inspection-environment.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,14-inspection-environment.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,14-inspection-environment.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,14-inspection-environment.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,14-inspection-environment.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,14-inspection-environment.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,14-inspection-environment.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,14-inspection-environment.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,14-inspection-environment.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,14-inspection-environment.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,14-inspection-environment.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,14-inspection-environment.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,14-inspection-environment.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,14-inspection-environment.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,14-inspection-environment.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,15-inspection-paths.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,15-inspection-paths.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,15-inspection-paths.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,15-inspection-paths.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,15-inspection-paths.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,15-inspection-paths.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,15-inspection-paths.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,15-inspection-paths.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,15-inspection-paths.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,15-inspection-paths.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,15-inspection-paths.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,15-inspection-paths.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,15-inspection-paths.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,15-inspection-paths.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,15-inspection-paths.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,15-inspection-paths.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,15-inspection-paths.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,15-inspection-paths.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,16-inspection-api.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,16-inspection-api.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,16-inspection-api.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,16-inspection-api.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,16-inspection-api.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,16-inspection-api.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,16-inspection-api.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,16-inspection-api.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,16-inspection-api.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,16-inspection-api.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,16-inspection-api.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,16-inspection-api.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,16-inspection-api.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,16-inspection-api.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,16-inspection-api.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,16-inspection-api.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,16-inspection-api.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,16-inspection-api.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,17-inspection-secrets.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,17-inspection-secrets.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,17-inspection-secrets.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,17-inspection-secrets.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,17-inspection-secrets.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,17-inspection-secrets.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,17-inspection-secrets.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,17-inspection-secrets.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,17-inspection-secrets.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,17-inspection-secrets.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,17-inspection-secrets.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,17-inspection-secrets.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,17-inspection-secrets.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,17-inspection-secrets.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,17-inspection-secrets.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,17-inspection-secrets.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,17-inspection-secrets.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,17-inspection-secrets.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,18-inspection-access.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,18-inspection-access.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,18-inspection-access.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,18-inspection-access.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,18-inspection-access.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,18-inspection-access.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,18-inspection-access.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,18-inspection-access.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,18-inspection-access.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,18-inspection-access.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,18-inspection-access.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,18-inspection-access.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,18-inspection-access.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,18-inspection-access.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,18-inspection-access.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,18-inspection-access.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,18-inspection-access.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,18-inspection-access.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,19-inspection-changes.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,19-inspection-changes.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,19-inspection-changes.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,19-inspection-changes.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,19-inspection-changes.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,19-inspection-changes.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,19-inspection-changes.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,19-inspection-changes.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,19-inspection-changes.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,19-inspection-changes.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,19-inspection-changes.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,19-inspection-changes.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,19-inspection-changes.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,19-inspection-changes.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,19-inspection-changes.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,19-inspection-changes.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,19-inspection-changes.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,19-inspection-changes.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,20-inspection-coverage.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,20-inspection-coverage.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,20-inspection-coverage.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,20-inspection-coverage.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,20-inspection-coverage.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,20-inspection-coverage.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,20-inspection-coverage.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,20-inspection-coverage.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,20-inspection-coverage.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,20-inspection-coverage.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,20-inspection-coverage.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,20-inspection-coverage.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,20-inspection-coverage.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,20-inspection-coverage.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,20-inspection-coverage.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,20-inspection-coverage.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,20-inspection-coverage.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,20-inspection-coverage.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,21-inspection-browser.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,21-inspection-browser.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,21-inspection-browser.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,21-inspection-browser.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,21-inspection-browser.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,21-inspection-browser.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,21-inspection-browser.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,21-inspection-browser.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,21-inspection-browser.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,21-inspection-browser.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,21-inspection-browser.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,21-inspection-browser.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,21-inspection-browser.png,기능 매핑에서 브라우저 연결,wb.scope.inspection.browser.connect,192,32,true,false
+dark,1024,720,21-inspection-browser.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,21-inspection-browser.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,21-inspection-browser.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,21-inspection-browser.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,21-inspection-browser.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,21-inspection-browser.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1024,720,22-inspection-original.png,Pretty,wb.scope.inspection.original.request.pretty,66,34,true,false
+dark,1024,720,22-inspection-original.png,Raw,wb.scope.inspection.original.request.raw,66,34,true,false
+dark,1024,720,22-inspection-original.png,Hex,wb.scope.inspection.original.request.hex,66,34,true,false
+dark,1024,720,22-inspection-original.png,Render,wb.scope.inspection.original.request.render,66,34,true,false
+dark,1024,720,22-inspection-original.png,↵,,28,28,true,false
+dark,1024,720,22-inspection-original.png,⋯,,28,28,true,false
+dark,1024,720,22-inspection-original.png,wb.scope.inspection.original.request.search,wb.scope.inspection.original.request.search,239,28,true,false
+dark,1024,720,22-inspection-original.png,×,wb.scope.inspection.original.request.clear,28,28,true,false
+dark,1024,720,22-inspection-original.png,↑,wb.scope.inspection.original.request.previous,28,28,true,false
+dark,1024,720,22-inspection-original.png,↓,wb.scope.inspection.original.request.next,28,28,true,false
+dark,1024,720,22-inspection-original.png,Aa,wb.scope.inspection.original.request.case,32,28,true,false
+dark,1024,720,22-inspection-original.png,.*,wb.scope.inspection.original.request.regex,28,28,true,false
+dark,1024,720,22-inspection-original.png,Pretty,wb.scope.inspection.original.response.pretty,66,34,true,false
+dark,1024,720,22-inspection-original.png,Raw,wb.scope.inspection.original.response.raw,66,34,true,false
+dark,1024,720,22-inspection-original.png,Hex,wb.scope.inspection.original.response.hex,66,34,true,false
+dark,1024,720,22-inspection-original.png,Render,wb.scope.inspection.original.response.render,66,34,true,false
+dark,1024,720,22-inspection-original.png,↵,,28,28,true,false
+dark,1024,720,22-inspection-original.png,⋯,,28,28,true,false
+dark,1024,720,22-inspection-original.png,wb.scope.inspection.original.response.search,wb.scope.inspection.original.response.search,240,28,true,false
+dark,1024,720,22-inspection-original.png,×,wb.scope.inspection.original.response.clear,28,28,true,false
+dark,1024,720,22-inspection-original.png,↑,wb.scope.inspection.original.response.previous,28,28,true,false
+dark,1024,720,22-inspection-original.png,↓,wb.scope.inspection.original.response.next,28,28,true,false
+dark,1024,720,22-inspection-original.png,Aa,wb.scope.inspection.original.response.case,32,28,true,false
+dark,1024,720,22-inspection-original.png,.*,wb.scope.inspection.original.response.regex,28,28,true,false
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,100,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,48,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1024,720,23-katana-settings.png,wb.scope.inspection.katana.executable,wb.scope.inspection.katana.executable,475,30,true,true
+dark,1024,720,23-katana-settings.png,파일 선택,wb.scope.inspection.katana.choose,80,32,true,true
+dark,1024,720,23-katana-settings.png,설치 확인,wb.scope.inspection.katana.check,80,32,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1024,720,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1024,720,24-katana-results.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1024,720,24-katana-results.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1024,720,24-katana-results.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1024,720,24-katana-results.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1024,720,24-katana-results.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1024,720,24-katana-results.png,wb.scope.inspection.url,wb.scope.inspection.url,738,42,true,false
+dark,1024,720,24-katana-results.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1024,720,24-katana-results.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1024,720,24-katana-results.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1024,720,24-katana-results.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1024,720,24-katana-results.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1024,720,24-katana-results.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1024,720,24-katana-results.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1024,720,24-katana-results.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1024,720,24-katana-results.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1024,720,24-katana-results.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1024,720,24-katana-results.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1024,720,24-katana-results.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,12-inspection-setup.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,12-inspection-setup.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,12-inspection-setup.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,12-inspection-setup.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,12-inspection-setup.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,12-inspection-setup.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,12-inspection-setup.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,12-inspection-setup.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,12-inspection-setup.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,12-inspection-setup.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,12-inspection-setup.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,12-inspection-setup.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,12-inspection-setup.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,12-inspection-setup.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,12-inspection-setup.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,12-inspection-setup.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,12-inspection-setup.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,12-inspection-setup.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,13-inspection-progress.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,13-inspection-progress.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,13-inspection-progress.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,13-inspection-progress.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,13-inspection-progress.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,13-inspection-progress.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,13-inspection-progress.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,13-inspection-progress.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,13-inspection-progress.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,13-inspection-progress.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,13-inspection-progress.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,13-inspection-progress.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,13-inspection-progress.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,13-inspection-progress.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,13-inspection-progress.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,13-inspection-progress.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,13-inspection-progress.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,13-inspection-progress.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,14-inspection-environment.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,14-inspection-environment.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,14-inspection-environment.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,14-inspection-environment.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,14-inspection-environment.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,14-inspection-environment.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,14-inspection-environment.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,14-inspection-environment.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,14-inspection-environment.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,14-inspection-environment.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,14-inspection-environment.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,14-inspection-environment.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,14-inspection-environment.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,14-inspection-environment.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,14-inspection-environment.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,14-inspection-environment.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,14-inspection-environment.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,14-inspection-environment.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,15-inspection-paths.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,15-inspection-paths.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,15-inspection-paths.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,15-inspection-paths.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,15-inspection-paths.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,15-inspection-paths.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,15-inspection-paths.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,15-inspection-paths.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,15-inspection-paths.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,15-inspection-paths.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,15-inspection-paths.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,15-inspection-paths.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,15-inspection-paths.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,15-inspection-paths.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,15-inspection-paths.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,15-inspection-paths.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,15-inspection-paths.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,15-inspection-paths.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,16-inspection-api.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,16-inspection-api.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,16-inspection-api.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,16-inspection-api.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,16-inspection-api.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,16-inspection-api.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,16-inspection-api.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,16-inspection-api.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,16-inspection-api.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,16-inspection-api.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,16-inspection-api.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,16-inspection-api.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,16-inspection-api.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,16-inspection-api.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,16-inspection-api.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,16-inspection-api.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,16-inspection-api.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,16-inspection-api.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,17-inspection-secrets.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,17-inspection-secrets.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,17-inspection-secrets.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,17-inspection-secrets.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,17-inspection-secrets.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,17-inspection-secrets.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,17-inspection-secrets.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,17-inspection-secrets.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,17-inspection-secrets.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,17-inspection-secrets.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,17-inspection-secrets.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,17-inspection-secrets.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,17-inspection-secrets.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,17-inspection-secrets.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,17-inspection-secrets.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,17-inspection-secrets.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,17-inspection-secrets.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,17-inspection-secrets.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,18-inspection-access.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,18-inspection-access.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,18-inspection-access.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,18-inspection-access.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,18-inspection-access.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,18-inspection-access.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,18-inspection-access.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,18-inspection-access.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,18-inspection-access.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,18-inspection-access.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,18-inspection-access.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,18-inspection-access.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,18-inspection-access.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,18-inspection-access.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,18-inspection-access.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,18-inspection-access.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,18-inspection-access.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,18-inspection-access.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,19-inspection-changes.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,19-inspection-changes.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,19-inspection-changes.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,19-inspection-changes.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,19-inspection-changes.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,19-inspection-changes.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,19-inspection-changes.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,19-inspection-changes.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,19-inspection-changes.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,19-inspection-changes.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,19-inspection-changes.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,19-inspection-changes.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,19-inspection-changes.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,19-inspection-changes.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,19-inspection-changes.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,19-inspection-changes.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,19-inspection-changes.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,19-inspection-changes.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,20-inspection-coverage.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,20-inspection-coverage.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,20-inspection-coverage.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,20-inspection-coverage.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,20-inspection-coverage.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,20-inspection-coverage.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,20-inspection-coverage.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,20-inspection-coverage.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,20-inspection-coverage.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,20-inspection-coverage.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,20-inspection-coverage.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,20-inspection-coverage.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,20-inspection-coverage.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,20-inspection-coverage.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,20-inspection-coverage.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,20-inspection-coverage.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,20-inspection-coverage.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,20-inspection-coverage.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,21-inspection-browser.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,21-inspection-browser.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,21-inspection-browser.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,21-inspection-browser.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,21-inspection-browser.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,21-inspection-browser.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,21-inspection-browser.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,21-inspection-browser.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,21-inspection-browser.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,21-inspection-browser.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,21-inspection-browser.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,21-inspection-browser.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,21-inspection-browser.png,기능 매핑에서 브라우저 연결,wb.scope.inspection.browser.connect,192,32,true,false
+dark,1280,800,21-inspection-browser.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,21-inspection-browser.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,21-inspection-browser.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,21-inspection-browser.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,21-inspection-browser.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,21-inspection-browser.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false
+dark,1280,800,22-inspection-original.png,Pretty,wb.scope.inspection.original.request.pretty,66,34,true,false
+dark,1280,800,22-inspection-original.png,Raw,wb.scope.inspection.original.request.raw,66,34,true,false
+dark,1280,800,22-inspection-original.png,Hex,wb.scope.inspection.original.request.hex,66,34,true,false
+dark,1280,800,22-inspection-original.png,Render,wb.scope.inspection.original.request.render,66,34,true,false
+dark,1280,800,22-inspection-original.png,↵,,28,28,true,false
+dark,1280,800,22-inspection-original.png,⋯,,28,28,true,false
+dark,1280,800,22-inspection-original.png,wb.scope.inspection.original.request.search,wb.scope.inspection.original.request.search,367,28,true,false
+dark,1280,800,22-inspection-original.png,×,wb.scope.inspection.original.request.clear,28,28,true,false
+dark,1280,800,22-inspection-original.png,↑,wb.scope.inspection.original.request.previous,28,28,true,false
+dark,1280,800,22-inspection-original.png,↓,wb.scope.inspection.original.request.next,28,28,true,false
+dark,1280,800,22-inspection-original.png,Aa,wb.scope.inspection.original.request.case,32,28,true,false
+dark,1280,800,22-inspection-original.png,.*,wb.scope.inspection.original.request.regex,28,28,true,false
+dark,1280,800,22-inspection-original.png,Pretty,wb.scope.inspection.original.response.pretty,66,34,true,false
+dark,1280,800,22-inspection-original.png,Raw,wb.scope.inspection.original.response.raw,66,34,true,false
+dark,1280,800,22-inspection-original.png,Hex,wb.scope.inspection.original.response.hex,66,34,true,false
+dark,1280,800,22-inspection-original.png,Render,wb.scope.inspection.original.response.render,66,34,true,false
+dark,1280,800,22-inspection-original.png,↵,,28,28,true,false
+dark,1280,800,22-inspection-original.png,⋯,,28,28,true,false
+dark,1280,800,22-inspection-original.png,wb.scope.inspection.original.response.search,wb.scope.inspection.original.response.search,368,28,true,false
+dark,1280,800,22-inspection-original.png,×,wb.scope.inspection.original.response.clear,28,28,true,false
+dark,1280,800,22-inspection-original.png,↑,wb.scope.inspection.original.response.previous,28,28,true,false
+dark,1280,800,22-inspection-original.png,↓,wb.scope.inspection.original.response.next,28,28,true,false
+dark,1280,800,22-inspection-original.png,Aa,wb.scope.inspection.original.response.case,32,28,true,false
+dark,1280,800,22-inspection-original.png,.*,wb.scope.inspection.original.response.regex,28,28,true,false
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,100,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,48,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,35,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1280,800,23-katana-settings.png,wb.scope.inspection.katana.executable,wb.scope.inspection.katana.executable,475,30,true,true
+dark,1280,800,23-katana-settings.png,파일 선택,wb.scope.inspection.katana.choose,80,32,true,true
+dark,1280,800,23-katana-settings.png,설치 확인,wb.scope.inspection.katana.check,80,32,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1280,800,23-katana-settings.png,Spinner.formattedTextField,Spinner.formattedTextField,61,30,true,true
+dark,1280,800,24-katana-results.png,wb.scope.inspection.scopes,wb.scope.inspection.scopes,200,32,true,false
+dark,1280,800,24-katana-results.png,목록 새로고침,wb.scope.inspection.refresh,106,32,true,false
+dark,1280,800,24-katana-results.png,Katana 탐색,wb.scope.inspection.katana.mode,101,26,true,false
+dark,1280,800,24-katana-results.png,SPA 메뉴 탐색,wb.scope.inspection.browser.mode,111,26,true,false
+dark,1280,800,24-katana-results.png,계정별 노출 비교,wb.scope.inspection.accounts,124,26,true,false
+dark,1280,800,24-katana-results.png,wb.scope.inspection.url,wb.scope.inspection.url,994,42,true,false
+dark,1280,800,24-katana-results.png,wb.scope.inspection.profile,wb.scope.inspection.profile,150,32,true,false
+dark,1280,800,24-katana-results.png,실행 조건,wb.scope.inspection.settings,80,32,true,false
+dark,1280,800,24-katana-results.png,통합 점검 시작,wb.scope.inspection.start,110,32,true,false
+dark,1280,800,24-katana-results.png,일시정지,wb.scope.inspection.pause,76,32,true,false
+dark,1280,800,24-katana-results.png,재개,wb.scope.inspection.resume,50,32,true,false
+dark,1280,800,24-katana-results.png,중지,wb.scope.inspection.stop,50,32,true,false
+dark,1280,800,24-katana-results.png,원본 보기,wb.scope.inspection.original,80,32,true,false
+dark,1280,800,24-katana-results.png,Repeater 준비,wb.scope.inspection.repeater,113,32,true,false
+dark,1280,800,24-katana-results.png,계정 비교 준비,wb.scope.inspection.compare,110,32,true,false
+dark,1280,800,24-katana-results.png,증거 추가,wb.scope.inspection.evidence,80,32,true,false
+dark,1280,800,24-katana-results.png,API 찾기로,wb.scope.inspection.js,88,32,true,false
+dark,1280,800,24-katana-results.png,입력값 검사로,wb.scope.inspection.payload,106,32,true,false

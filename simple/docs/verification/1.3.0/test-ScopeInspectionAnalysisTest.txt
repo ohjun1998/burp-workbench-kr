@@ -1,0 +1,49 @@
+PASS header stack signal is retained
+PASS explicit numeric product version is linked to its observed header
+PASS WAS body signal is retained separately from front server
+PASS proxy/CDN evidence has separate classification
+PASS HTTP stack evidence never claims actual deployed products are proved
+PASS database exception produces an explained product hypothesis
+PASS real JS analyzer discovers an API candidate
+PASS generic quoted URL discovery cannot invent GET for unknown or explicit POST APIs
+PASS hash menu route requires browser traversal instead of an invented GET
+PASS secret findings retain original packet ID and exact source offset
+PASS internal address/path observations are classified
+PASS summary never discloses private value: ghp_aB
+PASS summary never discloses private value: a7M2c9
+PASS summary never discloses private value: URL_PR
+PASS summary never discloses private value: COOKIE
+PASS summary never discloses private value: DB_PAS
+PASS summary never discloses private value: ROUTE_
+PASS key format findings never claim provider validity
+PASS secret severity is independent of format confidence
+PASS resolved documented GET can be queued
+PASS optional query fields do not invent required values
+PASS unresolved or changing operation is left for review: /api/required
+PASS unresolved or changing operation is left for review: /api/header
+PASS unresolved or changing operation is left for review: /api/items/{id}
+PASS unresolved or changing operation is left for review: /api/write
+PASS generic document discovery cannot override required-input execution gate
+PASS missing document method does not invent a GET API
+PASS unresolved request-body requirement cannot be queued as a complete GET
+PASS templated API remains visible without becoming a request
+PASS observed undocumented API is a review candidate
+PASS documented template matches the observed concrete path
+PASS declared-only operations remain distinct from actual observations
+PASS no document is not mislabeled a proven undocumented API
+PASS public identifiers receive low-priority review
+PASS test/example context is distinct from a live secret hypothesis
+PASS conflicting database products do not become a false definite stack
+PASS source/time limits remain explicitly incomplete
+PASS CORS header observation is not a browser exploit verdict
+PASS candidate display labels redact detected secret values too
+PASS known secret URL inputs are masked and never replayed, including percent-encoding
+PASS known encoded secret in menu URL cannot enter the persisted finding inventory
+PASS explicit evidence handoff extracts provider and named secret values transiently
+PASS evidence handoff includes actual session-cookie values
+PASS redaction-set diagnostics hide raw values
+PASS complete private-key span is available for redacted evidence handoff
+PASS credential field schema objects do not redact every JSON delimiter
+PASS oversized redaction input is not silently exported unreviewed
+PASS redaction-value capacity fails explicitly instead of dropping values
+ScopeInspectionAnalysisTest: 48 checks passed (local analyzers; no network)

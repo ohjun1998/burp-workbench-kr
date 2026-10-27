@@ -28,7 +28,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   final JTextField url = new JTextField(35);
   final JComboBox<String> scopeChoices = new JComboBox<>();
   final JComboBox<ScopeInspection.Profile> profile = new JComboBox<>();
-  final JCheckBox browserMode = new JCheckBox("SPA 메뉴 탐색"), compareAccounts = new JCheckBox("계정별 노출 비교");
+  final JCheckBox browserMode = new JCheckBox("SPA 메뉴 탐색"), compareAccounts = new JCheckBox("계정별 노출 비교"), katanaMode = new JCheckBox("Katana 탐색");
   final JButton start = new JButton("통합 점검 시작"), pause = new JButton("일시정지"), resume = new JButton("재개"), stop = new JButton("중지");
   final JSpinner budget = new JSpinner(new SpinnerNumberModel(100, 1, 500, 10));
   final JSpinner depth = new JSpinner(new SpinnerNumberModel(2, 0, 3, 1));
@@ -39,6 +39,12 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   final JSpinner browserPages = new JSpinner(new SpinnerNumberModel(15, 1, 100, 1));
   final JSpinner browserActions = new JSpinner(new SpinnerNumberModel(30, 1, 300, 1));
   final JSpinner browserSeconds = new JSpinner(new SpinnerNumberModel(60, 10, 300, 10));
+  final JTextField katanaExecutable = new JTextField("katana", 35);
+  final JSpinner katanaSeconds = new JSpinner(new SpinnerNumberModel(60, 10, 300, 10));
+  final JSpinner katanaPages = new JSpinner(new SpinnerNumberModel(100, 1, 500, 10));
+  final JButton katanaCheck = new JButton("설치 확인");
+  final JLabel katanaCheckResult = new JLabel("Katana 1.8.0 실행파일을 지정하세요.");
+  final JTextArea katanaStatus = new JTextArea(3, 60);
   final JTabbedPane pages = new JTabbedPane();
   final JLabel progress = new JLabel("SCOPE URL과 계정을 선택하면 시작할 수 있습니다."), feedback = new JLabel(" ");
   final JTextArea detail = new JTextArea(5, 60), browserStatus = new JTextArea(3, 60);
@@ -49,12 +55,14 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   final ScopeInspectionBrowser browser;
   final TargetWindow settings;
   volatile ScopeInspectionRunner runner;
+  volatile ScopeKatana katana;
   ScopeInspection.Options options;
   ScopeInspection.Snapshot current = empty();
   private final Function<String, List<ScopeInspection.Profile>> profiles;
   private final Actions actions;
   private final ScopeInspectionHistory history;
   private final ExecutorService historyWorker = Executors.newSingleThreadExecutor(r -> { var t = new Thread(r,"Scope-inspection-history");t.setDaemon(true);return t; });
+  private final ExecutorService katanaChecks = Executors.newSingleThreadExecutor(r -> { var t = new Thread(r,"Scope-Katana-install-check");t.setDaemon(true);return t; });
   private final List<ScopeInspectionRunner> retained = new ArrayList<>();
   private final Set<String> observed = new HashSet<>(), persisted = new HashSet<>();
   private List<ScopeInspection.Finding> changes = List.of();
@@ -75,7 +83,10 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     browser=new ScopeInspectionBrowser(this::browserObserved, target -> WorkbenchScope.contains(api,target));
     settings=new TargetWindow(this,"통합 점검 · 실행 조건",this::settingsContent);
     setName("wb.scope.inspection");setBorder(BorderFactory.createEmptyBorder(10,12,10,12));
-    name(url,"url");name(scopeChoices,"scopes");name(profile,"profile");name(browserMode,"browser.mode");name(compareAccounts,"accounts");
+    name(url,"url");name(scopeChoices,"scopes");name(profile,"profile");name(browserMode,"browser.mode");name(compareAccounts,"accounts");name(katanaMode,"katana.mode");
+    name(katanaExecutable,"katana.executable");name(katanaSeconds,"katana.seconds");name(katanaPages,"katana.pages");name(katanaCheck,"katana.check");name(katanaCheckResult,"katana.check.result");name(katanaStatus,"katana.status");
+    try { String saved=api.persistence().extensionData().getString(BuildInfo.storageKey("scope-katana-executable-v1"));if(saved!=null&&!saved.isBlank())katanaExecutable.setText(saved); } catch(RuntimeException ignored) {}
+    katanaCheck.addActionListener(e->checkKatana());
     for (Object[] entry : new Object[][] {{start,"start"},{pause,"pause"},{resume,"resume"},{stop,"stop"},{budget,"budget"},{depth,"depth"},{delay,"delay"},{timeout,"timeout"},{maxBody,"max.body"},{redirectLimit,"redirects"},{browserPages,"browser.pages"},{browserActions,"browser.actions"},{browserSeconds,"browser.seconds"}}) name((JComponent)entry[0],(String)entry[1]);
     profile.setRenderer(new DefaultListCellRenderer(){public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean selected,boolean focus){putClientProperty("html.disable",true);return super.getListCellRendererComponent(list,value instanceof ScopeInspection.Profile p?p.label():"비로그인",index,selected,focus);}});
     profile.setPreferredSize(new Dimension(150,32));
@@ -86,14 +97,17 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     JButton reload=new JButton("목록 새로고침");name(reload,"refresh");reload.addActionListener(e->refreshTargets());
     JButton conditions=new JButton("실행 조건");name(conditions,"settings");conditions.addActionListener(e->settings.open());
     JPanel target=new JPanel(new BorderLayout(8,0));target.add(url);target.add(WorkbenchUi.row(profile,conditions),BorderLayout.EAST);
-    JPanel top=new JPanel(new BorderLayout(0,7));top.add(WorkbenchUi.row(scopeChoices,reload,browserMode,compareAccounts),BorderLayout.NORTH);top.add(target);
-    start.addActionListener(e->safe(this::startInspection));pause.addActionListener(e->safe(()->{if(runner!=null)runner.pause();}));
+    JPanel top=new JPanel(new BorderLayout(0,7));top.add(WorkbenchUi.row(scopeChoices,reload,katanaMode,browserMode,compareAccounts),BorderLayout.NORTH);top.add(target);
+    start.addActionListener(e->safe(this::startInspection));pause.addActionListener(e->safe(()->{if(runner!=null)runner.pause();if(katana!=null)katana.pause();}));
     resume.addActionListener(e->safe(this::resumeInspection));stop.addActionListener(e->safe(this::stopInspection));
     WorkbenchUi.primary(start);top.add(WorkbenchUi.row(start,pause,resume,stop),BorderLayout.SOUTH);add(top,BorderLayout.NORTH);
     name(pages,"pages");
     addFindingsTab("요약","summary");addFindingsTab("환경·DB","environment");addPathsTab();
     addFindingsTab("API·명세 대조","api");addFindingsTab("키·민감정보","secrets");addFindingsTab("응답·내부정보","observations");
     addFindingsTab("계정별 차이","access");addFindingsTab("커버리지","coverage");addFindingsTab("이전 실행과 비교","changes");
+    addFindingsTab("Katana 수집","katana");
+    katanaStatus.setEditable(false);katanaStatus.setLineWrap(true);katanaStatus.setWrapStyleWord(true);
+    ((JPanel)pages.getComponentAt(pages.getTabCount()-1)).add(katanaStatus,BorderLayout.NORTH);
     JPanel browserPage=new JPanel(new BorderLayout(5,5));browserStatus.setEditable(false);browserStatus.setLineWrap(true);browserStatus.setWrapStyleWord(true);name(browserStatus,"browser.status");
     browserPage.add(browserStatus,BorderLayout.NORTH);browserPage.add(new JScrollPane(createTable("browser",new String[]{"계정/실행 주체","화면·API","상태","근거"})));
     JButton connect=new JButton("기능 매핑에서 브라우저 연결");name(connect,"browser.connect");connect.addActionListener(e->actions.tool("mapper",null));
@@ -110,8 +124,8 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     bottom.add(WorkbenchUi.row(original,repeater,compare,evidence,js,payload),BorderLayout.NORTH);
     JPanel notes=new JPanel(new GridLayout(0,1,0,3));notes.add(progress);notes.add(feedback);bottom.add(notes);add(bottom,BorderLayout.SOUTH);
     pages.addChangeListener(e->selectedChanged());
-    updates=new javax.swing.Timer(150,e->{if(pending!=null){var next=pending;pending=null;accept(next);}checkScope();refreshBrowser();});updates.start();
-    WorkbenchUi.style(this);refreshActions();refreshBrowser();
+    updates=new javax.swing.Timer(150,e->{if(pending!=null){var next=pending;pending=null;accept(next);}checkScope();refreshBrowser();refreshKatana();});updates.start();
+    WorkbenchUi.style(this);refreshActions();refreshBrowser();refreshKatana();
   }
   private static ScopeInspection.Snapshot empty(){return new ScopeInspection.Snapshot("",ScopeInspection.State.READY,"준비",0,0,0,0,0,0,List.of(),List.of(),List.of(),0,0);}
   private static void name(JComponent component,String suffix){component.setName("wb.scope.inspection."+suffix);}
@@ -129,17 +143,46 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   }
   private void addPathsTab(){JTable table=createTable("paths",new String[]{"계정","메서드","URL","HTTP","분류","분석 범위"});table.getColumnModel().getColumn(2).setPreferredWidth(340);JPanel body=new JPanel(new BorderLayout());body.setName("wb.scope.inspection.tab.paths");body.add(new JScrollPane(table));pages.addTab("경로·응답",body);}
   JPanel settingsContent(){
+    JButton choose=new JButton("파일 선택");name(choose,"katana.choose");choose.addActionListener(e->{
+      if(GraphicsEnvironment.isHeadless()){katanaCheckResult.setText("실행파일의 절대경로를 입력하세요.");return;}
+      JFileChooser picker=new JFileChooser();picker.setFileSelectionMode(JFileChooser.FILES_ONLY);
+      if(picker.showOpenDialog(this)==JFileChooser.APPROVE_OPTION)katanaExecutable.setText(picker.getSelectedFile().getAbsolutePath());
+    });
     JPanel body=TargetWindow.options(
       WorkbenchUi.row(new JLabel("전체 HTTP 요청 한도"),budget,new JLabel("탐색 깊이"),depth),
       WorkbenchUi.row(new JLabel("요청 간격(ms)"),delay,new JLabel("응답 시간(초)"),timeout),
       WorkbenchUi.row(new JLabel("본문 분석 한도(MiB)"),maxBody,new JLabel("리디렉션 한도"),redirectLimit),
       WorkbenchUi.row(new JLabel("브라우저 화면 한도"),browserPages,new JLabel("동작 한도"),browserActions),
       WorkbenchUi.row(new JLabel("브라우저 시간(초)"),browserSeconds),
+      new JSeparator(),
+      WorkbenchUi.row(new JLabel("Katana 실행파일 · 1.8.0"),katanaExecutable,choose,katanaCheck),
+      katanaCheckResult,
+      WorkbenchUi.row(new JLabel("Katana 페이지 한도"),katanaPages,new JLabel("수집 시간(초)"),katanaSeconds),
+      new JLabel("Katana는 별도 설치합니다. HTML·JS·폼 경로를 수집하며, 동적 메뉴는 SPA 탐색을 함께 사용하세요."),
+      new JLabel("Katana 요청도 선택한 HTTP 계정·현재 SCOPE·전체 요청 한도를 사용합니다."),
       new JLabel("HTTP 조회는 순차 실행하며 기준·신원·리디렉션 요청도 같은 한도에 포함합니다."),
       new JLabel("본문 분석 한도는 수신 다운로드 자체의 강제 상한이 아닙니다. 덤프·대용량 경로는 별도 검토합니다."),
       new JLabel("브라우저 리소스 요청 수는 HTTP 검사 요청 예산과 별도로 표시합니다."),
       new JLabel("비교 계정은 기존 계정 비교 도구에서 지정합니다. 발견한 키를 인증값으로 사용하지 않습니다."));
-    body.setName("wb.scope.inspection.settings.content");return body;
+    Component[] fields=body.getComponents();body.removeAll();body.setLayout(new GridBagLayout());
+    int row=0;
+    for(Component field:fields){
+      if(field instanceof JLabel note&&field!=katanaCheckResult){
+        JTextArea explanation=new JTextArea(note.getText(),2,1);explanation.setEditable(false);explanation.setLineWrap(true);explanation.setWrapStyleWord(true);explanation.setOpaque(false);field=explanation;
+      }
+      if(field instanceof JSeparator)field.setPreferredSize(new Dimension(1,2));
+      GridBagConstraints cell=new GridBagConstraints();cell.gridx=0;cell.gridy=row++;cell.weightx=1;cell.fill=GridBagConstraints.HORIZONTAL;cell.anchor=GridBagConstraints.NORTHWEST;cell.insets=new Insets(3,8,3,8);body.add(field,cell);
+    }
+    GridBagConstraints space=new GridBagConstraints();space.gridx=0;space.gridy=row;space.weighty=1;space.weightx=1;space.fill=GridBagConstraints.BOTH;body.add(Box.createGlue(),space);
+    WorkbenchUi.style(body);body.setName("wb.scope.inspection.settings.fields");
+    JPanel content=new JPanel(new BorderLayout());content.setName("wb.scope.inspection.settings.content");content.add(new JScrollPane(body));return content;
+  }
+  private void checkKatana(){
+    String executable=katanaExecutable.getText().strip();katanaCheck.setEnabled(false);katanaCheckResult.setText("Katana 설치와 버전을 확인합니다…");
+    katanaChecks.execute(()->{String result;boolean success=false;try{result=ScopeKatana.probe(executable);success=true;}catch(Exception error){result="Katana 1.8.0을 확인하지 못했습니다. 설치 위치와 실행 권한을 확인하세요.";}
+      final String message=result;final boolean ok=success;
+      SwingUtilities.invokeLater(()->{if(closed)return;katanaCheck.setEnabled(true);if(!executable.equals(katanaExecutable.getText().strip()))return;katanaCheckResult.setText(message);if(ok)try{api.persistence().extensionData().setString(BuildInfo.storageKey("scope-katana-executable-v1"),executable);}catch(RuntimeException ignored){}});
+    });
   }
   void refreshTargets(){
     String value=url.getText();scopeChoices.removeAllItems();scopeChoices.addItem("SCOPE에서 선택");for(var rule:WorkbenchScope.registeredRules(api))scopeChoices.addItem(rule.url());url.setText(value);refreshProfiles();
@@ -152,28 +195,50 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   }
   void startInspection(){
     if(closed)throw new IllegalArgumentException("종료된 통합 점검입니다.");
-    if(runner!=null&&(current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED))throw new IllegalArgumentException("진행 중 점검을 먼저 중지하세요.");
+    if(runner!=null&&(runner.snapshot().state()==ScopeInspection.State.RUNNING||runner.snapshot().state()==ScopeInspection.State.PAUSED))throw new IllegalArgumentException("진행 중 점검을 먼저 중지하세요.");
     String target=url.getText().strip();URI uri=URI.create(target);
     if(!Set.of("http","https").contains(uri.getScheme())||uri.getHost()==null||uri.getUserInfo()!=null||!WorkbenchScope.contains(api,target))throw new IllegalArgumentException("등록된 SCOPE 안의 HTTP(S) URL을 선택하세요.");
     List<ScopeInspection.Profile> available=List.copyOf(profiles.apply(target));
     ScopeInspection.Profile selected=(ScopeInspection.Profile)profile.getSelectedItem();
     if(selected==null)throw new IllegalArgumentException("계정을 선택하세요.");
     List<ScopeInspection.Profile> chosen;
-    if(compareAccounts.isSelected())chosen=available;
+    if(compareAccounts.isSelected())chosen=katanaMode.isSelected()?available.stream().sorted(Comparator.comparingInt(p->p.id().equals(selected.id())?0:1)).toList():available;
     else chosen=available.stream().filter(p->p.id().equals(selected.id())).limit(1).toList();
     if(chosen.isEmpty())throw new IllegalArgumentException("대상과 계정이 바뀌었습니다. 계정 목록을 새로고침하세요.");
-    options=new ScopeInspection.Options(target,number(budget),number(depth),number(delay),number(timeout)*1000,number(maxBody)*1024*1024,number(redirectLimit),browserMode.isSelected(),compareAccounts.isSelected(),chosen);
+    options=new ScopeInspection.Options(target,number(budget),number(depth),number(delay),number(timeout)*1000,number(maxBody)*1024*1024,number(redirectLimit),browserMode.isSelected(),compareAccounts.isSelected(),chosen,katanaMode.isSelected(),number(katanaSeconds),number(katanaPages));
+    ScopeKatana.Config katanaConfig=options.katana()?new ScopeKatana.Config(katanaExecutable.getText().strip(),options.katanaSeconds(),options.katanaPages(),options.depth(),options.timeoutMillis(),options.maxBodyBytes(),options.delayMillis()):null;
     WorkbenchScope scope=scope();runScope=scope.inspectionFingerprint();runProject=WorkspaceResume.projectIdentity(api);runHistoryScope=history.scopeFingerprint();
     List<String> include=options.browser()?scope.browserIncludes(target):List.of(), exclude=options.browser()?scope.browserExclusions(target):List.of();
     if(runner!=null){retained.add(runner);if(retained.size()>2)retained.remove(0).close();}
     String expectedScope=runScope,expectedProject=runProject;
     long token=++generation;
+    if(katana!=null){katana.close();katana=null;}
     runner=new ScopeInspectionRunner(api,options,t->!closed&&expectedScope.equals(scope.inspectionFingerprint())&&expectedProject.equals(WorkspaceResume.projectIdentity(api))&&WorkbenchScope.contains(api,t),snap->{if(!closed&&token==generation&&expectedProject.equals(WorkspaceResume.projectIdentity(api)))pending=snap;});
+    if(options.katana()){
+      ScopeInspectionRunner owner=runner;ScopeInspection.Options frozen=options;
+      owner.registerKatana(selected.id(),System.currentTimeMillis()+options.katanaSeconds()*1000L+5000);
+      String origin=EnvironmentCatalog.origin(uri);
+      Predicate<String> admitted=t->!closed&&token==generation&&expectedScope.equals(scope.inspectionFingerprint())&&expectedProject.equals(WorkspaceResume.projectIdentity(api))&&WorkbenchScope.contains(api,t);
+      katana=new ScopeKatana(katanaConfig,target,List.of(origin+"/"),List.of(),admitted,
+        (address,method)->katanaResponse(owner,address,method,frozen.maxBodyBytes()),
+        candidate->{if(!closed&&token==generation)owner.offerKatana(candidate);},
+        blocked->{if(!closed&&token==generation)owner.offerKatana(new ScopeInspection.Candidate(blocked.url(),blocked.method(),"Katana 차단",blocked.reason(),false));},
+        (complete,note)->{if(!closed&&token==generation)owner.finishKatana(complete,note);},ignored->{});
+      try{api.persistence().extensionData().setString(BuildInfo.storageKey("scope-katana-executable-v1"),katanaExecutable.getText().strip());}catch(RuntimeException ignored){}
+    }
     ((DefaultTableModel)tables.get("browser").getModel()).setRowCount(0);
     changes=List.of();observed.clear();current=runner.snapshot();
     if(options.browser())browser.begin(current.id(),target,include,exclude,number(browserPages),number(browserActions),System.currentTimeMillis()+number(browserSeconds)*1000L);
     else browser.stop();
-    accept(current);runner.start();
+    accept(current);runner.start();accept(runner.snapshot());if(katana!=null)katana.start();
+  }
+  static ScopeKatanaProxy.Response katanaResponse(ScopeInspectionRunner owner,String address,String method,int maximum) throws Exception {
+    CompletableFuture<DiskTrafficStore.PacketRef> future=owner.fetchKatana(address,method);
+    DiskTrafficStore.PacketRef packet;
+    try{packet=future.get();}catch(InterruptedException error){future.cancel(false);Thread.currentThread().interrupt();throw error;}
+    var response=packet.response();if(response==null)throw new IllegalStateException("Katana에 연결할 응답 원본이 없습니다.");
+    byte[] body=response.body()==null?new byte[0]:response.body().getBytes();if(body.length>maximum)body=Arrays.copyOf(body,maximum);
+    return new ScopeKatanaProxy.Response(response.statusCode(),response.headers().stream().map(h->new ScopeKatanaProxy.Header(h.name(),h.value())).toList(),body);
   }
   private WorkbenchScope scope(){return WorkbenchScope.current(api);}
   private static int number(JSpinner spinner){return ((Number)spinner.getValue()).intValue();}
@@ -182,12 +247,12 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     if(!runScope.equals(scope().inspectionFingerprint())||!runProject.equals(WorkspaceResume.projectIdentity(api)))throw new IllegalArgumentException("SCOPE 또는 프로젝트가 바뀌었습니다. 새 점검으로 시작하세요.");
     List<ScopeInspection.Profile> all=profiles.apply(options.url());List<ScopeInspection.Profile> fresh=new ArrayList<>();
     for(var previous:options.profiles()){var candidate=all.stream().filter(p->p.id().equals(previous.id())).findFirst().orElseThrow(()->new IllegalArgumentException("같은 계정을 다시 연결하세요. 다른 계정은 새 점검으로 시작합니다."));fresh.add(candidate);}
-    runner.resume(fresh);
+    runner.resume(fresh);if(katana!=null&&"PAUSED".equals(katana.snapshot().state()))katana.resume();
   }
-  void stopInspection(){if(runner!=null)runner.stop();browser.stop();}
+  void stopInspection(){if(runner!=null)runner.stop();if(katana!=null)katana.stop();browser.stop();}
   void scopeChanged(){
     if(!runProject.isEmpty()&&!runProject.equals(WorkspaceResume.projectIdentity(api))){
-      generation++;pending=null;browser.stop();actions.originalsCleared();closeInspectors();if(runner!=null)runner.close();runner=null;for(var old:retained)old.close();retained.clear();options=null;changes=List.of();observed.clear();runProject="";runScope="";accept(empty());
+      generation++;pending=null;browser.stop();if(katana!=null){katana.close();katana=null;}actions.originalsCleared();closeInspectors();if(runner!=null)runner.close();runner=null;for(var old:retained)old.close();retained.clear();options=null;changes=List.of();observed.clear();runProject="";runScope="";accept(empty());
       feedback.setText("프로젝트가 바뀌어 이전 실행 원본을 정리했습니다. 새 SCOPE를 선택하세요.");return;
     }
     if(runner!=null&&(current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED)){generation++;pending=null;stopInspection();accept(runner.snapshot());feedback.setText("SCOPE 변경으로 중지했습니다. 새 조건으로 시작하세요.");}
@@ -207,6 +272,17 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private void refreshBrowser(){
     if(closed)return;var value=browser.snapshot();browserStatus.setText("브라우저 세션 · "+value.state()+" · "+value.message()+"\n화면 "+value.pages()+" · 동작 "+value.actions()+" · 브라우저 리소스 요청 "+value.requests()+" · 제외 "+value.excluded()+"\nHTTP 재조회는 선택한 검사 계정을 사용하며 브라우저 로그인 계정과 별도입니다.");
   }
+  private void refreshKatana(){
+    if(closed)return;
+    if(katana==null){katanaStatus.setText("Katana 탐색을 선택해 통합 점검을 시작하세요. 실행 조건에서 설치 위치를 확인할 수 있습니다.\nHTML·JS·폼 경로 → 환경·API·민감정보·계정 차이·이력·미확인 항목으로 연결합니다.");return;}
+    var status=katana.snapshot();showKatanaStatus(status);
+    if(current.state()==ScopeInspection.State.PAUSED&&"RUNNING".equals(status.state()))katana.pause();
+    if((current.state()==ScopeInspection.State.STOPPED||current.state()==ScopeInspection.State.FAILED)&&"RUNNING".equals(status.state()))katana.stop();
+  }
+  void showKatanaStatus(ScopeKatana.Snapshot status){
+    katanaStatus.setText("Katana · "+katanaState(status.state())+" · "+status.message()+"\n수집 기록 "+status.records()+" · 경로 후보 "+status.endpoints()+" · 제외 "+status.excluded()+"\n실제 요청은 선택한 HTTP 계정과 전체 요청 한도를 공유합니다. 동적 SPA 메뉴는 브라우저 탐색에서 확인하세요.");
+  }
+  private static String katanaState(String state){return switch(state){case "READY"->"준비";case "RUNNING"->"수집 중";case "PAUSED"->"일시정지";case "COMPLETED"->"수집 큐 완료";case "PARTIAL"->"부분 수집";case "FAILED"->"실행 실패";case "STOPPED"->"중지";case "CLOSED"->"종료";default->state;};}
   void accept(ScopeInspection.Snapshot value){
     if(closed||accepting)return;if(!SwingUtilities.isEventDispatchThread()){SwingUtilities.invokeLater(()->accept(value));return;}
     accepting=true;rebuilding=true;
@@ -243,9 +319,9 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   }
   private static boolean terminal(ScopeInspection.State value){return value==ScopeInspection.State.COMPLETED||value==ScopeInspection.State.STOPPED||value==ScopeInspection.State.FAILED;}
   private static String state(ScopeInspection.State value){return switch(value){case READY->"준비";case RUNNING->"점검 중";case PAUSED->"일시정지";case STOPPED->"중지·미확인 포함";case COMPLETED->"대기열 처리 완료";case FAILED->"실패·미확인 포함";case CLOSED->"종료";};}
-  private static String category(String value){return switch(value){case "ENVIRONMENT"->"환경";case "DATABASE"->"DB";case "API"->"API";case "SECRET"->"키·민감정보";case "INTERNAL"->"내부정보";case "RESPONSE"->"응답";case "COVERAGE"->"점검 범위";case "INVENTORY"->"명세 대조";case "CHANGE"->"변경";case "ACCESS"->"계정 차이";default->value;};}
+  private static String category(String value){return switch(value){case "ENVIRONMENT"->"환경";case "DATABASE"->"DB";case "API"->"API";case "SECRET"->"키·민감정보";case "INTERNAL"->"내부정보";case "RESPONSE"->"응답";case "COVERAGE"->"점검 범위";case "INVENTORY"->"명세 대조";case "CHANGE"->"변경";case "ACCESS"->"계정 차이";case "KATANA"->"Katana";default->value;};}
   private static String severity(String value){return switch(value){case "INFO"->"정보";case "LOW"->"낮음";case "MEDIUM"->"중간";case "HIGH"->"높음";default->value;};}
-  private static boolean matches(String key,String category){return switch(key){case "summary"->true;case "environment"->Set.of("ENVIRONMENT","DATABASE").contains(category);case "api"->Set.of("API","INVENTORY").contains(category);case "secrets"->category.equals("SECRET");case "observations"->Set.of("INTERNAL","RESPONSE").contains(category);case "access"->Set.of("ACCESS","ACCOUNT","PERMISSION").contains(category);case "coverage"->category.equals("COVERAGE");default->false;};}
+  private static boolean matches(String key,String category){return switch(key){case "summary"->true;case "environment"->Set.of("ENVIRONMENT","DATABASE").contains(category);case "api"->Set.of("API","INVENTORY").contains(category);case "secrets"->category.equals("SECRET");case "observations"->Set.of("INTERNAL","RESPONSE").contains(category);case "access"->Set.of("ACCESS","ACCOUNT","PERMISSION").contains(category);case "coverage"->category.equals("COVERAGE");case "katana"->category.equals("KATANA");default->false;};}
   private JTable selectedTable(){int n=pages.getSelectedIndex();if(n<0)return null;Component body=pages.getComponentAt(n);for(var e:tables.entrySet())if(SwingUtilities.isDescendingFrom(e.getValue(),body))return e.getValue();return null;}
   private String key(JTable table){return tables.entrySet().stream().filter(e->e.getValue()==table).map(Map.Entry::getKey).findFirst().orElse("");}
   private record FindingSelection(String category,String url,String method,String account,String original,int line,int offset,String fingerprint){}
@@ -257,7 +333,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private DiskTrafficStore.PacketRef requireOriginal(){var ref=selectedOriginal();if(ref==null)throw new IllegalArgumentException("현재 실행의 원본이 연결된 항목을 선택하세요. 이전 요약·제외 항목은 원본을 대신 만들지 않습니다.");return ref;}
   private void selectedChanged(){if(rebuilding)return;var f=selectedFinding();if(f!=null)detail.setText(f.title()+"\n"+f.state()+" · "+f.confidence()+" · "+f.severity()+"\n"+f.detail()+"\n원본: "+f.originalId()+" · 본문 줄 "+f.line()+" · 문자 위치 "+f.offset());else{var ref=selectedOriginal();detail.setText(ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes");}detail.setCaretPosition(0);refreshActions();}
   private void captureEvidence(){var packet=requireOriginal();actions.evidence(List.of(packet),"통합 점검 "+current.id()+" · 선택 계정/원본 연결 · "+(selectedFinding()==null?"경로 응답":selectedFinding().title()));}
-  private void refreshActions(){boolean active=current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED;start.setEnabled(!closed&&!active);pause.setEnabled(!closed&&current.state()==ScopeInspection.State.RUNNING);resume.setEnabled(!closed&&current.state()==ScopeInspection.State.PAUSED);stop.setEnabled(!closed&&active);for(JComponent c:List.of(url,scopeChoices,profile,browserMode,compareAccounts))c.setEnabled(!active&&!closed);boolean linked=!closed&&selectedOriginal()!=null;for(JButton b:List.of(original,repeater,compare,evidence,js,payload)){b.setEnabled(linked);b.setToolTipText(linked?"선택 원본을 연결합니다. 준비·화면 이동은 대상 요청을 보내지 않습니다.":"원본이 연결된 결과를 먼저 선택하세요.");}}
+  private void refreshActions(){boolean active=current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED;start.setEnabled(!closed&&!active);pause.setEnabled(!closed&&current.state()==ScopeInspection.State.RUNNING);resume.setEnabled(!closed&&current.state()==ScopeInspection.State.PAUSED);stop.setEnabled(!closed&&active);for(JComponent c:List.of(url,scopeChoices,profile,browserMode,compareAccounts,katanaMode,katanaExecutable,katanaPages,katanaSeconds))c.setEnabled(!active&&!closed);boolean linked=!closed&&selectedOriginal()!=null;for(JButton b:List.of(original,repeater,compare,evidence,js,payload)){b.setEnabled(linked);b.setToolTipText(linked?"선택 원본을 연결합니다. 준비·화면 이동은 대상 요청을 보내지 않습니다.":"원본이 연결된 결과를 먼저 선택하세요.");}}
   JPanel originalContent(DiskTrafficStore.PacketRef packet){
     PacketInspector request=new PacketInspector("wb.scope.inspection.original.request"),response=new PacketInspector("wb.scope.inspection.original.response");inspectors.add(request);inspectors.add(response);
     request.setPacket(packet.requestPrefix(PacketInspector.PREVIEW_BYTES),null,packet.requestLength());response.setPacket(packet.responsePrefix(PacketInspector.PREVIEW_BYTES),null,packet.responseLength());
@@ -268,5 +344,5 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   void closeOriginalContent(JComponent content){Object value=content.getClientProperty("wb.scope.inspection.inspectors");if(value instanceof List<?> list)for(Object item:list)if(item instanceof PacketInspector inspector){inspector.close();inspectors.remove(inspector);}content.putClientProperty("wb.scope.inspection.inspectors",null);}
   private void closeInspectors(){for(var inspector:inspectors)inspector.close();inspectors.clear();}
   private void safe(Runnable action){try{action.run();}catch(RuntimeException error){feedback.setText(Objects.requireNonNullElse(error.getMessage(),"실행 조건을 확인하세요."));}}
-  @Override public void close(){if(closed)return;closed=true;updates.stop();browser.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();}
+  @Override public void close(){if(closed)return;closed=true;updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();}
 }

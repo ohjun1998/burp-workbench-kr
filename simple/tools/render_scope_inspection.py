@@ -24,6 +24,7 @@ CAPTURES = [
     '18-inspection-access.png', '19-inspection-changes.png',
     '20-inspection-coverage.png', '21-inspection-browser.png',
     '22-inspection-original.png',
+    '23-katana-settings.png', '24-katana-results.png',
 ]
 
 
@@ -89,6 +90,7 @@ def main() -> int:
         ('21-inspection-browser.png', 'wb.scope.inspection.browser'): 80,
         ('22-inspection-original.png', 'wb.scope.inspection.original.request.text'): 100,
         ('22-inspection-original.png', 'wb.scope.inspection.original.response.text'): 100,
+        ('24-katana-results.png', 'wb.scope.inspection.katana'): 100,
     }
     for (view, name), minimum in required.items():
         found = [r for r in content if r['view'] == view and r['name'] == name]

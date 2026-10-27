@@ -1,0 +1,17 @@
+PASS opening Katana controls performs neither a crawl nor target HTTP
+PASS existing ordinary inspection remains usable before an optional binary is installed
+PASS installation probe runs asynchronously and exposes its busy state
+PASS missing Katana has an actionable installation result
+PASS installation checking sends no target request
+PASS explicit start connects the optional crawler to the real inspection coordinator
+PASS running crawl conditions cannot silently change mid-run
+PASS a second start cannot race the first UI refresh and replace a running crawler
+PASS rejecting a second start preserves the active runner and its original store
+PASS failed external discovery makes coverage explicitly incomplete
+PASS crawler failure stays visible in unconfirmed coverage findings
+PASS a completed run unlocks crawler conditions for correction
+PASS durable comparison conditions retain the chosen discovery bounds
+PASS Katana provenance selects the same exact original as the other result tabs
+PASS Katana original and evidence handoff prepares existing tools without sending another request
+PASS unload closes optional process resources and its loopback proxy
+ScopeKatanaUiTest: 16 checks passed (production UI and loopback API adapter; real crawler covered separately)

@@ -11,3 +11,4 @@
 **/.browser-profile/
 **/chromium-profile/
 **/playwright-report/
+**/.tmp/

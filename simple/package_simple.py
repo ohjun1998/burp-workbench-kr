@@ -27,7 +27,7 @@ def source_files():
     """A complete independent build input, including pinned API dependencies and licenses."""
     inputs = []
     excluded = {'build', 'dist', 'downloads', '__pycache__', 'node_modules', '.run', '.git',
-                '.classes', '.host-home', '.font-cache', '.browser-profile',
+                '.classes', '.host-home', '.font-cache', '.browser-profile', '.tmp',
                 'chromium-profile', 'playwright-report'}
     for path in ROOT.rglob('*'):
         relative = path.relative_to(ROOT)

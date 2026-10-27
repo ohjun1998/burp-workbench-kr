@@ -2,7 +2,7 @@ name: Workbench Simple
 
 on:
   push:
-    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection']
+    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana']
     paths: ['simple/**', '.github/workflows/workbench-simple.yml']
   pull_request:
     paths: ['simple/**', '.github/workflows/workbench-simple.yml']
@@ -35,6 +35,10 @@ jobs:
           node-version: '22'
       - name: Strict Java 17 build and complete Simple regression profile
         run: python simple/dev.py check
+      - name: Install pinned external Katana 1.8.0
+        run: python simple/tools/install_katana.py --dest "$RUNNER_TEMP/workbench-katana" --platform linux_amd64
+      - name: Verify real Katana against the isolated loopback fixture
+        run: python simple/tools/verify_katana.py --katana "$RUNNER_TEMP/workbench-katana/katana" --out tmp/katana-integration
       - name: Render and check real Simple Swing components
         run: python simple/tools/render_simple.py --out tmp/simple-layout --check
       - name: Render and check scoped inspection Swing components
@@ -57,5 +61,7 @@ jobs:
             tmp/simple-inspection-layout/**/*.png
             tmp/simple-inspection-layout/*.json
             tmp/simple-inspection-layout/*.csv
+            tmp/katana-integration/**
+            ${{ runner.temp }}/workbench-katana/katana-install.json
           if-no-files-found: warn
           retention-days: 14

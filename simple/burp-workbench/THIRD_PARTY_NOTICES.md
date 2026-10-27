@@ -62,3 +62,31 @@ jsluice inspired the analysis workflow but its code/binary is not included. This
 ## Google Brotli Java decoder 0.1.2
 
 The MIT-licensed org.brotli:dec:0.1.2 decoder is bundled under kr.workbench.shaded.brotli to avoid host collisions. The license is preserved in licenses/brotli/LICENSE. Upstream: https://github.com/google/brotli . Maven SHA-256: 615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52 . No external process or native decoder is required.
+
+## Optional external Katana 1.8.0
+
+Katana is an optional, separately installed executable by ProjectDiscovery, licensed under the MIT License, Copyright (c) 2022 ProjectDiscovery. Workbench Simple invokes a user-selected local executable for scoped crawling. The Katana executable is not embedded in the Workbench JAR or redistributed in its source ZIP. The pinned official platform downloads and SHA-256 digests are recorded in `simple/docs/KATANA_DEPENDENCY.json`; `simple/tools/install_katana.py` installs only into an explicitly selected external directory.
+
+Upstream: https://github.com/projectdiscovery/katana/tree/v1.8.0 . Original license: https://github.com/projectdiscovery/katana/blob/v1.8.0/LICENSE.md . This integration does not modify Katana or imply endorsement by ProjectDiscovery.
+
+> MIT License
+>
+> Copyright (c) 2022 ProjectDiscovery
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.

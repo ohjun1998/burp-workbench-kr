@@ -1,25 +1,27 @@
-# Workbench Simple 1.2.0
+# Workbench Simple 1.3.0
 
-**기존 8개 통합 확장 도구를 유지하고 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0 JAR·소스·PDF는 보존합니다.
+**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0 JAR·소스·PDF는 보존합니다.
 
-SCOPE URL·HTTP 계정 선택 → 통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.
+SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.
 
 | 필요한 파일 | 위치 |
 |---|---|
-| 설치 JAR | [burp-workbench-simple-1.2.0.jar](downloads/1.2.0/burp-workbench-simple-1.2.0.jar) |
-| 독립 빌드 소스 | [소스 ZIP](downloads/1.2.0/burp-workbench-simple-1.2.0-source.zip) · [SHA256SUMS](downloads/1.2.0/SHA256SUMS) |
-| 브라우저·SPA helper | [helper 0.4.0 ZIP](downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip) |
+| 설치 JAR | [burp-workbench-simple-1.3.0.jar](downloads/1.3.0/burp-workbench-simple-1.3.0.jar) |
+| 독립 빌드 소스 | [소스 ZIP](downloads/1.3.0/burp-workbench-simple-1.3.0-source.zip) · [SHA256SUMS](downloads/1.3.0/SHA256SUMS) |
+| 브라우저·SPA helper | [helper 0.4.0 ZIP](downloads/1.3.0/feature-mapper-browser-helper-0.4.0.zip) |
+| 외부 Katana 1.8.0 | [공식 배포·SHA-256 확인 설치 도구](tools/install_katana.py) · [고정 의존성 기록](docs/KATANA_DEPENDENCY.json) · 실행 파일 별도 설치 |
 | 단계별 그림 가이드 | [HTML 안내서](docs/GUIDE_SIMPLE_KR.html) · [문서 원고](docs/GUIDE_SIMPLE_KR.md) |
-| PDF 가이드 | [Workbench Simple 그림 가이드북](downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf) |
-| 실제 검증 결과 | [검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.2.0.json) |
-| 변경 안내 | [Simple 1.2.0 적용 기능과 정리한 부가 흐름](docs/RELEASE_SIMPLE_1.2.0_KR.md) |
-| 적용 범위 | [요구사항·구현·검사·가이드 연결표](docs/SCOPE_INSPECTION_1.2.0_SPEC_KR.md) |
+| PDF 가이드 | [Workbench Simple 그림 가이드북](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) |
+| 실제 검증 결과 | [검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.3.0.json) |
+| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.3.0/katana-native/katana-verification.json) |
+| 변경 안내 | [Simple 1.3.0 적용 기능과 정리한 부가 흐름](docs/RELEASE_SIMPLE_1.3.0_KR.md) |
+| 적용 범위 | [Katana 요구사항·구현·검사·가이드 연결표](docs/KATANA_SCOPE_1.3.0_SPEC_KR.md) |
 
 ## SCOPE 통합 점검
 
 | 결과 | 연결한 기능 | 판정과 범위 |
 |---|---|---|
-| 메뉴·기능 발견 | HTML·JS·robots/sitemap·API 문서와 브라우저 관측을 연결합니다. | 실제 관측, 문서 선언, 기술 추정 후보를 구분합니다. |
+| 메뉴·기능 발견 | Katana·HTML·JS·robots/sitemap·API 문서와 브라우저 관측을 연결합니다. | 실제 관측, 문서 선언, 기술 추정 후보를 구분합니다. |
 | 환경·주요 경로 | 서버·WAS·프레임워크·프록시/CDN·DB 단서를 모으고 관련 경로를 확인합니다. | 탐지 근거·확실성과 응답 내용 확인 상태를 함께 읽습니다. |
 | API·민감정보 | API 문서와 관측 요청을 대조하고 키·토큰·내부 정보 후보를 분류합니다. | 공개 식별자·예제·비밀키 후보, 중요도·확신도·유효성을 구분합니다. |
 | 권한·변경 비교 | 선택한 HTTP 계정별 응답 차이와 이전 실행의 새 항목·변경 후보를 확인합니다. | 같은 프로젝트·계정·조건의 비교만 사용하고 불완전 실행을 해결로 확정하지 않습니다. |
@@ -28,14 +30,39 @@ SCOPE URL·HTTP 계정 선택 → 통합 점검 시작 → 결과·원본 확인
 
 ## 설치와 첫 점검
 
-1. Simple 설치 JAR burp-workbench-simple-1.2.0.jar를 준비하고 기존 Workbench 파일을 보관합니다.
+1. Simple 설치 JAR burp-workbench-simple-1.3.0.jar를 준비하고 기존 Workbench 파일을 보관합니다.
 2. Burp Extensions → Add → Java에서 Simple JAR를 선택하고 Workbench Simple 탭을 엽니다.
 3. 한 확장에서만 수집하려면 기존 Workbench의 로드를 해제하고 Simple을 사용합니다. 기존 확장이나 원본 파일을 삭제할 필요는 없습니다.
 4. SCOPE 목록에 대상 URL과 경로를 등록하고 허용·제외 범위를 확인합니다. 통합 점검 화면에서 URL·HTTP 계정과 요청 한도를 정합니다.
-5. 통합 점검을 시작하고 환경·경로·API·키/민감정보·권한 차이·커버리지 결과를 확인합니다. 브라우저 모드는 helper를 준비한 뒤 선택합니다.
+5. Katana 탐색의 실행 파일·수집 조건을 확인한 뒤 통합 점검을 시작합니다. Katana 수집과 환경·경로·API·키/민감정보·권한 차이·커버리지 결과를 확인합니다. 브라우저 모드는 helper를 준비한 뒤 선택합니다.
 6. 원본과 근거를 읽고 필요한 기존 도구에 연결합니다. 증거에 추가한 뒤 가림 미리보기 → 증거 ZIP 저장으로 저장합니다.
 
 화면 열기와 도구 이동은 전송하지 않습니다. 통합 점검 시작은 설정한 범위에 조회 요청을 전송합니다. 일반 트래픽 수집 OFF/SCOPE와 명시적 통합 점검 실행을 구분합니다.
+
+## Katana 1.8.0 설치와 수집
+
+1. Simple 폴더 또는 독립 소스 ZIP의 루트에서 python tools/install_katana.py --dest 뒤에 쓸 수 있는 외부 절대 경로를 지정합니다. 저장소 루트에서는 simple/tools/install_katana.py를 사용합니다. 공식 Katana 1.8.0 배포와 SHA-256을 확인해 실행 파일·설치 기록을 저장합니다.
+2. 설치 완료 시 출력된 실행 파일 경로를 복사합니다. Workbench의 SCOPE 통합 점검 → 실행 조건에서 파일 선택 또는 경로 입력 후 설치 확인을 누릅니다. Katana는 별도 설치하며 관리자 권한·PATH·사용자 CA 변경이 필요하지 않습니다.
+3. Katana 탐색을 선택하고 Katana 페이지 한도와 수집 시간(초)을 정합니다. 선택한 HTTP 계정이 Katana 수집의 실행 주체입니다. 대상 URL·허용 경로·계정·총 요청 한도를 확인한 뒤 통합 점검을 시작합니다.
+4. Katana 수집에서 상태·발견 출처·후보와 차단 사유를 확인합니다. 환경·경로·API·민감정보·계정별 차이·변경·커버리지는 기존 결과 탭에서 이어서 읽습니다.
+
+Linux/macOS에서 Simple 폴더 또는 독립 소스 ZIP 루트의 사용 예:
+
+```sh
+python tools/install_katana.py --dest "$HOME/Tools/Workbench-Katana/1.8.0"
+```
+
+저장소 루트에서 실행할 때는 `python simple/tools/install_katana.py`를 사용합니다.
+
+Windows에서는 `--dest "C:/Tools/Workbench-Katana/1.8.0" --platform windows_amd64`처럼 사용자가 쓸 수 있는 외부 폴더와 해당 플랫폼을 지정할 수 있습니다. 설치 도구는 PATH·HOME 설정을 재지정하거나 시스템 CA를 설치하지 않습니다.
+
+- 기존 Katana 재개 자료가 필요하면 먼저 보관합니다. 공급자 Katana 1.8.0은 버전 확인 때도 기본 사용자 설정 위치의 10일 지난 resume 파일을 정리할 수 있습니다. 설치 도구는 HOME을 재지정하지 않으며 이 동작을 의존성·설치 기록에 명시합니다.
+- Katana는 HTML·JavaScript·폼 메타데이터·기술 단서를 수집합니다. 실제 대상 요청은 실행 전용 인증 loopback 프록시를 거쳐 Workbench의 HTTP 계정·SCOPE·요청 예산을 적용합니다.
+- HTTPS CONNECT도 같은 전송 경계를 사용합니다. 실행용 임시 인증서를 사용하며 사용자 운영체제·브라우저에 CA 인증서를 설치하지 않습니다. 대상 Cookie·Authorization은 Katana 명령행이나 설정 파일로 전달하지 않습니다.
+- JSONL의 경로·폼·기술 메타데이터는 자동 재조회하지 않습니다. 폼의 action·메서드·입력 이름은 발견 정보이며 값은 메타데이터에 남기지 않고 민감 필드 이름을 가립니다. 폼 제출·자동 로그인·쓰기·키 자동 검증·외부 공급자 API·자동 업데이트는 실행하지 않습니다.
+- Katana는 # 조각이 없는 HTTP(S) 주소에서 표준 HTML/JS 모드로 수집합니다. SPA 메뉴·hash route는 기존 브라우저 helper에서 선택합니다. 브라우저 로그인 세션은 선택한 Workbench HTTP 계정과 별개입니다.
+- Katana 종료와 사이트 전체 검증 완료를 구분합니다. 시간·페이지·요청 한도, 차단·실패·부분 분석과 미확인 항목을 확인합니다. 일시정지 후 재개해도 처음 정한 절대 시간과 공통 요청 예산을 유지합니다.
+- Katana 실행 파일이 없거나 실행에 실패하면 Katana 실패·부분 수집 사유를 확인합니다. 일반 HTTP 점검 결과는 따로 유지하며 Katana 수집 성공으로 표시하지 않습니다.
 
 ## 브라우저·SPA 모드 준비
 
@@ -104,4 +131,4 @@ python tools/check_simple_guide.py
 
 이 로컬 환경의 컴파일 방식은 `python dev.py check --source-target`과 각 캡처 명령의 `--source-target`으로 재현합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.
 
-[보존한 Simple 1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.1.0 PDF](downloads/guides/1.1.0/Workbench_Simple_1.1.0_Guide_KR.pdf) · [Simple 1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)
+[보존한 Simple 1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.2.0 PDF](downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)

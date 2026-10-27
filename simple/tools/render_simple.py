@@ -16,6 +16,10 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 WB = ROOT / 'burp-workbench'
+CAPTURES = ['00-scope-editor.png', '00-start.png', '01-capture.png', '02-request.png',
+            '03-analysis.png', '04-auth-accounts.png', '04-auth-results.png',
+            '05-evidence.png', '06-redaction.png', '07-payload.png', '08-mapper.png',
+            '09-environment.png', '10-js.png', '11-replay.png']
 
 
 def main() -> int:
@@ -43,6 +47,7 @@ def main() -> int:
                     '-cp', classpath, '-d', str(classes), str(ROOT / 'tools/SimplePreview.java')], check=True)
     all_controls, all_content, all_scenarios = [], [], []
     views = 0
+    missing = []
     for theme in args.themes:
         for size in args.sizes:
             try:
@@ -59,7 +64,11 @@ def main() -> int:
                             'kr.workbench.SimplePreview', str(output),
                             str(WB / 'src/main/resources/fonts/NanumGothic-Regular.ttf'), theme, str(width), str(height)],
                            check=True, timeout=120, env=preview_env)
-            views += len(list(output.glob('*.png')))
+            for capture in CAPTURES:
+                if (output / capture).is_file():
+                    views += 1
+                else:
+                    missing.append({'theme': theme, 'size': size, 'view': capture})
             for name, rows in [('controls', all_controls), ('content', all_content), ('scenarios', all_scenarios)]:
                 with (output / f'{name}.csv').open(encoding='utf-8') as source:
                     rows.extend(csv.DictReader(source))
@@ -96,9 +105,9 @@ def main() -> int:
         'renderedViews': views, 'controls': len(all_controls), 'scenarios': len(all_scenarios),
         'retainedPrimaryTools': ['traffic','mapper','auth','js','environment','response.recon','payload','bounty'],
         'replayEvidenceModes': ['manual-request-replay','evidence-editor'],
-        'clippedControls': clipped, 'collapsedAreas': collapsed, 'failedScenarios': failed,
+        'clippedControls': clipped, 'collapsedAreas': collapsed, 'failedScenarios': failed, 'missingCaptures': missing,
         'scope': 'Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.',
-        'result': 'passed' if not clipped and not collapsed and not failed else 'failed',
+        'result': 'passed' if not clipped and not collapsed and not failed and not missing else 'failed',
     }
     (args.out / 'layout-report.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({key: value for key, value in result.items() if key not in ['clippedControls', 'collapsedAreas']}, ensure_ascii=False))

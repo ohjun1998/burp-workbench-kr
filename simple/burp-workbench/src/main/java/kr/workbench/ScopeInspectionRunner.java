@@ -45,6 +45,18 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private final Map<String, Integer> verifiedAt = new HashMap<>();
   private final Map<String, EnvironmentCatalog> catalogs = new HashMap<>();
   private final Map<String, List<ScopeInspection.Page>> accessComparisons = new HashMap<>();
+  private final ArrayDeque<KatanaTask> katanaQueue = new ArrayDeque<>();
+  private final Map<String, KatanaTask> katanaPending = new LinkedHashMap<>();
+  private final Map<String, Task> katanaDeferred = new LinkedHashMap<>();
+  private final Map<String, DiskTrafficStore.PacketRef> responseCache = new LinkedHashMap<>();
+  private final Set<String> analyzedOriginals = new HashSet<>();
+  private final Set<String> discoveredSecrets = new LinkedHashSet<>();
+  private int discoveredSecretBytes;
+  private boolean secretLimit;
+  private boolean katanaRegistered, katanaFinished;
+  private String katanaProfileId;
+  private long katanaDeadline;
+  private KatanaTask activeKatana;
   private volatile ScopeInspection.State state = ScopeInspection.State.READY;
   private volatile boolean closed, browserFinished, browserConnected;
   private volatile long browserLastEvent;
@@ -59,9 +71,11 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private record Received(HttpRequestResponse packet, DiskTrafficStore.PacketRef original, String headers, String body,
                           boolean complete, String note) {}
   private record Identity(boolean match, boolean different, boolean primaryMatch) {}
+  private record KatanaTask(String key, Task task, long condition, CompletableFuture<DiskTrafficStore.PacketRef> result) {}
   private static final class Halt extends RuntimeException { Halt(String text) { super(text); } }
   private static final class Retry extends RuntimeException {}
   private static final class Excluded extends RuntimeException { Excluded(String text) { super(text); } }
+  private static final class KatanaCancelled extends RuntimeException {}
 
   ScopeInspectionRunner(MontoyaApi api, ScopeInspection.Options options, Predicate<String> scope,
                         Consumer<ScopeInspection.Snapshot> changed) {
@@ -85,6 +99,102 @@ final class ScopeInspectionRunner implements AutoCloseable {
 
   String id() { return id; }
   ScopeInspection.Options options() { return options; }
+
+  /** Register the finite producer before start, without creating any target request. */
+  void registerKatana(String profileId, long deadlineMillis) {
+    synchronized (lock) {
+      long now = System.currentTimeMillis();
+      if (closed || state != ScopeInspection.State.READY || katanaRegistered)
+        throw new IllegalStateException("새 실행을 시작하기 전에 Katana를 연결하세요.");
+      if (!profiles.containsKey(profileId) || !options.compareAccounts() && !profiles.keySet().iterator().next().equals(profileId))
+        throw new IllegalArgumentException("현재 실행에서 선택한 HTTP 계정을 연결하세요.");
+      if (options.katana() && !options.katanaProfileId().equals(profileId))
+        throw new IllegalArgumentException("Katana 수집 계정과 저장할 검사 조건이 다릅니다.");
+      if (deadlineMillis <= now || deadlineMillis - now > 30 * 60_000L)
+        throw new IllegalArgumentException("Katana 완료 시한은 현재부터 30분 이내여야 합니다.");
+      katanaRegistered = true; katanaProfileId = profileId; katanaDeadline = deadlineMillis;
+      addFindingLocked(finding("COVERAGE", "Katana 탐색 대기", options.url(), "GET", profile(profileId).label(), "미확인", "INFO", "대기",
+          "선택 HTTP 계정의 표준 크롤러 요청을 공통 전송·예산·원본 분석으로 처리합니다.", "", "katana-wait"));
+    }
+  }
+
+  /** The guard proxy supplies only URL/method; crawler cookies, headers and bodies are never adopted. */
+  CompletableFuture<DiskTrafficStore.PacketRef> fetchKatana(String url, String method) {
+    synchronized (lock) {
+      try {
+        if (closed || !katanaRegistered || katanaFinished || state != ScopeInspection.State.RUNNING && state != ScopeInspection.State.PAUSED)
+          throw new IllegalStateException("Katana 전송을 받을 실행이 아닙니다.");
+        String raw = normalized(url), verb = Objects.requireNonNullElse(method, "").toUpperCase(Locale.ROOT);
+        if (raw == null || !allowed(raw) || !Set.of("GET", "HEAD").contains(verb) || !readOnlyUrl(raw) || secretInput(raw))
+          throw new IllegalArgumentException("Katana 요청이 허용 URL·SCOPE·조회 메서드·민감값 입력 정책 밖입니다.");
+        if (System.currentTimeMillis() >= katanaDeadline) {
+          finishKatanaLocked(false, "제한 시간 안에 크롤러 완료를 확인하지 못했습니다.");
+          throw new IllegalStateException("Katana 완료 시한이 지났습니다.");
+        }
+        var selected = profile(katanaProfileId);
+        String key = responseKey(selected, raw, verb);
+        KatanaTask existing = katanaPending.get(key);
+        if (existing != null && !existing.result().isCancelled()) return existing.result();
+        if (katanaPending.size() >= MAX_CANDIDATES) throw new IllegalStateException("Katana 대기 요청 한도에 도달했습니다.");
+        if (candidates.size() >= MAX_CANDIDATES && !candidateKeys.contains(verb + "|" + raw))
+          throw new IllegalStateException("이 실행의 후보 개수 한도에 도달했습니다.");
+        addCandidateLocked(new ScopeInspection.Candidate(raw, verb, "Katana 실제 요청", "표준 크롤러 경로", true), Math.min(1, options.depth()), 1);
+        Task task = queue.stream().filter(q -> q.profileId().equals(katanaProfileId) && q.candidate().url().equals(raw)
+            && q.candidate().method().equals(verb)).findFirst().orElseGet(() ->
+                new Task(new ScopeInspection.Candidate(raw, verb, "Katana 실제 요청", "표준 크롤러 경로", true), katanaProfileId, Math.min(1, options.depth()), 1, order++));
+        if (!responseCache.containsKey(key) && !queue.contains(task)) queue.add(task);
+        katanaDeferred.remove(taskKey(task));
+        var future = new CompletableFuture<DiskTrafficStore.PacketRef>();
+        var work = new KatanaTask(key, task, conditionRevision, future);
+        katanaPending.put(key, work); katanaQueue.add(work); lock.notifyAll();
+        return future;
+      } catch (RuntimeException rejected) { return CompletableFuture.failedFuture(rejected); }
+    }
+  }
+
+  /** JSONL is a metadata source; original HTTP evidence comes only from fetchKatana. */
+  void offerKatana(ScopeInspection.Candidate candidate) {
+    if (candidate == null) return;
+    synchronized (lock) {
+      if (closed || !katanaRegistered || katanaFinished || state != ScopeInspection.State.RUNNING && state != ScopeInspection.State.PAUSED) return;
+      boolean sensitive = secretInput(candidate.url());
+      boolean blocked = Objects.toString(candidate.source(), "").contains("차단");
+      String declaredSource = Objects.toString(candidate.source(), "");
+      String source = blocked ? "Katana 차단" : Set.of("Katana 환경", "Katana 폼").contains(declaredSource) ? declaredSource : "Katana JSONL";
+      String label = displayText(candidate.label(), 160);
+      String method = Objects.toString(candidate.method(), "?").toUpperCase(Locale.ROOT);
+      String normalized = normalized(candidate.url());
+      var original = normalized == null ? null : responseCache.get(responseKey(profile(katanaProfileId), normalized, method));
+      if (original == null && normalized != null && source.equals("Katana 환경")) {
+        original = responseCache.get(responseKey(profile(katanaProfileId), normalized, "GET"));
+        if (original == null) original = responseCache.get(responseKey(profile(katanaProfileId), normalized, "HEAD"));
+      }
+      addFindingLocked(finding("KATANA", blocked || sensitive ? "Katana 요청 차단" : source.equals("Katana 환경") ? "Katana 환경 관측" : source.equals("Katana 폼") ? "Katana 폼 관측" : "Katana 경로 관측", candidate.url(), method, profile(katanaProfileId).label(),
+          "크롤러 메타데이터", "INFO", blocked || sensitive ? "제외" : "관측", source + " · " + label + " · 원본은 공통 Montoya 전송 저장본에서만 연결합니다.",
+          original == null ? "" : original.id(), "katana-metadata:" + method + ":" + Objects.toString(normalized, candidate.url()) + ":" + blocked));
+      rememberLimitedCandidateLocked(new ScopeInspection.Candidate(sensitive ? origin + "/%5BREDACTED%5D" : candidate.url(), method, source, label, false),
+          "Katana 발견 메타데이터 · 실제 프록시 조회 없이 추가 HTTP를 예약하지 않음");
+      lock.notifyAll();
+    }
+    publish();
+  }
+
+  void finishKatana(boolean complete, String note) {
+    synchronized (lock) {
+      if (closed || !katanaRegistered || katanaFinished) return;
+      finishKatanaLocked(complete, note); lock.notifyAll();
+    }
+    publish();
+  }
+
+  private void finishKatanaLocked(boolean complete, String note) {
+    katanaFinished = true;
+    findings.entrySet().removeIf(e -> e.getValue().title().equals("Katana 탐색 대기"));
+    if (!complete) partial++;
+    addFindingLocked(finding("COVERAGE", complete ? "Katana 생산 종료" : "Katana 탐색 미완료", options.url(), "GET", profile(katanaProfileId).label(),
+        "관측", "INFO", complete ? "생산 종료" : "부분 검사", bounded(ScopeInspectionAnalysis.display(note, 300), 300)
+            + " · 이미 받은 후보와 HTTP 대기열은 이어서 처리합니다. 전체 사이트 탐색을 확정하지 않습니다.", "", "katana-finished"));
+  }
 
   void start() {
     synchronized (lock) {
@@ -147,6 +257,8 @@ final class ScopeInspectionRunner implements AutoCloseable {
         }
       }
       verifiedAt.clear(); missingReferences.clear(); retryAt = 0; conditionRevision++;
+      for (var deferred : katanaDeferred.values()) if (!queue.contains(deferred)) queue.add(deferred);
+      katanaDeferred.clear();
       boolean restart = state == ScopeInspection.State.STOPPED;
       state = ScopeInspection.State.RUNNING; finishedAt = 0; message = "재개 · 신원과 공통 응답 기준을 다시 확인합니다.";
       if (restart) { long token = generation.incrementAndGet(); pending = executor.submit(() -> run(token)); }
@@ -160,6 +272,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
       if (closed || state == ScopeInspection.State.COMPLETED || state == ScopeInspection.State.FAILED) return;
       state = ScopeInspection.State.STOPPED; finishedAt = System.currentTimeMillis();
       message = "중지 · 원본과 남은 경로를 보존했습니다."; generation.incrementAndGet();
+      failKatanaPendingLocked(new CancellationException("통합 점검 중지"));
       if (pending != null) pending.cancel(true); lock.notifyAll();
     }
     publish();
@@ -167,7 +280,8 @@ final class ScopeInspectionRunner implements AutoCloseable {
 
   ScopeInspection.Snapshot snapshot() {
     synchronized (lock) {
-      return new ScopeInspection.Snapshot(id, state, message, sent, completed, queue.size(), excluded, failed, partial,
+      int waiting = pendingCountLocked();
+      return new ScopeInspection.Snapshot(id, state, message, sent, completed, waiting, excluded, failed, partial,
           new ArrayList<>(findings.values()), new ArrayList<>(pages), new ArrayList<>(candidates), startedAt, finishedAt);
     }
   }
@@ -224,13 +338,21 @@ final class ScopeInspectionRunner implements AutoCloseable {
     try {
       while (true) {
         ready(token);
+        KatanaTask crawl;
+        synchronized (lock) {
+          expireKatanaLocked(); crawl = katanaQueue.peek();
+        }
+        if (crawl != null) {
+          inspectKatana(crawl, token); publish(); continue;
+        }
         Task task;
-        synchronized (lock) { task = queue.peek(); }
+        synchronized (lock) { task = queue.peek(); if (holdGuessedLocked(task)) task = null; }
         if (task == null) {
-          if (awaitBrowser(token)) continue;
+          if (awaitSources(token)) continue;
           ready(token);
           synchronized (lock) {
-            if (!queue.isEmpty()) continue;
+            if (!queue.isEmpty() || !katanaQueue.isEmpty()) continue;
+            if (!katanaDeferred.isEmpty()) throw new Halt("취소된 Katana 요청을 보류했습니다. 재개하면 남은 후보를 이어서 검사합니다.");
             addInventoryLocked();
             state = ScopeInspection.State.COMPLETED; finishedAt = System.currentTimeMillis();
             message = "발견한 대기열 처리 완료 · 미확인 " + (partial + failed) + "건 · 전체 사이트 확인을 의미하지 않습니다.";
@@ -264,8 +386,9 @@ final class ScopeInspectionRunner implements AutoCloseable {
       synchronized (lock) {
         if (token != generation.get() || closed) return;
         state = ScopeInspection.State.STOPPED; finishedAt = System.currentTimeMillis(); message = halt.getMessage();
+        failKatanaPendingLocked(new CancellationException(message));
         addFindingLocked(finding("COVERAGE", "실행 중단·미검사 경로", options.url(), "GET", "전체", "관측", "INFO", "미완료",
-            message + " · 남은 후보 " + queue.size() + "건", "", "halt:" + sent));
+            message + " · 남은 후보 " + pendingCountLocked() + "건", "", "halt:" + sent));
       }
       publish();
     } catch (RuntimeException | LinkageError | AssertionError error) {
@@ -273,6 +396,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
         if (token != generation.get() || closed) return;
         failed++; state = ScopeInspection.State.FAILED; finishedAt = System.currentTimeMillis();
         message = "통합 점검 오류 · " + error.getClass().getSimpleName() + " · 완료로 처리하지 않았습니다.";
+        failKatanaPendingLocked(new IllegalStateException(message));
       }
       publish();
     }
@@ -282,13 +406,26 @@ final class ScopeInspectionRunner implements AutoCloseable {
     String url = task.candidate().url(); String method = task.candidate().method();
     ScopeInspection.Profile profile = profile(task.profileId());
     if (!allowed(url)) throw new Excluded("현재 고정 SCOPE/Origin 밖 경로");
-    if (!readOnlyUrl(url) || !Set.of("GET", "HEAD").contains(method)) throw new Excluded("쓰기·동적 값·대용량 경로는 직접 검증 필요");
+    if (!readOnlyUrl(url) || !Set.of("GET", "HEAD").contains(method) || secretInput(url)) throw new Excluded("쓰기·동적 값·대용량·민감값 입력 경로는 직접 검증 필요");
+    synchronized (lock) {
+      if (responseCache.containsKey(responseKey(profile, url, method))) return;
+    }
     identity(profile, token);
     preflight(task, profile, token);
     EnvironmentControls.Reference reference = reference(url, profile, token);
     Received received = fetch(url, method, profile, task.depth(), token, false);
-    url = received.packet().request().url(); method = received.packet().request().method();
+    analyzeReceived(task, profile, received, reference);
+    transientState(profile, received.packet().response().statusCode(), received.headers(), received.body(), received.original(), token);
+  }
+
+  private void analyzeReceived(Task task, ScopeInspection.Profile profile, Received received, EnvironmentControls.Reference reference) {
+    synchronized (lock) {
+      if (!analyzedOriginals.add(received.original().id())) return;
+    }
+    String url = received.packet().request().url(), method = received.packet().request().method();
     HttpResponse response = received.packet().response(); int status = response.statusCode();
+    var analysis = ScopeInspectionAnalysis.analyze(url, status, received.headers(), received.body(), profile.label(), received.original().id());
+    rememberSecrets(received, analysis.findings().stream().anyMatch(f -> f.category().equals("SECRET")));
     String comparison = EnvironmentControls.state(status, received.headers(), received.body(), url, reference, IGNORED_FIELDS);
     var content = received.complete() ? EnvironmentContent.inspect(url, status, received.headers(), received.body(), comparison)
         : new EnvironmentContent.Finding("LIMIT", "본문 분석 미완료", received.note(), "미검사 원본과 범위를 확인하세요.");
@@ -296,17 +433,17 @@ final class ScopeInspectionRunner implements AutoCloseable {
     boolean targetCovered = !Set.of("LOGIN", "CHALLENGE", "RATE", "DENIED", "REDIRECT", "LIMIT", "UNKNOWN", "ERROR").contains(content.kind());
     boolean complete = received.complete() && referenceComplete && targetCovered;
     String note = received.note() + " · " + comparison;
+    if (task.candidate().source().contains("Katana")) note += " · Katana 표준 크롤러 · 공통 Montoya 원본";
     if (!targetCovered) note += " · 대상 내용 미확인 · " + content.title() + " · 해당 응답의 정적 단서만 분석";
     if (!profile.headers().isEmpty() && profile.identity() == null) note += " · 선택 계정 신원 미확인";
     if (!referenceComplete) note += " · 공통 응답 대조 미완료";
-    ScopeInspection.Page page = new ScopeInspection.Page(safe(url), method, profile.label(), status, content.kind(), complete,
+    ScopeInspection.Page page = new ScopeInspection.Page(displayUrl(url), method, profile.label(), status, content.kind(), complete,
         note, digest(received.headers(), received.body(), url), received.original(), revisionOf(profile));
     synchronized (lock) {
       addPageLocked(page);
       addFindingLocked(finding("PATH", content.title(), url, method, profile.label(), "응답 관측", severity(content.kind()), complete ? "내용 확인" : "부분 검사",
           content.reason() + " · " + comparison + (received.complete() ? "" : " · " + received.note()), received.original().id(), "path:" + content.kind()));
     }
-    var analysis = ScopeInspectionAnalysis.analyze(url, status, received.headers(), received.body(), profile.label(), received.original().id());
     synchronized (lock) {
       for (var item : analysis.findings()) addFindingLocked(item);
       if (!analysis.complete()) {
@@ -326,7 +463,126 @@ final class ScopeInspectionRunner implements AutoCloseable {
       learnEnvironment(url, received.headers(), received.body(), profile, task.depth());
     }
     compareAccess(page, profile);
-    transientState(profile, status, received.headers(), received.body(), received.original(), token);
+  }
+
+  private void inspectKatana(KatanaTask crawl, long token) {
+    activeKatana = crawl;
+    boolean retry = false;
+    try {
+      if (crawl.result().isCancelled()) throw new KatanaCancelled();
+      Task task = crawl.task(); String url = task.candidate().url(), method = task.candidate().method();
+      ScopeInspection.Profile selected = profile(task.profileId());
+      if (!allowed(url) || !Set.of("GET", "HEAD").contains(method) || !readOnlyUrl(url) || secretInput(url))
+        throw new Excluded("Katana 전송 직전 Scope·조회·민감값 입력 정책 제외");
+      DiskTrafficStore.PacketRef cached;
+      synchronized (lock) { cached = responseCache.get(responseKey(selected, url, method)); }
+      if (cached != null) {
+        ready(token);
+        if (crawl.result().isCancelled()) throw new KatanaCancelled();
+        if (!allowed(url)) throw new Excluded("Katana 캐시 전달 직전 SCOPE 변경");
+        boolean analyzed;
+        synchronized (lock) { analyzed = analyzedOriginals.contains(cached.id()); }
+        if (!analyzed) {
+          Received stored = readCached(cached, selected);
+          EnvironmentControls.Reference baseline;
+          synchronized (lock) { baseline = missingReferences.get(selected.id() + "|" + runRoot); }
+          Task traced = new Task(new ScopeInspection.Candidate(url, method, "Katana 실제 요청", "공통 원본 재사용", true), task.profileId(), task.depth(), task.priority(), task.order());
+          analyzeReceived(traced, selected, stored, baseline);
+          offerRedirectCandidate(stored, task.depth());
+        }
+        synchronized (lock) {
+          addFindingLocked(finding("KATANA", "Katana 원본 재사용", url, method, selected.label(), "동일 계정·인증 revision", "INFO", "재사용",
+              "동일 URL·메서드의 기존 공통 Montoya 응답 원본을 크롤러에 반환했습니다. 추가 대상 HTTP는 전송하지 않았습니다.", cached.id(), "katana-cache:" + crawl.key()));
+        }
+        crawl.result().complete(cached);
+        synchronized (lock) { queue.remove(task); katanaDeferred.remove(taskKey(task)); }
+        return;
+      }
+      identity(selected, token);
+      preflight(task, selected, token);
+      EnvironmentControls.Reference baseline = reference(url, selected, token);
+      Received received = sendOnce(url, method, selected, token, false);
+      Task traced = new Task(new ScopeInspection.Candidate(url, method, "Katana 실제 요청", "표준 크롤러 경로", true), task.profileId(), task.depth(), task.priority(), task.order());
+      analyzeReceived(traced, selected, received, baseline);
+      synchronized (lock) {
+        addFindingLocked(finding("KATANA", "Katana HTTP 응답", url, method, selected.label(), "공통 Montoya 전송", "INFO", "응답 관측",
+            "HTTP " + received.packet().response().statusCode() + " · 선택 계정·SCOPE·공통 요청 예산 적용 · 이 hop의 원본 응답을 반환합니다.",
+            received.original().id(), "katana-http:" + crawl.key()));
+      }
+      offerRedirectCandidate(received, task.depth());
+      ready(token);
+      if (!crawl.result().isCancelled() && allowed(url)) crawl.result().complete(received.original());
+      transientState(selected, received.packet().response().statusCode(), received.headers(), received.body(), received.original(), token);
+      synchronized (lock) { queue.remove(task); katanaDeferred.remove(taskKey(task)); completed++; }
+    } catch (Retry paused) {
+      retry = true;
+    } catch (KatanaCancelled cancelled) {
+      synchronized (lock) {
+        if (conditionRevision == crawl.condition()) {
+          queue.remove(crawl.task()); katanaDeferred.put(taskKey(crawl.task()), crawl.task());
+          addFindingLocked(finding("KATANA", "Katana 요청 보류", crawl.task().candidate().url(), crawl.task().candidate().method(), profile(crawl.task().profileId()).label(),
+              "취소 관측", "INFO", "미검사", "프록시 요청이 취소되어 같은 HTTP 계정의 일반 대기열에서도 보류했습니다. 새 크롤러 요청 또는 명시적 재개 후 처리합니다.", "", "katana-cancel:" + crawl.key()));
+        }
+      }
+    } catch (Halt halted) {
+      crawl.result().completeExceptionally(new CancellationException(halted.getMessage()));
+      throw halted;
+    } catch (Excluded excludedRequest) {
+      synchronized (lock) {
+        queue.remove(crawl.task()); excluded++;
+        addFindingLocked(finding("KATANA", "Katana 요청 제외", crawl.task().candidate().url(), crawl.task().candidate().method(), profile(crawl.task().profileId()).label(),
+            "관측", "INFO", "미검사", excludedRequest.getMessage(), "", "katana-excluded:" + crawl.key()));
+      }
+      crawl.result().completeExceptionally(new IllegalArgumentException(excludedRequest.getMessage()));
+    } catch (Exception error) {
+      synchronized (lock) {
+        queue.remove(crawl.task()); failed++; completed++;
+        addFindingLocked(finding("COVERAGE", "Katana 공통 전송·분석 실패", crawl.task().candidate().url(), crawl.task().candidate().method(), profile(crawl.task().profileId()).label(),
+            "미확인", "INFO", "실패", "원인: " + error.getClass().getSimpleName() + " · 해당 경로 확인을 완료하지 못했습니다.", "", "katana-error:" + crawl.key()));
+      }
+      crawl.result().completeExceptionally(new IllegalStateException("Katana 공통 전송·분석 실패: " + error.getClass().getSimpleName()));
+    } finally {
+      activeKatana = null;
+      synchronized (lock) {
+        if (!retry || crawl.result().isDone()) {
+          katanaQueue.remove(crawl); katanaPending.remove(crawl.key(), crawl);
+        }
+      }
+    }
+  }
+
+  private void offerRedirectCandidate(Received received, int depth) {
+    int status = received.packet().response().statusCode();
+    if (status < 300 || status >= 400) return;
+    String location = EnvironmentResponse.header(received.headers(), "Location");
+    if (location.isBlank()) return;
+    try {
+      String next = URI.create(received.packet().request().url()).resolve(location).toString();
+      synchronized (lock) {
+        if (depth < options.depth()) addCandidateLocked(new ScopeInspection.Candidate(next, "GET", "Katana 이동 응답", "Location 관측", !secretInput(next)), depth + 1, 2);
+        else rememberLimitedCandidateLocked(new ScopeInspection.Candidate(next, "GET", "Katana 이동 응답", "Location 관측", false), "탐색 깊이 한도 · 이동 대상 미검사");
+      }
+    } catch (RuntimeException invalid) {
+      synchronized (lock) { partial++; }
+    }
+  }
+
+  private Received readCached(DiskTrafficStore.PacketRef original, ScopeInspection.Profile profile) throws Exception {
+    HttpRequestResponse packet = original.packet();
+    String headers = EnvironmentPanel.responseHeaders(packet.response());
+    int bytes = packet.response().body().length(); long declared = contentLength(headers);
+    boolean complete = bytes <= options.maxBodyBytes() && (declared < 0 || declared <= options.maxBodyBytes());
+    String body = "", note = "기존 공통 원본 재사용 · 인증 스냅샷 " + revisionOf(profile);
+    if (complete) {
+      String type = EnvironmentResponse.header(headers, "Content-Type").toLowerCase(Locale.ROOT);
+      boolean compressed = !EnvironmentResponse.header(headers, "Content-Encoding").isBlank()
+          && !EnvironmentResponse.header(headers, "Content-Encoding").equalsIgnoreCase("identity");
+      if ((!type.isBlank() && TEXT_TYPES.stream().noneMatch(type::contains) && !type.contains("octet-stream")) || !compressed && binary(packet.response())) complete = false;
+      else try { body = JsBodyDecoder.decode(packet.response().body().getBytes(), EnvironmentResponse.header(headers,"Content-Encoding"), type, options.maxBodyBytes()); }
+      catch (java.io.IOException | RuntimeException incomplete) { complete = false; }
+    }
+    if (!complete) note += " · 본문 분석 한도·형식으로 미검사 · 전체 wire 원본 유지";
+    return new Received(packet, original, headers, body, complete, note);
   }
 
   private void preflight(Task task, ScopeInspection.Profile profile, long token) throws Exception {
@@ -334,7 +590,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
     if (!task.candidate().method().equals("GET") || !url.matches("(?i).*(?:\\.(?:log|bak|backup)|/(?:logs?|backups?|downloads?|dumps?))(?:$|[/?#].*)")) return;
     Received head = fetch(url, "HEAD", profile, task.depth(), token, true);
     synchronized (lock) {
-      addPageLocked(new ScopeInspection.Page(safe(head.packet().request().url()), "HEAD", profile.label(), head.packet().response().statusCode(),
+      addPageLocked(new ScopeInspection.Page(displayUrl(head.packet().request().url()), "HEAD", profile.label(), head.packet().response().statusCode(),
           "HEAD_PREFLIGHT", true, "대용량 후보의 메타데이터만 먼저 확인 · 본문을 내려받지 않았습니다.", "", head.original(), revisionOf(profile)));
     }
     transientState(profile, head.packet().response().statusCode(), head.headers(), head.body(), head.original(), token);
@@ -363,7 +619,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
       String location = EnvironmentResponse.header(received.headers(), "Location");
       if (location.isBlank()) return received;
       synchronized (lock) {
-        addPageLocked(new ScopeInspection.Page(safe(current), method, profile.label(), status, control ? "CONTROL_REDIRECT" : "REDIRECT", false,
+        addPageLocked(new ScopeInspection.Page(displayUrl(current), method, profile.label(), status, control ? "CONTROL_REDIRECT" : "REDIRECT", false,
             "이동 응답 원본 · 대상 내용 미확인 · Location은 이동 전 다시 검사합니다.", digest(received.headers(), received.body(), current), received.original(), revisionOf(profile)));
       }
       String target;
@@ -391,6 +647,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
     request = Core.sessionRequest(request, profile.headers(), credentialNames(profile));
     beforeSend(token);
     if (!allowed(url)) throw new Excluded("전송 직전 SCOPE가 바뀌었습니다.");
+    checkKatanaCancellation();
     synchronized (lock) { sent++; lastSend = System.currentTimeMillis(); message = "요청 " + sent + " / " + options.budget() + " · 남은 후보 " + queue.size(); }
     HttpRequestResponse packet = api.http().sendRequest(request, RequestOptions.requestOptions()
         .withResponseTimeout(options.timeoutMillis()).withRedirectionMode(RedirectionMode.NEVER));
@@ -427,6 +684,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
           complete = false; note += " · 디코딩·압축 해제 한도 또는 형식 오류 · 본문 미검사";
         }
       }
+    }
+    if (!control && response.statusCode() != 429 && (response.statusCode() != 401 || profile.headers().isEmpty())
+        && !EnvironmentContent.login(body) && !EnvironmentContent.challenge(body)) {
+      synchronized (lock) { responseCache.put(responseKey(profile, url, method), original); }
     }
     publish();
     return new Received(packet, original, headers, body, complete, note);
@@ -495,7 +756,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
         if (!received.complete()) { issue = "기준 본문이 미검사/부분 검사"; break; }
         var sample = EnvironmentControls.sample(received.packet().response().statusCode(), received.headers(), received.body(), missing, IGNORED_FIELDS);
         if (i == 0) first = sample; else second = sample;
-      } catch (Halt | Retry halted) { throw halted; }
+      } catch (Halt | Retry | KatanaCancelled halted) { throw halted; }
       catch (Excluded excluded) { issue = excluded.getMessage(); break; }
       catch (Exception error) { issue = "기준 전송/디코딩 오류 · " + error.getClass().getSimpleName(); break; }
     }
@@ -510,7 +771,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
 
   private void addControlPage(Received received, String url, ScopeInspection.Profile profile, String classification) {
     synchronized (lock) {
-      addPageLocked(new ScopeInspection.Page(safe(url), "GET", profile.label(), received.packet().response().statusCode(), classification,
+      addPageLocked(new ScopeInspection.Page(displayUrl(url), "GET", profile.label(), received.packet().response().statusCode(), classification,
           received.complete(), received.note(), digest(received.headers(), received.body(), url), received.original(), revisionOf(profile)));
     }
   }
@@ -532,6 +793,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
           String name = pair.substring(0, equal).strip();
           if (cookies.containsKey(name) && (!cookies.get(name).equals(pair.substring(equal + 1)) || value.matches("(?i).*;\\s*max-age=\\s*(?:0|-[0-9]+)(?:;.*)?"))) {
             synchronized (lock) { verifiedAt.remove(profile.id()); }
+            synchronized (lock) { responseCache.entrySet().removeIf(e -> e.getValue().id().equals(original.id())); }
             autoPause("세션 쿠키 변경 감지 · 새 인증정보를 수집한 뒤 재개하세요.", 0); throw new Retry();
           }
         }
@@ -570,22 +832,23 @@ final class ScopeInspectionRunner implements AutoCloseable {
     }
   }
 
-  private boolean awaitBrowser(long token) {
-    if (!options.browser() || browserFinished) return false;
-    long waitMillis = Math.max(30_000, Math.min(90_000, options.timeoutMillis() * 6L));
-    long deadline = startedAt + waitMillis;
+  private boolean awaitSources(long token) {
+    long browserDeadline = startedAt + Math.max(30_000, Math.min(90_000, options.timeoutMillis() * 6L));
     while (true) {
       ready(token);
       synchronized (lock) {
-        if (!queue.isEmpty()) return true;
-        if (browserFinished) return false;
-        if (System.currentTimeMillis() >= deadline) {
+        if (!katanaQueue.isEmpty() || !queue.isEmpty() && !holdGuessedLocked(queue.peek())) return true;
+        long now = System.currentTimeMillis();
+        if (options.browser() && !browserFinished && now >= browserDeadline) {
           browserFinished = true; partial++;
           addFindingLocked(finding("COVERAGE", browserConnected ? "브라우저 탐색 제한 시간" : "브라우저 미연결·미탐색", options.url(), "GET", "browser-session", "관측", "INFO", "부분 검사",
               browserConnected ? "제한 시간 안에 브라우저 완료를 확인하지 못했습니다. 수집한 라우트와 HTTP 결과는 유지합니다." : "브라우저 도우미가 이 실행에 연결되지 않았습니다. SPA 메뉴 전체를 검사했다고 표시하지 않습니다.", "", "browser-timeout"));
-          return false;
         }
-        message = browserConnected ? "브라우저 메뉴·API 후보를 기다립니다." : "HTTP 대기열 처리 완료 · 브라우저 도우미 연결 대기";
+        expireKatanaLocked();
+        boolean browserWaiting = options.browser() && !browserFinished, katanaWaiting = katanaRegistered && !katanaFinished;
+        if (!browserWaiting && !katanaWaiting) return false;
+        message = katanaWaiting ? "HTTP 대기열 처리 완료 · Katana 경로 수집 대기"
+            : browserConnected ? "브라우저 메뉴·API 후보를 기다립니다." : "HTTP 대기열 처리 완료 · 브라우저 도우미 연결 대기";
         try { lock.wait(200); } catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); throw new Halt("검사 중지"); }
       }
     }
@@ -598,13 +861,13 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private void addCandidateLocked(ScopeInspection.Candidate candidate, int depth, int priority) {
     String raw = normalized(candidate.url());
     String method = Objects.toString(candidate.method(), "?").toUpperCase(Locale.ROOT);
-    String display = safe(candidate.url());
+    String display = displayUrl(candidate.url());
     String key = method + "|" + Objects.toString(raw, display);
     boolean first = !candidateKeys.contains(key);
     if (first && candidates.size() >= MAX_CANDIDATES) { candidateLimitLocked(); return; }
     if (first) candidateKeys.add(key);
-    boolean executable = candidate.executable() && raw != null && Set.of("GET", "HEAD").contains(method) && readOnlyUrl(raw) && allowed(raw);
-    ScopeInspection.Candidate safeCandidate = new ScopeInspection.Candidate(display, method, bounded(candidate.source(), 120), bounded(candidate.label(), 160), executable);
+    boolean executable = candidate.executable() && raw != null && Set.of("GET", "HEAD").contains(method) && readOnlyUrl(raw) && allowed(raw) && !secretInput(raw);
+    ScopeInspection.Candidate safeCandidate = new ScopeInspection.Candidate(display, method, displayText(candidate.source(), 120), displayText(candidate.label(), 160), executable);
     if (first) candidates.add(safeCandidate);
     else if (executable) {
       for (int i = 0; i < candidates.size(); i++) {
@@ -615,7 +878,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
     if (!first && !executable) return;
     if (!executable) {
       excluded++;
-      String reason = raw == null ? "URL·필수 값 미확정" : !allowed(raw) ? "허용 Origin/SCOPE 밖" : !candidate.executable() || !Set.of("GET", "HEAD").contains(method) ? "메서드·필수 값 원본 확인 필요" : "변경 동작·대용량 경로 직접 확인 필요";
+      String reason = raw == null ? "URL·필수 값 미확정" : !allowed(raw) ? "허용 Origin/SCOPE 밖" : secretInput(raw) ? "관측 민감값을 요청 입력으로 재사용하지 않음" : !candidate.executable() || !Set.of("GET", "HEAD").contains(method) ? "메서드·필수 값 원본 확인 필요" : "변경 동작·대용량 경로 직접 확인 필요";
       addFindingLocked(finding("COVERAGE", "자동 요청 제외", display, method, "전체", "관측", "INFO", "미검사", reason + " · " + bounded(candidate.source(), 100), "", "candidate-excluded:" + key));
       return;
     }
@@ -634,7 +897,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
     if (candidateKeys.contains(key)) return;
     if (candidates.size() >= MAX_CANDIDATES) { candidateLimitLocked(); return; }
     candidateKeys.add(key);
-    if (candidates.size() < MAX_CANDIDATES) candidates.add(new ScopeInspection.Candidate(safe(candidate.url()), candidate.method(), candidate.source(), candidate.label(), false));
+    if (candidates.size() < MAX_CANDIDATES) candidates.add(new ScopeInspection.Candidate(displayUrl(candidate.url()), candidate.method(), candidate.source(), displayText(candidate.label(),160), false));
     excluded++;
     addFindingLocked(finding("COVERAGE", "발견했지만 자동 방문하지 않음", candidate.url(), candidate.method(), "전체", "관측", "INFO", "미검사", reason, "", "limited:" + key));
   }
@@ -690,13 +953,84 @@ final class ScopeInspectionRunner implements AutoCloseable {
 
   private void beforeSend(long token) {
     ready(token);
+    checkKatanaCancellation();
     if (sent >= options.budget()) throw new Halt("요청 한도 도달 · 남은 경로는 미검사입니다.");
     long remaining;
     while ((remaining = options.delayMillis() - (System.currentTimeMillis() - lastSend)) > 0) {
       try { Thread.sleep(Math.min(100, remaining)); } catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); throw new Halt("검사 중지"); }
       ready(token);
+      checkKatanaCancellation();
     }
     guard(token);
+    checkKatanaCancellation();
+  }
+
+  private void checkKatanaCancellation() {
+    if (activeKatana != null && activeKatana.result().isCancelled()) throw new KatanaCancelled();
+  }
+
+  private String responseKey(ScopeInspection.Profile profile, String url, String method) {
+    return profile.id() + "|" + revisionOf(profile) + "|" + method + "|" + url;
+  }
+
+  private void failKatanaPendingLocked(RuntimeException reason) {
+    for (var crawl : katanaPending.values()) crawl.result().completeExceptionally(reason);
+    katanaQueue.clear(); katanaPending.clear();
+  }
+
+  private static String taskKey(Task task) { return task.profileId() + "|" + task.candidate().method() + "|" + task.candidate().url(); }
+
+  private int pendingCountLocked() {
+    return queue.size() + katanaDeferred.size() + (int)katanaQueue.stream().filter(k -> !queue.contains(k.task())).count();
+  }
+
+  private boolean holdGuessedLocked(Task task) { return task != null && katanaRegistered && !katanaFinished && task.priority() >= 20; }
+
+  private void expireKatanaLocked() {
+    if (katanaRegistered && !katanaFinished && System.currentTimeMillis() >= katanaDeadline)
+      finishKatanaLocked(false, "제한 시간 안에 Katana 완료를 확인하지 못했습니다.");
+  }
+
+  private void rememberSecrets(Received received, boolean classifiedSecret) {
+    String body = received.body(), headers = received.headers();
+    String lower = body.toLowerCase(Locale.ROOT);
+    if (!classifiedSecret && !lower.contains("key") && !lower.contains("secret") && !lower.contains("password") && !lower.contains("token")
+        && !lower.contains("authorization") && !lower.contains("cookie") && !lower.contains("jdbc:") && !lower.contains("://")
+        && !headers.toLowerCase(Locale.ROOT).matches("(?s).*(?:set-cookie:|authorization:|x-api-key:).*")) return;
+    try {
+      for (String value : ScopeInspectionAnalysis.redactionValues(headers, body)) synchronized (lock) {
+        if (discoveredSecrets.contains(value)) continue;
+        int bytes = value.getBytes(java.nio.charset.StandardCharsets.UTF_8).length;
+        if (discoveredSecrets.size() >= 256 || discoveredSecretBytes + bytes > 256 * 1024) throw new IllegalArgumentException("민감값 입력 검사 한도");
+        discoveredSecrets.add(value); discoveredSecretBytes += bytes;
+      }
+    } catch (RuntimeException limited) {
+      synchronized (lock) {
+        if (secretLimit) return;
+        secretLimit = true; partial++;
+        addFindingLocked(finding("COVERAGE", "민감값 입력 대조 일부 미완료", received.packet().request().url(), received.packet().request().method(), "전체", "미확인", "INFO", "부분 검사",
+            "민감값 식별·개수·용량 한도에 도달했습니다. 확인된 값만 요청 입력에서 제외하며 미관측 값의 안전을 확정하지 않습니다.", received.original().id(), "secret-input-limit"));
+      }
+    }
+  }
+
+  private boolean secretInput(String url) {
+    if (url == null) return false;
+    String decoded;
+    try { decoded = java.net.URLDecoder.decode(url, java.nio.charset.StandardCharsets.UTF_8); }
+    catch (RuntimeException malformed) { decoded = url; }
+    synchronized (lock) {
+      for (String value : discoveredSecrets) if (!value.isEmpty() && (url.contains(value) || decoded.contains(value))) return true;
+    }
+    return false;
+  }
+
+  private String displayUrl(String url) { return secretInput(url) ? origin + "/%5BREDACTED%5D" : safe(url); }
+
+  private String displayText(String text, int max) {
+    String clean = ScopeInspectionAnalysis.display(text, max);
+    synchronized (lock) { for (String value : discoveredSecrets) if (!value.isEmpty()) clean = clean.replace(value, "[가림]"); }
+    return bounded(clean, max);
   }
 
   private Set<String> credentialNames(ScopeInspection.Profile profile) {
@@ -768,10 +1102,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
     return source.contains("관측") || source.contains("브라우저") || source.contains("메뉴") ? 5 : source.contains("API 문서") ? 10 : source.contains("JS") ? 15 : source.contains("환경") ? 25 : 50;
   }
   private static String severity(String kind) { return Set.of("ENV", "CONFIG_JSON", "GIT", "PHPINFO").contains(kind) ? "MEDIUM" : "INFO"; }
-  private static ScopeInspection.Finding finding(String category, String title, String url, String method, String account,
+  private ScopeInspection.Finding finding(String category, String title, String url, String method, String account,
                                                   String confidence, String severity, String state, String detail,
                                                   String originalId, String fingerprint) {
-    return new ScopeInspection.Finding(category, title, safe(url), method, account, confidence, severity, state, detail, originalId, 0, -1, EnvironmentProject.hash(fingerprint));
+    return new ScopeInspection.Finding(category, title, displayUrl(url), method, account, confidence, severity, state, detail, originalId, 0, -1, EnvironmentProject.hash(fingerprint));
   }
   /** The first checked path prefix is a stable per-run soft404 control root. */
   private String scopeRoot(String raw) {
@@ -799,8 +1133,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
       if (closed) return;
       closed = true; generation.incrementAndGet(); state = ScopeInspection.State.CLOSED;
       message = "통합 점검 종료"; finishedAt = System.currentTimeMillis();
+      failKatanaPendingLocked(new CancellationException("통합 점검 종료"));
       if (pending != null) pending.cancel(true); executor.shutdownNow(); lock.notifyAll();
       queue.clear(); referencesById.clear(); findings.clear(); pages.clear(); candidates.clear();
+      responseCache.clear(); katanaDeferred.clear(); analyzedOriginals.clear(); discoveredSecrets.clear(); discoveredSecretBytes = 0;
     }
     originals.close();
   }

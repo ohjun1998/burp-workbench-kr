@@ -185,6 +185,85 @@ public final class ScopeInspectionRunnerTest extends WorkbenchTest {
         check(snapshot.candidates().stream().anyMatch(c -> c.method().equals("POST") && !c.executable()), "browser writes are inventoried without automatic transmission");
         check(snapshot.findings().stream().noneMatch(f -> f.detail().contains("wrong")), "stale or foreign browser run events are ignored");
       }
+
+      fixture.visits.clear();
+      var katanaOptions = options(fixture, "/app/", 80, 0, false, fixture.options(true).profiles());
+      var declaredKatana=new ScopeInspection.Options(katanaOptions.url(),katanaOptions.budget(),katanaOptions.depth(),katanaOptions.delayMillis(),katanaOptions.timeoutMillis(),katanaOptions.maxBodyBytes(),katanaOptions.maxRedirects(),katanaOptions.browser(),katanaOptions.compareAccounts(),katanaOptions.profiles(),true,60,100);
+      try(var mismatch=new ScopeInspectionRunner(fixture.api,declaredKatana,allowed,value->{})){
+        rejects(()->mismatch.registerKatana("alice",System.currentTimeMillis()+15000),"a crawler cannot register a different identity than its durable discovery condition");
+        check(fixture.visits.isEmpty(),"rejecting a mismatched Katana identity sends no target HTTP");
+      }
+      try (var runner = new ScopeInspectionRunner(fixture.api, katanaOptions, allowed, value -> {})) {
+        runner.registerKatana("alice", System.currentTimeMillis() + 15000);
+        check(fixture.visits.isEmpty(), "registering the finite Katana producer sends no target HTTP");
+        runner.start();
+        await(() -> runner.snapshot().message().contains("Katana 경로 수집 대기"), "Katana producer waits ahead of guessed paths");
+        check(runner.snapshot().state() == ScopeInspection.State.RUNNING && fixture.visits.stream().noneMatch(v -> v.path().equals("/app/robots.txt")), "guessed common paths wait while the Katana producer is active");
+        var privatePage = runner.fetchKatana(fixture.origin + "/app/private", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(privatePage.responseStatus().equals("200") && new String(privatePage.requestPrefix(10000), StandardCharsets.UTF_8).contains(ScopeInspectionFixture.SESSION), "Katana uses only its selected HTTP account and retains the exact original");
+        var repeatedPage = runner.fetchKatana(fixture.origin + "/app/private", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(repeatedPage == privatePage && fixture.visits.stream().filter(v -> v.path().equals("/app/private") && v.account().equals("alice")).count() == 1, "same-profile revision and URL reuse one completed raw response without an extra target request");
+        var configPage = runner.fetchKatana(fixture.origin + "/app/config", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(runner.fetchKatana(fixture.origin + "/app/verify/" + ScopeInspectionFixture.API_SECRET, "GET").isCompletedExceptionally(), "a detected secret is never reused as a Katana request input");
+        check(runner.fetchKatana(fixture.origin + "/outside/sensitive", "GET").isCompletedExceptionally()
+            && runner.fetchKatana(fixture.origin + "/app/api/write-only", "POST").isCompletedExceptionally(), "external scope and write requests are rejected before transport");
+        var redirect = runner.fetchKatana(fixture.origin + "/app/redirect", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(redirect.responseStatus().equals("302") && redirect.url().endsWith("/app/redirect")
+            && redirect.response().headerValue("Location").equals("/outside/sensitive"), "Katana receives the original single-hop redirect response at its requested URL");
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/app/jsonl-only", "GET", "Katana v1.8.0", "depth-excluded discovery", true));
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/app/config", "?", "Katana 환경", "기술 단서 · PostgreSQL", false));
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/app/form-only", "POST", "Katana 폼", "입력 이름 · name", false));
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/outside/sensitive", "GET", "Katana 차단", "범위 제외", false));
+        runner.finishKatana(true, "isolated producer finished"); await(() -> terminal(runner), "Katana completion drains existing queues");
+        var snapshot = runner.snapshot();
+        check(snapshot.state() == ScopeInspection.State.COMPLETED && snapshot.pending() == 0 && snapshot.sent() == fixture.visits.size(), "Katana, controls and all comparison accounts share the actual HTTP budget and finish their accepted queues");
+        check(fixture.visits.stream().noneMatch(v -> v.path().equals("/app/jsonl-only") || v.path().equals("/app/form-only") || v.path().startsWith("/outside")), "JSONL discovery, forms and excluded paths never trigger blind replay");
+        check(snapshot.pages().stream().anyMatch(p -> p.note().contains("Katana 표준 크롤러") && p.original().id().equals(configPage.id())), "Katana packets use the common Page analysis and original evidence chain");
+        check(snapshot.findings().stream().anyMatch(f -> f.category().equals("KATANA") && f.title().equals("Katana 환경 관측") && f.originalId().equals(configPage.id())), "technology metadata links an already observed packet without guessing an HTTP method");
+        check(snapshot.findings().stream().anyMatch(f -> f.category().equals("ACCESS")), "Katana-observed paths retain ordinary account comparisons");
+        check(!snapshot.toString().contains(ScopeInspectionFixture.API_SECRET), "Katana metadata and public pages do not expose discovered secrets");
+      }
+
+      var gateStarted = new java.util.concurrent.CountDownLatch(1);
+      var releaseGate = new java.util.concurrent.CountDownLatch(1);
+      fixture.server.createContext("/app/katana-gate", exchange -> {
+        fixture.visits.add(new ScopeInspectionFixture.Visit(exchange.getRequestMethod(), "/app/katana-gate", "anonymous"));
+        gateStarted.countDown();
+        try { releaseGate.await(5, java.util.concurrent.TimeUnit.SECONDS); }
+        catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); }
+        reply(exchange, 200, "text/plain", "crawler transport gate");
+      });
+      fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/katana-gate", 30, 0, false, anonymous()), allowed, value -> {})) {
+        runner.registerKatana("anonymous", System.currentTimeMillis() + 15000); runner.start();
+        check(gateStarted.await(5, java.util.concurrent.TimeUnit.SECONDS), "loopback gate holds the worker before the pending crawler request");
+        var cancelled = runner.fetchKatana(fixture.origin + "/app/cancelled-katana", "GET"); cancelled.cancel(false); releaseGate.countDown();
+        await(() -> runner.snapshot().findings().stream().anyMatch(f -> f.title().equals("Katana 요청 보류")), "cancelled proxy request is held");
+        check(fixture.visits.stream().noneMatch(v -> v.path().equals("/app/cancelled-katana")), "a cancelled proxy future cannot retransmit immediately through the ordinary queue");
+        runner.fetchKatana(fixture.origin + "/app/cancelled-katana", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(fixture.visits.stream().filter(v -> v.path().equals("/app/cancelled-katana")).count() == 1, "a fresh fetch restores the held URL exactly once");
+        runner.pause();
+        var paused = runner.fetchKatana(fixture.origin + "/app/paused-katana", "GET"); int count = fixture.visits.size(); Thread.sleep(80);
+        check(!paused.isDone() && fixture.visits.size() == count, "user pause preserves the proxy future without dispatching new HTTP");
+        runner.resume(); paused.get(10, java.util.concurrent.TimeUnit.SECONDS);
+        runner.pause(); var stopped = runner.fetchKatana(fixture.origin + "/app/stopped-katana", "GET"); runner.stop();
+        check(stopped.isCompletedExceptionally() && runner.snapshot().pending() > 0, "stop completes proxy waiters and preserves accepted URL tasks");
+        runner.resume(); runner.finishKatana(true, "producer resumed and finished"); await(() -> terminal(runner), "stopped crawler queue resumes");
+        check(runner.snapshot().state() == ScopeInspection.State.COMPLETED && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/stopped-katana")), "explicit resume drains URLs that were queued before stop");
+      }
+
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/", 3, 0, false, anonymous()), allowed, value -> {})) {
+        runner.registerKatana("anonymous", System.currentTimeMillis() + 15000); runner.start();
+        await(() -> runner.snapshot().sent() == 3, "Katana shares the seed control budget");
+        var exhausted = runner.fetchKatana(fixture.origin + "/app/budget-katana", "GET");
+        await(() -> terminal(runner), "Katana exhausts the shared budget");
+        check(exhausted.isCompletedExceptionally() && runner.snapshot().sent() == 3 && runner.snapshot().pending() > 0, "Katana cannot bypass the global budget and budget failure releases proxy waiters");
+      }
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/", 30, 0, false, anonymous()), allowed, value -> {})) {
+        runner.registerKatana("anonymous", System.currentTimeMillis() + 500); runner.start();
+        await(() -> terminal(runner), "finite crawler completion deadline");
+        check(runner.snapshot().findings().stream().anyMatch(f -> f.title().equals("Katana 탐색 미완료")) && runner.snapshot().partial() > 0, "missing crawler completion becomes explicit partial coverage before normal queued work finishes");
+      }
     }
     System.out.println("ScopeInspectionRunnerTest: " + checks + " checks passed (production runner, isolated loopback HTTP)");
   }

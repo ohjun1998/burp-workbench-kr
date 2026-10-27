@@ -39,7 +39,7 @@ def main() -> int:
         if isinstance(value,dict): return [text for item in value.values() for text in strings(item)]
         if isinstance(value,(tuple,list)): return [text for item in value for text in strings(item)]
         return []
-    source_text = ''.join(text for key in ['MODULES','STEPS','INSTALL','REFERENCE','INTERPRETATION','SCOPE_FEATURES','HELPER_INSTALL','CAPTURE_NOTE'] for text in strings(guide[key]))
+    source_text = ''.join(text for key in ['MODULES','STEPS','INSTALL','REFERENCE','INTERPRETATION','SCOPE_FEATURES','HELPER_INSTALL','KATANA_INSTALL','KATANA_NOTES','CAPTURE_NOTE'] for text in strings(guide[key]))
     missing_glyphs = sorted({char for char in source_text if not char.isspace() and ord(char) not in font.face.charToGlyph})
     if missing_glyphs:
         raise RuntimeError('Guide font has no glyphs for: '+''.join(missing_glyphs))
@@ -61,7 +61,7 @@ def main() -> int:
         raise RuntimeError('Guide captures differ from current JAR')
     image_hashes = {('browser/'+step['image'] if step.get('captureKind')=='browser' else step['image']):sha(guide['capture_path'](args.images,step)) for step in steps}
     preserved = {}
-    for old in ['1.0.0','1.1.0']:
+    for old in ['1.0.0','1.1.0','1.2.0']:
         old_pdf = ROOT/f'downloads/guides/{old}/Workbench_Simple_{old}_Guide_KR.pdf'
         old_qa = ROOT/'docs'/('guide-validation.json' if old == '1.0.0' else f'guide-validation-{old}.json')
         if old == '1.0.0':
@@ -72,15 +72,15 @@ def main() -> int:
             preserved[old] = {'pdfHashUnchanged':ok}
             if not ok:
                 raise RuntimeError('Previous PDF hash differs: '+old)
-    history = ROOT/'docs/history/1.1.0/preservation.json'
-    if history.exists():
+    for history in sorted((ROOT/'docs/history').glob('*/preservation.json')):
         record = json.loads(history.read_text(encoding='utf-8'))
         for relative,expected in record['sha256'].items():
             if sha((history.parent/relative).resolve()) != expected:
                 raise RuntimeError('Historical guide content differs: '+relative)
-        preserved['1.1.0']['historicalFilesUnchanged'] = True
+        preserved.setdefault(record['version'],{})['historicalFilesUnchanged'] = True
+        preserved[record['version']]['historicalFilesChecked'] = len(record['sha256'])
     document = fitz.open(pdf)
-    expected_pages = len(steps)+6
+    expected_pages = len(steps)+guide['GUIDE_FIXED_PAGES']
     if len(document) != expected_pages:
         raise RuntimeError(f'Guide pages {len(document)} != {expected_pages}')
     if len(document.get_toc()) != expected_pages:
@@ -106,7 +106,7 @@ def main() -> int:
     if not any('NanumGothic' in font for font in fonts):
         raise RuntimeError('Embedded Korean font missing')
     text = '\n'.join(page.get_text() for page in document)
-    for required in ['SCOPE','HTTP','민감정보','브라우저','원본','미확인','관측','증거']:
+    for required in ['SCOPE','HTTP','Katana','loopback','민감정보','브라우저','원본','미확인','관측','증거']:
         if required not in text:
             raise RuntimeError('Required guide subject missing: '+required)
     if args.contact_sheet:
@@ -134,12 +134,14 @@ def main() -> int:
         'allEightToolScreensIncluded':['02-request.png','08-mapper.png','04-auth-results.png','10-js.png','09-environment.png','03-analysis.png','07-payload.png','05-evidence.png'],
         'manualReplayScreenIncluded':'11-replay.png',
         'inspectionScreensIncluded':[step['image'] for step in steps if step['number'].startswith('S')],
+        'katanaVersion':guide['KATANA_VERSION'],
+        'katanaScreensIncluded':[step['image'] for step in steps if step['number'].startswith('K')],
         'browserHelperCapture':{'included':guide['BROWSER_CAPTURE'].is_file(),'helperVersion':guide['HELPER_VERSION'],
             'path':guide['BROWSER_CAPTURE'].relative_to(ROOT).as_posix(),
             'kind':'Actual Chromium helper page using localhost synthetic fixture; distinct from production Swing rendering'},
         'preservedPreviousGuides':preserved,
-        'visualReview':'All pages reviewed in a contact sheet; full-size setup, environment, paths, API, secrets, access, changes, coverage, browser, originals and evidence pages reviewed for readable Korean text and uncropped controls.' if args.visual_reviewed else 'Structural checks passed; author visual review is still pending.',
-        'captureScope':'Production Simple Swing components with synthetic packet/API adapters; Chrome/Edge installation instructions are textual, not native browser installation screenshots.',
+        'visualReview':'All pages reviewed in a contact sheet; full-size Katana setup/results, inspection setup, environment, paths, API, secrets, access, changes, coverage, browser, originals and evidence pages reviewed for readable Korean text and uncropped controls.' if args.visual_reviewed else 'Structural checks passed; author visual review is still pending.',
+        'captureScope':'Production Simple Swing components with synthetic packet/API/Katana adapters; actual Katana process/HTTP/HTTPS checks are separate verification evidence. Chrome/Edge installation instructions are textual, not native browser installation screenshots.',
         'structuralResult':'passed','visualReviewComplete':args.visual_reviewed,
         'result':'passed' if args.visual_reviewed else 'needs-visual-review'
     }

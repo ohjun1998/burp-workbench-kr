@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "Katana",
+  "version": "1.8.0",
+  "platform": "linux_amd64",
+  "distribution": "external-optional",
+  "bundled": false,
+  "asset": {
+    "fileName": "katana_1.8.0_linux_amd64.zip",
+    "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_linux_amd64.zip",
+    "sizeBytes": 31910234,
+    "sha256": "cb027ae99d0757061b70c07a15c7a80f62c5a535ab52c4a329f80c4b0a7309d2"
+  },
+  "executable": {
+    "fileName": "katana",
+    "sha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc",
+    "sizeBytes": 68030626
+  },
+  "versionProbe": {
+    "arguments": [
+      "-duc",
+      "-version"
+    ],
+    "version": "1.8.0",
+    "callerHomePreserved": true,
+    "upstreamMayCleanResumeFilesOlderThanDays": 10
+  }
+}

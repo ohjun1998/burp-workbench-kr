@@ -44,7 +44,7 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
   }
   static ScopeInspection.Snapshot snapshot(String id, ScopeInspection.State state, int pending) {
     return new ScopeInspection.Snapshot(id, state,
-        "가이드용 합성 응답·브라우저 관측 예시 · 실제 대상/브라우저 탐색을 실행하지 않았습니다.",
+        "가이드용 합성 응답·Katana·브라우저 관측 예시 · 실제 대상 탐색을 실행하지 않았습니다.",
         16, packets.size(), pending, 2, 0, partial(packets), findings, packets, candidates,
         1793100000000L, state == ScopeInspection.State.COMPLETED ? 1793100005000L : 0);
   }
@@ -84,7 +84,7 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
     var profiles = List.of(new ScopeInspection.Profile("anonymous", "비로그인", Map.of(), null),
         new ScopeInspection.Profile("alice", "Alice", Map.of("cookie", "SID=SCOPE_DEMO_SESSION"),
             new CookieSessionProbe.Config(ORIGIN + "/app/api/me", "$.id", "alice")));
-    var options = new ScopeInspection.Options(ORIGIN + "/app/", 100, 2, 300, 10000, 2*1024*1024, 3, true, true, profiles);
+    var options = new ScopeInspection.Options(ORIGIN + "/app/", 100, 2, 300, 10000, 2*1024*1024, 3, true, true, profiles,true,60,100);
     var count = new java.util.concurrent.atomic.AtomicInteger();
     ScopeInspectionPanel.Actions actions = new ScopeInspectionPanel.Actions() {
       public void original(DiskTrafficStore.PacketRef ref) { count.incrementAndGet(); }
@@ -101,7 +101,7 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
     try {
       edt(() -> {
         panel.url.setText(ORIGIN + "/app/"); panel.options = options;
-        panel.compareAccounts.setSelected(true); panel.browserMode.setSelected(true);
+        panel.compareAccounts.setSelected(true); panel.browserMode.setSelected(true);panel.katanaMode.setSelected(true);
         scenario("Opening the production inspection panel performs no target requests", panel.runner == null);
         capture(panel, "12-inspection-setup.png");
       });
@@ -123,6 +123,12 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
       findings.add(new ScopeInspection.Finding("COVERAGE", "본문 분석 범위 제한", ORIGIN+"/app/large.log", "GET", "비로그인",
           "미확인", "정보", "미검사", "가이드 예시: 선언된 대용량 파일을 자동 수집에서 제외했습니다. 전체 점검 완료를 의미하지 않습니다.", "", 0, -1, EnvironmentProject.hash("partial-guide")));
       findings.addAll(ScopeInspectionAnalysis.compareInventory(findings, candidates, packets));
+      findings.add(new ScopeInspection.Finding("KATANA","JS API 경로 관측",ORIGIN+"/app/assets/site.js","GET","비로그인","관측","정보","원본 연결",
+          "가이드용 합성 Katana 기록 · script src → JS fetch 경로 · 선택 HTTP 계정/요청 한도 적용",packets.get(2).original().id(),0,-1,EnvironmentProject.hash("katana-js-guide")));
+      findings.add(new ScopeInspection.Finding("KATANA","폼 선언 · POST · [민감 필드]",ORIGIN+"/app/account","POST","비로그인","관측","정보","미실행",
+          "가이드용 합성 폼 메타데이터 · 입력 이름만 표시 · 입력값 가림 · 자동 제출하지 않음","",0,-1,EnvironmentProject.hash("katana-form-guide")));
+      findings.add(new ScopeInspection.Finding("KATANA","Scope 밖 요청 차단",ORIGIN+"/outside/sensitive","GET","비로그인","관측","정보","제외",
+          "가이드용 합성 제외 · 실제 대상 전송 없이 로컬에서 거부","",0,-1,EnvironmentProject.hash("katana-blocked-guide")));
       var completed = snapshot("guide-scope-run", ScopeInspection.State.COMPLETED, 0);
       var previousPages = new ArrayList<>(packets);
       String previousBody = configBody.replace("\"revision\":2", "\"revision\":1");
@@ -168,8 +174,22 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
         var original = panel.originalContent(config.original());
         scenario("Original response bytes remain available behind masked findings", config.original().response().toString().contains(API_KEY));
         capture(original, "22-inspection-original.png");
+        panel.katanaExecutable.setText("katana");panel.katanaCheckResult.setText("가이드용 합성 설치 확인 표시 · Katana 1.8.0 경로를 지정하세요.");
+        JPanel conditions=panel.settingsContent();
+        scenario("Katana execution conditions retain a named executable and bounded page/time controls",SimpleWorkflowTest.named(conditions,"wb.scope.inspection.katana.executable")!=null&&SimpleWorkflowTest.named(conditions,"wb.scope.inspection.katana.pages")!=null);
+        capture(conditions,"23-katana-settings.png",width,height,()->{
+          Rectangle executable=SwingUtilities.convertRectangle(panel.katanaExecutable.getParent(),panel.katanaExecutable.getBounds(),conditions);
+          Rectangle browserTime=SwingUtilities.convertRectangle(panel.browserSeconds.getParent(),panel.browserSeconds.getBounds(),conditions);
+          scenario("Execution settings stay left aligned without a separator pushing the crawler controls below a large blank area",executable.x<width/3&&executable.y-browserTime.y<120);
+        });
+        tab(panel,"katana");
+        scenario("Katana provenance table preserves linked originals and explicitly unexecuted forms",panel.tables.get("katana").getRowCount()>=3&&panel.selectedOriginal()!=null);
+        capture(panel,"24-katana-results.png",width,height,()->{
+          panel.showKatanaStatus(new ScopeKatana.Snapshot("PARTIAL","가이드용 합성 기록 · 범위 밖/폼 동작 제외 사유를 확인하세요.",12,18,3,1793100000000L,1793100005000L));
+          scenario("Captured Katana results use the production partial-state presenter after asynchronous layout updates",panel.katanaStatus.getText().contains("부분 수집")&&!panel.katanaStatus.getText().contains("선택해 통합 점검"));
+        });
       });
-      scenario("Synthetic capture never starts the target HTTP coordinator", panel.runner == null && count.get() == 0);
+      scenario("Synthetic capture never starts the target HTTP coordinator or external Katana", panel.runner == null && panel.katana==null && count.get() == 0);
     } finally {
       edt(panel::close); store.close(); WorkbenchScope.release(api);
       try (var files = Files.walk(historyDirectory)) {

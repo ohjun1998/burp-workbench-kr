@@ -167,7 +167,8 @@ final class ScopeInspectionHistory {
         if (profile.identity() != null) identity.append(profile.identity().url()).append('|').append(profile.identity().identityPath()).append('|').append(profile.identity().expectedIdentity()).append('|').append(profile.identity().claims());
       });
       String condition = hash(project + "|" + scope + "|" + options.url() + "|" + options.depth() + "|" + options.budget()
-          + "|" + options.delayMillis() + "|" + options.timeoutMillis() + "|" + options.maxBodyBytes() + "|" + options.maxRedirects() + "|" + options.browser() + "|" + options.compareAccounts() + "|" + identity);
+          + "|" + options.delayMillis() + "|" + options.timeoutMillis() + "|" + options.maxBodyBytes() + "|" + options.maxRedirects() + "|" + options.browser() + "|" + options.compareAccounts() + "|" + identity
+          + (options.katana() ? "|katana-1.8.0|" + options.katanaSeconds() + "|" + options.katanaPages() + "|" + options.katanaProfileId() : ""));
       return new Context(project, directory(project), scope, condition);
     } catch (RuntimeException error) { problem = "점검 이력의 프로젝트/범위 조건을 확인하지 못했습니다."; return null; }
   }

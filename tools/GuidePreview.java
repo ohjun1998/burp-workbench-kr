@@ -126,7 +126,7 @@ public final class GuidePreview extends WorkbenchTest {
                 if(recon.flowTable.getRowCount()>0)recon.flowTable.setRowSelectionInterval(0,0);
                 render(root,out.resolve("stored-flow.png"));
                 ext.openFeature("data");var dataTabs=(JTabbedPane)get(ext,"dataTabs");dataTabs.setSelectedIndex(2);
-                var comparison=(StructuredComparePanel)dataTabs.getSelectedComponent();comparison.leftInput.setText("{\"ID\":102,\"OWNER_ID\":2,\"VISIBILITY\":\"private\"}");comparison.rightInput.setText("{\"error\":\"not found\"}");comparison.compare();render(root,out.resolve("data-compare.png"));
+                var comparison=(StructuredComparePanel)dataTabs.getSelectedComponent();comparison.leftInput.setText("{\"ID\":102,\"OWNER_ID\":2,\"VISIBILITY\":\"private\"}");comparison.rightInput.setText("{\"error\":\"not found\"}");ComparisonTestSupport.compareAndWait(comparison);render(root,out.resolve("data-compare.png"));
                 var bounty=(BountySupportPanel)get(ext,"bountySupport");ext.openFeature("bounty");
                 bounty.flowOrigin.setText(origin);bounty.workflow.setText(bob.toString()+"\n===STEP===\n"+alice.toString());bounty.workflow.setCaretPosition(0);
                 bounty.pages.setSelectedIndex(1);render(root,out.resolve("bounty-1.png"));

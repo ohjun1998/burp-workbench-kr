@@ -46,6 +46,16 @@ final class TrafficBrowser implements AutoCloseable {
   Supplier<List<Identity>> identities=List::of;
   final JButton settingsButton=WorkspaceIcons.button("gear","wb.traffic.search.settings","검색·목록 설정");
   final JButton cancel=new JButton("검색 취소");
+  final JToggleButton freezeView=new JToggleButton("목록 고정");
+  final JButton newTraffic=new JButton("새 요청 0건");
+  final JButton undoStars=new JButton("중요 변경 취소");
+  private boolean viewFrozen;
+  private DiskTrafficStore frozenStore;
+  private int frozenCount;
+  static final int MAX_MARK_SELECTION=4096,MAX_MARK_UNDO=20;
+  private record StarEdit(DiskTrafficStore disk,String project,Map<Integer,Boolean> before,boolean after){}
+  private final Deque<StarEdit> starUndo=new ArrayDeque<>();
+  private String annotationStatus="";
   final JLabel feedback=new JLabel(" ");
   final TargetWindow settings;
   final ThreadPoolExecutor worker=new ThreadPoolExecutor(1,1,0,TimeUnit.MILLISECONDS,new ArrayBlockingQueue<>(1),r->{Thread t=new Thread(r,"Workbench-traffic-search");t.setDaemon(true);return t;});
@@ -99,12 +109,19 @@ final class TrafficBrowser implements AutoCloseable {
     method.setPreferredSize(new Dimension(120,32));response.setPreferredSize(new Dimension(120,32));period.setPreferredSize(new Dimension(150,32));
     regex.addActionListener(e->refreshInputValidation());
     account.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){refreshInputValidation();}public void removeUpdate(javax.swing.event.DocumentEvent e){refreshInputValidation();}public void changedUpdate(javax.swing.event.DocumentEvent e){refreshInputValidation();}});
-    buildConditionBar();ensureProjectState();loadControls();refreshConditionChips();
+    freezeView.setName("wb.traffic.view.freeze");newTraffic.setName("wb.traffic.view.apply");undoStars.setName("wb.traffic.stars.undo");
+    freezeView.setToolTipText("목록 화면만 고정 · 수집 OFF/SCOPE와 원본 저장은 유지합니다.");
+    newTraffic.setToolTipText("쌓인 새 요청을 목록에 반영하고 실시간 갱신을 재개합니다.");
+    freezeView.addActionListener(e->setViewFrozen(freezeView.isSelected()));
+    newTraffic.addActionListener(e->setViewFrozen(false));
+    undoStars.addActionListener(e->presetAction(this::undoStarEdit));
+    table.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())updateMarkActions();});
+    buildConditionBar();ensureProjectState();loadControls();refreshConditionChips();updateLiveControls();updateMarkActions();
   }
   private void cancelPending(){if(pending!=null)pending.cancel(true);worker.getQueue().clear();}
   void schedule(){if(closed)return;invalidateLinkedContexts();generation.incrementAndGet();cancelPending();paused=false;busy.set(false);scanned=-1;debouncePending=true;debounce.restart();refreshConditionChips();refreshInputValidation();refreshRecoveryControls();}
   void refresh(){
-    if(closed)return;ensureProjectState();if(paused||debouncePending)return;
+    if(closed)return;ensureProjectState();updateLiveControls();if(viewFrozen||paused||debouncePending)return;
     DiskTrafficStore disk=store.get();if(disk==null)return;
     SearchKey key=key(disk,search.getText().strip(),List.copyOf(identities.get()));
     if(busy.get()){
@@ -113,7 +130,7 @@ final class TrafficBrowser implements AutoCloseable {
       return;
     }
     SearchSnapshot prior=snapshot;
-    if(prior==null||!prior.key().equals(key)||prior.count()!=disk.size()||clock.getAsLong()>=prior.expiresAt())begin();
+    if(prior==null||!prior.key().equals(key)||prior.count()!=effectiveCount(disk)||clock.getAsLong()>=prior.expiresAt())begin();
   }
   boolean idle(){return !busy.get()&&!debouncePending;}
   boolean searchViewCurrent(){SearchSnapshot current=snapshot;return current!=null&&stillCurrent(current.key());}
@@ -123,14 +140,14 @@ final class TrafficBrowser implements AutoCloseable {
     if(closed)return;ensureProjectState();debounce.stop();debouncePending=false;cancelPending();busy.set(false);String requested=search.getText().strip();if(requested.length()>512){paused=true;feedback.setText("검색어 512자 제한 · 이전 결과 유지");return;}
     text=requested;TrafficQuery settings=query;
     if(settings.regex()&&!requested.isBlank())try{java.util.regex.Pattern.compile(requested);}catch(java.util.regex.PatternSyntaxException ex){paused=true;feedback.setText("정규식 오류 · 이전 결과 유지");return;}
-    long token=generation.incrementAndGet();DiskTrafficStore disk=store.get();if(disk==null)return;int count=Math.toIntExact(disk.size());
+    long token=generation.incrementAndGet();DiskTrafficStore disk=store.get();if(disk==null)return;int count=effectiveCount(disk);
     List<Identity> profiles=List.copyOf(identities.get());Set<String> open=Set.copyOf(expanded);SearchKey key=key(disk,requested,profiles);
     Map<String,Mark> markSnapshot=Map.copyOf(marks);long now=clock.getAsLong();SearchSnapshot prior=snapshot;
     if(prior==null||!prior.key().equals(key))invalidateLinkedContexts();
     if(requested.isBlank()&&settings.equals(TrafficQuery.defaults())&&profiles.isEmpty()){
       scanned=count;view=null;snapshot=new SearchSnapshot(key,null,count,Long.MAX_VALUE);runningKey=null;busy.set(false);
       lastMetrics=new SearchMetrics(prior!=null&&prior.key().equals(key),0,prior==null?0:Math.min(count,prior.count()),count,0);
-      var sorter=(TableRowSorter<?>)table.getRowSorter();if(sorter.getRowFilter()!=null)sorter.setRowFilter(null);
+      var sorter=(TableRowSorter<?>)table.getRowSorter();preserveTablePosition(()->{if(sorter.getRowFilter()!=null)sorter.setRowFilter(null);});
       feedback.setText(count==0?"수집된 트래픽이 없습니다 · SCOPE와 수집 상태를 확인하고 요청을 관찰하세요.":"전체 "+count+"건");changed.run();refreshRecoveryControls();viewPublished.run();return;
     }
     boolean incremental=prior!=null&&prior.view()!=null&&prior.key().equals(key)&&prior.count()<=count&&settings.minutes()==0;
@@ -151,9 +168,11 @@ final class TrafficBrowser implements AutoCloseable {
           boolean plain=requested.isBlank()&&settings.method().equals("전체")&&settings.status().equals("전체")&&settings.account().isBlank()&&settings.minutes()==0&&!settings.group()&&!settings.important();
           RowFilter<CaptureTableModel,Integer> filter=plain?null:visibleFilter;
           boolean filterChanged=sorter.getRowFilter()!=filter;
-          if(filterChanged)sorter.setRowFilter(filter);
-          else if(incremental)publishRows(result.changedRows(),sorter);
-          else model.fireTableDataChanged();
+          preserveTablePosition(()->{
+            if(filterChanged)sorter.setRowFilter(filter);
+            else if(incremental)publishRows(result.changedRows(),sorter);
+            else model.fireTableDataChanged();
+          });
           feedback.setText(resultFeedback(next));
           settingsButton.setToolTipText("검색·목록 설정 · "+feedback.getText()+" · "+(incremental?"증분":"전체")+" 평가 "+metrics.examinedRows()+"건 · 이전 결과 재사용 "+metrics.reusedRows()+"건");
           // Selection events during sorter publication see the old busy state. Notify once the
@@ -237,9 +256,62 @@ final class TrafficBrowser implements AutoCloseable {
     return switch(column){case 7->mark.star()?"★":"☆";case 8->v==null?"미매핑":v.accounts().getOrDefault(row,"미매핑");case 9->g==null?1:g.members().size();case 10->mark.note();default->"";};
   }
   String displayUrl(int raw,String original){View v=view;Group g=v==null?null:v.groups().get(raw);return g!=null&&g.members().size()>1?(expanded.contains(g.key())?"▾ ":"▸ ")+g.path():original;}
-  void toggleStar(int raw){var ref=store.get().ref(raw);marks.compute(ref.id(),(k,v)->new Mark(v==null||!v.star(),v==null?"":v.note()));marksVersion.incrementAndGet();schedule();model.fireTableRowsUpdated(raw,raw);}
-  void note(int raw,String note){if(note.length()>1000)throw new IllegalArgumentException("메모 1,000자 제한");var ref=store.get().ref(raw);marks.compute(ref.id(),(k,v)->new Mark(v!=null&&v.star(),note));marksVersion.incrementAndGet();schedule();model.fireTableRowsUpdated(raw,raw);}
+  void toggleStar(int raw){ensureProjectState();var ref=store.get().ref(raw);setStars(new int[]{raw},!marks.getOrDefault(ref.id(),new Mark(false,"")).star());}
+  void setSelectedStars(boolean value){ensureProjectState();int[] selected=table.getSelectedRows();if(selected.length==0)throw new IllegalArgumentException("중요 표시를 변경할 요청을 선택하세요.");if(selected.length>MAX_MARK_SELECTION)throw new IllegalArgumentException("한 번에 "+MAX_MARK_SELECTION+"건까지 중요 표시를 변경할 수 있습니다.");int[] rows=Arrays.stream(selected).map(table::convertRowIndexToModel).toArray();setStars(rows,value);}
+  void setStars(int[] rows,boolean value){
+    ensureProjectState();if(rows.length>MAX_MARK_SELECTION)throw new IllegalArgumentException("중요 표시 변경 선택 수 제한");
+    DiskTrafficStore disk=store.get();Map<Integer,Boolean> before=new LinkedHashMap<>();
+    for(int raw:rows){if(raw<0||raw>=model.getRowCount()||raw>=disk.size())throw new IllegalArgumentException("선택한 원본을 다시 확인하세요.");var ref=disk.ref(raw);boolean old=marks.getOrDefault(ref.id(),new Mark(false,"")).star();if(old!=value)before.put(raw,old);}
+    if(before.isEmpty()){annotationStatus="선택 "+rows.length+"건 · 이미 모두 "+(value?"중요 표시":"해제")+" 상태";feedback.setText(annotationStatus);updateMarkActions();return;}
+    StarEdit edit=new StarEdit(disk,projectIdentity,Map.copyOf(before),value);starUndo.addLast(edit);while(starUndo.size()>MAX_MARK_UNDO)starUndo.removeFirst();
+    for(int raw:before.keySet()){var ref=disk.ref(raw);marks.compute(ref.id(),(k,v)->new Mark(value,v==null?"":v.note()));}
+    publishMarkEdit(before.keySet());annotationStatus="선택 "+rows.length+"건 · "+before.size()+"건 "+(value?"중요 표시":"중요 해제");feedback.setText(annotationStatus);updateMarkActions();
+  }
+  void undoStarEdit(){
+    ensureProjectState();StarEdit edit=starUndo.peekLast();if(edit==null)throw new IllegalArgumentException("되돌릴 중요 표시 변경이 없습니다.");
+    if(edit.disk()!=store.get()||!edit.project().equals(projectIdentity)){starUndo.clear();updateMarkActions();throw new IllegalArgumentException("프로젝트나 원본 저장소가 바뀌어 이전 변경을 복원할 수 없습니다.");}
+    for(var item:edit.before().entrySet()){var ref=edit.disk().ref(item.getKey());if(marks.getOrDefault(ref.id(),new Mark(false,"")).star()!=edit.after())throw new IllegalArgumentException("중요 상태가 바뀌어 이전 변경을 복원할 수 없습니다.");}
+    starUndo.removeLast();for(var item:edit.before().entrySet()){var ref=edit.disk().ref(item.getKey());marks.compute(ref.id(),(k,v)->new Mark(item.getValue(),v==null?"":v.note()));}
+    publishMarkEdit(edit.before().keySet());annotationStatus="중요 표시 변경 "+edit.before().size()+"건 복원 · 메모 유지";feedback.setText(annotationStatus);updateMarkActions();
+  }
+  private void publishMarkEdit(Set<Integer> rows){marksVersion.incrementAndGet();schedule();preserveTablePosition(()->{for(int raw:rows)model.fireTableRowsUpdated(raw,raw);});}
+  private void updateMarkActions(){int count=table.getSelectedRowCount();StarEdit edit=starUndo.peekLast();undoStars.setEnabled(edit!=null);undoStars.setVisible(edit!=null);undoStars.setText(edit==null?"중요 변경 취소":"중요 변경 취소 ("+edit.before().size()+"건)");undoStars.setToolTipText("최근 "+MAX_MARK_UNDO+"회 중요 표시 변경 복원 · 메모 유지 · Alt+Z");table.putClientProperty("wb.traffic.selection.count",count);}
+  void note(int raw,String note){ensureProjectState();if(note.length()>1000)throw new IllegalArgumentException("메모 1,000자 제한");var ref=store.get().ref(raw);marks.compute(ref.id(),(k,v)->new Mark(v!=null&&v.star(),note));marksVersion.incrementAndGet();schedule();preserveTablePosition(()->model.fireTableRowsUpdated(raw,raw));annotationStatus="메모 저장 · 원본 변경 없음";feedback.setText(annotationStatus);updateMarkActions();}
   void toggleGroup(int raw){View v=view;if(v==null)return;Group g=v.groups().get(raw);if(g==null)return;if(!expanded.add(g.key()))expanded.remove(g.key());schedule();}
+
+  /** Capture writes remain independent: only the published metadata boundary is frozen. */
+  boolean viewFrozen(){return viewFrozen;}
+  int pendingRows(){DiskTrafficStore disk=store.get();return disk==null?0:Math.max(0,Math.toIntExact(disk.size())-model.getRowCount());}
+  private int effectiveCount(DiskTrafficStore disk){return viewFrozen&&disk==frozenStore?Math.min(frozenCount,Math.toIntExact(disk.size())):Math.toIntExact(disk.size());}
+  void publishCommittedRows(){
+    if(closed)return;ensureProjectState();DiskTrafficStore disk=store.get();if(disk==null)return;
+    if(viewFrozen&&disk!=frozenStore){viewFrozen=false;frozenStore=null;}
+    if(!viewFrozen){int count=Math.toIntExact(disk.size());if(count!=model.getRowCount())preserveTablePosition(()->model.publish(count));else model.publish(count);}
+    updateLiveControls();
+  }
+  void setViewFrozen(boolean frozen){
+    if(closed)return;ensureProjectState();DiskTrafficStore disk=store.get();if(disk==null)return;
+    if(frozen==viewFrozen){updateLiveControls();return;}
+    viewFrozen=frozen;
+    if(frozen){frozenStore=disk;frozenCount=model.getRowCount();generation.incrementAndGet();cancelPending();debounce.stop();debouncePending=false;busy.set(false);runningKey=null;feedback.setText("목록 고정 · 수집 상태 유지 · 새 요청은 반영 버튼으로 확인");}
+    else{frozenStore=null;publishCommittedRows();schedule();}
+    updateLiveControls();
+  }
+  private void updateLiveControls(){freezeView.setSelected(viewFrozen);newTraffic.setText("새 요청 "+pendingRows()+"건");newTraffic.setEnabled(viewFrozen);newTraffic.setVisible(viewFrozen);freezeView.setText(viewFrozen?"고정 해제":"목록 고정");}
+  /** Restore exact original rows and the viewport, never merely a former view index. */
+  private void preserveTablePosition(Runnable publish){
+    DiskTrafficStore disk=store.get();int first=table.getSelectionModel().getMinSelectionIndex(),last=table.getSelectionModel().getMaxSelectionIndex();
+    List<Integer> selected=new ArrayList<>();if(first>=0&&last-first<MAX_MARK_SELECTION)for(int row=first;row<=last;row++)if(row<table.getRowCount()&&table.isRowSelected(row))selected.add(table.convertRowIndexToModel(row));
+    JViewport viewport=table.getParent() instanceof JViewport value?value:null;Point point=viewport==null?null:viewport.getViewPosition();
+    publish.run();
+    if(disk!=store.get())return;
+    if(!selected.isEmpty()){
+      int[] current=table.getSelectedRows();boolean same=current.length==selected.size();
+      if(same)for(int index=0;index<current.length;index++)if(table.convertRowIndexToModel(current[index])!=selected.get(index)){same=false;break;}
+      if(!same){table.getSelectionModel().setValueIsAdjusting(true);try{table.clearSelection();for(int raw:selected)if(raw<model.getRowCount()){int visible=table.convertRowIndexToView(raw);if(visible>=0)table.addRowSelectionInterval(visible,visible);}}finally{table.getSelectionModel().setValueIsAdjusting(false);}}
+    }
+    if(viewport!=null&&point!=null&&!point.equals(viewport.getViewPosition()))viewport.setViewPosition(point);
+  }
 
   JPanel conditionBar(){return conditionBar;}
   SearchPosition capturePosition(){ensureProjectState();return new SearchPosition(query,search.getText(),projectIdentity);}
@@ -340,7 +412,7 @@ final class TrafficBrowser implements AutoCloseable {
     presetSave.addActionListener(e->presetAction(this::savePresetDialog));
     presetDelete.addActionListener(e->presetAction(this::deletePresetDialog));
     savedConditions.addActionListener(e->refreshPresetButtons());
-    conditionBar.add(WorkbenchUi.row(new JLabel("저장한 조건"),savedConditions,presetApply,presetSave,presetDelete,
+    conditionBar.add(WorkbenchUi.row(new JLabel("저장한 조건"),savedConditions,presetApply,presetSave,presetDelete,undoStars,
         WorkbenchUi.hint("검색어 제외 · 조건만 저장")),BorderLayout.NORTH);
     conditionBar.add(conditionChips,BorderLayout.CENTER);
     listFeedback.setName("wb.traffic.conditions.feedback");WorkbenchUi.feedback(listFeedback);
@@ -509,7 +581,7 @@ final class TrafficBrowser implements AutoCloseable {
     commitQuery(next,settingsProject);
   }
   void updateColumns(){int view=table.convertColumnIndexToView(10);if(view>=0){var c=table.getColumnModel().getColumn(view);c.setMinWidth(0);c.setMaxWidth(query.memo()?400:0);c.setPreferredWidth(query.memo()?130:0);} }
-  void clear(){invalidateLinkedContexts();relaxedBefore=null;relaxedAfter=null;marks.clear();marksVersion.incrementAndGet();expanded.clear();view=null;snapshot=null;runningKey=null;scanned=-1;generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=false;busy.set(false);refreshRecoveryControls();}
+  void clear(){viewFrozen=false;frozenStore=null;frozenCount=0;starUndo.clear();annotationStatus="";updateLiveControls();updateMarkActions();invalidateLinkedContexts();relaxedBefore=null;relaxedAfter=null;marks.clear();marksVersion.incrementAndGet();expanded.clear();view=null;snapshot=null;runningKey=null;scanned=-1;generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();paused=false;busy.set(false);refreshRecoveryControls();}
   @Override public void close(){closed=true;invalidateLinkedContexts();snapshot=null;runningKey=null;relaxedBefore=null;relaxedAfter=null;viewPublished=()->{};generation.incrementAndGet();debounce.stop();debouncePending=false;busy.set(false);settings.close();if(pending!=null)pending.cancel(true);worker.shutdownNow();}
 }
 

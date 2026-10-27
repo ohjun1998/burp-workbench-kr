@@ -16,7 +16,7 @@ final class BountyEvidence {
    * refs.
    */
   static final class Item {
-    private final String label, method, url, note, account, evidenceId;
+    private final String label, method, url, note, sourceNote, account, evidenceId;
     private final String requestText, responseText;
     private final EvidencePacketStore.Ref packet;
 
@@ -60,6 +60,13 @@ final class BountyEvidence {
     private Item(
         String label, String method, String url, String request, String response,
         String note, String account, EvidencePacketStore.Ref packet, String evidenceId) {
+      this(label, method, url, request, response, note, account, packet, evidenceId, note);
+    }
+
+    private Item(
+        String label, String method, String url, String request, String response,
+        String note, String account, EvidencePacketStore.Ref packet, String evidenceId, String sourceNote) {
+      this.sourceNote = Objects.toString(sourceNote, "");
       this.label = Objects.toString(label, "");
       this.method = Objects.toString(method, "");
       this.url = Objects.toString(url, "");
@@ -74,7 +81,13 @@ final class BountyEvidence {
     Item copyTo(EvidencePacketStore destination) {
       if (packet == null) return this;
       return new Item(label, method, url, null, null, note, account,
-          destination.append(packet), evidenceId);
+          destination.append(packet), evidenceId, sourceNote);
+    }
+
+    /** Authored descriptions change no raw packet, source role, account or evidence identity. */
+    Item withDescription(String name, String observation) {
+      String combined = observation.isBlank() ? sourceNote : sourceNote + "\n\n관찰 메모(진단자): " + observation;
+      return new Item(name, method, url, requestText, responseText, combined, account, packet, evidenceId, sourceNote);
     }
 
     String label() {

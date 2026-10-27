@@ -74,8 +74,35 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   final JTable evidenceTable = new JTable(evidenceModel);
   final JLabel evidenceCount = new JLabel("증거 0 / 32개");
   record EvidenceEdit(List<BountyEvidence.Item> items, Map<String, String> executions,
-      Map<String, String> parts, List<Integer> selected, EvidencePacketStore store, String project, boolean compact) {}
-  EvidenceEdit evidenceUndo;
+      Map<String, Set<String>> sources, Map<String, String> parts, List<Integer> selected,
+      EvidencePacketStore store, String project, boolean compact, Set<String> headers, Set<String> secrets,
+      Path image, String imageHash, Map<String, EvidenceDrafts.Annotation> annotations) {
+    // Selection is a view detail; moving focus must never invalidate an otherwise exact edit.
+    @Override public boolean equals(Object value) {
+      return value instanceof EvidenceEdit other && items.equals(other.items) && executions.equals(other.executions)
+          && sources.equals(other.sources) && parts.equals(other.parts) && store == other.store
+          && Objects.equals(project, other.project) && compact == other.compact && headers.equals(other.headers)
+          && secrets.equals(other.secrets) && Objects.equals(image, other.image)
+          && Objects.equals(imageHash, other.imageHash) && annotations.equals(other.annotations);
+    }
+    @Override public int hashCode() { return Objects.hash(items, executions, sources, parts, store, project,
+        compact, headers, secrets, image, imageHash, annotations); }
+  }
+  final EditHistory<EvidenceEdit> evidenceHistory = new EditHistory<>(20);
+  final Set<EvidencePacketStore> evidenceStores = Collections.newSetFromMap(new IdentityHashMap<>());
+  EvidenceEdit evidenceUndo; // Compatibility/readiness alias; actual history is multi-step.
+  final EvidenceDrafts evidenceDrafts;
+  final Map<String, EvidenceDrafts.Annotation> draftAnnotations = new LinkedHashMap<>();
+  final Map<String, EvidenceDrafts.Annotation> pendingAnnotations = new LinkedHashMap<>();
+  final JTextArea draftState = area(2);
+  final JTextField itemName = new JTextField(24);
+  final JTextArea itemNote = area(5);
+  final JLabel itemProblem = new JLabel(" ");
+  final TargetWindow itemEditor = new TargetWindow(this, "증거 항목 이름·관찰 메모", this::itemEditorContent);
+  final TargetWindow writingHelp = new TargetWindow(this, "증거 작성·초안", this::writingHelpContent);
+  final TargetWindow savedItemNotes = new TargetWindow(this, "저장된 항목 메모 · 원본 별도 연결", this::savedItemNotesContent);
+  String draftProject = "", editingItemId;
+  boolean loadingDraft, loadingItem;
   boolean evidenceCompactionNeeded;
   volatile String evidenceProject;
   final AtomicLong evidenceEpoch = new AtomicLong();
@@ -98,7 +125,9 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       evidenceRemove = action("선택 제거", this::removeSelectedEvidence),
       evidenceUp = action("위로", () -> moveSelectedEvidence(-1)),
       evidenceDown = action("아래로", () -> moveSelectedEvidence(1)),
-      evidenceUndoAction = action("실행 취소", this::undoEvidenceEdit);
+      evidenceUndoAction = action("실행 취소", this::undoEvidenceEdit),
+      evidenceRedoAction = action("다시 실행", this::redoEvidenceEdit),
+      evidenceDescribe = action("항목 설명", this::openItemEditor);
   CollaboratorClient collaborator;
   final LinkedHashMap<String, OastRequest> correlations = new LinkedHashMap<>();
   final Set<String> seenInteractions = new HashSet<>();
@@ -216,6 +245,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     this.auth = auth;
     this.activity = activity;
     evidenceProject = WorkspaceResume.projectIdentity(api);
+    evidenceDrafts = EvidenceDrafts.forApi(api);
+    evidenceStores.add(evidenceStore);
     setName("wb.bounty.support");
     setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
     pages.addTab("외부 도구", toolsContent());
@@ -232,6 +263,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     flowModel.addTableModelListener(e -> refreshActions());
     evidenceModel.addTableModelListener(e -> refreshActions());
     evidenceTable.getSelectionModel().addListSelectionListener(e -> refreshActions());
+    initializeDrafts();
     refreshActions();
     WorkbenchUi.style(this);
     WorkbenchUi.status(state);
@@ -325,7 +357,12 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceRemove.setEnabled(editable && selected.length > 0);
     evidenceUp.setEnabled(editable && canMoveEvidence(-1));
     evidenceDown.setEnabled(editable && canMoveEvidence(1));
-    evidenceUndoAction.setEnabled(editable && evidenceUndo != null);
+    evidenceUndo = evidenceHistory.canUndo() ? evidenceSnapshot() : null;
+    evidenceUndoAction.setEnabled(editable && evidenceHistory.canUndo());
+    evidenceRedoAction.setEnabled(editable && evidenceHistory.canRedo());
+    evidenceUndoAction.setToolTipText(evidenceHistory.canUndo() ? "취소: " + evidenceHistory.undoLabel() : "실행 취소할 편집이 없습니다.");
+    evidenceRedoAction.setToolTipText(evidenceHistory.canRedo() ? "다시 실행: " + evidenceHistory.redoLabel() : "다시 실행할 편집이 없습니다.");
+    evidenceDescribe.setEnabled(editable && selected.length == 1);
     evidenceCount.setText("증거 " + evidenceModel.getRowCount() + " / 32개 · 선택 " + selected.length + "개");
   }
 
@@ -452,30 +489,47 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceTitle.setColumns(24);
     includeBodies.setText("JSON/폼 본문 포함");
     includeBodies.setToolTipText("JSON/폼 본문을 증거에 포함합니다. 민감 키는 가리지만 직접 작성한 영향·재현 문장은 저장 전에 확인하세요.");
-    top.add(WorkbenchUi.row(new JLabel("제목"), evidenceTitle, includeBodies,
-        action("가림 설정", evidenceRedactionSettings::open)));
+    JPanel titleRow = new JPanel(new BorderLayout(8, 0));
+    titleRow.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+    titleRow.add(new JLabel("제목"), BorderLayout.WEST);
+    titleRow.add(evidenceTitle); titleRow.add(evidenceCount, BorderLayout.EAST);
+    top.add(titleRow);
     evidenceSave.setName("wb.bounty.evidence.save");
     evidencePreview.setName("wb.bounty.evidence.preview");
     evidenceClear.setName("wb.bounty.evidence.clear");
     WorkbenchUi.primary(evidenceSave);
-    top.add(
-        WorkbenchUi.row(
-            action("트래픽 추가", this::captureSelected),
-            action("권한 비교 추가", this::captureAuth),
-            action("업무 결과 추가", this::captureFlow),
-            new JSeparator(SwingConstants.VERTICAL),
-            evidencePreview,
-            evidenceSave,
-            evidenceClear));
+    JButton addEvidence = evidenceMenuButton("증거 추가", "wb.bounty.evidence.add", () -> {
+      JPopupMenu menu = new JPopupMenu();
+      evidenceMenuItem(menu, "트래픽 추가", !running, this::captureSelected);
+      evidenceMenuItem(menu, "권한 비교 추가", !running, this::captureAuth);
+      evidenceMenuItem(menu, "업무 결과 추가", !running, this::captureFlow);
+      return menu;
+    });
+    JButton moreEvidence = evidenceMenuButton("더 보기", "wb.bounty.evidence.more", () -> {
+      JPopupMenu menu = new JPopupMenu();
+      evidenceMenuItem(menu, "가림 설정·본문 포함", true, evidenceRedactionSettings::open);
+      evidenceMenuItem(menu, "작성 도움·저장된 초안", true, writingHelp::open);
+      menu.addSeparator(); evidenceMenuItem(menu, "증거 비우기", evidenceClear.isEnabled(), this::clearEvidence);
+      return menu;
+    });
+    top.add(WorkbenchUi.row(addEvidence, evidencePreview, evidenceSave, moreEvidence));
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     evidenceTable.setToolTipText("Ctrl/Shift로 여러 증거 선택 · 화면 순서대로 ZIP에 저장합니다.");
     evidenceRemove.setName("wb.bounty.evidence.remove");
     evidenceUp.setName("wb.bounty.evidence.up");
     evidenceDown.setName("wb.bounty.evidence.down");
     evidenceUndoAction.setName("wb.bounty.evidence.undo");
+    evidenceRedoAction.setName("wb.bounty.evidence.redo");
+    evidenceDescribe.setName("wb.bounty.evidence.describe");
     evidenceCount.setName("wb.bounty.evidence.count");
-    evidenceUndoAction.setToolTipText("마지막 제거·순서 변경 1회 복구 · 새 증거 추가·비우기·프로젝트 변경 시 해제");
-    top.add(WorkbenchUi.row(evidenceRemove, evidenceUp, evidenceDown, evidenceUndoAction, evidenceCount));
+    top.add(WorkbenchUi.row(evidenceRemove, evidenceUp, evidenceDown, evidenceUndoAction, evidenceRedoAction,
+        evidenceDescribe));
+    evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Z"), "evidence-undo");
+    evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Y"), "evidence-redo");
+    evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), "evidence-description");
+    evidenceTable.getActionMap().put("evidence-undo", new AbstractAction() { public void actionPerformed(java.awt.event.ActionEvent e) { if (evidenceUndoAction.isEnabled()) evidenceUndoAction.doClick(); } });
+    evidenceTable.getActionMap().put("evidence-redo", new AbstractAction() { public void actionPerformed(java.awt.event.ActionEvent e) { if (evidenceRedoAction.isEnabled()) evidenceRedoAction.doClick(); } });
+    evidenceTable.getActionMap().put("evidence-description", new AbstractAction() { public void actionPerformed(java.awt.event.ActionEvent e) { if (evidenceDescribe.isEnabled()) evidenceDescribe.doClick(); } });
     p.add(top, BorderLayout.NORTH);
     for (JTextArea area : List.of(impact, repro)) {
       area.setLineWrap(true);
@@ -490,19 +544,212 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
             .5);
     text.setName("wb.bounty.evidence.notes");
     JSplitPane body =
-        WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, new JScrollPane(evidenceTable), text, .5);
+        WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, new JScrollPane(evidenceTable), text, .45);
     body.setName("wb.bounty.evidence.body");
     p.add(body);
+    draftState.setName("wb.bounty.evidence.draft.state");
+    draftState.setEditable(false); draftState.setOpaque(false); draftState.setLineWrap(true);
+    draftState.setWrapStyleWord(true); draftState.putClientProperty("wb.prose", true);
+    p.add(draftState, BorderLayout.SOUTH);
     int[] widths = {130, 75, 380, 240};
     for (int i = 0; i < widths.length; i++)
       evidenceTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
     return p;
   }
 
+  JButton evidenceMenuButton(String title, String name, Supplier<JPopupMenu> content) {
+    JButton button = new JButton(title + " ▾"); button.setName(name);
+    button.addActionListener(event -> {
+      JPopupMenu menu = content.get(); WorkbenchUi.style(menu);
+      menu.show(button, 0, button.getHeight());
+      if (menu.getComponentCount() > 0 && menu.getComponent(0) instanceof JMenuItem first) first.requestFocusInWindow();
+    });
+    return button;
+  }
+
+  void evidenceMenuItem(JPopupMenu menu, String title, boolean enabled, Runnable run) {
+    JMenuItem item = new JMenuItem(title); item.setEnabled(enabled);
+    item.addActionListener(event -> {
+      try { run.run(); }
+      catch (Exception failure) {
+        Diagnostics.failure(this, "재현·증거 정리", failure);
+        state.setText(Objects.toString(failure.getMessage(), failure.getClass().getSimpleName()));
+      }
+    });
+    menu.add(item);
+  }
+
+  void initializeDrafts() {
+    javax.swing.event.DocumentListener listener = new javax.swing.event.DocumentListener() {
+      public void insertUpdate(javax.swing.event.DocumentEvent event) { saveEvidenceDraft(); }
+      public void removeUpdate(javax.swing.event.DocumentEvent event) { saveEvidenceDraft(); }
+      public void changedUpdate(javax.swing.event.DocumentEvent event) { saveEvidenceDraft(); }
+    };
+    for (var field : List.of(evidenceTitle, impact, repro)) field.getDocument().addDocumentListener(listener);
+    javax.swing.event.DocumentListener itemListener = new javax.swing.event.DocumentListener() {
+      void changed() { if (!loadingItem) saveEvidenceDraft(); }
+      public void insertUpdate(javax.swing.event.DocumentEvent event) { changed(); }
+      public void removeUpdate(javax.swing.event.DocumentEvent event) { changed(); }
+      public void changedUpdate(javax.swing.event.DocumentEvent event) { changed(); }
+    };
+    itemName.getDocument().addDocumentListener(itemListener); itemNote.getDocument().addDocumentListener(itemListener);
+    loadEvidenceDraft();
+  }
+
+  void loadEvidenceDraft() {
+    loadingDraft = true;
+    try {
+      evidenceDrafts.refreshProject();
+      String loadedProject = evidenceDrafts.project();
+      boolean projectChanged = !Objects.equals(draftProject, loadedProject);
+      draftProject = loadedProject;
+      var saved = evidenceDrafts.snapshot();
+      var content = saved == null ? EvidenceDrafts.Content.empty() : saved.content();
+      evidenceTitle.setText(saved == null ? "취약점 재현 증거" : content.title());
+      impact.setText(content.impact()); repro.setText(content.repro());
+      // Durable prose is an editor buffer, not proof that a live Item already has that description.
+      // Preserve the applied-state map on a same-project reload so its exact edit history remains valid.
+      if (projectChanged) { evidenceHistory.clear(); evidenceUndo = null; draftAnnotations.clear(); cleanupEvidenceStores(); }
+      pendingAnnotations.clear(); pendingAnnotations.putAll(content.annotations());
+      editingItemId = null; itemEditor.closeWindow(); savedItemNotes.closeWindow();
+    } finally { loadingDraft = false; }
+    updateDraftState("");
+  }
+
+  EvidenceDrafts.Content evidenceDraftContent() {
+    Map<String, EvidenceDrafts.Annotation> annotations = new LinkedHashMap<>(draftAnnotations);
+    annotations.putAll(pendingAnnotations);
+    if (editingItemId != null && !loadingItem) {
+      if (!annotations.containsKey(editingItemId) && annotations.size() >= EvidenceDrafts.MAX_ITEMS)
+        throw new IllegalArgumentException("저장된 항목 메모가 32개입니다. 작성 도움에서 연결 없는 이전 메모를 정리하세요.");
+      annotations.put(editingItemId, new EvidenceDrafts.Annotation(itemName.getText(), itemNote.getText()));
+    }
+    return new EvidenceDrafts.Content(evidenceTitle.getText(), impact.getText(), repro.getText(), annotations);
+  }
+
+  void saveEvidenceDraft() {
+    if (loadingDraft || loadingItem || closed.get()) return;
+    String problem = "";
+    try {
+      var content = evidenceDraftContent();
+      // Keep each editor's prose even when another item is opened or persistence temporarily fails.
+      pendingAnnotations.clear(); pendingAnnotations.putAll(content.annotations());
+      if (!evidenceDrafts.save(draftProject, content)) problem = evidenceDrafts.problem();
+    } catch (RuntimeException failure) { problem = failure.getMessage(); }
+    updateDraftState(problem);
+  }
+
+  void updateDraftState(String problem) {
+    String message = problem.isEmpty() ? evidenceDrafts.problem() : problem;
+    String saved = evidenceDrafts.savedAt() == 0 ? "초안 아직 저장 안 됨"
+        : "초안 저장 " + java.time.Instant.ofEpochMilli(evidenceDrafts.savedAt()).atZone(java.time.ZoneId.systemDefault())
+            .format(java.time.format.DateTimeFormatter.ofPattern("MM-dd HH:mm:ss"));
+    if (!message.isBlank()) saved = "초안 저장 확인: " + message;
+    var missing = EvidenceReportText.missing(evidenceTitle.getText(), impact.getText(), repro.getText());
+    String writing = missing.isEmpty() ? "작성 항목 입력됨 · 실제 내용은 저장 전에 확인하세요."
+        : "작성 확인: " + String.join(" · ", missing);
+    Set<String> noteIds = new HashSet<>(draftAnnotations.keySet()); noteIds.addAll(pendingAnnotations.keySet());
+    draftState.setText(saved + " · 항목 메모 " + noteIds.size() + "개\n" + writing);
+    draftState.setToolTipText(draftState.getText());
+    draftState.setCaretPosition(0);
+  }
+
+  void insertWritingTemplate() {
+    requireEvidenceEdit(); repro.setText(EvidenceReportText.template(repro.getText()));
+    repro.requestFocusInWindow(); state.setText("작성 양식 추가 · 기존 문장 유지 · 실제 영향은 옆 칸에 작성");
+  }
+
+  JPanel writingHelpContent() {
+    JTextArea help = area(5); help.setEditable(false); help.setLineWrap(true); help.setWrapStyleWord(true);
+    help.putClientProperty("wb.prose", true);
+    help.setText("사전 조건 → 재현 단계 → 관측 결과 → 실제 영향 순서로 작성하세요. 작성 확인은 누락된 입력을 알려주며 취약점 확정이나 저장 차단이 아닙니다.\n"
+        + "직접 작성한 제목·영향·절차·항목 메모는 현재 Burp 프로젝트에 자동 저장됩니다. HTTP 원본과 인증값을 자동 수집해 초안에 넣지 않습니다.\n"
+        + "항목 설명은 ZIP의 report.md·report.html·evidence.json에 반영됩니다. 저장 전 가림 미리보기를 확인하세요.");
+    JButton reload = action("저장본 다시 불러오기", () -> {
+      if (JOptionPane.showConfirmDialog(this, "현재 작성 내용을 프로젝트에 저장된 초안으로 바꿀까요?", "초안 다시 불러오기", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        evidenceDrafts.reload(); loadEvidenceDraft();
+      }
+    });
+    JButton fresh = action("새 초안으로 시작", () -> {
+      if (JOptionPane.showConfirmDialog(this, "현재 작성 내용으로 기존 초안을 교체할까요? 원본 증거는 바뀌지 않습니다.", "초안 교체", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION
+          && evidenceDrafts.resetCorrupt(draftProject)) saveEvidenceDraft();
+    });
+    JButton template = action("작성 양식 넣기", this::insertWritingTemplate); template.setName("wb.bounty.evidence.template");
+    return TargetWindow.options(new JScrollPane(help), WorkbenchUi.row(template, action("저장된 항목 메모", savedItemNotes::open)),
+        WorkbenchUi.row(reload, fresh), new JLabel("실행 취소/다시 실행은 표에서 Ctrl+Z / Ctrl+Y · 항목 설명은 Enter"));
+  }
+
+  JPanel savedItemNotesContent() {
+    JTextArea saved = area(12); saved.setEditable(false); saved.setLineWrap(true); saved.setWrapStyleWord(true);
+    saved.putClientProperty("wb.prose", true);
+    Set<String> active = evidence.stream().map(BountyEvidence.Item::evidenceId).collect(java.util.stream.Collectors.toSet());
+    StringBuilder text = new StringBuilder("저장된 작성 메모입니다. 재시작 후 HTTP 원본이 없으면 자동 연결하지 않습니다. 필요한 문장을 복사해 직접 연결한 원본의 항목 설명에 적용하세요.\n\n");
+    Map<String, EvidenceDrafts.Annotation> notes = new LinkedHashMap<>(draftAnnotations); notes.putAll(pendingAnnotations);
+    notes.forEach((id, note) -> text.append(active.contains(id) ? "[현재 원본 연결] " : "[원본 미연결] ")
+        .append(note.name()).append("\n").append(note.note()).append("\n\n"));
+    saved.setText(text.toString()); saved.setCaretPosition(0);
+    JButton discard = action("연결 없는 메모 지우기", () -> {
+      requireEvidenceEdit(); clearEvidenceHistory();
+      Set<String> currentIds = evidence.stream().map(BountyEvidence.Item::evidenceId).collect(java.util.stream.Collectors.toSet());
+      draftAnnotations.keySet().retainAll(currentIds); pendingAnnotations.keySet().retainAll(currentIds);
+      saveEvidenceDraft(); savedItemNotes.closeWindow();
+    });
+    return TargetWindow.options(new JScrollPane(saved), WorkbenchUi.row(discard));
+  }
+
+  void openItemEditor() {
+    requireEvidenceEdit(); var rows = selectedEvidenceRows();
+    if (rows.size() != 1) throw new IllegalArgumentException("이름과 메모를 편집할 증거 1개를 선택하세요.");
+    var item = evidence.get(rows.get(0)); editingItemId = item.evidenceId();
+    var description = pendingAnnotations.getOrDefault(editingItemId,
+        draftAnnotations.getOrDefault(editingItemId, new EvidenceDrafts.Annotation(item.label(), "")));
+    loadingItem = true;
+    try { itemName.setText(description.name()); itemNote.setText(description.note()); itemProblem.setText(" "); }
+    finally { loadingItem = false; }
+    itemEditor.open(); itemName.requestFocusInWindow();
+  }
+
+  JPanel itemEditorContent() {
+    itemName.setName("wb.bounty.evidence.item.name"); itemNote.setName("wb.bounty.evidence.item.note");
+    itemNote.setLineWrap(true); itemNote.setWrapStyleWord(true); itemNote.putClientProperty("wb.prose", true);
+    JButton apply = action("설명 적용", () -> { applyEvidenceDescription(); itemEditor.closeWindow(); evidenceTable.requestFocusInWindow(); });
+    apply.setName("wb.bounty.evidence.item.apply");
+    JPanel panel = new JPanel(new BorderLayout(6, 6));
+    panel.add(WorkbenchUi.row(new JLabel("이름 · 최대 256자"), itemName), BorderLayout.NORTH);
+    panel.add(WorkbenchUi.card("관찰 메모 · 최대 4,096자", new JScrollPane(itemNote)));
+    JPanel footer = new JPanel(new BorderLayout()); footer.add(itemProblem);
+    footer.add(WorkbenchUi.row(apply, new JLabel("작성 내용은 초안 저장 · 원본·실행 연결은 그대로 유지")), BorderLayout.SOUTH);
+    panel.add(footer, BorderLayout.SOUTH); WorkbenchUi.style(panel); return panel;
+  }
+
+  void applyEvidenceDescription() {
+    requireEvidenceEdit();
+    int row = -1;
+    for (int i = 0; i < evidence.size(); i++) if (evidence.get(i).evidenceId().equals(editingItemId)) { row = i; break; }
+    if (row < 0) throw new IllegalArgumentException("설명에 연결할 원본이 바뀌었습니다. 증거를 다시 선택하세요.");
+    try {
+      var annotation = new EvidenceDrafts.Annotation(itemName.getText(), itemNote.getText());
+      if (annotation.name().isBlank()) throw new IllegalArgumentException("증거 이름을 입력하세요.");
+      Set<String> noteIds = new HashSet<>(draftAnnotations.keySet()); noteIds.addAll(pendingAnnotations.keySet());
+      if (!noteIds.contains(editingItemId) && noteIds.size() >= EvidenceDrafts.MAX_ITEMS)
+        throw new IllegalArgumentException("저장된 항목 메모가 32개입니다. 작성 도움에서 연결 없는 메모를 정리하세요.");
+      var item = evidence.get(row);
+      var described = item.withDescription(annotation.name(), annotation.note());
+      if (item.label().equals(described.label()) && item.note().equals(described.note())) return;
+      EvidenceEdit before = evidenceSnapshot();
+      evidence.set(row, described);
+      draftAnnotations.put(item.evidenceId(), annotation); pendingAnnotations.remove(item.evidenceId());
+      editingItemId = null; recordEvidenceEdit(before, "항목 설명 변경");
+      rebuildEvidenceRows(List.of(item.evidenceId())); saveEvidenceDraft();
+      state.setText("증거 이름·관찰 메모 변경 · ZIP 보고서 반영 · 원본과 실행 연결 유지");
+    } catch (RuntimeException failure) { itemProblem.setText(failure.getMessage()); throw failure; }
+  }
+
   JPanel evidenceRedactionContent() {
     evidenceExtraNames.setName("wb.bounty.evidence.redaction.names");
     evidenceExtraNames.setToolTipText("헤더·JSON 중첩 키·폼 이름에 대소문자 구분 없이 적용합니다. 값이나 토큰을 입력하지 마세요.");
     return TargetWindow.options(
+        WorkbenchUi.row(includeBodies),
         WorkbenchUi.row(new JLabel("추가 가림 이름"), evidenceExtraNames),
         new JLabel("쉼표로 구분 · 예: customerCode, otp, X-Custom-Auth"),
         new JLabel("기본 민감 키와 지정한 이름의 값은 본문·반사 내용에서도 가립니다."),
@@ -533,13 +780,20 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       String label,
       String note,
       String account) {
+    remember(q, response, label, note, account, Set.of(), Set.of());
+  }
+
+  void remember(
+      burp.api.montoya.http.message.requests.HttpRequest q,
+      burp.api.montoya.http.message.responses.HttpResponse response,
+      String label, String note, String account, Collection<String> extraNames, Collection<String> extraSecrets) {
     if (closed.get()) throw new IllegalArgumentException("확장이 종료되었습니다.");
     if (running) throw new IllegalArgumentException("진행 중 작업이 끝난 뒤 증거를 추가하세요.");
     ensureEvidenceProject();
     if (evidence.size() >= 32) throw new IllegalArgumentException("증거 요청 최대 32개");
     if (q == null) throw new IllegalArgumentException("요청 없음");
-    Set<String> names = new LinkedHashSet<>(), secrets = new LinkedHashSet<>();
-    long incomingCharacters = 0;
+    Set<String> names = new LinkedHashSet<>(extraNames), secrets = new LinkedHashSet<>(extraSecrets);
+    long incomingCharacters = names.stream().mapToLong(String::length).sum() + secrets.stream().mapToLong(String::length).sum();
     for (var h : q.headers())
       if (auth.authNames.contains(h.name().toLowerCase(Locale.ROOT))
           || AuthComparePanel.CSRF.contains(h.name().toLowerCase(Locale.ROOT))
@@ -551,28 +805,41 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
             || incomingCharacters > EVIDENCE_REDACTION_CHARACTERS)
           throw new IllegalArgumentException("추가할 증거의 가림 정보가 보관 한도를 초과했습니다. 필요한 원본을 나누어 저장하세요. 기존 증거는 유지합니다.");
       }
-    retainEvidenceRedactions(names, secrets);
-    evidenceUndo = null;
-    compactEvidenceStore();
-    // The packet is copied once in bounded chunks. No full request/response String survives
-    // capture.
-    var stored = evidenceStore.append(q, response);
-    if (stored.response().length() > AuthComparePanel.MESSAGE_LIMIT)
-      note +=
-          " · 원본 HTTP 응답 "
-              + stored.response().length()
-              + " bytes · SHA-256 "
-              + stored.response().sha256();
-    BountyEvidence.Item item =
-        new BountyEvidence.Item(label, q.method(), q.url(), note, account, stored);
+    EvidenceRedactions redactions = plannedEvidenceRedactions(names, secrets);
+    // Stage potentially failing disk work before committing a new bundle or retiring its history.
+    EvidencePacketStore destination = evidenceCompactionNeeded ? new EvidencePacketStore() : evidenceStore;
+    List<BountyEvidence.Item> retained = new ArrayList<>();
+    BountyEvidence.Item item;
+    try {
+      if (destination != evidenceStore) for (var existing : evidence) retained.add(existing.copyTo(destination));
+      var stored = destination.append(q, response);
+      if (stored.response().length() > AuthComparePanel.MESSAGE_LIMIT)
+        note += " · 원본 HTTP 응답 " + stored.response().length() + " bytes · SHA-256 " + stored.response().sha256();
+      item = new BountyEvidence.Item(label, q.method(), q.url(), note, account, stored);
+    } catch (RuntimeException failure) {
+      if (destination != evidenceStore) destination.close();
+      throw failure;
+    }
+    evidenceHistory.clear(); evidenceUndo = null;
+    if (destination != evidenceStore) {
+      evidenceStore = destination; evidenceStores.add(destination);
+      evidence.clear(); evidence.addAll(retained); evidenceCompactionNeeded = false;
+    }
+    evidenceHeaders.clear(); evidenceHeaders.addAll(redactions.names());
+    evidenceSecrets.clear(); evidenceSecrets.addAll(redactions.secrets());
     evidence.add(item);
+    evidenceExecutionSources.keySet().retainAll(new HashSet<>(evidenceExecutions.values()));
+    evidenceExecutionParts.keySet().retainAll(new HashSet<>(evidenceExecutions.keySet()));
+    cleanupEvidenceStores();
     evidenceModel.addRow(new Object[] {label, q.method(), Core.safeUrl(q.url()), note});
   }
 
   int evidenceCount() { return evidence.size(); }
 
   /** Removed credentials may still be reflected elsewhere, so keep the union with a hard budget. */
-  void retainEvidenceRedactions(Collection<String> names, Collection<String> secrets) {
+  record EvidenceRedactions(Set<String> names, Set<String> secrets) {}
+
+  EvidenceRedactions plannedEvidenceRedactions(Collection<String> names, Collection<String> secrets) {
     Set<String> nextNames = new LinkedHashSet<>(evidenceHeaders), nextSecrets = new LinkedHashSet<>(evidenceSecrets);
     long characters = nextNames.stream().mapToLong(String::length).sum()
         + nextSecrets.stream().mapToLong(String::length).sum();
@@ -584,8 +851,14 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         if (target.size() > EVIDENCE_REDACTION_VALUES || characters > EVIDENCE_REDACTION_CHARACTERS)
           throw new IllegalArgumentException("증거 가림 정보 보관 한도에 도달했습니다. 현재 증거를 저장하고 비운 뒤 새 묶음을 시작하세요. 기존 가림 정보는 유지합니다.");
       }
-    evidenceHeaders.clear(); evidenceHeaders.addAll(nextNames);
-    evidenceSecrets.clear(); evidenceSecrets.addAll(nextSecrets);
+    return new EvidenceRedactions(Set.copyOf(nextNames), Set.copyOf(nextSecrets));
+  }
+
+  void retainEvidenceRedactions(Collection<String> names, Collection<String> secrets) {
+    EvidenceRedactions next = plannedEvidenceRedactions(names, secrets);
+    if (!evidenceHeaders.equals(next.names()) || !evidenceSecrets.equals(next.secrets())) clearEvidenceHistory();
+    evidenceHeaders.clear(); evidenceHeaders.addAll(next.names());
+    evidenceSecrets.clear(); evidenceSecrets.addAll(next.secrets());
   }
 
   boolean hasSavedEvidence() { return successfulEvidenceSaves.get() > 0; }
@@ -593,15 +866,17 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   /** Integration calls this when the active Burp project changes. No undo may cross this boundary. */
   void resetEvidenceProject() {
     evidenceEpoch.incrementAndGet();
-    evidenceUndo = null;
+    evidenceHistory.clear(); evidenceUndo = null;
     evidenceCompactionNeeded = false;
-    evidenceStore.close();
-    evidenceStore = new EvidencePacketStore();
+    for (var store : evidenceStores) store.close(); evidenceStores.clear();
+    evidenceStore = new EvidencePacketStore(); evidenceStores.add(evidenceStore);
+    editingItemId = null; itemEditor.closeWindow(); writingHelp.closeWindow(); savedItemNotes.closeWindow();
     evidence.clear(); evidenceExecutions.clear(); evidenceExecutionSources.clear(); evidenceExecutionParts.clear(); evidenceModel.setRowCount(0);
     evidenceHeaders.clear(); evidenceSecrets.clear();
     browserImage = null; browserImageSha256 = null;
     successfulEvidenceSaves.set(0);
     evidenceProject = WorkspaceResume.projectIdentity(api);
+    loadEvidenceDraft();
     refreshActions();
   }
 
@@ -625,9 +900,29 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         .sorted().boxed().toList();
   }
 
-  private void rememberEvidenceEdit() {
-    evidenceUndo = new EvidenceEdit(List.copyOf(evidence), Map.copyOf(evidenceExecutions),
-        Map.copyOf(evidenceExecutionParts), selectedEvidenceRows(), evidenceStore, evidenceProject, evidenceCompactionNeeded);
+  EvidenceEdit evidenceSnapshot() {
+    Map<String, Set<String>> sources = new LinkedHashMap<>();
+    evidenceExecutionSources.forEach((id, values) -> sources.put(id, Set.copyOf(values)));
+    return new EvidenceEdit(List.copyOf(evidence), Map.copyOf(evidenceExecutions), Map.copyOf(sources),
+        Map.copyOf(evidenceExecutionParts), selectedEvidenceRows(), evidenceStore, evidenceProject, evidenceCompactionNeeded,
+        Set.copyOf(evidenceHeaders), Set.copyOf(evidenceSecrets), browserImage, browserImageSha256, Map.copyOf(draftAnnotations));
+  }
+
+  void recordEvidenceEdit(EvidenceEdit before, String label) {
+    evidenceHistory.record(before, evidenceSnapshot(), label);
+    cleanupEvidenceStores(); refreshActions();
+  }
+
+  void clearEvidenceHistory() {
+    evidenceHistory.clear(); evidenceUndo = null;
+    cleanupEvidenceStores(); refreshActions();
+  }
+
+  void cleanupEvidenceStores() {
+    Set<EvidencePacketStore> retained = Collections.newSetFromMap(new IdentityHashMap<>());
+    retained.add(evidenceStore);
+    for (var saved : evidenceHistory.retainedValues()) retained.add(saved.store());
+    for (var store : List.copyOf(evidenceStores)) if (!retained.contains(store)) { store.close(); evidenceStores.remove(store); }
   }
 
   private void rebuildEvidenceRows(Collection<String> selectedIds) {
@@ -649,7 +944,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     requireEvidenceEdit();
     List<Integer> selected = selectedEvidenceRows();
     if (selected.isEmpty()) throw new IllegalArgumentException("제거할 증거를 선택하세요.");
-    rememberEvidenceEdit();
+    EvidenceEdit before = evidenceSnapshot();
     for (int i = selected.size() - 1; i >= 0; i--) {
       var removed = evidence.remove((int) selected.get(i));
       evidenceExecutions.remove(removed.evidenceId());
@@ -663,6 +958,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       int next = Math.min(selected.get(0), evidence.size() - 1);
       evidenceTable.setRowSelectionInterval(next, next);
     }
+    recordEvidenceEdit(before, "선택 증거 " + selected.size() + "개 제거");
     state.setText("선택 증거 " + selected.size() + "개 제거 · 실행 취소로 복구 · 원래 트래픽/실행 결과 유지");
   }
 
@@ -677,45 +973,48 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     if (direction != -1 && direction != 1) throw new IllegalArgumentException("증거 이동 방향 오류");
     if (!canMoveEvidence(direction)) throw new IllegalArgumentException("이 방향으로 이동할 선택 증거가 없습니다.");
     List<String> selected = selectedEvidenceRows().stream().map(row -> evidence.get(row).evidenceId()).toList();
-    rememberEvidenceEdit();
+    EvidenceEdit before = evidenceSnapshot();
     Set<String> chosen = new HashSet<>(selected);
     for (int i = direction < 0 ? 1 : evidence.size() - 2;
         direction < 0 ? i < evidence.size() : i >= 0; i -= direction)
       if (chosen.contains(evidence.get(i).evidenceId()) && !chosen.contains(evidence.get(i + direction).evidenceId()))
         Collections.swap(evidence, i, i + direction);
     rebuildEvidenceRows(selected);
+    recordEvidenceEdit(before, "증거 순서 " + (direction < 0 ? "위로" : "아래로") + " 이동");
     state.setText("선택 증거 " + selected.size() + "개 " + (direction < 0 ? "위로" : "아래로") + " 이동 · ZIP 저장 순서에 반영");
   }
 
   void undoEvidenceEdit() {
-    requireEvidenceEdit();
-    EvidenceEdit previous = evidenceUndo;
-    if (previous == null || previous.store() != evidenceStore || !previous.project().equals(evidenceProject))
-      throw new IllegalArgumentException("복구할 증거 편집이 없습니다.");
-    evidenceUndo = null;
-    evidence.clear(); evidence.addAll(previous.items());
-    evidenceExecutions.clear(); evidenceExecutions.putAll(previous.executions());
-    evidenceExecutionParts.clear(); evidenceExecutionParts.putAll(previous.parts());
-    evidenceCompactionNeeded = previous.compact();
-    var ids = previous.selected().stream().map(row -> evidence.get(row).evidenceId()).toList();
-    rebuildEvidenceRows(ids);
-    state.setText("마지막 증거 편집 복구 · 원본·실행 연결과 순서 유지");
+    requireEvidenceEdit(); String label = evidenceHistory.undoLabel();
+    restoreEvidenceEdit(evidenceHistory.undo(evidenceSnapshot()));
+    state.setText("실행 취소: " + label + " · 원본·실행 연결과 순서 유지");
   }
 
-  private void compactEvidenceStore() {
-    if (!evidenceCompactionNeeded) return;
-    EvidencePacketStore next = new EvidencePacketStore();
-    List<BountyEvidence.Item> copied = new ArrayList<>();
-    try {
-      for (var item : evidence) copied.add(item.copyTo(next));
-    } catch (RuntimeException error) { next.close(); throw error; }
-    EvidencePacketStore previous = evidenceStore;
-    evidenceStore = next;
-    evidence.clear(); evidence.addAll(copied);
-    evidenceCompactionNeeded = false;
-    previous.close();
-    evidenceExecutionSources.keySet().retainAll(new HashSet<>(evidenceExecutions.values()));
-    evidenceExecutionParts.keySet().retainAll(new HashSet<>(evidenceExecutions.keySet()));
+  void redoEvidenceEdit() {
+    requireEvidenceEdit(); String label = evidenceHistory.redoLabel();
+    restoreEvidenceEdit(evidenceHistory.redo(evidenceSnapshot()));
+    state.setText("다시 실행: " + label + " · 원본·실행 연결과 순서 유지");
+  }
+
+  private void restoreEvidenceEdit(EvidenceEdit previous) {
+    if (!Objects.equals(previous.project(), evidenceProject)) throw new IllegalArgumentException("다른 프로젝트의 증거 편집입니다.");
+    evidenceEpoch.incrementAndGet();
+    evidenceStore = previous.store();
+    evidence.clear(); evidence.addAll(previous.items());
+    evidenceExecutions.clear(); evidenceExecutions.putAll(previous.executions());
+    evidenceExecutionSources.clear(); evidenceExecutionSources.putAll(previous.sources());
+    evidenceExecutionParts.clear(); evidenceExecutionParts.putAll(previous.parts());
+    evidenceHeaders.clear(); evidenceHeaders.addAll(previous.headers());
+    evidenceSecrets.clear(); evidenceSecrets.addAll(previous.secrets());
+    evidenceCompactionNeeded = previous.compact();
+    browserImage = previous.image(); browserImageSha256 = previous.imageHash();
+    Set<String> changedNotes = new HashSet<>(draftAnnotations.keySet()); changedNotes.addAll(previous.annotations().keySet());
+    changedNotes.removeIf(id -> Objects.equals(draftAnnotations.get(id), previous.annotations().get(id)));
+    changedNotes.forEach(pendingAnnotations::remove);
+    draftAnnotations.clear(); draftAnnotations.putAll(previous.annotations());
+    editingItemId = null; itemEditor.closeWindow(); savedItemNotes.closeWindow();
+    var ids = previous.selected().stream().filter(row -> row >= 0 && row < evidence.size()).map(row -> evidence.get(row).evidenceId()).toList();
+    rebuildEvidenceRows(ids); cleanupEvidenceStores(); saveEvidenceDraft(); refreshActions();
   }
 
   void captureObserved(List<HttpRequestResponse> packets, String note) {
@@ -757,7 +1056,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   void attachBrowserEvidence(Path image, String expected) {
     requireEvidenceEdit();
     String hash = browserProofHash(image, expected);
-    evidenceUndo = null;
+    clearEvidenceHistory();
     browserImage = image;
     browserImageSha256 = hash;
     refreshActions();
@@ -819,7 +1118,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
           + planned.size() + "개를 함께 추가할 공간이 필요합니다.");
     Set<String> profileSecrets = new LinkedHashSet<>();
     for (var c : r.context.profiles()) if (c != null) profileSecrets.addAll(c.headers().values());
-    retainEvidenceRedactions(r.context.names(), profileSecrets);
+    plannedEvidenceRedactions(r.context.names(), profileSecrets); // Validate before the first staged capture; commit only with a packet.
     Set<String> originalPackets = new LinkedHashSet<>();
     int sourceIndex = 0;
     for (var entry : planned) {
@@ -828,7 +1127,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
         account = activity.tracker.assessments.match(entry.request());
       String provenance = execution == null ? "" : "\n\n[작업·원본·실행 연결]\n"
           + activity.tracker.assessments.executionSummary(r.executionId);
-      remember(entry.request(), entry.response(), entry.label(), entry.note() + provenance, account);
+      remember(entry.request(), entry.response(), entry.label(), entry.note() + provenance, account,
+          r.context.names(), profileSecrets);
       if (execution != null) {
         var item = evidence.get(evidence.size() - 1);
         evidenceExecutions.put(item.evidenceId(), r.executionId);
@@ -888,24 +1188,17 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   }
 
   void clearEvidence() {
-    if (closed.get()) throw new IllegalArgumentException("확장이 종료되었습니다.");
-    if (running) throw new IllegalArgumentException("저장 작업 종료 후 증거를 비우세요.");
-    evidenceUndo = null;
+    requireEvidenceEdit(); EvidenceEdit before = evidenceSnapshot();
     evidenceCompactionNeeded = false;
     evidenceEpoch.incrementAndGet();
-    evidenceStore.close();
-    evidenceStore = new EvidencePacketStore();
-    evidence.clear();
-    evidenceExecutions.clear();
-    evidenceExecutionSources.clear();
-    evidenceExecutionParts.clear();
-    evidenceModel.setRowCount(0);
-    evidenceHeaders.clear();
-    evidenceSecrets.clear();
-    browserImage = null;
-    browserImageSha256 = null;
+    evidenceStore = new EvidencePacketStore(); evidenceStores.add(evidenceStore);
+    evidence.clear(); evidenceExecutions.clear(); evidenceExecutionSources.clear(); evidenceExecutionParts.clear();
+    evidenceModel.setRowCount(0); evidenceHeaders.clear(); evidenceSecrets.clear();
+    browserImage = null; browserImageSha256 = null;
+    editingItemId = null; itemEditor.closeWindow();
+    recordEvidenceEdit(before, "증거 비우기");
     refreshActions();
-    state.setText("증거 비움 · 원래 트래픽과 비교 결과 유지");
+    state.setText("증거 비움 · 실행 취소로 복구 가능 · 새 원본 추가 시 이전 편집 이력 종료");
   }
 
   List<Map<String, Object>> oastSnapshot() {
@@ -1218,17 +1511,19 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
 
   @Override
   public void close() {
+    if (!closed.get()) saveEvidenceDraft();
     closed.set(true);
     evidenceEpoch.incrementAndGet();
-    evidenceUndo = null;
+    evidenceHistory.clear(); evidenceUndo = null;
     evidenceCompactionNeeded = false;
     successfulEvidenceSaves.set(0);
     for (var window : List.copyOf(previewWindows)) window.dispose();
     previewWindows.clear();
     cancel.set(true);
     worker.shutdownNow();
-    evidenceStore.close();
+    for (var store : evidenceStores) store.close(); evidenceStores.clear();
     flowSettings.close();
+    itemEditor.close(); writingHelp.close(); savedItemNotes.close();
     evidenceRedactionSettings.close();
     flowResults.clear();
     evidence.clear();

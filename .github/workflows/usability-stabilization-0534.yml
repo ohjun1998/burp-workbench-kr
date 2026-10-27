@@ -1,0 +1,261 @@
+name: Usability 0.53.4 fixed-scope stabilization verification
+on:
+  push:
+    branches: [account-a/usability-stabilization-0534-20261027]
+    paths:
+      - 'project/**'
+      - 'feature-mapper/**'
+      - 'tools/**'
+      - 'dev.py'
+      - 'audit/usability0534/**'
+      - '.github/workflows/usability-stabilization-0534.yml'
+permissions:
+  contents: read
+concurrency:
+  group: usability0534-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Build, regressions, loopback HTTP, and immutable release packages
+        run: python dev.py release --port 19534 --bounty-port 19535
+      - name: Check release fingerprints and packaging invariants
+        run: |
+          python tools/package_downloads.py --verify
+          python -m unittest discover -s tools -p 'test_*.py' -v
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0534-candidate-packages
+          retention-days: 14
+          path: |
+            downloads/extensions/0.53.4/
+            downloads/feature-mapper/0.3.5/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0534-linux-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/test-*.txt
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/*summary.json
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json
+            audit/0.23.0/.run/results.json
+            feature-mapper/build/test-results.txt
+  layout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Build current packaged UI and compile its test adapters
+        run: |
+          python dev.py build
+          python - <<'PYTHON'
+          from pathlib import Path
+          import os, subprocess
+          wb = Path('project/burp-development-workspace/burp-workbench-kr/burp-workbench').resolve()
+          classes = wb / 'build/tests'
+          classes.mkdir(parents=True, exist_ok=True)
+          cp = os.pathsep.join(str(p) for p in [wb / 'dist/burp-workbench-kr-0.53.4.jar', *sorted((wb / 'deps').glob('*.jar'))])
+          subprocess.run(['javac', '--release', '17', '-encoding', 'UTF-8', '-cp', cp, '-d', str(classes), *map(str, (wb / 'src/test/java').rglob('*.java'))], check=True)
+          PYTHON
+      - name: Check current usability views and remaining-work navigation
+        run: |
+          python tools/render_ui_layout.py --next-only --check --out tmp/usability0534-ui
+          python tools/render_ui_layout.py --check --out tmp/usability0534-full-ui
+          python - <<'PYTHON'
+          import subprocess, sys
+          for mode in ["traffic", "guide", "scope", "packet", "js", "session", "auth", "environment"]:
+              subprocess.run([sys.executable, "tools/render_ui_layout.py", "--"+mode+"-only", "--check", "--out", "tmp/usability0534-"+mode+"-ui"], check=True)
+          PYTHON
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0534-layout-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: tmp/usability0534-ui/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0534-full-layout-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            tmp/usability0534-*-ui/layout-report.json
+            tmp/usability0534-full-ui/layout-report.json
+            tmp/usability0534-full-ui/controls.csv
+            tmp/usability0534-full-ui/content.csv
+            tmp/usability0534-full-ui/text.csv
+            tmp/usability0534-full-ui/scenarios.csv
+            tmp/usability0534-full-ui/light/1024x720/next-remaining-checks.png
+            tmp/usability0534-full-ui/dark/1024x720/next-remaining-checks.png
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Windows Java and loopback regression checks
+        run: python dev.py check --port 19534 --bounty-port 19535
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: usability0534-windows-evidence
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/test-*.txt
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/*summary.json
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/results.json
+            audit/0.23.0/.run/results.json
+            feature-mapper/build/test-results.txt
+
+  publish-packages:
+    needs: [release, layout, windows]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: usability0534-candidate-packages
+          path: tmp/verified-packages
+      - uses: actions/download-artifact@v4
+        with:
+          name: usability0534-layout-evidence
+          path: tmp/verified-layout
+      - uses: actions/download-artifact@v4
+        with:
+          name: usability0534-full-layout-evidence
+          path: tmp/verified-full-layout
+      - uses: actions/download-artifact@v4
+        with:
+          name: usability0534-linux-evidence
+          path: tmp/verified-linux
+      - uses: actions/download-artifact@v4
+        with:
+          name: usability0534-windows-evidence
+          path: tmp/verified-windows
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Publish only verified immutable extension files to the same candidate branch
+        env:
+          CANDIDATE_BRANCH: ${{ github.ref_name }}
+          TESTED_SHA: ${{ github.sha }}
+          CANDIDATE_RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PYTHON'
+          from pathlib import Path
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+          import hashlib, json, os, shutil, subprocess
+          branch = os.environ['CANDIDATE_BRANCH']
+          if branch != 'account-a/usability-stabilization-0534-20261027':
+              raise SystemExit('Unexpected publication branch')
+          subprocess.run(['git', 'fetch', 'origin', branch], check=True)
+          current = subprocess.check_output(['git', 'rev-parse', 'FETCH_HEAD'], text=True).strip()
+          if current != os.environ['TESTED_SHA']:
+              raise SystemExit('Candidate head changed; do not publish artifacts for stale source')
+          names = ['burp-workbench-kr-0.53.4.jar', 'burp-workbench-kr-0.53.4-source.zip', 'manifest.json', 'SHA256SUMS']
+          destination = Path('downloads/extensions/0.53.4')
+          destination.mkdir(parents=True, exist_ok=True)
+          for name in names:
+              matches = list(Path('tmp/verified-packages').rglob(name))
+              if name in ('manifest.json', 'SHA256SUMS'):
+                  matches = [p for p in matches if p.parent.name == '0.53.4']
+              if len(matches) != 1:
+                  raise SystemExit('Missing or ambiguous artifact: '+name)
+              data = matches[0].read_bytes()
+              target = destination/name
+              if target.exists() and target.read_bytes() != data:
+                  raise SystemExit('Existing version is immutable: '+name)
+              target.write_bytes(data)
+          subprocess.run(['python', 'tools/package_downloads.py', '--verify'], check=True)
+          report_dir = Path('docs/reports/2026-10-27-stabilization-0534')
+          report_dir.mkdir(parents=True, exist_ok=True)
+          def one_report(directory, name, parent=None):
+              matches = list(Path(directory).rglob(name))
+              if parent is not None:
+                  matches = [p for p in matches if p.parent.name == parent]
+              if len(matches) != 1:
+                  raise SystemExit('Missing or ambiguous verification report: '+directory+'/'+name)
+              return matches[0]
+          linux = json.loads(one_report('tmp/verified-linux', 'check-summary.json').read_text())
+          windows = json.loads(one_report('tmp/verified-windows', 'check-summary.json').read_text())
+          focused = json.loads(one_report('tmp/verified-layout', 'layout-report.json').read_text())
+          full = json.loads(one_report('tmp/verified-full-layout', 'layout-report.json', 'usability0534-full-ui').read_text())
+          jar_hash = hashlib.sha256((destination/names[0]).read_bytes()).hexdigest()
+          for label, report in [('focused', focused), ('full', full)]:
+              if report['releaseJarSha256'] != jar_hash:
+                  raise SystemExit('Published JAR differs from UI-tested JAR: '+label)
+              if any(report[key] for key in ['clippedControlsOutsideScrollers', 'smallControls', 'collapsedRequiredWorkAreas', 'clippedSelectedTabOrHeadingLabels']) or report['scenarioFailures']:
+                  raise SystemExit('UI verification failed: '+label)
+          for label, report in [('linux', linux), ('windows', windows)]:
+              if report.get('version') != '0.53.4' or report.get('result') != 'passed':
+                  raise SystemExit('Platform verification failed: '+label)
+          for name, report in [('linux-check-summary.json', linux), ('windows-check-summary.json', windows), ('focused-layout-report.json', focused), ('full-layout-report.json', full)]:
+              (report_dir/name).write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
+          image_dir = report_dir/'ui'
+          image_dir.mkdir(exist_ok=True)
+          selected = [('light','stabilization-traffic-150.png'), ('dark','stabilization-traffic-150.png'), ('light','stabilization-evidence-150.png'), ('dark','stabilization-comparison-150.png'), ('light','stabilization-evidence-description-minimum.png'), ('light','stabilization-display-150-minimum.png')]
+          for theme, name in selected:
+              original = Path('tmp/verified-layout')/theme/'1024x720'/name
+              if not original.is_file():
+                  raise SystemExit('Missing selected UI screenshot: '+str(original))
+              (image_dir/(theme+'-'+name)).write_bytes(original.read_bytes())
+          record = {'version':'0.53.4', 'status':'candidate-ci-passed-main-pending', 'sourceBase':'e0b40e3dae3fcca21d3cd9441260e3edae65d159', 'sourceCommit':os.environ['TESTED_SHA'], 'candidateRunId':int(os.environ['CANDIDATE_RUN_ID']), 'linux':linux, 'windows':windows, 'fullLayout':full, 'focusedLayout':focused, 'releaseJarSha256':jar_hash, 'uiTestedJarMatchesPublished':True, 'main':{'merged':False}, 'notExecuted':['actual Burp GUI manual validation', 'native Windows DPI/IME and physical keyboard delivery', 'live external target services', 'Docker/Oracle/Nginx deployment']}
+          Path('docs/VERIFICATION_0.53.4.json').write_text(json.dumps(record, ensure_ascii=False, indent=2)+'\n')
+          (report_dir/'README.md').write_text('# 0.53.4 안정화 CI 검증\n\n고정한 8개 사용자 편의성 개선의 소스 `'+os.environ['TESTED_SHA']+'`를 [후보 CI](https://github.com/'+os.environ['GITHUB_REPOSITORY']+'/actions/runs/'+os.environ['CANDIDATE_RUN_ID']+')에서 검사했습니다. Linux·Windows 전체 검사와 모든 화면 모드가 통과한 뒤 배포 파일을 게시합니다. 아직 main 미병합입니다.\n\n- [Linux 검사](linux-check-summary.json) · [Windows 검사](windows-check-summary.json)\n- [전체 화면](full-layout-report.json) · [집중 화면](focused-layout-report.json): 두 검사는 겹치므로 합산하지 않습니다.\n- [150% 트래픽](ui/light-stabilization-traffic-150.png) · [150% 증거 작성](ui/light-stabilization-evidence-150.png) · [150% 비교](ui/dark-stabilization-comparison-150.png)\n\n화면 검사 JAR와 게시 JAR의 SHA-256이 일치합니다. 자동 Swing/API/격리 HTTP 검사이며 실제 Burp GUI·DPI/IME·외부 서비스 수동 검증을 뜻하지 않습니다. 이전 버전 파일과 당시 검증 기록은 보존합니다.\n')
+          log = Path('docs/chat-logs/2026-10-27/usability-stabilization-0534.md')
+          stamp = datetime.now(ZoneInfo('Asia/Seoul')).isoformat(timespec='seconds')
+          log.write_text(log.read_text()+ '\n## CI 배포 파일 반영 · 도우미 요약\n\n'+stamp+'에 고정 범위 후보 CI '+os.environ['CANDIDATE_RUN_ID']+'의 Linux release·전체 화면·Windows 작업이 모두 통과한 소스 '+os.environ['TESTED_SHA']+'의 0.53.4 JAR·소스 ZIP·해시·소스 지문을 같은 작업 브랜치에 게시했다. 기존 버전을 덮어쓰지 않았다. 아직 main 병합이나 실제 Burp GUI 수동 검증 완료를 뜻하지 않는다.\n')
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', str(destination), str(log), str(report_dir), 'docs/VERIFICATION_0.53.4.json'], check=True)
+          subprocess.run(['git', 'commit', '-m', 'release: publish CI-verified immutable 0.53.4 packages'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:refs/heads/'+branch], check=True)
+          PYTHON

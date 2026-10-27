@@ -384,6 +384,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (logWindow != null) logWindow.dispose();
                     diagnostics.close();
                     if (commonSettingsWindow != null) commonSettingsWindow.dispose();
+                    if (commonSettings != null) commonSettings.close();
                     if (scopeWindow != null) scopeWindow.dispose();
                     if (requestNativeWindow != null) requestNativeWindow.dispose();
                     if (responseNativeWindow != null) responseNativeWindow.dispose();
@@ -391,7 +392,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     responsePacket.close();
                     if (timer != null) timer.stop();
                     if (root != null) root.putClientProperty("wb.skin.closed", true);
-                    if (structuredCompare != null) structuredCompare.clearSources();
+                    if (structuredCompare != null) structuredCompare.close();
                     if (responseRecon != null) responseRecon.close();
                     if (jsAnalysis != null) jsAnalysis.close();
                     if (trafficBrowser != null) trafficBrowser.close();
@@ -648,7 +649,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       preparation.addActionListener(a -> openGettingStarted());jobs.addActionListener(a -> openJobMonitor());
       menu.add(preparation);menu.add(jobs);WorkbenchUi.style(menu);menu.show(workflowHelp,0,workflowHelp.getHeight());
     });
-    workContextPanel.add(WorkbenchUi.row(resumeWorkButton, workflowHelp), BorderLayout.EAST);
+    JPanel workflowActions=new JPanel();workflowActions.setName("wb.workflow.actions");workflowActions.setOpaque(false);
+    workflowActions.setLayout(new BoxLayout(workflowActions,BoxLayout.X_AXIS));
+    workflowActions.add(resumeWorkButton);workflowActions.add(Box.createHorizontalStrut(8));workflowActions.add(workflowHelp);
+    workContextPanel.add(workflowActions, BorderLayout.EAST);
     root.add(workContextPanel, BorderLayout.NORTH);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
@@ -668,6 +672,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     authCompare.backgroundJobs = backgroundJobs;
     bountySupport.backgroundJobs = backgroundJobs;
     jsAnalysis.backgroundJobs = backgroundJobs;
+    structuredCompare.backgroundJobs = backgroundJobs;
     configureUsabilityNavigation();
     workContext.onChange(this::rememberWorkspace);
     trafficBrowser.onSearchStateChanged(this::rememberWorkspace);
@@ -960,16 +965,27 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private Object captureNavigationPosition(String route) {
-    if(trafficBrowser==null || logTable==null || trafficStore==null)return null;
-    int[] selected=logTable.getSelectedRows();String[] originals=new String[selected.length<=200?selected.length:0];
-    for(int i=0;i<originals.length;i++)originals[i]=trafficStore.ref(logTable.convertRowIndexToModel(selected[i])).id();
-    JViewport viewport=(JViewport)SwingUtilities.getAncestorOfClass(JViewport.class,logTable);
-    return new NavigationPosition(trafficBrowser.capturePosition(),workspaceProject,route,originals,
-        viewport==null?new Point():new Point(viewport.getViewPosition()));
+    // Navigation events already queued on the EDT can run after the host has closed the
+    // store. Share the capture lifecycle lock so unload cannot close it mid-bookmark.
+    synchronized(captureLock){
+      if(unloaded.get() || trafficBrowser==null || trafficBrowser.closed || logTable==null || trafficStore==null
+          || root!=null&&Boolean.TRUE.equals(root.getClientProperty("wb.skin.closed")))return null;
+      DiskTrafficStore disk=trafficStore;
+      int[] selected=logTable.getSelectedRows();String[] originals=new String[selected.length<=200?selected.length:0];
+      for(int i=0;i<originals.length;i++){
+        int raw=logTable.convertRowIndexToModel(selected[i]);if(raw<0||raw>=disk.size())return null;
+        originals[i]=disk.ref(raw).id();
+      }
+      JViewport viewport=(JViewport)SwingUtilities.getAncestorOfClass(JViewport.class,logTable);
+      return new NavigationPosition(trafficBrowser.capturePosition(),workspaceProject,route,originals,
+          viewport==null?new Point():new Point(viewport.getViewPosition()));
+    }
   }
 
   private void restoreNavigationPosition(Object value) {
-    if(!(value instanceof NavigationPosition saved) || !saved.project().equals(workspaceProject))return;
+    if(unloaded.get() || trafficBrowser==null || trafficBrowser.closed
+        || root!=null&&Boolean.TRUE.equals(root.getClientProperty("wb.skin.closed"))
+        || !(value instanceof NavigationPosition saved) || !saved.project().equals(workspaceProject))return;
     long revision=++navigationRestoreRevision;
     if(navigationSelectionTimer!=null)navigationSelectionTimer.stop();
     long interaction=navigationInteractionRevision,page=assessmentNavigationRevision;
@@ -1211,6 +1227,31 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     return item;
   }
 
+  java.util.function.BiFunction<Component,String,String> trafficNotePrompt=(owner,current)->JOptionPane.showInputDialog(owner,"메모 (1,000자 이내)",current);
+
+  void editTrafficNote(){
+    int selected=logTable.getSelectedRow();if(selected<0||logTable.getSelectedRowCount()!=1)throw new IllegalArgumentException("메모를 편집할 요청 1개를 선택하세요.");
+    int raw=logTable.convertRowIndexToModel(selected);DiskTrafficStore disk=trafficStore;String project=trafficBrowser.projectIdentity(),id=disk.ref(raw).id();
+    String text=trafficNotePrompt.apply(logTable,Objects.toString(logModel.getValueAt(raw,10),""));
+    if(text!=null){if(disk!=trafficStore||!project.equals(trafficBrowser.projectIdentity())||raw>=disk.size()||!id.equals(disk.ref(raw).id()))throw new IllegalArgumentException("프로젝트나 선택 원본이 바뀌었습니다. 다시 선택하세요.");trafficBrowser.note(raw,text);}
+    logTable.requestFocusInWindow();
+  }
+  void toggleSelectedTrafficGroup(){int row=logTable.getSelectedRow();if(row>=0)trafficBrowser.toggleGroup(logTable.convertRowIndexToModel(row));logTable.requestFocusInWindow();}
+  private void updateTrafficMenu(JPopupMenu menu){int count=logTable.getSelectedRowCount();for(Component c:menu.getComponents())if(c instanceof JMenuItem item){item.setEnabled(count>0&&!"wb.traffic.shortcuts".equals(item.getName()));if("wb.traffic.mark".equals(item.getName()))item.setText("모두 중요 표시 ("+count+"건)");if("wb.traffic.unmark".equals(item.getName()))item.setText("모두 중요 해제 ("+count+"건)");if("wb.traffic.stars.undo.menu".equals(item.getName()))item.setEnabled(trafficBrowser!=null&&trafficBrowser.undoStars.isEnabled());}}
+  private void installTrafficKeyboard(JPopupMenu menu){
+    logTable.setToolTipText("행 작업: Shift+F10 · 중요 표시 Alt+I / 해제 Alt+Shift+I · 메모 Alt+M · 묶음 Alt+G · 중요 변경 취소 Alt+Z");
+    menu.addPopupMenuListener(new javax.swing.event.PopupMenuListener(){public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent e){updateTrafficMenu(menu);}public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent e){logTable.requestFocusInWindow();}public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e){logTable.requestFocusInWindow();}});
+    bindTrafficKey("shift F10","wb.traffic.popup",()->{int row=logTable.getSelectedRow();if(row<0)return;showTraffic(row);updateTrafficMenu(menu);Rectangle cell=logTable.getCellRect(row,0,true);if(logTable.isShowing())menu.show(logTable,cell.x,cell.y+cell.height);});
+    // Both physical context-menu keys share the same table-local action.
+    logTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_CONTEXT_MENU,0),"wb.traffic.popup");
+    bindTrafficKey("alt I","wb.traffic.mark",()->trafficBrowser.setSelectedStars(true));
+    bindTrafficKey("alt shift I","wb.traffic.unmark",()->trafficBrowser.setSelectedStars(false));
+    bindTrafficKey("alt M","wb.traffic.note",this::editTrafficNote);
+    bindTrafficKey("alt G","wb.traffic.group",this::toggleSelectedTrafficGroup);
+    bindTrafficKey("alt Z","wb.traffic.stars.undo",trafficBrowser::undoStarEdit);
+  }
+  private void bindTrafficKey(String stroke,String name,Runnable task){logTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(stroke),name);logTable.getActionMap().put(name,new AbstractAction(){public void actionPerformed(java.awt.event.ActionEvent e){try{task.run();}catch(RuntimeException error){WorkbenchExtension.this.error(error);}}});}
+
   private JPanel trafficPanel() {
     captureButton =
         button(
@@ -1239,9 +1280,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             int row = rowAtPoint(e.getPoint());
             if (row < 0) return null;
             int index = convertRowIndexToModel(row);
-            if(trafficBrowser!=null&&trafficBrowser.view!=null){var g=trafficBrowser.view.groups().get(index);if(g!=null&&g.members().size()>1)return "원본 "+g.members().size()+"건 · 상태 "+g.statuses()+" · 더블클릭으로 펼치기/접기";}
+            if(trafficBrowser!=null&&trafficBrowser.view!=null){var g=trafficBrowser.view.groups().get(index);if(g!=null&&g.members().size()>1)return "원본 "+g.members().size()+"건 · 상태 "+g.statuses()+" · 더블클릭/Alt+G 펼치기·접기 · Shift+F10 행 작업";}
             return index < traffic.size()
-                ? WorkbenchScope.reason(api, traffic.get(index).request())
+                ? WorkbenchScope.reason(api, traffic.get(index).request())+" · 행 작업 Shift+F10 · 메모 Alt+M"
                 : null;
           }
         };
@@ -1311,8 +1352,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               if (!logTable.isRowSelected(row)) logTable.setRowSelectionInterval(row, row);
               showTraffic(row);
             } else logTable.clearSelection();
-            for (Component c : trafficMenu.getComponents())
-              if (c instanceof JMenuItem item) item.setEnabled(row >= 0);
+            updateTrafficMenu(trafficMenu);
             trafficMenu.show(logTable, e.getX(), e.getY());
           }
 
@@ -1349,9 +1389,16 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       return profiles;
     };
     trafficMenu.addSeparator();
-    trafficMenu.add(trafficAction("중요 표시 / 해제",()->{for(int row:logTable.getSelectedRows())trafficBrowser.toggleStar(logTable.convertRowIndexToModel(row));}));
-    trafficMenu.add(trafficAction("메모 편집",()->{int row=logTable.getSelectedRow();if(row<0)return;int raw=logTable.convertRowIndexToModel(row);String note=JOptionPane.showInputDialog(logTable,"메모",Objects.toString(logModel.getValueAt(raw,10),""));if(note!=null)trafficBrowser.note(raw,note);}));
-    trafficMenu.add(trafficAction("묶음 펼치기 / 접기",()->{int row=logTable.getSelectedRow();if(row>=0)trafficBrowser.toggleGroup(logTable.convertRowIndexToModel(row));}));
+    JMenuItem mark=trafficAction("모두 중요 표시",()->trafficBrowser.setSelectedStars(true));
+    mark.setName("wb.traffic.mark");mark.setAccelerator(KeyStroke.getKeyStroke("alt I"));trafficMenu.add(mark);
+    JMenuItem unmark=trafficAction("모두 중요 해제",()->trafficBrowser.setSelectedStars(false));
+    unmark.setName("wb.traffic.unmark");unmark.setAccelerator(KeyStroke.getKeyStroke("alt shift I"));trafficMenu.add(unmark);
+    JMenuItem undoMark=trafficAction("중요 표시 변경 취소",trafficBrowser::undoStarEdit);
+    undoMark.setName("wb.traffic.stars.undo.menu");undoMark.setAccelerator(KeyStroke.getKeyStroke("alt Z"));trafficMenu.add(undoMark);
+    JMenuItem note=trafficAction("메모 편집",this::editTrafficNote);note.setAccelerator(KeyStroke.getKeyStroke("alt M"));trafficMenu.add(note);
+    JMenuItem grouped=trafficAction("묶음 펼치기 / 접기",this::toggleSelectedTrafficGroup);grouped.setAccelerator(KeyStroke.getKeyStroke("alt G"));trafficMenu.add(grouped);
+    installTrafficKeyboard(trafficMenu);
+    trafficMenu.addSeparator();JMenuItem shortcuts=new JMenuItem("행 작업: Shift+F10 · 메뉴 키");shortcuts.setName("wb.traffic.shortcuts");shortcuts.setEnabled(false);trafficMenu.add(shortcuts);
     logTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     int[] extraWidths={45,110,55,130};for(int i=0;i<4;i++)logTable.getColumnModel().getColumn(i+4).setPreferredWidth(extraWidths[i]);
     trafficBrowser.updateColumns();
@@ -1368,7 +1415,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     actions.add(captureButton);
     JPanel top = new JPanel(new BorderLayout(10, 0));
     top.setName("wb.traffic.controls");
-    JPanel searching=new JPanel(new BorderLayout(6,0));searching.add(filter);searching.add(trafficBrowser.settingsButton,BorderLayout.EAST);
+    JPanel searching=new JPanel(new BorderLayout(6,0));searching.add(filter);
+    JPanel live=new JPanel();live.setName("wb.traffic.live.controls");live.setOpaque(false);
+    live.setLayout(new BoxLayout(live,BoxLayout.X_AXIS));
+    live.add(trafficBrowser.freezeView);live.add(Box.createHorizontalStrut(5));
+    live.add(trafficBrowser.newTraffic);live.add(Box.createHorizontalStrut(5));live.add(trafficBrowser.settingsButton);
+    searching.add(live,BorderLayout.EAST);
     top.add(searching, BorderLayout.CENTER);
     top.add(actions, BorderLayout.EAST);
     JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
@@ -2169,8 +2221,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if (unloaded.get()) return;
     // Publish every committed metadata row once per tick, regardless of observer backlog.
     // JTable reads only visible/filter/sort metadata cells, never raw HTTP packet bodies.
-    logModel.publish(Math.toIntExact(trafficStore.size()));
-    if(trafficBrowser!=null)trafficBrowser.refresh();
+    if (commonSettings != null) commonSettings.refreshProject();
+    if(trafficBrowser!=null){trafficBrowser.publishCommittedRows();trafficBrowser.refresh();}
+    else logModel.publish(Math.toIntExact(trafficStore.size()));
     rememberWorkspace();
     stats.setText(
         "수신 "
@@ -2190,7 +2243,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
 
   private boolean addTraffic(Traffic packet) {
     if (unloaded.get()) return false;
-    logModel.publish(Math.toIntExact(trafficStore.size()));
+    if(trafficBrowser!=null)trafficBrowser.publishCommittedRows();
+    else logModel.publish(Math.toIntExact(trafficStore.size()));
     captureStage("트래픽 상태 갱신", this::refreshTrafficInfo);
     return true;
   }

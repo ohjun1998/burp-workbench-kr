@@ -105,6 +105,33 @@ def main():
         ('usability-response-summary.png','wb.compare.raw.right'):70,
         ('usability-evidence-editor.png','preview.evidence.impact'):70,
         ('usability-evidence-editor.png','preview.evidence.repro'):70,
+        ('stabilization-frozen-traffic.png','wb.traffic.request.text'):80,
+        ('stabilization-frozen-traffic.png','wb.traffic.response.text'):80,
+        ('stabilization-evidence-draft.png','preview.evidence.impact'):70,
+        ('stabilization-evidence-draft.png','preview.evidence.repro'):70,
+        ('stabilization-evidence-description.png','wb.bounty.evidence.item.note'):70,
+        ('stabilization-evidence-description-minimum.png','wb.bounty.evidence.item.note'):40,
+        ('stabilization-evidence-100.png','preview.evidence.impact'):70,
+        ('stabilization-evidence-100.png','preview.evidence.repro'):70,
+        ('stabilization-comparison-100.png','wb.compare.summary'):60,
+        ('stabilization-comparison-100.png','wb.compare.raw.left'):70,
+        ('stabilization-comparison-100.png','wb.compare.raw.right'):70,
+        ('stabilization-evidence-125.png','preview.evidence.impact'):70,
+        ('stabilization-evidence-125.png','preview.evidence.repro'):70,
+        ('stabilization-comparison-125.png','wb.compare.summary'):60,
+        ('stabilization-comparison-125.png','wb.compare.raw.left'):70,
+        ('stabilization-comparison-125.png','wb.compare.raw.right'):70,
+        ('stabilization-evidence-150.png','preview.evidence.impact'):70,
+        ('stabilization-evidence-150.png','preview.evidence.repro'):70,
+        ('stabilization-comparison-150.png','wb.compare.summary'):60,
+        ('stabilization-comparison-150.png','wb.compare.raw.left'):70,
+        ('stabilization-comparison-150.png','wb.compare.raw.right'):70,
+        ('stabilization-traffic-100.png','wb.traffic.request.text'):70,
+        ('stabilization-traffic-100.png','wb.traffic.response.text'):70,
+        ('stabilization-traffic-125.png','wb.traffic.request.text'):70,
+        ('stabilization-traffic-125.png','wb.traffic.response.text'):70,
+        ('stabilization-traffic-150.png','wb.traffic.request.text'):70,
+        ('stabilization-traffic-150.png','wb.traffic.response.text'):70,
     }
     for view,name,default_minimum,small_minimum in [
         ('next-auth-get-loading','wb.auth.effect.read.candidates',80,40),
@@ -159,7 +186,7 @@ def main():
             for (view,name),minimum in required.items():
                 expected_w,expected_h=w,h
                 copies=1
-                if (full_mode or args.next_only) and (view,name) in next_required and view not in {'next-response-retries.png','next-remaining-checks.png','next-traffic-conditions.png','usability-response-summary.png','usability-evidence-editor.png'}:
+                if (full_mode or args.next_only) and (view,name) in next_required and view not in {'next-response-retries.png','next-remaining-checks.png','next-traffic-conditions.png','usability-response-summary.png','usability-evidence-editor.png','stabilization-frozen-traffic.png','stabilization-evidence-draft.png','stabilization-traffic-100.png','stabilization-traffic-125.png','stabilization-traffic-150.png','stabilization-evidence-100.png','stabilization-evidence-125.png','stabilization-evidence-150.png','stabilization-comparison-100.png','stabilization-comparison-125.png','stabilization-comparison-150.png'}:
                     expected_w,expected_h=('560','300') if '-minimum' in view else ('760','480')
                     copies=len(args.sizes)
                 if args.js_only and view in {'js-packets.png','js-analysis-list.png','js-packets-small.png','js-analysis-list-small.png'}:
@@ -190,6 +217,10 @@ def main():
         'Remaining work and explicit next step',
         'Setup bundle readable diff','Setup bundle raw toggle','Active filters and saved project conditions',
         'Resume missing original and task guidance',
+        'Frozen reader keeps capture independent', 'Explicit new-request action publishes captured rows',
+        'Authored item description preserves packet identity', 'Clear supports undo redo and exact-original recovery',
+        'Project reopen restores prose without inventing original packets', 'Display scale keeps traffic reader active',
+        'Scaled evidence retains draft and edit recovery', 'Scaled response comparison retains result and original text',
     } if full_mode or args.next_only else set()
     for theme in args.themes:
         for size in args.sizes:

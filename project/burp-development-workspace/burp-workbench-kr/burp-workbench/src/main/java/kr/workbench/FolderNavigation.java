@@ -104,7 +104,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setName("wb.navigation.tree");
     tree.setRootVisible(false);
     tree.setShowsRootHandles(true);
-    tree.setRowHeight(40);
+    tree.setRowHeight(Math.max(40,tree.getFontMetrics(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f))).getHeight()+10));
     tree.setToggleClickCount(1);
     tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     tree.getAccessibleContext().setAccessibleName("기능 폴더 목록");
@@ -157,7 +157,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     settings.addActionListener(event -> openSettings.run());
     JLabel version = new JLabel("NEXT " + BuildInfo.VERSION);
     version.setName("wb.next.version");
-    version.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, 13f));
+    version.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, WorkbenchUi.displaySize(13f)));
     version.setForeground(WorkbenchUi.accent());
     version.setToolTipText("Workbench Next · 별도 배포 채널 · 기존 Workbench와 구분");
     JPanel navigationLine = new JPanel(new BorderLayout(8, 0));
@@ -489,7 +489,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       boolean toolNode = node.getUserObject() instanceof Tool;
       setText(node.toString());
-      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, 15f));
+      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(15f)));
       Icon icon = new NavigationIcon(toolNode ? IconKind.PAGE : expanded ? IconKind.OPEN_FOLDER : IconKind.FOLDER);
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
@@ -596,11 +596,13 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   void restoreAppearance() {
     if (tree.getUI().getClass().getEnclosingClass() != NavigationTree.class) tree.updateUI();
     tree.setCellRenderer(renderer);
-    tree.setRowHeight(40);
+    tree.setRowHeight(Math.max(40,tree.getFontMetrics(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f))).getHeight()+10));
     tree.setOpaque(false);
-    tree.setFont(WorkbenchUi.font().deriveFont(15f));
+    tree.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f)));
     tree.setBackground(WorkbenchUi.surface());
     tree.treeDidChange();
+    sidebar.setMinimumSize(new Dimension(minimumMenuWidth(),80));
+    constrainDivider();
   }
 
   void restoreLayout() {
@@ -622,9 +624,20 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     repaint();
   }
 
+  private int minimumMenuWidth() {
+    if(WorkbenchUi.appearanceScale()<=100)return MIN_WIDTH;
+    int required=MIN_WIDTH;
+    for(int row=0;row<tree.getRowCount();row++){
+      TreePath path=tree.getPathForRow(row);Rectangle bounds=tree.getRowBounds(row);if(path==null||bounds==null)continue;
+      Component label=renderer.getTreeCellRendererComponent(tree,path.getLastPathComponent(),false,tree.isExpanded(row),tree.getModel().isLeaf(path.getLastPathComponent()),row,false);
+      required=Math.max(required,bounds.x+label.getPreferredSize().width+sidebar.getVerticalScrollBar().getPreferredSize().width+8);
+    }
+    return Math.min(MAX_WIDTH,required);
+  }
   private int constrained(int width) {
+    int minimum=minimumMenuWidth();
     int maximum = split.getWidth() > 0 ? Math.min(MAX_WIDTH, split.getWidth() - 367) : MAX_WIDTH;
-    return Math.max(MIN_WIDTH, Math.min(Math.max(MIN_WIDTH, maximum), width));
+    return Math.max(minimum, Math.min(Math.max(minimum, maximum), width));
   }
 
   private void constrainDivider() {

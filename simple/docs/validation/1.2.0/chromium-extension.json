@@ -1,0 +1,8 @@
+{
+  "result": "blocked",
+  "reason": "EXTENSION_POLICY_BLOCKED",
+  "completedChecks": 0,
+  "explanation": "System-managed Chromium policy blocks unpacked extension installation. No policy was changed. Helper MV3 service worker and DNR transport integration were not executed.",
+  "separateExecutedCheck": "chromium-dom.json",
+  "scope": "Loopback fixture and temporary browser profile only; no external targets or native Burp GUI."
+}

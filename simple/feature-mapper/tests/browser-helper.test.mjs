@@ -31,7 +31,7 @@ test('content observer sends labels and never reads input values', () => {
   assert.equal(messages.length, 1);
   assert.deepEqual(Object.keys(messages[0]).sort(), ['kind', 'label', 'page', 'time', 'title', 'type']);
 });
-test('helper is an observer without request-blocking or credential permissions', () => {
+test('normal mapping is observational without blocking or credential permissions; explicit inspection is separate', () => {
   const manifest = JSON.parse(fs.readFileSync(new URL('../browser-helper/manifest.json', import.meta.url)));
   assert.equal(manifest.manifest_version, 3);
   assert(!manifest.permissions.includes('webRequestBlocking'));

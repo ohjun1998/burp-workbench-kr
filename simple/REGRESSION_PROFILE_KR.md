@@ -1,6 +1,6 @@
 # Simple 회귀 검사 적용 범위
 
-Simple 1.1.0은 Workbench Next 0.53.4의 통합 엔진과 8개 extension의 주요 기능을 보존하면서 각 도구를 직접 여는 메뉴로 재구성합니다. 주요 흐름인 여러 요청의 수동 재현과 증거 저장은 함께 유지하며, 부가 도구만 실행 화면에서 제외합니다. 이전 Simple 1.0.0의 JAR·소스·가이드는 그대로 보관합니다. 기존 검사에서 **사용자가 제거하도록 요청한 화면의 모양**과 **계속 동작해야 하는 엔진·원본·증거 계약**을 구분합니다. 이 문서는 검사 선택의 근거이며 통과 결과가 아닙니다. 실제 실행 결과와 건수는 `burp-workbench/build/test-summary.json` 및 `check-summary.json`을 기준으로 확인합니다.
+Simple 1.2.0은 Workbench Next 0.53.4의 통합 엔진과 8개 extension의 주요 기능, 각 도구를 직접 여는 메뉴를 보존하고 Scope 통합 점검을 연결합니다. 주요 흐름인 여러 요청의 수동 재현과 증거 저장은 함께 유지하며, 부가 도구만 실행 화면에서 제외합니다. 이전 Simple 1.0.0·1.1.0의 JAR·소스·가이드는 그대로 보관합니다. 기존 검사에서 **사용자가 제거하도록 요청한 화면의 모양**과 **계속 동작해야 하는 엔진·원본·증거 계약**을 구분합니다. 이 문서는 검사 선택의 근거이며 통과 결과가 아닙니다. 실제 실행 결과와 건수는 `burp-workbench/build/test-summary.json` 및 `check-summary.json`을 기준으로 확인합니다.
 
 ## Simple 검사로 교체한 이전 화면 검사
 
@@ -36,6 +36,25 @@ Simple 1.1.0은 Workbench Next 0.53.4의 통합 엔진과 8개 extension의 주�
 
 `BountyFeaturesTest`, `CompletenessTest`, `IntegrationEdgesTest` 등은 화면에서 제거한 부가 도구의 내부 메타데이터·가림·원본 연결도 검사합니다. 해당 엔진이 보존되어 있으므로 계속 실행합니다. 엔진 검사를 통과했다고 해당 부가 도구를 Simple 화면에서 제공한다는 뜻은 아닙니다.
 
-Mapper Java 검사는 별도 Mapper JAR 대신 **Simple JAR 안에 포함한 실제 Mapper 클래스**를 대상으로 실행합니다. 브라우저 도우미 검사는 Node의 TAP 출력으로 현재 선언한 15개 하위 검사가 모두 실행되었는지 확인합니다. 설치된 Node의 `--help`에서 지원을 확인한 뒤 stable `--test-isolation=none` 또는 experimental `--experimental-test-isolation=none`을 사용하며, 둘 다 없으면 기본 동작을 사용합니다. 파일 1개만 검사했다는 요약을 15개 통과로 인정하지 않습니다. 테스트별 `user.home`은 `build/test-home/<검사명>`으로 격리하며 기존 사용자 설정을 읽거나 바꾸지 않습니다.
+Mapper Java 검사는 별도 Mapper JAR 대신 **Simple JAR 안에 포함한 실제 Mapper 클래스**를 대상으로 실행합니다. 기존 `MapperTest`가 내부에서 호출하는 하위 `run()` 검사를 다시 합산하지 않으며, 새 `InspectionBridgeTest`의 독립 `main()`은 별도 실행·집계합니다. 자동 선택은 `Test.run()`의 전이 호출 관계를 확인해 다른 main에 이미 포함된 하위 main을 제외합니다. 구체적으로 `BrowserBodyObservationTest.run()`은 `MapperTest.main()`에 포함되므로 별도 main으로 다시 실행하지 않으며, 이 관계는 `mapperJavaNestedMains`에 남깁니다. 브라우저 도우미 검사는 Node의 TAP 출력으로 파일별 선언된 하위 검사가 모두 실행되었는지 확인합니다. 설치된 Node의 `--help`에서 지원을 확인한 뒤 stable `--test-isolation=none` 또는 experimental `--experimental-test-isolation=none`을 사용하며, 둘 다 없으면 기본 동작을 사용합니다. 파일 1개만 검사했다는 요약을 여러 하위 검사 통과로 인정하지 않습니다. 테스트별 `user.home`은 `build/test-home/<검사명>`으로 격리하며 기존 사용자 설정을 읽거나 바꾸지 않습니다.
+
+## 1.2.0 Scope 통합 점검 검사
+
+기본 프로필은 기존 회귀와 함께 `ScopeInspection*Test.java`를 중복 없이 자동 등록합니다. 아래 표는 확인할 계약이며, 최종 실행 결과나 통과 건수를 미리 확정하는 표가 아닙니다.
+
+| 검사 | 확인할 계약 |
+|---|---|
+| `ScopeInspectionRunnerTest` | Scope·Origin·리디렉션 경계, 신원·참조 요청을 포함한 예산, 경로 탐색·분석·계정별 원본, 일시정지·중지·재개와 부분검사 사유 |
+| `ScopeInspectionAnalysisTest` | 서버·WAS·DB·API의 근거·추정 구분, 문서/관측 API 대조, 민감정보 후보의 가림·분류·발견 위치, 분석 제한의 명시 |
+| `ScopeInspectionHistoryTest` | 프로젝트·실행 조건별 이력 분리, 인증값·원문을 담지 않는 저장, 변경 비교와 불완전한 실행의 해소 판정 방지 |
+| `ScopeInspectionBrowserTest` | 실행 ID·만료·허용 범위·브라우저 관측 메타데이터의 연결, 오래되거나 범위 밖인 이벤트 거부와 종료 정리 |
+| `ScopeInspectionUiTest` | 기존 8개 도구 보존, 창 열기만으로 전송하지 않음, 명시적 실행·원본/도구/증거 연결과 완료·제외·부분검사 표시 |
+| `InspectionBridgeTest` | Simple JAR에 내장된 실제 loopback 브리지의 인증·명령·이벤트·종료 계약 |
+
+Node 검사는 기존 `browser-helper.test.mjs`의 직접 선언 15개와 새 `inspection-browser.test.mjs`의 직접 선언 9개를 구분해 실행합니다. 이 숫자는 현재 파일의 선언 수이며 실제 통과 수는 최종 TAP 결과를 기준으로 합니다. 새 검사는 전용 탭의 Scope/GET·HEAD session rule, 라우트·메뉴 구분, DOM·MAIN guard 어댑터, 실행 명령·중지·정리 등을 확인합니다. 파일별 실제 수는 `check-summary.json`의 `mapperBrowserHelperGroups`, Java 수는 `mapperJavaGroups`에 남깁니다.
+
+Node의 DOM·Chrome API 어댑터 검사는 실제 Chromium에서 MV3 확장이 로드되어 탐색한 결과와 다릅니다. 현재 관리 환경의 시스템 Chromium은 `ExtensionInstallBlocklist: ["*"]` 정책 때문에 도우미 로드를 차단했습니다. 이를 브라우저 확장 실행 통과로 표시하지 않으며, native harness 진단과 Scope 렌더링·Node 검사 결과를 별도로 읽어야 합니다. CI에는 현재 native 확장 실행 검사를 추가하지 않습니다.
+
+화면 검사는 기존 Simple 화면 뒤에 `render_scope_inspection.py`로 실제 운영 패널을 별도 렌더링합니다. 합성 패킷·브라우저 관측을 사용한 캡처이며 실제 Burp GUI·대상 사이트 점검·브라우저 DOM 실행 결과로 합산하지 않습니다. 신규 helper ZIP은 manifest·필수 JS·라이선스·CRC·SHA와 소스 지문을 검증합니다.
 
 `python simple/dev.py check`는 선언한 전체 회귀·loopback 페이로드 HTTP·Mapper Java·브라우저 도우미 Node 검사를 실행합니다. 실제 Burp GUI, Windows DPI/IME, 브라우저 수동 조작, Docker 실습 스택, 외부 OAST/BApp/AI 서비스와 기존 실습 사이트 전체 HTTP 하네스는 별도 검증 범위입니다.

@@ -1,0 +1,57 @@
+scenario,passed
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Synthetic capture never starts the target HTTP coordinator,true
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Synthetic capture never starts the target HTTP coordinator,true
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Synthetic capture never starts the target HTTP coordinator,true
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Synthetic capture never starts the target HTTP coordinator,true

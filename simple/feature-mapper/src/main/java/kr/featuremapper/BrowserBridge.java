@@ -8,6 +8,7 @@ import java.security.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /** Authenticated loopback metadata bridge. Never forwards or modifies target requests. */
 public final class BrowserBridge implements AutoCloseable {
@@ -66,7 +67,9 @@ public final class BrowserBridge implements AutoCloseable {
     reply(exchange, status, message);
   }
 
-  BrowserBridge(Consumer<Map<String, Object>> sink) throws IOException {
+  BrowserBridge(Consumer<Map<String, Object>> sink) throws IOException { this(sink, origin -> Map.of()); }
+
+  BrowserBridge(Consumer<Map<String, Object>> sink, Function<String, Map<String,Object>> commands) throws IOException {
     byte[] random = new byte[32];
     new SecureRandom().nextBytes(random);
     token = HexFormat.of().formatHex(random);
@@ -83,6 +86,23 @@ public final class BrowserBridge implements AutoCloseable {
             reply(x, 200, "Feature Mapper KR " + BuildInfo.VERSION);
           } finally { x.close(); }
         });
+    server.createContext("/inspection/command", x -> {
+      try {
+        if (!x.getRequestURI().getPath().equals("/inspection/command")) { reject(x,404,"not found"); return; }
+        if (!authorized(x)) { reject(x,401,"unauthorized"); return; }
+        if (!x.getRequestMethod().equals("GET")) { reject(x,405,"GET required"); return; }
+        String query=Objects.toString(x.getRequestURI().getRawQuery(),"");
+        if(query.length()>2048||!query.startsWith("origin=")||query.indexOf('&')>=0){reject(x,400,"origin required");return;}
+        String origin=URLDecoder.decode(query.substring(7),StandardCharsets.UTF_8);
+        URI site=URI.create(origin);
+        if(!Set.of("http","https").contains(site.getScheme())||site.getHost()==null||site.getUserInfo()!=null||site.getQuery()!=null||site.getFragment()!=null||!Objects.toString(site.getPath(),"").isEmpty()) {reject(x,400,"origin only");return;}
+        String body=JsonWrite.text(commands.apply(origin));
+        if(body.length()>65536){reject(x,413,"command too large");return;}
+        authenticated();
+        x.getResponseHeaders().set("Content-Type","application/json; charset=utf-8");
+        reply(x,200,body);
+      } catch(Exception invalid){reject(x,400,"invalid command");} finally{x.close();}
+    });
     server.createContext(
         "/event",
         x -> {
@@ -136,7 +156,7 @@ public final class BrowserBridge implements AutoCloseable {
 
   private static void reply(HttpExchange x, int code, String value) throws IOException {
     byte[] body = value.getBytes(StandardCharsets.UTF_8);
-    x.getResponseHeaders().set("Content-Type", "text/plain; charset=utf-8");
+    if(x.getResponseHeaders().getFirst("Content-Type")==null)x.getResponseHeaders().set("Content-Type", "text/plain; charset=utf-8");
     x.getResponseHeaders().set("Cache-Control", "no-store");
     x.sendResponseHeaders(code, body.length);
     try (OutputStream out = x.getResponseBody()) {

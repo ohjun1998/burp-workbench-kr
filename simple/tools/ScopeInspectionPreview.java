@@ -1,0 +1,189 @@
+package kr.workbench;
+
+import burp.api.montoya.MontoyaApi;
+import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import static kr.workbench.SimplePreview.*;
+
+/** Real inspection presenters fed by explicitly synthetic packet and browser observations. */
+public final class ScopeInspectionPreview extends WorkbenchTest {
+  static final String ORIGIN = "https://scope.example.test";
+  static final String API_KEY = "SCOPE_PRIVATE_API_VALUE_0123456789abcdef";
+  static final List<ScopeInspection.Page> packets = new ArrayList<>();
+  static final List<ScopeInspection.Finding> findings = new ArrayList<>();
+  static final List<ScopeInspection.Candidate> candidates = new ArrayList<>();
+  static DiskTrafficStore store;
+
+  static ScopeInspection.Page page(String path, String account, int code, String type, String body) {
+    var headers = List.of(header("Content-Type", type), header("Server", "nginx/1.25 example"),
+        header("X-Powered-By", "Apache Tomcat example"));
+    var request = ScopeInspectionFixture.wireRequest(ORIGIN + path, "GET", account.equals("Alice")
+        ? List.of(header("Cookie", "SID=SCOPE_DEMO_SESSION")) : List.of(), new byte[0]);
+    var response = ScopeInspectionFixture.wireResponse(code, headers, body.getBytes(StandardCharsets.UTF_8));
+    var original = store.append("가이드 합성 자료", account, request, response);
+    String headerText = String.join("\r\n", headers.stream().map(h -> h.toString()).toList());
+    var analysis = ScopeInspectionAnalysis.analyze(ORIGIN + path, code, headerText, body, account, original.id());
+    var content = EnvironmentContent.inspect(ORIGIN + path, code, headerText, body, "가이드용 합성 응답");
+    boolean targetCovered = !Set.of("LOGIN", "CHALLENGE", "RATE", "DENIED", "REDIRECT", "LIMIT", "UNKNOWN", "ERROR").contains(content.kind());
+    String note = analysis.note() + (targetCovered ? "" : " · 대상 내용 미확인 · " + content.title() + " · 해당 응답의 정적 단서만 분석");
+    findings.addAll(analysis.findings()); candidates.addAll(analysis.candidates());
+    var result = new ScopeInspection.Page(ORIGIN + path, "GET", account, code,
+        content.kind(), analysis.complete() && targetCovered, note, EnvironmentProject.hash(body), original);
+    packets.add(result); return result;
+  }
+
+  static void tab(ScopeInspectionPanel panel, String key) {
+    panel.pages.setSelectedIndex(ScopeInspectionUiTest.indexOf(panel.pages, key));
+    JTable table = panel.tables.get(key);
+    if (table.getRowCount() > 0) table.setRowSelectionInterval(0, 0);
+  }
+  static ScopeInspection.Snapshot snapshot(String id, ScopeInspection.State state, int pending) {
+    return new ScopeInspection.Snapshot(id, state,
+        "가이드용 합성 응답·브라우저 관측 예시 · 실제 대상/브라우저 탐색을 실행하지 않았습니다.",
+        16, packets.size(), pending, 2, 0, partial(packets), findings, packets, candidates,
+        1793100000000L, state == ScopeInspection.State.COMPLETED ? 1793100005000L : 0);
+  }
+  static int partial(List<ScopeInspection.Page> pages) { return (int)pages.stream().filter(page -> !page.complete()).count(); }
+  static void set(Object owner, String field, Object value) {
+    try { var member = owner.getClass().getDeclaredField(field); member.setAccessible(true); member.set(owner, value); }
+    catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+  }
+  static Map<String,Object> browserEvent(String kind, String path, String label, String method, int pages) {
+    var value = new LinkedHashMap<String,Object>();
+    value.put("type", "inspection"); value.put("runId", "guide-scope-run"); value.put("kind", kind);
+    value.put("url", ORIGIN + path); value.put("page", ORIGIN + "/app/"); value.put("label", label);
+    value.put("method", method); value.put("routeId", (pages % 2 == 0 ? "b" : "a").repeat(64));
+    value.put("pages", pages); value.put("actions", 3); value.put("requests", 7); value.put("excluded", 1);
+    value.put("message", "가이드용 합성 브라우저 관측 · 실제 DOM 실행 아님"); return value;
+  }
+
+  static void appearance(String fontPath) throws Exception {
+    if (theme.equals("dark")) {
+      for (String key : List.of("Panel.background", "TabbedPane.background", "Button.background", "CheckBox.background", "ComboBox.background", "control")) UIManager.put(key, new Color(30,33,39));
+      UIManager.put("TabbedPane.selected", new Color(69,58,48));
+      for (String key : List.of("TabbedPane.selectHighlight", "TabbedPane.highlight", "TabbedPane.shadow", "TabbedPane.darkShadow", "controlHighlight", "controlLtHighlight", "controlShadow", "controlDkShadow")) UIManager.put(key, new Color(68,75,86));
+      UIManager.put("TabbedPane.contentAreaColor", new Color(30,33,39));
+      for (String key : List.of("Label.foreground", "Button.foreground", "CheckBox.foreground", "ComboBox.foreground", "TabbedPane.foreground", "textText")) UIManager.put(key, new Color(228,233,241));
+    }
+    Font font = Font.createFont(Font.TRUETYPE_FONT, Path.of(fontPath).toFile());
+    GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+    var keys = UIManager.getDefaults().keys();
+    while (keys.hasMoreElements()) { Object key = keys.nextElement(); if (UIManager.get(key) instanceof FontUIResource) UIManager.put(key, new FontUIResource(font.deriveFont(14f))); }
+  }
+
+  public static void main(String[] args) throws Exception {
+    out = Path.of(args[0]); theme = args[2]; width = Integer.parseInt(args[3]); height = Integer.parseInt(args[4]);
+    Files.createDirectories(out); appearance(args[1]); ScopeInspectionFixture.installFactory();
+    MontoyaApi api = SimpleWorkflowTest.previewApi();
+    var scope = WorkbenchScope.install(api); scope.add(ORIGIN + "/app/", false);
+    var profiles = List.of(new ScopeInspection.Profile("anonymous", "비로그인", Map.of(), null),
+        new ScopeInspection.Profile("alice", "Alice", Map.of("cookie", "SID=SCOPE_DEMO_SESSION"),
+            new CookieSessionProbe.Config(ORIGIN + "/app/api/me", "$.id", "alice")));
+    var options = new ScopeInspection.Options(ORIGIN + "/app/", 100, 2, 300, 10000, 2*1024*1024, 3, true, true, profiles);
+    var count = new java.util.concurrent.atomic.AtomicInteger();
+    ScopeInspectionPanel.Actions actions = new ScopeInspectionPanel.Actions() {
+      public void original(DiskTrafficStore.PacketRef ref) { count.incrementAndGet(); }
+      public void repeater(DiskTrafficStore.PacketRef ref) { count.incrementAndGet(); }
+      public void compare(DiskTrafficStore.PacketRef ref) { count.incrementAndGet(); }
+      public void evidence(List<DiskTrafficStore.PacketRef> refs, String note) { count.incrementAndGet(); }
+      public void tool(String id, DiskTrafficStore.PacketRef ref) { count.incrementAndGet(); }
+    };
+    var holder = new java.util.concurrent.atomic.AtomicReference<ScopeInspectionPanel>();
+    edt(() -> holder.set(new ScopeInspectionPanel(api, () -> profiles, actions)));
+    ScopeInspectionPanel panel = holder.get();
+    Path historyDirectory = Files.createTempDirectory("scope-guide-history-");
+    store = new DiskTrafficStore();
+    try {
+      edt(() -> {
+        panel.url.setText(ORIGIN + "/app/"); panel.options = options;
+        panel.compareAccounts.setSelected(true); panel.browserMode.setSelected(true);
+        scenario("Opening the production inspection panel performs no target requests", panel.runner == null);
+        capture(panel, "12-inspection-setup.png");
+      });
+      page("/app/", "비로그인", 200, "text/html", "<html><title>통합 점검 예시</title><nav><a href='/app/documents'>문서 메뉴</a><a href='/app/openapi.json'>API 문서</a></nav><script src='/app/assets/site.js'></script></html>");
+      page("/app/openapi.json", "비로그인", 200, "application/json", "{\"openapi\":\"3.0.0\",\"paths\":{\"/app/api/me\":{\"get\":{}},\"/app/api/documents/{id}\":{\"get\":{\"parameters\":[{\"name\":\"id\",\"in\":\"path\",\"required\":true}]}}}}");
+      page("/app/assets/site.js", "비로그인", 200, "application/javascript", "fetch('/app/api/me');\nfetch('/app/api/undocumented');\nconst api_key='"+API_KEY+"';");
+      String configBody = "{\"api_key\":\""+API_KEY+"\",\"database_url\":\"postgresql://app:DB_DEMO_PASSWORD@db.internal/app\",\"diagnostic\":\"org.postgresql.util.PSQLException SQLSTATE[08006]\",\"internal_ip\":\"10.20.30.40\",\"revision\":2}";
+      var config = page("/app/config.json", "비로그인", 200, "application/json", configBody);
+      page("/app/api/me", "비로그인", 401, "application/json", "{\"error\":\"login required\"}");
+      scenario("HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed",
+          packets.get(4).classification().equals("DENIED") && !packets.get(4).complete() && packets.get(4).note().contains("대상 내용 미확인"));
+      page("/app/api/me", "Alice", 200, "application/json", "{\"id\":\"alice\",\"role\":\"user\"}");
+      page("/app/api/undocumented", "Alice", 200, "application/json", "{\"document\":101,\"owner\":\"alice\"}");
+      findings.add(new ScopeInspection.Finding("ACCESS", "계정별 응답 차이", ORIGIN+"/app/api/me", "GET", "계정 비교",
+          "응답 관측", "중간", "수동 검토", "비로그인 HTTP 401 / Alice HTTP 200 · 선언한 접근 정책과 직접 대조하세요.",
+          packets.get(5).original().id(), 0, -1, EnvironmentProject.hash("account-response-difference")));
+      candidates.add(new ScopeInspection.Candidate(ORIGIN+"/app/api/documents/{id}", "GET", "OpenAPI 경로 매개변수", "필수 id 값 필요", false));
+      candidates.add(new ScopeInspection.Candidate(ORIGIN+"/outside/admin", "GET", "리디렉션", "선택한 SCOPE 경로 밖", false));
+      findings.add(new ScopeInspection.Finding("COVERAGE", "본문 분석 범위 제한", ORIGIN+"/app/large.log", "GET", "비로그인",
+          "미확인", "정보", "미검사", "가이드 예시: 선언된 대용량 파일을 자동 수집에서 제외했습니다. 전체 점검 완료를 의미하지 않습니다.", "", 0, -1, EnvironmentProject.hash("partial-guide")));
+      findings.addAll(ScopeInspectionAnalysis.compareInventory(findings, candidates, packets));
+      var completed = snapshot("guide-scope-run", ScopeInspection.State.COMPLETED, 0);
+      var previousPages = new ArrayList<>(packets);
+      String previousBody = configBody.replace("\"revision\":2", "\"revision\":1");
+      var previousOriginal = store.append("가이드 이전 합성 자료", "비로그인",
+          ScopeInspectionFixture.wireRequest(config.url(), "GET", List.of(), new byte[0]),
+          ScopeInspectionFixture.wireResponse(200, List.of(header("Content-Type", "application/json")),
+              previousBody.getBytes(StandardCharsets.UTF_8)));
+      previousPages.set(3, new ScopeInspection.Page(config.url(), config.method(), config.account(), config.status(), config.classification(), config.complete(),
+          config.note(), EnvironmentProject.hash(previousBody), previousOriginal, config.profileRevision()));
+      var previous = new ScopeInspection.Snapshot("guide-previous-run", ScopeInspection.State.COMPLETED, "이전 합성 실행", 14, previousPages.size(), 0, 0, 0, partial(previousPages),
+          findings, previousPages, candidates, 1793010000000L, 1793010005000L);
+      var history = new ScopeInspectionHistory(historyDirectory, "55555555-5555-4555-8555-555555555555", () -> "guide-scope-v1");
+      history.save(options, previous);
+      var changes = history.changes(options, completed);
+      edt(() -> {
+        panel.accept(snapshot("guide-scope-run", ScopeInspection.State.RUNNING, 9));
+        capture(panel, "13-inspection-progress.png");
+        panel.accept(completed); set(panel, "changes", changes); panel.accept(completed);
+        for (String[] target : new String[][] {
+            {"environment","14-inspection-environment.png"}, {"paths","15-inspection-paths.png"},
+            {"api","16-inspection-api.png"}, {"secrets","17-inspection-secrets.png"},
+            {"access","18-inspection-access.png"}, {"changes","19-inspection-changes.png"},
+            {"coverage","20-inspection-coverage.png"}}) {
+          tab(panel, target[0]);
+          scenario("Production inspection " + target[0] + " table contains inspectable synthetic evidence", panel.tables.get(target[0]).getRowCount() > 0);
+          if (target[0].equals("secrets")) scenario("Secret result view preserves masking", !ScopeInspectionUiTest.visibleText(panel).contains(API_KEY));
+          capture(panel, target[1]);
+        }
+        panel.browser.begin("guide-scope-run", ORIGIN+"/app/", List.of(ORIGIN+"/app/"), List.of(), 15, 30, System.currentTimeMillis()+60000);
+        panel.browserCommand(ORIGIN);
+        panel.browserEvent(browserEvent("started", "/app/", "통합 탐색 시작", "", 1));
+        panel.browserEvent(browserEvent("route", "/app/#/documents", "문서 메뉴", "GET", 2));
+        panel.browserEvent(browserEvent("api", "/app/api/me", "내 계정 조회", "GET", 2));
+        panel.browserEvent(browserEvent("excluded", "/outside/assets.js", "Scope 밖 리소스", "GET", 2));
+        panel.browserEvent(browserEvent("done", "/app/", "합성 관측 완료", "", 2));
+      });
+      edt(() -> {});
+      edt(() -> {
+        tab(panel, "browser");
+        scenario("Production browser lease retains separate browser-session attribution", panel.browser.snapshot().state().equals("COMPLETED"));
+        scenario("Production browser table displays received route and API observations", panel.tables.get("browser").getRowCount() >= 2);
+        capture(panel, "21-inspection-browser.png");
+        var original = panel.originalContent(config.original());
+        scenario("Original response bytes remain available behind masked findings", config.original().response().toString().contains(API_KEY));
+        capture(original, "22-inspection-original.png");
+      });
+      scenario("Synthetic capture never starts the target HTTP coordinator", panel.runner == null && count.get() == 0);
+    } finally {
+      edt(panel::close); store.close(); WorkbenchScope.release(api);
+      try (var files = Files.walk(historyDirectory)) {
+        for (Path path : files.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
+      }
+    }
+    controls.add(0,"theme,width,height,view,label,name,controlWidth,controlHeight,fullyVisible,scrollable");
+    content.add(0,"theme,width,height,view,name,visibleWidth,visibleHeight");
+    scenarios.add(0,"scenario,passed");
+    Files.write(out.resolve("scope-controls.csv"), controls, StandardCharsets.UTF_8);
+    Files.write(out.resolve("scope-content.csv"), content, StandardCharsets.UTF_8);
+    Files.write(out.resolve("scope-scenarios.csv"), scenarios, StandardCharsets.UTF_8);
+    System.out.println("Captured actual Scope inspection components: " + theme + " " + width + "x" + height
+        + "; synthetic packet/browser observations, zero target HTTP, not native Burp or live browser DOM.");
+    System.exit(0);
+  }
+}

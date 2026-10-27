@@ -4,5 +4,5 @@
 <label for="base">연결 주소</label><input id="base" placeholder="http://127.0.0.1:포트">
 <label for="token">연결 토큰</label><input id="token" type="password" autocomplete="off">
 <button id="connect">연결 확인·저장</button><button id="enable">현재 사이트 활성화</button><button id="disable">현재 사이트 해제</button>
-<p>활성화한 사이트에서 버튼·화면 정보와 요청 메타데이터를 연결합니다. 활성화 후 페이지를 새로고침하세요.</p><p id="status" role="status"></p><p id="diagnostics" aria-live="polite"></p>
+<p>활성화한 사이트에서 버튼·화면 정보와 요청 메타데이터를 연결합니다. 활성화 후 페이지를 새로고침하세요.</p><label><input id="inspection" type="checkbox" style="width:auto"> SPA 통합 탐색 허용</label><p style="font-size:12px">Workbench에서 시작한 점검만 전용 탭에서 실행합니다. Scope 안의 GET/HEAD만 허용하고 폼 제출·쓰기·범위 밖 리소스는 차단합니다. 브라우저 로그인 세션과 HTTP 점검 계정은 별개입니다.</p><p id="status" role="status"></p><p id="diagnostics" aria-live="polite"></p>
 <script type="module" src="popup.js"></script></html>

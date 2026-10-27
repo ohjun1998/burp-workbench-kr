@@ -1,0 +1,40 @@
+PASS a captured old Scope cannot save an old snapshot under current Scope conditions
+PASS stale Scope rejection creates no history, lock or temporary files
+PASS current Scope fixture has actual comparable historical changes
+PASS a stale captured Scope cannot compare an old run against current Scope history
+PASS history excludes credentials/body/identity/source detail: PRIVAT
+PASS history excludes credentials/body/identity/source detail: BODY_P
+PASS history excludes credentials/body/identity/source detail: PRIVAT
+PASS history excludes credentials/body/identity/source detail: RAW_BO
+PASS history excludes credentials/body/identity/source detail: sessio
+PASS history excludes credentials/body/identity/source detail: 관리자
+PASS complete metadata history survives readback
+PASS past metadata never pretends to retain a live original packet
+PASS history URL has no query values
+PASS the same run is not compared with itself
+PASS new key fingerprint produces a changed finding
+PASS status changes remain explicit
+PASS current comparison restores the current readable account label
+PASS changed authentication revision cannot reuse prior comparison
+PASS changed included/excluded scope conditions cannot mix historical results
+PASS partial runs show a comparison-range limitation
+PASS partial runs never claim an old finding disappeared
+PASS complete exact-page reinspection may record absence without declaring remediation
+PASS an unvisited old URL cannot be declared resolved
+PASS a new credential revision cannot match an old run despite identical initial options
+PASS mixed credential revisions explicitly hold historical absence comparisons
+PASS mixed credential run stays incomplete in durable history
+PASS newest history appears first
+PASS saving the same execution is idempotent
+PASS restarted store preserves comparison fingerprints without raw values
+PASS concurrent writer is rejected without overwrite
+PASS lock conflict preserves committed bytes
+PASS damaged primary restores its valid prior metadata backup
+PASS saving recovered history repairs primary atomically
+PASS future history schema is preserved rather than rolled back
+PASS future schema bytes are unchanged
+PASS a file from another project is not listed as this project's history
+PASS another project's file cannot be overwritten
+PASS an old async run cannot save into a newly active project
+PASS an old async comparison cannot use a new project's history
+ScopeInspectionHistoryTest: 39 checks passed (isolated masked disk metadata)

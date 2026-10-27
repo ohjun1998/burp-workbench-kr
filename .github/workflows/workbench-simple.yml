@@ -2,7 +2,7 @@ name: Workbench Simple
 
 on:
   push:
-    branches: ['account-a/workbench-simple']
+    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection']
     paths: ['simple/**', '.github/workflows/workbench-simple.yml']
   pull_request:
     paths: ['simple/**', '.github/workflows/workbench-simple.yml']
@@ -37,6 +37,8 @@ jobs:
         run: python simple/dev.py check
       - name: Render and check real Simple Swing components
         run: python simple/tools/render_simple.py --out tmp/simple-layout --check
+      - name: Render and check scoped inspection Swing components
+        run: python simple/tools/render_scope_inspection.py --out tmp/simple-inspection-layout --check
       - name: Verify published Simple artifact and source fingerprints
         run: python simple/dev.py verify
       - uses: actions/upload-artifact@v7
@@ -48,8 +50,12 @@ jobs:
             simple/burp-workbench/build/test-*.txt
             simple/burp-workbench/dist/burp-workbench-simple-*.jar
             simple/feature-mapper/build/*results.txt
+            simple/feature-mapper/build/test-*.txt
             tmp/simple-layout/**/*.png
             tmp/simple-layout/*.json
             tmp/simple-layout/*.csv
+            tmp/simple-inspection-layout/**/*.png
+            tmp/simple-inspection-layout/*.json
+            tmp/simple-inspection-layout/*.csv
           if-no-files-found: warn
           retention-days: 14

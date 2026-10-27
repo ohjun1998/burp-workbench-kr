@@ -1,0 +1,87 @@
+{
+  "result": "passed",
+  "passed": 17,
+  "checks": [
+    {
+      "name": "actual managed Chromium starts with an isolated temporary profile",
+      "passed": true
+    },
+    {
+      "name": "real DOM navigation reaches home and three distinct hash routes",
+      "passed": true
+    },
+    {
+      "name": "hash routes remain separate in the bounded browser traversal",
+      "passed": true
+    },
+    {
+      "name": "production DOM function expands native details and discovers its hidden route",
+      "passed": true
+    },
+    {
+      "name": "production DOM function clicks aria-expanded navigation and discovers a lazy submenu",
+      "passed": true
+    },
+    {
+      "name": "real hash-route navigation produces an API request",
+      "passed": true
+    },
+    {
+      "name": "browser API calls use the isolated browser session",
+      "passed": true
+    },
+    {
+      "name": "production MAIN fetch guard blocks page-load and menu-triggered POST calls",
+      "passed": true
+    },
+    {
+      "name": "production MAIN fetch guard blocks outside-Scope fetch calls",
+      "passed": true
+    },
+    {
+      "name": "production MAIN XHR guard permits scoped GET and blocks writes",
+      "passed": true
+    },
+    {
+      "name": "production MAIN guard prevents form submission and popup creation",
+      "passed": true
+    },
+    {
+      "name": "destructive and outside-Scope menu actions are not selected",
+      "passed": true
+    },
+    {
+      "name": "actual browser hash routes receive distinct redacted route identities",
+      "passed": true
+    },
+    {
+      "name": "API observation preserves the actual current hash-route context",
+      "passed": true
+    },
+    {
+      "name": "metadata excludes cookies/form values and keeps the browser actor distinct",
+      "passed": true
+    },
+    {
+      "name": "existing user tab remains unchanged",
+      "passed": true
+    },
+    {
+      "name": "supplemental MAIN guard alone does not claim DNR containment of resource requests",
+      "passed": true
+    }
+  ],
+  "scope": "Actual Chromium page DOM and production inspection.js functions with an isolated profile and loopback fixture; no helper installation, MV3 service worker, DNR, Burp GUI or manual permission verification.",
+  "verified": [
+    "real DOM menus and hash navigation",
+    "production supplemental MAIN guard",
+    "browser session and redacted route metadata"
+  ],
+  "notVerified": [
+    "helper installation",
+    "MV3 service worker",
+    "DNR tab transport restrictions",
+    "manual optional permission flow",
+    "native Burp GUI"
+  ]
+}

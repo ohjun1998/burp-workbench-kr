@@ -1,0 +1,136 @@
+PASS response file ID links upload to post creation
+PASS created post ID links follow-up detail request
+PASS one creation feature contains prerequisite upload, save and follow-up read
+PASS observed dynamic IDs normalize without deleting original URL
+PASS prerequisite retains its original packet and function
+PASS cross-account packets cannot inherit another session's ID chain
+PASS cross-origin responses cannot create data dependencies
+PASS matching ID in a different entity path is not a link
+PASS method change creates a distinct functional action
+PASS same feature after an idle gap starts a fresh execution
+PASS typed one-digit object IDs still link within the same entity and session
+PASS close repetitions share an execution while preserving both packets
+PASS GraphQL operations separate despite identical method and URL
+PASS GraphQL named mutation is inferred without operationName
+PASS body action values remain meaningful mapping signals
+PASS password-change fields infer a functional label
+PASS static resource remains available under common requests
+PASS observed OpenAPI summary supplies a function name
+PASS invalid JSON does not interrupt raw traffic retention
+PASS GraphQL batch operations retain distinct batch semantics
+PASS no selected auth material does not invent an account identity
+PASS early browser event maps a packet to its screen action
+PASS browser timing evidence identifies context without claiming causal certainty
+PASS same feature in another browser tab has a separate execution
+PASS indistinguishable parallel packets retract a tentative browser assignment
+PASS late bridge events can enrich already-retained packets
+PASS manual correction becomes an automatic project rule
+PASS function status persists across newly collected traffic
+PASS screen context cannot map packets on a different origin
+PASS page-observed UTF-8 hash maps only the matching body at an identical URL
+PASS page observation provenance is distinct from authenticated causality
+PASS distinct PATCH bodies retain distinct browser actions and runs
+PASS ambiguity retracts page-observation provenance along with browser attribution
+PASS page metadata cannot bypass captured-body hash comparison
+PASS unknown hash provenance is rejected
+PASS capture retains more than the prior 250-row limit
+PASS large wire packets are preserved while analysis has independent bounds
+PASS 2 MiB request and response preserve exact binary bytes
+PASS project import restores all traffic rows
+PASS project import restores exact request and response bytes
+PASS project restores function labels and review state
+PASS saved session salt keeps fingerprint grouping stable across reload
+PASS capture continues after reopening a project
+PASS invalid import is rejected without changing the active project
+PASS session credentials are not stored in mapping metadata
+PASS active raw store exists before unload
+PASS close removes private temporary raw storage
+PASS feature index preserves every membership and capture order after ancestor propagation
+PASS feature index preserves every membership and capture order after late browser mapping
+PASS feature index preserves every membership and capture order after ambiguous browser retraction
+PASS feature index preserves every membership and capture order after manual correction
+PASS feature index preserves every membership and capture order after project import
+PASS unrelated browser URLs examine zero packet/event candidates
+PASS body-hash index distinguishes identical method and URL
+PASS hashless event retains conservative ambiguity across bodies
+PASS distinct simultaneous tab actions retract browser attribution
+PASS ambiguous browser retraction preserves an explicit user correction
+PASS feature index preserves every membership and capture order after body and tab ambiguity
+PASS browser correlation keeps the exclusive 2500 ms boundary
+PASS out-of-order old packet expires from browser candidates without deleting raw traffic
+PASS browser event history retains the latest 2000 events
+PASS project close defers raw-file deletion while a save snapshot owns it
+PASS save snapshot excludes later packets and detaches mutable mapping metadata
+PASS save snapshot keeps feature state from its capture boundary
+PASS snapshot remains byte-exact after project replacement and close
+PASS last save lease deletes a closed project's private packet file
+PASS capture completes while snapshot output is deliberately blocked
+PASS closed mapper retains metadata for in-flight read-only snapshot consumers
+PASS snapshot copies only its fixed prefix despite concurrent append and close
+PASS unchanged Mapper rows emit no table replacement or cell events
+PASS new capture appends one UI row without rebuilding existing rows
+PASS project replacement clears old selection and packet details even when packet IDs repeat
+PASS Mapper preview reads bounded prefixes and preserves original packet lengths
+PASS bounded preview leaves large original request and response byte-exact
+PASS Mapper toolbar uses help, settings, log order
+PASS Mapper footer is removed to enlarge packet editors
+PASS Mapper bundled Korean font renders all toolbar captions
+PASS Mapper requestText uses shared packet syntax
+PASS Mapper line gutter preserves packet CRLF and content
+PASS Mapper responseText uses shared packet syntax
+PASS Mapper line gutter preserves packet CRLF and content
+PASS Mapper keeps readable rows and every captured item
+PASS Mapper settings open separately from the current traffic view
+PASS settings distinguish HTTP classification from actual helper authentication and linkage
+PASS connection status never displays the pairing token
+PASS compact capture button can stop collection
+PASS capture indicator reflects the separate native Scope setting
+PASS Mapper errors populate the actual log view
+PASS Mapper log omits packet-bearing exception messages
+PASS Mapper clear log action releases diagnostic records
+PASS Mapper packet style returns after host re-theming
+PASS Mapper local appearance returns after host look-and-feel replacement
+PASS Mapper log access survives host re-theming
+PASS Mapper layout, settings and logs send no HTTP requests
+PASS Mapper host re-theming and diagnostics emit no asynchronous errors
+PASS same-time browser events preserve distinct request body hashes
+PASS browser mapped count excludes unrelated HTTP packets
+PASS mapping evidence records exact method URL time and body-hash agreement
+PASS same-time browser events preserve distinct HTTP methods
+PASS hashless browser evidence stays explicitly unverified
+PASS different method URL body and time cannot become a click attribution
+PASS malformed body hash is rejected before indexing
+PASS ambiguous request retracts both mapping evidence and mapped count
+PASS retracted mapping removes stale exact-match evidence
+PASS project restore reconstructs browser linkage counts from stored evidence
+PASS running bridge never claims an authenticated helper connection
+PASS failed authentication increments rejection without marking connected
+PASS health requires its exact endpoint path
+PASS pairing success is separate from receiving any click request
+PASS transport counts received metadata even when the sink does not collect it
+PASS connection diagnostics contain neither pairing token nor target request data
+PASS idle authenticated transport does not claim a live connection forever
+PASS unloaded bridge reports a closed transport
+PASS assessment draft deduplicates APIs and removes query credentials
+PASS same feature has a stable opaque assessment source ID
+PASS assessment draft uses the latest feature label
+PASS renaming or classifying a feature preserves its task identity
+PASS different mapping projects never share task identities
+PASS save and reload retain feature task identity
+PASS save and reload retain exact API candidates
+PASS expired features cannot create task drafts
+PASS embedded mapping exposes the assessment link action
+PASS stored feature can be linked while traffic capture is OFF
+PASS scope changes block task draft delivery
+PASS selection changes invalidate an open task review
+PASS mapping task preparation sends no HTTP requests
+PASS unload invalidates pending mapping drafts
+PASS bridge binds exclusively to loopback
+PASS bridge rejects unpaired callers
+PASS paired health check succeeds
+PASS real loopback HTTP bridge delivers browser metadata
+PASS bridge requires JSON content type
+PASS malformed events do not reach mapper
+PASS close shuts down the bridge listener
+MapperTest: 134 checks passed
+Fontconfig error: No writable cache directories

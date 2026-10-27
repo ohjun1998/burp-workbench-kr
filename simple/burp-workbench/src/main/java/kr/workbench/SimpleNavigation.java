@@ -30,6 +30,9 @@ final class SimpleNavigation extends JPanel {
   private final JLabel hint = new JLabel();
 
   SimpleNavigation(JTabbedPane pages, Runnable settings, Runnable help, Runnable logs) {
+    this(pages,settings,help,logs,null);
+  }
+  SimpleNavigation(JTabbedPane pages, Runnable settings, Runnable help, Runnable logs, Runnable inspection) {
     super(new BorderLayout(0, 8));
     this.pages = pages; this.settings = settings; this.help = help; this.logs = logs;
     setName("wb.simple.navigation");
@@ -45,7 +48,9 @@ final class SimpleNavigation extends JPanel {
     JButton options = new JButton("도움말·설정");
     options.setName("wb.simple.options");
     options.addActionListener(e -> optionsMenu().show(options, 0, options.getHeight()));
-    titleRow.add(options, BorderLayout.EAST);
+    JPanel mainActions=new JPanel(new FlowLayout(FlowLayout.RIGHT,6,0));
+    if(inspection!=null){JButton inspect=new JButton("Scope 통합 점검");inspect.setName("wb.scope.inspection.open");inspect.addActionListener(e->inspection.run());WorkbenchUi.primary(inspect);mainActions.add(inspect);}
+    mainActions.add(options);titleRow.add(mainActions, BorderLayout.EAST);
     header.add(titleRow, BorderLayout.NORTH);
     toolRow.setName("wb.simple.tools");
     ButtonGroup group = new ButtonGroup();

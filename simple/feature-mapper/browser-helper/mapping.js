@@ -94,3 +94,5 @@ export class BodyObservations {
     this.requests = this.requests.filter(x => x.tabId !== tab);
   }
 }
+
+export {createInspectionService} from './inspection-background.js';

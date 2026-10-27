@@ -8,3 +8,6 @@
 **/.classes/
 **/.host-home/
 **/.font-cache/
+**/.browser-profile/
+**/chromium-profile/
+**/playwright-report/

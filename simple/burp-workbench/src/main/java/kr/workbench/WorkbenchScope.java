@@ -13,6 +13,7 @@ public final class WorkbenchScope {
  private List<BurpScopeConfig.Entry> burpExclusions=List.of();
  private WorkbenchScope(MontoyaApi api){this.api=api;try{String data=api.persistence().extensionData().getString(STORE);if(data!=null)load(data);}catch(Exception ignored){}}
  static WorkbenchScope install(MontoyaApi api){WorkbenchScope scope=new WorkbenchScope(api);scopes.put(api,scope);return scope;}
+ static WorkbenchScope current(MontoyaApi api){WorkbenchScope scope=scopes.get(api);if(scope==null)throw new IllegalStateException("Workbench SCOPE가 준비되지 않았습니다.");return scope;}
  static void release(MontoyaApi api){scopes.remove(api);}
  static List<Rule> registeredRules(MontoyaApi api){WorkbenchScope scope=scopes.get(api);return scope==null?List.of():scope.rules().stream().filter(r->scope.enabled(r)&&canonical(r.url())!=null).toList();}
  public static boolean contains(MontoyaApi api,HttpRequest request){if(request==null)return false;WorkbenchScope scope=scopes.get(api);try{return scope!=null&&scope.configured()?scope.matches(request.url()):request.isInScope();}catch(Exception ex){return false;}}
@@ -98,6 +99,25 @@ public final class WorkbenchScope {
  static String canonical(String raw){String url=ActivityTracker.safeUrl(raw);if(url==null)return null;try {URI u=URI.create(url).normalize();for(String segment:u.getRawPath().split("/",-1)){String decoded=URLDecoder.decode(segment.replace("+","%2B"),StandardCharsets.UTF_8);if(decoded.equals(".")||decoded.equals("..")||decoded.contains("/")||decoded.contains("\\")||decoded.chars().anyMatch(c->c<32))return null;}return u.toString();}catch(Exception ex){return null;}}
  private static String origin(String url){URI u=URI.create(url);return u.getScheme()+"://"+u.getRawAuthority();}
  synchronized String save(){return MetadataExport.json(Map.of("version",2,"configured",configured,"suppressed",new ArrayList<>(suppressed),"rules",rules.stream().map(r->{Map<String,Object> row=new LinkedHashMap<>();row.put("url",r.url);row.put("originOnly",r.originOnly);row.put("enabled",enabled(r));if(r.burpKey()!=null)row.put("burpKey",r.burpKey());return row;}).toList()));}
+ synchronized String inspectionFingerprint(){return EnvironmentProject.hash(save()+"|"+burpExclusions.toString());}
+ synchronized List<String> browserIncludes(String start){
+  String target=canonical(start);if(target==null)throw new IllegalArgumentException("브라우저 시작 URL을 확인하세요.");
+  List<String> included=new ArrayList<>();
+  for(Rule rule:rules)if(enabled(rule)&&(rule.burpKey()==null||!rule.burpKey().startsWith("observed:"))&&canonical(rule.url())!=null&&covers(new Rule(rule.url(),rule.originOnly()),target))included.add(rule.originOnly()?origin(rule.url())+"/":rule.url());
+  if(included.isEmpty())throw new IllegalArgumentException("SPA 자동 탐색에는 시작 URL을 포함하는 명시적인 URL SCOPE를 추가하세요. 고급 정규식 범위는 HTTP 점검에서 사용합니다.");
+  return List.copyOf(included);
+ }
+ synchronized List<String> browserExclusions(String start){
+  String canonical=canonical(start);if(canonical==null)throw new IllegalArgumentException("시작 URL을 확인하세요.");URI u=URI.create(canonical);String currentOrigin=origin(canonical);List<String> excluded=new ArrayList<>();
+  for(var rule:burpExclusions)if(rule.enabled()){
+   if(rule.prefix()!=null){if(origin(rule.prefix()).equals(currentOrigin))excluded.add(rule.prefix());}
+   else {int port=u.getPort()<0?(u.getScheme().equals("https")?443:80):u.getPort();
+    if(rule.protocol().matcher(u.getScheme()).find()&&rule.host().matcher(u.getHost()).find()&&rule.port().matcher(Integer.toString(port)).find())
+     throw new IllegalArgumentException("이 사이트의 고급 정규식 제외 범위를 브라우저에 동일하게 적용할 수 없습니다. HTTP 점검을 사용하거나 명시적인 URL 제외 범위를 설정하세요.");
+   }
+  }
+  return List.copyOf(excluded);
+ }
  synchronized void load(String data){Object obj=MinerJson.parse(data);if(!(obj instanceof Map<?,?> root)||!(root.get("rules") instanceof List<?> list)||!(root.get("version") instanceof Number v)||(v.intValue()!=1&&v.intValue()!=2))throw new IllegalArgumentException("SCOPE 저장 형식 오류");LinkedHashSet<Rule> imported=new LinkedHashSet<>();Set<Rule> unchecked=new HashSet<>();for(Object row:list){if(row instanceof Map<?,?> map){String key=map.get("burpKey") instanceof String k?k:null;String url=key==null?canonical(Objects.toString(map.get("url"),"")):Objects.toString(map.get("url"),"");if(url!=null){Rule rule=new Rule(key==null&&Boolean.TRUE.equals(map.get("originOnly"))?origin(url)+"/":url,Boolean.TRUE.equals(map.get("originOnly")),key);imported.add(rule);if(Boolean.FALSE.equals(map.get("enabled")))unchecked.add(rule);}}}rules.clear();rules.addAll(imported);disabled.clear();disabled.addAll(unchecked);suppressed.clear();if(root.get("suppressed") instanceof List<?> deleted)for(Object key:deleted)if(key instanceof String k)suppressed.add(k);configured=Boolean.TRUE.equals(root.get("configured"));}
  private void persist(){try{api.persistence().extensionData().setString(STORE,save());}catch(Exception ignored){}}
 }

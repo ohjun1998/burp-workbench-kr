@@ -1,19 +1,19 @@
-import {originOf, pageOf, pickAction, validateConnection, BodyObservations} from './mapping.js';
+import {originOf, pageOf, pickAction, validateConnection, BodyObservations, createInspectionService} from './mapping.js';
 const active = new Map();
 const history = new Map();
 const bodies = new BodyObservations();
 let delivered = 0;
 let unverifiedBodies = 0;
-let settings = {base: '', token: '', origins: []};
+let settings = {base: '', token: '', origins: [], inspectionEnabled: false};
 const changedSettings = {};
 const ready = Promise.all([
-  chrome.storage.local.get({base: '', token: '', origins: []}),
+  chrome.storage.local.get({base: '', token: '', origins: [], inspectionEnabled: false}),
   chrome.storage.session.get({deliveryCount: 0, bodyUnverifiedCount: 0})
 ]).then(([saved, session]) => { settings = {...saved, ...changedSettings}; delivered = Number(session.deliveryCount) || 0; unverifiedBodies = Number(session.bodyUnverifiedCount) || 0; });
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== 'local') return;
-  for (const key of ['base', 'token', 'origins']) if (changes[key])
-    settings[key] = changedSettings[key] = changes[key].newValue ?? (key === 'origins' ? [] : '');
+  for (const key of ['base', 'token', 'origins', 'inspectionEnabled']) if (changes[key])
+    settings[key] = changedSettings[key] = changes[key].newValue ?? (key === 'origins' ? [] : key === 'inspectionEnabled' ? false : '');
 });
 async function deliver(event) {
   await ready;
@@ -46,6 +46,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
   return true;
 });
 chrome.tabs.onRemoved.addListener(tab => {
+  inspectionService?.removed(tab).catch(() => {});
   bodies.clearTab(tab);
   for (const key of active.keys()) if (key.startsWith(tab + ':')) { active.delete(key); history.delete(key); }
   chrome.storage.session.get(null).then(values => chrome.storage.session.remove(
@@ -88,5 +89,24 @@ async function requestEvent(details) {
 }
 // Observe only. This listener does not block, replay, or modify any target request.
 chrome.webRequest.onBeforeRequest.addListener(details => {
+  inspectionService?.request(details).catch(() => {});
   requestEvent(details).catch(error => chrome.storage.session.set({lastError: error.message}));
 }, {urls: ['http://*/*', 'https://*/*']}, ['requestBody']);
+
+// Normal mapping stays observational. Explicit inspection is opt-in and uses its own guarded tab.
+const inspectionService = typeof createInspectionService === 'function' && chrome.declarativeNetRequest && chrome.tabs.create
+  ? createInspectionService(chrome, {
+      settings: async () => {await ready;return {...settings};},
+      command: async origin => {
+        await ready;const base=validateConnection(settings.base,settings.token);
+        const response=await fetch(base+'/inspection/command?origin='+encodeURIComponent(origin),{headers:{'X-Feature-Mapper-Token':settings.token},signal:AbortSignal.timeout(2500)});
+        if(!response.ok)throw new Error('브라우저 점검 연결 실패: '+response.status);return response.json();
+      },
+      event: async event => {
+        await ready;const base=validateConnection(settings.base,settings.token);
+        const response=await fetch(base+'/event',{method:'POST',headers:{'Content-Type':'application/json','X-Feature-Mapper-Token':settings.token},body:JSON.stringify(event),signal:AbortSignal.timeout(2500)});
+        if(!response.ok)throw new Error('브라우저 점검 결과 전달 실패: '+response.status);
+      }
+    }) : null;
+inspectionService?.start();
+if(inspectionService&&chrome.webRequest.onErrorOccurred)chrome.webRequest.onErrorOccurred.addListener(details=>inspectionService.blocked(details).catch(()=>{}),{urls:['http://*/*','https://*/*']});

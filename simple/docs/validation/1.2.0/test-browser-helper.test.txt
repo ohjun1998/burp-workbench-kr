@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: loopback pairing excludes remote endpoints and credentials
+ok 1 - loopback pairing excludes remote endpoints and credentials
+  ---
+  duration_ms: 1.106901
+  type: 'test'
+  ...
+# Subtest: page context removes query and fragment data
+ok 2 - page context removes query and fragment data
+  ---
+  duration_ms: 0.144438
+  type: 'test'
+  ...
+# Subtest: actions stay within their tab, frame, origin and short window
+ok 3 - actions stay within their tab, frame, origin and short window
+  ---
+  duration_ms: 0.23192
+  type: 'test'
+  ...
+# Subtest: content observer sends labels and never reads input values
+ok 4 - content observer sends labels and never reads input values
+  ---
+  duration_ms: 4.366882
+  type: 'test'
+  ...
+# Subtest: normal mapping is observational without blocking or credential permissions; explicit inspection is separate
+ok 5 - normal mapping is observational without blocking or credential permissions; explicit inspection is separate
+  ---
+  duration_ms: 0.342727
+  type: 'test'
+  ...
+# Subtest: site permission patterns omit ports while origins retain them
+ok 6 - site permission patterns omit ports while origins retain them
+  ---
+  duration_ms: 0.219692
+  type: 'test'
+  ...
+# Subtest: a delayed network callback selects its original action, not a newer click
+ok 7 - a delayed network callback selects its original action, not a newer click
+  ---
+  duration_ms: 0.187833
+  type: 'test'
+  ...
+# Subtest: worker startup waits for saved settings and delivery recovers after an earlier error
+ok 8 - worker startup waits for saved settings and delivery recovers after an earlier error
+  ---
+  duration_ms: 290.05041
+  type: 'test'
+  ...
+# Subtest: MAIN observer preserves fetch/XHR behavior and hashes UTF-8 POST/PATCH without forwarding body bytes
+ok 9 - MAIN observer preserves fetch/XHR behavior and hashes UTF-8 POST/PATCH without forwarding body bytes
+  ---
+  duration_ms: 9.186099
+  type: 'test'
+  ...
+# Subtest: body observation is bounded, opt-in, same-origin and skips unsupported bodies/accessors
+ok 10 - body observation is bounded, opt-in, same-origin and skips unsupported bodies/accessors
+  ---
+  duration_ms: 26.405426
+  type: 'test'
+  ...
+# Subtest: page digest matching requires a unique real request and rejects ambiguity, replay and cross-document data
+ok 11 - page digest matching requires a unique real request and rejects ambiguity, replay and cross-document data
+  ---
+  duration_ms: 0.512975
+  type: 'test'
+  ...
+# Subtest: body snapshots do not execute overridden buffer, view or Blob properties
+ok 12 - body snapshots do not execute overridden buffer, view or Blob properties
+  ---
+  duration_ms: 7.025207
+  type: 'test'
+  ...
+# Subtest: disabled generations cannot publish a digest after re-enabling
+ok 13 - disabled generations cannot publish a digest after re-enabling
+  ---
+  duration_ms: 20.420991
+  type: 'test'
+  ...
+# Subtest: content settings initialization cannot undo a later disable
+ok 14 - content settings initialization cannot undo a later disable
+  ---
+  duration_ms: 1.220342
+  type: 'test'
+  ...
+# Subtest: bounded digest registries fail closed under saturation and recover after stale hashes expire
+ok 15 - bounded digest registries fail closed under saturation and recover after stale hashes expire
+  ---
+  duration_ms: 2.257118
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 383.710906

@@ -25,6 +25,8 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     void toggleCapture();
     boolean acceptsUrl(String url);
     void failure(String stage, Exception error);
+    default Map<String,Object> inspectionCommand(String origin) { return Map.of("state","idle"); }
+    default void inspectionEvent(Map<String,Object> event) {}
     default boolean supportsAssessmentTasks() { return false; }
     default boolean allowsAssessmentUrl(String url) { return acceptsUrl(url); }
     default void assessmentDraft(String sourceId, String title, List<String> endpoints) {
@@ -140,6 +142,10 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       bridge =
           new BrowserBridge(
               event -> {
+                if ("inspection".equals(event.get("type"))) {
+                  if(!closed.get()&&embeddedHost!=null)embeddedHost.inspectionEvent(event);
+                  return;
+                }
                 synchronized (projectLock) {
                   if (!closed.get() && (embeddedHost == null
                       || embeddedHost.acceptsUrl(Objects.toString(event.get("url"), "")))) {
@@ -147,7 +153,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
                     revision.incrementAndGet();
                   }
                 }
-              });
+              }, origin -> !closed.get()&&embeddedHost!=null?embeddedHost.inspectionCommand(origin):Map.of("state","idle"));
       if (SwingUtilities.isEventDispatchThread()) buildUi();
       else SwingUtilities.invokeAndWait(this::buildUi);
       if (embeddedHost == null) {

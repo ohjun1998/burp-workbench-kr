@@ -10,6 +10,10 @@ if a.source_target:
  print('WARNING: Explicit --source-target mode uses -source 17 -target 17 on the selected JDK. Java 17 API compatibility is NOT verified; strict --release 17 remains the default.',flush=True)
 toolchain_mode='explicit-source17-target17-api-unverified' if a.source_target else 'strict-release17'
 source_options=['-source','17','-target','17'] if a.source_target else ['--release','17']
+version_probe=subprocess.run([a.java,'-version'],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=30)
+if version_probe.returncode:raise SystemExit('Selected Java runtime could not report its version')
+version_match=re.search(r'(?m)^(?:openjdk|java) version "([0-9][0-9A-Za-z.+_-]{0,63})"',version_probe.stdout+'\n'+version_probe.stderr)
+java_runtime_version=version_match.group(1) if version_match else 'unreported'
 lock=json.loads((root/'engine-lock.json').read_text());order=lock['order'].split(',')
 def sha(path):
  h=hashlib.sha256()
@@ -54,7 +58,7 @@ with ReleaseZip(temporary_output,'w',zipfile.ZIP_DEFLATED)as z:
  inputs += [p for p in (root/'src/main/resources').rglob('*') if p.is_file() and 'engines' not in p.relative_to(root/'src/main/resources').parts]
  inputs += [root/name for name in ['build_all.py','release_info.py','shade_rhino.py','engine-lock.json','LICENSE','THIRD_PARTY_NOTICES.md']]
  inputs += [api,legacy,rhino,brotli,mapper/'LICENSE',mapper/'THIRD_PARTY_NOTICES.md']
- z.writestr('META-INF/simple-build.json',json.dumps({'toolchainMode':toolchain_mode,'java17ApiCompatibilityVerified':not a.source_target},sort_keys=True)+'\n')
+ z.writestr('META-INF/simple-build.json',json.dumps({'toolchainMode':toolchain_mode,'javaRuntimeVersion':java_runtime_version,'java17ApiCompatibilityVerified':not a.source_target},sort_keys=True)+'\n')
  z.writestr('META-INF/simple-source.json',json.dumps({p.relative_to(root.parent).as_posix():sha(p) for p in sorted(inputs)},sort_keys=True,indent=2)+'\n')
  for path in sorted(classes.rglob('*.class')):z.writestr(path.relative_to(classes).as_posix(),relocate(path.read_bytes()))
  with zipfile.ZipFile(rhino) as dependency:
@@ -100,7 +104,8 @@ if a.test:
  }
  test_groups=['EvidenceDraftsTest','EditHistoryTest','Appearance0534Test','WorkspaceAppearanceProjectIsolationTest','ComparisonResponsiveness0534Test','JobMonitorResponsiveness0534Test','TrafficStabilization0534Test','NavigationLifecycle0534Test','EvidenceStabilizationTest','StabilizationIntegration0534Test','BuildInfoTest','TrafficUsability0532Test','EvidenceEditingTest','AuthInlineValidationTest','Navigation0532Test','ResponseDifferenceTest','ResponseDifferenceUiTest','BackgroundJobsTest','GettingStartedPanelTest','UsabilityIntegration0532Test','BundleChangeSummaryTest','RemainingWorkUsabilityTest','AuthUsability0531Test','TrafficSearchPresetsTest','TrafficSearchConditionsUiTest','WorkspaceResumeTest','OriginalRequestIdsTest','JsArchivePagingTest','AuthSetupWorkflowTest','AuthSetupBundlesTest','ExecutionLink052Test','RemainingChecks053Test','MapperTaskDraft052Test','TrafficIncrementalSearchTest','TrafficSearchLifecycleTest','ResponseViewUpdateTest','ResponseBudgetTest','NextIsolationTest','TrafficCancellationTest','RuntimeMetricsTest','WorkContextTest','AuthSetupSuggestionsTest','AnalysisRetryTest','CompletionEvidenceNextTest','PassiveProvenanceTest','CaptureProvenanceTest','JsBatchContextTest','EvidenceHardeningTest','ResponseHardeningTest','ResponseAnalysisLimitsTest','LargeResponseJsonTest','AssessmentHardeningTest','MapperIntegrationTest','BankUpgradeTest','OssLogicUpgradeTest','JsUpgradeTest','TrafficSearchUpgradeTest','JsCompactUpgradeTest','JsArchiveWorkflowTest','IncrementalCoverageTest','CapturePipelineTest','EvidenceStorageTest','JsMemoryBudgetTest','StructuredCompareTest','WorkbenchTest','EnvironmentTest','EnvironmentPanelTest','EnvironmentBatchTest','EnvironmentDiscoveryTest','EnvironmentFeedbackTest','EnvironmentUpgradeTest','TextEncodingTest','DisplayWorkflowTest','PacketUiTest','PacketInspectorTest','RenderAuthUiTest','PassiveScanTest','LayoutPassiveWorkflowTest','JsAnalysisTest','JsDraftMappingTest','JsDetailsWorkflowTest','PacketStyleTest','TextAnalysisTest','JsResponseWorkflowTest','JsRepeaterWorkflowTest','JsAnalysisPanelTest','JsNavigationTest','JsHistoryTest','PayloadIntegrationTest','UiLayoutTest','AuthRecordTest','AuthWorkspaceTest','AuthLayoutFitTest','AuthRunSummaryTest','AuthResponseWorkflowTest','AuthAccuracyWorkflowTest','AuthResponseRefinementTest','CookieSessionProbeTest','UiCleanupTest','ActivityReconTest','TrafficScopeTest','TrafficScopeModesTest','TrafficCaptureRecoveryTest','PopupWorkflowTest','TargetCleanupTest','ReviewWorkflowTest','OtherImprovementsTest','AuditRepairsTest','BountyFeaturesTest','CompletenessTest','IntegrationEdgesTest','AccountTasksTest','ReviewConditionsTest','StoredFlowStagesTest','EvidenceLinkTest','EvidencePreviewTest','AssessmentUiOptimizationTest','UiPanelsOptimizationTest','JsUiOptimizationTest','FeatureGuideWorkflowTest','FolderNavigationTest','DiagnosticsWorkflowTest','AppearanceWorkflowTest']
  test_groups=[name for name in test_groups if name not in excluded]
- test_groups+=sorted(p.stem for p in (root/'src/test/java/kr/workbench').glob('Simple*Test.java') if p.stem not in test_groups)
+ discovered=sorted({p.stem for pattern in ('Simple*Test.java','ScopeInspection*Test.java') for p in (root/'src/test/java/kr/workbench').glob(pattern)})
+ test_groups += [name for name in discovered if name not in test_groups]
  if a.test_group:
   unknown=set(a.test_group)-set(test_groups)
   if unknown:raise SystemExit('Unknown test groups: '+', '.join(sorted(unknown)))
@@ -128,7 +133,7 @@ if a.test and not a.skip_payload:
 if a.test:
  match=None if a.skip_payload else re.search(r'TEST_SUMMARY passed=(\d+) failed=0',report)
  if not a.skip_payload and not match and 'PayloadRunner' not in failures:failures.append('PayloadRunner summary missing')
- summary={'version':VERSION,'toolchainMode':toolchain_mode,'java17ApiCompatibilityVerified':not a.source_target,'groups':group_counts,'regressionGroups':len(group_counts),'regressionChecks':sum(group_counts.values()),'payloadHttpChecks':int(match.group(1)) if match else 0,'excludedGroups':excluded,'adaptedGroups':adapted,'failedGroups':failures,'result':'failed' if failures else 'passed','subset':bool(a.test_group)}
+ summary={'version':VERSION,'toolchainMode':toolchain_mode,'javaRuntimeVersion':java_runtime_version,'java17ApiCompatibilityVerified':not a.source_target,'groups':group_counts,'regressionGroups':len(group_counts),'regressionChecks':sum(group_counts.values()),'payloadHttpChecks':int(match.group(1)) if match else 0,'excludedGroups':excluded,'adaptedGroups':adapted,'failedGroups':failures,'result':'failed' if failures else 'passed','subset':bool(a.test_group)}
  (root/'build/test-summary.json').write_text(json.dumps(summary,indent=2)+'\n',encoding='utf-8')
  print('SIMPLE_CHECK_SUMMARY',json.dumps(summary),flush=True)
  if failures:raise SystemExit(1)

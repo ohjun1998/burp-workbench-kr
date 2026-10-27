@@ -1,17 +1,20 @@
 import {originOf, validateConnection, permissionPattern} from './mapping.js';
 const byId = id => document.getElementById(id);
-const saved = await chrome.storage.local.get({base: '', token: '', origins: []});
+const saved = await chrome.storage.local.get({base: '', token: '', origins: [], inspectionEnabled: false});
 byId('base').value = saved.base; byId('token').value = saved.token;
+byId('inspection').checked=!!saved.inspectionEnabled;
+byId('inspection').addEventListener('change',async()=>{await chrome.storage.local.set({inspectionEnabled:byId('inspection').checked});report(byId('inspection').checked?'SPA 통합 탐색 대기 · Workbench에서 시작하세요.':'SPA 통합 탐색 해제 · 실행 중인 전용 탭 정리');});
 function report(text) { byId('status').textContent = text; }
 async function diagnostics() {
-  const state = await chrome.storage.session.get({deliveryCount: 0, bodyUnverifiedCount: 0, lastDeliveryAt: 0, lastError: ''});
+  const state = await chrome.storage.session.get({deliveryCount: 0, bodyUnverifiedCount: 0, lastDeliveryAt: 0, lastError: '', inspectionStatus: '통합 탐색 대기', inspectionPages:0, inspectionActions:0, inspectionRequests:0, inspectionExcluded:0});
   const {origins = []} = await chrome.storage.local.get('origins');
   byId('diagnostics').textContent = '활성 사이트 ' + origins.length + '개 · 이벤트 전달 ' + state.deliveryCount + '건\n'
     + (state.lastError ? '최근 전달 실패: ' + state.lastError
       : state.lastDeliveryAt ? '마지막 전달: ' + new Date(state.lastDeliveryAt).toLocaleTimeString()
       : '클릭 요청 전달 대기')
     + '\n본문 해시 미확인으로 연결 제외 ' + state.bodyUnverifiedCount + '건'
-    + '\n전달 성공은 Burp의 SCOPE 수집·기능 연결 완료와 별개입니다.';
+    + '\n전달 성공은 Burp의 SCOPE 수집·기능 연결 완료와 별개입니다.'
+    + '\n'+state.inspectionStatus+' · 페이지 '+state.inspectionPages+' · 동작 '+state.inspectionActions+' · 네트워크 관측 '+state.inspectionRequests+' · 제외 '+state.inspectionExcluded;
 }
 chrome.storage.onChanged.addListener(() => { diagnostics().catch(() => {}); });
 await diagnostics();

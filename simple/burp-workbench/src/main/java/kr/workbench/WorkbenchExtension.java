@@ -184,6 +184,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JTabbedPane tabs;
   private FolderNavigation navigation;
   private SimpleNavigation simpleNavigation;
+  volatile ScopeInspectionPanel scopeInspectionPanel;
+  private TargetWindow scopeInspectionWindow;
+  private final Map<TargetWindow,Runnable> scopeInspectionOriginalWindows = new LinkedHashMap<>();
   private JTabbedPane dataTabs, trafficTools, explorationTools, mapperTools;
   private final WorkContext workContext = new WorkContext();
   private final OriginalRequestIds comparisonOriginalIds = new OriginalRequestIds();
@@ -376,6 +379,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (resumeSelectionTimer != null) resumeSelectionTimer.stop();
                     if (navigationSelectionTimer != null) navigationSelectionTimer.stop();
                     if (navigation != null) navigation.close();
+                    if (scopeInspectionWindow != null) scopeInspectionWindow.close();
+                    closeScopeOriginalWindows();
+                    if (scopeInspectionPanel != null) scopeInspectionPanel.close();
                     if (jobMonitorWindow != null) jobMonitorWindow.close();
                     if (gettingStartedWindow != null) gettingStartedWindow.close();
                     if (jobMonitor != null) jobMonitor.close();
@@ -611,6 +617,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                 error instanceof RuntimeException runtime ? runtime : new IllegalStateException(error));
           }
           public boolean supportsAssessmentTasks() { return true; }
+          public Map<String,Object> inspectionCommand(String origin) { return scopeInspectionPanel==null?Map.of():scopeInspectionPanel.browserCommand(origin); }
+          public void inspectionEvent(Map<String,Object> event) { if(scopeInspectionPanel!=null)scopeInspectionPanel.browserEvent(event); }
           public boolean allowsAssessmentUrl(String url) {
             return !unloaded.get() && localScope.matchesTraffic(url);
           }
@@ -638,7 +646,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logButton.addActionListener(e -> openLogs());
     navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton);
     // The retained route adapter keeps engine callbacks compatible; all eight extension entry points stay directly visible.
-    simpleNavigation = new SimpleNavigation(tabs, this::openSettings, this::openFeatureHelp, this::openLogs);
+    simpleNavigation = new SimpleNavigation(tabs, this::openSettings, this::openFeatureHelp, this::openLogs, this::openScopeInspection);
     root.add(simpleNavigation);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
@@ -1177,6 +1185,119 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             () -> commonSettingsWindow = null);
   }
 
+  private void openScopeInspection() {
+    if(unloaded.get())return;
+    if(scopeInspectionPanel==null){
+      scopeInspectionPanel=new ScopeInspectionPanel(api,(String target)->inspectionProfiles(target),new ScopeInspectionPanel.Actions(){
+        public void original(DiskTrafficStore.PacketRef packet){openScopeOriginal(packet);}
+        public void fullOriginal(DiskTrafficStore.PacketRef packet,boolean request){openScopeNativeOriginal(packet,request);}
+        public void originalsCleared(){closeScopeOriginalWindows();}
+        public void repeater(DiskTrafficStore.PacketRef packet){api.repeater().sendToRepeater(packet.request(),"Scope 통합 점검");}
+        public void compare(DiskTrafficStore.PacketRef packet){
+          var request=packet.request();comparisonOriginalIds.remember(request,packet.id());workContext.select(packet);
+          tabs.setSelectedComponent(authCompare);authCompare.stageReadiness(List.of(HttpRequestResponse.httpRequestResponse(request,packet.response())));
+        }
+        public void evidence(List<DiskTrafficStore.PacketRef> packets,String note){captureScopeEvidence(packets,note);}
+        public void tool(String id,DiskTrafficStore.PacketRef packet){
+          if(packet!=null){
+            if(id.equals("payload")){if(payloadImport==null)throw new IllegalArgumentException("입력값 검사 도구를 준비 중입니다.");payloadImport.accept(packet.request());selectPayloadRunnerPage();return;}
+            if(id.equals("js")){var response=packet.response();if(response==null)throw new IllegalArgumentException("응답 원본이 없습니다.");jsAnalysis.offer(packet.request(),response,packet);jsAnalysis.loadContext(EnvironmentPanel.decodedBody(PacketFormat.decodedResponse(response)),packet.url(),EnvironmentResponse.header(EnvironmentPanel.responseHeaders(response),"Content-Type"),packet.url());}
+          }
+          openFeature(id);
+        }
+        public void observed(DiskTrafficStore.PacketRef packet){observeScopeOriginal(packet);}
+      });
+      scopeInspectionPanel.settings.opener=dialogOpener;
+      scopeInspectionWindow=new TargetWindow(root,"Scope 통합 점검 · "+BuildInfo.VERSION,()->scopeInspectionPanel);
+      scopeInspectionWindow.opener=(owner,title,content,modal,closed)->{
+        JDialog window=dialogOpener.open(owner,title,content,modal,closed);
+        if(window!=null){window.setSize(1280,850);window.setMinimumSize(new Dimension(1024,720));window.setLocationRelativeTo(root);}return window;
+      };
+    }
+    scopeInspectionPanel.refreshTargets();scopeInspectionWindow.open();
+  }
+
+  private List<ScopeInspection.Profile> inspectionProfiles(String target){
+    List<ScopeInspection.Profile> profiles=new ArrayList<>();profiles.add(new ScopeInspection.Profile("anonymous","비로그인",Map.of(),null));
+    String origin;try{origin=EnvironmentCatalog.origin(java.net.URI.create(target));}catch(RuntimeException error){return List.copyOf(profiles);}
+    Set<String> credentials=new HashSet<>();
+    for(int slot=0;slot<AuthComparePanel.SLOTS&&profiles.size()<4;slot++){
+      var candidate=authCompare.slots[slot];if(candidate==null||candidate.headers().isEmpty()||!origin.equals(candidate.origin()))continue;
+      String credential=EnvironmentProject.hash(new TreeMap<>(candidate.headers()).toString());if(!credentials.add(credential))continue;
+      var account=authCompare.accounts.get(candidate.key());
+      String identity=account==null?candidate.key():account.toString();
+      String id=EnvironmentProject.hash(origin+"|"+slot+"|"+identity);
+      String label=authCompare.label(slot)+(account==null?" · 신원 연결 미확인":" · "+account.label());
+      profiles.add(new ScopeInspection.Profile(id,label,candidate.headers(),authCompare.sessionChecks[slot]));
+    }
+    return List.copyOf(profiles);
+  }
+
+  private void observeScopeOriginal(DiskTrafficStore.PacketRef packet){
+    if(unloaded.get()||!WorkbenchScope.contains(api,packet.url()))return;
+    var request=packet.request();var response=packet.response();
+    environments.observe(request,response);
+    responseRecon.offer(request,response,packet);jsAnalysis.offer(request,response,packet);
+    activity.observe(request,"통합 점검");activity.response(request,response);
+    if(featureMapper!=null)featureMapper.observeCaptured(packet.capturedAt(),"통합 점검",request,response);
+  }
+
+  private void openScopeOriginal(DiskTrafficStore.PacketRef packet){
+    if(scopeInspectionPanel==null)return;
+    ScopeInspectionPanel panel=scopeInspectionPanel;JPanel content=panel.originalContent(packet);
+    TargetWindow window=new TargetWindow(root,"통합 점검 원본 · 전체 보관 / 미리보기",()->content);
+    openScopeOriginalWindow(window,()->panel.closeOriginalContent(content));
+  }
+
+  private void openScopeNativeOriginal(DiskTrafficStore.PacketRef packet,boolean request){
+    if(unloaded.get()||scopeInspectionPanel==null)return;
+    JPanel content=new JPanel(new BorderLayout());content.setName("wb.scope.inspection.original."+(request?"request":"response")+".native");
+    content.putClientProperty("wb.nativeEditor",true);content.putClientProperty("wb.scope.inspection.original.id",packet.id());
+    Runnable clear;
+    if(request){
+      HttpRequestEditor editor=api.userInterface().createHttpRequestEditor(EditorOptions.READ_ONLY);
+      if(editor==null||editor.uiComponent()==null)throw new IllegalStateException("Burp 요청 편집기를 열 수 없습니다.");
+      editor.setRequest(packet.request());content.add(editor.uiComponent());clear=()->editor.setRequest(null);
+    }else{
+      HttpResponseEditor editor=api.userInterface().createHttpResponseEditor(EditorOptions.READ_ONLY);
+      if(editor==null||editor.uiComponent()==null||!packet.hasResponse())throw new IllegalStateException("Burp 응답 원본을 열 수 없습니다.");
+      editor.setResponse(packet.response());content.add(editor.uiComponent());clear=()->editor.setResponse(null);
+    }
+    TargetWindow window=new TargetWindow(root,"통합 점검 원본 · Burp "+(request?"요청":"응답")+" 전체 보기 · 읽기 전용",()->content);
+    openScopeOriginalWindow(window,clear);
+  }
+
+  private void openScopeOriginalWindow(TargetWindow window,Runnable cleanup){
+    while(scopeInspectionOriginalWindows.size()>=6)closeScopeOriginalWindow(scopeInspectionOriginalWindows.keySet().iterator().next());
+    scopeInspectionOriginalWindows.put(window,cleanup);
+    window.opener=(owner,title,content,modal,closed)->{
+      JDialog dialog=dialogOpener.open(owner,title,content,modal,()->{closeScopeOriginalWindow(window);closed.run();});
+      if(dialog!=null){dialog.setSize(1180,760);dialog.setMinimumSize(new Dimension(900,600));dialog.setLocationRelativeTo(root);}return dialog;
+    };
+    try{window.open();}catch(RuntimeException error){closeScopeOriginalWindow(window);throw error;}
+  }
+
+  private void closeScopeOriginalWindow(TargetWindow window){
+    Runnable cleanup=scopeInspectionOriginalWindows.remove(window);window.close();if(cleanup!=null)cleanup.run();
+  }
+
+  private void closeScopeOriginalWindows(){
+    for(var window:List.copyOf(scopeInspectionOriginalWindows.keySet()))closeScopeOriginalWindow(window);
+  }
+
+  private void captureScopeEvidence(List<DiskTrafficStore.PacketRef> packets,String note){
+    if(packets.isEmpty()||packets.size()>32)throw new IllegalArgumentException("증거로 연결할 원본은 1~32개입니다.");
+    for(var packet:packets){
+      var request=packet.request();var response=packet.response();String body=response==null?"":EnvironmentPanel.decodedBody(PacketFormat.decodedResponse(response));
+      Set<String> secrets=ScopeInspectionAnalysis.redactionValues(response==null?"":EnvironmentPanel.responseHeaders(response),body);
+      var page=scopeInspectionPanel==null?null:scopeInspectionPanel.current.pages().stream().filter(p->p.original()!=null&&p.original().id().equals(packet.id())).findFirst().orElse(null);
+      String actor=page==null?"미연결":page.account();String condition=page==null?"":page.profileRevision();
+      bountySupport.remember(request,response,"통합 점검 · "+actor,note+" · "+condition,actor,Set.of(),secrets);
+    }
+    bountySupport.refreshActions();tabs.setSelectedComponent(bountySupport);bountySupport.pages.setSelectedIndex(3);
+    bountySupport.state.setText("통합 점검 원본 "+packets.size()+"개 연결 · 가림 미리보기 후 ZIP 저장");
+  }
+
   private void captureObserved(List<HttpRequestResponse> packets, String note) {
     bountySupport.captureObserved(packets, note);
     tabs.setSelectedComponent(bountySupport);
@@ -1619,7 +1740,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       String json = api.burpSuite().exportProjectOptionsAsJson("target.scope");
       if (json != null && json.contains("\"target\"")) {
         nativeScopeFallback = false;
-        if (localScope.syncBurp(json)) scopeChanged();
+        String previous=localScope.inspectionFingerprint();
+        if (localScope.syncBurp(json)||!previous.equals(localScope.inspectionFingerprint())) scopeChanged();
         return;
       }
       nativeScopeFallback = true;
@@ -1876,6 +1998,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void scopeChanged() {
+    if (scopeInspectionPanel != null) scopeInspectionPanel.scopeChanged();
     workContext.configurationEdited();
     refreshScopeList();
     if (current != null && logTable.getSelectedRow() >= 0) showTraffic(logTable.getSelectedRow());

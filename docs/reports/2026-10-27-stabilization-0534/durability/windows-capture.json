@@ -1,0 +1,32 @@
+{
+  "host": "Montoya adapter; production callback, Swing timer and disk store",
+  "nativeBurp": false,
+  "nativeGuiClicks": false,
+  "os": "Windows Server 2025",
+  "java": "17.0.20.1",
+  "mode": "soak",
+  "received": 3645,
+  "drops": 0,
+  "processingErrors": 0,
+  "errorStages": [],
+  "acceptedResponses": 3645,
+  "retainedRows": 3645,
+  "diskBytes": 15720705,
+  "heapBeforeBytes": 1612072,
+  "heapAfterBytes": 122402992,
+  "elapsedSeconds": 182.4932991,
+  "requestedSeconds": 180,
+  "intervalMillis": 50,
+  "result": "passed",
+  "checks": 8,
+  "passedChecks": [
+    "collection exceeds the former 250-row limit",
+    "every accepted packet remains in disk and UI",
+    "all response callbacks complete with zero drops and processing errors",
+    "real Swing collection timer remains active",
+    "retained packet restores exact request and response bytes",
+    "retained packet restores exact request and response bytes",
+    "retained packet restores exact request and response bytes",
+    "unload deletes the active private traffic store"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "result": "passed",
+  "version": "0.53.4",
+  "iterations": 10,
+  "groups": [
+    "CapturePipelineTest",
+    "TrafficCaptureRecoveryTest"
+  ],
+  "executions": 20,
+  "note": "Repeated executions are not additional unique check counts."
+}

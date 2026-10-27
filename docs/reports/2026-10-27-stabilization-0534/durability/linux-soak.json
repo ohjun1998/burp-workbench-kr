@@ -1,0 +1,32 @@
+{
+  "host": "Montoya adapter; production callback, Swing timer and disk store",
+  "nativeBurp": false,
+  "nativeGuiClicks": false,
+  "os": "Linux",
+  "java": "17.0.20.1",
+  "mode": "soak",
+  "received": 3625,
+  "drops": 0,
+  "processingErrors": 0,
+  "errorStages": [],
+  "acceptedResponses": 3625,
+  "retainedRows": 3625,
+  "diskBytes": 15634445,
+  "heapBeforeBytes": 1653560,
+  "heapAfterBytes": 118680000,
+  "elapsedSeconds": 181.290793509,
+  "requestedSeconds": 180,
+  "intervalMillis": 50,
+  "result": "passed",
+  "checks": 8,
+  "passedChecks": [
+    "collection exceeds the former 250-row limit",
+    "every accepted packet remains in disk and UI",
+    "all response callbacks complete with zero drops and processing errors",
+    "real Swing collection timer remains active",
+    "retained packet restores exact request and response bytes",
+    "retained packet restores exact request and response bytes",
+    "retained packet restores exact request and response bytes",
+    "unload deletes the active private traffic store"
+  ]
+}

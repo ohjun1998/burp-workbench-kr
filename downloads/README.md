@@ -1,8 +1,23 @@
 # Workbench Next / 기존 버전 다운로드
+<!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
-파일을 열고 **Download raw file**을 누르세요. 현재 main 배포는 **자동 검증을 통과한 0.53.3 사용자 편의성 개선판**입니다. 이전 0.53.1 배포와 당시 기록을 보존합니다. 0.53.2는 PR 화면 회귀가 남은 보존 후보판입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 JAR·소스와 당시 기록·PDF는 보존합니다.
+파일을 열고 **Download raw file**을 누르세요. 현재 main 배포는 **자동 검증을 통과한 0.53.4 사용자 편의성 안정화판**입니다. 이전 0.53.3·0.53.1 배포와 당시 기록을 보존합니다. 0.53.2는 PR 화면 회귀가 남았던 보존 후보판입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 파일·기록·PDF는 보존합니다.
 
-## 현재 main 배포: Workbench Next 0.53.3
+## 현재 main 배포: Workbench Next 0.53.4
+
+초안 복원·다단계 편집 복구·목록 고정·일괄 중요 표시·화면 개인화·키보드·비동기 비교·증거 작성 지원 8개를 제공합니다. [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)을 **2026-10-27 14:19:48 (한국 시간)**에 main에 병합했습니다. 병합 커밋은 `56b56e961d0d73e777228e60fdfc1a1e544496fd`, 최종 PR head는 `64cc557bab399ae27d239ea928c266e810daf85d`입니다. 소스 `937c42defbc4d76187f1d189b36b84f4272dd76a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40451792261)에서 Linux·Windows 각각 회귀 123개 그룹·4,270개와 페이로드 HTTP 136개·전체 기능 HTTP 102개·모의 진단 HTTP 266개, 총 **4,774개**를 통과했습니다. 플랫폼별 반복 실행은 고유 검사 수로 합산하지 않습니다. 전체 화면 **576뷰·8,088개 컨트롤·246개 상태**와 집중 화면 **414뷰·4,308개 컨트롤·246개 상태**의 배치 게이트를 모두 통과했습니다. 전체·집중 검사는 겹치므로 합산하지 않습니다. [0.53.4 검증 기록](../docs/VERIFICATION_0.53.4.json)에서 범위와 미실행 항목을 확인하세요. 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·Docker·외부 AI/OAST/BApp 서비스는 이번 검증에서 실행하지 않았습니다.
+
+| 자료 | 0.53.4 경로 |
+|---|---|
+| 설치·사용 안내 | [0.53.4 단계별 안내](../docs/RELEASE_0.53.4_NEXT_KR.md) |
+| 설치 JAR | [burp-workbench-kr-0.53.4.jar](extensions/0.53.4/burp-workbench-kr-0.53.4.jar) |
+| 빌드 가능한 소스 ZIP | [burp-workbench-kr-0.53.4-source.zip](extensions/0.53.4/burp-workbench-kr-0.53.4-source.zip) |
+| 해시·소스 지문 | [SHA256SUMS](extensions/0.53.4/SHA256SUMS) · [manifest.json](extensions/0.53.4/manifest.json) |
+| 변경 없는 Mapper 0.3.5의 선택 연동 | [Chrome/Edge 도우미 ZIP](feature-mapper/0.3.5/feature-mapper-browser-0.3.5.zip) |
+
+Workbench 0.53.4 JAR SHA-256: `795e6566bcc1f5f7d059383b82d60e3efeb00d873310681c896b45eeddacef9d`. 소스 ZIP SHA-256: `276e6be72f185f67a9f1ace2135e53ed80870803c741249b0c0541f5897004ec`. 검사 JAR와 배포 JAR의 해시 일치 및 소스 ZIP 382개 항목의 CRC·소스 지문을 확인했습니다.
+
+## 보존: Workbench Next 0.53.3 · 이전 main 배포
 
 새 사용자 편의성 개선 8개와 탐색 막대 줄바꿈 보완을 포함합니다. **최종 자동 검증·배포 파일 게시를 완료하고 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)로 main에 병합했습니다.** 소스 `51184534`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows 각각 4,476개 검사와 전체·집중 화면 검사를 통과했습니다. 검사 JAR와 배포 JAR가 일치하며 소스 ZIP 367개 파일의 CRC·지문도 확인했습니다. [0.53.3 검증 기록](../docs/VERIFICATION_0.53.3.json)에서 실제 범위와 미실행 항목을 확인하세요. 이전 0.53.2의 파일은 그대로 보존합니다.
 

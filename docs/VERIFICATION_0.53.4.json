@@ -1,6 +1,6 @@
 {
   "version": "0.53.4",
-  "status": "candidate-ci-passed-main-pending",
+  "status": "merged-main-verification-passed",
   "sourceBase": "e0b40e3dae3fcca21d3cd9441260e3edae65d159",
   "sourceCommit": "937c42defbc4d76187f1d189b36b84f4272dd76a",
   "candidateRunId": 40451792261,
@@ -556,7 +556,16 @@
   "releaseJarSha256": "795e6566bcc1f5f7d059383b82d60e3efeb00d873310681c896b45eeddacef9d",
   "uiTestedJarMatchesPublished": true,
   "main": {
-    "merged": false
+    "merged": true,
+    "pullRequest": 94,
+    "mergeCommit": "56b56e961d0d73e777228e60fdfc1a1e544496fd",
+    "headCommit": "64cc557bab399ae27d239ea928c266e810daf85d",
+    "mergedAtUtc": "2026-10-27T05:19:48Z",
+    "mergedAtAsiaSeoul": "2026-10-27T14:19:48+09:00",
+    "tree": "20d28400ef783fa699a5682a3113789e20e0cf6e",
+    "treeMatchesVerifiedPullRequest": true,
+    "sourceAndArtifactsUnchanged": true,
+    "duplicateMainCi": "Skipped only after final PR Build and Windows/durability passed; actual main merge tree equals tested PR head."
   },
   "notExecuted": [
     "actual Burp GUI manual validation",
@@ -1214,5 +1223,63 @@
     "headCommit": "958e7a35044d2a0b82e4c9cf266f3d88b036c5cc",
     "sourceAndArtifactsUnchanged": true,
     "olderVersionFilesUnchanged": true
+  },
+  "pullRequestVerification": {
+    "headCommit": "64cc557bab399ae27d239ea928c266e810daf85d",
+    "build": {
+      "runId": 40453183311,
+      "jobId": 122020391458,
+      "status": "success"
+    },
+    "durability": {
+      "runId": 40453183309,
+      "linuxJobId": 122020391535,
+      "windowsJobId": 122020391049,
+      "status": "success"
+    },
+    "scope": "Full regression and loopback HTTP, role portals, authentication combinations, 50 operation API-adapter comparisons, all UI modes, package fingerprints; actual private-filesystem ENOSPC rollback/recovery and180-second Linux/Windows capture, repeated storage, automated native standalone Repeater and controlled PowerShell lifecycle. Not manual native Burp GUI or DPI/IME validation."
+  },
+  "durabilityArtifacts": [
+    {
+      "id": 12711661901,
+      "name": "linux-durability-40453183309-1",
+      "archiveSha256": "a01eb4e690518de3cd46e78be5cd01eb6ca54a166f307af7b8c05d8ae8db8a38",
+      "sourceCommit": "64cc557bab399ae27d239ea928c266e810daf85d"
+    },
+    {
+      "id": 12711527252,
+      "name": "windows-durability-40453183309-1",
+      "archiveSha256": "509c1288a09389c92549c6fbb40537743e5a5f971452d60a1f803b67ff2e02bf",
+      "sourceCommit": "64cc557bab399ae27d239ea928c266e810daf85d"
+    }
+  ],
+  "durabilityReports": {
+    "encoding": "UTF-8/LF normalized JSON; parsed values equal the original archived CI records",
+    "files": {
+      "windows-scripts.json": {
+        "originalSha256": "f772a78e3160718e37c92b86c9f5d0e48e7f583d2482d69691bbc34074bc93bf",
+        "normalizedSha256": "899a5265603422e83ab0e9aba0ee386e8fd77db596a81daa366ab958af9fdf68"
+      },
+      "release.json": {
+        "originalSha256": "fd5186d3861e229ca0cdf625dbf72cc8a44c7bb562b6f07c1c148117fd61f7bd",
+        "normalizedSha256": "fd5186d3861e229ca0cdf625dbf72cc8a44c7bb562b6f07c1c148117fd61f7bd"
+      },
+      "storage-repeat.json": {
+        "originalSha256": "5a510509d92bd98bebed09346c3d5596acd126c436f583c95211e6946b8edc33",
+        "normalizedSha256": "9907455df6ee71eec6610d7a70ffc0047ab129fb63af6cd51a50ecf5eb09cbdf"
+      },
+      "disk-full.json": {
+        "originalSha256": "6a7a3a5c69f1ebcd2bee8b9760401564560e02b699c83e8e75ccef679ade937f",
+        "normalizedSha256": "725860423f22d118132ca6040e55ca3fb6b2ca9762be1372156efd72d74eee15"
+      },
+      "linux-soak.json": {
+        "originalSha256": "e3c7fe5fa541ef2a9a69a1b3b3429cfb0fc0f7beaeb3831455b0acc67745fab0",
+        "normalizedSha256": "090e7a846ebf1a82b105a69a4f777e9aea5af38d1f2cd470206897854c4e1dd9"
+      },
+      "windows-capture.json": {
+        "originalSha256": "6b84aeedcd607910c32517ec7f2825f094af16a03e746d1e6ae40a4a98fcbc6e",
+        "normalizedSha256": "0b0d97681553aae1ca2a49479ae380fb5a5cc48bf5422a3ac532941d66b2cc85"
+      }
+    }
   }
 }

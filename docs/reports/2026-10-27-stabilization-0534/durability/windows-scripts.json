@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "checks": 6,
+  "powershell": "5.1.26100.33648",
+  "os": "Microsoft Windows NT 10.0.26100.0",
+  "dockerBackendExecuted": false,
+  "browserLaunched": false,
+  "passedChecks": [
+    "Windows PowerShell parsed start.ps1",
+    "Windows PowerShell parsed verify-stack.ps1",
+    "start.ps1 invoked the expected Compose command through a controlled command adapter",
+    "start.ps1 requested the loopback browser URL after successful command completion",
+    "start.ps1 rejects a nonzero Docker exit",
+    "start.ps1 does not request a browser after failed startup"
+  ]
+}

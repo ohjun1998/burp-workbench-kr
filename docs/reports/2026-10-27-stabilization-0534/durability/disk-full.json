@@ -1,0 +1,37 @@
+{
+  "host": "Montoya adapter; production callback, Swing timer and disk store",
+  "nativeBurp": false,
+  "nativeGuiClicks": false,
+  "os": "Linux",
+  "java": "17.0.20.1",
+  "mode": "disk-full",
+  "fileSystemType": "tmpfs",
+  "fileSystemBytes": 16777216,
+  "errorStages": {
+    "기능 자동 매핑 · 패킷 보관·매핑": 6,
+    "응답 수집": 2
+  },
+  "retainedRows": 9,
+  "expectedDrops": 2,
+  "expectedProcessingErrors": 8,
+  "recovered": true,
+  "result": "passed",
+  "checks": 15,
+  "passedChecks": [
+    "disk exhaustion is confined to an explicitly selected tmpfs of at most 64 MiB",
+    "real filesystem capacity causes a capture write failure",
+    "OS reports ENOSPC on the isolated filesystem",
+    "failed partial append rolls back file length and packet count",
+    "retained packet restores exact request and response bytes",
+    "repeated write failures count exactly two capture drops without breaking callbacks",
+    "shared diagnostics account separately for capture and Mapper storage failures",
+    "repeated failures preserve all previously accepted records",
+    "freeing disk space resumes capture without reloading the extension",
+    "embedded Mapper also resumes storage after disk space is freed",
+    "received counters and live Swing timer survive disk exhaustion",
+    "retained packet restores exact request and response bytes",
+    "retained packet restores exact request and response bytes",
+    "host error diagnostics contain no synthetic packet text or target URL",
+    "unload removes the traffic file after disk recovery"
+  ]
+}

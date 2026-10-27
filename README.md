@@ -1,16 +1,17 @@
 # Burp Workbench KR
+<!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-현재 main 배포는 **Workbench Next 0.53.3 사용자 편의성 개선판**입니다. **0.53.1 main 커밋 `6737746f`**을 기준으로 개발했으며, [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)로 main에 병합했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 기존 버전의 JAR·소스·검증 기록은 보존합니다.
+현재 main 배포는 **Workbench Next 0.53.4 사용자 편의성 안정화판**입니다. 0.53.3 main `e0b40e3dae3fcca21d3cd9441260e3edae65d159`을 기준으로 개발하고 [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)로 main에 병합했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 0.53.3 배포·0.53.2 보존 후보판과 이전 모든 버전의 파일·검증 기록을 보존합니다.
 
-이 작업 브랜치의 **0.53.4 안정화**는 초안 복원·다단계 편집 복구·목록 고정·일괄 중요 표시·화면 개인화·키보드·비동기 비교·증거 작성 지원 8개를 구현하고 로컬 전체 검사·10개 화면 모드를 통과했습니다. 원격 CI·배포 파일 게시·main 병합을 진행합니다. [고정 범위와 사용 안내](docs/RELEASE_0.53.4_NEXT_KR.md)를 확인하세요. 검증과 main 병합 완료 전에는 현재 main 0.53.3과 구분합니다.
+**0.53.4 안정화는 고정한 개선 초안 복원·다단계 편집 복구·목록 고정·일괄 중요 표시·화면 개인화·키보드·비동기 비교·증거 작성 지원 8개를 모두 구현했습니다.** 소스 `937c42defbc4d76187f1d189b36b84f4272dd76a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40451792261)에서 Linux·Windows 각각 회귀 123개 그룹·4,270개와 페이로드 HTTP 136개·전체 기능 HTTP 102개·모의 진단 HTTP 266개, 총 **4,774개**를 통과했습니다. 플랫폼별 반복 실행은 고유 검사 수로 합산하지 않습니다. 전체 화면 **576뷰·8,088개 컨트롤·246개 상태**와 집중 화면 **414뷰·4,308개 컨트롤·246개 상태**의 배치 게이트를 모두 통과했습니다. 전체·집중 검사는 겹치므로 합산하지 않습니다. 검사 JAR와 배포 JAR의 SHA-256 `795e6566bcc1f5f7d059383b82d60e3efeb00d873310681c896b45eeddacef9d`가 일치하며, 소스 ZIP 382개 항목의 CRC·소스 지문도 확인했습니다. [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)을 **2026-10-27 14:19:48 (한국 시간)**에 main에 병합했습니다. 병합 커밋은 `56b56e961d0d73e777228e60fdfc1a1e544496fd`, 최종 PR head는 `64cc557bab399ae27d239ea928c266e810daf85d`입니다. 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·Docker·외부 AI/OAST/BApp 서비스는 이번 검증에서 실행하지 않았습니다.
 
-0.53.3은 **검색 일치 위치와 주변 문맥**, **증거 개별 제거·순서 변경·실행 취소**, **검색 0건의 원인 안내와 조건 복원**, **입력 옆 오류·버튼 비활성 사유**, **Ctrl+K 기능 찾기와 이전·다음 화면**, **검색·분석·비교·저장 작업 현황**, **상태·헤더·JSON 항목별 응답 차이**, **첫 사용 준비 체크리스트**를 추가합니다. 0.53.1의 비교 준비·검색 조건 저장·작업 이어가기는 유지합니다.
+이전 0.53.3은 **검색 일치 위치와 주변 문맥**, **증거 개별 제거·순서 변경·실행 취소**, **검색 0건의 원인 안내와 조건 복원**, **입력 옆 오류·버튼 비활성 사유**, **Ctrl+K 기능 찾기와 이전·다음 화면**, **검색·분석·비교·저장 작업 현황**, **상태·헤더·JSON 항목별 응답 차이**, **첫 사용 준비 체크리스트**를 추가합니다. 0.53.1의 비교 준비·검색 조건 저장·작업 이어가기는 유지합니다.
 
-[0.53.3 설치·사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md) · [설치 JAR·소스·버전별 다운로드](downloads/README.md) · [0.53.3 검증 상태](docs/VERIFICATION_0.53.3.json)
+[0.53.4 설치·사용 안내](docs/RELEASE_0.53.4_NEXT_KR.md) · [설치 JAR·소스·버전별 다운로드](downloads/README.md) · [0.53.4 검증 기록](docs/VERIFICATION_0.53.4.json)
 
-**0.53.3의 최종 자동 검증을 통과하고 JAR·소스 ZIP을 생성했습니다.** 소스 `51184534`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows 각각 4,476개 검사와 전체 Swing 450개 화면·162개 상태를 통과했습니다. 화면 배치 게이트는 모두 0건이며 검사 JAR와 배포 JAR의 SHA-256이 일치합니다. 작은 창에서 돌아올 때 탐색 막대가 불필요한 두 줄로 남는 문제를 고쳐 남은 점검 설명 높이를 확보했습니다. [설치 JAR](downloads/extensions/0.53.3/burp-workbench-kr-0.53.3.jar) · [소스 ZIP](downloads/extensions/0.53.3/burp-workbench-kr-0.53.3-source.zip) · [검증 기록](docs/VERIFICATION_0.53.3.json)을 확인하세요. main 병합을 완료했으며 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스는 미실행입니다.
+**보존한 0.53.3의 최종 자동 검증·배포 이력입니다.** 소스 `51184534`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40414755887)에서 Linux·Windows 각각 4,476개 검사와 전체 Swing 450개 화면·162개 상태를 통과했습니다. 화면 배치 게이트는 모두 0건이며 검사 JAR와 배포 JAR의 SHA-256이 일치합니다. 작은 창에서 돌아올 때 탐색 막대가 불필요한 두 줄로 남는 문제를 고쳐 남은 점검 설명 높이를 확보했습니다. [설치 JAR](downloads/extensions/0.53.3/burp-workbench-kr-0.53.3.jar) · [소스 ZIP](downloads/extensions/0.53.3/burp-workbench-kr-0.53.3-source.zip) · [검증 기록](docs/VERIFICATION_0.53.3.json)을 확인하세요. main 병합을 완료했으며 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·외부 서비스는 미실행입니다.
 
 **0.53.2는 완료 배포가 아닌 보존 후보판입니다.** 초기 후보 CI는 통과했지만 [PR #91](https://github.com/ohjun1998/burp-workbench-kr/pull/91)의 전체 화면 검사에서 1024px 창·넓은 메뉴 조합의 남은 점검 설명 영역이 최소 높이 기준에 못 미쳤습니다. 기존 [0.53.2 파일](downloads/extensions/0.53.2/)과 [검증 이력](docs/VERIFICATION_0.53.2.json)은 그대로 보존하며, 탐색 막대 수정과 전체 화면 재검증은 새 버전 0.53.3에서 완료했습니다.
 
@@ -18,10 +19,10 @@
 
 ## 설치하고 첫 요청 확인하기
 
-1. **[버전별 다운로드](downloads/README.md)**에서 사용하려는 버전과 검증 상태를 먼저 확인합니다. 0.53.3은 해당 버전의 JAR와 [0.53.3 안내](docs/RELEASE_0.53.3_NEXT_KR.md)를 함께 사용합니다. 이전 배포가 필요하면 보존된 0.53.1을 선택합니다. 기존 JAR와 프로젝트·설정 파일은 보관하고 이전 Workbench의 로드를 해제한 뒤 Burp의 **Extensions → Add → Java**에서 새 JAR를 선택합니다.
+1. **[버전별 다운로드](downloads/README.md)**에서 사용하려는 버전과 검증 상태를 먼저 확인합니다. 0.53.4은 해당 버전의 JAR와 [0.53.4 안내](docs/RELEASE_0.53.4_NEXT_KR.md)를 함께 사용합니다. 이전 배포가 필요하면 보존된 0.53.1을 선택합니다. 기존 JAR와 프로젝트·설정 파일은 보관하고 이전 Workbench의 로드를 해제한 뒤 Burp의 **Extensions → Add → Java**에서 새 JAR를 선택합니다.
 2. Workbench **요청·응답 목록 → SCOPE 목록**에서 URL을 추가하거나 Burp **HTTP history → Add to scope**로 대상을 등록합니다. 수집할 범위를 체크하고, 수집 버튼을 **OFF → SCOPE**로 바꾼 뒤 사이트를 다시 사용합니다. 기존 History는 범위 안의 요청을 골라 Workbench로 가져올 수 있습니다. 트래픽 OFF에서는 새 패킷·수동 가져오기·일반 자동 관찰을 수집하지 않습니다. 계정 권한 비교의 인증 탐지는 별도 ON/OFF로 제어합니다. 수동 URL은 해당 경로와 하위 경로에 적용됩니다. 목록에서 행을 선택해 URL을 수정하면 체크 상태를 유지한 채 즉시 반영됩니다.
 3. **기능 찾기** 또는 **Ctrl+K**에서 이름·목적을 입력해 도구를 엽니다. 왼쪽 폴더에서도 선택할 수 있습니다. 메뉴를 숨겨도 상단 **메뉴 보기**로 다시 열 수 있습니다. 선택한 요청·응답을 읽고 목적에 맞는 도구로 이동합니다. 처음에는 **Repeater**로 요청을 준비해 직접 확인하고, 원본이 필요한 비교·증거 기능은 선택한 요청에서 이어갑니다.
-4. 상단 **도우미 → 시작 준비 체크리스트**에서 SCOPE·수집·계정·첫 비교·증거 ZIP의 실제 상태를 확인합니다. **도우미 → 진행 중인 작업 현황**에서 실행 상태를 봅니다. **기능 안내**(**F1**)와 **[0.53.3 사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md)**도 참고하세요. 재현한 결과는 **재현·증거 정리**에 모아 가림 미리보기를 확인하고 저장합니다.
+4. 상단 **도우미 → 시작 준비 체크리스트**에서 SCOPE·수집·계정·첫 비교·증거 ZIP의 실제 상태를 확인합니다. **도우미 → 진행 중인 작업 현황**에서 실행 상태를 봅니다. **기능 안내**(**F1**)와 **[0.53.4 사용 안내](docs/RELEASE_0.53.4_NEXT_KR.md)**도 참고하세요. 재현한 결과는 **재현·증거 정리**에 모아 가림 미리보기를 확인하고 저장합니다.
 
 SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다. 추가 요청 전송·계정 비교 실행·수동 검증·취약점 판단·증거 저장은 사용자가 선택합니다. Repeater 창 열기와 Burp Repeater 복사는 요청을 준비하는 동작입니다. 실제 요청은 해당 창의 **Send**를 직접 눌러 전송합니다.
 
@@ -61,7 +62,8 @@ SCOPE 공유와 이미 관측한 응답 분석은 반복 작업을 줄입니다.
 
 | 찾는 자료 | 위치 |
 |---|---|
-| **Next 0.53.3 편의성 개선판 · main 병합** | [설치·새 작업 흐름](docs/RELEASE_0.53.3_NEXT_KR.md) · [현재 검증 상태](docs/VERIFICATION_0.53.3.json) |
+| **Next 0.53.4 편의성 안정화 · main 병합** | [설치·새 작업 흐름](docs/RELEASE_0.53.4_NEXT_KR.md) · [현재 검증 상태](docs/VERIFICATION_0.53.4.json) |
+| Next 0.53.3 이전 main 배포 · 보존 | [당시 안내](docs/RELEASE_0.53.3_NEXT_KR.md) · [당시 검증](docs/VERIFICATION_0.53.3.json) |
 | Next 0.53.2 보존 후보판 · PR 화면 검사 미완료 | [당시 안내](docs/RELEASE_0.53.2_NEXT_KR.md) · [검증 이력](docs/VERIFICATION_0.53.2.json) |
 | Next 0.53.1 이전 main 배포 · 보존 | [설치·사용 안내](docs/RELEASE_0.53.1_NEXT_KR.md) · [당시 검증](docs/VERIFICATION_0.53.1.json) |
 | Next 0.52.0 main 병합 배포 · 보존 | [설치·기능별 안내](docs/RELEASE_0.52.0_NEXT_KR.md) · [당시 검증 기록](docs/VERIFICATION_0.52.0.json) |
@@ -99,9 +101,9 @@ python dev.py check
 
 ## 기능별 패킷 자동 매핑
 
-**트래픽 → 기능 자동 매핑 → 기능 분류·실행**에서 사용합니다. 별도 Mapper JAR를 추가하지 않아도 기능·실행·세션·패킷·분류 근거·메모와 `.fmkr` 프로젝트 저장/열기를 사용할 수 있습니다. 수집 버튼은 요청·응답 목록과 같은 OFF/SCOPE 상태이며, OFF와 Scope 밖의 브라우저 이벤트도 보관하지 않습니다. Chrome/Edge의 버튼 이름까지 연결하려면 [다운로드 목록](downloads/README.md)에서 사용하는 확장 버전에 맞는 브라우저 도우미를 확인하고 **매핑 설정 → 브라우저 연결**의 주소·토큰을 입력합니다. 0.53.3과 0.53.1의 내장 Mapper는 0.3.5입니다. 이전 별도 Mapper 확장은 해제하고 통합 Workbench를 사용하세요. [자세한 사용법](feature-mapper/README_KR.md).
+**트래픽 → 기능 자동 매핑 → 기능 분류·실행**에서 사용합니다. 별도 Mapper JAR를 추가하지 않아도 기능·실행·세션·패킷·분류 근거·메모와 `.fmkr` 프로젝트 저장/열기를 사용할 수 있습니다. 수집 버튼은 요청·응답 목록과 같은 OFF/SCOPE 상태이며, OFF와 Scope 밖의 브라우저 이벤트도 보관하지 않습니다. Chrome/Edge의 버튼 이름까지 연결하려면 [다운로드 목록](downloads/README.md)에서 사용하는 확장 버전에 맞는 브라우저 도우미를 확인하고 **매핑 설정 → 브라우저 연결**의 주소·토큰을 입력합니다. 0.53.4·0.53.3·0.53.1의 내장 Mapper는 0.3.5입니다. 이전 별도 Mapper 확장은 해제하고 통합 Workbench를 사용하세요. [자세한 사용법](feature-mapper/README_KR.md).
 
-[날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 이 버전의 안내서는 [Next 0.53.3 설치·사용 안내](docs/RELEASE_0.53.3_NEXT_KR.md)입니다. [0.25.4 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)는 이전 화면을 설명하는 보존 자료입니다.
+[날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 이 버전의 안내서는 [Next 0.53.4 설치·사용 안내](docs/RELEASE_0.53.4_NEXT_KR.md)입니다. [0.25.4 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)는 이전 화면을 설명하는 보존 자료입니다.
 
 
 

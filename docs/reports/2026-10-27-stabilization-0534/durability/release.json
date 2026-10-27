@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "command": "python dev.py release",
+  "freshOutputDirectory": true,
+  "committedDownloadsPreserved": true,
+  "dockerVersion": "3.10.0",
+  "dockerZipSha256": "c9f60b472b288c5509f1ce223a493aa9258650a71170a248004a00c27739e77f",
+  "freshDockerZipMatchesCommitted": true,
+  "version": "0.53.4",
+  "regressionGroups": 123,
+  "regressionChecks": 4270,
+  "payloadHttpChecks": 136,
+  "allFeaturesHttpChecks": 102,
+  "bountyHttpChecks": 266,
+  "totalChecks": 4774
+}

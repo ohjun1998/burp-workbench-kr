@@ -1,0 +1,16 @@
+package kr.payloadrunner;
+import java.nio.charset.StandardCharsets;import java.util.*;import java.util.concurrent.atomic.AtomicBoolean;import java.util.regex.*;
+public final class CommunityTest {
+ static Engine.Row scan(int port,Engine.Profile profile,String template,String baseline,String payload,String proof)throws Exception{List<Engine.Row> rows=new ArrayList<>();Engine.run(new Engine.Config(profile,Engine.Encoding.URL,template,baseline,List.of(payload),0,10,proof),r->EngineTest.http("127.0.0.1",port,r),new AtomicBoolean(),rows::add);return rows.get(rows.size()-1);}
+ static String get(String path,String cookie){return "GET "+path+" HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n"+(cookie.isBlank()?"":"Cookie: "+cookie+"\r\n")+"\r\n";}
+ public static void run(int port)throws Exception{
+  String form="username=alice&password=LabOnly%212026";String login="POST /api/auth/login HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: "+form.length()+"\r\n\r\n"+form;byte[] rr=EngineTest.http("127.0.0.1",port,login.getBytes(StandardCharsets.US_ASCII));String cookie=Engine.header(new String(rr,StandardCharsets.ISO_8859_1),"Set-Cookie").split(";",2)[0];String text=Engine.parse(rr).text();Matcher matcher=Pattern.compile("\\\"csrf\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"").matcher(text);if(!matcher.find())throw new AssertionError("community login csrf missing");String csrf=matcher.group(1);EngineTest.assertTest("real Spring/Tomcat/H2 lab authentication",Engine.parse(rr).status()==200&&!cookie.isBlank());
+  EngineTest.assertTest("community legacy vulnerable preview XSS reflection",scan(port,Engine.Profile.XSS,get("/vuln/preview?text=§PAYLOAD§",cookie),"hello","<img src=x onerror=console.log('{{MARKER}}')>","").verdict().equals("XSS 반사 후보"));
+  EngineTest.assertTest("community fixed preview escapes XSS probe",!scan(port,Engine.Profile.XSS,get("/fixed/preview?text=§PAYLOAD§",cookie),"hello","<img src=x onerror=console.log('{{MARKER}}')>","").verdict().equals("XSS 반사 후보"));
+  EngineTest.assertTest("community cross-account private file content evidence",scan(port,Engine.Profile.DOWNLOAD,get("/api/community/vuln/files/§PAYLOAD§",cookie),"missing-training-file","bob-private-file","BOB_PRIVATE_ATTACHMENT").verdict().equals("지정 파일 내용 발견"));
+  EngineTest.assertTest("community fixed file blocks cross-account content",!scan(port,Engine.Profile.DOWNLOAD,get("/api/community/fixed/files/§PAYLOAD§",cookie),"missing-training-file","bob-private-file","BOB_PRIVATE_ATTACHMENT").verdict().equals("지정 파일 내용 발견"));
+  String upload="POST /api/community/%s/posts/101/files?name=§PAYLOAD§ HTTP/1.1\r\nHost: 127.0.0.1\r\nCookie: "+cookie+"\r\nX-CSRF-Token: "+csrf+"\r\nConnection: close\r\nContent-Type: text/plain\r\nContent-Length: 13\r\n\r\ntraining-only";
+  EngineTest.assertTest("community vulnerable filename probe upload accepted",scan(port,Engine.Profile.UPLOAD_NAME,String.format(upload,"vuln"),"baseline.txt","probe.html","").verdict().equals("업로드 수락 후보"));
+  Engine.Row fixed=scan(port,Engine.Profile.UPLOAD_NAME,String.format(upload,"fixed"),"baseline.txt","probe.html","");EngineTest.assertTest("community fixed HTML filename upload rejected",fixed.response().status()==415&&!fixed.verdict().equals("업로드 수락 후보"));
+ }
+}

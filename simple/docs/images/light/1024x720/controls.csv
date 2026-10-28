@@ -1,0 +1,229 @@
+theme,width,height,view,label,name,controlWidth,controlHeight,fullyVisible,scrollable
+"light",900,600,"00-scope-editor.png","wb.traffic.scope.url","wb.traffic.scope.url",840,30,true,true
+"light",900,600,"00-scope-editor.png","URL 추가","wb.traffic.scope.add",80,32,true,true
+"light",900,600,"00-scope-editor.png","URL 수정","wb.traffic.scope.edit",80,32,true,true
+"light",900,600,"00-scope-editor.png","선택 삭제","wb.traffic.scope.remove",80,32,true,true
+"light",900,600,"00-scope-editor.png","일괄 삭제","wb.traffic.scope.clear",80,32,true,true
+"light",900,600,"00-scope-editor.png","닫기","",50,32,true,false
+"light",1024,720,"00-start.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"00-start.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"00-start.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"00-start.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"00-start.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"00-start.png","분석으로 →","wb.simple.next",93,32,true,false
+"light",1024,720,"00-start.png","wb.traffic.search","wb.traffic.search",487,40,true,false
+"light",1024,720,"00-start.png","목록 고정","wb.traffic.view.freeze",80,32,true,false
+"light",1024,720,"00-start.png","SCOPE 목록 (1)","wb.traffic.scope.list",174,40,true,false
+"light",1024,720,"00-start.png","OFF","wb.traffic.capture.mode",174,40,true,false
+"light",1024,720,"00-start.png","계정 비교 준비","wb.simple.traffic.compare",110,32,true,false
+"light",1024,720,"00-start.png","Repeater 준비","wb.simple.traffic.repeater",113,32,true,false
+"light",1024,720,"00-start.png","증거에 추가","wb.simple.traffic.evidence",93,32,true,false
+"light",1024,720,"00-start.png","Pretty","wb.traffic.request.pretty",66,34,true,false
+"light",1024,720,"00-start.png","Raw","wb.traffic.request.raw",66,34,true,false
+"light",1024,720,"00-start.png","Hex","wb.traffic.request.hex",66,34,true,false
+"light",1024,720,"00-start.png","Render","wb.traffic.request.render",66,34,true,false
+"light",1024,720,"00-start.png","↵","",28,28,true,false
+"light",1024,720,"00-start.png","⋯","",28,28,true,false
+"light",1024,720,"00-start.png","wb.traffic.request.search","wb.traffic.request.search",221,28,true,false
+"light",1024,720,"00-start.png","×","wb.traffic.request.clear",28,28,true,false
+"light",1024,720,"00-start.png","↑","wb.traffic.request.previous",28,28,true,false
+"light",1024,720,"00-start.png","↓","wb.traffic.request.next",28,28,true,false
+"light",1024,720,"00-start.png","Aa","wb.traffic.request.case",32,28,true,false
+"light",1024,720,"00-start.png",".*","wb.traffic.request.regex",28,28,true,false
+"light",1024,720,"00-start.png","Pretty","wb.traffic.response.pretty",66,34,true,false
+"light",1024,720,"00-start.png","Raw","wb.traffic.response.raw",66,34,true,false
+"light",1024,720,"00-start.png","Hex","wb.traffic.response.hex",66,34,true,false
+"light",1024,720,"00-start.png","Render","wb.traffic.response.render",66,34,true,false
+"light",1024,720,"00-start.png","↵","",28,28,true,false
+"light",1024,720,"00-start.png","⋯","",28,28,true,false
+"light",1024,720,"00-start.png","wb.traffic.response.search","wb.traffic.response.search",221,28,true,false
+"light",1024,720,"00-start.png","×","wb.traffic.response.clear",28,28,true,false
+"light",1024,720,"00-start.png","↑","wb.traffic.response.previous",28,28,true,false
+"light",1024,720,"00-start.png","↓","wb.traffic.response.next",28,28,true,false
+"light",1024,720,"00-start.png","Aa","wb.traffic.response.case",32,28,true,false
+"light",1024,720,"00-start.png",".*","wb.traffic.response.regex",28,28,true,false
+"light",1024,720,"01-capture.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"01-capture.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"01-capture.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"01-capture.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"01-capture.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"01-capture.png","분석으로 →","wb.simple.next",93,32,true,false
+"light",1024,720,"01-capture.png","wb.traffic.search","wb.traffic.search",487,40,true,false
+"light",1024,720,"01-capture.png","목록 고정","wb.traffic.view.freeze",80,32,true,false
+"light",1024,720,"01-capture.png","SCOPE 목록 (1)","wb.traffic.scope.list",174,40,true,false
+"light",1024,720,"01-capture.png","SCOPE","wb.traffic.capture.mode",174,40,true,false
+"light",1024,720,"01-capture.png","계정 비교 준비","wb.simple.traffic.compare",110,32,true,false
+"light",1024,720,"01-capture.png","Repeater 준비","wb.simple.traffic.repeater",113,32,true,false
+"light",1024,720,"01-capture.png","증거에 추가","wb.simple.traffic.evidence",93,32,true,false
+"light",1024,720,"01-capture.png","Pretty","wb.traffic.request.pretty",66,34,true,false
+"light",1024,720,"01-capture.png","Raw","wb.traffic.request.raw",66,34,true,false
+"light",1024,720,"01-capture.png","Hex","wb.traffic.request.hex",66,34,true,false
+"light",1024,720,"01-capture.png","Render","wb.traffic.request.render",66,34,true,false
+"light",1024,720,"01-capture.png","↵","",28,28,true,false
+"light",1024,720,"01-capture.png","⋯","",28,28,true,false
+"light",1024,720,"01-capture.png","wb.traffic.request.search","wb.traffic.request.search",221,28,true,false
+"light",1024,720,"01-capture.png","×","wb.traffic.request.clear",28,28,true,false
+"light",1024,720,"01-capture.png","↑","wb.traffic.request.previous",28,28,true,false
+"light",1024,720,"01-capture.png","↓","wb.traffic.request.next",28,28,true,false
+"light",1024,720,"01-capture.png","Aa","wb.traffic.request.case",32,28,true,false
+"light",1024,720,"01-capture.png",".*","wb.traffic.request.regex",28,28,true,false
+"light",1024,720,"01-capture.png","Pretty","wb.traffic.response.pretty",66,34,true,false
+"light",1024,720,"01-capture.png","Raw","wb.traffic.response.raw",66,34,true,false
+"light",1024,720,"01-capture.png","Hex","wb.traffic.response.hex",66,34,true,false
+"light",1024,720,"01-capture.png","Render","wb.traffic.response.render",66,34,true,false
+"light",1024,720,"01-capture.png","↵","",28,28,true,false
+"light",1024,720,"01-capture.png","⋯","",28,28,true,false
+"light",1024,720,"01-capture.png","wb.traffic.response.search","wb.traffic.response.search",221,28,true,false
+"light",1024,720,"01-capture.png","×","wb.traffic.response.clear",28,28,true,false
+"light",1024,720,"01-capture.png","↑","wb.traffic.response.previous",28,28,true,false
+"light",1024,720,"01-capture.png","↓","wb.traffic.response.next",28,28,true,false
+"light",1024,720,"01-capture.png","Aa","wb.traffic.response.case",32,28,true,false
+"light",1024,720,"01-capture.png",".*","wb.traffic.response.regex",28,28,true,false
+"light",1024,720,"02-request.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"02-request.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"02-request.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"02-request.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"02-request.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"02-request.png","분석으로 →","wb.simple.next",93,32,true,false
+"light",1024,720,"02-request.png","wb.traffic.search","wb.traffic.search",487,40,true,false
+"light",1024,720,"02-request.png","목록 고정","wb.traffic.view.freeze",80,32,true,false
+"light",1024,720,"02-request.png","SCOPE 목록 (1)","wb.traffic.scope.list",174,40,true,false
+"light",1024,720,"02-request.png","SCOPE","wb.traffic.capture.mode",174,40,true,false
+"light",1024,720,"02-request.png","계정 비교 준비","wb.simple.traffic.compare",110,32,true,false
+"light",1024,720,"02-request.png","Repeater 준비","wb.simple.traffic.repeater",113,32,true,false
+"light",1024,720,"02-request.png","증거에 추가","wb.simple.traffic.evidence",93,32,true,false
+"light",1024,720,"02-request.png","Pretty","wb.traffic.request.pretty",66,34,true,false
+"light",1024,720,"02-request.png","Raw","wb.traffic.request.raw",66,34,true,false
+"light",1024,720,"02-request.png","Hex","wb.traffic.request.hex",66,34,true,false
+"light",1024,720,"02-request.png","Render","wb.traffic.request.render",66,34,true,false
+"light",1024,720,"02-request.png","↵","",28,28,true,false
+"light",1024,720,"02-request.png","⋯","",28,28,true,false
+"light",1024,720,"02-request.png","wb.traffic.request.search","wb.traffic.request.search",221,28,true,false
+"light",1024,720,"02-request.png","×","wb.traffic.request.clear",28,28,true,false
+"light",1024,720,"02-request.png","↑","wb.traffic.request.previous",28,28,true,false
+"light",1024,720,"02-request.png","↓","wb.traffic.request.next",28,28,true,false
+"light",1024,720,"02-request.png","Aa","wb.traffic.request.case",32,28,true,false
+"light",1024,720,"02-request.png",".*","wb.traffic.request.regex",28,28,true,false
+"light",1024,720,"02-request.png","Pretty","wb.traffic.response.pretty",66,34,true,false
+"light",1024,720,"02-request.png","Raw","wb.traffic.response.raw",66,34,true,false
+"light",1024,720,"02-request.png","Hex","wb.traffic.response.hex",66,34,true,false
+"light",1024,720,"02-request.png","Render","wb.traffic.response.render",66,34,true,false
+"light",1024,720,"02-request.png","↵","",28,28,true,false
+"light",1024,720,"02-request.png","⋯","",28,28,true,false
+"light",1024,720,"02-request.png","wb.traffic.response.search","wb.traffic.response.search",221,28,true,false
+"light",1024,720,"02-request.png","×","wb.traffic.response.clear",28,28,true,false
+"light",1024,720,"02-request.png","↑","wb.traffic.response.previous",28,28,true,false
+"light",1024,720,"02-request.png","↓","wb.traffic.response.next",28,28,true,false
+"light",1024,720,"02-request.png","Aa","wb.traffic.response.case",32,28,true,false
+"light",1024,720,"02-request.png",".*","wb.traffic.response.regex",28,28,true,false
+"light",1024,720,"03-analysis.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"03-analysis.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"03-analysis.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"03-analysis.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"03-analysis.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"03-analysis.png","기능 자동 매핑","wb.simple.tool.mapper",110,32,true,false
+"light",1024,720,"03-analysis.png","JS에서 API 찾기","wb.simple.tool.js",118,32,true,false
+"light",1024,720,"03-analysis.png","응답 보안 분석","wb.simple.tool.response.recon",110,32,true,false
+"light",1024,720,"03-analysis.png","서버·경로 탐색","wb.simple.tool.environment",110,32,true,false
+"light",1024,720,"03-analysis.png","검증으로 →","wb.simple.next",93,32,true,false
+"light",1024,720,"03-analysis.png","관찰 초기화","",93,32,true,false
+"light",1024,720,"03-analysis.png","선택 관찰 → 증거","wb.response.finding.evidence",127,32,true,false
+"light",1024,720,"08-mapper.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"08-mapper.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"08-mapper.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"08-mapper.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"08-mapper.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"08-mapper.png","기능 자동 매핑","wb.simple.tool.mapper",110,32,true,false
+"light",1024,720,"08-mapper.png","JS에서 API 찾기","wb.simple.tool.js",118,32,true,false
+"light",1024,720,"08-mapper.png","응답 보안 분석","wb.simple.tool.response.recon",110,32,true,false
+"light",1024,720,"08-mapper.png","서버·경로 탐색","wb.simple.tool.environment",110,32,true,false
+"light",1024,720,"08-mapper.png","검증으로 →","wb.simple.next",93,32,true,false
+"light",1024,720,"08-mapper.png","프로젝트 저장","",106,32,true,false
+"light",1024,720,"08-mapper.png","프로젝트 열기","",106,32,true,false
+"light",1024,720,"08-mapper.png","Repeater에 준비","",126,32,true,false
+"light",1024,720,"08-mapper.png","SCOPE","fm.capture",174,38,true,false
+"light",1024,720,"08-mapper.png","매핑 설정","",80,32,true,false
+"light",1024,720,"08-mapper.png","기능 이름·상태·메모","",240,32,true,false
+"light",1024,720,"08-mapper.png","선택 패킷 분류 수정","",240,32,true,false
+"light",1024,720,"08-mapper.png","점검 업무로 연결","fm.assessment.link",240,32,true,false
+"light",1024,720,"08-mapper.png","","",135,36,true,false
+"light",1024,720,"08-mapper.png","","",135,36,true,false
+"light",1024,720,"08-mapper.png","","",384,44,true,false
+"light",1024,720,"09-environment.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"09-environment.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"09-environment.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"09-environment.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"09-environment.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"09-environment.png","기능 자동 매핑","wb.simple.tool.mapper",110,32,true,false
+"light",1024,720,"09-environment.png","JS에서 API 찾기","wb.simple.tool.js",118,32,true,false
+"light",1024,720,"09-environment.png","응답 보안 분석","wb.simple.tool.response.recon",110,32,true,false
+"light",1024,720,"09-environment.png","서버·경로 탐색","wb.simple.tool.environment",110,32,true,false
+"light",1024,720,"09-environment.png","검증으로 →","wb.simple.next",93,32,true,false
+"light",1024,720,"09-environment.png","대상 설정","wb.target.settings",80,32,true,false
+"light",1024,720,"09-environment.png","전체 환경","",80,32,true,false
+"light",1024,720,"09-environment.png","선택 경로 GET 확인","",141,32,true,false
+"light",1024,720,"09-environment.png","후보 목록 GET 확인","",141,32,true,false
+"light",1024,720,"09-environment.png","일시정지","",76,32,true,false
+"light",1024,720,"09-environment.png","중지","",50,32,true,false
+"light",1024,720,"09-environment.png","후보 설정","",80,32,true,false
+"light",1024,720,"09-environment.png","더보기","",63,32,true,false
+"light",1024,720,"09-environment.png","요청·응답 정렬","",111,26,true,false
+"light",1024,720,"09-environment.png","판정 근거","",80,32,true,false
+"light",1024,720,"07-payload.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"07-payload.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"07-payload.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"07-payload.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"07-payload.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"07-payload.png","계정 권한 비교","wb.simple.tool.auth",110,32,true,false
+"light",1024,720,"07-payload.png","입력값 보안 검사","wb.simple.tool.payload",123,32,true,false
+"light",1024,720,"07-payload.png","증거 정리로 →","wb.simple.next",110,32,true,false
+"light",1024,720,"07-payload.png","선택 영역 → §PAYLOAD§","",180,32,true,false
+"light",1024,720,"07-payload.png","정렬 미리보기","",106,32,true,false
+"light",1024,720,"07-payload.png","데이터 정렬","",94,26,true,false
+"light",1024,720,"07-payload.png","데이터 정렬","",94,26,true,false
+"light",1024,720,"07-payload.png","입력값 검사 시작","",123,32,true,false
+"light",1024,720,"07-payload.png","중지","",50,32,true,false
+"light",1024,720,"07-payload.png","선택 요청 → Repeater","",160,32,true,false
+"light",1024,720,"07-payload.png","검사 설정","",80,32,true,false
+"light",1024,720,"07-payload.png","더보기","",63,32,true,false
+"light",1000,300,"04-auth-accounts.png","wb.auth.preparation.account.0","wb.auth.preparation.account.0",308,32,true,true
+"light",1000,300,"04-auth-accounts.png","wb.auth.preparation.account.1","wb.auth.preparation.account.1",308,32,true,true
+"light",1000,300,"04-auth-accounts.png","wb.auth.preparation.account.2","wb.auth.preparation.account.2",308,32,true,true
+"light",1000,300,"04-auth-accounts.png","wb.auth.preparation.account.3","wb.auth.preparation.account.3",288,32,true,true
+"light",1000,300,"04-auth-accounts.png","닫기","",50,32,true,false
+"light",1024,720,"04-auth-results.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"04-auth-results.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"04-auth-results.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"04-auth-results.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"04-auth-results.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"04-auth-results.png","계정 권한 비교","wb.simple.tool.auth",110,32,true,false
+"light",1024,720,"04-auth-results.png","입력값 보안 검사","wb.simple.tool.payload",123,32,true,false
+"light",1024,720,"04-auth-results.png","증거 정리로 →","wb.simple.next",110,32,true,false
+"light",1024,720,"04-auth-results.png","인증 탐지 ON","wb.auth.detect",144,38,true,false
+"light",1024,720,"04-auth-results.png","선택 요청 비교","wb.simple.auth.review",110,32,true,false
+"light",1024,720,"04-auth-results.png","중지","wb.simple.auth.stop",50,32,true,false
+"light",1024,720,"04-auth-results.png","계정·판정 설정","wb.simple.auth.settings",110,32,true,false
+"light",1024,720,"04-auth-results.png","기록 비우기","",93,32,true,false
+"light",1024,720,"04-auth-results.png","wb.auth.history.filter","wb.auth.history.filter",91,32,true,false
+"light",1024,720,"04-auth-results.png","wb.auth.history.search","wb.auth.history.search",202,30,true,false
+"light",1024,720,"04-auth-results.png","계정·세션 보완","wb.auth.history.repair.session",110,32,true,false
+"light",1024,720,"04-auth-results.png","권한 설정 보완","wb.auth.history.repair.policy",110,32,true,false
+"light",1024,720,"04-auth-results.png","쓰기 조회 보완","wb.auth.history.repair.write",110,32,true,false
+"light",1024,720,"05-evidence.png","도움말·설정","wb.simple.options",93,32,true,false
+"light",1024,720,"05-evidence.png","1  수집","wb.simple.step.1",242,32,true,false
+"light",1024,720,"05-evidence.png","2  분석","wb.simple.step.2",242,32,true,false
+"light",1024,720,"05-evidence.png","3  검증","wb.simple.step.3",242,32,true,false
+"light",1024,720,"05-evidence.png","4  증거","wb.simple.step.4",242,32,true,false
+"light",1024,720,"05-evidence.png","수집으로 돌아가기","wb.simple.next",132,32,true,false
+"light",1024,720,"05-evidence.png","","",807,30,true,false
+"light",1024,720,"05-evidence.png","증거 추가 ▾","wb.bounty.evidence.add",91,32,true,false
+"light",1024,720,"05-evidence.png","가림 미리보기","wb.bounty.evidence.preview",106,32,true,false
+"light",1024,720,"05-evidence.png","증거 ZIP 저장","wb.bounty.evidence.save",103,32,true,false
+"light",1024,720,"05-evidence.png","더 보기 ▾","wb.bounty.evidence.more",78,32,true,false
+"light",1024,720,"05-evidence.png","선택 제거","wb.bounty.evidence.remove",80,32,true,false
+"light",1024,720,"05-evidence.png","위로","wb.bounty.evidence.up",50,32,true,false
+"light",1024,720,"05-evidence.png","아래로","wb.bounty.evidence.down",63,32,true,false
+"light",1024,720,"05-evidence.png","실행 취소","wb.bounty.evidence.undo",80,32,true,false
+"light",1024,720,"05-evidence.png","다시 실행","wb.bounty.evidence.redo",80,32,true,false
+"light",1024,720,"05-evidence.png","항목 설명","wb.bounty.evidence.describe",80,32,true,false
+"light",1024,720,"06-redaction.png","닫기","",50,32,true,false

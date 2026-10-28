@@ -1,0 +1,401 @@
+package kr.workbench;
+
+import com.sun.net.httpserver.HttpExchange;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
+
+/** Actual loopback requests through the packaged inspection coordinator; no native Burp or external hosts. */
+public final class ScopeInspectionRunnerTest extends WorkbenchTest {
+  static void await(BooleanSupplier condition, String note) throws Exception {
+    for (int i = 0; i < 1800; i++) { if (condition.getAsBoolean()) return; Thread.sleep(10); }
+    throw new AssertionError("통합 점검 대기 시간 초과: " + note);
+  }
+  static boolean terminal(ScopeInspectionRunner runner) {
+    return Set.of(ScopeInspection.State.COMPLETED, ScopeInspection.State.STOPPED, ScopeInspection.State.FAILED, ScopeInspection.State.CLOSED).contains(runner.snapshot().state());
+  }
+  static ScopeInspection.Options options(ScopeInspectionFixture fixture, String path, int budget, int depth,
+                                          boolean browser, List<ScopeInspection.Profile> profiles) {
+    return new ScopeInspection.Options(fixture.origin + path, budget, depth, 0, 3000, 1024 * 1024, 3, browser, profiles.size() > 1, profiles);
+  }
+  static List<ScopeInspection.Profile> anonymous() { return List.of(new ScopeInspection.Profile("anonymous", "비로그인", Map.of(), null)); }
+  static void reply(HttpExchange exchange, int code, String type, String body) throws java.io.IOException {
+    byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+    exchange.getResponseHeaders().set("Content-Type", type);
+    exchange.sendResponseHeaders(code, bytes.length); exchange.getResponseBody().write(bytes); exchange.close();
+  }
+  static int visitIndex(List<ScopeInspectionFixture.Visit> visits, String path) {
+    for (int i = 0; i < visits.size(); i++) if (visits.get(i).path().equals(path)) return i;
+    return -1;
+  }
+
+  static void separateRealm(ScopeInspectionFixture fixture, java.util.function.Predicate<String> allowed) throws Exception {
+    AtomicInteger mode = new AtomicInteger(), authenticatedChecks = new AtomicInteger();
+    AtomicBoolean denied = new AtomicBoolean(), identityScope = new AtomicBoolean(true);
+    var requests = new CopyOnWriteArrayList<ScopeInspectionFixture.Visit>();
+    fixture.server.createContext("/app/realm-identity", exchange -> {
+      boolean authenticated = ScopeInspectionFixture.SESSION.equals(exchange.getRequestHeaders().getFirst("Cookie"));
+      requests.add(new ScopeInspectionFixture.Visit(exchange.getRequestMethod(), "/app/realm-identity", authenticated ? "alice" : "anonymous"));
+      if (!authenticated) { reply(exchange,denied.get()&&mode.get()==9?200:401,"application/json",denied.get()&&mode.get()==9?"{\"id\":\"alice\"}":"{\"error\":\"unauthenticated\"}");return; }
+      authenticatedChecks.incrementAndGet();
+      int active = denied.get() ? mode.get() : 0;
+      if (active == 3) exchange.getResponseHeaders().set("Set-Cookie", "SID=CHANGED; Path=/");
+      if (active == 5) exchange.getResponseHeaders().set("Location", "/app/login");
+      reply(exchange,active==1?401:active==5?302:200,"application/json",
+          active==2?"{\"id\":\"another-user\"}":active==4?"<title>Just a moment...</title>cf-chl-fixture":active==6?"{":"{\"id\":\"alice\"}");
+    });
+    fixture.server.createContext("/app/realm-denied", exchange -> {
+      boolean authenticated = ScopeInspectionFixture.SESSION.equals(exchange.getRequestHeaders().getFirst("Cookie"));
+      requests.add(new ScopeInspectionFixture.Visit(exchange.getRequestMethod(), "/app/realm-denied", authenticated ? "alice" : "anonymous"));
+      denied.set(true);
+      if (mode.get()==7) exchange.getResponseHeaders().set("Set-Cookie", "SID=CHANGED; Path=/");
+      if (mode.get()==8) identityScope.set(false);
+      reply(exchange,401,"application/json","{\"error\":\"merchant authentication required\"}");
+    });
+    var identity = new CookieSessionProbe.Config(fixture.origin + "/app/realm-identity", "$.id", "alice");
+    var profile = new ScopeInspection.Profile("alice", "Alice", Map.of("Cookie",ScopeInspectionFixture.SESSION), identity);
+    for (int testMode=0;testMode<=9;testMode++) {
+      mode.set(testMode);denied.set(false);identityScope.set(true);authenticatedChecks.set(0);requests.clear();fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api,options(fixture,"/app/realm-denied",30,0,false,List.of(profile)),
+          url->allowed.test(url)&&(!url.endsWith("/app/realm-identity")||identityScope.get()),value->{})) {
+        runner.start();await(()->terminal(runner)||runner.snapshot().state()==ScopeInspection.State.PAUSED,"separate realm identity check");
+        var result=runner.snapshot();
+        if(testMode==0) {
+          check(result.state()==ScopeInspection.State.COMPLETED,"a resource-specific 401 does not pause a freshly reverified account identity");
+          var finding=result.findings().stream().filter(f->f.title().equals("개별 경로 401 · 선택 신원 재확인")).findFirst().orElseThrow();
+          check(finding.category().equals("ACCESS")&&finding.state().equals("미확인")&&!finding.originalId().isBlank(),"separate-realm 401 remains original-linked unresolved access evidence");
+          var recheck=result.pages().stream().filter(page->page.classification().equals("IDENTITY_RECHECK_CONTROL")).findFirst().orElseThrow();
+          check(recheck.status()==200&&finding.detail().contains(recheck.original().id()),"a fresh identity control original establishes the exact post-401 evidence");
+          check(authenticatedChecks.get()==2&&requests.stream().filter(r->r.path().equals("/app/realm-denied")).count()==1,"cached identity success is bypassed once and the denied endpoint is not retried");
+          var controls=result.pages().stream().filter(page->page.classification().equals("IDENTITY_RECHECK_CONTROL")).toList();
+          check(controls.size()==2&&controls.stream().anyMatch(page->page.status()==401&&page.account().equals("신원 비로그인 대조"))
+              &&controls.stream().allMatch(page->finding.detail().contains(page.original().id())),"fresh authenticated and anonymous controls both preserve original-linked contrast after denial");
+        } else {
+          check(result.state()==ScopeInspection.State.PAUSED,"identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused");
+          check(result.findings().stream().noneMatch(f->f.title().equals("개별 경로 401 · 선택 신원 재확인")),"failed or uncheckable identity never excuses the denied endpoint");
+          check(authenticatedChecks.get()==(testMode==7||testMode==8?1:2),"guard failure cannot start repeated identity checks or bypass cookie/Scope policy");
+        }
+        check(result.sent()==fixture.visits.size()+requests.size()&&result.sent()<=30&&requests.stream().allMatch(r->r.method().equals("GET")),"all fresh rechecks share actual read-only request accounting and the original budget");
+      }
+    }
+    for(int smallBudget:List.of(5,6,30)) {
+      boolean configured=smallBudget!=30;
+      mode.set(0);denied.set(false);identityScope.set(true);authenticatedChecks.set(0);requests.clear();fixture.visits.clear();
+      var selected=configured?profile:new ScopeInspection.Profile("alice","Alice",profile.headers(),null);
+      try(var runner=new ScopeInspectionRunner(fixture.api,options(fixture,"/app/realm-denied",smallBudget,0,false,List.of(selected)),allowed,value->{})) {
+        runner.start();await(()->terminal(runner)||runner.snapshot().state()==ScopeInspection.State.PAUSED,"unavailable realm verification pauses");
+        check(runner.snapshot().state()==ScopeInspection.State.PAUSED,"missing identity configuration or exhausted recheck budget cannot establish a live identity");
+        check(authenticatedChecks.get()==(configured?1:0),"no identity verification request is sent without configuration or remaining budget");
+      }
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    check(ScopeInspectionRunner.normalized("https://example.test/app/../secret") == null, "literal traversal is excluded before a request");
+    check(ScopeInspectionRunner.normalized("https://example.test/app/%252fsecret") == null, "double-encoded path ambiguity is excluded");
+    check(ScopeInspectionRunner.normalized("https://user:password@example.test/app/") == null, "userinfo URL cannot carry credentials into discovery");
+    check(ScopeInspectionRunner.normalized("https://example.test/app/#/view") == null, "SPA hash navigation is reserved for the browser adapter");
+    check(!ScopeInspectionRunner.readOnlyUrl("https://example.test/app/deleteUser/10"), "destructive-looking GET routes stay manual");
+    check(!ScopeInspectionRunner.readOnlyUrl("https://example.test/app/actuator/heapdump"), "large diagnostic dumps stay manual");
+    check(!ScopeInspectionRunner.readOnlyUrl("https://example.test/app/file.sql"), "database archive downloads stay manual");
+
+    try (var fixture = new ScopeInspectionFixture()) {
+      var allowed = (java.util.function.Predicate<String>) url -> url.equals(fixture.origin + "/app") || url.startsWith(fixture.origin + "/app/");
+      var updates = new CopyOnWriteArrayList<ScopeInspection.Snapshot>();
+      try (var runner = new ScopeInspectionRunner(fixture.api, fixture.options(true), allowed, updates::add)) {
+        check(fixture.visits.isEmpty() && runner.snapshot().state() == ScopeInspection.State.READY, "construction and result preparation send no HTTP");
+        runner.start(); await(() -> terminal(runner), "multi-account inspection");
+        var result = runner.snapshot();
+        check(result.state() == ScopeInspection.State.COMPLETED, "bounded fixture queue completes");
+        check(result.sent() == fixture.visits.size() && result.sent() <= 150, "counter includes actual identity, reference and target HTTP across accounts");
+        check(result.failed() == 0 && result.pending() == 0, "completed fixture has no failed or pending requests");
+        check(fixture.visits.stream().allMatch(v -> Set.of("GET", "HEAD").contains(v.method())), "all automatic HTTP uses GET or HEAD");
+        check(fixture.visits.stream().noneMatch(v -> v.path().startsWith("/outside") || v.path().contains("logout") || v.path().endsWith("write-only")), "scope, logout and write-only declarations are never fetched");
+        check(fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/undocumented")), "observed JS introduces its resolved GET API into the queue");
+        check(fixture.visits.stream().noneMatch(v -> v.path().contains("{id}")), "unresolved API path variables are never invented");
+        check(result.findings().stream().anyMatch(f -> f.category().equals("DATABASE") && f.title().contains("PostgreSQL")), "DB product clues are aggregated as findings");
+        check(result.findings().stream().anyMatch(f -> f.category().equals("ACCESS") && f.state().contains("수동")), "account response differences are review candidates rather than a vulnerability verdict");
+        check(result.findings().stream().anyMatch(f -> f.category().equals("SECRET")), "actual fetched source is passed to secret analysis");
+        check(!result.toString().contains(ScopeInspectionFixture.API_SECRET) && !result.toString().contains("DB_PRIVATE_VALUE")
+            && !result.toString().contains(ScopeInspectionFixture.SESSION), "public run snapshots contain no raw secrets, DB password or session cookie");
+        var original = result.pages().stream().filter(page -> page.url().endsWith("/app/private") && page.account().equals("Alice") && page.status() == 200).findFirst().orElseThrow();
+        check(runner.original(original.original().id()) == original.original(), "finding and page IDs resolve to the retained immutable original");
+        check(new String(original.original().requestPrefix(10000), StandardCharsets.UTF_8).contains(ScopeInspectionFixture.SESSION), "private original retains the exact selected account request");
+        check(original.original().packet().request().url().equals(original.url()), "stored original can be reconstructed with its exact service and URL");
+        check(original.original().packet().response().bodyToString().contains("alice"), "stored response can be reconstructed without a preview surrogate");
+        check(result.pages().stream().anyMatch(page -> page.classification().equals("SOFT404")), "common 200 fallback pages remain explicitly classified");
+        check(result.pages().stream().filter(page -> Set.of("DENIED", "REDIRECT").contains(page.classification()))
+            .allMatch(page -> !page.complete() && page.note().contains("대상 내용 미확인")), "blocked target responses retain static observations without claiming target content coverage");
+        check(updates.stream().anyMatch(update -> update.state() == ScopeInspection.State.RUNNING), "progress is observable before completion");
+      }
+      fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/", 2, 2, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "two-request budget");
+        check(runner.snapshot().state() == ScopeInspection.State.STOPPED && runner.snapshot().sent() == 2, "missing-page reference requests consume the global budget");
+        check(fixture.visits.size() == 2 && fixture.visits.stream().allMatch(v -> v.path().contains("wb-missing-")), "an exhausted reference budget does not send the target request");
+        check(runner.snapshot().pending() > 0 && runner.snapshot().findings().stream().anyMatch(f -> f.category().equals("COVERAGE")), "budget exhaustion preserves pending work and a coverage explanation");
+      }
+      fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/", 20, 0, false, anonymous()), url -> false, value -> {})) {
+        rejects(runner::start, "an excluded starting scope is rejected without network");
+        check(fixture.visits.isEmpty(), "scope rejection sends zero HTTP");
+      }
+
+      fixture.server.createContext("/app/inside-redirect", exchange -> {
+        exchange.getResponseHeaders().set("Location", "/app/api/documented"); reply(exchange, 302, "text/plain", "redirect");
+      });
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/inside-redirect", 20, 0, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "inside redirect");
+        var page = runner.snapshot().pages().stream().filter(p -> p.url().endsWith("/app/api/documented") && p.classification().equals("JSON")).findFirst().orElseThrow();
+        check(page.original().request().url().equals(page.url()), "redirect destination analysis links the final request, not the initial URL");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.url().endsWith("inside-redirect") && p.status() == 302), "each redirect hop retains its own wire original");
+      }
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/loop", 20, 0, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "redirect loop");
+        check(runner.snapshot().findings().stream().anyMatch(f -> f.detail().contains("리디렉션 순환")), "redirect loops are reported without infinite requests");
+      }
+
+      AtomicInteger logGets = new AtomicInteger(), logHeads = new AtomicInteger();
+      fixture.server.createContext("/app/logs", exchange -> {
+        if (exchange.getRequestMethod().equals("HEAD")) {
+          logHeads.incrementAndGet(); exchange.getResponseHeaders().set("Content-Length", "9000000");
+          exchange.getResponseHeaders().set("Content-Type", "text/plain"); exchange.sendResponseHeaders(200, -1); exchange.close();
+        } else { logGets.incrementAndGet(); reply(exchange, 200, "text/plain", "must not download"); }
+      });
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/logs", 20, 0, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "large log preflight");
+        check(logHeads.get() == 1 && logGets.get() == 0, "large declared log receives HEAD metadata but no automatic GET download");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.classification().equals("HEAD_PREFLIGHT")), "large-file metadata has its own retained original");
+      }
+      fixture.server.createContext("/app/huge", exchange -> reply(exchange, 200, "text/plain", "X".repeat(4096)));
+      var small = new ScopeInspection.Options(fixture.origin + "/app/huge", 20, 0, 0, 3000, 1024, 2, false, false, anonymous());
+      try (var runner = new ScopeInspectionRunner(fixture.api, small, allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "body analysis cap");
+        var page = runner.snapshot().pages().stream().filter(p -> p.url().endsWith("/app/huge")).findFirst().orElseThrow();
+        check(!page.complete() && page.classification().equals("LIMIT"), "an oversized received body is explicitly uninspected");
+        check(page.original().responseBodyLength() == 4096 && page.original().response().body().length() == 4096, "analysis truncation does not truncate the retained wire original");
+        check(page.note().contains("다운로드 상한은 별개"), "transport download and analysis limits are not conflated");
+      }
+      var zipped = new java.io.ByteArrayOutputStream();
+      try (var gzip = new java.util.zip.GZIPOutputStream(zipped)) { gzip.write("Z".repeat(4096).getBytes(StandardCharsets.UTF_8)); }
+      byte[] compressed = zipped.toByteArray();
+      fixture.server.createContext("/app/gzip-huge", exchange -> {
+        exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=UTF-8");
+        exchange.getResponseHeaders().set("Content-Encoding", "gzip");
+        exchange.sendResponseHeaders(200, compressed.length); exchange.getResponseBody().write(compressed); exchange.close();
+      });
+      var compressedOptions = new ScopeInspection.Options(fixture.origin + "/app/gzip-huge", 20, 0, 0, 3000, 1024, 2, false, false, anonymous());
+      try (var runner = new ScopeInspectionRunner(fixture.api, compressedOptions, allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "decoded body analysis cap");
+        var page = runner.snapshot().pages().stream().filter(p -> p.url().endsWith("/app/gzip-huge")).findFirst().orElseThrow();
+        check(!page.complete() && page.classification().equals("LIMIT") && page.note().contains("압축 해제 한도"), "configured body bound also limits decompressed bytes before static analysis");
+        byte[] wire = page.original().responsePrefix(10000);
+        check(page.original().responseBodyLength() == compressed.length
+            && Arrays.equals(compressed, Arrays.copyOfRange(wire, wire.length - compressed.length, wire.length)), "decompression limits preserve the exact compressed wire original");
+      }
+
+      fixture.rateLimited.set(true); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/rate", 25, 0, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED, "429 pause");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.status() == 429 && !p.complete() && p.note().contains("대상 내용 미확인")), "rate limiting is explicit incomplete target coverage");
+        int count = fixture.visits.size(); Thread.sleep(80);
+        check(fixture.visits.size() == count && runner.snapshot().pending() > 0, "429 pause gates later requests and retains the limited candidate");
+        fixture.rateLimited.set(false); runner.resume(); await(() -> terminal(runner), "429 explicit resume");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.url().endsWith("/app/rate") && p.status() == 429)
+            && runner.snapshot().pages().stream().anyMatch(p -> p.url().endsWith("/app/rate") && p.status() == 200), "resume keeps the limited attempt and the subsequent successful original");
+      }
+
+      var identity = new CookieSessionProbe.Config(fixture.origin + "/app/api/me", "$.id", "alice");
+      var expired = new ScopeInspection.Profile("alice", "Alice", Map.of("Cookie", "SID=EXPIRED"), identity);
+      var refreshed = new ScopeInspection.Profile("alice", "Alice", Map.of("Cookie", ScopeInspectionFixture.SESSION), identity);
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/private", 25, 0, false, List.of(expired)), allowed, value -> {})) {
+        runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED, "expired identity");
+        check(runner.snapshot().pages().stream().noneMatch(p -> p.url().endsWith("/app/private")), "expired identity blocks the discovery target");
+        runner.resume(List.of(refreshed)); await(() -> terminal(runner), "same-account refreshed identity");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.profileRevision().startsWith("r1:"))
+            && runner.snapshot().pages().stream().anyMatch(p -> p.profileRevision().startsWith("r2:")), "refresh preserves old and new authentication revisions separately");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.url().endsWith("/app/private") && p.status() == 200), "same declared identity can resume with refreshed credentials");
+      }
+
+      AtomicBoolean liveScope = new AtomicBoolean(true);
+      fixture.rateLimited.set(true); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/rate", 25, 0, false, anonymous()), url -> liveScope.get() && allowed.test(url), value -> {})) {
+        runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED, "pause before scope revocation");
+        int count = fixture.visits.size(); liveScope.set(false);
+        await(() -> terminal(runner), "scope revocation halts paused worker");
+        check(fixture.visits.size() == count && runner.snapshot().message().contains("SCOPE"), "changing the frozen scope stops future HTTP and preserves an explicit reason");
+      }
+      fixture.rateLimited.set(false);
+
+      var browserOptions = options(fixture, "/app/", 30, 0, true, anonymous());
+      try (var runner = new ScopeInspectionRunner(fixture.api, browserOptions, allowed, value -> {})) {
+        runner.start();
+        runner.offerBrowser(Map.of("runId", "other-run", "kind", "menu", "url", fixture.origin + "/app/private", "routeId", "wrong"));
+        runner.offerBrowser(Map.of("runId", runner.id(), "kind", "menu", "url", fixture.origin + "/app/", "routeId", "route-A", "label", "First SPA menu"));
+        runner.offerBrowser(Map.of("runId", runner.id(), "kind", "menu", "url", fixture.origin + "/app/", "routeId", "route-B", "label", "Second SPA menu"));
+        runner.offerBrowser(Map.of("runId", runner.id(), "kind", "api", "url", fixture.origin + "/app/api/me", "method", "GET", "routeId", "api-me", "pageRouteId", "route-A"));
+        runner.offerBrowser(Map.of("runId", runner.id(), "kind", "api", "url", fixture.origin + "/app/api/me", "method", "GET", "routeId", "api-me", "pageRouteId", "route-B"));
+        runner.offerBrowser(Map.of("runId", runner.id(), "kind", "api", "url", fixture.origin + "/app/api/documented", "method", "GET", "requiresQuery", true, "routeId", "query-required"));
+        runner.offerBrowser(Map.of("runId", runner.id(), "kind", "api", "url", fixture.origin + "/app/api/write-only", "method", "POST", "routeId", "write"));
+        runner.offerBrowser(Map.of("runId", runner.id(), "kind", "done", "state", "partial"));
+        await(() -> terminal(runner), "browser route events");
+        var snapshot = runner.snapshot();
+        check(snapshot.findings().stream().filter(f -> f.account().equals("browser-session") && f.category().equals("MENU")).count() == 2, "SPA hash routes remain distinct metadata without leaking full route values");
+        check(snapshot.findings().stream().filter(f -> f.account().equals("browser-session") && f.category().equals("API") && f.detail().contains("페이지 라우트 지문 route-")).count() == 2, "one API retains separate observed contexts for two SPA routes without claiming JS causality");
+        check(snapshot.findings().stream().anyMatch(f -> f.title().equals("브라우저 탐색 미완료")) && snapshot.partial() > 0, "browser partial completion remains explicit coverage rather than full completion");
+        check(snapshot.candidates().stream().anyMatch(c -> c.url().endsWith("/app/api/documented") && !c.executable()), "browser query values that were removed are never invented for HTTP replay");
+        check(snapshot.candidates().stream().anyMatch(c -> c.method().equals("POST") && !c.executable()), "browser writes are inventoried without automatic transmission");
+        check(snapshot.findings().stream().noneMatch(f -> f.detail().contains("wrong")), "stale or foreign browser run events are ignored");
+      }
+
+      fixture.visits.clear();
+      var katanaOptions = options(fixture, "/app/", 80, 0, false, fixture.options(true).profiles());
+      var declaredKatana=new ScopeInspection.Options(katanaOptions.url(),katanaOptions.budget(),katanaOptions.depth(),katanaOptions.delayMillis(),katanaOptions.timeoutMillis(),katanaOptions.maxBodyBytes(),katanaOptions.maxRedirects(),katanaOptions.browser(),katanaOptions.compareAccounts(),katanaOptions.profiles(),true,60,100);
+      try(var mismatch=new ScopeInspectionRunner(fixture.api,declaredKatana,allowed,value->{})){
+        rejects(()->mismatch.registerKatana("alice",System.currentTimeMillis()+15000),"a crawler cannot register a different identity than its durable discovery condition");
+        check(fixture.visits.isEmpty(),"rejecting a mismatched Katana identity sends no target HTTP");
+      }
+      try (var runner = new ScopeInspectionRunner(fixture.api, katanaOptions, allowed, value -> {})) {
+        runner.registerKatana("alice", System.currentTimeMillis() + 15000);
+        check(fixture.visits.isEmpty(), "registering the finite Katana producer sends no target HTTP");
+        runner.start();
+        await(() -> runner.snapshot().message().contains("Katana 경로 수집 대기"), "Katana producer waits ahead of guessed paths");
+        check(runner.snapshot().state() == ScopeInspection.State.RUNNING && fixture.visits.stream().noneMatch(v -> v.path().equals("/app/robots.txt")), "guessed common paths wait while the Katana producer is active");
+        var privatePage = runner.fetchKatana(fixture.origin + "/app/private", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(privatePage.responseStatus().equals("200") && new String(privatePage.requestPrefix(10000), StandardCharsets.UTF_8).contains(ScopeInspectionFixture.SESSION), "Katana uses only its selected HTTP account and retains the exact original");
+        var repeatedPage = runner.fetchKatana(fixture.origin + "/app/private", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(repeatedPage == privatePage && fixture.visits.stream().filter(v -> v.path().equals("/app/private") && v.account().equals("alice")).count() == 1, "same-profile revision and URL reuse one completed raw response without an extra target request");
+        var configPage = runner.fetchKatana(fixture.origin + "/app/config", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(runner.fetchKatana(fixture.origin + "/app/verify/" + ScopeInspectionFixture.API_SECRET, "GET").isCompletedExceptionally(), "a detected secret is never reused as a Katana request input");
+        check(runner.fetchKatana(fixture.origin + "/outside/sensitive", "GET").isCompletedExceptionally()
+            && runner.fetchKatana(fixture.origin + "/app/api/write-only", "POST").isCompletedExceptionally(), "external scope and write requests are rejected before transport");
+        var redirect = runner.fetchKatana(fixture.origin + "/app/redirect", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(redirect.responseStatus().equals("302") && redirect.url().endsWith("/app/redirect")
+            && redirect.response().headerValue("Location").equals("/outside/sensitive"), "Katana receives the original single-hop redirect response at its requested URL");
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/app/jsonl-only", "GET", "Katana v1.8.0", "depth-excluded discovery", true));
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/app/config", "?", "Katana 환경", "기술 단서 · PostgreSQL", false));
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/app/form-only", "POST", "Katana 폼", "입력 이름 · name", false));
+        runner.offerKatana(new ScopeInspection.Candidate(fixture.origin + "/outside/sensitive", "GET", "Katana 차단", "범위 제외", false));
+        runner.finishKatana(true, "isolated producer finished"); await(() -> terminal(runner), "Katana completion drains existing queues");
+        var snapshot = runner.snapshot();
+        check(snapshot.state() == ScopeInspection.State.COMPLETED && snapshot.pending() == 0 && snapshot.sent() == fixture.visits.size(), "Katana, controls and all comparison accounts share the actual HTTP budget and finish their accepted queues");
+        check(fixture.visits.stream().noneMatch(v -> v.path().equals("/app/jsonl-only") || v.path().equals("/app/form-only") || v.path().startsWith("/outside")), "JSONL discovery, forms and excluded paths never trigger blind replay");
+        check(snapshot.pages().stream().anyMatch(p -> p.note().contains("Katana 표준 크롤러") && p.original().id().equals(configPage.id())), "Katana packets use the common Page analysis and original evidence chain");
+        check(snapshot.findings().stream().anyMatch(f -> f.category().equals("KATANA") && f.title().equals("Katana 환경 관측") && f.originalId().equals(configPage.id())), "technology metadata links an already observed packet without guessing an HTTP method");
+        check(snapshot.findings().stream().anyMatch(f -> f.category().equals("ACCESS")), "Katana-observed paths retain ordinary account comparisons");
+        check(!snapshot.toString().contains(ScopeInspectionFixture.API_SECRET), "Katana metadata and public pages do not expose discovered secrets");
+      }
+
+      var gateStarted = new java.util.concurrent.CountDownLatch(1);
+      var releaseGate = new java.util.concurrent.CountDownLatch(1);
+      fixture.server.createContext("/app/katana-gate", exchange -> {
+        fixture.visits.add(new ScopeInspectionFixture.Visit(exchange.getRequestMethod(), "/app/katana-gate", "anonymous"));
+        gateStarted.countDown();
+        try { releaseGate.await(5, java.util.concurrent.TimeUnit.SECONDS); }
+        catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); }
+        reply(exchange, 200, "text/plain", "crawler transport gate");
+      });
+      fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/katana-gate", 30, 0, false, anonymous()), allowed, value -> {})) {
+        runner.registerKatana("anonymous", System.currentTimeMillis() + 15000); runner.start();
+        check(gateStarted.await(5, java.util.concurrent.TimeUnit.SECONDS), "loopback gate holds the worker before the pending crawler request");
+        var cancelled = runner.fetchKatana(fixture.origin + "/app/cancelled-katana", "GET"); cancelled.cancel(false); releaseGate.countDown();
+        await(() -> runner.snapshot().findings().stream().anyMatch(f -> f.title().equals("Katana 요청 보류")), "cancelled proxy request is held");
+        check(fixture.visits.stream().noneMatch(v -> v.path().equals("/app/cancelled-katana")), "a cancelled proxy future cannot retransmit immediately through the ordinary queue");
+        runner.fetchKatana(fixture.origin + "/app/cancelled-katana", "GET").get(10, java.util.concurrent.TimeUnit.SECONDS);
+        check(fixture.visits.stream().filter(v -> v.path().equals("/app/cancelled-katana")).count() == 1, "a fresh fetch restores the held URL exactly once");
+        runner.pause();
+        var paused = runner.fetchKatana(fixture.origin + "/app/paused-katana", "GET"); int count = fixture.visits.size(); Thread.sleep(80);
+        check(!paused.isDone() && fixture.visits.size() == count, "user pause preserves the proxy future without dispatching new HTTP");
+        runner.resume(); paused.get(10, java.util.concurrent.TimeUnit.SECONDS);
+        runner.pause(); var stopped = runner.fetchKatana(fixture.origin + "/app/stopped-katana", "GET"); runner.stop();
+        check(stopped.isCompletedExceptionally() && runner.snapshot().pending() > 0, "stop completes proxy waiters and preserves accepted URL tasks");
+        runner.resume(); runner.finishKatana(true, "producer resumed and finished"); await(() -> terminal(runner), "stopped crawler queue resumes");
+        check(runner.snapshot().state() == ScopeInspection.State.COMPLETED && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/stopped-katana")), "explicit resume drains URLs that were queued before stop");
+      }
+
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/", 3, 0, false, anonymous()), allowed, value -> {})) {
+        runner.registerKatana("anonymous", System.currentTimeMillis() + 15000); runner.start();
+        await(() -> runner.snapshot().sent() == 3, "Katana shares the seed control budget");
+        var exhausted = runner.fetchKatana(fixture.origin + "/app/budget-katana", "GET");
+        await(() -> terminal(runner), "Katana exhausts the shared budget");
+        check(exhausted.isCompletedExceptionally() && runner.snapshot().sent() == 3 && runner.snapshot().pending() > 0, "Katana cannot bypass the global budget and budget failure releases proxy waiters");
+      }
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/", 30, 0, false, anonymous()), allowed, value -> {})) {
+        runner.registerKatana("anonymous", System.currentTimeMillis() + 500); runner.start();
+        await(() -> terminal(runner), "finite crawler completion deadline");
+        check(runner.snapshot().findings().stream().anyMatch(f -> f.title().equals("Katana 탐색 미완료")) && runner.snapshot().partial() > 0, "missing crawler completion becomes explicit partial coverage before normal queued work finishes");
+      }
+
+      var alice = fixture.options(true).profiles().stream().filter(p -> p.id().equals("alice")).findFirst().orElseThrow();
+      for (var profile : List.of(alice, new ScopeInspection.Profile("alice", "Alice", alice.headers(), null))) {
+        fixture.visits.clear();
+        try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/form-root", 80, 2, false, List.of(profile)), allowed, value -> {})) {
+          runner.start(); await(() -> terminal(runner) || runner.snapshot().state() == ScopeInspection.State.PAUSED, "registration form is not session expiry");
+          var result = runner.snapshot();
+          check(result.state() == ScopeInspection.State.COMPLETED, "a valid page containing a password form does not auto-pause the authenticated run");
+          check(fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/script-found")), "ordinary registration-page scripts still introduce their observed APIs");
+          var page = result.pages().stream().filter(p -> p.url().endsWith("/app/form-root")).findFirst().orElseThrow();
+          check(!page.classification().equals("LOGIN") && page.note().contains(profile.identity() == null ? "선택 신원 미확인" : "선택 신원 조건 확인"), "password form classification states whether independent identity evidence exists");
+          check(result.findings().stream().anyMatch(f -> f.category().equals("AUTH") && f.originalId().equals(page.original().id())
+              && (profile.identity() == null ? f.confidence().equals("신원 미확인") : f.detail().contains("신원 대조 원본:"))), "the form explanation is linked to its original and never invents identity verification");
+        }
+      }
+      separateRealm(fixture, allowed);
+      for (String path : List.of("/app/expired", "/app/login-redirect", "/app/auth-redirect", "/app/challenge")) {
+        try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, path, 30, 1, false, List.of(alice)), allowed, value -> {})) {
+          runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED || terminal(runner), "real authentication barrier remains paused");
+          check(runner.snapshot().state() == ScopeInspection.State.PAUSED, "401, explicit login redirects and security challenges keep their pause behavior");
+        }
+      }
+      fixture.visits.clear();
+      var wrongIdentity = new ScopeInspection.Profile("alice", "Alice", alice.headers(), new CookieSessionProbe.Config(fixture.origin + "/app/identity-mismatch", "$.id", "alice"));
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/form-root", 30, 1, false, List.of(wrongIdentity)), allowed, value -> {})) {
+        runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED || terminal(runner), "identity mismatch cannot be excused by a form");
+        check(runner.snapshot().state() == ScopeInspection.State.PAUSED && fixture.visits.stream().noneMatch(v -> v.path().equals("/app/form-root")), "a failed explicit identity condition stops before the ordinary target request");
+      }
+
+      fixture.spaFallback.set(true); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/spa-root", 80, 2, false, List.of(alice)), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner) || runner.snapshot().state() == ScopeInspection.State.PAUSED, "explicit SPA start shell discovery");
+        var result = runner.snapshot();
+        check(result.state() == ScopeInspection.State.COMPLETED && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/script-found")), "a caller-selected SPA start shell keeps actual script/API discovery even when missing routes share its HTML");
+        check(result.pages().stream().anyMatch(p -> p.url().endsWith("/app/spa-root") && p.classification().equals("SOFT404") && !p.complete()), "SPA shell exploration does not turn a soft404 into proven target coverage");
+      }
+      fixture.spaFallback.set(false); fixture.exposedEnv.set(true); fixture.declaredDiscovery.set(true); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/discovery-root", 80, 2, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "meaningful discovery before bounded guesses");
+        var result = runner.snapshot();
+        Set<String> core = Set.of("/app/discovery-root", "/app/discovery.js", "/app/api/script-found", "/app/robots.txt", "/app/sitemap.xml",
+            "/app/api/robots-found", "/app/api/sitemap-found", "/app/.env", "/app/openapi.json", "/app/swagger.json", "/app/v3/api-docs", "/app/.well-known/security.txt");
+        int firstGuess = fixture.visits.size();
+        for (int i = 0; i < fixture.visits.size(); i++) if (!fixture.visits.get(i).path().contains("wb-missing-") && !core.contains(fixture.visits.get(i).path())) { firstGuess = i; break; }
+        for (String path : List.of("/app/api/script-found", "/app/api/robots-found", "/app/api/sitemap-found", "/app/.env"))
+          check(visitIndex(fixture.visits, path) >= 0 && visitIndex(fixture.visits, path) < firstGuess, "observed and declared discovery plus the single env check precede technology guesses");
+        check(fixture.visits.stream().map(ScopeInspectionFixture.Visit::path).filter(p -> !p.contains("wb-missing-") && !core.contains(p)).distinct().count() <= 12, "automatic technology guesses are capped at twelve distinct paths per run");
+        check(fixture.visits.stream().filter(v -> v.path().contains(".env")).allMatch(v -> v.path().equals("/app/.env"))
+            && fixture.visits.stream().filter(v -> v.path().equals("/app/.env")).count() == 1, "env inspection uses one live-scoped GET path rather than environment-file variants");
+        check(result.pages().stream().anyMatch(p -> p.url().endsWith("/app/.env") && p.classification().equals("ENV") && p.complete()), "a stable missing-path baseline distinguishes actual exposed env content");
+        check(result.sent() == fixture.visits.size() && result.sent() <= 80, "prioritized discovery and env checks still share all actual control/target requests in one budget");
+      }
+      fixture.exposedEnv.set(false); fixture.declaredDiscovery.set(false); fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/.env", 20, 0, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "fake env 200 remains partial");
+        check(runner.snapshot().pages().stream().anyMatch(p -> p.url().endsWith("/app/.env") && p.classification().equals("SOFT404") && !p.complete()), "a fake 200 env response is partial fallback evidence rather than an exposed env file");
+      }
+      fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, "/app/guarded-root", 80, 2, false, anonymous()), allowed, value -> {})) {
+        runner.start(); await(() -> terminal(runner), "unresolved API inputs do not become generic GET guesses");
+        check(fixture.visits.stream().noneMatch(v -> v.path().equals("/app/api/not-own-host") || v.path().equals("/app/api/post-observed")), "an unknown API host or POST declaration cannot be re-added as an environment GET guess");
+        check(fixture.visits.stream().anyMatch(v -> v.path().equals("/app/guarded.js"))
+            && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/safe-grounded"))
+            && fixture.visits.stream().anyMatch(v -> v.path().equals("/app/api/absolute-grounded")), "real script src and grounded relative/absolute GET calls retain automatic discovery");
+        check(runner.snapshot().candidates().stream().anyMatch(c -> c.url().equals("/app/api/not-own-host") && !c.executable()), "an unresolved relative API path stays visible without an invented origin");
+      }
+    }
+    System.out.println("ScopeInspectionRunnerTest: " + checks + " checks passed (production runner, isolated loopback HTTP)");
+  }
+}

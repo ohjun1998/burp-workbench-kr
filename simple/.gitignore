@@ -1,0 +1,14 @@
+**/__pycache__/
+**/*.pyc
+**/build/
+**/dist/
+**/.run/
+**/node_modules/
+**/*.building
+**/.classes/
+**/.host-home/
+**/.font-cache/
+**/.browser-profile/
+**/chromium-profile/
+**/playwright-report/
+**/.tmp/

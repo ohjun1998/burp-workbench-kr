@@ -1,0 +1,12 @@
+{
+  "version": "1.2.0",
+  "verifiedAtUtc": "2026-10-27T15:16:34.014839+00:00",
+  "result": "passed",
+  "sourceZipSha256": "d8ba6cf2e85334548f100fccba2d1da7b3681e62d61225700c5e0826827bc60c",
+  "publishedJarSha256": "3d8fb1a1958ebec623b0e4153839402dc78157509b9c53d65cf615612f86d8aa",
+  "rebuiltJarSha256": "3d8fb1a1958ebec623b0e4153839402dc78157509b9c53d65cf615612f86d8aa",
+  "byteIdentical": true,
+  "command": "python dev.py build --source-target",
+  "toolchainMode": "explicit-source17-target17-api-unverified",
+  "scope": "Fresh source ZIP extraction outside the checkout, bundled pinned dependencies, independent compilation; no source checkout build outputs reused."
+}

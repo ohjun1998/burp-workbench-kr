@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-27T23:50:05.590976+00:00",
+  "version": "1.3.1",
+  "jarSha256": "9b50905cebb5485274e986445aefb198dbc56c3d0d9cb1bfeef69a0c4d0f969d",
+  "rawDataCommitted": false,
+  "sites": 7,
+  "pairedRuns": 28,
+  "exactValueRows": 20281,
+  "categoryCounts": {
+    "sensitive": 415,
+    "environment": 1027,
+    "other": 3710,
+    "api": 2933,
+    "internal": 360,
+    "token": 110,
+    "key": 40,
+    "path": 11634,
+    "database": 52
+  },
+  "originCounts": {
+    "reportSupplemental": 3418,
+    "productReportSupplement": 15437,
+    "productDetected": 1415,
+    "testLoginAuth": 11
+  },
+  "pdfPages": 27,
+  "pdfRepresentativeValues": 87,
+  "sourceRevalidation": {
+    "passed": true,
+    "productValues": 16852,
+    "supplementalAndTestLoginValues": 3429,
+    "allValueAndRawLexemeHashesMatch": true
+  },
+  "validation": {
+    "roundtripExact": true,
+    "visualReviewComplete": true,
+    "browserChecks": 10,
+    "browserExternalRequests": 0,
+    "zipCrcAndAllContainedHashes": true,
+    "completePairedMatrixRequiredAndPassed": true
+  },
+  "files": {
+    "Workbench_Simple_1.3.1_Retest_KR.pdf": {
+      "path": "/workspace/simple-retest-1.3.1-report/Workbench_Simple_1.3.1_Retest_KR.pdf",
+      "bytes": 126894,
+      "sha256": "fd5c05ab1c491fa3bf7cf557f6e318bd0ad3773437585a8e1efb6ce47cbd86b4"
+    },
+    "parsed-values.zip": {
+      "path": "/workspace/simple-retest-1.3.1-report/parsed-values.zip",
+      "bytes": 7453086,
+      "sha256": "0b12e723dd775059e2472a422552ea6de4043ad7e314401cfab3d0555e87050e"
+    },
+    "evidence.zip": {
+      "path": "/workspace/simple-retest-1.3.1-report/evidence.zip",
+      "bytes": 130542895,
+      "sha256": "aa68b4ef2157e2c539326e5c79ae441897ec57268c92395d1f4a8d06461925bc"
+    },
+    "report.html": {
+      "path": "/workspace/simple-retest-1.3.1-report/report.html",
+      "bytes": 32226216,
+      "sha256": "c36372cdaab18c3277dff02673d60b20efe8fc228558fb7f94459f0b1096e9b1"
+    },
+    "raw-values.json": {
+      "path": "/workspace/simple-retest-1.3.1-report/raw-values.json",
+      "bytes": 38007114,
+      "sha256": "bf1f0e68ac9a402d4feadb80df15d1f1c55da459ed2666c926c090bfc7f67a9a"
+    },
+    "raw-values.csv": {
+      "path": "/workspace/simple-retest-1.3.1-report/raw-values.csv",
+      "bytes": 15835591,
+      "sha256": "e2b6a50c6b2ebce7cb8ccddcf9d8f53a8d24cfa63692fd7255a1193b2dcc6d59"
+    },
+    "report.json": {
+      "path": "/workspace/simple-retest-1.3.1-report/report.json",
+      "bytes": 40093645,
+      "sha256": "244bac767e25465b51d92a546241829320e98b76504f1b074172b472e1906b1a"
+    },
+    "report-validation.json": {
+      "path": "/workspace/simple-retest-1.3.1-report/report-validation.json",
+      "bytes": 2409,
+      "sha256": "f9bc2d20ab4670f41b9dc3fdfda5070e35d0b9912fa0560c3f0a216bb578e3d8"
+    },
+    "browser-validation.json": {
+      "path": "/workspace/simple-retest-1.3.1-report/browser-validation.json",
+      "bytes": 1192,
+      "sha256": "5253d891d9caa8d610ac1de69d3ed98469ad1054a08ec669900eb8b716eaf3a0"
+    },
+    "SHA256SUMS.json": {
+      "path": "/workspace/simple-retest-1.3.1-report/SHA256SUMS.json",
+      "bytes": 2356128,
+      "sha256": "286eaeae3805c825e395102325bb63c88a2de65bf917427a7d49df943e6f3012"
+    }
+  },
+  "limitations": [
+    "실제 로컬 원본 앱·HTTP/HTTPS·운영 Runner/Katana 엔진 검증이며 실제 Burp GUI 조작 검증이 아닙니다.",
+    "공유 대화에 명시된 개선 사례를 확인합니다. 접근 불가한 이전 PDF의 9개 항목 전체를 복원했다고 주장하지 않습니다.",
+    "미확인·부분·실패는 남은 범위입니다. 큐 종료를 사이트 전체 점검 완료로 해석하지 않습니다.",
+    "민감정보·키·토큰은 관측한 원문 값이며 자동으로 인증에 재사용하거나 외부 공급자에서 유효성을 검사하지 않았습니다.",
+    "재시험 보고서의 추가 파싱 결과는 제품이 자동 탐지한 결과로 집계하지 않습니다. 소스맵의 sourcesContent 전체 문자열을 비밀값으로 분류하지 않습니다.",
+    "1.3.0에는 원문 값 exporter가 없으므로 이전 버전의 값은 재시험 추가 파싱으로 제공합니다. 이전 제품의 탐지는 run.json findings와 제품 항목 수에서 확인하며 원문 출처별 행 수와 구분합니다.",
+    "값 수는 원본 위치별 관측 수입니다. 동일한 값의 여러 응답·여러 버전·반복 위치를 취약점 또는 독립 탐지 건수로 합산하지 않습니다.",
+    "파싱 값은 축약하지 않습니다. 지원하지 않는 엔티티는 RAW_LITERAL_UNDECODED로 표시한 원문 리터럴이며 디코딩 완료 값으로 읽지 않습니다. PDF 대표 값 외 전체 항목은 HTML·JSON·CSV·증거 ZIP에 보존합니다.",
+    "실제 실행 2개는 시험 하네스의 전체 경과 시간 한도로 중지했습니다. 제품 자동 일시정지와 구분하며 STOPPED·미확인·잔여 큐를 그대로 보존합니다.",
+    "I/O 수신 실패는 실제 응답 수에서 제외합니다. Juice Shop /ftp의 원본 Content-Length/EOF 불일치에 대한 Java HTTP 어댑터 제한 등 개별 사유는 실행 상세에 기록하며 실제 Burp TCP 처리 결과로 일반화하지 않습니다.",
+    "COMPLETED means the discovered queue was processed; partial/unconfirmed responses remain.",
+    "OopsSec final runs reached the explicit105-second audit wall limit; these are test-harness stops, not product session-expiry pauses.",
+    "Benchmark root reached the200-request budget; unvisited cases are not counted as tested.",
+    "Juice FTP content-length mismatches and OopsSec transport failures remain separately counted, not successful responses.",
+    "Baseline input config copies were not stored at initial launch; parity uses the recorded same config paths, predating modification times, known harness defaults and exact captured credential-header comparisons. Final inputs are privately snapshotted.",
+    "Values/authentication dumps and raw response corpus remain outside Git. Product detections, supplementary parsing and runtime login authentication are separate report origins.",
+    "The previous shared PDF and full nine-item improvement list were unavailable; this report does not invent missing items or reuse old test counts."
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "name": "Workbench Simple",
+  "version": "1.1.0",
+  "baseExtensionVersion": "0.53.4",
+  "baseGitCommit": "0cef0c5dc97f5824d1fe4a7b298b855994e69983",
+  "verifiedAtUtc": "2026-10-27T13:33:40.710362+00:00",
+  "result": "passed",
+  "jarSha256": "a761ec8ca4df89a5681b72d536043325a431d6ba0a6ec31669bb7741da32aed9",
+  "userScope": "Preserve all eight existing extensions and their core/major functions; simplify auxiliary execution UI.",
+  "primaryTools": [
+    {
+      "id": "traffic",
+      "visible": "요청·응답",
+      "core": "SCOPE/OFF collection, search, exact packet, local transforms/JWT/response comparison, selected original handoff"
+    },
+    {
+      "id": "mapper",
+      "visible": "기능 매핑",
+      "core": "Feature/execution/session mapping, packets, classification evidence, .fmkr projects and assessment links"
+    },
+    {
+      "id": "auth",
+      "visible": "계정 비교",
+      "core": "Candidate/account assignment, preparation review, policy/session/write verification, explicit comparison and evidence"
+    },
+    {
+      "id": "js",
+      "visible": "API 찾기",
+      "core": "Response/text analysis, API/input/secret/source positions, request draft/Repeater and local archive"
+    },
+    {
+      "id": "environment",
+      "visible": "서버·경로",
+      "core": "Observed site/path candidates, account/scope/budget, explicit GET, stop/resume, result/evidence and URL candidates"
+    },
+    {
+      "id": "response.recon",
+      "visible": "응답 분석",
+      "core": "Response security observations, API documents, stored-flow links, source/evidence/retry"
+    },
+    {
+      "id": "payload",
+      "visible": "입력값 검사",
+      "core": "Request/parameter positions, all profiles/encodings/settings/budgets, start/stop, counterexamples/Repeater, direct evidence"
+    },
+    {
+      "id": "bounty",
+      "visible": "재현·증거",
+      "core": "Manual sequential replay, variable extraction, expected results/limits/stop, result-to-evidence, redaction/drafts/ZIP"
+    }
+  ],
+  "auxiliaryUiRemoved": [
+    "Four-stage grouping and duplicate folder/resume/helper navigation",
+    "Automatic account comparison toggle on main execution surface",
+    "Bounty external tool/OAST/browser auxiliary screens",
+    "JS external source-map/NPM query and old automatic History polling",
+    "Payload duplicate More/CSV/standalone workspace main actions",
+    "Saved search management on the running traffic list (available in search settings)"
+  ],
+  "preservation": {
+    "originalTrackedFilesModified": [],
+    "originalVersionedDownloads": "unchanged",
+    "simple1_0_0JarAndSourceZip": "hashes unchanged",
+    "simple1_0_0Pdf": "hash unchanged",
+    "settingsPrefix": "simple.",
+    "storageDirectory": ".burp-workbench-simple",
+    "mainBranch": "not modified"
+  },
+  "checks": {
+    "regressionGroups": 122,
+    "regressionChecks": 4261,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 134,
+    "mapperBrowserHelperChecks": 15
+  },
+  "totalCountedChecks": 4546,
+  "countingNote": "One Linux run. Declared assertions in separate suites; screen/control counts and prior-version results are not added.",
+  "nodeOptions": [
+    "--test",
+    "--test-reporter=tap",
+    "--test-isolation=none"
+  ],
+  "screens": {
+    "renderedViews": 56,
+    "controls": 1132,
+    "scenarios": 44,
+    "retainedPrimaryTools": [
+      "traffic",
+      "mapper",
+      "auth",
+      "js",
+      "environment",
+      "response.recon",
+      "payload",
+      "bounty"
+    ],
+    "replayEvidenceModes": [
+      "manual-request-replay",
+      "evidence-editor"
+    ],
+    "clippedControls": [],
+    "collapsedAreas": [],
+    "failedScenarios": []
+  },
+  "guide": {
+    "pdf": "downloads/guides/1.1.0/Workbench_Simple_1.1.0_Guide_KR.pdf",
+    "pdfSha256": "9acef6f096efd327b8ec65593b36b098e992cd2ccf8815aab072766b3c3d4b06",
+    "pdfPages": 17,
+    "pdfOutlineEntries": 17,
+    "pdfScreenshotPages": 14,
+    "outOfPageText": []
+  },
+  "captureScope": "Production Simple Swing components with synthetic packet/API adapters; not actual Burp GUI screenshots.",
+  "toolchain": {
+    "runtime": "OpenJDK 21.0.12.1",
+    "mode": "explicit-source17-target17-api-unverified",
+    "javaClassMajor": 61,
+    "java17ApiCompatibilityVerified": false,
+    "strictDefault": "--release 17",
+    "limitation": "Local executor lacks ct.sym. Explicit -source 17 -target 17 used; no local Java 17 platform API claim."
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses"
+  ],
+  "attempts": [
+    {
+      "result": "renderer compile failure",
+      "reason": "New screenshot harness read a private JS field directly; fixed to use existing read-only reflection adapter, production visibility unchanged."
+    },
+    {
+      "result": "passed",
+      "reason": "Complete Simple 1.1 profile, Mapper, helper and all 56 layout views passed."
+    }
+  ],
+  "evidence": {
+    "checks": "verification/1.1.0/check-summary.json",
+    "layout": "images/1.1.0/layout-report.json",
+    "guide": "guide-validation-1.1.0.json",
+    "profile": "../REGRESSION_PROFILE_KR.md"
+  }
+}

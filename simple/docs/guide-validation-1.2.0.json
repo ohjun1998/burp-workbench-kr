@@ -1,0 +1,92 @@
+{
+  "guideVersion": "1.2.0",
+  "pdf": "downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf",
+  "pdfSha256": "41e54d2c328ad1d074b184e3c63e95e85ec54024b6b48fe54d864820711a53b4",
+  "html": "docs/GUIDE_SIMPLE_KR.html",
+  "htmlSha256": "67e978cbfd02cf12ad38a29c66064d349dbeed1a0c1c1cdb26bfeef6d081be6d",
+  "pdfPages": 31,
+  "pdfOutlineEntries": 31,
+  "pdfScreenshotPages": 25,
+  "pdfPageFormat": "A3 landscape",
+  "pdfFonts": [
+    "AAAAAA+NanumGothic",
+    "AAAAAB+NanumGothic",
+    "Helvetica"
+  ],
+  "outOfPageText": [],
+  "sourceTextMissingFontGlyphs": [],
+  "sourceScreenshotJarSha256": "3d8fb1a1958ebec623b0e4153839402dc78157509b9c53d65cf615612f86d8aa",
+  "screenshotLayoutResult": "passed",
+  "scopeScreenshotLayoutResult": "passed",
+  "usedScreenshots": {
+    "12-inspection-setup.png": "727eb4f1cb2f94651c987ebbdf08407bfa609d82cfc0ead078f0fb7d7c647e15",
+    "13-inspection-progress.png": "fa099340d92a7c02635a9c35f8aca05f00803c95907c77a02b91d6b1fe3efd14",
+    "14-inspection-environment.png": "0c4e3a87b69dd80e0439f52334d06331dd7bdfbac5e63f239420d836adfa6e41",
+    "15-inspection-paths.png": "16c9c9fb1a7091c23edb4fe068123c0e1ed358bd645ed1b1edc1185144453e9d",
+    "16-inspection-api.png": "51858ec3e09042164d6baf082fa3fc8e6330e6a389d22160a2754bc4ecf99289",
+    "17-inspection-secrets.png": "f1519ed787144502c3f08ed9d550bcf88fe624e29ea4ee37c3517cddce669fb9",
+    "18-inspection-access.png": "367876eb24c887e6f1554d3ffcca35fb21ac24ab63c6479a4b21a6238e9bcf5e",
+    "19-inspection-changes.png": "e2a13cbcd7f705e7d8973ff3fe646a541f068092910b9f97b10b6a517812f939",
+    "20-inspection-coverage.png": "e4c8697f9b9a08b8e0cdfa525914ee70704a8818933ee321382dd1326d761e50",
+    "21-inspection-browser.png": "45987b894aa2baa0b4f99530063dd0d782d4f1008c3cb2632fa3f9c1e5be4b48",
+    "22-inspection-original.png": "63bdb671e1ceddceb9e2f9e6914223cc0d75bcaa0615f36d1a64a454ed37584d",
+    "00-start.png": "13480ac3bfa7c26e884ea0c47f29a8e44415d0cef2fc30d4932211bacd3647dc",
+    "00-scope-editor.png": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+    "01-capture.png": "e9222f3b1809de308e1112d6487ddb44dfb1e4f74f20dade41685e52bc7f184e",
+    "02-request.png": "92f7f7635db52aa67644b587523a4571ae911349f401f44983b09da951058438",
+    "08-mapper.png": "6e14af7be2e3d15376af6136238c7adccf5889bff4970fb4ce06c3e610acce52",
+    "10-js.png": "c9776e2f99980559db0f20d36e2c4320c5c9f7dd274a8b5b97de9a21b3080d7f",
+    "09-environment.png": "18765082b6fc2c3d0f99f090c2bae135293b8450d45c255af238d62fe06948bd",
+    "03-analysis.png": "79563f66334e119fe8227d4c7177c51a59dc96d41363a2998f62ff949a43b101",
+    "04-auth-accounts.png": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+    "04-auth-results.png": "cca01332a6c1a9682d7e6c0d7bce3b12c0e31f96bd7d1dbc6acd547189a1cabd",
+    "07-payload.png": "54b31c94861a6a5c798a3d10947baec9c06ef4a32c4fe43bb8821390cbc90c9f",
+    "11-replay.png": "a5980452be8e2a4f3c37bd406b2a95918c129a918d01c2ba45459c656b39dcd9",
+    "05-evidence.png": "c06ebf6dffe3889fd876582b034c220a885b3ae62619e287ebc4ccff1f51add4",
+    "06-redaction.png": "2803168d347a6ef6843e0ec307f5ace2e572a549f58610c23eff20817a73a0e7"
+  },
+  "allEightToolScreensIncluded": [
+    "02-request.png",
+    "08-mapper.png",
+    "04-auth-results.png",
+    "10-js.png",
+    "09-environment.png",
+    "03-analysis.png",
+    "07-payload.png",
+    "05-evidence.png"
+  ],
+  "manualReplayScreenIncluded": "11-replay.png",
+  "inspectionScreensIncluded": [
+    "12-inspection-setup.png",
+    "13-inspection-progress.png",
+    "14-inspection-environment.png",
+    "15-inspection-paths.png",
+    "16-inspection-api.png",
+    "17-inspection-secrets.png",
+    "18-inspection-access.png",
+    "19-inspection-changes.png",
+    "20-inspection-coverage.png",
+    "21-inspection-browser.png",
+    "22-inspection-original.png"
+  ],
+  "browserHelperCapture": {
+    "included": false,
+    "helperVersion": "0.4.0",
+    "path": "docs/images/1.2.0/browser/helper-connected.png",
+    "kind": "Actual Chromium helper page using localhost synthetic fixture; distinct from production Swing rendering"
+  },
+  "preservedPreviousGuides": {
+    "1.0.0": {
+      "pdfHashUnchanged": true
+    },
+    "1.1.0": {
+      "pdfHashUnchanged": true,
+      "historicalFilesUnchanged": true
+    }
+  },
+  "visualReview": "All pages reviewed in a contact sheet; full-size setup, environment, paths, API, secrets, access, changes, coverage, browser, originals and evidence pages reviewed for readable Korean text and uncropped controls.",
+  "captureScope": "Production Simple Swing components with synthetic packet/API adapters; Chrome/Edge installation instructions are textual, not native browser installation screenshots.",
+  "structuralResult": "passed",
+  "visualReviewComplete": true,
+  "result": "passed"
+}

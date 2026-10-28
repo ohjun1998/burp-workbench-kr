@@ -1,0 +1,20 @@
+scenario,passed
+"Opening the production inspection panel performs no target requests",true
+"HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed",true
+"Production inspection environment table contains inspectable synthetic evidence",true
+"Production inspection paths table contains inspectable synthetic evidence",true
+"Production inspection api table contains inspectable synthetic evidence",true
+"Production inspection secrets table contains inspectable synthetic evidence",true
+"Secret result view preserves masking",true
+"Production inspection access table contains inspectable synthetic evidence",true
+"Production inspection changes table contains inspectable synthetic evidence",true
+"Production inspection coverage table contains inspectable synthetic evidence",true
+"Production browser lease retains separate browser-session attribution",true
+"Production browser table displays received route and API observations",true
+"Original response bytes remain available behind masked findings",true
+"Katana execution conditions retain a named executable and bounded page/time controls",true
+"Execution settings stay left aligned without a separator pushing the crawler controls below a large blank area",true
+"Katana provenance table preserves linked originals and explicitly unexecuted forms",true
+"Captured Katana results use the production partial-state presenter after asynchronous layout updates",true
+"Categorized export saves exact values locally while keeping ordinary result views masked",true
+"Synthetic capture never starts the target HTTP coordinator or external Katana",true

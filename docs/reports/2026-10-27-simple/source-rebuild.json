@@ -1,0 +1,9 @@
+{
+  "result": "passed",
+  "sourceZipSha256": "6d968a99bf3037b8285f7e8d71473745b421cdda9a52653e563c239d25a3e0d2",
+  "providedJarSha256": "379e03d74a9c86e66875adc25801da5f3c4c7d2deea8262929cdc8a94a261b04",
+  "rebuiltJarSha256": "379e03d74a9c86e66875adc25801da5f3c4c7d2deea8262929cdc8a94a261b04",
+  "build": "Fresh extraction of standalone Simple source ZIP, python dev.py build --source-target",
+  "originalRepositoryFilesRequired": false,
+  "java17PlatformApiValidation": false
+}

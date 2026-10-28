@@ -1,0 +1,31 @@
+{
+  "version": "1.3.0",
+  "artifact": "burp-workbench/dist/burp-workbench-simple-1.3.0.jar",
+  "jarSha256": "7a49aa673a3c5049831b65f3ab5782d9bf560b1e105213c7d419be1dbf2067b4",
+  "toolchainMode": "explicit-source17-target17-api-unverified",
+  "java17ApiCompatibilityVerified": false,
+  "renderedViews": 52,
+  "controls": 948,
+  "scenarios": 72,
+  "captureFiles": [
+    "12-inspection-setup.png",
+    "13-inspection-progress.png",
+    "14-inspection-environment.png",
+    "15-inspection-paths.png",
+    "16-inspection-api.png",
+    "17-inspection-secrets.png",
+    "18-inspection-access.png",
+    "19-inspection-changes.png",
+    "20-inspection-coverage.png",
+    "21-inspection-browser.png",
+    "22-inspection-original.png",
+    "23-katana-settings.png",
+    "24-katana-results.png"
+  ],
+  "clippedControls": [],
+  "collapsedAreas": [],
+  "failedScenarios": [],
+  "missingCaptures": [],
+  "scope": "Production Scope inspection components with synthetic wire packets and browser observations; zero target HTTP. Not native Burp GUI, live browser DOM or a live target assessment.",
+  "result": "passed"
+}

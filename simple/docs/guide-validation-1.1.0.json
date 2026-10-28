@@ -1,0 +1,54 @@
+{
+  "guideVersion": "1.1.0",
+  "pdf": "downloads/guides/1.1.0/Workbench_Simple_1.1.0_Guide_KR.pdf",
+  "pdfSha256": "9acef6f096efd327b8ec65593b36b098e992cd2ccf8815aab072766b3c3d4b06",
+  "html": "docs/GUIDE_SIMPLE_KR.html",
+  "htmlSha256": "d84bdbb52bc3d30497ebc55de103789d73712ec6778799620f7e0a0675cb1cde",
+  "pdfPages": 17,
+  "pdfOutlineEntries": 17,
+  "pdfScreenshotPages": 14,
+  "pdfPageFormat": "A3 landscape",
+  "pdfFonts": [
+    "AAAAAA+NanumGothic",
+    "AAAAAB+NanumGothic",
+    "Helvetica"
+  ],
+  "outOfPageText": [],
+  "sourceScreenshotJarSha256": "a761ec8ca4df89a5681b72d536043325a431d6ba0a6ec31669bb7741da32aed9",
+  "screenshotLayoutResult": "passed",
+  "usedScreenshots": {
+    "00-start.png": "ef4cd5b03d370d33bca945ec2e2a195b233be274cd85c474dc9466106079bfab",
+    "00-scope-editor.png": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+    "01-capture.png": "029523891398ca40b0cb99c5e56914129c1d3176412c699a5099c60ae30eb9d8",
+    "02-request.png": "1e87221b879eb8f3d1770f13565d4e5d32be0e54339b23526647cf9dd9b7f6da",
+    "08-mapper.png": "1e9257f1c6dafa7957709cb36f46ccc46f653cd0ad892971ad1c4f25f3567a34",
+    "10-js.png": "022dd2a4f316feb1cc3455bf210182418d548545f42658a46b95f093ffce95d6",
+    "09-environment.png": "9b41a46ca9bab64efe158b4e706aa9a1f4497b062f5175d8b00f10f95fb8fd0d",
+    "03-analysis.png": "9604b000acc111d3f546d6ee823d8341be0852812dcc58ee7cd29367531ca9b4",
+    "04-auth-accounts.png": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+    "04-auth-results.png": "a0c8217e9dd6bd826ed748b1aec25968d7da6f3c4692dc6a09e062b6a3155758",
+    "07-payload.png": "d41ec49c98b1f636960092cbab490dd729919b54fdc7f3c8c2b2287080b2c954",
+    "11-replay.png": "11a2403f9f4f0b59bb3305a7ca94e7b45d07d7ea015d970bd44573d0b813da7e",
+    "05-evidence.png": "7643cc10fe649da249838b268d8c44187eb23f01b4c75bc93c2830c5f1649e2b",
+    "06-redaction.png": "f6f6b82f39007e8ad7c066611cd540b456c7b0ba0cbec82507b87c7532f5cc57"
+  },
+  "allEightToolScreensIncluded": [
+    "02-request.png",
+    "08-mapper.png",
+    "04-auth-results.png",
+    "10-js.png",
+    "09-environment.png",
+    "03-analysis.png",
+    "07-payload.png",
+    "05-evidence.png"
+  ],
+  "manualReplayScreenIncluded": "11-replay.png",
+  "preserved100": {
+    "oldPdfUnchanged": true,
+    "oldHtmlPreserved": true,
+    "oldGuideImageHashesPreserved": true
+  },
+  "visualReview": "All pages checked in contact sheet; full source selection, JS analysis, account preparation, manual replay, evidence and redaction pages checked for readable Korean text and uncropped controls.",
+  "captureScope": "Production Simple Swing components with synthetic packet/API adapters; not actual Burp GUI screenshots.",
+  "result": "passed"
+}

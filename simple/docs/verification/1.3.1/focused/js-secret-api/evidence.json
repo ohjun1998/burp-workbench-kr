@@ -1,0 +1,174 @@
+{
+  "scope": "Focused strict Java17 static analyzers using selected current sources over a frozen compiled baseline; not final-JAR/full-regression/native-Burp proof.",
+  "createdUtc": "2026-10-27T23:07:52.360036+00:00",
+  "java": "/workspace/tools/jdk17/bin/java",
+  "javac": "/workspace/tools/jdk17/bin/javac",
+  "compileOptions": [
+    "--release",
+    "17",
+    "-encoding",
+    "UTF-8"
+  ],
+  "sourceSha256": {
+    "simple/burp-workbench/src/main/java/kr/workbench/SecretCandidates.java": "501533a26eca28f8a2fa8b18239451bc72afa9f1facf85a2aa7e29f8dae1f4bb",
+    "simple/burp-workbench/src/main/java/kr/workbench/TextCandidates.java": "a9b21e06ac9f634054abb6ac71edead3b18d7e9c4392b9809e2c78e0bada17fb",
+    "simple/burp-workbench/src/main/java/kr/workbench/JsAnalysis.java": "2c1062ede2e695764032073165341e320ad1669e1b7944d776980a4bab9357d0",
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionAnalysis.java": "a9f53a45a95b0120dded862a2d43732e9f28e6ce03571f417d73c1d1fafb57b2",
+    "simple/burp-workbench/src/main/java/kr/workbench/JsBatchAnalysis.java": "ee07de1550a2a2507b9af5fe3ea7bacdd450dc8a0c1c697d48b01dce903d774b",
+    "simple/burp-workbench/src/main/java/kr/workbench/JsHttpCalls.java": "60eeaba1d20a35657e8bbb95754992b3ffb29d69d9a15d1a19485f2a67143897",
+    "simple/burp-workbench/src/main/java/kr/workbench/JsSyntax.java": "943d15efbaf7950e2a068946ff4560318329c0ff6af2761f56d2da09c1275b6b",
+    "simple/burp-workbench/src/main/java/kr/workbench/JsMiner.java": "69477d5cc31036f36e9209ede1e599f95bba6d9bc8e4124cad0b50cd264055cb",
+    "simple/burp-workbench/src/main/java/kr/workbench/JsMapRecovery.java": "26744de3d362bd1823cab29047d6f2002c5e106d78a778b4950c30431db230e9",
+    "simple/burp-workbench/src/test/java/kr/workbench/ScopeInspectionSecretEvidenceTest.java": "cf39fe54e4afe1cdc9f26f5dfdeadb7fac6a4a79bd074fa38455803a75553a8c",
+    "simple/burp-workbench/src/test/java/kr/workbench/ScopeInspectionJsBundleEvidenceTest.java": "b45f232f25fc26e0bc6a1b25f7609922ba76463e5e9dea848f3423f80bcf0b18"
+  },
+  "baselineArtifact": "simple/burp-workbench/dist/burp-workbench-simple-1.3.1.jar",
+  "baselineArtifactSha256": "d7783ac293b5e59efb3250e81658453d83744aca20b92663507602b1c9f5f6e2",
+  "frozenBaselineClasses": "/tmp/workbench131-focus-baseclasses",
+  "baselineClassesAggregateSha256": "b5c22dcc7248815f7729326cf8b61a6fcfad5199756d00830633c0be7db13c50",
+  "overlayDirectory": "/tmp/workbench-131-js-classes",
+  "overlayClassSha256": {
+    "kr/workbench/ScopeInspectionAnalysis.class": "18c4d3d7cab12b74d7092ff94ab2618b8f5f0c0a1739fd158c56a2093f46e728",
+    "kr/workbench/ScopeInspectionAnalysis$LinkScan.class": "5b7bda29ec1d79e864c67542c5216b06c573df3e994510f7faaeff583bf90a3a",
+    "kr/workbench/ScopeInspectionAnalysis$Link.class": "44602e5135fa140d5673d939aade3b8d833a093cfab52e514630da9dbd4ce320",
+    "kr/workbench/ScopeInspectionAnalysis$1.class": "a22256b7a8546aef62a5bcd0d94c6f032431a7f23ab9104da285a8ad0646e5e8",
+    "kr/workbench/ScopeInspectionAnalysis$Db.class": "f38bb6c174651292e12544a3d08a375187da1e5d94c2993fe1ef28aa77ca4113",
+    "kr/workbench/ScopeInspectionAnalysis$Result.class": "f4f3521dd752675f84a29ae544b7e40576b34541b1d5845e6a5879255ba4ff45",
+    "kr/workbench/JsAnalysis.class": "3a6b51334fe1b651fb9ebef22e02eb64aebc556496010177b3749e47b0972d07",
+    "kr/workbench/JsAnalysis$1.class": "d0b384f1f3885ee236dde9c08c7b7ee4b1b32127b9aea7fbdd1f8e7ba84648fb",
+    "kr/workbench/JsAnalysis$Frame.class": "c86673dbdd6ad15544c447f7b781f2f7c1e135806d03b2a084943ab5734d8b78",
+    "kr/workbench/JsAnalysis$Rule.class": "89dd5105251c012d243739757418208b12db599f657c89450f2981d28e9f946e",
+    "kr/workbench/JsAnalysis$Segment.class": "ba07481e1d576f3d6921d8aa8931af366a00a15bc0ad93048361131dd720a0a6",
+    "kr/workbench/JsAnalysis$Value.class": "70f544bbe20942108a2d01489f63ec79ace32f760b33cebaaa716b1a0a5a1898",
+    "kr/workbench/JsAnalysis$Result.class": "ef539c65275c71758f10cd8b90e87ea35221451fad7648bace7b42c95c186643",
+    "kr/workbench/JsAnalysis$Secret.class": "9e8dcd177272ec36ba8e3c120c7e9c657bea372df93060dc822a28e0cd838357",
+    "kr/workbench/JsAnalysis$Endpoint.class": "9e658b268221f05ae8f6b8014254a29fd3a3ef6661c17b90ab9a2ee1059eb485",
+    "kr/workbench/TextCandidates.class": "72eefe7ad2de90bed4d8275ee495b8436297bc7d4d435442965f5eb4d9d5187e",
+    "kr/workbench/TextCandidates$Scan.class": "abaca2d9baebb4d35ac008afc7d41f3dde94b9b51742a947202bd37a442ad07a",
+    "kr/workbench/TextCandidates$Value.class": "15d431aa9495c476e64eb6acb6975cf801803974338352239c045a5295330b08",
+    "kr/workbench/SecretCandidates.class": "9949e0f55cfadacab8d745b04122102733ded198d53c5a7d4401ec42e0ab1a90"
+  },
+  "overlayAggregateSha256": "477aff243aedbe4806f425acc690b8cca008ef0cbf46c807cce02e32b55d9772",
+  "bundle": {
+    "upstream": "OWASP Juice Shop 20.3.0 official local source",
+    "path": "/workspace/simple-sites/juice-shop/source/frontend/dist/frontend/main.js",
+    "bytes": 1242633,
+    "sha256": "a029a0ee1822c924fe7eef8aa9316e4c196ff54f3279c0286abb472971b375a4"
+  },
+  "results": [
+    {
+      "name": "ScopeInspectionSecretEvidenceTest",
+      "command": [
+        "/workspace/tools/jdk17/bin/java",
+        "-cp",
+        "/tmp/workbench-131-js-classes:/tmp/workbench131-focus-baseclasses:/tmp/workbench131-focus-basetests:/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+        "kr.workbench.ScopeInspectionSecretEvidenceTest"
+      ],
+      "exitCode": 0,
+      "checks": 17,
+      "log": "ScopeInspectionSecretEvidenceTest.log"
+    },
+    {
+      "name": "ScopeInspectionJsBundleEvidenceTest",
+      "command": [
+        "/workspace/tools/jdk17/bin/java",
+        "-cp",
+        "/tmp/workbench-131-js-classes:/tmp/workbench131-focus-baseclasses:/tmp/workbench131-focus-basetests:/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+        "kr.workbench.ScopeInspectionJsBundleEvidenceTest"
+      ],
+      "exitCode": 0,
+      "checks": 15,
+      "log": "ScopeInspectionJsBundleEvidenceTest.log"
+    },
+    {
+      "name": "JsAnalysisTest",
+      "command": [
+        "/workspace/tools/jdk17/bin/java",
+        "-cp",
+        "/tmp/workbench-131-js-classes:/tmp/workbench131-focus-baseclasses:/tmp/workbench131-focus-basetests:/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+        "kr.workbench.JsAnalysisTest"
+      ],
+      "exitCode": 0,
+      "checks": 31,
+      "log": "JsAnalysisTest.log"
+    },
+    {
+      "name": "ScopeInspectionAnalysisTest",
+      "command": [
+        "/workspace/tools/jdk17/bin/java",
+        "-cp",
+        "/tmp/workbench-131-js-classes:/tmp/workbench131-focus-baseclasses:/tmp/workbench131-focus-basetests:/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+        "kr.workbench.ScopeInspectionAnalysisTest"
+      ],
+      "exitCode": 0,
+      "checks": 48,
+      "log": "ScopeInspectionAnalysisTest.log"
+    },
+    {
+      "name": "JsUpgradeTest",
+      "command": [
+        "/workspace/tools/jdk17/bin/java",
+        "-cp",
+        "/tmp/workbench-131-js-classes:/tmp/workbench131-focus-baseclasses:/tmp/workbench131-focus-basetests:/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+        "kr.workbench.JsUpgradeTest"
+      ],
+      "exitCode": 0,
+      "checks": 36,
+      "log": "JsUpgradeTest.log"
+    }
+  ],
+  "frozenBaselineTests": "/tmp/workbench131-focus-basetests",
+  "actualBundleProbe": {
+    "command": [
+      "/workspace/tools/jdk17/bin/java",
+      "-cp",
+      "/tmp/workbench-131-js-classes:/tmp/workbench131-focus-baseclasses:/tmp/workbench131-focus-basetests:/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+      "kr.workbench.Scope131BundleProbe",
+      "/workspace/simple-sites/juice-shop/source/frontend/dist/frontend/main.js"
+    ],
+    "exitCode": 0,
+    "proofs": 3,
+    "log": "actual-juice-shop-static.log",
+    "scope": "Actual pinned bundle bytes through current static Scope analyzer; no HTTP/GUI; unresolved host and dynamic IDs remain non-executable.",
+    "probeSource": "Scope131BundleProbe.java.txt",
+    "probeSourceSha256": "9adb30ccfff6d9fca6bfc5124958b7cebd8562626b8974357ce41e9ee3d9554e",
+    "compileCommand": [
+      "/workspace/tools/jdk17/bin/javac",
+      "--release",
+      "17",
+      "-encoding",
+      "UTF-8",
+      "-classpath",
+      "/tmp/workbench-131-js-classes:/tmp/workbench131-focus-baseclasses:/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar:/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar",
+      "-d",
+      "/tmp/workbench-131-js-classes",
+      "/tmp/Scope131BundleProbe.java"
+    ]
+  },
+  "result": "passed",
+  "checks": 147,
+  "compileCommand": [
+    "/workspace/tools/jdk17/bin/javac",
+    "--release",
+    "17",
+    "-encoding",
+    "UTF-8",
+    "-classpath",
+    "simple/burp-workbench/build/classes:simple/burp-workbench/build/tests:simple/burp-workbench/deps/rhino.jar:simple/burp-workbench/deps/montoya-2026.jar",
+    "-d",
+    "/tmp/workbench-131-js-classes",
+    "simple/burp-workbench/src/main/java/kr/workbench/SecretCandidates.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/TextCandidates.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/JsAnalysis.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionAnalysis.java",
+    "simple/burp-workbench/src/test/java/kr/workbench/ScopeInspectionSecretEvidenceTest.java",
+    "simple/burp-workbench/src/test/java/kr/workbench/ScopeInspectionJsBundleEvidenceTest.java"
+  ],
+  "dependencySha256": {
+    "simple/burp-workbench/deps/legacy-api.jar": "0b9b16048e1a3d10bb8f36219bb7dfa637dad2d54e116199d3506b4174518e54",
+    "simple/burp-workbench/deps/montoya-2026.jar": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94",
+    "simple/burp-workbench/deps/rhino.jar": "12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975",
+    "simple/burp-workbench/deps/brotli-dec-0.1.2.jar": "615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52"
+  },
+  "javaVersion": "openjdk version \"17.0.17\" 2025-10-21\nOpenJDK Runtime Environment Temurin-17.0.17+10 (build 17.0.17+10)\nOpenJDK 64-Bit Server VM Temurin-17.0.17+10 (build 17.0.17+10, mixed mode, sharing)"
+}

@@ -1,0 +1,96 @@
+{
+  "stoppedAtUTC": "2026-10-28T09:37:21.390162+00:00",
+  "allSevenServicesStopped": true,
+  "services": [
+    {
+      "siteId": "juice-shop",
+      "port": 24800,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "benchmarkjava",
+      "port": 24801,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "vulnerableapp",
+      "port": 24803,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "oopssec",
+      "port": 24802,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "dvbank",
+      "port": 5000,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "vulnbank",
+      "port": 24804,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "loop",
+      "port": 24808,
+      "listenerStopped": true
+    }
+  ],
+  "containers": [
+    {
+      "name": "simple-retest-vulnbank-postgres",
+      "running": false,
+      "containerPreserved": true
+    },
+    {
+      "name": "simple-benchmarkjava",
+      "running": false,
+      "containerPreserved": true
+    },
+    {
+      "name": "simple-vulnerableapp",
+      "running": false,
+      "containerPreserved": true
+    }
+  ],
+  "relayAndOwnedProcessesTerminated": true,
+  "databaseBackups": [
+    {
+      "siteId": "loop",
+      "kind": "H2 SCRIPT via owned JVM attach",
+      "preserved": true,
+      "bytes": 6016
+    },
+    {
+      "siteId": "vulnbank",
+      "kind": "PostgreSQL13 pg_dump plus retained container data",
+      "preserved": true,
+      "bytes": 26256
+    },
+    {
+      "siteId": "benchmarkjava",
+      "kind": "HSQL SCRIPT/CHECKPOINT plus retained file DB",
+      "preserved": true,
+      "bytes": 3825
+    }
+  ],
+  "originalSourcesOldConfigsResultsReportsPreserved": true,
+  "globalSettingsChanged": false,
+  "limitations": [
+    "VulnerableApp uses volatile H2 mem:testdb; current mutable memory was not separately dumped. Original seed/source/runtime files and actual response corpus are preserved."
+  ],
+  "supplementalRealmProbe": {
+    "separateFromMain28Runs": true,
+    "beforeAttempts": 5,
+    "afterAttempts": 24,
+    "temporarilyRestartedServices": [
+      "vulnbank",
+      "simple-retest-vulnbank-postgres"
+    ],
+    "bothStoppedAgain": true,
+    "newPostgresBackupPreserved": true,
+    "newPostgresBackupBytes": 26617
+  }
+}

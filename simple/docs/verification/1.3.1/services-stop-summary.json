@@ -1,0 +1,80 @@
+{
+  "allSevenServicesStopped": true,
+  "services": [
+    {
+      "siteId": "juice-shop",
+      "loopbackPort": 24800,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "benchmarkjava",
+      "loopbackPort": 24801,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "vulnerableapp",
+      "loopbackPort": 24803,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "oopssec",
+      "loopbackPort": 24802,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "dvbank",
+      "loopbackPort": 5000,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "vulnbank",
+      "loopbackPort": 24804,
+      "listenerStopped": true
+    },
+    {
+      "siteId": "loop",
+      "loopbackPort": 24808,
+      "listenerStopped": true
+    }
+  ],
+  "containers": [
+    {
+      "name": "simple-retest-vulnbank-postgres",
+      "running": false,
+      "containerPreserved": true
+    },
+    {
+      "name": "simple-benchmarkjava",
+      "running": false,
+      "containerPreserved": true
+    },
+    {
+      "name": "simple-vulnerableapp",
+      "running": false,
+      "containerPreserved": true
+    }
+  ],
+  "loopbackRelay64849Stopped": true,
+  "databaseSnapshots": [
+    {
+      "siteId": "loop",
+      "kind": "in-memory H2 SCRIPT",
+      "preserved": true
+    },
+    {
+      "siteId": "vulnbank",
+      "kind": "PostgreSQL pg_dump plus retained container data",
+      "preserved": true
+    },
+    {
+      "siteId": "benchmarkjava",
+      "kind": "HSQL SCRIPT/CHECKPOINT plus file database",
+      "preserved": true
+    }
+  ],
+  "limitations": [
+    "VulnerableApp uses volatile H2 mem:testdb; mutable memory was not separately dumped before shutdown. Original seed/source/runtime artifacts remain preserved and restart recreates the app data."
+  ],
+  "sourcesCorporaReportsPersistentDatabasesDeleted": false,
+  "globalSettingsChanged": false
+}

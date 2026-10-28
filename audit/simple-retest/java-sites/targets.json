@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "preparedAtUtc": "2026-10-27T23:09:31.089904+00:00",
+  "scope": "Original app setup and GET readiness only; security retest evidence is recorded separately by the verification lead.",
+  "network": "Docker internal network plus a byte-preserving loopback-only TCP relay. No public target testing.",
+  "targets": [
+    {
+      "siteId": "benchmarkjava",
+      "name": "BenchmarkJava",
+      "repository": "https://github.com/OWASP-Benchmark/BenchmarkJava",
+      "sourceCommit": "bc5ffeb09fb18ab039806d84ca1f718c2e332c54",
+      "sourceArchiveUrl": "https://codeload.github.com/OWASP-Benchmark/BenchmarkJava/tar.gz/bc5ffeb09fb18ab039806d84ca1f718c2e332c54",
+      "sourceArchiveSha256": "85ea734eee07e7a2cadfb89094720df1facb12cf0ee890f334d21b7584edbfee",
+      "originalSourceCheck": {
+        "filesChecked": 5725,
+        "changedFiles": []
+      },
+      "containerImage": "tomcat@sha256:baafc39d5598aac501d7b5e0d25ea0db46c1736fe598b2232e76c3de4ddbacac",
+      "builtArtifactSha256": "c935aba898e0640c7542d655fab59733fc10dac58d20e3d66ef25265258977d5",
+      "baseURL": "http://127.0.0.1:24801",
+      "startURL": "http://127.0.0.1:24801/benchmark/",
+      "scopeURL": "http://127.0.0.1:24801/benchmark/",
+      "globalLoginRequired": false,
+      "directScenario": true,
+      "coverage": {
+        "application": "complete original Maven WAR, 2766 Java source files; original HSQLDB/LDAP helpers running",
+        "servletSubset": false,
+        "syntheticApplication": false
+      },
+      "healthChecks": [
+        {
+          "method": "GET",
+          "path": "/benchmark/",
+          "status": 200,
+          "bytes": 2058,
+          "contentType": "text/html;charset=UTF-8"
+        },
+        {
+          "method": "GET",
+          "path": "/benchmark/xss-Index.html",
+          "status": 200,
+          "bytes": 57931,
+          "contentType": "text/html;charset=UTF-8"
+        },
+        {
+          "method": "GET",
+          "path": "/benchmark/pathtraver-00/BenchmarkTest00001",
+          "status": 200,
+          "bytes": 1077,
+          "contentType": "text/html;charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "siteId": "vulnerableapp",
+      "name": "VulnerableApp",
+      "repository": "https://github.com/SasanLabs/VulnerableApp",
+      "sourceCommit": "668ab14704b63d286bc73f5ec302885a5f192c2e",
+      "sourceArchiveUrl": "https://codeload.github.com/SasanLabs/VulnerableApp/tar.gz/668ab14704b63d286bc73f5ec302885a5f192c2e",
+      "sourceArchiveSha256": "4f0f65c711a1028434973386cb2cadb9c58c7a79ab9364848b4f1a832ef46862",
+      "originalSourceCheck": {
+        "filesChecked": 399,
+        "changedFiles": []
+      },
+      "containerImage": "maven@sha256:e4a7ace3dc0d645ed97f8d9ad0b0d3f0b14fa8d150138f27f116d7105a639b82",
+      "builtArtifactSha256": "dd4401b477a03b3b1155f51153fe3e3ee197fa67b090ec0338bba52e8d6d50f4",
+      "baseURL": "http://127.0.0.1:24803",
+      "startURL": "http://127.0.0.1:24803/VulnerableApp/",
+      "scopeURL": "http://127.0.0.1:24803/VulnerableApp/",
+      "globalLoginRequired": false,
+      "directScenario": true,
+      "coverage": {
+        "application": "complete original Gradle Spring Boot application with legacy UI and embedded H2/LDAP; separate modern facade not included",
+        "servletSubset": false,
+        "syntheticApplication": false
+      },
+      "healthChecks": [
+        {
+          "method": "GET",
+          "path": "/VulnerableApp/",
+          "status": 200,
+          "bytes": 6433,
+          "contentType": "text/html;charset=UTF-8"
+        },
+        {
+          "method": "GET",
+          "path": "/VulnerableApp/scanner",
+          "status": 200,
+          "bytes": 22642,
+          "contentType": "application/json"
+        },
+        {
+          "method": "GET",
+          "path": "/VulnerableApp/allEndPointJson",
+          "status": 200,
+          "bytes": 137368,
+          "contentType": "application/json"
+        }
+      ]
+    }
+  ]
+}

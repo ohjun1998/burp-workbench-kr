@@ -1,0 +1,16 @@
+PASS unknown server/dynamic values remain a non-executable relative API: /rest/user/login
+PASS bundle-tail API evidence links to its original JS response and exact line: /rest/user/login
+PASS API source offset includes the actual HTTP call argument: /rest/user/login
+PASS unknown server/dynamic values remain a non-executable relative API: /rest/basket/{dynamic}
+PASS bundle-tail API evidence links to its original JS response and exact line: /rest/basket/{dynamic}
+PASS API source offset includes the actual HTTP call argument: /rest/basket/{dynamic}
+PASS unknown server/dynamic values remain a non-executable relative API: /rest/products/search
+PASS bundle-tail API evidence links to its original JS response and exact line: /rest/products/search
+PASS API source offset includes the actual HTTP call argument: /rest/products/search
+PASS login preserves its POST method
+PASS split or unsupported bundle analysis stays explicitly partial
+PASS an unknown API host is not invented from the script download host
+PASS an actual script src retains its observed GET resource evidence for a selected SPA shell
+PASS retaining a script reference cannot invent GET for an unknown form method
+PASS a script tag written inside JavaScript text is not treated as an actual GET resource
+ScopeInspectionJsBundleEvidenceTest: 15 checks passed (large static bundle; no HTTP)

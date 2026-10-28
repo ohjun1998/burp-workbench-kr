@@ -1,0 +1,12 @@
+{
+  "version": "1.3.0",
+  "verifiedAtUtc": "2026-10-27T16:33:46.885242+00:00",
+  "result": "passed",
+  "sourceZipSha256": "2686d73b0c91d88cf47d07b53b0db871db79d32ebada5fc1952f2af63f4102f5",
+  "publishedJarSha256": "7a49aa673a3c5049831b65f3ab5782d9bf560b1e105213c7d419be1dbf2067b4",
+  "rebuiltJarSha256": "7a49aa673a3c5049831b65f3ab5782d9bf560b1e105213c7d419be1dbf2067b4",
+  "byteIdentical": true,
+  "command": "python dev.py build --source-target",
+  "toolchainMode": "explicit-source17-target17-api-unverified",
+  "scope": "Fresh extraction outside the source checkout using bundled pinned API dependencies; no build outputs reused; external Katana is an optional runtime dependency and is not needed to build."
+}

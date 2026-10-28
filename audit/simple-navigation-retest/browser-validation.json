@@ -1,0 +1,470 @@
+{
+  "schemaVersion": 1,
+  "version": "1.3.2",
+  "helperVersion": "0.4.1",
+  "passed": true,
+  "verifiedAtUTC": "2026-10-28T09:03:04.193210+00:00",
+  "scope": "Actual Chromium DOM and production inspection service through Playwright tab/storage adapters; loopback synthetic fixtures, same conditions before/after. Native MV3 service-worker/DNR transport and Burp GUI are not verified.",
+  "beforeVersion": "1.3.1",
+  "beforeCommit": "7113e7996dd1406c6262d896627e891769b80123",
+  "helperSourceSha256": {
+    "inspection.js": {
+      "before": "4a92575d60023ed3e9dbf12637efed71bc0a624ab12131ed39b7da44dad1d42f",
+      "after": "8ad1b140ed1d9b91b230e517d6ca6ad8da85f5a002df888caff67a68e00c18bc"
+    },
+    "inspection-background.js": {
+      "before": "cadb7c007549233f3cd69e26f7e6041b768f38340540f62fbedbb4fedf3e6f21",
+      "after": "4bded6324ad531ce5951f23d3db6d7f3fcfe18380fc62dad7374db4867f055ef"
+    }
+  },
+  "chromium": "154.0.8037.57",
+  "unitTests": {
+    "checks": 14,
+    "passed": true,
+    "command": "node --test simple/feature-mapper/tests/inspection-browser.test.mjs"
+  },
+  "before": {
+    "passed": true,
+    "result": "passed",
+    "expected": "before",
+    "checks": 28,
+    "details": [
+      {
+        "name": "late: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "late: no browser service exception",
+        "passed": true
+      },
+      {
+        "name": "late: delayed hydration menu was missed before fix",
+        "passed": true
+      },
+      {
+        "name": "late: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "replace: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "replace: no browser service exception",
+        "passed": true
+      },
+      {
+        "name": "replace: initial links were lost before fix",
+        "passed": true
+      },
+      {
+        "name": "replace: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "capped: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "capped: no browser service exception",
+        "passed": true
+      },
+      {
+        "name": "capped: limits were incorrectly complete before fix",
+        "passed": true
+      },
+      {
+        "name": "capped: 12-action document bound remains unchanged",
+        "passed": true
+      },
+      {
+        "name": "capped: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "navigate: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "navigate: no browser service exception",
+        "passed": true
+      },
+      {
+        "name": "navigate: read-only full navigation settles and discovers destination links",
+        "passed": true
+      },
+      {
+        "name": "navigate: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "busy: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "busy: no browser service exception",
+        "passed": true
+      },
+      {
+        "name": "busy: limits were incorrectly complete before fix",
+        "passed": true
+      },
+      {
+        "name": "busy: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "overflow: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "overflow: no browser service exception",
+        "passed": true
+      },
+      {
+        "name": "overflow: limits were incorrectly complete before fix",
+        "passed": true
+      },
+      {
+        "name": "overflow: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "actual MAIN guard blocks page-load POST across all fixtures",
+        "passed": true
+      },
+      {
+        "name": "actual MAIN guard blocks outside-Scope fetch across all fixtures",
+        "passed": true
+      },
+      {
+        "name": "existing user tab remains unchanged",
+        "passed": true
+      }
+    ],
+    "cases": [
+      {
+        "name": "late",
+        "state": "completed",
+        "message": "발견한 메뉴 큐 처리 완료",
+        "pages": 1,
+        "actions": 0,
+        "menuCount": 0,
+        "elapsedMillis": 470,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "replace",
+        "state": "completed",
+        "message": "발견한 메뉴 큐 처리 완료",
+        "pages": 2,
+        "actions": 1,
+        "menuCount": 1,
+        "elapsedMillis": 1117,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": true,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "capped",
+        "state": "completed",
+        "message": "발견한 메뉴 큐 처리 완료",
+        "pages": 1,
+        "actions": 12,
+        "menuCount": 0,
+        "elapsedMillis": 4705,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 1
+      },
+      {
+        "name": "navigate",
+        "state": "completed",
+        "message": "발견한 메뉴 큐 처리 완료",
+        "pages": 3,
+        "actions": 1,
+        "menuCount": 1,
+        "elapsedMillis": 1113,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "busy",
+        "state": "completed",
+        "message": "발견한 메뉴 큐 처리 완료",
+        "pages": 1,
+        "actions": 0,
+        "menuCount": 0,
+        "elapsedMillis": 462,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "overflow",
+        "state": "completed",
+        "message": "발견한 메뉴 큐 처리 완료",
+        "pages": 1,
+        "actions": 0,
+        "menuCount": 200,
+        "elapsedMillis": 609,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      }
+    ],
+    "chromium": "154.0.8037.57",
+    "scope": "Actual Chromium DOM and production inspection service through Playwright tab/storage adapters; loopback synthetic fixtures, same conditions before/after. Native MV3 service-worker/DNR transport and Burp GUI are not verified."
+  },
+  "after": {
+    "passed": true,
+    "result": "passed",
+    "expected": "after",
+    "checks": 28,
+    "details": [
+      {
+        "name": "late: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "late: no browser service exception ",
+        "passed": true
+      },
+      {
+        "name": "late: delayed hydration menu is retained",
+        "passed": true
+      },
+      {
+        "name": "late: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "replace: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "replace: no browser service exception ",
+        "passed": true
+      },
+      {
+        "name": "replace: initial links survive action mutation",
+        "passed": true
+      },
+      {
+        "name": "replace: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "capped: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "capped: no browser service exception ",
+        "passed": true
+      },
+      {
+        "name": "capped: limits remain explicitly partial",
+        "passed": true
+      },
+      {
+        "name": "capped: 12-action document bound remains unchanged",
+        "passed": true
+      },
+      {
+        "name": "capped: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "navigate: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "navigate: no browser service exception ",
+        "passed": true
+      },
+      {
+        "name": "navigate: read-only full navigation settles and discovers destination links",
+        "passed": true
+      },
+      {
+        "name": "navigate: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "busy: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "busy: no browser service exception ",
+        "passed": true
+      },
+      {
+        "name": "busy: limits remain explicitly partial",
+        "passed": true
+      },
+      {
+        "name": "busy: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "overflow: bounded service reaches terminal and releases lease",
+        "passed": true
+      },
+      {
+        "name": "overflow: no browser service exception ",
+        "passed": true
+      },
+      {
+        "name": "overflow: limits remain explicitly partial",
+        "passed": true
+      },
+      {
+        "name": "overflow: owned tab and guards/state released",
+        "passed": true
+      },
+      {
+        "name": "actual MAIN guard blocks page-load POST across all fixtures",
+        "passed": true
+      },
+      {
+        "name": "actual MAIN guard blocks outside-Scope fetch across all fixtures",
+        "passed": true
+      },
+      {
+        "name": "existing user tab remains unchanged",
+        "passed": true
+      }
+    ],
+    "cases": [
+      {
+        "name": "late",
+        "state": "partial",
+        "message": "DOM 준비·빈 화면/변화 대기 3초 한도 · 남은 메뉴는 미확인",
+        "pages": 2,
+        "actions": 0,
+        "menuCount": 1,
+        "elapsedMillis": 5399,
+        "delayedMenu": true,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "replace",
+        "state": "partial",
+        "message": "DOM 준비·빈 화면/변화 대기 3초 한도 · 남은 메뉴는 미확인",
+        "pages": 3,
+        "actions": 1,
+        "menuCount": 2,
+        "elapsedMillis": 6640,
+        "delayedMenu": false,
+        "initialMenu": true,
+        "replacementMenu": true,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "capped",
+        "state": "partial",
+        "message": "문서별 메뉴 동작 12회 한도 · 남은 메뉴는 미확인",
+        "pages": 1,
+        "actions": 12,
+        "menuCount": 0,
+        "elapsedMillis": 6734,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 1
+      },
+      {
+        "name": "navigate",
+        "state": "partial",
+        "message": "DOM 준비·빈 화면/변화 대기 3초 한도 · 남은 메뉴는 미확인",
+        "pages": 3,
+        "actions": 1,
+        "menuCount": 1,
+        "elapsedMillis": 5187,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "busy",
+        "state": "partial",
+        "message": "DOM 준비·빈 화면/변화 대기 3초 한도 · 남은 메뉴는 미확인",
+        "pages": 1,
+        "actions": 0,
+        "menuCount": 0,
+        "elapsedMillis": 3074,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      },
+      {
+        "name": "overflow",
+        "state": "partial",
+        "message": "DOM 메뉴 후보 200개 한도 · 남은 메뉴는 미확인",
+        "pages": 1,
+        "actions": 0,
+        "menuCount": 200,
+        "elapsedMillis": 1710,
+        "delayedMenu": false,
+        "initialMenu": false,
+        "replacementMenu": false,
+        "unopenedDetails": 0
+      }
+    ],
+    "chromium": "154.0.8037.57",
+    "scope": "Actual Chromium DOM and production inspection service through Playwright tab/storage adapters; loopback synthetic fixtures, same conditions before/after. Native MV3 service-worker/DNR transport and Burp GUI are not verified."
+  },
+  "limits": {
+    "minimumInitialDomWaitMillis": 1500,
+    "minimumAfterActionDomWaitMillis": 350,
+    "domQuietMillis": 350,
+    "maxDomWaitMillis": 3000,
+    "documentActions": 12,
+    "domRouteCandidates": 200,
+    "documentScrolls": 2,
+    "runCandidates": 500,
+    "queuedRoutes": 100
+  },
+  "nativeExtension": {
+    "result": "blocked",
+    "reason": "Managed system Chromium extension policy rejects unpacked helper installation. Policy was not changed. Actual MV3/DNR and native Burp GUI were not executed.",
+    "attemptEvidence": "/workspace/simple132-browser-native-before/results.json"
+  },
+  "limitations": [
+    "DOM settling is bounded and heuristic; delayed content on a non-empty page can appear after its quiet window. It is not a proof that every menu/function has been explored.",
+    "Empty leaf documents wait to the 3-second bound and remain conservatively partial even when reached; no invisible content is assumed.",
+    "Before/after checks describe expected behavior and overlap; they are not added to default regression totals.",
+    "Playwright tab/storage adapters run the production browser service on actual Chromium DOM. DNR rule construction/lifetime tests do not verify native extension transport."
+  ],
+  "supplementalDomGuardSuite": {
+    "result": "passed",
+    "checks": 17,
+    "scope": "Actual Chromium page DOM and production inspection.js functions with an isolated profile and loopback fixture; no helper installation, MV3 service worker, DNR, Burp GUI or manual permission verification.",
+    "verified": [
+      "real DOM menus and hash navigation",
+      "production supplemental MAIN guard",
+      "browser session and redacted route metadata"
+    ],
+    "notVerified": [
+      "helper installation",
+      "MV3 service worker",
+      "DNR tab transport restrictions",
+      "manual optional permission flow",
+      "native Burp GUI"
+    ],
+    "counting": "Separate overlapping suite; not added to default checks or the 28-case-check total."
+  }
+}

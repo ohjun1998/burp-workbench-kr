@@ -1,0 +1,25 @@
+PASS explicit browser task waits for paired helper
+PASS other origins cannot obtain the task
+PASS paired origin receives exact run and Scope command
+PASS command is leased once, avoiding two helpers launching duplicate tabs
+PASS dispatch is distinct from actual browser start
+PASS browser session never claims selected HTTP profile identity
+PASS command includes no target credentials
+PASS authenticated helper acknowledgement marks actual start
+PASS metadata URL removes query and fragment values
+PASS metadata allowlist and masking exclude private credentials and bodies
+PASS query-dependent browser API remains observation rather than a guessed HTTP replay
+PASS API observation actor remains separate from HTTP comparison account
+PASS duplicate browser observations are coalesced without losing original HTTP packets
+PASS stale browser run cannot enter new task results
+PASS current Scope and conservative exclusion prefixes reject every out-of-bound route
+PASS same pathname with distinct SPA route IDs remains separate
+PASS live Scope revocation cancels leased browser exploration
+PASS unload closes browser task state
+PASS closed browser task cannot be restarted
+PASS bare origin and slash root share the same browser Scope boundary
+PASS start cannot broaden a path-boundary Scope
+PASS cross-origin browser rules are rejected
+PASS page budget is bounded
+PASS expired browser command never becomes active
+ScopeInspectionBrowserTest: 24 checks passed (metadata adapter, no HTTP)

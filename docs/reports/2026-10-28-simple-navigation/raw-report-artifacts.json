@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-28T09:46:35.232239+00:00",
+  "version": "1.3.2",
+  "jarSha256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+  "helperVersion": "0.4.1",
+  "rawDataCommitted": false,
+  "sites": 7,
+  "pairedRuns": 28,
+  "supplementalDirectRuns": 2,
+  "mainMatrixResult": "review",
+  "automaticMerchantRootGateConfirmed": false,
+  "controlledDirectChecks": 16,
+  "controlledDirectResult": "passed",
+  "exactValueRows": 43355,
+  "categoryCounts": {
+    "other": 7616,
+    "sensitive": 768,
+    "path": 28248,
+    "environment": 1471,
+    "token": 154,
+    "api": 4817,
+    "database": 99,
+    "internal": 125,
+    "key": 57
+  },
+  "originCounts": {
+    "productReportSupplement": 36237,
+    "productDetected": 3062,
+    "reportSupplemental": 4045,
+    "testLoginAuth": 11
+  },
+  "pdfPages": 32,
+  "pdfRepresentativeValues": 88,
+  "sourceRevalidation": {
+    "passed": true,
+    "rows": 43355,
+    "origins": {
+      "productReportSupplement": 36237,
+      "productDetected": 3062,
+      "reportSupplemental": 4045,
+      "testLoginAuth": 11
+    },
+    "allValueAndRawLexemeHashesMatch": true,
+    "allOriginalSpansAndResponseHashesMatch": true
+  },
+  "controlledDirectSourceRevalidation": {
+    "passed": true,
+    "cases": 2,
+    "sourceOriginals": 3,
+    "sourceResponseAndBodyHashesMatch": true,
+    "freshSelectedIdentityExpectedValueMatches": true,
+    "freshAnonymous401Confirmed": true,
+    "privatePairedInputsByteIdentical": true,
+    "mainRootAutomaticGateRemainsUnconfirmed": true
+  },
+  "validation": {
+    "roundtripExact": true,
+    "visualReviewComplete": true,
+    "browserChecks": 10,
+    "browserExternalRequests": 0,
+    "zipCrcAndAllContainedHashes": true,
+    "completePairedMatrixRequiredAndPassed": true
+  },
+  "files": {
+    "Workbench_Simple_1.3.2_Retest_KR.pdf": {
+      "path": "/workspace/simple-navigation-1.3.2-report/Workbench_Simple_1.3.2_Retest_KR.pdf",
+      "bytes": 145806,
+      "sha256": "e85e79410e1cfec75cd8d925f7d051da90f20949116d8f207a2317d11eee27d0"
+    },
+    "parsed-values.zip": {
+      "path": "/workspace/simple-navigation-1.3.2-report/parsed-values.zip",
+      "bytes": 14964230,
+      "sha256": "4cb908ff748475dd4124b05c2ce729474d0b7187263d1672bead4d6a74fc6ea4"
+    },
+    "evidence.zip": {
+      "path": "/workspace/simple-navigation-1.3.2-report/evidence.zip",
+      "bytes": 198787578,
+      "sha256": "3cf543762d594cf2b19bfb9423f133bd630e1b2ed58b7906172b5cab233b4714"
+    },
+    "report.html": {
+      "path": "/workspace/simple-navigation-1.3.2-report/report.html",
+      "bytes": 71768753,
+      "sha256": "a978db1fb64fa715c23581e76982132d19367e445a8828fa37ad50bebdf628ff"
+    },
+    "raw-values.json": {
+      "path": "/workspace/simple-navigation-1.3.2-report/raw-values.json",
+      "bytes": 84632751,
+      "sha256": "73572824b147e0e14fa91beeb20c8388059903c08402653eadea62c32cd04765"
+    },
+    "raw-values.csv": {
+      "path": "/workspace/simple-navigation-1.3.2-report/raw-values.csv",
+      "bytes": 35196591,
+      "sha256": "ad3243e1b3ea3d0d65401c5288c80a64678d92718f9d5c2a38637667496d06ff"
+    },
+    "report.json": {
+      "path": "/workspace/simple-navigation-1.3.2-report/report.json",
+      "bytes": 89024587,
+      "sha256": "4b25b3560e7cd24f472f3761b75bd70fcd1e3b812851830a58eb8b981b5c2472"
+    },
+    "report-validation.json": {
+      "path": "/workspace/simple-navigation-1.3.2-report/report-validation.json",
+      "bytes": 2802,
+      "sha256": "4b93225659601f7b392abc6e9fa4bc869a15e4e2a443630796c2fb833cd09f7d"
+    },
+    "browser-validation.json": {
+      "path": "/workspace/simple-navigation-1.3.2-report/browser-validation.json",
+      "bytes": 1192,
+      "sha256": "5253d891d9caa8d610ac1de69d3ed98469ad1054a08ec669900eb8b716eaf3a0"
+    },
+    "source-revalidation.json": {
+      "path": "/workspace/simple-navigation-1.3.2-report/source-revalidation.json",
+      "bytes": 274,
+      "sha256": "7780b7176d1c1f303de8c9d63bfcd34afdba8bad7063efa10563cb9d3b9ffaa3"
+    },
+    "controlled-direct-source-revalidation.json": {
+      "path": "/workspace/simple-navigation-1.3.2-report/controlled-direct-source-revalidation.json",
+      "bytes": 289,
+      "sha256": "bd432a29e8ba9a270947f8370fd7cf962ed204e3ebf44d8f9e0cb45295044577"
+    },
+    "SHA256SUMS.json": {
+      "path": "/workspace/simple-navigation-1.3.2-report/SHA256SUMS.json",
+      "bytes": 2662514,
+      "sha256": "823a0aff16d163bf2a15fa97b843b6b8b64fc12a7349448934c23af896a1260f"
+    }
+  },
+  "limitations": [
+    "실제 로컬 원본 앱·HTTP/HTTPS·운영 Runner/Katana 엔진 검증이며 실제 Burp GUI 조작 검증이 아닙니다.",
+    "미확인·부분·실패는 남은 범위입니다. 큐 종료를 사이트 전체 점검 완료로 해석하지 않습니다.",
+    "민감정보·키·토큰은 관측한 원문 값이며 자동으로 인증에 재사용하거나 외부 공급자에서 유효성을 검사하지 않았습니다.",
+    "재시험 보고서의 추가 파싱 결과는 제품이 자동 탐지한 결과로 집계하지 않습니다. 소스맵의 sourcesContent 전체 문자열을 비밀값으로 분류하지 않습니다.",
+    "전후 버전 모두 실제 제품 exporter의 원문 값을 사용하며 제품 탐지·제품 보고서 보충 파싱·독립 보충 파싱을 구분합니다.",
+    "값 수는 원본 위치별 관측 수입니다. 동일한 값의 여러 응답·여러 버전·반복 위치를 취약점 또는 독립 탐지 건수로 합산하지 않습니다.",
+    "파싱 값은 축약하지 않습니다. 지원하지 않는 엔티티는 RAW_LITERAL_UNDECODED로 표시한 원문 리터럴이며 디코딩 완료 값으로 읽지 않습니다. PDF 대표 값 외 전체 항목은 HTML·JSON·CSV·증거 ZIP에 보존합니다.",
+    "별도 merchant realm 직접 대조 2회는 본28회와 분리했습니다. root after에서 merchant/me가 자동 발견되지 않아 원래 자동 발견 검증 게이트는 review/false로 유지합니다. 직접 지정 결과를 자동 발견 성공으로 바꾸지 않습니다.",
+    "실제 실행 4개는 시험 하네스의 전체 경과 시간 한도로 중지했습니다. 제품 자동 일시정지와 구분하며 STOPPED·미확인·잔여 큐를 그대로 보존합니다.",
+    "I/O 수신 실패는 실제 응답 수에서 제외합니다. Juice Shop /ftp의 원본 Content-Length/EOF 불일치에 대한 Java HTTP 어댑터 제한 등 개별 사유는 실행 상세에 기록하며 실제 Burp TCP 처리 결과로 일반화하지 않습니다.",
+    "COMPLETED means discovered queue processing ended; partial/unconfirmed responses remain.",
+    "Benchmark root may reach the 200-request budget; unvisited cases are not counted as tested.",
+    "The 105-second audit wall limit is a harness stop, distinct from a product authentication pause.",
+    "Java HttpClient content-length/EOF failures and cancellation are errors, not complete responses.",
+    "Development caches, response timestamps and asynchronous queue timing can vary. Transmission counts are not an accuracy or performance score.",
+    "Both versions use current credentials and byte-identical private input snapshots; earlier report measurements are not reused.",
+    "Original applications were restarted. Volatile LOOP/VulnerableApp H2 data was recreated from original seeds; Juice training account was recreated through normal registration before both matrices.",
+    "Source artifacts, old configs, old results and old reports are preserved. Raw responses and authentication remain outside public Git.",
+    "The main root-discovery comparison did not visit merchant/me in the final after run, so its automatic matched-endpoint gate remains false/review. Two separate controlled direct-seed runs verify the same merchant401 with fresh selected-identity200 and anonymous401 controls. Those2 supplemental runs are not added to the28 matrix totals.",
+    "An initial final-JAR Oops root run paused after28 attempts on a real configured-identity HTTP500. The original Next development log showed JSON/webpack errors, and the same frozen credentials later matched identity200 and the expected JSON value; exact causality was not established. All four initial Oops runs (both versions/scenarios) were preserved under /workspace/simple-navigation-retest-runtime/retry-exclusions/oops-transient-development-500 and replaced only by one new paired four-run set. The retry is serial for both versions with unchanged config/credentials; any remaining failure is kept without further retries."
+  ]
+}

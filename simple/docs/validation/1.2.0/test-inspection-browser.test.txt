@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: inspection Scope enforces origin, literal path boundary, conservative exclusions and ambiguity rejection
+ok 1 - inspection Scope enforces origin, literal path boundary, conservative exclusions and ambiguity rejection
+  ---
+  duration_ms: 2.779427
+  type: 'test'
+  ...
+# Subtest: DNR rules guard only the dedicated tab and allow scoped GET/HEAD without unsafe methods or redirect destinations
+ok 2 - DNR rules guard only the dedicated tab and allow scoped GET/HEAD without unsafe methods or redirect destinations
+  ---
+  duration_ms: 1.118228
+  type: 'test'
+  ...
+# Subtest: browser telemetry removes query/fragment values, separates hash routes, and never forwards credentials or bodies
+ok 3 - browser telemetry removes query/fragment values, separates hash routes, and never forwards credentials or bodies
+  ---
+  duration_ms: 9.494855
+  type: 'test'
+  ...
+# Subtest: actual DOM explorer opens navigation details and finds hash routes without reading forms or dangerous actions
+ok 4 - actual DOM explorer opens navigation details and finds hash routes without reading forms or dangerous actions
+  ---
+  duration_ms: 1.983224
+  type: 'test'
+  ...
+# Subtest: MAIN guard preserves allowed fetch/XHR and blocks writes, outside requests, forms and popup escape
+ok 5 - MAIN guard preserves allowed fetch/XHR and blocks writes, outside requests, forms and popup escape
+  ---
+  duration_ms: 22.789777
+  type: 'test'
+  ...
+# Subtest: dedicated browser service installs guards before navigation, visits SPA routes, then closes before guard removal
+ok 6 - dedicated browser service installs guards before navigation, visits SPA routes, then closes before guard removal
+  ---
+  duration_ms: 616.982183
+  type: 'test'
+  ...
+# Subtest: unsupported transport Scope rule fails closed before the first target navigation
+ok 7 - unsupported transport Scope rule fails closed before the first target navigation
+  ---
+  duration_ms: 1.048203
+  type: 'test'
+  ...
+# Subtest: site opt-out cancels the dedicated task without touching other user tabs
+ok 8 - site opt-out cancels the dedicated task without touching other user tabs
+  ---
+  duration_ms: 3.070987
+  type: 'test'
+  ...
+# Subtest: inspection helper adds only explicit tab guards and a separate opt-in without cookie/debugger permissions
+ok 9 - inspection helper adds only explicit tab guards and a separate opt-in without cookie/debugger permissions
+  ---
+  duration_ms: 0.574668
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 679.256643

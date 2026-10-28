@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "name": "Katana",
+  "version": "1.8.0",
+  "upstreamRepository": "https://github.com/projectdiscovery/katana",
+  "releaseUrl": "https://github.com/projectdiscovery/katana/releases/tag/v1.8.0",
+  "releaseApiUrl": "https://api.github.com/repos/projectdiscovery/katana/releases/403742774",
+  "releasePublishedAt": "2026-10-05T13:28:18Z",
+  "releaseImmutable": false,
+  "distribution": {
+    "mode": "external-optional",
+    "bundledInJar": false,
+    "bundledInSourceZip": false,
+    "installation": "Explicit absolute user-selected directory; no administrator or PATH changes"
+  },
+  "license": {
+    "spdxId": "MIT",
+    "copyright": "Copyright (c) 2022 ProjectDiscovery",
+    "url": "https://github.com/projectdiscovery/katana/blob/v1.8.0/LICENSE.md"
+  },
+  "versionProbe": {
+    "arguments": ["-duc", "-version"],
+    "callerHomePreserved": true,
+    "upstreamStartupBehavior": "Katana v1.8.0 may clean resume-* files older than ten days from its normal user configuration directory before printing its version. The installer does not override HOME/USERPROFILE or edit those files itself."
+  },
+  "integrity": {
+    "algorithm": "SHA-256",
+    "pinSource": "Official GitHub release asset digests, pinned in this source file; a freshly downloaded mutable checksum file is not used as trust input",
+    "checksumsAsset": {
+      "fileName": "katana-1.8.0-checksums.txt",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana-1.8.0-checksums.txt",
+      "sizeBytes": 762,
+      "sha256": "e937745b6dd4bd9c657b2f27399c1479e72b5ba3ca384a24ef4ed34e1d666a33"
+    }
+  },
+  "assets": {
+    "linux_386": {
+      "fileName": "katana_1.8.0_linux_386.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_linux_386.zip",
+      "sizeBytes": 17003727,
+      "sha256": "342adc440481a0b562121857d80bc5c8fbc8d1d21a57ddf593e6ba884078c8f6",
+      "executable": "katana"
+    },
+    "linux_amd64": {
+      "fileName": "katana_1.8.0_linux_amd64.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_linux_amd64.zip",
+      "sizeBytes": 31910234,
+      "sha256": "cb027ae99d0757061b70c07a15c7a80f62c5a535ab52c4a329f80c4b0a7309d2",
+      "executable": "katana"
+    },
+    "linux_arm64": {
+      "fileName": "katana_1.8.0_linux_arm64.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_linux_arm64.zip",
+      "sizeBytes": 30527878,
+      "sha256": "80e269210727a855511ffac8dfb01297b2344742acec71a35e8ba4a67a90f0f2",
+      "executable": "katana"
+    },
+    "macOS_amd64": {
+      "fileName": "katana_1.8.0_macOS_amd64.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_macOS_amd64.zip",
+      "sizeBytes": 32433462,
+      "sha256": "806256316dd45e0fe0e3985fd7283ddffc376c95cbaa3dcfd14cde6e1de61aaf",
+      "executable": "katana"
+    },
+    "macOS_arm64": {
+      "fileName": "katana_1.8.0_macOS_arm64.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_macOS_arm64.zip",
+      "sizeBytes": 31574229,
+      "sha256": "52e9802e9f83012a089fe57fb1ac476b936f181ac033c71bfa55f913c07cede6",
+      "executable": "katana"
+    },
+    "windows_386": {
+      "fileName": "katana_1.8.0_windows_386.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_windows_386.zip",
+      "sizeBytes": 16684091,
+      "sha256": "8de8420d3e7dde21e30e909b734111f92fd74b41133eb949f7a21b27ca0f2207",
+      "executable": "katana.exe"
+    },
+    "windows_amd64": {
+      "fileName": "katana_1.8.0_windows_amd64.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_windows_amd64.zip",
+      "sizeBytes": 17224143,
+      "sha256": "8013253e3092e08524527a5c3f7ebd70747acc4bb51414858f8e6dffeb17f907",
+      "executable": "katana.exe"
+    },
+    "windows_arm64": {
+      "fileName": "katana_1.8.0_windows_arm64.zip",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_windows_arm64.zip",
+      "sizeBytes": 15632560,
+      "sha256": "4b7c2e5759c8ea1a72081d75930e1ef24853a933c1d35e114ef6787bfc8ae058",
+      "executable": "katana.exe"
+    }
+  }
+}

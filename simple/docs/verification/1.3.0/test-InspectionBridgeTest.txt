@@ -1,0 +1,12 @@
+PASS unpaired callers cannot obtain inspection commands
+PASS authenticated helper obtains its data-only command
+PASS command transport is JSON rather than executable script
+PASS command task details are not cached
+PASS bridge never exposes command replies to arbitrary web origins
+PASS command endpoint accepts only authenticated GET
+PASS malformed or path-bearing origin cannot obtain a command
+PASS malformed or path-bearing origin cannot obtain a command
+PASS malformed or path-bearing origin cannot obtain a command
+PASS explicit browser inspection uses the authenticated existing event transport
+PASS inspection transport still reports delivery separately from Scope acceptance
+InspectionBridgeTest: 11 checks passed (loopback only)

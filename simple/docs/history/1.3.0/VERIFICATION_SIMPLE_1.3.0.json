@@ -1,0 +1,171 @@
+{
+  "name": "Workbench Simple",
+  "version": "1.3.0",
+  "baseExtensionVersion": "0.53.4",
+  "baseGitCommit": "0cef0c5dc97f5824d1fe4a7b298b855994e69983",
+  "simpleBaseCommit": "707363c92547a5cdc006bfe26bf4fc5e5bc3f4c4",
+  "verifiedAtUtc": "2026-10-27T16:32:04.961029+00:00",
+  "result": "automated-checks-and-real-Katana-passed-native-Burp-unverified",
+  "jarSha256": "7a49aa673a3c5049831b65f3ab5782d9bf560b1e105213c7d419be1dbf2067b4",
+  "embeddedMapperVersion": "0.3.6",
+  "browserHelperVersion": "0.4.0",
+  "primaryTools": [
+    {
+      "id": "traffic",
+      "visible": "요청·응답",
+      "core": "SCOPE/OFF collection, search, exact packet, local transforms/JWT/response comparison, selected original handoff"
+    },
+    {
+      "id": "mapper",
+      "visible": "기능 매핑",
+      "core": "Feature/execution/session mapping, packets, classification evidence, .fmkr projects and assessment links"
+    },
+    {
+      "id": "auth",
+      "visible": "계정 비교",
+      "core": "Candidate/account assignment, preparation review, policy/session/write verification, explicit comparison and evidence"
+    },
+    {
+      "id": "js",
+      "visible": "API 찾기",
+      "core": "Response/text analysis, API/input/secret/source positions, request draft/Repeater and local archive"
+    },
+    {
+      "id": "environment",
+      "visible": "서버·경로",
+      "core": "Observed site/path candidates, account/scope/budget, explicit GET, stop/resume, result/evidence and URL candidates"
+    },
+    {
+      "id": "response.recon",
+      "visible": "응답 분석",
+      "core": "Response security observations, API documents, stored-flow links, source/evidence/retry"
+    },
+    {
+      "id": "payload",
+      "visible": "입력값 검사",
+      "core": "Request/parameter positions, all profiles/encodings/settings/budgets, start/stop, counterexamples/Repeater, direct evidence"
+    },
+    {
+      "id": "bounty",
+      "visible": "재현·증거",
+      "core": "Manual sequential replay, variable extraction, expected results/limits/stop, result-to-evidence, redaction/drafts/ZIP"
+    }
+  ],
+  "auxiliaryUiRemoved": [
+    "Four-stage grouping and duplicate folder/resume/helper navigation",
+    "Automatic account comparison toggle on main execution surface",
+    "Bounty external tool/OAST/browser auxiliary screens",
+    "JS external source-map/NPM query and old automatic History polling",
+    "Payload duplicate More/CSV/standalone workspace main actions",
+    "Saved search management on the running traffic list (available in search settings)"
+  ],
+  "userScope": "Use real Katana against the specified Scope to collect menus/functions and environment, paths, APIs, sensitive information, account differences, history changes and unconfirmed coverage while preserving eight tools and previous releases.",
+  "katana": {
+    "version": "1.8.0",
+    "distribution": "External optional executable; no Katana binary is bundled in the JAR or source ZIP.",
+    "installer": "../tools/install_katana.py",
+    "dependency": "KATANA_DEPENDENCY.json",
+    "mode": "Pinned standard HTML/JavaScript/form/technology crawling; no Katana headless, automatic form fill, auto-login, knowledge-base provider validation or automatic update.",
+    "transport": "Authenticated ephemeral loopback HTTP proxy with HTTPS CONNECT terminated using a temporary in-memory certificate. Every target request uses the single existing Montoya worker, live Scope, selected HTTP identity, GET/HEAD restrictions and the same global request budget.",
+    "privacy": "Seed URL is supplied over stdin; selected account Cookie/Authorization are not placed in crawler arguments, environment or config. Child environment is minimized, JSON output is bounded and allowlisted, and raw originals remain in the existing evidence store.",
+    "history": "The declared Katana seed identity, comparison profiles, Scope, options, time/pages and credential revisions partition comparisons. Incomplete scans never prove remediation.",
+    "upstreamCompatibility": "Katana 1.8.0 omit-body mutates response bodies before JS parsing. The integration uses non-destructive output-field exclusion and keeps JavaScript discovery functional; actual native JS-only provenance is tested.",
+    "vendorNote": "Official Katana startup/version checking can clean its own resume files older than ten days under the caller home directory. HOME is preserved; application code does not modify these existing files directly. Own config/field/output workspaces are private and removed."
+  },
+  "checks": {
+    "regressionGroups": 130,
+    "regressionChecks": 4636,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "mapperBrowserHelperChecks": 24
+  },
+  "totalCountedChecks": 4941,
+  "countingNote": "One current Linux regression run; nested Mapper main is not double-counted. Separate real Katana checks and layout scenarios are not added to 4941. CI and earlier-version repetitions are not summed.",
+  "realKatana": {
+    "result": "passed",
+    "checks": 102,
+    "katanaVersion": "1.8.0",
+    "binarySha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc",
+    "officialArchiveSha256": "cb027ae99d0757061b70c07a15c7a80f62c5a535ab52c4a329f80c4b0a7309d2",
+    "jarSha256": "7a49aa673a3c5049831b65f3ab5782d9bf560b1e105213c7d419be1dbf2067b4",
+    "evidence": "verification/1.3.0/katana-native/katana-verification.json",
+    "cases": "verification/1.3.0/katana-native/native-results.json",
+    "scope": "Real pinned Katana against isolated HTTP and HTTPS targets through the production proxy/Runner, real menus and JS-only endpoint, forms/technology metadata, account differences, masked history changes, pause/resume/stop, global budget and credential/log/workspace boundaries. No external targets or native Burp GUI."
+  },
+  "screens": {
+    "renderedViews": 108,
+    "controls": 2124,
+    "scenarios": 116,
+    "clippedControls": [],
+    "collapsedAreas": [],
+    "failedScenarios": [],
+    "jarSha256": "7a49aa673a3c5049831b65f3ab5782d9bf560b1e105213c7d419be1dbf2067b4"
+  },
+  "guide": {
+    "pdf": "downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf",
+    "pdfSha256": "1a6eab046b08e1b340deb657e0ddf0b4b2f2f88f84ceaaa7fb900955fb895144",
+    "pdfPages": 34,
+    "pdfOutlineEntries": 34,
+    "pdfScreenshotPages": 27,
+    "outOfPageText": [],
+    "visualReviewComplete": true
+  },
+  "captureScope": "Production Swing components with synthetic packet, Katana and browser observations. Actual Katana transport has separate executable proof; guide images are not native Burp GUI screenshots.",
+  "preservation": {
+    "originalProductSourceFilesModified": [],
+    "priorDownloadFilesVerified": 16,
+    "priorDownloadSha256": {
+      "simple/downloads/1.0.0/SHA256SUMS": "8ee22230e93731633b6cf9881551649d1ce924f4a9a59a80a92d2d77418dd52b",
+      "simple/downloads/1.0.0/burp-workbench-simple-1.0.0-source.zip": "6d968a99bf3037b8285f7e8d71473745b421cdda9a52653e563c239d25a3e0d2",
+      "simple/downloads/1.0.0/burp-workbench-simple-1.0.0.jar": "379e03d74a9c86e66875adc25801da5f3c4c7d2deea8262929cdc8a94a261b04",
+      "simple/downloads/1.0.0/manifest.json": "d5078f346feea935c48259d7eda334c401ca49b8253d6aaa6c4192d98f58dac3",
+      "simple/downloads/1.1.0/SHA256SUMS": "9af351a74d4264e77250b1e7c56ef0f7473f131738746e88263c076410c9b95c",
+      "simple/downloads/1.1.0/burp-workbench-simple-1.1.0-source.zip": "51b29b4b21e979ca4bfcc2abdd15df9da7a3f27b6b8e4650162d05646e2ab45c",
+      "simple/downloads/1.1.0/burp-workbench-simple-1.1.0.jar": "a761ec8ca4df89a5681b72d536043325a431d6ba0a6ec31669bb7741da32aed9",
+      "simple/downloads/1.1.0/manifest.json": "44a11e7cf1e0c1cb98056eb759593ad7f39dc950f3cb8f231442486cacd5fa59",
+      "simple/downloads/1.2.0/SHA256SUMS": "c66bf24aa7f77e50426ed40b730c1d94968c1f37b0175185eb37cc9ef96f3265",
+      "simple/downloads/1.2.0/burp-workbench-simple-1.2.0-source.zip": "d8ba6cf2e85334548f100fccba2d1da7b3681e62d61225700c5e0826827bc60c",
+      "simple/downloads/1.2.0/burp-workbench-simple-1.2.0.jar": "3d8fb1a1958ebec623b0e4153839402dc78157509b9c53d65cf615612f86d8aa",
+      "simple/downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip": "96d031b6b495b96013cb375ba8e08e1fce1fcb37645bceff18f910860af1f0a5",
+      "simple/downloads/1.2.0/manifest.json": "061bce0297992f4ee36ae9f9b911d82c0ff369f13213135474b35257ba5dae98",
+      "simple/downloads/guides/1.0.0/Workbench_Simple_1.0.0_Guide_KR.pdf": "2feecd3968f4172df9e044b68939dac22644f423f1886e6b4fb083f147cefd33",
+      "simple/downloads/guides/1.1.0/Workbench_Simple_1.1.0_Guide_KR.pdf": "9acef6f096efd327b8ec65593b36b098e992cd2ccf8815aab072766b3c3d4b06",
+      "simple/downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf": "41e54d2c328ad1d074b184e3c63e95e85ec54024b6b48fe54d864820711a53b4"
+    },
+    "settingsPrefix": "simple.",
+    "storageDirectory": ".burp-workbench-simple",
+    "mainBranch": "not changed; task branch is stacked on the existing Simple 1.2.0 branch"
+  },
+  "toolchain": {
+    "runtime": "OpenJDK 21.0.12.1",
+    "mode": "explicit-source17-target17-api-unverified",
+    "javaClassMajor": 61,
+    "java17ApiCompatibilityVerifiedLocally": false,
+    "strictDefault": "--release 17",
+    "limitation": "The local JDK lacks ct.sym; explicit source/target17 used. The configured GitHub workflow uses a full JDK17 and Node22 plus the real pinned Katana fixture. See PR/Actions for remote results."
+  },
+  "practicalLimits": [
+    "Katana is a separately installed trusted local executable. Scope mode does not use Katana headless; existing opt-in SPA browser helper remains separate.",
+    "GET/HEAD and known changing-path restrictions do not establish that every server implements side-effect-free GET behavior.",
+    "The body limit bounds decoded analysis/proxy reads, not Montoya download transport. Large dump/archive paths are excluded.",
+    "Menu/API/environment/DB/account findings retain confidence and source; they are not automatic vulnerability or deployed-product certificates.",
+    "Persistent history is masked metadata. Full packet evidence is kept in bounded current-session stores and can be explicitly exported."
+  ],
+  "notRun": [
+    "Native Burp GUI",
+    "Windows/macOS installation and native Katana runs",
+    "Windows DPI/IME",
+    "Katana headless/browser automation",
+    "Manual Chrome/Edge helper installation or MV3/DNR integration for 1.3.0",
+    "Docker lab stack and external live target/services"
+  ],
+  "evidence": {
+    "checks": "verification/1.3.0/check-summary.json",
+    "profile": "../REGRESSION_PROFILE_KR.md",
+    "requirements": "KATANA_SCOPE_1.3.0_SPEC_KR.md",
+    "layout": "images/1.3.0/layout-report.json",
+    "scopeLayout": "images/1.3.0/scope-layout-report.json",
+    "guide": "guide-validation-1.3.0.json",
+    "installer": "verification/1.3.0/katana-install.json"
+  }
+}

@@ -1,0 +1,56 @@
+PASS global one-touch button opens the actual integrated panel
+PASS global entry retains its production inspection controller
+PASS integrated inspection preserves existing traffic entry point
+PASS integrated inspection preserves existing mapper entry point
+PASS integrated inspection preserves existing auth entry point
+PASS integrated inspection preserves existing js entry point
+PASS integrated inspection preserves existing environment entry point
+PASS integrated inspection preserves existing response.recon entry point
+PASS integrated inspection preserves existing payload entry point
+PASS integrated inspection preserves existing bounty entry point
+PASS opening the inspection and existing tools sends zero target HTTP
+PASS request full-view action opens the exact original in an independent native host
+PASS response full-view action opens the same original without replacing the main packet viewer
+PASS actual extension unload closes its integrated request coordinator
+PASS unload closes inspection preview workers as well as their windows
+PASS unload clears native editor message references
+PASS unloaded extension dispatches no further target requests
+PASS evidence handoff is disabled before a selected original exists
+PASS inspection exposes configured account profiles without credentials
+PASS profile rendering never reveals its authentication snapshot
+PASS profile rendering never reveals its authentication snapshot
+PASS configuring Scope/account/limits does not execute the inspection
+PASS actual loopback inspection completes through the production panel
+PASS all integrated request phases share the configured request budget
+PASS displayed request count exactly matches real target requests including controls
+PASS each inspected response retains its exact original packet
+PASS soft-404 control responses retain inspectable originals
+PASS multi-account identity controls are visible in retained response coverage
+PASS account comparison retains separate profile provenance
+PASS actual fetched responses feed the integrated secret analyzer
+PASS actual fetched documents and JS feed the API inventory
+PASS DB-specific evidence is retained as an inference
+PASS same-origin redirect cannot escape the selected application Scope
+PASS menu/API discovery excludes logout and write-only routes
+PASS one-touch inspection sends only read-oriented methods
+PASS progress callbacks forward each original to existing analyzers only once
+PASS integrated capture is explicitly shared with retained analyzers
+PASS sorted finding refresh preserves the selected account and exact original despite a shared fingerprint
+PASS sorted path refresh captures the old exact packet identity before replacing page order
+PASS selection-only snapshot refresh sends no target requests
+PASS integrated result tables and details mask the fetched secret
+PASS selected result keeps original/Repeater/account comparison handoffs available
+PASS all handoffs resolve the same immutable selected original
+PASS evidence handoff preserves the selected original reference
+PASS both full native actions preserve the exact selected PacketRef
+PASS native full-view callbacks and original handoffs send no target requests
+PASS masking the result view never destroys the exact private response evidence
+PASS preparing original/Repeater/evidence handoffs sends no extra HTTP
+PASS reinspection uses a distinct execution identity
+PASS same-condition reinspection exposes response or finding changes
+PASS paused UI state dispatches no new requests
+PASS resume reuses the retained inspection with live Scope validation
+PASS explicit UI stop retains partial results without further requests
+PASS resuming after Scope revocation cannot send another request
+PASS closed integrated UI retains no request-producing background task
+ScopeInspectionUiTest: 55 checks passed (real loopback HTTP, production Swing/API adapter; not native Burp GUI)

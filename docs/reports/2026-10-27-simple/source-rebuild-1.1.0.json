@@ -1,0 +1,10 @@
+{
+  "version": "1.1.0",
+  "result": "passed",
+  "sourceZipSha256": "51b29b4b21e979ca4bfcc2abdd15df9da7a3f27b6b8e4650162d05646e2ab45c",
+  "providedJarSha256": "a761ec8ca4df89a5681b72d536043325a431d6ba0a6ec31669bb7741da32aed9",
+  "rebuiltJarSha256": "a761ec8ca4df89a5681b72d536043325a431d6ba0a6ec31669bb7741da32aed9",
+  "build": "Fresh independent source ZIP extraction; python dev.py build --source-target",
+  "originalRepositoryFilesRequired": false,
+  "java17PlatformApiValidation": false
+}

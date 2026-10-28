@@ -1,0 +1,101 @@
+{
+  "generatedAtUTC": "2026-10-28T09:38:32.638513+00:00",
+  "result": "passed",
+  "scope": "Two supplemental controlled direct-seed runs against the original VulnBank application with the same frozen matrix credentials; separate from the main 28 automatic/direct matrix. Actual Katana enabled in both runs. Not automatic root discovery.",
+  "matrixRootDiscoveryComparable": false,
+  "matrixRootDiscoveryReason": "Before root observed merchant/me401; final after root did not observe that endpoint because bounded asynchronous discovery differed. Root completion is not evidence of this specific fix.",
+  "checks": {
+    "bothFixedJars": true,
+    "pairedConfigBytesIdentical": true,
+    "sameMatrixAuthenticationIdentityAndScope": true,
+    "bothObservedSameSelectedMerchant401": true,
+    "beforePausedAfterMerchant401": true,
+    "afterCompletedWithoutGlobalPause": true,
+    "freshSelectedIdentity200AndExpectedValue": true,
+    "freshAnonymousIdentity401": true,
+    "bothFreshControlOriginalsReferenced": true,
+    "accessRemainsUnconfirmed": true,
+    "continuedAfterFreshControls": true,
+    "allControlsWithinActualBudget": true,
+    "allRequestsReadOnly": true,
+    "sameCredentialHeadersAndRequestedParameters": true,
+    "allJarsUnchangedAndStrict17": true,
+    "bothProductExportsAvailable": true
+  },
+  "before": {
+    "state": "PAUSED",
+    "attempts": 5,
+    "responseSuccess": 5,
+    "transportErrors": 0,
+    "pending": 16,
+    "partial": 1,
+    "jarSHA256": "9b50905cebb5485274e986445aefb198dbc56c3d0d9cb1bfeef69a0c4d0f969d",
+    "parameters": {
+      "budget": 30,
+      "depth": 0,
+      "delayMillis": 0,
+      "timeoutMillis": 5000,
+      "maxBodyBytes": 5242880,
+      "katanaSeconds": 10,
+      "katanaPages": 1,
+      "auditWallSeconds": 45,
+      "katanaProfile": "alice"
+    }
+  },
+  "after": {
+    "state": "COMPLETED",
+    "attempts": 24,
+    "responseSuccess": 24,
+    "transportErrors": 0,
+    "pending": 0,
+    "partial": 3,
+    "jarSHA256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+    "parameters": {
+      "budget": 30,
+      "depth": 0,
+      "delayMillis": 0,
+      "timeoutMillis": 5000,
+      "maxBodyBytes": 5242880,
+      "katanaSeconds": 10,
+      "katanaPages": 1,
+      "auditWallSeconds": 45,
+      "katanaProfile": "alice"
+    }
+  },
+  "sourceProof": [
+    {
+      "kind": "resource-denial",
+      "originalId": "0148c7ee-3896-4632-8111-b82389f61288:4",
+      "transportIndex": 5,
+      "httpStatus": 401,
+      "responseSHA256": "eaacc432039f274d7b93936f89a06b50bc408a19a0b20dffda53552c0fb62b15",
+      "bodySHA256": "ec4a00ebedf472984f4f29a3e8ee8f0e2ebc87fd3dd36e16d2dea72947ba3d2d"
+    },
+    {
+      "kind": "fresh-selected-identity",
+      "originalId": "0148c7ee-3896-4632-8111-b82389f61288:5",
+      "transportIndex": 6,
+      "httpStatus": 200,
+      "responseSHA256": "10cb93a3dd2b6979f335893571c7bb63630dece7310b1de934a0fff4bb348ee2",
+      "bodySHA256": "cb50dabf28bb5e90008abc07c2ae3bf835630147455c422cea177533131b5769"
+    },
+    {
+      "kind": "fresh-anonymous-identity",
+      "originalId": "0148c7ee-3896-4632-8111-b82389f61288:6",
+      "transportIndex": 7,
+      "httpStatus": 401,
+      "responseSHA256": "1cc6cc9a7f4719f3814038fae82af5717f717f2ee9428ae50ae86faf16fb8e88",
+      "bodySHA256": "66b5f0b14ba8a1f0f85267e901d7298fa22e09adab6ba5efc282356013151771"
+    }
+  ],
+  "accessFinding": {
+    "originalId": "0148c7ee-3896-4632-8111-b82389f61288:4",
+    "state": "미확인",
+    "title": "개별 경로 401 · 선택 신원 재확인"
+  },
+  "limitations": [
+    "An identity200/anonymous401 control pair confirms the configured identity difference, not merchant access success or a vulnerability.",
+    "Initial missing-path controls and all fresh identity controls are included in the actual request budget.",
+    "Supplemental two-run counts are not added to the main28 matrix totals."
+  ]
+}

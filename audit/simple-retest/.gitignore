@@ -1,0 +1,12 @@
+results/
+private*/
+__pycache__/
+.classes/
+.host-home/
+.tmp/
+*.http
+*.body.bin
+*.decoded.txt
+*-private*.json
+*-auth.json
+*.log

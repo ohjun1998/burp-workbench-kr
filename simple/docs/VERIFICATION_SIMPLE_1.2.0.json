@@ -1,0 +1,187 @@
+{
+  "name": "Workbench Simple",
+  "version": "1.2.0",
+  "embeddedMapperVersion": "0.3.6",
+  "browserHelperVersion": "0.4.0",
+  "baseExtensionVersion": "0.53.4",
+  "baseGitCommit": "0cef0c5dc97f5824d1fe4a7b298b855994e69983",
+  "simpleBaseCommit": "6d5c616f0cfebde1dff2e4d88ea2e0faee826ad4",
+  "verifiedAtUtc": "2026-10-27T15:16:01.032442+00:00",
+  "result": "automated-checks-passed-with-native-integration-limitations",
+  "jarSha256": "3d8fb1a1958ebec623b0e4153839402dc78157509b9c53d65cf615612f86d8aa",
+  "userScope": "Preserve the eight extensions and original artifacts; add an explicit scoped integrated inspection and a step-by-step captured Korean guide.",
+  "primaryTools": [
+    {
+      "id": "traffic",
+      "visible": "요청·응답",
+      "core": "SCOPE/OFF collection, search, exact packet, local transforms/JWT/response comparison, selected original handoff"
+    },
+    {
+      "id": "mapper",
+      "visible": "기능 매핑",
+      "core": "Feature/execution/session mapping, packets, classification evidence, .fmkr projects and assessment links"
+    },
+    {
+      "id": "auth",
+      "visible": "계정 비교",
+      "core": "Candidate/account assignment, preparation review, policy/session/write verification, explicit comparison and evidence"
+    },
+    {
+      "id": "js",
+      "visible": "API 찾기",
+      "core": "Response/text analysis, API/input/secret/source positions, request draft/Repeater and local archive"
+    },
+    {
+      "id": "environment",
+      "visible": "서버·경로",
+      "core": "Observed site/path candidates, account/scope/budget, explicit GET, stop/resume, result/evidence and URL candidates"
+    },
+    {
+      "id": "response.recon",
+      "visible": "응답 분석",
+      "core": "Response security observations, API documents, stored-flow links, source/evidence/retry"
+    },
+    {
+      "id": "payload",
+      "visible": "입력값 검사",
+      "core": "Request/parameter positions, all profiles/encodings/settings/budgets, start/stop, counterexamples/Repeater, direct evidence"
+    },
+    {
+      "id": "bounty",
+      "visible": "재현·증거",
+      "core": "Manual sequential replay, variable extraction, expected results/limits/stop, result-to-evidence, redaction/drafts/ZIP"
+    }
+  ],
+  "auxiliaryUiRemoved": [
+    "Four-stage grouping and duplicate folder/resume/helper navigation",
+    "Automatic account comparison toggle on main execution surface",
+    "Bounty external tool/OAST/browser auxiliary screens",
+    "JS external source-map/NPM query and old automatic History polling",
+    "Payload duplicate More/CSV/standalone workspace main actions",
+    "Saved search management on the running traffic list (available in search settings)"
+  ],
+  "integratedWorkflow": [
+    "Explicit Scope URL/profile selection; no target request on opening",
+    "Bounded sequential scoped GET/HEAD with per-hop redirect checks, budgets, pause/resume/stop and project/unload cleanup",
+    "HTML/JS/robots/sitemap/OpenAPI discovery and technology path priority",
+    "Server/WAS/framework/CDN/front-end/numeric version/DB evidence with confidence",
+    "Soft404/login/access-denied/challenge/rate-limit classification and incomplete coverage",
+    "Masked secret/API key/token/password/connection/internal-information findings; no discovered-key reuse or provider validation",
+    "API document versus static/observed inventory; unresolved inputs and changing methods excluded",
+    "Read-only account response differences with profile revisions",
+    "Masked project/scope/condition history and conservative changes; no resolution claim after incomplete checks",
+    "Immutable full originals, text source positions, native read-only packet view, eight-tool handoff and evidence redaction",
+    "Opt-in dedicated browser-tab menus, lazy submenus, hash routes and observed API context; browser actor distinct from HTTP profile"
+  ],
+  "preservation": {
+    "originalSourceFilesModified": [],
+    "oldDownloadFilesVerified": 10,
+    "oldDownloadSha256": {
+      "simple/downloads/1.0.0/SHA256SUMS": "8ee22230e93731633b6cf9881551649d1ce924f4a9a59a80a92d2d77418dd52b",
+      "simple/downloads/1.0.0/burp-workbench-simple-1.0.0-source.zip": "6d968a99bf3037b8285f7e8d71473745b421cdda9a52653e563c239d25a3e0d2",
+      "simple/downloads/1.0.0/burp-workbench-simple-1.0.0.jar": "379e03d74a9c86e66875adc25801da5f3c4c7d2deea8262929cdc8a94a261b04",
+      "simple/downloads/1.0.0/manifest.json": "d5078f346feea935c48259d7eda334c401ca49b8253d6aaa6c4192d98f58dac3",
+      "simple/downloads/1.1.0/SHA256SUMS": "9af351a74d4264e77250b1e7c56ef0f7473f131738746e88263c076410c9b95c",
+      "simple/downloads/1.1.0/burp-workbench-simple-1.1.0-source.zip": "51b29b4b21e979ca4bfcc2abdd15df9da7a3f27b6b8e4650162d05646e2ab45c",
+      "simple/downloads/1.1.0/burp-workbench-simple-1.1.0.jar": "a761ec8ca4df89a5681b72d536043325a431d6ba0a6ec31669bb7741da32aed9",
+      "simple/downloads/1.1.0/manifest.json": "44a11e7cf1e0c1cb98056eb759593ad7f39dc950f3cb8f231442486cacd5fa59",
+      "simple/downloads/guides/1.0.0/Workbench_Simple_1.0.0_Guide_KR.pdf": "2feecd3968f4172df9e044b68939dac22644f423f1886e6b4fb083f147cefd33",
+      "simple/downloads/guides/1.1.0/Workbench_Simple_1.1.0_Guide_KR.pdf": "9acef6f096efd327b8ec65593b36b098e992cd2ccf8815aab072766b3c3d4b06"
+    },
+    "settingsPrefix": "simple.",
+    "storageDirectory": ".burp-workbench-simple",
+    "mainBranch": "not modified; stacked task branch based on Simple PR96"
+  },
+  "checks": {
+    "regressionGroups": 127,
+    "regressionChecks": 4481,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "mapperBrowserHelperChecks": 24
+  },
+  "totalCountedChecks": 4786,
+  "mapperJavaGroups": {
+    "MapperTest": 134,
+    "InspectionBridgeTest": 11
+  },
+  "mapperJavaNestedMains": {
+    "BrowserBodyObservationTest": [
+      "MapperTest"
+    ]
+  },
+  "nodeGroups": {
+    "browser-helper.test.mjs": 15,
+    "inspection-browser.test.mjs": 9
+  },
+  "countingNote": "127 Workbench groups plus payload HTTP, Mapper root suites and Node suites. BrowserBodyObservationTest is included in MapperTest and is not counted twice. The separate 17 actual Chromium DOM checks and layout scenarios are not added to 4786.",
+  "screens": {
+    "renderedViews": 100,
+    "controls": 1956,
+    "scenarios": 100,
+    "clippedControls": [],
+    "collapsedAreas": [],
+    "failedScenarios": [],
+    "jarSha256": "3d8fb1a1958ebec623b0e4153839402dc78157509b9c53d65cf615612f86d8aa"
+  },
+  "guide": {
+    "pdf": "downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf",
+    "pdfSha256": "41e54d2c328ad1d074b184e3c63e95e85ec54024b6b48fe54d864820711a53b4",
+    "pdfPages": 31,
+    "pdfOutlineEntries": 31,
+    "pdfScreenshotPages": 25,
+    "outOfPageText": [],
+    "visualReviewComplete": true
+  },
+  "captureScope": "Production Swing components with synthetic wire packets and browser observations. Actual Burp GUI and browser extension installation screenshots are not claimed.",
+  "browserDom": {
+    "result": "passed",
+    "checks": 17,
+    "evidence": "validation/1.2.0/chromium-dom.json",
+    "screenshot": "validation/1.2.0/chromium-dom.png",
+    "scope": "Actual managed Chromium page DOM, production exploration and supplemental MAIN guard, loopback fixture and isolated profile. Does not prove MV3 or DNR transport integration."
+  },
+  "browserExtension": {
+    "result": "blocked",
+    "completedChecks": 0,
+    "reason": "System-managed ExtensionInstallBlocklist prevents unpacked helper installation. Policy was not changed or bypassed.",
+    "notVerified": [
+      "actual helper installation",
+      "MV3 service worker",
+      "DNR tab transport boundaries",
+      "manual optional site permission flow"
+    ],
+    "evidence": "validation/1.2.0/chromium-extension.json"
+  },
+  "toolchain": {
+    "runtime": "OpenJDK 21.0.12.1",
+    "mode": "explicit-source17-target17-api-unverified",
+    "javaClassMajor": 61,
+    "java17ApiCompatibilityVerified": false,
+    "strictDefault": "--release 17",
+    "limitation": "Local JDK lacks ct.sym; explicit source17/target17 used. Strict Java17 and Node22 checks are configured in GitHub Actions; see PR run results."
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses",
+    "Actual helper MV3/DNR integration (blocked by managed browser policy)"
+  ],
+  "practicalLimits": [
+    "The HTTP body setting limits decoded analysis, not the underlying Montoya download transport. Large dump/archive candidates are excluded.",
+    "Browser resource observations have their own page/action/time/count bounds and are separate from the strict HTTP inspection request budget.",
+    "Environment, DB and account differences are evidence for review; they do not certify a vulnerability, deployed technology or account identity.",
+    "Full raw packets remain in bounded current-session stores. Durable history contains masked metadata; export evidence explicitly when needed."
+  ],
+  "evidence": {
+    "checks": "validation/1.2.0/check-summary.json",
+    "scopeTests": "validation/1.2.0/",
+    "layout": "images/1.2.0/layout-report.json",
+    "scopeLayout": "images/1.2.0/scope-layout-report.json",
+    "guide": "guide-validation-1.2.0.json",
+    "requirements": "SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+    "profile": "../REGRESSION_PROFILE_KR.md"
+  }
+}

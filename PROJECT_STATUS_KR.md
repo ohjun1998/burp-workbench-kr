@@ -1,7 +1,17 @@
 # 현재 개발 상태
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
-기준: 2026-10-27 (한국 시간). 현재 main 배포는 **Workbench Next 0.53.4**이며, 최종 자동 검증·새 배포 파일 게시·main 병합을 완료했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지하고, 0.53.3 배포·0.53.2 후보판과 아래 모든 과거 기록을 보존합니다.
+기준: 2026-10-28 (한국 시간). main은 별도 **Workbench Simple 1.3.2**와 기존 **Workbench Next 0.53.4**를 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0** 및 과거 모든 배포·후보 기록을 보존합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.
+
+## Workbench Simple 1.3.2 · main 병합 완료
+
+[PR #100](https://github.com/ohjun1998/burp-workbench-kr/pull/100)을 **2026-10-28 19:11:02 (한국 시간)**에 main으로 병합했습니다. merge `70a9476998764211b886fa392742ec11d3acf83c`, PR head `80beac1337f8788b4cb606d11d5136b69a45ce29`이며 검증된 제품 소스 `9fe30b6965b9c6074476f0233cbd6c30de82e3ca` 뒤에는 병합 요청 기록만 추가했습니다. 선행 Simple1.0.0~1.3.2의7개 커밋과 배포 이력을 보존했고 기존 Next 파일은 수정하지 않았습니다.
+
+head80beac1의 [Simple CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40669107190)는5,184개·실제Katana102개·보고서25개·112뷰/2,244컨트롤/120상태의 게이트0·배포 지문을 통과했습니다. 실제 CI checkout은 이전 stack base와 head의 merge `17b19ded22706776ccecf2944d661949734b6432`이며, 그 파일 트리는 head80beac1 및 실제 main merge70a9476과 정확히 일치합니다. 직접 main base에서 새로 기능 검사를 실행했다고 표현하지 않습니다. 원본 Build·Windows의 진행 중 검사는 이 Simple 성공 수치에 합산하지 않습니다.
+
+JAR SHA-256 `a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400`, 소스 ZIP SHA-256 `a0a1dab3daef3a9bc2495a8888a05bfbb279f0fbb850376dfd01fe0e7bcc7580`와 독립 재빌드 바이트 일치를 유지했습니다. 실제 사이트 본28회와 직접2회, 자동 경로 미관측 review와 직접 대조 성공, native Burp/MV3 미검증은 [기존 검증](simple/docs/VERIFICATION_SIMPLE_1.3.2.json)에 그대로 구분합니다. 원문 민감값 보고서는 공개 Git에 넣지 않았습니다.
+
+[Simple 설치·가이드](simple/README_KR.md) · [배포 파일](simple/downloads/1.3.2/) · [병합 상세](docs/reports/2026-10-28-simple-main/MERGE_KR.md) · [병합 요청·공개 대화](docs/chat-logs/2026-10-28/simple-main-merge.md)
 
 ## Workbench Next 0.53.4 사용자 편의성 안정화 · main 병합 완료
 

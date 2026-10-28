@@ -1,0 +1,127 @@
+{
+  "version": "1.3.2",
+  "prNumber": 100,
+  "sourceHead": "80beac1337f8788b4cb606d11d5136b69a45ce29",
+  "currentTargetBase": "0cef0c5dc97f5824d1fe4a7b298b855994e69983",
+  "sourceCodePreviouslyVerified": "9fe30b6965b9c6074476f0233cbd6c30de82e3ca",
+  "sourceDiffFromPreviouslyVerified": [
+    "docs/chat-logs/2026-10-28/simple-main-merge.md"
+  ],
+  "simpleCI": {
+    "id": 40669107190,
+    "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40669107190",
+    "status": "completed",
+    "conclusion": "success",
+    "head": "80beac1337f8788b4cb606d11d5136b69a45ce29",
+    "actualCheckout": "17b19ded22706776ccecf2944d661949734b6432",
+    "actualCheckoutParents": [
+      "7113e7996dd1406c6262d896627e891769b80123",
+      "80beac1337f8788b4cb606d11d5136b69a45ce29"
+    ],
+    "artifact": [
+      {
+        "id": 12807143903,
+        "name": "simple-verification-17b19ded22706776ccecf2944d661949734b6432",
+        "bytes": 10499990,
+        "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40669107190/artifacts/12807143903"
+      }
+    ],
+    "summary": {
+      "javaRuntimeVersion": "17.0.21",
+      "toolchainMode": "strict-release17",
+      "java17ApiCompatibilityVerified": true,
+      "regressionGroups": 134,
+      "regressionChecks": 4874,
+      "payloadHttpChecks": 136,
+      "mapperJavaChecks": 145,
+      "browserHelperNodeChecks": 29,
+      "totalChecks": 5184,
+      "failedGroups": [],
+      "legacyReportFormat10": true,
+      "versionedReportFormat25": true,
+      "nativeKatana": {
+        "result": "passed",
+        "version": "1.3.2",
+        "checks": 102,
+        "binarySha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc",
+        "jarSha256": "95a393ccf8d6caad44ce54fbb3b9f43c3d5cfa801ac67098bae00688e60dd364",
+        "exitCode": 0
+      },
+      "screens": {
+        "views": 112,
+        "controls": 2244,
+        "states": 120,
+        "failedScenarios": [],
+        "missingCaptures": [],
+        "allClipAndCollapseGatesZero": true
+      },
+      "packageVerified": true
+    }
+  },
+  "treeEquality": {
+    "headTree": "ca97be5c877530a2bc4147fdc728830e7515bc35",
+    "actualCICheckoutTree": "ca97be5c877530a2bc4147fdc728830e7515bc35",
+    "expectedCurrentMainMerge": "223b8d80f875f913205de65dd4b26382f266f292",
+    "expectedCurrentMainMergeParents": [
+      "0cef0c5dc97f5824d1fe4a7b298b855994e69983",
+      "80beac1337f8788b4cb606d11d5136b69a45ce29"
+    ],
+    "expectedCurrentMainMergeTree": "ca97be5c877530a2bc4147fdc728830e7515bc35",
+    "allEqual": true,
+    "meaning": "The workflow was scheduled while the PR still targeted the stack base7113e79. It checked the exact full file tree of head80 and the current main-target merge. Do not claim it directly checked a main-parent merge commit."
+  },
+  "otherJobsAtLastRead": [
+    {
+      "id": 122751356200,
+      "name": "check",
+      "status": "in_progress",
+      "conclusion": null,
+      "currentStep": [
+        "Measure 50 operations through the production comparison controller (API adapter)"
+      ]
+    },
+    {
+      "id": 122751061393,
+      "name": "isolated-disk-and-soak",
+      "status": "in_progress",
+      "conclusion": null,
+      "currentStep": [
+        "Verify sustained capture"
+      ]
+    },
+    {
+      "id": 122751061768,
+      "name": "windows",
+      "status": "in_progress",
+      "conclusion": null,
+      "currentStep": [
+        "Repeat concurrent storage and cache-eviction regressions ten times"
+      ]
+    }
+  ],
+  "branchProtectionObserved": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    }
+  },
+  "limits": [
+    "No failing checks were observed at the last read; the three original-project jobs were still pending, not successful or failed.",
+    "Server-side required checks and expected-head merge preconditions remain authoritative. No protection or checks were changed/bypassed.",
+    "Original Next and root Mapper sources were unchanged; this is not a new native Burp GUI or MV3/DNR validation.",
+    "The legacy report ten overlap the versioned twenty-five; repeated platform/execution checks are not summed.",
+    "The CI JDK patch build hash is distinct from local JDK17.0.17/a8dd release byte identity."
+  ],
+  "actualMainMerge": {
+    "sha": "70a9476998764211b886fa392742ec11d3acf83c",
+    "tree": "ca97be5c877530a2bc4147fdc728830e7515bc35",
+    "parents": [
+      "0cef0c5dc97f5824d1fe4a7b298b855994e69983",
+      "80beac1337f8788b4cb606d11d5136b69a45ce29"
+    ],
+    "mergedAtUTC": "2026-10-28T10:11:02Z",
+    "treeEqualsVerifiedHeadAndCICheckout": true
+  }
+}

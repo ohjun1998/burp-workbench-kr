@@ -1,6 +1,8 @@
 # Burp Workbench KR development
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
+- Parallel Simple release: **Workbench Simple 1.3.2** is merged to main through PR #100 (`70a9476998764211b886fa392742ec11d3acf83c`, 2026-10-28T10:11:02Z). Source/build commands live under `simple/`; use `python simple/dev.py check` and `python simple/dev.py verify` for Simple work. Guide: `simple/README_KR.md`; exact checks/limits: `simple/docs/VERIFICATION_SIMPLE_1.3.2.json`. Preserve all immutable Simple versioned artifacts and packaged inputs; changes after publication require a new version. Embedded Mapper0.3.6/helper0.4.1 are separate from the original Next versions below. Main merge verification is recorded in `docs/reports/2026-10-28-simple-main/MERGE_KR.md`.
+
 - GitHub is the shared source of truth. Read `README.md`, `PROJECT_STATUS_KR.md` and `docs/COLLABORATION_KR.md` before collaboration work.
 - Use a new task branch from current main: `account-a/<task>` or `account-b/<task>`. Do not overwrite the other account's branch or force-push main.
 - Deliver changes through a PR with actual checks and a short Korean handoff. Keep merged project status in `PROJECT_STATUS_KR.md`; track in-progress ownership in Issues and PRs.

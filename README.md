@@ -3,7 +3,13 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-현재 main 배포는 **Workbench Next 0.53.4 사용자 편의성 안정화판**입니다. 0.53.3 main `e0b40e3dae3fcca21d3cd9441260e3edae65d159`을 기준으로 개발하고 [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)로 main에 병합했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 0.53.3 배포·0.53.2 보존 후보판과 이전 모든 버전의 파일·검증 기록을 보존합니다.
+**Workbench Simple 1.3.2를 [PR #100](https://github.com/ohjun1998/burp-workbench-kr/pull/100)으로 main에 추가했습니다.** 기존 8개 도구를 유지하고 Scope·Katana 정보 수집과 메뉴 탐색·원문 보고서에 집중한 별도 버전입니다. 기존 Next와 과거 배포 파일은 보존합니다. 브라우저 메뉴 탐색 보완은 JAR와 helper 0.4.1을 함께 갱신해야 적용됩니다.
+
+[Simple 설치 JAR](simple/downloads/1.3.2/burp-workbench-simple-1.3.2.jar) · [helper 0.4.1](simple/downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip) · [35쪽 가이드](simple/downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) · [소스·체크섬](simple/downloads/1.3.2/) · [사용 안내](simple/README_KR.md) · [병합 기록](docs/reports/2026-10-28-simple-main/MERGE_KR.md)
+
+Simple 자동 검사5,184개·실제 Katana102개와112뷰 배치 검사를 통과한 파일 트리가 main 병합 결과와 일치합니다. 실제 Burp GUI·native MV3/DNR은 미검증이며, 실제 사이트의 미확인·부분 범위와 별도 직접 대조는 [검증 기록](simple/docs/VERIFICATION_SIMPLE_1.3.2.json)에 구분합니다.
+
+기존 **Workbench Next 계열의 main 배포는 0.53.4 사용자 편의성 안정화판**입니다. 0.53.3 main `e0b40e3dae3fcca21d3cd9441260e3edae65d159`을 기준으로 개발하고 [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)로 main에 병합했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 0.53.3 배포·0.53.2 보존 후보판과 이전 모든 버전의 파일·검증 기록을 보존합니다.
 
 **0.53.4 안정화는 고정한 개선 초안 복원·다단계 편집 복구·목록 고정·일괄 중요 표시·화면 개인화·키보드·비동기 비교·증거 작성 지원 8개를 모두 구현했습니다.** 소스 `937c42defbc4d76187f1d189b36b84f4272dd76a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40451792261)에서 Linux·Windows 각각 회귀 123개 그룹·4,270개와 페이로드 HTTP 136개·전체 기능 HTTP 102개·모의 진단 HTTP 266개, 총 **4,774개**를 통과했습니다. 플랫폼별 반복 실행은 고유 검사 수로 합산하지 않습니다. 전체 화면 **576뷰·8,088개 컨트롤·246개 상태**와 집중 화면 **414뷰·4,308개 컨트롤·246개 상태**의 배치 게이트를 모두 통과했습니다. 전체·집중 검사는 겹치므로 합산하지 않습니다. 검사 JAR와 배포 JAR의 SHA-256 `795e6566bcc1f5f7d059383b82d60e3efeb00d873310681c896b45eeddacef9d`가 일치하며, 소스 ZIP 382개 항목의 CRC·소스 지문도 확인했습니다. [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)을 **2026-10-27 14:19:48 (한국 시간)**에 main에 병합했습니다. 병합 커밋은 `56b56e961d0d73e777228e60fdfc1a1e544496fd`, 최종 PR head는 `64cc557bab399ae27d239ea928c266e810daf85d`입니다. 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·Docker·외부 AI/OAST/BApp 서비스는 이번 검증에서 실행하지 않았습니다.
 

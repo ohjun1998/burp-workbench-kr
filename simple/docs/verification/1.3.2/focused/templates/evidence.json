@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "verifiedAtUTC": "2026-10-28T09:16:26.056222+00:00",
+  "result": "passed-focused-and-offline-official-jars",
+  "javaRuntime": "Temurin17.0.17+10",
+  "java17ApiCompatibilityVerified": true,
+  "finalJarSha256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+  "decodedSourceSha256": "a029a0ee1822c924fe7eef8aa9316e4c196ff54f3279c0286abb472971b375a4",
+  "sameDecodedSource": true,
+  "networkRequests": 0,
+  "fixture": "Retained actual Juice Shop20.3.0 main bundle; parser-isolation synthetic packet wrapper",
+  "focusedChecks": 119,
+  "focusedCountNote": "119 = existing92 + new27; overlaps complete regression profile and must not be added again",
+  "before": {
+    "version": "1.3.1",
+    "rows": 17,
+    "templateRows": 0,
+    "dynamicRows": 0
+  },
+  "after": {
+    "version": "1.3.2",
+    "rows": 115,
+    "templateRows": 64,
+    "dynamicRows": 4
+  },
+  "allExportedSourceSpansExact": true,
+  "dynamicResolutionNotManufactured": true,
+  "limits": {
+    "wholeJsCharacters": 4194304,
+    "fallbackSeconds": 3,
+    "lexicalTokens": 500000,
+    "parsedTemplates": 1000,
+    "parsedTemplateCharactersTotal": 1048576,
+    "singleTemplateCharacters": 65536,
+    "singleTemplateAstNodes": 10000,
+    "nestedTemplateDepth": 16
+  },
+  "limitations": [
+    "The whole minified bundle remains unsupported/partial; these are observed exported rows, not complete API coverage or294 guaranteed recovered rows.",
+    "Ambiguous regex/division or malformed nested template boundaries leave subsequent templates/patterns unexamined, explicitly noted in page metadata.",
+    "Dynamic templates are raw source expressions, not evaluated runtime values or resolved endpoints. Tagged templates and secret expressions are excluded.",
+    "Offline report parser validation is separate from new live application retests, real Katana process tests, browser navigation and native Burp GUI validation."
+  ],
+  "finalJarBytes": 4536359
+}

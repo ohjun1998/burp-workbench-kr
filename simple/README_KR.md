@@ -1,21 +1,21 @@
-# Workbench Simple 1.3.1
+# Workbench Simple 1.3.2
 
-**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0 JAR·소스·PDF는 보존합니다.
+**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0·1.3.1 JAR·소스·PDF는 보존합니다.
 
 SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.
 
 | 필요한 파일 | 위치 |
 |---|---|
-| 설치 JAR | [burp-workbench-simple-1.3.1.jar](downloads/1.3.1/burp-workbench-simple-1.3.1.jar) |
-| 독립 빌드 소스 | [소스 ZIP](downloads/1.3.1/burp-workbench-simple-1.3.1-source.zip) · [SHA256SUMS](downloads/1.3.1/SHA256SUMS) |
-| 브라우저·SPA helper | [helper 0.4.0 ZIP](downloads/1.3.1/feature-mapper-browser-helper-0.4.0.zip) |
+| 설치 JAR | [burp-workbench-simple-1.3.2.jar](downloads/1.3.2/burp-workbench-simple-1.3.2.jar) |
+| 독립 빌드 소스 | [소스 ZIP](downloads/1.3.2/burp-workbench-simple-1.3.2-source.zip) · [SHA256SUMS](downloads/1.3.2/SHA256SUMS) |
+| 브라우저·SPA helper | [helper 0.4.1 ZIP](downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip) |
 | 외부 Katana 1.8.0 | [공식 배포·SHA-256 확인 설치 도구](tools/install_katana.py) · [고정 의존성 기록](docs/KATANA_DEPENDENCY.json) · 실행 파일 별도 설치 |
 | 단계별 그림 가이드 | [HTML 안내서](docs/GUIDE_SIMPLE_KR.html) · [문서 원고](docs/GUIDE_SIMPLE_KR.md) |
-| PDF 가이드 | [Workbench Simple 그림 가이드북](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) |
-| 실제 검증 결과 | [검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.3.1.json) |
-| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.3.1/katana-native/katana-verification.json) |
-| 변경 안내 | [Simple 1.3.1 적용 기능과 정리한 부가 흐름](docs/RELEASE_SIMPLE_1.3.1_KR.md) |
-| 적용 범위 | [Katana 요구사항·구현·검사·가이드 연결표](docs/KATANA_SCOPE_1.3.1_SPEC_KR.md) |
+| PDF 가이드 | [Workbench Simple 그림 가이드북](downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) |
+| 실제 검증 결과 | [검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.3.2.json) |
+| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.3.2/katana-native/katana-verification.json) |
+| 변경 안내 | [Simple 1.3.2 적용 기능과 정리한 부가 흐름](docs/RELEASE_SIMPLE_1.3.2_KR.md) |
+| 적용 범위 | [Katana 요구사항·구현·검사·가이드 연결표](docs/KATANA_SCOPE_1.3.2_SPEC_KR.md) |
 
 ## SCOPE 통합 점검
 
@@ -31,7 +31,7 @@ SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원�
 
 ## 설치와 첫 점검
 
-1. Simple 설치 JAR burp-workbench-simple-1.3.1.jar를 준비하고 기존 Workbench 파일을 보관합니다.
+1. Simple 설치 JAR burp-workbench-simple-1.3.2.jar를 준비하고 기존 Workbench 파일을 보관합니다.
 2. Burp Extensions → Add → Java에서 Simple JAR를 선택하고 Workbench Simple 탭을 엽니다.
 3. 한 확장에서만 수집하려면 기존 Workbench의 로드를 해제하고 Simple을 사용합니다. 기존 확장이나 원본 파일을 삭제할 필요는 없습니다.
 4. SCOPE 목록에 대상 URL과 경로를 등록하고 허용·제외 범위를 확인합니다. 통합 점검 화면에서 URL·HTTP 계정과 요청 한도를 정합니다.
@@ -67,7 +67,7 @@ Windows에서는 `--dest "C:/Tools/Workbench-Katana/1.8.0" --platform windows_am
 
 ## 브라우저·SPA 모드 준비
 
-1. 배포 파일 feature-mapper-browser-helper-0.4.0.zip을 새 폴더에 풀어 manifest.json이 보이는 폴더를 준비합니다. 기존 helper와 배포 파일은 보관합니다.
+1. 배포 파일 feature-mapper-browser-helper-0.4.1.zip을 새 폴더에 풀어 manifest.json이 보이는 폴더를 준비합니다. 기존 helper와 배포 파일은 보관합니다.
 2. Chrome은 chrome://extensions, Edge는 edge://extensions를 열고 개발자 모드에서 압축해제된 확장 로드를 선택해 해당 폴더를 불러옵니다.
 3. Workbench의 기능 매핑 설정에서 브라우저 연결 주소와 토큰을 확인하고 helper 팝업에 입력한 뒤 연결을 확인·저장합니다. 토큰은 로컬 연결에 사용합니다.
 4. 브라우저에서 대상 사이트를 열고 필요한 로그인을 마칩니다. helper에서 현재 사이트를 활성화하고 정상적인 사이트 접근 권한 절차를 진행합니다.
@@ -96,9 +96,9 @@ Windows에서는 `--dest "C:/Tools/Workbench-Katana/1.8.0" --platform windows_am
 - 관측은 실제 응답이나 참조를 읽은 상태입니다. 기술 이름·DB 오류·경로 이름은 근거와 함께 읽고, 추정 또는 미확인 상태를 확정으로 바꾸지 않습니다.
 - HTTP 200이어도 공통 홈·로그인·soft404일 수 있습니다. 부재 경로 대조가 불안정하거나 보안 확인·요청 제한이 발생하면 내용 확인을 보류합니다.
 - 키 형식이 맞아도 공개 SDK 식별자·예제·비밀키 후보가 다릅니다. 기본은 마스킹과 원본 위치·지문 표시이며 발견한 키를 자동 검증하거나 인증값으로 사용하지 않습니다.
-- 분류 보고서 저장은 응답의 원문 값을 포함하는 별도 로컬 내보내기입니다. 화면·실행 이력·기존 증거의 가림과 구분하며 원문이 없는 과거 요약에서 값을 만들어내지 않습니다.
+- 분류 보고서 저장은 응답 원문을 포함하는 별도 로컬 내보내기입니다. 정적 문자열과 동적 API 템플릿을 구분하고, 식을 평가하거나 없는 원문 값을 만들어내지 않습니다. 화면·이력의 가림은 유지합니다.
 - 본문 줄·문자 위치는 분석한 텍스트 본문을 기준으로 읽습니다. HTTP 헤더를 포함한 원시 패킷의 바이트 위치와 다르며 압축·문자 인코딩에 따라 원본 미리보기와 직접 일치하지 않을 수 있습니다.
-- 브라우저 메뉴·화면·API 연결은 전용 탭과 현재 라우트의 관측 문맥입니다. 해당 JavaScript 호출의 인과관계를 확정한 결과로 해석하지 않습니다.
+- 브라우저 메뉴·화면·API 연결은 전용 탭과 현재 라우트의 관측 문맥입니다. 지연 메뉴는 제한 시간 안에서 기다리며, 한도와 미확인 상태를 전체 메뉴 완료로 해석하지 않습니다.
 - 브라우저 탐색은 허용 Origin·포트·경로·제외 범위를 지킵니다. URL 규칙으로 안전하게 표현할 수 없는 범위는 브라우저 모드 사용 불가 사유를 확인하고 HTTP 모드로 점검합니다.
 - 좁은 SCOPE가 필요한 스크립트·리소스를 제외하면 일부 메뉴가 열리지 않을 수 있습니다. 결과는 부분 탐색으로 읽고 범위를 자동으로 넓힌 것으로 가정하지 않습니다.
 - 자동 탐색은 GET/HEAD와 알려진 변경 경로 제외 규칙을 사용합니다. GET을 사용하는 서버 기능에 부작용이 전혀 없음을 보장하는 방식은 아니므로 결과와 원본을 확인합니다.
@@ -133,4 +133,4 @@ python tools/check_simple_guide.py
 
 Java 17을 PATH에 둔 환경에서 위 명령을 실행하거나 `--java`로 Java 17 경로를 지정합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.
 
-[보존한 Simple 1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)
+[보존한 Simple 1.3.1 안내서](docs/history/1.3.1/GUIDE_SIMPLE_KR.html) · [1.3.1 PDF](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) · [1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)

@@ -32,6 +32,67 @@ public final class ScopeInspectionRunnerTest extends WorkbenchTest {
     return -1;
   }
 
+  static void separateRealm(ScopeInspectionFixture fixture, java.util.function.Predicate<String> allowed) throws Exception {
+    AtomicInteger mode = new AtomicInteger(), authenticatedChecks = new AtomicInteger();
+    AtomicBoolean denied = new AtomicBoolean(), identityScope = new AtomicBoolean(true);
+    var requests = new CopyOnWriteArrayList<ScopeInspectionFixture.Visit>();
+    fixture.server.createContext("/app/realm-identity", exchange -> {
+      boolean authenticated = ScopeInspectionFixture.SESSION.equals(exchange.getRequestHeaders().getFirst("Cookie"));
+      requests.add(new ScopeInspectionFixture.Visit(exchange.getRequestMethod(), "/app/realm-identity", authenticated ? "alice" : "anonymous"));
+      if (!authenticated) { reply(exchange,denied.get()&&mode.get()==9?200:401,"application/json",denied.get()&&mode.get()==9?"{\"id\":\"alice\"}":"{\"error\":\"unauthenticated\"}");return; }
+      authenticatedChecks.incrementAndGet();
+      int active = denied.get() ? mode.get() : 0;
+      if (active == 3) exchange.getResponseHeaders().set("Set-Cookie", "SID=CHANGED; Path=/");
+      if (active == 5) exchange.getResponseHeaders().set("Location", "/app/login");
+      reply(exchange,active==1?401:active==5?302:200,"application/json",
+          active==2?"{\"id\":\"another-user\"}":active==4?"<title>Just a moment...</title>cf-chl-fixture":active==6?"{":"{\"id\":\"alice\"}");
+    });
+    fixture.server.createContext("/app/realm-denied", exchange -> {
+      boolean authenticated = ScopeInspectionFixture.SESSION.equals(exchange.getRequestHeaders().getFirst("Cookie"));
+      requests.add(new ScopeInspectionFixture.Visit(exchange.getRequestMethod(), "/app/realm-denied", authenticated ? "alice" : "anonymous"));
+      denied.set(true);
+      if (mode.get()==7) exchange.getResponseHeaders().set("Set-Cookie", "SID=CHANGED; Path=/");
+      if (mode.get()==8) identityScope.set(false);
+      reply(exchange,401,"application/json","{\"error\":\"merchant authentication required\"}");
+    });
+    var identity = new CookieSessionProbe.Config(fixture.origin + "/app/realm-identity", "$.id", "alice");
+    var profile = new ScopeInspection.Profile("alice", "Alice", Map.of("Cookie",ScopeInspectionFixture.SESSION), identity);
+    for (int testMode=0;testMode<=9;testMode++) {
+      mode.set(testMode);denied.set(false);identityScope.set(true);authenticatedChecks.set(0);requests.clear();fixture.visits.clear();
+      try (var runner = new ScopeInspectionRunner(fixture.api,options(fixture,"/app/realm-denied",30,0,false,List.of(profile)),
+          url->allowed.test(url)&&(!url.endsWith("/app/realm-identity")||identityScope.get()),value->{})) {
+        runner.start();await(()->terminal(runner)||runner.snapshot().state()==ScopeInspection.State.PAUSED,"separate realm identity check");
+        var result=runner.snapshot();
+        if(testMode==0) {
+          check(result.state()==ScopeInspection.State.COMPLETED,"a resource-specific 401 does not pause a freshly reverified account identity");
+          var finding=result.findings().stream().filter(f->f.title().equals("개별 경로 401 · 선택 신원 재확인")).findFirst().orElseThrow();
+          check(finding.category().equals("ACCESS")&&finding.state().equals("미확인")&&!finding.originalId().isBlank(),"separate-realm 401 remains original-linked unresolved access evidence");
+          var recheck=result.pages().stream().filter(page->page.classification().equals("IDENTITY_RECHECK_CONTROL")).findFirst().orElseThrow();
+          check(recheck.status()==200&&finding.detail().contains(recheck.original().id()),"a fresh identity control original establishes the exact post-401 evidence");
+          check(authenticatedChecks.get()==2&&requests.stream().filter(r->r.path().equals("/app/realm-denied")).count()==1,"cached identity success is bypassed once and the denied endpoint is not retried");
+          var controls=result.pages().stream().filter(page->page.classification().equals("IDENTITY_RECHECK_CONTROL")).toList();
+          check(controls.size()==2&&controls.stream().anyMatch(page->page.status()==401&&page.account().equals("신원 비로그인 대조"))
+              &&controls.stream().allMatch(page->finding.detail().contains(page.original().id())),"fresh authenticated and anonymous controls both preserve original-linked contrast after denial");
+        } else {
+          check(result.state()==ScopeInspection.State.PAUSED,"identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused");
+          check(result.findings().stream().noneMatch(f->f.title().equals("개별 경로 401 · 선택 신원 재확인")),"failed or uncheckable identity never excuses the denied endpoint");
+          check(authenticatedChecks.get()==(testMode==7||testMode==8?1:2),"guard failure cannot start repeated identity checks or bypass cookie/Scope policy");
+        }
+        check(result.sent()==fixture.visits.size()+requests.size()&&result.sent()<=30&&requests.stream().allMatch(r->r.method().equals("GET")),"all fresh rechecks share actual read-only request accounting and the original budget");
+      }
+    }
+    for(int smallBudget:List.of(5,6,30)) {
+      boolean configured=smallBudget!=30;
+      mode.set(0);denied.set(false);identityScope.set(true);authenticatedChecks.set(0);requests.clear();fixture.visits.clear();
+      var selected=configured?profile:new ScopeInspection.Profile("alice","Alice",profile.headers(),null);
+      try(var runner=new ScopeInspectionRunner(fixture.api,options(fixture,"/app/realm-denied",smallBudget,0,false,List.of(selected)),allowed,value->{})) {
+        runner.start();await(()->terminal(runner)||runner.snapshot().state()==ScopeInspection.State.PAUSED,"unavailable realm verification pauses");
+        check(runner.snapshot().state()==ScopeInspection.State.PAUSED,"missing identity configuration or exhausted recheck budget cannot establish a live identity");
+        check(authenticatedChecks.get()==(configured?1:0),"no identity verification request is sent without configuration or remaining budget");
+      }
+    }
+  }
+
   public static void main(String[] args) throws Exception {
     check(ScopeInspectionRunner.normalized("https://example.test/app/../secret") == null, "literal traversal is excluded before a request");
     check(ScopeInspectionRunner.normalized("https://example.test/app/%252fsecret") == null, "double-encoded path ambiguity is excluded");
@@ -283,6 +344,7 @@ public final class ScopeInspectionRunnerTest extends WorkbenchTest {
               && (profile.identity() == null ? f.confidence().equals("신원 미확인") : f.detail().contains("신원 대조 원본:"))), "the form explanation is linked to its original and never invents identity verification");
         }
       }
+      separateRealm(fixture, allowed);
       for (String path : List.of("/app/expired", "/app/login-redirect", "/app/auth-redirect", "/app/challenge")) {
         try (var runner = new ScopeInspectionRunner(fixture.api, options(fixture, path, 30, 1, false, List.of(alice)), allowed, value -> {})) {
           runner.start(); await(() -> runner.snapshot().state() == ScopeInspection.State.PAUSED || terminal(runner), "real authentication barrier remains paused");

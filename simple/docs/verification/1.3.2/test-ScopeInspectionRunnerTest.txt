@@ -1,0 +1,153 @@
+PASS literal traversal is excluded before a request
+PASS double-encoded path ambiguity is excluded
+PASS userinfo URL cannot carry credentials into discovery
+PASS SPA hash navigation is reserved for the browser adapter
+PASS destructive-looking GET routes stay manual
+PASS large diagnostic dumps stay manual
+PASS database archive downloads stay manual
+PASS construction and result preparation send no HTTP
+PASS bounded fixture queue completes
+PASS counter includes actual identity, reference and target HTTP across accounts
+PASS completed fixture has no failed or pending requests
+PASS all automatic HTTP uses GET or HEAD
+PASS scope, logout and write-only declarations are never fetched
+PASS observed JS introduces its resolved GET API into the queue
+PASS unresolved API path variables are never invented
+PASS DB product clues are aggregated as findings
+PASS account response differences are review candidates rather than a vulnerability verdict
+PASS actual fetched source is passed to secret analysis
+PASS public run snapshots contain no raw secrets, DB password or session cookie
+PASS finding and page IDs resolve to the retained immutable original
+PASS private original retains the exact selected account request
+PASS stored original can be reconstructed with its exact service and URL
+PASS stored response can be reconstructed without a preview surrogate
+PASS common 200 fallback pages remain explicitly classified
+PASS blocked target responses retain static observations without claiming target content coverage
+PASS progress is observable before completion
+PASS missing-page reference requests consume the global budget
+PASS an exhausted reference budget does not send the target request
+PASS budget exhaustion preserves pending work and a coverage explanation
+PASS an excluded starting scope is rejected without network
+PASS scope rejection sends zero HTTP
+PASS redirect destination analysis links the final request, not the initial URL
+PASS each redirect hop retains its own wire original
+PASS redirect loops are reported without infinite requests
+PASS large declared log receives HEAD metadata but no automatic GET download
+PASS large-file metadata has its own retained original
+PASS an oversized received body is explicitly uninspected
+PASS analysis truncation does not truncate the retained wire original
+PASS transport download and analysis limits are not conflated
+PASS configured body bound also limits decompressed bytes before static analysis
+PASS decompression limits preserve the exact compressed wire original
+PASS rate limiting is explicit incomplete target coverage
+PASS 429 pause gates later requests and retains the limited candidate
+PASS resume keeps the limited attempt and the subsequent successful original
+PASS expired identity blocks the discovery target
+PASS refresh preserves old and new authentication revisions separately
+PASS same declared identity can resume with refreshed credentials
+PASS changing the frozen scope stops future HTTP and preserves an explicit reason
+PASS SPA hash routes remain distinct metadata without leaking full route values
+PASS one API retains separate observed contexts for two SPA routes without claiming JS causality
+PASS browser partial completion remains explicit coverage rather than full completion
+PASS browser query values that were removed are never invented for HTTP replay
+PASS browser writes are inventoried without automatic transmission
+PASS stale or foreign browser run events are ignored
+PASS a crawler cannot register a different identity than its durable discovery condition
+PASS rejecting a mismatched Katana identity sends no target HTTP
+PASS registering the finite Katana producer sends no target HTTP
+PASS guessed common paths wait while the Katana producer is active
+PASS Katana uses only its selected HTTP account and retains the exact original
+PASS same-profile revision and URL reuse one completed raw response without an extra target request
+PASS a detected secret is never reused as a Katana request input
+PASS external scope and write requests are rejected before transport
+PASS Katana receives the original single-hop redirect response at its requested URL
+PASS Katana, controls and all comparison accounts share the actual HTTP budget and finish their accepted queues
+PASS JSONL discovery, forms and excluded paths never trigger blind replay
+PASS Katana packets use the common Page analysis and original evidence chain
+PASS technology metadata links an already observed packet without guessing an HTTP method
+PASS Katana-observed paths retain ordinary account comparisons
+PASS Katana metadata and public pages do not expose discovered secrets
+PASS loopback gate holds the worker before the pending crawler request
+PASS a cancelled proxy future cannot retransmit immediately through the ordinary queue
+PASS a fresh fetch restores the held URL exactly once
+PASS user pause preserves the proxy future without dispatching new HTTP
+PASS stop completes proxy waiters and preserves accepted URL tasks
+PASS explicit resume drains URLs that were queued before stop
+PASS Katana cannot bypass the global budget and budget failure releases proxy waiters
+PASS missing crawler completion becomes explicit partial coverage before normal queued work finishes
+PASS a valid page containing a password form does not auto-pause the authenticated run
+PASS ordinary registration-page scripts still introduce their observed APIs
+PASS password form classification states whether independent identity evidence exists
+PASS the form explanation is linked to its original and never invents identity verification
+PASS a valid page containing a password form does not auto-pause the authenticated run
+PASS ordinary registration-page scripts still introduce their observed APIs
+PASS password form classification states whether independent identity evidence exists
+PASS the form explanation is linked to its original and never invents identity verification
+PASS a resource-specific 401 does not pause a freshly reverified account identity
+PASS separate-realm 401 remains original-linked unresolved access evidence
+PASS a fresh identity control original establishes the exact post-401 evidence
+PASS cached identity success is bypassed once and the denied endpoint is not retried
+PASS fresh authenticated and anonymous controls both preserve original-linked contrast after denial
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS identity expiry, mismatch, cookie mutation, challenge, redirect, malformed body or revoked identity Scope stays paused
+PASS failed or uncheckable identity never excuses the denied endpoint
+PASS guard failure cannot start repeated identity checks or bypass cookie/Scope policy
+PASS all fresh rechecks share actual read-only request accounting and the original budget
+PASS missing identity configuration or exhausted recheck budget cannot establish a live identity
+PASS no identity verification request is sent without configuration or remaining budget
+PASS missing identity configuration or exhausted recheck budget cannot establish a live identity
+PASS no identity verification request is sent without configuration or remaining budget
+PASS missing identity configuration or exhausted recheck budget cannot establish a live identity
+PASS no identity verification request is sent without configuration or remaining budget
+PASS 401, explicit login redirects and security challenges keep their pause behavior
+PASS 401, explicit login redirects and security challenges keep their pause behavior
+PASS 401, explicit login redirects and security challenges keep their pause behavior
+PASS 401, explicit login redirects and security challenges keep their pause behavior
+PASS a failed explicit identity condition stops before the ordinary target request
+PASS a caller-selected SPA start shell keeps actual script/API discovery even when missing routes share its HTML
+PASS SPA shell exploration does not turn a soft404 into proven target coverage
+PASS observed and declared discovery plus the single env check precede technology guesses
+PASS observed and declared discovery plus the single env check precede technology guesses
+PASS observed and declared discovery plus the single env check precede technology guesses
+PASS observed and declared discovery plus the single env check precede technology guesses
+PASS automatic technology guesses are capped at twelve distinct paths per run
+PASS env inspection uses one live-scoped GET path rather than environment-file variants
+PASS a stable missing-path baseline distinguishes actual exposed env content
+PASS prioritized discovery and env checks still share all actual control/target requests in one budget
+PASS a fake 200 env response is partial fallback evidence rather than an exposed env file
+PASS an unknown API host or POST declaration cannot be re-added as an environment GET guess
+PASS real script src and grounded relative/absolute GET calls retain automatic discovery
+PASS an unresolved relative API path stays visible without an invented origin
+ScopeInspectionRunnerTest: 152 checks passed (production runner, isolated loopback HTTP)

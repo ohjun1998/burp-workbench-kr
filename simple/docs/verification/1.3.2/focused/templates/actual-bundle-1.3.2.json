@@ -1,0 +1,34 @@
+{
+  "producerVersion": "1.3.1",
+  "decodedSourceSha256": "a029a0ee1822c924fe7eef8aa9316e4c196ff54f3279c0286abb472971b375a4",
+  "decodedCharacters": 1241893,
+  "rows": 115,
+  "templateRows": 64,
+  "rawDynamicRows": 4,
+  "categories": {
+    "API": 4,
+    "ENVIRONMENT": 10,
+    "INTERNAL": 1,
+    "OTHER": 29,
+    "PATH": 61,
+    "SENSITIVE": 8,
+    "TOKEN": 2
+  },
+  "types": {
+    "NULL": 10,
+    "NUMBER": 3,
+    "RAW_TEMPLATE_INTERPOLATED": 4,
+    "STRING": 98
+  },
+  "allOriginalUtf16SpansExact": true,
+  "dynamicResolutionNotManufactured": true,
+  "partial": true,
+  "notes": [
+    "JS 구문·시간·노드 제한 · 직접 문자열 리터럴 보조 · 태그 함수 또는 미확정 문맥의 템플릿 제외 · 동적 템플릿 관측 · 식 평가/동적 URL 복원 미수행 · 템플릿 중첩/정규식/길이 경계 미확정 · 이후 템플릿/패턴 미검사 · 코드 식 1475개는 실제 값으로 출력하지 않음"
+  ],
+  "seconds": 7.102466555,
+  "networkRequests": 0,
+  "scope": "Offline report parser probe of a retained actual Juice Shop main bundle; synthetic packet wrapper for parser isolation. Does not replace live retest.",
+  "jarSha256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+  "jarBytes": 4536359
+}

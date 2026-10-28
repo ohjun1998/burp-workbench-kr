@@ -14,7 +14,8 @@ export function createInspectionService(chrome, hooks) {
       excluded:owner.excluded,tab:String(owner.tabId??''),state:value.state||'running'},owner.command);
     await hooks.event(event);
     if(task!==owner)return;
-    await chrome.storage.session.set({inspectionStatus:kind==='error'?'탐색 오류':kind==='done'?(owner.excluded?'일부 탐색 · 범위 밖 리소스 제외':'탐색 완료'):'브라우저 로그인 세션으로 탐색 중',inspectionPages:owner.pages,inspectionActions:owner.actions,
+    const terminalStatus=value.state==='partial'?'일부 탐색 · 미확인 메뉴 있음':value.state==='stopped'?'탐색 중지':value.state==='failed'?'탐색 오류':owner.excluded?'탐색 완료 · 제외 항목 있음':'탐색 완료';
+    await chrome.storage.session.set({inspectionStatus:kind==='error'?'탐색 오류':kind==='done'?terminalStatus:'브라우저 로그인 세션으로 탐색 중',inspectionPages:owner.pages,inspectionActions:owner.actions,
       inspectionRequests:owner.requests,inspectionExcluded:owner.excluded,inspectionRunId:owner.command.runId});
   };
   const ownedRules=async()=>((await chrome.declarativeNetRequest.getSessionRules())||[]).filter(rule=>rule.id>=firstRule&&rule.id<=lastRule).map(rule=>rule.id);
@@ -51,6 +52,34 @@ export function createInspectionService(chrome, hooks) {
     const result=await chrome.scripting.executeScript({target:{tabId:task.tabId,frameIds:[0]},world,func,args});
     return result?.[0]?.result;
   }
+  // Allow bounded hydration and lazy menus to settle before deciding a document is empty.
+  // DOM readiness is a heuristic, not a claim that all application work has finished.
+  async function settledDocument(current, minimum=1500) {
+    const started=Date.now();let changed=started,signature='',page;
+    while(await validTask()) {
+      if(task!==current||current.cancelled)return null;
+      try{page=await script(inspectDocument,[current.command,false]);}
+      catch(error){
+        // A read-only tab action can replace the frame between two script calls.
+        // Retry only inside the same bounded wait and never claim completion on expiry.
+        if(Date.now()-started>=3000)throw error;
+        await delay(100);continue;
+      }
+      if(!page)return null;
+      const next=JSON.stringify([page.url,page.ready,page.loading,page.pendingActions,page.routes,page.limits]);
+      if(next!==signature){signature=next;changed=Date.now();}
+      const now=Date.now();
+      const hasNavigation=!!page.routes?.length||!!page.pendingActions;
+      if(now-started>=minimum&&!page.loading&&now-changed>=350&&hasNavigation)return page;
+      if(now-started>=3000){page.settlingLimited=true;return page;}
+      await delay(100);
+    }
+    return null;
+  }
+  function markPartial(current,reason) {
+    current.partialReasons ||= [];
+    if(!current.partialReasons.includes(reason)&&current.partialReasons.length<12)current.partialReasons.push(reason);
+  }
   async function run() {
     if(loop)return loop;
     loop=(async()=>{
@@ -58,8 +87,9 @@ export function createInspectionService(chrome, hooks) {
         while(await validTask()) {
           const current=task;
           if(!current.queue.length||current.pages>=current.command.maxPages||current.actions>=current.command.maxActions){
-            const limited=current.queue.length>0;
-            await finish(limited?'partial':'completed',limited?'브라우저 페이지/동작 한도 · 남은 메뉴는 미탐색':'발견한 메뉴 큐 처리 완료');break;
+            if(current.queue.length)markPartial(current,'브라우저 페이지/동작 한도');
+            const reasons=current.partialReasons||[];
+            await finish(reasons.length?'partial':'completed',reasons.length?reasons.join(' · ')+' · 남은 메뉴는 미확인':'발견한 메뉴 큐 처리 완료');break;
           }
           const next=current.queue.shift();current.current=next.url;await persist();
           if(!inspectionAllows(next.url,current.command)){current.excluded++;await emit('excluded',{url:next.url,label:next.label,message:'Scope 또는 변경 경로 제외'});continue;}
@@ -69,36 +99,58 @@ export function createInspectionService(chrome, hooks) {
           if(task!==current||current.cancelled)break;
           if(!inspectionAllows(tab.url,current.command)){current.excluded++;await emit('excluded',{url:tab.url,message:'이동 결과가 Scope 밖이거나 브라우저 차단 화면'});continue;}
           await script(installInspectionGuard,[current.command],'MAIN');
-          await delay(300);
-          let page=await script(inspectDocument,[current.command,false]);
-          if(!page||!inspectionAllows(page.url,current.command)){current.excluded++;await emit('excluded',{url:next.url,message:'문서 또는 실제 이동 Scope 확인 실패'});continue;}
+          let page=await settledDocument(current);
+          if(!page||!inspectionAllows(page.url,current.command)){if(task!==current)break;current.excluded++;markPartial(current,'문서 또는 이동 Scope 확인 실패');continue;}
           if(page.login){await finish('partial','로그인 화면 관측 · 브라우저 세션 확인 필요');break;}
           current.pages++;current.visited.push(next.url);
           await emit('route',{url:page.url,page:page.url,label:next.label||'화면',message:'브라우저 세션으로 방문한 메뉴 · HTTP 재조회 계정과 별도'});
-          for(let step=0;step<12&&current.actions<current.command.maxActions&&await validTask();step++) {
-            page=await script(inspectDocument,[current.command,true]);
-            if(task!==current||current.cancelled)break;
-            if(!page||!inspectionAllows(page.url,current.command))break;
-            if(page.login){await finish('partial','로그인 화면 관측 · 브라우저 세션 확인 필요');break;}
-            if(page.url!==current.current){
-              if(!current.visited.includes(page.url)){if(current.pages>=current.command.maxPages){await finish('partial','브라우저 페이지 한도 · 남은 메뉴는 미탐색');break;}current.pages++;current.visited.push(page.url);}
-              current.current=page.url;await emit('route',{url:page.url,page:page.url,label:page.action||'SPA 메뉴 이동',message:'메뉴 동작 후 실제 라우트 관측'});
+          let countedExcluded=0;
+          const harvest=async value=>{
+            if(!value||!inspectionAllows(value.url,current.command)){markPartial(current,'메뉴 동작 후 문서 Scope 확인 실패');return false;}
+            if(value.login){await finish('partial','로그인 화면 관측 · 브라우저 세션 확인 필요');return false;}
+            if(value.settlingLimited)markPartial(current,'DOM 준비·빈 화면/변화 대기 3초 한도');
+            for(const reason of value.limits||[])markPartial(current,reason);
+            if(value.url!==current.current){
+              if(!current.visited.includes(value.url)){if(current.pages>=current.command.maxPages){await finish('partial','브라우저 페이지 한도 · 남은 메뉴는 미탐색');return false;}current.pages++;current.visited.push(value.url);}
+              current.current=value.url;countedExcluded=0;
+              await emit('route',{url:value.url,page:value.url,label:value.action||'SPA 메뉴 이동',message:'메뉴 동작 후 실제 라우트 관측'});
             }
-            current.excluded+=Math.max(0,Number(page.excluded)||0);
-            for(const route of page.routes||[]) {
+            const excluded=Math.max(0,Number(value.excluded)||0);current.excluded+=Math.max(0,excluded-countedExcluded);countedExcluded=Math.max(countedExcluded,excluded);
+            for(const route of value.routes||[]) {
               if(!inspectionAllows(route.url,current.command)){current.excluded++;continue;}
               if(current.discovered.includes(route.url))continue;
-              if(current.discovered.length>=500){current.excluded++;continue;}
+              if(current.discovered.length>=500){current.excluded++;markPartial(current,'실행별 메뉴 후보 500개 한도');continue;}
               current.discovered.push(route.url);
-              await emit('menu',{url:route.url,page:page.url,label:route.label,message:'실제 DOM 메뉴에서 발견 · 메뉴 접근 권한/업무 완료는 별도 확인'});
+              await emit('menu',{url:route.url,page:value.url,label:route.label,message:'실제 DOM 메뉴에서 발견 · 메뉴 접근 권한/업무 완료는 별도 확인'});
               // Unknown query values are kept inside the browser; do not replay guessed parameters.
               if(new URL(route.url).search){current.excluded++;continue;}
-              if(!current.visited.includes(route.url)&&!current.queue.some(x=>x.url===route.url)&&current.queue.length<100)current.queue.push(route);
+              if(!current.visited.includes(route.url)&&!current.queue.some(x=>x.url===route.url)){
+                if(current.queue.length<100)current.queue.push(route);
+                else {current.excluded++;markPartial(current,'브라우저 메뉴 대기열 100개 한도');}
+              }
             }
-            if(!page.action)break;
+            return task===current&&!current.cancelled;
+          };
+          // Harvest the initial document before a tab/menu action can replace its links.
+          if(!await harvest(page))break;
+          let steps=0;
+          for(;steps<12&&current.actions<current.command.maxActions&&await validTask();steps++) {
+            if(page.pendingActions===false)break;
+            const acted=await script(inspectDocument,[current.command,true]);
+            if(task!==current||current.cancelled)break;
+            if(!await harvest(acted))break;
+            if(!acted.action){page=acted;break;}
             current.actions++;
-            await emit('progress',{url:page.url,page:page.url,label:page.action,message:'메뉴 확장·지연 로딩 확인'});
-            await persist();await delay(350);
+            await emit('progress',{url:acted.url,page:acted.url,label:acted.action,message:'메뉴 확장·지연 로딩 확인'});
+            await persist();
+            page=await settledDocument(current,350);
+            if(task!==current||current.cancelled||!await harvest(page))break;
+            await script(installInspectionGuard,[current.command],'MAIN');
+          }
+          if(task!==current||current.cancelled)break;
+          if(page?.pendingActions){
+            if(steps>=12)markPartial(current,'문서별 메뉴 동작 12회 한도');
+            if(current.actions>=current.command.maxActions)markPartial(current,'실행별 브라우저 동작 한도');
           }
           await persist();
         }
@@ -115,7 +167,7 @@ export function createInspectionService(chrome, hooks) {
     const saved=await settings();
     if(!saved.inspectionEnabled||!saved.origins.includes(command.origin))return;
     const match=new URL(command.origin).protocol+'//'+new URL(command.origin).hostname+'/*';
-    task={command,tabId:null,current:command.startUrl,queue:[{url:command.startUrl,label:'시작 화면'}],visited:[],discovered:[command.startUrl],pages:0,actions:0,requests:0,excluded:0,cancelled:false};
+    task={command,tabId:null,current:command.startUrl,queue:[{url:command.startUrl,label:'시작 화면'}],visited:[],discovered:[command.startUrl],pages:0,actions:0,requests:0,excluded:0,partialReasons:[],cancelled:false};
     await persist();
     try {
       if(chrome.permissions?.contains&&!await chrome.permissions.contains({origins:[match]}))throw new Error('브라우저 사이트 권한을 다시 활성화하세요.');

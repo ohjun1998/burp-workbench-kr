@@ -1,0 +1,117 @@
+{
+  "guideVersion": "1.3.2",
+  "pdf": "downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf",
+  "pdfSha256": "44a34cb8b3fc2dfc1316f2b58b51d0e466461c4b912651bd3ac40ed57406c9c9",
+  "html": "docs/GUIDE_SIMPLE_KR.html",
+  "htmlSha256": "f2363af004f349d0e88c77220be06513d51b8d28ebbd3e664970b4436732442e",
+  "pdfPages": 35,
+  "pdfOutlineEntries": 35,
+  "pdfScreenshotPages": 28,
+  "pdfPageFormat": "A3 landscape",
+  "pdfFonts": [
+    "AAAAAA+NanumGothic",
+    "AAAAAB+NanumGothic",
+    "Helvetica"
+  ],
+  "outOfPageText": [],
+  "sourceTextMissingFontGlyphs": [],
+  "sourceScreenshotJarSha256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+  "screenshotLayoutResult": "passed",
+  "scopeScreenshotLayoutResult": "passed",
+  "usedScreenshots": {
+    "12-inspection-setup.png": "35834bba1fcfb649215b80a9039180d7a1b11b3707dec79c67e25ef2d0689636",
+    "23-katana-settings.png": "ba2d8c593246fd9cb842d9789560e7096e1ae88a2e6eb6307b510304ec1bacdc",
+    "13-inspection-progress.png": "8db9e1ef99ea6ad986cc20a4a26e961e1fc92caebc42bbb4b4d05145997eaadd",
+    "24-katana-results.png": "58e3eb1819e377f25ee9eb2c9e33a08a55b891f1d31d7871c31fcf57f76c6464",
+    "14-inspection-environment.png": "c61139bda556f261a43a2e9edc162d3c76f448c5baef6bab4f3b1898949174f7",
+    "15-inspection-paths.png": "e066a8d44891b7a4d0a1d6cdf0ba084ef2318543fefe867fcc9bf34232561bc8",
+    "16-inspection-api.png": "77d5386d3dff562228efcaa5c2acaaab40a0d966b5da25210f8b24139b32be29",
+    "17-inspection-secrets.png": "bdcaee61161388fc76965cfa0558e34ced27687073b68e81b3876a1f6686f536",
+    "18-inspection-access.png": "273718abb28158f272e1d807992a12ed4c619425f6d1e5fa439f2e21f3120831",
+    "19-inspection-changes.png": "bfc694d1111237eb2861dd617b3dcd60aec27b90067489ae599d4b561fec800d",
+    "20-inspection-coverage.png": "e5e6d00dd80a8e87421f9df22c7ba3c101ebdb3c71b348f76119fb809ea2bbd7",
+    "21-inspection-browser.png": "a65fc6ea065aefa31aa532e156af45fa209ca05294e09b0d39d617009afb5ec9",
+    "22-inspection-original.png": "6369ec5eae9582ac876f1dcad2384e0d922a9d41fe414fe013753d26ec9b5369",
+    "25-inspection-report.png": "e34694fbfaae1f54e769c534634cad8b1a6cea1737c5dcab1409cbdeffc748c2",
+    "00-start.png": "13480ac3bfa7c26e884ea0c47f29a8e44415d0cef2fc30d4932211bacd3647dc",
+    "00-scope-editor.png": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+    "01-capture.png": "e9222f3b1809de308e1112d6487ddb44dfb1e4f74f20dade41685e52bc7f184e",
+    "02-request.png": "92f7f7635db52aa67644b587523a4571ae911349f401f44983b09da951058438",
+    "08-mapper.png": "6e14af7be2e3d15376af6136238c7adccf5889bff4970fb4ce06c3e610acce52",
+    "10-js.png": "85d0f16a18fc37b1636bbad2e1a0425c37161ffc6e85b75e4a92df8af6e51b51",
+    "09-environment.png": "18765082b6fc2c3d0f99f090c2bae135293b8450d45c255af238d62fe06948bd",
+    "03-analysis.png": "79563f66334e119fe8227d4c7177c51a59dc96d41363a2998f62ff949a43b101",
+    "04-auth-accounts.png": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+    "04-auth-results.png": "d3ced889aba31b4d7bc4348c0d811521ec273cead6afb70837caeb5163f24512",
+    "07-payload.png": "54b31c94861a6a5c798a3d10947baec9c06ef4a32c4fe43bb8821390cbc90c9f",
+    "11-replay.png": "a5980452be8e2a4f3c37bd406b2a95918c129a918d01c2ba45459c656b39dcd9",
+    "05-evidence.png": "5bf71fb0b28fae47dc76bee31542764ec4e25a434f2349a8a57a7bdfb2484824",
+    "06-redaction.png": "1e6500e078cb98d4b88ac4d3a01c6dc481bceea1cda0b763fb88d90854388036"
+  },
+  "allEightToolScreensIncluded": [
+    "02-request.png",
+    "08-mapper.png",
+    "04-auth-results.png",
+    "10-js.png",
+    "09-environment.png",
+    "03-analysis.png",
+    "07-payload.png",
+    "05-evidence.png"
+  ],
+  "manualReplayScreenIncluded": "11-replay.png",
+  "inspectionScreensIncluded": [
+    "12-inspection-setup.png",
+    "13-inspection-progress.png",
+    "14-inspection-environment.png",
+    "15-inspection-paths.png",
+    "16-inspection-api.png",
+    "17-inspection-secrets.png",
+    "18-inspection-access.png",
+    "19-inspection-changes.png",
+    "20-inspection-coverage.png",
+    "21-inspection-browser.png",
+    "22-inspection-original.png",
+    "25-inspection-report.png"
+  ],
+  "katanaVersion": "1.8.0",
+  "katanaScreensIncluded": [
+    "23-katana-settings.png",
+    "24-katana-results.png"
+  ],
+  "browserHelperCapture": {
+    "included": false,
+    "helperVersion": "0.4.1",
+    "path": "docs/images/1.3.2/browser/helper-connected.png",
+    "kind": "Actual Chromium helper page using localhost synthetic fixture; distinct from production Swing rendering"
+  },
+  "preservedPreviousGuides": {
+    "1.0.0": {
+      "pdfHashUnchanged": true
+    },
+    "1.1.0": {
+      "pdfHashUnchanged": true,
+      "historicalFilesUnchanged": true,
+      "historicalFilesChecked": 21
+    },
+    "1.2.0": {
+      "pdfHashUnchanged": true,
+      "historicalFilesUnchanged": true,
+      "historicalFilesChecked": 35
+    },
+    "1.3.0": {
+      "pdfHashUnchanged": true,
+      "historicalFilesUnchanged": true,
+      "historicalFilesChecked": 41
+    },
+    "1.3.1": {
+      "pdfHashUnchanged": true,
+      "historicalFilesUnchanged": true,
+      "historicalFilesChecked": 45
+    }
+  },
+  "visualReview": "All pages reviewed in a contact sheet; full-size installation, helper setup, interpretation, account comparison, SPA/browser navigation, classified report and reference pages reviewed for readable Korean text, current helper guidance and uncropped controls.",
+  "captureScope": "Production Simple Swing components with synthetic packet/API/Katana adapters; actual Katana process/HTTP/HTTPS checks are separate verification evidence. Chrome/Edge installation instructions are textual, not native browser installation screenshots.",
+  "structuralResult": "passed",
+  "visualReviewComplete": true,
+  "result": "passed"
+}

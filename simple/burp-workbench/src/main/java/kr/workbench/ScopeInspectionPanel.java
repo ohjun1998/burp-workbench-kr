@@ -116,7 +116,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     JPanel browserPage=new JPanel(new BorderLayout(5,5));browserStatus.setEditable(false);browserStatus.setLineWrap(true);browserStatus.setWrapStyleWord(true);name(browserStatus,"browser.status");
     browserPage.add(browserStatus,BorderLayout.NORTH);browserPage.add(new JScrollPane(createTable("browser",new String[]{"계정/실행 주체","화면·API","상태","근거"})));
     JButton connect=new JButton("기능 매핑에서 브라우저 연결");name(connect,"browser.connect");connect.addActionListener(e->actions.tool("mapper",null));
-    browserPage.add(WorkbenchUi.row(connect,new JLabel("도우미 0.4.0 연결 · 현재 사이트 활성화 · SPA 통합 탐색 허용")),BorderLayout.SOUTH);pages.addTab("브라우저 메뉴",browserPage);
+    browserPage.add(WorkbenchUi.row(connect,new JLabel("브라우저 도우미 연결 · 현재 사이트 활성화 · SPA 통합 탐색 허용")),BorderLayout.SOUTH);pages.addTab("브라우저 메뉴",browserPage);
     detail.setEditable(false);detail.setLineWrap(true);detail.setWrapStyleWord(true);name(detail,"detail");
     JPanel result=new JPanel(new BorderLayout(0,6));result.add(pages);result.add(new JScrollPane(detail),BorderLayout.SOUTH);
     add(result,BorderLayout.CENTER);

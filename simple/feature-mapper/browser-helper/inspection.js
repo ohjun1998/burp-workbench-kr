@@ -148,14 +148,22 @@ export function inspectDocument(command, performAction = true) {
       else if(state.scrolled<2&&document.documentElement.scrollHeight>innerHeight+20){state.scrolled++;scrollBy(0,Math.max(200,innerHeight*0.7));action='지연 로딩 영역 확인';}
     }
   }
-  const routes=[];let excluded=0;
+  const routes=[];let excluded=0,routeLimit=false;
   for(const element of document.querySelectorAll('a[href],[role="link"][href],[data-route],[routerlink]')){
-    if(routes.length>=200)break;if(!visible(element))continue;
+    if(routes.length>=200){routeLimit=true;break;}if(!visible(element))continue;
     const label=text(element);const raw=element.getAttribute('href')||element.getAttribute('data-route')||element.getAttribute('routerlink');
     if(!raw||dangerous.test(label)){excluded++;continue;}
     try{const url=new URL(raw,location.href);if(!allowed(url.href)||url.href===location.href||url.protocol==='javascript:'){excluded++;continue;}routes.push({url:url.href,label:label||'메뉴 경로'});}catch{excluded++;}
   }
+  const pendingDetails=[...document.querySelectorAll('nav details:not([open]),[role="navigation"] details:not([open]),[role="menu"] details:not([open])')]
+    .some(x=>visible(x)&&!state.expanded.has(x)&&!dangerous.test(text(x)));
+  const pendingButtons=[...document.querySelectorAll('nav button[aria-expanded="false"],[role="navigation"] button[aria-expanded="false"],[role="menubar"] [aria-expanded="false"],nav [role="tab"][aria-selected="false"]')]
+    .some(x=>visible(x)&&!state.expanded.has(x)&&!x.closest('form')&&!x.disabled&&x.getAttribute('type')!=='submit'&&!dangerous.test(text(x)));
+  const canScroll=document.documentElement.scrollHeight>innerHeight+20;
+  const pendingScroll=canScroll&&state.scrolled<2;
+  const scrollLimit=canScroll&&state.scrolled>=2&&((globalThis.scrollY||0)+innerHeight+20<document.documentElement.scrollHeight);
+  const loading=document.readyState!=='complete'||[...document.querySelectorAll('[aria-busy="true"]')].some(visible);
   const password=document.querySelector?.('input[type="password"]');
   const login=!!password&&(/(?:^|\/)(?:login|signin|sign-in)(?:\/|$)/i.test(location.pathname)||/(?:로그인|sign.?in|log.?in)/i.test(document.title));
-  return {url:location.href,title:document.title,routes,action,excluded,forms:document.forms.length,login,ready:document.readyState};
+  return {url:location.href,title:document.title,routes,action,excluded,forms:document.forms.length,login,ready:document.readyState,loading,pendingActions:pendingDetails||pendingButtons||pendingScroll,limits:[...(routeLimit?['DOM 메뉴 후보 200개 한도']:[]),...(scrollLimit?['문서별 지연 스크롤 2회 한도']:[])]};
 }

@@ -1,0 +1,43 @@
+{
+  "version": "1.3.2",
+  "jarSha256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+  "scope": "이번 코드·실제 재현으로 확인한 개선. 이전 검사·초기 후보·브라우저 전후 반복 수는 합산하지 않음. 전체 메뉴나 취약점 확인을 뜻하지 않음.",
+  "checks": [
+    {
+      "id": "N01",
+      "title": "지연 SPA 메뉴와 빈 화면 대기",
+      "status": "PASS",
+      "detail": "같은 실제 Chromium fixture의 1.8초 지연 메뉴가 수정 전 누락, 수정 후 발견됩니다. 정해진 DOM 안정/대기 한도와 미확인은 partial로 표시합니다. native MV3 로드는 관리 정책에 차단되어 service/API adapter와 실제 DOM을 검증했습니다."
+    },
+    {
+      "id": "N02",
+      "title": "메뉴 동작 전 링크 보존·화면 교체",
+      "status": "PASS",
+      "detail": "실제 탭 전환 fixture에서 초기 링크와 전환 후 링크를 함께 보존합니다. 조회 화면 이동의 execution-context 교체는 같은 대기 한도 안에서 재시도합니다."
+    },
+    {
+      "id": "N03",
+      "title": "탐색 한도와 종료 상태",
+      "status": "PASS",
+      "detail": "동작12/DOM후보200/실행후보500/큐100/스크롤2 등 도달 시 미확인을 남깁니다. 준비 중·빈 화면·한도 fixture는 completed가 아닌 partial이며 팝업도 해당 상태를 표시합니다."
+    },
+    {
+      "id": "N04",
+      "title": "개별 401과 계정 신원 실패 분리",
+      "status": "PASS",
+      "detail": "Runner 집중152개에서 기존 검증된 계정의 새 인증/비로그인 GET 대조를 확인했습니다. 원본ID·동일 인증 snapshot·GET·Scope·2회 공유 예산을 적용합니다. 신원 실패·공개 신원·쿠키 변경·challenge·로그인 이동·예산 부족은 중단을 유지합니다. 접근 거부 경로는 ACCESS 미확인으로 남기며 재시도하지 않습니다."
+    },
+    {
+      "id": "N05",
+      "title": "정적·동적 backtick 원문 보고서",
+      "status": "PASS",
+      "detail": "Report 집중119개에서 cooked 정적값과 전체 rawText 좌표를 확인했습니다. 동적 API는 RAW_TEMPLATE_INTERPOLATED/DYNAMIC_UNRESOLVED로 기록하며 식 평가·resolvedEndpoint·자동 요청은 없습니다. 같은 실제 번들 공식 JAR 대조는17→115행, template64(API4/PATH60)입니다. 전체 구문과 모호한 경계는 부분으로 유지합니다."
+    },
+    {
+      "id": "N06",
+      "title": "도우미 안내·기존 배포 보존",
+      "status": "PASS",
+      "detail": "helper0.4.1과 화면의 버전 안내 불일치를 제거했습니다. 이전 배포28개와 과거 가이드142개 보존 해시를 대조했으며 새 캡처와 PDF는 최종 a8dd JAR 기준입니다."
+    }
+  ]
+}

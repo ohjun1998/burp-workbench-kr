@@ -26,6 +26,43 @@ public final class ScopeInspectionReportTest extends WorkbenchTest {
   static Map<String,String> zip(Path file)throws IOException{Map<String,String>out=new HashMap<>();try(ZipInputStream input=new ZipInputStream(Files.newInputStream(file),StandardCharsets.UTF_8)){ZipEntry entry;while((entry=input.getNextEntry())!=null)out.put(entry.getName(),new String(input.readAllBytes(),StandardCharsets.UTF_8));}return out;}
   static void ioFailure(Io action,String message)throws Exception{try{action.run();throw new AssertionError(message);}catch(IOException expected){check(true,message);}}
   interface Io{void run()throws Exception;}
+  static void templates(DiskTrafficStore store,Path directory)throws Exception{
+    String tagged="ghp_"+"Ab3dE6gH9jK2mN5pQ8sT1vW4yZ7cF0iL3oR6";
+    String source="const leading='😀'; const apiKey=`STATIC_\\u{1F680}_KEY`; const endpoint=`/api/static\\x2fitems`; fetch(`${base}/api/items/${id}`);"
+        +"const secret=`DYNAMIC_${process.env.SECRET}`; const passwordPrefix=`PREFIX_VALUE_`+suffix; const nested=`x${`/api/nested/${id}`}`;"
+        +"const password=tag`"+tagged+"`; fetch(`/api/${({id:'x'}).id}`);";
+    var packet=packet(store,"https://report.test/templates.js","application/javascript",source,List.of());
+    var document=ScopeInspectionReport.collect(snapshot(List.of(page(packet)),List.of()));var values=document.values();
+    check(values.stream().anyMatch(v->v.name().equals("apiKey")&&v.value().equals("STATIC_🚀_KEY")&&v.valueType().equals("STRING")),"static backtick field uses cooked Unicode codepoint escapes without evaluating code");
+    check(values.stream().anyMatch(v->v.value().equals("/api/static/items")&&v.rawText().equals("`/api/static\\x2fitems`")&&v.attributes().get("resolvedEndpoint").equals("https://report.test/api/static/items")),"static backtick API separates cooked string, exact raw escape and reconstructed endpoint");
+    var dynamic=values.stream().filter(v->v.value().equals("${base}/api/items/${id}")).findFirst().orElseThrow();
+    check(dynamic.valueType().equals("RAW_TEMPLATE_INTERPOLATED")&&dynamic.classification().equals("DYNAMIC_UNRESOLVED")&&dynamic.confidence().contains("동적값 미확정"),"dynamic API is explicitly an unresolved raw template rather than an actual runtime URL");
+    check(dynamic.attributes().get("resolution").equals("DYNAMIC_UNRESOLVED")&&!dynamic.attributes().containsKey("resolvedEndpoint")&&dynamic.attributes().get("httpMethod").equals("GET"),"dynamic API keeps observed method but never reconstructs a host or request URL");
+    check(dynamic.rawText().equals("`${base}/api/items/${id}`")&&dynamic.source().offset()==source.indexOf(dynamic.rawText()),"template offsets retain exact UTF16 positions after supplementary characters");
+    check(values.stream().noneMatch(v->v.value().contains("DYNAMIC_")||v.value().equals("PREFIX_VALUE_")||v.value().equals(tagged)),"dynamic secret expressions, concatenation prefixes and tagged template call outputs are not exported as actual secrets");
+    check(values.stream().noneMatch(v->v.value().equals("/api/nested/${id}")),"nested interpolation does not manufacture a separate observed top-level API literal");
+    check(values.stream().anyMatch(v->v.value().equals("/api/${({id:'x'}).id}")&&v.valueType().equals("RAW_TEMPLATE_INTERPOLATED")),"balanced object/string interpolation remains exact unresolved API template text");
+    for(var value:values)check(value.rawText().equals(source.substring(value.source().offset(),value.source().offset()+value.source().length())),"all template evidence spans identify the exact original source substring");
+    check(!document.complete()&&document.pages().get(0).note().contains("동적 템플릿"),"dynamic and tagged template limitations remain visible in page completeness");
+    Path output=directory.resolve("templates.zip");ScopeInspectionReport.write(output,snapshot(List.of(page(packet)),List.of()));var files=zip(output);
+    for(String format:List.of("report.json","report.html","values.csv"))check(files.get(format).contains("RAW_TEMPLATE_INTERPOLATED")&&files.get(format).contains("DYNAMIC_UNRESOLVED"),"template unresolved state is visible in every report format");
+    String fallback="const broken=; /* `/api/comment` */ const matcher=/`\\/api\\/regex`/; const apiKey=`FALLBACK_STATIC_KEY`; fetch(`/api/fallback`); fetch(`${origin}/api/fallback/${id}`);"
+        +"fetch(`/api/nested/${`${id}`}`); const password=`FALLBACK_PREFIX`+suffix; const secret=tag`"+tagged+"`;";
+    var unsupported=packet(store,"https://report.test/fallback.js","application/javascript",fallback,List.of());
+    var fallbackDoc=ScopeInspectionReport.collect(snapshot(List.of(page(unsupported)),List.of()));var rows=fallbackDoc.values();
+    check(rows.stream().anyMatch(v->v.value().equals("FALLBACK_STATIC_KEY"))&&rows.stream().anyMatch(v->v.value().equals("/api/fallback")),"unsupported whole JS retains independently parsed static template fields and API literals");
+    check(rows.stream().anyMatch(v->v.value().equals("${origin}/api/fallback/${id}")&&v.valueType().equals("RAW_TEMPLATE_INTERPOLATED")&&!v.attributes().containsKey("resolvedEndpoint")),"unsupported bundle fallback records dynamic API text with no guessed origin or substitution");
+    check(rows.stream().anyMatch(v->v.value().equals("/api/nested/${`${id}`}")&&v.valueType().equals("RAW_TEMPLATE_INTERPOLATED")),"fallback balances nested template boundaries and preserves the entire outer API source");
+    check(rows.stream().noneMatch(v->v.value().equals("/api/comment")||v.value().equals("/api/regex")||v.value().equals("FALLBACK_PREFIX")||v.value().equals(tagged)),"fallback skips comment/regex tokens and never exposes expression prefixes or tag return values");
+    for(var value:rows)check(value.rawText().equals(fallback.substring(value.source().offset(),value.source().offset()+value.source().length())),"fallback template offsets identify original whole-bundle UTF16 source");
+    check(!fallbackDoc.complete()&&fallbackDoc.pages().get(0).note().contains("JS 구문"),"local template success never hides unsupported whole-bundle syntax");
+    var uncertain=packet(store,"https://report.test/ambiguous.js","application/javascript","const broken=; fetch(`/api/${/a{1}/.test(id)}`); fetch(`/api/after`);",List.of());
+    var uncertainDoc=ScopeInspectionReport.collect(snapshot(List.of(page(uncertain)),List.of()));
+    check(uncertainDoc.values().stream().noneMatch(v->v.value().equals("/api/after"))&&uncertainDoc.pages().get(0).note().contains("경계 미확정"),"ambiguous regex/interpolation boundaries stop conservative fallback and explicitly leave later templates unexamined");
+    var tooLarge=packet(store,"https://report.test/large-template.js","application/javascript","const broken=; const apiKey=`"+"A".repeat(ScopeInspectionReport.MAX_VALUE)+"`;",List.of());
+    var large=ScopeInspectionReport.collect(snapshot(List.of(page(tooLarge)),List.of()));
+    check(!large.complete()&&large.values().stream().noneMatch(v->v.name().equals("apiKey")),"oversize template values are excluded without truncation in unsupported-bundle fallback");
+  }
   public static void main(String[]args)throws Exception{
     Path directory=Files.createTempDirectory("scope-raw-report-test-");
     try(DiskTrafficStore store=new DiskTrafficStore()){
@@ -107,6 +144,7 @@ public final class ScopeInspectionReportTest extends WorkbenchTest {
       check(nameValues.stream().filter(value->Set.of("ssn","socialSecurityNumber","customer_ssn","customerSSN").contains(value.name())&&value.category().equals("SENSITIVE")).count()==4,"exact acronym and tokenized SSN field names retain sensitive-value classification");
       var map=packet(store,"https://report.test/bundle.js.map","application/json","{\"sourcesContent\":[\"const api_key='RECOVERED_VALUE';\"]}",List.of());
       check(ScopeInspectionReport.collect(snapshot(List.of(page(map)),List.of())).pages().get(0).note().contains("소스맵"),"unmapped recovered source code has an explicit coordinate and parsing limitation");
+      templates(store,directory);
       Path raced=directory.resolve("raced.zip");AtomicInteger won=new AtomicInteger(),lost=new AtomicInteger();ExecutorService writers=Executors.newFixedThreadPool(2);CountDownLatch start=new CountDownLatch(1);
       try{List<Future<?>>tasks=new ArrayList<>();for(int i=0;i<2;i++)tasks.add(writers.submit(()->{try{start.await();ScopeInspectionReport.write(raced,snapshot);won.incrementAndGet();}catch(FileAlreadyExistsException expected){lost.incrementAndGet();}catch(Exception error){throw new RuntimeException(error);}}));start.countDown();for(Future<?>task:tasks)task.get(30,TimeUnit.SECONDS);}finally{writers.shutdownNow();}
       check(won.get()==1&&lost.get()==1&&zip(raced).containsKey("report.json"),"competing writers publish one complete ZIP and never replace it");

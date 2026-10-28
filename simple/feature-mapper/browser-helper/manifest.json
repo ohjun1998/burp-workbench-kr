@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Feature Mapper KR 브라우저 연결",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "화면·요청 매핑과 명시적으로 시작한 Scope 내 SPA 메뉴 탐색을 로컬 Workbench에 연결합니다.",
   "permissions": [
     "storage",

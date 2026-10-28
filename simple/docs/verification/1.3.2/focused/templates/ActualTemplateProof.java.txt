@@ -1,0 +1,20 @@
+package kr.workbench;
+import java.nio.file.*;import java.util.*;import java.nio.charset.*;import java.security.*;
+public final class ActualTemplateProof {
+ public static void main(String[]args)throws Exception {
+  Path input=Path.of(args[0]),output=Path.of(args[1]);String body=Files.readString(input);long at=System.nanoTime();
+  try(DiskTrafficStore store=new DiskTrafficStore()) {
+   var packet=ScopeInspectionReportTest.packet(store,"https://retained-proof.invalid/main.js","application/javascript",body,List.of());
+   var doc=ScopeInspectionReport.collect(ScopeInspectionReportTest.snapshot(List.of(ScopeInspectionReportTest.page(packet)),List.of()));
+   Map<String,Integer> categories=new TreeMap<>(),types=new TreeMap<>();boolean spans=true,unresolved=true;int templates=0,dynamic=0;
+   for(var value:doc.values()){
+    categories.merge(value.category(),1,Integer::sum);types.merge(value.valueType(),1,Integer::sum);
+    if(value.source().area().equals("DECODED_RESPONSE_BODY"))spans &= value.rawText().equals(body.substring(value.source().offset(),value.source().offset()+value.source().length()));
+    if(value.source().locator().equals("JS template"))templates++;
+    if(value.valueType().equals("RAW_TEMPLATE_INTERPOLATED")){dynamic++;unresolved &= value.classification().equals("DYNAMIC_UNRESOLVED")&&"DYNAMIC_UNRESOLVED".equals(value.attributes().get("resolution"))&&!value.attributes().containsKey("resolvedEndpoint");}
+   }
+   Map<String,Object> proof=new LinkedHashMap<>();proof.put("producerVersion",BuildInfo.VERSION);proof.put("decodedSourceSha256",HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(body.getBytes(StandardCharsets.UTF_8))));proof.put("decodedCharacters",body.length());proof.put("rows",doc.values().size());proof.put("templateRows",templates);proof.put("rawDynamicRows",dynamic);proof.put("categories",categories);proof.put("types",types);proof.put("allOriginalUtf16SpansExact",spans);proof.put("dynamicResolutionNotManufactured",unresolved);proof.put("partial",!doc.complete());proof.put("notes",doc.pages().stream().map(ScopeInspectionReport.Page::note).toList());proof.put("seconds",(System.nanoTime()-at)/1e9);proof.put("networkRequests",0);proof.put("scope","Offline report parser probe of a retained actual Juice Shop main bundle; synthetic packet wrapper for parser isolation. Does not replace live retest.");
+   Files.createDirectories(output.toAbsolutePath().getParent());Files.writeString(output,MetadataExport.json(proof)+"\n");System.out.println("Retained bundle proof saved: "+output+" rows="+doc.values().size()+" templates="+templates+" dynamic="+dynamic+" exactSpans="+spans);
+  }
+ }
+}

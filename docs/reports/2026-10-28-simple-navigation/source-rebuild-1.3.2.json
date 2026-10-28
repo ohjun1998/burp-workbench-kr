@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "version": "1.3.2",
+  "verifiedAtUTC": "2026-10-28T09:42:03.783304+00:00",
+  "verification": "Independent source ZIP extraction, all source fingerprints, strict Java17 production build, byte-for-byte published JAR comparison",
+  "sourceZip": {
+    "path": "simple/downloads/1.3.2/burp-workbench-simple-1.3.2-source.zip",
+    "sha256": "a0a1dab3daef3a9bc2495a8888a05bfbb279f0fbb850376dfd01fe0e7bcc7580",
+    "bytes": 52179602,
+    "entries": 1403,
+    "manifestSourceChecks": 1403,
+    "crcPassed": true,
+    "allSourceSha256Match": true
+  },
+  "build": {
+    "freshDirectory": "/workspace/simple-1.3.2-independent-rebuild",
+    "command": [
+      "python",
+      "burp-workbench/build_all.py",
+      "--java",
+      "/workspace/tools/jdk17/bin/java",
+      "--javac",
+      "/workspace/tools/jdk17/bin/javac"
+    ],
+    "exitCode": 0,
+    "productionBuildOnly": true,
+    "testsExecuted": false,
+    "javaRuntime": "openjdk version \"17.0.17\" 2025-10-21",
+    "embeddedBuildMetadata": {
+      "java17ApiCompatibilityVerified": true,
+      "javaRuntimeVersion": "17.0.17",
+      "toolchainMode": "strict-release17"
+    },
+    "embeddedProductionSourceInputs": 216,
+    "allEmbeddedProductionSourceSha256Match": true,
+    "sourceArchiveFingerprintsStillMatchAfterBuild": true,
+    "buildLog": "/tmp/simple132-independent-build.log"
+  },
+  "comparison": {
+    "publishedJar": "simple/downloads/1.3.2/burp-workbench-simple-1.3.2.jar",
+    "rebuiltJar": "/workspace/simple-1.3.2-independent-rebuild/burp-workbench/dist/burp-workbench-simple-1.3.2.jar",
+    "publishedSha256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+    "rebuiltSha256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+    "publishedBytes": 4536359,
+    "rebuiltBytes": 4536359,
+    "rebuiltJarCrcPassed": true,
+    "byteForByteIdentical": true
+  },
+  "limits": [
+    "This verifies independent build reproducibility with the same selected Temurin17.0.17+10 toolchain, not byte-identical output across different JDK patch versions.",
+    "No extra regression tests, actual application requests, native Burp GUI or manual browser tests were run as part of this independent build.",
+    "The original repository simple/ inputs and existing immutable release artifacts were read only."
+  ],
+  "passed": true
+}

@@ -74,20 +74,20 @@ test('MAIN guard preserves allowed fetch/XHR and blocks writes, outside requests
   assert(!calls.includes('https://other.test/api'));
 });
 
-function fixture({unsupported=false,closed=false}={}) {
+function fixture({unsupported=false,closed=false,document=null}={}) {
   const events=[],operations=[],session={},rules=[];let url='about:blank',nextTab=77;
   const config={inspectionEnabled:true,base:'http://127.0.0.1:1234',token:'a'.repeat(64),origins:['https://scope.test']};
   const chrome={
     storage:{session:{get:async key=>typeof key==='string'?{[key]:session[key]}:{...session},set:async value=>Object.assign(session,value)}},
     permissions:{contains:async()=>true},
     tabs:{create:async value=>{operations.push('create:'+value.url);url=value.url;return {id:nextTab};},update:async(id,value)=>{operations.push('navigate:'+value.url);url=value.url;return {id};},get:async id=>{if(closed)throw new Error('tab closed');return {id,status:'complete',url};},remove:async id=>{operations.push('close:'+id);}},
-    scripting:{executeScript:async ({func,args})=>{operations.push('script:'+func.name);if(func.name==='installInspectionGuard')return [{result:null}];return [{result:{url,title:'fixture',routes:url.endsWith('/app')?[{url:'https://scope.test/app#/orders',label:'주문'}]:[],action:'',excluded:0,forms:0}}];}},
+    scripting:{executeScript:async ({func,args})=>{operations.push('script:'+func.name);if(func.name==='installInspectionGuard')return [{result:null}];if(document)return [{result:document(url,args[1])}];return [{result:{url,title:'fixture',routes:url.endsWith('/app')?[{url:'https://scope.test/app#/orders',label:'주문'}]:[],action:'',excluded:0,forms:0}}];}},
     declarativeNetRequest:{getSessionRules:async()=>[...rules],isRegexSupported:async()=>({isSupported:!unsupported}),updateSessionRules:async value=>{operations.push(value.addRules.length?'guard':'unguard');for(const id of value.removeRuleIds){const n=rules.findIndex(x=>x.id===id);if(n>=0)rules.splice(n,1);}rules.push(...value.addRules);}}
   };
   const service=createInspectionService(chrome,{settings:async()=>({...config}),command:async()=>({state:'running',runId:'test-run-01'}),event:async event=>events.push(event)});
   return {service,events,operations,session,rules,config};
 }
-async function idle(service){for(let i=0;i<300&&service.snapshot();i++)await new Promise(resolve=>setTimeout(resolve,10));assert.equal(service.snapshot(),null,'inspection should complete and clean its lease');}
+async function idle(service){for(let i=0;i<1200&&service.snapshot();i++)await new Promise(resolve=>setTimeout(resolve,10));assert.equal(service.snapshot(),null,'inspection should complete and clean its lease');}
 
 test('dedicated browser service installs guards before navigation, visits SPA routes, then closes before guard removal', async () => {
   const f=fixture();await f.service.launch(task());await idle(f.service);
@@ -108,13 +108,56 @@ test('unsupported transport Scope rule fails closed before the first target navi
 test('site opt-out cancels the dedicated task without touching other user tabs', async () => {
   const f=fixture();await f.service.launch(task());f.config.inspectionEnabled=false;await f.service.poll();await idle(f.service);
   assert(f.operations.filter(x=>x.startsWith('close:')).every(x=>x==='close:77'));
-  assert.equal(f.rules.length,0);assert(f.events.some(x=>x.kind==='done'&&x.state==='stopped'));
+  assert.equal(f.rules.length,0);assert(f.events.some(x=>x.kind==='done'&&x.state==='stopped'));assert.equal(f.session.inspectionStatus,'탐색 중지');
 });
 
 test('inspection helper adds only explicit tab guards and a separate opt-in without cookie/debugger permissions', () => {
   const manifest=JSON.parse(fs.readFileSync(new URL('../browser-helper/manifest.json',import.meta.url)));
   assert(manifest.permissions.includes('declarativeNetRequest'));assert(manifest.permissions.includes('alarms'));
   assert(!manifest.permissions.includes('cookies'));assert(!manifest.permissions.includes('debugger'));assert(!manifest.permissions.includes('webRequestBlocking'));
-  assert.deepEqual(manifest.host_permissions,['http://127.0.0.1/*']);assert.equal(manifest.version,'0.4.0');
+  assert.deepEqual(manifest.host_permissions,['http://127.0.0.1/*']);assert.equal(manifest.version,'0.4.1');
   const popup=fs.readFileSync(new URL('../browser-helper/popup.html',import.meta.url),'utf8');assert(popup.includes('SPA 통합 탐색 허용'));
+});
+
+
+test('DOM route and remaining-menu limits are explicit without adding unsafe actions', () => {
+  const link=i=>({textContent:'menu '+i,disabled:false,getAttribute:key=>key==='href'?'/app?item='+i:null,getBoundingClientRect:()=>({width:50,height:20}),closest:()=>null});
+  const links=Array.from({length:201},(_,i)=>link(i));
+  const context={location:{href:'https://scope.test/app',origin:'https://scope.test',pathname:'/app'},URL,innerHeight:800,scrollY:0,scrollBy(){},getComputedStyle:()=>({visibility:'visible',display:'block'}),document:{title:'SPA',readyState:'complete',forms:{length:0},documentElement:{scrollHeight:800},querySelector:()=>null,querySelectorAll:selector=>selector.startsWith('a[href]')?links:[]}};
+  vm.createContext(context);const fn=vm.runInContext('('+inspectDocument.toString()+')',context);
+  const value=fn(task(),false);assert.equal(value.routes.length,200);assert(value.limits.includes('DOM 메뉴 후보 200개 한도'));assert.equal(value.pendingActions,false);assert.equal(value.loading,false);
+});
+
+test('initial routes are harvested before a read-only navigation tab replaces the document links', async () => {
+  let changed=false;
+  const f=fixture({document:(url,action)=>{
+    if(action&&!changed){changed=true;return {url,routes:[{url:'https://scope.test/app#/replacement',label:'replacement'}],action:'read-only tab',pendingActions:false,excluded:0};}
+    return {url,routes:[{url:changed?'https://scope.test/app#/replacement':'https://scope.test/app#/initial',label:changed?'replacement':'initial'}],action:'',excluded:0};
+  }});
+  await f.service.launch(task());await idle(f.service);
+  assert(f.events.some(x=>x.kind==='menu'&&x.label==='initial'));assert(f.events.some(x=>x.kind==='menu'&&x.label==='replacement'));
+});
+
+test('remaining navigation after the twelve-action document bound is reported partial', async () => {
+  let actions=0;
+  const f=fixture({document:(url,action)=>{if(action)actions++;return {url,routes:[],action:action?'expand':'',pendingActions:actions<13,excluded:0};}});
+  await f.service.launch(task({maxActions:100}));await idle(f.service);
+  const done=f.events.findLast(x=>x.kind==='done');assert.equal(actions,12);assert.equal(done.state,'partial');assert(done.message.includes('12회'));
+});
+
+test('persistent DOM loading reaches its bounded wait and reports partial rather than empty completion', async () => {
+  const f=fixture({document:url=>({url,routes:[],action:'',pendingActions:false,loading:true,ready:'complete',excluded:0})});
+  await f.service.launch(task());await idle(f.service);
+  const done=f.events.findLast(x=>x.kind==='done');assert.equal(done.state,'partial');assert(done.message.includes('3초'));assert(f.session.inspectionStatus.includes('일부 탐색'));assert(!f.session.inspectionStatus.startsWith('탐색 완료'));
+});
+
+test('read-only navigation retries a replaced frame within the bounded DOM wait', async () => {
+  let navigated=false,unloaded=false;
+  const f=fixture({document:(url,action)=>{
+    if(action&&!navigated){navigated=true;unloaded=true;return {url,routes:[],action:'read-only navigation',pendingActions:false,excluded:0};}
+    if(!action&&unloaded){unloaded=false;throw new Error('Execution context was destroyed because of a navigation');}
+    return {url,routes:navigated?[{url:'https://scope.test/app/destination',label:'destination'}]:[],pendingActions:!navigated,excluded:0};
+  }});
+  await f.service.launch(task());await idle(f.service);
+  assert(!f.events.some(x=>x.kind==='error'));assert(f.events.some(x=>x.kind==='menu'&&x.label==='destination'));
 });

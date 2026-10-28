@@ -130,12 +130,12 @@ final class ScopeInspectionReport {
       if(collector.values.size()>=MAX_VALUES||(long)collector.valueCharacters+value.length()+length>MAX_TOTAL_VALUES){partial("실행별 값 개수/16 Mi 문자 제한 · 추가 값 제외");collector.note("값 추출 결과 한도 도달 · 미출력 값은 원본에서 확인");return;}
       if(collector.values.stream().anyMatch(old->old.source().originalId().equals(original)&&old.source().account().equals(page.account())&&old.source().profileRevision().equals(page.profileRevision())
           &&old.source().area().equals(area)&&old.category().equals(category)&&old.value().equals(value)&&overlap(old.source().offset(),old.source().length(),start,length)))return;
-      String classification=classification(name,value);String raw=source.substring(start,start+length);
+      String classification=type.equals("RAW_TEMPLATE_INTERPOLATED")?"DYNAMIC_UNRESOLVED":classification(name,value);String raw=source.substring(start,start+length);
       String provenance=product(category,name,value,area,start,length)?"PRODUCT_FINDING":"REPORT_SUPPLEMENT";
       int line=area.equals("RESPONSE_HEADERS")?line(headers,start):1+insertion(newlines,start);
       Source origin=new Source(original,page.account(),page.profileRevision(),ScopeInspectionAnalysis.safeUrl(page.url()),page.method(),status,digest,area,locator,line,start,length);
       collector.values.add(new Value(category,name,value,raw,type,classification,provenance,
-          type.equals("RAW_LITERAL_UNDECODED")?"미지원 엔터티 · value는 원문 리터럴, 파싱값 미확정":category.equals("API")||category.equals("PATH")?"관측 리터럴·실제 도달 별도":"관측 값·용도/유효성 미검증",origin,attributes));collector.valueCharacters+=value.length()+raw.length();
+          type.equals("RAW_TEMPLATE_INTERPOLATED")?"관측 템플릿 원문 · 동적값 미확정 · 식 평가/자동 요청 없음":type.equals("RAW_LITERAL_UNDECODED")?"미지원 엔터티 · value는 원문 리터럴, 파싱값 미확정":category.equals("API")||category.equals("PATH")?"관측 리터럴·실제 도달 별도":"관측 값·용도/유효성 미검증",origin,attributes));collector.valueCharacters+=value.length()+raw.length();
     }
     boolean product(String category,String name,String value,String area,int offset,int length){
       String fingerprint=ScopeInspectionAnalysis.hash(value);
@@ -188,7 +188,7 @@ final class ScopeInspectionReport {
       try{new Json(this,source,base).parse();}
       catch(IllegalArgumentException invalid){collector.values.subList(before,collector.values.size()).clear();collector.valueCharacters=characters;throw invalid;}
     }
-    void excluded(int start,int length){expressions++;if(excludedExpressions.size()<10_000)excludedExpressions.add(new int[]{start,length});else partial("코드 식 위치 개수 제한");}
+    void excluded(int start,int length){if(start<0||length<=0){partial("코드 식 소스 위치 미확정 · 원본에서 확인");return;}expressions++;if(excludedExpressions.size()<10_000)excludedExpressions.add(new int[]{start,length});else partial("코드 식 위치 개수 제한");}
     boolean inExpression(int start,int end){return excludedExpressions.stream().anyMatch(span->overlap(span[0],span[1],start,end-start));}
     void plain(String source,int base,boolean unquoted)throws IOException{
       int position=0;
@@ -217,7 +217,7 @@ final class ScopeInspectionReport {
       }
     }
     void javascript(String source,int base)throws IOException{
-      interrupted();if(source.length()>4*1024*1024){partial("JS 단일 본문 4 Mi 문자 초과 · 코드 파싱 미검사, 직접 리터럴 보조");plain(source,base,false);return;}
+      interrupted();if(source.length()>4*1024*1024){partial("JS 단일 본문 4 Mi 문자 초과 · 코드 파싱 미검사, 직접 리터럴 보조");plain(source,base,false);templateFallback(source,base);return;}
       try{
         CompilerEnvirons env=new CompilerEnvirons();env.setLanguageVersion(org.mozilla.javascript.Context.VERSION_ES6);env.setRecoverFromErrors(false);
         env.setErrorReporter(new ErrorReporter(){public void warning(String a,String b,int c,String d,int e){}public void error(String a,String b,int c,String d,int e){throw new EvaluatorException("report syntax");}public EvaluatorException runtimeError(String a,String b,int c,String d,int e){return new EvaluatorException("report syntax");}});
@@ -228,6 +228,8 @@ final class ScopeInspectionReport {
           if(failure.error!=null)return false;
           try{
             interrupted();if(System.nanoTime()>deadline||++nodes>100_000)throw new IllegalArgumentException();
+            if(node instanceof TaggedTemplateLiteral tagged){AstNode rawTemplate=tagged.getTemplateLiteral();if(rawTemplate!=null)excluded(base+rawTemplate.getAbsolutePosition(),rawTemplate.getLength());partial("태그 함수 템플릿은 실행 결과 미확정 · 실제 값 추출 제외");return false;}
+            if(node instanceof TemplateLiteral template){template(template,source,base,templateField(template),jsMethod(template,base));return false;}
             if(node instanceof VariableInitializer variable)jsField(jsKey(variable.getTarget()),variable.getInitializer(),base);
             else if(node instanceof ObjectProperty property)jsField(jsKey(property.getKey()),property.getValue(),base);
             else if(node instanceof Assignment assignment)jsField(jsKey(assignment.getLeft()),assignment.getRight(),base);
@@ -241,10 +243,78 @@ final class ScopeInspectionReport {
         });
         if(failure.error instanceof IOException io)throw io;if(failure.error!=null)throw new IllegalArgumentException();
       }catch(InterruptedIOException cancelled){throw cancelled;}
-      catch(RuntimeException|StackOverflowError error){partial("JS 구문·시간·노드 제한 · 직접 문자열 리터럴 보조");plain(source,base,false);}
+      catch(RuntimeException|StackOverflowError error){partial("JS 구문·시간·노드 제한 · 직접 문자열 리터럴 보조");plain(source,base,false);templateFallback(source,base);}
+    }
+    String templateField(AstNode node){
+      AstNode direct=node,parent=node.getParent();while(parent instanceof ParenthesizedExpression expression){direct=parent;parent=expression.getParent();}
+      if(parent instanceof VariableInitializer variable&&variable.getInitializer()==direct)return jsKey(variable.getTarget());
+      if(parent instanceof ObjectProperty property&&property.getValue()==direct)return jsKey(property.getKey());
+      if(parent instanceof Assignment assignment&&assignment.getRight()==direct)return jsKey(assignment.getLeft());
+      return null;
+    }
+    String jsMethod(AstNode node,int base){
+      String method="?";AstNode parent=node.getParent();
+      if(parent instanceof FunctionCall call&&call.getArguments().indexOf(node)==0){String callee=call.getTarget().toSource();
+        if(callee.matches("(?:axios|http|httpClient)\\.(?:get|post|put|patch|delete|head|options)"))method=callee.substring(callee.lastIndexOf('.')+1).toUpperCase(Locale.ROOT);
+        else if(Set.of("fetch","window.fetch","Request").contains(callee)&&call.getArguments().size()==1)method="GET";
+      }
+      int start=base+node.getAbsolutePosition();for(var finding:findings)if(finding.category().equals("API")&&finding.offset()>=start&&finding.offset()<start+node.getLength()&&!finding.method().equals("?")){method=finding.method();break;}
+      return method;
+    }
+    void template(TemplateLiteral literal,String source,int base,String name,String method)throws IOException{
+      interrupted();int start=literal.getAbsolutePosition(),length=literal.getLength();
+      if(start<0||length<2||start>source.length()-length||source.charAt(start)!='`'||source.charAt(start+length-1)!='`'){partial("템플릿 원문 위치 미확정 · 제외");return;}
+      if(length>MAX_VALUE){partial("64 Ki 문자 초과 템플릿 제외 · 원본에서 확인");return;}
+      boolean dynamic=!literal.getSubstitutions().isEmpty();String raw=source.substring(start+1,start+length-1);
+      if(dynamic){
+        excluded(base+start,length);partial("동적 템플릿 관측 · 식 평가/동적 URL 복원 미수행");
+        if((uriLike(raw)||raw.startsWith("${"))&&apiLike(raw))add("API","JS API template",raw,"RAW_TEMPLATE_INTERPOLATED","DECODED_RESPONSE_BODY","JS template",base+start,length,
+            Map.of("parser","JS 템플릿 원문 · 코드 실행 없음","observedLiteral",raw,"httpMethod",method,"resolution","DYNAMIC_UNRESOLVED"));
+      }else{
+        StringBuilder value=new StringBuilder();for(TemplateCharacters characters:literal.getTemplateStrings()){
+          if(characters.getValue()==null){partial("템플릿 escape 해석 미확정 · 제외");return;}value.append(characters.getValue());}
+        String actual=value.toString();Map<String,String> attributes=new LinkedHashMap<>();attributes.put("parser","JS 정적 backtick 리터럴 · 코드 실행 없음");
+        if(uriLike(actual))attributes.putAll(apiAttributes(actual,method));
+        if(name!=null)scalar(name,actual,"STRING","JS:"+name,base+start,length,attributes);
+        if(uriLike(actual))add(apiLike(actual)?"API":"PATH","JS URL/path backtick literal",actual,"STRING","DECODED_RESPONSE_BODY","JS template",base+start,length,attributes);
+      }
+    }
+    void templateFallback(String source,int base)throws IOException{
+      // Lexical compatibility preserves original spans. Each whole template is parsed separately;
+      // malformed/nested-token boundaries stop this pass rather than inventing a cooked value.
+      JsSyntax.Cursor cursor=new JsSyntax.Cursor(source);List<JsSyntax.Token> previous=new ArrayList<>();JsSyntax.Token token;
+      long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(3);int count=0,templates=0,totalCharacters=0;
+      while((token=cursor.next())!=null){
+        interrupted();if(++count>500_000||System.nanoTime()>deadline){partial("템플릿 보조 파싱 시간/토큰 한도 · 나머지 미검사");return;}
+        if(token.quoted()&&token.text().startsWith("`")){
+          int boundary=templateEnd(source,token.start(),0);
+          if(boundary<0){excluded(base+token.start(),source.length()-token.start());partial("템플릿 중첩/정규식/길이 경계 미확정 · 이후 템플릿/패턴 미검사");return;}
+          token=new JsSyntax.Token(source.substring(token.start(),boundary),token.start(),boundary,true);cursor.position=boundary;cursor.previous="literal";
+          String raw=token.text();int start=base+token.start();
+          if(raw.length()>MAX_VALUE){partial("64 Ki 문자 초과 템플릿 제외 · 원본에서 확인");continue;}
+          String last=previous.isEmpty()?"":previous.get(previous.size()-1).text();
+          if(!Set.of("","=",":","(",",","[","return","throw","yield","=>","?","||","&&","??",";","{","}").contains(last)){
+            excluded(start,raw.length());partial("태그 함수 또는 미확정 문맥의 템플릿 제외");continue;}
+          if(!literalTail(source,token.end())){excluded(start,raw.length());continue;}
+          String field=null;if(Set.of("=",":").contains(last)&&previous.size()>1){var key=previous.get(previous.size()-2);field=key.quoted()?decodeQuoted(key.text()):key.text();}
+          String interior=raw.length()>1?raw.substring(1,raw.length()-1):"";
+          boolean candidate=uriLike(interior)||interior.startsWith("${")&&apiLike(interior)||field!=null&&interesting(field);
+          if(!candidate&&!raw.contains("${")){previous.add(token);if(previous.size()>3)previous.remove(0);continue;}
+          if(++templates>1000||(totalCharacters+=raw.length())>1024*1024){partial("템플릿 보조 파싱 개수/총용량 한도 · 나머지 미검사");return;}
+          try{
+            CompilerEnvirons env=new CompilerEnvirons();env.setLanguageVersion(org.mozilla.javascript.Context.VERSION_ES6);env.setRecoverFromErrors(false);
+            env.setErrorReporter(new ErrorReporter(){public void warning(String a,String b,int c,String d,int e){}public void error(String a,String b,int c,String d,int e){throw new EvaluatorException("template syntax");}public EvaluatorException runtimeError(String a,String b,int c,String d,int e){return new EvaluatorException("template syntax");}});
+            AstRoot root=new Parser(env).parse(raw,"report-template.js",1);List<TemplateLiteral> parsed=new ArrayList<>();int[] visited={0};
+            root.visit(node->{if(++visited[0]>10_000||System.nanoTime()>deadline)throw new IllegalArgumentException();if(node instanceof TemplateLiteral template){parsed.add(template);return false;}return true;});
+            if(parsed.size()!=1||parsed.get(0).getAbsolutePosition()!=0||parsed.get(0).getLength()!=raw.length())throw new IllegalArgumentException();
+            template(parsed.get(0),raw,start,field,"?");
+          }catch(RuntimeException|StackOverflowError invalid){excluded(start,raw.length());partial("템플릿 토큰 구문/중첩 경계 미확정 · 이후 템플릿 미검사");return;}
+        }
+        previous.add(token);if(previous.size()>3)previous.remove(0);
+      }
     }
     void jsField(String name,AstNode node,int base)throws IOException{
-      if(name==null||node==null)return;while(node instanceof ParenthesizedExpression parent)node=parent.getExpression();String value=null,type="STRING";
+      if(name==null||node==null)return;while(node instanceof ParenthesizedExpression parent)node=parent.getExpression();if(node instanceof TemplateLiteral)return;String value=null,type="STRING";
       if(node instanceof StringLiteral literal)value=literal.getValue();
       else if(node instanceof NumberLiteral literal){value=literal.getValue();type="NUMBER";}
       else if(node instanceof KeywordLiteral literal&&Set.of(Token.TRUE,Token.FALSE,Token.NULL).contains(literal.getType())){value=literal.toSource();type=scalarType(value);}
@@ -363,6 +433,29 @@ final class ScopeInspectionReport {
   private static boolean codeExpression(String value){return SecretCandidates.expression(value)||value.matches("(?is)^(?:process\\.env\\.|import\\.meta\\.|(?:window|this|config|settings|env)\\.|function\\b|new\\s|[A-Za-z_$][A-Za-z0-9_.$]*\\s*\\(|\\$\\{|\\{\\{|.*=>).*");}
   private static String scalarType(String value){return value.equals("true")||value.equals("false")?"BOOLEAN":value.equals("null")?"NULL":value.matches("-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?")?"NUMBER":"STRING";}
   private static String jsKey(AstNode node){if(node instanceof Name n)return n.getIdentifier();if(node instanceof StringLiteral s)return s.getValue();if(node instanceof PropertyGet p)return p.getProperty().getIdentifier();return null;}
+  private static int templateEnd(String source,int start,int depth){
+    if(depth>16||start>=source.length()||source.charAt(start)!='`')return -1;
+    int end=Math.min(source.length(),start+MAX_VALUE+1);
+    for(int at=start+1;at<end;at++){
+      char c=source.charAt(at);if(c=='\\'){at++;continue;}if(c=='`')return at+1;
+      if(c=='$'&&at+1<end&&source.charAt(at+1)=='{'){
+        int braces=1;at+=2;
+        for(;at<end&&braces>0;at++){
+          c=source.charAt(at);
+          if(c=='\''||c=='"'){int close=quotedEnd(source,at);if(close<0||close>end)return -1;at=close-1;}
+          else if(c=='`'){int close=templateEnd(source,at,depth+1);if(close<0||close>end)return -1;at=close-1;}
+          else if(c=='{'){if(++braces>128)return -1;}
+          else if(c=='}')braces--;
+          else if(c=='/'&&at+1<end){
+            if(source.charAt(at+1)=='/'){int close=source.indexOf('\n',at+2);if(close<0||close>=end)return -1;at=close;}
+            else if(source.charAt(at+1)=='*'){int close=source.indexOf("*/",at+2);if(close<0||close+2>end)return -1;at=close+1;}
+            else return -1; // Ambiguous regex/division: no boundary or cooked-value guess.
+          }
+        }
+        if(braces!=0)return -1;at--;
+      }
+    }return -1;
+  }
   private static int quotedEnd(String source,int start){char quote=source.charAt(start);for(int i=start+1;i<source.length()&&i-start<=MAX_VALUE+2;i++){char c=source.charAt(i);if(c=='\\'){i++;continue;}if(c==quote)return i+1;}return -1;}
   private static boolean literalTail(String source,int end){
     int next=end;boolean newline=false;

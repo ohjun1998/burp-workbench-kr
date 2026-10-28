@@ -61,7 +61,7 @@ def main() -> int:
         raise RuntimeError('Guide captures differ from current JAR')
     image_hashes = {('browser/'+step['image'] if step.get('captureKind')=='browser' else step['image']):sha(guide['capture_path'](args.images,step)) for step in steps}
     preserved = {}
-    for old in ['1.0.0','1.1.0','1.2.0','1.3.0']:
+    for old in ['1.0.0','1.1.0','1.2.0','1.3.0','1.3.1']:
         old_pdf = ROOT/f'downloads/guides/{old}/Workbench_Simple_{old}_Guide_KR.pdf'
         old_qa = ROOT/'docs'/('guide-validation.json' if old == '1.0.0' else f'guide-validation-{old}.json')
         if old == '1.0.0':
@@ -140,7 +140,7 @@ def main() -> int:
             'path':guide['BROWSER_CAPTURE'].relative_to(ROOT).as_posix(),
             'kind':'Actual Chromium helper page using localhost synthetic fixture; distinct from production Swing rendering'},
         'preservedPreviousGuides':preserved,
-        'visualReview':'All pages reviewed in a contact sheet; full-size Katana setup/results, inspection setup, environment, paths, API, secrets, access, changes, coverage, browser, originals and evidence pages reviewed for readable Korean text and uncropped controls.' if args.visual_reviewed else 'Structural checks passed; author visual review is still pending.',
+        'visualReview':'All pages reviewed in a contact sheet; full-size installation, helper setup, interpretation, account comparison, SPA/browser navigation, classified report and reference pages reviewed for readable Korean text, current helper guidance and uncropped controls.' if args.visual_reviewed else 'Structural checks passed; author visual review is still pending.',
         'captureScope':'Production Simple Swing components with synthetic packet/API/Katana adapters; actual Katana process/HTTP/HTTPS checks are separate verification evidence. Chrome/Edge installation instructions are textual, not native browser installation screenshots.',
         'structuralResult':'passed','visualReviewComplete':args.visual_reviewed,
         'result':'passed' if args.visual_reviewed else 'needs-visual-review'

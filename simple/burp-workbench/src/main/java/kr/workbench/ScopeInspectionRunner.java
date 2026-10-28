@@ -805,7 +805,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
   }
 
   private void transientState(ScopeInspection.Profile profile, int status, String headers, String body,
-                              DiskTrafficStore.PacketRef original, long token) {
+                              DiskTrafficStore.PacketRef original, long token) throws Exception {
     guard(token);
     if (status == 429) { autoPause("HTTP 429 · Retry-After 이후 직접 재개하세요.", EnvironmentScan.retryTime(headers)); throw new Retry(); }
     if (EnvironmentContent.challenge(body)) { autoPause("보안 확인 화면 감지 · 브라우저와 세션 확인 후 재개하세요.", 0); throw new Retry(); }
@@ -815,10 +815,6 @@ final class ScopeInspectionRunner implements AutoCloseable {
       if (status >= 300 && status < 400 && !location.isBlank()) try { loginRedirect = loginPath(URI.create(original.url()).resolve(location).toString()); } catch (RuntimeException ignored) { }
       boolean redirectedForm = status >= 200 && status < 300 && EnvironmentContent.login(body) && dedicatedLoginForm(original.url(), body)
           && redirectTargets.contains(profile.id() + "|" + original.url());
-      if (status == 401 || loginRedirect || redirectedForm) {
-        synchronized (lock) { verifiedAt.remove(profile.id()); }
-        autoPause(status == 401 ? "로그인 세션 확인 필요 · 새 인증정보 연결 후 재개하세요." : "로그인 경로 이동 감지 · 계정·권한 조건을 확인한 뒤 재개하세요.", 0); throw new Retry();
-      }
       Map<String, String> cookies = CookieSessionProbe.cookies(profile.headers());
       for (String line : headers.split("\\r?\\n")) if (line.regionMatches(true, 0, "set-cookie:", 0, 11)) {
         String value = line.substring(11).strip(), pair = value.split(";", 2)[0]; int equal = pair.indexOf('=');
@@ -831,7 +827,48 @@ final class ScopeInspectionRunner implements AutoCloseable {
           }
         }
       }
+      if (status == 401 || loginRedirect || redirectedForm) {
+        if (status == 401 && !EnvironmentContent.login(body) && !loginPath(original.url())
+            && !loginRedirect && !redirectedForm && recheckDeniedIdentity(profile, original, token)) return;
+        synchronized (lock) { verifiedAt.remove(profile.id()); }
+        autoPause(status == 401 ? "로그인 세션 확인 필요 · 새 인증정보 연결 후 재개하세요." : "로그인 경로 이동 감지 · 계정·권한 조건을 확인한 뒤 재개하세요.", 0); throw new Retry();
+      }
     }
+  }
+
+  /** A resource's 401 need not mean the already verified account session expired. */
+  private boolean recheckDeniedIdentity(ScopeInspection.Profile profile, DiskTrafficStore.PacketRef denied, long token) throws Exception {
+    CookieSessionProbe.Config config = profile.identity();
+    if (config == null || !identityVerified(profile) || Objects.equals(normalized(config.url()), normalized(denied.url()))
+        || !allowed(config.url()) || !readOnlyUrl(config.url()) || secretInput(config.url())) return false;
+    synchronized (lock) { if (sent + 2 > options.budget()) return false; }
+    Received fresh, freshAnonymous;
+    try {
+      // Bypass both caches: require a fresh authenticated/anonymous identity contrast.
+      fresh = sendOnce(config.url(), "GET", profile, token, true);
+      addControlPage(fresh, config.url(), profile, "IDENTITY_RECHECK_CONTROL");
+      transientState(profile, fresh.packet().response().statusCode(), fresh.headers(), fresh.body(), fresh.original(), token);
+      if (!identityOutcome(fresh, config).match()) return false;
+      ScopeInspection.Profile anonymous = new ScopeInspection.Profile(profile.id() + ":identity-anonymous", "신원 비로그인 대조", Map.of(), null);
+      freshAnonymous = sendOnce(config.url(), "GET", anonymous, token, true);
+      addControlPage(freshAnonymous, config.url(), anonymous, "IDENTITY_RECHECK_CONTROL");
+      transientState(anonymous, freshAnonymous.packet().response().statusCode(), freshAnonymous.headers(), freshAnonymous.body(), freshAnonymous.original(), token);
+      Identity empty = identityOutcome(freshAnonymous, config);
+      if (!empty.different() || empty.primaryMatch()) return false;
+    } catch (Retry | Halt | KatanaCancelled stopped) { throw stopped; }
+    catch (Exception failure) { return false; }
+    synchronized (lock) {
+      verifiedAt.put(profile.id(), sent);
+      verifiedOriginals.put(profile.id(), fresh.original().id() + " / " + freshAnonymous.original().id());
+      responseCache.put(responseKey(profile, denied.url(), denied.method()), denied);
+      addFindingLocked(finding("ACCESS", "개별 경로 401 · 선택 신원 재확인", denied.url(), denied.method(), profile.label(),
+          "신원 재확인·접근 거부 관측", "INFO", "미확인",
+          "이 경로는 HTTP 401이지만 같은 인증 스냅샷의 새 신원 확인 응답은 설정한 신원·claim 조건과 일치합니다. "
+              + "새 비로그인 대조도 선택 신원과 구분됩니다. 별도 인증 영역·필요 권한은 수동 확인하며 접근 성공이나 취약점으로 판정하지 않습니다. 신원 재확인 원본: "
+              + fresh.original().id() + " / " + freshAnonymous.original().id(),
+          denied.id(), "endpoint-401:" + profile.id() + ":" + denied.url()));
+    }
+    return true;
   }
 
   private boolean identityVerified(ScopeInspection.Profile profile) {

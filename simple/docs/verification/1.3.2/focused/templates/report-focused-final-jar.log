@@ -1,0 +1,120 @@
+PASS exact key value links to the existing product finding fingerprint
+PASS JSON parsed value and exact escaped source are distinct and unrelated API offsets do not imply product detection
+PASS token category retains the actual response token without provider validation
+PASS publicapikey uses the shared public-identifier policy
+PASS explicit demo token remains an example rather than an inconsistent live-secret claim
+PASS latestToken is not downgraded because test is a substring of latest
+PASS code expressions and concatenated literal fragments are excluded from actual values
+PASS opaque dotted data-file value is not mistaken for a JavaScript property expression
+PASS excluded expressions remain explicit in the response parsing notes
+PASS large numeric JSON value preserves its original lexical precision
+PASS nested JSON source uses a correct escaped JSON pointer
+PASS long multiline value is preserved without preview clipping
+PASS response cookie actual value is extracted separately from its attributes
+PASS response authorization token is distinct from request profile credentials
+PASS HTML paired input fields and XML scalar text are parsed from actual response positions
+PASS observed API literal, actual method and reconstructed endpoint are kept separate
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS body source offset and length identify the exact uncompressed UTF-16 source substring
+PASS each value retains response identity, account, revision and hash
+PASS raw-value DTO diagnostics remain masked outside explicit report serialization
+PASS explicit local ZIP contains all requested report representations
+PASS machine JSON contains the exact unmasked actual value
+PASS CSV formula protection does not change the authoritative machine JSON value
+PASS report HTML renders response markup as text and includes no injected active element
+PASS response-only export does not dump request profile or query credentials
+PASS response-only export does not dump request profile or query credentials
+PASS response-only export does not dump request profile or query credentials
+PASS response-only export does not dump request profile or query credentials
+PASS existing report is refused without overwrite
+PASS existing report bytes remain unchanged
+PASS interrupted export is cancelled before publication
+PASS cancelled export leaves no final report
+PASS historical metadata without originals is explicitly unextractable
+PASS over-limit value is explicitly excluded rather than silently clipped into a false exact value
+PASS failed JS parsing never exports expression-prefix literals or provider-pattern prefixes as actual values
+PASS failed whole JSON validation rolls back staged values before conservative literal fallback
+PASS unsupported HTML entity preserves only the explicitly labeled raw literal and marks parsing partial
+PASS unsupported-entity raw-only state is visible in HTML JSON and CSV alike
+PASS className and cssName never become sensitive merely because normalized names contain ssn
+PASS exact acronym and tokenized SSN field names retain sensitive-value classification
+PASS unmapped recovered source code has an explicit coordinate and parsing limitation
+PASS static backtick field uses cooked Unicode codepoint escapes without evaluating code
+PASS static backtick API separates cooked string, exact raw escape and reconstructed endpoint
+PASS dynamic API is explicitly an unresolved raw template rather than an actual runtime URL
+PASS dynamic API keeps observed method but never reconstructs a host or request URL
+PASS template offsets retain exact UTF16 positions after supplementary characters
+PASS dynamic secret expressions, concatenation prefixes and tagged template call outputs are not exported as actual secrets
+PASS nested interpolation does not manufacture a separate observed top-level API literal
+PASS balanced object/string interpolation remains exact unresolved API template text
+PASS all template evidence spans identify the exact original source substring
+PASS all template evidence spans identify the exact original source substring
+PASS all template evidence spans identify the exact original source substring
+PASS all template evidence spans identify the exact original source substring
+PASS dynamic and tagged template limitations remain visible in page completeness
+PASS template unresolved state is visible in every report format
+PASS template unresolved state is visible in every report format
+PASS template unresolved state is visible in every report format
+PASS unsupported whole JS retains independently parsed static template fields and API literals
+PASS unsupported bundle fallback records dynamic API text with no guessed origin or substitution
+PASS fallback balances nested template boundaries and preserves the entire outer API source
+PASS fallback skips comment/regex tokens and never exposes expression prefixes or tag return values
+PASS fallback template offsets identify original whole-bundle UTF16 source
+PASS fallback template offsets identify original whole-bundle UTF16 source
+PASS fallback template offsets identify original whole-bundle UTF16 source
+PASS fallback template offsets identify original whole-bundle UTF16 source
+PASS local template success never hides unsupported whole-bundle syntax
+PASS ambiguous regex/interpolation boundaries stop conservative fallback and explicitly leave later templates unexamined
+PASS oversize template values are excluded without truncation in unsupported-bundle fallback
+PASS competing writers publish one complete ZIP and never replace it
+PASS temporary report files are removed after success, conflict and cancellation
+ScopeInspectionReportTest: 119 checks passed (response-only exact values, no network)

@@ -258,7 +258,7 @@ def write_pdf(images: Path) -> Path:
     y-=150
     for text in INSTALL+[ 'Simple은 설정 키 simple.*와 저장 폴더 .burp-workbench-simple을 사용해 기존 Next와 분리됩니다.',CAPTURE_NOTE]:
         y=paragraph(esc(text),margin,y,width-2*margin)-18
-    paragraph('기존 Next와 Simple 1.0.0·1.1.0·1.2.0 JAR·소스·PDF를 보존합니다. 통합 점검 화면 열기는 전송하지 않으며 시작 버튼에서 실제 조회 요청을 보냅니다.',margin,y,width-2*margin,small);c.showPage()
+    paragraph('기존 Next와 Simple 1.0.0–1.3.1 JAR·소스·PDF를 보존합니다. 통합 점검 화면 열기는 전송하지 않으며 시작 버튼에서 실제 조회 요청을 보냅니다.',margin,y,width-2*margin,small);c.showPage()
     frame(2,'확장별 핵심 기능과 부가 흐름 정리','modules');y=heading('8개 확장의 주요 기능을 모두 유지합니다',height-80)
     data=[[Paragraph(esc(text),body) for text in ['기존 통합 도구','유지한 핵심 기능','부가 흐름 정리']]]
     for module in MODULES:data.append([Paragraph('<b>'+esc(module['nav'])+'</b><br/>'+esc(module['name']),body),Paragraph(esc(module['core']),body),Paragraph(esc(module['aux']),body)])
@@ -307,7 +307,7 @@ def write_pdf(images: Path) -> Path:
 
 def write_readme() -> Path:
     lines=[f'# Workbench Simple {VERSION}', '',
-           '**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0 JAR·소스·PDF는 보존합니다.', '',
+           '**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0·1.3.1 JAR·소스·PDF는 보존합니다.', '',
            'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.', '',
            '| 필요한 파일 | 위치 |', '|---|---|',
            f'| 설치 JAR | [burp-workbench-simple-{VERSION}.jar](downloads/{VERSION}/burp-workbench-simple-{VERSION}.jar) |',
@@ -352,7 +352,7 @@ def write_readme() -> Path:
               '테스트 어댑터 빌드 후 두 캡처 명령으로 기존 8개 도구와 통합 점검 화면을 같은 버전 디렉터리에 생성합니다. PDF 생성에는 Python `reportlab`, `Pillow`가 필요하고, 구조 검증에는 `PyMuPDF`를 사용합니다.', '',
               '```sh', 'python tools/render_simple.py --check', 'python tools/render_scope_inspection.py --check', 'python tools/build_simple_guide.py', 'python tools/check_simple_guide.py', '```', '',
               'Java 17을 PATH에 둔 환경에서 위 명령을 실행하거나 `--java`로 Java 17 경로를 지정합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.', '',
-              '[보존한 Simple 1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)', '']
+              '[보존한 Simple 1.3.1 안내서](docs/history/1.3.1/GUIDE_SIMPLE_KR.html) · [1.3.1 PDF](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) · [1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)', '']
     output=ROOT/'README_KR.md';output.write_text('\n'.join(lines),encoding='utf-8');return output
 
 
@@ -360,7 +360,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--images',type=Path,default=ROOT/f'docs/images/{VERSION}/light/1280x800')
     args=parser.parse_args();args.images=args.images.resolve()
-    if tuple(map(int,VERSION.split('.'))) < (1,3,1):raise SystemExit('Simple1.0.0/1.1.0/1.2.0/1.3.0 artifacts are immutable. This generator requires Simple 1.3.1 or newer.')
+    if tuple(map(int,VERSION.split('.'))) < (1,3,2):raise SystemExit('Simple1.0.0/1.1.0/1.2.0/1.3.0/1.3.1 artifacts are immutable. This generator requires Simple 1.3.2 or newer.')
     missing=[step['image'] for step in STEPS if not capture_path(args.images,step).is_file()]
     if missing:raise SystemExit('Missing current-version production screenshots: '+', '.join(missing))
     outputs=[write_readme(),write_markdown(args.images),write_html(args.images),write_pdf(args.images)]

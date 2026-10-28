@@ -1,0 +1,106 @@
+{
+  "name": "Workbench Simple",
+  "version": "1.0.0",
+  "baseExtensionVersion": "0.53.4",
+  "baseGitCommit": "0cef0c5dc97f5824d1fe4a7b298b855994e69983",
+  "verifiedAtUtc": "2026-10-27T12:38:18.923640+00:00",
+  "result": "passed",
+  "jarSha256": "379e03d74a9c86e66875adc25801da5f3c4c7d2deea8262929cdc8a94a261b04",
+  "preservation": {
+    "originalTrackedFilesModified": [],
+    "originalVersionedDownloads": "unchanged",
+    "settingsPrefix": "simple.",
+    "storageDirectory": ".burp-workbench-simple",
+    "mainBranch": "not modified"
+  },
+  "workflow": [
+    "SCOPE 수집·요청 선택",
+    "기존 도구 분석",
+    "직접 비교·검증",
+    "가림 확인·증거 ZIP"
+  ],
+  "runtimeRemovedFromPrimaryFlow": [
+    "폴더/중복 이동·작업 이어가기·별도 준비 체크리스트",
+    "자동 요청 비교 토글",
+    "외부 도구 설치·OAST·순차 재현·브라우저 보조 화면",
+    "시작 시 기존 History 자동 순회",
+    "메인 목록의 저장 조건 관리"
+  ],
+  "enginesRetained": [
+    "HTTP capture/search/packet readers",
+    "Feature Mapper 0.3.5 and optional browser helper",
+    "JS/API analysis",
+    "response analysis",
+    "server/path discovery and URL candidates",
+    "account authorization comparison",
+    "payload runner",
+    "evidence provenance/redaction/ZIP"
+  ],
+  "checks": {
+    "regressionGroups": 122,
+    "regressionChecks": 4231,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 134,
+    "mapperBrowserHelperChecks": 15
+  },
+  "totalCountedChecks": 4516,
+  "countingNote": "Assertions in separate declared suites, one Linux run; screen/control counts are not added to test counts. Prior-version results are not included.",
+  "screens": {
+    "renderedViews": 48,
+    "controls": 912,
+    "scenarios": 32,
+    "clippedControls": [],
+    "collapsedAreas": [],
+    "failedScenarios": []
+  },
+  "guide": {
+    "pdf": "downloads/guides/1.0.0/Workbench_Simple_1.0.0_Guide_KR.pdf",
+    "pdfSha256": "2feecd3968f4172df9e044b68939dac22644f423f1886e6b4fb083f147cefd33",
+    "pdfPages": 11,
+    "pdfOutlineEntries": 11,
+    "pdfScreenshotPages": 9,
+    "outOfPageText": []
+  },
+  "captureScope": "Production Simple Swing components with synthetic packet/API adapters; not actual Burp GUI screenshots.",
+  "toolchain": {
+    "runtime": "OpenJDK 21.0.12.1",
+    "mode": "explicit-source17-target17-api-unverified",
+    "javaClassMajor": 61,
+    "java17ApiCompatibilityVerified": false,
+    "strictDefault": "--release 17",
+    "limitation": "This executor has no lib/ct.sym; explicit -source 17 -target 17 was used. Strict Java 17 API validation is not claimed for this local run."
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses"
+  ],
+  "attempts": [
+    {
+      "result": "blocked",
+      "reason": "System ct.sym absent, strict --release 17 not supported; explicit fallback used."
+    },
+    {
+      "result": "blocked",
+      "reason": "Default sandbox denies loopback sockets; final tests/rendering ran with network enabled."
+    },
+    {
+      "result": "failed",
+      "reason": "Initial profile asserted old Next namespace/removed UI paths in four tests; Simple-only expectations adapted without removing engine checks. See verification/initial-check.json."
+    },
+    {
+      "result": "passed",
+      "reason": "Final complete Simple profile, Mapper, helper and all layout gates passed."
+    }
+  ],
+  "evidence": {
+    "regressions": "verification/check-summary.json",
+    "log": "verification/check.log",
+    "layout": "images/layout-report.json",
+    "guide": "guide-validation.json",
+    "testProfile": "../REGRESSION_PROFILE_KR.md"
+  }
+}

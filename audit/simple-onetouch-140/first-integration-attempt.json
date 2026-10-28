@@ -1,0 +1,10 @@
+{
+  "result": "failed",
+  "failedGroups": [
+    "ScopeInspectionAnalysisTest",
+    "ScopeInspectionDetection140Test",
+    "ScopeInspectionSecretEvidenceTest"
+  ],
+  "subsequentAction": "Fix shared-parser classification/severity consistency; independent reviewer findings and UI layout also require rebuild. Not final release evidence.",
+  "candidateJarSHA256": "019a0b27baaee097958be450359eb0264b757cf1133c6ff412913d31463b7cbd"
+}

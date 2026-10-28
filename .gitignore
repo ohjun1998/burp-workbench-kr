@@ -23,3 +23,14 @@ tmp/
 # Mapper development outputs; versioned downloads are the published artifacts.
 feature-mapper/dist/feature-mapper-*.jar
 feature-mapper/dist/feature-mapper-*.zip
+
+# Simple verification runtime stays local; publish only versioned downloads/evidence.
+simple/burp-workbench/dist/
+simple/feature-mapper/dist/
+simple/**/.classes/
+simple/**/.host-home/
+simple/**/.tmp/
+simple/**/.font-cache/
+simple/**/.browser-profile/
+simple/**/chromium-profile/
+simple/**/playwright-report/

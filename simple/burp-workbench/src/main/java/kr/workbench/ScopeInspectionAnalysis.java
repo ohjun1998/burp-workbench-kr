@@ -33,6 +33,8 @@ final class ScopeInspectionAnalysis {
   private static final Pattern EMAIL = Pattern.compile("(?i)\\b[A-Z0-9._%+-]{1,64}@[A-Z0-9.-]{1,128}\\.[A-Z]{2,20}\\b");
   private static final Pattern PROVIDER = Pattern.compile("(?:AKIA|ASIA)[A-Z0-9]{16}|AIza[0-9A-Za-z_-]{35}|(?:gh[pousr]_[A-Za-z0-9]{36,255}|github_pat_[A-Za-z0-9_]{40,255})|xox[baprs]-[0-9A-Za-z-]{10,200}|sk_(?:live|test)_[0-9A-Za-z]{16,200}|eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}");
   private static final Pattern CREDENTIAL_VALUE = Pattern.compile("(?im)([A-Za-z_$][A-Za-z0-9_.$-]{0,79})[\"']?\\s{0,8}[:=]\\s{0,8}(?:\"((?:\\\\.|[^\"\\r\\n]){1,16384}+)\"|'((?:\\\\.|[^'\\r\\n]){1,16384}+)'|([^\\s\"'<>;,]{1,16384}+))");
+  private static final Pattern URL_USERINFO = Pattern.compile("(?i)((?:https?|wss?)://|(?<![A-Za-z0-9:])//)[^\\s/?#@]{0,8192}@");
+  private static final Pattern DISPLAY_URL = Pattern.compile("(?i)(?:https?|wss?)://[^\\s\"'<>]{1,8192}");
   private ScopeInspectionAnalysis() {}
   private static Db db(String name, String pattern) { return new Db(name, Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)); }
 
@@ -74,6 +76,10 @@ final class ScopeInspectionAnalysis {
     if (databases > 1) add(found, "DATABASE", "DB 단서 복수 관측", safe, "GET", who, "미확인", "정보", "검토 필요",
         "서로 다른 DB 제품 표식 " + databases + "개 · 문서/중계 오류/여러 저장소 가능 · 실제 구성 수동 확인", original, 0, -1, hash("db-conflict"));
 
+    // The same response-value parser supplies masked live findings and the explicit exact-value export.
+    // Its large-JS mode is token bounded and does not build another whole-bundle AST.
+    complete &= commonValues(url,status,head,text,who,original,found,candidates,sensitiveValues);
+
     String jsText = text;
     int marker = -1;
     for (int count = 0; count < 17; count++) {
@@ -84,6 +90,20 @@ final class ScopeInspectionAnalysis {
     JsAnalysis.Result js = jsText.length()>JsAnalysis.SOURCE_LIMIT
         ? JsBatchAnalysis.analyze(jsText,url,type,url) : JsAnalysis.analyze(jsText, url, type);
     complete &= !js.truncated();
+    if(type.toLowerCase(Locale.ROOT).contains("javascript")||url.split("[?#]",2)[0].matches("(?i).*\\.(?:js|mjs|cjs)$")) {
+      Matcher maps=Pattern.compile("(?m)(?://[#@]|/\\*[#@])\\s*sourceMappingURL\\s*=\\s*([^\\s*]{1,4096})").matcher(text);int count=0;
+      while(maps.find()) {
+        if(++count>20){complete=false;break;}
+        String reference=maps.group(1);if(reference.startsWith("data:"))continue;
+        try {
+          URI target=URI.create(url).resolve(reference);
+          if(target.getUserInfo()!=null||target.getHost()==null||!Set.of("http","https").contains(target.getScheme())||target.getRawFragment()!=null)continue;
+          candidate(candidates,target.toString(),"GET","소스맵 참조","명시적 sourceMappingURL · Scope/깊이/예산 확인 후 조회",true);
+          add(found,"PATH","명시적 소스맵 참조",target.toString(),"GET",who,"관측","정보","문자열 관측·도달 별도",
+              "캡처된 스크립트의 sourceMappingURL 참조 · 파일명 추측 없음 · 실제 원문/가상 복원 좌표 구분",original,line(text,maps.start(1)),maps.start(1),hash(reference));
+        }catch(RuntimeException ignored){}
+      }
+    }
     for (var endpoint : js.endpoints()) {
       boolean method = Set.of("GET", "HEAD").contains(endpoint.method());
       boolean resolved = endpoint.complete() && !unresolved(endpoint.url()) && endpoint.parameters().isBlank();
@@ -101,6 +121,11 @@ final class ScopeInspectionAnalysis {
           original, endpoint.line(), endpoint.start(), hash(endpoint.method() + " " + (relative.isEmpty()?safeUrl(endpoint.url()):relative)));
     }
     for (var secret : js.secrets()) {
+      if(secret.rule().startsWith("시크릿 이름: ")&&secret.start()>=0&&secret.sourceLength()>0&&secret.start()<=text.length()-secret.sourceLength()) {
+        String field=secret.rule().substring("시크릿 이름: ".length()),literal=text.substring(secret.start(),secret.start()+secret.sourceLength()).strip();
+        if(literal.length()>=2&&"\"'`".indexOf(literal.charAt(0))>=0&&literal.charAt(literal.length()-1)==literal.charAt(0))literal=literal.substring(1,literal.length()-1);
+        if(ScopeInspectionValueRules.category(field,literal)==null||ScopeInspectionValueRules.emptyOrMetadata(field,literal,"STRING")||ScopeInspectionValueRules.codeFragment(literal))continue;
+      }
       boolean example = secret.confidence().contains("예제");
       boolean secretProvider = Set.of("GitHub token", "Slack token", "Stripe secret key", "Private key").contains(secret.rule());
       boolean publicId = !secretProvider && secret.confidence().contains("공개 식별자");
@@ -158,13 +183,15 @@ final class ScopeInspectionAnalysis {
     if (!complete) add(found, "COVERAGE", "부분 분석·미검사 구간", safe, "GET", who, "관측", "정보", "미검사",
         "입력·시간·구조·결과 한도에 도달한 분석기가 있음 · 미발견을 안전으로 해석하지 않음", original, 0, -1, hash("partial"));
     List<ScopeInspection.Finding> masked = new ArrayList<>();
-    Set<String> duplicate = new HashSet<>();
+    Set<String> duplicate = new HashSet<>();Map<String,Integer> secretIndexes=new HashMap<>();
     for (var value : found) {
       var clean = new ScopeInspection.Finding(value.category(), clean(value.title(), sensitiveValues), maskedKnownUrl(value.url(), sensitiveValues),
           value.method(), clean(value.account(), sensitiveValues), value.confidence(), value.severity(), value.state(),
           clean(value.detail(), sensitiveValues), value.originalId(), value.line(), value.offset(), value.fingerprint());
-      String key = clean.category() + "|" + (clean.category().equals("SECRET")?"":clean.title()) + "|" + clean.url() + "|" + clean.account() + "|" + clean.fingerprint();
-      if (duplicate.add(key)) masked.add(clean);
+      String fingerprint=clean.category().equals("SECRET")&&clean.fingerprint().length()>16?clean.fingerprint().substring(0,16):clean.fingerprint();
+      String key = clean.category() + "|" + (clean.category().equals("SECRET")?"":clean.title()) + "|" + clean.url() + "|" + clean.account() + "|" + fingerprint;
+      if (duplicate.add(key)){if(clean.category().equals("SECRET"))secretIndexes.put(key,masked.size());masked.add(clean);}
+      else if(clean.category().equals("SECRET")) {Integer index=secretIndexes.get(key);if(index!=null&&secretRank(clean)<secretRank(masked.get(index)))masked.set(index,clean);}
     }
     List<ScopeInspection.Candidate> cleanCandidates = candidates.values().stream().map(c -> {
       boolean sensitiveInput = containsKnownValue(c.url(), sensitiveValues);
@@ -315,6 +342,7 @@ final class ScopeInspectionAnalysis {
       if(++count>2000||out.size()>=FINDING_LIMIT)break;
       if(!item.literal())continue;
       String key=item.key(),value=item.text();
+      if(ScopeInspectionValueRules.category(key,value)==null||ScopeInspectionValueRules.emptyOrMetadata(key,value,"STRING")||ScopeInspectionValueRules.codeFragment(value))continue;
       boolean privateProvider=value.matches("(?s)(?:gh[pousr]_|github_pat_|xox[baprs]-|sk_(?:live|test)_|-----BEGIN .*PRIVATE KEY-----).*");
       boolean publicId = !privateProvider&&SecretCandidates.publicIdentifier(key);
       if (!SecretCandidates.named(key) && !publicId) continue;
@@ -331,16 +359,66 @@ final class ScopeInspectionAnalysis {
     return !scan.limited()&&count <= 2000 && out.size() < FINDING_LIMIT;
   }
 
+  private static boolean commonValues(String url,int status,String headers,String body,String account,String original,
+      List<ScopeInspection.Finding> out,Map<String,ScopeInspection.Candidate> candidates,Set<String> raw) {
+    var extracted=ScopeInspectionReport.extractObserved(url,status,headers,body,account,original);
+    List<ScopeInspectionReport.Value> values=new ArrayList<>(extracted.values());
+    values.sort(Comparator.comparingInt(v->switch(v.category()){case "SENSITIVE","KEY","TOKEN"->0;case "DATABASE","INTERNAL","ENVIRONMENT"->1;default->2;}));
+    for(var value:values){
+      String category=value.category(),classification=value.classification(),field=display(value.name(),100),actual=value.value();
+      boolean personal=ScopeInspectionValueRules.personal(value.name(),value.source().locator()),credential=Set.of("KEY","TOKEN").contains(category)||category.equals("SENSITIVE")&&!personal;
+      boolean business=category.equals("OTHER")&&ScopeInspectionValueRules.normalized(value.name()).matches(".*(?:username|userid|accountid|accountnumber|balance)$");
+      boolean protectedValue=personal||credential||business||Set.of("DATABASE","INTERNAL").contains(category);
+      // Short structured scalars are masked in their own finding. They are not global string
+      // substitutions or authentication inputs: userId=1 must not redact every loopback URL.
+      boolean connection=category.equals("DATABASE")&&CONNECTION.matcher(actual).find();
+      if((credential||personal||connection)&&!business&&actual.length()>=8)raw.add(actual);
+      String product=credential?"SECRET":personal?"SENSITIVE":category.equals("OTHER")?"RESPONSE":category;
+      if(category.equals("OTHER")&&!ScopeInspectionValueRules.normalized(value.name()).matches(".*(?:role|permission|username|userid|accountid|accountnumber|balance)$"))continue;
+      String title=switch(product){case "SECRET"->(category.equals("TOKEN")?"Token":category.equals("KEY")?"Key":"비밀값")+" · "+field;
+        case "SENSITIVE"->"개인정보 · "+field;case "ENVIRONMENT"->"환경 값 · "+field;case "DATABASE"->"DB 설정 · "+field;
+        case "INTERNAL"->"내부 정보 · "+field;case "API"->"API 원문 · "+field;case "PATH"->"경로 원문 · "+field;default->"계정·업무 값 · "+field;};
+      String state=switch(classification){case "DYNAMIC_UNRESOLVED"->"동적 미해결";case "STATIC_FRAGMENT_UNRESOLVED"->"정적 경로 조각·서버 미확정";case "EXAMPLE_OR_PLACEHOLDER"->"예제값 가능";case "PUBLIC_IDENTIFIER"->"공개 식별자 가능";
+        case "PERSONAL_DATA"->"관측 값·공개 범위 미확인";case "COOKIE_VALUE"->"쿠키 값·인증 용도 미확인";default->credential?"유효성 미검증":Set.of("API","PATH").contains(category)?"문자열 관측·도달 별도":"관측 값·용도 미확인";};
+      if(value.valueType().equals("RAW_LITERAL_UNDECODED"))state="원문 리터럴·파싱 미확정";
+      boolean low=Set.of("EXAMPLE_OR_PLACEHOLDER","PUBLIC_IDENTIFIER","COOKIE_VALUE").contains(classification);
+      String shown=Set.of("API","PATH").contains(category)?displayUrlLiteral(actual,240):display(actual,240);
+      String detail=(protectedValue?"[가림 · "+actual.length()+"자]":shown)+" · 분류: "+classification
+          +" · "+(value.source().area().equals("RESPONSE_HEADERS")?"응답 헤더":"응답 본문")+" · 공통 값 파서 · HTTP "+status
+          +" · "+(personal?"선택 계정 응답의 관측값 · 비인가 공개/권한 우회 확정 아님":credential?"형식·문맥 관측 · 자격증명 유효성 미검증":"실제 배포 구성/대상 경로 도달 여부는 별도");
+      String method=value.attributes().getOrDefault("httpMethod","GET");
+      if(!method.matches("[A-Z?]{1,16}"))method="?";
+      int offset=value.source().area().equals("DECODED_RESPONSE_BODY")?value.source().offset():-1;
+      add(out,product,title,url,method,account,Set.of("DYNAMIC_UNRESOLVED","STATIC_FRAGMENT_UNRESOLVED").contains(classification)?"미확인":"관측",credential?(low?"낮음":"중간"):personal?"낮음":"정보",state,detail,original,
+          value.source().line(),offset,hash(actual));
+      if(category.equals("API")){
+        String target=value.attributes().getOrDefault("resolvedEndpoint","");
+        boolean dynamic=classification.equals("DYNAMIC_UNRESOLVED")||unresolved(actual);
+        if(target.isEmpty())target=actual;
+        // Common raw literals add inventory only. A literal alone cannot establish a safe GET or required inputs.
+        candidate(candidates,target,method,"JS API",dynamic?"공통 값 파서 · 동적 미해결":classification.equals("STATIC_FRAGMENT_UNRESOLVED")?"공통 값 파서 · 정적 경로 조각·서버 미확정":"공통 값 파서 · 문자열 관측 · 도달 별도",false);
+      }
+    }
+    return extracted.complete()&&out.size()<FINDING_LIMIT;
+  }
+  private static int secretRank(ScopeInspection.Finding value) {
+    if(Set.of("GitHub token","Slack token","Stripe secret key","Private key","AWS Access Key ID","Google API Key","JWT / JWS").contains(value.title()))return 0;
+    return value.detail().contains("공통 값 파서")?1:2;
+  }
+
   private static boolean sensitive(String body, Pattern pattern, String title, String severity, String url, String account,
                                 String original, List<ScopeInspection.Finding> out, Set<String> raw) {
-    Matcher matcher = pattern.matcher(body); int count = 0;
-    while (matcher.find() && count++ < 32 && out.size() < FINDING_LIMIT) {
+    Matcher matcher = pattern.matcher(body); int count = 0,scanned=0;boolean limited=false;
+    while (matcher.find()) {
+      if(++scanned>256||out.size()>=FINDING_LIMIT){limited=true;break;}
+      if(pattern==EMAIL&&ScopeInspectionValueRules.uriUserinfoEmail(body,matcher.start(),matcher.end()))continue;
+      if(++count>32){limited=true;break;}
       if (title.contains("연결")) raw.add(matcher.group());
       add(out, title.contains("연결") ? "SECRET" : "INTERNAL", title, url, "GET", account, "형식 후보", severity, "검토 필요",
           "[가림 · " + matcher.group().length() + "자] · 원본 위치에서 개인정보/배포 의도 확인", original,
           line(body, matcher.start()), matcher.start(), hash(matcher.group()).substring(0, 16));
     }
-    return count <= 32 && out.size() < FINDING_LIMIT;
+    return !limited&&out.size() < FINDING_LIMIT;
   }
 
   private static void cors(String headers, String url, String account, String original, List<ScopeInspection.Finding> out) {
@@ -448,11 +526,35 @@ final class ScopeInspectionAnalysis {
   }
   static String display(String value, int limit) {
     String text = Objects.requireNonNullElse(value, "").replaceAll("[\\p{Cntrl}&&[^\\n]]", " ");
+    text=URL_USERINFO.matcher(text).replaceAll("$1[인증정보가림]@");
+    text=DISPLAY_URL.matcher(text).replaceAll(match->Matcher.quoteReplacement(urlLiteralMetadata(match.group())));
     text = PROVIDER.matcher(text).replaceAll("[가림]");
     text = text.replaceAll("(?im)^(?:authorization|cookie|set-cookie|x-api-key)\\s*:[^\\r\\n]*", "[인증 헤더 가림]");
     text = CONNECTION.matcher(text).replaceAll("[DB 연결정보 가림]");
     text = text.replaceAll("(?i)((?:password|secret|token|api[_-]?key|access[_-]?key)\\s{0,8}[:=]\\s{0,8})[^\\s,;\\\"']{1,256}", "$1[가림]");
     return text.substring(0, Math.min(limit, text.length()));
+  }
+  /** Safe human metadata only; the explicit local report keeps the exact literal separately. */
+  static String displayUrlLiteral(String value,int limit) {return display(urlLiteralMetadata(value),limit);}
+  private static String urlLiteralMetadata(String value) {
+    String text=URL_USERINFO.matcher(Objects.requireNonNullElse(value,"")).replaceAll("$1[인증정보가림]@");
+    int braces=0;char quote=0;boolean escaped=false,routeFragment=false;
+    for(int i=0;i<text.length();i++) {
+      char c=text.charAt(i);
+      if(braces>0) {
+        if(quote!=0){if(escaped)escaped=false;else if(c=='\\')escaped=true;else if(c==quote)quote=0;}
+        else if(c=='\''||c=='\"'||c=='`')quote=c;
+        else if(c=='{')braces++;else if(c=='}')braces--;
+        continue;
+      }
+      if(c=='$'&&i+1<text.length()&&text.charAt(i+1)=='{'){braces=1;i++;continue;}
+      if(c=='?')return text.substring(0,i)+"?[쿼리값가림]";
+      if(c=='#'){
+        if(!routeFragment&&i+1<text.length()&&(text.charAt(i+1)=='/'||text.charAt(i+1)=='!'))routeFragment=true;
+        else return text.substring(0,i)+"#[fragment값가림]";
+      }
+    }
+    return text;
   }
   private static String clean(String value, Set<String> raw) {
     String text = Objects.requireNonNullElse(value, "");
@@ -488,7 +590,7 @@ final class ScopeInspectionAnalysis {
         || candidatePriority(candidate.source()) == candidatePriority(old.source()) && !old.executable() && candidate.executable()) out.put(key, candidate);
   }
   private static int candidatePriority(String source) {
-    return switch (source) { case "API 문서" -> 0; case "관측 링크", "메뉴 라우트" -> 1; case "JS API" -> 2; default -> 3; };
+    return switch (source) { case "API 문서" -> 0; case "관측 링크", "메뉴 라우트", "소스맵 참조" -> 1; case "JS API" -> 2; default -> 3; };
   }
   private static void add(List<ScopeInspection.Finding> out, String category, String title, String url, String method, String account,
       String confidence, String severity, String state, String detail, String original, int line, int offset, String fingerprint) {

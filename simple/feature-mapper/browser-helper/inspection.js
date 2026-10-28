@@ -76,6 +76,10 @@ export async function inspectionMetadata(value, command, cryptoImpl = globalThis
     .replace(/https?:\/\/[^\s<>"']+/g, candidate => inspectionSafeUrl(candidate))
     .replace(/(?:AKIA|ASIA)[A-Z0-9]{16}|AIza[0-9A-Za-z_-]{35}|gh[pousr]_[A-Za-z0-9]{36,255}|sk_(?:live|test)_[A-Za-z0-9]{16,200}|eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}/g,'[REDACTED]')
     .replace(/((?:api[_-]?key|token|secret|password|authorization|cookie)\s*[:=]\s*)[^ ,;]+/gi, '$1[REDACTED]').slice(0, limit);
+  const integer=(value,max)=>Number.isInteger(value)&&value>=0?Math.min(value,max):0;
+  const stage=['request','response','error'].includes(value.networkStage)?value.networkStage:'';
+  const status=Number.isInteger(value.statusCode)&&value.statusCode>=100&&value.statusCode<=599?value.statusCode:0;
+  if(stage==='response'&&!status)throw new Error('브라우저 응답 HTTP 상태 코드 미확인');
   return {type: 'inspection', runId: command.runId, actor: 'browser-session',
     kind:text(value.kind,32),state:text(value.state,40),message:text(value.message,300),method:text(value.method,16),
     tab:text(value.tab,32),pages:Number(value.pages)||0,actions:Number(value.actions)||0,requests:Number(value.requests)||0,excluded:Number(value.excluded)||0,
@@ -83,7 +87,14 @@ export async function inspectionMetadata(value, command, cryptoImpl = globalThis
     routeId: await inspectionRouteId(url?.href || command.startUrl, cryptoImpl),
     pageRouteId: await inspectionRouteId(value.page || command.startUrl, cryptoImpl), association: 'tab-current-route-observation',
     queryNames: url ? [...new Set(url.searchParams.keys())].slice(0,32).map(x => text(x,80)) : [],
-    requiresQuery: !!url?.search || (!!url && safe !== url.origin + url.pathname), httpProfileShared: false};
+    requiresQuery: !!url?.search || (!!url && safe !== url.origin + url.pathname), httpProfileShared: false,
+    networkStage:stage,statusCode:stage==='response'?status:0,
+    requestId:value.requestId?await inspectionRouteId(command.runId+'|'+String(value.requestId).slice(0,256),cryptoImpl):'',
+    resourceType:['xmlhttprequest','other','main_frame','sub_frame'].includes(value.resourceType)?value.resourceType:'',
+    frameId:integer(value.frameId,100000),elapsedMillis:integer(value.elapsedMillis,15*60*1000),fromCache:value.fromCache===true,
+    errorCode:['BLOCKED','ABORTED','TIMED_OUT','NETWORK_ERROR'].includes(value.errorCode)?value.errorCode:'',
+    discoveryType:['anchor','iframe','network'].includes(value.discoveryType)?value.discoveryType:'',
+    responses:integer(value.responses,2000),networkErrors:integer(value.networkErrors,2000),pendingRequests:integer(value.pendingRequests,200)};
 }
 
 /** Runs only inside the dedicated tab in MAIN world. DNR remains the transport boundary. */
@@ -149,11 +160,12 @@ export function inspectDocument(command, performAction = true) {
     }
   }
   const routes=[];let excluded=0,routeLimit=false;
-  for(const element of document.querySelectorAll('a[href],[role="link"][href],[data-route],[routerlink]')){
+  for(const element of document.querySelectorAll('a[href],[role="link"][href],[data-route],[routerlink],iframe[src]')){
     if(routes.length>=200){routeLimit=true;break;}if(!visible(element))continue;
-    const label=text(element);const raw=element.getAttribute('href')||element.getAttribute('data-route')||element.getAttribute('routerlink');
+    const frame=String(element.tagName||'').toLowerCase()==='iframe';
+    const label=text(element);const raw=frame?element.getAttribute('src'):element.getAttribute('href')||element.getAttribute('data-route')||element.getAttribute('routerlink');
     if(!raw||dangerous.test(label)){excluded++;continue;}
-    try{const url=new URL(raw,location.href);if(!allowed(url.href)||url.href===location.href||url.protocol==='javascript:'){excluded++;continue;}routes.push({url:url.href,label:label||'메뉴 경로'});}catch{excluded++;}
+    try{const url=new URL(raw,location.href);if(!allowed(url.href)||url.href===location.href||url.protocol==='javascript:'){excluded++;continue;}routes.push({url:url.href,label:label||(frame?'포함 화면':'메뉴 경로'),discoveryType:frame?'iframe':'anchor'});}catch{excluded++;}
   }
   const pendingDetails=[...document.querySelectorAll('nav details:not([open]),[role="navigation"] details:not([open]),[role="menu"] details:not([open])')]
     .some(x=>visible(x)&&!state.expanded.has(x)&&!dangerous.test(text(x)));

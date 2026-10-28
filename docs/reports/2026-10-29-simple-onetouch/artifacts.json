@@ -1,0 +1,24 @@
+{
+  "version": "1.4.0",
+  "files": {
+    "burp-workbench-simple-1.4.0.jar": {
+      "sha256": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637",
+      "bytes": 4586564
+    },
+    "burp-workbench-simple-1.4.0-source.zip": {
+      "sha256": "e9aaad51edb917673fd5c990ac50a04db157fdf9b3defec7f0dec6262b429e07",
+      "bytes": 78470597
+    },
+    "feature-mapper-browser-helper-0.5.0.zip": {
+      "sha256": "785a7108a177e5ea55a09a5373ed11710c1b5f695c923661b67d693f4a84cb83",
+      "bytes": 36257
+    },
+    "Workbench_Simple_1.4.0_Guide_KR.pdf": {
+      "sha256": "da5f059264b672915ddba3e3e67a6dfddd36d6c3560a3746241c85655903f465",
+      "bytes": 2744112
+    }
+  },
+  "sourceEntries": 1748,
+  "sourceAndArtifactVerification": "passed",
+  "rawSiteValuesPublished": false
+}

@@ -1,0 +1,50 @@
+{
+  "version": "1.4.0",
+  "jarSha256": "019a0b27baaee097958be450359eb0264b757cf1133c6ff412913d31463b7cbd",
+  "renderedViews": 68,
+  "controls": 1492,
+  "scenarios": 88,
+  "clippedControls": [],
+  "collapsedAreas": [
+    {
+      "theme": "light",
+      "width": "1024",
+      "height": "720",
+      "view": "26-inspection-routes.png",
+      "name": "wb.scope.inspection.routes",
+      "visibleWidth": "976",
+      "visibleHeight": "95"
+    },
+    {
+      "theme": "dark",
+      "width": "1024",
+      "height": "720",
+      "view": "26-inspection-routes.png",
+      "name": "wb.scope.inspection.routes",
+      "visibleWidth": "976",
+      "visibleHeight": "95"
+    },
+    {
+      "theme": "light",
+      "width": "1024",
+      "height": "720",
+      "view": "28-inspection-recheck.png",
+      "name": "wb.scope.inspection.routes",
+      "visibleWidth": "976",
+      "visibleHeight": "95"
+    },
+    {
+      "theme": "dark",
+      "width": "1024",
+      "height": "720",
+      "view": "28-inspection-recheck.png",
+      "name": "wb.scope.inspection.routes",
+      "visibleWidth": "976",
+      "visibleHeight": "95"
+    }
+  ],
+  "failedScenarios": [],
+  "missingCaptures": [],
+  "result": "failed",
+  "subsequentAction": "Keep100px minimum table gate; reduce duplicate coverage summary to one line; rerender final JAR."
+}

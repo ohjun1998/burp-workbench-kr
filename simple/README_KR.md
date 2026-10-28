@@ -1,37 +1,37 @@
-# Workbench Simple 1.3.2
+# Workbench Simple 1.4.0
 
-**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0·1.3.1 JAR·소스·PDF는 보존합니다.
+**기존 8개 통합 확장 도구를 유지하고 원터치 수집에서 메뉴·환경·경로·API·민감정보를 연결합니다.** 공통 응답 파서, 탐색 처리 흐름과 선택 재점검을 추가하며 기존 Next와 Simple 1.0.0–1.3.2 JAR·소스·PDF는 보존합니다.
 
-SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.
+SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 주요정보·실제 응답·미확인 확인 → 선택 재점검 → 원문 보고서·증거 저장으로 이어갑니다. 필요한 기존 도구도 바로 선택할 수 있습니다.
 
 | 필요한 파일 | 위치 |
 |---|---|
-| 설치 JAR | [burp-workbench-simple-1.3.2.jar](downloads/1.3.2/burp-workbench-simple-1.3.2.jar) |
-| 독립 빌드 소스 | [소스 ZIP](downloads/1.3.2/burp-workbench-simple-1.3.2-source.zip) · [SHA256SUMS](downloads/1.3.2/SHA256SUMS) |
-| 브라우저·SPA helper | [helper 0.4.1 ZIP](downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip) |
+| 설치 JAR | [burp-workbench-simple-1.4.0.jar](downloads/1.4.0/burp-workbench-simple-1.4.0.jar) |
+| 독립 빌드 소스 | [소스 ZIP](downloads/1.4.0/burp-workbench-simple-1.4.0-source.zip) · [SHA256SUMS](downloads/1.4.0/SHA256SUMS) |
+| 브라우저·SPA helper | [helper 0.5.0 ZIP](downloads/1.4.0/feature-mapper-browser-helper-0.5.0.zip) |
 | 외부 Katana 1.8.0 | [공식 배포·SHA-256 확인 설치 도구](tools/install_katana.py) · [고정 의존성 기록](docs/KATANA_DEPENDENCY.json) · 실행 파일 별도 설치 |
 | 단계별 그림 가이드 | [HTML 안내서](docs/GUIDE_SIMPLE_KR.html) · [문서 원고](docs/GUIDE_SIMPLE_KR.md) |
-| PDF 가이드 | [Workbench Simple 그림 가이드북](downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) |
-| 실제 검증 결과 | [검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.3.2.json) |
-| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.3.2/katana-native/katana-verification.json) |
-| 변경 안내 | [Simple 1.3.2 적용 기능과 정리한 부가 흐름](docs/RELEASE_SIMPLE_1.3.2_KR.md) |
-| 적용 범위 | [Katana 요구사항·구현·검사·가이드 연결표](docs/KATANA_SCOPE_1.3.2_SPEC_KR.md) |
+| PDF 가이드 | [Workbench Simple 그림 가이드북](downloads/guides/1.4.0/Workbench_Simple_1.4.0_Guide_KR.pdf) |
+| 실제 검증 결과 | [검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.4.0.json) |
+| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.4.0/katana-native/katana-verification.json) |
+| 변경 안내 | [Simple 1.4.0 적용 기능과 정리한 부가 흐름](docs/RELEASE_SIMPLE_1.4.0_KR.md) |
+| 적용 범위 | [Katana 요구사항·구현·검사·가이드 연결표](docs/KATANA_SCOPE_1.4.0_SPEC_KR.md) |
 
 ## SCOPE 통합 점검
 
 | 결과 | 연결한 기능 | 판정과 범위 |
 |---|---|---|
-| 메뉴·기능 발견 | Katana·HTML·JS·robots/sitemap·API 문서와 브라우저 관측을 연결합니다. | 실제 관측, 문서 선언, 기술 추정 후보를 구분합니다. |
+| 메뉴·기능 발견 | Katana·HTML·JS·API 문서와 브라우저 메뉴·iframe·통신 관측을 연결합니다. | 경로 문자열 발견, 브라우저 응답 관측, HTTP 본문 분석을 구분합니다. |
 | 환경·주요 경로 | 서버·WAS·프레임워크·프록시/CDN·DB 단서를 모으고 관련 경로를 확인합니다. | 탐지 근거·확실성과 응답 내용 확인 상태를 함께 읽습니다. |
-| API·민감정보 | API 문서와 관측 요청을 대조하고 키·토큰·내부 정보 후보를 분류합니다. | 공개 식별자·예제·비밀키 후보, 중요도·확신도·유효성을 구분합니다. |
+| API·민감정보 | 공통 파서로 API·개인정보·환경 설정·키·토큰·내부 정보 후보를 분류합니다. | 공개·예제·데모·미해결과 비밀값 후보를 구분하고 화면·이력은 가립니다. |
 | 권한·변경 비교 | 선택한 HTTP 계정별 응답 차이와 이전 실행의 새 항목·변경 후보를 확인합니다. | 같은 프로젝트·계정·조건의 비교만 사용하고 불완전 실행을 해결로 확정하지 않습니다. |
 | 원본·증거 | 불변 원본 ID에서 요청·응답을 열고 기존 도구와 증거에 연결합니다. | 과거 이력의 원본이 없으면 현재 원본처럼 열리지 않습니다. |
-| 원문 값 분류 보고서 | 현재 응답의 API·민감정보·토큰·키·환경 값을 위치와 원본 ID별로 저장합니다. | 제품 탐지와 보고서 추가 파싱을 구분하며 로컬 ZIP에는 원문 값이 포함됩니다. |
-| 범위·실행 상태 | SCOPE·리디렉션·요청 한도·세션·중지/재개와 제외 사유를 확인합니다. | HTTP 완료·브라우저 탐색·미검사·실패 상태를 각각 확인합니다. |
+| 원문 값 분류 보고서 | 화면과 같은 추출 규칙의 API·민감정보·환경 값을 위치·원본 ID별로 저장합니다. | 추출·연결 근거와 부분 범위를 읽으며 명시적 로컬 ZIP에는 원문 값이 포함됩니다. |
+| 탐색 흐름·재점검 | 발견·대기·조회·분석·미확인 이유를 읽고 선택 항목만 재점검합니다. | 같은 SCOPE·인증·공통 예산을 유지하고 거부·변경 동작을 자동 우회하지 않습니다. |
 
 ## 설치와 첫 점검
 
-1. Simple 설치 JAR burp-workbench-simple-1.3.2.jar를 준비하고 기존 Workbench 파일을 보관합니다.
+1. Simple 설치 JAR burp-workbench-simple-1.4.0.jar를 준비하고 기존 Workbench 파일을 보관합니다.
 2. Burp Extensions → Add → Java에서 Simple JAR를 선택하고 Workbench Simple 탭을 엽니다.
 3. 한 확장에서만 수집하려면 기존 Workbench의 로드를 해제하고 Simple을 사용합니다. 기존 확장이나 원본 파일을 삭제할 필요는 없습니다.
 4. SCOPE 목록에 대상 URL과 경로를 등록하고 허용·제외 범위를 확인합니다. 통합 점검 화면에서 URL·HTTP 계정과 요청 한도를 정합니다.
@@ -67,7 +67,7 @@ Windows에서는 `--dest "C:/Tools/Workbench-Katana/1.8.0" --platform windows_am
 
 ## 브라우저·SPA 모드 준비
 
-1. 배포 파일 feature-mapper-browser-helper-0.4.1.zip을 새 폴더에 풀어 manifest.json이 보이는 폴더를 준비합니다. 기존 helper와 배포 파일은 보관합니다.
+1. 배포 파일 feature-mapper-browser-helper-0.5.0.zip을 새 폴더에 풀어 manifest.json이 보이는 폴더를 준비합니다. 기존 helper와 배포 파일은 보관합니다.
 2. Chrome은 chrome://extensions, Edge는 edge://extensions를 열고 개발자 모드에서 압축해제된 확장 로드를 선택해 해당 폴더를 불러옵니다.
 3. Workbench의 기능 매핑 설정에서 브라우저 연결 주소와 토큰을 확인하고 helper 팝업에 입력한 뒤 연결을 확인·저장합니다. 토큰은 로컬 연결에 사용합니다.
 4. 브라우저에서 대상 사이트를 열고 필요한 로그인을 마칩니다. helper에서 현재 사이트를 활성화하고 정상적인 사이트 접근 권한 절차를 진행합니다.
@@ -97,14 +97,19 @@ Windows에서는 `--dest "C:/Tools/Workbench-Katana/1.8.0" --platform windows_am
 - HTTP 200이어도 공통 홈·로그인·soft404일 수 있습니다. 부재 경로 대조가 불안정하거나 보안 확인·요청 제한이 발생하면 내용 확인을 보류합니다.
 - 키 형식이 맞아도 공개 SDK 식별자·예제·비밀키 후보가 다릅니다. 기본은 마스킹과 원본 위치·지문 표시이며 발견한 키를 자동 검증하거나 인증값으로 사용하지 않습니다.
 - 분류 보고서 저장은 응답 원문을 포함하는 별도 로컬 내보내기입니다. 정적 문자열과 동적 API 템플릿을 구분하고, 식을 평가하거나 없는 원문 값을 만들어내지 않습니다. 화면·이력의 가림은 유지합니다.
-- 본문 줄·문자 위치는 분석한 텍스트 본문을 기준으로 읽습니다. HTTP 헤더를 포함한 원시 패킷의 바이트 위치와 다르며 압축·문자 인코딩에 따라 원본 미리보기와 직접 일치하지 않을 수 있습니다.
+- PATH_SHAPE_ONLY는 미해결 템플릿과 실제 관측 주소의 정적 경로 형태가 맞는 후보입니다. 쿼리·fragment 항목은 제외하며, 변수값 복원·같은 계정·동일 권한·메뉴 인과·실행 가능성 승격을 뜻하지 않습니다. 연결을 표시하는 동작은 새 요청을 보내지 않습니다.
+- 주요정보의 개수와 취약점 개수는 다릅니다. CSS 아이콘명·빈값·DOMTokenList·일반 Swagger 코드 조각을 실제 DB·키·토큰으로 해석하지 않습니다. 인증된 본인 시험 계정 정보도 비인가 공개 여부와 구분합니다.
+- 본문 줄·문자 위치는 분석한 텍스트 본문을 기준으로 읽습니다. HTTP 헤더를 포함한 원시 패킷의 바이트 위치와 다르며 압축·문자 인코딩에 따라 원본 미리보기와 직접 일치하지 않을 수 있습니다. 소스맵 복원 코드의 가상 위치는 실제 응답 원문 좌표로 대신하지 않습니다.
 - 브라우저 메뉴·화면·API 연결은 전용 탭과 현재 라우트의 관측 문맥입니다. 지연 메뉴는 제한 시간 안에서 기다리며, 한도와 미확인 상태를 전체 메뉴 완료로 해석하지 않습니다.
+- 브라우저 요청·응답의 연결 ID와 HTTP 상태는 브라우저 세션의 관측 메타데이터입니다. 브라우저 응답 본문 분석이나 선택한 HTTP 계정의 인증·접근 성공을 대신하지 않습니다. 종료 시 대기 요청은 미확인으로 남습니다.
 - 브라우저 탐색은 허용 Origin·포트·경로·제외 범위를 지킵니다. URL 규칙으로 안전하게 표현할 수 없는 범위는 브라우저 모드 사용 불가 사유를 확인하고 HTTP 모드로 점검합니다.
 - 좁은 SCOPE가 필요한 스크립트·리소스를 제외하면 일부 메뉴가 열리지 않을 수 있습니다. 결과는 부분 탐색으로 읽고 범위를 자동으로 넓힌 것으로 가정하지 않습니다.
 - 자동 탐색은 GET/HEAD와 알려진 변경 경로 제외 규칙을 사용합니다. GET을 사용하는 서버 기능에 부작용이 전혀 없음을 보장하는 방식은 아니므로 결과와 원본을 확인합니다.
 - HTTP 요청 예산에는 기준·신원·리디렉션 요청도 포함됩니다. 브라우저의 페이지·동작 한도와 실제 네트워크 관측 수는 HTTP 점검의 엄격한 요청 예산과 구분합니다.
 - 대형 덤프·아카이브 후보는 자동 점검에서 제외합니다. 압축을 푼 본문 분석에도 바이트 한도를 적용하며 전체 압축 원본은 별도로 보관합니다. 분석 한도는 실제 다운로드 중단 한도가 아니므로 미검사·부분 분석 이유를 확인합니다.
 - 저장된 실행 이력은 마스킹된 결과·지문 중심입니다. 인증 헤더·쿠키·본문·시크릿 원문을 실행 이력으로 저장하지 않으며, 현재 실행의 원본과 과거 요약을 구분합니다.
+- 중지 시 이미 수신한 원본은 RESPONSE_PENDING_ANALYSIS · complete=false로 보존합니다. 추가 HTTP 없이 원본 보기·분류 보고서로 확인할 수 있으며, 원문 값 추출은 제품 분석 완료를 뜻하지 않습니다.
+- 선택 재점검은 기존 실행 조건·남은 예산과 현재 SCOPE에서 가능한 조회만 수행합니다. Scope·프로젝트·인증이 달라졌거나 예산이 끝났으면 이유를 확인하고 새 실행을 준비합니다. 미해결 변수·쓰기·권한 거부를 추측으로 우회하지 않습니다.
 
 ## 원본·이력·증거
 
@@ -114,7 +119,7 @@ Simple 설정 키는 `simple.*`, 저장 폴더는 `.burp-workbench-simple`입니
 
 ## 캡처와 검증
 
-그림은 Simple 운영 Swing 화면에 합성 예제 패킷을 넣어 렌더링한 캡처입니다. 실제 Burp GUI를 조작한 캡처가 아닙니다. 예제 URL·계정·판정은 실제 대상 점검의 성공을 뜻하지 않습니다. DOM 어댑터·실제 브라우저·실제 Burp 실행 범위는 버전별 검증 기록에서 구분합니다.
+운영 Swing 그림은 합성 예제 패킷으로 렌더링했습니다. helper 한 장은 실제 Chromium의 운영 popup을 로컬 Chrome API·연결 fixture로 구동한 화면이며, 네이티브 MV3·DNR·Burp GUI 실행과 구분합니다. 예제 URL·계정·판정은 실제 대상 점검의 성공을 뜻하지 않습니다. DOM 어댑터·실제 브라우저·실제 Burp 실행 범위는 버전별 검증 기록에서 구분합니다.
 
 ## 개발과 가이드 재생성
 
@@ -133,4 +138,4 @@ python tools/check_simple_guide.py
 
 Java 17을 PATH에 둔 환경에서 위 명령을 실행하거나 `--java`로 Java 17 경로를 지정합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.
 
-[보존한 Simple 1.3.1 안내서](docs/history/1.3.1/GUIDE_SIMPLE_KR.html) · [1.3.1 PDF](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) · [1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)
+[보존한 Simple 1.3.2 안내서](docs/history/1.3.2/GUIDE_SIMPLE_KR.html) · [1.3.2 PDF](downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) · [1.3.1 안내서](docs/history/1.3.1/GUIDE_SIMPLE_KR.html) · [1.3.1 PDF](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) · [1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)

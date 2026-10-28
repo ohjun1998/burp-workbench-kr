@@ -14,6 +14,7 @@ import static kr.workbench.SimplePreview.*;
 public final class ScopeInspectionPreview extends WorkbenchTest {
   static final String ORIGIN = "https://scope.example.test";
   static final String API_KEY = "SCOPE_PRIVATE_API_VALUE_0123456789abcdef";
+  static final String API_TEMPLATE = "${host}/app/api/documents/${id}";
   static final List<ScopeInspection.Page> packets = new ArrayList<>();
   static final List<ScopeInspection.Finding> findings = new ArrayList<>();
   static final List<ScopeInspection.Candidate> candidates = new ArrayList<>();
@@ -46,12 +47,42 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
     return new ScopeInspection.Snapshot(id, state,
         "가이드용 합성 응답·Katana·브라우저 관측 예시 · 실제 대상 탐색을 실행하지 않았습니다.",
         16, packets.size(), pending, 2, 0, partial(packets), findings, packets, candidates,
-        1793100000000L, state == ScopeInspection.State.COMPLETED ? 1793100005000L : 0);
+        1793100000000L, state == ScopeInspection.State.COMPLETED ? 1793100005000L : 0, coverage());
+  }
+  /** Disclosed synthetic traces; no network coordinator is started to create these examples. */
+  static List<ScopeInspectionCoverage.Row> coverage() {
+    var result = new ArrayList<ScopeInspectionCoverage.Row>();
+    for (var packet : packets) {
+      String state = packet.status()==401 ? "DENIED" : packet.complete() ? "ANALYZED" : "PARTIAL";
+      result.add(new ScopeInspectionCoverage.Row(EnvironmentProject.hash("guide|"+packet.account()+"|"+packet.url()),
+          packet.url(),packet.method(),packet.account(),packet.profileRevision(),"가이드 합성 응답","합성 원본 연결",state,
+          packet.status()==401 ? "합성 접근 거부 · 대상 권한 미확인" : "합성 응답의 분석 상태 · 실제 대상 점검 아님",packet.status(),
+          packet.original().id(),false,List.of("DISCOVERED","SCOPE_CHECKED","QUEUED","REQUESTED","RESPONDED","ANALYZED")));
+    }
+    result.add(new ScopeInspectionCoverage.Row(EnvironmentProject.hash("guide-unvisited"),ORIGIN+"/app/api/pending","GET","Alice","r1",
+        "JS API","조회 후보","UNVISITED","가이드 합성 미방문 예시 · 중지 전에 남은 조회 항목",0,"",true,List.of("DISCOVERED","SCOPE_CHECKED","QUEUED")));
+    result.add(new ScopeInspectionCoverage.Row(EnvironmentProject.hash("guide-failure"),ORIGIN+"/app/api/slow","GET","Alice","r1",
+        "관측 링크","조회 실패 예시","FAILED","가이드 합성 타임아웃 · 새 조회에는 남은 예산 필요",0,"",true,List.of("DISCOVERED","SCOPE_CHECKED","QUEUED","REQUESTED")));
+    result.add(new ScopeInspectionCoverage.Row(EnvironmentProject.hash("guide-template"),ORIGIN+"/app/api/documents/{id}","GET","Alice","r1",
+        "API 문서","필수 id 값 필요","EXCLUDED","동적 경로 변수 미해결 · 추측 전송하지 않음",0,"",false,List.of("DISCOVERED","SCOPE_CHECKED")));
+    result.add(new ScopeInspectionCoverage.Row(EnvironmentProject.hash("guide-js-template"),API_TEMPLATE,"GET","비로그인","r1",
+        "JS API","동적 미해결","EXCLUDED","합성 JS 응답에서 템플릿 관측 · 형태 연결도 변수 해소나 실행 성공이 아님",0,"",false,List.of("DISCOVERED","SCOPE_CHECKED")));
+    return List.copyOf(result);
   }
   static int partial(List<ScopeInspection.Page> pages) { return (int)pages.stream().filter(page -> !page.complete()).count(); }
   static void set(Object owner, String field, Object value) {
     try { var member = owner.getClass().getDeclaredField(field); member.setAccessible(true); member.set(owner, value); }
     catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+  }
+  static void syntheticContext(ScopeInspectionPanel panel, WorkbenchScope scope, MontoyaApi api) {
+    try {
+      set(panel,"runScope",scope.inspectionFingerprint());set(panel,"runProject",WorkspaceResume.projectIdentity(api));
+      var inputs=ScopeInspectionPanel.class.getDeclaredMethod("inputConditions");inputs.setAccessible(true);
+      set(panel,"runInputs",inputs.invoke(panel));
+      // The example history below is provided explicitly; do not start a real history save for these guide traces.
+      var persisted=ScopeInspectionPanel.class.getDeclaredField("persisted");persisted.setAccessible(true);
+      @SuppressWarnings("unchecked") var ids=(Set<String>)persisted.get(panel);ids.add("guide-scope-run");
+    } catch(ReflectiveOperationException error) {throw new AssertionError(error);}
   }
   static Map<String,Object> browserEvent(String kind, String path, String label, String method, int pages) {
     var value = new LinkedHashMap<String,Object>();
@@ -100,14 +131,14 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
     store = new DiskTrafficStore();
     try {
       edt(() -> {
-        panel.url.setText(ORIGIN + "/app/"); panel.options = options;
+        panel.url.setText(ORIGIN + "/app/");
         panel.compareAccounts.setSelected(true); panel.browserMode.setSelected(true);panel.katanaMode.setSelected(true);
         scenario("Opening the production inspection panel performs no target requests", panel.runner == null);
         capture(panel, "12-inspection-setup.png");
       });
       page("/app/", "비로그인", 200, "text/html", "<html><title>통합 점검 예시</title><nav><a href='/app/documents'>문서 메뉴</a><a href='/app/openapi.json'>API 문서</a></nav><script src='/app/assets/site.js'></script></html>");
       page("/app/openapi.json", "비로그인", 200, "application/json", "{\"openapi\":\"3.0.0\",\"paths\":{\"/app/api/me\":{\"get\":{}},\"/app/api/documents/{id}\":{\"get\":{\"parameters\":[{\"name\":\"id\",\"in\":\"path\",\"required\":true}]}}}}");
-      page("/app/assets/site.js", "비로그인", 200, "application/javascript", "fetch('/app/api/me');\nfetch('/app/api/undocumented');\nconst api_key='"+API_KEY+"';");
+      page("/app/assets/site.js", "비로그인", 200, "application/javascript", "fetch('/app/api/me');\nfetch('/app/api/undocumented');\nfetch(`"+API_TEMPLATE+"`);\nconst api_key='"+API_KEY+"';");
       String configBody = "{\"api_key\":\""+API_KEY+"\",\"database_url\":\"postgresql://app:DB_DEMO_PASSWORD@db.internal/app\",\"diagnostic\":\"org.postgresql.util.PSQLException SQLSTATE[08006]\",\"internal_ip\":\"10.20.30.40\",\"revision\":2}";
       var config = page("/app/config.json", "비로그인", 200, "application/json", configBody);
       page("/app/api/me", "비로그인", 401, "application/json", "{\"error\":\"login required\"}");
@@ -115,6 +146,7 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
           packets.get(4).classification().equals("DENIED") && !packets.get(4).complete() && packets.get(4).note().contains("대상 내용 미확인"));
       page("/app/api/me", "Alice", 200, "application/json", "{\"id\":\"alice\",\"role\":\"user\"}");
       page("/app/api/undocumented", "Alice", 200, "application/json", "{\"document\":101,\"owner\":\"alice\"}");
+      page("/app/api/documents/101", "Alice", 200, "application/json", "{\"id\":101,\"owner\":\"alice\",\"title\":\"가이드 합성 문서\"}");
       findings.add(new ScopeInspection.Finding("ACCESS", "계정별 응답 차이", ORIGIN+"/app/api/me", "GET", "계정 비교",
           "응답 관측", "중간", "수동 검토", "비로그인 HTTP 401 / Alice HTTP 200 · 선언한 접근 정책과 직접 대조하세요.",
           packets.get(5).original().id(), 0, -1, EnvironmentProject.hash("account-response-difference")));
@@ -144,6 +176,8 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
       history.save(options, previous);
       var changes = history.changes(options, completed);
       edt(() -> {
+        panel.options=options;
+        syntheticContext(panel,scope,api);
         panel.accept(snapshot("guide-scope-run", ScopeInspection.State.RUNNING, 9));
         capture(panel, "13-inspection-progress.png");
         panel.accept(completed); set(panel, "changes", changes); panel.accept(completed);
@@ -157,6 +191,29 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
           if (target[0].equals("secrets")) scenario("Secret result view preserves masking", !ScopeInspectionUiTest.visibleText(panel).contains(API_KEY));
           capture(panel, target[1]);
         }
+        tab(panel,"routes");
+        scenario("Coverage guide distinguishes synthetic responses, unvisited candidates and retry exclusions",panel.tables.get("routes").getRowCount()>=packets.size()+3);
+        capture(panel,"26-inspection-routes.png");
+        panel.routeFilter.setSelectedItem("형태 일치 후보");tab(panel,"routes");
+        scenario("Path-shape guide associates an unresolved observed template with separate synthetic response evidence",ScopeInspectionCoverage.correlations(panel.current).stream().anyMatch(c->c.template().equals(API_TEMPLATE)&&c.observedUrl().endsWith("/app/api/documents/101")));
+        JTable linked=panel.tables.get("routes");
+        for(int i=0;i<panel.current.coverage().size();i++)if(panel.current.coverage().get(i).url().equals(API_TEMPLATE)){
+          int view=linked.convertRowIndexToView(i);if(view>=0){linked.setRowSelectionInterval(view,view);break;}
+        }
+        int association=panel.detail.getText().indexOf("PATH_SHAPE_ONLY");
+        if(association>=0)panel.detail.setCaretPosition(association);
+        capture(panel,"29-inspection-correlations.png");panel.routeFilter.setSelectedIndex(0);
+        panel.resultFilter.setSelectedItem(ScopeInspectionView.Filter.IMPORTANT);tab(panel,"summary");
+        scenario("Important result filter uses masked production findings without new HTTP",panel.tables.get("summary").getRowCount()>0&&!ScopeInspectionUiTest.visibleText(panel).contains(API_KEY));
+        capture(panel,"27-inspection-filter.png");
+        panel.resultFilter.setSelectedItem(ScopeInspectionView.Filter.ALL);panel.routeFilter.setSelectedItem("미확인·재점검");tab(panel,"routes");
+        JTable routes=panel.tables.get("routes");
+        for(int i=0;i<panel.current.coverage().size();i++)if(panel.current.coverage().get(i).retryable()){
+          int view=routes.convertRowIndexToView(i);if(view>=0){routes.setRowSelectionInterval(view,view);break;}
+        }
+        scenario("Synthetic guide selection retains retryable route evidence but never starts a coordinator",!panel.selectedCoverage().isEmpty()&&panel.selectedCoverage().get(0).retryable()&&!panel.recheck.isEnabled()&&panel.runner==null);
+        capture(panel,"28-inspection-recheck.png");
+        panel.routeFilter.setSelectedIndex(0);
         panel.browser.begin("guide-scope-run", ORIGIN+"/app/", List.of(ORIGIN+"/app/"), List.of(), 15, 30, System.currentTimeMillis()+60000);
         panel.browserCommand(ORIGIN);
         panel.browserEvent(browserEvent("started", "/app/", "통합 탐색 시작", "", 1));

@@ -1,0 +1,26 @@
+{
+  "message": "TimeoutError: browserContext.waitForEvent: Timeout 20000ms exceeded while waiting for event \"serviceworker\"",
+  "helper": "/workspace/burp-workbench-kr/simple/feature-mapper/browser-helper",
+  "targets": [
+    {
+      "type": "browser_ui",
+      "url": "chrome://omnibox-popup.top-chrome/"
+    },
+    {
+      "type": "browser_ui",
+      "url": "chrome://omnibox-popup.top-chrome/omnibox_popup_aim.html"
+    },
+    {
+      "type": "page",
+      "url": "about:blank"
+    },
+    {
+      "type": "page",
+      "url": "about:blank"
+    }
+  ],
+  "extensionPage": " Extensions html { /* Remove 300ms delay for 'click' event, when using touch interface. */ touch-action: manipulation; } @media (prefers-color-scheme: dark) { html { background: var(--md-background-color); } } /* Mimics the developer mode toolbar until the real one loads. Note: * .in-dev-mode is applied by i18n{loadTimeClasses}. */ html.loading.in-dev-mode body::before { box-sizing: border-box; content: ''; display: block; border-bottom: var(--md-toolbar-border); height: calc(var(--md-toolbar-height) + 58px); } html, body { height: 100%; line-height: 154%; margin: 0; overflow: hidden; width: 100%; } html[webui-refresh-2026] { background: var(--color-webui-page-background); } Drop to install Extensions Search extensions Developer mode This setting is managed by your administrator. Load unpacked Pack extension Update My extensions Site permissions Keyboard shortcuts Discover more extensions and themes on the Chrome Web Store Your browser is managed by your organization Find extensions and themes in the Chrome Web Store No search results found All Extensions Pin new extensions to Toolbar Related to Chromium PDF Viewer Not from Chrome Web Store. Chromium PDF Viewer 1 Rate it Details Remove Your parent has disabled extension permissions Chrome Apps ",
+  "popup": "",
+  "popupError": "Error: page.goto: net::ERR_BLOCKED_BY_CLIENT at chrome-extension://ppncieadnhgmmelcpohcbicnjcbdcnnk/popup.html\nCall log:\n\u001b[2m  - navigating to \"chrome-extension://ppncieadnhgmmelcpohcbicnjcbdcnnk/popup.html\", waiting until \"load\"\u001b[22m\n",
+  "managedExtensionPolicyBlocked": true
+}

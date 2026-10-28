@@ -1,0 +1,181 @@
+{
+  "candidateJarSHA256": "9368f63cd182c6f6dbb04e7897d11bb83c8da3aa963c51edbb303f1d8175c2cc",
+  "finalReleaseEvidence": false,
+  "completedCandidateRuns": 14,
+  "runs": [
+    {
+      "siteId": "benchmarkjava",
+      "scenario": "direct",
+      "state": "COMPLETED",
+      "sent": 28,
+      "transportResponses": 28,
+      "transportErrors": 0,
+      "partial": 6,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "benchmarkjava",
+      "scenario": "root",
+      "state": "STOPPED",
+      "sent": 151,
+      "transportResponses": 151,
+      "transportErrors": 0,
+      "partial": 11,
+      "wallLimitReached": true
+    },
+    {
+      "siteId": "dvbank",
+      "scenario": "protected",
+      "state": "COMPLETED",
+      "sent": 48,
+      "transportResponses": 48,
+      "transportErrors": 0,
+      "partial": 23,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "dvbank",
+      "scenario": "root",
+      "state": "COMPLETED",
+      "sent": 56,
+      "transportResponses": 56,
+      "transportErrors": 0,
+      "partial": 31,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "juice-shop",
+      "scenario": "protected",
+      "state": "COMPLETED",
+      "sent": 72,
+      "transportResponses": 70,
+      "transportErrors": 2,
+      "partial": 49,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "juice-shop",
+      "scenario": "root",
+      "state": "COMPLETED",
+      "sent": 92,
+      "transportResponses": 90,
+      "transportErrors": 2,
+      "partial": 72,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "loop",
+      "scenario": "protected",
+      "state": "PAUSED",
+      "sent": 1,
+      "transportResponses": 1,
+      "transportErrors": 0,
+      "partial": 0,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "loop",
+      "scenario": "root",
+      "state": "PAUSED",
+      "sent": 1,
+      "transportResponses": 1,
+      "transportErrors": 0,
+      "partial": 0,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "oopssec",
+      "scenario": "protected",
+      "state": "STOPPED",
+      "sent": 53,
+      "transportResponses": 52,
+      "transportErrors": 1,
+      "partial": 14,
+      "wallLimitReached": true
+    },
+    {
+      "siteId": "oopssec",
+      "scenario": "root",
+      "state": "STOPPED",
+      "sent": 44,
+      "transportResponses": 43,
+      "transportErrors": 1,
+      "partial": 11,
+      "wallLimitReached": true
+    },
+    {
+      "siteId": "vulnbank",
+      "scenario": "protected",
+      "state": "COMPLETED",
+      "sent": 54,
+      "transportResponses": 54,
+      "transportErrors": 0,
+      "partial": 5,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "vulnbank",
+      "scenario": "root",
+      "state": "COMPLETED",
+      "sent": 128,
+      "transportResponses": 128,
+      "transportErrors": 0,
+      "partial": 40,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "vulnerableapp",
+      "scenario": "direct",
+      "state": "COMPLETED",
+      "sent": 10,
+      "transportResponses": 10,
+      "transportErrors": 0,
+      "partial": 0,
+      "wallLimitReached": false
+    },
+    {
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "state": "COMPLETED",
+      "sent": 68,
+      "transportResponses": 68,
+      "transportErrors": 0,
+      "partial": 19,
+      "wallLimitReached": false
+    }
+  ],
+  "reasonExcluded": "Guide visual QA found DB connection userinfo also classified as an Email candidate; fix the shared analyzer and regenerate release evidence. Two LOOP cases also correctly paused on configured identity401. Final LOOP before/after pair will use one fresh normal-login snapshot, keeping both old baseline cases and this candidate separate.",
+  "candidateCompleteCheck": {
+    "result": "passed",
+    "workbenchGroups": 139,
+    "workbenchChecks": 5122,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "nodeChecks": 34
+  },
+  "privateSourcesPreserved": true,
+  "oldArtifactsChanged": false,
+  "pendingResponseCandidate": {
+    "sha256": "ad31af6ed76cb331737e5045fb7b3779dc947f000cbcea57ce2113561dfd20f2",
+    "runsPreserved": 14,
+    "integrityResult": "review",
+    "reason": "Two OopsSec harness-stop RESPONDED traces had retained originals but were missing from snapshot.pages. Fix stop-boundary partial-page publication, preserve complete=false, then retest exact new JAR. Do not relax the source-evidence gate.",
+    "checks": {
+      "regressionChecks": 5138,
+      "payloadHttpChecks": 136,
+      "mapperJavaChecks": 145,
+      "nodeChecks": 34,
+      "allPassed": true
+    },
+    "finalReleaseEvidence": false
+  },
+  "proxyLifecycleAssertion": {
+    "jarSHA256": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637",
+    "firstFullCheckFailedGroup": "ScopeKatanaProxyTest",
+    "firstFailure": "closed proxy cannot accept a new crawler connection",
+    "exactOSCause": "not established",
+    "independentProbe": "A closed owned listener with terminated acceptor and zero dispatch can share a reused port with a new listener, so a successful TCP connection alone does not identify the closed proxy.",
+    "action": "Keep production unchanged. Test owned listener/acceptor termination and valid preconnected request rejection with Scope enabled; fixed50checks passed3isolated runs. Rerun fullprofile after owned apps are stopped.",
+    "productionChanged": false
+  }
+}

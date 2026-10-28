@@ -10,12 +10,12 @@ import java.util.function.Predicate;
 /** Explicit, bounded browser command lease. Browser cookies and bodies never cross this bridge. */
 final class ScopeInspectionBrowser implements AutoCloseable {
   record Snapshot(String runId, String state, String message, int pages, int actions, int requests,
-                  int excluded, long startedAt, long finishedAt) {}
+                  int excluded, long startedAt, long finishedAt, int responses, int networkErrors, int pendingRequests) {}
   private final Consumer<Map<String,Object>> listener;
   private final Predicate<String> liveScope;
   private String runId="", startUrl="", origin="", state="IDLE", message="브라우저 연결 대기";
   private List<String> includes=List.of(), excludes=List.of();
-  private int maxPages, maxActions, pages, actions, requests, excluded, events;
+  private int maxPages, maxActions, pages, actions, requests, excluded, events, responses, networkErrors, pendingRequests;
   private long expiresAt, startedAt, finishedAt;
   private boolean closed;
   private final Set<String> seen = new LinkedHashSet<>();
@@ -37,7 +37,7 @@ final class ScopeInspectionBrowser implements AutoCloseable {
     if(allowed.isEmpty()||!accepts(url,site,allowed,denied)||!liveScope.test(url))
       throw new IllegalArgumentException("브라우저 시작 URL이 허용 Scope에 없습니다.");
     runId=id;startUrl=url;origin=site;includes=allowed;excludes=denied;
-    maxPages=pageLimit;maxActions=actionLimit;expiresAt=expiry;pages=actions=requests=excluded=events=0;
+    maxPages=pageLimit;maxActions=actionLimit;expiresAt=expiry;pages=actions=requests=excluded=events=responses=networkErrors=pendingRequests=0;
     startedAt=System.currentTimeMillis();finishedAt=0;seen.clear();state="WAITING";
     message="도우미의 SPA 통합 탐색 허용과 사이트 활성화를 확인하세요.";
   }
@@ -78,11 +78,26 @@ final class ScopeInspectionBrowser implements AutoCloseable {
       if(!routeId.isEmpty()&&!routeId.matches("[a-fA-F0-9]{16,128}"))return;
       String pageRouteId=text(input.get("pageRouteId"),128);
       if(!pageRouteId.isEmpty()&&!pageRouteId.matches("[a-fA-F0-9]{16,128}"))return;
+      String networkStage=text(input.get("networkStage"),16),requestId=text(input.get("requestId"),128);
+      if(!Set.of("","request","response","error").contains(networkStage)||!requestId.isEmpty()&&!requestId.matches("[a-fA-F0-9]{64}"))return;
+      if(!networkStage.isEmpty()&&!kind.equals("api"))return;
+      // A response observation requires an actual HTTP status. Invalid/missing
+      // values must not fall back to zero and promote an unconfirmed request.
+      if(networkStage.equals("response")&&(!(input.get("statusCode") instanceof Number n)
+          ||n.doubleValue()!=n.intValue()||n.intValue()<100||n.intValue()>599))return;
+      int status=number(input.get("statusCode"),0,599);
+      if(status>0&&status<100||status>0&&!networkStage.equals("response"))return;
+      String resourceType=text(input.get("resourceType"),32),errorCode=text(input.get("errorCode"),32),discoveryType=text(input.get("discoveryType"),16);
+      if(!Set.of("","xmlhttprequest","other","main_frame","sub_frame").contains(resourceType)
+          ||!Set.of("","BLOCKED","ABORTED","TIMED_OUT","NETWORK_ERROR").contains(errorCode)
+          ||!Set.of("","anchor","iframe","network").contains(discoveryType))return;
       String label=masked(text(input.get("label"),120));
-      String key=kind+"|"+safe(url)+"|"+routeId+"|"+pageRouteId+"|"+method+"|"+label;
+      String key=kind+"|"+safe(url)+"|"+routeId+"|"+pageRouteId+"|"+method+"|"+label+"|"+networkStage+"|"+requestId+"|"+status+"|"+errorCode;
       if(Set.of("route","menu","api").contains(kind)&&!seen.add(key))return;
       events++; pages=max(pages,input.get("pages"),maxPages);actions=max(actions,input.get("actions"),maxActions);
       requests=max(requests,input.get("requests"),100000);excluded=max(excluded,input.get("excluded"),100000);
+      responses=max(responses,input.get("responses"),2000);networkErrors=max(networkErrors,input.get("networkErrors"),2000);
+      pendingRequests=number(input.get("pendingRequests"),pendingRequests,200);
       clean=new LinkedHashMap<>();clean.put("type","inspection");clean.put("runId",runId);clean.put("kind",kind);
       clean.put("state",text(input.get("state"),40));clean.put("message",masked(text(input.get("message"),300)));
       clean.put("url",safe(url));clean.put("page",safe(page));clean.put("method",method);clean.put("label",label);
@@ -92,6 +107,11 @@ final class ScopeInspectionBrowser implements AutoCloseable {
       clean.put("queryNames",query instanceof List<?> list?list.stream().limit(32).map(x->masked(text(x,80))).toList():List.of());
       clean.put("pages",pages);clean.put("actions",actions);clean.put("requests",requests);clean.put("excluded",excluded);
       clean.put("httpProfileShared",false);
+      clean.put("networkStage",networkStage);clean.put("requestId",requestId);clean.put("statusCode",status);
+      clean.put("resourceType",resourceType);clean.put("errorCode",errorCode);clean.put("discoveryType",discoveryType);
+      clean.put("frameId",number(input.get("frameId"),0,100000));clean.put("elapsedMillis",number(input.get("elapsedMillis"),0,15*60*1000));
+      clean.put("fromCache",Boolean.TRUE.equals(input.get("fromCache")));
+      clean.put("responses",responses);clean.put("networkErrors",networkErrors);clean.put("pendingRequests",pendingRequests);
       if(kind.equals("started")){state="RUNNING";message="브라우저 로그인 세션으로 전용 탭 탐색 중";}
       if(kind.equals("done")){
         state="stopped".equals(input.get("state"))?"STOPPED":"COMPLETED";finishedAt=System.currentTimeMillis();
@@ -105,11 +125,12 @@ final class ScopeInspectionBrowser implements AutoCloseable {
   }
 
   synchronized boolean active() { return !closed&&Set.of("WAITING","DISPATCHED","RUNNING").contains(state); }
-  synchronized Snapshot snapshot() { return new Snapshot(runId,state,message,pages,actions,requests,excluded,startedAt,finishedAt); }
+  synchronized Snapshot snapshot() { return new Snapshot(runId,state,message,pages,actions,requests,excluded,startedAt,finishedAt,responses,networkErrors,pendingRequests); }
   synchronized void stop(){if(active()){state="STOPPED";finishedAt=System.currentTimeMillis();message="브라우저 탐색 중지 · 전용 탭 정리 대기";}}
   @Override public synchronized void close(){stop();closed=true;state="CLOSED";seen.clear();}
 
   private static int max(int old,Object value,int limit){return value instanceof Number n?Math.max(old,Math.min(limit,Math.max(0,n.intValue()))):old;}
+  private static int number(Object value,int fallback,int limit){return value instanceof Number n&&n.doubleValue()==n.intValue()&&n.intValue()>=0&&n.intValue()<=limit?n.intValue():fallback;}
   private static String text(Object value,int max){return Objects.toString(value,"").replaceAll("[\\r\\n\\t]"," ").substring(0,Math.min(max,Objects.toString(value,"").length()));}
   private static String masked(String value){
     String clean=value.replaceAll("(?i)(?:AKIA|ASIA)[A-Z0-9]{16}|AIza[0-9A-Za-z_-]{35}|gh[pousr]_[A-Za-z0-9]{36,255}|sk_(?:live|test)_[A-Za-z0-9]{16,200}|eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}","[REDACTED]");

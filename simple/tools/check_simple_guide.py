@@ -61,7 +61,7 @@ def main() -> int:
         raise RuntimeError('Guide captures differ from current JAR')
     image_hashes = {('browser/'+step['image'] if step.get('captureKind')=='browser' else step['image']):sha(guide['capture_path'](args.images,step)) for step in steps}
     preserved = {}
-    for old in ['1.0.0','1.1.0','1.2.0','1.3.0','1.3.1']:
+    for old in ['1.0.0','1.1.0','1.2.0','1.3.0','1.3.1','1.3.2']:
         old_pdf = ROOT/f'downloads/guides/{old}/Workbench_Simple_{old}_Guide_KR.pdf'
         old_qa = ROOT/'docs'/('guide-validation.json' if old == '1.0.0' else f'guide-validation-{old}.json')
         if old == '1.0.0':
@@ -79,6 +79,16 @@ def main() -> int:
                 raise RuntimeError('Historical guide content differs: '+relative)
         preserved.setdefault(record['version'],{})['historicalFilesUnchanged'] = True
         preserved[record['version']]['historicalFilesChecked'] = len(record['sha256'])
+    for mirror in sorted((ROOT/'docs/history').glob('*/link-mirrors.json')):
+        record = json.loads(mirror.read_text(encoding='utf-8'))
+        for relative, expected in record['mirrors'].items():
+            if sha((mirror.parent/relative).resolve()) != expected['sha256']:
+                raise RuntimeError('Historical relative-path mirror differs: '+relative)
+        for link in record['links']:
+            if sha((mirror.parent/link['target']).resolve()) != link['sha256']:
+                raise RuntimeError('Archived guide link target differs: '+link['target'])
+        preserved.setdefault(record['version'],{})['relativeLinksResolved'] = len(record['links'])
+        preserved[record['version']]['relativePathMirrorsChecked'] = len(record['mirrors'])
     document = fitz.open(pdf)
     expected_pages = len(steps)+guide['GUIDE_FIXED_PAGES']
     if len(document) != expected_pages:
@@ -138,7 +148,8 @@ def main() -> int:
         'katanaScreensIncluded':[step['image'] for step in steps if step['number'].startswith('K')],
         'browserHelperCapture':{'included':guide['BROWSER_CAPTURE'].is_file(),'helperVersion':guide['HELPER_VERSION'],
             'path':guide['BROWSER_CAPTURE'].relative_to(ROOT).as_posix(),
-            'kind':'Actual Chromium helper page using localhost synthetic fixture; distinct from production Swing rendering'},
+            'kind':'Actual Chromium production helper popup with local Chrome API and authenticated connection fixtures; not native MV3/DNR or Burp GUI',
+            'nativeMv3DnrVerified':False,'nativeBurpVerified':False},
         'preservedPreviousGuides':preserved,
         'visualReview':'All pages reviewed in a contact sheet; full-size installation, helper setup, interpretation, account comparison, SPA/browser navigation, classified report and reference pages reviewed for readable Korean text, current helper guidance and uncropped controls.' if args.visual_reviewed else 'Structural checks passed; author visual review is still pending.',
         'captureScope':'Production Simple Swing components with synthetic packet/API/Katana adapters; actual Katana process/HTTP/HTTPS checks are separate verification evidence. Chrome/Edge installation instructions are textual, not native browser installation screenshots.',

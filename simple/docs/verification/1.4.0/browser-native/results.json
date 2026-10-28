@@ -1,0 +1,8 @@
+{
+  "result": "blocked",
+  "checks": [],
+  "reason": "EXTENSION_POLICY_BLOCKED",
+  "error": "Error: System Chromium managed extension policy blocks loading the unpacked helper; MV3/DNR verification was not executed.\n    at file:///workspace/burp-workbench-kr/simple/feature-mapper/tests/inspection-native.mjs:63:37",
+  "events": [],
+  "requests": []
+}

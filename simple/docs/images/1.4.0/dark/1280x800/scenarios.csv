@@ -1,0 +1,12 @@
+scenario,passed
+"All eight retained primary tools are directly visible",true
+"Scope editor opens exact production body",true
+"Traffic feedback and visible originals share a settled snapshot",true
+"Production response analysis displays a synthetic observation",true
+"JS analysis retains the selected HTTP source",true
+"Synthetic account candidates are retained",true
+"Manual replay prepares the selected request without running",true
+"Original and comparison packets are captured together",true
+"Production preview excludes synthetic session values",true
+"Production redaction preview contains a masked Cookie example",true
+"Guide navigation sends zero HTTP",true

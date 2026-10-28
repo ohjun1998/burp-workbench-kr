@@ -63,7 +63,7 @@ try{
     if(policyBlocked){const blocked=new Error('System Chromium managed extension policy blocks loading the unpacked helper; MV3/DNR verification was not executed.');blocked.code='EXTENSION_POLICY_BLOCKED';throw blocked;}
     throw error;
   }
-  check(!!worker,'actual Chromium loads helper0.4 and MV3 service worker');
+  check(!!worker,'actual Chromium loads the configured helper and MV3 service worker');
   const id=new URL(worker.url()).host;
   const popup=await context.newPage();await popup.setViewportSize({width:420,height:760});await popup.goto('chrome-extension://'+id+'/popup.html');await popup.evaluate(async()=>{await import(chrome.runtime.getURL('popup.js'));});
   await popup.locator('#base').fill(origin);await popup.locator('#token').fill(token);await popup.locator('#connect').click();await popup.waitForFunction(()=>document.querySelector('#status').textContent.includes('연결 완료'));

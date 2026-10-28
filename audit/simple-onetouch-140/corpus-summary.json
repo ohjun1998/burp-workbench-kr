@@ -1,0 +1,1015 @@
+{
+  "schemaVersion": 1,
+  "sourceVersion": "1.3.2",
+  "sourceRawValuesSHA256": "73572824b147e0e14fa91beeb20c8388059903c08402653eadea62c32cd04765",
+  "sourceScope": "retained original local applications; existing final1.3.2 response corpus; offline replay only",
+  "sites": [
+    "benchmarkjava",
+    "dvbank",
+    "juice-shop",
+    "loop",
+    "oopssec",
+    "vulnbank",
+    "vulnerableapp"
+  ],
+  "caseCount": 38,
+  "relevantTruthCount": 79,
+  "controlTruthCount": 17,
+  "cases": [
+    {
+      "caseId": "C001",
+      "siteId": "juice-shop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "95ba5e5971a2e4491df3501eefca7df59dcefedd7fd036d727fd092a1110a929",
+      "decodedSHA256": "17e8bfaefd2aa1196e91ef3081e501ec72dfbe1b473e97c7a8c6b26eead3eee4",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0002691",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "c0862aa59607838af3e7159aed076117db206866e0843a624104bb795b5c545e"
+        },
+        {
+          "id": "V0002692",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "53ef306358ab4abe8665660d58a2dffb8992e37b0eaef11952c037c2d1408363"
+        }
+      ]
+    },
+    {
+      "caseId": "C002",
+      "siteId": "juice-shop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "b5b8b4e0b0670848fedb3b047bb6ae993d09be241e7cd3d5f3e1259b24f9104c",
+      "decodedSHA256": "a029a0ee1822c924fe7eef8aa9316e4c196ff54f3279c0286abb472971b375a4",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0001549",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "29603b9fd6ff3468a157a022c5e86e72060d7f3dbf183f6a2549891872f8cc9c"
+        },
+        {
+          "id": "V0001550",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "1a661bde52b143cfaf5de4612410321a47c35097d2f78e05a32ff8ce1a6e3c2f"
+        },
+        {
+          "id": "V0001551",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "2ec1384214a122251544a3128d407ccce7a230d38e57d1f0f827aef24a3da114"
+        },
+        {
+          "id": "V0001552",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "6d0d3973c5239bceb907d3c685993474b0e8c6edccadf8b2433e4d32768d7951"
+        },
+        {
+          "id": "V0002867",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "73240e1acd49d5b5db8dd95611e019ef518e329bc0e4e2e4440c264331ffcc61"
+        },
+        {
+          "id": "V0002868",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "4c1211ba45042aafbd4d27b055deb246b10a95114702976c3e49fa2ef65243dc"
+        }
+      ]
+    },
+    {
+      "caseId": "C003",
+      "siteId": "juice-shop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "29c49b256425bd1f0b76665cb62c8847742cee1fa9513663e01cc4b0ca094732",
+      "decodedSHA256": "26258c9ae37bf2a0ba11e59c9e7725a9c68127c79f4bc1c858e1cb93e7ae43f5",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0002138",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "b582c0ae2f3d0f511eb6ea66aba2d1168f96fce9c168b084354a03a271026143"
+        }
+      ]
+    },
+    {
+      "caseId": "C004",
+      "siteId": "juice-shop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "c66ef4aa04e5cfdf71b421ace721993e51179c46e2edf58464ff6dad9cc2288c",
+      "decodedSHA256": "2ed173c5c3e3fa78967a27af73a7882304343ab9474494b328d6d6895207cf3f",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0001324",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "f82a7efbf3ff7a3381bd63b12a4afe8d1d471a90b7f34f67a3cc70d884c9b799"
+        }
+      ]
+    },
+    {
+      "caseId": "C005",
+      "siteId": "benchmarkjava",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "a19373eb314f3d331adfbc69d60e493b32e5ef187c22a05b702493ee8366131e",
+      "decodedSHA256": "d64ac7721c96e6b9f88e1c557077ba2e455934943e69e58b1ffbdeb9005ac74d",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0013904",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "a86bcd51916245c6faea5807d7cb28daf33d552aea7f14dcb1244b7fd27c4f3a"
+        },
+        {
+          "id": "V0013898",
+          "category": "TOKEN",
+          "expectedKind": "test-cookie",
+          "valueSHA256": "a28b7cb756d92315de95bec90d358d476059c67d2eed22cdd2258c1227f9c2a3"
+        }
+      ]
+    },
+    {
+      "caseId": "C006",
+      "siteId": "benchmarkjava",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "c2c7aa53eec40f188b180f62f82a5e5b0718293f73c78170e7024677728f9c76",
+      "decodedSHA256": "c3dfea91d43d32f04ac0eae732a673702e0fd738042ffc137ef232107dff1b15",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0013914",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "61e18d1cdd1fd31e3871bb8b523b6cc1d89d4ebd1bb04b3afde00dc6e78b3f4c"
+        },
+        {
+          "id": "V0013908",
+          "category": "TOKEN",
+          "expectedKind": "test-cookie",
+          "valueSHA256": "c7b68ac37f364473e922936708e7f43c293dd07b295171566c07ff5fe024fab9"
+        }
+      ]
+    },
+    {
+      "caseId": "C007",
+      "siteId": "benchmarkjava",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "20a26b56beecb2f67ad61989cb3846e6ea6d5996fc2a489fe4feac9417cd0bf8",
+      "decodedSHA256": "880065c7492f749c64973c9c1e6c9f5c2b6cb864621d233daaec1e7ecd32a573",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0014900",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "71c5f0d2718dab0a22bdcde9c130d20bbe8faa84500184b39e52ce19d0b22011"
+        }
+      ]
+    },
+    {
+      "caseId": "C008",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "42f59a97263709b4e53849dc7de9f7eed4b8211a1370afd52b0a6aa56884a126",
+      "decodedSHA256": "7134ebe488447af161d0fe73fb0e605573c000d96b7f27ed4961c48ca45d2125",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016577",
+          "category": "INTERNAL",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "e344392d893579d0c33eb287e66c395d2b1459c0d464203ebfc4070163240d4e"
+        }
+      ]
+    },
+    {
+      "caseId": "C009",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "b8f7fe28a5b4a9619a806356b6ab0656cb530fa4aacf14d3af5bf948c902e8a4",
+      "decodedSHA256": "82ccab98789d5e220e96f24e03df5284e651968dbd458121ef492aeff10541a7",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016580",
+          "category": "INTERNAL",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "321b8cfad9123efa2bbc3731928587ae101a28631abd004f62c3a0d1bd7026d2"
+        },
+        {
+          "id": "V0016581",
+          "category": "INTERNAL",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "75b95c05a9e47d067b696e5aebcb9a8ba66af7da87e2a79ea33a5f6d13d61d58"
+        },
+        {
+          "id": "V0016582",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "318f9d3326c7cf7872fe30436d032da89ccc9a65bffb413a3467cc512a84f3cf"
+        }
+      ]
+    },
+    {
+      "caseId": "C010",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "41277cd617fb3c7066dd456531456e51aab67249ef3224cab14eb3cb0b81eeb5",
+      "decodedSHA256": "9739f14eac445efa9b1f652ba59c6f6d3c7918f11b8f208c47552d229e8420c3",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016583",
+          "category": "INTERNAL",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "cfe362be94ac6899e300067bfebb21b7b99ad5c12b3263716a99e218f74aa0ae"
+        }
+      ]
+    },
+    {
+      "caseId": "C011",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "b08dae89b69612281c9a1b7607271110eba6ba077631105b276e5266c5c8c1bb",
+      "decodedSHA256": "b3f548f5f2b451dc2f1ec5c02e5bc57d24822b134bb999ba425c69ec05be92dd",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016431",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "c5ef59b1084b2c75bd40fd6ad3ef22c4727604740c031a7243024ef659c3a3d2"
+        }
+      ]
+    },
+    {
+      "caseId": "C012",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "24cb59782c5e61c0f3461696ac73b58c7c80b280e916e027cc1cb4ec86e6c06b",
+      "decodedSHA256": "d089da471b56b963f5de3205c784ecd7d5b73217d000d88c64e313bb4c74d175",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016437",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "474e219a6700eb3e57a788031f28964baac7d02e22ed1a0d77306a11607189c1"
+        }
+      ]
+    },
+    {
+      "caseId": "C013",
+      "siteId": "oopssec",
+      "scenario": "root",
+      "status": 404,
+      "responseSHA256": "240332fdd367db8635443cd4d8667d0d7ac77d4953b85ddf4bcced4a7b7a8e94",
+      "decodedSHA256": "e8293bfce56250ffc39e64c0b94c1e937260141b321435103e3ce235835ce947",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0021903",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "30b7f8482c4f570c063e4dff04b91ddc9b2b5f535ac70fedffb1cf34e0d23ec6"
+        }
+      ]
+    },
+    {
+      "caseId": "C014",
+      "siteId": "oopssec",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "7de8af53c3ea3d9bfeb0e6330d89dbebf08cc9616e68bd73bd76e0d5446411bb",
+      "decodedSHA256": "06fb0d5b971393065234c1b18d86892b2f30cf7ae28633a6326e0f2954e8b760",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0021900",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "ff8d9819fc0e12bf0d24892e45987e249a28dce836a85cad60e28eaaa8c6d976"
+        },
+        {
+          "id": "V0027215",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "9d053504ba13f05dd6710559d35971328f70b33bd728321ae92254a0f5f151ea"
+        },
+        {
+          "id": "V0027216",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "3fc732073e9e859de0d44ea72812d36d018a4a450da27d6ddb8176e09ac87151"
+        },
+        {
+          "id": "V0027217",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "2e67c7afb04df6a5fc149cf61e72585acb78a4d59a6ab6a88cbfbb38c4eb501c"
+        },
+        {
+          "id": "V0027218",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "238a789cca70494d8750b9854d8444549481aa50b1b55279d77c3aca7e1ba9a4"
+        },
+        {
+          "id": "V0027219",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "e8bfe1ed693510570ced8b5ee70049cc4b985a77ec066ee345892f685d72cca6"
+        }
+      ]
+    },
+    {
+      "caseId": "C015",
+      "siteId": "oopssec",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "fcfbe49e232aeec3fb1bac74180d209cd45bf886295789f5b89f7d684b5f9a6f",
+      "decodedSHA256": "3ddad6e068aa3f07627d4c3682fd9ad63e24fdba193a38f4d35c043994207a7e",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0024313",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "93b724d34d231e6a96044b2384e8393c29422b5ad92192d1cf8a05f0f00236f4"
+        }
+      ]
+    },
+    {
+      "caseId": "C016",
+      "siteId": "oopssec",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "0cb7be55758f34afc1918b16ce16ffac9190b82b9421d63e9b2abb1eb9a98a19",
+      "decodedSHA256": "44da0ffba235b180fe74d95f853328cabb94bda9de1966c9640ad2c4894cc0c8",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0024517",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "7a8572553bae4f4ad3285104ba09545cf6bac19d8bc074130a5409ecadc95926"
+        }
+      ]
+    },
+    {
+      "caseId": "C017",
+      "siteId": "oopssec",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "e3fabad157e47f6a9107e7a907b5c3757b6288bb3431b8bb7c785bdb267ed95e",
+      "decodedSHA256": "fa5b7c6bdd1cc5101ee2a13f3b2391a1726519e10b50bb33bb5a0e81b1a2517f",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0026880",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "3b2596a6c0a35d4c3aa6702008fd317909c6bbec76cbe60440b74edc85d90206"
+        },
+        {
+          "id": "V0026881",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "1713a5abd3acbd74d914ac4222828c7114107d2fc941b16858410305fc1035d1"
+        }
+      ]
+    },
+    {
+      "caseId": "C018",
+      "siteId": "dvbank",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "6f8efd15015d9cc5038c30293e087f84a378acdc025ee328fbdd9cbff052b83d",
+      "decodedSHA256": "288c628a6e7caf93708be0be2d4adca1e8991698023755c343d166e0337e92be",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0034896",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "dfd920841316ef3c70e0dcb37577abebcb4aed8b7fed8832ea56a76b3ac49e06"
+        },
+        {
+          "id": "V0034898",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "fe73828aeeb0f5ec1e9eb3abb1c038704772afc4e94d10a08c7ba5d8e5b6782f"
+        },
+        {
+          "id": "V0034899",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "1eb68bc23667d32712ecd6ae62382d0f4731ca5569ee9cbd8d58b850cc7b4fd0"
+        },
+        {
+          "id": "V0034900",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "4fa8c1cdf83eb36e391f810620bfe090be6d41177e9d5dafcdde9de957fd3460"
+        },
+        {
+          "id": "V0034901",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "100978d4e704e8c89741afae561cdb1f08005c3ca81f14997f2c912878335c52"
+        },
+        {
+          "id": "V0034902",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "01a54629efb952287e554eb23ef69c52097a75aecc0e3a93ca0855ab6d7a31a0"
+        },
+        {
+          "id": "V0035083",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "b2071fe8117866bdded614652b991821295c5a5e432f8909b32901fbf8b1489d"
+        },
+        {
+          "id": "V0035082",
+          "category": "OTHER",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "3e5944dfd878a9b3abffe5008b03968790b433c1401a4fceb66adffcbc806f04"
+        }
+      ]
+    },
+    {
+      "caseId": "C019",
+      "siteId": "dvbank",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "c0696dd8a87dc956b4607023c6d704c926af4c9af64102b230124ae62cc89191",
+      "decodedSHA256": "b445bffba29d721b7786b45fa84712a9ca086762052f93262869b1ec2bd43e0a",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0034932",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "a5c1e1ca489682e3ff03a2b8062ccec1d09f1f010f0b3c19e8c6e89802977fab"
+        },
+        {
+          "id": "V0035085",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "43128bf79753440673f8e9018e4b03d8cdcdf79217d8ebad14f9d7dc87a42c49"
+        },
+        {
+          "id": "V0035086",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "c26577918dc68e83dcd28d46c170f51f21cc7189ee54e350902d9eab91dc9a3d"
+        },
+        {
+          "id": "V0035089",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "a94217cff96efde07cba3da41b97a6fe2e8cac996b0a400950f09d438c195801"
+        },
+        {
+          "id": "V0035090",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "d143c5bac3d4e559d23a6ba9bc383c250ab29948008d6c40b0e896f090f8dbab"
+        }
+      ]
+    },
+    {
+      "caseId": "C020",
+      "siteId": "vulnbank",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "afd64e89067db7225c52aedbf61711285e3e29bb4672f439400f0f98eef81e8f",
+      "decodedSHA256": "cb50dabf28bb5e90008abc07c2ae3bf835630147455c422cea177533131b5769",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0037364",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "dfd920841316ef3c70e0dcb37577abebcb4aed8b7fed8832ea56a76b3ac49e06"
+        },
+        {
+          "id": "V0038538",
+          "category": "OTHER",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "94c0ec15d01cc89288a74c4a95eab3b23e6c9761506bc69593f17d79211a1bb0"
+        },
+        {
+          "id": "V0038539",
+          "category": "OTHER",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "4250638e192f9a123203e510b554639f0912688ad6ccdb3de696ba913112612a"
+        }
+      ]
+    },
+    {
+      "caseId": "C021",
+      "siteId": "vulnbank",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "41e04a74a316ff82edbd89a11b689ae2ab08809e0e8250da31889ee6e98a0bef",
+      "decodedSHA256": "9bd0e5db0b0ce25cd202e37e0c7398e60408e2783aecabb743141303befc7847",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0038333",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "9b54d52b7f4bdc62245f1997d7fe40672036c370f5c8ae199fc3bd5a7e749401"
+        },
+        {
+          "id": "V0038334",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "2500b1a84fb5236950fffdef8a5d822af3fd088b6d920e85ee6ebceb5dec7e5e"
+        },
+        {
+          "id": "V0038335",
+          "category": "DATABASE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "f753fb524871104203a89ebafaf9e3a3a25a5ebb04a5a25a0cb8991fc553d03a"
+        },
+        {
+          "id": "V0038336",
+          "category": "DATABASE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "4aeb7ad6d5d37a041c4c5ce6562bf9e3caf05a42d931cef4d9e2a60ca623194d"
+        },
+        {
+          "id": "V0038337",
+          "category": "DATABASE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "be8fc1619af0ed35dc31cd9690b047068364ec2cc9bd309c21948d82525749c6"
+        },
+        {
+          "id": "V0038338",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "3b4e383c3da3506830dc069595e0b4624c736b7ae4c94488311161e560e56624"
+        },
+        {
+          "id": "V0038339",
+          "category": "DATABASE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "419b9ba14c3accdd9857fa49b176c7984d3f90f47ad5c06815469e516b4d6113"
+        },
+        {
+          "id": "V0038340",
+          "category": "DATABASE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "56377322cda8b65ea33bf09bbc3ca2dae0c5ad4f23b6acdc6e2124fba96fd1cb"
+        },
+        {
+          "id": "V0038341",
+          "category": "KEY",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "71184bb0762321f2ef5646bf2a80b7408a0b79cdffa801e5744a28384cc49e03"
+        },
+        {
+          "id": "V0038342",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "e04171010fb1699f4784522ac8eb21dfc001fbd087e51c4d3be2d80961513c11"
+        },
+        {
+          "id": "V0038343",
+          "category": "INTERNAL",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "f753fb524871104203a89ebafaf9e3a3a25a5ebb04a5a25a0cb8991fc553d03a"
+        },
+        {
+          "id": "V0038345",
+          "category": "INTERNAL",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "525bd381b7a41553a72afe70201d84727975ffce67035329a9271a2e2ca2d64a"
+        },
+        {
+          "id": "V0038346",
+          "category": "INTERNAL",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "cc33d96eb2320fed24b52cb3dd16b22432503bf4a540abad1120582b95e57dd7"
+        },
+        {
+          "id": "V0038347",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "3a645408ee3bf145c57d8e377de1ef163b42f1b61dca1005f4b4270bb73bbf21"
+        }
+      ]
+    },
+    {
+      "caseId": "C022",
+      "siteId": "vulnbank",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "82af6ed39dead35b9d0dab979e02cbe0d3c709e36e91e3db1ab0521ed62406a8",
+      "decodedSHA256": "b773ee3429cca0109ba7cc9d3f1d608a2fe4f0dd676f3582d7dd459f2fd9ccac",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0037672",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "d3504423cfd864b86dd839fb7ea4aa7b292bbe1558c1c5e8ca7ffb27444fb3f8"
+        },
+        {
+          "id": "V0037673",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "f0f683baca3072ec9b593f88d368d45b664faa3f1126eb62048709e0865aabdd"
+        },
+        {
+          "id": "V0038546",
+          "category": "KEY",
+          "expectedKind": "key-placeholder",
+          "valueSHA256": "c0ffa2c46619ae3cd963e2008c5a4cb4a30bb7309eb6cf10ccb9a35850af7f4c"
+        }
+      ]
+    },
+    {
+      "caseId": "C023",
+      "siteId": "vulnbank",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "1a2b43464b1bd5b7b14162d3f6a55bef27d50231fe5e7342c978d210044d6570",
+      "decodedSHA256": "8a92d26f223f991f9390a7350b4a376704571b4136228a5fbc82912a22006a27",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0037736",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "1e6c8cbd421cf147ec1708c84f12e0174550cfd4cdf9d37ef74969389475e959"
+        },
+        {
+          "id": "V0037754",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "e50d31df69b0dec4a163cd8cbffd315ec96a704b8dda10e997cabaa9db75b591"
+        },
+        {
+          "id": "V0039067",
+          "category": "KEY",
+          "expectedKind": "auth-header-name",
+          "valueSHA256": "5c8e084af056619260507f85113a87c0da1305c1ebd6a6da22beaa948c313ee8"
+        }
+      ]
+    },
+    {
+      "caseId": "C024",
+      "siteId": "loop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "6ff900dfa252afaa9bb13f4622baf22bb332255f5fbbf6c22ae4baee1f2c191b",
+      "decodedSHA256": "f064e9e59378bb59376694f734a4d13f0136cba892d73956cd77b39589401062",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0041885",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "c542b72e91fa7079bededf5277742ffa946b36d279a1f0d2738cbecb250094c2"
+        },
+        {
+          "id": "V0041886",
+          "category": "ENVIRONMENT",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "e488e34ba7c1bd7f68be636ab13e4adc12d4030096fc4bd9d8e24a820d93bbb1"
+        },
+        {
+          "id": "V0041887",
+          "category": "DATABASE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "602eed4052d1e56f2355d4e3ef971749944d0d45b942a6520828c19ed0913796"
+        }
+      ]
+    },
+    {
+      "caseId": "C025",
+      "siteId": "loop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "896f24f549581000b886a1ab3808f1de9523459f376ed0af598b3801655274fd",
+      "decodedSHA256": "0d60cde904dc48f70a839bd75d81a3fa6d12d02d32dbfc9b41041323c60cad01",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0041510",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "468dc88d94c0dc9ba151bcffc2f20c36eca0b587455ffc8ae7681aaff3e3b85b"
+        }
+      ]
+    },
+    {
+      "caseId": "C026",
+      "siteId": "loop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "3c535b4ee49bef2da957c705604bfe7940ac48611d9fbc68ba01a343c5c0a490",
+      "decodedSHA256": "f851f433663b036a71a7e12c173fd977ec3927deb4a88e097b8ec54a93c79aff",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0041242",
+          "category": "SENSITIVE",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "ca3dc951304431725289fda1d3ef26990d70fa776e348bee1f65d873ae04abd0"
+        },
+        {
+          "id": "V0041241",
+          "category": "OTHER",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "92b7b421992ef490f3b75898ec0e511f1a5c02422819d89719b20362b023ee4f"
+        }
+      ]
+    },
+    {
+      "caseId": "C027",
+      "siteId": "loop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "7d85f27f5d32470d57352ab35c4f838300e0405b89ed21ceffbe6a9ab829341e",
+      "decodedSHA256": "524bc00f3b6044a84eedffcda67287b4f04cf6ee042f872719309174d0bbaa16",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0041288",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "106fd5f141f7b0d34708c5339db02ce8a951c4c7b40fa1b9f7739a42287c75f0"
+        },
+        {
+          "id": "V0041291",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "a90fd9109b9c96f16af406f5517176948a223b9e736d9020dabe9003c0f07636"
+        },
+        {
+          "id": "V0041292",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "807c351ca5c33b16804e740003cd53c1dfc719f6634751127184b8904104d5a8"
+        },
+        {
+          "id": "V0041299",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "87e40774eb08d84de163d866a3fe912a667a1f852c7b0bf2360b9acef3817d5d"
+        },
+        {
+          "id": "V0041303",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "3d2559195e0edcc222f534150babf28a204167b35381d24769294090cadff273"
+        },
+        {
+          "id": "V0041311",
+          "category": "API",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "76a20b326c99045a777d63121fad8e3f1aac510a48181200cb41b9ddb0e2f204"
+        }
+      ]
+    },
+    {
+      "caseId": "C028",
+      "siteId": "loop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "455667b158f8cf1b976b5f6ddf1e1388b3ab7e98895f9482c696548f87d146d7",
+      "decodedSHA256": "d68a4ceed242ea326ddcafbffcffba239d8b58dbaed1e1dcc25402c41d7c2f4b",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0041391",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "9b503abcfa82a17cb056ef3572de08cf16e93b41b0043414c4ac52a369b77ad0"
+        }
+      ]
+    },
+    {
+      "caseId": "C029",
+      "siteId": "loop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "e71451bc35ade7b50cc3119aa48fd207cfbd588d271567052c607f4fab09b384",
+      "decodedSHA256": "ea4483452d5e63f39f5f31ee394dc4709bbbbc3eec218f29b2707ca76d8af14c",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0041248",
+          "category": "PATH",
+          "expectedKind": "relevant-value",
+          "valueSHA256": "0622fa5a59797fe675101e4d793e996b49b989ad0872c0bcb4b88d9e888847e1"
+        }
+      ]
+    },
+    {
+      "caseId": "C030",
+      "siteId": "juice-shop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "c81ec114b25b077964cd6534de2073eec236fef1f289bb254422c2c449cb00d8",
+      "decodedSHA256": "02e2bfc08dc862550029c4187297c565b2f7035de93c295b11cbd88829b529b3",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0002504",
+          "category": "SENSITIVE",
+          "expectedKind": "public-contact",
+          "valueSHA256": "4b1926fc5a43dd55e436039e4aa8e163c20607f691bc35ec781abc5c2cb80b5b"
+        }
+      ]
+    },
+    {
+      "caseId": "C031",
+      "siteId": "benchmarkjava",
+      "scenario": "direct",
+      "status": 200,
+      "responseSHA256": "5507de2d4eb275ab8c8a8c3ede68e682a145ce101ef52f938f90e360e47a8b8d",
+      "decodedSHA256": "bb42b85b2ec168fea2aa7e3c5908c18404d70206fd5e76a730fa309c227e144f",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016164",
+          "category": "ENVIRONMENT",
+          "expectedKind": "code-version",
+          "valueSHA256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+        }
+      ]
+    },
+    {
+      "caseId": "C032",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 404,
+      "responseSHA256": "bd58b5b55c82d5f2ce18d305d1e1be1f2182f78c3156c2225011f7be59025c10",
+      "decodedSHA256": "bdbb675d83d314921ea031f1d0ebf0c72f26be25bba29a9ef7fe16b890783ea1",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016596",
+          "category": "API",
+          "expectedKind": "404-api-candidate",
+          "valueSHA256": "20f0f75286c96bfd1296b39683859d77daefed2f2d478f0d748a966ff4156866"
+        }
+      ]
+    },
+    {
+      "caseId": "C033",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 404,
+      "responseSHA256": "c2907becc5174fd6da55cbb489738605bcf31546a112c51e7981525e228061a7",
+      "decodedSHA256": "aabe56fc6a9266561e5a63b1db0cf0ebea442b66149594600d4954b7654b5e1b",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016598",
+          "category": "API",
+          "expectedKind": "404-api-candidate",
+          "valueSHA256": "23fdef804fe23d94b9de7d68f918e5705cf1e35fb4da9254236121a1078518dc"
+        }
+      ]
+    },
+    {
+      "caseId": "C034",
+      "siteId": "vulnerableapp",
+      "scenario": "root",
+      "status": 404,
+      "responseSHA256": "1c992a087c0c39155d4392ee967cc7a568ca26f382affde69cb3a0729b2fbcbd",
+      "decodedSHA256": "7ccfe60a6df3df83b9c9e6ff8f8a1eac6199cc59d97f97a11b4b12fe27d4ff4a",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0016600",
+          "category": "API",
+          "expectedKind": "404-api-candidate",
+          "valueSHA256": "8b248e277efcf3863c02f767add75805ac5f587245f6a1cbef2e708ea6f8af3c"
+        }
+      ]
+    },
+    {
+      "caseId": "C035",
+      "siteId": "loop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "fa95ad32bcac4d7a703ea38b34822a6ed31ea06280306dd9eb4ed6dc67a846f9",
+      "decodedSHA256": "ba58f038109f19cfa90c3781a42ab7d467df4d9f222f47075816c68a725ced99",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0041852",
+          "category": "TOKEN",
+          "expectedKind": "explicit-demo-token",
+          "valueSHA256": "a8f57f37080f9c4dffa4c92bc92ec40b14bef6dee10093ecd884bd4b1d7168e7"
+        }
+      ]
+    },
+    {
+      "caseId": "C036",
+      "siteId": "juice-shop",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "9710da8d2f9bbb68c0494a74fab147a0fbe17f4efbe612c05e77c1481aa1e644",
+      "decodedSHA256": "5f276ee5a575d172cfea74252632dd78dca641a958382dab85c2cc1ea90801bd",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0002240",
+          "category": "DATABASE",
+          "expectedKind": "css-icon-noise",
+          "valueSHA256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb"
+        },
+        {
+          "id": "V0002247",
+          "category": "DATABASE",
+          "expectedKind": "css-icon-noise",
+          "valueSHA256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb"
+        },
+        {
+          "id": "V0002253",
+          "category": "DATABASE",
+          "expectedKind": "css-icon-noise",
+          "valueSHA256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb"
+        }
+      ]
+    },
+    {
+      "caseId": "C037",
+      "siteId": "juice-shop",
+      "scenario": "protected",
+      "status": 200,
+      "responseSHA256": "1f8dd1e93251225bd76dd8f373c03bc543a633d0ef20f3c79d93947893959842",
+      "decodedSHA256": "050bc415ee7048dcd881682678f720264e7da5e373f7461d7c58c755305255f7",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0005510",
+          "category": "TOKEN",
+          "expectedKind": "domtokenlist-noise",
+          "valueSHA256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+        },
+        {
+          "id": "V0005897",
+          "category": "KEY",
+          "expectedKind": "swagger-code-fragment",
+          "valueSHA256": "a348ad00c9cbaf07b44c2b8bb9c19863cc4cb28ff81ab54ecff9701f1a22e500"
+        },
+        {
+          "id": "V0005902",
+          "category": "KEY",
+          "expectedKind": "swagger-code-fragment",
+          "valueSHA256": "78cfc65f2d478d22ab503901fcb1a6f13846ca2e0b69480c2d454dabec9a0950"
+        }
+      ]
+    },
+    {
+      "caseId": "C038",
+      "siteId": "oopssec",
+      "scenario": "root",
+      "status": 200,
+      "responseSHA256": "cadf483a0bb34684052455fe82798a4e194243917e6b14f35ecb814a3798cc8f",
+      "decodedSHA256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683",
+      "sourceMapping": "verified-old-product-original-id",
+      "truth": [
+        {
+          "id": "V0023994",
+          "category": "TOKEN",
+          "expectedKind": "domtokenlist-noise",
+          "valueSHA256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+        }
+      ]
+    }
+  ],
+  "transportOnlyCases": 0
+}

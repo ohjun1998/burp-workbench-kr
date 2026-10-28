@@ -1,0 +1,11 @@
+{
+  "siteId": "loop",
+  "previousIdentityHTTP": 401,
+  "normalLoginHTTP": 200,
+  "newIdentityHTTP": 200,
+  "expectedIdentityVerified": true,
+  "reason": "Prior configured credentials returned401. The exact expiry/invalidation cause was not separately established. The product correctly paused. Both old baseline cases and candidate cases were preserved; one fresh normal-login snapshot was used for a new paired four-case set.",
+  "finalPairedInputsByteIdentical": true,
+  "originalSourceModified": false,
+  "authValuesPublished": false
+}

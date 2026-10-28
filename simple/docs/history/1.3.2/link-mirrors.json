@@ -1,0 +1,1639 @@
+{
+  "version": "1.3.2",
+  "note": "Relative-path mirrors let the byte-preserved archived guide and linked older guides open at their archived location. No preserved guide/source/artifact bytes were rewritten.",
+  "checkedDocuments": [
+    "GUIDE_SIMPLE_KR.html",
+    "GUIDE_SIMPLE_KR.md",
+    "KATANA_SCOPE_1.3.2_SPEC_KR.md",
+    "history/1.2.0/GUIDE_SIMPLE_KR.html",
+    "history/1.1.0/GUIDE_SIMPLE_KR.html",
+    "history/1.0.0/GUIDE_SIMPLE_KR.html",
+    "history/1.2.0/GUIDE_SIMPLE_KR.md",
+    "history/1.1.0/GUIDE_SIMPLE_KR.md",
+    "history/1.0.0/GUIDE_SIMPLE_KR.md",
+    "KATANA_SCOPE_1.3.1_SPEC_KR.md",
+    "history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+    "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.html",
+    "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+    "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+    "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+    "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+    "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+    "RETEST_VALUES_1.3.1_SPEC_KR.md",
+    "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+    "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md"
+  ],
+  "links": [
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "../downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf",
+      "target": "../downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf",
+      "sha256": "44a34cb8b3fc2dfc1316f2b58b51d0e466461c4b912651bd3ac40ed57406c9c9"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "KATANA_SCOPE_1.3.2_SPEC_KR.md",
+      "target": "KATANA_SCOPE_1.3.2_SPEC_KR.md",
+      "sha256": "b52883f1e7add7c71295143395c4ff9897f96f54c8fb83ee104305677a312d5c"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "../tools/install_katana.py",
+      "target": "../tools/install_katana.py",
+      "sha256": "067d376aacf7e9f08041dec646007434a7d2ef02920f0eeaa40b50d7a8ecba8c"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "KATANA_DEPENDENCY.json",
+      "target": "KATANA_DEPENDENCY.json",
+      "sha256": "db08f451a94ccc27f219cf9fda1d3f07a6ed30424d2edf778db0a2af59955aa1"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "../downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip",
+      "target": "../downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip",
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE_1.3.2.json",
+      "target": "VERIFICATION_SIMPLE_1.3.2.json",
+      "sha256": "2dd97b9d486c556d13026a1042cfb2b3ba7bbd4c4949dc47ee745f44c3dca4d2"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "target": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "67e978cbfd02cf12ad38a29c66064d349dbeed1a0c1c1cdb26bfeef6d081be6d"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "target": "history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "d84bdbb52bc3d30497ebc55de103789d73712ec6778799620f7e0a0675cb1cde"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.html",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "target": "history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "../tools/install_katana.py",
+      "target": "../tools/install_katana.py",
+      "sha256": "067d376aacf7e9f08041dec646007434a7d2ef02920f0eeaa40b50d7a8ecba8c"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "KATANA_DEPENDENCY.json",
+      "target": "KATANA_DEPENDENCY.json",
+      "sha256": "db08f451a94ccc27f219cf9fda1d3f07a6ed30424d2edf778db0a2af59955aa1"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "../downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip",
+      "target": "../downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip",
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/12-inspection-setup.png",
+      "target": "images/1.3.2/light/1280x800/12-inspection-setup.png",
+      "sha256": "35834bba1fcfb649215b80a9039180d7a1b11b3707dec79c67e25ef2d0689636"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/23-katana-settings.png",
+      "target": "images/1.3.2/light/1280x800/23-katana-settings.png",
+      "sha256": "ba2d8c593246fd9cb842d9789560e7096e1ae88a2e6eb6307b510304ec1bacdc"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/13-inspection-progress.png",
+      "target": "images/1.3.2/light/1280x800/13-inspection-progress.png",
+      "sha256": "8db9e1ef99ea6ad986cc20a4a26e961e1fc92caebc42bbb4b4d05145997eaadd"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/24-katana-results.png",
+      "target": "images/1.3.2/light/1280x800/24-katana-results.png",
+      "sha256": "58e3eb1819e377f25ee9eb2c9e33a08a55b891f1d31d7871c31fcf57f76c6464"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/14-inspection-environment.png",
+      "target": "images/1.3.2/light/1280x800/14-inspection-environment.png",
+      "sha256": "c61139bda556f261a43a2e9edc162d3c76f448c5baef6bab4f3b1898949174f7"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/15-inspection-paths.png",
+      "target": "images/1.3.2/light/1280x800/15-inspection-paths.png",
+      "sha256": "e066a8d44891b7a4d0a1d6cdf0ba084ef2318543fefe867fcc9bf34232561bc8"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/16-inspection-api.png",
+      "target": "images/1.3.2/light/1280x800/16-inspection-api.png",
+      "sha256": "77d5386d3dff562228efcaa5c2acaaab40a0d966b5da25210f8b24139b32be29"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/17-inspection-secrets.png",
+      "target": "images/1.3.2/light/1280x800/17-inspection-secrets.png",
+      "sha256": "bdcaee61161388fc76965cfa0558e34ced27687073b68e81b3876a1f6686f536"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/18-inspection-access.png",
+      "target": "images/1.3.2/light/1280x800/18-inspection-access.png",
+      "sha256": "273718abb28158f272e1d807992a12ed4c619425f6d1e5fa439f2e21f3120831"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/19-inspection-changes.png",
+      "target": "images/1.3.2/light/1280x800/19-inspection-changes.png",
+      "sha256": "bfc694d1111237eb2861dd617b3dcd60aec27b90067489ae599d4b561fec800d"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/20-inspection-coverage.png",
+      "target": "images/1.3.2/light/1280x800/20-inspection-coverage.png",
+      "sha256": "e5e6d00dd80a8e87421f9df22c7ba3c101ebdb3c71b348f76119fb809ea2bbd7"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/21-inspection-browser.png",
+      "target": "images/1.3.2/light/1280x800/21-inspection-browser.png",
+      "sha256": "a65fc6ea065aefa31aa532e156af45fa209ca05294e09b0d39d617009afb5ec9"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/22-inspection-original.png",
+      "target": "images/1.3.2/light/1280x800/22-inspection-original.png",
+      "sha256": "6369ec5eae9582ac876f1dcad2384e0d922a9d41fe414fe013753d26ec9b5369"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/25-inspection-report.png",
+      "target": "images/1.3.2/light/1280x800/25-inspection-report.png",
+      "sha256": "e34694fbfaae1f54e769c534634cad8b1a6cea1737c5dcab1409cbdeffc748c2"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/00-start.png",
+      "target": "images/1.3.2/light/1280x800/00-start.png",
+      "sha256": "13480ac3bfa7c26e884ea0c47f29a8e44415d0cef2fc30d4932211bacd3647dc"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/00-scope-editor.png",
+      "target": "images/1.3.2/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/01-capture.png",
+      "target": "images/1.3.2/light/1280x800/01-capture.png",
+      "sha256": "e9222f3b1809de308e1112d6487ddb44dfb1e4f74f20dade41685e52bc7f184e"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/02-request.png",
+      "target": "images/1.3.2/light/1280x800/02-request.png",
+      "sha256": "92f7f7635db52aa67644b587523a4571ae911349f401f44983b09da951058438"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/08-mapper.png",
+      "target": "images/1.3.2/light/1280x800/08-mapper.png",
+      "sha256": "6e14af7be2e3d15376af6136238c7adccf5889bff4970fb4ce06c3e610acce52"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/10-js.png",
+      "target": "images/1.3.2/light/1280x800/10-js.png",
+      "sha256": "85d0f16a18fc37b1636bbad2e1a0425c37161ffc6e85b75e4a92df8af6e51b51"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/09-environment.png",
+      "target": "images/1.3.2/light/1280x800/09-environment.png",
+      "sha256": "18765082b6fc2c3d0f99f090c2bae135293b8450d45c255af238d62fe06948bd"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/03-analysis.png",
+      "target": "images/1.3.2/light/1280x800/03-analysis.png",
+      "sha256": "79563f66334e119fe8227d4c7177c51a59dc96d41363a2998f62ff949a43b101"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/04-auth-accounts.png",
+      "target": "images/1.3.2/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/04-auth-results.png",
+      "target": "images/1.3.2/light/1280x800/04-auth-results.png",
+      "sha256": "d3ced889aba31b4d7bc4348c0d811521ec273cead6afb70837caeb5163f24512"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/07-payload.png",
+      "target": "images/1.3.2/light/1280x800/07-payload.png",
+      "sha256": "54b31c94861a6a5c798a3d10947baec9c06ef4a32c4fe43bb8821390cbc90c9f"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/11-replay.png",
+      "target": "images/1.3.2/light/1280x800/11-replay.png",
+      "sha256": "a5980452be8e2a4f3c37bd406b2a95918c129a918d01c2ba45459c656b39dcd9"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/05-evidence.png",
+      "target": "images/1.3.2/light/1280x800/05-evidence.png",
+      "sha256": "5bf71fb0b28fae47dc76bee31542764ec4e25a434f2349a8a57a7bdfb2484824"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.3.2/light/1280x800/06-redaction.png",
+      "target": "images/1.3.2/light/1280x800/06-redaction.png",
+      "sha256": "1e6500e078cb98d4b88ac4d3a01c6dc481bceea1cda0b763fb88d90854388036"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE_1.3.2.json",
+      "target": "VERIFICATION_SIMPLE_1.3.2.json",
+      "sha256": "2dd97b9d486c556d13026a1042cfb2b3ba7bbd4c4949dc47ee745f44c3dca4d2"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "KATANA_SCOPE_1.3.2_SPEC_KR.md",
+      "target": "KATANA_SCOPE_1.3.2_SPEC_KR.md",
+      "sha256": "b52883f1e7add7c71295143395c4ff9897f96f54c8fb83ee104305677a312d5c"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "target": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "c08e3401d60890431e0a682cd91d21c2c406b1a5923dc39a5c91aba3d42842fa"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "target": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "6e20b963f871006a2a571745e643a84d232ec403297f2f104da5f8ebff07c39a"
+    },
+    {
+      "document": "GUIDE_SIMPLE_KR.md",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "target": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb"
+    },
+    {
+      "document": "KATANA_SCOPE_1.3.2_SPEC_KR.md",
+      "reference": "KATANA_SCOPE_1.3.1_SPEC_KR.md",
+      "target": "KATANA_SCOPE_1.3.1_SPEC_KR.md",
+      "sha256": "f2462224f2b56403f08023fba90f14eca3acf79033038d0c6b1f5c5960418c43"
+    },
+    {
+      "document": "KATANA_SCOPE_1.3.2_SPEC_KR.md",
+      "reference": "VERIFICATION_SIMPLE_1.3.2.json",
+      "target": "VERIFICATION_SIMPLE_1.3.2.json",
+      "sha256": "2dd97b9d486c556d13026a1042cfb2b3ba7bbd4c4949dc47ee745f44c3dca4d2"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "reference": "../downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf",
+      "target": "history/downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf",
+      "sha256": "41e54d2c328ad1d074b184e3c63e95e85ec54024b6b48fe54d864820711a53b4"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "reference": "SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "target": "history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "sha256": "a8d0072ab0a3fe70b00e35e69a85ea6b6c88562645075e503da6bef783098fea"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "reference": "../downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip",
+      "target": "history/downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip",
+      "sha256": "96d031b6b495b96013cb375ba8e08e1fce1fcb37645bceff18f910860af1f0a5"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE_1.2.0.json",
+      "target": "history/1.2.0/VERIFICATION_SIMPLE_1.2.0.json",
+      "sha256": "4aaaad9c6b35d7bdd7c3469e94392d9d9b1948b2f5b01709a044ee81abc1d86b"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "reference": "history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "target": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "d84bdbb52bc3d30497ebc55de103789d73712ec6778799620f7e0a0675cb1cde"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "target": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE_1.1.0.json",
+      "target": "history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json",
+      "sha256": "d2cd20e9542855600b8b90717dcb8c5b426e945130517c1dfd58e48312fdd4f8"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "target": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "../downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip",
+      "target": "history/downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip",
+      "sha256": "96d031b6b495b96013cb375ba8e08e1fce1fcb37645bceff18f910860af1f0a5"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/12-inspection-setup.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/12-inspection-setup.png",
+      "sha256": "727eb4f1cb2f94651c987ebbdf08407bfa609d82cfc0ead078f0fb7d7c647e15"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/13-inspection-progress.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/13-inspection-progress.png",
+      "sha256": "fa099340d92a7c02635a9c35f8aca05f00803c95907c77a02b91d6b1fe3efd14"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/14-inspection-environment.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/14-inspection-environment.png",
+      "sha256": "0c4e3a87b69dd80e0439f52334d06331dd7bdfbac5e63f239420d836adfa6e41"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/15-inspection-paths.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/15-inspection-paths.png",
+      "sha256": "16c9c9fb1a7091c23edb4fe068123c0e1ed358bd645ed1b1edc1185144453e9d"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/16-inspection-api.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/16-inspection-api.png",
+      "sha256": "51858ec3e09042164d6baf082fa3fc8e6330e6a389d22160a2754bc4ecf99289"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/17-inspection-secrets.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/17-inspection-secrets.png",
+      "sha256": "f1519ed787144502c3f08ed9d550bcf88fe624e29ea4ee37c3517cddce669fb9"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/18-inspection-access.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/18-inspection-access.png",
+      "sha256": "367876eb24c887e6f1554d3ffcca35fb21ac24ab63c6479a4b21a6238e9bcf5e"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/19-inspection-changes.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/19-inspection-changes.png",
+      "sha256": "e2a13cbcd7f705e7d8973ff3fe646a541f068092910b9f97b10b6a517812f939"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/20-inspection-coverage.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/20-inspection-coverage.png",
+      "sha256": "e4c8697f9b9a08b8e0cdfa525914ee70704a8818933ee321382dd1326d761e50"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/21-inspection-browser.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/21-inspection-browser.png",
+      "sha256": "45987b894aa2baa0b4f99530063dd0d782d4f1008c3cb2632fa3f9c1e5be4b48"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/22-inspection-original.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/22-inspection-original.png",
+      "sha256": "63bdb671e1ceddceb9e2f9e6914223cc0d75bcaa0615f36d1a64a454ed37584d"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/00-start.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/00-start.png",
+      "sha256": "13480ac3bfa7c26e884ea0c47f29a8e44415d0cef2fc30d4932211bacd3647dc"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/00-scope-editor.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/01-capture.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/01-capture.png",
+      "sha256": "e9222f3b1809de308e1112d6487ddb44dfb1e4f74f20dade41685e52bc7f184e"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/02-request.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/02-request.png",
+      "sha256": "92f7f7635db52aa67644b587523a4571ae911349f401f44983b09da951058438"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/08-mapper.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/08-mapper.png",
+      "sha256": "6e14af7be2e3d15376af6136238c7adccf5889bff4970fb4ce06c3e610acce52"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/10-js.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/10-js.png",
+      "sha256": "c9776e2f99980559db0f20d36e2c4320c5c9f7dd274a8b5b97de9a21b3080d7f"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/09-environment.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/09-environment.png",
+      "sha256": "18765082b6fc2c3d0f99f090c2bae135293b8450d45c255af238d62fe06948bd"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/03-analysis.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/03-analysis.png",
+      "sha256": "79563f66334e119fe8227d4c7177c51a59dc96d41363a2998f62ff949a43b101"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/04-auth-accounts.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/04-auth-results.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/04-auth-results.png",
+      "sha256": "cca01332a6c1a9682d7e6c0d7bce3b12c0e31f96bd7d1dbc6acd547189a1cabd"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/07-payload.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/07-payload.png",
+      "sha256": "54b31c94861a6a5c798a3d10947baec9c06ef4a32c4fe43bb8821390cbc90c9f"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/11-replay.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/11-replay.png",
+      "sha256": "a5980452be8e2a4f3c37bd406b2a95918c129a918d01c2ba45459c656b39dcd9"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/05-evidence.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/05-evidence.png",
+      "sha256": "c06ebf6dffe3889fd876582b034c220a885b3ae62619e287ebc4ccff1f51add4"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.2.0/light/1280x800/06-redaction.png",
+      "target": "history/1.2.0/images/1.2.0/light/1280x800/06-redaction.png",
+      "sha256": "2803168d347a6ef6843e0ec307f5ace2e572a549f58610c23eff20817a73a0e7"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE_1.2.0.json",
+      "target": "history/1.2.0/VERIFICATION_SIMPLE_1.2.0.json",
+      "sha256": "4aaaad9c6b35d7bdd7c3469e94392d9d9b1948b2f5b01709a044ee81abc1d86b"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "target": "history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "sha256": "a8d0072ab0a3fe70b00e35e69a85ea6b6c88562645075e503da6bef783098fea"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "target": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "6e20b963f871006a2a571745e643a84d232ec403297f2f104da5f8ebff07c39a"
+    },
+    {
+      "document": "history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "target": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/00-start.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/00-start.png",
+      "sha256": "ef4cd5b03d370d33bca945ec2e2a195b233be274cd85c474dc9466106079bfab"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/00-scope-editor.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/01-capture.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/01-capture.png",
+      "sha256": "029523891398ca40b0cb99c5e56914129c1d3176412c699a5099c60ae30eb9d8"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/02-request.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/02-request.png",
+      "sha256": "1e87221b879eb8f3d1770f13565d4e5d32be0e54339b23526647cf9dd9b7f6da"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/08-mapper.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/08-mapper.png",
+      "sha256": "1e9257f1c6dafa7957709cb36f46ccc46f653cd0ad892971ad1c4f25f3567a34"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/10-js.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/10-js.png",
+      "sha256": "022dd2a4f316feb1cc3455bf210182418d548545f42658a46b95f093ffce95d6"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/09-environment.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/09-environment.png",
+      "sha256": "9b41a46ca9bab64efe158b4e706aa9a1f4497b062f5175d8b00f10f95fb8fd0d"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/03-analysis.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/03-analysis.png",
+      "sha256": "9604b000acc111d3f546d6ee823d8341be0852812dcc58ee7cd29367531ca9b4"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/04-auth-accounts.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/04-auth-results.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/04-auth-results.png",
+      "sha256": "a0c8217e9dd6bd826ed748b1aec25968d7da6f3c4692dc6a09e062b6a3155758"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/07-payload.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/07-payload.png",
+      "sha256": "d41ec49c98b1f636960092cbab490dd729919b54fdc7f3c8c2b2287080b2c954"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/11-replay.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/11-replay.png",
+      "sha256": "11a2403f9f4f0b59bb3305a7ca94e7b45d07d7ea015d970bd44573d0b813da7e"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/05-evidence.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/05-evidence.png",
+      "sha256": "7643cc10fe649da249838b268d8c44187eb23f01b4c75bc93c2830c5f1649e2b"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/06-redaction.png",
+      "target": "history/1.1.0/images/1.1.0/light/1280x800/06-redaction.png",
+      "sha256": "f6f6b82f39007e8ad7c066611cd540b456c7b0ba0cbec82507b87c7532f5cc57"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE_1.1.0.json",
+      "target": "history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json",
+      "sha256": "d2cd20e9542855600b8b90717dcb8c5b426e945130517c1dfd58e48312fdd4f8"
+    },
+    {
+      "document": "history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "target": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-start.png",
+      "target": "history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-scope-editor.png",
+      "target": "history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/01-capture.png",
+      "target": "history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/02-request.png",
+      "target": "history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/03-analysis.png",
+      "target": "history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-accounts.png",
+      "target": "history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-results.png",
+      "target": "history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/05-evidence.png",
+      "target": "history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/06-redaction.png",
+      "target": "history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2"
+    },
+    {
+      "document": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    },
+    {
+      "document": "KATANA_SCOPE_1.3.1_SPEC_KR.md",
+      "reference": "history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "target": "history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "sha256": "a8d0072ab0a3fe70b00e35e69a85ea6b6c88562645075e503da6bef783098fea"
+    },
+    {
+      "document": "KATANA_SCOPE_1.3.1_SPEC_KR.md",
+      "reference": "VERIFICATION_SIMPLE_1.3.1.json",
+      "target": "VERIFICATION_SIMPLE_1.3.1.json",
+      "sha256": "fa0de4044613350dddb858136bedeeabd5b3629ac64b95256d2ffb49e6c5bd54"
+    },
+    {
+      "document": "KATANA_SCOPE_1.3.1_SPEC_KR.md",
+      "reference": "KATANA_DEPENDENCY.json",
+      "target": "KATANA_DEPENDENCY.json",
+      "sha256": "db08f451a94ccc27f219cf9fda1d3f07a6ed30424d2edf778db0a2af59955aa1"
+    },
+    {
+      "document": "KATANA_SCOPE_1.3.1_SPEC_KR.md",
+      "reference": "RETEST_VALUES_1.3.1_SPEC_KR.md",
+      "target": "RETEST_VALUES_1.3.1_SPEC_KR.md",
+      "sha256": "2dcdbd73061cf0d19eb7389fc50a101ce239c1c7cd23a249c1b82147c59c861c"
+    },
+    {
+      "document": "history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "reference": "VERIFICATION_SIMPLE_1.2.0.json",
+      "target": "history/1.2.0/VERIFICATION_SIMPLE_1.2.0.json",
+      "sha256": "4aaaad9c6b35d7bdd7c3469e94392d9d9b1948b2f5b01709a044ee81abc1d86b"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE_1.1.0.json",
+      "target": "history/1.2.0/history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json",
+      "sha256": "d2cd20e9542855600b8b90717dcb8c5b426e945130517c1dfd58e48312fdd4f8"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.2.0/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.1.0/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/00-start.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/00-start.png",
+      "sha256": "ef4cd5b03d370d33bca945ec2e2a195b233be274cd85c474dc9466106079bfab"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/00-scope-editor.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/01-capture.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/01-capture.png",
+      "sha256": "029523891398ca40b0cb99c5e56914129c1d3176412c699a5099c60ae30eb9d8"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/02-request.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/02-request.png",
+      "sha256": "1e87221b879eb8f3d1770f13565d4e5d32be0e54339b23526647cf9dd9b7f6da"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/08-mapper.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/08-mapper.png",
+      "sha256": "1e9257f1c6dafa7957709cb36f46ccc46f653cd0ad892971ad1c4f25f3567a34"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/10-js.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/10-js.png",
+      "sha256": "022dd2a4f316feb1cc3455bf210182418d548545f42658a46b95f093ffce95d6"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/09-environment.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/09-environment.png",
+      "sha256": "9b41a46ca9bab64efe158b4e706aa9a1f4497b062f5175d8b00f10f95fb8fd0d"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/03-analysis.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/03-analysis.png",
+      "sha256": "9604b000acc111d3f546d6ee823d8341be0852812dcc58ee7cd29367531ca9b4"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/04-auth-accounts.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/04-auth-results.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/04-auth-results.png",
+      "sha256": "a0c8217e9dd6bd826ed748b1aec25968d7da6f3c4692dc6a09e062b6a3155758"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/07-payload.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/07-payload.png",
+      "sha256": "d41ec49c98b1f636960092cbab490dd729919b54fdc7f3c8c2b2287080b2c954"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/11-replay.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/11-replay.png",
+      "sha256": "11a2403f9f4f0b59bb3305a7ca94e7b45d07d7ea015d970bd44573d0b813da7e"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/05-evidence.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/05-evidence.png",
+      "sha256": "7643cc10fe649da249838b268d8c44187eb23f01b4c75bc93c2830c5f1649e2b"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/1.1.0/light/1280x800/06-redaction.png",
+      "target": "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/06-redaction.png",
+      "sha256": "f6f6b82f39007e8ad7c066611cd540b456c7b0ba0cbec82507b87c7532f5cc57"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE_1.1.0.json",
+      "target": "history/1.2.0/history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json",
+      "sha256": "d2cd20e9542855600b8b90717dcb8c5b426e945130517c1dfd58e48312fdd4f8"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "reference": "history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-start.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-scope-editor.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/01-capture.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/02-request.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/03-analysis.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-accounts.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-results.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/05-evidence.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/06-redaction.png",
+      "target": "history/1.2.0/history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2"
+    },
+    {
+      "document": "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.2.0/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-start.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-scope-editor.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/01-capture.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/02-request.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/03-analysis.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-accounts.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-results.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/05-evidence.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/06-redaction.png",
+      "target": "history/1.1.0/history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2"
+    },
+    {
+      "document": "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.1.0/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-start.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/00-scope-editor.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/01-capture.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/02-request.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/03-analysis.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-accounts.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/04-auth-results.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/05-evidence.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "images/light/1280x800/06-redaction.png",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2"
+    },
+    {
+      "document": "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "reference": "VERIFICATION_SIMPLE.json",
+      "target": "history/1.2.0/history/1.1.0/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324"
+    }
+  ],
+  "mirrors": {
+    "../downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf": {
+      "source": "downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf",
+      "sha256": "44a34cb8b3fc2dfc1316f2b58b51d0e466461c4b912651bd3ac40ed57406c9c9",
+      "bytes": 2107094
+    },
+    "../tools/install_katana.py": {
+      "source": "tools/install_katana.py",
+      "sha256": "067d376aacf7e9f08041dec646007434a7d2ef02920f0eeaa40b50d7a8ecba8c",
+      "bytes": 16444
+    },
+    "../downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip": {
+      "source": "downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip",
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2",
+      "bytes": 34685
+    },
+    "history/1.2.0/GUIDE_SIMPLE_KR.html": {
+      "source": "docs/history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "67e978cbfd02cf12ad38a29c66064d349dbeed1a0c1c1cdb26bfeef6d081be6d",
+      "bytes": 4034835
+    },
+    "history/1.1.0/GUIDE_SIMPLE_KR.html": {
+      "source": "docs/history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "d84bdbb52bc3d30497ebc55de103789d73712ec6778799620f7e0a0675cb1cde",
+      "bytes": 1924373
+    },
+    "history/1.0.0/GUIDE_SIMPLE_KR.html": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38",
+      "bytes": 1142434
+    },
+    "history/1.2.0/GUIDE_SIMPLE_KR.md": {
+      "source": "docs/history/1.2.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "c08e3401d60890431e0a682cd91d21c2c406b1a5923dc39a5c91aba3d42842fa",
+      "bytes": 30120
+    },
+    "history/1.1.0/GUIDE_SIMPLE_KR.md": {
+      "source": "docs/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "6e20b963f871006a2a571745e643a84d232ec403297f2f104da5f8ebff07c39a",
+      "bytes": 15112
+    },
+    "history/1.0.0/GUIDE_SIMPLE_KR.md": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb",
+      "bytes": 8810
+    },
+    "KATANA_SCOPE_1.3.1_SPEC_KR.md": {
+      "source": "docs/KATANA_SCOPE_1.3.1_SPEC_KR.md",
+      "sha256": "f2462224f2b56403f08023fba90f14eca3acf79033038d0c6b1f5c5960418c43",
+      "bytes": 10091
+    },
+    "history/downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf": {
+      "source": "downloads/guides/1.2.0/Workbench_Simple_1.2.0_Guide_KR.pdf",
+      "sha256": "41e54d2c328ad1d074b184e3c63e95e85ec54024b6b48fe54d864820711a53b4",
+      "bytes": 1834649
+    },
+    "history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md": {
+      "source": "docs/history/1.2.0/SCOPE_INSPECTION_1.2.0_SPEC_KR.md",
+      "sha256": "a8d0072ab0a3fe70b00e35e69a85ea6b6c88562645075e503da6bef783098fea",
+      "bytes": 10975
+    },
+    "history/downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip": {
+      "source": "downloads/1.2.0/feature-mapper-browser-helper-0.4.0.zip",
+      "sha256": "96d031b6b495b96013cb375ba8e08e1fce1fcb37645bceff18f910860af1f0a5",
+      "bytes": 33497
+    },
+    "history/1.2.0/VERIFICATION_SIMPLE_1.2.0.json": {
+      "source": "docs/history/1.2.0/VERIFICATION_SIMPLE_1.2.0.json",
+      "sha256": "4aaaad9c6b35d7bdd7c3469e94392d9d9b1948b2f5b01709a044ee81abc1d86b",
+      "bytes": 9433
+    },
+    "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.html": {
+      "source": "docs/history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "d84bdbb52bc3d30497ebc55de103789d73712ec6778799620f7e0a0675cb1cde",
+      "bytes": 1924373
+    },
+    "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.html": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38",
+      "bytes": 1142434
+    },
+    "history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json": {
+      "source": "docs/history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json",
+      "sha256": "d2cd20e9542855600b8b90717dcb8c5b426e945130517c1dfd58e48312fdd4f8",
+      "bytes": 5239
+    },
+    "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38",
+      "bytes": 1142434
+    },
+    "history/1.0.0/VERIFICATION_SIMPLE.json": {
+      "source": "docs/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324",
+      "bytes": 3795
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/12-inspection-setup.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/12-inspection-setup.png",
+      "sha256": "727eb4f1cb2f94651c987ebbdf08407bfa609d82cfc0ead078f0fb7d7c647e15",
+      "bytes": 28037
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/13-inspection-progress.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/13-inspection-progress.png",
+      "sha256": "fa099340d92a7c02635a9c35f8aca05f00803c95907c77a02b91d6b1fe3efd14",
+      "bytes": 91455
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/14-inspection-environment.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/14-inspection-environment.png",
+      "sha256": "0c4e3a87b69dd80e0439f52334d06331dd7bdfbac5e63f239420d836adfa6e41",
+      "bytes": 92993
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/15-inspection-paths.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/15-inspection-paths.png",
+      "sha256": "16c9c9fb1a7091c23edb4fe068123c0e1ed358bd645ed1b1edc1185144453e9d",
+      "bytes": 72236
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/16-inspection-api.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/16-inspection-api.png",
+      "sha256": "51858ec3e09042164d6baf082fa3fc8e6330e6a389d22160a2754bc4ecf99289",
+      "bytes": 93538
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/17-inspection-secrets.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/17-inspection-secrets.png",
+      "sha256": "f1519ed787144502c3f08ed9d550bcf88fe624e29ea4ee37c3517cddce669fb9",
+      "bytes": 78530
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/18-inspection-access.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/18-inspection-access.png",
+      "sha256": "367876eb24c887e6f1554d3ffcca35fb21ac24ab63c6479a4b21a6238e9bcf5e",
+      "bytes": 49200
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/19-inspection-changes.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/19-inspection-changes.png",
+      "sha256": "e2a13cbcd7f705e7d8973ff3fe646a541f068092910b9f97b10b6a517812f939",
+      "bytes": 48274
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/20-inspection-coverage.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/20-inspection-coverage.png",
+      "sha256": "e4c8697f9b9a08b8e0cdfa525914ee70704a8818933ee321382dd1326d761e50",
+      "bytes": 92293
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/21-inspection-browser.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/21-inspection-browser.png",
+      "sha256": "45987b894aa2baa0b4f99530063dd0d782d4f1008c3cb2632fa3f9c1e5be4b48",
+      "bytes": 72802
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/22-inspection-original.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/22-inspection-original.png",
+      "sha256": "63bdb671e1ceddceb9e2f9e6914223cc0d75bcaa0615f36d1a64a454ed37584d",
+      "bytes": 47553
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/00-start.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/00-start.png",
+      "sha256": "13480ac3bfa7c26e884ea0c47f29a8e44415d0cef2fc30d4932211bacd3647dc",
+      "bytes": 49554
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/00-scope-editor.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "bytes": 15004
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/01-capture.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/01-capture.png",
+      "sha256": "e9222f3b1809de308e1112d6487ddb44dfb1e4f74f20dade41685e52bc7f184e",
+      "bytes": 66991
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/02-request.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/02-request.png",
+      "sha256": "92f7f7635db52aa67644b587523a4571ae911349f401f44983b09da951058438",
+      "bytes": 68092
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/08-mapper.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/08-mapper.png",
+      "sha256": "6e14af7be2e3d15376af6136238c7adccf5889bff4970fb4ce06c3e610acce52",
+      "bytes": 42952
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/10-js.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/10-js.png",
+      "sha256": "c9776e2f99980559db0f20d36e2c4320c5c9f7dd274a8b5b97de9a21b3080d7f",
+      "bytes": 63234
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/09-environment.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/09-environment.png",
+      "sha256": "18765082b6fc2c3d0f99f090c2bae135293b8450d45c255af238d62fe06948bd",
+      "bytes": 65939
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/03-analysis.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/03-analysis.png",
+      "sha256": "79563f66334e119fe8227d4c7177c51a59dc96d41363a2998f62ff949a43b101",
+      "bytes": 37743
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/04-auth-accounts.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "bytes": 13753
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/04-auth-results.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/04-auth-results.png",
+      "sha256": "cca01332a6c1a9682d7e6c0d7bce3b12c0e31f96bd7d1dbc6acd547189a1cabd",
+      "bytes": 63313
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/07-payload.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/07-payload.png",
+      "sha256": "54b31c94861a6a5c798a3d10947baec9c06ef4a32c4fe43bb8821390cbc90c9f",
+      "bytes": 58771
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/11-replay.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/11-replay.png",
+      "sha256": "a5980452be8e2a4f3c37bd406b2a95918c129a918d01c2ba45459c656b39dcd9",
+      "bytes": 50056
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/05-evidence.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/05-evidence.png",
+      "sha256": "c06ebf6dffe3889fd876582b034c220a885b3ae62619e287ebc4ccff1f51add4",
+      "bytes": 87509
+    },
+    "history/1.2.0/images/1.2.0/light/1280x800/06-redaction.png": {
+      "source": "docs/history/1.2.0/images/1.2.0/light/1280x800/06-redaction.png",
+      "sha256": "2803168d347a6ef6843e0ec307f5ace2e572a549f58610c23eff20817a73a0e7",
+      "bytes": 46894
+    },
+    "history/1.2.0/history/1.1.0/GUIDE_SIMPLE_KR.md": {
+      "source": "docs/history/1.1.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "6e20b963f871006a2a571745e643a84d232ec403297f2f104da5f8ebff07c39a",
+      "bytes": 15112
+    },
+    "history/1.2.0/history/1.0.0/GUIDE_SIMPLE_KR.md": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb",
+      "bytes": 8810
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/00-start.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/00-start.png",
+      "sha256": "ef4cd5b03d370d33bca945ec2e2a195b233be274cd85c474dc9466106079bfab",
+      "bytes": 48225
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/00-scope-editor.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "bytes": 15004
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/01-capture.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/01-capture.png",
+      "sha256": "029523891398ca40b0cb99c5e56914129c1d3176412c699a5099c60ae30eb9d8",
+      "bytes": 65533
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/02-request.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/02-request.png",
+      "sha256": "1e87221b879eb8f3d1770f13565d4e5d32be0e54339b23526647cf9dd9b7f6da",
+      "bytes": 66462
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/08-mapper.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/08-mapper.png",
+      "sha256": "1e9257f1c6dafa7957709cb36f46ccc46f653cd0ad892971ad1c4f25f3567a34",
+      "bytes": 41262
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/10-js.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/10-js.png",
+      "sha256": "022dd2a4f316feb1cc3455bf210182418d548545f42658a46b95f093ffce95d6",
+      "bytes": 61465
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/09-environment.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/09-environment.png",
+      "sha256": "9b41a46ca9bab64efe158b4e706aa9a1f4497b062f5175d8b00f10f95fb8fd0d",
+      "bytes": 65039
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/03-analysis.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/03-analysis.png",
+      "sha256": "9604b000acc111d3f546d6ee823d8341be0852812dcc58ee7cd29367531ca9b4",
+      "bytes": 35983
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/04-auth-accounts.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "bytes": 13753
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/04-auth-results.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/04-auth-results.png",
+      "sha256": "a0c8217e9dd6bd826ed748b1aec25968d7da6f3c4692dc6a09e062b6a3155758",
+      "bytes": 61260
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/07-payload.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/07-payload.png",
+      "sha256": "d41ec49c98b1f636960092cbab490dd729919b54fdc7f3c8c2b2287080b2c954",
+      "bytes": 57303
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/11-replay.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/11-replay.png",
+      "sha256": "11a2403f9f4f0b59bb3305a7ca94e7b45d07d7ea015d970bd44573d0b813da7e",
+      "bytes": 48167
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/05-evidence.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/05-evidence.png",
+      "sha256": "7643cc10fe649da249838b268d8c44187eb23f01b4c75bc93c2830c5f1649e2b",
+      "bytes": 86515
+    },
+    "history/1.1.0/images/1.1.0/light/1280x800/06-redaction.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/06-redaction.png",
+      "sha256": "f6f6b82f39007e8ad7c066611cd540b456c7b0ba0cbec82507b87c7532f5cc57",
+      "bytes": 46802
+    },
+    "history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb",
+      "bytes": 8810
+    },
+    "history/1.0.0/images/light/1280x800/00-start.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63",
+      "bytes": 43742
+    },
+    "history/1.0.0/images/light/1280x800/00-scope-editor.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "bytes": 15004
+    },
+    "history/1.0.0/images/light/1280x800/01-capture.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f",
+      "bytes": 61338
+    },
+    "history/1.0.0/images/light/1280x800/02-request.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6",
+      "bytes": 62332
+    },
+    "history/1.0.0/images/light/1280x800/03-analysis.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13",
+      "bytes": 38605
+    },
+    "history/1.0.0/images/light/1280x800/04-auth-accounts.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "bytes": 13753
+    },
+    "history/1.0.0/images/light/1280x800/04-auth-results.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf",
+      "bytes": 61697
+    },
+    "history/1.0.0/images/light/1280x800/05-evidence.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0",
+      "bytes": 79089
+    },
+    "history/1.0.0/images/light/1280x800/06-redaction.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2",
+      "bytes": 46755
+    },
+    "VERIFICATION_SIMPLE_1.3.1.json": {
+      "source": "docs/VERIFICATION_SIMPLE_1.3.1.json",
+      "sha256": "fa0de4044613350dddb858136bedeeabd5b3629ac64b95256d2ffb49e6c5bd54",
+      "bytes": 70431
+    },
+    "KATANA_DEPENDENCY.json": {
+      "source": "docs/KATANA_DEPENDENCY.json",
+      "sha256": "db08f451a94ccc27f219cf9fda1d3f07a6ed30424d2edf778db0a2af59955aa1",
+      "bytes": 4325
+    },
+    "RETEST_VALUES_1.3.1_SPEC_KR.md": {
+      "source": "docs/RETEST_VALUES_1.3.1_SPEC_KR.md",
+      "sha256": "2dcdbd73061cf0d19eb7389fc50a101ce239c1c7cd23a249c1b82147c59c861c",
+      "bytes": 2921
+    },
+    "history/1.2.0/history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json": {
+      "source": "docs/history/1.1.0/VERIFICATION_SIMPLE_1.1.0.json",
+      "sha256": "d2cd20e9542855600b8b90717dcb8c5b426e945130517c1dfd58e48312fdd4f8",
+      "bytes": 5239
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.html": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38",
+      "bytes": 1142434
+    },
+    "history/1.2.0/history/1.0.0/VERIFICATION_SIMPLE.json": {
+      "source": "docs/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324",
+      "bytes": 3795
+    },
+    "history/1.1.0/history/1.0.0/VERIFICATION_SIMPLE.json": {
+      "source": "docs/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324",
+      "bytes": 3795
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/00-start.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/00-start.png",
+      "sha256": "ef4cd5b03d370d33bca945ec2e2a195b233be274cd85c474dc9466106079bfab",
+      "bytes": 48225
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/00-scope-editor.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "bytes": 15004
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/01-capture.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/01-capture.png",
+      "sha256": "029523891398ca40b0cb99c5e56914129c1d3176412c699a5099c60ae30eb9d8",
+      "bytes": 65533
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/02-request.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/02-request.png",
+      "sha256": "1e87221b879eb8f3d1770f13565d4e5d32be0e54339b23526647cf9dd9b7f6da",
+      "bytes": 66462
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/08-mapper.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/08-mapper.png",
+      "sha256": "1e9257f1c6dafa7957709cb36f46ccc46f653cd0ad892971ad1c4f25f3567a34",
+      "bytes": 41262
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/10-js.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/10-js.png",
+      "sha256": "022dd2a4f316feb1cc3455bf210182418d548545f42658a46b95f093ffce95d6",
+      "bytes": 61465
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/09-environment.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/09-environment.png",
+      "sha256": "9b41a46ca9bab64efe158b4e706aa9a1f4497b062f5175d8b00f10f95fb8fd0d",
+      "bytes": 65039
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/03-analysis.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/03-analysis.png",
+      "sha256": "9604b000acc111d3f546d6ee823d8341be0852812dcc58ee7cd29367531ca9b4",
+      "bytes": 35983
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/04-auth-accounts.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "bytes": 13753
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/04-auth-results.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/04-auth-results.png",
+      "sha256": "a0c8217e9dd6bd826ed748b1aec25968d7da6f3c4692dc6a09e062b6a3155758",
+      "bytes": 61260
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/07-payload.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/07-payload.png",
+      "sha256": "d41ec49c98b1f636960092cbab490dd729919b54fdc7f3c8c2b2287080b2c954",
+      "bytes": 57303
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/11-replay.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/11-replay.png",
+      "sha256": "11a2403f9f4f0b59bb3305a7ca94e7b45d07d7ea015d970bd44573d0b813da7e",
+      "bytes": 48167
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/05-evidence.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/05-evidence.png",
+      "sha256": "7643cc10fe649da249838b268d8c44187eb23f01b4c75bc93c2830c5f1649e2b",
+      "bytes": 86515
+    },
+    "history/1.2.0/history/1.1.0/images/1.1.0/light/1280x800/06-redaction.png": {
+      "source": "docs/history/1.1.0/images/1.1.0/light/1280x800/06-redaction.png",
+      "sha256": "f6f6b82f39007e8ad7c066611cd540b456c7b0ba0cbec82507b87c7532f5cc57",
+      "bytes": 46802
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/GUIDE_SIMPLE_KR.md": {
+      "source": "docs/history/1.0.0/GUIDE_SIMPLE_KR.md",
+      "sha256": "49889d7aa570f0bef306aa4ec2c6d6d790259bca8d1e9a78a754d1c2ce88dcfb",
+      "bytes": 8810
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/00-start.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63",
+      "bytes": 43742
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/00-scope-editor.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "bytes": 15004
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/01-capture.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f",
+      "bytes": 61338
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/02-request.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6",
+      "bytes": 62332
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/03-analysis.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13",
+      "bytes": 38605
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/04-auth-accounts.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "bytes": 13753
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/04-auth-results.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf",
+      "bytes": 61697
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/05-evidence.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0",
+      "bytes": 79089
+    },
+    "history/1.2.0/history/1.0.0/images/light/1280x800/06-redaction.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2",
+      "bytes": 46755
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/00-start.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63",
+      "bytes": 43742
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/00-scope-editor.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "bytes": 15004
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/01-capture.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f",
+      "bytes": 61338
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/02-request.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6",
+      "bytes": 62332
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/03-analysis.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13",
+      "bytes": 38605
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-accounts.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "bytes": 13753
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-results.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf",
+      "bytes": 61697
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/05-evidence.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0",
+      "bytes": 79089
+    },
+    "history/1.1.0/history/1.0.0/images/light/1280x800/06-redaction.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2",
+      "bytes": 46755
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/VERIFICATION_SIMPLE.json": {
+      "source": "docs/history/1.0.0/VERIFICATION_SIMPLE.json",
+      "sha256": "6e67aac229b9a556eea20c05352e4696e44f950ae74818931ae44390a3e87324",
+      "bytes": 3795
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/00-start.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-start.png",
+      "sha256": "94bc6cd801b92f7060a3c88d97493504c862b745c94da8b90eba17c8d65a6b63",
+      "bytes": 43742
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/00-scope-editor.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "bytes": 15004
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/01-capture.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/01-capture.png",
+      "sha256": "0eb39483f337f9948a96afc03d3855377549c8c14bdb02b08300495a9c4d426f",
+      "bytes": 61338
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/02-request.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/02-request.png",
+      "sha256": "819ef912d233f3eb6eb9826e7202c47cfa0da59049375cbf152e1b858f3785e6",
+      "bytes": 62332
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/03-analysis.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/03-analysis.png",
+      "sha256": "c4b3ce2b45e5bca4ed294613ad9982c05c4447124999e39d2af5ff73c1db8f13",
+      "bytes": 38605
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-accounts.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "bytes": 13753
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/04-auth-results.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/04-auth-results.png",
+      "sha256": "1740504da8223abcecb2ec53b40204d183b3d1dbcfe38fd5e72179b7ce9362cf",
+      "bytes": 61697
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/05-evidence.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/05-evidence.png",
+      "sha256": "962933f9941bdfed2d8c3a65ee4e3acb792ba4dfe2091e3982a5a3a2187275c0",
+      "bytes": 79089
+    },
+    "history/1.2.0/history/1.1.0/history/1.0.0/images/light/1280x800/06-redaction.png": {
+      "source": "docs/history/1.0.0/images/light/1280x800/06-redaction.png",
+      "sha256": "26ab5af7b6503a543cbe5f2f440b732fe5a5f4fb1c10ed66b241ea8529eb0fc2",
+      "bytes": 46755
+    }
+  },
+  "result": "passed"
+}

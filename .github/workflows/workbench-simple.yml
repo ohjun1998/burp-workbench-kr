@@ -2,10 +2,10 @@ name: Workbench Simple
 
 on:
   push:
-    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana', 'account-a/simple-retest-values', 'account-a/simple-navigation-retest']
-    paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', '.github/workflows/workbench-simple.yml']
+    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana', 'account-a/simple-retest-values', 'account-a/simple-navigation-retest', 'account-a/simple-onetouch-detection-140']
+    paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', 'audit/simple-onetouch-140/**', '.github/workflows/workbench-simple.yml']
   pull_request:
-    paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', '.github/workflows/workbench-simple.yml']
+    paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', 'audit/simple-onetouch-140/**', '.github/workflows/workbench-simple.yml']
   workflow_dispatch:
 
 permissions:
@@ -39,6 +39,8 @@ jobs:
         run: python -m unittest discover -s audit/simple-retest -p test_build_report.py -v
       - name: Verify versioned retest report inputs
         run: python -m unittest discover -s audit/simple-navigation-retest -p 'test_*.py' -v
+      - name: Verify one-touch detection comparison and evidence contracts
+        run: python -m unittest discover -s audit/simple-onetouch-140 -p 'test_*.py' -v
       - name: Install pinned external Katana 1.8.0
         run: python simple/tools/install_katana.py --dest "$RUNNER_TEMP/workbench-katana" --platform linux_amd64
       - name: Verify real Katana against the isolated loopback fixture

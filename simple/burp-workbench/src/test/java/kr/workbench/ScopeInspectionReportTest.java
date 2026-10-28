@@ -93,9 +93,9 @@ public final class ScopeInspectionReportTest extends WorkbenchTest {
       check(document.values().stream().anyMatch(v->v.category().equals("TOKEN")&&v.value().equals(token)),"token category retains the actual response token without provider validation");
       check(document.values().stream().anyMatch(v->v.value().equals("PUBLIC_CLIENT_VALUE")&&v.classification().equals("PUBLIC_IDENTIFIER")),"publicapikey uses the shared public-identifier policy");
       check(document.values().stream().anyMatch(v->v.value().equals("LAB_ONLY_DEMO_TOKEN_NOT_A_REAL_SECRET")&&v.classification().equals("EXAMPLE_OR_PLACEHOLDER")),"explicit demo token remains an example rather than an inconsistent live-secret claim");
-      check(document.values().stream().anyMatch(v->v.value().equals("LATEST_REAL_456")&&v.classification().equals("UNVERIFIED")),"latestToken is not downgraded because test is a substring of latest");
+      check(document.values().stream().anyMatch(v->v.value().equals("LATEST_REAL_456")&&v.classification().equals("SECRET_CANDIDATE")),"latestToken is not downgraded because test is a substring of latest");
       check(document.values().stream().noneMatch(v->v.value().equals("process.env.SECRET")||v.value().equals("getKey()")||v.name().equals("passwordJoin")),"code expressions and concatenated literal fragments are excluded from actual values");
-      check(document.values().stream().anyMatch(v->v.value().equals("q7VnPk2x.A8tRz9Lm")&&v.classification().equals("UNVERIFIED")),"opaque dotted data-file value is not mistaken for a JavaScript property expression");
+      check(document.values().stream().anyMatch(v->v.value().equals("q7VnPk2x.A8tRz9Lm")&&v.classification().equals("SECRET_CANDIDATE")),"opaque dotted data-file value is not mistaken for a JavaScript property expression");
       check(document.pages().stream().anyMatch(p->p.note().contains("코드 식")),"excluded expressions remain explicit in the response parsing notes");
       check(document.values().stream().anyMatch(v->v.value().equals("12345678901234567890.000")&&v.valueType().equals("NUMBER")),"large numeric JSON value preserves its original lexical precision");
       check(document.values().stream().anyMatch(v->v.value().equals("NESTED_TOKEN_VALUE")&&v.source().locator().equals("JSON:/nested/access~1token")),"nested JSON source uses a correct escaped JSON pointer");

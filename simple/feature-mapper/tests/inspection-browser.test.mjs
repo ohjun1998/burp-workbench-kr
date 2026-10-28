@@ -115,7 +115,7 @@ test('inspection helper adds only explicit tab guards and a separate opt-in with
   const manifest=JSON.parse(fs.readFileSync(new URL('../browser-helper/manifest.json',import.meta.url)));
   assert(manifest.permissions.includes('declarativeNetRequest'));assert(manifest.permissions.includes('alarms'));
   assert(!manifest.permissions.includes('cookies'));assert(!manifest.permissions.includes('debugger'));assert(!manifest.permissions.includes('webRequestBlocking'));
-  assert.deepEqual(manifest.host_permissions,['http://127.0.0.1/*']);assert.equal(manifest.version,'0.4.1');
+  assert.deepEqual(manifest.host_permissions,['http://127.0.0.1/*']);assert.equal(manifest.version,'0.5.0');
   const popup=fs.readFileSync(new URL('../browser-helper/popup.html',import.meta.url),'utf8');assert(popup.includes('SPA 통합 탐색 허용'));
 });
 
@@ -160,4 +160,63 @@ test('read-only navigation retries a replaced frame within the bounded DOM wait'
   }});
   await f.service.launch(task());await idle(f.service);
   assert(!f.events.some(x=>x.kind==='error'));assert(f.events.some(x=>x.kind==='menu'&&x.label==='destination'));
+});
+
+test('network lifecycle metadata hashes request IDs and allowlists response status, frame and error fields', async () => {
+  const input={kind:'api',url:'https://scope.test/app/api?token=PRIVATE_QUERY',page:'https://scope.test/app#/users',
+    method:'GET',networkStage:'response',requestId:'PRIVATE_REQUEST_ID',statusCode:403,resourceType:'xmlhttprequest',frameId:9,
+    elapsedMillis:125,fromCache:true,errorCode:'net::PRIVATE_ERROR',headers:{Cookie:'PRIVATE_COOKIE'},body:'PRIVATE_BODY',responses:2,pendingRequests:0};
+  const one=await inspectionMetadata(input,task(),webcrypto),two=await inspectionMetadata({...input,networkStage:'request'},task(),webcrypto);
+  assert.match(one.requestId,/^[a-f0-9]{64}$/);assert.equal(one.requestId,two.requestId);
+  assert.equal(one.statusCode,403);assert.equal(two.statusCode,0);assert.equal(one.frameId,9);assert.equal(one.elapsedMillis,125);assert(one.fromCache);
+  assert.equal(one.errorCode,'');assert.equal(one.resourceType,'xmlhttprequest');assert.equal(one.responses,2);assert.equal(one.pendingRequests,0);
+  assert(!JSON.stringify(one).includes('PRIVATE_'));assert(!('headers' in one)&&!('body' in one));
+});
+
+test('response telemetry requires an actual integer HTTP status rather than a zero fallback', async () => {
+  const input={kind:'api',url:'https://scope.test/app/api',networkStage:'response',requestId:'status-boundary'};
+  for(const statusCode of [undefined,null,0,-1,99,600,200.5,NaN,Infinity,'200'])
+    await assert.rejects(inspectionMetadata({...input,statusCode},task(),webcrypto),/상태 코드 미확인/);
+  for(const statusCode of [100,200,403,599])assert.equal((await inspectionMetadata({...input,statusCode},task(),webcrypto)).statusCode,statusCode);
+});
+
+test('same-Scope visible iframe URLs become bounded menu candidates without reading the embedded DOM', () => {
+  const frame=(src,title)=>({tagName:'IFRAME',textContent:'',getAttribute:key=>key==='src'?src:key==='title'?title:null,getBoundingClientRect:()=>({width:500,height:300}),closest:()=>null});
+  const frames=[frame('/app/embedded','포함 화면'),frame('https://other.test/app','외부 화면'),frame('/app/delete','위험 경로')];
+  const context={location:{href:'https://scope.test/app',origin:'https://scope.test',pathname:'/app'},URL,innerHeight:800,scrollBy(){},getComputedStyle:()=>({visibility:'visible',display:'block'}),document:{title:'SPA',readyState:'complete',forms:{length:0},documentElement:{scrollHeight:800},querySelector:()=>null,querySelectorAll:selector=>selector.startsWith('a[href]')?frames:[]}};
+  vm.createContext(context);const result=vm.runInContext('('+inspectDocument.toString()+')',context)(task(),false);
+  assert.equal(result.routes.length,1);assert.equal(result.routes[0].url,'https://scope.test/app/embedded');assert.equal(result.routes[0].discoveryType,'iframe');assert.equal(result.excluded,2);
+});
+
+test('actual API callbacks retain request-response-error linkage while query values, bodies and unrelated completions stay local', async () => {
+  const f=fixture();await f.service.launch(task());
+  const details={tabId:77,requestId:'xhr-1',url:'https://scope.test/app/api?token=PRIVATE_QUERY',documentUrl:'https://scope.test/app#/orders',method:'GET',type:'xmlhttprequest',frameId:2};
+  await f.service.request(details);
+  for(const statusCode of [undefined,null,0,-1,99,600,200.5,NaN,Infinity,'200'])await f.service.completed({...details,statusCode});
+  assert.equal(f.service.snapshot().responses,0);assert.equal(Object.keys(f.service.snapshot().pendingRequests).length,1);
+  assert(!f.events.some(e=>e.networkStage==='response'),'invalid callbacks must preserve pending rather than claim a response');
+  await f.service.completed({...details,statusCode:403,fromCache:true});
+  await f.service.completed({...details,requestId:'unobserved',statusCode:200});
+  // Request IDs are opaque: a prototype-shaped value must remain an own key.
+  await f.service.request({...details,requestId:'__proto__',url:'https://scope.test/app/slow'});
+  await f.service.blocked({...details,requestId:'__proto__',url:'https://scope.test/app/slow',error:'net::ERR_CONNECTION_RESET PRIVATE_ERROR'});
+  await idle(f.service);
+  const stages=f.events.filter(e=>e.kind==='api');
+  assert.equal(stages.length,4);assert.deepEqual(stages.map(e=>e.networkStage),['request','response','request','error']);
+  assert.equal(stages[0].requestId,stages[1].requestId);assert.notEqual(stages[1].requestId,stages[2].requestId);assert.equal(stages[2].requestId,stages[3].requestId);
+  assert.equal(stages[1].statusCode,403);assert.equal(stages[1].frameId,2);assert(stages[1].fromCache);assert.equal(stages[3].errorCode,'NETWORK_ERROR');
+  assert(stages.every(e=>e.actor==='browser-session'&&e.httpProfileShared===false));assert(!JSON.stringify(f.events).includes('PRIVATE_'));
+  assert.equal(f.session.inspectionResponses,1);assert.equal(f.session.inspectionNetworkErrors,1);assert.equal(f.session.inspectionPendingRequests,0);
+  const done=f.events.findLast(e=>e.kind==='done');assert.equal(done.state,'partial');assert(done.message.includes('전송 실패'));
+  const before=f.events.length;await f.service.completed({...details,statusCode:200});assert.equal(f.events.length,before);
+});
+
+test('unfinished API responses remain pending and make bounded browser completion partial', async () => {
+  const f=fixture({document:url=>({url,routes:[],action:'',pendingActions:false,loading:false,ready:'complete',excluded:0})});
+  await f.service.launch(task());
+  await f.service.request({tabId:77,requestId:'never-completes',url:'https://scope.test/app/api',method:'GET',type:'xmlhttprequest',frameId:0});
+  await idle(f.service);
+  const done=f.events.findLast(e=>e.kind==='done');assert.equal(done.state,'partial');assert(done.message.includes('응답 대기 1.5초'));
+  assert.equal(f.session.inspectionPendingRequests,1);assert.equal(f.session.inspectionResponses,0);
+  assert(!f.events.some(e=>e.networkStage==='response'||e.networkStage==='error'),'timeout is not fabricated as a real HTTP response or callback error');
 });

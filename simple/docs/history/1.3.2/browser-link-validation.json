@@ -1,0 +1,57 @@
+{
+  "version": "1.3.2",
+  "result": "passed",
+  "scope": "Actual Chromium rendering of byte-preserved archived guide through an isolated loopback documentation server; no target service or Burp execution. Local file/fragment validation includes the linked historical documents.",
+  "embeddedImagesLoaded": 28,
+  "directLocalLinkResourcesHttp200": 9,
+  "resources": [
+    {
+      "path": "/docs/history/1.3.2/KATANA_DEPENDENCY.json",
+      "httpStatus": 200,
+      "sha256": "db08f451a94ccc27f219cf9fda1d3f07a6ed30424d2edf778db0a2af59955aa1"
+    },
+    {
+      "path": "/docs/history/1.3.2/KATANA_SCOPE_1.3.2_SPEC_KR.md",
+      "httpStatus": 200,
+      "sha256": "b52883f1e7add7c71295143395c4ff9897f96f54c8fb83ee104305677a312d5c"
+    },
+    {
+      "path": "/docs/history/1.3.2/VERIFICATION_SIMPLE_1.3.2.json",
+      "httpStatus": 200,
+      "sha256": "2dd97b9d486c556d13026a1042cfb2b3ba7bbd4c4949dc47ee745f44c3dca4d2"
+    },
+    {
+      "path": "/docs/history/1.3.2/history/1.0.0/GUIDE_SIMPLE_KR.html",
+      "httpStatus": 200,
+      "sha256": "08f898ca0366740f5aa4e0305aeeb5b2d57374649d34cb89c486539002348b38"
+    },
+    {
+      "path": "/docs/history/1.3.2/history/1.1.0/GUIDE_SIMPLE_KR.html",
+      "httpStatus": 200,
+      "sha256": "d84bdbb52bc3d30497ebc55de103789d73712ec6778799620f7e0a0675cb1cde"
+    },
+    {
+      "path": "/docs/history/1.3.2/history/1.2.0/GUIDE_SIMPLE_KR.html",
+      "httpStatus": 200,
+      "sha256": "67e978cbfd02cf12ad38a29c66064d349dbeed1a0c1c1cdb26bfeef6d081be6d"
+    },
+    {
+      "path": "/docs/history/downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip",
+      "httpStatus": 200,
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+    },
+    {
+      "path": "/docs/history/downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf",
+      "httpStatus": 200,
+      "sha256": "44a34cb8b3fc2dfc1316f2b58b51d0e466461c4b912651bd3ac40ed57406c9c9"
+    },
+    {
+      "path": "/docs/history/tools/install_katana.py",
+      "httpStatus": 200,
+      "sha256": "067d376aacf7e9f08041dec646007434a7d2ef02920f0eeaa40b50d7a8ecba8c"
+    }
+  ],
+  "pageErrors": [],
+  "externalBrowserRequests": 0,
+  "nativeBurp": false
+}

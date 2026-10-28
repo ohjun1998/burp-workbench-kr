@@ -116,9 +116,9 @@ final class ScopeInspectionHistory {
         && !context.scope().isEmpty() && run.conditionFingerprint().equals(current.conditionFingerprint())).findFirst().orElse(null);
     if (previous == null) return List.of();
     List<ScopeInspection.Finding> changes = new ArrayList<>();
-    Map<String, List<ScopeInspection.Finding>> oldFindings = group(previous.findings());
-    Map<String, List<ScopeInspection.Finding>> newFindings = group(current.findings());
-    for (var finding : current.findings()) {
+    Map<String, List<ScopeInspection.Finding>> oldFindings = group(previous.findings().stream().filter(ScopeInspectionView::historyRelevant).toList());
+    Map<String, List<ScopeInspection.Finding>> newFindings = group(current.findings().stream().filter(ScopeInspectionView::historyRelevant).toList());
+    for (var finding : current.findings().stream().filter(ScopeInspectionView::historyRelevant).toList()) {
       List<ScopeInspection.Finding> same = oldFindings.getOrDefault(key(finding), List.of());
       if (same.stream().anyMatch(old -> old.fingerprint().equals(finding.fingerprint()))) continue;
       String title = same.isEmpty() ? "새 발견 후보" : "발견 내용 변경";
@@ -126,7 +126,7 @@ final class ScopeInspectionHistory {
           title + " · " + finding.category() + " / " + finding.title() + " · 이전 실행 " + previous.id(), finding.fingerprint()));
     }
     if (current.complete() && previous.complete()) {
-      for (var finding : previous.findings()) if (!newFindings.containsKey(key(finding))
+      for (var finding : previous.findings()) if (ScopeInspectionView.historyRelevant(finding) && !newFindings.containsKey(key(finding))
           && current.pages().stream().anyMatch(page -> page.complete() && page.account().equals(finding.account())
               && page.url().equals(finding.url()) && page.method().equals(finding.method())))
         changes.add(change("이번 응답에서 재관측 없음", finding.url(), finding.method(), finding.account(),
@@ -168,12 +168,13 @@ final class ScopeInspectionHistory {
       });
       String condition = hash(project + "|" + scope + "|" + options.url() + "|" + options.depth() + "|" + options.budget()
           + "|" + options.delayMillis() + "|" + options.timeoutMillis() + "|" + options.maxBodyBytes() + "|" + options.maxRedirects() + "|" + options.browser() + "|" + options.compareAccounts() + "|" + identity
+          + "|inspection-analysis-schema:2"
           + (options.katana() ? "|katana-1.8.0|" + options.katanaSeconds() + "|" + options.katanaPages() + "|" + options.katanaProfileId() : ""));
       return new Context(project, directory(project), scope, condition);
     } catch (RuntimeException error) { problem = "점검 이력의 프로젝트/범위 조건을 확인하지 못했습니다."; return null; }
   }
   private Summary summary(ScopeInspection.Options options, ScopeInspection.Snapshot snapshot, Context context) {
-    List<ScopeInspection.Finding> findings = snapshot.findings().stream().limit(MAX_FINDINGS).map(f -> stored(f, options)).toList();
+    List<ScopeInspection.Finding> findings = snapshot.findings().stream().sorted(Comparator.comparingInt(ScopeInspectionView::historyPriority)).limit(MAX_FINDINGS).map(f -> stored(f, options)).toList();
     List<PageSummary> pages = snapshot.pages().stream().limit(MAX_PAGES).map(page -> new PageSummary(
         ScopeInspectionAnalysis.safeUrl(page.url()), checkedMethod(page.method()), account(page.account(), options), page.status(),
         text(page.classification(), 100), page.complete(), digest(page.digest()), text(page.profileRevision(), 120))).toList();

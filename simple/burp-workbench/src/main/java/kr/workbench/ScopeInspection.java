@@ -55,9 +55,15 @@ final class ScopeInspection {
   }
   record Snapshot(String id, State state, String message, int sent, int completed, int pending,
                   int excluded, int failed, int partial, List<Finding> findings, List<Page> pages,
-                  List<Candidate> candidates, long startedAt, long finishedAt) {
+                  List<Candidate> candidates, long startedAt, long finishedAt, List<ScopeInspectionCoverage.Row> coverage) {
+    Snapshot(String id, State state, String message, int sent, int completed, int pending,
+             int excluded, int failed, int partial, List<Finding> findings, List<Page> pages,
+             List<Candidate> candidates, long startedAt, long finishedAt) {
+      this(id,state,message,sent,completed,pending,excluded,failed,partial,findings,pages,candidates,startedAt,finishedAt,List.of());
+    }
     Snapshot {
       findings = List.copyOf(findings); pages = List.copyOf(pages); candidates = List.copyOf(candidates);
+      coverage = List.copyOf(coverage);
     }
   }
   private ScopeInspection() {}

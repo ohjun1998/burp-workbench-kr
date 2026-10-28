@@ -125,13 +125,13 @@ scope_steps = SCOPE_CONTENT['SCOPE_STEPS']
 katana_steps = KATANA_CONTENT['KATANA_STEPS']
 STEPS = scope_steps[:1] + katana_steps[:1] + scope_steps[1:2] + katana_steps[1:] + scope_steps[2:] + STEPS
 if BROWSER_CAPTURE.is_file():
-    CAPTURE_NOTE = '운영 Swing 그림은 합성 예제 패킷으로 렌더링했습니다. 별도 표시한 helper 한 장은 로컬 fixture에 연결한 실제 Chromium 페이지이며, 실제 Burp GUI 조작 캡처와 구분합니다.'
+    CAPTURE_NOTE = '운영 Swing 그림은 합성 예제 패킷으로 렌더링했습니다. helper 한 장은 실제 Chromium의 운영 popup을 로컬 Chrome API·연결 fixture로 구동한 화면이며, 네이티브 MV3·DNR·Burp GUI 실행과 구분합니다.'
     STEPS.insert(0, {'number':'B01', 'module':'브라우저 helper 실제 화면',
-        'title':'helper 연결과 SPA 허용 상태를 확인합니다', 'image':'helper-connected.png', 'captureKind':'browser',
+        'title':'helper 연결과 요청·응답·대기 상태를 확인합니다', 'image':'helper-connected.png', 'captureKind':'browser',
         'actions':['helper의 연결 주소·연결 토큰을 입력하고 연결 확인·저장으로 로컬 Workbench 연결을 확인합니다. 토큰 입력란은 가림 상태로 표시됩니다.',
-                   '현재 사이트 활성화 후 SPA 통합 탐색 허용을 켭니다. 실제 탐색은 Workbench의 SCOPE 통합 점검 시작에서 요청합니다.'],
-        'check':'다음 확인: 브라우저 로그인 세션과 HTTP 점검 계정은 별개입니다. 이 캡처는 설치·권한 허용 전체 수동 조작 또는 실제 Burp 실행의 증명이 아닙니다.',
-        'caption':'실제 Chromium에서 열린 helper 연결 페이지 · localhost 합성 fixture와 가짜 토큰을 사용한 검증 캡처입니다.'})
+                   '현재 사이트 활성화 후 SPA 통합 탐색 허용을 켭니다. 요청·응답·실패·대기 수와 부분 탐색 사유를 읽습니다. 실제 탐색은 Workbench의 SCOPE 통합 점검 시작에서 요청합니다.'],
+        'check':'다음 확인: 브라우저 로그인 세션과 HTTP 점검 계정은 별개입니다. 그림의 Burp 연결 완료 표시는 로컬 health fixture 응답이며 실제 Burp 연결·네이티브 설치를 증명하지 않습니다.',
+        'caption':'실제 Chromium + helper 운영 popup · 로컬 Chrome API·연결 fixture와 가짜 토큰 사용. 네이티브 MV3·DNR·Burp GUI 실행과 구분합니다.'})
 INSTALL = [
     f'Simple 설치 JAR burp-workbench-simple-{VERSION}.jar를 준비하고 기존 Workbench 파일을 보관합니다.',
     'Burp Extensions → Add → Java에서 Simple JAR를 선택하고 Workbench Simple 탭을 엽니다.',
@@ -196,7 +196,7 @@ def write_html(images: Path) -> Path:
 {''.join(blocks)}<section class="appendix"><div class="eyebrow">REFERENCE</div><h2>공통 사용 흐름과 확인 사항</h2>{''.join('<p>'+esc(text)+'</p>' for text in REFERENCE)}
 <p><strong>Ctrl+F</strong> 요청 검색 · <strong>Ctrl+R</strong> 선택 요청을 Repeater에 준비 · <strong>F1</strong> 현재 도구 안내. 상단 8개 도구의 단축키는 각 버튼의 안내를 확인하세요.</p>
 <h3>캡처와 검증의 범위</h3><p>{esc(CAPTURE_NOTE)} 실제 Burp 설치·GUI 클릭, Windows DPI·IME와 외부 서비스의 검증은 별도입니다. 새 {VERSION}에서 실제 실행한 검사와 제한은 <a href="{EVIDENCE_FILE}">버전별 검증 기록</a>을 확인합니다. 기존 1.0.0·Next의 검사 수를 새 결과로 합산하지 않습니다.</p>
-<p><a href="history/1.2.0/GUIDE_SIMPLE_KR.html">보존한 Simple 1.2.0 안내서</a> · <a href="history/1.1.0/GUIDE_SIMPLE_KR.html">1.1.0 안내서</a> · <a href="history/1.0.0/GUIDE_SIMPLE_KR.html">1.0.0 안내서</a> · 기존 버전 파일과 별도로 관리합니다.</p><a class="back" href="#top">처음으로 ↑</a></section></main></body></html>''', encoding='utf-8')
+<p><a href="history/1.3.2/GUIDE_SIMPLE_KR.html">보존한 Simple 1.3.2 안내서</a> · <a href="history/1.3.1/GUIDE_SIMPLE_KR.html">1.3.1 안내서</a> · <a href="history/1.3.0/GUIDE_SIMPLE_KR.html">1.3.0 안내서</a> · <a href="history/1.2.0/GUIDE_SIMPLE_KR.html">1.2.0 안내서</a> · <a href="history/1.1.0/GUIDE_SIMPLE_KR.html">1.1.0 안내서</a> · <a href="history/1.0.0/GUIDE_SIMPLE_KR.html">1.0.0 안내서</a> · 기존 버전 파일과 별도로 관리합니다.</p><a class="back" href="#top">처음으로 ↑</a></section></main></body></html>''', encoding='utf-8')
     return output
 
 
@@ -226,7 +226,7 @@ def write_markdown(images: Path) -> Path:
     lines += ['', '**Ctrl+F** 요청 검색 · **Ctrl+R** Repeater 준비 · **F1** 현재 도구 안내. 상단 도구 단축키는 버튼 안내를 확인합니다.', '',
               '## 검증 범위','',CAPTURE_NOTE,f'실제 실행한 검사와 미실행 범위는 [{VERSION} 검증 기록]({EVIDENCE_FILE})을 확인합니다. 과거 버전의 통과 수를 새 버전 검사로 합산하지 않습니다.', '',
               f'[Katana 요구사항·구현·검사·가이드 연결표]({KATANA_SPEC})', '',
-              '[보존한 1.2.0 안내서](history/1.2.0/GUIDE_SIMPLE_KR.md) · [1.1.0 안내서](history/1.1.0/GUIDE_SIMPLE_KR.md) · [1.0.0 안내서](history/1.0.0/GUIDE_SIMPLE_KR.md)', '']
+              '[보존한 1.3.2 안내서](history/1.3.2/GUIDE_SIMPLE_KR.md) · [1.3.1 안내서](history/1.3.1/GUIDE_SIMPLE_KR.md) · [1.3.0 안내서](history/1.3.0/GUIDE_SIMPLE_KR.md) · [1.2.0 안내서](history/1.2.0/GUIDE_SIMPLE_KR.md) · [1.1.0 안내서](history/1.1.0/GUIDE_SIMPLE_KR.md) · [1.0.0 안내서](history/1.0.0/GUIDE_SIMPLE_KR.md)', '']
     output=ROOT/'docs/GUIDE_SIMPLE_KR.md';output.write_text('\n'.join(lines),encoding='utf-8');return output
 
 
@@ -258,7 +258,7 @@ def write_pdf(images: Path) -> Path:
     y-=150
     for text in INSTALL+[ 'Simple은 설정 키 simple.*와 저장 폴더 .burp-workbench-simple을 사용해 기존 Next와 분리됩니다.',CAPTURE_NOTE]:
         y=paragraph(esc(text),margin,y,width-2*margin)-18
-    paragraph('기존 Next와 Simple 1.0.0–1.3.1 JAR·소스·PDF를 보존합니다. 통합 점검 화면 열기는 전송하지 않으며 시작 버튼에서 실제 조회 요청을 보냅니다.',margin,y,width-2*margin,small);c.showPage()
+    paragraph('기존 Next와 Simple 1.0.0–1.3.2 JAR·소스·PDF를 보존합니다. 통합 점검 화면 열기는 전송하지 않으며 시작 버튼에서 실제 조회 요청을 보냅니다.',margin,y,width-2*margin,small);c.showPage()
     frame(2,'확장별 핵심 기능과 부가 흐름 정리','modules');y=heading('8개 확장의 주요 기능을 모두 유지합니다',height-80)
     data=[[Paragraph(esc(text),body) for text in ['기존 통합 도구','유지한 핵심 기능','부가 흐름 정리']]]
     for module in MODULES:data.append([Paragraph('<b>'+esc(module['nav'])+'</b><br/>'+esc(module['name']),body),Paragraph(esc(module['core']),body),Paragraph(esc(module['aux']),body)])
@@ -307,8 +307,8 @@ def write_pdf(images: Path) -> Path:
 
 def write_readme() -> Path:
     lines=[f'# Workbench Simple {VERSION}', '',
-           '**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0·1.3.1 JAR·소스·PDF는 보존합니다.', '',
-           'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.', '',
+           '**기존 8개 통합 확장 도구를 유지하고 원터치 수집에서 메뉴·환경·경로·API·민감정보를 연결합니다.** 공통 응답 파서, 탐색 처리 흐름과 선택 재점검을 추가하며 기존 Next와 Simple 1.0.0–1.3.2 JAR·소스·PDF는 보존합니다.', '',
+           'SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 주요정보·실제 응답·미확인 확인 → 선택 재점검 → 원문 보고서·증거 저장으로 이어갑니다. 필요한 기존 도구도 바로 선택할 수 있습니다.', '',
            '| 필요한 파일 | 위치 |', '|---|---|',
            f'| 설치 JAR | [burp-workbench-simple-{VERSION}.jar](downloads/{VERSION}/burp-workbench-simple-{VERSION}.jar) |',
            f'| 독립 빌드 소스 | [소스 ZIP](downloads/{VERSION}/burp-workbench-simple-{VERSION}-source.zip) · [SHA256SUMS](downloads/{VERSION}/SHA256SUMS) |',
@@ -352,7 +352,7 @@ def write_readme() -> Path:
               '테스트 어댑터 빌드 후 두 캡처 명령으로 기존 8개 도구와 통합 점검 화면을 같은 버전 디렉터리에 생성합니다. PDF 생성에는 Python `reportlab`, `Pillow`가 필요하고, 구조 검증에는 `PyMuPDF`를 사용합니다.', '',
               '```sh', 'python tools/render_simple.py --check', 'python tools/render_scope_inspection.py --check', 'python tools/build_simple_guide.py', 'python tools/check_simple_guide.py', '```', '',
               'Java 17을 PATH에 둔 환경에서 위 명령을 실행하거나 `--java`로 Java 17 경로를 지정합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.', '',
-              '[보존한 Simple 1.3.1 안내서](docs/history/1.3.1/GUIDE_SIMPLE_KR.html) · [1.3.1 PDF](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) · [1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)', '']
+              '[보존한 Simple 1.3.2 안내서](docs/history/1.3.2/GUIDE_SIMPLE_KR.html) · [1.3.2 PDF](downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) · [1.3.1 안내서](docs/history/1.3.1/GUIDE_SIMPLE_KR.html) · [1.3.1 PDF](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) · [1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)', '']
     output=ROOT/'README_KR.md';output.write_text('\n'.join(lines),encoding='utf-8');return output
 
 
@@ -360,7 +360,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--images',type=Path,default=ROOT/f'docs/images/{VERSION}/light/1280x800')
     args=parser.parse_args();args.images=args.images.resolve()
-    if tuple(map(int,VERSION.split('.'))) < (1,3,2):raise SystemExit('Simple1.0.0/1.1.0/1.2.0/1.3.0/1.3.1 artifacts are immutable. This generator requires Simple 1.3.2 or newer.')
+    if tuple(map(int,VERSION.split('.'))) < (1,4,0):raise SystemExit('Published Simple 1.0.0–1.3.2 artifacts are immutable. This generator requires Simple 1.4.0 or newer.')
     missing=[step['image'] for step in STEPS if not capture_path(args.images,step).is_file()]
     if missing:raise SystemExit('Missing current-version production screenshots: '+', '.join(missing))
     outputs=[write_readme(),write_markdown(args.images),write_html(args.images),write_pdf(args.images)]

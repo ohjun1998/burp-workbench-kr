@@ -28,9 +28,28 @@ final class ScopeInspectionReport {
   }
   record Page(String originalId, String account, String profileRevision, String url, String method, int status,
               String responseSha256, int responseBytes, int decodedCharacters, boolean complete, String note) {}
-  record Document(String runId, String state, List<Value> values, List<Page> pages, boolean complete, List<String> notes) {
-    Document { values=List.copyOf(values);pages=List.copyOf(pages);notes=List.copyOf(notes); }
+  record Document(String runId, String state, List<Value> values, List<Page> pages, boolean complete, List<String> notes,
+                  List<ScopeInspectionCoverage.Row> coverage,List<ScopeInspectionCoverage.Correlation> correlations) {
+    Document(String runId,String state,List<Value>values,List<Page>pages,boolean complete,List<String>notes){this(runId,state,values,pages,complete,notes,List.of(),List.of());}
+    Document(String runId,String state,List<Value>values,List<Page>pages,boolean complete,List<String>notes,List<ScopeInspectionCoverage.Row>coverage){this(runId,state,values,pages,complete,notes,coverage,List.of());}
+    Document { values=List.copyOf(values);pages=List.copyOf(pages);notes=List.copyOf(notes);coverage=List.copyOf(coverage);correlations=List.copyOf(correlations); }
     @Override public String toString() { return "Document[pages="+pages.size()+", values="+values.size()+", complete="+complete+", values hidden]"; }
+  }
+  /** Transient common parser output. Raw values must never be retained by the ordinary UI/history. */
+  record Extraction(List<Value> values, boolean complete, String note) {
+    Extraction { values=List.copyOf(values); }
+    @Override public String toString(){return "Extraction[values="+values.size()+", complete="+complete+", raw hidden]";}
+  }
+  static Extraction extractObserved(String url,int status,String headers,String body,String account,String original) {
+    var snapshot=new ScopeInspection.Snapshot("transient-common-parser",ScopeInspection.State.RUNNING,"",0,0,0,0,0,0,List.of(),List.of(),List.of(),0,0);
+    Collector collector=new Collector(snapshot,true);
+    var page=new ScopeInspection.Page(url,"GET",account,status,"",true,"","",null,"transient");
+    Context context=new Context(collector,page,original,status,"",headers,"");
+    try {
+      context.headers();context.setBody(body);context.body(EnvironmentResponse.header(headers,"Content-Type"));
+    } catch(InterruptedIOException cancelled){Thread.currentThread().interrupt();context.partial("공통 값 파서 중지 · 미검사 범위 유지");}
+      catch(IOException|RuntimeException|StackOverflowError limited){context.partial("공통 값 파서 시간/결과/구조 한도 · 나머지 미검사");}
+    return new Extraction(collector.values,context.complete,String.join(" · ",context.notes));
   }
   private record Provider(String name, String category, Pattern pattern) {}
   private static final List<Provider> PROVIDERS=List.of(
@@ -58,7 +77,7 @@ final class ScopeInspectionReport {
       privateFile(temporary);
       try(ZipOutputStream zip=new ZipOutputStream(Files.newOutputStream(temporary))){
         entry(zip,"report.json",json(documentMap(document))); entry(zip,"report.html",html(document)); entry(zip,"values.csv",csv(document));
-        entry(zip,"manifest.json",json(Map.of("schemaVersion",1,"producerVersion",BuildInfo.VERSION,"createdAt",Instant.now().toString(),
+        entry(zip,"manifest.json",json(Map.of("schemaVersion",2,"producerVersion",BuildInfo.VERSION,"createdAt",Instant.now().toString(),
             "containsUnmaskedResponseValues",true,"containsRequestHeaders",false,"coordinateBasis","UTF-16 characters; decoded response body or normalized response header block; not wire-byte offsets",
             "machineValueAuthority","report.json preserves parsed value and rawText separately; CSV may prefix an apostrophe to prevent formulas",
             "complete",document.complete(),"notes",document.notes())));
@@ -106,12 +125,21 @@ final class ScopeInspectionReport {
     boolean complete=snapshot.state()==ScopeInspection.State.COMPLETED&&snapshot.pending()==0&&snapshot.failed()==0&&snapshot.partial()==0
         &&collector.pages.stream().allMatch(Page::complete)&&collector.notes.isEmpty();
     if(snapshot.state()!=ScopeInspection.State.COMPLETED||snapshot.pending()>0||snapshot.failed()>0||snapshot.partial()>0)collector.note("원래 실행에 중지·실패·부분·미검사 범위가 있음 · 보고서 미발견은 안전 판정이 아님");
-    return new Document(snapshot.id(),snapshot.state().name(),collector.values,collector.pages,complete,collector.notes);
+    return new Document(snapshot.id(),snapshot.state().name(),collector.values,collector.pages,complete,collector.notes,ScopeInspectionCoverage.rows(snapshot),ScopeInspectionCoverage.correlations(snapshot));
   }
-  private static Page page(ScopeInspection.Page p,String id,String digest,int bytes,int chars,boolean complete,String note){return new Page(id,p.account(),p.profileRevision(),ScopeInspectionAnalysis.safeUrl(p.url()),p.method(),p.status(),digest,bytes,chars,complete,note);}
+  private static Page page(ScopeInspection.Page p,String id,String digest,int bytes,int chars,boolean complete,String note){
+    if(!p.complete()) {
+      String product=p.classification().equals("RESPONSE_PENDING_ANALYSIS")?"제품 응답 분석 대기(RESPONSE_PENDING_ANALYSIS)":"제품 응답 점검 미완료";
+      String original=Objects.requireNonNullElse(p.note(),"").strip();
+      note=product+(original.isEmpty()?"":" · "+original)+" · 로컬 원문 값 추출: "+note;
+    }
+    return new Page(id,p.account(),p.profileRevision(),ScopeInspectionAnalysis.safeUrl(p.url()),p.method(),p.status(),digest,bytes,chars,complete&&p.complete(),note);
+  }
   private static final class Collector {
     final ScopeInspection.Snapshot snapshot;final List<Value>values=new ArrayList<>();final List<Page>pages=new ArrayList<>();final List<String>notes=new ArrayList<>();int valueCharacters;
-    Collector(ScopeInspection.Snapshot snapshot){this.snapshot=snapshot;}
+    final boolean live;final long deadline;
+    Collector(ScopeInspection.Snapshot snapshot){this(snapshot,false);}
+    Collector(ScopeInspection.Snapshot snapshot,boolean live){this.snapshot=snapshot;this.live=live;deadline=live?System.nanoTime()+java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(1200):Long.MAX_VALUE;}
     void note(String value){if(notes.size()<100&&!notes.contains(value))notes.add(value);}
   }
   private static final class Context {
@@ -125,12 +153,22 @@ final class ScopeInspectionReport {
     void partial(String note){complete=false;if(notes.size()<16&&!notes.contains(note))notes.add(note);}
     void add(String category,String name,String value,String type,String area,String locator,int start,int length,Map<String,String> attributes)throws IOException{
       interrupted();String source=area.equals("RESPONSE_HEADERS")?headers:text;
+      if(collector.live&&(System.nanoTime()>collector.deadline||collector.values.size()>=500||collector.valueCharacters>1024*1024))throw new IOException("live parser limit");
       if(start<0||length<0||start>source.length()-length){partial("소스 위치 미확정 항목 제외");return;}
       if(value.length()>MAX_VALUE||length>MAX_VALUE){partial("64 Ki 문자 초과 값 제외 · 길이 "+Math.max(value.length(),length)+" · 원본에서 확인");return;}
       if(collector.values.size()>=MAX_VALUES||(long)collector.valueCharacters+value.length()+length>MAX_TOTAL_VALUES){partial("실행별 값 개수/16 Mi 문자 제한 · 추가 값 제외");collector.note("값 추출 결과 한도 도달 · 미출력 값은 원본에서 확인");return;}
       if(collector.values.stream().anyMatch(old->old.source().originalId().equals(original)&&old.source().account().equals(page.account())&&old.source().profileRevision().equals(page.profileRevision())
           &&old.source().area().equals(area)&&old.category().equals(category)&&old.value().equals(value)&&overlap(old.source().offset(),old.source().length(),start,length)))return;
-      String classification=type.equals("RAW_TEMPLATE_INTERPOLATED")?"DYNAMIC_UNRESOLVED":classification(name,value);String raw=source.substring(start,start+length);
+      if(ScopeInspectionValueRules.emptyOrMetadata(name,value,type))return;
+      if(locator.startsWith("JS:")||locator.startsWith("field:"))if(ScopeInspectionValueRules.codeFragment(value))return;
+      String classification="response cookie".equals(attributes.get("kind"))?"COOKIE_VALUE":"STATIC_FRAGMENT_UNRESOLVED".equals(attributes.get("resolution"))?"STATIC_FRAGMENT_UNRESOLVED":ScopeInspectionValueRules.classification(category,name,value,type,locator);String raw=source.substring(start,start+length);
+      if(Set.of("KEY","TOKEN","SENSITIVE").contains(category)&&!Set.of("PERSONAL_DATA","EXAMPLE_OR_PLACEHOLDER","COOKIE_VALUE").contains(classification)) {
+        String fingerprint=ScopeInspectionAnalysis.hash(value);
+        for(var finding:findings)if(finding.category().equals("SECRET")&&(finding.account().equals(page.account())||finding.account().equals("전체"))&&(finding.fingerprint().equals(fingerprint)||finding.fingerprint().equals(fingerprint.substring(0,16)))) {
+          if(finding.state().contains("예제값"))classification="EXAMPLE_OR_PLACEHOLDER";
+          else if(finding.state().contains("공개 식별자"))classification="PUBLIC_IDENTIFIER";
+        }
+      }
       String provenance=product(category,name,value,area,start,length)?"PRODUCT_FINDING":"REPORT_SUPPLEMENT";
       int line=area.equals("RESPONSE_HEADERS")?line(headers,start):1+insertion(newlines,start);
       Source origin=new Source(original,page.account(),page.profileRevision(),ScopeInspectionAnalysis.safeUrl(page.url()),page.method(),status,digest,area,locator,line,start,length);
@@ -175,13 +213,18 @@ final class ScopeInspectionReport {
       if(json){try{json(text,0);}catch(IllegalArgumentException error){partial("JSON 구조·크기·노드 제한 또는 형식 오류 · 보조 리터럴만 확인");plain(text,0,false);}}
       else if(markup)markup();
       else if(type.toLowerCase(Locale.ROOT).contains("javascript")||page.url().split("[?#]",2)[0].matches("(?i).*\\.(?:js|mjs|cjs)$"))javascript(text,0);
+      else if(type.toLowerCase(Locale.ROOT).contains("css")||page.url().split("[?#]",2)[0].matches("(?i).*\\.css$")) { /* CSS declarations are not application configuration fields. */ }
       else plain(text,0,true);
       providers();if(expressions>0)notes.add("코드 식 "+expressions+"개는 실제 값으로 출력하지 않음");
       if(findings.stream().anyMatch(f->f.offset()<0&&f.detail().toLowerCase(Locale.ROOT).contains("source map"))||text.contains("\"sourcesContent\""))
         partial("소스맵 복원 코드의 가상 위치는 응답 원문 좌표로 추정하지 않음 · 원문 직접값/패턴만 추출, 복원 내부 코드 미검사");
     }
     void scalar(String name,String value,String type,String locator,int start,int length,Map<String,String> attributes)throws IOException{
-      String category=category(name,value);if(category!=null)add(category,name,value,type,"DECODED_RESPONSE_BODY",locator,start,length,attributes);
+      String category=ScopeInspectionValueRules.category(name,value,locator);
+      if(category!=null){
+        if(Set.of("API","PATH").contains(category)&&uriLike(value)){Map<String,String> merged=new LinkedHashMap<>(apiAttributes(value,attributes.getOrDefault("httpMethod","?")));merged.putAll(attributes);attributes=merged;}
+        add(category,name,value,type,"DECODED_RESPONSE_BODY",locator,start,length,attributes);
+      }
     }
     void json(String source,int base)throws IOException{
       int before=collector.values.size(),characters=collector.valueCharacters;
@@ -193,7 +236,7 @@ final class ScopeInspectionReport {
     void plain(String source,int base,boolean unquoted)throws IOException{
       int position=0;
       while(position<source.length()){
-        interrupted();char c=source.charAt(position);if(!Character.isJavaIdentifierStart(c)){position++;continue;}
+        interrupted();if(collector.live&&System.nanoTime()>collector.deadline)throw new IOException("live parser time limit");char c=source.charAt(position);if(!Character.isJavaIdentifierStart(c)){position++;continue;}
         int begin=position++;while(position<source.length()&&(Character.isJavaIdentifierPart(source.charAt(position))||".-".indexOf(source.charAt(position))>=0))position++;
         if(position-begin>128)continue;String key=source.substring(begin,position);int separator=position;
         while(separator<source.length()&&Character.isWhitespace(source.charAt(separator)))separator++;
@@ -217,12 +260,13 @@ final class ScopeInspectionReport {
       }
     }
     void javascript(String source,int base)throws IOException{
+      if(collector.live&&source.length()>256*1024){javascriptLexical(source,base);return;}
       interrupted();if(source.length()>4*1024*1024){partial("JS 단일 본문 4 Mi 문자 초과 · 코드 파싱 미검사, 직접 리터럴 보조");plain(source,base,false);templateFallback(source,base);return;}
       try{
         CompilerEnvirons env=new CompilerEnvirons();env.setLanguageVersion(org.mozilla.javascript.Context.VERSION_ES6);env.setRecoverFromErrors(false);
         env.setErrorReporter(new ErrorReporter(){public void warning(String a,String b,int c,String d,int e){}public void error(String a,String b,int c,String d,int e){throw new EvaluatorException("report syntax");}public EvaluatorException runtimeError(String a,String b,int c,String d,int e){return new EvaluatorException("report syntax");}});
         String compatible=JsSyntax.compatible(source).text();if(compatible.length()!=source.length())throw new IllegalArgumentException();
-        AstRoot root=new Parser(env).parse(compatible,"report.js",1);long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(5);
+        AstRoot root=new Parser(env).parse(compatible,"report.js",1);long deadline=Math.min(collector.deadline,System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(5));
         AtomicFailure failure=new AtomicFailure();
         root.visit(node->{
           if(failure.error!=null)return false;
@@ -245,6 +289,50 @@ final class ScopeInspectionReport {
       }catch(InterruptedIOException cancelled){throw cancelled;}
       catch(RuntimeException|StackOverflowError error){partial("JS 구문·시간·노드 제한 · 직접 문자열 리터럴 보조");plain(source,base,false);templateFallback(source,base);}
     }
+    /** Large runtime bundles use bounded literal tokens instead of a second whole-bundle AST. */
+    void javascriptLexical(String source,int base)throws IOException {
+      JsSyntax.Cursor cursor=new JsSyntax.Cursor(source);List<JsSyntax.Token> previous=new ArrayList<>();JsSyntax.Token token;int count=0;
+      while((token=cursor.next())!=null){
+        interrupted();if(++count>500_000||System.nanoTime()>collector.deadline){partial("대형 JS 공통 리터럴 시간/토큰 한도 · 나머지 미검사");return;}
+        if(token.quoted()){
+          String raw=token.text(),last=previous.isEmpty()?"":previous.get(previous.size()-1).text();
+          if(raw.startsWith("`")){
+            int end=templateBoundary(source,token);
+            if(end<0){partial("템플릿 경계 미확정 · 나머지 공통 리터럴 미검사");return;}
+            raw=source.substring(token.start(),end);cursor.position=end;cursor.previous="literal";
+            boolean fragment=last.equals("+")&&uriLike(raw.substring(1,raw.length()-1))&&!raw.contains("${");
+            if((Set.of("","=",":","(",",","[","return","throw","yield","=>","?","||","&&","??",";","{","}").contains(last)&&literalTail(source,end))||fragment) {
+              String field=null;if(Set.of("=",":").contains(last)&&previous.size()>1){var key=previous.get(previous.size()-2);field=key.quoted()?decodeQuoted(key.text()):key.text();}
+              parseTemplate(raw,base+token.start(),fragment?null:field,fragment);
+            }else excluded(base+token.start(),raw.length());
+            token=new JsSyntax.Token(raw,token.start(),end,true);
+          }else if(raw.startsWith("\"")||raw.startsWith("'")){
+            boolean boundary=Set.of("","=",":","(",",","[","return","throw","yield","=>","?","||","&&","??",";","{").contains(last);
+            if(boundary&&literalTail(source,token.end())){
+              String value=decodeQuoted(raw),field=null;
+              if(Set.of("=",":").contains(last)&&previous.size()>1){var key=previous.get(previous.size()-2);field=key.quoted()?decodeQuoted(key.text()):key.text();}
+              if(field!=null)scalar(field,value,"STRING","JS:"+field,base+token.start(),raw.length(),Map.of("parser","대형 JS 위치 보존 리터럴 · 실행 없음"));
+              if(uriLike(value))add(apiLike(value)?"API":"PATH","JS URL/path literal",value,"STRING","DECODED_RESPONSE_BODY","JS literal",base+token.start(),raw.length(),apiAttributes(value,"?"));
+            }else if(!literalTail(source,token.end()))excluded(base+token.start(),raw.length());
+          }
+        }
+        previous.add(token);if(previous.size()>3)previous.remove(0);
+      }
+    }
+    void parseTemplate(String raw,int start,String field)throws IOException {parseTemplate(raw,start,field,false);}
+    void parseTemplate(String raw,int start,String field,boolean fragment)throws IOException {
+      if(raw.length()>MAX_VALUE){partial("64 Ki 문자 초과 템플릿 제외");return;}
+      String interior=raw.length()>1?raw.substring(1,raw.length()-1):"";
+      if(!uriLike(interior)&&!(interior.startsWith("${")&&apiLike(interior))&&(field==null||!interesting(field)))return;
+      try{
+        CompilerEnvirons env=new CompilerEnvirons();env.setLanguageVersion(org.mozilla.javascript.Context.VERSION_ES6);env.setRecoverFromErrors(false);
+        env.setErrorReporter(new ErrorReporter(){public void warning(String a,String b,int c,String d,int e){}public void error(String a,String b,int c,String d,int e){throw new EvaluatorException("template syntax");}public EvaluatorException runtimeError(String a,String b,int c,String d,int e){return new EvaluatorException("template syntax");}});
+        AstRoot root=new Parser(env).parse(raw,"observed-template.js",1);List<TemplateLiteral> parsed=new ArrayList<>();int[] visited={0};
+        root.visit(node->{if(++visited[0]>10_000||System.nanoTime()>collector.deadline)throw new IllegalArgumentException();if(node instanceof TemplateLiteral template){parsed.add(template);return false;}return true;});
+        if(parsed.size()!=1||parsed.get(0).getAbsolutePosition()!=0||parsed.get(0).getLength()!=raw.length())throw new IllegalArgumentException();
+        template(parsed.get(0),raw,start,field,"?",fragment);
+      }catch(RuntimeException|StackOverflowError error){excluded(start,raw.length());partial("템플릿 구문 경계 미확정 · 실제 값 추출 제외");}
+    }
     String templateField(AstNode node){
       AstNode direct=node,parent=node.getParent();while(parent instanceof ParenthesizedExpression expression){direct=parent;parent=expression.getParent();}
       if(parent instanceof VariableInitializer variable&&variable.getInitializer()==direct)return jsKey(variable.getTarget());
@@ -262,6 +350,10 @@ final class ScopeInspectionReport {
       return method;
     }
     void template(TemplateLiteral literal,String source,int base,String name,String method)throws IOException{
+      AstNode parent=literal.getParent();
+      template(literal,source,base,name,method,parent instanceof InfixExpression infix&&infix.getType()==Token.ADD);
+    }
+    void template(TemplateLiteral literal,String source,int base,String name,String method,boolean fragment)throws IOException{
       interrupted();int start=literal.getAbsolutePosition(),length=literal.getLength();
       if(start<0||length<2||start>source.length()-length||source.charAt(start)!='`'||source.charAt(start+length-1)!='`'){partial("템플릿 원문 위치 미확정 · 제외");return;}
       if(length>MAX_VALUE){partial("64 Ki 문자 초과 템플릿 제외 · 원본에서 확인");return;}
@@ -274,7 +366,8 @@ final class ScopeInspectionReport {
         StringBuilder value=new StringBuilder();for(TemplateCharacters characters:literal.getTemplateStrings()){
           if(characters.getValue()==null){partial("템플릿 escape 해석 미확정 · 제외");return;}value.append(characters.getValue());}
         String actual=value.toString();Map<String,String> attributes=new LinkedHashMap<>();attributes.put("parser","JS 정적 backtick 리터럴 · 코드 실행 없음");
-        if(uriLike(actual))attributes.putAll(apiAttributes(actual,method));
+        if(uriLike(actual))attributes.putAll(fragment?Map.of("observedLiteral",actual,"httpMethod","?","resolution","STATIC_FRAGMENT_UNRESOLVED","fragmentOnly","true"):apiAttributes(actual,method));
+        if(fragment&&uriLike(actual))partial("정적 API 경로 조각 관측 · 실제 서버/전체 경로 미확정");
         if(name!=null)scalar(name,actual,"STRING","JS:"+name,base+start,length,attributes);
         if(uriLike(actual))add(apiLike(actual)?"API":"PATH","JS URL/path backtick literal",actual,"STRING","DECODED_RESPONSE_BODY","JS template",base+start,length,attributes);
       }
@@ -283,21 +376,23 @@ final class ScopeInspectionReport {
       // Lexical compatibility preserves original spans. Each whole template is parsed separately;
       // malformed/nested-token boundaries stop this pass rather than inventing a cooked value.
       JsSyntax.Cursor cursor=new JsSyntax.Cursor(source);List<JsSyntax.Token> previous=new ArrayList<>();JsSyntax.Token token;
-      long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(3);int count=0,templates=0,totalCharacters=0;
+      long deadline=Math.min(collector.deadline,System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(3));int count=0,templates=0,totalCharacters=0;
       while((token=cursor.next())!=null){
         interrupted();if(++count>500_000||System.nanoTime()>deadline){partial("템플릿 보조 파싱 시간/토큰 한도 · 나머지 미검사");return;}
         if(token.quoted()&&token.text().startsWith("`")){
-          int boundary=templateEnd(source,token.start(),0);
+          int boundary=templateBoundary(source,token);
           if(boundary<0){excluded(base+token.start(),source.length()-token.start());partial("템플릿 중첩/정규식/길이 경계 미확정 · 이후 템플릿/패턴 미검사");return;}
           token=new JsSyntax.Token(source.substring(token.start(),boundary),token.start(),boundary,true);cursor.position=boundary;cursor.previous="literal";
           String raw=token.text();int start=base+token.start();
           if(raw.length()>MAX_VALUE){partial("64 Ki 문자 초과 템플릿 제외 · 원본에서 확인");continue;}
           String last=previous.isEmpty()?"":previous.get(previous.size()-1).text();
+          String interior=raw.length()>1?raw.substring(1,raw.length()-1):"";
+          boolean fragment=last.equals("+")&&uriLike(interior)&&!raw.contains("${");
+          if(fragment){parseTemplate(raw,start,null,true);previous.add(token);if(previous.size()>3)previous.remove(0);continue;}
           if(!Set.of("","=",":","(",",","[","return","throw","yield","=>","?","||","&&","??",";","{","}").contains(last)){
             excluded(start,raw.length());partial("태그 함수 또는 미확정 문맥의 템플릿 제외");continue;}
           if(!literalTail(source,token.end())){excluded(start,raw.length());continue;}
           String field=null;if(Set.of("=",":").contains(last)&&previous.size()>1){var key=previous.get(previous.size()-2);field=key.quoted()?decodeQuoted(key.text()):key.text();}
-          String interior=raw.length()>1?raw.substring(1,raw.length()-1):"";
           boolean candidate=uriLike(interior)||interior.startsWith("${")&&apiLike(interior)||field!=null&&interesting(field);
           if(!candidate&&!raw.contains("${")){previous.add(token);if(previous.size()>3)previous.remove(0);continue;}
           if(++templates>1000||(totalCharacters+=raw.length())>1024*1024){partial("템플릿 보조 파싱 개수/총용량 한도 · 나머지 미검사");return;}
@@ -356,6 +451,7 @@ final class ScopeInspectionReport {
     void providers()throws IOException{
       for(Provider provider:PROVIDERS){Matcher match=provider.pattern().matcher(text);int count=0;while(match.find()){
         interrupted();if(++count>2000){partial("단일 패턴 결과 2,000개 제한");break;}
+        if(provider.name().equals("Email")&&ScopeInspectionValueRules.uriUserinfoEmail(text,match.start(),match.end()))continue;
         if(!inExpression(match.start(),match.end())&&!coveredScalar(provider.category(),match.start(),match.end()))add(provider.category(),provider.name(),match.group(),"STRING","DECODED_RESPONSE_BODY","pattern:"+provider.name(),match.start(),match.end()-match.start(),Map.of("parser","형식/표식 보조 · 유효성 검증 없음"));
       }}
       int start=0;while((start=text.indexOf("-----BEGIN ",start))>=0){
@@ -381,7 +477,7 @@ final class ScopeInspectionReport {
     void parse()throws IOException{value("", "",0);space();if(at!=source.length())throw new IllegalArgumentException();}
     void space(){while(at<source.length()&&" \r\n\t".indexOf(source.charAt(at))>=0)at++;}
     void value(String path,String name,int depth)throws IOException{
-      interrupted();space();if(depth>40||++nodes>60_000||at>=source.length())throw new IllegalArgumentException();char c=source.charAt(at);
+      interrupted();if(context.collector.live&&System.nanoTime()>context.collector.deadline)throw new IOException("live JSON time limit");space();if(depth>40||++nodes>60_000||at>=source.length())throw new IllegalArgumentException();char c=source.charAt(at);
       if(c=='{'){at++;space();Set<String>keys=new HashSet<>();if(take('}'))return;do{space();int keyStart=at;String key=string();int keyEnd=at;
         if(uriLike(key))context.add(apiLike(key)||path.endsWith("/paths")?"API":"PATH","JSON path key",key,"STRING","DECODED_RESPONSE_BODY","JSON key:"+path,base+keyStart,keyEnd-keyStart,context.apiAttributes(key,"?"));
         if(!keys.add(key))context.partial("JSON 중복 키 관측 · 각 원문 위치를 따로 보존");space();need(':');value(path+"/"+key.replace("~","~0").replace("/","~1"),key,depth+1);space();if(take('}'))return;need(',');}while(true);}
@@ -397,34 +493,11 @@ final class ScopeInspectionReport {
     void need(char c){if(!take(c))throw new IllegalArgumentException();}
   }
 
-  private static String category(String name,String value){
-    String key=Objects.requireNonNullElse(name,"").replaceAll("[^A-Za-z0-9]","").toLowerCase(Locale.ROOT);
-    if(key.matches(".*(?:password|passwd|passphrase|clientsecret|privatekey|credential|signingsecret|secret).*")||Set.of("pwd","pin").contains(key))return "SENSITIVE";
-    if(key.matches(".*(?:token|jwt|session|cookie|bearer|authorization|oauth).*") )return "TOKEN";
-    if(key.matches(".*(?:apikey|accesskey|publickey|publishablekey|sitekey|measurementid|clientid).*") )return "KEY";
-    if(key.matches(".*(?:database|connectionstring|dbhost|dbport|dbuser|dburl|jdbc|mongodb|redis).*") )return "DATABASE";
-    if(key.matches(".*(?:email|phone|mobile|residentnumber|creditcard|cardnumber|fullname|address).*")||ssnName(name,key))return "SENSITIVE";
-    if(key.matches(".*(?:hostname|internalhost|internalip|internalpath|cwd|homedir).*") )return "INTERNAL";
-    if(key.matches(".*(?:runtime|version|environment|platform|framework|server|was|nodeenv|osinfo).*") )return "ENVIRONMENT";
-    if(key.matches(".*(?:apiurl|endpoint|baseurl).*")&&uriLike(value))return "API";
-    if(key.matches(".*(?:url|uri|path|route|href|src).*")&&uriLike(value))return apiLike(value)?"API":"PATH";
-    if(key.matches(".*(?:stacktrace|exception|error|debug|role|permission|username|userid|accountid|featureflag|config).*")||key.equals("id"))return "OTHER";
-    return null;
-  }
-  private static boolean ssnName(String name,String normalized){
-    if(normalized.endsWith("socialsecuritynumber"))return true;
-    String words=Objects.requireNonNullElse(name,"").replaceAll("([a-z0-9])([A-Z])","$1_$2").replaceAll("([A-Z])([A-Z][a-z])","$1_$2");
-    return Arrays.stream(words.split("[^A-Za-z0-9]+")).anyMatch(word->word.equalsIgnoreCase("ssn"));
-  }
+  private static String category(String name,String value){return ScopeInspectionValueRules.category(name,value);}
   private static boolean interesting(String key){return category(key,"https://observed.invalid/api/example")!=null;}
-  private static String classification(String name,String value){
-    if(SecretCandidates.example(name,value)||value.startsWith("${")||value.startsWith("{{")||value.startsWith("process.env.")||value.startsWith("import.meta.env."))return "EXAMPLE_OR_PLACEHOLDER";
-    if(SecretCandidates.publicIdentifier(name)||value.startsWith("pk_live_")||value.startsWith("pk_test_"))return "PUBLIC_IDENTIFIER";
-    return "UNVERIFIED";
-  }
   private static boolean compatibleCategory(String report,String product){return switch(report){
     case "API" -> Set.of("API","INVENTORY").contains(product);case "PATH" -> Set.of("PATH","MENU","API").contains(product);
-    case "KEY","TOKEN" -> product.equals("SECRET");case "SENSITIVE" -> Set.of("SECRET","INTERNAL").contains(product);
+    case "KEY","TOKEN" -> product.equals("SECRET");case "SENSITIVE" -> Set.of("SECRET","INTERNAL","SENSITIVE").contains(product);
     case "DATABASE" -> Set.of("DATABASE","SECRET").contains(product);case "ENVIRONMENT" -> product.equals("ENVIRONMENT");
     case "INTERNAL" -> product.equals("INTERNAL");case "OTHER" -> product.equals("RESPONSE");default -> false;
   };}
@@ -433,6 +506,21 @@ final class ScopeInspectionReport {
   private static boolean codeExpression(String value){return SecretCandidates.expression(value)||value.matches("(?is)^(?:process\\.env\\.|import\\.meta\\.|(?:window|this|config|settings|env)\\.|function\\b|new\\s|[A-Za-z_$][A-Za-z0-9_.$]*\\s*\\(|\\$\\{|\\{\\{|.*=>).*");}
   private static String scalarType(String value){return value.equals("true")||value.equals("false")?"BOOLEAN":value.equals("null")?"NULL":value.matches("-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?")?"NUMBER":"STRING";}
   private static String jsKey(AstNode node){if(node instanceof Name n)return n.getIdentifier();if(node instanceof StringLiteral s)return s.getValue();if(node instanceof PropertyGet p)return p.getProperty().getIdentifier();return null;}
+  private static int templateBoundary(String source,JsSyntax.Token token) {
+    int end=templateEnd(source,token.start(),0);if(end>=0)return end;
+    // A non-API library template may contain a regex in ${...}. Independently parsing
+    // its entire small token can prove the closing boundary without evaluating it.
+    // API templates with ambiguous regex retain the existing conservative stop policy.
+    String raw=token.text();if(raw.length()<2||raw.length()>8192||!raw.endsWith("`")||apiLike(raw))return -1;
+    try {
+      CompilerEnvirons env=new CompilerEnvirons();env.setLanguageVersion(org.mozilla.javascript.Context.VERSION_ES6);env.setRecoverFromErrors(false);
+      env.setErrorReporter(new ErrorReporter(){public void warning(String a,String b,int c,String d,int e){}public void error(String a,String b,int c,String d,int e){throw new EvaluatorException("boundary syntax");}public EvaluatorException runtimeError(String a,String b,int c,String d,int e){return new EvaluatorException("boundary syntax");}});
+      AstRoot root=new Parser(env).parse(raw,"boundary-only.js",1);List<TemplateLiteral> literals=new ArrayList<>();
+      root.visit(node->{if(node instanceof TemplateLiteral t){literals.add(t);return false;}return true;});
+      if(literals.size()==1&&literals.get(0).getAbsolutePosition()==0&&literals.get(0).getLength()==raw.length())return token.end();
+    }catch(RuntimeException|StackOverflowError ignored){}
+    return -1;
+  }
   private static int templateEnd(String source,int start,int depth){
     if(depth>16||start>=source.length()||source.charAt(start)!='`')return -1;
     int end=Math.min(source.length(),start+MAX_VALUE+1);
@@ -501,17 +589,30 @@ final class ScopeInspectionReport {
       Source s=value.source();Map<String,Object> source=new LinkedHashMap<>();source.put("originalId",s.originalId());source.put("account",s.account());source.put("profileRevision",s.profileRevision());source.put("url",s.url());source.put("method",s.method());source.put("responseStatus",s.status());source.put("responseSha256",s.responseSha256());source.put("area",s.area());source.put("locator",s.locator());source.put("line",s.line());source.put("offset",s.offset());source.put("length",s.length());
       Map<String,Object> row=new LinkedHashMap<>();row.put("category",value.category());row.put("name",value.name());row.put("value",value.value());row.put("rawText",value.rawText());row.put("valueType",value.valueType());row.put("classification",value.classification());row.put("provenance",value.provenance());row.put("confidence",value.confidence());row.put("source",source);row.put("attributes",value.attributes());values.add(row);
     }for(Page page:document.pages()){Map<String,Object> row=new LinkedHashMap<>();row.put("originalId",page.originalId());row.put("account",page.account());row.put("profileRevision",page.profileRevision());row.put("url",page.url());row.put("method",page.method());row.put("responseStatus",page.status());row.put("responseSha256",page.responseSha256());row.put("responseBytes",page.responseBytes());row.put("decodedCharacters",page.decodedCharacters());row.put("complete",page.complete());row.put("note",page.note());pages.add(row);}
-    return Map.of("schemaVersion",1,"producerVersion",BuildInfo.VERSION,"runId",document.runId(),"state",document.state(),"complete",document.complete(),"coordinateBasis","UTF-16 characters; decoded response body or normalized response headers; offset zero-based, line one-based; not wire bytes","values",values,"pages",pages,"notes",document.notes());
+    List<Object> coverage=new ArrayList<>();for(var route:document.coverage()){
+      Map<String,Object> row=new LinkedHashMap<>();row.put("key",route.key());row.put("url",route.url());row.put("method",route.method());row.put("account",route.account());row.put("profileRevision",route.profileRevision());
+      row.put("source",route.source());row.put("label",route.label());row.put("state",route.state());row.put("stateLabel",ScopeInspectionCoverage.stateLabel(route.state()));row.put("reason",route.reason());
+      row.put("responseStatus",route.status());row.put("originalId",route.originalId());row.put("retryable",route.retryable());row.put("queryUnresolved",route.queryUnresolved());row.put("stages",route.stages());coverage.add(row);
+    }
+    List<Object> correlations=new ArrayList<>();for(var correlation:document.correlations()){
+      Map<String,Object> row=new LinkedHashMap<>();row.put("templateKey",correlation.templateKey());row.put("template",correlation.template());row.put("templateMethod",correlation.templateMethod());row.put("templateAccount",correlation.templateAccount());row.put("templateRevision",correlation.templateRevision());row.put("templateOriginalId",correlation.templateOriginalId());
+      row.put("observedKey",correlation.observedKey());row.put("observedUrl",correlation.observedUrl());row.put("observedMethod",correlation.observedMethod());row.put("observedAccount",correlation.observedAccount());row.put("observedRevision",correlation.observedRevision());row.put("responseStatus",correlation.status());row.put("observedOriginalId",correlation.observedOriginalId());row.put("observedState",correlation.observedState());row.put("note",correlation.note());correlations.add(row);
+    }
+    Map<String,Object> result=new LinkedHashMap<>(Map.of("schemaVersion",2,"producerVersion",BuildInfo.VERSION,"runId",document.runId(),"state",document.state(),"complete",document.complete(),"coordinateBasis","UTF-16 characters; decoded response body or normalized response headers; offset zero-based, line one-based; not wire bytes","values",values,"pages",pages,"notes",document.notes(),"coverage",coverage));result.put("correlations",correlations);return result;
   }
   private static String html(Document document){
     StringBuilder out=new StringBuilder("<!doctype html><html lang=ko><meta charset=utf-8><meta http-equiv=Content-Security-Policy content=\"default-src 'none'; style-src 'unsafe-inline'\"><title>응답 실제값 보고서</title><style>body{font:15px system-ui;margin:32px;max-width:1400px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #bbb;padding:9px;text-align:left;vertical-align:top}pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0}code{overflow-wrap:anywhere}.muted{color:#555}</style><h1>응답 실제값 보고서</h1><p>명시적으로 저장한 로컬 응답 값 · 키 사용/외부 검증 없음 · 요청 인증 헤더는 포함하지 않음</p><p>");
-    out.append(document.values().size()).append("개 값 / ").append(document.pages().size()).append("개 응답 · ").append(document.complete()?"설정한 추출 범위 내 완료":"부분·제외 범위 포함").append("</p><p>PRODUCT_FINDING: 기존 제품 발견과 연결 / REPORT_SUPPLEMENT: 보고서 전용 보조 파싱. UNVERIFIED는 유효한 비밀이라는 뜻이 아닙니다.</p><p>value는 파싱한 실제 값, rawText는 원본 소스 표기입니다. resolvedEndpoint는 재구성 경로이며 원문 값과 구분합니다. 좌표는 디코딩한 본문/정규화 헤더의 UTF-16 문자 기준입니다.</p>");
+    out.append(document.values().size()).append("개 값 / ").append(document.pages().size()).append("개 응답 · ").append(document.complete()?"설정한 추출 범위 내 완료":"부분·제외 범위 포함").append("</p><p>PRODUCT_FINDING: 제품 발견과 연결 / REPORT_SUPPLEMENT: 보고서 보충 파싱. SECRET_CANDIDATE는 유효 비밀 판정이 아니며 PERSONAL_DATA는 비인가 유출 확정이 아닙니다. COOKIE_VALUE는 인증 용도 미확인 쿠키이며 EXAMPLE_OR_PLACEHOLDER와 PUBLIC_IDENTIFIER를 구분합니다.</p><p>value는 파싱한 실제 값, rawText는 원본 소스 표기입니다. resolvedEndpoint는 재구성 경로이며 원문 값과 구분합니다. 좌표는 디코딩한 본문/정규화 헤더의 UTF-16 문자 기준입니다.</p>");
     for(String note:document.notes())out.append("<p class=muted>").append(escape(note)).append("</p>");
     for(String category:List.of("API","SENSITIVE","TOKEN","KEY","ENVIRONMENT","DATABASE","PATH","INTERNAL","OTHER")){
       var rows=document.values().stream().filter(value->value.category().equals(category)).toList();if(rows.isEmpty())continue;out.append("<h2>").append(category).append(" · ").append(rows.size()).append("</h2><table><tr><th>이름·분류</th><th>실제 값 / 원문</th><th>출처·응답</th></tr>");
       for(Value value:rows){Source s=value.source();out.append("<tr><td>").append(escape(value.name())).append("<br>").append(escape(value.classification())).append("<br>").append(escape(value.provenance())).append("<br>").append(escape(value.valueType())).append("</td><td><b>value</b><pre>").append(escape(value.value())).append("</pre><details><summary>rawText · ").append(s.length()).append(" 문자</summary><pre>").append(escape(value.rawText())).append("</pre></details><pre class=muted>").append(escape(json(value.attributes()))).append("</pre></td><td><code>").append(escape(s.method()+" "+s.url())).append("</code><br>HTTP ").append(s.status()).append(" · ").append(escape(s.account())).append(" · ").append(escape(s.profileRevision())).append("<br>").append(escape(s.originalId())).append("<br>").append(escape(s.area()+" / "+s.locator())).append("<br>줄 ").append(s.line()).append(" · offset ").append(s.offset()).append(" · length ").append(s.length()).append("</td></tr>");}out.append("</table>");
     }
-    out.append("<h2>응답별 범위</h2><table><tr><th>응답 원본</th><th>범위</th></tr>");for(Page page:document.pages())out.append("<tr><td>").append(escape(page.originalId()+" · "+page.method()+" "+page.url())).append("</td><td>").append(page.complete()?"완료":"부분/미검사").append(" · ").append(escape(page.note())).append("</td></tr>");return out.append("</table></html>").toString();
+    out.append("<h2>경로별 처리 상태</h2><p>발견 문자열과 실제 응답을 구분합니다. 브라우저 응답 메타데이터만 있으면 본문 분석 완료를 뜻하지 않습니다.</p><table><tr><th>경로·계정</th><th>단계·상태</th><th>근거</th></tr>");
+    for(var route:document.coverage())out.append("<tr><td>").append(escape(route.method()+" "+route.url()+" · "+route.account())).append("</td><td>").append(escape(String.join(" → ",route.stages()))).append("<br>").append(escape(ScopeInspectionCoverage.stateLabel(route.state()))).append("</td><td>HTTP ").append(route.status()).append(" · ").append(escape(route.reason())).append("<br>").append(escape(route.originalId())).append("</td></tr>");
+    out.append("</table><h2>API 템플릿·실제 요청 연결 후보</h2><p>경로 모양만 대조한 PATH_SHAPE_ONLY 후보입니다. 변수 복원·동일 인증·쿼리 일치·권한 허용·새 요청의 증거가 아닙니다.</p><table><tr><th>관측 템플릿</th><th>실제 요청</th><th>비교 범위</th></tr>");
+    for(var correlation:document.correlations())out.append("<tr><td>").append(escape(correlation.templateMethod()+" "+correlation.template()+" · "+correlation.templateAccount())).append("<br>").append(escape(correlation.templateOriginalId())).append("</td><td>").append(escape(correlation.observedMethod()+" "+correlation.observedUrl()+" · "+correlation.observedAccount())).append("<br>HTTP ").append(correlation.status()).append(" · ").append(escape(correlation.observedOriginalId())).append("</td><td>").append(escape(correlation.note())).append("</td></tr>");
+    out.append("</table><h2>응답별 범위</h2><table><tr><th>응답 원본</th><th>범위</th></tr>");for(Page page:document.pages())out.append("<tr><td>").append(escape(page.originalId()+" · "+page.method()+" "+page.url())).append("</td><td>").append(page.complete()?"완료":"부분/미검사").append(" · ").append(escape(page.note())).append("</td></tr>");return out.append("</table></html>").toString();
   }
   private static String escape(String value){return value.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\"","&quot;").replace("'","&#39;");}
   private static String csv(Document document){

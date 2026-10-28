@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "version": "1.4.0",
+  "generatedAtUTC": "2026-10-28T15:56:48.129636+00:00",
+  "result": "passed",
+  "sourceBranch": "account-a/simple-onetouch-detection-140",
+  "baseCommit": "7a54e9842a90fca9b8cf0a47ed59932a7bec4afb",
+  "embeddedMapperVersion": "0.3.7",
+  "browserHelperVersion": "0.5.0",
+  "retainedCoreTools": 8,
+  "originalNextSourceChanged": false,
+  "artifact": {
+    "jar": "downloads/1.4.0/burp-workbench-simple-1.4.0.jar",
+    "jarSha256": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637",
+    "jarBytes": 4586564,
+    "embeddedBuildInputs": 219,
+    "allEmbeddedInputFingerprintsMatch": true,
+    "toolchain": {
+      "java17ApiCompatibilityVerified": true,
+      "javaRuntimeVersion": "17.0.17",
+      "toolchainMode": "strict-release17"
+    },
+    "sourceZip": "downloads/1.4.0/burp-workbench-simple-1.4.0-source.zip",
+    "checksums": "downloads/1.4.0/SHA256SUMS",
+    "helperZipSha256": "785a7108a177e5ea55a09a5373ed11710c1b5f695c923661b67d693f4a84cb83"
+  },
+  "completeRegression": {
+    "result": "passed",
+    "workbenchGroups": 140,
+    "workbenchChecks": 5161,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "nodeChecks": 34,
+    "total": 5476,
+    "failedGroups": [],
+    "focusedChecksAlreadyIncluded": true
+  },
+  "independentAuditPythonTests": 20,
+  "legacyReportPythonTests": {
+    "checks": 25,
+    "commonLegacyChecksAlreadyIncluded": true
+  },
+  "nativeKatana": {
+    "result": "passed",
+    "version": "1.8.0",
+    "checks": 102,
+    "jarSha256": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637",
+    "evidence": "verification/1.4.0/katana-native/katana-verification.json"
+  },
+  "browser": {
+    "helperVersion": "0.5.0",
+    "actualChromiumDomAndServiceAdapterChecks": 14,
+    "componentSourceFingerprintsMatch": true,
+    "nativeMV3": "blocked",
+    "nativeDNRVerified": false,
+    "evidence": "verification/1.4.0/browser-collection/results.json",
+    "nativeEvidence": "verification/1.4.0/browser-native/results.json"
+  },
+  "layout": {
+    "result": "passed",
+    "views": 128,
+    "controls": 2764,
+    "states": 136,
+    "allGatesZero": true,
+    "jarSha256": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637"
+  },
+  "guide": {
+    "pdf": "downloads/guides/1.4.0/Workbench_Simple_1.4.0_Guide_KR.pdf",
+    "pages": 40,
+    "bookmarks": 40,
+    "captures": 33,
+    "sha256": "da5f059264b672915ddba3e3e67a6dfddd36d6c3560a3746241c85655903f465",
+    "bytes": 2744112,
+    "visualReviewComplete": true,
+    "evidence": "guide-validation-1.4.0.json"
+  },
+  "offlineSameInput": {
+    "result": "passed",
+    "caseCount": 38,
+    "siteCount": 7,
+    "relevantTruthItems": 79,
+    "controlTruthItems": 17,
+    "before": {
+      "truthItems": 79,
+      "productLocationOrFingerprintLinked": 46,
+      "distinctSiteValueTruthItems": 78,
+      "productLinkedDistinctSiteValues": 46,
+      "exactExportValueAndRaw": 64,
+      "exactExportValueAndSourceSpan": 64,
+      "exportValuePresent": 64,
+      "exporterProductLinked": 48
+    },
+    "after": {
+      "truthItems": 79,
+      "productLocationOrFingerprintLinked": 79,
+      "distinctSiteValueTruthItems": 78,
+      "productLinkedDistinctSiteValues": 78,
+      "exactExportValueAndRaw": 73,
+      "exactExportValueAndSourceSpan": 79,
+      "exportValuePresent": 79,
+      "exporterProductLinked": 79
+    },
+    "gates": {
+      "sameFrozenSources": true,
+      "sameHarness": true,
+      "allTruthChecksPresent": true,
+      "noPreviouslyLinkedValueRegression": true,
+      "knownNoiseExcludedFromExport": true,
+      "controlsNotElevatedAsSecret": true,
+      "retainedExamplesAndMetadataClassified": true,
+      "adapterWireMatchesOriginal": true,
+      "allExportSourceSpansVerified": true,
+      "allExportResponseHashesMatchOriginal": true
+    },
+    "fingerprints": {
+      "beforeJar": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400",
+      "afterJar": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637",
+      "corpus": "d7656727dc2b8bd5114f420319ee4f52c642c91bfe15c95b37604d708a14695b",
+      "harness": "9e34d6d973cc911ff6bcaf813d1a34d7dd9e5931058c8f0c87325aa5dd5a147e"
+    }
+  },
+  "liveOriginalApplications": {
+    "result": "passed",
+    "runCount": 28,
+    "checks": {
+      "all28FreshRunsPresent": true,
+      "frozenJarsUnchanged": true,
+      "strictJava17": true,
+      "requestBudgetsRespected": true,
+      "readMethodsOnly": true,
+      "exactAttemptAccounting": true,
+      "requestedConditionsMatch": true,
+      "configuredCredentialsMatchRequests": true,
+      "exportsAvailable": true,
+      "pairedConfigBytesIdentical": true,
+      "newCoverageHasSourceEvidence": true,
+      "newCorrelationOriginalsResolve": true
+    },
+    "stages": {
+      "1.3.2": {
+        "runCount": 14,
+        "attempts": 1257,
+        "httpResponses": 1247,
+        "transportErrors": 10,
+        "states": {
+          "COMPLETED": 11,
+          "STOPPED": 3
+        },
+        "jarSHA256": "a8dd345b44b4893a301bf3092817335585c15ebd67cb5e6508bd3847fee49400"
+      },
+      "1.4.0": {
+        "runCount": 14,
+        "attempts": 1163,
+        "httpResponses": 1158,
+        "transportErrors": 5,
+        "states": {
+          "COMPLETED": 11,
+          "STOPPED": 3
+        },
+        "jarSHA256": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637"
+      }
+    },
+    "newCoverageSourceEvidence": true,
+    "servicesStopped": true,
+    "wholeSiteCoverageComplete": false,
+    "publicEvidence": "../../audit/simple-onetouch-140/live-comparison.json"
+  },
+  "preservation": {
+    "priorVersionedArtifacts": 322,
+    "allSha256Unchanged": true,
+    "guide132Archived": true,
+    "sealedRetestReportChanged": false
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Native MV3/DNR installation (managed Chrome policy blocked; not bypassed)",
+    "Windows DPI/IME",
+    "External provider key validity checks"
+  ],
+  "notes": [
+    "Counts describe executed checks and selected evidence, not all-site vulnerability accuracy or complete menu coverage.",
+    "Final live28 cases exclude intermediate candidate28 cases and two replaced LOOP baseline cases; all excluded raw evidence is preserved outside Git.",
+    "The same-input offline79 location items contain78 unique site/value pairs. Old supplemental raw lexemes match73; six API literals now retain the complete original backtick boundary, verified by actual UTF-16 source substrings.",
+    "HTTP response totals include controls/non-2xx responses. Transport errors are separate. Benchmark budget and Oops105-second harness stops remain STOPPED; discovered-queue COMPLETED is not full-site completion.",
+    "RESPONSE_PENDING_ANALYSIS retains an actual received original with complete=false and no fabricated digest. Local raw extraction does not promote product analysis to complete.",
+    "PATH_SHAPE_ONLY associations do not evaluate variables, prove a shared identity/permission or create requests.",
+    "Browser response metadata does not contain response bodies or shared HTTP cookies. Its actual DOM/Chrome API adapter validation is separate from native MV3/DNR, which the managed policy blocked.",
+    "Exact raw values are written only by explicit local export; normal findings/history keep masks. External key validity is not automatically tested.",
+    "Raw responses, credentials and whole-site private outputs are not committed. Current-session resume/recheck does not restore raw credentials/packet queues across application restarts."
+  ]
+}

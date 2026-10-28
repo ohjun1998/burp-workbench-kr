@@ -11,12 +11,14 @@ export function createInspectionService(chrome, hooks) {
     if(!task)return;
     const owner=task;
     const event=await inspectionMetadata({...value,kind,pages:owner.pages,actions:owner.actions,requests:owner.requests,
+      responses:owner.responses||0,networkErrors:owner.networkErrors||0,pendingRequests:Object.keys(owner.pendingRequests||{}).length,
       excluded:owner.excluded,tab:String(owner.tabId??''),state:value.state||'running'},owner.command);
     await hooks.event(event);
     if(task!==owner)return;
     const terminalStatus=value.state==='partial'?'일부 탐색 · 미확인 메뉴 있음':value.state==='stopped'?'탐색 중지':value.state==='failed'?'탐색 오류':owner.excluded?'탐색 완료 · 제외 항목 있음':'탐색 완료';
     await chrome.storage.session.set({inspectionStatus:kind==='error'?'탐색 오류':kind==='done'?terminalStatus:'브라우저 로그인 세션으로 탐색 중',inspectionPages:owner.pages,inspectionActions:owner.actions,
-      inspectionRequests:owner.requests,inspectionExcluded:owner.excluded,inspectionRunId:owner.command.runId});
+      inspectionRequests:owner.requests,inspectionResponses:owner.responses||0,inspectionNetworkErrors:owner.networkErrors||0,
+      inspectionPendingRequests:Object.keys(owner.pendingRequests||{}).length,inspectionExcluded:owner.excluded,inspectionRunId:owner.command.runId});
   };
   const ownedRules=async()=>((await chrome.declarativeNetRequest.getSessionRules())||[]).filter(rule=>rule.id>=firstRule&&rule.id<=lastRule).map(rule=>rule.id);
   const removeRules=async()=>chrome.declarativeNetRequest.updateSessionRules({removeRuleIds:await ownedRules(),addRules:[]});
@@ -80,6 +82,14 @@ export function createInspectionService(chrome, hooks) {
     current.partialReasons ||= [];
     if(!current.partialReasons.includes(reason)&&current.partialReasons.length<12)current.partialReasons.push(reason);
   }
+  async function settleNetwork(current) {
+    // Keep the command lease alive briefly for late fetch/XHR completions. An
+    // unfinished request is retained as unconfirmed, never fabricated as HTTP0.
+    const until=Date.now()+1500;
+    while(task===current&&!current.cancelled&&Object.keys(current.pendingRequests||{}).length&&Date.now()<until&&await validTask())await delay(50);
+    if(task===current&&!current.cancelled&&Object.keys(current.pendingRequests||{}).length)
+      markPartial(current,'브라우저 응답 대기 1.5초 한도 · 미확인 요청 '+Object.keys(current.pendingRequests).length+'개');
+  }
   async function run() {
     if(loop)return loop;
     loop=(async()=>{
@@ -88,6 +98,8 @@ export function createInspectionService(chrome, hooks) {
           const current=task;
           if(!current.queue.length||current.pages>=current.command.maxPages||current.actions>=current.command.maxActions){
             if(current.queue.length)markPartial(current,'브라우저 페이지/동작 한도');
+            await settleNetwork(current);
+            if(task!==current||current.cancelled)break;
             const reasons=current.partialReasons||[];
             await finish(reasons.length?'partial':'completed',reasons.length?reasons.join(' · ')+' · 남은 메뉴는 미확인':'발견한 메뉴 큐 처리 완료');break;
           }
@@ -121,7 +133,7 @@ export function createInspectionService(chrome, hooks) {
               if(current.discovered.includes(route.url))continue;
               if(current.discovered.length>=500){current.excluded++;markPartial(current,'실행별 메뉴 후보 500개 한도');continue;}
               current.discovered.push(route.url);
-              await emit('menu',{url:route.url,page:value.url,label:route.label,message:'실제 DOM 메뉴에서 발견 · 메뉴 접근 권한/업무 완료는 별도 확인'});
+              await emit('menu',{url:route.url,page:value.url,label:route.label,discoveryType:route.discoveryType||'anchor',message:route.discoveryType==='iframe'?'같은 Scope의 포함 화면 경로 발견 · 별도 방문으로 메뉴 확인':'실제 DOM 메뉴에서 발견 · 메뉴 접근 권한/업무 완료는 별도 확인'});
               // Unknown query values are kept inside the browser; do not replay guessed parameters.
               if(new URL(route.url).search){current.excluded++;continue;}
               if(!current.visited.includes(route.url)&&!current.queue.some(x=>x.url===route.url)){
@@ -167,7 +179,7 @@ export function createInspectionService(chrome, hooks) {
     const saved=await settings();
     if(!saved.inspectionEnabled||!saved.origins.includes(command.origin))return;
     const match=new URL(command.origin).protocol+'//'+new URL(command.origin).hostname+'/*';
-    task={command,tabId:null,current:command.startUrl,queue:[{url:command.startUrl,label:'시작 화면'}],visited:[],discovered:[command.startUrl],pages:0,actions:0,requests:0,excluded:0,partialReasons:[],cancelled:false};
+    task={command,tabId:null,current:command.startUrl,queue:[{url:command.startUrl,label:'시작 화면'}],visited:[],discovered:[command.startUrl],pages:0,actions:0,requests:0,responses:0,networkErrors:0,pendingRequests:Object.create(null),excluded:0,partialReasons:[],cancelled:false};
     await persist();
     try {
       if(chrome.permissions?.contains&&!await chrome.permissions.contains({origins:[match]}))throw new Error('브라우저 사이트 권한을 다시 활성화하세요.');
@@ -206,14 +218,40 @@ export function createInspectionService(chrome, hooks) {
     if(!inspectionAllows(details.url,current.command)||!['GET','HEAD'].includes(details.method)){
       current.excluded++;await emit('excluded',{url:details.url,method:details.method,message:'브라우저 Scope/조회 전용 정책에서 제외'});
     } else if(['xmlhttprequest','other'].includes(details.type)){
-      let page=current.current;try{const tab=await chrome.tabs.get(current.tabId);if(inspectionAllows(tab.url,current.command))page=tab.url;}catch{}
-      if(task===current&&!current.cancelled)await emit('api',{url:details.url,page,method:details.method,label:'브라우저 관측 API',message:'탭·현재 라우트 관측 문맥 · JavaScript 인과/계정 신원 확정 아님. HTTP 검증은 별도 선택 계정으로 수행'});
+      const page=typeof details.documentUrl==='string'&&inspectionAllows(details.documentUrl,current.command)?details.documentUrl:current.current;
+      const id=String(details.requestId||'').slice(0,256);
+      if(id){
+        if(Object.keys(current.pendingRequests).length<200||current.pendingRequests[id])
+          current.pendingRequests[id]={url:details.url,page,method:details.method,resourceType:details.type,frameId:details.frameId,startedAt:Date.now()};
+        else markPartial(current,'응답 연계 대기 요청 200개 한도');
+      }else markPartial(current,'요청 식별자 없음 · 응답 연계 미확인');
+      if(task===current&&!current.cancelled)await emit('api',{url:details.url,page,method:details.method,requestId:id,networkStage:'request',resourceType:details.type,frameId:details.frameId,discoveryType:'network',label:'브라우저 요청 관측 API',message:'실제 요청 시도 · 응답 미확인 · 탭·현재 라우트 관측 문맥, JavaScript 인과/HTTP 계정 신원 확정 아님'});
     }
     if(task===current&&current.requests>=2000)await finish('partial','브라우저 네트워크 관측 한도 · HTTP 검사 예산과 별도');
   }
+  async function completed(details) {
+    const current=task;if(!current||details.tabId!==current.tabId||current.cancelled)return;
+    const id=String(details.requestId||'').slice(0,256),pending=current.pendingRequests?.[id];
+    if(!pending||!inspectionAllows(details.url,current.command)||!['GET','HEAD'].includes(details.method))return;
+    if(!Number.isInteger(details.statusCode)||details.statusCode<100||details.statusCode>599){
+      markPartial(current,'브라우저 응답 HTTP 상태 코드 미확인');return;
+    }
+    delete current.pendingRequests[id];current.responses++;
+    await emit('api',{...pending,url:details.url,requestId:id,networkStage:'response',statusCode:details.statusCode,fromCache:details.fromCache,
+      elapsedMillis:Math.max(0,Date.now()-pending.startedAt),discoveryType:'network',label:'브라우저 응답 관측 API',
+      message:'브라우저 세션의 실제 HTTP 응답 · 본문은 전달/분석하지 않음 · 선택 HTTP 계정의 접근 성공과 별도'});
+  }
   async function blocked(details) {
-    if(task&&details.tabId===task.tabId&&String(details.error||'').includes('BLOCKED')){
-      task.excluded++;await emit('excluded',{url:details.url,method:details.method,message:'범위 밖 리소스 또는 조회 전용 정책에 따라 브라우저 전송 차단'});
+    const current=task;if(!current||details.tabId!==current.tabId||current.cancelled)return;
+    const id=String(details.requestId||'').slice(0,256),pending=current.pendingRequests?.[id];
+    const error=String(details.error||''),errorCode=error.includes('BLOCKED')?'BLOCKED':error.includes('ABORTED')?'ABORTED':error.includes('TIMED_OUT')?'TIMED_OUT':'NETWORK_ERROR';
+    if(pending){
+      delete current.pendingRequests[id];current.networkErrors++;
+      markPartial(current,'브라우저 API 전송 실패 · '+errorCode);
+      await emit('api',{...pending,requestId:id,networkStage:'error',errorCode,elapsedMillis:Math.max(0,Date.now()-pending.startedAt),discoveryType:'network',label:'브라우저 API 응답 미확인',message:'네트워크 실패 · HTTP 응답 확보/본문 분석 완료가 아님 · 자동 재전송하지 않음'});
+    }
+    if(errorCode==='BLOCKED'){
+      current.excluded++;await emit('excluded',{url:details.url,method:details.method,message:'범위 밖 리소스 또는 조회 전용 정책에 따라 브라우저 전송 차단'});
     }
   }
   async function recover() {
@@ -223,6 +261,8 @@ export function createInspectionService(chrome, hooks) {
       inspectionCommand({...previous.command,state:'run'});
       const tab=await chrome.tabs.get(previous.tabId);
       task=previous;task.cancelled=false;
+      if(Object.keys(task.pendingRequests||{}).length)markPartial(task,'도우미 재시작 · 이전 요청의 응답 연계 미확인');
+      task.pendingRequests=Object.create(null);task.responses=Number(task.responses)||0;task.networkErrors=Number(task.networkErrors)||0;
       if(task.current&&!task.visited.includes(task.current)&&!task.queue.some(x=>x.url===task.current))task.queue.unshift({url:task.current,label:'중단된 화면 이어서 확인'});
       const rules=inspectionRules(tab.id,task.command,firstRule);
       await chrome.declarativeNetRequest.updateSessionRules({removeRuleIds:await ownedRules(),addRules:rules});
@@ -236,5 +276,5 @@ export function createInspectionService(chrome, hooks) {
     if(chrome.alarms){chrome.alarms.create('scope-inspection-poll',{periodInMinutes:0.5});chrome.alarms.onAlarm.addListener(alarm=>{if(alarm.name==='scope-inspection-poll')poll();});}
     return ()=>{stopped=true;clearInterval(timer);return finish('stopped','브라우저 도우미 종료');};
   }
-  return {start,poll,request,blocked,removed,launch,snapshot:()=>task};
+  return {start,poll,request,completed,blocked,removed,launch,snapshot:()=>task};
 }

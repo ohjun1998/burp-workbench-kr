@@ -54,6 +54,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private final Map<String, Task> katanaDeferred = new LinkedHashMap<>();
   private final Map<String, DiskTrafficStore.PacketRef> responseCache = new LinkedHashMap<>();
   private final Set<String> analyzedOriginals = new HashSet<>();
+  private final LinkedHashMap<String, Trace> coverage = new LinkedHashMap<>();
+  private final LinkedHashMap<String, ScopeInspectionCoverage.Row> browserCoverage = new LinkedHashMap<>();
+  private final List<Task> suspendedTasks = new ArrayList<>();
+  private boolean selectiveRecheck;
   private final Set<String> discoveredSecrets = new LinkedHashSet<>();
   private int discoveredSecretBytes;
   private boolean secretLimit;
@@ -77,6 +81,17 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private record Identity(boolean match, boolean different, boolean primaryMatch) {}
   private record DiscoveryInputs(Set<String> blockedPaths, Set<String> groundedGets) {}
   private record KatanaTask(String key, Task task, long condition, CompletableFuture<DiskTrafficStore.PacketRef> result) {}
+  private static final class Trace {
+    final String key, profileId, revision;
+    ScopeInspection.Candidate candidate;
+    final LinkedHashSet<String> stages = new LinkedHashSet<>(List.of("DISCOVERED"));
+    String state = "DISCOVERED", reason = "경로 발견 · 아직 전송하지 않음", originalId = "";
+    int status;
+    boolean retryAllowed = true;
+    Trace(String key, String profileId, String revision, ScopeInspection.Candidate candidate) {
+      this.key=key;this.profileId=profileId;this.revision=revision;this.candidate=candidate;
+    }
+  }
   private static final class Halt extends RuntimeException { Halt(String text) { super(text); } }
   private static final class Retry extends RuntimeException {}
   private static final class Excluded extends RuntimeException { Excluded(String text) { super(text); } }
@@ -105,6 +120,17 @@ final class ScopeInspectionRunner implements AutoCloseable {
   String id() { return id; }
   ScopeInspection.Options options() { return options; }
 
+  /** Validate the current in-memory credential revision without exposing credentials to the UI. */
+  boolean profilesMatch(List<ScopeInspection.Profile> fresh){
+    synchronized(lock){
+      if(closed||fresh==null||fresh.size()!=profiles.size())return false;
+      Map<String,ScopeInspection.Profile> supplied=new HashMap<>();
+      for(var value:fresh)if(value==null||supplied.putIfAbsent(value.id(),value)!=null)return false;
+      if(!supplied.keySet().equals(profiles.keySet()))return false;
+      return profiles.entrySet().stream().allMatch(e->e.getValue().equals(supplied.get(e.getKey())));
+    }
+  }
+
   /** Register the finite producer before start, without creating any target request. */
   void registerKatana(String profileId, long deadlineMillis) {
     synchronized (lock) {
@@ -127,7 +153,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
   CompletableFuture<DiskTrafficStore.PacketRef> fetchKatana(String url, String method) {
     synchronized (lock) {
       try {
-        if (closed || !katanaRegistered || katanaFinished || state != ScopeInspection.State.RUNNING && state != ScopeInspection.State.PAUSED)
+        if (closed || selectiveRecheck || !katanaRegistered || katanaFinished || state != ScopeInspection.State.RUNNING && state != ScopeInspection.State.PAUSED)
           throw new IllegalStateException("Katana 전송을 받을 실행이 아닙니다.");
         String raw = normalized(url), verb = Objects.requireNonNullElse(method, "").toUpperCase(Locale.ROOT);
         if (raw == null || !allowed(raw) || !Set.of("GET", "HEAD").contains(verb) || !readOnlyUrl(raw) || secretInput(raw))
@@ -264,6 +290,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
         }
       }
       verifiedAt.clear(); verifiedOriginals.clear(); redirectTargets.clear(); missingReferences.clear(); retryAt = 0; conditionRevision++;
+      restoreSuspendedLocked(); selectiveRecheck=false;
       for (var deferred : katanaDeferred.values()) if (!queue.contains(deferred)) queue.add(deferred);
       katanaDeferred.clear();
       boolean restart = state == ScopeInspection.State.STOPPED;
@@ -288,9 +315,107 @@ final class ScopeInspectionRunner implements AutoCloseable {
   ScopeInspection.Snapshot snapshot() {
     synchronized (lock) {
       int waiting = pendingCountLocked();
-      return new ScopeInspection.Snapshot(id, state, message, sent, completed, waiting, excluded, failed, partial,
-          new ArrayList<>(findings.values()), new ArrayList<>(pages), new ArrayList<>(candidates), startedAt, finishedAt);
+      List<ScopeInspection.Page> visiblePages=new ArrayList<>(pages);
+      Set<String> linked=new HashSet<>();for(var page:visiblePages)if(page.original()!=null)linked.add(page.original().id());
+      int pendingAnalysis=0;
+      // A response can already be durably retained when cancellation interrupts decoding
+      // or analysis. Publish that exact original without decoding, hashing or completing it.
+      for(Trace trace:coverage.values()){
+        if(trace.status<=0||!trace.stages.contains("RESPONDED")||trace.originalId.isBlank()||linked.contains(trace.originalId))continue;
+        var original=referencesById.get(trace.originalId);var profile=profiles.get(trace.profileId);
+        if(original==null||!original.hasResponse()||profile==null)continue;
+        linked.add(trace.originalId);pendingAnalysis++;
+        visiblePages.add(new ScopeInspection.Page(displayUrl(original.url()),original.method(),displayText(profile.label(),160),trace.status,
+            "RESPONSE_PENDING_ANALYSIS",false,"원문 응답 수신·보관 · 디코딩/분석 미완료 · 원본만 연결하며 분석 완료로 처리하지 않음", "",original,trace.revision));
+      }
+      return new ScopeInspection.Snapshot(id, state, message, sent, completed, waiting, excluded, failed, partial+pendingAnalysis,
+          new ArrayList<>(findings.values()), visiblePages, new ArrayList<>(candidates), startedAt, finishedAt, coverageRowsLocked());
     }
+  }
+
+  /** Explicitly recheck only selected unresolved read-only routes; other pending work is retained. */
+  int recheck(List<String> keys) {
+    int count;
+    synchronized (lock) {
+      if (closed || state != ScopeInspection.State.COMPLETED && state != ScopeInspection.State.STOPPED)
+        throw new IllegalStateException("완료 또는 중지한 실행에서 미확인 경로를 선택하세요.");
+      if (keys == null || keys.isEmpty() || keys.size() > 100) throw new IllegalArgumentException("재점검 경로를 1~100개 선택하세요.");
+      if (sent >= options.budget()) throw new IllegalArgumentException("이 실행의 요청 한도가 소진됐습니다. 새 실행을 준비하세요.");
+      if (System.currentTimeMillis() < retryAt) throw new IllegalArgumentException("Retry-After 대기 후 재점검하세요.");
+      if (!allowed(options.url())) throw new IllegalArgumentException("고정 SCOPE 또는 프로젝트가 바뀌었습니다. 새 실행을 준비하세요.");
+      LinkedHashSet<String> selected = new LinkedHashSet<>(keys);
+      List<Trace> work = new ArrayList<>();
+      for (String key : selected) {
+        Trace trace = coverage.get(key);
+        if (trace == null || !retryableLocked(trace)) throw new IllegalArgumentException("선택 경로의 인증 revision·조회 정책·미확인 상태를 다시 확인하세요.");
+        work.add(trace);
+      }
+      // All validation precedes queue/cache mutation. No credentials are imported or refreshed here.
+      if (!selectiveRecheck) suspendedTasks.addAll(queue);
+      else suspendedTasks.addAll(queue.stream().filter(t -> !suspendedTasks.contains(t)).toList());
+      queue.clear(); selectiveRecheck = true;
+      for (Trace trace : work) {
+        var profile = profile(trace.profileId); String raw = normalized(trace.candidate.url());
+        suspendedTasks.removeIf(t->t.profileId().equals(trace.profileId)&&t.candidate().method().equals(trace.candidate.method())&&t.candidate().url().equals(raw));
+        responseCache.remove(responseKey(profile, raw, trace.candidate.method()));
+        queue.add(new Task(new ScopeInspection.Candidate(raw,trace.candidate.method(),trace.candidate.source(),trace.candidate.label(),true),
+            trace.profileId, options.depth(), -10, order++));
+        trace.state="QUEUED";trace.reason="선택한 경로만 조회 재점검 · 원래 인증 revision·Scope·총 예산 유지 · 추가 탐색 깊이 확장 없음";trace.stages.add("QUEUED");
+      }
+      verifiedAt.clear(); verifiedOriginals.clear(); missingReferences.clear(); redirectTargets.clear();
+      conditionRevision++; state=ScopeInspection.State.RUNNING; finishedAt=0;
+      message="선택 경로 조회 재점검 · 다른 대기 경로는 보존";
+      long token=generation.incrementAndGet();pending=executor.submit(()->run(token));count=work.size();
+      lock.notifyAll();
+    }
+    publish();return count;
+  }
+
+  private Collection<ScopeInspection.Profile> runProfiles() {
+    return options.compareAccounts()?profiles.values():List.of(profiles.values().iterator().next());
+  }
+
+  private Trace traceLocked(ScopeInspection.Candidate candidate, ScopeInspection.Profile profile) {
+    String revision=revisionOf(profile),method=Objects.toString(candidate.method(),"?").toUpperCase(Locale.ROOT);
+    String key=ScopeInspectionCoverage.key(id+"|"+profile.id()+"|"+revision+"|"+method+"|"+candidate.url());
+    Trace trace=coverage.get(key);
+    if(trace==null && coverage.size()<MAX_TASKS+500){
+      trace=new Trace(key,profile.id(),revision,new ScopeInspection.Candidate(candidate.url(),method,candidate.source(),candidate.label(),candidate.executable()));
+      coverage.put(key,trace);
+    } else if(trace!=null && candidate.executable() && !trace.candidate.executable()) trace.candidate=candidate;
+    return trace;
+  }
+
+  private void traceStateLocked(Task task,String state,String reason) {
+    Trace trace=traceLocked(task.candidate(),profile(task.profileId()));
+    if(trace!=null){trace.state=state;trace.reason=reason;}
+  }
+
+  private boolean retryableLocked(Trace trace) {
+    var profile=profiles.get(trace.profileId);
+    if(profile==null||!trace.revision.equals(revisionOf(profile))||!trace.retryAllowed||!trace.candidate.executable())return false;
+    if(!Set.of("FAILED","UNVISITED","PARTIAL","QUEUED").contains(trace.state))return false;
+    if(Set.of(401,403,429).contains(trace.status))return false;
+    String raw=normalized(trace.candidate.url());
+    return raw!=null&&allowed(raw)&&readOnlyUrl(raw)&&!secretInput(raw)&&Set.of("GET","HEAD").contains(trace.candidate.method());
+  }
+
+  private List<ScopeInspectionCoverage.Row> coverageRowsLocked() {
+    List<ScopeInspectionCoverage.Row> result=new ArrayList<>();
+    for(Trace trace:coverage.values()){
+      var profile=profiles.get(trace.profileId);if(profile==null)continue;
+      String phase=trace.state,reason=trace.reason;
+      boolean current=trace.revision.equals(revisionOf(profile));
+      if(!current){phase="STALE";reason="이전 인증 revision의 관측·원본 보존 · 현재 조건으로 재사용하지 않음";}
+      else if(phase.equals("QUEUED")&&(state==ScopeInspection.State.STOPPED||state==ScopeInspection.State.FAILED)){
+        phase="UNVISITED";reason="대기 경로 미방문 · "+message;
+      }else if(phase.equals("QUEUED")&&state==ScopeInspection.State.PAUSED)reason="다음 전송 보류 · "+message;
+      boolean retryable=current&&retryableLocked(trace)&&!closed&&(state==ScopeInspection.State.COMPLETED||state==ScopeInspection.State.STOPPED)&&sent<options.budget();
+      result.add(new ScopeInspectionCoverage.Row(trace.key,candidateDisplay(trace.candidate),trace.candidate.method(),displayText(profile.label(),160),
+          trace.revision,displayText(trace.candidate.source(),120),displayText(trace.candidate.label(),160),phase,displayText(reason,1200),
+          trace.status,trace.originalId,retryable,new ArrayList<>(trace.stages),trace.candidate.url().indexOf('?')>=0||trace.candidate.url().indexOf('#')>=0));
+    }
+    result.addAll(browserCoverage.values());return List.copyOf(result);
   }
 
   DiskTrafficStore.PacketRef original(String originalId) {
@@ -304,6 +429,13 @@ final class ScopeInspectionRunner implements AutoCloseable {
       if (closed || state != ScopeInspection.State.RUNNING && state != ScopeInspection.State.PAUSED) return;
       String kind = Objects.toString(event.get("kind"), Objects.toString(event.get("state"), ""));
       if (!Set.of("started", "route", "menu", "api", "excluded", "progress", "done", "error").contains(kind)) return;
+      String networkStage=Objects.toString(event.get("networkStage"),"");
+      // The Runner can also be embedded without the browser bridge. Validate transport
+      // evidence again before it can update progress, findings, queues or coverage.
+      if(kind.equals("api")&&!networkStage.isEmpty()
+          &&(!Set.of("request","response","error").contains(networkStage)
+              ||!Objects.toString(event.get("requestId"),"").matches("[a-fA-F0-9]{64}")
+              ||networkStage.equals("response")&&browserStatus(event)==0))return;
       browserConnected = true; browserLastEvent = System.currentTimeMillis();
       String url = Objects.toString(event.get("url"), Objects.toString(event.get("page"), options.url()));
       String method = Objects.toString(event.get("method"), "GET").toUpperCase(Locale.ROOT);
@@ -325,12 +457,16 @@ final class ScopeInspectionRunner implements AutoCloseable {
               "현재 실행 SCOPE 밖이므로 HTTP 재조회를 예약하지 않았습니다.", "", "browser-outside:" + routeId));
         } else {
           boolean queryRequired = Boolean.TRUE.equals(event.get("requiresQuery"));
+          if(kind.equals("api"))traceBrowserLocked(event,url,method,label,routeId);
+          String networkNote=networkStage.equals("response")?" · 브라우저 HTTP "+browserStatus(event)+" 응답 관측 · 본문/원본 미수집·HTTP 계정 접근 성공과 별도"
+              :networkStage.equals("error")?" · 브라우저 통신 오류 · 자동 HTTP 재요청 예약하지 않음":networkStage.equals("request")?" · 브라우저 실제 요청 관측":"";
           addFindingLocked(finding(kind.equals("api") ? "API" : "MENU", label, url, method, "browser-session", "브라우저 관측", "INFO", "관측",
               "브라우저 별도 세션 · 라우트 지문 " + bounded(routeId, 80)
                   + (pageRouteId.isBlank() ? "" : " · 페이지 라우트 지문 " + pageRouteId + " · 탭·현재 라우트 관측 문맥, JS 인과 확정 아님")
-                  + (queryRequired ? " · 쿼리 값 원본 필요" : " · HTTP 재조회는 선택한 계정으로 별도 수행"), "", "browser:" + kind + ":" + routeId + ":" + pageRouteId + ":" + method));
-          addCandidateLocked(new ScopeInspection.Candidate(url, method, kind.equals("api") ? "브라우저 API" : "메뉴 라우트", label,
-              !queryRequired && Set.of("GET", "HEAD").contains(method)), Math.min(1, options.depth()), 10);
+                  + (queryRequired ? " · 쿼리 값 원본 필요" : " · HTTP 재조회는 선택한 계정으로 별도 수행")+networkNote, "", "browser:" + kind + ":" + routeId + ":" + pageRouteId + ":" + method+":"+networkStage));
+          if(!kind.equals("api")||networkStage.isEmpty()||networkStage.equals("request"))
+            addCandidateLocked(new ScopeInspection.Candidate(url, method, kind.equals("api") ? "브라우저 API" : "메뉴 라우트", label,
+                !queryRequired && Set.of("GET", "HEAD").contains(method)), Math.min(1, options.depth()), 10);
         }
       } else if (kind.equals("excluded")) {
         excluded++; addFindingLocked(finding("COVERAGE", "브라우저 동작 제외", url, method, "browser-session", "관측", "INFO", "제외",
@@ -341,20 +477,56 @@ final class ScopeInspectionRunner implements AutoCloseable {
     publish();
   }
 
+  private static int browserStatus(Map<String,Object> event){
+    Object value=event.get("statusCode");
+    if(!(value instanceof Number n))return 0;
+    double status=n.doubleValue();
+    return Double.isFinite(status)&&status==Math.rint(status)&&status>=100&&status<=599?(int)status:0;
+  }
+
+  private void traceBrowserLocked(Map<String,Object> event,String url,String method,String label,String routeId){
+    String phase=Objects.toString(event.get("networkStage"),""),request=Objects.toString(event.get("requestId"),"");
+    if(!Set.of("request","response","error").contains(phase)||!request.matches("[a-fA-F0-9]{64}"))return;
+    String key=ScopeInspectionCoverage.key(id+"|browser-session|"+request);
+    var old=browserCoverage.get(key);if(old==null&&browserCoverage.size()>=MAX_CANDIDATES)return;
+    LinkedHashSet<String> stages=new LinkedHashSet<>(old==null?List.of("DISCOVERED","SCOPE_CHECKED"):old.stages());
+    stages.add("REQUESTED");int status=phase.equals("response")?browserStatus(event):0;String state,reason;
+    if(phase.equals("response")){
+      stages.add("RESPONDED");state="HTTP_RESPONDED";
+      reason="브라우저 세션의 응답 메타데이터 관측 · 본문/원본 미수집 · 선택 HTTP 계정과 별도 · 라우트 지문 "+bounded(routeId,80);
+    }else if(phase.equals("error")){
+      state="FAILED";reason="브라우저 통신 오류 · "+bounded(Objects.toString(event.get("errorCode"),"NETWORK_ERROR"),80)+" · 자동 HTTP 재요청 없음";
+    }else{
+      state="REQUESTING";reason="브라우저 세션 실제 요청 관측 · 응답·본문 분석은 미확인";
+      if(old!=null&&(old.state().equals("HTTP_RESPONDED")||old.state().equals("FAILED"))){state=old.state();reason=old.reason();status=old.status();}
+    }
+    browserCoverage.put(key,new ScopeInspectionCoverage.Row(key,displayUrl(url),method,"browser-session","browser-session", "브라우저 실제 통신",displayText(label,160),state,
+        displayText(reason,1200),status,"",false,new ArrayList<>(stages),Boolean.TRUE.equals(event.get("requiresQuery"))||url.indexOf('?')>=0||url.indexOf('#')>=0||old!=null&&old.queryUnresolved()));
+  }
+
   private void run(long token) {
     try {
       while (true) {
         ready(token);
         KatanaTask crawl;
         synchronized (lock) {
-          expireKatanaLocked(); crawl = katanaQueue.peek();
+          expireKatanaLocked(); crawl = selectiveRecheck?null:katanaQueue.peek();
         }
         if (crawl != null) {
           inspectKatana(crawl, token); publish(); continue;
         }
         Task task;
-        synchronized (lock) { task = queue.peek(); if (holdGuessedLocked(task)) task = null; }
+        synchronized (lock) { task = queue.peek(); if (!selectiveRecheck&&holdGuessedLocked(task)) task = null; }
         if (task == null) {
+          synchronized(lock){
+            if(selectiveRecheck){
+              restoreSuspendedLocked();selectiveRecheck=false;addInventoryLocked();
+              state=queue.isEmpty()&&katanaDeferred.isEmpty()?ScopeInspection.State.COMPLETED:ScopeInspection.State.STOPPED;
+              finishedAt=System.currentTimeMillis();
+              message="선택 경로 재점검 종료 · 다른 대기 경로 "+pendingCountLocked()+"건 보존 · 전체 확인을 의미하지 않음";
+              publish();return;
+            }
+          }
           if (awaitSources(token)) continue;
           ready(token);
           synchronized (lock) {
@@ -375,6 +547,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
         } catch (Excluded skip) {
           synchronized (lock) {
             queue.remove(task); excluded++;
+            traceStateLocked(task,"EXCLUDED",skip.getMessage());
             addFindingLocked(finding("COVERAGE", "후보 확인 제외", task.candidate().url(), task.candidate().method(), profile(task.profileId()).label(),
                 "관측", "INFO", "제외", skip.getMessage(), "", "excluded:" + task.profileId() + ":" + task.candidate().url()));
           }
@@ -383,6 +556,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
         } catch (Exception error) {
           synchronized (lock) {
             queue.remove(task); failed++; completed++;
+            traceStateLocked(task,"FAILED","원인: "+error.getClass().getSimpleName()+" · 실제 응답·분석 완료 근거 없음");
             addFindingLocked(finding("COVERAGE", "요청·분석 실패", task.candidate().url(), task.candidate().method(), profile(task.profileId()).label(),
                 "미확인", "INFO", "실패", "원인: " + error.getClass().getSimpleName() + " · 해당 경로 확인을 완료하지 못했습니다.", "", "error:" + task.profileId() + ":" + task.candidate().url()));
           }
@@ -421,6 +595,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
     preflight(task, profile, token);
     EnvironmentControls.Reference reference = reference(url, profile, token);
     Received received = fetch(url, method, profile, task.depth(), token, false);
+    guard(token);
     analyzeReceived(task, profile, received, reference);
     transientState(profile, received.packet().response().statusCode(), received.headers(), received.body(), received.original(), token);
   }
@@ -451,6 +626,13 @@ final class ScopeInspectionRunner implements AutoCloseable {
         note, digest(received.headers(), received.body(), url), received.original(), revisionOf(profile));
     synchronized (lock) {
       addPageLocked(page);
+      Trace trace=traceLocked(new ScopeInspection.Candidate(url,method,task.candidate().source(),task.candidate().label(),true),profile);
+      if(trace!=null){
+        trace.stages.add("ANALYZED");trace.status=status;trace.originalId=received.original().id();
+        trace.state=status==401||status==403?"DENIED":Set.of("LOGIN","CHALLENGE","RATE").contains(content.kind())?"AUTH_REQUIRED":complete&&analysis.complete()?"ANALYZED":"PARTIAL";
+        trace.reason=note+(!analysis.complete()?" · 정적 분석 일부 미완료 · "+analysis.note():"");
+        if(Set.of("SOFT404","SIMILAR","LOGIN","CHALLENGE","RATE","DENIED","REDIRECT","LIMIT").contains(content.kind())||status==401||status==403)trace.retryAllowed=false;
+      }
       addFindingLocked(finding("PATH", content.title(), url, method, profile.label(), "응답 관측", severity(content.kind()), complete ? "내용 확인" : "부분 검사",
           content.reason() + " · " + comparison + (received.complete() ? "" : " · " + received.note()), received.original().id(), "path:" + content.kind()));
     }
@@ -511,6 +693,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
           EnvironmentControls.Reference baseline;
           synchronized (lock) { baseline = missingReferences.get(selected.id() + "|" + runRoot); }
           Task traced = new Task(new ScopeInspection.Candidate(url, method, "Katana 실제 요청", "공통 원본 재사용", true), task.profileId(), task.depth(), task.priority(), task.order());
+          guard(token);
           analyzeReceived(traced, selected, stored, baseline);
           offerRedirectCandidate(stored, task.depth());
         }
@@ -527,6 +710,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
       EnvironmentControls.Reference baseline = reference(url, selected, token);
       Received received = sendOnce(url, method, selected, token, false);
       Task traced = new Task(new ScopeInspection.Candidate(url, method, "Katana 실제 요청", "표준 크롤러 경로", true), task.profileId(), task.depth(), task.priority(), task.order());
+      guard(token);
       analyzeReceived(traced, selected, received, baseline);
       synchronized (lock) {
         addFindingLocked(finding("KATANA", "Katana HTTP 응답", url, method, selected.label(), "공통 Montoya 전송", "INFO", "응답 관측",
@@ -554,6 +738,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
     } catch (Excluded excludedRequest) {
       synchronized (lock) {
         queue.remove(crawl.task()); excluded++;
+        traceStateLocked(crawl.task(),"EXCLUDED",excludedRequest.getMessage());
         addFindingLocked(finding("KATANA", "Katana 요청 제외", crawl.task().candidate().url(), crawl.task().candidate().method(), profile(crawl.task().profileId()).label(),
             "관측", "INFO", "미검사", excludedRequest.getMessage(), "", "katana-excluded:" + crawl.key()));
       }
@@ -561,6 +746,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
     } catch (Exception error) {
       synchronized (lock) {
         queue.remove(crawl.task()); failed++; completed++;
+        traceStateLocked(crawl.task(),"FAILED","Katana 공통 전송·분석 실패 · "+error.getClass().getSimpleName());
         addFindingLocked(finding("COVERAGE", "Katana 공통 전송·분석 실패", crawl.task().candidate().url(), crawl.task().candidate().method(), profile(crawl.task().profileId()).label(),
             "미확인", "INFO", "실패", "원인: " + error.getClass().getSimpleName() + " · 해당 경로 확인을 완료하지 못했습니다.", "", "katana-error:" + crawl.key()));
       }
@@ -645,6 +831,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
       synchronized (lock) {
         addPageLocked(new ScopeInspection.Page(displayUrl(current), method, profile.label(), status, control ? "CONTROL_REDIRECT" : "REDIRECT", false,
             "이동 응답 원본 · 대상 내용 미확인 · Location은 이동 전 다시 검사합니다.", digest(received.headers(), received.body(), current), received.original(), revisionOf(profile)));
+        if(!control){
+          Trace trace=traceLocked(new ScopeInspection.Candidate(current,method,"실제 HTTP 요청","리디렉션 원본",true),profile);
+          if(trace!=null){trace.state="PARTIAL";trace.reason="리디렉션 hop 응답 · 최종 대상 내용과 별도 원본";trace.retryAllowed=false;}
+        }
       }
       String target;
       try { target = URI.create(current).resolve(location).toString(); } catch (RuntimeException error) { target = ""; }
@@ -672,7 +862,13 @@ final class ScopeInspectionRunner implements AutoCloseable {
     beforeSend(token);
     if (!allowed(url)) throw new Excluded("전송 직전 SCOPE가 바뀌었습니다.");
     checkKatanaCancellation();
-    synchronized (lock) { sent++; lastSend = System.currentTimeMillis(); message = "요청 " + sent + " / " + options.budget() + " · 남은 후보 " + queue.size(); }
+    synchronized (lock) {
+      sent++; lastSend = System.currentTimeMillis(); message = "요청 " + sent + " / " + options.budget() + " · 남은 후보 " + queue.size();
+      if(!control){
+        Trace trace=traceLocked(new ScopeInspection.Candidate(url,method,"실제 HTTP 요청","공통 HTTP 전송",true),profile);
+        if(trace!=null){trace.stages.add("SCOPE_CHECKED");trace.stages.add("REQUESTED");trace.state="REQUESTING";trace.reason="동일 계정·인증 revision·Scope·공통 예산으로 전송";trace.status=0;trace.originalId="";}
+      }
+    }
     HttpRequestResponse packet = api.http().sendRequest(request, RequestOptions.requestOptions()
         .withResponseTimeout(options.timeoutMillis()).withRedirectionMode(RedirectionMode.NEVER));
     guard(token);
@@ -683,6 +879,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
     DiskTrafficStore.PacketRef original = originals.append(LocalTime.now().toString(), "Scope " + id + " · " + profile.id() + (control ? " · 대조" : ""), packet.request(), packet.response());
     synchronized (lock) { referencesById.put(original.id(), original); }
     HttpResponse response = packet.response();
+    if(!control)synchronized(lock){
+      Trace trace=traceLocked(new ScopeInspection.Candidate(url,method,"실제 HTTP 요청","공통 HTTP 전송",true),profile);
+      if(trace!=null){trace.stages.add("RESPONDED");trace.status=response.statusCode();trace.originalId=original.id();trace.state="PARTIAL";trace.reason="실제 HTTP 응답 수신 · 본문 분석 대기";}
+    }
     String headers = EnvironmentPanel.responseHeaders(response);
     if (response.statusCode() >= 300 && response.statusCode() < 400) try {
       String target = normalized(URI.create(url).resolve(EnvironmentResponse.header(headers, "Location")).toString());
@@ -997,6 +1197,13 @@ final class ScopeInspectionRunner implements AutoCloseable {
     boolean first = !candidateKeys.contains(key);
     if (first && candidates.size() >= MAX_CANDIDATES) { candidateLimitLocked(); return; }
     boolean executable = candidate.executable() && raw != null && Set.of("GET", "HEAD").contains(method) && readOnlyUrl(raw) && allowed(raw) && !secretInput(raw);
+    for(var profile:runProfiles()){
+      Trace trace=traceLocked(candidate,profile);
+      if(trace!=null&&trace.state.equals("DISCOVERED")){
+        if(raw!=null)trace.stages.add("SCOPE_CHECKED");
+        if(!executable){trace.state="EXCLUDED";trace.retryAllowed=false;trace.reason=raw==null?"URL·필수값·동적 변수 미확정":!allowed(raw)?"허용 Origin/SCOPE 밖":secretInput(raw)?"관측 민감값을 요청 입력으로 재사용하지 않음":!candidate.executable()||!Set.of("GET","HEAD").contains(method)?"메서드·필수값 원본 확인 필요":"변경 동작·대용량 경로 직접 확인 필요";}
+      }
+    }
     if (executable && priority >= 80 && !environmentGuesses.contains(raw)) {
       boolean existingObserved = queue.stream().anyMatch(t -> t.candidate().url().equals(raw) && t.candidate().method().equals(method) && t.priority() < 80);
       if (!existingObserved) {
@@ -1022,12 +1229,14 @@ final class ScopeInspectionRunner implements AutoCloseable {
       addFindingLocked(finding("COVERAGE", "자동 요청 제외", display, method, "전체", "관측", "INFO", "미검사", reason + " · " + bounded(candidate.source(), 100), "", "candidate-excluded:" + key));
       return;
     }
-    Collection<ScopeInspection.Profile> runProfiles = options.compareAccounts() ? profiles.values() : List.of(profiles.values().iterator().next());
-    for (var profile : runProfiles) {
+    for (var profile : runProfiles()) {
       String taskKey = profile.id() + "|" + key;
       if (queued.add(taskKey)) {
         if (queue.size() >= MAX_TASKS) { partial++; continue; }
-        queue.add(new Task(new ScopeInspection.Candidate(raw, method, candidate.source(), candidate.label(), true), profile.id(), depth, priority, order++));
+        Task next=new Task(new ScopeInspection.Candidate(raw, method, candidate.source(), candidate.label(), true), profile.id(), depth, priority, order++);
+        if(selectiveRecheck)suspendedTasks.add(next);else queue.add(next);
+        Trace trace=traceLocked(candidate,profile);
+        if(trace!=null){trace.stages.add("QUEUED");trace.state="QUEUED";trace.reason=selectiveRecheck?"선택 재점검 중 발견 · 다른 대기 경로로 보존":"조회 후보 큐 등록 · 아직 대상 응답 없음";trace.retryAllowed=true;}
       } else {
         Task existing = queue.stream().filter(t -> t.profileId().equals(profile.id()) && t.candidate().url().equals(raw) && t.candidate().method().equals(method)).findFirst().orElse(null);
         if (existing != null && priority < existing.priority()) {
@@ -1043,6 +1252,10 @@ final class ScopeInspectionRunner implements AutoCloseable {
     if (candidateKeys.contains(key)) return;
     if (candidates.size() >= MAX_CANDIDATES) { candidateLimitLocked(); return; }
     candidateKeys.add(key);
+    for(var profile:runProfiles()){
+      Trace trace=traceLocked(candidate,profile);
+      if(trace!=null&&!trace.stages.contains("REQUESTED")){trace.state="UNVISITED";trace.reason=reason;trace.retryAllowed=candidate.executable();}
+    }
     if (candidates.size() < MAX_CANDIDATES) candidates.add(new ScopeInspection.Candidate(candidateDisplay(candidate), candidate.method(), candidate.source(), displayText(candidate.label(),160), false));
     excluded++;
     addFindingLocked(finding("COVERAGE", "발견했지만 자동 방문하지 않음", candidate.url(), candidate.method(), "전체", "관측", "INFO", "미검사", reason, "", "limited:" + key));
@@ -1127,7 +1340,13 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private static String taskKey(Task task) { return task.profileId() + "|" + task.candidate().method() + "|" + task.candidate().url(); }
 
   private int pendingCountLocked() {
-    return queue.size() + katanaDeferred.size() + (int)katanaQueue.stream().filter(k -> !queue.contains(k.task())).count();
+    return queue.size() + suspendedTasks.size() + katanaDeferred.size() + (int)katanaQueue.stream().filter(k -> !queue.contains(k.task())).count();
+  }
+
+  private void restoreSuspendedLocked(){
+    Set<String> present=new HashSet<>();for(Task task:queue)present.add(taskKey(task));
+    for(Task task:suspendedTasks)if(present.add(taskKey(task)))queue.add(task);
+    suspendedTasks.clear();
   }
 
   private boolean holdGuessedLocked(Task task) { return task != null && katanaRegistered && !katanaFinished && task.priority() >= 20; }
@@ -1175,6 +1394,8 @@ final class ScopeInspectionRunner implements AutoCloseable {
 
   private String candidateDisplay(ScopeInspection.Candidate candidate) {
     String raw = candidate.url();
+    if(!candidate.executable()&&raw!=null&&raw.contains("${")&&raw.length()<=2048)
+      return secretInput(raw)?"/%5BREDACTED%5D":displayText(raw.split("[?#]",2)[0],2048);
     if (!candidate.executable() && Objects.toString(candidate.source(), "").contains("JS") && raw != null && raw.startsWith("/") && !raw.startsWith("//") && raw.length() <= 2048) try {
       URI path = URI.create(raw.replace("{", "%7B").replace("}", "%7D"));
       if (path.getScheme() == null && path.getRawAuthority() == null) {
@@ -1259,6 +1480,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
   private static int priority(ScopeInspection.Candidate candidate) {
     String source = Objects.toString(candidate.source(), ""), basis = source + " " + Objects.toString(candidate.label(), "");
     if (source.equals("시작 URL")) return 0;
+    if (source.equals("소스맵 참조")) return 5;
     if (basis.contains("소스맵 후보")) return 85;
     if (source.contains("관측") || source.contains("브라우저") || source.contains("메뉴") || basis.contains("실제 응답 참조") || basis.contains("실제 링크") || basis.contains("실제 선언")) return 5;
     if (source.contains("API 문서") || basis.contains("OpenAPI GET 선언") || basis.contains("Swagger 명세 참조")) return 10;
@@ -1301,6 +1523,7 @@ final class ScopeInspectionRunner implements AutoCloseable {
       failKatanaPendingLocked(new CancellationException("통합 점검 종료"));
       if (pending != null) pending.cancel(true); executor.shutdownNow(); lock.notifyAll();
       queue.clear(); referencesById.clear(); findings.clear(); pages.clear(); candidates.clear();
+      coverage.clear();browserCoverage.clear();suspendedTasks.clear();
       responseCache.clear(); katanaDeferred.clear(); analyzedOriginals.clear(); discoveredSecrets.clear(); discoveredSecretBytes = 0;
       verifiedOriginals.clear(); environmentGuesses.clear(); redirectTargets.clear();
     }

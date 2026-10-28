@@ -3,11 +3,17 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
-**Workbench Simple 1.3.2를 [PR #100](https://github.com/ohjun1998/burp-workbench-kr/pull/100)으로 main에 추가했습니다.** 기존 8개 도구를 유지하고 Scope·Katana 정보 수집과 메뉴 탐색·원문 보고서에 집중한 별도 버전입니다. 기존 Next와 과거 배포 파일은 보존합니다. 브라우저 메뉴 탐색 보완은 JAR와 helper 0.4.1을 함께 갱신해야 적용됩니다.
+**Workbench Simple 1.4.0 원터치 탐지 고도화판**은 기존 8개 도구에 공통 응답 파서, 경로별 처리 단계·미확인 사유·선택 재점검, 브라우저 요청·응답 연결을 더합니다. API·개인정보·환경 값의 제품 탐지를 넓히고 예시·쿠키·코드 조각을 구분합니다. 기존 Next와 이전 Simple 배포 파일은 보존합니다.
 
-[Simple 설치 JAR](simple/downloads/1.3.2/burp-workbench-simple-1.3.2.jar) · [helper 0.4.1](simple/downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip) · [35쪽 가이드](simple/downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) · [소스·체크섬](simple/downloads/1.3.2/) · [사용 안내](simple/README_KR.md) · [병합 기록](docs/reports/2026-10-28-simple-main/MERGE_KR.md)
+[Simple 1.4.0 JAR](simple/downloads/1.4.0/burp-workbench-simple-1.4.0.jar) · [helper 0.5.0](simple/downloads/1.4.0/feature-mapper-browser-helper-0.5.0.zip) · [40쪽 그림 가이드](simple/downloads/guides/1.4.0/Workbench_Simple_1.4.0_Guide_KR.pdf) · [소스·체크섬](simple/downloads/1.4.0/) · [사용 안내](simple/README_KR.md) · [검증 범위](simple/docs/VERIFICATION_SIMPLE_1.4.0.json)
 
-Simple 자동 검사5,184개·실제 Katana102개와112뷰 배치 검사를 통과한 파일 트리가 main 병합 결과와 일치합니다. 실제 Burp GUI·native MV3/DNR은 미검증이며, 실제 사이트의 미확인·부분 범위와 별도 직접 대조는 [검증 기록](simple/docs/VERIFICATION_SIMPLE_1.3.2.json)에 구분합니다.
+동일한 실제 7개 앱의 보존 응답38개에서 선별한 주요항목79개의 제품 근거 연결은46→79개(고유 사이트·값78종)로 늘었습니다. 이 수치는 해당 표본의 원문 위치·지문 검증이며 서비스 전체 탐지율이 아닙니다. 브라우저 메타데이터는 응답 본문 분석과 구분하고, 동적 API의 `PATH_SHAPE_ONLY` 연결은 변수 복원·동일 인증·권한 획득을 뜻하지 않습니다. 실제 Burp GUI·native MV3/DNR 검증 범위도 별도 기록합니다.
+
+이전 **Workbench Simple 1.3.2는 [PR #100](https://github.com/ohjun1998/burp-workbench-kr/pull/100)으로 main에 추가했습니다.** 당시 브라우저 helper는0.4.1이며 아래 파일과 검증 기록을 보존합니다.
+
+[Simple 설치 JAR](simple/downloads/1.3.2/burp-workbench-simple-1.3.2.jar) · [helper 0.4.1](simple/downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip) · [35쪽 가이드](simple/downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) · [소스·체크섬](simple/downloads/1.3.2/) · [1.3.2 사용 안내](simple/docs/history/1.3.2/GUIDE_SIMPLE_KR.html) · [병합 기록](docs/reports/2026-10-28-simple-main/MERGE_KR.md)
+
+1.3.2의 자동 검사5,184개·실제 Katana102개와112뷰 배치 검사를 통과한 파일 트리가 당시 main 병합 결과와 일치합니다. 실제 Burp GUI·native MV3/DNR은 미검증이며, 당시 실제 사이트의 미확인·부분 범위와 별도 직접 대조는 [검증 기록](simple/docs/VERIFICATION_SIMPLE_1.3.2.json)에 구분합니다.
 
 기존 **Workbench Next 계열의 main 배포는 0.53.4 사용자 편의성 안정화판**입니다. 0.53.3 main `e0b40e3dae3fcca21d3cd9441260e3edae65d159`을 기준으로 개발하고 [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)로 main에 병합했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 0.53.3 배포·0.53.2 보존 후보판과 이전 모든 버전의 파일·검증 기록을 보존합니다.
 

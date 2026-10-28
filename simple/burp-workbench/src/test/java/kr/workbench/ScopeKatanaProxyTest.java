@@ -25,6 +25,14 @@ public final class ScopeKatanaProxyTest extends WorkbenchTest {
   static Socket socket(ScopeKatanaProxy proxy) throws IOException {
     Socket socket = new Socket(); socket.connect(new InetSocketAddress("127.0.0.1", URI.create(proxy.address()).getPort()), 2000); socket.setSoTimeout(5000); return socket;
   }
+  static boolean ownedTransportClosed(ScopeKatanaProxy proxy) throws Exception {
+    var listenerField = ScopeKatanaProxy.class.getDeclaredField("listener"); listenerField.setAccessible(true);
+    var acceptorField = ScopeKatanaProxy.class.getDeclaredField("acceptor"); acceptorField.setAccessible(true);
+    ServerSocket listener = (ServerSocket)listenerField.get(proxy);
+    Thread acceptor = (Thread)acceptorField.get(proxy);
+    acceptor.join(2000);
+    return listener.isClosed() && !acceptor.isAlive();
+  }
   static String request(ScopeKatanaProxy proxy, String method, String url, String host, String extra) {
     return method + " " + url + " HTTP/1.1\r\nHost: " + host + "\r\nProxy-Authorization: " + auth(proxy) + "\r\n" + extra + "\r\n";
   }
@@ -168,12 +176,26 @@ public final class ScopeKatanaProxyTest extends WorkbenchTest {
         enabled.set(false); socket.getOutputStream().write("GET /app/me HTTP/1.1\r\nHost: secure.invalid\r\n\r\n".getBytes(StandardCharsets.US_ASCII)); socket.getOutputStream().flush();
         check(read(socket.getInputStream(), false).status() == 403 && calls.size() == accepted, "an authenticated open CONNECT cannot bypass later live Scope revocation");
       }
-      try (Socket idle = socket(secureProxy)) {
-        secureProxy.close(); boolean ended; try { ended = idle.getInputStream().read() < 0; } catch (IOException expected) { ended = true; }
+      // Restore a valid Scope: rejection below must come from shutdown, not the preceding revocation.
+      enabled.set(true); accepted = calls.size();
+      String afterCloseRequest = request(secureProxy, "CONNECT", "secure.invalid:443", "secure.invalid:443", "");
+      try (Socket idle = socket(secureProxy); Socket pending = socket(secureProxy)) {
+        secureProxy.close(); boolean ended;
+        try { ended = idle.getInputStream().read() < 0; }
+        catch (SocketTimeoutException timeout) { ended = false; }
+        catch (IOException expected) { ended = true; }
         check(ended, "close terminates accepted idle sockets as well as the listener");
+        boolean rejected;
+        try {
+          pending.getOutputStream().write(afterCloseRequest.getBytes(StandardCharsets.US_ASCII)); pending.getOutputStream().flush();
+          rejected = read(pending.getInputStream(), false).status() >= 400;
+        } catch (SocketTimeoutException timeout) { rejected = false; }
+        catch (IOException expected) { rejected = true; }
+        check(rejected && calls.size() == accepted, "shutdown rejects an authenticated valid-Scope request on an established socket without target dispatch");
       }
-      boolean closed = false; try (Socket ignored = socket(secureProxy)) { } catch (IOException expected) { closed = true; }
-      check(closed, "closed proxy cannot accept a new crawler connection");
+      // A released ephemeral port may already belong to another local listener. Check this proxy's
+      // owned transport instead of assuming a new TCP connection proves the closed proxy accepted it.
+      check(ownedTransportClosed(secureProxy), "close releases its owned listener and terminates its acceptor within the bounded wait");
     } finally { secureProxy.close(); }
     System.out.println("ScopeKatanaProxyTest: " + checks + " checks passed (loopback HTTP/CONNECT/TLS only; no target network or CA installation)");
   }

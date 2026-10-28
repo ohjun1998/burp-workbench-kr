@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.*;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.*;
 
 /** The production, modeless one-touch inspection workspace; opening it performs no requests. */
@@ -49,6 +51,12 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   final JTabbedPane pages = new JTabbedPane();
   final JLabel progress = new JLabel("SCOPE URL과 계정을 선택하면 시작할 수 있습니다."), feedback = new JLabel(" ");
   final JTextArea detail = new JTextArea(5, 60), browserStatus = new JTextArea(3, 60);
+  final JTextField resultSearch = new JTextField(22);
+  final JComboBox<ScopeInspectionView.Filter> resultFilter = new JComboBox<>(ScopeInspectionView.Filter.values());
+  final JComboBox<String> routeFilter = new JComboBox<>(new String[]{"전체 경로","실제 응답 있음","미확인·재점검","실행 제외","형태 일치 후보"});
+  final JButton recheck = new JButton("선택 조회 재점검");
+  final JTextArea coverageStatus = new JTextArea(1,60);
+  final JLabel filterStatus = new JLabel("현재 결과에서 검색합니다."), contextStatus = new JLabel("Scope·계정 선택 → 시작 → 주요정보·미확인 확인 → 보고서 저장");
   final Map<String, JTable> tables = new LinkedHashMap<>();
   final Map<String, List<ScopeInspection.Finding>> rows = new HashMap<>();
   final JButton original = new JButton("원본 보기"), repeater = new JButton("Repeater 준비"), compare = new JButton("계정 비교 준비"), evidence = new JButton("증거 추가");
@@ -69,7 +77,9 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private final List<ScopeInspectionRunner> retained = new ArrayList<>();
   private final Set<String> observed = new HashSet<>(), persisted = new HashSet<>();
   private List<ScopeInspection.Finding> changes = List.of();
-  private String runScope = "", runProject = "", runHistoryScope = "";
+  private List<ScopeInspectionCoverage.Row> coverageRows = List.of();
+  private List<ScopeInspectionCoverage.Correlation> routeCorrelations = List.of();
+  private String runScope = "", runProject = "", runHistoryScope = "", runInputs = "";
   private volatile boolean closed;
   private boolean rebuilding, accepting;
   private volatile ScopeInspection.Snapshot pending;
@@ -109,7 +119,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     name(pages,"pages");
     addFindingsTab("요약","summary");addFindingsTab("환경·DB","environment");addPathsTab();
     addFindingsTab("API·명세 대조","api");addFindingsTab("키·민감정보","secrets");addFindingsTab("응답·내부정보","observations");
-    addFindingsTab("계정별 차이","access");addFindingsTab("커버리지","coverage");addFindingsTab("이전 실행과 비교","changes");
+    addFindingsTab("계정별 차이","access");addCoverageTab();addFindingsTab("미확인·범위","coverage");addFindingsTab("이전 실행과 비교","changes");
     addFindingsTab("Katana 수집","katana");
     katanaStatus.setEditable(false);katanaStatus.setLineWrap(true);katanaStatus.setWrapStyleWord(true);
     ((JPanel)pages.getComponentAt(pages.getTabCount()-1)).add(katanaStatus,BorderLayout.NORTH);
@@ -118,7 +128,14 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     JButton connect=new JButton("기능 매핑에서 브라우저 연결");name(connect,"browser.connect");connect.addActionListener(e->actions.tool("mapper",null));
     browserPage.add(WorkbenchUi.row(connect,new JLabel("브라우저 도우미 연결 · 현재 사이트 활성화 · SPA 통합 탐색 허용")),BorderLayout.SOUTH);pages.addTab("브라우저 메뉴",browserPage);
     detail.setEditable(false);detail.setLineWrap(true);detail.setWrapStyleWord(true);name(detail,"detail");
-    JPanel result=new JPanel(new BorderLayout(0,6));result.add(pages);result.add(new JScrollPane(detail),BorderLayout.SOUTH);
+    name(resultSearch,"result.search");name(resultFilter,"result.filter");name(filterStatus,"result.filter.status");name(contextStatus,"result.context");
+    resultSearch.setToolTipText("현재 수집한 가림 결과·경로·계정·원본 ID를 검색합니다. 추가 요청을 보내지 않습니다.");
+    resultFilter.setToolTipText("응답 원본 연결과 경로 문자열·동적 미해결·예시 정보를 구분합니다.");
+    JButton clearFilter=new JButton("필터 초기화");name(clearFilter,"result.filter.clear");clearFilter.addActionListener(e->{resultSearch.setText("");resultFilter.setSelectedItem(ScopeInspectionView.Filter.ALL);routeFilter.setSelectedIndex(0);});
+    resultSearch.getDocument().addDocumentListener(new DocumentListener(){public void insertUpdate(DocumentEvent e){applyFilters();}public void removeUpdate(DocumentEvent e){applyFilters();}public void changedUpdate(DocumentEvent e){applyFilters();}});
+    resultFilter.addActionListener(e->applyFilters());
+    JPanel resultHead=new JPanel(new BorderLayout(0,2));resultHead.add(WorkbenchUi.row(new JLabel("결과 보기"),resultFilter,resultSearch,clearFilter,filterStatus));resultHead.add(contextStatus,BorderLayout.SOUTH);
+    JPanel result=new JPanel(new BorderLayout(0,6));result.add(resultHead,BorderLayout.NORTH);result.add(pages);result.add(new JScrollPane(detail),BorderLayout.SOUTH);
     add(result,BorderLayout.CENTER);
     original.addActionListener(e->safe(()->actions.original(requireOriginal())));repeater.addActionListener(e->safe(()->actions.repeater(requireOriginal())));
     compare.addActionListener(e->safe(()->actions.compare(requireOriginal())));evidence.addActionListener(e->safe(this::captureEvidence));
@@ -128,8 +145,8 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     JPanel bottom=new JPanel(new BorderLayout(0,4));name(progress,"progress");name(feedback,"feedback");
     bottom.add(WorkbenchUi.row(original,repeater,compare,evidence,js,payload),BorderLayout.NORTH);
     JPanel notes=new JPanel(new GridLayout(0,1,0,3));notes.add(progress);notes.add(feedback);bottom.add(notes);add(bottom,BorderLayout.SOUTH);
-    pages.addChangeListener(e->selectedChanged());
-    updates=new javax.swing.Timer(150,e->{if(pending!=null){var next=pending;pending=null;accept(next);}checkScope();refreshBrowser();refreshKatana();});updates.start();
+    pages.addChangeListener(e->{selectedChanged();updateFilterStatus();});
+    updates=new javax.swing.Timer(150,e->{if(pending!=null){var next=pending;pending=null;accept(next);}checkScope();refreshBrowser();refreshKatana();refreshContext();});updates.start();
     WorkbenchUi.style(this);refreshActions();refreshBrowser();refreshKatana();
   }
   private static ScopeInspection.Snapshot empty(){return new ScopeInspection.Snapshot("",ScopeInspection.State.READY,"준비",0,0,0,0,0,0,List.of(),List.of(),List.of(),0,0);}
@@ -147,6 +164,17 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     JPanel body=new JPanel(new BorderLayout());body.setName("wb.scope.inspection.tab."+key);body.add(new JScrollPane(table));pages.addTab(title,body);
   }
   private void addPathsTab(){JTable table=createTable("paths",new String[]{"계정","메서드","URL","HTTP","분류","분석 범위"});table.getColumnModel().getColumn(2).setPreferredWidth(340);JPanel body=new JPanel(new BorderLayout());body.setName("wb.scope.inspection.tab.paths");body.add(new JScrollPane(table));pages.addTab("경로·응답",body);}
+  private void addCoverageTab(){
+    JTable table=createTable("routes",new String[]{"발견 출처","계정","메서드","경로·API","처리 상태","실제 HTTP","미확인·처리 사유","재점검","형태 후보"});
+    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    int[] widths={140,110,75,360,150,95,430,100,100};for(int i=0;i<widths.length;i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+    name(routeFilter,"routes.filter");name(recheck,"routes.recheck");name(coverageStatus,"routes.status");
+    routeFilter.addActionListener(e->applyFilters());recheck.addActionListener(e->safe(this::recheckSelected));
+    coverageStatus.setEditable(false);coverageStatus.setLineWrap(true);coverageStatus.setWrapStyleWord(true);coverageStatus.setOpaque(false);
+    coverageStatus.setToolTipText("경로 문자열 발견과 대상 응답을 구분합니다. 미관측·제외·부분 범위가 남아 있으면 전체 점검 완료가 아닙니다. 선택 행의 단계와 사유를 확인하세요.");
+    JPanel head=new JPanel(new BorderLayout());head.add(WorkbenchUi.row(routeFilter,recheck),BorderLayout.NORTH);head.add(coverageStatus);
+    JPanel body=new JPanel(new BorderLayout(0,3));body.setName("wb.scope.inspection.tab.routes");body.add(head,BorderLayout.NORTH);body.add(new JScrollPane(table));pages.addTab("탐색 커버리지",body);
+  }
   JPanel settingsContent(){
     JButton choose=new JButton("파일 선택");name(choose,"katana.choose");choose.addActionListener(e->{
       if(GraphicsEnvironment.isHeadless()){katanaCheckResult.setText("실행파일의 절대경로를 입력하세요.");return;}
@@ -212,6 +240,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     else chosen=available.stream().filter(p->p.id().equals(selected.id())).limit(1).toList();
     if(chosen.isEmpty())throw new IllegalArgumentException("대상과 계정이 바뀌었습니다. 계정 목록을 새로고침하세요.");
     options=new ScopeInspection.Options(target,number(budget),number(depth),number(delay),number(timeout)*1000,number(maxBody)*1024*1024,number(redirectLimit),browserMode.isSelected(),compareAccounts.isSelected(),chosen,katanaMode.isSelected(),number(katanaSeconds),number(katanaPages));
+    runInputs=inputConditions();
     ScopeKatana.Config katanaConfig=options.katana()?new ScopeKatana.Config(katanaExecutable.getText().strip(),options.katanaSeconds(),options.katanaPages(),options.depth(),options.timeoutMillis(),options.maxBodyBytes(),options.delayMillis()):null;
     WorkbenchScope scope=scope();runScope=scope.inspectionFingerprint();runProject=WorkspaceResume.projectIdentity(api);runHistoryScope=history.scopeFingerprint();
     List<String> include=options.browser()?scope.browserIncludes(target):List.of(), exclude=options.browser()?scope.browserExclusions(target):List.of();
@@ -251,8 +280,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private void resumeInspection(){
     if(runner==null)return;
     if(!runScope.equals(scope().inspectionFingerprint())||!runProject.equals(WorkspaceResume.projectIdentity(api)))throw new IllegalArgumentException("SCOPE 또는 프로젝트가 바뀌었습니다. 새 점검으로 시작하세요.");
-    List<ScopeInspection.Profile> all=profiles.apply(options.url());List<ScopeInspection.Profile> fresh=new ArrayList<>();
-    for(var previous:options.profiles()){var candidate=all.stream().filter(p->p.id().equals(previous.id())).findFirst().orElseThrow(()->new IllegalArgumentException("같은 계정을 다시 연결하세요. 다른 계정은 새 점검으로 시작합니다."));fresh.add(candidate);}
+    List<ScopeInspection.Profile> fresh=configuredRunProfiles();
     runner.resume(fresh);if(katana!=null&&"PAUSED".equals(katana.snapshot().state()))katana.resume();
   }
   void stopInspection(){if(runner!=null)runner.stop();if(katana!=null)katana.stop();browser.stop();}
@@ -276,7 +304,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     });
   }
   private void refreshBrowser(){
-    if(closed)return;var value=browser.snapshot();browserStatus.setText("브라우저 세션 · "+value.state()+" · "+value.message()+"\n화면 "+value.pages()+" · 동작 "+value.actions()+" · 브라우저 리소스 요청 "+value.requests()+" · 제외 "+value.excluded()+"\nHTTP 재조회는 선택한 검사 계정을 사용하며 브라우저 로그인 계정과 별도입니다.");
+    if(closed)return;var value=browser.snapshot();browserStatus.setText("브라우저 세션 · "+value.state()+" · "+value.message()+"\n화면 "+value.pages()+" · 동작 "+value.actions()+" · 요청 "+value.requests()+" · API 응답 "+value.responses()+" · 통신 실패 "+value.networkErrors()+" · 대기 "+value.pendingRequests()+" · 제외 "+value.excluded()+"\n브라우저 응답 관측과 HTTP 본문 분석을 구분합니다. HTTP 재조회는 선택한 검사 계정을 사용합니다.");
   }
   private void refreshKatana(){
     if(closed)return;
@@ -295,12 +323,13 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     try{
       Map<String,Object> selectedBefore=new HashMap<>();Map<String,Integer> positionsBefore=new HashMap<>();
       for(var entry:tables.entrySet()){positionsBefore.put(entry.getKey(),entry.getValue().getSelectedRow());Object selected=selectedId(entry.getValue(),entry.getKey());if(selected!=null)selectedBefore.put(entry.getKey(),selected);}
-      current=value;progress.setText(state(value.state())+" · 요청 "+value.sent()+" / "+(options==null?"—":options.budget())+" · 확인 "+value.completed()+" · 대기 "+value.pending()+" · 제외 "+value.excluded()+" · 실패 "+value.failed()+" · 부분 "+value.partial());
+      current=value;coverageRows=ScopeInspectionCoverage.rows(value);routeCorrelations=ScopeInspectionCoverage.correlations(value);progress.setText(state(value.state())+" · 요청 "+value.sent()+" / "+(options==null?"—":options.budget())+" · 확인 "+value.completed()+" · 대기 "+value.pending()+" · 제외 "+value.excluded()+" · 실패 "+value.failed()+" · 부분 "+value.partial());
       progress.setToolTipText(value.message());feedback.setText(value.message());
       for(var entry:tables.entrySet()){
         String key=entry.getKey();if(key.equals("browser"))continue;
         DefaultTableModel model=(DefaultTableModel)entry.getValue().getModel();int selection=positionsBefore.getOrDefault(key,-1);Object selectedId=selectedBefore.get(key);model.setRowCount(0);
         if(key.equals("paths")){for(var page:value.pages())model.addRow(new Object[]{page.account(),page.method(),ScopeInspectionAnalysis.safeUrl(page.url()),page.status(),page.classification(),page.complete()?"검사 범위 내 완료":"부분 · "+page.note()});}
+        else if(key.equals("routes")){for(var route:coverageRows){int linked=correlationsFor(route.key()).size();model.addRow(new Object[]{route.source(),route.account(),route.method(),ScopeInspectionView.routeDisplay(route.url()),ScopeInspectionCoverage.stateLabel(route.state()),route.status()>0?route.status():"미관측",route.reason(),route.retryable()?"조회 가능":"직접 확인",linked>0?linked:"—"});}}
         else {
           List<ScopeInspection.Finding> selected=key.equals("changes")?changes:value.findings().stream().filter(f->matches(key,f.category())).toList();
           if(key.equals("coverage")){
@@ -310,6 +339,9 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
         }
         restoreSelection(entry.getValue(),key,selectedId,selection);
       }
+      long responses=coverageRows.stream().filter(row->row.status()>0).count(),retryable=coverageRows.stream().filter(ScopeInspectionCoverage.Row::retryable).count();
+      coverageStatus.setText("발견·요청 기록 "+coverageRows.size()+" · 응답 상태 관측 "+responses+" · 조회 재점검 후보 "+retryable);
+      applyFilters();refreshContext();
       for(var page:value.pages())if(page.original()!=null&&observed.add(page.original().id()))try{actions.observed(page.original());}catch(RuntimeException error){feedback.setText("기존 도구 연결 일부 실패 · 원본은 통합 점검에 보관됩니다.");}
       if(options!=null&&terminal(value.state())&&!value.id().isEmpty()&&persisted.add(value.id())){if(browser.active())browser.stop();saveHistory(options,value,runProject,runScope,runHistoryScope);}
       refreshActions();
@@ -324,20 +356,128 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     });
   }
   private static boolean terminal(ScopeInspection.State value){return value==ScopeInspection.State.COMPLETED||value==ScopeInspection.State.STOPPED||value==ScopeInspection.State.FAILED;}
+  private static boolean recheckState(ScopeInspection.State value){return value==ScopeInspection.State.COMPLETED||value==ScopeInspection.State.STOPPED;}
   private static String state(ScopeInspection.State value){return switch(value){case READY->"준비";case RUNNING->"점검 중";case PAUSED->"일시정지";case STOPPED->"중지·미확인 포함";case COMPLETED->"대기열 처리 완료";case FAILED->"실패·미확인 포함";case CLOSED->"종료";};}
-  private static String category(String value){return switch(value){case "ENVIRONMENT"->"환경";case "DATABASE"->"DB";case "API"->"API";case "SECRET"->"키·민감정보";case "INTERNAL"->"내부정보";case "RESPONSE"->"응답";case "COVERAGE"->"점검 범위";case "INVENTORY"->"명세 대조";case "CHANGE"->"변경";case "ACCESS"->"계정 차이";case "KATANA"->"Katana";default->value;};}
+  private static String category(String value){return switch(value){case "ENVIRONMENT"->"환경";case "DATABASE"->"DB";case "API"->"API";case "SECRET"->"키·인증정보";case "SENSITIVE"->"개인·민감정보";case "INTERNAL"->"내부정보";case "RESPONSE"->"응답";case "COVERAGE"->"점검 범위";case "INVENTORY"->"명세 대조";case "CHANGE"->"변경";case "ACCESS"->"계정 차이";case "KATANA"->"Katana";default->value;};}
   private static String severity(String value){return switch(value){case "INFO"->"정보";case "LOW"->"낮음";case "MEDIUM"->"중간";case "HIGH"->"높음";default->value;};}
-  private static boolean matches(String key,String category){return switch(key){case "summary"->true;case "environment"->Set.of("ENVIRONMENT","DATABASE").contains(category);case "api"->Set.of("API","INVENTORY").contains(category);case "secrets"->category.equals("SECRET");case "observations"->Set.of("INTERNAL","RESPONSE").contains(category);case "access"->Set.of("ACCESS","ACCOUNT","PERMISSION").contains(category);case "coverage"->category.equals("COVERAGE");case "katana"->category.equals("KATANA");default->false;};}
+  private static boolean matches(String key,String category){return switch(key){case "summary"->true;case "environment"->Set.of("ENVIRONMENT","DATABASE").contains(category);case "api"->Set.of("API","INVENTORY").contains(category);case "secrets"->Set.of("SECRET","SENSITIVE","KEY","TOKEN").contains(category);case "observations"->Set.of("INTERNAL","RESPONSE").contains(category);case "access"->Set.of("ACCESS","ACCOUNT","PERMISSION").contains(category);case "coverage"->category.equals("COVERAGE");case "katana"->category.equals("KATANA");default->false;};}
+  @SuppressWarnings("unchecked")
+  void applyFilters(){
+    if(closed)return;
+    String query=ScopeInspectionView.normalize(resultSearch.getText());
+    ScopeInspectionView.Filter filter=(ScopeInspectionView.Filter)resultFilter.getSelectedItem();
+    if(filter==null)filter=ScopeInspectionView.Filter.ALL;final ScopeInspectionView.Filter selected=filter;
+    for(var entry:tables.entrySet()){
+      String key=entry.getKey();JTable table=entry.getValue();
+      if(!(table.getRowSorter() instanceof TableRowSorter<?>))continue;
+      TableRowSorter<TableModel> sorter=(TableRowSorter<TableModel>)table.getRowSorter();
+      sorter.setRowFilter(new RowFilter<TableModel,Integer>(){
+        @Override public boolean include(Entry<? extends TableModel,? extends Integer> entry){
+          int row=entry.getIdentifier();
+          if(key.equals("routes")){
+            if(row>=coverageRows.size())return false;var route=coverageRows.get(row);
+            int choice=routeFilter.getSelectedIndex();
+            if(choice==1&&route.status()<=0||choice==2&&route.state().equals("ANALYZED")||choice==3&&!route.state().equals("EXCLUDED")||choice==4&&correlationsFor(route.key()).isEmpty())return false;
+          }else if(!key.equals("paths")&&!key.equals("browser")){
+            var list=rows.getOrDefault(key,List.of());if(row>=list.size())return false;
+            var finding=list.get(row);return ScopeInspectionView.matches(selected,finding)&&ScopeInspectionView.search(finding,query);
+          }
+          if(query.isEmpty())return true;
+          for(int c=0;c<entry.getValueCount();c++)if(ScopeInspectionView.normalize(entry.getStringValue(c)).contains(query))return true;
+          return false;
+        }
+      });
+    }
+    updateFilterStatus();selectedChanged();
+  }
+  private void updateFilterStatus(){JTable table=selectedTable();filterStatus.setText(table==null?"현재 결과에서 검색합니다.":"표시 "+table.getRowCount()+" / "+table.getModel().getRowCount());}
+  private String inputConditions(){
+    String selected=profile.getSelectedItem() instanceof ScopeInspection.Profile p?p.id():"";
+    return String.join("|",url.getText().strip(),selected,Objects.toString(budget.getValue()),Objects.toString(depth.getValue()),Objects.toString(delay.getValue()),Objects.toString(timeout.getValue()),Objects.toString(maxBody.getValue()),Objects.toString(redirectLimit.getValue()),
+        Boolean.toString(browserMode.isSelected()),Boolean.toString(compareAccounts.isSelected()),Boolean.toString(katanaMode.isSelected()),katanaExecutable.getText().strip(),Objects.toString(katanaSeconds.getValue()),Objects.toString(katanaPages.getValue()),Objects.toString(browserPages.getValue()),Objects.toString(browserActions.getValue()),Objects.toString(browserSeconds.getValue()));
+  }
+  private boolean currentConditions(){return options!=null&&!runScope.isEmpty()&&runScope.equals(scope().inspectionFingerprint())&&runProject.equals(WorkspaceResume.projectIdentity(api))&&runInputs.equals(inputConditions());}
+  private List<ScopeInspection.Profile> configuredRunProfiles(){
+    if(options==null)return List.of();List<ScopeInspection.Profile> all=profiles.apply(options.url()),selected=new ArrayList<>();
+    for(var previous:options.profiles()){
+      var same=all.stream().filter(p->p.id().equals(previous.id())).toList();
+      if(same.size()!=1)throw new IllegalArgumentException("동일한 계정 구성을 다시 연결하세요. 다른 계정은 새 점검으로 시작합니다.");selected.add(same.get(0));
+    }
+    return List.copyOf(selected);
+  }
+  private boolean currentProfiles(){try{return runner!=null&&runner.profilesMatch(configuredRunProfiles());}catch(RuntimeException unavailable){return false;}}
+  private void refreshContext(){
+    if(closed)return;
+    String text=options==null?"Scope·계정 선택 → 시작 → 주요정보·미확인 확인 → 보고서 저장":!currentConditions()?"입력 또는 Scope가 변경됨 · 현재 결과는 이전 조건입니다. 새 점검으로 적용하세요.":runner!=null&&!currentProfiles()?"계정 인증 정보가 변경됨 · 현재 결과는 이전 인증 조건입니다. 재개 또는 새 점검으로 확인하세요.":"현재 결과는 실행에 연결된 Scope·계정·요청 한도로 확인합니다.";
+    contextStatus.setText(text);contextStatus.setToolTipText(text);refreshActions();
+  }
+  List<ScopeInspectionCoverage.Row> selectedCoverage(){
+    JTable table=tables.get("routes");if(table==null)return List.of();
+    List<ScopeInspectionCoverage.Row> selected=new ArrayList<>();
+    for(int view:table.getSelectedRows()){int model=table.convertRowIndexToModel(view);if(model>=0&&model<coverageRows.size())selected.add(coverageRows.get(model));}
+    return List.copyOf(selected);
+  }
+  private List<ScopeInspectionCoverage.Correlation> correlationsFor(String key){return routeCorrelations.stream().filter(c->c.templateKey().equals(key)||c.observedKey().equals(key)).toList();}
+  private String routeOriginalId(ScopeInspectionCoverage.Row route){
+    if(!route.originalId().isEmpty())return route.originalId();
+    List<String> sources=correlationsFor(route.key()).stream().filter(c->c.templateKey().equals(route.key())).map(ScopeInspectionCoverage.Correlation::templateOriginalId).filter(id->!id.isEmpty()).distinct().toList();
+    return sources.size()==1?sources.get(0):"";
+  }
+  private String correlationDetail(ScopeInspectionCoverage.Row route){
+    List<ScopeInspectionCoverage.Correlation> links=correlationsFor(route.key());if(links.isEmpty())return "";
+    StringBuilder text=new StringBuilder("\n\n경로 형태 일치 후보 ").append(links.size()).append("개 · 변수 복원·실행 가능 승격·계정 일치 확인 아님");
+    for(var link:links.stream().limit(3).toList())text.append("\n선언: ").append(link.templateMethod()).append(' ').append(ScopeInspectionView.routeDisplay(link.template()))
+        .append(" · ").append(link.templateAccount()).append(" / ").append(link.templateRevision()).append(" · 출처 원본 ").append(link.templateOriginalId())
+        .append("\n관측: ").append(link.observedMethod()).append(' ').append(ScopeInspectionView.routeDisplay(link.observedUrl()))
+        .append(" · ").append(link.observedAccount()).append(" / ").append(link.observedRevision()).append(" · HTTP ").append(link.status())
+        .append(" · ").append(ScopeInspectionCoverage.stateLabel(link.observedState())).append(" · 응답 원본 ").append(link.observedOriginalId().isEmpty()?"미연결":link.observedOriginalId())
+        .append("\n").append(link.note());
+    if(links.size()>3)text.append("\n추가 후보는 연결된 관측 행에서 확인하세요.");
+    return text.toString();
+  }
+  void recheckSelected(){
+    if(closed||reportBusy||runner==null||!recheckState(current.state()))throw new IllegalArgumentException("대기열 처리 완료 또는 중지 후 미확인 조회 항목을 선택하세요.");
+    if(!currentConditions())throw new IllegalArgumentException("Scope·계정 또는 실행 조건이 바뀌었습니다. 새 점검으로 시작하세요.");
+    if(!currentProfiles())throw new IllegalArgumentException("계정 인증 조건이 현재 실행과 다릅니다. 동일 계정 재개 또는 새 점검으로 확인하세요.");
+    List<String> keys=selectedCoverage().stream().filter(ScopeInspectionCoverage.Row::retryable).map(ScopeInspectionCoverage.Row::key).toList();
+    if(keys.isEmpty())throw new IllegalArgumentException("재점검 가능한 미확인 조회 항목을 선택하세요. 접근 거부·변경 요청·미해결 입력은 자동 재시도하지 않습니다.");
+    int accepted=runner.recheck(keys);if(accepted<1)throw new IllegalArgumentException("재점검 가능한 항목이나 남은 요청 한도가 없습니다.");
+    persisted.remove(current.id());accept(runner.snapshot());feedback.setText("선택한 "+accepted+"개 조회 항목 재점검 · 기존 계정·Scope·남은 요청 한도 사용");
+  }
   private JTable selectedTable(){int n=pages.getSelectedIndex();if(n<0)return null;Component body=pages.getComponentAt(n);for(var e:tables.entrySet())if(SwingUtilities.isDescendingFrom(e.getValue(),body))return e.getValue();return null;}
   private String key(JTable table){return tables.entrySet().stream().filter(e->e.getValue()==table).map(Map.Entry::getKey).findFirst().orElse("");}
   private record FindingSelection(String category,String url,String method,String account,String original,int line,int offset,String fingerprint){}
   private static FindingSelection findingSelection(ScopeInspection.Finding finding){return new FindingSelection(finding.category(),finding.url(),finding.method(),finding.account(),finding.originalId(),finding.line(),finding.offset(),finding.fingerprint());}
-  private Object selectedId(JTable table,String key){int row=table.getSelectedRow();if(row<0)return null;row=table.convertRowIndexToModel(row);if(key.equals("paths"))return row<current.pages().size()&&current.pages().get(row).original()!=null?current.pages().get(row).original().id():null;var entries=rows.getOrDefault(key,List.of());return row<entries.size()?findingSelection(entries.get(row)):null;}
-  private void restoreSelection(JTable table,String key,Object selected,int old){if(table.getRowCount()==0)return;int row=Math.min(Math.max(0,old),table.getRowCount()-1);if(selected!=null){if(key.equals("paths")){for(int i=0;i<current.pages().size();i++)if(current.pages().get(i).original()!=null&&selected.equals(current.pages().get(i).original().id())){row=i;break;}}else{var list=rows.getOrDefault(key,List.of());for(int i=0;i<list.size();i++)if(selected.equals(findingSelection(list.get(i)))){row=i;break;}}}if(row<table.getModel().getRowCount()){int view=table.convertRowIndexToView(row);if(view>=0)table.setRowSelectionInterval(view,view);}}
+  private Object selectedId(JTable table,String key){int row=table.getSelectedRow();if(row<0)return null;row=table.convertRowIndexToModel(row);if(key.equals("paths"))return row<current.pages().size()&&current.pages().get(row).original()!=null?current.pages().get(row).original().id():null;if(key.equals("routes"))return selectedCoverage().stream().map(ScopeInspectionCoverage.Row::key).toList();var entries=rows.getOrDefault(key,List.of());return row<entries.size()?findingSelection(entries.get(row)):null;}
+  private void restoreSelection(JTable table,String key,Object selected,int old){
+    if(table.getRowCount()==0)return;
+    int row=Math.min(Math.max(0,old),table.getModel().getRowCount()-1);
+    if(key.equals("routes")&&selected instanceof List<?> keys){
+      boolean restored=false;for(int i=0;i<coverageRows.size();i++)if(keys.contains(coverageRows.get(i).key())){int view=table.convertRowIndexToView(i);if(view>=0){table.addRowSelectionInterval(view,view);restored=true;}}
+      if(restored)return;
+    }else if(selected!=null){
+      if(key.equals("paths")){for(int i=0;i<current.pages().size();i++)if(current.pages().get(i).original()!=null&&selected.equals(current.pages().get(i).original().id())){row=i;break;}}
+      else{var list=rows.getOrDefault(key,List.of());for(int i=0;i<list.size();i++)if(selected.equals(findingSelection(list.get(i)))){row=i;break;}}
+    }
+    if(row>=0&&row<table.getModel().getRowCount()){int view=table.convertRowIndexToView(row);if(view>=0)table.setRowSelectionInterval(view,view);}
+  }
   ScopeInspection.Finding selectedFinding(){JTable table=selectedTable();if(table==null||table.getSelectedRow()<0)return null;String key=key(table);int row=table.convertRowIndexToModel(table.getSelectedRow());var list=rows.getOrDefault(key,List.of());return row<list.size()?list.get(row):null;}
-  DiskTrafficStore.PacketRef selectedOriginal(){JTable table=selectedTable();if(table!=null&&key(table).equals("paths")&&table.getSelectedRow()>=0){int n=table.convertRowIndexToModel(table.getSelectedRow());return n<current.pages().size()?current.pages().get(n).original():null;}var finding=selectedFinding();if(finding==null||finding.originalId().isEmpty())return null;for(var page:current.pages())if(page.original()!=null&&finding.originalId().equals(page.original().id()))return page.original();return null;}
+  DiskTrafficStore.PacketRef selectedOriginal(){JTable table=selectedTable();if(table!=null&&key(table).equals("paths")&&table.getSelectedRow()>=0){int n=table.convertRowIndexToModel(table.getSelectedRow());return n<current.pages().size()?current.pages().get(n).original():null;}String id;if(table!=null&&key(table).equals("routes")){var selected=selectedCoverage();id=selected.isEmpty()?"":routeOriginalId(selected.get(0));}else{var finding=selectedFinding();id=finding==null?"":finding.originalId();}if(id.isEmpty())return null;for(var page:current.pages())if(page.original()!=null&&id.equals(page.original().id()))return page.original();return null;}
   private DiskTrafficStore.PacketRef requireOriginal(){var ref=selectedOriginal();if(ref==null)throw new IllegalArgumentException("현재 실행의 원본이 연결된 항목을 선택하세요. 이전 요약·제외 항목은 원본을 대신 만들지 않습니다.");return ref;}
-  private void selectedChanged(){if(rebuilding)return;var f=selectedFinding();if(f!=null)detail.setText(f.title()+"\n"+f.state()+" · "+f.confidence()+" · "+f.severity()+"\n"+f.detail()+"\n원본: "+f.originalId()+" · 본문 줄 "+f.line()+" · 문자 위치 "+f.offset());else{var ref=selectedOriginal();detail.setText(ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes");}detail.setCaretPosition(0);refreshActions();}
+  private void selectedChanged(){
+    if(rebuilding)return;var f=selectedFinding();JTable table=selectedTable();
+    if(table!=null&&key(table).equals("routes")&&!selectedCoverage().isEmpty()){
+      var selected=selectedCoverage();var route=selected.get(0);
+      detail.setText(route.label()+"\n"+route.method()+" "+ScopeInspectionView.routeDisplay(route.url())+" · "+route.account()+" · 인증 revision "+route.profileRevision()
+          +"\n"+String.join(" → ",route.stages().stream().map(ScopeInspectionCoverage::stageLabel).toList())+"\n"+ScopeInspectionCoverage.stateLabel(route.state())+" · 실제 HTTP "+(route.status()>0?route.status():"미관측")+" · "+route.reason()
+          +"\n요청 원본: "+(route.originalId().isEmpty()?"미연결":route.originalId())+" · 선택 "+selected.size()+"개 · 경로 문자열과 접근 성공을 구분합니다."
+          +correlationDetail(route));
+    }else if(f!=null){
+      String source=current.pages().stream().filter(p->p.original()!=null&&p.original().id().equals(f.originalId())).findFirst().map(p->"\n출처 응답: "+p.method()+" "+ScopeInspectionAnalysis.safeUrl(p.url())+" · HTTP "+p.status()+" · "+p.account()+" · 인증 revision "+p.profileRevision()).orElse("");
+      detail.setText(f.title()+"\n"+f.state()+" · "+f.confidence()+" · "+f.severity()+"\n"+ScopeInspectionView.meaning(f)+"\n"+f.detail()+source+"\n원본: "+f.originalId()+" · 원문 줄 "+f.line()+" · 문자 위치 "+f.offset());
+    }else{var ref=selectedOriginal();detail.setText(ref==null?"원본이 연결된 결과를 선택하세요. 경로·API의 방문 여부는 탐색 커버리지에서 확인할 수 있습니다.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes");}
+    detail.setCaretPosition(0);refreshActions();
+  }
   private void captureEvidence(){var packet=requireOriginal();actions.evidence(List.of(packet),"통합 점검 "+current.id()+" · 선택 계정/원본 연결 · "+(selectedFinding()==null?"경로 응답":selectedFinding().title()));}
   private void chooseReport(){
     if(GraphicsEnvironment.isHeadless()){feedback.setText("분류 보고서는 데스크톱의 저장 위치 선택 창에서 저장합니다. 원문 값이 포함됩니다.");return;}
@@ -359,7 +499,19 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
       SwingUtilities.invokeLater(()->{reportBusy=false;if(closed)return;if(token==generation&&current.id().equals(frozen.id()))feedback.setText(result);refreshActions();});
     });
   }
-  private void refreshActions(){boolean active=current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED;start.setEnabled(!closed&&!active&&!reportBusy);report.setEnabled(!closed&&!active&&!reportBusy&&current.pages().stream().anyMatch(p->p.original()!=null));pause.setEnabled(!closed&&current.state()==ScopeInspection.State.RUNNING);resume.setEnabled(!closed&&current.state()==ScopeInspection.State.PAUSED);stop.setEnabled(!closed&&active);for(JComponent c:List.of(url,scopeChoices,profile,browserMode,compareAccounts,katanaMode,katanaExecutable,katanaPages,katanaSeconds))c.setEnabled(!active&&!closed);boolean linked=!closed&&selectedOriginal()!=null;for(JButton b:List.of(original,repeater,compare,evidence,js,payload)){b.setEnabled(linked);b.setToolTipText(linked?"선택 원본을 연결합니다. 준비·화면 이동은 대상 요청을 보내지 않습니다.":"원본이 연결된 결과를 먼저 선택하세요.");}}
+  private void refreshActions(){
+    boolean active=current.state()==ScopeInspection.State.RUNNING||current.state()==ScopeInspection.State.PAUSED;
+    start.setEnabled(!closed&&!active&&!reportBusy);report.setEnabled(!closed&&!active&&!reportBusy&&current.pages().stream().anyMatch(p->p.original()!=null));
+    pause.setEnabled(!closed&&current.state()==ScopeInspection.State.RUNNING);resume.setEnabled(!closed&&current.state()==ScopeInspection.State.PAUSED);stop.setEnabled(!closed&&active);
+    for(JComponent c:List.of(url,scopeChoices,profile,browserMode,compareAccounts,katanaMode,katanaExecutable,katanaPages,katanaSeconds,budget,depth,delay,timeout,maxBody,redirectLimit,browserPages,browserActions,browserSeconds))c.setEnabled(!active&&!closed);
+    boolean linked=!closed&&selectedOriginal()!=null;
+    for(JButton b:List.of(original,repeater,compare,evidence,js,payload)){b.setEnabled(linked);b.setToolTipText(linked?"선택 원본을 연결합니다. 준비·화면 이동은 대상 요청을 보내지 않습니다.":"원본이 연결된 결과를 먼저 선택하세요.");}
+    boolean ready=!closed&&!reportBusy&&runner!=null&&recheckState(current.state())&&currentConditions()&&options!=null;
+    boolean sameProfiles=ready&&currentProfiles();
+    boolean retry=sameProfiles&&current.sent()<options.budget()&&selectedCoverage().stream().anyMatch(ScopeInspectionCoverage.Row::retryable);
+    recheck.setEnabled(retry);
+    recheck.setToolTipText(ready&&!sameProfiles?"계정 인증 조건이 현재 실행과 다릅니다. 동일 계정 재개 또는 새 점검으로 확인하세요.":retry?"선택한 미확인 조회만 현재 실행의 인증 revision·Scope·남은 요청 한도로 다시 확인합니다.":"대기열 처리 완료·중지 후 같은 조건의 재점검 가능 조회 항목과 남은 요청 한도가 필요합니다.");
+  }
   JPanel originalContent(DiskTrafficStore.PacketRef packet){
     PacketInspector request=new PacketInspector("wb.scope.inspection.original.request"),response=new PacketInspector("wb.scope.inspection.original.response");inspectors.add(request);inspectors.add(response);
     request.setPacket(packet.requestPrefix(PacketInspector.PREVIEW_BYTES),null,packet.requestLength());response.setPacket(packet.responsePrefix(PacketInspector.PREVIEW_BYTES),null,packet.responseLength());

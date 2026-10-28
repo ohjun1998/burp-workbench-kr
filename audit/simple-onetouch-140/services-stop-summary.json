@@ -1,0 +1,87 @@
+{
+  "atUTC": "2026-10-28T15:47:16.831293+00:00",
+  "processes": [
+    {
+      "name": "java-loopback",
+      "ownershipVerified": true,
+      "stopped": true
+    },
+    {
+      "name": "juice-shop",
+      "ownershipVerified": true,
+      "stopped": true
+    },
+    {
+      "name": "loop",
+      "ownershipVerified": true,
+      "stopped": true
+    },
+    {
+      "name": "vulnbank",
+      "ownershipVerified": true,
+      "stopped": true
+    },
+    {
+      "name": "oopssec",
+      "ownershipVerified": true,
+      "stopped": true
+    },
+    {
+      "name": "dvbank",
+      "ownershipVerified": true,
+      "stopped": true
+    }
+  ],
+  "containers": [
+    {
+      "name": "simple-benchmarkjava",
+      "stopped": true
+    },
+    {
+      "name": "simple-vulnerableapp",
+      "stopped": true
+    },
+    {
+      "name": "simple-retest-vulnbank-postgres",
+      "stopped": true
+    }
+  ],
+  "ports": [
+    {
+      "port": 24800,
+      "notListening": true
+    },
+    {
+      "port": 24801,
+      "notListening": true
+    },
+    {
+      "port": 24802,
+      "notListening": true
+    },
+    {
+      "port": 24803,
+      "notListening": true
+    },
+    {
+      "port": 24804,
+      "notListening": true
+    },
+    {
+      "port": 24808,
+      "notListening": true
+    },
+    {
+      "port": 5000,
+      "notListening": true
+    },
+    {
+      "port": 24814,
+      "notListening": true
+    }
+  ],
+  "allOwnedServicesStopped": true,
+  "dataBackupsPreserved": true,
+  "originalAppSourceModified": false,
+  "unrelatedServicesStopped": false
+}

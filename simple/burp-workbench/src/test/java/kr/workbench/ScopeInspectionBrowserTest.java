@@ -57,6 +57,31 @@ public final class ScopeInspectionBrowserTest extends WorkbenchTest {
       rejects(()->another.begin("bad","https://browser.test/app",List.of("/app"),List.of(),101,10,System.currentTimeMillis()+10000),"page budget is bounded");
       rejects(()->another.begin("bad","https://browser.test/app",List.of("/app"),List.of(),5,10,System.currentTimeMillis()-1),"expired browser command never becomes active");
     }
+    var lifecycle=new ArrayList<Map<String,Object>>();
+    try(var observed=new ScopeInspectionBrowser(lifecycle::add)) {
+      observed.begin("network","https://browser.test/app",List.of("/app"),List.of(),5,10,System.currentTimeMillis()+10000);
+      var request=event("network","api","https://browser.test/app/api?token=PRIVATE_QUERY");
+      request.put("method","GET");request.put("networkStage","request");request.put("requestId","d".repeat(64));request.put("resourceType","xmlhttprequest");request.put("frameId",2);request.put("pendingRequests",1);
+      request.put("headers",Map.of("Cookie","PRIVATE_COOKIE"));request.put("body","PRIVATE_BODY");observed.event(request);
+      var response=new LinkedHashMap<String,Object>(request);response.put("networkStage","response");response.put("statusCode",403);response.put("responses",1);response.put("pendingRequests",0);response.put("elapsedMillis",250);response.put("fromCache",true);observed.event(response);
+      check(lifecycle.size()==2,"response stage survives request metadata deduplication");
+      check(lifecycle.get(1).get("statusCode").equals(403)&&lifecycle.get(1).get("requestId").equals(lifecycle.get(0).get("requestId")),"actual response status is linked by a bounded hashed request ID");
+      check(observed.snapshot().responses()==1&&observed.snapshot().pendingRequests()==0,"network counters retain response completion and clear pending count");
+      check(!lifecycle.toString().contains("PRIVATE_")&&!lifecycle.get(1).containsKey("body"),"new completion telemetry never forwards raw credentials or response bodies");
+      var invalid=new LinkedHashMap<String,Object>(response);invalid.put("requestId","raw-private-id");observed.event(invalid);
+      check(lifecycle.size()==2,"bridge rejects unhashed request correlation values");
+      invalid=new LinkedHashMap<>(response);invalid.put("errorCode","PRIVATE_ERROR");observed.event(invalid);
+      check(lifecycle.size()==2,"bridge accepts only bounded network error categories");
+      for(Object statusValue:Arrays.asList(null,0,-1,99,600,200.5,Double.NaN,Double.POSITIVE_INFINITY,"200")){
+        invalid=new LinkedHashMap<>(response);invalid.put("requestId","e".repeat(64));
+        if(statusValue==null)invalid.remove("statusCode");else invalid.put("statusCode",statusValue);
+        observed.event(invalid);
+        check(lifecycle.size()==2&&observed.snapshot().responses()==1,"invalid HTTP response status cannot cross browser bridge or promote coverage: "+statusValue);
+      }
+      var error=new LinkedHashMap<String,Object>(request);error.put("networkStage","error");error.put("errorCode","TIMED_OUT");error.put("networkErrors",1);error.put("pendingRequests",0);observed.event(error);
+      check(lifecycle.size()==3&&lifecycle.get(2).get("statusCode").equals(0)&&observed.snapshot().networkErrors()==1,"callback error remains HTTP-unconfirmed rather than a response status");
+      observed.event(response);check(lifecycle.size()==3,"duplicate completion is coalesced by request ID and stage");
+    }
     System.out.println("ScopeInspectionBrowserTest: "+checks+" checks passed (metadata adapter, no HTTP)");
   }
   static Map<String,Object> event(String id,String kind,String url){var value=new LinkedHashMap<String,Object>();value.put("type","inspection");value.put("runId",id);value.put("kind",kind);value.put("url",url);return value;}

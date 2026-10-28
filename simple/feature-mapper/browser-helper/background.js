@@ -109,4 +109,5 @@ const inspectionService = typeof createInspectionService === 'function' && chrom
       }
     }) : null;
 inspectionService?.start();
+if(inspectionService&&chrome.webRequest.onCompleted)chrome.webRequest.onCompleted.addListener(details=>inspectionService.completed(details).catch(()=>{}),{urls:['http://*/*','https://*/*']});
 if(inspectionService&&chrome.webRequest.onErrorOccurred)chrome.webRequest.onErrorOccurred.addListener(details=>inspectionService.blocked(details).catch(()=>{}),{urls:['http://*/*','https://*/*']});

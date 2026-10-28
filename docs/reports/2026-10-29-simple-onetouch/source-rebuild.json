@@ -1,0 +1,12 @@
+{
+  "result": "passed",
+  "sourceZipSHA256": "e9aaad51edb917673fd5c990ac50a04db157fdf9b3defec7f0dec6262b429e07",
+  "sourceEntries": 1748,
+  "allSourceFingerprintsMatch": true,
+  "zipCRC": true,
+  "strictJava17": true,
+  "independentProductionBuild": true,
+  "jarSHA256": "675ca941665611a540912308c8b59f8a3f683b647cc1546ed926993e856d2637",
+  "byteIdenticalToPublishedJar": true,
+  "functionalChecksRepeated": false
+}

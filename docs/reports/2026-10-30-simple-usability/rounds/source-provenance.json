@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "classification": "Curation-time cross-check; not an original execution output or a replacement for preserved manifests",
+  "sourceRootAtExecution": "/workspace/usability-five-rounds",
+  "baselineCommitClaimFromStaging": "81b48defb81db7c656e913a8ebd6848e30621cf1",
+  "repositoryHeadAtLaunchAloneProvesJarSource": false,
+  "productsInOrder": [
+    {
+      "product": "A0",
+      "declaredVersion": "1.4.0",
+      "jarSHA256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+      "evidence": "execution-v1/round-1/before-whole/metadata.json"
+    },
+    {
+      "product": "A1",
+      "declaredVersion": "1.4.0",
+      "jarSHA256": "a4702e027b0f5ba80627961de9b25442a1bd0dbdbce8895317ba67241b13cf38",
+      "evidence": "execution-v1/round-1/after-whole/metadata.json"
+    },
+    {
+      "product": "A2",
+      "declaredVersion": "1.4.0",
+      "jarSHA256": "b472df5e56bd4fae163921d29979a59cda458139220e3798e51d4feb50965f00",
+      "evidence": "execution-v1/round-2/after-whole/metadata.json"
+    },
+    {
+      "product": "A3",
+      "declaredVersion": "1.4.0",
+      "jarSHA256": "1632d5fae4cd00d1e69c978a2573be9de005a33a84efa246c80034a8a4f39c58",
+      "evidence": "execution-v1/round-3/after-whole/metadata.json"
+    },
+    {
+      "product": "A4",
+      "declaredVersion": "1.4.0",
+      "jarSHA256": "84cf9413f70aebf6e95934d73a1fef5dccb613dc248bcd02272728fbd0b8146e",
+      "evidence": "execution-v1/round-4/after-whole/metadata.json"
+    },
+    {
+      "product": "A5",
+      "declaredVersion": "1.4.1",
+      "jarSHA256": "ebda707fd762dcac91f641c7f149a6bf5e52865008d0f70e8861e502d8a5bbf1",
+      "evidence": "execution-v1/round-5/after-whole/metadata.json"
+    }
+  ],
+  "sourceTransitions": [
+    {
+      "round": 1,
+      "file": "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java",
+      "beforeSHA256": "e7b04b8217d16e3135fac6b3685594a390c0aa83cb18509f1a3013cf0d9020bd",
+      "afterSHA256": "d20479cccd6aed5d3ed3a46770613d7cc899d17166358a93c0a374e657837156",
+      "manifest": "changes/round-1/manifest.json",
+      "diff": "changes/round-1/change.patch"
+    },
+    {
+      "round": 2,
+      "file": "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java",
+      "beforeSHA256": "d20479cccd6aed5d3ed3a46770613d7cc899d17166358a93c0a374e657837156",
+      "afterSHA256": "5eca919b6fcb439ed4a8af7045f15d9e68a869b8daf904f7fea90c63619b04ee",
+      "manifest": "changes/round-2/manifest.json",
+      "diff": "changes/round-2/change.patch"
+    },
+    {
+      "round": 3,
+      "file": "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java",
+      "beforeSHA256": "5eca919b6fcb439ed4a8af7045f15d9e68a869b8daf904f7fea90c63619b04ee",
+      "afterSHA256": "7b8cc7b32f18c88f4d4abc874443cb22f680d48451ce5255cb5b9f708b052f64",
+      "manifest": "changes/round-3/manifest.json",
+      "diff": "changes/round-3/change.patch"
+    },
+    {
+      "round": 4,
+      "file": "simple/burp-workbench/src/main/java/kr/workbench/PassiveScanPanel.java",
+      "beforeSHA256": "b91d504e1514e46b1da2a6b96a98d5c73d00ceb679255425d039b7326f347396",
+      "afterSHA256": "063d0983aa151966c1a73cba69038e493faeafd446296d575d388d75a0f4a8e3",
+      "manifest": "changes/round-4/manifest.json",
+      "diff": "changes/round-4/change.patch"
+    },
+    {
+      "round": 4,
+      "file": "simple/burp-workbench/build_all.py",
+      "beforeSHA256": "6aeccca19bdde16269062cd936f2666f02a990d8a83714c7006379bfa79f6f74",
+      "afterSHA256": "df4907176436df4acd7d3b74c58d653950991ec2b1e59ef091d822fb2160d2ad",
+      "manifest": "changes/round-4/manifest.json",
+      "diff": "changes/round-4/change.patch"
+    },
+    {
+      "round": 5,
+      "file": "simple/burp-workbench/src/main/java/kr/workbench/ScopeDashboardPanel.java",
+      "beforeSHA256": "74e34543f877488f4bd30bccfc8fe420ebaa042428603192615e6c812c4a3f04",
+      "afterSHA256": "e6d6afa9cb18ba58a0acda3b6494fce69303741710a9e55c26887186475ee812",
+      "manifest": "changes/round-5/manifest.json",
+      "diff": "changes/round-5/change.patch"
+    },
+    {
+      "round": 5,
+      "file": "simple/burp-workbench/src/main/java/kr/workbench/BuildInfo.java",
+      "beforeSHA256": "67c3541e172d9703f0a878cabf066504bc07b7ae5e936ac7a59f7311966f72c0",
+      "afterSHA256": "82c5089ab1184b16e892af6d59baca09ef8efcd8635200f3bd67eaf2b19694bc",
+      "manifest": "changes/round-5/manifest.json",
+      "diff": "changes/round-5/change.patch"
+    }
+  ],
+  "crossChecks": {
+    "fiveCompletedRounds": true,
+    "tenIndependentWholeRuns": true,
+    "previousAfterJarMatchesNextBeforeJar": true,
+    "changedFileHashChainMatchesFinalStagingDeclaration": true,
+    "singleWholeHarnessSHA256": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4",
+    "singleWholeAdapterTreeSHA256": "8d92faf6399ce00769729f29d8d78518c991c8d2bae32ca814598bc24e0392e5"
+  },
+  "preparedSourceProvenanceScope": "prepared-source-provenance.json records only round2/round3 reconstructed source equality to preliminary candidates; not the complete build source tree",
+  "actualApplicationMethod": "apply_round.py verified before/after source hashes, then copied prepared full-file bytes into staging. appliedPatch is a diff reference; patch was not the application command.",
+  "limitations": [
+    "Intermediate builds do not each have a unique Git commit; archived manifests track the changed files and execution metadata tracks product/harness/adapter/dependency hashes.",
+    "Full prepared Java files, intermediate JARs, adapters, dependencies, classes, raw packets and project archives are intentionally omitted.",
+    "Original manifests retain applied:false as preparation-time records; actual execution is evidenced by apply/build logs, completed round summaries and execution state."
+  ]
+}

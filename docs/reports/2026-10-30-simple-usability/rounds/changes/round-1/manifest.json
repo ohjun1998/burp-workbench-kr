@@ -1,0 +1,12 @@
+{
+  "round": 1,
+  "improvement": "Preserve reading/copy position for unchanged detail",
+  "preparedFromPreliminaryInvestigation": true,
+  "applied": false,
+  "files": {
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java": {
+      "beforeSHA256": "e7b04b8217d16e3135fac6b3685594a390c0aa83cb18509f1a3013cf0d9020bd",
+      "afterSHA256": "d20479cccd6aed5d3ed3a46770613d7cc899d17166358a93c0a374e657837156"
+    }
+  }
+}

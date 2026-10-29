@@ -1,0 +1,41 @@
+{
+  "round": 2,
+  "startedAtUtc": "2026-10-29T20:31:58.828443+00:00",
+  "beforeJarSHA256": "a4702e027b0f5ba80627961de9b25442a1bd0dbdbce8895317ba67241b13cf38",
+  "wholeHarnessSHA256": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4",
+  "appliedPatch": "changes/round-2/change.patch",
+  "completed": true,
+  "afterJarSHA256": "b472df5e56bd4fae163921d29979a59cda458139220e3798e51d4feb50965f00",
+  "improvement": {
+    "metric": "explicit UI actions",
+    "before": 6,
+    "after": 4
+  },
+  "finishedAtUtc": "2026-10-29T20:32:54.059865+00:00",
+  "beforeChecks": 115,
+  "afterChecks": 115,
+  "beforeHttp": 42,
+  "afterHttp": 42,
+  "beforeModules": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "afterModules": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "beforeWholeReused": false,
+  "afterWholeReused": false
+}

@@ -1,0 +1,37 @@
+{
+  "byte_exact_copies": true,
+  "files": {
+    "InspectionUpdateProbe.java": {
+      "sha256": "cf68dc83d8bcb8d8429e2d032e546332d6132b813fc8e6d4cc104b8bbdf5ccdd",
+      "bytes": 24544,
+      "source_at_copy": "/workspace/usability-five-cycles/cycle3/InspectionUpdateProbe.java"
+    },
+    "PassiveImportBenchmark.java": {
+      "sha256": "af40c4ee017cc761c3dcc77d793bbd5ee4f7c4b36c646741e7e01672045d0a46",
+      "bytes": 6795,
+      "source_at_copy": "/workspace/usability-five-cycles/cycle4/PassiveImportBenchmark.java"
+    },
+    "DashboardNavigationProbe.java": {
+      "sha256": "92605c226507593d22a8a39ed8659738baf489d294649e7068cd43989e156e8d",
+      "bytes": 16397,
+      "source_at_copy": "/workspace/usability-five-cycles/cycle5/DashboardNavigationProbe.java"
+    },
+    "LoopWorkflowAudit.java": {
+      "sha256": "b9785ab7317642892de9f60f13108552f6e0e5765d43122bf5e1fa6f6c4ea63d",
+      "bytes": 18927,
+      "source_at_copy": "/workspace/usability-five-cycles/loop/src/kr/workbench/LoopWorkflowAudit.java"
+    }
+  },
+  "additional_new_harnesses": {
+    "WholeWorkbenchWorkflowAudit.java": {
+      "classification": "additional newly authored whole-workflow harness",
+      "external_byte_exact_copy": false,
+      "sha256": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4",
+      "bytes": 46177,
+      "purpose": "Same frozen eight-module protocol for five full before/improvement/after rounds",
+      "finalized_at_utc": "2026-10-29T20:30:34.671284+00:00"
+    }
+  },
+  "classificationNote": "byte_exact_copies and files apply only to the four preserved external sources; additional_new_harnesses are newly authored and separately SHA-registered after finalization.",
+  "pending_new_harnesses": {}
+}

@@ -1,7 +1,13 @@
 # 현재 개발 상태
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
-기준: 2026-10-30 (한국 시간). 현재 Simple 소스는 **Workbench Simple 1.4.0** 점검 대시보드를 제공하며 기존 **Workbench Next 0.53.4**와 Simple 1.3.2 및 과거 모든 배포·후보 기록을 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**은 유지합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.
+기준: 2026-10-30 (한국 시간). 현재 Simple 소스는 **Workbench Simple 1.4.1** 실사용 흐름 개선판이며 기존 **Workbench Next 0.53.4**와 Simple 1.4.0 및 과거 모든 배포·후보 기록을 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**은 유지합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.
+
+## Workbench Simple 1.4.1 · 전체 흐름 5라운드 개선
+
+main `81b48defb81db7c656e913a8ebd6848e30621cf1`의 1.4.0을 기준으로 사용자가 선택한 로컬 실습 환경에서 **전체 8개 도구 검증 → 개선 하나 적용 → 전체 흐름 재검증**을 5라운드 완료했습니다. 총 10개 독립 실행에서 각각 115개 확인 항목이 통과했습니다. 사전 조사에서 준비한 수정은 순차 적용했으며 사전 사례를 라운드로 세거나 실행 결과를 재사용하지 않았습니다. 상세 읽기·대상/계정 변경·대량 표 갱신·URL 가져오기·대시보드 결과 이동의 실제 전후 결과와 소스·JAR 지문은 [5라운드 보고서](docs/reports/2026-10-30-simple-usability/REPORT_KR.md), [기계 판독 검증](docs/reports/2026-10-30-simple-usability/VERIFICATION.json), PR의 체크 결과를 기준으로 읽습니다. 원본 LOOP 3.10.0 앱과 운영 Swing·Runner·실제 HTTP 어댑터로 확인했으며 native Burp GUI 실행으로 표현하지 않습니다.
+
+새 스캔 기능을 추가하지 않고 기존 8개 도구와 관리 메뉴, SCOPE·계정·요청 예산·정확한 원본 ID·증거 계약을 보존합니다. 기존 Next 소스와 과거 배포 파일은 변경하지 않습니다. [1.4.1 JAR·소스](simple/downloads/1.4.1/) · [사용법](simple/docs/RELEASE_SIMPLE_1.4.1_KR.md) · [관련 대화](docs/chat-logs/2026-10-30/simple-usability-five-cycles.md)
 
 ## Workbench Simple 1.4.0 · 내부 점검 대시보드
 

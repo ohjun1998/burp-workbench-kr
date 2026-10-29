@@ -1,0 +1,50 @@
+--- a/simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java
++++ b/simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java
+@@ -2,6 +2,8 @@
+ 
+ import burp.api.montoya.MontoyaApi;
+ import java.awt.*;
++import java.awt.event.FocusAdapter;
++import java.awt.event.FocusEvent;
+ import java.net.URI;
+ import java.time.*;
+ import java.time.format.DateTimeFormatter;
+@@ -105,8 +107,10 @@
+     try { String saved=api.persistence().extensionData().getString(BuildInfo.storageKey("scope-katana-executable-v1"));if(saved!=null&&!saved.isBlank())katanaExecutable.setText(saved); } catch(RuntimeException ignored) {}
+     katanaCheck.addActionListener(e->checkKatana());
+     for (Object[] entry : new Object[][] {{start,"start"},{pause,"pause"},{resume,"resume"},{stop,"stop"},{budget,"budget"},{depth,"depth"},{delay,"delay"},{timeout,"timeout"},{maxBody,"max.body"},{redirectLimit,"redirects"},{browserPages,"browser.pages"},{browserActions,"browser.actions"},{browserSeconds,"browser.seconds"}}) name((JComponent)entry[0],(String)entry[1]);
+-    profile.setRenderer(new DefaultListCellRenderer(){public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean selected,boolean focus){putClientProperty("html.disable",true);return super.getListCellRendererComponent(list,value instanceof ScopeInspection.Profile p?p.label():"비로그인",index,selected,focus);}});
++    profile.setRenderer(new DefaultListCellRenderer(){public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean selected,boolean focus){putClientProperty("html.disable",true);return super.getListCellRendererComponent(list,value instanceof ScopeInspection.Profile p?p.label():"계정 선택",index,selected,focus);}});
+     profile.setPreferredSize(new Dimension(150,32));
++    url.addActionListener(e->completeTarget());
++    url.addFocusListener(new FocusAdapter(){public void focusLost(FocusEvent event){completeTarget();}});
+     scopeChoices.addItem("SCOPE에서 선택");for(var rule:WorkbenchScope.registeredRules(api))scopeChoices.addItem(rule.url());
+     scopeChoices.setPreferredSize(new Dimension(200,32));
+     scopeChoices.addActionListener(e->{if(scopeChoices.getSelectedIndex()>0){url.setText(Objects.toString(scopeChoices.getSelectedItem(),""));refreshProfiles();}});
+@@ -206,11 +210,22 @@
+   void refreshTargets(){
+     String value=url.getText();scopeChoices.removeAllItems();scopeChoices.addItem("SCOPE에서 선택");for(var rule:WorkbenchScope.registeredRules(api))scopeChoices.addItem(rule.url());url.setText(value);refreshProfiles();
+   }
++  private void completeTarget(){
++    if(closed||!url.isEnabled())return;
++    try{refreshProfiles();feedback.setText("대상 계정 목록을 갱신했습니다. 계정을 확인한 뒤 시작하세요.");}
++    catch(RuntimeException error){
++      profile.removeAllItems();profile.setSelectedItem(null);
++      feedback.setText("대상 URL의 계정 목록을 불러오지 못했습니다. URL을 확인하고 다시 입력하세요.");
++    }
++  }
+   void refreshProfiles(){
+-    String selected=profile.getSelectedItem() instanceof ScopeInspection.Profile p?p.id():"anonymous";
+-    List<ScopeInspection.Profile> available=profiles.apply(url.getText());profile.removeAllItems();
+-    for(var p:available){profile.addItem(p);if(p.id().equals(selected))profile.setSelectedItem(p);}
+-    if(profile.getItemCount()==0)profile.addItem(new ScopeInspection.Profile("anonymous","비로그인",Map.of(),null));
++    String selected=profile.getSelectedItem() instanceof ScopeInspection.Profile p?p.id():"";
++    List<ScopeInspection.Profile> available=List.copyOf(profiles.apply(url.getText().strip()));profile.removeAllItems();
++    ScopeInspection.Profile preserved=null,anonymous=null;
++    for(var candidate:available){profile.addItem(candidate);if(candidate.id().equals(selected))preserved=candidate;if(candidate.id().equals("anonymous"))anonymous=candidate;}
++    if(profile.getItemCount()==0){anonymous=new ScopeInspection.Profile("anonymous","비로그인",Map.of(),null);profile.addItem(anonymous);}
++    // A target change can remove the old identity. Never implicitly choose another authenticated account.
++    profile.setSelectedItem(preserved!=null?preserved:anonymous);
+   }
+   void startInspection(){
+     if(closed)throw new IllegalArgumentException("종료된 통합 점검입니다.");

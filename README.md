@@ -3,6 +3,12 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
+**Workbench Simple 1.4.1은 로컬 실습 환경에서 전체 8개 도구의 테스트·개선·재검증을 5라운드 수행한 사용성 개선판입니다.** 매 라운드 전후를 새로 실행한 총 10번의 전체 흐름에서 각각 115개 확인 항목을 통과했습니다. 상세 근거의 읽기·복사 위치, 대상 변경 후 계정 선택, 대량 결과·URL 후보 갱신과 대시보드 결과 이동을 개선합니다. 기존 기능과 관리 메뉴를 유지하며 실제 HTTP와 합성 Swing 부하의 결과를 구분해 기록합니다.
+
+[Simple 1.4.1 설치 JAR](simple/downloads/1.4.1/burp-workbench-simple-1.4.1.jar) · [독립 소스·체크섬](simple/downloads/1.4.1/) · [달라진 작업 흐름](simple/docs/RELEASE_SIMPLE_1.4.1_KR.md) · [5회 전후 비교와 검증](docs/reports/2026-10-30-simple-usability/REPORT_KR.md)
+
+아래 1.4.0 대시보드 도입과 이전 버전은 보존한 배포 이력입니다.
+
 **Workbench Simple 1.4.0은 내부 점검 대시보드를 추가합니다.** 현재 SCOPE 통합 점검의 관측 경로·API와 명세·환경과 DB·민감정보 후보·계정 관련 검토·미확인 수치를 보고, 카드·막대에서 조건별 목록 → 근거와 원본 → Repeater 준비·증거 추가로 이어갑니다. 계정·중요도 필터와 작은 창·다크테마를 지원하며 기존 8개 도구의 입력과 진입점을 유지합니다. 현재 실행만 집계하고 후보와 확정 취약점을 구분합니다.
 
 [Simple 1.4.0 설치 JAR](simple/downloads/1.4.0/burp-workbench-simple-1.4.0.jar) · [독립 소스·체크섬](simple/downloads/1.4.0/) · [대시보드 사용법](simple/docs/RELEASE_SIMPLE_1.4.0_KR.md) · [실제 검증과 미실행 범위](simple/docs/VERIFICATION_SIMPLE_1.4.0.json)

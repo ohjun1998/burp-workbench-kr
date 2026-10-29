@@ -1,0 +1,21 @@
+{
+  "baseMain": "81b48defb81db7c656e913a8ebd6848e30621cf1",
+  "originalNextAndLabTrackedSourcesUnchanged": true,
+  "workflowsUnchanged": true,
+  "previousTrackedVersionedArtifactsUnchanged": true,
+  "modifiedTrackedPathsAtReview": [
+    "AGENTS.md",
+    "PROJECT_STATUS_KR.md",
+    "README.md",
+    "simple/README_KR.md",
+    "simple/burp-workbench/build_all.py",
+    "simple/burp-workbench/src/main/java/kr/workbench/BuildInfo.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/PassiveScanPanel.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeDashboardPanel.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java",
+    "simple/tools/ScopeInspectionPreview.java",
+    "simple/tools/SimplePreview.java"
+  ],
+  "newArtifactDirectory": "simple/downloads/1.4.1",
+  "note": "Only the new Simple version is packaged; historical Simple and Next artifacts are preserved."
+}

@@ -1,0 +1,16 @@
+{
+  "round": 5,
+  "improvement": "Reveal explicitly selected dashboard results without moving automatic updates",
+  "preparedFromPreliminaryInvestigation": true,
+  "applied": false,
+  "files": {
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeDashboardPanel.java": {
+      "beforeSHA256": "74e34543f877488f4bd30bccfc8fe420ebaa042428603192615e6c812c4a3f04",
+      "afterSHA256": "e6d6afa9cb18ba58a0acda3b6494fce69303741710a9e55c26887186475ee812"
+    },
+    "simple/burp-workbench/src/main/java/kr/workbench/BuildInfo.java": {
+      "beforeSHA256": "67c3541e172d9703f0a878cabf066504bc07b7ae5e936ac7a59f7311966f72c0",
+      "afterSHA256": "82c5089ab1184b16e892af6d59baca09ef8efcd8635200f3bd67eaf2b19694bc"
+    }
+  }
+}

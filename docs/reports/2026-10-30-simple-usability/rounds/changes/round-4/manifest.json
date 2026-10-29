@@ -1,0 +1,16 @@
+{
+  "round": 4,
+  "improvement": "Batch URL imports and filters while preserving provenance",
+  "preparedFromPreliminaryInvestigation": true,
+  "applied": false,
+  "files": {
+    "simple/burp-workbench/src/main/java/kr/workbench/PassiveScanPanel.java": {
+      "beforeSHA256": "b91d504e1514e46b1da2a6b96a98d5c73d00ceb679255425d039b7326f347396",
+      "afterSHA256": "063d0983aa151966c1a73cba69038e493faeafd446296d575d388d75a0f4a8e3"
+    },
+    "simple/burp-workbench/build_all.py": {
+      "beforeSHA256": "6aeccca19bdde16269062cd936f2666f02a990d8a83714c7006379bfa79f6f74",
+      "afterSHA256": "df4907176436df4acd7d3b74c58d653950991ec2b1e59ef091d822fb2160d2ad"
+    }
+  }
+}

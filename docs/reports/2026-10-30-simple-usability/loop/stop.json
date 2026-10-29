@@ -1,0 +1,12 @@
+{
+  "ownedPid": 13555,
+  "port": 18888,
+  "ownedPortClosed": true,
+  "ownedProcessRunning": false,
+  "processState": "Z",
+  "verifiedAtUtc": "2026-10-29T20:40:16.393336+00:00",
+  "initialImmediatePortProbeClosed": false,
+  "shutdownSignal": "SIGTERM",
+  "otherServicesChanged": false,
+  "note": "The immediate shutdown probe raced socket closure. Independent follow-up TCP and ss checks confirm port closed; recorded process is exited (zombie awaiting its parent to reap)."
+}

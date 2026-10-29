@@ -216,7 +216,7 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
               !ScopeInspectionUiTest.visibleText(dashboard).contains(API_KEY)
                   && !dashboard.detail.getText().isBlank());
           String selectedDetail = dashboard.detail.getText();
-          capture(dashboard,"28-dashboard-detail.png",width,height,()->dashboardResults(dashboard));
+          capture(dashboard,"28-dashboard-detail.png",width,height,()->dashboardRevealed(dashboard,false));
           SimpleWorkflowTest.click(dashboard,"wb.scope.dashboard.severity.info");
           scenario("Dashboard unmatched severity filter shows an empty current result list",
               dashboard.table.getRowCount() == 0);
@@ -226,7 +226,7 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
                   && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.original")).isEnabled()
                   && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.repeater")).isEnabled()
                   && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.evidence")).isEnabled());
-          capture(dashboard,"29-dashboard-empty-filter.png",width,height,()->dashboardResults(dashboard));
+          capture(dashboard,"29-dashboard-empty-filter.png",width,height,()->dashboardRevealed(dashboard,true));
           scenario("Dashboard inspection projection and filters invoke no target actions",count.get() == 0);
         } finally { dashboard.close(); }
       });

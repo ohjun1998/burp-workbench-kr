@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.BooleanSupplier;
 import javax.swing.*;
@@ -65,6 +66,9 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
   final JTable table = new LiteralTable(model);
   final JPanel resultViews = new JPanel(new CardLayout());
   final JPanel metricGrid = new JPanel(new GridLayout(2, 3, 8, 6));
+  private final JPanel resultsSection = new JPanel(new BorderLayout(0, 6));
+  private final JScrollPane contentScroll;
+  private final AtomicLong revealVersion = new AtomicLong();
   final KeyedTableRows<String> keyedRows = new KeyedTableRows<>();
   volatile ScopeInspection.Snapshot current = EMPTY;
   List<ScopeInspectionDashboard.Row> visibleRows = List.of();
@@ -125,14 +129,14 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     });
     account.setPrototypeDisplayValue(new AccountChoice("전체 결과 계정 / 비교 계정"));
     account.addItem(new AccountChoice(""));
-    account.addActionListener(e -> { if (!rebuilding && !closed) refresh(true); });
+    account.addActionListener(e -> { if (!rebuilding && !closed) { refresh(true); revealResults(); } });
     reset.setToolTipText("선택 분류는 유지하고 계정·중요도 조건을 해제합니다.");
     reset.addActionListener(e -> {
       if (closed) return;
       rebuilding = true;
       try { account.setSelectedIndex(0); selectedSeverity = ""; }
       finally { rebuilding = false; }
-      refresh(true);
+      refresh(true); revealResults();
     });
     addSection(content, WorkbenchUi.row(new JLabel("계정"), account, reset), 4);
 
@@ -159,7 +163,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       bar.addActionListener(e -> {
         if (closed) return;
         group = ScopeInspectionDashboard.Group.SECRETS; selectedSeverity = severity;
-        table.clearSelection(); refresh(true);
+        table.clearSelection(); refresh(true); revealResults();
       });
       severityButtons.put(severity, bar); severities.add(bar);
     }
@@ -200,14 +204,14 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     split.setPreferredSize(new Dimension(850, 320));
     split.setMaximumSize(new Dimension(Integer.MAX_VALUE, 500));
     name(filterSummary, "filter.summary");
-    var results = new JPanel(new BorderLayout(0, 6));
-    results.add(filterSummary, BorderLayout.NORTH); results.add(split);
-    addSection(content, results, 0);
-    var scroll = new JScrollPane(content);
-    name(scroll, "scroll"); scroll.setBorder(null);
-    scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    scroll.getVerticalScrollBar().setUnitIncrement(24);
-    add(scroll);
+    name(resultsSection, "results.area");
+    resultsSection.add(filterSummary, BorderLayout.NORTH); resultsSection.add(split);
+    addSection(content, resultsSection, 0);
+    contentScroll = new JScrollPane(content);
+    name(contentScroll, "scroll"); contentScroll.setBorder(null);
+    contentScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    contentScroll.getVerticalScrollBar().setUnitIncrement(24);
+    add(contentScroll);
     WorkbenchUi.style(this);
     addComponentListener(new java.awt.event.ComponentAdapter() {
       @Override public void componentResized(java.awt.event.ComponentEvent e) {
@@ -279,7 +283,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       if (closed) return;
       newRun = !current.id().equals(next.snapshot().id());
       current = next.snapshot();
-      if (newRun) invalidateProjectionLocked();
+      if (newRun) { invalidateProjectionLocked(); revealVersion.incrementAndGet(); }
     }
     if (newRun) {
       group = ScopeInspectionDashboard.Group.PATHS; selectedSeverity = "";
@@ -319,7 +323,26 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
 
   private void choose(ScopeInspectionDashboard.Group value) {
     if (closed) return;
-    group = value; selectedSeverity = ""; table.clearSelection(); refresh(true);
+    group = value; selectedSeverity = ""; table.clearSelection(); refresh(true); revealResults();
+  }
+
+  /** Only an explicit navigation action reveals results; background publications keep reading position. */
+  private void revealResults() {
+    if (closed) return;
+    long version = revealVersion.incrementAndGet();
+    String runId = current.id(), accountValue = selectedAccount(), severity = selectedSeverity;
+    var selectedGroup = group;
+    Point position = contentScroll.getViewport().getViewPosition();
+    SwingUtilities.invokeLater(() -> {
+      if (closed || revealVersion.get() != version || !current.id().equals(runId)
+          || !selectedAccount().equals(accountValue) || group != selectedGroup || !selectedSeverity.equals(severity)
+          || !contentScroll.getViewport().getViewPosition().equals(position)) return;
+      for (Component component = this; component != null; component = component.getParent())
+        if (!component.isVisible()) return;
+      if (resultsSection.getWidth() <= 0 || resultsSection.getHeight() <= 0) return;
+      int height = Math.min(resultsSection.getHeight(), contentScroll.getViewport().getExtentSize().height);
+      resultsSection.scrollRectToVisible(new Rectangle(0, 0, resultsSection.getWidth(), Math.max(1, height)));
+    });
   }
 
   private void refresh(boolean selectFirst) {
@@ -567,10 +590,11 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
         .anyMatch(page -> page.original() != null && row.originalId().equals(page.original().id()));
   }
 
-  void clear() { synchronized (updateLock) { invalidateProjectionLocked(); } update(EMPTY, 0, ""); }
+  void clear() { revealVersion.incrementAndGet(); synchronized (updateLock) { invalidateProjectionLocked(); } update(EMPTY, 0, ""); }
 
   @Override public void close() {
     synchronized (updateLock) { if (closed) return; closed = true; pending = null; current = EMPTY; invalidateProjectionLocked(); }
+    revealVersion.incrementAndGet();
     projectionWorker.shutdownNow();
     Runnable clear = () -> {
       visibleRows = List.of(); keyedRows.clear(); model.setRowCount(0); table.clearSelection();

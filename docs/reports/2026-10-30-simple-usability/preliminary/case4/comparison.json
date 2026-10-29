@@ -1,0 +1,32 @@
+{
+  "scenario": "Import1000SyntheticUrlsThroughProductionPassiveScanPanel",
+  "before": {
+    "medianMs": 429.177673,
+    "maxMs": 646.170918,
+    "medianEdtAllocatedBytes": 143619664.0,
+    "maxEdtAllocatedBytes": 143936648.0,
+    "targetRequests": 0
+  },
+  "after": {
+    "medianMs": 74.850096,
+    "maxMs": 155.713255,
+    "medianEdtAllocatedBytes": 55952176.0,
+    "maxEdtAllocatedBytes": 56268632.0,
+    "targetRequests": 0
+  },
+  "medianTimeReductionPercent": 82.55964820425316,
+  "medianAllocationReductionPercent": 61.041423965453646,
+  "filterSetsPerImport": {
+    "before": 1000,
+    "after": 1
+  },
+  "rowFilterIncludesPerImport": {
+    "before": 501499,
+    "after": 1000
+  },
+  "sortEventsPerImport": {
+    "before": 1999,
+    "after": 1
+  },
+  "allSamplesPreservedInvariants": true
+}

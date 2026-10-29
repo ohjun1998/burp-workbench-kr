@@ -1,0 +1,33 @@
+{
+  "cycle": 5,
+  "scenario": "explicit dashboard card/classification/importance selection reveals list and detail",
+  "fixture": "synthetic request/response packets in production DiskTrafficStore; no actual HTTP fetch, no native Burp GUI",
+  "surface": "full Workbench SimpleNavigation and production dashboard appended page",
+  "before_artifact_sha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+  "after_artifact_sha256": "ebda707fd762dcac91f641c7f149a6bf5e52865008d0f70e8861e502d8a5bbf1",
+  "same_probe_sha256": "92605c226507593d22a8a39ed8659738baf489d294649e7068cd43989e156e8d",
+  "same_visibility_criteria": {
+    "list_min_width": 150,
+    "list_min_height": 80,
+    "detail_min_width": 120,
+    "detail_min_height": 80,
+    "selected_row_visible": true
+  },
+  "navigation_tasks_each": 12,
+  "one_click_visible": {
+    "before": 6,
+    "after": 12
+  },
+  "additional_explicit_scroll_required": {
+    "before": 6,
+    "after": 0
+  },
+  "wheel_event_counts_estimated": false,
+  "target_http_calls": {
+    "before": 0,
+    "after": 0
+  },
+  "account_original_empty_contracts_preserved": true,
+  "automatic_snapshot_preserves_user_scroll": true,
+  "result": "passed"
+}

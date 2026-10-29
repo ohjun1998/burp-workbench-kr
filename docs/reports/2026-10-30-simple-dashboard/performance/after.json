@@ -1,0 +1,87 @@
+{
+  "measured_at_utc": "2026-10-29T18:59:01.967470887Z",
+  "environment": {
+    "java": "17.0.21+9",
+    "os": "Linux 6.18.55 amd64",
+    "available_processors": 4,
+    "headless": true,
+    "concurrent_load_context": "Main task was running renderer/native Katana verification concurrently; timings are not an isolated-load benchmark."
+  },
+  "jar": "/workspace/burp-workbench-kr/tmp/dashboard-performance/measured-after.jar",
+  "jar_sha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+  "fixture": {
+    "fresh_snapshots": 5,
+    "findings_each": 5000,
+    "accounts": 2,
+    "pages": 0,
+    "candidates": 0,
+    "detail_characters": 188,
+    "warmup_findings": 100,
+    "secret_findings": 1000,
+    "secret_each_severity": 250
+  },
+  "fresh_snapshot_edt_update_ms": [
+    42.697606,
+    7.843134,
+    35.224976,
+    11.531433,
+    3.423155
+  ],
+  "fresh_snapshot_edt_update_median_ms": 11.531433,
+  "fresh_projection_ready_end_to_end_ms": [
+    2262.800931,
+    1707.629967,
+    2184.923881,
+    934.661578,
+    836.576889
+  ],
+  "fresh_projection_ready_end_to_end_median_ms": 1707.629967,
+  "cached_interactions_per_batch": 10,
+  "cached_interactions_batch_edt_ms": [
+    183.942529,
+    103.86023,
+    159.822836,
+    160.432253,
+    33.359719
+  ],
+  "cached_interactions_mean_per_action_edt_ms": [
+    18.394253,
+    10.386023,
+    15.982284,
+    16.043225,
+    3.335972
+  ],
+  "cached_interactions_median_mean_per_action_edt_ms": 15.982284,
+  "checks": {
+    "category_total_5000": true,
+    "card_list_counts_match": true,
+    "secret_severity_counts_match": true,
+    "same_snapshot_account_projection_identity_reused": true,
+    "account_filtered_counts_match": true,
+    "no_original_actions_without_packets": true,
+    "closed_on_edt": true
+  },
+  "network_requests_by_harness": 0,
+  "limits": [
+    "Synthetic findings and headless Swing only; not actual Burp GUI.",
+    "EDT update intervals exclude queue waiting and worker calculation; readiness end-to-end includes queue wait, worker calculation, UI publication and up to 10ms polling delay. Snapshot construction, native window layout and paint are excluded.",
+    "Cached batches include 6 card and 4 severity changes, JTable updates and simple count assertions.",
+    "No fake packets, Burp API, HTTP runner or network client is constructed.",
+    "Concurrent renderer/release verification execution may affect timings; no pass/fail latency threshold is defined.",
+    "Five samples include JVM/JIT warmup effects after a small 100-finding warmup."
+  ],
+  "source_release_jar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-simple-1.4.0.jar",
+  "source_release_jar_sha256_at_report": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+  "isolated_measured_jar_matches_source_release": true,
+  "readiness": {
+    "checks": [
+      "same snapshot reference",
+      "aggregating false",
+      "category total equals expected findings"
+    ],
+    "poll_interval_ms": 10,
+    "deadline_seconds": 60,
+    "polling_runs_outside_edt": true
+  },
+  "coalescing_validation": "Not restressed by this timing harness; reviewed separately in controlled ScopeInspectionDashboardAsyncTest."
+}

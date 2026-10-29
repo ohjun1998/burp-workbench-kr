@@ -1,0 +1,313 @@
+scenario,passed
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Katana execution conditions retain a named executable and bounded page/time controls,true
+Execution settings stay left aligned without a separator pushing the crawler controls below a large blank area,true
+Katana provenance table preserves linked originals and explicitly unexecuted forms,true
+Captured Katana results use the production partial-state presenter after asynchronous layout updates,true
+Categorized export saves exact values locally while keeping ordinary result views masked,true
+Dashboard uses current synthetic inspection evidence without a new runner,true
+Dashboard named visual exists: card.paths,true
+Dashboard visual keeps readable visible bounds: card.paths,true
+Dashboard metric caption and number retain their painted width: card.paths,true
+Dashboard named visual exists: card.api,true
+Dashboard visual keeps readable visible bounds: card.api,true
+Dashboard metric caption and number retain their painted width: card.api,true
+Dashboard named visual exists: card.environment,true
+Dashboard visual keeps readable visible bounds: card.environment,true
+Dashboard metric caption and number retain their painted width: card.environment,true
+Dashboard named visual exists: card.secrets,true
+Dashboard visual keeps readable visible bounds: card.secrets,true
+Dashboard metric caption and number retain their painted width: card.secrets,true
+Dashboard named visual exists: card.access,true
+Dashboard visual keeps readable visible bounds: card.access,true
+Dashboard metric caption and number retain their painted width: card.access,true
+Dashboard named visual exists: card.coverage,true
+Dashboard visual keeps readable visible bounds: card.coverage,true
+Dashboard metric caption and number retain their painted width: card.coverage,true
+Dashboard named visual exists: bar.paths,true
+Dashboard visual keeps readable visible bounds: bar.paths,true
+"Dashboard chart retains separate caption, bar and count areas: bar.paths",true
+Dashboard named visual exists: bar.api,true
+Dashboard visual keeps readable visible bounds: bar.api,true
+"Dashboard chart retains separate caption, bar and count areas: bar.api",true
+Dashboard named visual exists: bar.environment,true
+Dashboard visual keeps readable visible bounds: bar.environment,true
+"Dashboard chart retains separate caption, bar and count areas: bar.environment",true
+Dashboard named visual exists: bar.secrets,true
+Dashboard visual keeps readable visible bounds: bar.secrets,true
+"Dashboard chart retains separate caption, bar and count areas: bar.secrets",true
+Dashboard named visual exists: bar.access,true
+Dashboard visual keeps readable visible bounds: bar.access,true
+"Dashboard chart retains separate caption, bar and count areas: bar.access",true
+Dashboard named visual exists: bar.coverage,true
+Dashboard visual keeps readable visible bounds: bar.coverage,true
+"Dashboard chart retains separate caption, bar and count areas: bar.coverage",true
+Dashboard named visual exists: bar.observations,true
+Dashboard visual keeps readable visible bounds: bar.observations,true
+"Dashboard chart retains separate caption, bar and count areas: bar.observations",true
+Dashboard named visual exists: severity.high,true
+Dashboard visual keeps readable visible bounds: severity.high,true
+"Dashboard chart retains separate caption, bar and count areas: severity.high",true
+Dashboard named visual exists: severity.medium,true
+Dashboard visual keeps readable visible bounds: severity.medium,true
+"Dashboard chart retains separate caption, bar and count areas: severity.medium",true
+Dashboard named visual exists: severity.low,true
+Dashboard visual keeps readable visible bounds: severity.low,true
+"Dashboard chart retains separate caption, bar and count areas: severity.low",true
+Dashboard named visual exists: severity.info,true
+Dashboard visual keeps readable visible bounds: severity.info,true
+"Dashboard chart retains separate caption, bar and count areas: severity.info",true
+Dashboard high-severity secret filter retains matching synthetic candidates,true
+Dashboard secret details preserve masking and inspection-state wording,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard unmatched severity filter shows an empty current result list,true
+Dashboard empty filter clears the previously selected secret details,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard inspection projection and filters invoke no target actions,true
+Synthetic capture never starts the target HTTP coordinator or external Katana,true
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Katana execution conditions retain a named executable and bounded page/time controls,true
+Execution settings stay left aligned without a separator pushing the crawler controls below a large blank area,true
+Katana provenance table preserves linked originals and explicitly unexecuted forms,true
+Captured Katana results use the production partial-state presenter after asynchronous layout updates,true
+Categorized export saves exact values locally while keeping ordinary result views masked,true
+Dashboard uses current synthetic inspection evidence without a new runner,true
+Dashboard named visual exists: card.paths,true
+Dashboard visual keeps readable visible bounds: card.paths,true
+Dashboard metric caption and number retain their painted width: card.paths,true
+Dashboard named visual exists: card.api,true
+Dashboard visual keeps readable visible bounds: card.api,true
+Dashboard metric caption and number retain their painted width: card.api,true
+Dashboard named visual exists: card.environment,true
+Dashboard visual keeps readable visible bounds: card.environment,true
+Dashboard metric caption and number retain their painted width: card.environment,true
+Dashboard named visual exists: card.secrets,true
+Dashboard visual keeps readable visible bounds: card.secrets,true
+Dashboard metric caption and number retain their painted width: card.secrets,true
+Dashboard named visual exists: card.access,true
+Dashboard visual keeps readable visible bounds: card.access,true
+Dashboard metric caption and number retain their painted width: card.access,true
+Dashboard named visual exists: card.coverage,true
+Dashboard visual keeps readable visible bounds: card.coverage,true
+Dashboard metric caption and number retain their painted width: card.coverage,true
+Dashboard named visual exists: bar.paths,true
+Dashboard visual keeps readable visible bounds: bar.paths,true
+"Dashboard chart retains separate caption, bar and count areas: bar.paths",true
+Dashboard named visual exists: bar.api,true
+Dashboard visual keeps readable visible bounds: bar.api,true
+"Dashboard chart retains separate caption, bar and count areas: bar.api",true
+Dashboard named visual exists: bar.environment,true
+Dashboard visual keeps readable visible bounds: bar.environment,true
+"Dashboard chart retains separate caption, bar and count areas: bar.environment",true
+Dashboard named visual exists: bar.secrets,true
+Dashboard visual keeps readable visible bounds: bar.secrets,true
+"Dashboard chart retains separate caption, bar and count areas: bar.secrets",true
+Dashboard named visual exists: bar.access,true
+Dashboard visual keeps readable visible bounds: bar.access,true
+"Dashboard chart retains separate caption, bar and count areas: bar.access",true
+Dashboard named visual exists: bar.coverage,true
+Dashboard visual keeps readable visible bounds: bar.coverage,true
+"Dashboard chart retains separate caption, bar and count areas: bar.coverage",true
+Dashboard named visual exists: bar.observations,true
+Dashboard visual keeps readable visible bounds: bar.observations,true
+"Dashboard chart retains separate caption, bar and count areas: bar.observations",true
+Dashboard named visual exists: severity.high,true
+Dashboard visual keeps readable visible bounds: severity.high,true
+"Dashboard chart retains separate caption, bar and count areas: severity.high",true
+Dashboard named visual exists: severity.medium,true
+Dashboard visual keeps readable visible bounds: severity.medium,true
+"Dashboard chart retains separate caption, bar and count areas: severity.medium",true
+Dashboard named visual exists: severity.low,true
+Dashboard visual keeps readable visible bounds: severity.low,true
+"Dashboard chart retains separate caption, bar and count areas: severity.low",true
+Dashboard named visual exists: severity.info,true
+Dashboard visual keeps readable visible bounds: severity.info,true
+"Dashboard chart retains separate caption, bar and count areas: severity.info",true
+Dashboard high-severity secret filter retains matching synthetic candidates,true
+Dashboard secret details preserve masking and inspection-state wording,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard unmatched severity filter shows an empty current result list,true
+Dashboard empty filter clears the previously selected secret details,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard inspection projection and filters invoke no target actions,true
+Synthetic capture never starts the target HTTP coordinator or external Katana,true
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Katana execution conditions retain a named executable and bounded page/time controls,true
+Execution settings stay left aligned without a separator pushing the crawler controls below a large blank area,true
+Katana provenance table preserves linked originals and explicitly unexecuted forms,true
+Captured Katana results use the production partial-state presenter after asynchronous layout updates,true
+Categorized export saves exact values locally while keeping ordinary result views masked,true
+Dashboard uses current synthetic inspection evidence without a new runner,true
+Dashboard named visual exists: card.paths,true
+Dashboard visual keeps readable visible bounds: card.paths,true
+Dashboard metric caption and number retain their painted width: card.paths,true
+Dashboard named visual exists: card.api,true
+Dashboard visual keeps readable visible bounds: card.api,true
+Dashboard metric caption and number retain their painted width: card.api,true
+Dashboard named visual exists: card.environment,true
+Dashboard visual keeps readable visible bounds: card.environment,true
+Dashboard metric caption and number retain their painted width: card.environment,true
+Dashboard named visual exists: card.secrets,true
+Dashboard visual keeps readable visible bounds: card.secrets,true
+Dashboard metric caption and number retain their painted width: card.secrets,true
+Dashboard named visual exists: card.access,true
+Dashboard visual keeps readable visible bounds: card.access,true
+Dashboard metric caption and number retain their painted width: card.access,true
+Dashboard named visual exists: card.coverage,true
+Dashboard visual keeps readable visible bounds: card.coverage,true
+Dashboard metric caption and number retain their painted width: card.coverage,true
+Dashboard named visual exists: bar.paths,true
+Dashboard visual keeps readable visible bounds: bar.paths,true
+"Dashboard chart retains separate caption, bar and count areas: bar.paths",true
+Dashboard named visual exists: bar.api,true
+Dashboard visual keeps readable visible bounds: bar.api,true
+"Dashboard chart retains separate caption, bar and count areas: bar.api",true
+Dashboard named visual exists: bar.environment,true
+Dashboard visual keeps readable visible bounds: bar.environment,true
+"Dashboard chart retains separate caption, bar and count areas: bar.environment",true
+Dashboard named visual exists: bar.secrets,true
+Dashboard visual keeps readable visible bounds: bar.secrets,true
+"Dashboard chart retains separate caption, bar and count areas: bar.secrets",true
+Dashboard named visual exists: bar.access,true
+Dashboard visual keeps readable visible bounds: bar.access,true
+"Dashboard chart retains separate caption, bar and count areas: bar.access",true
+Dashboard named visual exists: bar.coverage,true
+Dashboard visual keeps readable visible bounds: bar.coverage,true
+"Dashboard chart retains separate caption, bar and count areas: bar.coverage",true
+Dashboard named visual exists: bar.observations,true
+Dashboard visual keeps readable visible bounds: bar.observations,true
+"Dashboard chart retains separate caption, bar and count areas: bar.observations",true
+Dashboard named visual exists: severity.high,true
+Dashboard visual keeps readable visible bounds: severity.high,true
+"Dashboard chart retains separate caption, bar and count areas: severity.high",true
+Dashboard named visual exists: severity.medium,true
+Dashboard visual keeps readable visible bounds: severity.medium,true
+"Dashboard chart retains separate caption, bar and count areas: severity.medium",true
+Dashboard named visual exists: severity.low,true
+Dashboard visual keeps readable visible bounds: severity.low,true
+"Dashboard chart retains separate caption, bar and count areas: severity.low",true
+Dashboard named visual exists: severity.info,true
+Dashboard visual keeps readable visible bounds: severity.info,true
+"Dashboard chart retains separate caption, bar and count areas: severity.info",true
+Dashboard high-severity secret filter retains matching synthetic candidates,true
+Dashboard secret details preserve masking and inspection-state wording,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard unmatched severity filter shows an empty current result list,true
+Dashboard empty filter clears the previously selected secret details,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard inspection projection and filters invoke no target actions,true
+Synthetic capture never starts the target HTTP coordinator or external Katana,true
+Opening the production inspection panel performs no target requests,true
+HTTP 401 fixture uses the production denied classifier and keeps target content unconfirmed,true
+Production inspection environment table contains inspectable synthetic evidence,true
+Production inspection paths table contains inspectable synthetic evidence,true
+Production inspection api table contains inspectable synthetic evidence,true
+Production inspection secrets table contains inspectable synthetic evidence,true
+Secret result view preserves masking,true
+Production inspection access table contains inspectable synthetic evidence,true
+Production inspection changes table contains inspectable synthetic evidence,true
+Production inspection coverage table contains inspectable synthetic evidence,true
+Production browser lease retains separate browser-session attribution,true
+Production browser table displays received route and API observations,true
+Original response bytes remain available behind masked findings,true
+Katana execution conditions retain a named executable and bounded page/time controls,true
+Execution settings stay left aligned without a separator pushing the crawler controls below a large blank area,true
+Katana provenance table preserves linked originals and explicitly unexecuted forms,true
+Captured Katana results use the production partial-state presenter after asynchronous layout updates,true
+Categorized export saves exact values locally while keeping ordinary result views masked,true
+Dashboard uses current synthetic inspection evidence without a new runner,true
+Dashboard named visual exists: card.paths,true
+Dashboard visual keeps readable visible bounds: card.paths,true
+Dashboard metric caption and number retain their painted width: card.paths,true
+Dashboard named visual exists: card.api,true
+Dashboard visual keeps readable visible bounds: card.api,true
+Dashboard metric caption and number retain their painted width: card.api,true
+Dashboard named visual exists: card.environment,true
+Dashboard visual keeps readable visible bounds: card.environment,true
+Dashboard metric caption and number retain their painted width: card.environment,true
+Dashboard named visual exists: card.secrets,true
+Dashboard visual keeps readable visible bounds: card.secrets,true
+Dashboard metric caption and number retain their painted width: card.secrets,true
+Dashboard named visual exists: card.access,true
+Dashboard visual keeps readable visible bounds: card.access,true
+Dashboard metric caption and number retain their painted width: card.access,true
+Dashboard named visual exists: card.coverage,true
+Dashboard visual keeps readable visible bounds: card.coverage,true
+Dashboard metric caption and number retain their painted width: card.coverage,true
+Dashboard named visual exists: bar.paths,true
+Dashboard visual keeps readable visible bounds: bar.paths,true
+"Dashboard chart retains separate caption, bar and count areas: bar.paths",true
+Dashboard named visual exists: bar.api,true
+Dashboard visual keeps readable visible bounds: bar.api,true
+"Dashboard chart retains separate caption, bar and count areas: bar.api",true
+Dashboard named visual exists: bar.environment,true
+Dashboard visual keeps readable visible bounds: bar.environment,true
+"Dashboard chart retains separate caption, bar and count areas: bar.environment",true
+Dashboard named visual exists: bar.secrets,true
+Dashboard visual keeps readable visible bounds: bar.secrets,true
+"Dashboard chart retains separate caption, bar and count areas: bar.secrets",true
+Dashboard named visual exists: bar.access,true
+Dashboard visual keeps readable visible bounds: bar.access,true
+"Dashboard chart retains separate caption, bar and count areas: bar.access",true
+Dashboard named visual exists: bar.coverage,true
+Dashboard visual keeps readable visible bounds: bar.coverage,true
+"Dashboard chart retains separate caption, bar and count areas: bar.coverage",true
+Dashboard named visual exists: bar.observations,true
+Dashboard visual keeps readable visible bounds: bar.observations,true
+"Dashboard chart retains separate caption, bar and count areas: bar.observations",true
+Dashboard named visual exists: severity.high,true
+Dashboard visual keeps readable visible bounds: severity.high,true
+"Dashboard chart retains separate caption, bar and count areas: severity.high",true
+Dashboard named visual exists: severity.medium,true
+Dashboard visual keeps readable visible bounds: severity.medium,true
+"Dashboard chart retains separate caption, bar and count areas: severity.medium",true
+Dashboard named visual exists: severity.low,true
+Dashboard visual keeps readable visible bounds: severity.low,true
+"Dashboard chart retains separate caption, bar and count areas: severity.low",true
+Dashboard named visual exists: severity.info,true
+Dashboard visual keeps readable visible bounds: severity.info,true
+"Dashboard chart retains separate caption, bar and count areas: severity.info",true
+Dashboard high-severity secret filter retains matching synthetic candidates,true
+Dashboard secret details preserve masking and inspection-state wording,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard unmatched severity filter shows an empty current result list,true
+Dashboard empty filter clears the previously selected secret details,true
+Dashboard result area remains reachable in its vertical scroll pane,true
+Dashboard inspection projection and filters invoke no target actions,true
+Synthetic capture never starts the target HTTP coordinator or external Katana,true

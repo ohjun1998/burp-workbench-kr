@@ -33,6 +33,9 @@ final class ScopeInspectionAnalysis {
   private static final Pattern EMAIL = Pattern.compile("(?i)\\b[A-Z0-9._%+-]{1,64}@[A-Z0-9.-]{1,128}\\.[A-Z]{2,20}\\b");
   private static final Pattern PROVIDER = Pattern.compile("(?:AKIA|ASIA)[A-Z0-9]{16}|AIza[0-9A-Za-z_-]{35}|(?:gh[pousr]_[A-Za-z0-9]{36,255}|github_pat_[A-Za-z0-9_]{40,255})|xox[baprs]-[0-9A-Za-z-]{10,200}|sk_(?:live|test)_[0-9A-Za-z]{16,200}|eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}");
   private static final Pattern CREDENTIAL_VALUE = Pattern.compile("(?im)([A-Za-z_$][A-Za-z0-9_.$-]{0,79})[\"']?\\s{0,8}[:=]\\s{0,8}(?:\"((?:\\\\.|[^\"\\r\\n]){1,16384}+)\"|'((?:\\\\.|[^'\\r\\n]){1,16384}+)'|([^\\s\"'<>;,]{1,16384}+))");
+  private static final Pattern DISPLAY_CONTROL = Pattern.compile("[\\p{Cntrl}&&[^\\n]]");
+  private static final Pattern DISPLAY_AUTH_HEADER = Pattern.compile("(?im)^(?:authorization|cookie|set-cookie|x-api-key)\\s*:[^\\r\\n]*");
+  private static final Pattern DISPLAY_ASSIGNMENT = Pattern.compile("(?i)((?:password|secret|token|api[_-]?key|access[_-]?key)\\s{0,8}[:=]\\s{0,8})[^\\s,;\\\"']{1,256}");
   private ScopeInspectionAnalysis() {}
   private static Db db(String name, String pattern) { return new Db(name, Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)); }
 
@@ -447,11 +450,11 @@ final class ScopeInspectionAnalysis {
     catch (RuntimeException ignored) { return ""; }
   }
   static String display(String value, int limit) {
-    String text = Objects.requireNonNullElse(value, "").replaceAll("[\\p{Cntrl}&&[^\\n]]", " ");
+    String text = DISPLAY_CONTROL.matcher(Objects.requireNonNullElse(value, "")).replaceAll(" ");
     text = PROVIDER.matcher(text).replaceAll("[가림]");
-    text = text.replaceAll("(?im)^(?:authorization|cookie|set-cookie|x-api-key)\\s*:[^\\r\\n]*", "[인증 헤더 가림]");
+    text = DISPLAY_AUTH_HEADER.matcher(text).replaceAll("[인증 헤더 가림]");
     text = CONNECTION.matcher(text).replaceAll("[DB 연결정보 가림]");
-    text = text.replaceAll("(?i)((?:password|secret|token|api[_-]?key|access[_-]?key)\\s{0,8}[:=]\\s{0,8})[^\\s,;\\\"']{1,256}", "$1[가림]");
+    text = DISPLAY_ASSIGNMENT.matcher(text).replaceAll("$1[가림]");
     return text.substring(0, Math.min(limit, text.length()));
   }
   private static String clean(String value, Set<String> raw) {

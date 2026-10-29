@@ -8,7 +8,7 @@ final class WorkspaceResume {
   static final String KEY = BuildInfo.storageKey("workspace-resume-v1");
   static final String PROJECT_KEY = BuildInfo.storageKey("auth-setup-library-project-v1");
   private static final Set<String> FEATURES = Set.of("traffic", "data", "mapper", "activity", "auth",
-      "js", "environment", "passive", "response.recon", "payload", "bounty");
+      "js", "environment", "passive", "response.recon", "payload", "bounty", "dashboard");
   interface Storage {
     String project();
     String read();

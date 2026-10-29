@@ -1,21 +1,29 @@
-# Workbench Simple 1.3.2
+# Workbench Simple 1.4.0
 
-**기존 8개 통합 확장 도구를 유지하고 Katana와 SCOPE 통합 점검으로 메뉴·환경·경로·API·민감정보를 한 실행에 연결합니다.** 기존 Next와 Simple 1.0.0·1.1.0·1.2.0·1.3.0·1.3.1 JAR·소스·PDF는 보존합니다.
+**점검 대시보드에서 현재 실행의 수치를 보고, 카드·막대를 눌러 조건별 목록과 근거·원본을 확인합니다.** 기존 8개 도구와 Katana·SCOPE 통합 점검을 유지하고 기존 Next 및 Simple 1.0.0–1.3.2 JAR·소스·PDF를 보존합니다.
 
 SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.
 
 | 필요한 파일 | 위치 |
 |---|---|
-| 설치 JAR | [burp-workbench-simple-1.3.2.jar](downloads/1.3.2/burp-workbench-simple-1.3.2.jar) |
-| 독립 빌드 소스 | [소스 ZIP](downloads/1.3.2/burp-workbench-simple-1.3.2-source.zip) · [SHA256SUMS](downloads/1.3.2/SHA256SUMS) |
-| 브라우저·SPA helper | [helper 0.4.1 ZIP](downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip) |
+| 설치 JAR | [burp-workbench-simple-1.4.0.jar](downloads/1.4.0/burp-workbench-simple-1.4.0.jar) |
+| 독립 빌드 소스 | [소스 ZIP](downloads/1.4.0/burp-workbench-simple-1.4.0-source.zip) · [SHA256SUMS](downloads/1.4.0/SHA256SUMS) |
+| 브라우저·SPA helper | [helper 0.4.1 ZIP](downloads/1.4.0/feature-mapper-browser-helper-0.4.1.zip) |
 | 외부 Katana 1.8.0 | [공식 배포·SHA-256 확인 설치 도구](tools/install_katana.py) · [고정 의존성 기록](docs/KATANA_DEPENDENCY.json) · 실행 파일 별도 설치 |
-| 단계별 그림 가이드 | [HTML 안내서](docs/GUIDE_SIMPLE_KR.html) · [문서 원고](docs/GUIDE_SIMPLE_KR.md) |
-| PDF 가이드 | [Workbench Simple 그림 가이드북](downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) |
-| 실제 검증 결과 | [검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.3.2.json) |
-| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.3.2/katana-native/katana-verification.json) |
-| 변경 안내 | [Simple 1.3.2 적용 기능과 정리한 부가 흐름](docs/RELEASE_SIMPLE_1.3.2_KR.md) |
-| 적용 범위 | [Katana 요구사항·구현·검사·가이드 연결표](docs/KATANA_SCOPE_1.3.2_SPEC_KR.md) |
+| 대시보드 사용 안내 | [수치·필터·근거·원본 연결](docs/RELEASE_SIMPLE_1.4.0_KR.md) |
+| 기존 도구 그림 가이드 | [보존한 1.3.2 HTML 안내서](docs/GUIDE_SIMPLE_KR.html) · [1.3.2 문서 원고](docs/GUIDE_SIMPLE_KR.md) |
+| 기존 도구 PDF 가이드 | [보존한 1.3.2 그림 가이드북](downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) |
+| 실제 검증 결과 | [1.4.0 검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.4.0.json) |
+| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.4.0/katana-native/katana-verification.json) |
+| Katana 적용 범위 | [기존 요구사항·구현·검사 연결표](docs/KATANA_SCOPE_1.3.2_SPEC_KR.md) |
+
+## 점검 대시보드
+
+상단 **대시보드 → 통합 점검 열기**에서 실행을 준비합니다. 현재 실행의 관측 경로·API와 명세·환경과 DB 단서·민감정보 후보·계정별 차이·미확인 수치를 클릭하면 같은 기준의 결과 목록을 표시합니다. 계정과 민감정보 중요도로 좁히고 항목을 선택해 근거·원본 위치를 확인합니다. 연결된 원본에서 Repeater 준비·증거 추가로 이어갑니다.
+
+카드 수와 목록 수는 같은 집계 기준을 사용합니다. 후보와 확정 취약점, 전송 한도와 점검 완료율을 구분하며 계정 정보가 없는 후보는 전체 결과 계정에서 확인합니다. 대시보드는 현재 실행만 표시하며 조회와 필터는 대상 요청을 보내지 않습니다. [전체 집계 기준과 사용법](docs/RELEASE_SIMPLE_1.4.0_KR.md)을 참고하세요.
+
+대량 결과를 집계하는 동안에는 **—**와 진행 안내를 표시합니다. 같은 실행의 갱신은 이전 집계임을 명시하고, 실행·계정 변경이나 종료 뒤에 오래된 결과가 다시 표시되지 않도록 처리합니다.
 
 ## SCOPE 통합 점검
 
@@ -31,7 +39,7 @@ SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원�
 
 ## 설치와 첫 점검
 
-1. Simple 설치 JAR burp-workbench-simple-1.3.2.jar를 준비하고 기존 Workbench 파일을 보관합니다.
+1. Simple 설치 JAR burp-workbench-simple-1.4.0.jar를 준비하고 기존 Workbench 파일을 보관합니다.
 2. Burp Extensions → Add → Java에서 Simple JAR를 선택하고 Workbench Simple 탭을 엽니다.
 3. 한 확장에서만 수집하려면 기존 Workbench의 로드를 해제하고 Simple을 사용합니다. 기존 확장이나 원본 파일을 삭제할 필요는 없습니다.
 4. SCOPE 목록에 대상 URL과 경로를 등록하고 허용·제외 범위를 확인합니다. 통합 점검 화면에서 URL·HTTP 계정과 요청 한도를 정합니다.
@@ -120,17 +128,15 @@ Simple 설정 키는 `simple.*`, 저장 폴더는 `.burp-workbench-simple`입니
 
 완전한 JDK에서 `python dev.py build`, `python dev.py check`를 사용합니다. 기본 컴파일은 `--release 17`입니다. Node 검사 런처는 설치된 Node가 지원하는 옵션 표기를 확인하며 실제 하위 검사 집계를 검증합니다.
 
-이번 로컬 검증은 별도로 준비한 완전한 Temurin JDK 17과 `--release 17`을 사용합니다. 런타임·컴파일 방식과 실제 실행한 검사·제한은 위의 검증 기록을 확인합니다.
+이번 로컬 빌드는 별도로 준비한 Temurin JDK 17의 `--release 17`을 사용합니다. 런타임·컴파일 방식과 실제 실행한 검사·제한은 1.4.0 검증 기록을 확인합니다.
 
 테스트 어댑터 빌드 후 두 캡처 명령으로 기존 8개 도구와 통합 점검 화면을 같은 버전 디렉터리에 생성합니다. PDF 생성에는 Python `reportlab`, `Pillow`가 필요하고, 구조 검증에는 `PyMuPDF`를 사용합니다.
 
 ```sh
 python tools/render_simple.py --check
 python tools/render_scope_inspection.py --check
-python tools/build_simple_guide.py
-python tools/check_simple_guide.py
 ```
 
-Java 17을 PATH에 둔 환경에서 위 명령을 실행하거나 `--java`로 Java 17 경로를 지정합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.
+JDK 17 이상에서 위 명령을 실행하거나 `--java`로 JDK 경로를 지정합니다. 기존 1.3.2 그림 가이드·PDF와 생성 도구는 보존하며 이번 대시보드 안내는 별도 1.4.0 문서와 운영 컴포넌트 캡처로 제공합니다. 원본 Next나 이전 Simple 결과를 새 검사 수로 합산하지 않습니다. GPL·제3자 고지를 보존합니다.
 
 [보존한 Simple 1.3.1 안내서](docs/history/1.3.1/GUIDE_SIMPLE_KR.html) · [1.3.1 PDF](downloads/guides/1.3.1/Workbench_Simple_1.3.1_Guide_KR.pdf) · [1.3.0 안내서](docs/history/1.3.0/GUIDE_SIMPLE_KR.html) · [1.3.0 PDF](downloads/guides/1.3.0/Workbench_Simple_1.3.0_Guide_KR.pdf) · [1.2.0 안내서](docs/history/1.2.0/GUIDE_SIMPLE_KR.html) · [1.1.0 안내서](docs/history/1.1.0/GUIDE_SIMPLE_KR.html) · [1.0.0 안내서](docs/history/1.0.0/GUIDE_SIMPLE_KR.html)

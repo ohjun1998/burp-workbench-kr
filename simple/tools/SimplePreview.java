@@ -68,6 +68,47 @@ public final class SimplePreview extends WorkbenchTest {
     scenarios.add(csv(name) + "," + passed);
     if (!passed) throw new AssertionError(name);
   }
+  static void dashboardBounds(Container root) {
+    for (String card : List.of("paths", "api", "environment", "secrets", "access", "coverage"))
+      dashboardArea(root, "card." + card, 110, 76);
+    for (String bar : List.of("paths", "api", "environment", "secrets", "access", "coverage", "observations"))
+      dashboardArea(root, "bar." + bar, 160, 16);
+    for (String severity : List.of("high", "medium", "low", "info"))
+      dashboardArea(root, "severity." + severity, 120, 16);
+  }
+  static void dashboardResults(Container root) {
+    var scroll = (JScrollPane) SimpleWorkflowTest.named(root, "wb.scope.dashboard.scroll");
+    scenario("Dashboard result area remains reachable in its vertical scroll pane", scroll != null);
+    JViewport viewport = scroll.getViewport();
+    viewport.setViewPosition(new Point(0, Math.max(0,
+        viewport.getView().getHeight() - viewport.getExtentSize().height)));
+  }
+  static void dashboardArea(Container root, String part, int minimumWidth, int minimumHeight) {
+    String name = "wb.scope.dashboard." + part;
+    Component component = SimpleWorkflowTest.named(root, name);
+    scenario("Dashboard named visual exists: " + part, component != null);
+    Rectangle bounds = SwingUtilities.convertRectangle(component.getParent(), component.getBounds(), root);
+    Rectangle shown = visible(root, component, bounds, root.getWidth(), root.getHeight());
+    scenario("Dashboard visual keeps readable visible bounds: " + part,
+        component.isVisible() && shown.width >= minimumWidth && shown.height >= minimumHeight
+            && shown.contains(bounds));
+    if (component instanceof ScopeDashboardPanel.MetricButton card) {
+      Font captionFont = WorkbenchUi.font().deriveFont(Font.PLAIN, WorkbenchUi.displaySize(12));
+      Font valueFont = WorkbenchUi.font().deriveFont(Font.BOLD, WorkbenchUi.displaySize(28));
+      int padding = WorkbenchUi.displayPixels(24);
+      scenario("Dashboard metric caption and number retain their painted width: " + part,
+          card.getFontMetrics(captionFont).stringWidth(card.caption) <= card.getWidth() - padding
+              && card.getFontMetrics(valueFont).stringWidth(Integer.toString(card.count)) <= card.getWidth() - padding);
+    } else if (component instanceof ScopeDashboardPanel.BarButton bar) {
+      Font font = WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11));
+      int labelWidth = Math.min(bar.getWidth() / 2,
+          Math.max(108, bar.getFontMetrics(font).stringWidth(bar.caption) + 10));
+      scenario("Dashboard chart retains separate caption, bar and count areas: " + part,
+          bar.getFontMetrics(font).stringWidth(bar.caption) + 7 <= labelWidth
+              && bar.getWidth() - labelWidth - 48 >= 20
+              && bar.getFontMetrics(font).stringWidth(Integer.toString(bar.count)) <= 30);
+    }
+  }
   static Rectangle visible(Container root, Component component, Rectangle bounds, int w, int h) {
     var result = new Rectangle(bounds);
     for (var parent = component.getParent(); parent != null && parent != root; parent = parent.getParent())
@@ -141,6 +182,13 @@ public final class SimplePreview extends WorkbenchTest {
         scenario("Scope editor opens exact production body", dialog.get() != null);
         var body = WorkbenchUi.settingsBody(dialog.get(), () -> {});
         capture(body,"00-scope-editor.png", Math.min(width,900), Math.min(height,600));
+        click(root,"wb.simple.dashboard.open");
+        var dashboard = (ScopeDashboardPanel) value(extension,"scopeDashboard");
+        scenario("Main dashboard opens the production appended page without starting inspection",
+            dashboard != null && ((JTabbedPane)value(extension,"tabs")).getSelectedComponent() == dashboard
+                && value(extension,"scopeInspectionPanel") == null);
+        scenario("Empty dashboard has no manufactured result rows", dashboard.table.getRowCount() == 0);
+        capture(root,"26-dashboard-empty.png",width,height,()->dashboardBounds(root));
         click(root,"wb.simple.tool.traffic"); capture(root,"00-start.png");
         ((JButton) value(extension,"captureButton")).doClick(0);
       });

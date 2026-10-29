@@ -76,6 +76,18 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private volatile long generation;
   private final javax.swing.Timer updates;
   private final List<PacketInspector> inspectors = new ArrayList<>();
+  private Consumer<ScopeInspection.Snapshot> snapshotListener = value -> {};
+
+  /** A read-only view of the same live run; attaching a dashboard never starts an inspection. */
+  void setSnapshotListener(Consumer<ScopeInspection.Snapshot> listener) {
+    snapshotListener = Objects.requireNonNull(listener);
+    snapshotListener.accept(current);
+  }
+
+  ScopeInspection.Snapshot dashboardSnapshot() {
+    checkScope();
+    return current;
+  }
 
   ScopeInspectionPanel(MontoyaApi api, Supplier<List<ScopeInspection.Profile>> profiles, Actions actions) {
     this(api, ignored -> profiles.get(), actions);
@@ -315,6 +327,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
       refreshActions();
     }finally{rebuilding=false;accepting=false;}
     selectedChanged();
+    snapshotListener.accept(current);
   }
   private void saveHistory(ScopeInspection.Options savedOptions,ScopeInspection.Snapshot snapshot,String project,String scopeFingerprint,String historyScopeFingerprint){
     historyWorker.execute(()->{
@@ -370,5 +383,5 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   void closeOriginalContent(JComponent content){Object value=content.getClientProperty("wb.scope.inspection.inspectors");if(value instanceof List<?> list)for(Object item:list)if(item instanceof PacketInspector inspector){inspector.close();inspectors.remove(inspector);}content.putClientProperty("wb.scope.inspection.inspectors",null);}
   private void closeInspectors(){for(var inspector:inspectors)inspector.close();inspectors.clear();}
   private void safe(Runnable action){try{action.run();}catch(RuntimeException error){feedback.setText(Objects.requireNonNullElse(error.getMessage(),"실행 조건을 확인하세요."));}}
-  @Override public void close(){if(closed)return;closed=true;report.setEnabled(false);updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();reportWorker.shutdownNow();}
+  @Override public void close(){if(closed)return;closed=true;snapshotListener=value->{};report.setEnabled(false);updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();reportWorker.shutdownNow();}
 }

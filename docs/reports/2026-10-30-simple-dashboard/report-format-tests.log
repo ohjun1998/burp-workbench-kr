@@ -1,0 +1,15 @@
+test_classname_is_not_ssn_and_password_hash_is_sensitive (test_build_report.ReportExactnessTest.test_classname_is_not_ssn_and_password_hash_is_sensitive) ... ok
+test_csv_roundtrip_preserves_formula_multiline_and_long_value (test_build_report.ReportExactnessTest.test_csv_roundtrip_preserves_formula_multiline_and_long_value) ... ok
+test_duplicate_supplement_prefers_exact_product_span_after_astral_text (test_build_report.ReportExactnessTest.test_duplicate_supplement_prefers_exact_product_span_after_astral_text) ... ok
+test_html_script_data_preserves_inert_exact_values (test_build_report.ReportExactnessTest.test_html_script_data_preserves_inert_exact_values) ... ok
+test_invalid_json_never_yields_partial_scalars (test_build_report.ReportExactnessTest.test_invalid_json_never_yields_partial_scalars) ... ok
+test_json_offsets_escapes_numeric_lexeme_and_pointer (test_build_report.ReportExactnessTest.test_json_offsets_escapes_numeric_lexeme_and_pointer) ... ok
+test_overlapping_json_and_api_regex_do_not_duplicate_same_location (test_build_report.ReportExactnessTest.test_overlapping_json_and_api_regex_do_not_duplicate_same_location) ... ok
+test_product_header_uses_utf8_wire_and_normalized_lf_coordinates (test_build_report.ReportExactnessTest.test_product_header_uses_utf8_wire_and_normalized_lf_coordinates) ... ok
+test_product_values_require_exact_utf16_span_and_response_hash (test_build_report.ReportExactnessTest.test_product_values_require_exact_utf16_span_and_response_hash) ... ok
+test_recorded_paths_cannot_escape_run_directory (test_build_report.ReportExactnessTest.test_recorded_paths_cannot_escape_run_directory) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.024s
+
+OK

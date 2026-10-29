@@ -184,6 +184,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JTabbedPane tabs;
   private FolderNavigation navigation;
   private SimpleNavigation simpleNavigation;
+  ScopeDashboardPanel scopeDashboard;
   volatile ScopeInspectionPanel scopeInspectionPanel;
   private TargetWindow scopeInspectionWindow;
   private final Map<TargetWindow,Runnable> scopeInspectionOriginalWindows = new LinkedHashMap<>();
@@ -382,6 +383,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (scopeInspectionWindow != null) scopeInspectionWindow.close();
                     closeScopeOriginalWindows();
                     if (scopeInspectionPanel != null) scopeInspectionPanel.close();
+                    if (scopeDashboard != null) scopeDashboard.close();
                     if (jobMonitorWindow != null) jobMonitorWindow.close();
                     if (gettingStartedWindow != null) gettingStartedWindow.close();
                     if (jobMonitor != null) jobMonitor.close();
@@ -638,6 +640,20 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     mapperTools.setToolTipTextAt(1, "계정·URL·업무를 직접 검토하고 완료합니다. 자동 분류와 별도 상태입니다.");
     addPage("기능 자동 매핑", "mapper", mapperTools, false);
     addPage("설정", "settings", settingsPanel(), false);
+    scopeDashboard = new ScopeDashboardPanel(new ScopeDashboardPanel.Actions() {
+      public void inspect() { openScopeInspection(); }
+      public void original(String id) { openScopeOriginal(dashboardOriginal(id)); }
+      public void repeater(String id) {
+        var packet = dashboardOriginal(id);
+        api.repeater().sendToRepeater(packet.request(), "대시보드 · 통합 점검");
+      }
+      public void evidence(String id) {
+        var packet = dashboardOriginal(id);
+        captureScopeEvidence(List.of(packet), "대시보드 · 현재 통합 점검 원본 " + packet.id());
+      }
+    });
+    // Append this page so every retained engine keeps its original route index.
+    addPage("대시보드", "dashboard", scopeDashboard, false);
     settingsActionReady = true;
     featureHelp.setName("wb.feature.help");
     featureHelp.addActionListener(e -> openFeatureHelp());
@@ -745,6 +761,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         navigationRestoreRevision++;
         if (navigationSelectionTimer != null) navigationSelectionTimer.stop();
         backgroundJobs.reset();
+        if(scopeInspectionPanel!=null)scopeInspectionPanel.scopeChanged();
+        if(scopeDashboard!=null)scopeDashboard.clear();
         if (navigation != null) navigation.resetHistory();
         if(bountySupport!=null)bountySupport.resetEvidenceProject();
         if(authCompare!=null)authCompare.resetChecklistProject();
@@ -1208,6 +1226,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         public void observed(DiskTrafficStore.PacketRef packet){observeScopeOriginal(packet);}
       });
       scopeInspectionPanel.settings.opener=dialogOpener;
+      scopeInspectionPanel.setSnapshotListener(snapshot -> {
+        if (scopeDashboard != null) {
+          var runOptions = scopeInspectionPanel.options;
+          scopeDashboard.update(snapshot, runOptions == null ? 0 : runOptions.budget(),
+              runOptions == null ? "" : runOptions.url());
+        }
+      });
       scopeInspectionWindow=new TargetWindow(root,"Scope 통합 점검 · "+BuildInfo.VERSION,()->scopeInspectionPanel);
       scopeInspectionWindow.opener=(owner,title,content,modal,closed)->{
         JDialog window=dialogOpener.open(owner,title,content,modal,closed);
@@ -1215,6 +1240,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       };
     }
     scopeInspectionPanel.refreshTargets();scopeInspectionWindow.open();
+  }
+
+  private DiskTrafficStore.PacketRef dashboardOriginal(String id) {
+    if(unloaded.get() || scopeInspectionPanel==null || id==null || id.isBlank())
+      throw new IllegalArgumentException("현재 실행의 원본이 연결된 항목을 선택하세요.");
+    return scopeInspectionPanel.dashboardSnapshot().pages().stream()
+        .map(ScopeInspection.Page::original).filter(Objects::nonNull)
+        .filter(packet -> id.equals(packet.id())).findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("실행 또는 프로젝트가 바뀌어 선택한 원본을 사용할 수 없습니다."));
   }
 
   private List<ScopeInspection.Profile> inspectionProfiles(String target){

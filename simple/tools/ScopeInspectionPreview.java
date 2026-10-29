@@ -195,6 +195,41 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
         scenario("Categorized export saves exact values locally while keeping ordinary result views masked",Files.isRegularFile(historyDirectory.resolve("categorized-values.zip"))&&panel.feedback.getText().contains("저장 완료")&&!ScopeInspectionUiTest.visibleText(panel).contains(API_KEY));
         capture(panel,"25-inspection-report.png");
       });
+      edt(() -> {
+        var dashboard = new ScopeDashboardPanel(new ScopeDashboardPanel.Actions() {
+          public void inspect() { count.incrementAndGet(); }
+          public void original(String id) { count.incrementAndGet(); }
+          public void repeater(String id) { count.incrementAndGet(); }
+          public void evidence(String id) { count.incrementAndGet(); }
+        });
+        try {
+          dashboard.update(completed, options.budget(), options.url());
+          scenario("Dashboard uses current synthetic inspection evidence without a new runner",
+              dashboard.table.getRowCount() > 0 && panel.runner == null);
+          capture(dashboard,"27-dashboard.png",width,height,()->dashboardBounds(dashboard));
+          SimpleWorkflowTest.click(dashboard,"wb.scope.dashboard.card.secrets");
+          SimpleWorkflowTest.click(dashboard,"wb.scope.dashboard.severity.high");
+          scenario("Dashboard high-severity secret filter retains matching synthetic candidates",
+              dashboard.table.getRowCount() > 0);
+          dashboard.table.setRowSelectionInterval(0,0);
+          scenario("Dashboard secret details preserve masking and inspection-state wording",
+              !ScopeInspectionUiTest.visibleText(dashboard).contains(API_KEY)
+                  && !dashboard.detail.getText().isBlank());
+          String selectedDetail = dashboard.detail.getText();
+          capture(dashboard,"28-dashboard-detail.png",width,height,()->dashboardResults(dashboard));
+          SimpleWorkflowTest.click(dashboard,"wb.scope.dashboard.severity.info");
+          scenario("Dashboard unmatched severity filter shows an empty current result list",
+              dashboard.table.getRowCount() == 0);
+          scenario("Dashboard empty filter clears the previously selected secret details",
+              !dashboard.detail.getText().contains(API_KEY)
+                  && !dashboard.detail.getText().equals(selectedDetail)
+                  && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.original")).isEnabled()
+                  && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.repeater")).isEnabled()
+                  && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.evidence")).isEnabled());
+          capture(dashboard,"29-dashboard-empty-filter.png",width,height,()->dashboardResults(dashboard));
+          scenario("Dashboard inspection projection and filters invoke no target actions",count.get() == 0);
+        } finally { dashboard.close(); }
+      });
       scenario("Synthetic capture never starts the target HTTP coordinator or external Katana", panel.runner == null && panel.katana==null && count.get() == 0);
     } finally {
       edt(panel::close); store.close(); WorkbenchScope.release(api);

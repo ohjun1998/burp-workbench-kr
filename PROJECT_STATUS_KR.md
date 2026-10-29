@@ -1,7 +1,15 @@
 # 현재 개발 상태
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
-기준: 2026-10-28 (한국 시간). main은 별도 **Workbench Simple 1.3.2**와 기존 **Workbench Next 0.53.4**를 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0** 및 과거 모든 배포·후보 기록을 보존합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.
+기준: 2026-10-30 (한국 시간). 현재 Simple 소스는 **Workbench Simple 1.4.0** 점검 대시보드를 제공하며 기존 **Workbench Next 0.53.4**와 Simple 1.3.2 및 과거 모든 배포·후보 기록을 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**은 유지합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.
+
+## Workbench Simple 1.4.0 · 내부 점검 대시보드
+
+main `7a54e9842a90fca9b8cf0a47ed59932a7bec4afb`에서 시작해 현재 실행의 여섯 수치 카드·분류와 중요도 막대·계정 필터·조건별 목록·근거·원본 전달을 추가합니다. 기존 8개 도구와 엔진 인덱스·입력을 유지하고, 같은 실행의 갱신·새 실행·프로젝트 변경·종료를 구분합니다. 별도 HTML 대시보드나 자동 추가 요청은 만들지 않습니다.
+
+로컬 검증 및 원격 CI·병합 기록은 [1.4.0 사용법](simple/docs/RELEASE_SIMPLE_1.4.0_KR.md), [Simple 검증](simple/docs/VERIFICATION_SIMPLE_1.4.0.json), [최종 검증 기록](docs/reports/2026-10-30-simple-dashboard/VERIFICATION.json)과 PR을 기준으로 읽습니다. 기존 main의 Next `Build and verify` 실패 이력과 이번 Simple 결과를 구분하며, 실제 Burp GUI 검증을 실행한 것으로 표현하지 않습니다.
+
+[1.4.0 JAR·소스·체크섬](simple/downloads/1.4.0/) · [요청과 작업 대화](docs/chat-logs/2026-10-30/simple-dashboard-1-4-0.md)
 
 ## Workbench Simple 1.3.2 · main 병합 완료
 

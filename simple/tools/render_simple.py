@@ -19,7 +19,7 @@ WB = ROOT / 'burp-workbench'
 CAPTURES = ['00-scope-editor.png', '00-start.png', '01-capture.png', '02-request.png',
             '03-analysis.png', '04-auth-accounts.png', '04-auth-results.png',
             '05-evidence.png', '06-redaction.png', '07-payload.png', '08-mapper.png',
-            '09-environment.png', '10-js.png', '11-replay.png']
+            '09-environment.png', '10-js.png', '11-replay.png', '26-dashboard-empty.png']
 
 
 def main() -> int:

@@ -1,0 +1,106 @@
+{
+  "version": "1.4.0",
+  "baseMain": "7a54e9842a90fca9b8cf0a47ed59932a7bec4afb",
+  "featureScope": "Current SCOPE inspection dashboard inside Workbench Simple; no separate HTML application; existing eight tools retained.",
+  "implementation": {
+    "metricCards": 6,
+    "classificationBars": 7,
+    "secretSeverityBuckets": [
+      "HIGH",
+      "MEDIUM",
+      "LOW",
+      "INFO"
+    ],
+    "filters": [
+      "result account",
+      "secret importance"
+    ],
+    "currentRunOnly": true,
+    "originalIdRevalidatedOnHandoff": true,
+    "snapshotProjectionCached": true,
+    "asyncProjectionThreshold": 500,
+    "workerLimit": 1,
+    "pendingSnapshotLimit": 1,
+    "queuedCompletionLimit": 1,
+    "previousSameRunProjectionMarkedExplicitly": true,
+    "staleEpochResultsDiscarded": true,
+    "sharedDisplayRegexRulesUnchanged": true
+  },
+  "toolchain": {
+    "distribution": "Eclipse Temurin",
+    "runtime": "17.0.21+9",
+    "mode": "strict --release 17",
+    "downloadSha256": "8b9b611d917e3dfd8419d3566b5949226f69b052fed7e109c1368add1dfe8711",
+    "note": "The environment Java 21 install lacks ct.sym; a separate checksum-verified complete JDK 17 was used without changing host Java settings."
+  },
+  "dashboardSuites": [
+    "ScopeInspectionDashboardTest",
+    "ScopeInspectionDashboardUiTest",
+    "ScopeInspectionDashboardAsyncTest",
+    "SimpleDashboardIntegrationTest"
+  ],
+  "releaseGate": {
+    "command": "python simple/dev.py release --java <Temurin17>/bin/java --javac <Temurin17>/bin/javac",
+    "requiredResult": "passed",
+    "finalRecordedResult": "https://github.com/ohjun1998/burp-workbench-kr/blob/main/docs/reports/2026-10-30-simple-dashboard/VERIFICATION.json",
+    "note": "The final complete regression counts, packaging result, CI and merge provenance are recorded outside the immutable Simple source package at this repository link."
+  },
+  "layout": {
+    "result": "passed",
+    "jarSha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+    "renderedViews": 128,
+    "controls": 2700,
+    "scenarioAssertions": 568,
+    "conditions": [
+      "light/1024x720",
+      "light/1280x800",
+      "dark/1024x720",
+      "dark/1280x800"
+    ],
+    "reports": [
+      "images/1.4.0/layout-report.json",
+      "images/1.4.0/scope-layout-report.json"
+    ],
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "failedScenarios": 0
+  },
+  "additionalPythonChecks": {
+    "exactValueReportFormats": 10,
+    "versionedRetestReportInputs": 25,
+    "result": "passed"
+  },
+  "katanaEvidence": "verification/1.4.0/katana-native/katana-verification.json",
+  "metricRules": [
+    "Cards and unfiltered lists share the same projection.",
+    "Distinct observed paths use method and exact PacketRef URL when available; only displayed URLs are masked.",
+    "Existing global coverage and unresolved relative candidates are linked only by the real runner fingerprint.",
+    "Candidates, observed differences and identity review records are not confirmed vulnerability counts.",
+    "Sent/budget is request-budget usage, not a site-wide completion percentage.",
+    "Account-less candidates remain global; raw original packets are never fabricated for candidate-only rows.",
+    "Large projections run on one daemon worker; a previous projection is shown only for the same run/account with an explicit updating label, and every card/list uses that one projection."
+  ],
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "live external targets or external OAST/BApp/AI services",
+    "Docker lab stack",
+    "native MV3/DNR validation"
+  ],
+  "captureProvenance": "Production Swing components rendered with explicitly synthetic packet/API adapters. These images are not native Burp GUI screenshots.",
+  "focusedDashboardChecks": {
+    "ScopeInspectionDashboardTest": 97,
+    "ScopeInspectionDashboardUiTest": 51,
+    "ScopeInspectionDashboardAsyncTest": 20,
+    "SimpleDashboardIntegrationTest": 31,
+    "total": 199,
+    "result": "passed"
+  },
+  "additionalAnalysisRegressions": {
+    "ScopeInspectionAnalysisTest": 48,
+    "ScopeInspectionSecretEvidenceTest": 17,
+    "result": "passed"
+  },
+  "performanceEvidence": "https://github.com/ohjun1998/burp-workbench-kr/tree/main/docs/reports/2026-10-30-simple-dashboard/performance"
+}

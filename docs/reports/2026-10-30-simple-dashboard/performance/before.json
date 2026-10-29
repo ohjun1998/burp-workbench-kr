@@ -1,0 +1,65 @@
+{
+  "measured_at_utc": "2026-10-29T18:43:58.782207880Z",
+  "environment": {
+    "java": "17.0.21+9",
+    "os": "Linux 6.18.55 amd64",
+    "available_processors": 4,
+    "headless": true,
+    "concurrent_load_observation": "Root release/fullcheck Java regression tasks were observed running during the measurement window; renderer load was also possible per task context."
+  },
+  "jar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-simple-1.4.0.jar",
+  "jar_sha256": "f40773cb5352d3adf1d95e1cd4ab538528b8b893241d3a405f07be510b29dec0",
+  "fixture": {
+    "fresh_snapshots": 5,
+    "findings_each": 5000,
+    "accounts": 2,
+    "pages": 0,
+    "candidates": 0,
+    "detail_characters": 188,
+    "warmup_findings": 100,
+    "secret_findings": 1000,
+    "secret_each_severity": 250
+  },
+  "fresh_snapshot_edt_update_ms": [
+    5572.314775,
+    4983.394563,
+    3684.953398,
+    1325.865166,
+    700.466677
+  ],
+  "fresh_snapshot_edt_update_median_ms": 3684.953398,
+  "cached_interactions_per_batch": 10,
+  "cached_interactions_batch_edt_ms": [
+    420.476292,
+    157.629154,
+    78.031044,
+    39.17309,
+    35.384233
+  ],
+  "cached_interactions_mean_per_action_edt_ms": [
+    42.047629,
+    15.762915,
+    7.803104,
+    3.917309,
+    3.538423
+  ],
+  "cached_interactions_median_mean_per_action_edt_ms": 7.803104,
+  "checks": {
+    "category_total_5000": true,
+    "card_list_counts_match": true,
+    "secret_severity_counts_match": true,
+    "same_snapshot_account_projection_identity_reused": true,
+    "account_filtered_counts_match": true,
+    "no_original_actions_without_packets": true,
+    "closed_on_edt": true
+  },
+  "network_requests_by_harness": 0,
+  "limits": [
+    "Synthetic findings and headless Swing only; not actual Burp GUI.",
+    "EDT intervals exclude event-queue waiting, snapshot construction, assertions outside timed interactions, native window layout and paint.",
+    "Cached batches include 6 card and 4 severity changes, JTable updates and simple count assertions.",
+    "No fake packets, Burp API, HTTP runner or network client is constructed.",
+    "Concurrent renderer/release verification load may affect timings; no pass/fail latency threshold is defined.",
+    "Five samples include JVM/JIT warmup effects after a small 100-finding warmup."
+  ]
+}

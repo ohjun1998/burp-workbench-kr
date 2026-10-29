@@ -1,0 +1,8 @@
+{
+  "version": "1.4.0",
+  "sourceZipCrc": "passed",
+  "build": "passed",
+  "jarByteIdentical": true,
+  "jarSha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+  "toolchain": "Eclipse Temurin 17.0.21+9; --release 17"
+}

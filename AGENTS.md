@@ -1,6 +1,8 @@
 # Burp Workbench KR development
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
+- Workbench Simple **1.4.0** adds the current-run inspection dashboard inside the existing Simple workspace. It reuses `ScopeInspection.Snapshot` and immutable original IDs; it never starts a scan to populate metrics. Source: `simple/burp-workbench`; guide: `simple/docs/RELEASE_SIMPLE_1.4.0_KR.md`; evidence: `simple/docs/VERIFICATION_SIMPLE_1.4.0.json` and `docs/reports/2026-10-30-simple-dashboard/VERIFICATION.json`. Mapper remains 0.3.6, helper 0.4.1 and Katana 1.8.0. Preserve Simple 1.3.2 and all prior artifacts. Build/verify with `python simple/dev.py release` and `python simple/dev.py verify`; do not apply these changes to the original Next sources.
+
 - Parallel Simple release: **Workbench Simple 1.3.2** is merged to main through PR #100 (`70a9476998764211b886fa392742ec11d3acf83c`, 2026-10-28T10:11:02Z). Source/build commands live under `simple/`; use `python simple/dev.py check` and `python simple/dev.py verify` for Simple work. Guide: `simple/README_KR.md`; exact checks/limits: `simple/docs/VERIFICATION_SIMPLE_1.3.2.json`. Preserve all immutable Simple versioned artifacts and packaged inputs; changes after publication require a new version. Embedded Mapper0.3.6/helper0.4.1 are separate from the original Next versions below. Main merge verification is recorded in `docs/reports/2026-10-28-simple-main/MERGE_KR.md`.
 
 - GitHub is the shared source of truth. Read `README.md`, `PROJECT_STATUS_KR.md` and `docs/COLLABORATION_KR.md` before collaboration work.

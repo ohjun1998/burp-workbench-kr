@@ -3,6 +3,12 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
+**Workbench Simple 1.4.0은 내부 점검 대시보드를 추가합니다.** 현재 SCOPE 통합 점검의 관측 경로·API와 명세·환경과 DB·민감정보 후보·계정 관련 검토·미확인 수치를 보고, 카드·막대에서 조건별 목록 → 근거와 원본 → Repeater 준비·증거 추가로 이어갑니다. 계정·중요도 필터와 작은 창·다크테마를 지원하며 기존 8개 도구의 입력과 진입점을 유지합니다. 현재 실행만 집계하고 후보와 확정 취약점을 구분합니다.
+
+[Simple 1.4.0 설치 JAR](simple/downloads/1.4.0/burp-workbench-simple-1.4.0.jar) · [독립 소스·체크섬](simple/downloads/1.4.0/) · [대시보드 사용법](simple/docs/RELEASE_SIMPLE_1.4.0_KR.md) · [실제 검증과 미실행 범위](simple/docs/VERIFICATION_SIMPLE_1.4.0.json)
+
+아래 Simple 1.3.2 및 Next 기록은 기존 배포 이력입니다. 이전 산출물과 검증 기록은 보존합니다.
+
 **Workbench Simple 1.3.2를 [PR #100](https://github.com/ohjun1998/burp-workbench-kr/pull/100)으로 main에 추가했습니다.** 기존 8개 도구를 유지하고 Scope·Katana 정보 수집과 메뉴 탐색·원문 보고서에 집중한 별도 버전입니다. 기존 Next와 과거 배포 파일은 보존합니다. 브라우저 메뉴 탐색 보완은 JAR와 helper 0.4.1을 함께 갱신해야 적용됩니다.
 
 [Simple 설치 JAR](simple/downloads/1.3.2/burp-workbench-simple-1.3.2.jar) · [helper 0.4.1](simple/downloads/1.3.2/feature-mapper-browser-helper-0.4.1.zip) · [35쪽 가이드](simple/downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) · [소스·체크섬](simple/downloads/1.3.2/) · [사용 안내](simple/README_KR.md) · [병합 기록](docs/reports/2026-10-28-simple-main/MERGE_KR.md)

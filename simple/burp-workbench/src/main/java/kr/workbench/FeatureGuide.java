@@ -10,6 +10,12 @@ public final class FeatureGuide {
     @Override public String toString() { return title; }
   }
   private static final List<Feature> FEATURES = List.of(
+      new Feature("dashboard", "점검 대시보드", "현재 SCOPE 통합 점검 결과를 수치로 보고 클릭한 조건의 목록·근거·원본을 확인합니다.",
+          "1. 상단 대시보드를 엽니다. 통합 점검 열기에서 SCOPE·계정·실행 조건을 확인하고 점검을 직접 시작합니다.\n"
+          + "2. 현재 실행의 관측 경로·API·환경·민감정보·계정 차이·미확인 카드를 선택합니다. 계정 필터와 민감정보 중요도 막대로 목록을 좁힙니다.\n"
+          + "3. 항목을 선택해 상태·확실성·원본 위치를 확인하고 원본 보기·Repeater 준비·증거 추가로 이어갑니다.\n"
+          + "4. 필터 해제로 같은 분류의 전체 목록으로 돌아갑니다. 현재 실행만 표시하며 프로젝트 변경 시 이전 실행을 정리합니다.",
+          "대시보드 조회·필터·원본 보기·Repeater 준비는 대상 요청을 보내지 않습니다. 전송/한도는 점검 완료율이 아니며, 민감정보 후보와 계정별 응답 차이는 확정 취약점 수가 아닙니다."),
       new Feature("start", "처음 시작하기", "기존 8개 도구를 유지하고 Scope 통합 점검으로 탐색·환경·API·민감정보를 한 번에 확인합니다.",
           "1. SCOPE 목록에 URL을 등록하고 상단 ‘Scope 통합 점검’을 엽니다. URL·계정을 선택해 통합 점검 시작을 누르면 조회·분석을 함께 실행합니다. 일반 트래픽 수집은 별도 OFF/SCOPE로 제어합니다.\n"
           + "2. 환경·DB, 경로·응답, API·명세 대조, 키·민감정보, 계정 차이와 커버리지를 확인합니다. SPA 메뉴 탐색은 배포한 브라우저 도우미를 연결하고 허용한 뒤 사용합니다.\n"
@@ -80,6 +86,7 @@ public final class FeatureGuide {
   public static String title(String id) { return feature(id).title(); }
   public static String location(String id) {
     return switch (id) {
+      case "dashboard" -> "대시보드";
       case "traffic" -> "요청·응답";
       case "data" -> "요청·응답 → 변환·비교";
       case "mapper", "js", "response.recon", "environment" -> "" + title(id);

@@ -26,8 +26,10 @@ final class SimpleNavigation extends JPanel {
   private final JTabbedPane pages;
   private final Runnable settings, help, logs;
   private final Map<String, JToggleButton> tools = new LinkedHashMap<>();
+  private final ButtonGroup toolGroup = new ButtonGroup();
   private final JPanel toolRow = new JPanel(new GridLayout(1, IDS.length, 6, 0));
   private final JLabel hint = new JLabel();
+  private final JToggleButton dashboard = new JToggleButton("대시보드");
 
   SimpleNavigation(JTabbedPane pages, Runnable settings, Runnable help, Runnable logs) {
     this(pages,settings,help,logs,null);
@@ -49,11 +51,15 @@ final class SimpleNavigation extends JPanel {
     options.setName("wb.simple.options");
     options.addActionListener(e -> optionsMenu().show(options, 0, options.getHeight()));
     JPanel mainActions=new JPanel(new FlowLayout(FlowLayout.RIGHT,6,0));
+    dashboard.setName("wb.simple.dashboard.open");
+    dashboard.setToolTipText("현재 통합 점검의 수치·분류·원본 확인 · 대상 요청 없음");
+    dashboard.addActionListener(e -> { select("dashboard"); refreshSelection(); });
+    mainActions.add(dashboard);
     if(inspection!=null){JButton inspect=new JButton("Scope 통합 점검");inspect.setName("wb.scope.inspection.open");inspect.addActionListener(e->inspection.run());WorkbenchUi.primary(inspect);mainActions.add(inspect);}
     mainActions.add(options);titleRow.add(mainActions, BorderLayout.EAST);
     header.add(titleRow, BorderLayout.NORTH);
     toolRow.setName("wb.simple.tools");
-    ButtonGroup group = new ButtonGroup();
+    ButtonGroup group = toolGroup;
     for (int i = 0; i < IDS.length; i++) {
       String id = IDS[i];
       JToggleButton button = new JToggleButton(LABELS[i]);
@@ -107,11 +113,16 @@ final class SimpleNavigation extends JPanel {
   void refreshSelection() {
     String selected = pages.getSelectedComponent() instanceof JComponent component
         ? String.valueOf(component.getClientProperty("wb.feature.id")) : "traffic";
+    dashboard.setEnabled(indexOf("dashboard") >= 0);
+    dashboard.setSelected("dashboard".equals(selected));
     for (var entry : tools.entrySet()) {
       entry.getValue().setEnabled(indexOf(entry.getKey()) >= 0);
       entry.getValue().setSelected(entry.getKey().equals(selected));
     }
-    hint.setText(HINTS.getOrDefault(selected, "필요한 도구를 선택하세요. 화면 이동은 대상 요청을 보내지 않습니다."));
+    if ("dashboard".equals(selected)) toolGroup.clearSelection();
+    hint.setText("dashboard".equals(selected)
+        ? "현재 실행의 숫자 선택 → 조건별 목록 → 근거·원본 확인 · 화면 조회는 요청을 보내지 않습니다."
+        : HINTS.getOrDefault(selected, "필요한 도구를 선택하세요. 화면 이동은 대상 요청을 보내지 않습니다."));
     revalidate(); repaint();
   }
 }

@@ -1,0 +1,90 @@
+{
+  "version": "1.4.0",
+  "baseMain": "7a54e9842a90fca9b8cf0a47ed59932a7bec4afb",
+  "branch": "account-a/simple-dashboard-1.4.0",
+  "localRelease": {
+    "command": "python simple/dev.py release --java <Temurin17>/bin/java --javac <Temurin17>/bin/javac",
+    "result": "passed",
+    "counts": {
+      "regressionGroups": 138,
+      "regressionChecks": 5077,
+      "payloadHttpChecks": 136,
+      "mapperJavaChecks": 145,
+      "mapperBrowserHelperChecks": 29,
+      "totalChecks": 5387
+    },
+    "fullSummary": "check-summary.json"
+  },
+  "packaging": {
+    "result": "passed",
+    "jarSha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+    "artifacts": {
+      "burp-workbench-simple-1.4.0.jar": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+      "burp-workbench-simple-1.4.0-source.zip": "124023dab104cc51ed7bc8afc9187ed91fbef49d710add6b3382f2ba5d8f6800",
+      "feature-mapper-browser-helper-0.4.1.zip": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+    },
+    "sourceFiles": 1575,
+    "sourceZipCrc": "passed",
+    "sourceFingerprint": "passed",
+    "independentRebuild": "byte-identical",
+    "evidence": "independent-rebuild.json"
+  },
+  "layout": {
+    "result": "passed",
+    "views": 128,
+    "controls": 2700,
+    "scenarioAssertions": 568,
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "failedScenarios": 0,
+    "provenance": "Production Swing components with synthetic packet/API adapters, not native Burp GUI"
+  },
+  "nativeKatana": {
+    "result": "passed",
+    "checks": 102,
+    "jarSha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+    "evidence": "../../../simple/docs/verification/1.4.0/katana-native/katana-verification.json",
+    "scope": "Actual pinned Katana 1.8.0 process against isolated loopback HTTP/HTTPS CONNECT; not native Burp GUI"
+  },
+  "additionalPythonTests": {
+    "reportFormats": 10,
+    "versionedRetestInputs": 25,
+    "result": "passed"
+  },
+  "performance": {
+    "before": "performance/before.json",
+    "after": "performance/after.json",
+    "fixtureFindings": 5000,
+    "note": "Synthetic headless measurements under concurrent test/render load. EDT dispatch and background completion latency are separate; no native Burp or paint latency claim."
+  },
+  "review": {
+    "fixed": [
+      "Exact observed URL grouping uses PacketRef metadata; visible URLs remain masked.",
+      "Unresolved relative candidates retain origin-free paths and link to coverage only through actual runner fingerprints.",
+      "Large projections use one daemon worker with one pending input and one queued completion; stale run/account epochs are discarded.",
+      "Same-content detail text preserves selection and caret; cached projections avoid repeated card-navigation computation."
+    ],
+    "noKnownOutstandingDashboardFindings": true
+  },
+  "remoteVerification": {
+    "workflow": ".github/workflows/workbench-simple.yml",
+    "evidence": "The PR checks and uploaded simple-verification artifact record the remote checkout/head and results. Repeated platform/run counts are not added to local unique check counts.",
+    "pullRequests": "https://github.com/ohjun1998/burp-workbench-kr/pulls?q=is%3Apr+head%3Aaccount-a%2Fsimple-dashboard-1.4.0"
+  },
+  "baselineNextCiFailure": {
+    "head": "7a54e9842a90fca9b8cf0a47ed59932a7bec4afb",
+    "workflow": "Build and verify",
+    "run": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40670664087/job/122756778373",
+    "test": "TrafficUsability0532Test.java:85",
+    "message": "normal packet search dropped a pending list context",
+    "note": "Observed on main before this Simple task. Original Next production/test sources and all prior artifacts are unchanged. PR check results must distinguish a repeated baseline failure from this Simple validation."
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external targets/OAST/BApp/AI",
+    "native MV3/DNR validation"
+  ]
+}

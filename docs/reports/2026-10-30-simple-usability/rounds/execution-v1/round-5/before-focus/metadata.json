@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 1,
+  "probe": "dashboard",
+  "phase": "round-5-before",
+  "startedAtUtc": "2026-10-29T20:34:53.547327+00:00",
+  "nativeBurp": false,
+  "browserDOM": false,
+  "osClicks": false,
+  "repositoryHeadAtLaunch": "81b48defb81db7c656e913a8ebd6848e30621cf1",
+  "repositoryHeadProvesJarSource": false,
+  "harnessSource": {
+    "path": "audit/simple-usability/DashboardNavigationProbe.java",
+    "sha256": "92605c226507593d22a8a39ed8659738baf489d294649e7068cd43989e156e8d"
+  },
+  "preservedHarnessSHA256": {
+    "InspectionUpdateProbe.java": "cf68dc83d8bcb8d8429e2d032e546332d6132b813fc8e6d4cc104b8bbdf5ccdd",
+    "PassiveImportBenchmark.java": "af40c4ee017cc761c3dcc77d793bbd5ee4f7c4b36c646741e7e01672045d0a46",
+    "DashboardNavigationProbe.java": "92605c226507593d22a8a39ed8659738baf489d294649e7068cd43989e156e8d",
+    "LoopWorkflowAudit.java": "b9785ab7317642892de9f60f13108552f6e0e5765d43122bf5e1fa6f6c4ea63d"
+  },
+  "additionalNewHarnessSHA256": {
+    "WholeWorkbenchWorkflowAudit.java": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4"
+  },
+  "strictJava17": true,
+  "commands": [
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-version"
+      ],
+      "timeoutSeconds": 20,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "com.sun.tools.javac.Main",
+        "--release",
+        "17",
+        "-encoding",
+        "UTF-8",
+        "-cp",
+        "/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.product.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.classes:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.adapters:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/brotli-dec-0.1.2.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/legacy-api.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/montoya-2026.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/rhino.jar",
+        "-d",
+        "/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.classes",
+        "/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.sources/DashboardNavigationProbe.java"
+      ],
+      "timeoutSeconds": 180,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "-cp",
+        "/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.product.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.classes:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.adapters:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/brotli-dec-0.1.2.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/legacy-api.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/montoya-2026.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/rhino.jar",
+        "kr.workbench.DashboardNavigationProbe",
+        "<private-runtime>/work/light-1024x720",
+        "light",
+        "1024",
+        "720"
+      ],
+      "timeoutSeconds": 120,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "-cp",
+        "/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.product.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.classes:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.adapters:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/brotli-dec-0.1.2.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/legacy-api.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/montoya-2026.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/rhino.jar",
+        "kr.workbench.DashboardNavigationProbe",
+        "<private-runtime>/work/light-1280x800",
+        "light",
+        "1280",
+        "800"
+      ],
+      "timeoutSeconds": 120,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "-cp",
+        "/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.product.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.classes:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.adapters:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/brotli-dec-0.1.2.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/legacy-api.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/montoya-2026.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/rhino.jar",
+        "kr.workbench.DashboardNavigationProbe",
+        "<private-runtime>/work/dark-1024x720",
+        "dark",
+        "1024",
+        "720"
+      ],
+      "timeoutSeconds": 120,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "-cp",
+        "/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.product.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.classes:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.adapters:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/brotli-dec-0.1.2.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/legacy-api.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/montoya-2026.jar:/workspace/usability-five-rounds/execution-v1/round-5/before-focus/.deps/rhino.jar",
+        "kr.workbench.DashboardNavigationProbe",
+        "<private-runtime>/work/dark-1280x800",
+        "dark",
+        "1280",
+        "800"
+      ],
+      "timeoutSeconds": 120,
+      "returnCode": 0
+    }
+  ],
+  "resultFiles": [
+    {
+      "path": "results/dark-1024x720/00-dashboard-summary.png",
+      "sha256": "b9d32a6762af06e818448fb5b23d970a530aa2fbf7c4165e3f024f9617230bf6",
+      "bytes": 67283
+    },
+    {
+      "path": "results/dark-1024x720/01-api-card-after-click.png",
+      "sha256": "cf7cc6ed6d6d3a1996c59dfc67d3f6fa1290ab95481bf27c5379d96bedc3756d",
+      "bytes": 67248
+    },
+    {
+      "path": "results/dark-1024x720/01-api-card-after-reveal.png",
+      "sha256": "bef9f7b3dd80e95599e9f8a39d9f7b89b7e081753675b99859622664b7573286",
+      "bytes": 69917
+    },
+    {
+      "path": "results/dark-1024x720/02-api-classification-after-click.png",
+      "sha256": "cf7cc6ed6d6d3a1996c59dfc67d3f6fa1290ab95481bf27c5379d96bedc3756d",
+      "bytes": 67248
+    },
+    {
+      "path": "results/dark-1024x720/02-api-classification-after-reveal.png",
+      "sha256": "bef9f7b3dd80e95599e9f8a39d9f7b89b7e081753675b99859622664b7573286",
+      "bytes": 69917
+    },
+    {
+      "path": "results/dark-1024x720/03-high-importance-after-click.png",
+      "sha256": "9be25bbacfeaa372331020198ef534823f5b574c3a852e7dab8ed8b687d603e8",
+      "bytes": 67959
+    },
+    {
+      "path": "results/dark-1024x720/03-high-importance-after-reveal.png",
+      "sha256": "258bab70b7c64cd5fbb460a348473d9af08b3853c8de693ee5d649b38d4f2c6f",
+      "bytes": 71331
+    },
+    {
+      "path": "results/dark-1024x720/04-automatic-snapshot-refresh.png",
+      "sha256": "601856d5bc14a922799ccc8067f6eb4ada068f374d314f30bd26cfb92d3eb84c",
+      "bytes": 67646
+    },
+    {
+      "path": "results/dark-1024x720/result.json",
+      "sha256": "5fc8305fd64664ab96cf927450f68c89f5bbb4097ece4c0d96bc1627e47bb3be",
+      "bytes": 5192
+    },
+    {
+      "path": "results/dark-1280x800/00-dashboard-summary.png",
+      "sha256": "d4708c3e82f1856febaf16f5ee521bc2a732b9de09052f11803dc1b53a55dd9b",
+      "bytes": 86807
+    },
+    {
+      "path": "results/dark-1280x800/01-api-card-after-click.png",
+      "sha256": "a159668b4e39366505f0fdce7a7d26ee433951c3a6032a6bd0768a2375ce5ffb",
+      "bytes": 83081
+    },
+    {
+      "path": "results/dark-1280x800/01-api-card-after-reveal.png",
+      "sha256": "a159668b4e39366505f0fdce7a7d26ee433951c3a6032a6bd0768a2375ce5ffb",
+      "bytes": 83081
+    },
+    {
+      "path": "results/dark-1280x800/02-api-classification-after-click.png",
+      "sha256": "a159668b4e39366505f0fdce7a7d26ee433951c3a6032a6bd0768a2375ce5ffb",
+      "bytes": 83081
+    },
+    {
+      "path": "results/dark-1280x800/02-api-classification-after-reveal.png",
+      "sha256": "a159668b4e39366505f0fdce7a7d26ee433951c3a6032a6bd0768a2375ce5ffb",
+      "bytes": 83081
+    },
+    {
+      "path": "results/dark-1280x800/03-high-importance-after-click.png",
+      "sha256": "fc879d694ebf32c953c719844644388ae0eaed8ebb73e6ff1dc5959ce271a85a",
+      "bytes": 84261
+    },
+    {
+      "path": "results/dark-1280x800/03-high-importance-after-reveal.png",
+      "sha256": "fc879d694ebf32c953c719844644388ae0eaed8ebb73e6ff1dc5959ce271a85a",
+      "bytes": 84261
+    },
+    {
+      "path": "results/dark-1280x800/04-automatic-snapshot-refresh.png",
+      "sha256": "a52839745db46991ec8aa788705d66bc85fcfb5a23f1df413664761992b2f3c6",
+      "bytes": 81513
+    },
+    {
+      "path": "results/dark-1280x800/result.json",
+      "sha256": "406075abf51393a2bcfbe59c83b2b0755474e04cdb4c86d0c8b09f13ebd9f00f",
+      "bytes": 5193
+    },
+    {
+      "path": "results/light-1024x720/00-dashboard-summary.png",
+      "sha256": "311ebe1236f621ff7ececfe0cade74d181fc86e30be2ee7a69b3613a5bab4f01",
+      "bytes": 68118
+    },
+    {
+      "path": "results/light-1024x720/01-api-card-after-click.png",
+      "sha256": "9552d4fcd94a17264d53b0fecaf6320325bb2e8c3881b1e632e556ce9d1bf407",
+      "bytes": 68072
+    },
+    {
+      "path": "results/light-1024x720/01-api-card-after-reveal.png",
+      "sha256": "ec42a6105d55afed6ba82a18818efc6651bf324701038e42a6ea37489ce97f77",
+      "bytes": 70817
+    },
+    {
+      "path": "results/light-1024x720/02-api-classification-after-click.png",
+      "sha256": "9552d4fcd94a17264d53b0fecaf6320325bb2e8c3881b1e632e556ce9d1bf407",
+      "bytes": 68072
+    },
+    {
+      "path": "results/light-1024x720/02-api-classification-after-reveal.png",
+      "sha256": "ec42a6105d55afed6ba82a18818efc6651bf324701038e42a6ea37489ce97f77",
+      "bytes": 70817
+    },
+    {
+      "path": "results/light-1024x720/03-high-importance-after-click.png",
+      "sha256": "1b031f4fb3da6db3ca742282d8290b570f8a7dee9d5760cbbeb8415adb8a6c87",
+      "bytes": 68791
+    },
+    {
+      "path": "results/light-1024x720/03-high-importance-after-reveal.png",
+      "sha256": "c11c386ba8e1e1daf9b8b5905e824871f3a4b1fccd99745bbcad86c16c54458d",
+      "bytes": 72171
+    },
+    {
+      "path": "results/light-1024x720/04-automatic-snapshot-refresh.png",
+      "sha256": "68c4f60d6aaea825ad89ab98cf1422aa6d8781a1a8f6c041a0d60fd23a3aca78",
+      "bytes": 68805
+    },
+    {
+      "path": "results/light-1024x720/result.json",
+      "sha256": "e7315bd2eb4f5063b9a6b896ada15a96e565896cb100b21ed3fb77dd7f35f8eb",
+      "bytes": 5193
+    },
+    {
+      "path": "results/light-1280x800/00-dashboard-summary.png",
+      "sha256": "06c5b151178939e3b1b4ee59f5350f38cb322a7b9f3ae9bec3eaa6a5a00ea80e",
+      "bytes": 88105
+    },
+    {
+      "path": "results/light-1280x800/01-api-card-after-click.png",
+      "sha256": "a3e755b85c46b8835b2d9182add217b8afbc89e0275cd502bf086e6a4e6319c6",
+      "bytes": 84391
+    },
+    {
+      "path": "results/light-1280x800/01-api-card-after-reveal.png",
+      "sha256": "a3e755b85c46b8835b2d9182add217b8afbc89e0275cd502bf086e6a4e6319c6",
+      "bytes": 84391
+    },
+    {
+      "path": "results/light-1280x800/02-api-classification-after-click.png",
+      "sha256": "a3e755b85c46b8835b2d9182add217b8afbc89e0275cd502bf086e6a4e6319c6",
+      "bytes": 84391
+    },
+    {
+      "path": "results/light-1280x800/02-api-classification-after-reveal.png",
+      "sha256": "a3e755b85c46b8835b2d9182add217b8afbc89e0275cd502bf086e6a4e6319c6",
+      "bytes": 84391
+    },
+    {
+      "path": "results/light-1280x800/03-high-importance-after-click.png",
+      "sha256": "19867649136ad52bee3921a4f80f8530219b5e3263709db8f919d2c9a104c067",
+      "bytes": 85624
+    },
+    {
+      "path": "results/light-1280x800/03-high-importance-after-reveal.png",
+      "sha256": "19867649136ad52bee3921a4f80f8530219b5e3263709db8f919d2c9a104c067",
+      "bytes": 85624
+    },
+    {
+      "path": "results/light-1280x800/04-automatic-snapshot-refresh.png",
+      "sha256": "e69f8c42f875f2c4e8d9d36b981a4e7fbddf84a05c481b682d18ba7daf319e10",
+      "bytes": 83049
+    },
+    {
+      "path": "results/light-1280x800/result.json",
+      "sha256": "6e685f1d04b7288287ecad3eada9ecdae61fb393a0569c4ab42c9da85b29b600",
+      "bytes": 5194
+    },
+    {
+      "path": "results/summary.json",
+      "sha256": "8fead1158636c6cc3666c481b6a478dc5dd3ad8103fe01423aa719bfd8c74875",
+      "bytes": 27921
+    },
+    {
+      "path": "logs/compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/dark-1024x720.log",
+      "sha256": "3afcef05eff61a460abd8053fc0586192c34773fcfb9ffdb304db54c7b782165",
+      "bytes": 1131
+    },
+    {
+      "path": "logs/dark-1280x800.log",
+      "sha256": "470cf0c3f54e639b8830e53887219cd73824797d30c4566cb14b9c9fc1b7e26b",
+      "bytes": 1129
+    },
+    {
+      "path": "logs/java-version.log",
+      "sha256": "aa8b8c37cfb8295d241a736330151318fe156c8937b464a27b2c21d638db1862",
+      "bytes": 183
+    },
+    {
+      "path": "logs/light-1024x720.log",
+      "sha256": "eb4d2574fef53ecdd07443fe4155c1ed3eca83700b822df89ee273409e7e4668",
+      "bytes": 1132
+    },
+    {
+      "path": "logs/light-1280x800.log",
+      "sha256": "8bb36da4245de3e79c01faf17dbd032ee4b8c05ed49f889461cb4717f2e45240",
+      "bytes": 1130
+    }
+  ],
+  "withheldOutputs": [],
+  "runtimeIsolation": {
+    "userHome": true,
+    "javaPrefs": true,
+    "javaTmp": true,
+    "rawReportZipsPromoted": false,
+    "privateRuntimeRemoved": true
+  },
+  "textReview": "Heuristic checks only; no claim of complete secret detection. PNGs are synthetic-fixture captures and require visual review before sharing.",
+  "status": "completed",
+  "productJar": {
+    "source": "/workspace/usability-five-rounds/execution-v1/products/round-4-after.jar",
+    "snapshot": ".product.jar",
+    "sha256": "84cf9413f70aebf6e95934d73a1fef5dccb613dc248bcd02272728fbd0b8146e",
+    "bytes": 4589952
+  },
+  "harnessSourceSnapshot": {
+    "source": "/workspace/burp-workbench-kr/audit/simple-usability/DashboardNavigationProbe.java",
+    "snapshot": "DashboardNavigationProbe.java",
+    "sha256": "92605c226507593d22a8a39ed8659738baf489d294649e7068cd43989e156e8d",
+    "bytes": 16397
+  },
+  "adapters": {
+    "source": "/workspace/burp-workbench-kr/simple/burp-workbench/build/tests",
+    "snapshot": ".adapters",
+    "classFiles": 208,
+    "treeSHA256": "8d92faf6399ce00769729f29d8d78518c991c8d2bae32ca814598bc24e0392e5",
+    "stableDuringCopy": true,
+    "copyAttempts": 1
+  },
+  "dependencies": [
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar",
+      "snapshot": "brotli-dec-0.1.2.jar",
+      "sha256": "615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52",
+      "bytes": 98115
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+      "snapshot": "legacy-api.jar",
+      "sha256": "0b9b16048e1a3d10bb8f36219bb7dfa637dad2d54e116199d3506b4174518e54",
+      "bytes": 20139
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar",
+      "snapshot": "montoya-2026.jar",
+      "sha256": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94",
+      "bytes": 181538
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar",
+      "snapshot": "rhino.jar",
+      "sha256": "12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975",
+      "bytes": 1647024
+    }
+  ],
+  "removedJvmEnvironmentNames": [],
+  "java": {
+    "executable": "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+    "version": "openjdk version \"17.0.21\" 2026-10-20\nOpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)\nOpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)",
+    "major": 17
+  },
+  "compiledProbeClassMajorVersions": [
+    61
+  ],
+  "inputJarSHA256After": "84cf9413f70aebf6e95934d73a1fef5dccb613dc248bcd02272728fbd0b8146e",
+  "inputJarUnchanged": true,
+  "productSnapshotUnchanged": true,
+  "harnessSourceUnchanged": true,
+  "harnessSnapshotUnchanged": true,
+  "finishedAtUtc": "2026-10-29T20:35:15.765020+00:00"
+}

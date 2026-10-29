@@ -1,0 +1,53 @@
+--- a/simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java
++++ b/simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java
+@@ -152,7 +152,21 @@
+   }
+   private static ScopeInspection.Snapshot empty(){return new ScopeInspection.Snapshot("",ScopeInspection.State.READY,"준비",0,0,0,0,0,0,List.of(),List.of(),List.of(),0,0);}
+   private static void name(JComponent component,String suffix){component.setName("wb.scope.inspection."+suffix);}
+-  private static DefaultTableModel model(String[] columns){return new DefaultTableModel(columns,0){public boolean isCellEditable(int r,int c){return false;}};}
++  /** Cache immutable inputs before formatting cells; a publication need not rebuild every table. */
++  private static final class SnapshotTableModel extends DefaultTableModel {
++    private List<?> shown=List.of();
++    SnapshotTableModel(String[] columns){super(columns,0);}
++    @Override public boolean isCellEditable(int row,int column){return false;}
++    <T> boolean replace(List<T> values,Function<T,Object[]> cells){
++      if(getRowCount()==values.size()&&shown.equals(values))return false;
++      Vector<Vector> next=new Vector<>(values.size());
++      for(T value:values)next.add(new Vector<>(Arrays.asList(cells.apply(value))));
++      // A data event preserves column widths/order and sort keys. A structure event would not.
++      dataVector=next;shown=List.copyOf(values);fireTableDataChanged();return true;
++    }
++    void release(){shown=List.of();}
++  }
++  private static DefaultTableModel model(String[] columns){return new SnapshotTableModel(columns);}
+   private JTable createTable(String key,String[] columns){
+     JTable table=new JTable(model(columns));name(table,key);table.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+     DefaultTableCellRenderer renderer=new DefaultTableCellRenderer();renderer.putClientProperty("html.disable",true);table.setDefaultRenderer(Object.class,renderer);
+@@ -328,16 +342,16 @@
+       progress.setToolTipText(value.message());feedback.setText(value.message());
+       for(var entry:tables.entrySet()){
+         String key=entry.getKey();if(key.equals("browser"))continue;
+-        DefaultTableModel model=(DefaultTableModel)entry.getValue().getModel();int selection=positionsBefore.getOrDefault(key,-1);Object selectedId=selectedBefore.get(key);model.setRowCount(0);
+-        if(key.equals("paths")){for(var page:value.pages())model.addRow(new Object[]{page.account(),page.method(),ScopeInspectionAnalysis.safeUrl(page.url()),page.status(),page.classification(),page.complete()?"검사 범위 내 완료":"부분 · "+page.note()});}
++        SnapshotTableModel model=(SnapshotTableModel)entry.getValue().getModel();int selection=positionsBefore.getOrDefault(key,-1);Object selectedId=selectedBefore.get(key);boolean changed;
++        if(key.equals("paths"))changed=model.replace(value.pages(),page->new Object[]{page.account(),page.method(),ScopeInspectionAnalysis.safeUrl(page.url()),page.status(),page.classification(),page.complete()?"검사 범위 내 완료":"부분 · "+page.note()});
+         else {
+           List<ScopeInspection.Finding> selected=key.equals("changes")?changes:value.findings().stream().filter(f->matches(key,f.category())).toList();
+           if(key.equals("coverage")){
+             var extras=new ArrayList<>(selected);for(var candidate:value.candidates())if(!candidate.executable())extras.add(new ScopeInspection.Finding("COVERAGE",candidate.label(),ScopeInspectionAnalysis.safeUrl(candidate.url()),candidate.method(),"", "미확인","정보","필수값·원본 확인",candidate.source(),"",0,-1,""));selected=List.copyOf(extras);
+           }
+-          rows.put(key,selected);for(var f:selected)model.addRow(new Object[]{category(f.category()),f.title(),f.account(),f.state(),f.confidence(),severity(f.severity()),f.url()});
++          rows.put(key,selected);changed=model.replace(selected,f->new Object[]{category(f.category()),f.title(),f.account(),f.state(),f.confidence(),severity(f.severity()),f.url()});
+         }
+-        restoreSelection(entry.getValue(),key,selectedId,selection);
++        if(changed)restoreSelection(entry.getValue(),key,selectedId,selection);
+       }
+       for(var page:value.pages())if(page.original()!=null&&observed.add(page.original().id()))try{actions.observed(page.original());}catch(RuntimeException error){feedback.setText("기존 도구 연결 일부 실패 · 원본은 통합 점검에 보관됩니다.");}
+       if(options!=null&&terminal(value.state())&&!value.id().isEmpty()&&persisted.add(value.id())){if(browser.active())browser.stop();saveHistory(options,value,runProject,runScope,runHistoryScope);}
+@@ -418,5 +432,5 @@
+   void closeOriginalContent(JComponent content){Object value=content.getClientProperty("wb.scope.inspection.inspectors");if(value instanceof List<?> list)for(Object item:list)if(item instanceof PacketInspector inspector){inspector.close();inspectors.remove(inspector);}content.putClientProperty("wb.scope.inspection.inspectors",null);}
+   private void closeInspectors(){for(var inspector:inspectors)inspector.close();inspectors.clear();}
+   private void safe(Runnable action){try{action.run();}catch(RuntimeException error){feedback.setText(Objects.requireNonNullElse(error.getMessage(),"실행 조건을 확인하세요."));}}
+-  @Override public void close(){if(closed)return;closed=true;snapshotListener=value->{};report.setEnabled(false);updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();reportWorker.shutdownNow();}
++  @Override public void close(){if(closed)return;closed=true;snapshotListener=value->{};report.setEnabled(false);updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();reportWorker.shutdownNow();for(var table:tables.values())if(table.getModel() instanceof SnapshotTableModel model)model.release();}
+ }

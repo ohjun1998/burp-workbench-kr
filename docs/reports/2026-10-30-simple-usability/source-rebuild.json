@@ -1,0 +1,20 @@
+{
+  "result": "passed",
+  "sourceZipSHA256": "bdf1b095b7c18370ee61ff2516e78e80ec1c1eb781c51f36cebdeb9b679d9230",
+  "publishedJarSHA256": "ebda707fd762dcac91f641c7f149a6bf5e52865008d0f70e8861e502d8a5bbf1",
+  "rebuiltJarSHA256": "ebda707fd762dcac91f641c7f149a6bf5e52865008d0f70e8861e502d8a5bbf1",
+  "byteIdentical": true,
+  "command": [
+    "python",
+    "dev.py",
+    "build",
+    "--java",
+    "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+    "--javac",
+    "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/javac"
+  ],
+  "independentDirectory": "/workspace/simple-1.4.1-independent-source-build",
+  "exitCode": 0,
+  "finishedAtUtc": "2026-10-29T20:48:35.773057+00:00",
+  "scope": "Independent source archive strict-release17 build; complete regression ran on the same packaged sources before publication, not repeated here."
+}

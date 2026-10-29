@@ -1,0 +1,10 @@
+{
+  "round2": {
+    "reconstructedSourceMatchesEarlierCandidate": true,
+    "sha256": "5eca919b6fcb439ed4a8af7045f15d9e68a869b8daf904f7fea90c63619b04ee"
+  },
+  "round3": {
+    "reconstructedSourceMatchesEarlierCandidate": true,
+    "sha256": "7b8cc7b32f18c88f4d4abc874443cb22f680d48451ce5255cb5b9f708b052f64"
+  }
+}

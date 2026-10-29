@@ -1,0 +1,31 @@
+{
+  "recordedAtUtc": "2026-10-29T19:47:31.961917+00:00",
+  "note": "Immutable 1.4.0 and copied cycle1+2 product artifacts; standalone probe/test classes are outside the shared product build.",
+  "files": {
+    "probe_source": {
+      "path": "/workspace/usability-five-cycles/cycle3/InspectionUpdateProbe.java",
+      "bytes": 24544,
+      "sha256": "cf68dc83d8bcb8d8429e2d032e546332d6132b813fc8e6d4cc104b8bbdf5ccdd"
+    },
+    "immutable_1_4_0": {
+      "path": "/workspace/burp-workbench-kr/simple/downloads/1.4.0/burp-workbench-simple-1.4.0.jar",
+      "bytes": 4586412,
+      "sha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef"
+    },
+    "progressive_cycles_1_2": {
+      "path": "/workspace/usability-five-cycles/cycle3/before-progressive-product.jar",
+      "bytes": 4587514,
+      "sha256": "b472df5e56bd4fae163921d29979a59cda458139220e3798e51d4feb50965f00"
+    },
+    "test_fixture_class": {
+      "path": "/tmp/inspection-update-probe-tests/kr/workbench/ScopeInspectionFixture.class",
+      "bytes": 29309,
+      "sha256": "1d7b3eaec8ba72f798068552497528da8ff99468884f544bf7756d5065d1a1fc"
+    },
+    "test_workbench_class": {
+      "path": "/tmp/inspection-update-probe-tests/kr/workbench/WorkbenchTest.class",
+      "bytes": 27264,
+      "sha256": "4a1eee1f5d8ae176646fdc07baefb58c55751de6836c56d2ffa2db381a06c68f"
+    }
+  }
+}

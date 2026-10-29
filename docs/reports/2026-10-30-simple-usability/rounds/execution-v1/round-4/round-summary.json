@@ -1,0 +1,51 @@
+{
+  "round": 4,
+  "startedAtUtc": "2026-10-29T20:33:51.435118+00:00",
+  "beforeJarSHA256": "1632d5fae4cd00d1e69c978a2573be9de005a33a84efa246c80034a8a4f39c58",
+  "wholeHarnessSHA256": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4",
+  "appliedPatch": "changes/round-4/change.patch",
+  "completed": true,
+  "afterJarSHA256": "84cf9413f70aebf6e95934d73a1fef5dccb613dc248bcd02272728fbd0b8146e",
+  "improvement": {
+    "metric": "import 1000 URLs",
+    "before": {
+      "medianMs": 316.070339,
+      "medianEdtAllocatedBytes": 143618856.0,
+      "targetRequests": 0
+    },
+    "after": {
+      "medianMs": 111.963185,
+      "medianEdtAllocatedBytes": 55929528.0,
+      "targetRequests": 0
+    },
+    "filterSetsBefore": 1000,
+    "filterSetsAfter": 1
+  },
+  "finishedAtUtc": "2026-10-29T20:34:40.886705+00:00",
+  "beforeChecks": 115,
+  "afterChecks": 115,
+  "beforeHttp": 42,
+  "afterHttp": 42,
+  "beforeModules": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "afterModules": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "beforeWholeReused": false,
+  "afterWholeReused": false
+}

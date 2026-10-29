@@ -1,0 +1,169 @@
+{
+  "version": "1.4.1",
+  "baseMain": "81b48defb81db7c656e913a8ebd6848e30621cf1",
+  "featureScope": "Improve five measured workflows in existing Workbench Simple; preserve all eight tools, dashboard and original-ID/auth/SCOPE/budget contracts.",
+  "jarSha256": "ebda707fd762dcac91f641c7f149a6bf5e52865008d0f70e8861e502d8a5bbf1",
+  "roundDefinition": {
+    "completedRounds": 5,
+    "wholeWorkflowExecutions": 10,
+    "modulesPerExecution": [
+      "traffic",
+      "mapper",
+      "auth",
+      "js",
+      "environment",
+      "response.recon",
+      "payload",
+      "bounty"
+    ],
+    "passedAssertionsPerExecution": 115,
+    "failedAssertionsPerExecution": 0,
+    "realLoopGetRequestsPerExecution": 42,
+    "loginSetupPostRequestsPerExecution": 2,
+    "resultReuse": false,
+    "earlierFocusedCasesCountAsRounds": false,
+    "improvementsPreparedDuringPreliminaryInvestigation": true,
+    "stageOrder": "fresh whole before -> fresh focus before -> apply one verified patch -> build -> fresh focus after -> fresh whole after"
+  },
+  "improvements": [
+    {
+      "metric": "reselectionActions",
+      "before": 5,
+      "after": 0
+    },
+    {
+      "metric": "explicit UI actions",
+      "before": 6,
+      "after": 4
+    },
+    {
+      "metric": "same snapshot",
+      "before": {
+        "edtWallMs": {
+          "median": 25.210611,
+          "min": 20.50904,
+          "max": 31.114048
+        },
+        "edtAllocatedBytes": {
+          "median": 9889192.0,
+          "min": 9889192.0,
+          "max": 9937744.0
+        },
+        "modelEventCount": {
+          "median": 6009.0,
+          "min": 6009.0,
+          "max": 6009.0
+        }
+      },
+      "after": {
+        "edtWallMs": {
+          "median": 2.900999,
+          "min": 1.656574,
+          "max": 4.999419
+        },
+        "edtAllocatedBytes": {
+          "median": 568232.0,
+          "min": 568232.0,
+          "max": 712576.0
+        },
+        "modelEventCount": {
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        }
+      }
+    },
+    {
+      "metric": "import 1000 URLs",
+      "before": {
+        "medianMs": 316.070339,
+        "medianEdtAllocatedBytes": 143618856.0,
+        "targetRequests": 0
+      },
+      "after": {
+        "medianMs": 111.963185,
+        "medianEdtAllocatedBytes": 55929528.0,
+        "targetRequests": 0
+      },
+      "filterSetsBefore": 1000,
+      "filterSetsAfter": 1
+    },
+    {
+      "metric": "additional explicit scrolling across 12 observations",
+      "before": 6,
+      "after": 0
+    }
+  ],
+  "newRegressionChecks": {
+    "ScopeInspectionReadingTest": 16,
+    "ScopeInspectionTargetFlowTest": 25,
+    "ScopeInspectionTableUpdateTest": 18,
+    "PassiveImportBatchTest": 26,
+    "SimpleDashboardRevealTest": 17,
+    "total": 102,
+    "result": "passed",
+    "note": "These checks are included in the complete release suite; overlapping focused runs are not added again."
+  },
+  "layout": {
+    "result": "passed",
+    "renderedViews": 128,
+    "controls": 2700,
+    "scenarioAssertions": 568,
+    "conditions": [
+      "light/1024x720",
+      "light/1280x800",
+      "dark/1024x720",
+      "dark/1280x800"
+    ],
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "failedScenarios": 0,
+    "reports": [
+      "images/1.4.1/layout-report.json",
+      "images/1.4.1/scope-layout-report.json"
+    ]
+  },
+  "katanaEvidence": "verification/1.4.1/katana-native/katana-verification.json",
+  "additionalLoopLifecycleCheck": {
+    "passed": 25,
+    "failed": 0,
+    "result": "passed",
+    "scope": "Original LOOP3.10.0 normal-login account, pause/resume/stop, original, Repeater preparation, evidence/report and unload. Separate from the ten whole runs."
+  },
+  "releaseGate": {
+    "command": "python simple/dev.py release --java <Temurin17>/bin/java --javac <Temurin17>/bin/javac",
+    "requiredResult": "passed",
+    "finalRecordedResult": "https://github.com/ohjun1998/burp-workbench-kr/blob/main/docs/reports/2026-10-30-simple-usability/VERIFICATION.json",
+    "note": "Final complete regression counts, immutable package verification, source rebuild and PR checks are recorded outside this source package. Packaging only follows successful complete regression execution."
+  },
+  "reproduction": "https://github.com/ohjun1998/burp-workbench-kr/tree/main/audit/simple-usability",
+  "roundEvidence": "https://github.com/ohjun1998/burp-workbench-kr/tree/main/docs/reports/2026-10-30-simple-usability/rounds",
+  "interpretation": [
+    "EDT allocation is per-thread allocated bytes, not retained heap or RSS.",
+    "Synthetic timing medians are local diagnostics, not native Burp GUI latency or human task completion time.",
+    "Repeated assertions are not unique additional checks.",
+    "Whole workflow dashboard asserts selected original correctness; account-filter selection itself is covered by the separate two-account focused/regression evidence.",
+    "Whole HTTP adapter reconstructs HTTP framing after Java HttpClient decoding; not a raw TCP recording."
+  ],
+  "captureProvenance": "Production Swing components rendered with explicit synthetic API/packet adapters. Whole runs additionally use actual loopback HTTP against original LOOP3.10.0.",
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "native MV3/DNR or browser DOM",
+    "Docker lab stack",
+    "live external targets or external OAST/BApp/AI services"
+  ],
+  "preserved": {
+    "mapper": "0.3.6",
+    "browserHelper": "0.4.1",
+    "katana": "1.8.0",
+    "originalNextSourcesUnchanged": true,
+    "previousVersionedArtifactsUnchanged": true
+  },
+  "toolchain": {
+    "runtime": "Eclipse Temurin17.0.21+9",
+    "mode": "strict --release17",
+    "java17ApiCompatibilityVerified": true
+  }
+}

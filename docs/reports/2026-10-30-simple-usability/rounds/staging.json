@@ -1,0 +1,16 @@
+{
+  "baselineCommit": "81b48defb81db7c656e913a8ebd6848e30621cf1",
+  "baselineVersion": "1.4.0",
+  "baselineJarSHA256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+  "finalCandidateJarSHA256": "ebda707fd762dcac91f641c7f149a6bf5e52865008d0f70e8861e502d8a5bbf1",
+  "finalSources": {
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java": "7b8cc7b32f18c88f4d4abc874443cb22f680d48451ce5255cb5b9f708b052f64",
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeDashboardPanel.java": "e6d6afa9cb18ba58a0acda3b6494fce69303741710a9e55c26887186475ee812",
+    "simple/burp-workbench/src/main/java/kr/workbench/PassiveScanPanel.java": "063d0983aa151966c1a73cba69038e493faeafd446296d575d388d75a0f4a8e3",
+    "simple/burp-workbench/src/main/java/kr/workbench/BuildInfo.java": "82c5089ab1184b16e892af6d59baca09ef8efcd8635200f3bd67eaf2b19694bc",
+    "simple/burp-workbench/build_all.py": "df4907176436df4acd7d3b74c58d653950991ec2b1e59ef091d822fb2160d2ad"
+  },
+  "nextRound": 6,
+  "publicationsPerformed": false,
+  "lastAppliedRound": 5
+}

@@ -1,0 +1,19 @@
+{
+  "owned_product_files": {
+    "simple/burp-workbench/src/main/java/kr/workbench/ScopeDashboardPanel.java": "e6d6afa9cb18ba58a0acda3b6494fce69303741710a9e55c26887186475ee812",
+    "simple/burp-workbench/src/test/java/kr/workbench/SimpleDashboardRevealTest.java": "f8aeeb4e9be5b68a3c09d69d8de393f50f2515fefb2a0e94a867bcb017a38457",
+    "simple/tools/SimplePreview.java": "b3b97ae56a1000c8a23de39af2dca6fd9f8b23711a3c7c01aba5209551ef2e5d",
+    "simple/tools/ScopeInspectionPreview.java": "eff8c324c7757f85fee64776936ad870c98b046cdf0fbe2bf69b20b73bbe2de9"
+  },
+  "candidate_jar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-simple-1.4.1.jar",
+  "candidate_sha256": "ebda707fd762dcac91f641c7f149a6bf5e52865008d0f70e8861e502d8a5bbf1",
+  "toolchain": "strict-release17",
+  "java_runtime": "17.0.21",
+  "source_changes_outside_owned_files": false,
+  "remote_or_git_actions": false,
+  "packaged_release_generated": false,
+  "notes": [
+    "The final immutable 1.4.1 packaging and full-suite verification remain with root.",
+    "The first focus attempt failed a y=0 lifecycle assumption; a control-group comparison separated existing Swing caret layout motion from delayed reveal cancellation."
+  ]
+}

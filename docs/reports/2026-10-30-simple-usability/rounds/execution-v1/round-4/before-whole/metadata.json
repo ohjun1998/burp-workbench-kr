@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "probe": "whole",
+  "phase": "round-4-before",
+  "startedAtUtc": "2026-10-29T20:33:51.493081+00:00",
+  "nativeBurp": false,
+  "browserDOM": false,
+  "osClicks": false,
+  "repositoryHeadAtLaunch": "81b48defb81db7c656e913a8ebd6848e30621cf1",
+  "repositoryHeadProvesJarSource": false,
+  "harnessSource": {
+    "path": "audit/simple-usability/WholeWorkbenchWorkflowAudit.java",
+    "sha256": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4"
+  },
+  "preservedHarnessSHA256": {
+    "InspectionUpdateProbe.java": "cf68dc83d8bcb8d8429e2d032e546332d6132b813fc8e6d4cc104b8bbdf5ccdd",
+    "PassiveImportBenchmark.java": "af40c4ee017cc761c3dcc77d793bbd5ee4f7c4b36c646741e7e01672045d0a46",
+    "DashboardNavigationProbe.java": "92605c226507593d22a8a39ed8659738baf489d294649e7068cd43989e156e8d",
+    "LoopWorkflowAudit.java": "b9785ab7317642892de9f60f13108552f6e0e5765d43122bf5e1fa6f6c4ea63d"
+  },
+  "additionalNewHarnessSHA256": {
+    "WholeWorkbenchWorkflowAudit.java": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4"
+  },
+  "strictJava17": true,
+  "commands": [
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-version"
+      ],
+      "timeoutSeconds": 20,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "com.sun.tools.javac.Main",
+        "--release",
+        "17",
+        "-encoding",
+        "UTF-8",
+        "-cp",
+        "/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.product.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.classes:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.adapters:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/brotli-dec-0.1.2.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/legacy-api.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/montoya-2026.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/rhino.jar",
+        "-d",
+        "/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.classes",
+        "/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.sources/WholeWorkbenchWorkflowAudit.java"
+      ],
+      "timeoutSeconds": 180,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "-cp",
+        "/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.product.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.classes:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.adapters:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/brotli-dec-0.1.2.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/legacy-api.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/montoya-2026.jar:/workspace/usability-five-rounds/execution-v1/round-4/before-whole/.deps/rhino.jar",
+        "kr.workbench.WholeWorkbenchWorkflowAudit",
+        "<private-runtime>/work",
+        "1632d5fae4cd00d1e69c978a2573be9de005a33a84efa246c80034a8a4f39c58"
+      ],
+      "timeoutSeconds": 240,
+      "returnCode": 0
+    }
+  ],
+  "resultFiles": [
+    {
+      "path": "results/summary.json",
+      "sha256": "9458c4420839031820bbed41619519620e13d81aa9fb86ea9039420d47f00fac",
+      "bytes": 49603
+    },
+    {
+      "path": "logs/compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/java-version.log",
+      "sha256": "aa8b8c37cfb8295d241a736330151318fe156c8937b464a27b2c21d638db1862",
+      "bytes": 183
+    },
+    {
+      "path": "logs/probe.log",
+      "sha256": "7d0f0ef9c4ee71ba1e62d04275af1087e91df0f4739818d578d4cb1279ff35a6",
+      "bytes": 488
+    }
+  ],
+  "withheldOutputs": [],
+  "runtimeIsolation": {
+    "userHome": true,
+    "javaPrefs": true,
+    "javaTmp": true,
+    "rawReportZipsPromoted": false,
+    "privateRuntimeRemoved": true
+  },
+  "textReview": "Heuristic checks only; no claim of complete secret detection. PNGs are synthetic-fixture captures and require visual review before sharing.",
+  "status": "completed",
+  "loop": {
+    "baseURL": "http://127.0.0.1:18888",
+    "serverStartedByRunner": false,
+    "requiresPreparedOriginalLoop3100": true
+  },
+  "wholeWorkflow": {
+    "sourceClassification": "additional newly authored harness, not an external byte-exact copy",
+    "expectedModuleIds": [
+      "traffic",
+      "mapper",
+      "auth",
+      "js",
+      "environment",
+      "response.recon",
+      "payload",
+      "bounty"
+    ],
+    "roundMeaning": "all eight core workflows before one cumulative improvement and all eight again afterwards",
+    "focusedFiveCasesArePreliminaryInvestigation": true,
+    "summaryContract": {
+      "expectedModuleIds": [
+        "traffic",
+        "mapper",
+        "auth",
+        "js",
+        "environment",
+        "response.recon",
+        "payload",
+        "bounty"
+      ],
+      "allEightModuleLabelsPresent": true,
+      "jarSHA256MatchesExecutedSnapshot": true,
+      "originalLoopOriginRecorded": true,
+      "actualEngineHttpObserved": true,
+      "nativeBurpFalse": true
+    }
+  },
+  "productJar": {
+    "source": "/workspace/usability-five-rounds/execution-v1/products/round-3-after.jar",
+    "snapshot": ".product.jar",
+    "sha256": "1632d5fae4cd00d1e69c978a2573be9de005a33a84efa246c80034a8a4f39c58",
+    "bytes": 4588328
+  },
+  "harnessSourceSnapshot": {
+    "source": "/workspace/burp-workbench-kr/audit/simple-usability/WholeWorkbenchWorkflowAudit.java",
+    "snapshot": "WholeWorkbenchWorkflowAudit.java",
+    "sha256": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4",
+    "bytes": 46177
+  },
+  "adapters": {
+    "source": "/workspace/burp-workbench-kr/simple/burp-workbench/build/tests",
+    "snapshot": ".adapters",
+    "classFiles": 208,
+    "treeSHA256": "8d92faf6399ce00769729f29d8d78518c991c8d2bae32ca814598bc24e0392e5",
+    "stableDuringCopy": true,
+    "copyAttempts": 1
+  },
+  "dependencies": [
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar",
+      "snapshot": "brotli-dec-0.1.2.jar",
+      "sha256": "615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52",
+      "bytes": 98115
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+      "snapshot": "legacy-api.jar",
+      "sha256": "0b9b16048e1a3d10bb8f36219bb7dfa637dad2d54e116199d3506b4174518e54",
+      "bytes": 20139
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar",
+      "snapshot": "montoya-2026.jar",
+      "sha256": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94",
+      "bytes": 181538
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar",
+      "snapshot": "rhino.jar",
+      "sha256": "12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975",
+      "bytes": 1647024
+    }
+  ],
+  "removedJvmEnvironmentNames": [],
+  "java": {
+    "executable": "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+    "version": "openjdk version \"17.0.21\" 2026-10-20\nOpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)\nOpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)",
+    "major": 17
+  },
+  "compiledProbeClassMajorVersions": [
+    61
+  ],
+  "inputJarSHA256After": "1632d5fae4cd00d1e69c978a2573be9de005a33a84efa246c80034a8a4f39c58",
+  "inputJarUnchanged": true,
+  "productSnapshotUnchanged": true,
+  "harnessSourceUnchanged": true,
+  "harnessSnapshotUnchanged": true,
+  "finishedAtUtc": "2026-10-29T20:34:06.317549+00:00"
+}

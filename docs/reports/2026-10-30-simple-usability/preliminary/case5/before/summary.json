@@ -1,0 +1,946 @@
+{
+  "phase": "before",
+  "artifact": "/workspace/burp-workbench-kr/simple/downloads/1.4.0/burp-workbench-simple-1.4.0.jar",
+  "artifact_sha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+  "fixture": "synthetic request/response packets in production DiskTrafficStore; no actual HTTP fetch, no native Burp GUI",
+  "surface": "full Workbench SimpleNavigation and production dashboard appended page",
+  "result_files": [
+    "/workspace/usability-five-cycles/cycle5/before/light-1024x720/result.json",
+    "/workspace/usability-five-cycles/cycle5/before/light-1280x800/result.json",
+    "/workspace/usability-five-cycles/cycle5/before/dark-1024x720/result.json",
+    "/workspace/usability-five-cycles/cycle5/before/dark-1280x800/result.json"
+  ],
+  "measured_navigation_tasks": 12,
+  "one_click_with_list_and_detail_visible": 6,
+  "additional_explicit_scroll_required": 6,
+  "wheel_event_counts_estimated": false,
+  "target_http_calls": 0,
+  "all_original_account_empty_checks_passed": true,
+  "all_automatic_refresh_scroll_checks_passed": true,
+  "observations": [
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 720,
+      "action": "01-api-card",
+      "control": "wb.scope.dashboard.card.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "height": 0,
+          "x": 13,
+          "y": 752,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 0,
+          "x": 616,
+          "y": 724,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 2,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 2건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "height": 0,
+          "x": 13,
+          "y": 752,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 0,
+          "x": 616,
+          "y": 724,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": true,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 1,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 296,
+        "list_shown": {
+          "height": 251,
+          "x": 13,
+          "y": 456,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 231,
+          "x": 616,
+          "y": 428,
+          "width": 361
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 720,
+      "action": "02-api-classification",
+      "control": "wb.scope.dashboard.bar.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "height": 0,
+          "x": 13,
+          "y": 752,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 0,
+          "x": 616,
+          "y": 724,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "height": 0,
+          "x": 13,
+          "y": 752,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 0,
+          "x": 616,
+          "y": 724,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": true,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 1,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 296,
+        "list_shown": {
+          "height": 251,
+          "x": 13,
+          "y": 456,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 231,
+          "x": 616,
+          "y": 428,
+          "width": 361
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 720,
+      "action": "03-high-importance",
+      "control": "wb.scope.dashboard.severity.high",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "height": 0,
+          "x": 13,
+          "y": 752,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 0,
+          "x": 616,
+          "y": 724,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "height": 0,
+          "x": 13,
+          "y": 752,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 0,
+          "x": 616,
+          "y": 724,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      },
+      "additional_explicit_scroll_required": true,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 1,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 296,
+        "list_shown": {
+          "height": 251,
+          "x": 13,
+          "y": 456,
+          "width": 525
+        },
+        "detail_shown": {
+          "height": 231,
+          "x": 616,
+          "y": 428,
+          "width": 361
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "60ddd2a6-9e56-4fa8-90ab-b763229c836d:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "action": "01-api-card",
+      "control": "wb.scope.dashboard.card.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 2,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 2건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": false,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 0,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "action": "02-api-classification",
+      "control": "wb.scope.dashboard.bar.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": false,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 0,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "action": "03-high-importance",
+      "control": "wb.scope.dashboard.severity.high",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      },
+      "additional_explicit_scroll_required": false,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 0,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "83a32f21-baf4-40cc-a870-760e7e14ef68:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 720,
+      "action": "01-api-card",
+      "control": "wb.scope.dashboard.card.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 752,
+          "x": 13,
+          "height": 0,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 724,
+          "x": 616,
+          "height": 0,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 2,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 2건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 752,
+          "x": 13,
+          "height": 0,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 724,
+          "x": 616,
+          "height": 0,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": true,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 1,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 296,
+        "list_shown": {
+          "y": 456,
+          "x": 13,
+          "height": 251,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 428,
+          "x": 616,
+          "height": 231,
+          "width": 361
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 720,
+      "action": "02-api-classification",
+      "control": "wb.scope.dashboard.bar.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 752,
+          "x": 13,
+          "height": 0,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 724,
+          "x": 616,
+          "height": 0,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 752,
+          "x": 13,
+          "height": 0,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 724,
+          "x": 616,
+          "height": 0,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": true,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 1,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 296,
+        "list_shown": {
+          "y": 456,
+          "x": 13,
+          "height": 251,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 428,
+          "x": 616,
+          "height": 231,
+          "width": 361
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 720,
+      "action": "03-high-importance",
+      "control": "wb.scope.dashboard.severity.high",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 752,
+          "x": 13,
+          "height": 0,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 724,
+          "x": 616,
+          "height": 0,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 752,
+          "x": 13,
+          "height": 0,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 724,
+          "x": 616,
+          "height": 0,
+          "width": 361
+        },
+        "list_usable": false,
+        "detail_usable": false,
+        "selected_row_visible": false,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      },
+      "additional_explicit_scroll_required": true,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 1,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 296,
+        "list_shown": {
+          "y": 456,
+          "x": 13,
+          "height": 251,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 428,
+          "x": 616,
+          "height": 231,
+          "width": 361
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "ccbef693-7cce-4f64-b719-935ce0b9fbb4:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "action": "01-api-card",
+      "control": "wb.scope.dashboard.card.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 2,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 2건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": false,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 0,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "action": "02-api-classification",
+      "control": "wb.scope.dashboard.bar.api",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "additional_explicit_scroll_required": false,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 0,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      }
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "action": "03-high-importance",
+      "control": "wb.scope.dashboard.severity.high",
+      "explicit_control_clicks": 1,
+      "before": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "API·명세 항목 · Alice · 전체 1건 중 조건에 맞는 1건"
+      },
+      "after_click": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      },
+      "additional_explicit_scroll_required": false,
+      "wheel_events_estimated": false,
+      "explicit_scroll_operations_in_probe": 0,
+      "after_explicit_scroll_if_needed": {
+        "viewport_y": 0,
+        "list_shown": {
+          "y": 670,
+          "x": 13,
+          "height": 119,
+          "width": 525
+        },
+        "detail_shown": {
+          "y": 642,
+          "x": 772,
+          "height": 147,
+          "width": 461
+        },
+        "list_usable": true,
+        "detail_usable": true,
+        "selected_row_visible": true,
+        "rows": 1,
+        "selected_original": "7fd23ae5-78a3-417a-b72f-26dd59e078c7:0",
+        "selected_account": "Alice",
+        "filter_summary": "키·민감정보 후보 · Alice · 전체 2건 중 조건에 맞는 1건 · 중요도 높음"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "beforeJarSha256": "f0ec264f526dd6485f4a021276367919771bee544b4671f4ff0815bfc0029bef",
+  "afterJarSha256": "84cf9413f70aebf6e95934d73a1fef5dccb613dc248bcd02272728fbd0b8146e",
+  "beforePassivePanelClassSha256": "4626d09ba2a1340d797340d61785b6c75c3c21e640455251fc11bc14b4d60904",
+  "afterPassivePanelClassSha256": "ee180bca9f8305ab21b3e8bfa10ec8057cca2e0a4571243a1650b32312598fed",
+  "harnessSha256": "af40c4ee017cc761c3dcc77d793bbd5ee4f7c4b36c646741e7e01672045d0a46",
+  "sourceSha256": "063d0983aa151966c1a73cba69038e493faeafd446296d575d388d75a0f4a8e3",
+  "testSourceSha256": "3c3c305f2db684d4579a1d01f4b6cbcf5fb377b521dba45dfda1696d3d8b795f",
+  "toolchain": {
+    "java17ApiCompatibilityVerified": true,
+    "javaRuntimeVersion": "17.0.21",
+    "toolchainMode": "strict-release17"
+  },
+  "limits": [
+    "Synthetic example.test URLs; production Swing component; API adapter; headless",
+    "No native Burp GUI; no manual browser; no external target requests",
+    "EDT allocation is allocated bytes, not retained heap or RSS",
+    "Timing samples may be affected by shared machine load"
+  ]
+}

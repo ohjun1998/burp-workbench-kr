@@ -1,0 +1,38 @@
+--- a/simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java
++++ b/simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java
+@@ -77,6 +77,8 @@
+   private final javax.swing.Timer updates;
+   private final List<PacketInspector> inspectors = new ArrayList<>();
+   private Consumer<ScopeInspection.Snapshot> snapshotListener = value -> {};
++  private String displayedDetailRun = "";
++  private Object displayedDetailSelection;
+ 
+   /** A read-only view of the same live run; attaching a dashboard never starts an inspection. */
+   void setSnapshotListener(Consumer<ScopeInspection.Snapshot> listener) {
+@@ -350,7 +352,25 @@
+   ScopeInspection.Finding selectedFinding(){JTable table=selectedTable();if(table==null||table.getSelectedRow()<0)return null;String key=key(table);int row=table.convertRowIndexToModel(table.getSelectedRow());var list=rows.getOrDefault(key,List.of());return row<list.size()?list.get(row):null;}
+   DiskTrafficStore.PacketRef selectedOriginal(){JTable table=selectedTable();if(table!=null&&key(table).equals("paths")&&table.getSelectedRow()>=0){int n=table.convertRowIndexToModel(table.getSelectedRow());return n<current.pages().size()?current.pages().get(n).original():null;}var finding=selectedFinding();if(finding==null||finding.originalId().isEmpty())return null;for(var page:current.pages())if(page.original()!=null&&finding.originalId().equals(page.original().id()))return page.original();return null;}
+   private DiskTrafficStore.PacketRef requireOriginal(){var ref=selectedOriginal();if(ref==null)throw new IllegalArgumentException("현재 실행의 원본이 연결된 항목을 선택하세요. 이전 요약·제외 항목은 원본을 대신 만들지 않습니다.");return ref;}
+-  private void selectedChanged(){if(rebuilding)return;var f=selectedFinding();if(f!=null)detail.setText(f.title()+"\n"+f.state()+" · "+f.confidence()+" · "+f.severity()+"\n"+f.detail()+"\n원본: "+f.originalId()+" · 본문 줄 "+f.line()+" · 문자 위치 "+f.offset());else{var ref=selectedOriginal();detail.setText(ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes");}detail.setCaretPosition(0);refreshActions();}
++  private void selectedChanged(){
++    if(rebuilding)return;
++    var finding=selectedFinding();
++    String text;
++    if(finding!=null)text=finding.title()+"\n"+finding.state()+" · "+finding.confidence()+" · "+finding.severity()+"\n"+finding.detail()+"\n원본: "+finding.originalId()+" · 본문 줄 "+finding.line()+" · 문자 위치 "+finding.offset();
++    else{
++      var ref=selectedOriginal();
++      text=ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes";
++    }
++    JTable table=selectedTable();
++    Object selection=table==null?null:selectedId(table,key(table));
++    // Live publications must not interrupt reading or copying an unchanged result.
++    // Row/run identity still resets the position when two results display equal text.
++    if(!current.id().equals(displayedDetailRun)||!Objects.equals(selection,displayedDetailSelection)||!text.equals(detail.getText())){
++      detail.setText(text);detail.setCaretPosition(0);
++    }
++    displayedDetailRun=current.id();displayedDetailSelection=selection;
++    refreshActions();
++  }
+   private void captureEvidence(){var packet=requireOriginal();actions.evidence(List.of(packet),"통합 점검 "+current.id()+" · 선택 계정/원본 연결 · "+(selectedFinding()==null?"경로 응답":selectedFinding().title()));}
+   private void chooseReport(){
+     if(GraphicsEnvironment.isHeadless()){feedback.setText("분류 보고서는 데스크톱의 저장 위치 선택 창에서 저장합니다. 원문 값이 포함됩니다.");return;}

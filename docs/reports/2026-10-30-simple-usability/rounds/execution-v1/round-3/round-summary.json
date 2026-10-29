@@ -1,0 +1,73 @@
+{
+  "round": 3,
+  "startedAtUtc": "2026-10-29T20:32:54.060784+00:00",
+  "beforeJarSHA256": "b472df5e56bd4fae163921d29979a59cda458139220e3798e51d4feb50965f00",
+  "wholeHarnessSHA256": "f3cfa5f91fd2435e0446d1e2da96919537df1eef706231b96821dc711f05aed4",
+  "appliedPatch": "changes/round-3/change.patch",
+  "completed": true,
+  "afterJarSHA256": "1632d5fae4cd00d1e69c978a2573be9de005a33a84efa246c80034a8a4f39c58",
+  "improvement": {
+    "metric": "same snapshot",
+    "before": {
+      "edtWallMs": {
+        "median": 25.210611,
+        "min": 20.50904,
+        "max": 31.114048
+      },
+      "edtAllocatedBytes": {
+        "median": 9889192.0,
+        "min": 9889192.0,
+        "max": 9937744.0
+      },
+      "modelEventCount": {
+        "median": 6009.0,
+        "min": 6009.0,
+        "max": 6009.0
+      }
+    },
+    "after": {
+      "edtWallMs": {
+        "median": 2.900999,
+        "min": 1.656574,
+        "max": 4.999419
+      },
+      "edtAllocatedBytes": {
+        "median": 568232.0,
+        "min": 568232.0,
+        "max": 712576.0
+      },
+      "modelEventCount": {
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    }
+  },
+  "finishedAtUtc": "2026-10-29T20:33:51.434287+00:00",
+  "beforeChecks": 115,
+  "afterChecks": 115,
+  "beforeHttp": 42,
+  "afterHttp": 42,
+  "beforeModules": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "afterModules": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "beforeWholeReused": false,
+  "afterWholeReused": false
+}

@@ -83,6 +83,18 @@ public final class SimplePreview extends WorkbenchTest {
     viewport.setViewPosition(new Point(0, Math.max(0,
         viewport.getView().getHeight() - viewport.getExtentSize().height)));
   }
+  static void dashboardRevealed(Container root, boolean empty) {
+    Component list = SimpleWorkflowTest.named(root, empty ? "wb.scope.dashboard.empty" : "wb.scope.dashboard.results");
+    Component detail = SimpleWorkflowTest.named(root, "wb.scope.dashboard.detail");
+    Rectangle listBounds = SwingUtilities.convertRectangle(list.getParent(), list.getBounds(), root);
+    Rectangle detailBounds = SwingUtilities.convertRectangle(detail.getParent(), detail.getBounds(), root);
+    Rectangle listShown = visible(root, list, listBounds, root.getWidth(), root.getHeight());
+    Rectangle detailShown = visible(root, detail, detailBounds, root.getWidth(), root.getHeight());
+    scenario("Explicit dashboard selection reveals its " + (empty ? "empty recovery message" : "result list")
+            + " and detail without fixture scrolling",
+        listShown.width >= 150 && listShown.height >= (empty ? 40 : 100)
+            && detailShown.width >= 120 && detailShown.height >= 80);
+  }
   static void dashboardArea(Container root, String part, int minimumWidth, int minimumHeight) {
     String name = "wb.scope.dashboard." + part;
     Component component = SimpleWorkflowTest.named(root, name);

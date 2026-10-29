@@ -1,0 +1,10 @@
+{
+  "recordedAtUtc": "2026-10-29T19:49:36.880769+00:00",
+  "product": {
+    "path": "/workspace/usability-five-cycles/cycle3/after-cycle3-product.jar",
+    "bytes": 4588328,
+    "sha256": "1632d5fae4cd00d1e69c978a2573be9de005a33a84efa246c80034a8a4f39c58"
+  },
+  "harnessSourceSha256": "cf68dc83d8bcb8d8429e2d032e546332d6132b813fc8e6d4cc104b8bbdf5ccdd",
+  "note": "Copied product after cycles 1, 2 and 3, before cycle 4; identical standalone probe and test adapter snapshot."
+}

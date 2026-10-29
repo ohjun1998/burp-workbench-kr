@@ -2,6 +2,8 @@ package kr.workbench;
 
 import burp.api.montoya.MontoyaApi;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.net.URI;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -77,6 +79,8 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private final javax.swing.Timer updates;
   private final List<PacketInspector> inspectors = new ArrayList<>();
   private Consumer<ScopeInspection.Snapshot> snapshotListener = value -> {};
+  private String displayedDetailRun = "";
+  private Object displayedDetailSelection;
 
   /** A read-only view of the same live run; attaching a dashboard never starts an inspection. */
   void setSnapshotListener(Consumer<ScopeInspection.Snapshot> listener) {
@@ -103,8 +107,10 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     try { String saved=api.persistence().extensionData().getString(BuildInfo.storageKey("scope-katana-executable-v1"));if(saved!=null&&!saved.isBlank())katanaExecutable.setText(saved); } catch(RuntimeException ignored) {}
     katanaCheck.addActionListener(e->checkKatana());
     for (Object[] entry : new Object[][] {{start,"start"},{pause,"pause"},{resume,"resume"},{stop,"stop"},{budget,"budget"},{depth,"depth"},{delay,"delay"},{timeout,"timeout"},{maxBody,"max.body"},{redirectLimit,"redirects"},{browserPages,"browser.pages"},{browserActions,"browser.actions"},{browserSeconds,"browser.seconds"}}) name((JComponent)entry[0],(String)entry[1]);
-    profile.setRenderer(new DefaultListCellRenderer(){public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean selected,boolean focus){putClientProperty("html.disable",true);return super.getListCellRendererComponent(list,value instanceof ScopeInspection.Profile p?p.label():"비로그인",index,selected,focus);}});
+    profile.setRenderer(new DefaultListCellRenderer(){public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean selected,boolean focus){putClientProperty("html.disable",true);return super.getListCellRendererComponent(list,value instanceof ScopeInspection.Profile p?p.label():"계정 선택",index,selected,focus);}});
     profile.setPreferredSize(new Dimension(150,32));
+    url.addActionListener(e->completeTarget());
+    url.addFocusListener(new FocusAdapter(){public void focusLost(FocusEvent event){completeTarget();}});
     scopeChoices.addItem("SCOPE에서 선택");for(var rule:WorkbenchScope.registeredRules(api))scopeChoices.addItem(rule.url());
     scopeChoices.setPreferredSize(new Dimension(200,32));
     scopeChoices.addActionListener(e->{if(scopeChoices.getSelectedIndex()>0){url.setText(Objects.toString(scopeChoices.getSelectedItem(),""));refreshProfiles();}});
@@ -146,7 +152,21 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   }
   private static ScopeInspection.Snapshot empty(){return new ScopeInspection.Snapshot("",ScopeInspection.State.READY,"준비",0,0,0,0,0,0,List.of(),List.of(),List.of(),0,0);}
   private static void name(JComponent component,String suffix){component.setName("wb.scope.inspection."+suffix);}
-  private static DefaultTableModel model(String[] columns){return new DefaultTableModel(columns,0){public boolean isCellEditable(int r,int c){return false;}};}
+  /** Cache immutable inputs before formatting cells; a publication need not rebuild every table. */
+  private static final class SnapshotTableModel extends DefaultTableModel {
+    private List<?> shown=List.of();
+    SnapshotTableModel(String[] columns){super(columns,0);}
+    @Override public boolean isCellEditable(int row,int column){return false;}
+    <T> boolean replace(List<T> values,Function<T,Object[]> cells){
+      if(getRowCount()==values.size()&&shown.equals(values))return false;
+      Vector<Vector> next=new Vector<>(values.size());
+      for(T value:values)next.add(new Vector<>(Arrays.asList(cells.apply(value))));
+      // A data event preserves column widths/order and sort keys. A structure event would not.
+      dataVector=next;shown=List.copyOf(values);fireTableDataChanged();return true;
+    }
+    void release(){shown=List.of();}
+  }
+  private static DefaultTableModel model(String[] columns){return new SnapshotTableModel(columns);}
   private JTable createTable(String key,String[] columns){
     JTable table=new JTable(model(columns));name(table,key);table.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     DefaultTableCellRenderer renderer=new DefaultTableCellRenderer();renderer.putClientProperty("html.disable",true);table.setDefaultRenderer(Object.class,renderer);
@@ -204,11 +224,22 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   void refreshTargets(){
     String value=url.getText();scopeChoices.removeAllItems();scopeChoices.addItem("SCOPE에서 선택");for(var rule:WorkbenchScope.registeredRules(api))scopeChoices.addItem(rule.url());url.setText(value);refreshProfiles();
   }
+  private void completeTarget(){
+    if(closed||!url.isEnabled())return;
+    try{refreshProfiles();feedback.setText("대상 계정 목록을 갱신했습니다. 계정을 확인한 뒤 시작하세요.");}
+    catch(RuntimeException error){
+      profile.removeAllItems();profile.setSelectedItem(null);
+      feedback.setText("대상 URL의 계정 목록을 불러오지 못했습니다. URL을 확인하고 다시 입력하세요.");
+    }
+  }
   void refreshProfiles(){
-    String selected=profile.getSelectedItem() instanceof ScopeInspection.Profile p?p.id():"anonymous";
-    List<ScopeInspection.Profile> available=profiles.apply(url.getText());profile.removeAllItems();
-    for(var p:available){profile.addItem(p);if(p.id().equals(selected))profile.setSelectedItem(p);}
-    if(profile.getItemCount()==0)profile.addItem(new ScopeInspection.Profile("anonymous","비로그인",Map.of(),null));
+    String selected=profile.getSelectedItem() instanceof ScopeInspection.Profile p?p.id():"";
+    List<ScopeInspection.Profile> available=List.copyOf(profiles.apply(url.getText().strip()));profile.removeAllItems();
+    ScopeInspection.Profile preserved=null,anonymous=null;
+    for(var candidate:available){profile.addItem(candidate);if(candidate.id().equals(selected))preserved=candidate;if(candidate.id().equals("anonymous"))anonymous=candidate;}
+    if(profile.getItemCount()==0){anonymous=new ScopeInspection.Profile("anonymous","비로그인",Map.of(),null);profile.addItem(anonymous);}
+    // A target change can remove the old identity. Never implicitly choose another authenticated account.
+    profile.setSelectedItem(preserved!=null?preserved:anonymous);
   }
   void startInspection(){
     if(closed)throw new IllegalArgumentException("종료된 통합 점검입니다.");
@@ -311,16 +342,16 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
       progress.setToolTipText(value.message());feedback.setText(value.message());
       for(var entry:tables.entrySet()){
         String key=entry.getKey();if(key.equals("browser"))continue;
-        DefaultTableModel model=(DefaultTableModel)entry.getValue().getModel();int selection=positionsBefore.getOrDefault(key,-1);Object selectedId=selectedBefore.get(key);model.setRowCount(0);
-        if(key.equals("paths")){for(var page:value.pages())model.addRow(new Object[]{page.account(),page.method(),ScopeInspectionAnalysis.safeUrl(page.url()),page.status(),page.classification(),page.complete()?"검사 범위 내 완료":"부분 · "+page.note()});}
+        SnapshotTableModel model=(SnapshotTableModel)entry.getValue().getModel();int selection=positionsBefore.getOrDefault(key,-1);Object selectedId=selectedBefore.get(key);boolean changed;
+        if(key.equals("paths"))changed=model.replace(value.pages(),page->new Object[]{page.account(),page.method(),ScopeInspectionAnalysis.safeUrl(page.url()),page.status(),page.classification(),page.complete()?"검사 범위 내 완료":"부분 · "+page.note()});
         else {
           List<ScopeInspection.Finding> selected=key.equals("changes")?changes:value.findings().stream().filter(f->matches(key,f.category())).toList();
           if(key.equals("coverage")){
             var extras=new ArrayList<>(selected);for(var candidate:value.candidates())if(!candidate.executable())extras.add(new ScopeInspection.Finding("COVERAGE",candidate.label(),ScopeInspectionAnalysis.safeUrl(candidate.url()),candidate.method(),"", "미확인","정보","필수값·원본 확인",candidate.source(),"",0,-1,""));selected=List.copyOf(extras);
           }
-          rows.put(key,selected);for(var f:selected)model.addRow(new Object[]{category(f.category()),f.title(),f.account(),f.state(),f.confidence(),severity(f.severity()),f.url()});
+          rows.put(key,selected);changed=model.replace(selected,f->new Object[]{category(f.category()),f.title(),f.account(),f.state(),f.confidence(),severity(f.severity()),f.url()});
         }
-        restoreSelection(entry.getValue(),key,selectedId,selection);
+        if(changed)restoreSelection(entry.getValue(),key,selectedId,selection);
       }
       for(var page:value.pages())if(page.original()!=null&&observed.add(page.original().id()))try{actions.observed(page.original());}catch(RuntimeException error){feedback.setText("기존 도구 연결 일부 실패 · 원본은 통합 점검에 보관됩니다.");}
       if(options!=null&&terminal(value.state())&&!value.id().isEmpty()&&persisted.add(value.id())){if(browser.active())browser.stop();saveHistory(options,value,runProject,runScope,runHistoryScope);}
@@ -350,7 +381,25 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   ScopeInspection.Finding selectedFinding(){JTable table=selectedTable();if(table==null||table.getSelectedRow()<0)return null;String key=key(table);int row=table.convertRowIndexToModel(table.getSelectedRow());var list=rows.getOrDefault(key,List.of());return row<list.size()?list.get(row):null;}
   DiskTrafficStore.PacketRef selectedOriginal(){JTable table=selectedTable();if(table!=null&&key(table).equals("paths")&&table.getSelectedRow()>=0){int n=table.convertRowIndexToModel(table.getSelectedRow());return n<current.pages().size()?current.pages().get(n).original():null;}var finding=selectedFinding();if(finding==null||finding.originalId().isEmpty())return null;for(var page:current.pages())if(page.original()!=null&&finding.originalId().equals(page.original().id()))return page.original();return null;}
   private DiskTrafficStore.PacketRef requireOriginal(){var ref=selectedOriginal();if(ref==null)throw new IllegalArgumentException("현재 실행의 원본이 연결된 항목을 선택하세요. 이전 요약·제외 항목은 원본을 대신 만들지 않습니다.");return ref;}
-  private void selectedChanged(){if(rebuilding)return;var f=selectedFinding();if(f!=null)detail.setText(f.title()+"\n"+f.state()+" · "+f.confidence()+" · "+f.severity()+"\n"+f.detail()+"\n원본: "+f.originalId()+" · 본문 줄 "+f.line()+" · 문자 위치 "+f.offset());else{var ref=selectedOriginal();detail.setText(ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes");}detail.setCaretPosition(0);refreshActions();}
+  private void selectedChanged(){
+    if(rebuilding)return;
+    var finding=selectedFinding();
+    String text;
+    if(finding!=null)text=finding.title()+"\n"+finding.state()+" · "+finding.confidence()+" · "+finding.severity()+"\n"+finding.detail()+"\n원본: "+finding.originalId()+" · 본문 줄 "+finding.line()+" · 문자 위치 "+finding.offset();
+    else{
+      var ref=selectedOriginal();
+      text=ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes";
+    }
+    JTable table=selectedTable();
+    Object selection=table==null?null:selectedId(table,key(table));
+    // Live publications must not interrupt reading or copying an unchanged result.
+    // Row/run identity still resets the position when two results display equal text.
+    if(!current.id().equals(displayedDetailRun)||!Objects.equals(selection,displayedDetailSelection)||!text.equals(detail.getText())){
+      detail.setText(text);detail.setCaretPosition(0);
+    }
+    displayedDetailRun=current.id();displayedDetailSelection=selection;
+    refreshActions();
+  }
   private void captureEvidence(){var packet=requireOriginal();actions.evidence(List.of(packet),"통합 점검 "+current.id()+" · 선택 계정/원본 연결 · "+(selectedFinding()==null?"경로 응답":selectedFinding().title()));}
   private void chooseReport(){
     if(GraphicsEnvironment.isHeadless()){feedback.setText("분류 보고서는 데스크톱의 저장 위치 선택 창에서 저장합니다. 원문 값이 포함됩니다.");return;}
@@ -383,5 +432,5 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   void closeOriginalContent(JComponent content){Object value=content.getClientProperty("wb.scope.inspection.inspectors");if(value instanceof List<?> list)for(Object item:list)if(item instanceof PacketInspector inspector){inspector.close();inspectors.remove(inspector);}content.putClientProperty("wb.scope.inspection.inspectors",null);}
   private void closeInspectors(){for(var inspector:inspectors)inspector.close();inspectors.clear();}
   private void safe(Runnable action){try{action.run();}catch(RuntimeException error){feedback.setText(Objects.requireNonNullElse(error.getMessage(),"실행 조건을 확인하세요."));}}
-  @Override public void close(){if(closed)return;closed=true;snapshotListener=value->{};report.setEnabled(false);updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();reportWorker.shutdownNow();}
+  @Override public void close(){if(closed)return;closed=true;snapshotListener=value->{};report.setEnabled(false);updates.stop();browser.close();if(katana!=null)katana.close();actions.originalsCleared();if(runner!=null)runner.close();for(var old:retained)old.close();retained.clear();closeInspectors();settings.close();historyWorker.shutdownNow();katanaChecks.shutdownNow();reportWorker.shutdownNow();for(var table:tables.values())if(table.getModel() instanceof SnapshotTableModel model)model.release();}
 }

@@ -1,0 +1,96 @@
+{
+  "comparison": "Cycle 3 only: after cycles 1+2 versus after cycles 1+2+3",
+  "environment": "Same Java 17 runtime, standalone probe/test adapter snapshot, 2000 synthetic Findings + 2000 synthetic Pages; production Swing with loopback originals, no native Burp GUI",
+  "samplePolicy": "2 warmups excluded, 5 measured samples per scenario; median/min/max diagnostics, no absolute performance threshold",
+  "allBeforeInvariantsPassed": true,
+  "allAfterInvariantsPassed": true,
+  "beforeAdditionalHttp": 0,
+  "afterAdditionalHttp": 0,
+  "scenarios": {
+    "same_snapshot": {
+      "edtWallMs": {
+        "beforeMedian": 24.999368,
+        "afterMedian": 2.462201,
+        "reductionPercent": 90.15094701594056
+      },
+      "edtAllocatedBytes": {
+        "beforeMedian": 9777192.0,
+        "afterMedian": 520232.0,
+        "reductionPercent": 94.67912668586236
+      },
+      "modelEventCount": {
+        "beforeMedian": 6009.0,
+        "afterMedian": 0.0,
+        "reductionPercent": 100.0
+      }
+    },
+    "one_finding_changed": {
+      "edtWallMs": {
+        "beforeMedian": 25.063059,
+        "afterMedian": 2.88987,
+        "reductionPercent": 88.46960381013348
+      },
+      "edtAllocatedBytes": {
+        "beforeMedian": 9639144.0,
+        "afterMedian": 1000208.0,
+        "reductionPercent": 89.62347693944608
+      },
+      "modelEventCount": {
+        "beforeMedian": 6009.0,
+        "afterMedian": 2.0,
+        "reductionPercent": 99.966716591779
+      }
+    },
+    "sorted_finding_changed": {
+      "edtWallMs": {
+        "beforeMedian": 30.880152,
+        "afterMedian": 5.992808,
+        "reductionPercent": 80.59333386700946
+      },
+      "edtAllocatedBytes": {
+        "beforeMedian": 12253120.0,
+        "afterMedian": 1414216.0,
+        "reductionPercent": 88.45831918727637
+      },
+      "modelEventCount": {
+        "beforeMedian": 6009.0,
+        "afterMedian": 2.0,
+        "reductionPercent": 99.966716591779
+      }
+    },
+    "reordered_paths": {
+      "edtWallMs": {
+        "beforeMedian": 85.980477,
+        "afterMedian": 54.149952,
+        "reductionPercent": 37.02064248841047
+      },
+      "edtAllocatedBytes": {
+        "beforeMedian": 53345168.0,
+        "afterMedian": 16903968.0,
+        "reductionPercent": 68.31209154688574
+      },
+      "modelEventCount": {
+        "beforeMedian": 6009.0,
+        "afterMedian": 9.0,
+        "reductionPercent": 99.85022466300549
+      }
+    },
+    "sort_only": {
+      "edtWallMs": {
+        "beforeMedian": 1.918533,
+        "afterMedian": 1.955705,
+        "reductionPercent": -1.9375220546115173
+      },
+      "edtAllocatedBytes": {
+        "beforeMedian": 612896.0,
+        "afterMedian": 612928.0,
+        "reductionPercent": -0.0052211141857672425
+      },
+      "modelEventCount": {
+        "beforeMedian": 0.0,
+        "afterMedian": 0.0,
+        "reductionPercent": null
+      }
+    }
+  }
+}

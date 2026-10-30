@@ -1,0 +1,164 @@
+{
+  "version": "1.4.4",
+  "jarSha256": "10cb61aae0ea6152bbdddc757dc027064476edfc0ef58c260ff220fd16ec1553",
+  "scope": "Production Swing UI captured with synthetic Montoya/packet fixtures; not native Burp GUI or real target results.",
+  "resolution": [
+    1280,
+    800
+  ],
+  "tools": [
+    {
+      "id": "01-traffic",
+      "tool": "요청·응답 목록",
+      "state": "합성 요청 3개와 선택한 요청·응답 원문 예시",
+      "files": {
+        "light": {
+          "name": "01-traffic-light.png",
+          "sha256": "112d86c36fa5ca0f50e3c628b69dc1b3eb44d9c8e748596807b0ed54e2ec276d",
+          "source": "light/1280x800/01-capture.png"
+        },
+        "dark": {
+          "name": "01-traffic-dark.png",
+          "sha256": "ccd5ff593bc265c6ed65a95c5115235d3d400a4c0d40bbfb5c781804295aaea3",
+          "source": "dark/1280x800/01-capture.png"
+        }
+      }
+    },
+    {
+      "id": "02-mapper",
+      "tool": "기능 자동 매핑",
+      "state": "빈 프로젝트 · 매핑 목록이 아직 없는 초기 상태",
+      "files": {
+        "light": {
+          "name": "02-mapper-light.png",
+          "sha256": "a978a9a6553b61917232fd69140cc1d8e444ccf89f15afb8d2fc567e248fab11",
+          "source": "light/1280x800/08-mapper.png"
+        },
+        "dark": {
+          "name": "02-mapper-dark.png",
+          "sha256": "18e3a7620dfee145a10db1a5e07c50dec8ecfea7ed6caba8bd7f07a8db2cec95",
+          "source": "dark/1280x800/08-mapper.png"
+        }
+      }
+    },
+    {
+      "id": "03-auth",
+      "tool": "계정 권한 비교",
+      "state": "합성 계정 후보와 비교 기록 예시 · 실제 전송/취약점 판정 아님",
+      "files": {
+        "light": {
+          "name": "03-auth-light.png",
+          "sha256": "9542cbce050a90b92fe0d672c9b9d7c27f67db3157681b2b0490947751e65e62",
+          "source": "light/1280x800/04-auth-results.png"
+        },
+        "dark": {
+          "name": "03-auth-dark.png",
+          "sha256": "39d5b1f7c8b22374d6a287a4cae51f0edd64e07ebb51c94ffae51f6f14dfc8e3",
+          "source": "dark/1280x800/04-auth-results.png"
+        }
+      }
+    },
+    {
+      "id": "04-js",
+      "tool": "JS에서 API 찾기",
+      "state": "합성 JavaScript의 API 경로 분석 예시",
+      "files": {
+        "light": {
+          "name": "04-js-light.png",
+          "sha256": "fce651eaa5a9402cdd402e1cc42a382002ef1b3778d350a036fff6a778058d27",
+          "source": "light/1280x800/10-js.png"
+        },
+        "dark": {
+          "name": "04-js-dark.png",
+          "sha256": "8971befc779de999ad36bc35bd0dcc2770c332ea9364f9a8171095a4c27271ab",
+          "source": "dark/1280x800/10-js.png"
+        }
+      }
+    },
+    {
+      "id": "05-environment",
+      "tool": "서버·경로 탐색",
+      "state": "경로 후보가 있으나 GET 검증 전 · 실제 검증 응답 없음",
+      "files": {
+        "light": {
+          "name": "05-environment-light.png",
+          "sha256": "a3b5b49b9536eecedd3ff064a6491bec29af057a2b1ec9c611aa787f2abd791a",
+          "source": "light/1280x800/09-environment.png"
+        },
+        "dark": {
+          "name": "05-environment-dark.png",
+          "sha256": "bf24b3a9a54f0d93b1bb3ba609a03a3e6fd2a5d1d18a85d5b51faab0073ce9ba",
+          "source": "dark/1280x800/09-environment.png"
+        }
+      }
+    },
+    {
+      "id": "06-response",
+      "tool": "응답 보안 분석",
+      "state": "합성 응답에서 수집한 관찰 항목 예시",
+      "files": {
+        "light": {
+          "name": "06-response-light.png",
+          "sha256": "cbc169865ae08c538079068c84f6fe1ce2dfb19b00bb1122f6899e9ab267443a",
+          "source": "light/1280x800/03-analysis.png"
+        },
+        "dark": {
+          "name": "06-response-dark.png",
+          "sha256": "a4e3578875db4022120d2daf5f7f8811d80d5f02c9cb7d838cad6b2238aea10a",
+          "source": "dark/1280x800/03-analysis.png"
+        }
+      }
+    },
+    {
+      "id": "07-payload",
+      "tool": "입력값 보안 검사",
+      "state": "요청 준비·검사 대기 상태 · 실행 결과 없음",
+      "files": {
+        "light": {
+          "name": "07-payload-light.png",
+          "sha256": "070856a19a3118554b0a79b4e130e2d8d328c86bbce4753c07ecfa128b952799",
+          "source": "light/1280x800/07-payload.png"
+        },
+        "dark": {
+          "name": "07-payload-dark.png",
+          "sha256": "22a6435d5d7b6036804bd0b0e4adcd21badf707e3751c1934f3e2bc09ccfdf40",
+          "source": "dark/1280x800/07-payload.png"
+        }
+      }
+    },
+    {
+      "id": "08-evidence",
+      "tool": "재현·증거 정리",
+      "state": "합성 원본·비교 패킷과 증거 작성 예시",
+      "files": {
+        "light": {
+          "name": "08-evidence-light.png",
+          "sha256": "673d3c5c87e0aec96a00982a3b80debe0e554b0444d3dd1008702dca84740715",
+          "source": "light/1280x800/05-evidence.png"
+        },
+        "dark": {
+          "name": "08-evidence-dark.png",
+          "sha256": "b91846a3302f4f6c9b08a0f4f6117fb3c24e77631601f574d9f271e59264f6f3",
+          "source": "dark/1280x800/05-evidence.png"
+        }
+      }
+    },
+    {
+      "id": "09-replay",
+      "tool": "재현·증거 정리 — 요청 재현 탭",
+      "state": "8번 도구의 추가 화면 · 요청만 준비하고 실행하지 않은 상태",
+      "files": {
+        "light": {
+          "name": "09-replay-light.png",
+          "sha256": "da63f6b13bec9d0c78102ea62bc3ff95e36d2ce7695ece2c86f2838d3c0dccb3",
+          "source": "light/1280x800/11-replay.png"
+        },
+        "dark": {
+          "name": "09-replay-dark.png",
+          "sha256": "1eed400c75e18ff4be4bc9f18518d87358242108927fbfb224ff3ef8c6b2400e",
+          "source": "dark/1280x800/11-replay.png"
+        }
+      }
+    }
+  ]
+}

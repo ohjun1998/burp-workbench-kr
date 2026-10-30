@@ -1,0 +1,171 @@
+{
+  "file": "workbench-simple-1.4.12-tool-screens.pdf",
+  "pages": 16,
+  "bookmarks": 16,
+  "bytes": 1434508,
+  "sha256": "bde190a2d07d3305a03c83ef6550ef423df7f409ea67abd734a0acd506bff9ce",
+  "theme": "dark",
+  "sourceVersion": "Simple 1.4.12",
+  "checks": [
+    {
+      "page": 1,
+      "title": "요청·응답 목록",
+      "source": "traffic.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 2,
+      "title": "기능 자동 매핑",
+      "source": "mapper.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 3,
+      "title": "JS에서 API 찾기",
+      "source": "js.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 4,
+      "title": "서버·경로 탐색",
+      "source": "environment.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 5,
+      "title": "외부 노출 조사 · Google 검색",
+      "source": "exposure-search.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 6,
+      "title": "외부 노출 조사 · CVE 후보",
+      "source": "exposure-cve.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 7,
+      "title": "계정 권한 비교",
+      "source": "auth.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 8,
+      "title": "계정 권한 비교 · 인증 후보 연결",
+      "source": "auth-accounts.png",
+      "width": 1000,
+      "height": 300,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 9,
+      "title": "응답 보안 분석",
+      "source": "response-recon.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 10,
+      "title": "입력값 보안 검사 · 요청 준비",
+      "source": "payload.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 11,
+      "title": "입력값 보안 검사 · 실행·결과",
+      "source": "payload-results.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 12,
+      "title": "데이터 변환·비교",
+      "source": "data.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 13,
+      "title": "점검 진행 현황",
+      "source": "activity.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 14,
+      "title": "재현·증거 정리",
+      "source": "bounty.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 15,
+      "title": "재현·증거 정리 · 요청 재현",
+      "source": "bounty-replay.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    },
+    {
+      "page": 16,
+      "title": "점검 대시보드",
+      "source": "dashboard.png",
+      "width": 1600,
+      "height": 1000,
+      "pixelsPreserved": true,
+      "koreanTitleExtractable": true,
+      "imageInsidePage": true
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "basis": "Latest user attachment reiterates the approved eight title-free mockups",
+  "references": [
+    {
+      "file": "reference/01-traffic.png",
+      "sha256": "5baabe08778bfe6fa850c269d2bcd1fdf4995286d8204106e81dfb35f9dde6d1",
+      "role": "previously approved generated design reference; not implementation evidence"
+    },
+    {
+      "file": "reference/02-mapper.png",
+      "sha256": "cad34fcf440d3f00730e7955f3954e3bda383d9658ab7ae581fc76c8f308b9f4",
+      "role": "previously approved generated design reference; not implementation evidence"
+    },
+    {
+      "file": "reference/03-auth.png",
+      "sha256": "912bedc4382b185d4ee18fd67459ff1ef0088fae85c12050a8946133bd3846ef",
+      "role": "previously approved generated design reference; not implementation evidence"
+    },
+    {
+      "file": "reference/04-js.png",
+      "sha256": "c3ba361342480164073bfbadc9114e86b1d29cfee3b126a96f529ca8ea82aa08",
+      "role": "previously approved generated design reference; not implementation evidence"
+    },
+    {
+      "file": "reference/05-environment.png",
+      "sha256": "517ec87c67dd84d766b59e099abebacfc192ffc295bc8b0498d8fe0fcc705ca2",
+      "role": "previously approved generated design reference; not implementation evidence"
+    },
+    {
+      "file": "reference/06-response.png",
+      "sha256": "a5fdbb7091a8a6ecd7f6aea87a72307c1cbd74aea0c4205c17263f5a3c938a9b",
+      "role": "previously approved generated design reference; not implementation evidence"
+    },
+    {
+      "file": "reference/07-payload.png",
+      "sha256": "df63ff1d6ef9e2a9aea96930477561321dde2f8d3640dccdfaf5a7582c685a29",
+      "role": "previously approved generated design reference; not implementation evidence"
+    },
+    {
+      "file": "reference/08-evidence.png",
+      "sha256": "4087953a4e2ec8e3a8d039ac3671404034a40cb4df98babc3a834d37c05365c1",
+      "role": "previously approved generated design reference; not implementation evidence"
+    }
+  ]
+}

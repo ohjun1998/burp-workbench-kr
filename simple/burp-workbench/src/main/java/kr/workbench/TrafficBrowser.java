@@ -70,7 +70,7 @@ final class TrafficBrowser implements AutoCloseable {
   private volatile boolean debouncePending;
   private volatile boolean preparing;
   final JComboBox<String> method=new JComboBox<>(new String[]{"전체","GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS"});
-  final JComboBox<String> response=new JComboBox<>(new String[]{"전체","2xx","3xx","4xx","5xx","200","201","204","301","302","400","401","403","404","429","500"});
+  final JComboBox<String> response=new JComboBox<>(new String[]{"전체","오류","2xx","3xx","4xx","5xx","200","201","204","301","302","400","401","403","404","429","500"});
   final JToggleButton[] ranges={new JToggleButton("목록"),new JToggleButton("요청 포함"),new JToggleButton("전체 패킷")};
   final JCheckBox group=new JCheckBox("비슷한 요청 묶기"),important=new JCheckBox("중요 표시만 보기"),normalize=new JCheckBox("숫자·UUID 경로 묶기",true),memo=new JCheckBox("메모 열 표시",true),sensitive=new JCheckBox("대소문자 구분"),regex=new JCheckBox("정규식");
   final JTextField account=new JTextField(12);final JComboBox<String> period=new JComboBox<>(new String[]{"전체","최근 5분","최근 30분","최근 1시간","최근 24시간"});
@@ -595,9 +595,14 @@ final class TrafficBrowser implements AutoCloseable {
     if(GraphicsEnvironment.isHeadless())return null;JDialog dialog=new JDialog(SwingUtilities.getWindowAncestor(owner),title,Dialog.ModalityType.MODELESS);dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);dialog.setContentPane((Container)content);dialog.setSize(550,440);dialog.setMinimumSize(new Dimension(480,360));dialog.setLocationRelativeTo(owner);dialog.addWindowListener(new WindowAdapter(){public void windowClosed(WindowEvent e){closed.run();}});dialog.setVisible(true);return dialog;
   }
   private JLabel section(String text){JLabel l=new JLabel(text);l.setBorder(BorderFactory.createEmptyBorder(12,0,6,0));return l;}
+  Runnable quickStateChanged=()->{};
+  void quickFilter(String verb,String code,String who){
+    ensureProjectState();TrafficQuery q=query;
+    commitQuery(new TrafficQuery(verb==null?q.method():verb,code==null?q.status():code,q.range(),q.sensitive(),q.regex(),q.group(),q.normalize(),q.important(),q.memo(),who==null?q.account():who,q.minutes()),projectIdentity);
+  }
   void loadControls(){TrafficQuery q=query;method.setSelectedItem(q.method());response.setSelectedItem(q.status());for(int i=0;i<3;i++)ranges[i].setSelected(i==q.range());group.setSelected(q.group());important.setSelected(q.important());normalize.setSelected(q.normalize());memo.setSelected(q.memo());sensitive.setSelected(q.sensitive());regex.setSelected(q.regex());account.setText(q.account());
     String time=q.minutes()==0?"전체":q.minutes()==60?"최근 1시간":q.minutes()==1440?"최근 24시간":"최근 "+q.minutes()+"분";
-    boolean found=false;for(int i=0;i<period.getItemCount();i++)if(time.equals(period.getItemAt(i)))found=true;if(!found)period.addItem(time);period.setSelectedItem(time);
+    boolean found=false;for(int i=0;i<period.getItemCount();i++)if(time.equals(period.getItemAt(i)))found=true;if(!found)period.addItem(time);period.setSelectedItem(time);quickStateChanged.run();
   }
   private int selectedMinutes(){String selected=Objects.toString(period.getSelectedItem(),"전체");return switch(selected){case "전체"->0;case "최근 1시간"->60;case "최근 24시간"->1440;default->Integer.parseInt(selected.replace("최근 ","").replace("분",""));};}
   void apply(){int range=0;for(int i=0;i<3;i++)if(ranges[i].isSelected())range=i;TrafficQuery next=new TrafficQuery(method.getSelectedItem().toString(),response.getSelectedItem().toString(),range,sensitive.isSelected(),regex.isSelected(),group.isSelected(),normalize.isSelected(),important.isSelected(),memo.isSelected(),account.getText().strip(),selectedMinutes());

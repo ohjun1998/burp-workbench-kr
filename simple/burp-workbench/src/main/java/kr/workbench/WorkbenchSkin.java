@@ -21,7 +21,7 @@ final class WorkbenchSkin {
     SearchField(int columns) { this(columns,"URL, 메서드, 상태 코드 검색"); }
     SearchField() { this(0); }
     SearchField(int columns,String placeholder) { super(columns); this.placeholder=placeholder; }
-    @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(40,d.height)); }
+    @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(34,d.height)); }
     @Override protected void paintComponent(Graphics graphics) {
       super.paintComponent(graphics);
       if (getText().isEmpty() && !hasFocus()) {
@@ -50,9 +50,9 @@ final class WorkbenchSkin {
     @Override public void update(Graphics graphics, JComponent component) { paint(graphics, component); }
     @Override public Dimension getPreferredSize(JComponent component) {
       if (Boolean.TRUE.equals(component.getClientProperty("wb.capture")))
-        return new Dimension(174, 38);
+        return new Dimension(132, 34);
       if (Boolean.TRUE.equals(component.getClientProperty("wb.analysis.lamp")))
-        return new Dimension(112, 38);
+        return new Dimension(132, 34);
       Dimension size = super.getPreferredSize(component);
       return new Dimension(size.width, Math.max(32, size.height));
     }
@@ -95,7 +95,7 @@ final class WorkbenchSkin {
   }
   private static final class ComboUi extends BasicComboBoxUI {
     @Override public Dimension getPreferredSize(JComponent component){Dimension size=super.getPreferredSize(component);return new Dimension(size.width,Math.max(32,size.height));}
-    @Override protected JButton createArrowButton(){return new BasicArrowButton(SwingConstants.SOUTH,WorkbenchUi.raised(),WorkbenchUi.line(),WorkbenchUi.ink(),WorkbenchUi.line());}
+    @Override protected JButton createArrowButton(){JButton arrow=new JButton(){protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setColor(WorkbenchUi.ink());g.setStroke(new BasicStroke(1.3f));int x=getWidth()/2,y=getHeight()/2;g.drawPolyline(new int[]{x-4,x,x+4},new int[]{y-2,y+2,y-2},3);g.dispose();}};arrow.putClientProperty("wb.nativeEditor",true);arrow.setBorder(null);arrow.setPreferredSize(new Dimension(25,30));return arrow;}
   }
   static void scroll(JScrollBar bar) {
     if(!(bar.getUI() instanceof ScrollUi))bar.setUI(new ScrollUi());
@@ -112,16 +112,13 @@ final class WorkbenchSkin {
   static Color captureColor(String mode) {
     return switch (mode) {
       case "OFF" -> WorkbenchUi.dark() ? new Color(255, 110, 120) : new Color(192, 53, 67);
-      default -> WorkbenchUi.dark() ? new Color(255, 179, 66) : new Color(162, 96, 14);
+      default -> WorkbenchUi.accent();
     };
   }
 
   private static void capture(Graphics2D g, JButton button) {
     String mode = button.getText();
-    String label = mode + "  |  " + switch (mode) {
-      case "OFF" -> "수집 중지";
-      default -> "범위 수집";
-    };
+    String label = "수집: " + mode;
     Color color = captureColor(mode);
     lamp(g, button, label, color);
   }
@@ -137,7 +134,7 @@ final class WorkbenchSkin {
     g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 40));
     g.fillOval(11, cy-8, 16, 16);
     g.setColor(color); g.fillOval(14, cy-5, 10, 10);
-    g.setFont(WorkbenchUi.font().deriveFont(Font.BOLD));
+    g.setFont(WorkbenchUi.font());
     g.setColor(WorkbenchUi.dark() ? WorkbenchUi.ink() : color.darker());
     g.drawString(label, 34, (button.getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());
   }

@@ -1436,7 +1436,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           }
         };
     logTable.setName("wb.traffic.history");
-    logTable.putClientProperty("wb.table.compact", true);
+    logTable.putClientProperty("wb.table.compact", false);logTable.putClientProperty("wb.table.flat",true);
     logTable.setRowSorter(
         new CaptureRowSorter(logModel, error -> captureFailure("트래픽 검색·정렬", error)));
     logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -1513,7 +1513,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             popup(e);
           }
         });
-    for (int i = 6; i >= 4; i--) logTable.removeColumn(logTable.getColumnModel().getColumn(i));
+    for (int i : new int[]{9,7,6,5}) logTable.removeColumn(logTable.getColumnModel().getColumn(i));
+    logTable.moveColumn(5,4);
     int[] widths = {56, 75, 500, 65};
     for (int i = 0; i < widths.length; i++) {
       logTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
@@ -1561,8 +1562,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     trafficMenu.addSeparator();
     trafficMenu.add(trafficAction("선택 원본을 증거에 추가", this::addSimpleEvidence));
     logTable.setToolTipText("요청 선택 → 비교 준비 또는 증거에 추가 · Shift+F10 행 메뉴 · Ctrl+R Repeater 준비");
-    logTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    int[] extraWidths={45,110,55,130};for(int i=0;i<4;i++){logTable.getColumnModel().getColumn(i+4).setPreferredWidth(extraWidths[i]);logTable.getColumnModel().getColumn(i+4).setWidth(extraWidths[i]);}
+    CompactWorkbenchUi.columns(logTable,65,80,430,75,105,175,215);
     trafficBrowser.updateColumns();
     logTable
         .getSelectionModel()
@@ -1572,8 +1572,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             });
     scopeListButton = button("SCOPE 목록", this::showScopeList);
     scopeListButton.setName("wb.traffic.scope.list");
-    JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
-        res = WorkbenchUi.card("응답  RESPONSE", responsePacket);
+    JPanel req = WorkbenchUi.card("요청", requestPacket),
+        res = WorkbenchUi.card("응답", responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
     viewers.setName("wb.traffic.messages");
     JPanel messages = new JPanel(new BorderLayout(0, 6));
@@ -1583,11 +1583,20 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     body.setName("wb.traffic.workspace");
     JPanel controls = new JPanel(new BorderLayout(0, 5));
     controls.setName("wb.traffic.controls");
-    controls.add(row(scopeListButton, captureButton, trafficBrowser.freezeView, trafficBrowser.newTraffic, trafficBrowser.settingsButton), BorderLayout.NORTH);
-    controls.add(trafficBrowser.conditionBar(), BorderLayout.CENTER);
+    JComboBox<String> targetChoice=new JComboBox<>(new String[]{"전체 대상"});targetChoice.setName("wb.traffic.target");targetChoice.setToolTipText("관찰한 대상으로 URL 검색 · 수집 범위는 SCOPE 목록에서 설정");targetChoice.setPreferredSize(new Dimension(220,34));
+    targetChoice.addPopupMenuListener(new javax.swing.event.PopupMenuListener(){
+      public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent e){Object selected=targetChoice.getSelectedItem();java.util.Set<String> hosts=new java.util.LinkedHashSet<>();hosts.add("전체 대상");for(int i=Math.max(0,logModel.getRowCount()-4096);i<logModel.getRowCount()&&hosts.size()<200;i++)try{hosts.add(java.net.URI.create(logModel.getValueAt(i,2).toString()).getHost());}catch(Exception ignored){}for(String host:hosts)if(host!=null&&((DefaultComboBoxModel<String>)targetChoice.getModel()).getIndexOf(host)<0)targetChoice.addItem(host);targetChoice.setSelectedItem(selected);}
+      public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent e){}public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e){}
+    });
+    targetChoice.addActionListener(e->{String value=Objects.toString(targetChoice.getSelectedItem(),"");filter.setText(value.equals("전체 대상")?"":value);});
+    boolean[] syncingQuick={false};JComboBox<String> accountChoice=new JComboBox<>(new String[]{"전체"});accountChoice.setEditable(true);accountChoice.setName("wb.traffic.account");accountChoice.setPreferredSize(new Dimension(160,34));
+    accountChoice.addPopupMenuListener(new javax.swing.event.PopupMenuListener(){public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent e){for(var identity:trafficBrowser.identities.get())if(((DefaultComboBoxModel<String>)accountChoice.getModel()).getIndexOf(identity.label())<0)accountChoice.addItem(identity.label());}public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent e){}public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e){}});
+    accountChoice.addActionListener(e->{if(syncingQuick[0])return;try{trafficBrowser.quickFilter(null,null,Objects.toString(accountChoice.getSelectedItem(),"전체").replaceFirst("^전체$",""));}catch(RuntimeException invalid){trafficBrowser.feedback.setText(invalid.getMessage());}});
+    scopeListButton.setText("SCOPE 설정");scopeListButton.setIcon(WorkspaceIcons.of("gear"));
+    controls.add(row(new JLabel("대상"),targetChoice,new JLabel("계정"),accountChoice,captureButton,scopeListButton,trafficBrowser.settingsButton), BorderLayout.NORTH);
     JButton compareSelected = button("계정 비교 준비", this::prepareSimpleComparison);
-    JButton repeatSelected = button("Repeater 준비", this::prepareSimpleRepeater);
-    JButton evidenceSelected = button("증거에 추가", this::addSimpleEvidence);
+    JButton repeatSelected = button("Repeater", this::prepareSimpleRepeater);
+    JButton evidenceSelected = button("증거 추가", this::addSimpleEvidence);
     compareSelected.setName("wb.simple.traffic.compare");
     repeatSelected.setName("wb.simple.traffic.repeater");
     evidenceSelected.setName("wb.simple.traffic.evidence");
@@ -1606,8 +1615,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     selectedState.run();
     JPanel searchActions = new JPanel(new BorderLayout(8, 0));
     filter.setColumns(12);
-    searchActions.add(filter);
-    searchActions.add(row(compareSelected, repeatSelected, evidenceSelected, selectionInfo), BorderLayout.EAST);
+    JPanel queryRow=new JPanel(new BorderLayout(8,0));queryRow.add(filter);JPanel methods=new JPanel(new GridLayout(1,0));ButtonGroup methodGroup=new ButtonGroup();List<JToggleButton> quickMethods=new ArrayList<>();
+    for(String label:new String[]{"전체","GET","POST","오류"}){JToggleButton b=new JToggleButton(label,label.equals("전체"));b.setName("wb.traffic.quick."+label);b.putClientProperty("wb.compact.button",true);methodGroup.add(b);methods.add(b);quickMethods.add(b);b.addActionListener(e->trafficBrowser.quickFilter(label.equals("오류")?"전체":label,label.equals("오류")?"오류":"전체",null));}
+    trafficBrowser.quickStateChanged=()->{syncingQuick[0]=true;try{var q=trafficBrowser.query;methodGroup.clearSelection();for(JToggleButton b:quickMethods)b.setSelected(b.getText().equals("오류")?q.status().equals("오류"):q.status().equals("전체")&&b.getText().equals(q.method()));accountChoice.setSelectedItem(q.account().isEmpty()?"전체":q.account());}finally{syncingQuick[0]=false;}};trafficBrowser.quickStateChanged.run();
+    queryRow.add(methods,BorderLayout.EAST);searchActions.add(queryRow);
+    compareSelected.setIcon(WorkspaceIcons.of("traffic"));repeatSelected.setIcon(WorkspaceIcons.of("mapper"));evidenceSelected.setIcon(WorkspaceIcons.of("bounty"));
+    searchActions.add(row(compareSelected, repeatSelected, evidenceSelected), BorderLayout.EAST);
+    JPanel footer=new JPanel(new BorderLayout());footer.add(trafficBrowser.conditionBar());footer.add(row(trafficBrowser.freezeView,trafficBrowser.newTraffic,selectionInfo),BorderLayout.EAST);messages.add(footer,BorderLayout.SOUTH);
     controls.add(searchActions, BorderLayout.SOUTH);
     JPanel main = page(controls, body);
     main.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));

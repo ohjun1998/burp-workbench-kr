@@ -88,7 +88,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
   FolderNavigation(MontoyaApi api, JTabbedPane pages, Runnable openSettings, JButton help, JButton logs,
       boolean classic, AbstractButton... shortcuts) {
-    super(new BorderLayout(0, 6));
+    super(new BorderLayout(0, 0));
     this.api = api;
     this.pages = pages;
     this.classic = classic;
@@ -104,18 +104,18 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("도구");
     folder(root, "트래픽", "traffic", "mapper");
-    if (classic) folder(root, "탐색·정보 수집", "js", "environment", "passive");
+    if (classic) folder(root, "탐색·정보 수집", "js", "environment");
     else folder(root, "탐색·정보 수집", "js", "environment");
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
     if (classic) {
       folder(root, "데이터 도구", "data");
-      folder(root, "점검 관리·증거", "activity", "dashboard", "bounty");
+      folder(root, "점검 관리·증거", "activity", "bounty");
     } else folder(root, "점검 관리·증거", "bounty");
     tree = new NavigationTree(root);
     tree.setName("wb.navigation.tree");
     tree.setRootVisible(false);
-    tree.setShowsRootHandles(true);
-    tree.setRowHeight(Math.max(40,tree.getFontMetrics(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f))).getHeight()+10));
+    tree.setShowsRootHandles(false);
+    tree.setRowHeight(0);
     tree.setToggleClickCount(1);
     tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     tree.getAccessibleContext().setAccessibleName("기능 폴더 목록");
@@ -134,7 +134,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     });
     sidebar = new JScrollPane(tree);
     sidebar.setName("wb.navigation.sidebar");
-    sidebar.setMinimumSize(new Dimension(MIN_WIDTH, 80));
+    sidebar.setMinimumSize(new Dimension(MIN_WIDTH, 80));sidebar.setBorder(null);
     sidebar.setPreferredSize(new Dimension(menuWidth, 400));
     split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidebar, pages);
     split.setName("wb.navigation.split");
@@ -151,7 +151,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     split.addComponentListener(new ComponentAdapter() {
       @Override public void componentResized(ComponentEvent event) { constrainDivider(); }
     });
-    toggle.setName("wb.navigation.toggle");
+    toggle.setName("wb.navigation.toggle");toggle.setIcon(WorkspaceIcons.of("menu"));toggle.putClientProperty("wb.segment.button",true);toggle.setPreferredSize(new Dimension(40,38));
     toggle.addActionListener(event -> setMenuHidden(!hidden));
     back.setName("wb.navigation.back"); forward.setName("wb.navigation.forward");
     quick.setName("wb.navigation.quick");
@@ -184,15 +184,26 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       if (navigationControls.getComponentCount() > 0) navigationControls.add(Box.createHorizontalStrut(8));
       navigationControls.add(control);
     }
+    if (classic) {
+      JLabel brand=new JLabel("Workbench");brand.setName("wb.navigation.brand");brand.putClientProperty("wb.font.size",18);brand.putClientProperty("wb.font.heading",true);
+      navigationControls.add(Box.createHorizontalStrut(10));navigationControls.add(brand);
+      navigationControls.setPreferredSize(new Dimension(DEFAULT_WIDTH-12,40));
+      navigationControls.setBorder(BorderFactory.createMatteBorder(0,0,0,1,WorkbenchUi.line()));
+    }
     navigationLine.add(navigationControls, BorderLayout.WEST);
     navigationLine.add(current, BorderLayout.CENTER);
     JPanel actions = new JPanel(classic
         ? new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 6, 0) : new GridLayout(1, 0, 8, 0));
     actions.setName("wb.navigation.actions");
-    for (AbstractButton shortcut : shortcuts) if (shortcut != null) actions.add(shortcut);
+    for (AbstractButton shortcut : shortcuts) if (shortcut != null) {
+      if(classic && shortcut.getText().contains("Scope")){shortcut.setToolTipText(shortcut.getText());shortcut.getAccessibleContext().setAccessibleName(shortcut.getText());shortcut.setText("");shortcut.setIcon(WorkspaceIcons.of("target"));shortcut.putClientProperty("wb.compact.button",true);}
+      actions.add(shortcut);
+    }
+    if(classic && help!=null)help.setText("도움말");
     if (help != null) actions.add(help);
     actions.add(settings);
     if (logs != null) actions.add(logs);
+    for(Component c:actions.getComponents())if(c instanceof AbstractButton b)b.putClientProperty("wb.segment.button",true);
     navigationLine.add(actions, BorderLayout.EAST);
     JPanel toolbar = new ResponsiveToolbar(navigationLine, actions);
     add(toolbar, BorderLayout.NORTH);
@@ -385,7 +396,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     ResponsiveToolbar(JPanel line, JPanel actions) {
       super(new BorderLayout(8, 4)); this.line = line; this.actions = actions;
       setName("wb.navigation.toolbar");
-      setBorder(BorderFactory.createEmptyBorder(4, 6, 0, 6)); add(line, BorderLayout.NORTH);
+      setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,1,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(0,6,0,8))); add(line, BorderLayout.NORTH);
     }
     private void adapt() {
       boolean next = getWidth() > 0 && getWidth() < 900;
@@ -411,7 +422,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     NavigationTree(TreeNode root) {
       super(root);
       setOpaque(false);
-      setBorder(BorderFactory.createEmptyBorder(6, 0, 8, 0));
+      setBorder(BorderFactory.createEmptyBorder(6, 14, 8, 0));
       addMouseMotionListener(new MouseMotionAdapter() {
         @Override public void mouseMoved(MouseEvent event) {
           int row = rowAt(event);
@@ -431,8 +442,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       setUI(new BasicTreeUI() {
         @Override protected void installDefaults() {
           super.installDefaults();
-          setLeftChildIndent(10);
-          setRightChildIndent(12);
+          setLeftChildIndent(8);
+          setRightChildIndent(10);
           setExpandedIcon(new NavigationIcon(IconKind.DOWN));
           setCollapsedIcon(new NavigationIcon(IconKind.RIGHT));
         }
@@ -467,7 +478,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
     @Override protected void paintComponent(Graphics graphics) {
       Graphics2D g = (Graphics2D) graphics.create();
-      g.setColor(WorkbenchUi.surface());
+      g.setColor(WorkbenchUi.background());
       g.fillRect(0, 0, getWidth(), getHeight());
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       Rectangle clip = g.getClipBounds();
@@ -504,7 +515,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     NavigationRenderer() {
       setOpaque(false);
       setIconTextGap(8);
-      setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 12));
+      setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 8));
     }
 
     @Override
@@ -513,8 +524,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       boolean toolNode = node.getUserObject() instanceof Tool;
       setText(node.toString());
-      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(15f)));
-      Icon icon = new NavigationIcon(toolNode ? IconKind.PAGE : expanded ? IconKind.OPEN_FOLDER : IconKind.FOLDER);
+      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(14f)));
+      setBorder(BorderFactory.createEmptyBorder(toolNode?8:row==0?18:30, 2, toolNode?8:10, 8));
+      Icon icon = WorkspaceIcons.of(toolNode?((Tool)node.getUserObject()).id():"group");
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
       setDisabledIcon(icon);
@@ -644,9 +656,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   void restoreAppearance() {
     if (tree.getUI().getClass().getEnclosingClass() != NavigationTree.class) tree.updateUI();
     tree.setCellRenderer(renderer);
-    tree.setRowHeight(Math.max(40,tree.getFontMetrics(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f))).getHeight()+10));
+    tree.setRowHeight(0);
     tree.setOpaque(false);
-    tree.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f)));
+    tree.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(14f)));
     tree.setBackground(WorkbenchUi.surface());
     tree.treeDidChange();
     sidebar.setMinimumSize(new Dimension(minimumMenuWidth(),80));
@@ -658,9 +670,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setBackground(WorkbenchUi.surface());
     sidebar.setVisible(!hidden);
     split.setDividerSize(hidden ? 0 : 7);
-    toggle.setText(hidden ? "메뉴 보기" : "메뉴 숨기기");
+    toggle.setText("");toggle.putClientProperty("wb.segment.button",true);
     toggle.setToolTipText("왼쪽 폴더 메뉴 " + (hidden ? "보기" : "숨기기") + " · Ctrl+Shift+M");
-    toggle.getAccessibleContext().setAccessibleName(toggle.getText());
+    toggle.getAccessibleContext().setAccessibleName(hidden ? "메뉴 보기" : "메뉴 숨기기");
     constrainDivider();
   }
 

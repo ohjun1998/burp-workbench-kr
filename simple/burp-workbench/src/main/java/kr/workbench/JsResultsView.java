@@ -10,6 +10,7 @@ import javax.swing.table.*;
 /** One-line evidence and one combined filter menu; all actions use original model indexes. */
 final class JsResultsView extends JPanel {
   final JsAnalysisPanel owner;
+  final JTextArea detail=new JTextArea(),inputDetail=new JTextArea();
   final JButton filter=WorkspaceIcons.button("filter","wb.js.filter","목록 필터");
   final JLabel count=new JLabel("0 / 0"),summary=new JLabel("경로를 선택하세요"){
     @Override public Dimension getPreferredSize(){return new Dimension(80,28);}
@@ -25,7 +26,12 @@ final class JsResultsView extends JPanel {
   Map<String,String> changeLabels=Map.of();
   private boolean refreshing;
   JsResultsView(JsAnalysisPanel owner,ResultTabs tabs){
-    super(new BorderLayout(0,2));this.owner=owner;setName("wb.js.list.workspace");add(tabs);
+    super(new BorderLayout(0,2));this.owner=owner;setName("wb.js.list.workspace");
+    detail.setName("wb.js.inline.detail");inputDetail.setName("wb.js.inline.inputs");
+    for(JTextArea area:List.of(detail,inputDetail)){area.setEditable(false);area.setLineWrap(true);area.setWrapStyleWord(true);area.putClientProperty("wb.prose",true);}
+    JPanel information=new JPanel(new GridLayout(1,2,12,0));information.add(new JScrollPane(detail));information.add(new JScrollPane(inputDetail));
+    JSplitPane content=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,tabs,WorkbenchUi.card("경로 상세 정보",information),.55);content.setName("wb.js.inline.split");add(content);
+    owner.urlTable.putClientProperty("wb.search.apply",(Runnable)this::apply);
     summary.setName("wb.js.selection.summary");shortcut.setName("wb.js.selection.shortcut");
     summary.putClientProperty("wb.font.size",12);shortcut.putClientProperty("wb.font.size",11);
     JPanel line=new JPanel(new BorderLayout(8,0));line.setName("wb.js.selection.line");line.setBorder(BorderFactory.createEmptyBorder(0,8,0,6));line.add(summary);line.add(shortcut,BorderLayout.EAST);add(line,BorderLayout.SOUTH);
@@ -65,15 +71,19 @@ final class JsResultsView extends JPanel {
   void apply(){
     if(refreshing)return;
     @SuppressWarnings("unchecked") TableRowSorter<DefaultTableModel> sorter=(TableRowSorter<DefaultTableModel>)owner.urlTable.getRowSorter();
-    sorter.setRowFilter(new RowFilter<>(){public boolean include(Entry<? extends DefaultTableModel,? extends Integer> entry){return eligible(entry.getIdentifier());}});
+    sorter.setRowFilter(new RowFilter<>(){public boolean include(Entry<? extends DefaultTableModel,? extends Integer> entry){String query=Objects.toString(owner.urlTable.getClientProperty("wb.search.query"),"");boolean matches=query.isEmpty();for(int i=0;i<entry.getValueCount()&&!matches;i++)matches=entry.getStringValue(i).toLowerCase(Locale.ROOT).contains(query);return matches&&eligible(entry.getIdentifier());}});
     count.setText(owner.urlTable.getRowCount()+" / "+owner.endpoints.getRowCount());
     boolean active=call.getSelectedIndex()>0||priority.isSelected()||fresh.isSelected();filter.putClientProperty("wb.icon.active",active);filter.setBorder(BorderFactory.createLineBorder(active?WorkbenchUi.accent():WorkbenchUi.line()));
     filter.setToolTipText("목록 필터 · "+count.getText()+(active?" · 조건 적용 중":""));selection();owner.refreshActions();
   }
-  void selection(){var r=owner.currentResult();int row=owner.urlTable.getSelectedRow();if(r==null||row<0||owner.results.getSelectedIndex()!=0){summary.setText("경로를 선택하세요");summary.setToolTipText(null);return;}
+  void selection(){var r=owner.currentResult();int row=owner.urlTable.getSelectedRow();if(r==null||row<0||owner.results.getSelectedIndex()!=0){summary.setText("경로를 선택하세요");summary.setToolTipText(null);detail.setText("");inputDetail.setText("");return;}
     var e=r.endpoints().get(owner.urlTable.convertRowIndexToModel(row));List<String> reasons=JsTrafficIndex.reasons(e,owner.trafficIndex.get(e.url()));String reason=reasons.isEmpty()?"일반 검토":compactReason(e,reasons.get(0));
     String source=JsVersions.base(owner.currentSourceKey());int slash=source.lastIndexOf('/');String shortSource=slash>=0?source.substring(slash+1):source;
-    String line=reason+" · "+Objects.toString(owner.endpoints.getValueAt(owner.urlTable.convertRowIndexToModel(row),7),"").replace("JS에서만 발견","미호출")+" | "+shortSource+":"+e.line();summary.setText(line);summary.setToolTipText(JsFindingGroups.evidence(r,e)+"\n"+String.join(" · ",reasons));
+    String line=reason+" · "+Objects.toString(owner.endpoints.getValueAt(owner.urlTable.convertRowIndexToModel(row),7),"").replace("JS에서만 발견","미호출")+" | "+shortSource+":"+e.line();summary.setText(line);
+    String description="경로   "+e.url()+"\n\n메서드   "+e.method()+"\n\n호출 위치   "+shortSource+":"+e.line()+"\n\n상태   "+owner.endpoints.getValueAt(owner.urlTable.convertRowIndexToModel(row),7)+"\n\n분석 근거\n"+JsFindingGroups.evidence(r,e);
+    String inputs="발견한 입력 이름\n\n파라미터   "+e.parameters()+"\n\n헤더   "+e.headers()+"\n\n본문 항목   "+e.bodyKeys()+"\n\n"+String.join("\n",reasons);
+    if(!detail.getText().equals(description)){detail.setText(description);detail.setCaretPosition(0);}if(!inputDetail.getText().equals(inputs)){inputDetail.setText(inputs);inputDetail.setCaretPosition(0);}
+    summary.setToolTipText(JsFindingGroups.evidence(r,e)+"\n"+String.join(" · ",reasons));
   }
   static String compactReason(JsAnalysis.Endpoint e,String full){String url=e.url().toLowerCase(Locale.ROOT);if(url.matches(".*(?:admin|role|permission).*"))return "권한 관련 경로";if(url.matches(".*(?:upload|download|file).*"))return "파일 관련 경로";if(url.matches(".*(?:export|import).*"))return "데이터 입출력 경로";if(full.startsWith("응답 민감"))return "응답 민감 필드";if(full.contains("객체/계정"))return "객체·계정 식별자";return full.length()>18?full.substring(0,17)+"…":full;}
   void openTraffic(){refresh();traffic.setRowCount(0);var r=owner.currentResult();if(r!=null)for(int i=0;i<r.endpoints().size();i++){var e=r.endpoints().get(i);var fact=owner.trafficIndex.get(e.url());traffic.addRow(new Object[]{e.url(),e.method(),fact==null?"미관측":String.join(", ",fact.methods()),owner.endpoints.getValueAt(i,7),String.join(" · ",JsTrafficIndex.reasons(e,fact))});}comparison.closeWindow();comparison.open();}

@@ -10,6 +10,18 @@ import javax.swing.table.TableRowSorter;
 public final class CompactWorkbenchUi {
   private CompactWorkbenchUi() {}
 
+  public static JTabbedPane pages(){return new JTabbedPane(){public void updateUI(){setUI(new javax.swing.plaf.basic.BasicTabbedPaneUI(){protected int calculateTabAreaHeight(int p,int r,int m){return 0;}protected Insets getContentBorderInsets(int p){return new Insets(0,0,0,0);}protected void paintTabArea(Graphics g,int p,int s){}protected void paintContentBorder(Graphics g,int p,int s){}});} };}
+
+  public static JPanel toolbar(Component context, Component actions) {
+    JPanel bar=new JPanel(new BorderLayout(8,4)){
+      boolean stacked;
+      private void adapt(){boolean next=getWidth()>0&&getWidth()<context.getMinimumSize().width+actions.getPreferredSize().width+16;if(next==stacked)return;stacked=next;remove(actions);add(actions,next?BorderLayout.SOUTH:BorderLayout.EAST);}
+      public void doLayout(){adapt();super.doLayout();}
+      public Dimension getPreferredSize(){if(context!=null)adapt();return super.getPreferredSize();}
+    };
+    bar.add(context);bar.add(actions,BorderLayout.EAST);return bar;
+  }
+
   public static JPanel disclosure(String name, String title, Component content, boolean expanded) {
     JPanel panel = new JPanel(new BorderLayout(0, 4));
     panel.setName(name);
@@ -28,13 +40,15 @@ public final class CompactWorkbenchUi {
 
   /** Literal search, including metacharacters, over the existing model and sorter. */
   public static JTextField search(JTable table, String name, String hint) {
-    JTextField field = new JTextField(18);
+    JTextField field = new WorkbenchSkin.SearchField(18,hint);
     field.setName(name); field.setToolTipText(hint);
     field.getAccessibleContext().setAccessibleName(hint);
     if (!(table.getRowSorter() instanceof TableRowSorter<?>)) table.setAutoCreateRowSorter(true);
     field.getDocument().addDocumentListener(new DocumentListener() {
       void changed() {
         String query = field.getText().strip().toLowerCase(java.util.Locale.ROOT);
+        table.putClientProperty("wb.search.query",query);
+        if(table.getClientProperty("wb.search.apply") instanceof Runnable apply){apply.run();return;}
         @SuppressWarnings("unchecked")
         TableRowSorter<javax.swing.table.TableModel> sorter =
             (TableRowSorter<javax.swing.table.TableModel>) table.getRowSorter();

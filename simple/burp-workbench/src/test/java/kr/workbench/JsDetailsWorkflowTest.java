@@ -22,8 +22,9 @@ public final class JsDetailsWorkflowTest {
   });var panel=ref.get();JsAnalysisPanelTest.waitDone(panel);
   edt(()->{
    panel.analysisDetails.doClick(0);JsAnalysisDetails detail=windows.get(1);
-   var group=(JPanel)UiLayoutTest.named(panel,"wb.js.analysis.group");Component[] actions=group.getComponents();
-   verify(actions[0]==panel.analysisList&&actions[1]==panel.analysisDetails,"analysis details sits directly right of analysis list");
+   var more=(JButton)UiLayoutTest.named(panel,"wb.js.more");var menu=(JPopupMenu)more.getClientProperty("wb.js.more.menu");
+   var labels=java.util.Arrays.stream(menu.getComponents()).filter(c->c instanceof JMenuItem).map(c->((JMenuItem)c).getText()).toList();
+   verify(labels.contains(panel.analysisList.getText())&&labels.indexOf(panel.analysisDetails.getText())==labels.indexOf(panel.analysisList.getText())+1,"analysis list and details remain adjacent in the more menu");
    verify(panel.results.getTabCount()==7&&java.util.stream.IntStream.range(0,7).noneMatch(i->panel.results.getTitleAt(i).equals("분석 상세")),"main results no longer contain the old details tab");
    verify(((JLabel)UiLayoutTest.named(detail,"wb.js.details.count.api")).getText().equals("2"),"API summary card matches the selected analysis");
    verify(((JLabel)UiLayoutTest.named(detail,"wb.js.details.count.secret")).getText().equals(Integer.toString(detail.snapshot.secrets().size()))&&detail.snapshot.secrets().size()>0,"token summary counts masked candidates");

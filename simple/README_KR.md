@@ -1,4 +1,8 @@
-# Workbench Simple 1.4.5
+# Workbench Simple 1.4.6
+
+**승인 시안과 달랐던 1.4.5 화면을 다시 구성했습니다.** [1.4.6 JAR](downloads/1.4.6/burp-workbench-simple-1.4.6.jar) · [실제 8개 화면](docs/images/1.4.6/README.md) · [변경·검증](docs/RELEASE_SIMPLE_1.4.6_KR.md).
+
+아래 1.4.5 설명은 이전 배포 이력이며, 시각적 일치가 부족해 이번 버전에서 수정했습니다.
 
 **큰 본문 제목 없이 작업 도구 모음부터 시작하는 8개 도구의 새 배치를 적용합니다.** [1.4.5 JAR](downloads/1.4.5/burp-workbench-simple-1.4.5.jar) · [소스·체크섬](downloads/1.4.5/) · [변경·실제 화면](docs/RELEASE_SIMPLE_1.4.5_KR.md).
 

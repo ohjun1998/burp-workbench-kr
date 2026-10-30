@@ -303,7 +303,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       if (embeddedHost == null) enabled.doClick(0);
       else { embeddedHost.toggleCapture(); updateIndicators(); }
     });
-    JPanel projectActions = MapperUi.row(button("프로젝트 저장", () -> chooseFile(true)),button("프로젝트 열기", () -> chooseFile(false)),button("Repeater에 준비", this::sendToRepeater),captureButton);
+    JPanel projectActions = MapperUi.row(new JLabel("프로젝트"),button("열기 ▾", () -> chooseFile(false)),button("저장", () -> chooseFile(true)),captureButton);
     JPanel toolbar = new JPanel(new BorderLayout(0,6)); if (embeddedHost == null) toolbar.add(header,BorderLayout.NORTH);
     else projectActions.add(button("매핑 설정", this::showSettings));
     toolbar.add(projectActions);
@@ -364,7 +364,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     JPanel filters = new JPanel(new BorderLayout(10,0));
     filters.setName("fm.filters");
     filters.add(MapperUi.row(new JLabel("실행"),runs,new JLabel("세션"),sessions),BorderLayout.WEST);
-    filters.add(search);
+    filters.add(search);filters.add(MapperUi.row(button("분류 수정",this::movePackets),button("Repeater",this::sendToRepeater)),BorderLayout.EAST);
     runs.addActionListener(
         e -> {
           if (!rebuilding) fillRows();
@@ -399,8 +399,8 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     JSplitPane packets =
         new JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT,
-            scroll("요청  REQUEST", requestText),
-            scroll("응답  RESPONSE", responseText));
+            scroll("요청", requestText),
+            scroll("응답", responseText));
     packets.setName("fm.messages"); MapperUi.split(packets,.5);
     JTabbedPane details = new JTabbedPane();
     details.addTab("요청·응답", packets);
@@ -414,6 +414,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     all.setName("fm.navigation.split"); MapperUi.split(all,.23);
     all.putClientProperty("fm.initial.width",190); all.setResizeWeight(0);
     all.setDividerLocation(190);
+    treeToggle.addActionListener(e->{boolean expanded=treeToggle.isSelected();left.setMinimumSize(new Dimension(expanded?160:40,60));all.setDividerLocation(expanded?190:48);all.putClientProperty("fm.initial.width",expanded?190:48);treeToggle.setText(expanded?"기능 목록 · 접기":">");treeToggle.setToolTipText(expanded?"기능 목록 접기":"기능 목록 펼치기");treeToggle.getAccessibleContext().setAccessibleName(treeToggle.getToolTipText());});
     root.add(all);
 
     api.userInterface().applyThemeToComponent(root);

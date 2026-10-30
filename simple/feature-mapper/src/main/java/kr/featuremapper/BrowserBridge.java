@@ -74,6 +74,7 @@ public final class BrowserBridge implements AutoCloseable {
     new SecureRandom().nextBytes(random);
     token = HexFormat.of().formatHex(random);
     server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 8);
+    try {
     server.setExecutor(executor);
     server.createContext(
         "/health",
@@ -145,6 +146,14 @@ public final class BrowserBridge implements AutoCloseable {
           }
         });
     server.start();
+    } catch (RuntimeException | LinkageError failure) {
+      // A host loader can expose HttpServer but hide HttpHandler/HttpExchange.
+      // The constructor cannot publish a bridge for unload() to close on that path.
+      try { server.stop(0); }
+      catch (RuntimeException cleanup) { failure.addSuppressed(cleanup); }
+      finally { executor.shutdownNow(); }
+      throw failure;
+    }
   }
 
   private boolean authorized(HttpExchange x) {

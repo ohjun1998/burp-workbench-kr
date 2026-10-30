@@ -12,8 +12,8 @@ public final class AuthLayoutFitTest extends WorkbenchTest {
     edt(()->{
       check(panel.history.getColumnName(1).equals("메서드")&&panel.history.getColumnName(2).equals("URL"),"history shows method before URL without changing account model indices");
       var actions=(JPanel)UiLayoutTest.named(panel,"wb.auth.actions");
-      check(java.util.Arrays.stream(actions.getComponents()).map(Component::getName).toList().equals(List.of("wb.auth.detect", "wb.simple.auth.review", "wb.simple.auth.stop", "wb.simple.auth.settings")),"Simple toolbar contains only named detection, explicit comparison, stop and account/settings controls");
-      check(!SwingUtilities.isDescendingFrom(panel.packetDetails,panel),"main keeps packet inspector in separate detail window");
+      check(java.util.Arrays.stream(actions.getComponents()).filter(c -> c instanceof AbstractButton).map(Component::getName).toList().equals(List.of("wb.auth.detect", "wb.simple.auth.review", "wb.simple.auth.stop", "wb.simple.auth.settings")),"Simple toolbar retains four named actions beside compact counts");
+      check(!SwingUtilities.isDescendingFrom(panel.packetDetails,panel) && SwingUtilities.isDescendingFrom(panel.inlinePreview,panel),"inline comparison remains mounted while enlarged packet window stays independent");
       for(int width:new int[]{800,1024,1280,1600}){
         panel.setSize(width,800);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
         for(JTable table:new JTable[]{panel.candidates,panel.history}){

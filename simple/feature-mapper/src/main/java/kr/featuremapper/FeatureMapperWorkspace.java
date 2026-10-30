@@ -60,6 +60,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   @Override public void close() { unload(); }
   volatile Mapper mapper;
   BrowserBridge bridge;
+  private String browserUnavailable = "브라우저 연결 준비 전";
   private MontoyaApi api;
   private final Object projectLock = new Object();
   private final ConcurrentHashMap<Integer, Long> starts = new ConcurrentHashMap<>();
@@ -139,7 +140,8 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     if (embeddedHost == null) api.extension().setName("Feature Mapper KR " + BuildInfo.VERSION);
     try {
       mapper = new Mapper();
-      bridge =
+      try {
+        bridge =
           new BrowserBridge(
               event -> {
                 if ("inspection".equals(event.get("type"))) {
@@ -154,6 +156,22 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
                   }
                 }
               }, origin -> !closed.get()&&embeddedHost!=null?embeddedHost.inspectionCommand(origin):Map.of("state","idle"));
+      } catch (NoClassDefFoundError missing) {
+        // Burp may use a reduced runtime or an extension loader without access to this module.
+        // Do not turn an unrelated linkage defect into an apparently successful initialization.
+        if (missing.getMessage() == null
+            || !missing.getMessage().replace('.', '/').startsWith("com/sun/net/httpserver/")) throw missing;
+        browserUnavailable = "현재 Burp Java에서 jdk.httpserver 클래스를 불러올 수 없습니다. "
+            + "브라우저 도우미·SPA 연결을 사용할 수 없습니다. "
+            + "사용 중인 Burp 버전이 지원하는 완전한 JDK로 Burp JAR를 실행하고 "
+            + "jdk.httpserver 모듈 접근을 확인한 뒤 확장을 다시 추가하세요.";
+        bridgeUnavailable(missing);
+      } catch (IOException unavailable) {
+        browserUnavailable = "브라우저 연결용 로컬 서버를 시작하지 못했습니다. "
+            + "브라우저 도우미·SPA 연결을 사용할 수 없습니다. "
+            + "Burp의 로컬 loopback 연결 권한을 확인한 뒤 확장을 다시 추가하세요.";
+        bridgeUnavailable(unavailable);
+      }
       if (SwingUtilities.isEventDispatchThread()) buildUi();
       else SwingUtilities.invokeAndWait(this::buildUi);
       if (embeddedHost == null) {
@@ -165,6 +183,12 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       unload();
       throw new IllegalStateException("Feature Mapper 초기화 실패", e);
     }
+  }
+
+  private void bridgeUnavailable(Throwable error) {
+    diagnostics.record("브라우저 연결 시작", error);
+    api.logging().logToOutput("Feature Mapper · 브라우저 연결 사용 불가 · " + browserUnavailable
+        + " HTTP 수집·자동 매핑과 HTTP 통합 점검은 계속 사용할 수 있습니다.");
   }
 
   public void requestStarted(int messageId) {
@@ -311,7 +335,17 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       assessment.setToolTipText("선택 기능의 API로 업무 초안을 만듭니다. 계정·범위 검토 후 연결하며 완료로 표시하지 않습니다.");
       actions.add(assessment);
     }
-    left.add(actions, BorderLayout.SOUTH);
+    JPanel treeBody = new JPanel(new BorderLayout(0, 4));
+    treeBody.add(left.getComponent(0)); treeBody.add(actions, BorderLayout.SOUTH);
+    left.removeAll();
+    JToggleButton treeToggle = new JToggleButton("기능 목록 · 접기", true);
+    treeToggle.setName("fm.tree.toggle");
+    left.add(treeToggle, BorderLayout.NORTH); left.add(treeBody);
+    treeToggle.addActionListener(e -> {
+      treeBody.setVisible(treeToggle.isSelected());
+      treeToggle.setText(treeToggle.isSelected() ? "기능 목록 · 접기" : "기능 목록 · 펼치기");
+      left.revalidate(); left.repaint();
+    });
     table.setName("fm.history");
     table.setAutoCreateRowSorter(true);
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -375,11 +409,11 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     top.add(filters, BorderLayout.NORTH);
     top.add(new JScrollPane(table));
     JSplitPane main = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, details);
-    main.setName("fm.workspace"); MapperUi.split(main,.45);
+    main.setName("fm.workspace"); MapperUi.split(main,.40);
     JSplitPane all = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, main);
     all.setName("fm.navigation.split"); MapperUi.split(all,.23);
-    all.putClientProperty("fm.initial.width",240); all.setResizeWeight(0);
-    all.setDividerLocation(240);
+    all.putClientProperty("fm.initial.width",190); all.setResizeWeight(0);
+    all.setDividerLocation(190);
     root.add(all);
 
     api.userInterface().applyThemeToComponent(root);
@@ -412,7 +446,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     String label = diagnostics.size() == 0 ? "로그" : "로그 (" + diagnostics.size() + ")";
     if (!label.equals(logButton.getText())) logButton.setText(label);
     logButton.setForeground(diagnostics.size() == 0 ? MapperUi.ink() : new Color(210,70,80));
-    if (bridge != null && mapper != null) {
+    if (mapper != null) {
       String summary = browserSummary();
       if (!summary.equals(browserStatus.getText())) browserStatus.setText(summary);
     }
@@ -523,7 +557,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
               + " · 미리보기 병합 "
               + previewCoalesced.get()
               + " · 브라우저 압력 "
-              + bridge.backpressureCount()
+              + (bridge == null ? "사용 불가" : bridge.backpressureCount())
               + " · 오류 "
               + errors.get());
     } catch (IOException e) {
@@ -712,20 +746,23 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   }
 
   String browserSummary() {
-    return bridge.snapshot().description(System.currentTimeMillis())
+    return (bridge == null ? "브라우저 연결 사용 불가 · " + browserUnavailable
+        + "\nHTTP 수집·자동 매핑과 HTTP 통합 점검은 계속 사용할 수 있습니다."
+        : bridge.snapshot().description(System.currentTimeMillis()))
         + "\nHTTP 자동 분류 " + mapper.count() + "건 · 브라우저 연결 근거 " + mapper.browserMappedPackets() + "건"
         + "\n이벤트 수신과 수집 반영은 별개입니다. OFF·범위 밖·중복 요청은 연결되지 않을 수 있습니다.";
   }
 
   private void showBridge() {
+    if (closed.get()) return;
     JTextArea text =
         new JTextArea(
-            "연결 주소: "
+            (bridge == null ? browserSummary() : "연결 주소: "
                 + bridge.baseUrl()
                 + "\n연결 토큰: "
                 + bridge.token
                 + "\n\n" + browserSummary()
-                + "\n\n브라우저 보조 확장의 연결 설정에 입력하세요.\n브라우저 보조 확장에서 분석할 사이트를 활성화한 뒤 새로고침합니다.",
+                + "\n\n브라우저 보조 확장의 연결 설정에 입력하세요.\n브라우저 보조 확장에서 분석할 사이트를 활성화한 뒤 새로고침합니다."),
             7,
             70);
     text.setEditable(false);

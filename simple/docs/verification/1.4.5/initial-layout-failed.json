@@ -1,0 +1,80 @@
+{
+  "version": "1.4.5",
+  "artifact": "burp-workbench/dist/burp-workbench-simple-1.4.5.jar",
+  "toolchainMode": "strict-release17",
+  "java17ApiCompatibilityVerified": true,
+  "compilerNote": "Compiled with --release 17.",
+  "jarSha256": "6ede16fcde1052e9ab712d8f80f7440a3fdd58efbf22f0daa3b9b2156556269e",
+  "renderedViews": 60,
+  "controls": 1276,
+  "scenarios": 256,
+  "retainedPrimaryTools": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "replayEvidenceModes": [
+    "manual-request-replay",
+    "evidence-editor"
+  ],
+  "clippedControls": [
+    {
+      "theme": "light",
+      "width": "1024",
+      "height": "720",
+      "view": "04-auth-results.png",
+      "label": "기록 비우기",
+      "name": "",
+      "controlWidth": "93",
+      "controlHeight": "-4",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    },
+    {
+      "theme": "light",
+      "width": "1280",
+      "height": "800",
+      "view": "04-auth-results.png",
+      "label": "기록 비우기",
+      "name": "",
+      "controlWidth": "93",
+      "controlHeight": "-4",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    },
+    {
+      "theme": "dark",
+      "width": "1024",
+      "height": "720",
+      "view": "04-auth-results.png",
+      "label": "기록 비우기",
+      "name": "",
+      "controlWidth": "93",
+      "controlHeight": "-4",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    },
+    {
+      "theme": "dark",
+      "width": "1280",
+      "height": "800",
+      "view": "04-auth-results.png",
+      "label": "기록 비우기",
+      "name": "",
+      "controlWidth": "93",
+      "controlHeight": "-4",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    }
+  ],
+  "collapsedAreas": [],
+  "failedScenarios": [],
+  "missingCaptures": [],
+  "scope": "Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.",
+  "result": "failed"
+}

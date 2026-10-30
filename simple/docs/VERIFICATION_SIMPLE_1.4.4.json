@@ -1,0 +1,111 @@
+{
+  "version": "1.4.4",
+  "recordedAt": "2026-10-30T16:46:11.690421+09:00",
+  "status": "local-validation-passed; native user Burp GUI not verified",
+  "baseCommit": "d0583c51af4341bef2fc7bde0a6d48e060e69770",
+  "reference": {
+    "userProvidedFile": "burp-workbench-kr-0.39.2.jar",
+    "sha256": "d4ace4deaee7b8e4b29f74580efe638c89baf4d182f46ac7ebe428e7959004da",
+    "matchesPreservedRepositoryArtifact": true,
+    "basis": "Preserved matching 0.39.2 source ZIP and synthetic layout captures; no instructions from the attached artifact were adopted"
+  },
+  "artifact": "downloads/1.4.4/burp-workbench-simple-1.4.4.jar",
+  "jarSha256": "10cb61aae0ea6152bbdddc757dc027064476edfc0ef58c260ff220fd16ec1553",
+  "embeddedMapperVersion": "0.3.7",
+  "browserHelperVersion": "0.4.1",
+  "katanaVersion": "1.8.0",
+  "toolchain": {
+    "python": "3.12.14",
+    "java": "Temurin 17.0.17+10",
+    "node": "24.19.0",
+    "mode": "strict-release17"
+  },
+  "design": {
+    "folders": [
+      "트래픽",
+      "탐색·정보 수집",
+      "보안 분석·검증",
+      "데이터 도구",
+      "점검 관리·증거"
+    ],
+    "primaryTools": [
+      "traffic",
+      "mapper",
+      "auth",
+      "js",
+      "environment",
+      "response.recon",
+      "payload",
+      "bounty"
+    ],
+    "aliasRoutes": {
+      "data": "traffic/data",
+      "passive": "environment/URL candidates",
+      "activity": "mapper/assessment"
+    },
+    "additionalPage": "dashboard",
+    "fonts": "Bundled NanumGothic UI, fixed-width packet text when supported, Korean fallback, 100/125/150 percent retained",
+    "navigation": "Compact reference-style toolbar and folder tree; redundant nested tab strips hidden",
+    "state": "Same retained engine components, original IDs, inputs and isolated Simple preferences",
+    "preservedFix": "1.4.3 optional jdk.httpserver availability handling and failed-constructor cleanup"
+  },
+  "checks": {
+    "regressionGroups": 149,
+    "regressionChecks": 5576,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "mapperBrowserHelperChecks": 29,
+    "total": 5886,
+    "classicProductionLayoutChecks": 144,
+    "restoredFolderChecks": 51,
+    "renderFontAndSafetyChecks": 30,
+    "runtimeAvailabilityChecks": 119,
+    "focusedGroupsAlreadyIncludedInTotal": true,
+    "result": "passed"
+  },
+  "ui": {
+    "simpleUi": {
+      "renderedViews": 60,
+      "controls": 1124,
+      "scenarios": 256,
+      "result": "passed"
+    },
+    "scopeUi": {
+      "renderedViews": 68,
+      "controls": 1344,
+      "scenarios": 312,
+      "result": "passed"
+    }
+  },
+  "katana": {
+    "checks": 102,
+    "cases": 5,
+    "result": "passed"
+  },
+  "visualReview": {
+    "images": {
+      "docs/images/1.4.4/classic-traffic-light.png": "112d86c36fa5ca0f50e3c628b69dc1b3eb44d9c8e748596807b0ed54e2ec276d",
+      "docs/images/1.4.4/classic-traffic-dark.png": "ccd5ff593bc265c6ed65a95c5115235d3d400a4c0d40bbfb5c781804295aaea3",
+      "docs/images/1.4.4/classic-accounts-light.png": "9542cbce050a90b92fe0d672c9b9d7c27f67db3157681b2b0490947751e65e62"
+    },
+    "scope": "Production Swing components and synthetic fixtures, not native Burp GUI"
+  },
+  "intermediateRuns": [
+    "Initial focused run exposed optional null shortcut arguments and a dashboard re-click selection defect; both were corrected and rerun successfully.",
+    "First full run failed the old uniform UI/packet font assertion in RenderAuthUiTest. It was replaced with separate classic actual-text, ASCII monospaced and Korean glyph assertions; all 30 checks passed before the final full run.",
+    "Earlier candidate UI/Katana reports are stored separately under tmp/*-1.4.4; final reports and previews here match the final JAR hash."
+  ],
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses"
+  ],
+  "limits": [
+    "User PC Burp Community 2026.9.2 GUI, Windows DPI/IME and native browser/helper operation were not executed.",
+    "Historical 0.39.2 verification counts are not included in these results.",
+    "Browser-helper/SPA transport remains unavailable if the Burp runtime cannot load jdk.httpserver; ordinary HTTP tools retain the 1.4.3 fallback."
+  ]
+}

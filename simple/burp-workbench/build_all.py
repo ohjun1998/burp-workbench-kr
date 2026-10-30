@@ -86,15 +86,16 @@ if a.test:
  reports=[];group_counts={};failures=[]
  excluded={
   'UiCleanupTest':'Asserts removed WorkContext header, exact 15-item auxiliary menu and absence of direct next-step buttons; replaced by SimpleWorkflowTest and Simple layout rendering',
-  'FolderNavigationTest':'Asserts removed folder sidebar, sidebar resize/hide controls and NEXT badge; replaced by SimpleWorkflowTest eight direct extension routes and retained-input checks',
-  'AppearanceWorkflowTest':'Asserts removed folder JTree renderer, orange icons and sidebar row geometry; theme/traffic/capture/input checks replaced by SimpleAppearanceTest'
+  'AppearanceWorkflowTest':'Requires the original auxiliary/settings page contract; current folder styling and retained Simple inputs are checked by SimpleClassicLayoutTest, FolderNavigationTest and SimpleAppearanceTest'
  }
  adapted={
   'BuildInfoTest':'Assert Simple artifact filename while retaining packaged JAR manifest/runtime consistency checks',
   'PacketUiTest':'Assert named payload settings/start/stop/direct-evidence controls instead of the removed More menu; retain all shared packet preview, native-editor, raw-byte and syntax assertions',
   'NextIsolationTest':'Assert Simple display and storage namespace; preserve both stable and Next preference/archive fixtures',
-  'FeatureGuideWorkflowTest':'Use actual Simple options help item and current bounty title/eight-extension introductory guidance; retain routing/input/no-HTTP assertions',
-  'DiagnosticsWorkflowTest':'Use actual consolidated Simple options/logs menu; retain bounded concurrency, redaction, error selection/clear, lifecycle and no-HTTP checks',
+  'FeatureGuideWorkflowTest':'Use the classic toolbar help action and current bounty title/eight-extension introductory guidance; retain routing/input/no-HTTP assertions',
+  'DiagnosticsWorkflowTest':'Use the classic toolbar logs action; retain bounded concurrency, redaction, error selection/clear, lifecycle and no-HTTP checks',
+  'FolderNavigationTest':'Restore the 0.39.2-style five folders with Simple identity and nested-tool aliases; retain actual tree selection, input, width, hide/restore and no-HTTP contracts',
+  'RenderAuthUiTest':'Match the requested 0.39.2 ASCII fixed-width/Korean fallback fonts instead of requiring one UI/packet font; retain HTML sanitization, exact bytes, no-network and auth contracts',
   'UiPanelsOptimizationTest':'Restore original core manual-replay editor/result viewport assertions and verify route index 1; retain comparison, evidence, response, worker and image-state checks',
   'AuditRepairsTest':'Use the same original community JS fixture copied into Simple test resources, so regressions run independently of the original directory layout',
   'AuthSetupBundlesTest':'Assert exact BuildInfo.storageKey project UUID key instead of the historical Next prefix; retain bundle exchange, disk integrity, capacity and project-isolation checks',

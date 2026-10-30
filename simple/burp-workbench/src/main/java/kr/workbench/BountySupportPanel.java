@@ -78,6 +78,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   static final int EVIDENCE_REDACTION_VALUES = 256, EVIDENCE_REDACTION_CHARACTERS = 256 * 1024;
   final DefaultTableModel evidenceModel = model("이름", "메서드", "URL", "관찰");
   final JTable evidenceTable = new JTable(evidenceModel);
+  final JTextArea evidencePacketPreview = area(10), evidenceRequestPreview = area(10);
+  final JLabel evidencePacketLabel = new JLabel("증거를 선택하세요.");
   final JLabel evidenceCount = new JLabel("증거 0 / 32개");
   record EvidenceEdit(List<BountyEvidence.Item> items, Map<String, String> executions,
       Map<String, Set<String>> sources, Map<String, String> parts, List<Integer> selected,
@@ -283,7 +285,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     add(state, BorderLayout.SOUTH);
     flowModel.addTableModelListener(e -> refreshActions());
     evidenceModel.addTableModelListener(e -> refreshActions());
-    evidenceTable.getSelectionModel().addListSelectionListener(e -> refreshActions());
+    evidenceTable.getSelectionModel().addListSelectionListener(e -> {refreshActions();if(!e.getValueIsAdjusting())showEvidencePacket();});
     initializeDrafts();
     refreshActions();
     WorkbenchUi.style(this);
@@ -514,7 +516,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     titleRow.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
     titleRow.add(new JLabel("제목"), BorderLayout.WEST);
     titleRow.add(evidenceTitle); titleRow.add(evidenceCount, BorderLayout.EAST);
-    top.add(titleRow);
+    evidenceTitle.setColumns(18);
     evidenceSave.setName("wb.bounty.evidence.save");
     evidencePreview.setName("wb.bounty.evidence.preview");
     evidenceClear.setName("wb.bounty.evidence.clear");
@@ -533,7 +535,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       menu.addSeparator(); evidenceMenuItem(menu, "증거 비우기", evidenceClear.isEnabled(), this::clearEvidence);
       return menu;
     });
-    top.add(WorkbenchUi.row(addEvidence, evidencePreview, evidenceSave, moreEvidence));
+    top.add(WorkbenchUi.row(new JLabel("제목"),evidenceTitle,addEvidence,evidencePreview,evidenceSave,moreEvidence));
     addEvidence.setToolTipText("수집한 원본, 계정 비교 또는 요청 재현 결과를 증거에 추가합니다.");
     evidencePreview.setToolTipText("ZIP에 저장할 보고서와 패킷의 민감 정보 가림을 먼저 확인합니다.");
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -545,8 +547,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceRedoAction.setName("wb.bounty.evidence.redo");
     evidenceDescribe.setName("wb.bounty.evidence.describe");
     evidenceCount.setName("wb.bounty.evidence.count");
-    top.add(WorkbenchUi.row(evidenceRemove, evidenceUp, evidenceDown, evidenceUndoAction, evidenceRedoAction,
-        evidenceDescribe));
+    JPanel itemActions=WorkbenchUi.row(evidenceRemove, evidenceUp, evidenceDown, evidenceUndoAction, evidenceRedoAction, evidenceDescribe);
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Z"), "evidence-undo");
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Y"), "evidence-redo");
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), "evidence-description");
@@ -559,27 +560,43 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       area.setWrapStyleWord(true);
       area.putClientProperty("wb.prose", true);
     }
-    JSplitPane text =
-        WorkbenchUi.split(
-            JSplitPane.HORIZONTAL_SPLIT,
-            WorkbenchUi.card("실제 영향 · 직접 작성", new JScrollPane(impact)),
-            WorkbenchUi.card("재현 절차 · 직접 작성", new JScrollPane(repro)),
-            .5);
+    JSplitPane text = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,
+        WorkbenchUi.card("실제 영향 · 직접 작성", new JScrollPane(impact)),
+        WorkbenchUi.card("재현 절차 · 직접 작성", new JScrollPane(repro)), .5);
     text.setName("wb.bounty.evidence.notes");
-    JSplitPane body =
-        WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, new JScrollPane(evidenceTable), text, .45);
+    evidencePacketPreview.setName("wb.bounty.evidence.packet");
+    evidencePacketPreview.setEditable(false); evidencePacketPreview.putClientProperty("wb.packet.syntax",true);
+    evidenceRequestPreview.setName("wb.bounty.evidence.request");evidenceRequestPreview.setEditable(false);evidenceRequestPreview.putClientProperty("wb.packet.syntax",true);
+    JTabbedPane packetTabs=new JTabbedPane();packetTabs.setName("wb.bounty.evidence.packet.tabs");packetTabs.addTab("응답",new JScrollPane(evidencePacketPreview));packetTabs.addTab("요청",new JScrollPane(evidenceRequestPreview));
+    JPanel preview=new JPanel(new BorderLayout(0,4));preview.add(evidencePacketLabel,BorderLayout.NORTH);preview.add(packetTabs);
+    JSplitPane detail=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,preview,text,.42);
+    detail.setName("wb.bounty.evidence.detail");
+    JPanel list=new JPanel(new BorderLayout(0,4));list.add(new JScrollPane(evidenceTable));list.add(itemActions,BorderLayout.SOUTH);
+    JSplitPane body=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,list,detail,.35);
     body.setName("wb.bounty.evidence.body");
     p.add(body);
     draftState.setName("wb.bounty.evidence.draft.state");
     draftState.setEditable(false); draftState.setOpaque(false); draftState.setLineWrap(true);
     draftState.setWrapStyleWord(true); draftState.putClientProperty("wb.prose", true);
-    p.add(draftState, BorderLayout.SOUTH);
-    int[] widths = {130, 75, 380, 240};
+    JPanel footer=new JPanel(new BorderLayout());footer.add(draftState);footer.add(evidenceCount,BorderLayout.EAST);p.add(footer, BorderLayout.SOUTH);
+    evidenceTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    int[] widths = {170, 65, 260, 240};
     for (int i = 0; i < widths.length; i++)
-      evidenceTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+      {evidenceTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);evidenceTable.getColumnModel().getColumn(i).setWidth(widths[i]);}
     return p;
   }
 
+
+  void showEvidencePacket() {
+    var selected=selectedEvidenceRows();
+    if(selected.isEmpty()||selected.get(0)>=evidence.size()){evidencePacketLabel.setText("증거를 선택하세요.");evidencePacketPreview.setText("");evidenceRequestPreview.setText("");return;}
+    var item=evidence.get(selected.get(0));
+    evidencePacketLabel.setText(item.label());evidencePacketLabel.setToolTipText(item.url()+" · "+item.note());
+    String value;
+    try { value=item.response();String q=item.request();if(!q.equals(evidenceRequestPreview.getText())){evidenceRequestPreview.setText(q);evidenceRequestPreview.setCaretPosition(0);} }
+    catch(RuntimeException unavailable){evidenceRequestPreview.setText("");value="원본 미리보기를 읽을 수 없습니다. 증거 원본을 다시 연결하세요.";}
+    if(!value.equals(evidencePacketPreview.getText())){evidencePacketPreview.setText(value);evidencePacketPreview.setCaretPosition(0);}
+  }
   JButton evidenceMenuButton(String title, String name, Supplier<JPopupMenu> content) {
     JButton button = new JButton(title + " ▾"); button.setName(name);
     button.addActionListener(event -> {

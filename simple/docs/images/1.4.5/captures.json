@@ -1,0 +1,132 @@
+{
+  "version": "1.4.5",
+  "jarSha256": "8b59ccbf803a92367a923e55364bc8e7df35fc3a5e060ab82cc6610c7d0a5e4c",
+  "captures": [
+    {
+      "tool": "요청·응답 목록",
+      "state": "합성 요청과 응답",
+      "theme": "light",
+      "file": "01-traffic-light.png",
+      "sha256": "c81ad70423f4f34638f5b5a0ee253e6ecf122dbbca34cd6ab25fdc1f6e03a805"
+    },
+    {
+      "tool": "요청·응답 목록",
+      "state": "합성 요청과 응답",
+      "theme": "dark",
+      "file": "01-traffic-dark.png",
+      "sha256": "c9c2f484c4b6b6a295ceea46842ecc94e3f71626ee8b3fd3e693f0dbe66f6708"
+    },
+    {
+      "tool": "기능 자동 매핑",
+      "state": "초기 빈 프로젝트",
+      "theme": "light",
+      "file": "02-mapper-light.png",
+      "sha256": "80bf2e204f6b1d6526090068e6be0f05487697747a19b8358f53ac534cfebde9"
+    },
+    {
+      "tool": "기능 자동 매핑",
+      "state": "초기 빈 프로젝트",
+      "theme": "dark",
+      "file": "02-mapper-dark.png",
+      "sha256": "56606099ca33b81caafcf3d33e65a470a92286bc72cc040bf4e80d636f4df82b"
+    },
+    {
+      "tool": "계정 권한 비교",
+      "state": "합성 계정·비교 이력, 기준/선택 계정 응답",
+      "theme": "light",
+      "file": "03-auth-light.png",
+      "sha256": "90f97738f98f2e5ae7c73deb0c7157088080a3f529fd985f84a94fa79ad220c1"
+    },
+    {
+      "tool": "계정 권한 비교",
+      "state": "합성 계정·비교 이력, 기준/선택 계정 응답",
+      "theme": "dark",
+      "file": "03-auth-dark.png",
+      "sha256": "faa381b08ab065066ec82dd0e046ea6a025e126c9eceea636f8acd89884320b0"
+    },
+    {
+      "tool": "JS에서 API 찾기",
+      "state": "합성 JS 원문과 분석 결과",
+      "theme": "light",
+      "file": "04-js-light.png",
+      "sha256": "f19c29595e23dae8d6f6693694449bf0dd4bc145671ac80b6bffda39103309c3"
+    },
+    {
+      "tool": "JS에서 API 찾기",
+      "state": "합성 JS 원문과 분석 결과",
+      "theme": "dark",
+      "file": "04-js-dark.png",
+      "sha256": "a36cfc5849b76521336124cfe03e2f47e01ed2e301287aa54dc87df8bdb326a4"
+    },
+    {
+      "tool": "서버·경로 탐색",
+      "state": "후보 목록, GET 확인 전",
+      "theme": "light",
+      "file": "05-environment-light.png",
+      "sha256": "0965aecc4db6ce39c191940b591e294c378e7a24eacac03de81bcdb3917edf58"
+    },
+    {
+      "tool": "서버·경로 탐색",
+      "state": "후보 목록, GET 확인 전",
+      "theme": "dark",
+      "file": "05-environment-dark.png",
+      "sha256": "cb599a002ed209b6374b4ce5da3de208f216df8eb9ea8441dfd0730cddc275f4"
+    },
+    {
+      "tool": "응답 보안 분석",
+      "state": "합성 관찰과 연결 원본 응답",
+      "theme": "light",
+      "file": "06-response-light.png",
+      "sha256": "96c856476751691afc379e8b6b3232217fd1ec5d6cdfc27727e9d62ba7c2b069"
+    },
+    {
+      "tool": "응답 보안 분석",
+      "state": "합성 관찰과 연결 원본 응답",
+      "theme": "dark",
+      "file": "06-response-dark.png",
+      "sha256": "1a42f6dd56f4ce44e41fd474180de99f9503aae0523ab6a0c97e01b70be8dcec"
+    },
+    {
+      "tool": "입력값 보안 검사 · 준비",
+      "state": "실행 전 요청 준비",
+      "theme": "light",
+      "file": "07-payload-light.png",
+      "sha256": "c2e210fdb590caef3eab12d2da4925ce87131b0169eb8177c5217f48c15ef510"
+    },
+    {
+      "tool": "입력값 보안 검사 · 준비",
+      "state": "실행 전 요청 준비",
+      "theme": "dark",
+      "file": "07-payload-dark.png",
+      "sha256": "56359b2c3e597780303eb58b41a0f7b392ca183a49e0cf7b6268aaa44e2f887f"
+    },
+    {
+      "tool": "입력값 보안 검사 · 결과",
+      "state": "실행 전 빈 결과 탭",
+      "theme": "light",
+      "file": "07-payload-results-light.png",
+      "sha256": "c4a368aad8454549858b8ec166fd641e47dd10f4aa719df2ee51310fd819a900"
+    },
+    {
+      "tool": "입력값 보안 검사 · 결과",
+      "state": "실행 전 빈 결과 탭",
+      "theme": "dark",
+      "file": "07-payload-results-dark.png",
+      "sha256": "4b85028720317c6c592c6c5f4435ef652c059cddf80ee85abfc0270ccd52fe10"
+    },
+    {
+      "tool": "재현·증거 정리",
+      "state": "합성 증거와 직접 작성 예시",
+      "theme": "light",
+      "file": "08-evidence-light.png",
+      "sha256": "2954a26fe4d45470fdba46790de5be1a47e2346d5f937b3312b892195a175c56"
+    },
+    {
+      "tool": "재현·증거 정리",
+      "state": "합성 증거와 직접 작성 예시",
+      "theme": "dark",
+      "file": "08-evidence-dark.png",
+      "sha256": "d05070348e387a62d5c44025ea22bf5838c9594916d8929ab2a45781e77e855c"
+    }
+  ]
+}

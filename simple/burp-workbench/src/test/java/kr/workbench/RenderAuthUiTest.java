@@ -35,7 +35,9 @@ public final class RenderAuthUiTest extends WorkbenchTest {
         p.text.setText(html.replace("본문","수정 본문"));byte[] edited=p.editedBytes();p.tabs.get(3).doClick(0);check(content(p.rendered).contains("수정 본문")&&Arrays.equals(edited,p.editedBytes()),"Render reflects Raw edits while preserving transmission source");
         p.setPacket("HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\"html\":\"<b>literal</b>\"}".getBytes(StandardCharsets.UTF_8),null);check(content(p.rendered).contains("<b>literal</b>"),"JSON remains escaped text rather than interpreted HTML");
         p.setPacket(new byte[100000],null);check(content(p.rendered).contains("64 KiB"),"Render declares truncated input");
-        check(p.text.getFont().getFamily().equals(WorkbenchUi.font().getFamily())&&WorkbenchUi.textFont("ASCII").getFamily().equals(WorkbenchUi.textFont("한글").getFamily()),"packet and prose share requested font family");
+        check(p.text.getFont().getFamily().equals(WorkbenchUi.textFont(p.text.getText()).getFamily()),"packet uses the requested classic font for its actual text");
+        check(WorkbenchUi.textFont("ASCII").getFamily().equals(new Font(Font.MONOSPACED,Font.PLAIN,14).getFamily()),"ASCII packets retain the reference version's fixed-width font");
+        check(WorkbenchUi.textFont("한글").canDisplayUpTo("한글")<0,"packet text retains Korean glyph coverage through the reference fallback");
         Set<String> fonts=Set.of(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());if(fonts.contains("GulimChe")||fonts.contains("굴림체")||fonts.contains("Gulim")||fonts.contains("굴림"))check(Set.of("GulimChe","굴림체","Gulim","굴림").contains(WorkbenchUi.font().getFamily()),"installed Gulim is selected");else check(WorkbenchUi.font().canDisplayUpTo("굴림 대체 한글")<0,"missing Gulim has a Korean-capable fallback");
         var api=proxy(MontoyaApi.class,(o,m,a)->def(m));var panel=new AuthComparePanel(api,List::of);auth.set(panel);
         panel.observe(AuthRecordTest.q("first-secret"),response(200,"{}"));panel.observe(AuthRecordTest.q("second-secret"),response(200,"{}"));

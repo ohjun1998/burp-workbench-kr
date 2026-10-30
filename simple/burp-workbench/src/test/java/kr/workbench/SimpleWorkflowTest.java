@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 /** Production Simple routes, retained originals and settings isolation; no remote HTTP. */
 public final class SimpleWorkflowTest extends WorkbenchTest {
@@ -65,9 +67,38 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
   }
 
   static void click(Component root, String name) {
+    if (name.startsWith("wb.simple.tool.")) {
+      JTree tree = (JTree) named(root, "wb.navigation.tree");
+      TreePath path = toolPath(root, name.substring("wb.simple.tool.".length()));
+      tree.expandPath(path.getParentPath());
+      tree.setSelectionPath(path);
+      tree.scrollPathToVisible(path);
+      return;
+    }
     Component value = named(root, name);
     if (!(value instanceof AbstractButton button)) throw new AssertionError("Missing control: " + name);
     button.doClick(0);
+  }
+
+  static TreePath toolPath(Component root, String id) {
+    Component navigation = named(root, "wb.navigation.tree");
+    if (!(navigation instanceof JTree tree)) throw new AssertionError("Missing folder navigation");
+    var nodes = ((DefaultMutableTreeNode) tree.getModel().getRoot()).depthFirstEnumeration();
+    while (nodes.hasMoreElements()) {
+      var node = (DefaultMutableTreeNode) nodes.nextElement();
+      if (node.isLeaf() && FeatureGuide.title(id).equals(node.toString())) return new TreePath(node.getPath());
+    }
+    throw new AssertionError("Missing navigation tool: " + id);
+  }
+
+  static boolean toolVisible(Component root, String id) {
+    JTree tree = (JTree) named(root, "wb.navigation.tree");
+    return tree != null && tree.isVisible() && tree.getRowForPath(toolPath(root, id)) >= 0;
+  }
+
+  static boolean toolSelected(Component root, String id) {
+    JTree tree = (JTree) named(root, "wb.navigation.tree");
+    return tree != null && toolPath(root, id).equals(tree.getSelectionPath());
   }
 
   static void clickText(Component root, String text) {
@@ -121,7 +152,7 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
     int sends = PayloadIntegrationTest.sent.get();
     try {
       edt(() -> {
-        check(named(root, "wb.simple.navigation") != null, "eight-tool navigation is attached to production workspace");
+        check(named(root, "wb.navigation.tree") instanceof JTree, "classic folder navigation is attached to production workspace");
         var browser = (TrafficBrowser) unchecked(extension, "trafficBrowser");
         check(!visibleComponents(root).contains(named(root, "wb.traffic.conditions.saved")), "saved-filter management is absent from the running list");
         check(!browser.recoveryActions.isVisible(), "empty unfiltered list omits meaningless recovery controls");
@@ -133,13 +164,12 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
         String[] features = {"traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty"};
         var enginePages = new LinkedHashMap<String, Component>();
         for (String feature : features) {
-          var action = named(root, "wb.simple.tool." + feature);
-          check(action instanceof AbstractButton && visibleComponents(root).contains(action), "direct navigation always exposes retained " + feature + " tool");
+          check(toolVisible(root, feature), "folder navigation exposes retained " + feature + " tool");
           click(root, "wb.simple.tool." + feature);
           check(selectedFeature(tabs).equals(feature), "direct navigation opens retained " + feature + " engine");
           enginePages.put(feature, tabs.getSelectedComponent());
         }
-        check(Arrays.stream(features).allMatch(feature -> named(root,"wb.simple.tool."+feature)!=null), "all eight existing major tools remain available together");
+        check(Arrays.stream(features).allMatch(feature -> toolVisible(root, feature)), "all eight existing major tools remain available together");
         check(evidence.pages.getSelectedIndex() == 3, "replay/evidence tool starts on fixed evidence route index 3");
         click(root, "wb.simple.bounty.replay");
         check(evidence.pages.getSelectedIndex() == 1 && named(evidence,"wb.bounty.flow.run") == evidence.flowRun, "manual request replay is a visible core function at stable index 1");
@@ -171,24 +201,26 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
         check(!visibleComponents(root).contains(auth.record), "automatic retransmission control is removed from visible Simple flow");
         check(!auth.record.isSelected() && auth.recording.get() == null, "Simple starts without automatic retransmission");
         var names = visibleComponents(root).stream().map(Component::getName).filter(Objects::nonNull).toList();
-        check(!names.contains("wb.workflow.actions") && !names.contains("wb.navigation.tree"), "duplicate helper and folder navigation are absent from visible flow");
+        check(!names.contains("wb.simple.header") && !names.contains("wb.work.context")
+            && names.contains("wb.navigation.tree"), "classic folders replace the large Simple header without an extra context strip");
         var input = (JTextArea) unchecked(extension, "codecIn"); input.setText("SIMPLE_PENDING_LOCAL_INPUT");
         var dialog = new AtomicReference<Component>();
         extension.dialogOpener = (owner, title, body, modal, closed) -> {
           check(!modal && title.contains("Simple"), "consolidated utility opens a modeless Simple window");
           dialog.set(body); return null;
         };
-        var navigation = (SimpleNavigation) named(root, "wb.simple.navigation");
-        var menu = navigation.optionsMenu();
-        check(menu.getComponentCount() == 3, "one options menu exposes help, appearance and diagnostics");
-        ((JMenuItem) named(menu, "wb.simple.options.0")).doClick(0);
-        check(dialog.get() != null && named(dialog.get(), "wb.feature.guide.text") != null, "current-tool help is reachable from the real options menu");
+        check(named(root, "wb.feature.help") instanceof AbstractButton
+            && named(root, "wb.navigation.settings") instanceof AbstractButton
+            && named(root, "wb.navigation.logs") instanceof AbstractButton,
+            "compact top bar exposes help, appearance and diagnostics");
+        click(root, "wb.feature.help");
+        check(dialog.get() != null && named(dialog.get(), "wb.feature.guide.text") != null, "current-tool help is reachable from the actual top bar");
         root.getActionMap().get("featureHelp").actionPerformed(new java.awt.event.ActionEvent(root, 0, "F1"));
         check(named(dialog.get(), "wb.feature.guide.choice") != null, "F1 opens the same retained tool guidance");
-        ((JMenuItem) named(menu, "wb.simple.options.1")).doClick(0);
-        check(named(dialog.get(), "wb.settings.layout.common") != null, "appearance settings remain reachable from options");
-        ((JMenuItem) named(menu, "wb.simple.options.2")).doClick(0);
-        check(named(dialog.get(), "diagnostics.table") != null, "collection and error diagnostics remain reachable from options");
+        click(root, "wb.navigation.settings");
+        check(named(dialog.get(), "wb.settings.layout.common") != null, "appearance settings remain reachable from the top bar");
+        click(root, "wb.navigation.logs");
+        check(named(dialog.get(), "diagnostics.table") != null, "collection and error diagnostics remain reachable from the top bar");
         check(input.getText().equals("SIMPLE_PENDING_LOCAL_INPUT") && selectedFeature(tabs).equals("auth"), "opening utilities preserves the current tool and unsaved input");
       });
       var origin = "https://simple.example.test";

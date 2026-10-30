@@ -63,11 +63,12 @@ public final class FolderNavigationTest extends WorkbenchTest {
           groups.add(folder.toString());
           for (int j = 0; j < folder.getChildCount(); j++) leaves.add(folder.getChildAt(j).toString());
         }
-        check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "점검 관리·증거")),
-            "four task folders keep eight primary tools visible");
-        check(leaves.equals(List.of("요청·응답 목록", "기능 자동 매핑", "JS에서 API 찾기", "서버·경로 탐색",
-            "계정 권한 비교", "응답 보안 분석", "입력값 보안 검사", "재현·증거 정리")),
-            "eight primary tools; auxiliary tools remain nested and SCOPE stays inside traffic");
+        check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "데이터 도구", "점검 관리·증거")),
+            "five classic task folders preserve the requested navigation structure");
+        List<String> leafIds = List.of("traffic", "mapper", "js", "environment", "passive", "auth",
+            "response.recon", "payload", "data", "activity", "dashboard", "bounty");
+        check(leaves.equals(leafIds.stream().map(FeatureGuide::title).toList()),
+            "classic leaf order retains eight engines, nested aliases and the current dashboard");
         JTable traffic = (JTable) unchecked(extension, "logTable");
         traffic.setRowSelectionInterval(0, 0);
         Object source = unchecked(extension, "current");
@@ -76,20 +77,28 @@ public final class FolderNavigationTest extends WorkbenchTest {
         Object runner = unchecked(entry, "payloadRunner");
         JTextArea payload = (JTextArea) unchecked(runner, "request");
         payload.setText("UNSAVED_PAYLOAD_INPUT");
-        for (String leaf : leaves) {
-          tree.setSelectionPath(path(tree, leaf));
-          check(pages.getTitleAt(pages.getSelectedIndex()).equals(leaf), "folder selection opens production tool: " + leaf);
-        }
-        check(unchecked(extension, "current") == source && traffic.getSelectedRow() == 0
-            && codec.getText().equals("UNSAVED_FOLDER_INPUT") && payload.getText().equals("UNSAVED_PAYLOAD_INPUT"),
-            "all eight routes preserve selected traffic and unsaved editor work");
-        check(UiLayoutTest.named(panel, "wb.next.version") instanceof JLabel version
-                && version.getText().equals("NEXT " + BuildInfo.VERSION)
-                && FeatureGuide.SUITE_TAB.equals("Workbench Next"),
-            "new channel is visibly distinct in Burp tab and persistent version badge");
         JTabbedPane trafficTools = (JTabbedPane) unchecked(extension, "trafficTools");
         JTabbedPane explorationTools = (JTabbedPane) unchecked(extension, "explorationTools");
         JTabbedPane mapperTools = (JTabbedPane) unchecked(extension, "mapperTools");
+        for (String id : leafIds) {
+          tree.setSelectionPath(path(tree, FeatureGuide.title(id)));
+          String host = switch (id) {
+            case "data" -> "traffic";
+            case "passive" -> "environment";
+            case "activity" -> "mapper";
+            default -> id;
+          };
+          check(SimpleWorkflowTest.selectedFeature(pages).equals(host), "folder selection opens production tool: " + id);
+          if (id.equals("data")) check(trafficTools.getSelectedIndex() == 1, "data leaf opens the retained conversion/comparison page");
+          if (id.equals("passive")) check(explorationTools.getSelectedIndex() == 1, "URL leaf opens the retained candidate collector");
+          if (id.equals("activity")) check(mapperTools.getSelectedIndex() == 1, "progress leaf opens the existing assessment workspace");
+        }
+        check(unchecked(extension, "current") == source && traffic.getSelectedRow() == 0
+            && codec.getText().equals("UNSAVED_FOLDER_INPUT") && payload.getText().equals("UNSAVED_PAYLOAD_INPUT"),
+            "all classic routes preserve selected traffic and unsaved editor work");
+        check(UiLayoutTest.named(panel, "wb.next.version") == null
+                && FeatureGuide.SUITE_TAB.contains("Simple") && BuildInfo.DISPLAY_NAME.contains("Simple"),
+            "classic layout keeps Simple extension identity without a Next version badge");
         extension.openFeature("data");
         check(pages.getSelectedIndex() == pages.indexOfTab("요청·응답 목록") && trafficTools.getSelectedIndex() == 1
                 && codec.getText().equals("UNSAVED_FOLDER_INPUT"),
@@ -162,7 +171,7 @@ public final class FolderNavigationTest extends WorkbenchTest {
         JTabbedPane pages2 = new FolderNavigation.Pages();
         JPanel content = new JPanel();content.putClientProperty("wb.feature.id", "traffic");
         pages2.addTab("요청·응답 목록", content);
-        FolderNavigation navigation = new FolderNavigation(preferences(saved), pages2, () -> {});
+        FolderNavigation navigation = new FolderNavigation(preferences(saved), pages2, () -> {}, null, null, true, null, null);
         WorkbenchUi.style(navigation);navigation.restoreLayout();
         layout(navigation, 1280);
         JSplitPane split = (JSplitPane) UiLayoutTest.named(navigation, "wb.navigation.split");
@@ -177,7 +186,7 @@ public final class FolderNavigationTest extends WorkbenchTest {
         check(saved.get(BuildInfo.storageKey("wb.navigation.hidden")).equals("true"), "keyboard menu shortcut toggles and persists visibility");
         saved.put(BuildInfo.storageKey("wb.navigation.width"), "broken");
         saved.put(BuildInfo.storageKey("wb.navigation.hidden"), "false");
-        FolderNavigation recovered = new FolderNavigation(preferences(saved), new FolderNavigation.Pages(), () -> {});
+        FolderNavigation recovered = new FolderNavigation(preferences(saved), new FolderNavigation.Pages(), () -> {}, null, null, true, null, null);
         recovered.restoreLayout();layout(recovered, 1024);
         check(((JSplitPane) UiLayoutTest.named(recovered, "wb.navigation.split")).getDividerLocation() == 220,
             "invalid saved width falls back to the default without blocking startup");

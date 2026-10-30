@@ -238,7 +238,7 @@ public final class SimpleBridgeRuntimeTest extends WorkbenchTest {
           mode + " states the preserved HTTP mapping capability");
       edt(() -> {
         for (String tool : List.of("traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty")) {
-          check(SimpleWorkflowTest.named(root, "wb.simple.tool." + tool) instanceof AbstractButton,
+          check(SimpleWorkflowTest.toolVisible(root, tool),
               mode + " retains the " + tool + " navigation action");
           SimpleWorkflowTest.click(root, "wb.simple.tool." + tool);
           check(SimpleWorkflowTest.selectedFeature(tabs).equals(tool), mode + " opens the " + tool + " tool");

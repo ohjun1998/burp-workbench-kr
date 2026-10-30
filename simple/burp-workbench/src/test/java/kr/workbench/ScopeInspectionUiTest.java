@@ -101,7 +101,7 @@ public final class ScopeInspectionUiTest extends WorkbenchTest {
         check(dialog.get() instanceof ScopeInspectionPanel, "global one-touch button opens the actual integrated panel");
         check(dialog.get() == value(extension, "scopeInspectionPanel"), "global entry retains its production inspection controller");
         for (String id : List.of("traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty")) {
-          check(SimpleWorkflowTest.named(workspace, "wb.simple.tool." + id) instanceof AbstractButton,
+          check(SimpleWorkflowTest.toolVisible(workspace, id),
               "integrated inspection preserves existing " + id + " entry point");
           SimpleWorkflowTest.click(workspace, "wb.simple.tool." + id);
         }

@@ -185,8 +185,8 @@ public final class SimplePreview extends WorkbenchTest {
     final String origin = "https://simple.example.test";
     try {
       edt(() -> {
-        scenario("All eight retained primary tools are directly visible",List.of("traffic","mapper","auth","js","environment","response.recon","payload","bounty").stream()
-            .allMatch(id -> SimpleWorkflowTest.visibleComponents(root).contains(SimpleWorkflowTest.named(root,"wb.simple.tool."+id))));
+        scenario("All eight retained primary tools are visible in the classic folders",List.of("traffic","mapper","auth","js","environment","response.recon","payload","bounty").stream()
+            .allMatch(id -> SimpleWorkflowTest.toolVisible(root,id)));
         var scope = (WorkbenchScope) value(extension,"localScope"); scope.add(origin+"/", true); invoke(extension,"scopeChanged");
         var dialog = new AtomicReference<Component>();
         extension.dialogOpener = (owner,title,body,modal,closed) -> { dialog.set(body); return null; };

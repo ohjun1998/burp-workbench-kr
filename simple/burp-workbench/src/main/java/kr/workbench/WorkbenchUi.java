@@ -27,8 +27,8 @@ public final class WorkbenchUi {
  static boolean appearanceCompact(){return appearanceCompact;}
  public static float displaySize(float base){return base*appearanceScale/100f;}
  static int displayPixels(int base){return Math.round(base*appearanceScale/100f);}
- public static synchronized Font font(){if(preferred==null){String[] families=GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();for(String wanted:new String[]{"GulimChe","굴림체","Gulim","굴림"}){for(String family:families)if(family.equalsIgnoreCase(wanted)){preferred=new Font(family,Font.PLAIN,14);break;}if(preferred!=null)break;}if(preferred==null){Font f=bundledFont();preferred=f==null?new Font(Font.SANS_SERIF,Font.PLAIN,14):f;}}return preferred.deriveFont(Font.PLAIN,displaySize(14f));}
- public static Font textFont(String text){return font();}
+ public static synchronized Font font(){if(preferred==null){Font f=bundledFont();preferred=f==null?new Font(Font.SANS_SERIF,Font.PLAIN,14):f;}return preferred.deriveFont(Font.PLAIN,displaySize(14f));}
+ public static Font textFont(String text){Font mono=new Font(Font.MONOSPACED,Font.PLAIN,14).deriveFont(displaySize(14f));return mono.canDisplayUpTo(text==null?"":text)<0?mono:font();}
  public static JDialog settingsWindow(Component owner,String title,Component content,boolean modal,Runnable closed){
   if(GraphicsEnvironment.isHeadless())return null;
   Window parent=SwingUtilities.getWindowAncestor(owner);JDialog dialog=new JDialog(parent,title,modal?Dialog.ModalityType.APPLICATION_MODAL:Dialog.ModalityType.MODELESS);dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

@@ -24,6 +24,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   private static final int MAX_WIDTH = 420;
   private final MontoyaApi api;
   private final JTabbedPane pages;
+  private final boolean classic;
   private final Map<String, DefaultMutableTreeNode> tools = new LinkedHashMap<>();
   private final JTree tree;
   private final TreeCellRenderer renderer = new NavigationRenderer();
@@ -82,9 +83,15 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   }
 
   FolderNavigation(MontoyaApi api, JTabbedPane pages, Runnable openSettings, JButton help, JButton logs) {
+    this(api, pages, openSettings, help, logs, false);
+  }
+
+  FolderNavigation(MontoyaApi api, JTabbedPane pages, Runnable openSettings, JButton help, JButton logs,
+      boolean classic, AbstractButton... shortcuts) {
     super(new BorderLayout(0, 6));
     this.api = api;
     this.pages = pages;
+    this.classic = classic;
     quickWindow = new TargetWindow(this, "기능 바로 찾기 · Ctrl+K", this::quickPanel);
     setName("wb.navigation");
     pages.setName("wb.navigation.pages");
@@ -97,9 +104,13 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("도구");
     folder(root, "트래픽", "traffic", "mapper");
-    folder(root, "탐색·정보 수집", "js", "environment");
+    if (classic) folder(root, "탐색·정보 수집", "js", "environment", "passive");
+    else folder(root, "탐색·정보 수집", "js", "environment");
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
-    folder(root, "점검 관리·증거", "bounty");
+    if (classic) {
+      folder(root, "데이터 도구", "data");
+      folder(root, "점검 관리·증거", "activity", "dashboard", "bounty");
+    } else folder(root, "점검 관리·증거", "bounty");
     tree = new NavigationTree(root);
     tree.setName("wb.navigation.tree");
     tree.setRootVisible(false);
@@ -154,6 +165,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     current.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 6));
     JButton settings = new JButton("설정");
     settings.setName("wb.navigation.settings");
+    settings.setToolTipText("Workbench Simple " + BuildInfo.VERSION + " · 화면 설정");
     settings.addActionListener(event -> openSettings.run());
     JLabel version = new JLabel("NEXT " + BuildInfo.VERSION);
     version.setName("wb.next.version");
@@ -164,15 +176,20 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     navigationLine.setName("wb.navigation.toolbar.line");
     JPanel navigationControls = new JPanel();
     navigationControls.setLayout(new BoxLayout(navigationControls, BoxLayout.X_AXIS));
-    navigationControls.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
-    for (Component control : new Component[] {toggle, version, back, forward, quick}) {
+    navigationControls.setBorder(classic ? BorderFactory.createEmptyBorder()
+        : BorderFactory.createEmptyBorder(5, 8, 5, 8));
+    Component[] navigationButtons = classic ? new Component[] {toggle}
+        : new Component[] {toggle, version, back, forward, quick};
+    for (Component control : navigationButtons) {
       if (navigationControls.getComponentCount() > 0) navigationControls.add(Box.createHorizontalStrut(8));
       navigationControls.add(control);
     }
     navigationLine.add(navigationControls, BorderLayout.WEST);
     navigationLine.add(current, BorderLayout.CENTER);
-    JPanel actions = new JPanel(new GridLayout(1, 0, 8, 0));
+    JPanel actions = new JPanel(classic
+        ? new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 6, 0) : new GridLayout(1, 0, 8, 0));
     actions.setName("wb.navigation.actions");
+    for (AbstractButton shortcut : shortcuts) if (shortcut != null) actions.add(shortcut);
     if (help != null) actions.add(help);
     actions.add(settings);
     if (logs != null) actions.add(logs);
@@ -188,6 +205,13 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     bindNavigation("control K", "quickNavigation", this::openQuickNavigation);
     bindNavigation("alt LEFT", "navigationBack", this::goBack);
     bindNavigation("alt RIGHT", "navigationForward", this::goForward);
+    if (classic) {
+      String[] retained = {"traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty"};
+      for (int i = 0; i < retained.length; i++) {
+        String id = retained[i];
+        bindNavigation("alt " + (i + 1), "classic.tool." + id, () -> navigate(id));
+      }
+    }
     pages.addChangeListener(event -> { refreshSelection(); navigationChanged(); });
     refreshSelection();
     updateHistoryActions();
@@ -212,6 +236,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   /** The host calls this after changes in nested work tabs, using the same event coalescing as pages. */
   void navigationChanged() {
     if (closed || changingHistory) return;
+    refreshSelection();
     ensureProject(); captureCurrent();
     if (recordPending) return;
     recordPending = true;
@@ -376,8 +401,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   private boolean active(Object value) {
     if (!(value instanceof DefaultMutableTreeNode node)
         || !(node.getUserObject() instanceof Tool tool)) return false;
-    int index = indexOf(tool.id());
-    return index >= 0 && index == pages.getSelectedIndex();
+    return tool.id().equals(selectedToolId());
   }
 
   /** Local UI delegate and vector icons avoid OS-dependent folders and tree guide lines. */
@@ -574,20 +598,44 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     for (int i = 0; i < pages.getTabCount(); i++)
       if (pages.getComponentAt(i) instanceof JComponent page
           && id.equals(page.getClientProperty("wb.feature.id"))) return i;
+    if (classic) {
+      String host = switch (id) {
+        case "data", "jwt" -> "traffic";
+        case "passive" -> "environment";
+        case "activity" -> "mapper";
+        case "evidence" -> "bounty";
+        default -> id;
+      };
+      if (!host.equals(id)) return indexOf(host);
+    }
     return -1;
+  }
+
+  private String selectedToolId() {
+    String route = currentRoute();
+    String id = switch (route) {
+      case "jwt" -> "data";
+      case "evidence" -> "bounty";
+      default -> route;
+    };
+    return tools.containsKey(id) ? id : selectedRoute();
   }
 
   void refreshSelection() {
     Component selected = pages.getSelectedComponent();
     if (!(selected instanceof JComponent page)) return;
-    DefaultMutableTreeNode node = tools.get(page.getClientProperty("wb.feature.id"));
-    if (node == null) return;
-    TreePath path = new TreePath(node.getPath());
+    DefaultMutableTreeNode node = tools.get(selectedToolId());
     synchronizing = true;
     try {
-      tree.setSelectionPath(path);
-      tree.scrollPathToVisible(path);
-      current.setText(node.getParent() + " / " + node);
+      if (node == null) {
+        tree.clearSelection();
+        current.setText(FeatureGuide.title(Objects.toString(page.getClientProperty("wb.feature.id"), "")));
+      } else {
+        TreePath path = new TreePath(node.getPath());
+        tree.setSelectionPath(path);
+        tree.scrollPathToVisible(path);
+        current.setText(node.getParent() + " / " + node);
+      }
       current.setToolTipText(current.getText());
     } finally { synchronizing = false; }
     tree.repaint();

@@ -31,7 +31,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
                 };
                 JTable traffic=(JTable)unchecked(extension,"logTable");traffic.setRowSelectionInterval(0,0);
                 Object selected=unchecked(extension,"current");
-                AbstractButton help=(AbstractButton)((SimpleNavigation)unchecked(extension,"simpleNavigation")).optionsMenu().getComponent(0);
+                AbstractButton help=(AbstractButton)UiLayoutTest.named(root,"wb.feature.help");
                 check(help!=null&&help.isEnabled(),"feature help is available without configuring or executing a scan");
                 Map<String,Component> routes=new LinkedHashMap<>();
                 routes.put("요청·응답 목록",traffic);
@@ -112,7 +112,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
             for(var unload:PayloadIntegrationTest.legacyUnloads)unload.extensionUnloaded();edt(()->{});
         }
         int prior=opened.get();
-        edt(()->((AbstractButton)((SimpleNavigation)unchecked(extension,"simpleNavigation")).optionsMenu().getComponent(0)).doClick());
+        edt(()->((AbstractButton)UiLayoutTest.named(root,"wb.feature.help")).doClick());
         check(opened.get()==prior,"unloaded extension cannot reopen a feature guide");
         System.out.println("FeatureGuideWorkflowTest: "+checks+" checks passed (headless Swing navigation; zero HTTP)");
     }

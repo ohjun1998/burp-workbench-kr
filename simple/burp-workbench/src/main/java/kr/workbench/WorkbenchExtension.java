@@ -183,7 +183,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JDialog logWindow;
   private JTabbedPane tabs;
   private FolderNavigation navigation;
-  private SimpleNavigation simpleNavigation;
   ScopeDashboardPanel scopeDashboard;
   volatile ScopeInspectionPanel scopeInspectionPanel;
   private TargetWindow scopeInspectionWindow;
@@ -227,7 +226,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         tabs.indexOfComponent(bountySupport));
     WorkbenchUi.packetLayout(page, commonSettings.choice.getSelectedIndex() == 1);
     navigation.refreshSelection();
-    if (simpleNavigation != null) simpleNavigation.refreshSelection();
   }
 
   public void selectPayloadRunnerPage() {
@@ -523,7 +521,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     addPage("JS 추출", "js", jsPanel(), false);
     environments = new EnvironmentPanel(api);
     passiveScan = new PassiveScanWorkspace(api);
-    explorationTools = new JTabbedPane();
+    explorationTools = new FolderNavigation.Pages();
     explorationTools.setName("wb.exploration.tools");
     explorationTools.addTab("서버·경로 확인", environments);
     explorationTools.setToolTipTextAt(0, "관측 환경과 경로 후보 확인 · GET 확인은 직접 실행합니다.");
@@ -632,7 +630,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             mapperTools.setSelectedComponent(activity);
           }
         });
-    mapperTools = new JTabbedPane();
+    mapperTools = new FolderNavigation.Pages();
     mapperTools.setName("wb.mapper.tools");
     mapperTools.addTab("기능 분류·실행", mapperPage);
     mapperTools.setToolTipTextAt(0, "요청을 기능과 실행별로 묶습니다. 분류는 점검 완료가 아닙니다.");
@@ -660,10 +658,20 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logButton.setName("wb.navigation.logs");
     logButton.setToolTipText("오류 기록과 수집 상태 확인");
     logButton.addActionListener(e -> openLogs());
-    navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton);
-    // The retained route adapter keeps engine callbacks compatible; all eight extension entry points stay directly visible.
-    simpleNavigation = new SimpleNavigation(tabs, this::openSettings, this::openFeatureHelp, this::openLogs, this::openScopeInspection);
-    root.add(simpleNavigation);
+    JToggleButton dashboard = new JToggleButton("대시보드");
+    dashboard.setName("wb.simple.dashboard.open");
+    dashboard.setToolTipText("현재 통합 점검 결과 · 화면 조회는 대상 요청을 보내지 않습니다.");
+    dashboard.addActionListener(e -> {
+      if (unloaded.get()) return;
+      navigation.navigate("dashboard");
+      dashboard.setSelected(tabs.getSelectedComponent() == scopeDashboard);
+    });
+    tabs.addChangeListener(e -> dashboard.setSelected(tabs.getSelectedComponent() == scopeDashboard));
+    JButton inspect = button("Scope 통합 점검", this::openScopeInspection);
+    inspect.setName("wb.scope.inspection.open");
+    navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton,
+        true, dashboard, inspect);
+    root.add(navigation);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
     mapperTools.addChangeListener(e -> updateFeatureHelp());
@@ -1612,7 +1620,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     JPanel main = page(controls, body);
     main.setBorder(BorderFactory.createEmptyBorder(8, 16, 12, 16));
     main.setName("wb.traffic");
-    trafficTools = new JTabbedPane();
+    trafficTools = new FolderNavigation.Pages();
     trafficTools.setName("wb.traffic.tools");
     trafficTools.addTab("요청·응답", main);
     trafficTools.addTab("변환·비교", dataPanel());

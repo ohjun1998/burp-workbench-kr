@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.4는 첨부한 0.39.2 스타일의 디자인·배치를 적용합니다.** 큰 도구 버튼 줄을 왼쪽 폴더와 작은 상단 메뉴로 바꾸고 Simple 기능·입력·원본 연결과 1.4.3 로드 수정을 유지합니다. [새 JAR](simple/downloads/1.4.4/burp-workbench-simple-1.4.4.jar) · [소스·체크섬](simple/downloads/1.4.4/) · [배치 안내](simple/docs/RELEASE_SIMPLE_1.4.4_KR.md).
+
 **Simple 1.4.3은 Burp 확장 추가 시 `HttpServer` 클래스 누락으로 전체 로드가 실패하는 문제를 수정합니다.** 브라우저 연결 불가 이유를 표시하고 일반 HTTP 작업을 사용할 수 있게 합니다. [수정 JAR](simple/downloads/1.4.3/burp-workbench-simple-1.4.3.jar) · [소스·체크섬](simple/downloads/1.4.3/) · [Burp Java 복구 안내](simple/docs/RELEASE_SIMPLE_1.4.3_KR.md). 이전 배포와 아래 검증 이력은 보존합니다.
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 

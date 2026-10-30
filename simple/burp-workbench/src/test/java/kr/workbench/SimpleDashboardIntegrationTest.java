@@ -78,8 +78,8 @@ public final class SimpleDashboardIntegrationTest extends WorkbenchTest {
         check(field(extension, "scopeInspectionPanel") == null, "extension startup does not construct or start inspection");
         SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
         check(tabs.getSelectedComponent() == dashboard, "production top-bar dashboard action opens the appended page");
-        check(!((javax.swing.AbstractButton) SimpleWorkflowTest.named(root,"wb.simple.tool.traffic")).isSelected(),
-            "dashboard selection clears the previous tool highlight");
+        check(SimpleWorkflowTest.toolSelected(root,"dashboard") && !SimpleWorkflowTest.toolSelected(root,"traffic"),
+            "dashboard folder selection replaces the previous tool highlight");
         SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
         check(((javax.swing.AbstractButton) SimpleWorkflowTest.named(root,"wb.simple.dashboard.open")).isSelected(),
             "clicking the current dashboard keeps its navigation highlight selected");

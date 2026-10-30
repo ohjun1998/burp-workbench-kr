@@ -1,8 +1,12 @@
-# Workbench Simple 1.4.3
+# Workbench Simple 1.4.4
+
+**첨부한 Workbench 0.39.2처럼 작은 상단 도구 모음과 왼쪽 5개 폴더로 디자인·배치를 바꿉니다.** 한글 기본 글꼴·표·선택 강조를 맞추고 Simple 기능과 1.4.3 로드 수정을 유지합니다. [1.4.4 설치 JAR](downloads/1.4.4/burp-workbench-simple-1.4.4.jar) · [소스·체크섬](downloads/1.4.4/) · [배치·사용 안내](docs/RELEASE_SIMPLE_1.4.4_KR.md).
+
+아래 1.4.3 및 이전 버전의 설명과 파일은 보존 이력입니다.
 
 **Burp 확장 추가 시 `com/sun/net/httpserver/HttpServer` 오류로 전체 로드가 중단되는 문제를 수정합니다.** 브라우저 연결 서버를 사용할 수 없으면 원인과 복구 방법을 표시하고 일반 HTTP 작업을 초기화합니다. 이 상태에서 브라우저 도우미·SPA 연결은 사용할 수 없습니다. [1.4.3 JAR](downloads/1.4.3/burp-workbench-simple-1.4.3.jar) · [소스·체크섬](downloads/1.4.3/) · [설치·Java 확인 방법](docs/RELEASE_SIMPLE_1.4.3_KR.md).
 
-아래는 보존한 1.4.2의 작업 흐름 안내입니다. 새 설치에는 위 1.4.3 파일을 사용하세요.
+아래는 보존한 1.4.2의 작업 흐름 안내입니다. 새 설치에는 문서 상단의 최신 버전을 사용하세요.
 
 **점검 대시보드에서 현재 실행의 수치를 보고, 카드·막대를 눌러 조건별 목록과 근거·원본을 확인합니다.** 기존 8개 도구와 Katana·SCOPE 통합 점검을 유지하고 기존 Next 및 Simple 1.0.0–1.4.1 JAR·소스·PDF를 보존합니다.
 

@@ -54,7 +54,7 @@ public final class SimpleAppearanceTest extends WorkbenchTest {
         check(picture.getRGB(19,mode.getHeight()/2)==WorkbenchSkin.captureColor("OFF").getRGB(), "capture lamp recovers after host button UI replacement");
         SimpleWorkflowTest.click(root,"wb.simple.tool.bounty");
         SimpleWorkflowTest.click(root,"wb.simple.tool.traffic");
-        check(SimpleWorkflowTest.named(root,"wb.simple.tool.traffic") instanceof JToggleButton tool && tool.isSelected(), "direct tool navigation remains usable after host theme replacement");
+        check(SimpleWorkflowTest.toolSelected(root,"traffic"), "folder navigation remains selected and usable after host theme replacement");
         check(input.getText().equals("SIMPLE_UNSAVED_INPUT"), "moving between retained tools preserves local conversion input");
         check(PayloadIntegrationTest.sent.get()==0, "appearance and capture-state changes send zero HTTP");
         check(errors.get()==0, "simulated host look-and-feel change emits no asynchronous UI errors");

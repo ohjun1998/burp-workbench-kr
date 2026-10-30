@@ -31,17 +31,18 @@ public final class DiagnosticsWorkflowTest extends WorkbenchTest {
         try {
           ext.dialogOpener=(owner,title,content,modal,closed)->{opened.add(content);titles.add(title);return null;};
           root.setSize(1280,800);for(int i=0;i<6;i++)UiLayoutTest.layout(root);
-          JButton options=(JButton)UiLayoutTest.named(root,"wb.simple.options");
-          SimpleNavigation navigation=(SimpleNavigation)get(ext,"simpleNavigation");
-          JPopupMenu actions=navigation.optionsMenu();
-          check(options!=null&&Arrays.stream(actions.getComponents()).map(c->((JMenuItem)c).getText()).toList().equals(List.of("현재 도구 안내","화면 설정","오류·수집 기록")),"Simple options keeps help, settings and diagnostics in one menu");
+          JButton help=(JButton)UiLayoutTest.named(root,"wb.feature.help");
+          JButton settings=(JButton)UiLayoutTest.named(root,"wb.navigation.settings");
+          JButton logs=(JButton)UiLayoutTest.named(root,"wb.navigation.logs");
+          check(help!=null&&settings!=null&&logs!=null&&help.isEnabled()&&settings.isEnabled()&&logs.isEnabled(),
+              "classic top bar exposes working help, settings and diagnostics actions");
           check(((BorderLayout)root.getLayout()).getLayoutComponent(BorderLayout.SOUTH)==null,"global footer no longer takes packet space");
           check(UiLayoutTest.named(root,"wb.traffic.title")==null,"large traffic title is removed");
           check(((JLabel)get(ext,"captureInfo")).getParent()==null&&((JLabel)get(ext,"selectionInfo")).getParent()==null,"traffic count and selected-packet summaries are absent from layout");
           Component search=UiLayoutTest.named(root,"wb.traffic.search");
           check(search.isVisible()&&search.getWidth()>200,"search remains visible at top with useful input width");
           int selected=pages.getSelectedIndex();JTextArea input=(JTextArea)get(ext,"codecIn");input.setText("KEEP_WORKING_INPUT");
-          ((JMenuItem)navigation.optionsMenu().getComponent(2)).doClick(0);
+          logs.doClick(0);
           check(titles.get(0).endsWith("로그")&&UiLayoutTest.named(opened.get(0),"diagnostics.table") instanceof JTable,"log button opens the actual error table");
           check(pages.getSelectedIndex()==selected&&input.getText().equals("KEEP_WORKING_INPUT"),"opening logs preserves current tool and input");
           BountySupportPanel support=(BountySupportPanel)get(ext,"bountySupport");
@@ -53,18 +54,18 @@ public final class DiagnosticsWorkflowTest extends WorkbenchTest {
           check(((JTextArea)UiLayoutTest.named(opened.get(0),"diagnostics.details")).getText().contains("IOException"),"selecting an error shows its safe cause and code details");
           ((JButton)UiLayoutTest.named(opened.get(0),"diagnostics.clear")).doClick(0);
           check(table.getRowCount()==0&&diagnostics.text().isEmpty(),"clear button removes rows and copied diagnostic text");
-          ((JMenuItem)navigation.optionsMenu().getComponent(2)).doClick(0);
+          logs.doClick(0);
           check(opened.get(0)==opened.get(1),"reopening logs reuses its content and timer");
           for(int i=0;i<pages.getTabCount();i++) {
             pages.setSelectedIndex(i);UiLayoutTest.layout(root);
             if(!"설정".equals(pages.getTitleAt(i))){
               boolean visible=true;
-              for(Component action:List.of(options)){
+              for(Component action:List.of(help,settings,logs)){
                 Rectangle bounds=SwingUtilities.convertRectangle(action.getParent(),action.getBounds(),root);
                 visible&=new Rectangle(0,0,root.getWidth(),root.getHeight()).contains(bounds);
                 for(Container parent=action.getParent();parent!=null&&parent!=root;parent=parent.getParent())visible&=SwingUtilities.convertRectangle(parent,new Rectangle(0,0,parent.getWidth(),parent.getHeight()),root).contains(bounds);
               }
-              check(visible,"Simple options button stays fully visible on tool "+i);
+              check(visible,"classic help, settings and log buttons stay fully visible on tool "+i);
             }
           }
         } catch(Exception e) {throw new IllegalStateException(e);}

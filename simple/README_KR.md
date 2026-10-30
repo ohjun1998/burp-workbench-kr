@@ -1,4 +1,6 @@
-# Workbench Simple 1.4.8
+# Workbench Simple 1.4.9
+
+**Simple 1.4.9는 외부 노출·CVE 조사의 두 탭을 추가합니다.** 검색식·결과 URL 관리와 NVD/KEV/EPSS 조회, 관측·영향·수정 버전 상세를 제공합니다. [설치 JAR](downloads/1.4.9/burp-workbench-simple-1.4.9.jar) · [구현 화면](docs/images/1.4.9/README.md) · [기능·제한](docs/RELEASE_SIMPLE_1.4.9_KR.md).
 
 **Simple 1.4.8은 시안의 단계·요약 줄·계정 비교·상세 정보·증거 편집 구성 요소를 다시 적용합니다.** [설치 JAR](downloads/1.4.8/burp-workbench-simple-1.4.8.jar) · [8개 실제 화면](docs/images/1.4.8/README.md) · [시안 비교](docs/design/1.4.8/COMPARE.html) · [변경·검증](docs/RELEASE_SIMPLE_1.4.8_KR.md). 아래 이전 버전은 보존 이력입니다.
 

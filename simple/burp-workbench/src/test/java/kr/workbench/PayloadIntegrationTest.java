@@ -65,7 +65,7 @@ public final class PayloadIntegrationTest {
   Object runner=WorkbenchTest.get(entry,"payloadRunner");
   JTabbedPane tabs=(JTabbedPane)WorkbenchTest.get(workbench,"tabs");
   check(suiteTabs.get()==1&&legacyTabs.get()==0,"single Workbench suite tab; no standalone Payload Runner tab");
-  check(tabs.getTabCount()==10,"eight primary tools including Mapper plus independent Settings and appended dashboard");
+  check(tabs.getTabCount()==11,"nine tools including CVE research and Mapper plus independent Settings and appended dashboard");
   check(names.stream().allMatch(BuildInfo.DISPLAY_NAME::equals),"embedded runner preserves Workbench extension name");
   check(java.util.stream.IntStream.range(0,tabs.getTabCount()).noneMatch(i->Set.of("도구 가이드","원본 엔진").contains(tabs.getTitleAt(i))),"removed pages absent");
   check(entry.getClass().getResource("/engines/catalog.properties")==null,"engine catalog excluded from installation");

@@ -1,0 +1,137 @@
+package kr.workbench;
+
+import burp.api.montoya.MontoyaApi;
+import burp.api.montoya.http.message.requests.HttpRequest;
+import burp.api.montoya.http.message.responses.HttpResponse;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.function.Predicate;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.DefaultTableModel;
+
+/** Two-tab research workspace. Construction, import and navigation never send target HTTP. */
+final class ExposureResearchPanel extends JPanel implements AutoCloseable {
+  final JTextField target=new JTextField(23), vendor=new JTextField(10), product=new JTextField(16), version=new JTextField(10);
+  final JCheckBox subdomains=new JCheckBox("하위 도메인 포함",true),remote=new JCheckBox("원격 · 인증 불필요",true),kevOnly=new JCheckBox("KEV만"),unknown=new JCheckBox("미확인 포함",true);
+  final JComboBox<String> category=new JComboBox<>(ExposureResearch.DORKS.keySet().toArray(String[]::new));
+  final JComboBox<ExposureResearch.Product> observed=new JComboBox<>();
+  final JSpinner minimum=new JSpinner(new SpinnerNumberModel(7.0,0.0,10.0,.1));
+  final JTextField query=new JTextField();
+  final JTabbedPane tabs=new JTabbedPane();
+  final JLabel status=new JLabel("대상을 입력하거나 SCOPE 응답을 수집하세요. · 자동 조회 없음"), freshness=new JLabel("NVD · KEV · EPSS / 아직 조회하지 않음"),scopeLabel=new JLabel("SCOPE 미확인");
+  final DefaultTableModel exposureModel=model("분류","결과 URL","범위","확인 상태"),cveModel=model("CVE","판정","CVSS","KEV","EPSS","원격·무인증");
+  final JTable exposureTable=new JTable(exposureModel),cveTable=new JTable(cveModel);
+  final JTextArea exposureDetail=reader(),conditions=reader(),evidence=reader(),observedDetail=reader(),affectedDetail=reader(),fixedDetail=reader();
+  final JComboBox<String> references=new JComboBox<>();
+  final JButton lookup=new JButton("CVE 후보 조회"),cancel=new JButton("취소");
+  final List<ExposureResearch.Exposure> exposures=new ArrayList<>();
+  final List<ExposureResearch.Candidate> visible=new ArrayList<>();
+  final Map<String,List<ExposureResearch.Product>> observations=new LinkedHashMap<>();
+  final Map<String,ExposureResearch.Batch> cache=new LinkedHashMap<>();
+  ExposureResearch.Batch batch;
+  ExposureResearch.Product selectedProduct;
+  private final MontoyaApi api;
+  private final Predicate<String> scope;
+  private final VulnerabilityClient client;
+  private final ExecutorService worker=Executors.newSingleThreadExecutor(r->{Thread t=new Thread(r,"workbench-cve");t.setDaemon(true);return t;});
+  private Future<?> job;
+  private long generation;
+  private volatile long projectEpoch;
+  private boolean closed,refreshing;
+  ExposureResearchPanel(MontoyaApi api,Predicate<String> scope){this(api,scope,new VulnerabilityClient());}
+  ExposureResearchPanel(MontoyaApi api,Predicate<String> scope,VulnerabilityClient client){
+    super(new BorderLayout(0,8));this.api=api;this.scope=scope;this.client=client;setName("wb.exposure");setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
+    target.setName("wb.exposure.target");target.setToolTipText("점검 대상 도메인 또는 HTTP(S) URL");observed.setPrototypeDisplayValue(new ExposureResearch.Product("","관측 제품 선택", "", "", "", ""));
+    add(CompactWorkbenchUi.toolbar(flow(new JLabel("대상"),target,subdomains),flow(scopeLabel)),BorderLayout.NORTH);
+    tabs.setName("wb.exposure.tabs");tabs.addTab("검색 노출",searchPage());tabs.addTab("CVE 후보",cvePage());add(tabs);add(status,BorderLayout.SOUTH);
+    query.setEditable(false);cancel.setEnabled(false);WorkbenchUi.primary(lookup);
+    conditions.setName("wb.exposure.conditions");evidence.setName("wb.exposure.evidence");exposureDetail.setName("wb.exposure.discovery");
+    watch(target,()->{invalidateQuery();refreshProducts();refreshQuery();refreshExposures();});
+    for(JTextField f:List.of(vendor,product,version))watch(f,()->{if(!refreshing)invalidateQuery();});
+    subdomains.addActionListener(e->{refreshQuery();refreshExposures();});category.addActionListener(e->refreshQuery());
+    observed.addActionListener(e->{if(!refreshing&&observed.getSelectedItem() instanceof ExposureResearch.Product p){invalidateQuery();fillProduct(p);}});
+    lookup.addActionListener(e->start());cancel.addActionListener(e->{invalidateQuery();status.setText("조회 취소 · 세션 캐시는 유지됩니다.");});
+    for(JCheckBox b:List.of(remote,kevOnly,unknown))b.addActionListener(e->refreshCves());minimum.addChangeListener(e->refreshCves());
+    exposureTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())showExposure();});
+    cveTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())showCve();});
+    CompactWorkbenchUi.columns(exposureTable,120,520,95,110);CompactWorkbenchUi.columns(cveTable,170,180,75,95,95,125);
+    for(JTable table:List.of(exposureTable,cveTable)){table.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);table.setFillsViewportHeight(true);}
+  }
+  static DefaultTableModel model(String... headers){return new DefaultTableModel(headers,0){public boolean isCellEditable(int r,int c){return false;}};}
+  static JTextArea reader(){JTextArea a=new JTextArea();a.setEditable(false);a.setLineWrap(true);a.setWrapStyleWord(true);a.setMargin(new Insets(9,10,9,10));return a;}
+  static JPanel flow(Component... cs){JPanel p=new JPanel(new FlowLayout(FlowLayout.LEFT,7,3));for(Component c:cs)p.add(c);return p;}
+  static JPanel card(String title,Component body){JPanel p=new JPanel(new BorderLayout(0,4));JLabel label=new JLabel(title);label.setBorder(BorderFactory.createEmptyBorder(7,10,5,10));label.setFont(label.getFont().deriveFont(Font.BOLD));p.add(label,BorderLayout.NORTH);p.add(body);p.setBorder(BorderFactory.createLineBorder(WorkbenchUi.line()));return p;}
+  static JSplitPane split(int orientation,Component first,Component second,double weight){JSplitPane s=WorkbenchUi.split(orientation,first,second,weight);first.setMinimumSize(new Dimension(100,90));second.setMinimumSize(new Dimension(100,90));return s;}
+  JButton button(String title,Runnable action){JButton b=new JButton(title);b.addActionListener(e->guard(action));return b;}
+  void guard(Runnable action){try{action.run();}catch(Exception e){status.setText(Objects.toString(e.getMessage(),"작업 실패"));}}
+  JPanel searchPage(){
+    JPanel p=new JPanel(new BorderLayout(0,8));JPanel controls=new JPanel();controls.setLayout(new BoxLayout(controls,BoxLayout.Y_AXIS));
+    controls.add(CompactWorkbenchUi.toolbar(flow(new JLabel("검색식"),category),flow(button("검색식 복사",()->copy(query.getText())),button("Google에서 열기",()->{ExposureResearch.host(target.getText());browse("https://www.google.com/search?q="+URLEncoder.encode(query.getText(),StandardCharsets.UTF_8));}))));
+    controls.add(query);controls.add(CompactWorkbenchUi.toolbar(new JLabel("검색 결과 URL을 가져온 뒤 실제 노출 여부를 확인하세요."),flow(button("결과 URL 가져오기",this::importDialog),button("선택 삭제",this::removeExposure))));p.add(controls,BorderLayout.NORTH);
+    JPanel detail=card("발견 근거 · 확인 상태",new JScrollPane(exposureDetail));detail.add(flow(button("Repeater 준비",this::repeater),button("근거 복사",()->copy(exposureDetail.getText()))),BorderLayout.SOUTH);
+    p.add(split(JSplitPane.VERTICAL_SPLIT,new JScrollPane(exposureTable),detail,.50));return p;
+  }
+  JPanel cvePage(){
+    JPanel p=new JPanel(new BorderLayout(0,8));JPanel controls=new JPanel();controls.setLayout(new BoxLayout(controls,BoxLayout.Y_AXIS));
+    JPanel mapping=flow(new JLabel("CPE 공급사"),vendor,new JLabel("제품"),product,new JLabel("관측 버전"),version);mapping.setVisible(false);
+    JToggleButton edit=new JToggleButton("수정");edit.setToolTipText("CPE 공급사·제품·관측 버전 수정");edit.addActionListener(e->{mapping.setVisible(edit.isSelected());p.revalidate();});
+    controls.add(CompactWorkbenchUi.toolbar(flow(new JLabel("관측 제품"),observed,edit),flow(lookup,cancel,button("캐시 보기",this::restoreCache))));
+    controls.add(mapping);
+    controls.add(flow(new JLabel("CVSS ≥"),minimum,remote,kevOnly,unknown));controls.add(freshness);p.add(controls,BorderLayout.NORTH);
+    JPanel detail=new JPanel(new BorderLayout(0,7));JPanel cards=new JPanel(new GridLayout(1,3,7,0));
+    cards.add(card("대상에서 관측",new JScrollPane(observedDetail)));cards.add(card("CVE 영향 버전",new JScrollPane(affectedDetail)));cards.add(card("수정 버전",new JScrollPane(fixedDetail)));cards.setPreferredSize(new Dimension(600,90));detail.add(cards,BorderLayout.NORTH);
+    detail.add(split(JSplitPane.HORIZONTAL_SPLIT,card("조건 체크 · 적용 판정",new JScrollPane(conditions)),card("관측 근거 · 출처",new JScrollPane(evidence)),.5));
+    references.setPrototypeDisplayValue("https://공급사.example/security/advisory");
+    detail.add(CompactWorkbenchUi.toolbar(flow(references),flow(button("출처 열기",()->{if(references.getSelectedItem()!=null)browse(references.getSelectedItem().toString());}),button("CVE 근거 복사",()->copy(cveNote())))),BorderLayout.SOUTH);
+    p.add(split(JSplitPane.VERTICAL_SPLIT,new JScrollPane(cveTable),detail,.30));return p;
+  }
+  static void watch(JTextField f,Runnable r){f.getDocument().addDocumentListener(new DocumentListener(){public void insertUpdate(DocumentEvent e){r.run();}public void removeUpdate(DocumentEvent e){r.run();}public void changedUpdate(DocumentEvent e){r.run();}});}
+  void refreshQuery(){try{query.setText(ExposureResearch.query(target.getText(),category.getSelectedItem().toString(),subdomains.isSelected()));scopeLabel.setText(scope.test("https://"+ExposureResearch.host(target.getText())+"/")?"SCOPE 포함":"SCOPE 확인 필요");}catch(RuntimeException e){query.setText("");scopeLabel.setText("SCOPE 미확인");}}
+  void invalidateQuery(){generation++;if(job!=null)job.cancel(true);job=null;lookup.setEnabled(true);cancel.setEnabled(false);batch=null;selectedProduct=null;refreshCves();freshness.setText("조건 변경 · 조회하거나 세션 캐시를 선택하세요.");}
+  void fillProduct(ExposureResearch.Product p){refreshing=true;try{vendor.setText(p.vendor());product.setText(p.name());version.setText(p.version());}finally{refreshing=false;}}
+  void refreshProducts(){refreshing=true;try{observed.removeAllItems();String h;try{h=ExposureResearch.host(target.getText());}catch(RuntimeException e){fillProduct(new ExposureResearch.Product("","","","","",""));return;}for(var p:observations.getOrDefault(h,List.of()))observed.addItem(p);if(observed.getItemCount()>0)fillProduct(observed.getItemAt(0));else fillProduct(new ExposureResearch.Product("","","","","",""));}finally{refreshing=false;}}
+  void offer(HttpRequest request,HttpResponse response,Object originalId){if(request==null||response==null)return;long epoch=projectEpoch;String url=request.url();String headers=EnvironmentPanel.responseHeaders(response);List<ExposureResearch.Product> found=ExposureResearch.observe(url,headers,Objects.toString(originalId,""));if(found.isEmpty())return;SwingUtilities.invokeLater(()->{if(closed||epoch!=projectEpoch)return;String h=ExposureResearch.host(url);List<ExposureResearch.Product> list=new ArrayList<>(observations.getOrDefault(h,List.of()));boolean changed=false;for(var p:found)if(list.stream().noneMatch(o->o.vendor().equals(p.vendor())&&o.name().equals(p.name())&&o.version().equals(p.version()))&&list.size()<24){list.add(p);changed=true;}if(!changed)return;if(observations.size()>=100&&!observations.containsKey(h))observations.remove(observations.keySet().iterator().next());observations.put(h,List.copyOf(list));if(target.getText().isBlank())target.setText(h);else if(ExposureResearch.within(url,target.getText(),false)){if(vendor.getText().isBlank())refreshProducts();else{refreshing=true;try{for(var p:found){boolean exists=false;for(int i=0;i<observed.getItemCount();i++){var o=observed.getItemAt(i);if(o.vendor().equals(p.vendor())&&o.name().equals(p.name())&&o.version().equals(p.version()))exists=true;}if(!exists)observed.addItem(p);}}finally{refreshing=false;}}}});}
+  void importDialog(){JTextArea input=new JTextArea(10,60);if(JOptionPane.showConfirmDialog(this,new JScrollPane(input),"결과 URL · 한 줄에 하나, 최대 500개",JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION)importUrls(input.getText());}
+  void importUrls(String text){if(text.length()>500000)throw new IllegalArgumentException("가져오기 크기 제한");ExposureResearch.host(target.getText());int added=0,rejected=0;for(String line:text.split("\\R")){if(line.isBlank())continue;try{String u=ExposureResearch.url(line);if(!ExposureResearch.within(u,target.getText(),subdomains.isSelected())){rejected++;continue;}if(exposures.stream().anyMatch(x->x.url().equals(u)))continue;if(exposures.size()>=500)throw new IllegalArgumentException("URL 최대 500개");exposures.add(new ExposureResearch.Exposure(u,category.getSelectedItem().toString(),query.getText(),Instant.now()));added++;}catch(RuntimeException e){rejected++;}}refreshExposures();status.setText("URL "+added+"개 가져옴 · 제외 "+rejected+"개 · 실제 노출 미확인");}
+  final List<ExposureResearch.Exposure> displayedExposures=new ArrayList<>();
+  void refreshExposures(){displayedExposures.clear();exposureModel.setRowCount(0);for(var x:exposures)if(ExposureResearch.within(x.url(),target.getText(),subdomains.isSelected())){displayedExposures.add(x);exposureModel.addRow(new Object[]{x.category(),x.url(),scope.test(x.url())?"SCOPE 포함":"범위 밖","미확인"});}tabs.setTitleAt(0,"검색 노출  "+displayedExposures.size());exposureDetail.setText("");}
+  ExposureResearch.Exposure selectedExposure(){int row=exposureTable.getSelectedRow();return row<0||row>=exposureTable.getRowCount()||exposureTable.convertRowIndexToModel(row)>=displayedExposures.size()?null:displayedExposures.get(exposureTable.convertRowIndexToModel(row));}
+  void showExposure(){var x=selectedExposure();exposureDetail.setText(x==null?"URL을 선택하면 검색식과 발견 근거가 표시됩니다.":x.url()+"\n\n분류  "+x.category()+"\n발견 경로  사용자 URL 가져오기 · "+x.discovered()+"\n검색식  "+x.query()+"\n\n현재 SCOPE  "+(scope.test(x.url())?"포함":"범위 밖")+"\n확인 상태  미확인 · URL 가져오기는 실제 노출 확인이 아닙니다.");exposureDetail.setCaretPosition(0);}
+  void removeExposure(){var x=selectedExposure();if(x!=null){exposures.remove(x);refreshExposures();}}
+  void repeater(){var x=selectedExposure();if(x==null)throw new IllegalArgumentException("결과 URL을 선택하세요.");if(!scope.test(x.url())||!ExposureResearch.within(x.url(),target.getText(),subdomains.isSelected()))throw new IllegalArgumentException("현재 SCOPE에 포함된 URL만 준비할 수 있습니다.");if(api!=null)api.repeater().sendToRepeater(HttpRequest.httpRequestFromUrl(x.url()),"검색 노출 확인");status.setText("Repeater 준비 완료 · 대상 요청은 전송하지 않았습니다.");}
+  ExposureResearch.Product inputProduct(){String h=ExposureResearch.host(target.getText());String v=vendor.getText().strip().toLowerCase(Locale.ROOT),n=product.getText().strip().toLowerCase(Locale.ROOT),ver=version.getText().strip();var o=observed.getSelectedItem() instanceof ExposureResearch.Product p?p:null;boolean same=o!=null&&o.vendor().equals(v)&&o.name().equals(n)&&o.version().equals(ver);return new ExposureResearch.Product(v,n,ver,same?o.evidence():"사용자 입력 · 관측값 검증 필요"+(o==null?"":"\n관측 원본: "+o.evidence()),o!=null?o.source():"https://"+h+"/",o!=null?o.originalId():"");}
+  String cacheKey(ExposureResearch.Product p){return ExposureResearch.host(target.getText())+"|"+p.vendor()+"|"+p.name();}
+  void start(){guard(()->{ExposureResearch.Product p=inputProduct();if(!p.vendor().matches("[a-z0-9_.-]{1,100}")||!p.name().matches("[a-z0-9_.-]{1,100}"))throw new IllegalArgumentException("CPE 공급사·제품을 입력하세요.");invalidateQuery();long token=generation;String key=cacheKey(p);lookup.setEnabled(false);cancel.setEnabled(true);status.setText("NVD 조회 중 · 제품 식별자만 제공자에 전송 · 대상 URL/인증 정보 제외");job=worker.submit(()->{try{var result=client.lookup(p,()->Thread.currentThread().isInterrupted());SwingUtilities.invokeLater(()->{if(closed||token!=generation)return;if(cache.size()>=30&&!cache.containsKey(key))cache.remove(cache.keySet().iterator().next());cache.put(key,result);display(result,p,false);finish();});}catch(Exception error){SwingUtilities.invokeLater(()->{if(closed||token!=generation)return;finish();var old=cache.get(key);if(old!=null)display(old,p,true);status.setText("CVE 조회 실패 · "+error.getClass().getSimpleName()+" · "+(old==null?"연결 상태를 확인하세요.":"이전 캐시를 표시합니다."));});}});});}
+  void finish(){job=null;lookup.setEnabled(true);cancel.setEnabled(false);}
+  void restoreCache(){var p=inputProduct();var saved=cache.get(cacheKey(p));if(saved==null)throw new IllegalArgumentException("이 대상·제품의 세션 캐시가 없습니다.");invalidateQuery();display(saved,p,true);}
+  void display(ExposureResearch.Batch result,ExposureResearch.Product p,boolean cached){batch=result;selectedProduct=p;refreshCves();freshness.setText((cached?"세션 캐시":"조회 완료")+" · "+result.fetched()+" · KEV "+result.kevStatus()+" · EPSS "+result.epssStatus());freshness.setToolTipText(freshness.getText());status.setText(result.truncated()?"최대 100건 표시 · NVD에 추가 결과가 있습니다. 전체 조회 결과가 아닙니다.":"조건 일치는 실제 취약점 확인이 아닙니다. · 캐시는 확장 종료 시 삭제됩니다.");}
+  void refreshCves(){visible.clear();cveModel.setRowCount(0);clearDetail();if(batch!=null&&selectedProduct!=null)for(var c:batch.candidates()){
+    var match=ExposureResearch.applicability(c,selectedProduct);var access=ExposureResearch.remoteAnonymous(c);boolean kevKnown=batch.kevStatus().equals("최신 조회 완료");
+    if(c.score()!=null&&c.score()<((Number)minimum.getValue()).doubleValue())continue;
+    if(remote.isSelected()&&(access==ExposureResearch.Truth.NO||access==ExposureResearch.Truth.UNKNOWN&&!unknown.isSelected()))continue;
+    if(kevOnly.isSelected()&&(kevKnown&&!batch.kev().contains(c.id())||!kevKnown&&!unknown.isSelected()))continue;
+    if(!unknown.isSelected()&&(match==ExposureResearch.Truth.UNKNOWN||c.score()==null))continue;
+    visible.add(c);cveModel.addRow(new Object[]{c.id(),ExposureResearch.verdict(match),c.score()==null?"미확인":c.score(),kevKnown?(batch.kev().contains(c.id())?"등재":"미등재"):"미확인",batch.epss().containsKey(c.id())?String.format(Locale.ROOT,"%.2f%%",batch.epss().get(c.id())*100):"미확인",access==ExposureResearch.Truth.YES?"조건 일치":access==ExposureResearch.Truth.NO?"조건 제외":"미확인"});
+  }tabs.setTitleAt(1,"CVE 후보  "+visible.size());}
+  void clearDetail(){for(var a:List.of(observedDetail,affectedDetail,fixedDetail,conditions,evidence))a.setText("");references.removeAllItems();}
+  ExposureResearch.Candidate selectedCve(){int row=cveTable.getSelectedRow();return row<0||row>=cveTable.getRowCount()||cveTable.convertRowIndexToModel(row)>=visible.size()?null:visible.get(cveTable.convertRowIndexToModel(row));}
+  static String truthLabel(ExposureResearch.Truth t){return t==ExposureResearch.Truth.YES?"조건 일치":t==ExposureResearch.Truth.NO?"조건 제외":"미확인";}
+  void showCve(){var c=selectedCve();if(c==null||selectedProduct==null)return;var p=selectedProduct;
+    observedDetail.setText(p.vendor()+" / "+p.name()+"\n"+(p.version().isBlank()?"버전 미확인":p.version()));affectedDetail.setText(ExposureResearch.affected(c,p));fixedDetail.setText("공급사 공지 확인 필요\n영향 범위 끝값 ≠ 수정 버전");
+    conditions.setText(ExposureResearch.verdict(ExposureResearch.applicability(c,p))+"\n\n원격·인증 불필요  "+truthLabel(ExposureResearch.remoteAnonymous(c))+"\nCVSS  "+Objects.toString(c.score(),"미확인")+"\n"+c.vector()+"\n\n운영체제·모듈·설정  추가 확인 필요\n백포트·배포판 패치  추가 확인 필요\n\n조건 일치 ≠ 실제 취약점 확인\n\n"+c.description());
+    evidence.setText("관측 원본\n"+p.evidence()+"\n"+p.source()+"\n원본 ID  "+(p.originalId().isBlank()?"연결 없음":p.originalId())+"\n\nNVD 수정일  "+c.modified()+"\nCVSS 출처  "+c.metricSource()+"\n조회 시각  "+batch.fetched()+"\nKEV  "+batch.kevStatus()+"\nEPSS  "+batch.epssStatus());
+    references.removeAllItems();references.addItem("https://nvd.nist.gov/vuln/detail/"+c.id());for(String r:c.references())references.addItem(r);for(var a:List.of(observedDetail,affectedDetail,fixedDetail,conditions,evidence))a.setCaretPosition(0);
+  }
+  String cveNote(){var c=selectedCve();if(c==null)throw new IllegalArgumentException("CVE 후보를 선택하세요.");return "# "+c.id()+"\n\n"+observedDetail.getText()+"\n영향 버전: "+affectedDetail.getText()+"\n수정 버전: "+fixedDetail.getText()+"\n\n"+conditions.getText()+"\n\n"+evidence.getText()+"\n\n"+String.join("\n",c.references());}
+  void copy(String value){if(value.isBlank())throw new IllegalArgumentException("복사할 내용이 없습니다.");Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(value),null);status.setText("클립보드에 복사했습니다.");}
+  void browse(String value){String normalized=ExposureResearch.url(value);try{if(!Desktop.isDesktopSupported()||!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))throw new IllegalStateException("브라우저를 열 수 없습니다. URL을 복사하세요.");Desktop.getDesktop().browse(URI.create(normalized));}catch(java.io.IOException e){throw new IllegalStateException("브라우저 열기 실패",e);}}
+  void resetProject(){projectEpoch++;invalidateQuery();cache.clear();observations.clear();exposures.clear();target.setText("");refreshProducts();refreshExposures();status.setText("프로젝트 변경 · 조사 세션을 초기화했습니다.");}
+  public void close(){closed=true;generation++;if(job!=null)job.cancel(true);worker.shutdownNow();cache.clear();observations.clear();exposures.clear();}
+}

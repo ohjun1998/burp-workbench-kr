@@ -19,7 +19,7 @@ WB = ROOT / 'burp-workbench'
 CAPTURES = ['00-scope-editor.png', '00-start.png', '01-capture.png', '02-request.png',
             '03-analysis.png', '04-auth-accounts.png', '04-auth-results.png',
             '05-evidence.png', '06-redaction.png', '07-payload.png', '07-payload-results.png', '08-mapper.png',
-            '09-environment.png', '10-js.png', '11-replay.png', '26-dashboard-empty.png']
+            '09-environment.png', '10-js.png', '11-replay.png', '26-dashboard-empty.png', '12-exposure-search.png', '13-exposure-cve.png']
 
 
 def main() -> int:
@@ -76,6 +76,9 @@ def main() -> int:
     failed = [row for row in all_scenarios if row['passed'] != 'true']
     # Verify the principal reader and evidence writing areas retain usable height.
     required = {
+        ('13-exposure-cve.png', 'wb.exposure.conditions'): 85,
+        ('13-exposure-cve.png', 'wb.exposure.evidence'): 85,
+        ('12-exposure-search.png', 'wb.exposure.discovery'): 85,
         ('02-request.png', 'wb.traffic.request.text'): 65,
         ('02-request.png', 'wb.traffic.response.text'): 65,
         ('05-evidence.png', 'wb.bounty.evidence.packet'): 65,

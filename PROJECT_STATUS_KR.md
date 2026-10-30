@@ -1,5 +1,15 @@
 # 현재 개발 상태
 
+## Simple 1.4.10 · 독립 창과 압축 메뉴 — main 병합 완료
+
+Workbench 탭으로 독립 창을 열고 같은 도구·입력·선택을 유지하면서 최대화/F11·Esc 전체화면을 사용합니다. 창 닫기는 숨김이며, 로드 해제는 화면/작업 자원을 정리합니다. 기존 설정·원본·Scope 보조 창의 편집·소유 관계도 유지합니다. 상단은36px 한 줄, 도구별 색상 아이콘·hover/선택 강조·조밀한 메뉴를 적용했습니다. 구현 `0a1e11c21c54d9fca6ddaab3150c0403365813e8`를 main `fc795088b75b872f01443e747b589c099b86683b`로 일반 병합·push했습니다.
+
+전체 **6,029개**(153개 Java 그룹5,717 · payload HTTP136 · Mapper147 · Node29), 헤드리스 Swing **194개 화면**, 실제 창 **50개**(두 테마), Katana **102개** 통과. 기존11개 메뉴와 CVE 두 탭·대시보드까지13개 화면을 밝음/어두움으로 제공하며, 일반/최대화/전체화면을 포함한32개 PNG와 ZIP·HTML 갤러리를 업로드했습니다. 공개 JAR와 이미지ZIP 재다운로드 체크섬이 로컬과 일치합니다. JAR SHA-256 `e863f670a2ba95d57c1f2c74bf06e3b476e0c9451247d47e7e399d5d52422560`.
+
+[설치 JAR](simple/downloads/1.4.10/burp-workbench-simple-1.4.10.jar) · [도구별 이미지](simple/docs/images/1.4.10/README.md) · [전체 이미지 ZIP](docs/reports/2026-10-31-workbench-window/workbench-1.4.10-images.zip) · [사용법](simple/docs/RELEASE_SIMPLE_1.4.10_KR.md) · [검증](docs/reports/2026-10-31-workbench-window/VERIFICATION.json) · [병합](docs/reports/2026-10-31-workbench-window/MERGE_KR.md)
+
+실제 창 검증은 격리한 Linux Xorg/xfwm4와 합성 Burp API/패킷을 사용했습니다. 실제 Windows Burp GUI·DPI/IME는 미검증입니다. 원본 Next와 이전 배포 파일은 보존했습니다. 내장 Mapper0.3.11/helper0.4.1.
+
 ## Simple 1.4.9 · 외부 노출·CVE 조사 — main 병합 완료
 
 검색 노출 / CVE 후보의 두 탭을 추가했습니다. Google 검색식·결과 URL 가져오기, 현재 SCOPE 확인 후 Repeater 준비, NVD/KEV/EPSS 명시적 조회, 관측/영향/수정 버전과 조건·출처 상세, 조회 취소·세션 캐시·프로젝트 초기화를 제공합니다. 구현 `5487aef6199cc0020b1128c32a04766bf5738be7`를 main `58a3c47e5f99bde963a9cb7e70eaec601bbff3b1`로 일반 병합·push했습니다. 공개 main JAR를 내려받아 로컬 검증 파일과 동일한 체크섬임을 확인했습니다.

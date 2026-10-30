@@ -1,0 +1,19 @@
+{
+  "baseMain": "65ae9273d3b58d47ddf7e3b96d0e118875bb15b3",
+  "originalNextSourcesAndWorkflowsUnchanged": true,
+  "oldFrozenUsabilityAuditUnchanged": true,
+  "previousTrackedArtifactsUnchanged": true,
+  "modifiedTrackedPaths": [
+    "AGENTS.md",
+    "PROJECT_STATUS_KR.md",
+    "README.md",
+    "simple/README_KR.md",
+    "simple/burp-workbench/build_all.py",
+    "simple/burp-workbench/src/main/java/kr/workbench/BuildInfo.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/EnvironmentPanel.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/PassiveScanWorkspace.java",
+    "simple/burp-workbench/src/main/java/kr/workbench/TrafficBrowser.java",
+    "simple/burp-workbench/src/test/java/kr/workbench/TargetCleanupTest.java"
+  ],
+  "newArtifactsOnly": "simple/downloads/1.4.2/"
+}

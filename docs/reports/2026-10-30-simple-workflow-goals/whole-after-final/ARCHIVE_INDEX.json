@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "curatedAtUtc": "2026-10-29T23:50:19.910482+00:00",
+  "sourceRootAtCuration": "/workspace/usability-goals-1.4.2/whole-after-final",
+  "finalProductJarSHA256": "a10a6cfb2a51a4eb96ffafd07f7e31ec56df9d1a23158402b75de4ef65879bd8",
+  "confirmationRuns": 5,
+  "sameAssertionsRepeated": 115,
+  "repetitionsAreNotNewImprovementRounds": true,
+  "distinctOriginalStoreUUIDs": [
+    "95fdbd67-bafc-42a7-ac53-ba3991fc3d2a",
+    "cba20d10-694e-477b-be45-c3f1072d2370",
+    "9c89d3f9-9b91-476b-9145-7387237ad63e",
+    "9da90bbb-3fe4-4232-bdf8-f13573ca2d19",
+    "affb71c3-9c8f-49a4-8cb6-925d4a0dbf8b"
+  ],
+  "copiedFiles": [
+    {
+      "path": "summary.json",
+      "sha256": "0e714ee6992f64375aa75fbce25d30560a4a31a1c4a944120b19bac414c88625",
+      "bytes": 2863,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-1/metadata.json",
+      "sha256": "24c0b02391a8a02c68046f10efd5c2667677639e8cbb599cb9fe40afc6952cd7",
+      "bytes": 8370,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-1/results/summary.json",
+      "sha256": "0b400f33002722310c67d55f7a5f4702e6d148adcbc21152a43552594858a4bb",
+      "bytes": 49604,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-2/metadata.json",
+      "sha256": "95b5b87f94768e0ff7c5216bf5a05487c20f60d43b48e2d9b5dae6ec48942bda",
+      "bytes": 8370,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-2/results/summary.json",
+      "sha256": "47a390cb33d9b0d9b6efc0f9a340937bb4592ea2d7d44abfd62e38d3af18c596",
+      "bytes": 49599,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-3/metadata.json",
+      "sha256": "c082ca266537f154b096afe7c765eeae165c52ae1149a83371d8d172186391c6",
+      "bytes": 8370,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-3/results/summary.json",
+      "sha256": "724795f1ef3b007f25463391bf5583c26e25b6e91d92f4c50d44001369ab036e",
+      "bytes": 49615,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-4/metadata.json",
+      "sha256": "7cd0adf88ddc89b76285bd9fed5afcd84ea35dd2fae3a9aacf79210b8d155aa2",
+      "bytes": 8370,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-4/results/summary.json",
+      "sha256": "3e25b6f243d3c920d31ee08bdbb4e0c9611f3b8edd25bae2e456d4d9ae8946f3",
+      "bytes": 49596,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-5/metadata.json",
+      "sha256": "37738b6b4fb0be6c30459ddd9aacc021855ff947095c5f60083efa273c4fd72b",
+      "bytes": 8370,
+      "byteExactCopy": true
+    },
+    {
+      "path": "run-5/results/summary.json",
+      "sha256": "cdbf2652c1dfbad92653cbc792266220e004b400a762045c5915d183aa081517",
+      "bytes": 49593,
+      "byteExactCopy": true
+    }
+  ],
+  "review": "Only reviewed JSON metadata and summaries copied; no hidden product/adapters/dependencies/classes, original packet bodies, live credentials, private homes or ZIPs."
+}

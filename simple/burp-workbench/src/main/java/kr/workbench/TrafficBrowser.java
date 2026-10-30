@@ -67,7 +67,8 @@ final class TrafficBrowser implements AutoCloseable {
   private final javax.swing.Timer debounce;
   // A one-shot Swing Timer stops being "running" before its queued EDT action
   // executes. Keep logical pending work until begin/cancel consumes it.
-  private boolean debouncePending;
+  private volatile boolean debouncePending;
+  private volatile boolean preparing;
   final JComboBox<String> method=new JComboBox<>(new String[]{"전체","GET","POST","PUT","PATCH","DELETE","HEAD","OPTIONS"});
   final JComboBox<String> response=new JComboBox<>(new String[]{"전체","2xx","3xx","4xx","5xx","200","201","204","301","302","400","401","403","404","429","500"});
   final JToggleButton[] ranges={new JToggleButton("목록"),new JToggleButton("요청 포함"),new JToggleButton("전체 패킷")};
@@ -134,11 +135,20 @@ final class TrafficBrowser implements AutoCloseable {
     SearchSnapshot prior=snapshot;
     if(prior==null||!prior.key().equals(key)||prior.count()!=effectiveCount(disk)||clock.getAsLong()>=prior.expiresAt())begin();
   }
-  boolean idle(){return !busy.get()&&!debouncePending;}
+  boolean idle(){
+    long revision=generation.get();
+    if(preparing||busy.get()||debouncePending)return false;
+    return !preparing&&!busy.get()&&!debouncePending&&revision==generation.get();
+  }
   boolean searchViewCurrent(){SearchSnapshot current=snapshot;return current!=null&&stillCurrent(current.key());}
   private SearchKey key(DiskTrafficStore disk,String requested,List<Identity> profiles){return new SearchKey(disk,query,requested,profiles,marksVersion.get());}
   private boolean stillCurrent(SearchKey key){return key.equals(key(store.get(),search.getText().strip(),List.copyOf(identities.get())));}
   private void begin(){
+    preparing=true;
+    // Publish a new revision before consuming logical pending work. Cross-thread
+    // readiness reads must not combine the previous flags with this preparation.
+    generation.incrementAndGet();
+    try{
     if(closed)return;ensureProjectState();debounce.stop();debouncePending=false;cancelPending();busy.set(false);String requested=search.getText().strip();if(requested.length()>512){paused=true;feedback.setText("검색어 512자 제한 · 이전 결과 유지");return;}
     text=requested;TrafficQuery settings=query;
     if(settings.regex()&&!requested.isBlank())try{java.util.regex.Pattern.compile(requested);}catch(java.util.regex.PatternSyntaxException ex){paused=true;feedback.setText("정규식 오류 · 이전 결과 유지");return;}
@@ -150,7 +160,9 @@ final class TrafficBrowser implements AutoCloseable {
       scanned=count;view=null;snapshot=new SearchSnapshot(key,null,count,Long.MAX_VALUE);runningKey=null;busy.set(false);
       lastMetrics=new SearchMetrics(prior!=null&&prior.key().equals(key),0,prior==null?0:Math.min(count,prior.count()),count,0);
       var sorter=(TableRowSorter<?>)table.getRowSorter();preserveTablePosition(()->{if(sorter.getRowFilter()!=null)sorter.setRowFilter(null);});
-      feedback.setText(count==0?"수집된 트래픽이 없습니다 · SCOPE와 수집 상태를 확인하고 요청을 관찰하세요.":"전체 "+count+"건");changed.run();refreshRecoveryControls();viewPublished.run();return;
+      feedback.setText(count==0?"수집된 트래픽이 없습니다 · SCOPE와 수집 상태를 확인하고 요청을 관찰하세요.":"전체 "+count+"건");changed.run();refreshRecoveryControls();
+      // The synchronous view is fully published before listeners inspect its readiness.
+      preparing=false;viewPublished.run();return;
     }
     boolean incremental=prior!=null&&prior.view()!=null&&prior.key().equals(key)&&prior.count()<=count&&settings.minutes()==0;
     View previous=incremental?prior.view():null;int from=incremental?prior.count():0;
@@ -185,6 +197,10 @@ final class TrafficBrowser implements AutoCloseable {
       }catch(CancellationException ignored){job.cancelled("검색 중지 완료");}catch(Exception ex){job.fail("검색 조건/저장소 확인 필요");SwingUtilities.invokeLater(()->{if(!closed&&token==generation.get()){paused=true;feedback.setText("검색 실패 · 검색 조건을 바꿔 재시도: "+Objects.toString(ex.getMessage(),ex.getClass().getSimpleName()));}});}
       finally{if(closed||token!=generation.get()||Thread.currentThread().isInterrupted())job.cancelled("검색 중지 완료");SwingUtilities.invokeLater(()->{if(token==generation.get()){runningKey=null;busy.set(false);refreshRecoveryControls();}});}
     });
+    }catch(RuntimeException error){
+      generation.incrementAndGet();debounce.stop();debouncePending=false;cancelPending();runningKey=null;busy.set(false);
+      if(!closed){paused=true;Diagnostics.failure(table,"트래픽 검색 준비",error);feedback.setText("검색 준비 실패 · 검색 조건과 계정 연결을 확인한 뒤 다시 시도하세요.");refreshRecoveryControls();}
+    }finally{preparing=false;}
   }
   /** Re-evaluate only changed filter/extra-column rows; avoid full sorter resets on append. */
   private void publishRows(BitSet rows,TableRowSorter<CaptureTableModel> sorter){

@@ -1,0 +1,65 @@
+{
+  "baseUrl": "http://127.0.0.1:18888",
+  "port": 18888,
+  "pid": 28571,
+  "sourceCommit": "81b48defb81db7c656e913a8ebd6848e30621cf1",
+  "scope": "Original LOOP3.10.0 source, separate memory H2, loopback only; no native Burp",
+  "passed": 13,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "health available",
+      "passed": true
+    },
+    {
+      "name": "anonymous identity denied",
+      "passed": true
+    },
+    {
+      "name": "seed normal login accepted",
+      "passed": true
+    },
+    {
+      "name": "normal login identity matches",
+      "passed": true
+    },
+    {
+      "name": "fixed normal-account admin access denied",
+      "passed": true
+    },
+    {
+      "name": "training vulnerable admin comparison accessible",
+      "passed": true
+    },
+    {
+      "name": "normal account own object available",
+      "passed": true
+    },
+    {
+      "name": "normal account other object hidden",
+      "passed": true
+    },
+    {
+      "name": "seed admin login accepted",
+      "passed": true
+    },
+    {
+      "name": "admin role endpoint available",
+      "passed": true
+    },
+    {
+      "name": "normal account logout succeeds",
+      "passed": true
+    },
+    {
+      "name": "logged-out identity rejected",
+      "passed": true
+    },
+    {
+      "name": "admin logout succeeds",
+      "passed": true
+    }
+  ],
+  "credentialsPersistedInEvidence": false,
+  "nativeBurp": false
+}

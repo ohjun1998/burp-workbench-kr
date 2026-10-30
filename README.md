@@ -3,6 +3,10 @@
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.
 
+**Workbench Simple 1.4.2는 반복 작업의 설정 절차와 오류 복구를 개선합니다.** 서버·경로의 대상·계정을 기본 화면에서 선택하고 고급 실행 조건·저장 관리는 별도로 유지합니다. 새 응답 수신 중 읽기 위치를 보존하고, URL 대상 준비 오류는 입력 창 안에서 바로 교정합니다. 검색 준비·완료 상태의 경합도 보강합니다. 실제 전후 검증과 남은 한계를 기록합니다.
+
+[Simple 1.4.2 설치 JAR](simple/downloads/1.4.2/burp-workbench-simple-1.4.2.jar) · [독립 소스·체크섬](simple/downloads/1.4.2/) · [달라진 작업 흐름](simple/docs/RELEASE_SIMPLE_1.4.2_KR.md) · [목표별 전후 검증](docs/reports/2026-10-30-simple-workflow-goals/REPORT_KR.md)
+
 **Workbench Simple 1.4.1은 로컬 실습 환경에서 전체 8개 도구의 테스트·개선·재검증을 5라운드 수행한 사용성 개선판입니다.** 매 라운드 전후를 새로 실행한 총 10번의 전체 흐름에서 각각 115개 확인 항목을 통과했습니다. 상세 근거의 읽기·복사 위치, 대상 변경 후 계정 선택, 대량 결과·URL 후보 갱신과 대시보드 결과 이동을 개선합니다. 기존 기능과 관리 메뉴를 유지하며 실제 HTTP와 합성 Swing 부하의 결과를 구분해 기록합니다.
 
 [Simple 1.4.1 설치 JAR](simple/downloads/1.4.1/burp-workbench-simple-1.4.1.jar) · [독립 소스·체크섬](simple/downloads/1.4.1/) · [달라진 작업 흐름](simple/docs/RELEASE_SIMPLE_1.4.1_KR.md) · [5회 전후 비교와 검증](docs/reports/2026-10-30-simple-usability/REPORT_KR.md)

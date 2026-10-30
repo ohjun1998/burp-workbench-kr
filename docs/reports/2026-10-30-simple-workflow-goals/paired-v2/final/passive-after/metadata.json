@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "probe": "passive",
+  "phase": "after",
+  "startedAtUtc": "2026-10-29T23:46:15.665130+00:00",
+  "status": "completed",
+  "nativeBurp": false,
+  "osClicks": false,
+  "browserDOM": false,
+  "repositoryHeadAtLaunch": "65ae9273d3b58d47ddf7e3b96d0e118875bb15b3",
+  "repositoryHeadProvesJarSource": false,
+  "runnerSHA256": "e3d25fa93accdd308bf30bc7378d187f339dcf52a3312f851e3a44e8ddd6319c",
+  "preservedUtilitySHA256": "c80f012d9191be4b2ed076438821c3053735f65dec687223e473350f81c7bd22",
+  "harnessSource": {
+    "path": "audit/simple-workflow-usability/PassiveTargetFlowProbe.java",
+    "sha256": "e7910051a8a2e7e0ddac7eedfe1626453ce7e02c2fe93a1f2b9848395070cdf8"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-version"
+      ],
+      "timeoutSeconds": 20,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "com.sun.tools.javac.Main",
+        "--release",
+        "17",
+        "-encoding",
+        "UTF-8",
+        "-cp",
+        "/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.product.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.classes:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.adapters:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/brotli-dec-0.1.2.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/legacy-api.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/montoya-2026.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/rhino.jar",
+        "-d",
+        "/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.classes",
+        "/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.sources/PassiveTargetFlowProbe.java"
+      ],
+      "timeoutSeconds": 180,
+      "returnCode": 0
+    },
+    {
+      "argv": [
+        "/workspace/burp-workbench-kr/.dev-tools/jdk-17.0.21+9/bin/java",
+        "-Duser.home=<private-runtime>/home",
+        "-Djava.util.prefs.userRoot=<private-runtime>/prefs/user",
+        "-Djava.util.prefs.systemRoot=<private-runtime>/prefs/system",
+        "-Djava.io.tmpdir=<private-runtime>/tmp",
+        "-Djava.awt.headless=true",
+        "-Dfile.encoding=UTF-8",
+        "-cp",
+        "/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.product.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.classes:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.adapters:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/brotli-dec-0.1.2.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/legacy-api.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/montoya-2026.jar:/workspace/usability-goals-1.4.2/paired-v2/final/passive-after/.deps/rhino.jar",
+        "kr.workbench.PassiveTargetFlowProbe",
+        "<private-runtime>/work",
+        "after"
+      ],
+      "timeoutSeconds": 240,
+      "returnCode": 0
+    }
+  ],
+  "resultFiles": [
+    {
+      "path": "results/result.json",
+      "sha256": "dbbaf012ca034a5e0d3b7a7fb28f80f5ff4a669bda5c5bfbeb9aadcbd8313612",
+      "bytes": 2276
+    },
+    {
+      "path": "logs/compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "logs/java-version.log",
+      "sha256": "aa8b8c37cfb8295d241a736330151318fe156c8937b464a27b2c21d638db1862",
+      "bytes": 183
+    },
+    {
+      "path": "logs/probe.log",
+      "sha256": "382919ce79d7141999ef46693463dc3e7a82ed0d8dc829a5d44ad4beb527f8a2",
+      "bytes": 210
+    }
+  ],
+  "withheldOutputs": [],
+  "runtimeIsolation": {
+    "userHome": true,
+    "javaPreferences": true,
+    "javaTmp": true,
+    "rawPacketsPromoted": false,
+    "rawReportZipsPromoted": false,
+    "privateRuntimeRemoved": true
+  },
+  "resultMeaning": "A completed probe can report expected baseline defects. Compare the JSON conditions; completion alone is not an improvement or correctness claim.",
+  "productJar": {
+    "source": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-simple-1.4.2.jar",
+    "snapshot": ".product.jar",
+    "sha256": "a10a6cfb2a51a4eb96ffafd07f7e31ec56df9d1a23158402b75de4ef65879bd8",
+    "bytes": 4594549
+  },
+  "sourceSnapshot": {
+    "source": "/workspace/burp-workbench-kr/audit/simple-workflow-usability/PassiveTargetFlowProbe.java",
+    "snapshot": "PassiveTargetFlowProbe.java",
+    "sha256": "e7910051a8a2e7e0ddac7eedfe1626453ce7e02c2fe93a1f2b9848395070cdf8",
+    "bytes": 11929
+  },
+  "adapters": {
+    "source": "/workspace/usability-goals-1.4.2/paired-v2/passive-before/.adapters",
+    "snapshot": ".adapters",
+    "classFiles": 208,
+    "treeSHA256": "8d92faf6399ce00769729f29d8d78518c991c8d2bae32ca814598bc24e0392e5",
+    "stableDuringCopy": true,
+    "copyAttempts": 1
+  },
+  "dependencies": [
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar",
+      "snapshot": "montoya-2026.jar",
+      "sha256": "cb852b7b883290fcc1d21b13d80fa10f5b13a0f57335d710d2b1e5956ecb2a94",
+      "bytes": 181538
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/legacy-api.jar",
+      "snapshot": "legacy-api.jar",
+      "sha256": "0b9b16048e1a3d10bb8f36219bb7dfa637dad2d54e116199d3506b4174518e54",
+      "bytes": 20139
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/rhino.jar",
+      "snapshot": "rhino.jar",
+      "sha256": "12dbb224cea124a5d32968722e8eb161c967bf15f3c9a795d1b05592b1147975",
+      "bytes": 1647024
+    },
+    {
+      "source": "/workspace/burp-workbench-kr/simple/burp-workbench/deps/brotli-dec-0.1.2.jar",
+      "snapshot": "brotli-dec-0.1.2.jar",
+      "sha256": "615c0c3efef990d77831104475fba6a1f7971388691d4bad1471ad84101f6d52",
+      "bytes": 98115
+    }
+  ],
+  "removedJvmEnvironmentNames": [],
+  "inputJarUnchanged": true,
+  "productSnapshotUnchanged": true,
+  "harnessSourceUnchanged": true,
+  "harnessSnapshotUnchanged": true,
+  "runnerSourceUnchanged": true,
+  "preservedUtilityUnchanged": true,
+  "finishedAtUtc": "2026-10-29T23:46:19.591381+00:00"
+}

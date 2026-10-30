@@ -1,0 +1,2 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/burp-workbench-kr/simple/package_simple.py --verify
+Simple package verified: /workspace/burp-workbench-kr/simple/downloads/1.4.2

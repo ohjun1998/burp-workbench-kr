@@ -1,0 +1,131 @@
+{
+  "version": "1.4.2",
+  "baseMain": "65ae9273d3b58d47ddf7e3b96d0e118875bb15b3",
+  "jarSha256": "a10a6cfb2a51a4eb96ffafd07f7e31ec56df9d1a23158402b75de4ef65879bd8",
+  "featureScope": "Fewer daily setup operations and settings windows; stable environment response reading; visible URL-target recovery/Enter preparation; accurate cross-thread search preparation readiness. Existing eight tools retained.",
+  "actualWorkflows": {
+    "environment": {
+      "beforeRequiredControlActivations": 6,
+      "afterRequiredControlActivations": 4,
+      "beforeSettingsWindows": 2,
+      "afterSettingsWindows": 0,
+      "accountDuringMeasuredGet": "anonymous after explicit slot1-to-anonymous choice",
+      "optionalWindowClosesIncluded": false,
+      "osClicksMeasured": false
+    },
+    "passive": {
+      "inlineInvalidAndLimitErrorsVisibleAfter": true,
+      "enterThenButtonFallbackActivationsBefore": 2,
+      "enterActivationsAfter": 1,
+      "buttonOnlyActivationsBothVersions": 1,
+      "preparationStartsCollectionOrTargetHttp": false,
+      "queuedActionsCannotRecreateClosedTargets": true
+    },
+    "readiness": {
+      "oneBlockedPreparationInterval": true,
+      "crossThreadReadSamples": 1000,
+      "idleTrueDuringPreparationBefore": 1000,
+      "idleTrueDuringPreparationAfter": 0,
+      "exactNewOriginalSelectedAfter": true,
+      "targetHttp": 0
+    }
+  },
+  "newFocusedSuites": {
+    "SimpleEnvironmentWorkflowTest": 32,
+    "SimplePassiveTargetFlowTest": 30,
+    "SimpleTrafficReadinessTest": 18,
+    "total": 80,
+    "result": "passed",
+    "note": "Included in the complete release suite, not added again to its total. TargetCleanupTest adapts the daily environment selectors and adds one account visibility assertion."
+  },
+  "performance": {
+    "fixture": "One prepared actual-loopback metadata observation per kind, applied20 times per sample; 1warmup and5 measured samples. The measured GET is anonymous. Parsing/preparation/network latency excluded.",
+    "sameOrigin": {
+      "medianEdtMillisBefore": 131.403911,
+      "medianEdtMillisAfter": 0.066354,
+      "medianEdtAllocatedBytesBefore": 84195320,
+      "medianEdtAllocatedBytesAfter": 3200,
+      "allAfterSamplesPreserveReadingAndExactOriginal": true,
+      "afterModelAndDocumentEvents": 0
+    },
+    "otherOrigin": {
+      "medianEdtMillisBefore": 163.30888,
+      "medianEdtMillisAfter": 0.060056,
+      "medianEdtAllocatedBytesBefore": 113799336,
+      "medianEdtAllocatedBytesAfter": 3200,
+      "allAfterSamplesPreserveReadingAndExactOriginal": true,
+      "afterModelAndDocumentEvents": 0
+    },
+    "retainedHeapOrRSSMeasured": false,
+    "automaticTargetHttpDuringReplays": 0
+  },
+  "newWholeBaseline": {
+    "product": "1.4.1",
+    "passed": 107,
+    "failed": 2,
+    "completedModules": 7,
+    "engineGetRequests": 39,
+    "loginSetupPostRequests": 2,
+    "status": "failed, preserved",
+    "historicalFailureCauseConfirmed": false,
+    "evidence": "https://github.com/ohjun1998/burp-workbench-kr/tree/main/docs/reports/2026-10-30-simple-workflow-goals/baseline-1.4.1"
+  },
+  "finalWholeConfirmations": {
+    "executions": 5,
+    "freshJvmAndPrivateProfileEachTime": true,
+    "modulesPerExecution": 8,
+    "passedAssertionsPerExecution": 115,
+    "failedAssertionsPerExecution": 0,
+    "engineGetRequestsPerExecution": 42,
+    "loginSetupPostRequestsPerExecution": 2,
+    "additionalImprovementRounds": false,
+    "repetitionsCountedAsUniqueChecks": false,
+    "frozenWholeHarnessUnchanged": true
+  },
+  "layout": {
+    "result": "passed",
+    "views": 128,
+    "controls": 2708,
+    "scenarioAssertions": 568,
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "failedScenarios": 0,
+    "reports": [
+      "images/1.4.2/layout-report.json",
+      "images/1.4.2/scope-layout-report.json"
+    ]
+  },
+  "katanaEvidence": "verification/1.4.2/katana-native/katana-verification.json",
+  "releaseGate": {
+    "command": "python simple/dev.py release --java <Temurin17>/bin/java --javac <Temurin17>/bin/javac",
+    "requiredResult": "passed",
+    "finalRecordedResult": "https://github.com/ohjun1998/burp-workbench-kr/blob/main/docs/reports/2026-10-30-simple-workflow-goals/VERIFICATION.json",
+    "note": "Final complete regression counts, immutable package verification, independent source rebuild and exact PR checks are recorded outside this source package. Packaging follows complete suite success."
+  },
+  "accountIsolation": "External identity-condition changes at the same slot invalidate both preview and table state on identical/other-origin observations. Dedicated regression verifies this without manual refresh. Authenticated HTTP is covered separately by existing comparison/whole suites.",
+  "preserved": {
+    "eightTools": true,
+    "originalIdsAccountsScopeBudgetsEvidence": true,
+    "originalNextSources": true,
+    "previousArtifacts": true,
+    "oldFrozenAuditSources": true,
+    "mapper": "0.3.6",
+    "browserHelper": "0.4.1",
+    "katana": "1.8.0"
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual OS clicks or file-picker operation",
+    "native browser DOM/MV3/DNR",
+    "Docker lab stack",
+    "live external targets or external OAST/BApp/AI services"
+  ],
+  "reproduction": "https://github.com/ohjun1998/burp-workbench-kr/tree/main/audit/simple-workflow-usability",
+  "report": "https://github.com/ohjun1998/burp-workbench-kr/blob/main/docs/reports/2026-10-30-simple-workflow-goals/REPORT_KR.md",
+  "toolchain": {
+    "runtime": "Temurin17.0.21+9",
+    "compiler": "strict --release17",
+    "java17ApiCompatibilityVerified": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "run_probes.py": "e3d25fa93accdd308bf30bc7378d187f339dcf52a3312f851e3a44e8ddd6319c",
+    "EnvironmentWorkflowProbe.java": "3f69d311aa39b7a0158f5db2f9665d0b6439bd9b51f1e042e4d2b679d7846c03",
+    "PassiveTargetFlowProbe.java": "e7910051a8a2e7e0ddac7eedfe1626453ce7e02c2fe93a1f2b9848395070cdf8",
+    "TrafficReadinessProbe.java": "23713b66dedfb765621fa8b176903cdabebd663cacf7439dc847afb675687f1a"
+  },
+  "sourceFreezeBeforePairedRuns": true,
+  "nativeBurp": false,
+  "sequence": "baseline three independent probes, product build, same probes after; performance probes run sequentially"
+}

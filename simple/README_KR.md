@@ -1,23 +1,23 @@
-# Workbench Simple 1.4.1
+# Workbench Simple 1.4.2
 
-**점검 대시보드에서 현재 실행의 수치를 보고, 카드·막대를 눌러 조건별 목록과 근거·원본을 확인합니다.** 기존 8개 도구와 Katana·SCOPE 통합 점검을 유지하고 기존 Next 및 Simple 1.0.0–1.4.0 JAR·소스·PDF를 보존합니다.
+**점검 대시보드에서 현재 실행의 수치를 보고, 카드·막대를 눌러 조건별 목록과 근거·원본을 확인합니다.** 기존 8개 도구와 Katana·SCOPE 통합 점검을 유지하고 기존 Next 및 Simple 1.0.0–1.4.1 JAR·소스·PDF를 보존합니다.
 
-1.4.1은 현재 기능을 유지하면서 상세 읽기 위치·대상별 계정 갱신·대량 표 갱신·URL 후보 가져오기·대시보드 결과 이동을 개선합니다. [5회 전후 검증](docs/RELEASE_SIMPLE_1.4.1_KR.md)을 참고하세요.
+1.4.2는 서버·경로의 대상과 계정을 기본 화면에서 선택하고, 수신 중에도 읽던 응답을 유지하며, URL 대상 준비 오류를 같은 창에서 바로 수정하게 합니다. 검색 준비·화면 반영의 완료 상태도 보강합니다. [실제 작업의 전후 검증](docs/RELEASE_SIMPLE_1.4.2_KR.md)과 [보존한 1.4.1 개선 기록](docs/RELEASE_SIMPLE_1.4.1_KR.md)을 참고하세요.
 
 SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원본 확인 → 필요한 기존 도구·증거 저장으로 이어갑니다. 도구를 정해진 순서대로 모두 거칠 필요는 없습니다.
 
 | 필요한 파일 | 위치 |
 |---|---|
-| 설치 JAR | [burp-workbench-simple-1.4.1.jar](downloads/1.4.1/burp-workbench-simple-1.4.1.jar) |
-| 독립 빌드 소스 | [소스 ZIP](downloads/1.4.1/burp-workbench-simple-1.4.1-source.zip) · [SHA256SUMS](downloads/1.4.1/SHA256SUMS) |
-| 브라우저·SPA helper | [helper 0.4.1 ZIP](downloads/1.4.1/feature-mapper-browser-helper-0.4.1.zip) |
+| 설치 JAR | [burp-workbench-simple-1.4.2.jar](downloads/1.4.2/burp-workbench-simple-1.4.2.jar) |
+| 독립 빌드 소스 | [소스 ZIP](downloads/1.4.2/burp-workbench-simple-1.4.2-source.zip) · [SHA256SUMS](downloads/1.4.2/SHA256SUMS) |
+| 브라우저·SPA helper | [helper 0.4.1 ZIP](downloads/1.4.2/feature-mapper-browser-helper-0.4.1.zip) |
 | 외부 Katana 1.8.0 | [공식 배포·SHA-256 확인 설치 도구](tools/install_katana.py) · [고정 의존성 기록](docs/KATANA_DEPENDENCY.json) · 실행 파일 별도 설치 |
-| 실사용 개선 안내 | [5회 비교와 달라진 작업 흐름](docs/RELEASE_SIMPLE_1.4.1_KR.md) |
+| 실사용 개선 안내 | [일상 조건·설정 절차·읽기·복구 개선](docs/RELEASE_SIMPLE_1.4.2_KR.md) |
 | 대시보드 집계 기준 | [수치·필터·근거·원본 연결](docs/RELEASE_SIMPLE_1.4.0_KR.md) |
 | 기존 도구 그림 가이드 | [보존한 1.3.2 HTML 안내서](docs/GUIDE_SIMPLE_KR.html) · [1.3.2 문서 원고](docs/GUIDE_SIMPLE_KR.md) |
 | 기존 도구 PDF 가이드 | [보존한 1.3.2 그림 가이드북](downloads/guides/1.3.2/Workbench_Simple_1.3.2_Guide_KR.pdf) |
-| 실제 검증 결과 | [1.4.1 검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.4.1.json) |
-| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.4.1/katana-native/katana-verification.json) |
+| 실제 검증 결과 | [1.4.2 검사와 미실행 범위](docs/VERIFICATION_SIMPLE_1.4.2.json) |
+| Katana 실제 실행 | [공식 프로세스·격리 HTTP/HTTPS 검증](docs/verification/1.4.2/katana-native/katana-verification.json) |
 | Katana 적용 범위 | [기존 요구사항·구현·검사 연결표](docs/KATANA_SCOPE_1.3.2_SPEC_KR.md) |
 
 ## 점검 대시보드
@@ -42,7 +42,7 @@ SCOPE URL·HTTP 계정 선택 → Katana·통합 점검 시작 → 결과·원�
 
 ## 설치와 첫 점검
 
-1. Simple 설치 JAR burp-workbench-simple-1.4.1.jar를 준비하고 기존 Workbench 파일을 보관합니다.
+1. Simple 설치 JAR burp-workbench-simple-1.4.2.jar를 준비하고 기존 Workbench 파일을 보관합니다.
 2. Burp Extensions → Add → Java에서 Simple JAR를 선택하고 Workbench Simple 탭을 엽니다.
 3. 한 확장에서만 수집하려면 기존 Workbench의 로드를 해제하고 Simple을 사용합니다. 기존 확장이나 원본 파일을 삭제할 필요는 없습니다.
 4. SCOPE 목록에 대상 URL과 경로를 등록하고 허용·제외 범위를 확인합니다. 통합 점검 화면에서 URL·HTTP 계정과 요청 한도를 정합니다.
@@ -131,7 +131,7 @@ Simple 설정 키는 `simple.*`, 저장 폴더는 `.burp-workbench-simple`입니
 
 완전한 JDK에서 `python dev.py build`, `python dev.py check`를 사용합니다. 기본 컴파일은 `--release 17`입니다. Node 검사 런처는 설치된 Node가 지원하는 옵션 표기를 확인하며 실제 하위 검사 집계를 검증합니다.
 
-이번 로컬 빌드는 별도로 준비한 Temurin JDK 17의 `--release 17`을 사용합니다. 런타임·컴파일 방식과 실제 실행한 검사·제한은 1.4.1 검증 기록을 확인합니다.
+이번 로컬 빌드는 별도로 준비한 Temurin JDK 17의 `--release 17`을 사용합니다. 런타임·컴파일 방식과 실제 실행한 검사·제한은 1.4.2 검증 기록을 확인합니다.
 
 테스트 어댑터 빌드 후 두 캡처 명령으로 기존 8개 도구와 통합 점검 화면을 같은 버전 디렉터리에 생성합니다. PDF 생성에는 Python `reportlab`, `Pillow`가 필요하고, 구조 검증에는 `PyMuPDF`를 사용합니다.
 

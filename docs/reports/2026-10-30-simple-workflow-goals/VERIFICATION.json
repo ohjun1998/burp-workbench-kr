@@ -1,0 +1,192 @@
+{
+  "version": "1.4.2",
+  "result": "passed",
+  "recordedAtUtc": "2026-10-30T00:05:42.322866+00:00",
+  "baseMain": "65ae9273d3b58d47ddf7e3b96d0e118875bb15b3",
+  "userSelectedEnvironment": "Repository isolated original LOOP3.10.0 plus production Swing/Montoya HTTP adapters",
+  "goalCoverage": {
+    "fewerDailyOperations": {
+      "requiredControlActivationsBefore": 6,
+      "after": 4,
+      "measuredAnonymousGet": true,
+      "osClicksOrOptionalClosesCounted": false
+    },
+    "simplerSetupAndDailyVsManagement": {
+      "settingsWindowEntriesBefore": 2,
+      "after": 0,
+      "dailyControls": [
+        "observed target",
+        "verification account"
+      ],
+      "advancedAndManagementKeptSeparate": [
+        "request intervals/timeouts/budget",
+        "baseline/volatile-field rules",
+        "follow-discovery",
+        "save/import/history/reset"
+      ]
+    },
+    "responseReadingAndAllocation": {
+      "sameOrigin": {
+        "medianEdtMillisBefore": 131.403911,
+        "medianEdtMillisAfter": 0.066354,
+        "medianEdtAllocatedBytesBefore": 84195320,
+        "medianEdtAllocatedBytesAfter": 3200,
+        "beforeFirstSampleEvents": {
+          "pathModelEvents": 460,
+          "techModelEvents": 40,
+          "requestDocumentEvents": 120,
+          "responseDocumentEvents": 120
+        },
+        "allAfterModelAndDocumentEventsZero": true,
+        "allAfterReadingAndOriginalPreserved": true
+      },
+      "otherOrigin": {
+        "medianEdtMillisBefore": 163.30888,
+        "medianEdtMillisAfter": 0.060056,
+        "medianEdtAllocatedBytesBefore": 113799336,
+        "medianEdtAllocatedBytesAfter": 3200,
+        "beforeFirstSampleEvents": {
+          "pathModelEvents": 460,
+          "techModelEvents": 40,
+          "requestDocumentEvents": 120,
+          "responseDocumentEvents": 120
+        },
+        "allAfterModelAndDocumentEventsZero": true,
+        "allAfterReadingAndOriginalPreserved": true
+      }
+    },
+    "targetErrorRecovery": {
+      "invalidAndLimitErrorsVisibleInlineAfter": true,
+      "enterPlusMouseFallbackBefore": 2,
+      "enterOnlyAfter": 1,
+      "buttonOnlyBoth": 1,
+      "preparationTargetHttp": 0,
+      "closedQueuedActionsRecreateTargets": false
+    }
+  },
+  "initialWholeBaseline": {
+    "version": "1.4.1",
+    "result": "FAIL",
+    "passed": 107,
+    "failed": 2,
+    "completedModules": 7,
+    "engineGetRequests": 39,
+    "loginSetupPostRequests": 2,
+    "exactCauseOfHistoricalFailureConfirmed": false,
+    "evidence": "baseline-1.4.1/summary.json"
+  },
+  "controlledSearchReadiness": {
+    "oneBlockedPreparationInterval": true,
+    "crossThreadSamples": 1000,
+    "idleTrueBefore": 1000,
+    "idleTrueAfter": 0,
+    "exactNewOriginalAfter": true,
+    "httpRequests": 0,
+    "frozenProbeSHA256": "23713b66dedfb765621fa8b176903cdabebd663cacf7439dc847afb675687f1a",
+    "historicalFailureCauseProven": false
+  },
+  "finalWholeConfirmations": {
+    "freshExecutions": 5,
+    "allModulesPerExecution": 8,
+    "passedPerExecution": 115,
+    "failedPerExecution": 0,
+    "engineGetRequestsPerExecution": 42,
+    "loginSetupPostRequestsPerExecution": 2,
+    "repetitionsAreNotNewImprovementRoundsOrUniqueChecks": true,
+    "summary": "whole-after-final/summary.json"
+  },
+  "releaseSuite": {
+    "command": "python simple/dev.py release --java <Temurin17>/bin/java --javac <Temurin17>/bin/javac",
+    "exitCode": 0,
+    "result": "passed",
+    "subset": false,
+    "regressionGroups": 146,
+    "regressionChecks": 5260,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "nodeBrowserHelperChecks": 29,
+    "total": 5570,
+    "failedGroups": [],
+    "summary": "check-summary.json",
+    "newFocusedSuitesIncluded": {
+      "SimpleEnvironmentWorkflowTest": 32,
+      "SimplePassiveTargetFlowTest": 30,
+      "SimpleTrafficReadinessTest": 18
+    },
+    "newFocusedChecksIncluded": 80,
+    "countingNote": "Focused/whole/layout/native checks are separate or overlapping scopes and are not added to the release-suite total."
+  },
+  "layout": {
+    "result": "passed",
+    "views": 128,
+    "controls": 2708,
+    "scenarios": 568,
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "failedScenarios": 0,
+    "reports": [
+      "../../../simple/docs/images/1.4.2/layout-report.json",
+      "../../../simple/docs/images/1.4.2/scope-layout-report.json"
+    ]
+  },
+  "katana": {
+    "version": "1.8.0",
+    "checks": 102,
+    "result": "passed",
+    "evidence": "../../../simple/docs/verification/1.4.2/katana-native/katana-verification.json"
+  },
+  "artifacts": {
+    "burp-workbench-simple-1.4.2.jar": {
+      "sha256": "a10a6cfb2a51a4eb96ffafd07f7e31ec56df9d1a23158402b75de4ef65879bd8",
+      "bytes": 4594549
+    },
+    "burp-workbench-simple-1.4.2-source.zip": {
+      "sha256": "ead4b6a1d5ce457de0982bf9414d60d3e516a0e48b28f8abc24900f1af48090d",
+      "bytes": 73310035
+    },
+    "feature-mapper-browser-helper-0.4.1.zip": {
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2",
+      "bytes": 34685
+    }
+  },
+  "packaging": {
+    "sourceFingerprintInputs": 1915,
+    "verifyCommand": "python simple/dev.py verify --java <Temurin17>/bin/java",
+    "verifyExitCode": 0,
+    "crcAndEverySourceEntryHashChecked": true,
+    "verificationLog": "package-verification.txt",
+    "independentSourceRebuild": "source-rebuild.json",
+    "rebuiltJarByteIdentical": true,
+    "finalJarMatchesPairedWholeLayoutAndKatana": true
+  },
+  "cleanup": {
+    "ownedLoopPortClosed": true,
+    "ownedLoopProcessRunning": false,
+    "evidence": "loop/stop-verification.json"
+  },
+  "preservation": "preservation.json",
+  "sourceAndProbeInterpretation": [
+    "Performance uses one prepared actual-loopback metadata observation per kind,20 applies per sample,1warmup+5samples. Parsing/preparation/network latency excluded.",
+    "Measured environment GET is anonymous after slot1-to-anonymous selection; authenticated comparison HTTP is covered separately.",
+    "EDT allocations are allocated bytes, not retained heap/RSS/peak memory.",
+    "Readiness1000 reads share one controlled blocked interval, not1000 independent tests.",
+    "Enter2-to1 is Enter then fallback button versus successful Enter; button-only remains1-to1.",
+    "Initial historical whole failure cause is not proven by the independent readiness reproduction."
+  ],
+  "remotePublication": {
+    "recordScope": "Committed local gates before upload. Exact PR-head CI and main merge provenance are authoritative on the corresponding GitHub PR.",
+    "branch": "account-a/simple-workflow-usability",
+    "target": "main",
+    "mergeRequiresPassingPrChecks": true
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual OS clicks/file picker",
+    "native browser DOM/MV3/DNR",
+    "Docker lab stack",
+    "live external targets or external OAST/BApp/AI services"
+  ],
+  "report": "REPORT_KR.md",
+  "conversation": "../../chat-logs/2026-10-30/simple-workflow-goals.md"
+}

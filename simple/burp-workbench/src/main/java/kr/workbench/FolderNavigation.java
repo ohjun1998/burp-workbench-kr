@@ -189,7 +189,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     navigationLine.add(current, BorderLayout.CENTER);
     JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 3, 1));
     actions.setName("wb.navigation.actions");
+    AbstractButton guideButton=null;
     for (AbstractButton shortcut : shortcuts) if (shortcut != null) {
+      if(Boolean.TRUE.equals(shortcut.getClientProperty("wb.guide.button"))){guideButton=shortcut;continue;}
       if(classic)compactAction(shortcut, shortcut.getName()!=null&&shortcut.getName().contains("fullscreen")?"fullscreen":shortcut.getText().contains("Scope")?"target":"dashboard",shortcut.getText());
       actions.add(shortcut);
     }
@@ -197,6 +199,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     if(classic)compactAction(settings,"gear","화면 설정");
     actions.add(settings);
     if (logs != null) {if(classic)compactAction(logs,"logs","오류 기록");actions.add(logs);}
+    if(guideButton!=null){guideButton.setPreferredSize(new Dimension(66,30));guideButton.setMinimumSize(new Dimension(66,30));guideButton.setMaximumSize(new Dimension(66,30));actions.add(guideButton);}
     for(Component c:actions.getComponents())if(c instanceof AbstractButton b)b.putClientProperty("wb.segment.button",true);
     navigationLine.add(actions, BorderLayout.EAST);
     JPanel toolbar = new ResponsiveToolbar(navigationLine, actions);

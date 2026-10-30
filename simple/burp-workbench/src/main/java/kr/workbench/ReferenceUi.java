@@ -66,9 +66,10 @@ public final class ReferenceUi {
     public boolean getScrollableTracksViewportHeight(){return false;}
   }
 
-  /** Formatting writes ordinary report text, so draft/ZIP/export remain byte-for-byte transparent. */
-  static JPanel writing(JTextArea text){JPanel p=new JPanel(new BorderLayout());p.setName("wb.reference.writing");JPanel tools=new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT,2,2));String[][] formats={{"B","굵게 (Markdown)","**","**"},{"I","기울임 (Markdown)","*","*"},{"</>","코드 (Markdown)","`","`"},{"•","글머리 목록","- ",""},{"1.","번호 목록","1. ",""},{"↗","링크 (Markdown)","[","](https://)"}};
-    for(String[] format:formats){JButton b=new JButton(format[0]);b.putClientProperty("wb.segment.button",true);b.putClientProperty("wb.compact.button",true);b.setPreferredSize(new Dimension(format[0].equals("</>")?44:40,30));b.setToolTipText(format[1]);b.getAccessibleContext().setAccessibleName(format[1]);b.addActionListener(e->{int start=text.getSelectionStart(),end=text.getSelectionEnd();String selected=text.getSelectedText();if(selected==null)selected="";text.replaceRange(format[2]+selected+format[3],start,end);text.requestFocusInWindow();text.select(start+format[2].length(),start+format[2].length()+selected.length());});tools.add(b);}
-    JLabel count=new JLabel();count.putClientProperty("wb.secondary",true);Runnable update=()->count.setText(text.getDocument().getLength()+"자");text.getDocument().addDocumentListener(new DocumentListener(){public void insertUpdate(DocumentEvent e){update.run();}public void removeUpdate(DocumentEvent e){update.run();}public void changedUpdate(DocumentEvent e){update.run();}});update.run();JPanel bar=header(tools,count);bar.setBorder(BorderFactory.createEmptyBorder(0,6,0,12));p.add(bar,BorderLayout.NORTH);p.add(new JScrollPane(text));return p;
+  /** Plain report editing keeps the original text; auxiliary formatting controls were retired. */
+  static JPanel writing(JTextArea text){
+    JPanel panel=new JPanel(new BorderLayout());panel.setName("wb.reference.writing");
+    panel.add(new JScrollPane(text));return panel;
   }
+
 }

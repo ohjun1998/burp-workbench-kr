@@ -1,0 +1,194 @@
+[
+  {
+    "screen": "traffic",
+    "theme": "light",
+    "source": "02-request.png",
+    "sha256": "ba150495e1340a9f73102a85592e9de24b4ab5c0ff68befe7ff91b139d6244dc"
+  },
+  {
+    "screen": "mapper",
+    "theme": "light",
+    "source": "08-mapper.png",
+    "sha256": "21dce7c5ca1cfce9600114305e9d3fc41376260947ede889bd5d317a4d17055e"
+  },
+  {
+    "screen": "js",
+    "theme": "light",
+    "source": "10-js.png",
+    "sha256": "de5927953e18389610c9fae4a825c4fed9db761e2a9570d1d710217eec4e6703"
+  },
+  {
+    "screen": "environment",
+    "theme": "light",
+    "source": "09-environment.png",
+    "sha256": "19aa0c0cd5f57c5e40d2b4131694ae855415528c8489cb4a991577ea8c703934"
+  },
+  {
+    "screen": "exposure.search",
+    "theme": "light",
+    "source": "12-exposure-search.png",
+    "sha256": "14529f5a45459a81005536b59df07d0f0c6f39195600ba3dba972304858d13e3"
+  },
+  {
+    "screen": "exposure.cve",
+    "theme": "light",
+    "source": "13-exposure-cve.png",
+    "sha256": "43e46b330203f4944e6072d5a5f52f0934caf2ddfab8eb3e108db82e2ee622d7"
+  },
+  {
+    "screen": "auth",
+    "theme": "light",
+    "source": "04-auth-results.png",
+    "sha256": "e9031e1cd153f360bbf31148d7d3d8459e25c7bb885d22214b0bb9fee374aef4"
+  },
+  {
+    "screen": "response.recon",
+    "theme": "light",
+    "source": "03-analysis.png",
+    "sha256": "b81a1ecf73499092a15107c85a4ef207abe9cd5de8a3934378885ca2a6dc4bc2"
+  },
+  {
+    "screen": "payload",
+    "theme": "light",
+    "source": "07-payload.png",
+    "sha256": "9b5661197bea6a09977054aa7a1cdf3639880dd532fd2f0a10efeaafa3b21164"
+  },
+  {
+    "screen": "data",
+    "theme": "light",
+    "source": "14-data.png",
+    "sha256": "5d13d32d9f841cb1f9b811a217a15f873420832329ecf578467bb5cd7bf5ccc3"
+  },
+  {
+    "screen": "activity",
+    "theme": "light",
+    "source": "15-progress.png",
+    "sha256": "3732063bb4c8235f827c53f06b18d23ca83f53e75703d9734f0e2b0c6a0bfa42"
+  },
+  {
+    "screen": "bounty",
+    "theme": "light",
+    "source": "05-evidence.png",
+    "sha256": "0ce7001e248680065d699ce666f266a87eb7684a41cc8cfd6cd2ac89a1b42404"
+  },
+  {
+    "screen": "dashboard",
+    "theme": "light",
+    "source": "16-dashboard.png",
+    "sha256": "0ece6e8f960ebc6f4990619c64a5ef8887a04adb6e8de667d26241f137c2a5fe"
+  },
+  {
+    "screen": "payload.results",
+    "theme": "light",
+    "source": "07-payload-results.png",
+    "sha256": "f8b7b2af9f8df1d15dee41abcc98a5f00b3c495fe8d527026a751c7d7b9d283f"
+  },
+  {
+    "screen": "bounty.replay",
+    "theme": "light",
+    "source": "11-replay.png",
+    "sha256": "42c32bd1a6d1f747c05e10b87cf3103f883564419214a4c28403dfa1f82eae41"
+  },
+  {
+    "screen": "auth.accounts",
+    "theme": "light",
+    "source": "04-auth-accounts.png",
+    "sha256": "c40a354318c9ee54f1a059c0a0485e1e466da0923ef1715ad30a614dc4e62bd7"
+  },
+  {
+    "screen": "traffic",
+    "theme": "dark",
+    "source": "02-request.png",
+    "sha256": "0ed6a7cf2732994a67f61b4910b0a6c65944c671fd3dbf2b8d15f82b9bfeaf2e"
+  },
+  {
+    "screen": "mapper",
+    "theme": "dark",
+    "source": "08-mapper.png",
+    "sha256": "926ec0450893e54686bd510a6cf675e9c716220c27a69365c3e5e803b2cd6ee3"
+  },
+  {
+    "screen": "js",
+    "theme": "dark",
+    "source": "10-js.png",
+    "sha256": "edab0bcddd9b814278a3d22ee394ba91fb73d1409350914ef986391eee8565d6"
+  },
+  {
+    "screen": "environment",
+    "theme": "dark",
+    "source": "09-environment.png",
+    "sha256": "814b8aff6212dc30b73f3c0a7f2d1bee9a30c5abb42bc017cd1c2a27f7fcd13a"
+  },
+  {
+    "screen": "exposure.search",
+    "theme": "dark",
+    "source": "12-exposure-search.png",
+    "sha256": "aba35155a304bdf81142cf000cc92624af60a12e1337364c737afdf0dcf4c149"
+  },
+  {
+    "screen": "exposure.cve",
+    "theme": "dark",
+    "source": "13-exposure-cve.png",
+    "sha256": "f6e939ecf5fb3101e50e4f29f47377568dded802396d2507e018fd25c56dc49b"
+  },
+  {
+    "screen": "auth",
+    "theme": "dark",
+    "source": "04-auth-results.png",
+    "sha256": "9365be4d2c86cb2ff049a1919948e590b7c9fefc478fdccd8311499497bf4613"
+  },
+  {
+    "screen": "response.recon",
+    "theme": "dark",
+    "source": "03-analysis.png",
+    "sha256": "86de2875a6fda9296896b440f3a8f20609587be287177430dc1fa5f3d680cb39"
+  },
+  {
+    "screen": "payload",
+    "theme": "dark",
+    "source": "07-payload.png",
+    "sha256": "b5b05c5bab74b8f92b0b6971a85006b70b383d0773453776b37996ed21b91731"
+  },
+  {
+    "screen": "data",
+    "theme": "dark",
+    "source": "14-data.png",
+    "sha256": "9b7c4c572c38af4fcd0d02954863c5847e61ec02b7f9df0f191697627bf7c27e"
+  },
+  {
+    "screen": "activity",
+    "theme": "dark",
+    "source": "15-progress.png",
+    "sha256": "c946df6cb1445f8a4d4b7275c5e255df70738d7a4621a6936fc22cab6b7b015a"
+  },
+  {
+    "screen": "bounty",
+    "theme": "dark",
+    "source": "05-evidence.png",
+    "sha256": "2cbc8651a0276b9fd05ea95e57212615a0316d78fbd8dad743dbb7e68f1ad7ed"
+  },
+  {
+    "screen": "dashboard",
+    "theme": "dark",
+    "source": "16-dashboard.png",
+    "sha256": "b08ec1da64d7ed5dd6ff3a12ae77db08d8188c69ab762bad3fbfe86d24ac77ac"
+  },
+  {
+    "screen": "payload.results",
+    "theme": "dark",
+    "source": "07-payload-results.png",
+    "sha256": "f20b3e338364a5cc849b71eaa4c50541623060d1e4078f5a3a54afe6edef6eb2"
+  },
+  {
+    "screen": "bounty.replay",
+    "theme": "dark",
+    "source": "11-replay.png",
+    "sha256": "79683e3b9403bd090d239087d9b0939ebcd9e40611897529ae2f46eb9cb14826"
+  },
+  {
+    "screen": "auth.accounts",
+    "theme": "dark",
+    "source": "04-auth-accounts.png",
+    "sha256": "21ec19c3e215b78c875a68d6934014788e9a7864ddbeb940f53d70266df836c8"
+  }
+]

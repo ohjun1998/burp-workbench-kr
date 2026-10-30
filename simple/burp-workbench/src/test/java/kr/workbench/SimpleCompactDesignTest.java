@@ -86,8 +86,8 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
         bounty.removeSelectedEvidence();evidenceSearch.setText("");
         check(bounty.evidence.size()==1&&!bounty.evidence.get(0).evidenceId().equals(id),"remove through evidence search targets model identity");
         bounty.impact.setText("retain selected words");bounty.impact.select(7,15);
-        JPanel editor=(JPanel)bounty.impact.getParent().getParent().getParent();SimpleWorkflowTest.clickText(editor,"B");
-        check(bounty.impact.getText().equals("retain **selected** words")&&bounty.evidence.get(0).label().equals("FIRST"),"formatting changes only selected report text and preserves packet evidence");
+        bounty.impact.replaceSelection("**selected**");
+        check(bounty.impact.getText().equals("retain **selected** words")&&bounty.evidence.get(0).label().equals("FIRST"),"manual Markdown editing preserves authored report text and packet evidence after formatting-toolbar removal");
 
         var environment = (EnvironmentPanel) SimpleWorkflowTest.unchecked(extension, "environments");
         var toggle = (JToggleButton) SimpleWorkflowTest.named(environment, "wb.environment.observations.toggle");
@@ -100,7 +100,7 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
         phases.setSelectedIndex(1); phases.setSelectedIndex(0);
         check(input.getText().equals(original), "switching preparation/results preserves exact payload input");
         ((JToggleButton)SimpleWorkflowTest.named(root,"wb.payload.step.results")).doClick();check(phases.getSelectedIndex()==1,"visible results step opens the retained workflow page");
-        ((JButton)SimpleWorkflowTest.named(root,"wb.payload.prepare")).doClick();check(phases.getSelectedIndex()==0&&input.getText().equals(original),"return to preparation preserves authored request");
+        ((AbstractButton)SimpleWorkflowTest.named(root,"wb.payload.step.prepare")).doClick();check(phases.getSelectedIndex()==0&&input.getText().equals(original),"return to preparation preserves authored request");
         check(!(boolean) SimpleWorkflowTest.unchecked(payload, "running") && PayloadIntegrationTest.sent.get() == 0, "changing phase and reading details never starts a payload run or sends HTTP");
 
         for (String tool : List.of("traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty")) {

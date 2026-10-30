@@ -329,7 +329,6 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     left.add(new JScrollPane(tree));
     JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
     actions.add(button("기능 이름·상태·메모", this::editFeature));
-    actions.add(button("선택 패킷 분류 수정", this::movePackets));
     if (embeddedHost != null && embeddedHost.supportsAssessmentTasks()) {
       JButton assessment = button("점검 업무로 연결", this::linkAssessment);
       assessment.setName("fm.assessment.link");

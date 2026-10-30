@@ -1,5 +1,15 @@
 # 현재 개발 상태
 
+## Simple 1.4.8 · 시안 구성 요소 적용 — main 병합 완료
+
+사각 단계 버튼처럼 시안과 다른 기본 컴포넌트가 남아 있던 부분을 다시 구성했습니다. 원형 단계 번호·주황 밑줄, 대상/계정/진행 요약, 계정 비교 표·차이 표시, 이름/값 상세 정보, Raw/JSON 탭, 증거 검색·서식 도구까지 8개 도구에 적용합니다. 검증한 구현 `d23adc511612ed6a7a2333a5182b2910b1bfb1d9`를 main `8d45e6b98ae646a92d6680cc03cd54721c383aaa`로 일반 병합·push했고 공개 JAR 체크섬을 확인했습니다.
+
+전체 검사 **5,901개**(Java 150개 그룹 5,589 · payload HTTP 136 · Mapper 147 · Node 29), 실제 Swing **164개 화면**, Katana **102개** 통과. 사용자 지정 열 너비·정렬·원본 ID·명시적 전송을 유지하며 작은 창에서 작성/패킷 최소 높이를 확인했습니다. 내장 Mapper 0.3.11 / helper 0.4.1. JAR SHA-256 `9a0d497ef23b6cc479f9ac7889175599795391258dca452f1f76bf12cbe88465`.
+
+[설치 JAR](simple/downloads/1.4.8/burp-workbench-simple-1.4.8.jar) · [실제 8개 도구](simple/docs/images/1.4.8/README.md) · [시안 비교](simple/docs/design/1.4.8/COMPARE.html) · [검증](simple/docs/VERIFICATION_SIMPLE_1.4.8.json) · [병합 기록](docs/reports/2026-10-30-simple-reference-components/MERGE_KR.md)
+
+실제 Burp 본체 GUI·Windows DPI/IME·픽셀 동일성은 미검증입니다. 아래 이전 버전 및 원래 Next는 보존 이력입니다.
+
 ## Simple 1.4.7 · 전체 화면 세부 디자인 — main 병합 완료
 
 첨부한 계정 카드·개수 배지 탭·기능 트리의 세부 표현을 8개 도구의 공통 버튼·입력·표·패킷·빈 상태까지 적용했습니다. 검증한 작업 커밋 `5c7c072e426fc26b023b5749725026745a2388e6`를 main `39eae232cbc5e7092130f5cb928a7ff6c1bd51c6`로 일반 병합하고 push했습니다. 공개 main JAR를 내려받아 로컬 검증 파일과 동일한 해시임을 확인했습니다.

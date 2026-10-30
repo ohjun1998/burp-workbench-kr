@@ -14,4 +14,4 @@
 
 자료는 운영 Swing 컴포넌트의 합성 예시 캡처입니다. 실제 Burp GUI·Windows DPI/IME·수동 브라우저는 미실행이며 픽셀 동일성을 주장하지 않습니다. 원래 Next와 이전 버전 배포 파일은 변경하지 않습니다.
 
-현재 세션에는 PR 생성 도구가 없고 GitHub API는 허용 목록 밖입니다. 사용자가 승인한 main 반영은 작업 브랜치 push와 일반 merge commit으로 수행하며, 완료 후 MERGE_KR.md에 실제 병합을 기록합니다. force-push하지 않습니다.
+현재 세션에는 PR 생성 도구가 없고 GitHub API는 허용 목록 밖입니다. 사용자가 승인한 main 반영은 작업 브랜치 push와 일반 merge commit으로 수행했습니다. [병합 확인](MERGE_KR.md)에 실제 원격 반영과 공개 파일 검증을 기록했습니다. force-push하지 않습니다.

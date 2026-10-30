@@ -42,6 +42,7 @@ final class WorkbenchSkin {
     button.setOpaque(false);
     button.setContentAreaFilled(false);
     button.setRolloverEnabled(true);
+    String label=button.getText()==null?"":button.getText();if(button.getIcon()==null&&!label.startsWith("<html")&&!(button instanceof JToggleButton)&&!Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"))){String kind=label.contains("설정")?"gear":label.contains("Repeater")?"play":label.equals("중지")?"stop":label.contains("증거")&&label.contains("추가")?"plus":null;if(kind!=null)button.setIcon(WorkspaceIcons.of(kind));}
     button.setBorder(Boolean.TRUE.equals(button.getClientProperty("wb.compact.button"))
         ? BorderFactory.createEmptyBorder(5, 9, 5, 9)
         : BorderFactory.createEmptyBorder(7, 12, 7, 12));
@@ -207,6 +208,9 @@ final class WorkbenchSkin {
   }
 
   private static final class TabsUi extends BasicTabbedPaneUI {
+    protected Insets getTabInsets(int placement,int index){return new Insets(10,18,10,18);}
+    protected void paintText(Graphics g,int placement,Font font,FontMetrics metrics,int index,String title,Rectangle rect,boolean selected){g.setFont(font.deriveFont(selected?Font.BOLD:Font.PLAIN));g.setColor(selected?WorkbenchUi.accent():WorkbenchUi.ink());g.drawString(title,rect.x,rect.y+metrics.getAscent());}
+    protected Insets getContentBorderInsets(int placement){return new Insets(1,0,0,0);}
     @Override public void uninstallUI(JComponent component) {
       detachTabViewport((JTabbedPane)component);
       super.uninstallUI(component);
@@ -221,6 +225,8 @@ final class WorkbenchSkin {
   }
 
   private static final class TableUi extends BasicTableUI {public void paint(Graphics graphics,JComponent component){super.paint(graphics,component);kr.packetui.VisualTheme.emptyTable(graphics,(JTable)component);}}
+
+  static void progress(JProgressBar bar){bar.setUI(new BasicProgressBarUI(){protected void paintDeterminate(Graphics graphics,JComponent c){Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(WorkbenchUi.raised());g.fillRect(0,0,c.getWidth(),c.getHeight());g.setFont(WorkbenchUi.font());g.setColor(WorkbenchUi.ink());String title=bar.getString();g.drawString(title,Math.max(0,c.getWidth()-g.getFontMetrics().stringWidth(title)),17);g.setColor(WorkbenchUi.line());g.fillRoundRect(0,c.getHeight()-7,c.getWidth(),6,6,6);g.setColor(bar.getValue()>=bar.getMaximum()?WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS):WorkbenchUi.accent());g.fillRoundRect(0,c.getHeight()-7,(int)(c.getWidth()*bar.getPercentComplete()),6,6,6);g.dispose();}});bar.setBorder(null);}
 
   static void table(JTable table) {
     if (!(table.getUI() instanceof TableUi)) table.setUI(new TableUi());

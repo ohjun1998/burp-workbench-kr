@@ -1,0 +1,35 @@
+[
+  {
+    "stage": "environment user-width compatibility",
+    "result": "failed then corrected",
+    "evidence": "earlier-environment-width-summary.json",
+    "details": "The new maximum width clamped a user-set status column width before a data refresh. Removed only this maximum; default widths remain. Kept the original user-width, sort and reading-position regression assertions."
+  },
+  {
+    "stage": "component implementation and focused tests",
+    "result": "corrected",
+    "details": "Adjusted prior table-column assertions to the new six-column view while keeping nine model fields; added third-slot restoration. New evidence-filter test exposed an invalid post-delete view selection and was fixed. Added source/affected-URL clearing and report text selection checks."
+  },
+  {
+    "stage": "first full regression",
+    "result": "failed",
+    "evidence": "earlier-test-summary.json",
+    "details": "JsUiOptimizationTest referenced the now-unmounted source textarea; changed it to check the actual mounted labeled reader with the same minimum height. JsArchivePagingTest hit its existing 5-second worker timeout during concurrent rendering; it passed standalone without changing its timeout."
+  },
+  {
+    "stage": "small-window captures",
+    "result": "failed then corrected",
+    "evidence": "earlier-ui.json",
+    "details": "Formatting toolbars reduced writing height. Reduced toolbar spacing, rebalanced the evidence split, wrapped packet previews and required at least 65px for the evidence packet in addition to existing 55px writing checks. Last preflight was 64px; title padding was reduced by 2px without reducing any gate."
+  },
+  {
+    "stage": "long selected details",
+    "result": "corrected",
+    "details": "Added a regression for long field values; use viewport-width measurement and vertical scrolling. Detached text measurement avoids moving a live reader while laying out; capture scenario verifies selected JS detail starts at the first field."
+  },
+  {
+    "stage": "intermediate full runs",
+    "result": "interrupted",
+    "details": "Stopped only task-owned intermediate test process trees for the small-window adjustment and actual account URL column width correction. The complete final suite was then run serially on the frozen production source."
+  }
+]

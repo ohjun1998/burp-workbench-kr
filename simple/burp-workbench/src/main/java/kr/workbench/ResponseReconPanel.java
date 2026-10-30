@@ -4,7 +4,8 @@ import javax.swing.*;import javax.swing.table.DefaultTableModel;import java.awt.
 /** Scope-only response analysis; all work is passive and bounded. Repeater is explicit preparation only. */
 final class ResponseReconPanel extends JPanel implements AutoCloseable {
  final MontoyaApi api;final ObservationTableModel findings=model("규칙","URL (쿼리 제외)","근거 위치","관찰 근거","관측 횟수"),documents=model("메서드","경로 템플릿","쿼리 이름","본문 이름","관찰 결과"),flowModel=model("마커","쓰기 URL","조회 URL","쓰기 응답","조회 재출력","HTML 출력","브라우저 실행","HTTP");
- final PacketInspector findingResponse=new PacketInspector("wb.response.finding.response");
+ final PacketInspector findingResponse=new PacketInspector("wb.response.finding.response"),findingRequest=new PacketInspector("wb.response.finding.request");
+ final JTextArea findingUrls=new JTextArea();
  final JTable findingTable=new AuthLayout.Table(findings),apiTable=new JTable(documents),flowTable=new JTable(flowModel);final JLabel status=new JLabel("SCOPE 내 응답 자동 관찰 · 취약점 확정/추가 요청 없음");
  final StoredFlows flows=new StoredFlows();final LinkedHashMap<String,PassiveFindings.Finding> issues=new LinkedHashMap<>();final Map<String,Integer> counts=new HashMap<>();final Map<String,Set<String>> affected=new LinkedHashMap<>();volatile Map<String,Set<String>> displayedAffected=Map.of();final JTextArea findingDetail=new JTextArea(7,70);final LinkedHashMap<String,ApiInventory.Endpoint> inventory=new LinkedHashMap<>();final LinkedHashMap<String,Set<String>> observed=new LinkedHashMap<>();final Map<String,Set<String>> observedTemplates=new HashMap<>();
  final ThreadPoolExecutor worker=new ThreadPoolExecutor(1,1,0,TimeUnit.MILLISECONDS,new ArrayBlockingQueue<>(50),r->{Thread t=new Thread(r,"Workbench-response-recon");t.setDaemon(true);return t;});final AtomicLong generation=new AtomicLong();final AtomicBoolean closed=new AtomicBoolean(),counterUpdatePending=new AtomicBoolean();final AtomicInteger dropped=new AtomicInteger(),oversized=new AtomicInteger(),queueRejected=new AtomicInteger(),analysisErrors=new AtomicInteger();
@@ -45,23 +46,24 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   JButton clear=new JButton("관찰 초기화");apiDraft.addActionListener(e->{int row=apiTable.getSelectedRow();if(row<0){status.setText("API 항목을 선택하세요.");return;}String key=documents.getValueAt(apiTable.convertRowIndexToModel(row),0)+" "+documents.getValueAt(apiTable.convertRowIndexToModel(row),1);drafting=displayedInventory.get(key);if(drafting==null)return;resolved.setText(drafting.url());draftWindow.closeWindow();draftWindow.open();});clear.addActionListener(e->{generation.incrementAndGet();analysisQueue.cancelQueued();worker.getQueue().clear();retries.clear();submit(()->{issues.clear();counts.clear();countedOriginals.clear();affected.clear();clearPackets();synchronized(browserImages){browserImages.clear();}inventory.clear();observed.clear();observedTemplates.clear();flows.clear();refresh(generation.get());});});
   clear.setToolTipText("현재 Passive/API/저장·조회 관측과 마커를 모두 비웁니다. 원본 트래픽은 유지합니다.");JTabbedPane tabs=new JTabbedPane();tabs.setName("wb.response.pages");findingDetail.setEditable(false);findingDetail.setLineWrap(true);findingDetail.setWrapStyleWord(true);findingTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting()){showFinding();refreshActions();}});JPanel passivePage=new JPanel(new BorderLayout(4,4));findingCapture.setName("wb.response.finding.evidence");WorkbenchUi.primary(findingCapture);JButton more=new JButton("더보기");JPopupMenu maintenance=new JPopupMenu();JMenuItem clearItem=new JMenuItem("관찰 초기화");clearItem.addActionListener(e->clear.doClick());maintenance.add(clearItem);more.addActionListener(e->maintenance.show(more,0,more.getHeight()));
   passivePage.add(CompactWorkbenchUi.toolbar(CompactWorkbenchUi.search(findingTable,"wb.response.search","분류·URL·관찰 내용 검색"),WorkbenchUi.row(findingCapture,more)),BorderLayout.NORTH);
-  JTabbedPane detailTabs=new JTabbedPane();detailTabs.addTab("근거·영향 URL",new JScrollPane(findingDetail));
-  JSplitPane detailSplit=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,detailTabs,WorkbenchUi.card("관련 응답",findingResponse),.35);
+  JTabbedPane detailTabs=new JTabbedPane();findingUrls.setEditable(false);findingUrls.putClientProperty("wb.prose",true);
+  JSplitPane detailSplit=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,ReferenceUi.facts(findingDetail),WorkbenchUi.card("응답 본문 (Response)",findingResponse),.35);detailTabs.addTab("근거 상세",detailSplit);detailTabs.addTab("관련 요청",findingRequest);detailTabs.addTab("영향 URL",new JScrollPane(findingUrls));
   detailSplit.setName("wb.response.finding.detail");
-  JSplitPane findingSplit=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,new JScrollPane(findingTable),detailSplit,.42);
+  JSplitPane findingSplit=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,new JScrollPane(findingTable),detailTabs,.34);
   findingSplit.setName("wb.response.finding.split");passivePage.add(findingSplit);tabs.addTab("응답 관찰",passivePage);JPanel apiPage=new JPanel(new BorderLayout(4,4));apiDraft.setName("wb.response.api.draft");apiDraft.setToolTipText("선택 API의 URL 변수를 확인한 뒤 Repeater에 초안을 준비합니다. 서버로 전송하지 않습니다.");WorkbenchUi.primary(apiDraft);apiPage.add(WorkbenchUi.row(apiDraft,WorkbenchUi.hint("API 선택 → 경로 변수 확인 → 초안 준비")),BorderLayout.NORTH);apiPage.add(new JScrollPane(apiTable));apiTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())refreshActions();});tabs.addTab("API 문서",apiPage);tabs.addTab("저장/조회 연결",storedContent());tabs.addTab("분석 처리·재시도",retries.content(this::retryOriginal));add(tabs);add(status,BorderLayout.SOUTH);WorkbenchUi.feedback(status);int[][] widths={{190,290,140,270,80},{90,300,180,180,230},{150,230,230,150,160,130,160,70}};int t=0;for(JTable table:List.of(findingTable,apiTable,flowTable)){table.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);for(int i=0;i<table.getColumnCount();i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[t][i]);t++;}CompactWorkbenchUi.columns(findingTable,140,340,110,320,70);refreshActions();WorkbenchUi.style(this);
 
  }
 
  void showFinding(){
   int view=findingTable.getSelectedRow();
-  if(view<0){findingDetail.setText("");AuthComparePanel.loadInspector(findingResponse,null,null);return;}
+  if(view<0){findingDetail.setText("");findingUrls.setText("");AuthComparePanel.loadInspector(findingRequest,null,null);AuthComparePanel.loadInspector(findingResponse,null,null);return;}
   int row=findingTable.convertRowIndexToModel(view);
   String key=row<displayedFindingKeys.size()?displayedFindingKeys.get(row):"";
   String group=ApiInventory.origin(Objects.toString(findings.getValueAt(row,1),""))+"|"+findings.getValueAt(row,0)+"|"+findings.getValueAt(row,2)+"|"+findings.getValueAt(row,3);
-  String text="분류: "+findings.getValueAt(row,0)+"\n위치: "+findings.getValueAt(row,2)+"\n관찰: "+findings.getValueAt(row,3)+"\n\n관찰 후보 · 취약점 확정 아님\n\n영향 URL (쿼리 값 제외 · 그룹별 최대 100개)\n"+String.join("\n",displayedAffected.getOrDefault(group,Set.of()));
+  String text="분류: "+findings.getValueAt(row,0)+"\n\n위치: "+findings.getValueAt(row,2)+"\n\n관찰: "+findings.getValueAt(row,3)+"\n\n관찰 후보 · 취약점 확정 아님\n\n영향 URL (쿼리 값 제외 · 그룹별 최대 100개)\n"+String.join("\n",displayedAffected.getOrDefault(group,Set.of()));
   if(!text.equals(findingDetail.getText())){findingDetail.setText(text);findingDetail.setCaretPosition(0);}
-  var packet=displayedFindingPackets.get(key);
+  findingUrls.setText(String.join("\n",displayedAffected.getOrDefault(group,Set.of())));findingUrls.setCaretPosition(0);
+  var packet=displayedFindingPackets.get(key);AuthComparePanel.loadInspector(findingRequest,packet==null?null:packet.request(),null);
   AuthComparePanel.loadInspector(findingResponse,null,packet==null?null:packet.response());
  }
  JButton action(String title,Runnable task){JButton button=new JButton(title);button.addActionListener(e->{try{task.run();}catch(Exception ex){Diagnostics.failure(ResponseReconPanel.this,"응답 보안 분석",ex);status.setText(ex.getMessage());}});return button;}
@@ -276,5 +278,5 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   int view=table.convertRowIndexToView(modelRow);
   if(view>=0)table.setRowSelectionInterval(view,view);
  }
- @Override public void close(){findingResponse.close();closed.set(true);pendingView.set(null);retries.clear();generation.incrementAndGet();analysisQueue.close();markerWindow.close();draftWindow.close();flows.clear();clearPackets();displayedFindingPackets=Map.of();displayedFlowPackets=Map.of();displayedFlows=List.of();displayedFindingKeys=List.of();synchronized(browserImages){browserImages.clear();}flowDetail.setText("");}
+ @Override public void close(){findingResponse.close();findingRequest.close();closed.set(true);pendingView.set(null);retries.clear();generation.incrementAndGet();analysisQueue.close();markerWindow.close();draftWindow.close();flows.clear();clearPackets();displayedFindingPackets=Map.of();displayedFlowPackets=Map.of();displayedFlows=List.of();displayedFindingKeys=List.of();synchronized(browserImages){browserImages.clear();}flowDetail.setText("");}
 }

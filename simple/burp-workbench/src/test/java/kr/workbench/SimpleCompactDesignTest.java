@@ -22,6 +22,10 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
     Object payload = get(entry, "payloadRunner");
     try {
       edt(() -> {
+        JTextArea longSource=new JTextArea("위치   "+"long-path/".repeat(300));
+        JPanel facts=ReferenceUi.facts(longSource);facts.setSize(300,120);for(int pass=0;pass<6;pass++)UiLayoutTest.layout(facts);
+        JScrollPane factScroll=(JScrollPane)facts.getComponent(0);
+        check(factScroll.getViewport().getView().getPreferredSize().height>120,"long labeled values wrap and scroll instead of clipping the source");
         var request = request("https://compact.test/documents/101", "GET", true, List.of());
         auth.observe(AuthRecordTest.q("A"), response(200,"A"));
         auth.observe(AuthRecordTest.q("B"), response(200,"B"));
@@ -36,6 +40,12 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
             && auth.inlinePreview.response.text.getText().contains("ACCOUNT_B_ORIGINAL"),
             "inline account choice displays exact baseline and selected account response");
         check(auth.inlinePreview.differences.getText().contains("403")&&auth.inlinePreview.differences.getText().contains("200"),"account difference tab compares the selected exact response status lines");
+        var left=auth.inlinePreview.differenceBaseline;var right=auth.inlinePreview.differenceResponse;
+        check(right.text.getText().contains("ACCOUNT_B_ORIGINAL")&&right.text.getHighlighter().getHighlights().length>0,"difference panes retain the selected packet with actual differing ranges");
+        right.search.setText("ORIGINAL");right.search.setText("");
+        check(right.text.getHighlighter().getHighlights().length>0,"clearing packet search preserves difference decoration");
+        left.modePicker.setSelectedIndex(1);right.modePicker.setSelectedIndex(1);
+        check(right.text.getHighlighter().getHighlights().length>0&&right.text.getText().contains("ACCOUNT_B_ORIGINAL"),"Raw mode reapplies differences without altering source");
         check(auth.accountCards[0].getParent()!=null&&auth.accountCards[2].getParent()==null&&auth.accountCards[3].getParent()!=null,"three summary cards occupy three cells without a blank unassigned account cell");
         auth.mapCandidate(accounts.get(0),new AuthAccount("Alice","alice","101","문서 소유자","alice@compact.test"));auth.refreshSlots();
         check(auth.accountCards[0].getAccessibleContext().getAccessibleName().contains("alice@compact.test")&&auth.accountCards[0].getAccessibleContext().getAccessibleName().contains("문서 소유자"),"account summary uses the assigned email and role without exposing session credentials");
@@ -57,8 +67,10 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
         recon.findingTable.setRowSelectionInterval(0, 0);
         check(recon.findingResponse.text.getText().contains("EXACT_FINDING_PACKET"), "filtered row uses model identity to show the correct response");
         check(recon.findingDetail.getText().contains(q.url()), "affected URL grouping retains its original normalized-location mapping");
+        check(recon.findingRequest.text.getText().contains("/api/item")&&recon.findingUrls.getText().contains(q.url()),"related-request and affected-URL tabs use the selected original mapping");
         search.setText("does-not-exist");
         check(recon.findingTable.getSelectedRow() == -1 && !recon.findingResponse.text.getText().contains("EXACT_FINDING_PACKET"), "filtering away a row clears stale packet and selection");
+        check(!recon.findingRequest.text.getText().contains("/api/item")&&recon.findingUrls.getText().isEmpty(),"filtering clears both additional detail tabs");
 
         EvidenceEditingTest.append(bounty, "FIRST"); EvidenceEditingTest.append(bounty, "SECOND");
         bounty.evidenceTable.setRowSelectionInterval(1, 1);
@@ -68,6 +80,14 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
         bounty.evidenceTable.setRowSelectionInterval(0, 0);
         check(bounty.impact.getText().equals("keep authored impact") && bounty.repro.getText().equals("keep authored steps"), "reading another packet does not overwrite authored report text");
         check(bounty.evidence.get(1).evidenceId().equals(id), "reading evidence does not replace immutable evidence identity");
+        var evidenceSearch=(JTextField)SimpleWorkflowTest.named(bounty,"wb.bounty.evidence.search");
+        evidenceSearch.setText("SECOND");bounty.evidenceTable.setRowSelectionInterval(0,0);
+        check(bounty.evidencePacketPreview.getText().contains("SECOND"),"filtered evidence row resolves exact stored packet");
+        bounty.removeSelectedEvidence();evidenceSearch.setText("");
+        check(bounty.evidence.size()==1&&!bounty.evidence.get(0).evidenceId().equals(id),"remove through evidence search targets model identity");
+        bounty.impact.setText("retain selected words");bounty.impact.select(7,15);
+        JPanel editor=(JPanel)bounty.impact.getParent().getParent().getParent();SimpleWorkflowTest.clickText(editor,"B");
+        check(bounty.impact.getText().equals("retain **selected** words")&&bounty.evidence.get(0).label().equals("FIRST"),"formatting changes only selected report text and preserves packet evidence");
 
         var environment = (EnvironmentPanel) SimpleWorkflowTest.unchecked(extension, "environments");
         var toggle = (JToggleButton) SimpleWorkflowTest.named(environment, "wb.environment.observations.toggle");

@@ -194,7 +194,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
           category = null;
           refresh();
         });
-    JPanel observations = CompactWorkbenchUi.disclosure("wb.environment.observations", "관찰한 환경 · 펼치기 / 접기", new JScrollPane(technologies), false);
+    JPanel observations = CompactWorkbenchUi.disclosure("wb.environment.observations", "관찰 환경", new JScrollPane(technologies), false);
     observations.getComponent(1).setPreferredSize(new Dimension(600, 100));
     JPanel lists = new JPanel(new BorderLayout(0, 4));
     lists.setName("wb.environment.candidates");
@@ -204,7 +204,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     JPanel commands=CompactWorkbenchUi.toolbar(search,WorkbenchUi.row(single,start,pause,stop,settings,more));
     JPanel candidateHeader=new JPanel(new BorderLayout());candidateHeader.add(commands);candidateHeader.add(selection,BorderLayout.SOUTH);candidatePanel.add(candidateHeader,BorderLayout.NORTH);lists.add(candidatePanel);
     JSplitPane messages = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
-        WorkbenchUi.card("요청", new JScrollPane(requestView)),
+        WorkbenchUi.card("요청", packetTabs(requestView)),
         WorkbenchUi.card("응답", responsePane()), .5);
     messages.setName("wb.environment.messages");
     JSplitPane workspace = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, lists, messages, .4);
@@ -217,7 +217,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     int[] widths = {440, 210, 300, 190};
     for (int i = 0; i < widths.length; i++)
       pathTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
-    pathTable.moveColumn(3, 0);
+    pathTable.moveColumn(3, 0);CompactWorkbenchUi.columns(pathTable,110,480,250,300);
     pathTable
         .getSelectionModel()
         .addListSelectionListener(
@@ -469,13 +469,15 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     return p;
   }
 
+  JPanel packetTabs(JTextArea area){return packetTabs(area,null);}
+  JPanel packetTabs(JTextArea area,JComponent action){JPanel p=new JPanel(new BorderLayout());JToggleButton raw=ReferenceUi.tab("Raw"),pretty=ReferenceUi.tab("JSON");ButtonGroup group=new ButtonGroup();group.add(raw);group.add(pretty);pretty.setSelected(formatted.isSelected());raw.setSelected(!formatted.isSelected());raw.addActionListener(e->{if(formatted.isSelected())formatted.doClick();});pretty.addActionListener(e->{if(!formatted.isSelected())formatted.doClick();});formatted.addItemListener(e->{pretty.setSelected(formatted.isSelected());raw.setSelected(!formatted.isSelected());});p.add(ReferenceUi.header(ReferenceUi.stepRow(raw,pretty),action==null?null:WorkbenchUi.row(action)),BorderLayout.NORTH);p.add(new JScrollPane(area));return p;}
+
   JPanel responsePane() {
     JPanel p = new JPanel(new BorderLayout(0, 4));
     JButton evidence=new JButton("판정 근거");evidence.addActionListener(e->resultDetails.open());
-    p.add(WorkbenchUi.row(formatted,evidence), BorderLayout.NORTH);
     responseView.setLineWrap(true);
     responseView.setWrapStyleWord(false);
-    p.add(new JScrollPane(responseView));
+    p.add(packetTabs(responseView,evidence));
     return p;
   }
 

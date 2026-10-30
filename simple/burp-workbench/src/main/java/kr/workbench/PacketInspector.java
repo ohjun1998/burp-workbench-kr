@@ -17,6 +17,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   enum Mode { PRETTY, RAW, HEX, RENDER }
   static final int PREVIEW_BYTES = 65536, MAX_MATCHES = 2000;
   final JTextPane text;
+  Runnable displayDecoration=()->{};
   final JEditorPane rendered = PacketRender.pane();
   final JLabel renderNotice = new JLabel("정적 HTML · 외부 요청 없음");
   final JPanel renderPanel = new JPanel(new BorderLayout());
@@ -359,7 +360,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());
     WorkbenchUi.style(renderPanel);rendered.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES,true);
     if(mode==Mode.RENDER){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
-    colorize();lines.repaint();toolbar.revalidate();toolbar.repaint();searchBar.revalidate();
+    colorize();lines.repaint();toolbar.revalidate();toolbar.repaint();searchBar.revalidate();displayDecoration.run();
   }
 
   private void colorize() {
@@ -393,7 +394,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     if(closed)return;
     if(displayingTrafficContext||trafficSearchActive)return;
     generation.incrementAndGet();debounce.stop();if(pending!=null)pending.cancel(true);worker.getQueue().clear();
-    matches=List.of();current=-1;currentHighlight=null;text.getHighlighter().removeAllHighlights();
+    matches=List.of();current=-1;currentHighlight=null;text.getHighlighter().removeAllHighlights();displayDecoration.run();
     count.setText("0 / 0");count.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));count.setToolTipText(null);previous.setEnabled(false);next.setEnabled(false);
     if(mode!=Mode.RENDER&&!search.getText().isEmpty()){count.setText("…");debounce.restart();}
   }

@@ -351,7 +351,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     table.setAutoCreateRowSorter(true);
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     int[] widths={50,75,400,65,150,80,80},minimums={40,60,220,55,80,60,60};
-    for(int i=0;i<widths.length;i++){table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);table.getColumnModel().getColumn(i).setMinWidth(minimums[i]);}
+    for(int i=0;i<widths.length;i++){table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);table.getColumnModel().getColumn(i).setWidth(widths[i]);table.getColumnModel().getColumn(i).setMinWidth(minimums[i]);}
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
     renderer.putClientProperty("html.disable", true);
     table.setDefaultRenderer(Object.class, renderer);

@@ -78,6 +78,7 @@ def main() -> int:
     required = {
         ('02-request.png', 'wb.traffic.request.text'): 65,
         ('02-request.png', 'wb.traffic.response.text'): 65,
+        ('05-evidence.png', 'wb.bounty.evidence.packet'): 65,
         ('05-evidence.png', 'wb.simple.evidence.impact'): 55,
         ('05-evidence.png', 'wb.simple.evidence.repro'): 55,
         ('06-redaction.png', 'wb.simple.evidence.preview.text'): 200,

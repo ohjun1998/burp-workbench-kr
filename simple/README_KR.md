@@ -1,4 +1,6 @@
-# Workbench Simple 1.4.6
+# Workbench Simple 1.4.8
+
+**Simple 1.4.8은 시안의 단계·요약 줄·계정 비교·상세 정보·증거 편집 구성 요소를 다시 적용합니다.** [설치 JAR](downloads/1.4.8/burp-workbench-simple-1.4.8.jar) · [8개 실제 화면](docs/images/1.4.8/README.md) · [시안 비교](docs/design/1.4.8/COMPARE.html) · [변경·검증](docs/RELEASE_SIMPLE_1.4.8_KR.md). 아래 이전 버전은 보존 이력입니다.
 
 **Simple 1.4.7은 계정 카드·개수 배지·기능 트리부터 공통 버튼·표·패킷까지 세부 디자인을 적용합니다.** [설치 JAR](downloads/1.4.7/burp-workbench-simple-1.4.7.jar) · [8개 실제 화면](docs/images/1.4.7/README.md) · [변경·검증](docs/RELEASE_SIMPLE_1.4.7_KR.md). 아래 이전 버전 파일과 설명은 보존 이력입니다.
 

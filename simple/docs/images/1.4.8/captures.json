@@ -1,0 +1,154 @@
+{
+  "version": "1.4.8",
+  "kind": "Production Swing with synthetic adapters; not native Burp GUI",
+  "dimensions": [
+    1600,
+    1000
+  ],
+  "captures": [
+    {
+      "tool": "01-traffic",
+      "title": "요청·응답 목록",
+      "theme": "light",
+      "file": "01-traffic-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/01-capture.png",
+      "sha256": "eb4fa1a358b91e21080cde0f1d56a095835dc3fc51839ea37bb3035bd2d56e37"
+    },
+    {
+      "tool": "01-traffic",
+      "title": "요청·응답 목록",
+      "theme": "dark",
+      "file": "01-traffic-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/01-capture.png",
+      "sha256": "578d73247896d62c520dc05c31b7291ada2b68fd62c2839b583cd3314a70f617"
+    },
+    {
+      "tool": "02-mapper",
+      "title": "기능 자동 매핑",
+      "theme": "light",
+      "file": "02-mapper-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/08-mapper.png",
+      "sha256": "d7fabbdc46ed61ae008751c2a67f69808635aee9c7f6f1b7bf0ea3b16090e064"
+    },
+    {
+      "tool": "02-mapper",
+      "title": "기능 자동 매핑",
+      "theme": "dark",
+      "file": "02-mapper-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/08-mapper.png",
+      "sha256": "d19f35613b06d06da255df67f03cc426c405015b5381f1d98b6d312ace398aba"
+    },
+    {
+      "tool": "03-auth",
+      "title": "계정 권한 비교",
+      "theme": "light",
+      "file": "03-auth-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/04-auth-results.png",
+      "sha256": "02328d74cf8420060a5f741612afd508b54d60037c286c1fdf7aa657ec25a634"
+    },
+    {
+      "tool": "03-auth",
+      "title": "계정 권한 비교",
+      "theme": "dark",
+      "file": "03-auth-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/04-auth-results.png",
+      "sha256": "4e34b0d9e456ea5cce5ee3189a7b8e8c77c89f9dc52cf0ec47d411eaab7fec01"
+    },
+    {
+      "tool": "04-js",
+      "title": "JS에서 API 찾기",
+      "theme": "light",
+      "file": "04-js-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/10-js.png",
+      "sha256": "c73ce155165cdcca1d3b61ddf899ef6a7f05e045f8d679a93beb889ca27f5030"
+    },
+    {
+      "tool": "04-js",
+      "title": "JS에서 API 찾기",
+      "theme": "dark",
+      "file": "04-js-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/10-js.png",
+      "sha256": "4ae884827f5da1485b44d3da9d3f430f4e6f9cbdce05e993421a1ff5d3f8a493"
+    },
+    {
+      "tool": "05-environment",
+      "title": "서버·경로 탐색",
+      "theme": "light",
+      "file": "05-environment-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/09-environment.png",
+      "sha256": "25dcccb8f3bd326ca2a1f2c617adf4906dbcaa5be1b03f15571c0bbf89020dba"
+    },
+    {
+      "tool": "05-environment",
+      "title": "서버·경로 탐색",
+      "theme": "dark",
+      "file": "05-environment-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/09-environment.png",
+      "sha256": "99509b2a3223d883d269e223ccbbf739e0d473f03cf0bc1c9f6634f3c3f21117"
+    },
+    {
+      "tool": "06-response",
+      "title": "응답 보안 분석",
+      "theme": "light",
+      "file": "06-response-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/03-analysis.png",
+      "sha256": "c47431d598ef38adba77df0096faecfef00719b4ed0399613b2d0334bfef7650"
+    },
+    {
+      "tool": "06-response",
+      "title": "응답 보안 분석",
+      "theme": "dark",
+      "file": "06-response-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/03-analysis.png",
+      "sha256": "906597e099ea20907638c84f14fcd399d5a32fbcacbd55b885ec343af6cfe645"
+    },
+    {
+      "tool": "07-payload",
+      "title": "입력값 보안 검사",
+      "theme": "light",
+      "file": "07-payload-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/07-payload-results.png",
+      "sha256": "6d349d913e7877f0a1dcc605ec06cab4b532b50cffe2fca5833d903beaba84d8"
+    },
+    {
+      "tool": "07-payload",
+      "title": "입력값 보안 검사",
+      "theme": "dark",
+      "file": "07-payload-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/07-payload-results.png",
+      "sha256": "b54b8e5c1ffd925cbdf07be93dd758b106a9e106aa1b7d986c06ab4cf6205414"
+    },
+    {
+      "tool": "08-evidence",
+      "title": "재현·증거 정리",
+      "theme": "light",
+      "file": "08-evidence-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/05-evidence.png",
+      "sha256": "d0add2a46792eb14b8cb483fc2d16f3e818b98de207f48e2400f9267cf4ceadf"
+    },
+    {
+      "tool": "08-evidence",
+      "title": "재현·증거 정리",
+      "theme": "dark",
+      "file": "08-evidence-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/05-evidence.png",
+      "sha256": "598c9fde34f8e58a808b7b5fe6dfb46837cd02e9c1b6a3509dcf8cdcf692f086"
+    },
+    {
+      "tool": "07-payload-prepare",
+      "title": "입력값 검사 준비",
+      "theme": "light",
+      "file": "07-payload-prepare-light.png",
+      "source": "tmp/reference-ship-ui/light/1600x1000/07-payload.png",
+      "sha256": "30282e0b5398208d5b8308e5efd0222ecd4477d17e6ab08f131a9982fe9d484b"
+    },
+    {
+      "tool": "07-payload-prepare",
+      "title": "입력값 검사 준비",
+      "theme": "dark",
+      "file": "07-payload-prepare-dark.png",
+      "source": "tmp/reference-ship-ui/dark/1600x1000/07-payload.png",
+      "sha256": "2a739a714c00cc699363d1e414fcf3eaf8ec2c3f90f6d749cc9d4bda5e594f28"
+    }
+  ]
+}

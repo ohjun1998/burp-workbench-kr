@@ -524,15 +524,15 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       boolean toolNode = node.getUserObject() instanceof Tool;
       setText(node.toString());
-      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(14f)));
+      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(15f)));
       setBorder(BorderFactory.createEmptyBorder(toolNode?8:row==0?18:30, 2, toolNode?8:10, 8));
-      Icon icon = WorkspaceIcons.of(toolNode?((Tool)node.getUserObject()).id():node.toString().contains("보안")?"security":node.toString().contains("탐색")?"discovery":node.toString().contains("데이터")?"data":node.toString().contains("증거")?"activity":"group");
+      Icon icon = WorkspaceIcons.of(toolNode?((Tool)node.getUserObject()).id():"folder");
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
       setDisabledIcon(icon);
       boolean available = !toolNode || indexOf(((Tool) node.getUserObject()).id()) >= 0;
       setEnabled(available);
-      setForeground(available ? WorkbenchUi.ink() : WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
+      setForeground(available ? active(node)?WorkbenchUi.accent():WorkbenchUi.ink() : WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
       return this;
     }
 
@@ -658,7 +658,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setCellRenderer(renderer);
     tree.setRowHeight(0);
     tree.setOpaque(false);
-    tree.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(14f)));
+    tree.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f)));
     tree.setBackground(WorkbenchUi.surface());
     tree.treeDidChange();
     sidebar.setMinimumSize(new Dimension(minimumMenuWidth(),80));

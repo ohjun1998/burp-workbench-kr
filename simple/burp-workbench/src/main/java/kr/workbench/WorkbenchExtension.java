@@ -229,13 +229,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   public void selectPayloadRunnerPage() {
-    if (payloadPage != null) tabs.setSelectedComponent(payloadPage);
+    if (workbenchWindow != null) workbenchWindow.open();
+    if (payloadPage != null) selectWorkspacePage(payloadPage);
   }
 
   public void capturePayloadEvidence(
       burp.api.montoya.http.HttpService service, java.util.List<kr.payloadrunner.Engine.Row> rows) {
     bountySupport.capturePayload(service, rows);
-    tabs.setSelectedComponent(bountySupport);
+    selectWorkspacePage(bountySupport);
     bountySupport.pages.setSelectedIndex(3);
   }
 
@@ -252,6 +253,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private JPanel root;
+  private WorkbenchWindow workbenchWindow;
   private EnvironmentPanel environments;
   private ExposureResearchPanel exposureResearch;
   private PassiveScanWorkspace passiveScan;
@@ -379,6 +381,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (resumeSelectionTimer != null) resumeSelectionTimer.stop();
                     if (navigationSelectionTimer != null) navigationSelectionTimer.stop();
                     if (navigation != null) navigation.close();
+                    if (workbenchWindow != null) workbenchWindow.close();
                     if (scopeInspectionWindow != null) scopeInspectionWindow.close();
                     closeScopeOriginalWindows();
                     if (scopeInspectionPanel != null) scopeInspectionPanel.close();
@@ -551,7 +554,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     };
     activity.sourceNavigator =
         (source, line, kind) -> {
-          tabs.setSelectedComponent(jsAnalysis);
+          selectWorkspacePage(jsAnalysis);
           jsAnalysis.navigateSource(source, line, kind);
         };
     authCompare.reviewSink = (method, url, reason) -> activity.review(method, url, reason);
@@ -586,12 +589,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         activity.assessmentPanel.showExecutionMetadata(id);
         return;
       }
-      tabs.setSelectedComponent(authCompare);
+      selectWorkspacePage(authCompare);
       authCompare.openComparison(run);
     };
     activity.assessmentPanel.evidenceNavigator = id -> {
       AuthComparePanel.Run run = selectAssessmentExecution(id);
-      tabs.setSelectedComponent(bountySupport);
+      selectWorkspacePage(bountySupport);
       bountySupport.pages.setSelectedIndex(3);
       bountySupport.state.setText(run == null
           ? "연결 실행의 패킷이 현재 비교 이력에 없습니다. 저장 ZIP을 확인하거나 원본을 직접 준비하세요."
@@ -603,7 +606,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     responseRecon.storedEvidenceSink =
         (packets, note, image, sha) -> {
           bountySupport.captureObservedWithImage(packets, note, image, sha);
-          tabs.setSelectedComponent(bountySupport);
+          selectWorkspacePage(bountySupport);
         };
     featureMapper = new kr.featuremapper.FeatureMapperWorkspace();
     JPanel mapperPage = featureMapper.initializeEmbedded(api,
@@ -673,8 +676,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     tabs.addChangeListener(e -> dashboard.setSelected(tabs.getSelectedComponent() == scopeDashboard));
     JButton inspect = button("Scope 통합 점검", this::openScopeInspection);
     inspect.setName("wb.scope.inspection.open");
+    workbenchWindow = new WorkbenchWindow(root);
     navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton,
-        true, dashboard, inspect);
+        true, dashboard, inspect, workbenchWindow.fullScreenButton);
     root.add(navigation);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
@@ -686,7 +690,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     api.userInterface().applyThemeToComponent(root);
     WorkbenchUi.style(root);
     navigation.restoreLayout();
-    api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB, root);
+    WorkbenchUi.style(workbenchWindow.launcher);
+    api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB, workbenchWindow.launcher);
     WorkbenchSkin.install(root, navigation::restoreLayout);
     workspaceResume = WorkspaceResume.forApi(api);
     workspaceProject = workspaceResume.project();
@@ -1051,8 +1056,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   /** Stable feature IDs keep old help links working after tools move into focused workspaces. */
+  private void selectWorkspacePage(Component page) {
+    if (unloaded.get()) return;
+    if (workbenchWindow != null) workbenchWindow.open();
+    tabs.setSelectedComponent(page);
+  }
+
   void openFeature(String id) {
     if (unloaded.get()) return;
+    if (workbenchWindow != null) workbenchWindow.open();
     String pageId = switch (id) {
       case "data" -> "traffic";
       case "passive" -> "environment";
@@ -1226,7 +1238,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         public void repeater(DiskTrafficStore.PacketRef packet){api.repeater().sendToRepeater(packet.request(),"Scope 통합 점검");}
         public void compare(DiskTrafficStore.PacketRef packet){
           var request=packet.request();comparisonOriginalIds.remember(request,packet.id());workContext.select(packet);
-          tabs.setSelectedComponent(authCompare);authCompare.stageReadiness(List.of(HttpRequestResponse.httpRequestResponse(request,packet.response())));
+          selectWorkspacePage(authCompare);authCompare.stageReadiness(List.of(HttpRequestResponse.httpRequestResponse(request,packet.response())));
         }
         public void evidence(List<DiskTrafficStore.PacketRef> packets,String note){captureScopeEvidence(packets,note);}
         public void tool(String id,DiskTrafficStore.PacketRef packet){
@@ -1342,13 +1354,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       String actor=page==null?"미연결":page.account();String condition=page==null?"":page.profileRevision();
       bountySupport.remember(request,response,"통합 점검 · "+actor,note+" · "+condition,actor,Set.of(),secrets);
     }
-    bountySupport.refreshActions();tabs.setSelectedComponent(bountySupport);bountySupport.pages.setSelectedIndex(3);
+    bountySupport.refreshActions();selectWorkspacePage(bountySupport);bountySupport.pages.setSelectedIndex(3);
     bountySupport.state.setText("통합 점검 원본 "+packets.size()+"개 연결 · 가림 미리보기 후 ZIP 저장");
   }
 
   private void captureObserved(List<HttpRequestResponse> packets, String note) {
     bountySupport.captureObserved(packets, note);
-    tabs.setSelectedComponent(bountySupport);
+    selectWorkspacePage(bountySupport);
   }
 
   private JPanel dataPanel() {
@@ -1460,7 +1472,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             "선택 요청 계정 비교 실행",
             () -> {
               selectedTraffic();
-              tabs.setSelectedIndex(1);
+              openFeature("auth");
               authCompare.reviewSelection();
             }));
     trafficMenu.add(
@@ -1475,7 +1487,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             "재현·증거 정리 열기",
             () -> {
               selectedTraffic();
-              tabs.setSelectedComponent(bountySupport);
+              selectWorkspacePage(bountySupport);
             }));
     trafficMenu.add(trafficAction("선택 요청 JWT 확인", this::selectedJwt));
     trafficMenu.add(trafficAction("선택 응답에서 API 찾기", this::selectedJs));
@@ -1645,7 +1657,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
 
   private void prepareSimpleComparison() {
     selectedTraffic();
-    tabs.setSelectedComponent(authCompare);
+    selectWorkspacePage(authCompare);
     authCompare.reviewSelection();
   }
 
@@ -2105,7 +2117,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private void prepareRemainingCheck(AssessmentTracker.RemainingCheck check) {
     if (unloaded.get()) return;
     if (check.originalId().isEmpty()) {
-      tabs.setSelectedIndex(0);
+      openFeature("traffic");
       status.setText("연결 원본 없음 · " + check.method() + " " + check.url()
           + "의 정확한 요청·응답을 직접 선택한 뒤 비교 준비를 여세요.");
       return;
@@ -2129,7 +2141,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               throw new IllegalArgumentException("업무·실행 조건이 바뀌었습니다. 남은 점검을 다시 선택하세요.");
             if (!localScope.matchesTraffic(ref.url())) throw new IllegalArgumentException("연결 원본이 현재 SCOPE 밖입니다.");
             comparisonOriginalIds.remember(packet.request(), ref.id());
-            tabs.setSelectedComponent(authCompare);
+            selectWorkspacePage(authCompare);
             authCompare.stageReadiness(List.of(packet));
             authCompare.state.setText("업무 원본 준비 · 점검 계정 "
                 + activity.tracker.assessments.account(check.account()).label()

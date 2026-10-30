@@ -1,0 +1,20 @@
+{
+  "version": "1.4.10",
+  "totalChecks": 6029,
+  "headlessViews": 194,
+  "nativeWindowChecks": 50,
+  "nativeWindowThemes": 2,
+  "katanaChecks": 102,
+  "sharedHeaderHeight": 36,
+  "galleryScreens": 13,
+  "galleryPngs": 32,
+  "galleryZipCrcVerified": true,
+  "packageVerified": true,
+  "jarSha256": "e863f670a2ba95d57c1f2c74bf06e3b476e0c9451247d47e7e399d5d52422560",
+  "jarBytes": 6311898,
+  "sourceSha256": "eb189f132228e668df1cdfcf0fa1538a5d770e06c67f4044afd64b9e5d80e7d4",
+  "sourceBytes": 97131221,
+  "galleryZipSha256": "814790173ac4b34d774384d8f192223d8d2875d94e92c9c90307c0af836404a0",
+  "nativeBurpGuiVerified": false,
+  "windowsDpiImeVerified": false
+}

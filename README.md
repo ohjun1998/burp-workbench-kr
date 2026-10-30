@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.11은 오른쪽 위 Guide 버튼으로 빨간 번호 사용 설명을 엽니다.** 16개 화면·96개 단계의 별도 가이드 창과 중복/보조 기능 정리를 제공합니다. [설치 JAR](simple/downloads/1.4.11/burp-workbench-simple-1.4.11.jar) · [가이드·정리 검토 이미지](simple/docs/images/1.4.11/README.md) · [사용법](simple/docs/RELEASE_SIMPLE_1.4.11_KR.md).
+
 **Simple 1.4.10은 Workbench를 독립 창으로 엽니다.** 최대화·F11 전체화면, 36px 공통 상단과 색상·마우스 반응을 더한 메뉴를 적용합니다. [설치 JAR](simple/downloads/1.4.10/burp-workbench-simple-1.4.10.jar) · [실제 화면](simple/docs/images/1.4.10/README.md) · [사용법](simple/docs/RELEASE_SIMPLE_1.4.10_KR.md).
 
 **Simple 1.4.9는 외부 노출·CVE 조사를 추가합니다.** Google 검색식·결과 URL과 NVD/KEV/EPSS 후보를 두 탭으로 검토합니다. [설치 JAR](simple/downloads/1.4.9/burp-workbench-simple-1.4.9.jar) · [구현 화면](simple/docs/images/1.4.9/README.md) · [기능·제한](simple/docs/RELEASE_SIMPLE_1.4.9_KR.md).

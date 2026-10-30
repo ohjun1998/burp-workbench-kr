@@ -1,0 +1,785 @@
+{
+  "status": "review-proposal-not-a-removal-list",
+  "note": "분명한 중복3종과 증거 서식 보조/반복 제목2종을 이번 버전에서 제거했습니다. 실선은 반영 항목, 점선은 추가 검토 후보입니다. 후보의 모든 기능을 삭제한 것은 아닙니다. 사용 빈도 통계는 없으며 SCOPE·인증·실행/중지·한도·원본ID는 유지합니다.",
+  "commonCandidates": [
+    {
+      "n": 0,
+      "label": "기존 텍스트 도움말 아이콘/창",
+      "reason": "새 번호 가이드가 화면별 사용 설명을 제공하므로 기존 텍스트 안내 창과 별도 기능 선택 화면을 교체했습니다.",
+      "recommendation": "remove-duplicate",
+      "x": 0.925625,
+      "y": 0.003,
+      "width": 0.01875,
+      "height": 0.03,
+      "pixelBounds": [
+        1481,
+        3,
+        30,
+        30
+      ],
+      "kind": "replaced-legacy-help",
+      "status": "approved-root-implementation",
+      "retainedAccess": "새 Guide와 F1; 프로필별 Engine.hint 등 고유 설정 설명은 유지",
+      "sourceProof": "WorkbenchExtension.openFeatureHelp 구형 창 UI만 새 시각Guide로 통합"
+    }
+  ],
+  "screens": [
+    {
+      "id": "traffic",
+      "title": "요청·응답 목록",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/01-traffic.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "요청 Hex·Render 상시 탭",
+          "reason": "Pretty·Raw는 기본으로 두고 바이트/렌더 뷰를 추가 메뉴로 묶으면 탭 밀도를 줄일 수 있습니다. 저빈도라는 사용 통계는 없습니다.",
+          "recommendation": "move-more",
+          "x": 0.234375,
+          "y": 0.492,
+          "width": 0.066875,
+          "height": 0.035,
+          "pixelBounds": [
+            375,
+            492,
+            107,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "보기 메뉴에서 Hex·Render를 그대로 선택; 원본 바이트 보존",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "응답 Hex·Render 상시 탭",
+          "reason": "요청 창과 같은 고급 보기 제어가 양쪽에 반복 노출됩니다. 기능 자체는 고유하므로 삭제 근거는 없습니다.",
+          "recommendation": "move-more",
+          "x": 0.65875,
+          "y": 0.492,
+          "width": 0.09375,
+          "height": 0.035,
+          "pixelBounds": [
+            1054,
+            492,
+            150,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "응답 보기 메뉴 및 기존 원본 읽기 경로",
+          "sourceProof": ""
+        },
+        {
+          "n": 3,
+          "label": "목록 고정 상시 버튼",
+          "reason": "계속 들어오는 목록을 고정하는 보조 동작입니다. 기능을 삭제하지 않고 메뉴로 옮기는 검토만 권합니다.",
+          "recommendation": "move-more",
+          "x": 0.903125,
+          "y": 0.952,
+          "width": 0.0525,
+          "height": 0.035,
+          "pixelBounds": [
+            1445,
+            952,
+            84,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "목록 더보기의 고정 체크; 고정 중에는 상태 표시 유지",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "mapper",
+      "title": "기능 자동 매핑",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/02-mapper.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "하단의 선택 패킷 분류 수정",
+          "reason": "상단 분류 수정과 정확히 같은 movePackets 메서드를 호출하는 중복 버튼입니다.",
+          "recommendation": "remove-duplicate",
+          "x": 0.146875,
+          "y": 0.918,
+          "width": 0.14375,
+          "height": 0.035,
+          "pixelBounds": [
+            235,
+            918,
+            230,
+            35
+          ],
+          "kind": "verified-duplicate",
+          "status": "implemented",
+          "retainedAccess": "상단 분류 수정 유지",
+          "sourceProof": "FeatureMapperWorkspace.java의 두 버튼 모두 this::movePackets; 하단 actions.add만 삭제"
+        },
+        {
+          "n": 2,
+          "label": "매핑 설정 상시 버튼",
+          "reason": "설정 접근을 정리할 수 있지만 설정 값이나 매핑 엔진을 삭제하면 안 됩니다. 메뉴 이동 검토 대상입니다.",
+          "recommendation": "move-more",
+          "x": 0.359375,
+          "y": 0.049,
+          "width": 0.05,
+          "height": 0.035,
+          "pixelBounds": [
+            575,
+            49,
+            80,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "프로젝트 또는 더보기의 매핑 설정",
+          "sourceProof": ""
+        },
+        {
+          "n": 3,
+          "label": "점검 업무로 연결 상시 버튼",
+          "reason": "매핑에서 업무 초안을 만드는 고유 연계입니다. 초기 분류를 보는 동안은 상세/더보기로 정리할 수 있으나 기능 삭제 근거는 없습니다.",
+          "recommendation": "move-more",
+          "x": 0.146875,
+          "y": 0.957,
+          "width": 0.14375,
+          "height": 0.035,
+          "pixelBounds": [
+            235,
+            957,
+            230,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "선택 기능 더보기에서 업무 연결; 기존 ID·계정/SCOPE 검토 유지",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "js",
+      "title": "JS에서 API 찾기",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/03-js.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "추가 도구 전용 버튼",
+          "reason": "전용 메뉴에는 관찰된 API 패킷 보기 한 항목만 있습니다. 기존 더보기 메뉴에 통합하면 버튼을 하나 줄일 수 있습니다.",
+          "recommendation": "move-more",
+          "x": 0.3075,
+          "y": 0.051,
+          "width": 0.049375,
+          "height": 0.035,
+          "pixelBounds": [
+            492,
+            51,
+            79,
+            35
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "더보기의 관찰된 API 패킷 보기 유지",
+          "sourceProof": "JsAnalysisPanel.java: toolMenu에 observed 한 항목 추가; moreMenu는 별도로 존재"
+        },
+        {
+          "n": 2,
+          "label": "NPM·소스맵·복원 원본 상시 탭",
+          "reason": "기본 API 찾기보다 심화 결과입니다. 추가 분석 아래 묶는 제안이며 각 결과와 분석 기능은 유지해야 합니다.",
+          "recommendation": "fold",
+          "x": 0.764375,
+          "y": 0.158,
+          "width": 0.17875,
+          "height": 0.039,
+          "pixelBounds": [
+            1223,
+            158,
+            286,
+            39
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "추가 분석 선택/탭; 현재 선택 결과가 있으면 직접 표시",
+          "sourceProof": ""
+        },
+        {
+          "n": 3,
+          "label": "대기·캐시·퇴출 상세 수치",
+          "reason": "메모리 예산 관련 진단 값이 주 화면에 노출됩니다. 일반 상태와 오류는 남기고 상세 계수만 진단 정보로 접을 수 있습니다.",
+          "recommendation": "fold",
+          "x": 0.77375,
+          "y": 0.968,
+          "width": 0.221875,
+          "height": 0.025,
+          "pixelBounds": [
+            1238,
+            968,
+            355,
+            25
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "진행 상태 상세/오류 진단; 실패·예산 초과는 항상 표시",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "environment",
+      "title": "서버·경로 탐색",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/04-environment.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "전체 환경 반복 라벨",
+          "reason": "기본 상태에서 상단 전체 환경 버튼과 같은 문구가 별도 줄에 반복됩니다. 선택 필터가 있을 때의 설명은 유지해야 합니다.",
+          "recommendation": "remove-duplicate",
+          "x": 0.14875,
+          "y": 0.182,
+          "width": 0.128125,
+          "height": 0.024,
+          "pixelBounds": [
+            238,
+            182,
+            205,
+            24
+          ],
+          "kind": "conditional-duplicate",
+          "status": "optional-not-implemented",
+          "retainedAccess": "전체 상태에서는 라벨 생략; 분류 필터를 선택하면 현재 분류 표시",
+          "sourceProof": "EnvironmentPanel.java selection JLabel 기본값이 전체 환경, all 버튼도 전체 환경"
+        },
+        {
+          "n": 2,
+          "label": "기본 상태의 전체 환경 초기화 버튼",
+          "reason": "이미 전체 상태일 때는 초기화 동작이 필요하지 않습니다. 특정 관측 환경을 고른 경우에만 노출하는 검토입니다.",
+          "recommendation": "fold",
+          "x": 0.523125,
+          "y": 0.049,
+          "width": 0.05,
+          "height": 0.035,
+          "pixelBounds": [
+            837,
+            49,
+            80,
+            35
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "분류 필터가 있는 동안 초기화 버튼과 명확한 현재 분류 유지",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "exposure.search",
+      "title": "외부 노출 조사 · 검색 노출",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/05-exposure-search.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "검색 결과 가져오기 안내 전용 줄",
+          "reason": "목록이 채워진 뒤에도 반복 안내가 별도 줄을 차지합니다. 빈 상태/Guide로 옮기되 미확인·SCOPE 경고는 유지합니다.",
+          "recommendation": "fold",
+          "x": 0.14875,
+          "y": 0.226,
+          "width": 0.59,
+          "height": 0.034,
+          "pixelBounds": [
+            238,
+            226,
+            944,
+            34
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "빈 목록 안내와 Guide; 미확인/범위 상태는 목록·상세에 항상 유지",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "선택 삭제 상시 버튼",
+          "reason": "조사보다 목록 관리에 가까운 보조 동작입니다. 기능 삭제가 아니라 목록 메뉴 이동 검토입니다.",
+          "recommendation": "move-more",
+          "x": 0.94,
+          "y": 0.225,
+          "width": 0.05,
+          "height": 0.035,
+          "pixelBounds": [
+            1504,
+            225,
+            80,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "결과 목록 컨텍스트/더보기의 선택 삭제",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "exposure.cve",
+      "title": "외부 노출 조사 · CVE 후보",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/06-exposure-cve.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "성공 시 긴 제공자 상태 한 줄",
+          "reason": "같은 조회 시각과 제공자 상태가 아래 출처 상세에 반복됩니다. 성공 상세는 접고 캐시·실패·미확인 상태는 상단 배지로 유지할 수 있습니다.",
+          "recommendation": "fold",
+          "x": 0.146875,
+          "y": 0.232,
+          "width": 0.725,
+          "height": 0.028,
+          "pixelBounds": [
+            235,
+            232,
+            1160,
+            28
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "상단 캐시/오류 배지 + 아래 조회 시각/제공자 상태 원문",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "값이 없는 수정 버전 카드",
+          "reason": "수정 버전이 확인되지 않은 경우 같은 안내만 카드 한 칸을 차지합니다. 해당 상태에서만 안내를 작게 합치며 경고를 지우면 안 됩니다.",
+          "recommendation": "fold",
+          "x": 0.714375,
+          "y": 0.477,
+          "width": 0.28,
+          "height": 0.09,
+          "pixelBounds": [
+            1143,
+            477,
+            448,
+            90
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "영향 범위 아래 공급사 확인 필요 문구; 수정 버전이 확인되면 카드 복원",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "title": "계정 권한 비교",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/07-auth.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "선택 요청 URL 반복 제목줄",
+          "reason": "위 표의 선택 원본 URL을 아래에서 다시 길게 반복합니다. 제목은 압축하고 전체 URL·원본 ID 접근은 유지할 수 있습니다.",
+          "recommendation": "fold",
+          "x": 0.1475,
+          "y": 0.535,
+          "width": 0.61125,
+          "height": 0.041,
+          "pixelBounds": [
+            236,
+            535,
+            978,
+            41
+          ],
+          "kind": "conditional-duplicate",
+          "status": "optional-not-implemented",
+          "retainedAccess": "선택 원본 툴팁/상세, 비교 계정 선택기는 유지",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "기준 응답 Hex·Render 탭",
+          "reason": "기본 읽기는 Pretty·Raw로 유지하고 고급 보기만 메뉴로 정리할 수 있습니다. 형식 자체는 고유합니다.",
+          "recommendation": "move-more",
+          "x": 0.235,
+          "y": 0.666,
+          "width": 0.07,
+          "height": 0.036,
+          "pixelBounds": [
+            376,
+            666,
+            112,
+            36
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "기준 응답 보기 메뉴; 원본 바이트/오프셋 유지",
+          "sourceProof": ""
+        },
+        {
+          "n": 3,
+          "label": "계정 응답 Hex·Render 탭",
+          "reason": "양쪽 응답의 고급 보기 제어가 같은 줄에 반복됩니다. 비교·원문 접근을 잃지 않도록 이동만 검토합니다.",
+          "recommendation": "move-more",
+          "x": 0.658125,
+          "y": 0.666,
+          "width": 0.094375,
+          "height": 0.036,
+          "pixelBounds": [
+            1053,
+            666,
+            151,
+            36
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "계정 응답 보기 메뉴; 비교 근거·원본은 유지",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "response.recon",
+      "title": "응답 보안 분석",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/08-response.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "응답 Hex·Render 상시 탭",
+          "reason": "기본 원문 검토와 관계없는 기능이 아니라 고급 표시 방식입니다. 삭제하지 않고 보기 메뉴에 묶는 제안입니다.",
+          "recommendation": "move-more",
+          "x": 0.529375,
+          "y": 0.511,
+          "width": 0.099375,
+          "height": 0.035,
+          "pixelBounds": [
+            847,
+            511,
+            159,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "응답 보기 메뉴 및 기존 Pretty/Raw·근거 위치",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "Passive/API/흐름 내부 계수 줄",
+          "reason": "내부 분류·제외·절단 계수를 본문 아래에 나열합니다. 선택 결과와 필요한 오류만 기본 표시하고 상세는 접을 수 있습니다.",
+          "recommendation": "fold",
+          "x": 0.148125,
+          "y": 0.967,
+          "width": 0.469375,
+          "height": 0.028,
+          "pixelBounds": [
+            237,
+            967,
+            751,
+            28
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "상태 상세; 실패·절단·제한 경고는 기본 화면 유지",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "payload",
+      "title": "입력값 보안 검사",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/09-payload.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "요청 준비로 돌아가기 중복 버튼",
+          "reason": "왼쪽 1 요청 준비 단계와 정확히 같은 workflow.setSelectedIndex(0)를 호출합니다.",
+          "recommendation": "remove-duplicate",
+          "x": 0.568125,
+          "y": 0.051,
+          "width": 0.091875,
+          "height": 0.035,
+          "pixelBounds": [
+            909,
+            51,
+            147,
+            35
+          ],
+          "kind": "verified-duplicate",
+          "status": "implemented",
+          "retainedAccess": "왼쪽 번호1 요청 준비 단계 유지",
+          "sourceProof": "PayloadRunnerPanel.java prepare와 preparation 리스너 모두 workflow.setSelectedIndex(0)"
+        },
+        {
+          "n": 2,
+          "label": "정렬 미리보기 상시 버튼",
+          "reason": "원문 편집과 분리된 읽기 보조 보기입니다. 저빈도라는 사용 통계는 없으므로 기능 삭제 대신 보기 메뉴 이동만 검토합니다.",
+          "recommendation": "move-more",
+          "x": 0.27625,
+          "y": 0.924,
+          "width": 0.076875,
+          "height": 0.035,
+          "pixelBounds": [
+            442,
+            924,
+            123,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "요청 보기 메뉴의 정렬 미리보기; 편집 원문/원본 바이트 보존",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "데이터 변환·비교",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/10-data.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "출력→입력 보조 버튼",
+          "reason": "연속 변환에 쓰는 편의 동작입니다. 고유한 기능이라 불필요하다고 단정할 수 없으며 메뉴 이동만 제안합니다.",
+          "recommendation": "move-more",
+          "x": 0.2975,
+          "y": 0.101,
+          "width": 0.06125,
+          "height": 0.034,
+          "pixelBounds": [
+            476,
+            101,
+            98,
+            34
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "변환 메뉴의 출력→입력; 기본 변환/복사는 그대로 유지",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "입력의 큰 제목줄",
+          "reason": "데이터 도구에는 명확한 삭제 대상 기능이 없습니다. 입력·인코딩 표시는 유지하고 카드 제목 높이만 줄이는 밀도 개선 검토입니다.",
+          "recommendation": "fold",
+          "x": 0.151875,
+          "y": 0.15,
+          "width": 0.41625,
+          "height": 0.04,
+          "pixelBounds": [
+            243,
+            150,
+            666,
+            40
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "작은 입력(UTF-8) 라벨 유지; 실제 편집기·변환 기능은 삭제하지 않음",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "activity",
+      "title": "점검 진행 현황",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/11-progress.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "기록 창 전용 버튼",
+          "reason": "과거 변경 기록을 여는 보조 진입입니다. 현재 점검 조작과 분리해 메뉴로 옮길 수 있습니다.",
+          "recommendation": "move-more",
+          "x": 0.346875,
+          "y": 0.051,
+          "width": 0.045625,
+          "height": 0.035,
+          "pixelBounds": [
+            555,
+            51,
+            73,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "optional-not-implemented",
+          "retainedAccess": "더보기의 변경 기록; 기록 자체 보존",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "URL 점검 현황 반복 제목줄",
+          "reason": "현재 도구와 탭에 같은 제목이 있어 반복 카드 제목줄만 삭제했습니다. 목록/입력/완료 기록은 유지합니다.",
+          "recommendation": "remove-duplicate",
+          "x": 0.148125,
+          "y": 0.197,
+          "width": 0.605625,
+          "height": 0.041,
+          "pixelBounds": [
+            237,
+            197,
+            969,
+            41
+          ],
+          "kind": "conditional-duplicate",
+          "status": "implemented",
+          "retainedAccess": "현재 탭과 테이블 열 이름 유지; 다른 모드의 의미 있는 제목은 보존",
+          "sourceProof": ""
+        },
+        {
+          "n": 3,
+          "label": "입력이 없는 우측 빈 패널",
+          "reason": "선택 요청에 입력 항목이 없을 때 넓은 빈 패널이 유지됩니다. 입력이 있는 경우 자동으로 복원하는 접기를 검토합니다.",
+          "recommendation": "fold",
+          "x": 0.758125,
+          "y": 0.197,
+          "width": 0.235625,
+          "height": 0.793,
+          "pixelBounds": [
+            1213,
+            197,
+            377,
+            793
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "입력 수 배지/패널 펼치기; 파라미터가 있으면 자동 표시",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "bounty",
+      "title": "재현·증거 정리",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/12-evidence.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "영향 작성의 서식 버튼줄",
+          "reason": "보조 서식 삽입 기능을 삭제해 영향·절차 입력 영역을 넓혔습니다. 작성한 텍스트와 증거 원본은 그대로 유지합니다.",
+          "recommendation": "remove-helper",
+          "x": 0.446875,
+          "y": 0.458,
+          "width": 0.5475,
+          "height": 0.036,
+          "pixelBounds": [
+            715,
+            458,
+            876,
+            36
+          ],
+          "kind": "advanced-convenience",
+          "status": "implemented",
+          "retainedAccess": "원문/Markdown 직접 작성과 초안/증거 저장은 유지",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "재현 절차의 서식 버튼줄",
+          "reason": "보조 서식 삽입 기능을 삭제해 영향·절차 입력 영역을 넓혔습니다. 작성한 텍스트와 증거 원본은 그대로 유지합니다.",
+          "recommendation": "remove-helper",
+          "x": 0.446875,
+          "y": 0.697,
+          "width": 0.5475,
+          "height": 0.035,
+          "pixelBounds": [
+            715,
+            697,
+            876,
+            35
+          ],
+          "kind": "advanced-convenience",
+          "status": "implemented",
+          "retainedAccess": "원문/Markdown 직접 작성과 초안/증거 저장은 유지",
+          "sourceProof": ""
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "title": "점검 대시보드",
+      "sourceImage": "simple/docs/images/1.4.10/dark/tools/13-dashboard.png",
+      "referenceWidth": 1600,
+      "referenceHeight": 1000,
+      "candidates": [
+        {
+          "n": 1,
+          "label": "대시보드 본문 큰 제목",
+          "reason": "공통 상단의 점검 대시보드와 본문에서 같은 화면 이름이 다시 크게 표시됩니다.",
+          "recommendation": "remove-duplicate",
+          "x": 0.148125,
+          "y": 0.046,
+          "width": 0.306875,
+          "height": 0.036,
+          "pixelBounds": [
+            237,
+            46,
+            491,
+            36
+          ],
+          "kind": "verified-presentation-duplicate",
+          "status": "optional-not-implemented",
+          "retainedAccess": "공통 상단의 현재 도구 이름 유지",
+          "sourceProof": ""
+        },
+        {
+          "n": 2,
+          "label": "빈 실행 상태 안내3줄",
+          "reason": "선택 실행 없음·현재 실행 없음·요청 기록 없음이 아래 빈 결과 안내와 반복됩니다. 빈 상태에서만 한 줄로 합칠 수 있습니다.",
+          "recommendation": "fold",
+          "x": 0.148125,
+          "y": 0.088,
+          "width": 0.46875,
+          "height": 0.065,
+          "pixelBounds": [
+            237,
+            88,
+            750,
+            65
+          ],
+          "kind": "conditional-duplicate",
+          "status": "optional-not-implemented",
+          "retainedAccess": "활성 실행의 실제 SCOPE·실행 ID·계정 정보는 그대로 표시",
+          "sourceProof": ""
+        },
+        {
+          "n": 3,
+          "label": "결과 목록 앞 반복 요약줄",
+          "reason": "선택 분류와 계정·건수가 이미 카드/계정 필터/목록과 겹칩니다. 목록 헤더의 작은 배지로 합치는 검토입니다.",
+          "recommendation": "fold",
+          "x": 0.148125,
+          "y": 0.5,
+          "width": 0.510625,
+          "height": 0.026,
+          "pixelBounds": [
+            237,
+            500,
+            817,
+            26
+          ],
+          "kind": "presentation-only",
+          "status": "optional-not-implemented",
+          "retainedAccess": "현재 분류·계정·결과 수는 목록 헤더에 유지",
+          "sourceProof": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,6 @@
-# Workbench Simple 1.4.10
+# Workbench Simple 1.4.11
+
+**Simple 1.4.11은 도구별 Guide와 빨간 번호 사용 설명을 제공합니다.** 현재 도구에 맞는 별도 가이드 창,16개 화면·96개 단계와 중복/보조 기능 정리를 적용합니다. [설치 JAR](downloads/1.4.11/burp-workbench-simple-1.4.11.jar) · [가이드·정리 검토 화면](docs/images/1.4.11/README.md) · [사용법](docs/RELEASE_SIMPLE_1.4.11_KR.md).
 
 **Simple 1.4.10은 독립 창·최대화·F11 전체화면과 36px 상단을 제공합니다.** Workbench 탭을 누르면 도구를 선택하는 별도 창이 열립니다. 메뉴 색상·마우스 반응·선택 강조와 간격도 정리했습니다. [설치 JAR](downloads/1.4.10/burp-workbench-simple-1.4.10.jar) · [화면](docs/images/1.4.10/README.md) · [사용법](docs/RELEASE_SIMPLE_1.4.10_KR.md).
 

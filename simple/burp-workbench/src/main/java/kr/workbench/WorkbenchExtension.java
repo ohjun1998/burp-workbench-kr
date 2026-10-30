@@ -172,11 +172,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   TrafficBrowser trafficBrowser;
   private final JLabel captureInfo = new JLabel();
   private Component payloadPage;
-  private JDialog featureHelpWindow;
-  private JPanel featureHelpContent;
-  private JComboBox<FeatureGuide.Feature> featureChoices;
-  private final JTextArea featureHelpText = new JTextArea(15, 55);
-  private final JButton featureHelp = new JButton("기능 안내");
+  private final JButton visualGuide = new JButton("Guide");
+  private VisualGuideWindow visualGuideWindow;
   private final Diagnostics diagnostics = new Diagnostics();
   private final JButton logButton = new JButton("로그");
   private JPanel logContent;
@@ -392,7 +389,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (gettingStarted != null) gettingStarted.close();
                     backgroundJobs.close();
                     if (resumeWorkWindow != null) resumeWorkWindow.dispose();
-                    if (featureHelpWindow != null) featureHelpWindow.dispose();
+                    if (visualGuideWindow != null) visualGuideWindow.close();
                     if (logWindow != null) logWindow.dispose();
                     diagnostics.close();
                     if (commonSettingsWindow != null) commonSettingsWindow.dispose();
@@ -660,8 +657,11 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     addPage("외부 노출·CVE 조사", "exposure", exposureResearch, false);
     addPage("대시보드", "dashboard", scopeDashboard, false);
     settingsActionReady = true;
-    featureHelp.setName("wb.feature.help");
-    featureHelp.addActionListener(e -> openFeatureHelp());
+    visualGuide.setName("wb.visual.guide.open");
+    visualGuide.putClientProperty("wb.guide.button",true);
+    visualGuide.setToolTipText("현재 도구의 화면별 사용 단계 · 빨간 번호 가이드");
+    visualGuide.getAccessibleContext().setAccessibleName("Guide · 화면별 사용 단계");
+    visualGuide.addActionListener(e -> openVisualGuide());
     logButton.setName("wb.navigation.logs");
     logButton.setToolTipText("오류 기록과 수집 상태 확인");
     logButton.addActionListener(e -> openLogs());
@@ -677,8 +677,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     JButton inspect = button("Scope 통합 점검", this::openScopeInspection);
     inspect.setName("wb.scope.inspection.open");
     workbenchWindow = new WorkbenchWindow(root);
-    navigation = new FolderNavigation(api, tabs, this::openSettings, featureHelp, logButton,
-        true, dashboard, inspect, workbenchWindow.fullScreenButton);
+    navigation = new FolderNavigation(api, tabs, this::openSettings, null, logButton,
+        true, dashboard, inspect, workbenchWindow.fullScreenButton, visualGuide);
     root.add(navigation);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
@@ -721,7 +721,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             "featureHelp",
             new AbstractAction() {
               public void actionPerformed(java.awt.event.ActionEvent e) {
-                openFeatureHelp();
+                openVisualGuide();
               }
             });
     root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
@@ -1091,61 +1091,31 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
 
   private void updateFeatureHelp() {
     String id = currentFeature();
-    featureHelp.setToolTipText(FeatureGuide.feature(id).summary() + " · F1로 전체 기능과 사용 순서 보기");
+    visualGuide.setToolTipText("Guide · "+FeatureGuide.title(id)+" · 화면 번호별 사용 단계");
   }
 
-  private void openFeatureHelp() {
+  private void openVisualGuide() {
     if (unloaded.get()) return;
-    if (featureHelpContent == null) {
-      featureHelpContent = new FeatureGuidePanel();
-      featureHelpContent.setName("wb.feature.guide");
-      featureChoices = new JComboBox<>(FeatureGuide.all().toArray(FeatureGuide.Feature[]::new));
-      featureChoices.setName("wb.feature.guide.choice");
-      featureHelpText.setName("wb.feature.guide.text");
-      featureHelpText.setEditable(false);
-      featureHelpText.setLineWrap(true);
-      featureHelpText.setWrapStyleWord(true);
-      featureHelpText.putClientProperty("wb.prose", true);
-      JButton open = new JButton("이 기능 열기");
-      open.setName("wb.feature.guide.open");
-      open.setToolTipText("선택한 기능 화면으로 이동합니다. 검사나 추가 요청을 실행하지 않습니다.");
-      Runnable show =
-          () -> {
-            FeatureGuide.Feature chosen = (FeatureGuide.Feature) featureChoices.getSelectedItem();
-            if (chosen == null) return;
-            featureHelpText.setText(FeatureGuide.helpText(chosen.id()));
-            featureHelpText.setCaretPosition(0);
-            open.setEnabled(
-                !chosen.id().equals("start")
-                    && (!chosen.id().equals("payload") || payloadPage != null));
-          };
-      featureChoices.addActionListener(e -> show.run());
-      open.addActionListener(
-          e -> {
-            if (unloaded.get()) return;
-            FeatureGuide.Feature chosen = (FeatureGuide.Feature) featureChoices.getSelectedItem();
-            if (chosen == null) return;
-            openFeature(chosen.id());
-          });
-      featureHelpContent.add(
-          WorkbenchUi.row(new JLabel("알아볼 기능"), featureChoices, open), BorderLayout.NORTH);
-      featureHelpContent.add(featureHelpText);
-      show.run();
-      WorkbenchUi.style(featureHelpContent);
+    if (visualGuideWindow == null) visualGuideWindow = new VisualGuideWindow(root);
+    visualGuideWindow.open(visualGuideScreen());
+  }
+
+  String visualGuideScreen() {
+    String id=currentFeature();
+    if (id.equals("exposure")) return exposureResearch.tabs.getSelectedIndex()==1?"exposure.cve":"exposure.search";
+    if (id.equals("payload") && payloadPage!=null) {
+      Component phase=findGuideComponent(payloadPage,"wb.payload.steps");
+      if (phase instanceof JTabbedPane pages && pages.getSelectedIndex()==1) return "payload.results";
     }
-    featureChoices.setSelectedItem(FeatureGuide.feature(currentFeature()));
-    if (featureHelpWindow != null && featureHelpWindow.isDisplayable()) {
-      featureHelpWindow.toFront();
-      featureHelpWindow.requestFocus();
-      return;
-    }
-    featureHelpWindow =
-        dialogOpener.open(
-            root,
-            "Workbench Simple · 기능 안내",
-            featureHelpContent,
-            false,
-            () -> featureHelpWindow = null);
+    if (id.equals("bounty") && bountySupport.pages.getSelectedIndex()==1) return "bounty.replay";
+    if (id.equals("passive")) return "environment";
+    return VisualGuideCatalog.all().stream().anyMatch(g->g.id().equals(id))?id:"traffic";
+  }
+
+  private static Component findGuideComponent(Component root,String name){
+    if(name.equals(root.getName()))return root;
+    if(root instanceof Container parent)for(Component child:parent.getComponents()){Component result=findGuideComponent(child,name);if(result!=null)return result;}
+    return null;
   }
 
   private void updateLogButton() {
@@ -1161,37 +1131,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if (logWindow != null && logWindow.isDisplayable()) { logWindow.toFront(); return; }
     logWindow = dialogOpener.open(root, "Workbench Simple · 로그", logContent, false, () -> logWindow = null);
     if (logWindow != null) logWindow.setMinimumSize(new Dimension(680,420));
-  }
-
-  private static final class FeatureGuidePanel extends JPanel implements Scrollable {
-    FeatureGuidePanel() {
-      super(new BorderLayout(0, 8));
-    }
-
-    @Override
-    public Dimension getPreferredScrollableViewportSize() {
-      return getPreferredSize();
-    }
-
-    @Override
-    public int getScrollableUnitIncrement(Rectangle visible, int orientation, int direction) {
-      return 20;
-    }
-
-    @Override
-    public int getScrollableBlockIncrement(Rectangle visible, int orientation, int direction) {
-      return Math.max(20, visible.height - 20);
-    }
-
-    @Override
-    public boolean getScrollableTracksViewportWidth() {
-      return true;
-    }
-
-    @Override
-    public boolean getScrollableTracksViewportHeight() {
-      return false;
-    }
   }
 
   private JPanel settingsPanel() {

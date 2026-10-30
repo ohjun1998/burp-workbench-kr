@@ -31,7 +31,7 @@ public final class DiagnosticsWorkflowTest extends WorkbenchTest {
         try {
           ext.dialogOpener=(owner,title,content,modal,closed)->{opened.add(content);titles.add(title);return null;};
           root.setSize(1280,800);for(int i=0;i<6;i++)UiLayoutTest.layout(root);
-          JButton help=(JButton)UiLayoutTest.named(root,"wb.feature.help");
+          JButton help=(JButton)UiLayoutTest.named(root,"wb.visual.guide.open");
           JButton settings=(JButton)UiLayoutTest.named(root,"wb.navigation.settings");
           JButton logs=(JButton)UiLayoutTest.named(root,"wb.navigation.logs");
           check(help!=null&&settings!=null&&logs!=null&&help.isEnabled()&&settings.isEnabled()&&logs.isEnabled(),

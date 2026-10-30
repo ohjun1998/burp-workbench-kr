@@ -141,7 +141,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     JSplitPane split =
         WorkbenchUi.split(
             JSplitPane.HORIZONTAL_SPLIT,
-            WorkbenchUi.card("URL 점검 현황", new JScrollPane(table)),
+            new JScrollPane(table),
             WorkbenchUi.card("선택 URL 입력", new JScrollPane(parameterTable)),
             .72);
     JPanel endpointsPage = new JPanel(new BorderLayout(6, 6));

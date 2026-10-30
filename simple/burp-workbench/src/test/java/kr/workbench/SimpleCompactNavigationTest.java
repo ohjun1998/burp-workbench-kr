@@ -35,7 +35,7 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
           Rectangle line=SwingUtilities.convertRectangle(actions.getParent(),actions.getBounds(),toolbar);
           check(line.y>=0&&line.y+line.height<=toolbar.getHeight(),"header actions stay inside the same row at "+width);
           for(Component c:actions.getComponents())if(c instanceof AbstractButton button){
-            check(button.getIcon()!=null&&button.getText().isEmpty(),"compact action uses a visible icon: "+button.getName());
+            check(Boolean.TRUE.equals(button.getClientProperty("wb.guide.button"))?button.getText().equals("Guide")&&button.getWidth()>=60:button.getIcon()!=null&&button.getText().isEmpty(),"compact action keeps the requested Guide caption and other visible icons: "+button.getName());
             check(button.getAccessibleContext().getAccessibleName()!=null&&!button.getAccessibleContext().getAccessibleName().isBlank()&&button.getToolTipText()!=null,"compact action retains an accessible name and tooltip: "+button.getName());
           }
         }

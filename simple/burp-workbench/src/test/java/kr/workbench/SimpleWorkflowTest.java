@@ -209,14 +209,15 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
           check(!modal && title.contains("Simple"), "consolidated utility opens a modeless Simple window");
           dialog.set(body); return null;
         };
-        check(named(root, "wb.feature.help") instanceof AbstractButton
+        check(named(root, "wb.visual.guide.open") instanceof AbstractButton
             && named(root, "wb.navigation.settings") instanceof AbstractButton
             && named(root, "wb.navigation.logs") instanceof AbstractButton,
             "compact top bar exposes help, appearance and diagnostics");
-        click(root, "wb.feature.help");
-        check(dialog.get() != null && named(dialog.get(), "wb.feature.guide.text") != null, "current-tool help is reachable from the actual top bar");
+        click(root, "wb.visual.guide.open");
+        var guide=(VisualGuideWindow)unchecked(extension,"visualGuideWindow");
+        check(guide!=null&&guide.panel.selectedId().equals("auth"),"current-tool numbered Guide is reachable from the actual top bar");
         root.getActionMap().get("featureHelp").actionPerformed(new java.awt.event.ActionEvent(root, 0, "F1"));
-        check(named(dialog.get(), "wb.feature.guide.choice") != null, "F1 opens the same retained tool guidance");
+        check(unchecked(extension,"visualGuideWindow")==guide&&guide.panel.selectedId().equals("auth"),"F1 opens the same retained numbered guidance");
         click(root, "wb.navigation.settings");
         check(named(dialog.get(), "wb.settings.layout.common") != null, "appearance settings remain reachable from the top bar");
         click(root, "wb.navigation.logs");

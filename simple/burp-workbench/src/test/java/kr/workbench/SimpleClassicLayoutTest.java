@@ -252,7 +252,7 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
             Component toolbar = SimpleWorkflowTest.named(root, "wb.navigation.toolbar.line");
             check(toolbar != null && toolbar.getHeight() > 0 && toolbar.getHeight() <= 64,
                 context + " keeps the classic navigation toolbar compact");
-            for (String name : List.of("wb.navigation.toggle", "wb.feature.help", "wb.navigation.settings",
+            for (String name : List.of("wb.navigation.toggle", "wb.visual.guide.open", "wb.navigation.settings",
                 "wb.navigation.logs", "wb.simple.dashboard.open", "wb.scope.inspection.open")) inside(root, name, context);
             var messages = (JSplitPane) SimpleWorkflowTest.named(root, "wb.traffic.messages");
             var workspace = (JSplitPane) SimpleWorkflowTest.named(root, "wb.traffic.workspace");

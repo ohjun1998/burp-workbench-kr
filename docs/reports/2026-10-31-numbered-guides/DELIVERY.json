@@ -1,0 +1,25 @@
+{
+  "version": "1.4.11",
+  "guideScreens": 16,
+  "steps": 96,
+  "cleanupScreens": 13,
+  "removedCategories": 5,
+  "publicPngs": 62,
+  "coreChecks": 6964,
+  "postUiFocusedChecks": 1057,
+  "nativeGuideChecks": 50,
+  "swingViews": 194,
+  "katanaChecks": 102,
+  "packageVerified": true,
+  "sourceBytes": 99800544,
+  "jarBytes": 8976823,
+  "jarSha256": "634c8a67afc53c69a0e21acf453ed51723b423bb499521ae8cbac968a04b4847",
+  "sourceSha256": "a00aca2c04065d55ea15bf8766adc21743104fb7d9ad1843b8fb5e88bc001f8a",
+  "imageArchives": {
+    "all-images.zip": "27a23c3b9b24a1bb854d9d732eefe4391b8c1cddf1f0a577782e1b2bb5827554",
+    "guide-images.zip": "64a35228576d23250e707c25ae75fc4d103ebeb21d8b8e45ce6182a2f1a899f5",
+    "cleanup-review-images.zip": "426ee48e6eb95f176449de2b6371660c53741f8516557bb26e7200ff8a805767"
+  },
+  "nativeBurpGuiVerified": false,
+  "windowsDpiImeVerified": false
+}

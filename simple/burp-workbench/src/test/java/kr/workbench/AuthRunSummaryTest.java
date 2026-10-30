@@ -41,7 +41,7 @@ public final class AuthRunSummaryTest extends WorkbenchTest {
         check(p.historyModel.getValueAt(0,2).equals("200 · 기준"),"baseline account displays status and reference marker only");
         check(p.historyModel.getValueAt(0,3).equals("403"),"other account displays HTTP code only");
         check(p.historyModel.getValueAt(0,7).equals("차단 응답 확인"),"same-auth gray does not contaminate one blocked summary");
-        check(p.history.getColumnName(3).equals("종합 결과")&&p.history.getColumnName(8).equals("실행 상태"),"single summary immediately after URL");
+        check(p.history.getColumnName(p.history.getColumnCount()-1).equals("종합 결과")&&p.history.convertColumnIndexToView(5)==-1&&p.historyModel.getColumnName(5).equals("실행 상태"),"single aggregate follows account response columns; execution metadata retained");
         p.show(live);check(p.packets.getIconAt(0)==null&&p.packets.getIconAt(1)==null,"no per-account verdict lights in packet tabs");
         check(p.judgementDetails.getText().contains("종합 결과: 차단 응답 확인")&&p.judgementDetails.getText().contains("HTTP 403"),"aggregate and account evidence remain available in details");
         var r=run(p,200);packet(r,0,200,"원본과 동일 인증 · 교차 인가 미검증");packet(r,1,200,"우회 의심 · 동일 성공 응답");
@@ -74,7 +74,7 @@ public final class AuthRunSummaryTest extends WorkbenchTest {
         var cell=(JLabel)p.history.prepareRenderer(p.history.getCellRenderer(row,result),row,result);
         check(cell.getText().equals("차단 응답 확인")&&cell.getIcon()!=null&&cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)),"sorted aggregate uses correct run and color");
         cell=(JLabel)p.history.prepareRenderer(p.history.getCellRenderer(row,account),row,account);
-        check(cell.getText().equals("200 · 기준")&&cell.getIcon()==null&&cell.getForeground().equals(WorkbenchUi.ink()),"reused summary renderer cannot leak verdict into account cell");
+        check(cell.getText().equals("200 · 기준")&&cell.getIcon()==null&&cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)),"reused summary renderer cannot leak verdict into account cell");
       });
     } finally {edt(p::close);}
     System.out.println("AuthRunSummaryTest: "+checks+" checks passed");

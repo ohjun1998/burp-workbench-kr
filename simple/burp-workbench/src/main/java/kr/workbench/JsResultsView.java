@@ -29,7 +29,7 @@ final class JsResultsView extends JPanel {
     super(new BorderLayout(0,2));this.owner=owner;setName("wb.js.list.workspace");
     detail.setName("wb.js.inline.detail");inputDetail.setName("wb.js.inline.inputs");
     for(JTextArea area:List.of(detail,inputDetail)){area.setEditable(false);area.setLineWrap(true);area.setWrapStyleWord(true);area.putClientProperty("wb.prose",true);}
-    JPanel information=new JPanel(new GridLayout(1,2,12,0));information.add(new JScrollPane(detail));information.add(new JScrollPane(inputDetail));
+    JPanel information=new JPanel(new GridLayout(1,2,12,0));JPanel detailView=ReferenceUi.facts(detail);detailView.setName("wb.js.inline.detail");information.add(detailView);information.add(ReferenceUi.facts(inputDetail));
     JSplitPane content=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,tabs,WorkbenchUi.card("경로 상세 정보",information),.55);content.setName("wb.js.inline.split");add(content);
     owner.urlTable.putClientProperty("wb.search.apply",(Runnable)this::apply);
     summary.setName("wb.js.selection.summary");shortcut.setName("wb.js.selection.shortcut");

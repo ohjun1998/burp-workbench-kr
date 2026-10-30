@@ -10,7 +10,7 @@ public final class AuthLayoutFitTest extends WorkbenchTest {
     var api=proxy(burp.api.montoya.MontoyaApi.class,(p,m,a)->def(m));
     final AuthComparePanel[] box={null};edt(()->box[0]=new AuthComparePanel(api,List::of));var panel=box[0];
     edt(()->{
-      check(panel.history.getColumnName(1).equals("메서드")&&panel.history.getColumnName(2).equals("URL"),"history shows method before URL without changing account model indices");
+      check(panel.history.getColumnName(1).equals("URL")&&panel.history.convertColumnIndexToView(6)==-1&&panel.historyModel.getColumnCount()==9,"history combines method and URL while retaining original account model indices");
       var actions=(JPanel)UiLayoutTest.named(panel,"wb.auth.actions");
       check(java.util.Arrays.stream(actions.getComponents()).filter(c -> c instanceof AbstractButton).map(Component::getName).toList().equals(List.of("wb.auth.detect", "wb.simple.auth.settings", "wb.auth.history.more", "wb.auth.candidates.toggle")),"detection/settings stay above cards, comparison actions stay with the result filters");
       check(!SwingUtilities.isDescendingFrom(panel.packetDetails,panel) && SwingUtilities.isDescendingFrom(panel.inlinePreview,panel),"inline comparison remains mounted while enlarged packet window stays independent");

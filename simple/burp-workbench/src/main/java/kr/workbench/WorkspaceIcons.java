@@ -16,6 +16,11 @@ final class WorkspaceIcons {
       else if(kind.equals("target")){g.drawOval(2,2,12,12);g.drawOval(6,6,4,4);}
       else if(kind.equals("filter")){g.drawPolyline(new int[]{1,15,10,10,6,6,1},new int[]{2,2,8,14,12,8,2},7);}
       else if(kind.equals("gear")){g.drawOval(3,3,10,10);g.drawOval(6,6,4,4);for(int i=0;i<8;i++){double a=i*Math.PI/4;g.drawLine(8+(int)(5*Math.cos(a)),8+(int)(5*Math.sin(a)),8+(int)(7*Math.cos(a)),8+(int)(7*Math.sin(a)));}}
+      else if(kind.equals("arrow")){g.drawLine(1,8,14,8);g.drawPolyline(new int[]{10,14,10},new int[]{4,8,12},3);}
+      else if(kind.equals("play")){g.drawPolygon(new int[]{4,4,13},new int[]{2,14,8},3);}
+      else if(kind.equals("stop")){g.fillRoundRect(3,3,10,10,1,1);}
+      else if(kind.equals("plus")){g.drawLine(8,2,8,14);g.drawLine(2,8,14,8);}
+      else if(kind.equals("folder")){g.drawPolyline(new int[]{1,1,6,8,15,15,1},new int[]{13,3,3,5,5,13,13},7);}
       else if(kind.equals("copy")){g.drawRoundRect(5,4,9,11,2,2);g.drawPolyline(new int[]{10,10,2,2,4},new int[]{3,1,1,12,12},5);}
       else if(kind.equals("more"))for(int i=0;i<3;i++)g.fillOval(1+i*6,7,3,3);
       else if(kind.equals("security")){g.drawPolygon(new int[]{8,14,13,8,3,2},new int[]{1,4,10,15,10,4},6);g.drawPolyline(new int[]{5,7,11},new int[]{8,10,6},3);}

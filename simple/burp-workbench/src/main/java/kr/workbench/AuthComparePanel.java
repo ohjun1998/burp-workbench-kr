@@ -105,6 +105,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                 Run run = runs.get(convertRowIndexToModel(row));
                 if (modelColumn >= 2 && modelColumn <= 4 || modelColumn==8) {
                   cell.setText(AuthRunSummary.responseLabel(run, (modelColumn==8?3:modelColumn-2)));
+                  if(cell instanceof WorkbenchUi.Cells styled)styled.responseBadge(cell.getText());
                   cell.setToolTipText(run.context.labels[(modelColumn==8?3:modelColumn-2)]+" · 응답 코드 (판정 근거는 상세 창)");
                   cell.getAccessibleContext().setAccessibleDescription(cell.getToolTipText()+" · "+cell.getText());
                 } else if (modelColumn == 7) {
@@ -145,6 +146,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final AtomicLong credentialDropped=new AtomicLong();
   final Map<String,AuthAccount> accounts=new LinkedHashMap<>();
   final AuthInlinePreview inlinePreview = new AuthInlinePreview();
+  private javax.swing.table.TableColumn thirdAccountColumn;
+  final JLabel accountOrigin=new JLabel("전체 대상");
   final JButton[] accountCards={new AccountSummaryCard(0),new AccountSummaryCard(1),new AccountSummaryCard(2),new AccountSummaryCard(3)};
   final JPanel packetDetails=new JPanel(new BorderLayout(0,6));
   final TargetWindow comparisonWindow=new TargetWindow(this,"비교 기록 상세",()->packetDetails);
@@ -518,11 +521,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     WorkbenchUi.primary(compare);
     JButton stop = button("중지", this::stop);
     stop.setName("wb.simple.auth.stop");
-    JPanel actions=WorkbenchUi.row(detection, settings);
+    JPanel actions=WorkbenchUi.row(detection,ReferenceUi.field("대상 도메인",accountOrigin),settings);
     actions.setName("wb.auth.actions");top.add(actions);
     detection.setToolTipText("인증 탐지는 수집 OFF/SCOPE와 별도입니다. 후보를 계정에 지정한 뒤 선택 요청을 비교하세요.");
-    actions.add(counts);
-    JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setName("wb.auth.account.cards");
+    counts.setToolTipText("인증 후보와 비교 기록 수");
+    JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setBorder(BorderFactory.createCompoundBorder(kr.packetui.VisualTheme.border(1,1,1,1),BorderFactory.createEmptyBorder(9,10,9,10)));summaries.setName("wb.auth.account.cards");
     for(int i:new int[]{0,1,2,3}){final int slot=i;JButton card=accountCards[i];card.setName("wb.auth.account.card."+i);card.setHorizontalAlignment(SwingConstants.LEFT);card.addActionListener(e->safe(this::openAccountPreparation));if(i!=2)summaries.add(card);}
     top.add(summaries);
     // Retain this internal status model for the engine, without an automatic-mode control.
@@ -603,7 +606,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     JScrollPane candidateScroll = new JScrollPane(candidates);
     candidateScroll.setPreferredSize(new Dimension(600, 76));
     history.setName("wb.auth.history");
-    history.putClientProperty("wb.table.compact",true);
+    history.putClientProperty("wb.table.compact",false);
     history.setAutoCreateRowSorter(true);
     historySorter = new TableRowSorter<>(historyModel); historySorter.setSortsOnUpdates(true); history.setRowSorter(historySorter);
     history.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -620,6 +623,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     history.moveColumn(6,1);
     history.moveColumn(history.convertColumnIndexToView(7),3);
     history.moveColumn(history.convertColumnIndexToView(8),7);
+    thirdAccountColumn=history.getColumnModel().getColumn(history.convertColumnIndexToView(4));
+    for(int index:new int[]{5,6,4})history.removeColumn(history.getColumnModel().getColumn(history.convertColumnIndexToView(index)));
+    history.moveColumn(history.convertColumnIndexToView(7),history.getColumnCount()-1);
+    int[] referenceWidths={45,520,115,115,115,160};for(int i=0;i<referenceWidths.length;i++){history.getColumnModel().getColumn(i).setPreferredWidth(referenceWidths[i]);history.getColumnModel().getColumn(i).setWidth(referenceWidths[i]);}
+    history.getColumnModel().getColumn(1).setCellRenderer(new WorkbenchUi.Cells(){public Component getTableCellRendererComponent(JTable t,Object v,boolean selected,boolean focus,int row,int col){super.getTableCellRendererComponent(t,v,selected,focus,row,col);int modelRow=t.convertRowIndexToModel(row);setText(historyModel.getValueAt(modelRow,6)+"  "+v);return this;}});
     history
         .getSelectionModel()
         .addListSelectionListener(
@@ -669,7 +677,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       public void changedUpdate(javax.swing.event.DocumentEvent event) { filterHistory(); }
     });
     JPanel triage = new JPanel(); triage.setLayout(new BoxLayout(triage, BoxLayout.Y_AXIS));
-    triage.add(CompactWorkbenchUi.toolbar(WorkbenchUi.row(historyFilter,historySearch,historyVisible),WorkbenchUi.row(compare,stop)));
+    triage.add(CompactWorkbenchUi.toolbar(WorkbenchUi.row(historySearch,historyFilter,historyVisible),WorkbenchUi.row(compare,stop)));
     JButton sessionRepair = button("계정·세션 보완", () -> repairCurrent(3)), policyRepair = button("권한 설정 보완", () -> repairCurrent(4)), writeRepair = button("쓰기 조회 보완", () -> repairCurrent(5));
     sessionRepair.setName("wb.auth.history.repair.session"); policyRepair.setName("wb.auth.history.repair.policy"); writeRepair.setName("wb.auth.history.repair.write");
     historyRepairState = () -> {
@@ -959,7 +967,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
   void applyAccountToSlot(int slot,Candidate candidate){AuthAccount a=accounts.get(candidate.key());if(a!=null){profileNames[slot].setText(a.label());profileOwners[slot].setText(a.userId());profileRoles[slot].setText(a.role());}}
   void copyAccount(Candidate from,Candidate to){AuthAccount account=accounts.get(from.key());if(account!=null)accounts.put(to.key(),account);}
-  void updateHistoryHeaders(Run run){if(history==null||history.getColumnCount()<5)return;for(int i=0;i<SLOTS;i++)history.getColumnModel().getColumn(history.convertColumnIndexToView((i==3?8:i+2))).setHeaderValue(run==null?slots[i]==null?"미지정 "+(char)('A'+i):label(i):run.context.labels[i]);history.getTableHeader().repaint();}
+  void updateHistoryHeaders(Run run){
+    if(history==null||history.getColumnCount()<5)return;
+    if(thirdAccountColumn!=null){boolean needed=run==null?slots[2]!=null:run.context.profiles[2]!=null;int view=history.convertColumnIndexToView(4);if(needed&&view<0){history.addColumn(thirdAccountColumn);history.moveColumn(history.getColumnCount()-1,4);}else if(!needed&&view>=0)history.removeColumn(thirdAccountColumn);}
+    for(int i=0;i<SLOTS;i++){int view=history.convertColumnIndexToView(i==3?8:i+2);if(view>=0)history.getColumnModel().getColumn(view).setHeaderValue(run==null?slots[i]==null?i==3?"비로그인":"계정 "+(i+1):label(i):run.context.labels[i]);}history.getTableHeader().repaint();
+  }
   void openComparison(Run run){if(run==null)return;detailRun=run;WorkbenchUi.style(packetDetails);show(run);detailShortcuts.install();comparisonWindow.open();}
   static void loadInspector(PacketInspector view,HttpRequest request,HttpResponse response) {
     if(request==null&&response==null){view.setPacket(null,null);return;}
@@ -1345,9 +1357,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     matrixEditor.refreshNames();
     updateHistoryHeaders(detailRun==null?current():detailRun);
     for (int i = 0; i < SLOTS; i++) {
-      Candidate c = slots[i];
+      Candidate c = slots[i];if(i==0)accountOrigin.setText(c==null?"전체 대상":c.origin());
       JButton card=accountCards[i];if(i==2){Container parent=accountCards[0].getParent();if(parent!=null){if(c!=null&&card.getParent()==null)parent.add(card,2);else if(c==null&&card.getParent()!=null)parent.remove(card);parent.revalidate();}}
-      ((AccountSummaryCard)card).summary(i==3?"비로그인":label(i),c==null?"계정 연결 필요":c.headers().isEmpty()?"인증 정보 없음":accounts.get(c.key())!=null&&!accounts.get(c.key()).email().isBlank()?accounts.get(c.key()).email():profileOwners[i].getText().isBlank()?c.origin():profileOwners[i].getText(),c==null?"클릭하여 계정을 연결하세요":c.headers().isEmpty()?"인증 없이 요청을 비교합니다":profileRoles[i].getText().isBlank()?"연결됨 · 클릭하여 계정 설정":profileRoles[i].getText(),i==0&&c!=null);
+      ((AccountSummaryCard)card).summary(i==3?"비로그인":c!=null&&accounts.get(c.key())!=null&&!accounts.get(c.key()).name().isBlank()?accounts.get(c.key()).name()+(profileRoles[i].getText().isBlank()?"":" · "+profileRoles[i].getText()):label(i),c==null?"계정 연결 필요":c.headers().isEmpty()?"인증 정보 없음":accounts.get(c.key())!=null&&!accounts.get(c.key()).email().isBlank()?accounts.get(c.key()).email():profileOwners[i].getText().isBlank()?c.origin():profileOwners[i].getText(),c==null?"클릭하여 계정을 연결하세요":c.headers().isEmpty()?"인증 없이 요청을 비교합니다":profileRoles[i].getText().isBlank()?"연결됨 · 클릭하여 계정 설정":profileRoles[i].getText(),i==0&&c!=null);
       card.setToolTipText(c==null?"원본 선택 후 계정 연결":c.origin()+" · 계정 설정 열기");
       slotLabels[i].setText(
           c == null ? "미지정" : c.headers.isEmpty() ? "비로그인" : c.key.substring(0, 12));

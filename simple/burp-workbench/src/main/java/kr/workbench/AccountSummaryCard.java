@@ -13,10 +13,10 @@ final class AccountSummaryCard extends JButton {
     Color color=slot==3?WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL):WorkbenchUi.toneInk(slot==0?WorkbenchUi.Tone.ACTIVE:slot==1?WorkbenchUi.Tone.SUCCESS:WorkbenchUi.Tone.WARNING);
     g.setColor(color);int cy=WorkbenchUi.displayPixels(24);g.fillOval(18,cy-8,13,13);g.fillRoundRect(13,cy+7,23,12,7,7);
     int x=48,base=WorkbenchUi.displayPixels(27),available=Math.max(0,getWidth()-x-12);
-    g.setFont(WorkbenchUi.font().deriveFont(Font.BOLD,WorkbenchUi.displaySize(15)));g.setColor(WorkbenchUi.ink());
+    g.setFont(WorkbenchUi.font().deriveFont(Font.BOLD,WorkbenchUi.displaySize(16)));g.setColor(WorkbenchUi.ink());
     int badge=reference&&available>160?70:0;String caption=fit(g,title,available-badge);g.drawString(caption,x,base);
     if(badge>0){int bx=x+g.getFontMetrics().stringWidth(caption)+8;g.setColor(WorkbenchUi.toneFill(WorkbenchUi.Tone.ACTIVE));g.fillRoundRect(bx,base-17,62,23,6,6);g.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.ACTIVE));g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12)));g.drawString("계정 1",bx+6,base);}
-    g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(13)));g.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(fit(g,identity,available),x,base+WorkbenchUi.displayPixels(23));g.drawString(fit(g,description,available),x,base+WorkbenchUi.displayPixels(44));g.dispose();
+    g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(14)));g.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(fit(g,identity,available),x,base+WorkbenchUi.displayPixels(23));g.drawString(fit(g,description,available),x,base+WorkbenchUi.displayPixels(44));g.dispose();
   }
   private static String fit(Graphics2D g,String text,int width){if(g.getFontMetrics().stringWidth(text)<=width)return text;int end=text.length();while(end>0&&g.getFontMetrics().stringWidth(text.substring(0,end)+"…")>width)end--;return end==0?"":text.substring(0,end)+"…";}
 }

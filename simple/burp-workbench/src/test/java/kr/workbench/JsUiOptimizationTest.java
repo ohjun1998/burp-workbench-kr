@@ -27,7 +27,7 @@ public final class JsUiOptimizationTest {
       check(source.width>=300&&source.height>=80,"editable JS source remains visible in "+mode+" at "+size[0]+"x"+size[1]+" ("+source.width+"x"+source.height+")");
       check(visible(panel.sources,panel).height==panel.sources.getHeight()&&visible(panel.navigator.previous,panel).height==panel.navigator.previous.getHeight(),"analysis list and navigation controls stay visible in "+mode+" at "+size[0]);
       Rectangle findings=visible(panel.results,panel);
-      check(findings.width>=450&&findings.height>=140&&panel.resultView.detail.getParent().getHeight()>=100&&!SwingUtilities.isDescendingFrom(panel.requestPacket,panel),"findings and inline details share the released packet area in "+mode+" at "+size[0]);
+      check(findings.width>=450&&findings.height>=140&&visible(UiLayoutTest.named(panel,"wb.js.inline.detail"),panel).height>=100&&!SwingUtilities.isDescendingFrom(panel.requestPacket,panel),"findings and inline details share the released packet area in "+mode+" at "+size[0]);
      });
     }
    }

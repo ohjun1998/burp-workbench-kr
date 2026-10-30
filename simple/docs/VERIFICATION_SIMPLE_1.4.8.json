@@ -1,0 +1,64 @@
+{
+  "version": "1.4.8",
+  "recordedAt": "2026-10-30T21:12:09.622705+09:00",
+  "status": "Passed complete local checks and production Swing captures; native Burp GUI not run",
+  "baseCommit": "d133f621af8ef8a402cf49336bcd04f576e68267",
+  "branch": "account-a/simple-reference-components",
+  "artifact": "downloads/1.4.8/burp-workbench-simple-1.4.8.jar",
+  "jarSha256": "9a0d497ef23b6cc479f9ac7889175599795391258dca452f1f76bf12cbe88465",
+  "embeddedMapperVersion": "0.3.11",
+  "browserHelperVersion": "0.4.1",
+  "checks": {
+    "regressionGroups": 150,
+    "regressionChecks": 5589,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 147,
+    "browserHelperNodeChecks": 29,
+    "total": 5901,
+    "result": "passed",
+    "exitCode": 0,
+    "logSha256": "a4b33a60dbc81414f816a09c41a050ccab4569cb52cbfcef2a18e3caab89a1b4"
+  },
+  "ui": {
+    "primaryViews": 96,
+    "scopeViews": 68,
+    "totalRenderedCases": 164,
+    "controls": 3450,
+    "scenarios": 708,
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "primarySizes": [
+      "1024x720",
+      "1280x800",
+      "1600x1000"
+    ],
+    "evidencePacketMinimum": 65,
+    "evidenceWritingMinimum": 55
+  },
+  "katana": {
+    "version": "1.8.0",
+    "checks": 102,
+    "result": "passed",
+    "binarySha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc"
+  },
+  "visualReview": {
+    "gallery": "images/1.4.8/README.md",
+    "captureManifest": "images/1.4.8/captures.json",
+    "comparison": "design/1.4.8/COMPARE.html",
+    "specification": "design/1.4.8/DETAILS_KR.md",
+    "limitations": "Raster references differ in content and controls. Real metadata, engine fields and platform rendering are retained; no pixel-equality claim."
+  },
+  "earlierAttempts": "verification/1.4.8/earlier-attempts.json",
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses"
+  ]
+}

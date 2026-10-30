@@ -25,6 +25,31 @@ public final class SimplePreview extends WorkbenchTest {
   static final List<String> content = new ArrayList<>();
   static final List<String> scenarios = new ArrayList<>();
 
+  /** Synthetic result fixture only; never used by the extension or sent to an HTTP transport. */
+  static void payloadFixture(Object runner) {
+    try {
+      ((JTextField)value(runner,"host")).setText("simple.example.test");
+      ((JSpinner)value(runner,"port")).setValue(443);
+      ((JTextArea)value(runner,"request")).setText("GET /search?q=§PAYLOAD§ HTTP/1.1\r\nHost: simple.example.test\r\nCookie: SID=ALICE_DEMO_SECRET\r\n\r\n");
+      Class<?> entry=Class.forName("kr.payloadrunner.PayloadRunnerPanel$Entry");
+      var constructor=entry.getDeclaredConstructor(kr.payloadrunner.Engine.Row.class,burp.IHttpService.class);constructor.setAccessible(true);
+      @SuppressWarnings("unchecked") var entries=(java.util.List<Object>)value(runner,"entries");
+      var model=(javax.swing.table.DefaultTableModel)value(runner,"model");
+      String[] payloads={"baseline","WB_CANARY_101","<b>WB_CANARY_101</b>","WB_CONTROL_101"};
+      for(int i=0;i<payloads.length;i++){
+        byte[] request=("GET /search?q="+java.net.URLEncoder.encode(payloads[i],StandardCharsets.UTF_8)+" HTTP/1.1\r\nHost: simple.example.test\r\n\r\n").getBytes(StandardCharsets.UTF_8);
+        String body="<html>\n  <body>\n    <p>"+payloads[i].replace("<","&lt;").replace(">","&gt;")+"</p>\n  </body>\n</html>";
+        byte[] wire=("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n"+body).getBytes(StandardCharsets.UTF_8);
+        var response=new kr.payloadrunner.Engine.Response(200,wire.length,"text/html",body,false,wire,true);
+        var row=new kr.payloadrunner.Engine.Row(i+1,payloads[i],22+i,response,i==0?"기준 응답":"반사 관찰","화면 검증용 합성 데이터 · 브라우저 실행 미확인",request);
+        entries.add(constructor.newInstance(row,proxy(burp.IHttpService.class,(p,m,a)->switch(m.getName()){case "getHost"->"simple.example.test";case "getPort"->443;case "getProtocol"->"https";default->def(m);})));model.addRow(new Object[]{row.index(),row.payload(),200,wire.length,row.millis(),row.verdict(),row.evidence()});
+      }
+      ((JTable)value(runner,"table")).setRowSelectionInterval(2,2);
+      var progress=(JProgressBar)value(runner,"progress");progress.setMaximum(4);progress.setValue(4);progress.setString("예시 · 4 / 4");
+      ((JLabel)value(runner,"status")).setText("합성 화면 검증 데이터 · 실제 HTTP 전송 0건 · 브라우저 실행 미확인");
+    } catch(Exception e){throw new IllegalStateException("Synthetic payload fixture",e);}
+  }
+
   static void layout(Component component) {
     if (component instanceof Container parent) {
       parent.doLayout();
@@ -210,6 +235,10 @@ public final class SimplePreview extends WorkbenchTest {
           response(200,"{\"id\":101,\"title\":\"권한 점검용 문서\",\"ownerId\":\"alice\"}"));
       seedTraffic(extension,request(origin+"/api/users/me","GET",true,List.of(header("Cookie","SID=BOB_DEMO_SECRET"))),
           response(200,"{\"id\":\"bob\",\"role\":\"일반 사용자\",\"diagnostic\":\"java.lang.Exception\"}"));
+      for(String path:new String[]{"/api/projects","/api/documents/102","/api/admin/users","/api/auth/login","/api/projects/12/notes"}){
+        int status=path.contains("admin")?403:path.contains("102")?404:200;
+        seedTraffic(extension,request(origin+path,"GET",true,List.of(header("Accept","application/json"))),response(status,status==200?"{\"items\":[]}":"{\"error\":\"unavailable\"}"));
+      }
       var recon = (ResponseReconPanel) get(extension,"responseRecon");
       var analyzed = new java.util.concurrent.CountDownLatch(1);
       recon.submit(() -> { recon.refresh(recon.generation.get()); analyzed.countDown(); });
@@ -219,8 +248,8 @@ public final class SimplePreview extends WorkbenchTest {
         var browser=(TrafficBrowser)value(extension,"trafficBrowser");
         browser.refresh();
         awaitUi(()->browser.positionReady(browser.capturePosition()),"published traffic search snapshot");
-        scenario("Traffic feedback and visible originals share a settled snapshot",browser.positionReady(browser.capturePosition())&&table.getRowCount()==3);
-        capture(root,"01-capture.png");
+        scenario("Traffic feedback and visible originals share a settled snapshot",browser.positionReady(browser.capturePosition())&&table.getRowCount()==8);
+        table.setRowSelectionInterval(1,1);capture(root,"01-capture.png");
         table.setRowSelectionInterval(1,1); capture(root,"02-request.png");
         click(root,"wb.simple.tool.mapper"); click(root,"wb.simple.tool.response.recon");
         scenario("Production response analysis displays a synthetic observation", recon.findingTable.getRowCount() > 0);
@@ -230,14 +259,14 @@ public final class SimplePreview extends WorkbenchTest {
         awaitUi(()->{var current=(JsAnalysis.Result)value(js,"current");return current!=null&&!current.endpoints().isEmpty();},"selected original JS analysis");
         scenario("JS analysis retains the selected HTTP source",js.sourceUrl.getText().startsWith(origin+"/assets/app.js")&&js.input.getText().contains("fetch("));
         if(js.urlTable.getRowCount()>0)js.urlTable.setRowSelectionInterval(0,0);
-        capture(root,"10-js.png"); table.setRowSelectionInterval(1,1);
+        capture(root,"10-js.png");var details=(JPanel)SimpleWorkflowTest.named(root,"wb.js.inline.detail");scenario("Selected JS detail starts at the first labeled value",((JScrollPane)details.getComponent(0)).getViewport().getViewPosition().y==0);table.setRowSelectionInterval(1,1);
         click(root,"wb.simple.tool.mapper");
         var mapper=(kr.featuremapper.FeatureMapperWorkspace)value(extension,"featureMapper");
         mapper.observeCaptured(System.currentTimeMillis(),"합성 UI 검증",request(origin+"/api/documents/101","GET",true,List.of()),response(200,"{\"id\":101,\"title\":\"문서 예시\"}"));invoke(mapper,"refresh");
         JTable mapperTable=(JTable)value(mapper,"table");if(mapperTable.getRowCount()>0)mapperTable.setRowSelectionInterval(0,0);
         capture(root,"08-mapper.png");
         click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
-        click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); capture(root,"07-payload.png");
+        click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); payloadFixture(value(entry,"payloadRunner"));capture(root,"07-payload.png");
         var phases=(JTabbedPane)SimpleWorkflowTest.named(root,"wb.payload.steps");
         phases.setSelectedIndex(1);capture(root,"07-payload-results.png");
         scenario("Payload results phase opens without starting inspection",!(boolean)value(value(entry,"payloadRunner"),"running"));
@@ -277,6 +306,7 @@ public final class SimplePreview extends WorkbenchTest {
         evidence.evidenceTitle.setText("문서 접근 권한 비교 · 작성 예시");
         evidence.impact.setText("다른 사용자와 비로그인 응답을 확인하고 접근 정책과 대조했습니다.\n이 가이드 화면의 패킷과 결과는 합성 데이터입니다.");
         evidence.repro.setText("1. 점검 대상 URL을 SCOPE에 추가합니다.\n2. 원본 요청을 선택하고 계정 1/2와 비로그인을 연결합니다.\n3. 비교 결과와 응답 원문을 확인합니다.\n4. 가림 미리보기를 확인한 뒤 ZIP을 저장합니다.");
+        evidence.impact.setCaretPosition(0);evidence.repro.setCaretPosition(0);
         evidence.impact.setName("wb.simple.evidence.impact"); evidence.repro.setName("wb.simple.evidence.repro");
         if(evidence.evidenceTable.getRowCount()>0)evidence.evidenceTable.setRowSelectionInterval(0,0);
         scenario("Original and comparison packets are captured together", evidence.evidenceCount() >= 3);

@@ -1,5 +1,15 @@
 # 현재 개발 상태
 
+## Simple 1.4.9 · 외부 노출·CVE 조사 — main 병합 완료
+
+검색 노출 / CVE 후보의 두 탭을 추가했습니다. Google 검색식·결과 URL 가져오기, 현재 SCOPE 확인 후 Repeater 준비, NVD/KEV/EPSS 명시적 조회, 관측/영향/수정 버전과 조건·출처 상세, 조회 취소·세션 캐시·프로젝트 초기화를 제공합니다. 구현 `5487aef6199cc0020b1128c32a04766bf5738be7`를 main `58a3c47e5f99bde963a9cb7e70eaec601bbff3b1`로 일반 병합·push했습니다. 공개 main JAR를 내려받아 로컬 검증 파일과 동일한 체크섬임을 확인했습니다.
+
+전체 **5,944개**(151개 Java 그룹 5,632 · payload HTTP 136 · Mapper Java 147 · Node 29), 실제 Swing **176개 화면**, Katana **102개** 통과. 새 기능 회귀 38개, 잘린 컨트롤과 최소 읽기 높이 미달 0개. 내장 Mapper 0.3.11 / helper 0.4.1. JAR SHA-256 `507620f0daaeab37859b18707844e3f19d4a7f531bcd7372969d62745481439d`.
+
+[설치 JAR](simple/downloads/1.4.9/burp-workbench-simple-1.4.9.jar) · [구현 화면](simple/docs/images/1.4.9/README.md) · [기능·제한](simple/docs/RELEASE_SIMPLE_1.4.9_KR.md) · [검증](docs/reports/2026-10-30-exposure-cve-research/VERIFICATION.json) · [병합 기록](docs/reports/2026-10-30-exposure-cve-research/MERGE_KR.md)
+
+캡처는 실제 Swing 컴포넌트와 합성 데이터이며 native Burp GUI가 아닙니다. 클라우드 네트워크 정책 때문에 외부 CVE API/Google 실접속은 미검증입니다. NVD 최대 100건, 세션 메모리 캐시, 수동 URL 가져오기이며 수정 버전은 공급사 공지 확인이 필요합니다. 원본 Next와 이전 배포 파일은 보존했습니다.
+
 ## Simple 1.4.8 · 시안 구성 요소 적용 — main 병합 완료
 
 사각 단계 버튼처럼 시안과 다른 기본 컴포넌트가 남아 있던 부분을 다시 구성했습니다. 원형 단계 번호·주황 밑줄, 대상/계정/진행 요약, 계정 비교 표·차이 표시, 이름/값 상세 정보, Raw/JSON 탭, 증거 검색·서식 도구까지 8개 도구에 적용합니다. 검증한 구현 `d23adc511612ed6a7a2333a5182b2910b1bfb1d9`를 main `8d45e6b98ae646a92d6680cc03cd54721c383aaa`로 일반 병합·push했고 공개 JAR 체크섬을 확인했습니다.

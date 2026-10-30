@@ -1,4 +1,17 @@
 # 현재 개발 상태
+
+## Workbench Simple 1.4.5 · 승인한 도구별 디자인 main 반영
+
+2026-10-30T18:16:06.383383+09:00 기준 원격 main에 병합했습니다. 병합 커밋 `8971308b2f1f40ce1dfccb7e790d17e55d30fd3f`, 구현 커밋 `c16fa61`입니다. 사용자가 소스 적용과 main 병합을 명시적으로 요청했으며 GitHub API 접근 제한으로 PR API를 사용하지 않고 일반 Git 병합·push로 반영했습니다. 강제 push나 브랜치 보호 우회는 하지 않았습니다.
+
+큰 본문 제목 없이 폴더·상단 경로에서 도구를 식별합니다. 계정 비교·응답 분석·증거의 선택 상세를 본문에 연결하고, 입력값 검사는 준비/결과 단계를 분리했습니다. 1.4.3의 HttpServer 로드 수정과 1.4.4의 폴더 복원도 포함합니다. 원본 Next와 이전 배포는 보존합니다.
+
+전체 로컬 검사 5,912개, 운영 Swing 화면 132개, Katana 연동 102개 및 패키지 무결성을 통과했습니다. 실제 Burp GUI·Windows DPI/IME·수동 브라우저 검증은 미실행입니다. GitHub CI 통과를 주장하는 기록은 아닙니다.
+
+[Simple 1.4.5 JAR](simple/downloads/1.4.5/burp-workbench-simple-1.4.5.jar) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.5_KR.md) · [도구별 실제 화면](simple/docs/images/1.4.5/README.md) · [병합 인수인계](docs/reports/2026-10-30-simple-compact-main/MERGE_KR.md)
+
+아래는 이전 병합 이력입니다.
+
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
 기준: 2026-10-30 (한국 시간). 현재 Simple 소스는 **Workbench Simple 1.4.2** 반복 작업·설정·복구 개선판이며 기존 **Workbench Next 0.53.4**와 Simple 1.4.0 및 과거 모든 배포·후보 기록을 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**은 유지합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.

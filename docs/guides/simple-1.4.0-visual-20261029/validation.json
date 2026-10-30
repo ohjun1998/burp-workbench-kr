@@ -1,0 +1,52 @@
+{
+  "result": "passed",
+  "scope": "New document-only verification. No extension build, Katana, Burp GUI, native MV3, or target-site scan. Historical product metrics remain separate.",
+  "documentRevision": "2026-10-29",
+  "steps": 33,
+  "callouts": 95,
+  "pdfPages": 40,
+  "pdfBookmarks": 40,
+  "checks": {
+    "33_steps_95_explanations": true,
+    "one_to_one_callouts": true,
+    "source_hashes_and_all_callout_bounds": true,
+    "all_detail_panels_enlarge_at_least_1_2x": true,
+    "html_ids_links_and_embedded_original_images": true,
+    "pdf_40_pages_40_bookmarks_all_captures_fonts_bounds": true,
+    "current_html_actual_chromium_33_checks": true,
+    "current_pdf_all_40_pages_visually_reviewed": true,
+    "original_product_inputs_unchanged": true
+  },
+  "allDetailZoomScaleAtLeast": 1.25,
+  "pdfOutsideText": [],
+  "pdfMissingGlyphs": [],
+  "pdfFonts": [
+    "AAAAAA+NanumGothic",
+    "AAAAAB+NanumGothic",
+    "Helvetica"
+  ],
+  "browserChecks": 33,
+  "browserScope": "Actual Chromium reading the standalone guide in a fresh context. file:// is attempted first; a managed-policy block is recorded separately and the identical bytes are served over isolated loopback HTTP with non-loopback requests denied. No policy modification, Burp GUI, native extension, Katana, or target-site test.",
+  "fileProtocol": {
+    "result": "blocked",
+    "reason": "ERR_BLOCKED_BY_ADMINISTRATOR",
+    "policyChanged": false
+  },
+  "pdfVisualReview": "all 40 pages; separate detailed review in pdf-review.json",
+  "preservation": {
+    "scope": "original Simple product and historical artifacts compared with pre-document hashes",
+    "checkedFiles": 1688,
+    "changedFiles": [],
+    "result": "passed"
+  },
+  "artifacts": {
+    "Workbench_Simple_1.4.0_Visual_Guide_20261029_KR.html": {
+      "sha256": "f486b7401681e3ad4409c0cf94bd8ee16e4fe2a6e91630eabadb8f88d3b7d7a7",
+      "bytes": 9072727
+    },
+    "Workbench_Simple_1.4.0_Visual_Guide_20261029_KR.pdf": {
+      "sha256": "443eda3860bf4d685d96e0611bc47be5a5a6e167bc2c1d08ab6eb0ae9492dc20",
+      "bytes": 2802383
+    }
+  }
+}

@@ -25,9 +25,9 @@ public final class JsUiOptimizationTest {
      settle(panel,size[0],size[1]);edt(()->{
       Rectangle source=visible(panel.input,panel);
       check(source.width>=300&&source.height>=80,"editable JS source remains visible in "+mode+" at "+size[0]+"x"+size[1]+" ("+source.width+"x"+source.height+")");
-      check(visible(panel.analysisList,panel).height==panel.analysisList.getHeight()&&visible(panel.navigator.previous,panel).height==panel.navigator.previous.getHeight(),"analysis list and navigation controls stay visible in "+mode+" at "+size[0]);
+      check(visible(panel.sources,panel).height==panel.sources.getHeight()&&visible(panel.navigator.previous,panel).height==panel.navigator.previous.getHeight(),"analysis list and navigation controls stay visible in "+mode+" at "+size[0]);
       Rectangle findings=visible(panel.results,panel);
-      check(findings.width>=450&&findings.height>=300&&!SwingUtilities.isDescendingFrom(panel.requestPacket,panel),"findings use the released packet area in "+mode+" at "+size[0]);
+      check(findings.width>=450&&findings.height>=140&&panel.resultView.detail.getParent().getHeight()>=100&&!SwingUtilities.isDescendingFrom(panel.requestPacket,panel),"findings and inline details share the released packet area in "+mode+" at "+size[0]);
      });
     }
    }
@@ -35,7 +35,7 @@ public final class JsUiOptimizationTest {
    edt(()->panel.load("fetch('/users'); const apiKey='ghp_"+"A1b2C3d4".repeat(5)+"';",source));JsAnalysisPanelTest.waitDone(panel);
    edt(()->{
     check(((JLabel)UiLayoutTest.named(panel,"wb.js.source.summary")).getToolTipText().equals(source),"long source URL is available in the source tooltip");
-    check(!SwingUtilities.isDescendingFrom(panel.sources,panel)&&panel.analysisList.getPreferredSize().width<200,"analysis list button has stable width without an inline source selector");
+    check(SwingUtilities.isDescendingFrom(panel.sources,panel)&&panel.sources.getPreferredSize().width<=320,"inline source selector has a bounded width while full source remains in tooltip");
     check(!panel.toRepeater.isEnabled()&&!panel.resolve.isEnabled(),"analysis does not enable endpoint actions before row selection");
     panel.urlTable.setRowSelectionInterval(0,0);
     check(panel.toRepeater.isEnabled()&&panel.resolve.isEnabled()&&panel.locate.isEnabled(),"selecting an endpoint enables its actions");

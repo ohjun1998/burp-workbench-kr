@@ -35,6 +35,8 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
         check(auth.inlinePreview.baseline.text.getText().contains("BASELINE_ORIGINAL")
             && auth.inlinePreview.response.text.getText().contains("ACCOUNT_B_ORIGINAL"),
             "inline account choice displays exact baseline and selected account response");
+        check(auth.inlinePreview.differences.getText().contains("403")&&auth.inlinePreview.differences.getText().contains("200"),"account difference tab compares the selected exact response status lines");
+        check(auth.accountCards[0].getParent()!=null&&auth.accountCards[2].getParent()==null&&auth.accountCards[3].getParent()!=null,"three summary cards occupy three cells without a blank unassigned account cell");
         check(SwingUtilities.isDescendingFrom(auth.inlinePreview, auth), "comparison reader is mounted in the main workspace");
         auth.inlinePreview.showRun(null);
         check(!auth.inlinePreview.response.text.getText().contains("ACCOUNT_B_ORIGINAL"), "cleared account selection removes stale response");
@@ -74,13 +76,26 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
         String original = input.getText();
         phases.setSelectedIndex(1); phases.setSelectedIndex(0);
         check(input.getText().equals(original), "switching preparation/results preserves exact payload input");
+        ((JToggleButton)SimpleWorkflowTest.named(root,"wb.payload.step.results")).doClick();check(phases.getSelectedIndex()==1,"visible results step opens the retained workflow page");
+        ((JButton)SimpleWorkflowTest.named(root,"wb.payload.prepare")).doClick();check(phases.getSelectedIndex()==0&&input.getText().equals(original),"return to preparation preserves authored request");
         check(!(boolean) SimpleWorkflowTest.unchecked(payload, "running") && PayloadIntegrationTest.sent.get() == 0, "changing phase and reading details never starts a payload run or sends HTTP");
 
         for (String tool : List.of("traffic", "mapper", "auth", "js", "environment", "response.recon", "payload", "bounty")) {
           SimpleWorkflowTest.click(root, "wb.simple.tool." + tool);
           check(SimpleWorkflowTest.toolSelected(root, tool), "compact design keeps the exact " + tool + " folder route");
         }
+        extension.openFeature("traffic");root.setSize(1600,1000);for(int i=0;i<6;i++)UiLayoutTest.layout(root);
+        var brand=(JLabel)SimpleWorkflowTest.named(root,"wb.navigation.brand");var bar=SimpleWorkflowTest.named(root,"wb.navigation.toolbar");
+        check(brand.getText().equals("Workbench")&&bar.getHeight()<=50,"approved shell has the compact Workbench brand bar");
+        var tree=(JTree)SimpleWorkflowTest.named(root,"wb.navigation.tree");var nodes=((javax.swing.tree.DefaultMutableTreeNode)tree.getModel().getRoot()).depthFirstEnumeration();int leaves=0;while(nodes.hasMoreElements())if(((javax.swing.tree.DefaultMutableTreeNode)nodes.nextElement()).isLeaf())leaves++;check(leaves==10,"approved sidebar has ten leaves in five groups; auxiliary routes remain reachable separately");
+        var nav=(JSplitPane)SimpleWorkflowTest.named(root,"wb.navigation.split");check(Math.abs(nav.getDividerLocation()-220)<10,"approved sidebar retains the reference width at 1600px");
+        var traffic=(JTable)SimpleWorkflowTest.unchecked(extension,"logTable");check(java.util.stream.IntStream.range(0,traffic.getColumnCount()).mapToObj(traffic::getColumnName).toList().equals(List.of("NO","메서드","URL","상태","계정","시간","메모")),"traffic uses approved visible columns without discarding hidden metadata");
+        var browser=(TrafficBrowser)SimpleWorkflowTest.unchecked(extension,"trafficBrowser");String typed=browser.search.getText();browser.quickFilter("POST","오류","Bob");check(browser.query.method().equals("POST")&&browser.query.status().equals("오류")&&browser.query.account().equals("Bob")&&browser.search.getText().equals(typed),"quick filters preserve free text and apply existing query engine");
+        var query=browser.query.prepare("");check(query.matchesFields("POST","500","Bob")&&query.matchesFields("POST","403","Bob")&&!query.matchesFields("POST","302","Bob"),"error segment covers both server and client HTTP errors");browser.quickFilter("전체","전체","");check(((JComboBox<?>)SimpleWorkflowTest.named(root,"wb.traffic.account")).getSelectedItem().equals("전체")&&((JToggleButton)SimpleWorkflowTest.named(root,"wb.traffic.quick.전체")).isSelected(),"quick filter controls follow restored query state");
+        extension.openFeature("mapper");for(int i=0;i<5;i++)UiLayoutTest.layout(root);var mapperSplit=(JSplitPane)SimpleWorkflowTest.named(root,"fm.navigation.split");var mapperToggle=(JToggleButton)SimpleWorkflowTest.named(root,"fm.tree.toggle");int initial=mapperSplit.getDividerLocation();mapperToggle.doClick();UiLayoutTest.layout(root);check(mapperSplit.getDividerLocation()<80,"folding the mapper tree reclaims its width");mapperToggle.doClick();UiLayoutTest.layout(root);check(Math.abs(mapperSplit.getDividerLocation()-initial)<10,"expanding restores mapper tree width");
       });
+      var js=(JsAnalysisPanel)get(extension,"jsAnalysis");edt(()->js.load("fetch('/first');fetch('/second');","https://compact.test/app.js"));JsAnalysisPanelTest.waitDone(js);
+      edt(()->{js.urlTable.setRowSelectionInterval(1,1);check(js.resultView.detail.getText().contains("/second"),"JS inline detail follows the selected original model row");var search=(JTextField)SimpleWorkflowTest.named(js,"wb.js.findings.search");search.setText("first");check(js.urlTable.getRowCount()==1,"inline JS search filters the existing result model");js.resultView.apply();check(js.urlTable.getRowCount()==1,"search stays combined when existing result filters refresh");js.urlTable.setRowSelectionInterval(0,0);check(js.resultView.detail.getText().contains("/first")&&!js.resultView.detail.getText().contains("/second"),"filtered JS detail cannot show the previous source row");search.setText("[missing]");check(js.urlTable.getRowCount()==0&&js.resultView.detail.getText().isEmpty(),"literal JS search clears stale inline details");check(js.resultTabs.titles.get(0).getText().endsWith("2"),"visible custom result tab shows the actual source count");});
     } finally { SimpleWorkflowTest.unload(); }
     System.out.println("SimpleCompactDesignTest: " + checks + " checks passed");
   }

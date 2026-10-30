@@ -12,7 +12,7 @@ import java.util.regex.PatternSyntaxException;
 record TrafficQuery(String method,String status,int range,boolean sensitive,boolean regex,
                     boolean group,boolean normalize,boolean important,boolean memo,String account,int minutes) {
   private static final Pattern GROUP_ID=Pattern.compile("(?i)(?<=/)(?:[0-9]+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?=/|$)");
-  TrafficQuery { if(method==null||!method.matches("전체|GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS")||status==null||!status.matches("전체|[1-5][0-9]{2}|[2-5]xx")||account==null||account.length()>128||account.chars().anyMatch(Character::isISOControl)||range<0||range>2||minutes<0||minutes>1440)throw new IllegalArgumentException("검색 조건·범위 확인"); }
+  TrafficQuery { if(method==null||!method.matches("전체|GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS")||status==null||!status.matches("전체|오류|[1-5][0-9]{2}|[2-5]xx")||account==null||account.length()>128||account.chars().anyMatch(Character::isISOControl)||range<0||range>2||minutes<0||minutes>1440)throw new IllegalArgumentException("검색 조건·범위 확인"); }
   static TrafficQuery defaults(){return new TrafficQuery("전체","전체",0,false,false,false,true,false,true,"",0);}
   Map<String,Object> json(){return Map.ofEntries(Map.entry("method",method),Map.entry("status",status),Map.entry("range",range),Map.entry("sensitive",sensitive),Map.entry("regex",regex),Map.entry("group",group),Map.entry("normalize",normalize),Map.entry("important",important),Map.entry("memo",memo),Map.entry("account",account),Map.entry("minutes",minutes));}
   static TrafficQuery read(String json){
@@ -55,7 +55,7 @@ record TrafficQuery(String method,String status,int range,boolean sensitive,bool
     boolean matchesFields(String verb,String code,String who){
       if(!settings.method().equals("전체")&&!settings.method().equals(verb))return false;
       String status=settings.status();
-      if(!status.equals("전체")&&!(status.endsWith("xx")?code.startsWith(status.substring(0,1)):code.equals(status)))return false;
+      if(!status.equals("전체")&&!(status.equals("오류")?(code.startsWith("4")||code.startsWith("5")):status.endsWith("xx")?code.startsWith(status.substring(0,1)):code.equals(status)))return false;
       return account.isBlank()||who.toLowerCase(Locale.ROOT).contains(account);
     }
     boolean matchesText(String value,BooleanSupplier cancelled){

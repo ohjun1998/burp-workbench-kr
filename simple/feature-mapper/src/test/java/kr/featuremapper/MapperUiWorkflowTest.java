@@ -56,7 +56,7 @@ final class MapperUiWorkflowTest {
           MapperTest.check(scroll.getRowHeader()!=null&&text.getText().equals(packet),"Mapper line gutter preserves packet CRLF and content");
         }}catch(Exception e){throw new RuntimeException(e);}
         JTable table=(JTable)named(root,"fm.history");
-        MapperTest.check(table.getRowHeight()>=32&&table.getRowCount()==4,"Mapper keeps readable rows and every captured item");
+        MapperTest.check(table.getRowHeight()>=28&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2&&table.getRowCount()==4,"Mapper keeps readable rows and every captured item");
         ((JButton)named(root,"fm.navigation.settings")).doClick(0);
         MapperTest.check(fixture.titles.get(0).endsWith("설정")&&named(fixture.opened.get(0),"fm.settings")!=null,"Mapper settings open separately from the current traffic view");
         JTextArea connection=(JTextArea)named(fixture.opened.get(0),"fm.browser.status");

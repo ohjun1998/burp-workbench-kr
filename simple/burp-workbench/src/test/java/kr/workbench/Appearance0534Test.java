@@ -144,13 +144,13 @@ public final class Appearance0534Test extends WorkbenchTest {
       edt(()->{
         JTable table=(JTable)unchecked(initial,"logTable");LayoutSettings layout=(LayoutSettings)unchecked(initial,"commonSettings");
         WorkspaceAppearance appearance=(WorkspaceAppearance)unchecked(layout,"appearance");
-        check(table.getModel().getColumnCount()==11&&table.getColumnCount()==8,"production traffic keeps11 model columns with8 visible columns");
-        check(visibleModels(table).equals(List.of(0,1,2,3,7,8,9,10)),"production metadata columns4 through6 are hidden");
+        check(table.getModel().getColumnCount()==11&&table.getColumnCount()==7,"production traffic keeps11 model columns with7 approved visible columns");
+        check(visibleModels(table).equals(List.of(0,1,2,3,8,4,10)),"production metadata columns4 through6 are hidden");
         table.moveColumn(table.convertColumnIndexToView(2),0);table.getColumnModel().getColumn(0).setWidth(231);
         appearance.capture();
         WorkspaceAppearance.State saved=WorkspaceAppearance.decode((String)projectA.get(WorkspaceAppearance.KEY));
         String id=(String)table.getClientProperty("wb.appearance.id");
-        check(saved.columns().containsKey(id)&&saved.columns().get(id).order().equals(List.of(2,0,1,3,7,8,9,10)),"production traffic's actual visible subset is durably captured");
+        check(saved.columns().containsKey(id)&&saved.columns().get(id).order().equals(List.of(2,0,1,3,8,4,10)),"production traffic's actual visible subset is durably captured");
         check(saved.columns().get(id).widths().get(0)==231,"production URL column width is stored with its exact model index");
         JTable changedSubset=new JTable(table.getModel());
         for(int hidden=6;hidden>=4;hidden--)changedSubset.removeColumn(changedSubset.getColumnModel().getColumn(hidden));
@@ -169,11 +169,11 @@ public final class Appearance0534Test extends WorkbenchTest {
       edt(()->{
         JTable table=(JTable)unchecked(reopened,"logTable");LayoutSettings layout=(LayoutSettings)unchecked(reopened,"commonSettings");
         WorkspaceAppearance appearance=(WorkspaceAppearance)unchecked(layout,"appearance");
-        check(visibleModels(table).equals(List.of(2,0,1,3,7,8,9,10)),"recreated production workspace restores hidden-subset column order");
+        check(visibleModels(table).equals(List.of(2,0,1,3,8,4,10)),"recreated production workspace restores hidden-subset column order");
         check(table.getColumnModel().getColumn(0).getWidth()==231,"recreated production workspace restores URL width");
-        check(table.convertColumnIndexToView(4)<0&&table.convertColumnIndexToView(5)<0&&table.convertColumnIndexToView(6)<0,"restoration never exposes hidden traffic metadata");
+        check(table.convertColumnIndexToView(7)<0&&table.convertColumnIndexToView(5)<0&&table.convertColumnIndexToView(6)<0,"restoration never exposes hidden traffic metadata");
         String aSaved=(String)projectA.get(WorkspaceAppearance.KEY);host.project.set(projectB);layout.refreshProject();
-        check(visibleModels(table).equals(List.of(0,1,2,3,7,8,9,10)),"new project resets traffic order to its own visible subset defaults");
+        check(visibleModels(table).equals(List.of(0,1,2,3,8,4,10)),"new project resets traffic order to its own visible subset defaults");
         check(aSaved.equals(projectA.get(WorkspaceAppearance.KEY)),"project switch preserves the previous project's column metadata");
         table.moveColumn(table.convertColumnIndexToView(10),0);table.getColumnModel().getColumn(0).setWidth(179);appearance.capture();
         host.project.set(projectA);layout.refreshProject();
@@ -191,7 +191,7 @@ public final class Appearance0534Test extends WorkbenchTest {
       edt(()->{
         JTable table=(JTable)unchecked(memoReopened,"logTable");
         check(table.getColumnModel().getColumn(table.convertColumnIndexToView(10)).getMaxWidth()==0&&table.getColumnModel().getColumn(table.convertColumnIndexToView(10)).getWidth()==0,"reopening saved widths cannot unhide disabled memo column");
-        check(table.convertColumnIndexToView(4)<0&&table.convertColumnIndexToView(5)<0&&table.convertColumnIndexToView(6)<0,"reopening with memo disabled preserves all metadata column exclusions");
+        check(table.convertColumnIndexToView(7)<0&&table.convertColumnIndexToView(5)<0&&table.convertColumnIndexToView(6)<0,"reopening with memo disabled preserves all metadata column exclusions");
         TrafficBrowser browser=(TrafficBrowser)unchecked(memoReopened,"trafficBrowser");
         browser.restoreSearchState(TrafficSearchPresets.capture(TrafficQuery.defaults()));
         check(table.getColumnModel().getColumn(table.convertColumnIndexToView(10)).getMaxWidth()==400,"memo can be explicitly enabled again without restoring hidden metadata");

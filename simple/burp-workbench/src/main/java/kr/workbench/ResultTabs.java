@@ -51,6 +51,7 @@ final class ResultTabs extends JPanel {
     add(header,BorderLayout.NORTH);add(content);
     viewport.addChangeListener(event -> updateArrows());
     content.addChangeListener(event -> selectTitle());
+    content.addPropertyChangeListener("indexForTitle",event->{for(int i=0;i<titles.size();i++){titles.get(i).setText(content.getTitleAt(i));titles.get(i).getAccessibleContext().setAccessibleName(content.getTitleAt(i));}strip.revalidate();strip.repaint();});
     viewport.addComponentListener(new ComponentAdapter() {
       public void componentResized(ComponentEvent event) { revealSelected(); }
     });

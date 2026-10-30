@@ -1,5 +1,8 @@
 # Burp Workbench KR
 
+**Simple 1.4.6은 승인 시안과 달랐던 1.4.5 화면을 다시 구성합니다.** [설치 JAR](simple/downloads/1.4.6/burp-workbench-simple-1.4.6.jar) · [실제 8개 화면](simple/docs/images/1.4.6/README.md) · [시안/구현 비교](simple/docs/design/1.4.6/COMPARE.html) · [변경·검증](simple/docs/RELEASE_SIMPLE_1.4.6_KR.md). 이전 배포 파일은 보존합니다.
+
+
 **Simple 1.4.5는 승인한 제목 없는 도구별 배치를 적용합니다.** 계정 비교·응답 분석·증거의 선택 상세와 입력값 검사의 준비/결과 단계를 정리했습니다. [새 JAR](simple/downloads/1.4.5/burp-workbench-simple-1.4.5.jar) · [소스·체크섬](simple/downloads/1.4.5/) · [변경·실제 화면](simple/docs/RELEASE_SIMPLE_1.4.5_KR.md).
 
 **Simple 1.4.4는 첨부한 0.39.2 스타일의 디자인·배치를 적용합니다.** 큰 도구 버튼 줄을 왼쪽 폴더와 작은 상단 메뉴로 바꾸고 Simple 기능·입력·원본 연결과 1.4.3 로드 수정을 유지합니다. [새 JAR](simple/downloads/1.4.4/burp-workbench-simple-1.4.4.jar) · [소스·체크섬](simple/downloads/1.4.4/) · [배치 안내](simple/docs/RELEASE_SIMPLE_1.4.4_KR.md).

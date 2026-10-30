@@ -1,0 +1,91 @@
+{
+  "version": "1.4.6",
+  "recordedAt": "2026-10-30T19:14:10.733694+09:00",
+  "status": "passed local complete checks, UI captures and native pinned Katana; native Burp not run",
+  "baseCommit": "f83b356c40a3288717dc6c39c9c1318809b76d7c",
+  "branch": "account-a/simple-approved-design",
+  "artifact": "downloads/1.4.6/burp-workbench-simple-1.4.6.jar",
+  "jarSha256": "868b8f7369f5d71aa00b19635cfea83db8092b7e3dad501b5758c6ff0e6fd67b",
+  "embeddedMapperVersion": "0.3.9",
+  "browserHelperVersion": "0.4.1",
+  "toolchain": {
+    "java": "Temurin 17.0.17+10",
+    "mode": "strict --release 17",
+    "python": "3.12.14",
+    "node": "24.19.0"
+  },
+  "checks": {
+    "regressionGroups": 150,
+    "regressionChecks": 5587,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "browserHelperNodeChecks": 29,
+    "total": 5897,
+    "focusedApprovedDesignChecks": 41,
+    "result": "passed",
+    "command": "python simple/dev.py check --java /workspace/.cloud-tools/jdk17/bin/java --javac /workspace/.cloud-tools/jdk17/bin/javac",
+    "exitCode": 0,
+    "logSha256": "11ac227389d7523337f03717836febecdae83d35569d52a00ae087c088a3b9cc"
+  },
+  "ui": {
+    "primaryViews": 96,
+    "scopeViews": 68,
+    "totalRenderedCases": 164,
+    "controls": 3354,
+    "scenarios": 702,
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "primarySizes": [
+      "1024x720",
+      "1280x800",
+      "1600x1000"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "kind": "actual production Swing with synthetic packet/API adapters; not native Burp GUI"
+  },
+  "katana": {
+    "version": "1.8.0",
+    "checks": 102,
+    "binarySha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc",
+    "result": "passed"
+  },
+  "visualReview": {
+    "references": "design/1.4.6/reference-manifest.json",
+    "comparison": "design/1.4.6/COMPARE.html",
+    "actualCaptures": "images/1.4.6/captures.json",
+    "checks": "Workbench bar, five-group/ten-leaf navigation, outline icons/font, action placement, account cards, JS detail, tree width reclaim, payload phases and report editing layout",
+    "limits": "No pixel-equality score; reference mockups differ from one another in font/icon details; actual engine fields/empty states retained"
+  },
+  "changesToUiAssertionCounts": {
+    "AuthLayoutFitTest": [
+      102,
+      71
+    ],
+    "FolderNavigationTest": [
+      51,
+      48
+    ],
+    "SimpleCompactDesignTest": [
+      22,
+      41
+    ],
+    "reason": "collapsed credentials are tested on expansion, approved sidebar has ten leaves, new actual controls/selected data assertions; all 150 groups retained"
+  },
+  "earlierAttempts": "verification/1.4.6/earlier-attempts.json",
+  "preserved": [
+    "original Next sources",
+    "previous versioned JARs/source ZIPs",
+    "original IDs/accounts/SCOPE/budget/explicit-send contracts",
+    "optional HTTP server runtime fallback"
+  ],
+  "notRun": [
+    "native Burp Community 2026.9.2 GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab",
+    "external OAST/BApp/AI services"
+  ]
+}

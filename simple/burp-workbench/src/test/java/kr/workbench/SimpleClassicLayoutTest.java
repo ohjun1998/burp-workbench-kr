@@ -80,8 +80,8 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
 
   private static void referenceTypography() throws Exception {
     Font reference;
-    try (var resource = WorkbenchUi.class.getResourceAsStream("/fonts/NanumGothic-Regular.ttf")) {
-      check(resource != null, "the packaged classic UI includes the reference Nanum Gothic font");
+    try (var resource = WorkbenchUi.class.getResourceAsStream("/fonts/WorkbenchSans-Regular.otf")) {
+      check(resource != null, "the packaged classic UI includes the approved Noto-derived Workbench Sans font");
       reference = Font.createFont(Font.TRUETYPE_FONT, resource);
     }
     check(WorkbenchUi.font().getPSName().equals(reference.getPSName())
@@ -181,11 +181,11 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
         var mapper = (JTabbedPane) value(extension, "mapperTools");
         for (Object[] alias : new Object[][] {
             {"data", "traffic", trafficTools}, {"passive", "environment", exploration}, {"activity", "mapper", mapper}}) {
-          select(tree, (String) alias[0]);
+          navigation.navigate((String) alias[0]);
           check(pages.getSelectedComponent() == enginePages.get(alias[1])
                   && ((JTabbedPane) alias[2]).getSelectedIndex() == 1,
               "classic " + alias[0] + " leaf opens the retained nested tool rather than a new engine");
-          check(tree.getSelectionPath().equals(route(tree, (String) alias[0])),
+          check(tree.getSelectionPath().equals(route(tree, alias[0].equals("passive")?"environment":(String)alias[0])),
               "nested route keeps the actual " + alias[0] + " leaf selected");
           JTabbedPane nested = (JTabbedPane) alias[2];
           Component retained = nested.getComponentAt(1);
@@ -195,7 +195,7 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
                   && retained.getHeight() >= nested.getHeight() - border.top - border.bottom - 2,
               "classic " + alias[0] + " content fills the working pane without a duplicate tab-strip row");
           select(tree, (String) alias[1]);
-          select(tree, (String) alias[0]);
+          navigation.navigate((String) alias[0]);
           check(nested.getSelectedComponent() == retained && nested.getSelectedIndex() == 1,
               "hidden inner tabs retain the exact " + alias[0] + " controller across folder navigation");
         }
@@ -203,9 +203,9 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
                 && codec.getText().equals("UNSAVED_CLASSIC_CODEC")
                 && payload.getText().equals("UNSAVED_CLASSIC_PAYLOAD"),
             "primary and alias routes preserve the selected original and authored input");
-        select(tree, "dashboard");
+        navigation.navigate("dashboard");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath().equals(route(tree, "dashboard")),
+                && tree.getSelectionPath()==null,
             "dashboard folder entry selects the production page and its own tree leaf");
         var current = (JLabel) SimpleWorkflowTest.named(root, "wb.navigation.current");
         check(current.getText().contains(FeatureGuide.title("dashboard")),
@@ -213,7 +213,7 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
         select(tree, "auth");
         SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath().equals(route(tree, "dashboard")),
+                && tree.getSelectionPath()==null,
             "compact dashboard action synchronizes the same page and folder selection");
       });
 

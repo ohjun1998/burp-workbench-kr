@@ -229,8 +229,13 @@ public final class SimplePreview extends WorkbenchTest {
         var js=(JsAnalysisPanel)value(extension,"jsAnalysis");
         awaitUi(()->{var current=(JsAnalysis.Result)value(js,"current");return current!=null&&!current.endpoints().isEmpty();},"selected original JS analysis");
         scenario("JS analysis retains the selected HTTP source",js.sourceUrl.getText().startsWith(origin+"/assets/app.js")&&js.input.getText().contains("fetch("));
+        if(js.urlTable.getRowCount()>0)js.urlTable.setRowSelectionInterval(0,0);
         capture(root,"10-js.png"); table.setRowSelectionInterval(1,1);
-        click(root,"wb.simple.tool.mapper"); capture(root,"08-mapper.png");
+        click(root,"wb.simple.tool.mapper");
+        var mapper=(kr.featuremapper.FeatureMapperWorkspace)value(extension,"featureMapper");
+        mapper.observeCaptured(System.currentTimeMillis(),"합성 UI 검증",request(origin+"/api/documents/101","GET",true,List.of()),response(200,"{\"id\":101,\"title\":\"문서 예시\"}"));invoke(mapper,"refresh");
+        JTable mapperTable=(JTable)value(mapper,"table");if(mapperTable.getRowCount()>0)mapperTable.setRowSelectionInterval(0,0);
+        capture(root,"08-mapper.png");
         click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
         click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); capture(root,"07-payload.png");
         var phases=(JTabbedPane)SimpleWorkflowTest.named(root,"wb.payload.steps");

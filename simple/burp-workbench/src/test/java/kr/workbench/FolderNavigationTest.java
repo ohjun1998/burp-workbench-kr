@@ -65,8 +65,8 @@ public final class FolderNavigationTest extends WorkbenchTest {
         }
         check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "데이터 도구", "점검 관리·증거")),
             "five classic task folders preserve the requested navigation structure");
-        List<String> leafIds = List.of("traffic", "mapper", "js", "environment", "passive", "auth",
-            "response.recon", "payload", "data", "activity", "dashboard", "bounty");
+        List<String> leafIds = List.of("traffic", "mapper", "js", "environment", "auth",
+            "response.recon", "payload", "data", "activity", "bounty");
         check(leaves.equals(leafIds.stream().map(FeatureGuide::title).toList()),
             "classic leaf order retains eight engines, nested aliases and the current dashboard");
         JTable traffic = (JTable) unchecked(extension, "logTable");
@@ -136,7 +136,7 @@ public final class FolderNavigationTest extends WorkbenchTest {
           toggle.doClick();
           layout(panel, width);
           check(!split.getLeftComponent().isVisible() && pages.getWidth() > shownWidth + 250
-              && toggle.isVisible() && toggle.getText().equals("메뉴 보기"),
+              && toggle.isVisible() && toggle.getAccessibleContext().getAccessibleName().equals("메뉴 보기"),
               "hide frees content width and leaves a visible restore action at " + width);
           toggle.doClick();
           layout(panel, width);

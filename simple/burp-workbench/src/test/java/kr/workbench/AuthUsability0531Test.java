@@ -15,6 +15,7 @@ import javax.swing.*;
 public final class AuthUsability0531Test extends WorkbenchTest {
   static Component named(Component value, String name) {
     if (name.equals(value.getName())) return value;
+    if(value instanceof JComponent j&&j.getComponentPopupMenu()!=null){Component found=named(j.getComponentPopupMenu(),name);if(found!=null)return found;}
     if (value instanceof Container container) for (Component child : container.getComponents()) {
       Component found = named(child, name); if (found != null) return found;
     }
@@ -88,9 +89,9 @@ public final class AuthUsability0531Test extends WorkbenchTest {
         panel.refresh(run); panel.historyFilter.setSelectedIndex(3);
         check(panel.history.getRowCount() == 1, "history session filter exposes affected run");
         panel.historyFilter.setSelectedIndex(5); check(panel.history.getRowCount() == 0, "history cause filter hides unrelated session run");
-        check(!((JButton) named(panel, "wb.auth.history.repair.write")).isEnabled(), "repair action disables when filter removes selected result");
+        check(!((AbstractButton) named(panel, "wb.auth.history.repair.write")).isEnabled(), "repair action disables when filter removes selected result");
         panel.historyFilter.setSelectedIndex(0); panel.history.setRowSelectionInterval(0, 0);
-        check(((JButton) named(panel, "wb.auth.history.repair.write")).isEnabled(), "write repair enables for explicitly selected write result");
+        check(((AbstractButton) named(panel, "wb.auth.history.repair.write")).isEnabled(), "write repair enables for explicitly selected write result");
         panel.stageRepair(panel.current(), 3);
         check(panel.preparationSelection.size() == 1 && panel.preparationSelection.get(0).request() == patch && panel.preparationSlot == 0,
             "result repair stages exact historical request and affected account without replay");

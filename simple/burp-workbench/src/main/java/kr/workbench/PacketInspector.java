@@ -20,7 +20,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   final JEditorPane rendered = PacketRender.pane();
   final JLabel renderNotice = new JLabel("정적 HTML · 외부 요청 없음");
   final JPanel renderPanel = new JPanel(new BorderLayout());
-  final JTextField search = new JTextField();
+  final JTextField search = new WorkbenchSkin.SearchField(0,"패킷에서 검색 (Ctrl+F)");
   final JToggleButton caseSensitive = new JToggleButton("Aa"), regex = new JToggleButton(".*"), wrap = new ToolToggle("↵", "wrap");
   final JButton previous = new ToolButton("↑", "up"), next = new ToolButton("↓", "down"), clear = new JButton("×"), more = new ToolButton("⋯", "more");
   final JLabel count = new JLabel("0 / 0", SwingConstants.CENTER) {
@@ -124,7 +124,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     search.setName(name + ".search");search.setColumns(6);search.setMinimumSize(new Dimension(35, 28));
     search.setToolTipText("Search · Enter/F3 다음 · Shift+Enter/Shift+F3 이전 · Esc 비우기");
     JPanel input = new JPanel(new BorderLayout(2, 0));input.add(search);input.add(clear, BorderLayout.EAST);
-    JLabel label = new JLabel("Search");searchBar.add(label, BorderLayout.WEST);searchBar.add(input);
+    JLabel label = new JLabel(WorkspaceIcons.of("search"));searchBar.add(label, BorderLayout.WEST);searchBar.add(input);
     searchControls.setLayout(new BoxLayout(searchControls,BoxLayout.X_AXIS));
     rebuildSearchControls(false);
     searchBar.add(searchControls, BorderLayout.EAST);add(searchBar, BorderLayout.SOUTH);

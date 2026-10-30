@@ -535,7 +535,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       menu.addSeparator(); evidenceMenuItem(menu, "증거 비우기", evidenceClear.isEnabled(), this::clearEvidence);
       return menu;
     });
-    top.add(WorkbenchUi.row(new JLabel("제목"),evidenceTitle,addEvidence,evidencePreview,evidenceSave,moreEvidence));
+    JPanel heading=new JPanel(new BorderLayout(8,0));heading.add(new JLabel("제목"),BorderLayout.WEST);heading.add(evidenceTitle);
+    top.add(CompactWorkbenchUi.toolbar(heading,WorkbenchUi.row(addEvidence,evidencePreview,evidenceSave,moreEvidence)));
     addEvidence.setToolTipText("수집한 원본, 계정 비교 또는 요청 재현 결과를 증거에 추가합니다.");
     evidencePreview.setToolTipText("ZIP에 저장할 보고서와 패킷의 민감 정보 가림을 먼저 확인합니다.");
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -547,7 +548,10 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceRedoAction.setName("wb.bounty.evidence.redo");
     evidenceDescribe.setName("wb.bounty.evidence.describe");
     evidenceCount.setName("wb.bounty.evidence.count");
-    JPanel itemActions=WorkbenchUi.row(evidenceRemove, evidenceUp, evidenceDown, evidenceUndoAction, evidenceRedoAction, evidenceDescribe);
+    evidenceUp.setText("↑");evidenceDown.setText("↓");evidenceUndoAction.setText("");evidenceUndoAction.setIcon(WorkspaceIcons.of("undo"));evidenceRedoAction.setText("");evidenceRedoAction.setIcon(WorkspaceIcons.of("redo"));evidenceDescribe.setText("메모");evidenceRemove.setText("삭제");
+    for(JButton action:new JButton[]{evidenceUp,evidenceDown,evidenceUndoAction,evidenceRedoAction}){action.putClientProperty("wb.compact.button",true);action.setPreferredSize(new Dimension(32,32));}
+    evidenceUp.setToolTipText("증거 위로 이동");evidenceDown.setToolTipText("증거 아래로 이동");evidenceUndoAction.setToolTipText("되돌리기 · Ctrl+Z");evidenceRedoAction.setToolTipText("다시 적용 · Ctrl+Y");
+    JPanel itemActions=WorkbenchUi.row(evidenceUp,evidenceDown,evidenceRemove,evidenceUndoAction,evidenceRedoAction,evidenceDescribe);
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Z"), "evidence-undo");
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Y"), "evidence-redo");
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), "evidence-description");
@@ -561,8 +565,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       area.putClientProperty("wb.prose", true);
     }
     JSplitPane text = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,
-        WorkbenchUi.card("실제 영향 · 직접 작성", new JScrollPane(impact)),
-        WorkbenchUi.card("재현 절차 · 직접 작성", new JScrollPane(repro)), .5);
+        WorkbenchUi.card("영향", new JScrollPane(impact)),
+        WorkbenchUi.card("재현 절차", new JScrollPane(repro)), .5);
     text.setName("wb.bounty.evidence.notes");
     evidencePacketPreview.setName("wb.bounty.evidence.packet");
     evidencePacketPreview.setEditable(false); evidencePacketPreview.putClientProperty("wb.packet.syntax",true);
@@ -579,8 +583,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     draftState.setEditable(false); draftState.setOpaque(false); draftState.setLineWrap(true);
     draftState.setWrapStyleWord(true); draftState.putClientProperty("wb.prose", true);
     JPanel footer=new JPanel(new BorderLayout());footer.add(draftState);footer.add(evidenceCount,BorderLayout.EAST);p.add(footer, BorderLayout.SOUTH);
-    evidenceTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    int[] widths = {170, 65, 260, 240};
+    evidenceTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+    int[] widths = {135, 55, 190, 90};
     for (int i = 0; i < widths.length; i++)
       {evidenceTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);evidenceTable.getColumnModel().getColumn(i).setWidth(widths[i]);}
     return p;
@@ -593,7 +597,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     var item=evidence.get(selected.get(0));
     evidencePacketLabel.setText(item.label());evidencePacketLabel.setToolTipText(item.url()+" · "+item.note());
     String value;
-    try { value=item.response();String q=item.request();if(!q.equals(evidenceRequestPreview.getText())){evidenceRequestPreview.setText(q);evidenceRequestPreview.setCaretPosition(0);} }
+    try { value=PacketFormat.pretty(item.response());String q=PacketFormat.pretty(item.request());if(!q.equals(evidenceRequestPreview.getText())){evidenceRequestPreview.setText(q);evidenceRequestPreview.setCaretPosition(0);} }
     catch(RuntimeException unavailable){evidenceRequestPreview.setText("");value="원본 미리보기를 읽을 수 없습니다. 증거 원본을 다시 연결하세요.";}
     if(!value.equals(evidencePacketPreview.getText())){evidencePacketPreview.setText(value);evidencePacketPreview.setCaretPosition(0);}
   }

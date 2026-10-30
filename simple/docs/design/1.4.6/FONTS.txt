@@ -1,0 +1,6 @@
+Workbench Sans is a subset of the installed Noto Sans CJK KR Regular font,
+renamed for this distribution. Copyright and SIL Open Font License: NOTO-LICENSE.txt.
+Includes Latin U+0020–024F, Korean Jamo U+1100–11FF, symbols/punctuation
+U+2000–31FF, Hangul U+AC00–D7AF and full-width forms U+FF00–FFEF.
+Subset generated with fontTools 4.61.1. Font outlines are unchanged.
+The previous Nanum Gothic resource and its license remain for compatibility.

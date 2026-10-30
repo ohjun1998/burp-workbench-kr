@@ -21,7 +21,7 @@ public final class UiLayoutTest {
   SwingUtilities.invokeAndWait(()->((PassiveScanWorkspace)unchecked(w,"passiveScan")).open("https://ui.test/",false));
   check(named(root,"wb.traffic.clear")==null&&named(root,"wb.traffic.export")==null&&named(root,"wb.traffic.search.clear")==null,"removed traffic controls are absent");
   SwingUtilities.invokeAndWait(()->{JButton action=new JButton("실행");WorkbenchUi.primary(action);WorkbenchUi.style(action);action.setEnabled(false);check(action.getBackground().equals(WorkbenchUi.surface()),"disabled primary action has neutral background");action.setEnabled(true);check(action.getBackground().equals(WorkbenchUi.accent())&&action.getForeground().equals(Color.WHITE),"ready primary action restores accent");});
-  check(table.getColumnCount()==8,"traffic adds importance account count and note metadata columns");
+  check(table.getColumnCount()==7,"traffic shows the approved account/time/note columns and retains complete metadata model");
   check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
   check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"traffic requests and responses side by side below list");
   check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&named(root,"wb.environment.observations.toggle") instanceof JToggleButton&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"environment full-width candidates and collapsible observations above paired packets");
@@ -29,7 +29,7 @@ public final class UiLayoutTest {
   check(named(root,"wb.js.messages")==null&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS has no embedded packet area and passive keeps the shared packet layout");
   check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"payload editors and results above packets in reference layout");
   check(requestResponseTabs(root)==2 && named(root,"wb.bounty.evidence.packet.tabs") instanceof JTabbedPane,"paired packet readers remain persistent; compact evidence preview has explicit request/response tabs");
-  check(table.getRowHeight()==24&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2,"compact rows fit Gothic text with vertical padding");
+  check(table.getRowHeight()==28&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2,"compact rows fit Gothic text with vertical padding");
   check(table.getDefaultRenderer(Object.class) instanceof WorkbenchUi.Cells,"semantic method/status renderer installed");
   for(int size:new int[]{1000,1280,1600})SwingUtilities.invokeAndWait(()->{
    root.setSize(size,900);for(int i=0;i<tabs.getTabCount();i++){tabs.setSelectedIndex(i);layout(root);check(tabs.getComponentAt(i).getWidth()>0,"tab "+i+" laid out at "+size);}

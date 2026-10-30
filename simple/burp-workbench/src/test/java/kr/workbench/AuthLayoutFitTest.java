@@ -12,11 +12,11 @@ public final class AuthLayoutFitTest extends WorkbenchTest {
     edt(()->{
       check(panel.history.getColumnName(1).equals("메서드")&&panel.history.getColumnName(2).equals("URL"),"history shows method before URL without changing account model indices");
       var actions=(JPanel)UiLayoutTest.named(panel,"wb.auth.actions");
-      check(java.util.Arrays.stream(actions.getComponents()).filter(c -> c instanceof AbstractButton).map(Component::getName).toList().equals(List.of("wb.auth.detect", "wb.simple.auth.review", "wb.simple.auth.stop", "wb.simple.auth.settings")),"Simple toolbar retains four named actions beside compact counts");
+      check(java.util.Arrays.stream(actions.getComponents()).filter(c -> c instanceof AbstractButton).map(Component::getName).toList().equals(List.of("wb.auth.detect", "wb.simple.auth.settings", "wb.auth.history.more", "wb.auth.candidates.toggle")),"detection/settings stay above cards, comparison actions stay with the result filters");
       check(!SwingUtilities.isDescendingFrom(panel.packetDetails,panel) && SwingUtilities.isDescendingFrom(panel.inlinePreview,panel),"inline comparison remains mounted while enlarged packet window stays independent");
       for(int width:new int[]{800,1024,1280,1600}){
         panel.setSize(width,800);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
-        for(JTable table:new JTable[]{panel.candidates,panel.history}){
+        for(JTable table:new JTable[]{panel.history}){
           var viewport=(JViewport)table.getParent();int available=viewport.getWidth();
           int minimum=0;for(int c=0;c<table.getColumnCount();c++)minimum+=table.getColumnModel().getColumn(c).getMinWidth();
           check(available>=minimum?Math.abs(table.getWidth()-available)<=1:table.getWidth()>=minimum,"table fills available width or scrolls at readable minimum: "+width+" "+table.getName());
@@ -25,6 +25,7 @@ public final class AuthLayoutFitTest extends WorkbenchTest {
         }
         for(Component control:actions.getComponents())check(control.getY()+control.getHeight()<=actions.getHeight(),"toolbar wraps within available height");
       }
+      ((JToggleButton)UiLayoutTest.named(panel,"wb.auth.candidates.toggle")).doClick();UiLayoutTest.layout(panel);check(panel.candidates.getParent().getWidth()>0,"candidate controls remain accessible through disclosure");
       var details=panel.candidateDetails;details.setSize(820,600);details.load(new AuthComparePanel.Candidate(1,"demo","https://example.test:443",java.util.Map.of(),1,""));
       for(int i=0;i<4;i++)UiLayoutTest.layout(details);
       check(details.name.getY()==details.role.getY()&&details.name.getX()<details.role.getX(),"account form uses two aligned columns");

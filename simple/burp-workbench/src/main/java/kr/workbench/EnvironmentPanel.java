@@ -132,10 +132,10 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
                     WorkbenchUi.row(targetSummary),
                     new JLabel("SCOPE 내 관찰된 응답을 기준으로 환경 후보를 구성합니다.")));
     setName("wb.environment");
-    setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+    setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
     limit.setSelectedItem(100);
     limit.setPreferredSize(new Dimension(90,32));
-    origins.setPreferredSize(new Dimension(360, 30));
+    origins.setPreferredSize(new Dimension(260, 34));
     origins.setName("wb.environment.origin");account.setName("wb.environment.account");
     account.setPreferredSize(new Dimension(140,30));
     JMenuItem send = new JMenuItem("선택 URL → 비로그인 GET Repeater");
@@ -146,7 +146,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     JPanel toolbar = new JPanel();
     toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
     toolbar.add(WorkbenchUi.row(new JLabel("대상"),origins,new JLabel("계정"),account,targetSettings.button(),all));
-    toolbar.add(WorkbenchUi.row(single, start, pause, stop, settings, more));
+
     WorkbenchUi.primary(single);
     start.setToolTipText("전체 후보를 확인합니다. 실제 GET 요청을 전송합니다.");
     add(
@@ -199,7 +199,10 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     JPanel lists = new JPanel(new BorderLayout(0, 4));
     lists.setName("wb.environment.candidates");
     lists.add(observations, BorderLayout.NORTH);
-    lists.add(WorkbenchUi.card("추천 경로 · 미검증 후보", candidatePane()));
+    JPanel candidatePanel=candidatePane();
+    JTextField search=CompactWorkbenchUi.search(pathTable,"wb.environment.search","경로·상태·근거 검색");
+    JPanel commands=CompactWorkbenchUi.toolbar(search,WorkbenchUi.row(single,start,pause,stop,settings,more));
+    JPanel candidateHeader=new JPanel(new BorderLayout());candidateHeader.add(commands);candidateHeader.add(selection,BorderLayout.SOUTH);candidatePanel.add(candidateHeader,BorderLayout.NORTH);lists.add(candidatePanel);
     JSplitPane messages = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("요청", new JScrollPane(requestView)),
         WorkbenchUi.card("응답", responsePane()), .5);

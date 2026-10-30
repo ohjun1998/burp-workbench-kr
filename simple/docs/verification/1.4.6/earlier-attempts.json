@@ -1,0 +1,61 @@
+[
+  {
+    "log": "approved-check1.log",
+    "sha256": "495b2f3deb2a2224161ad6db89b91299535be49da4c1d83172b7c42795d7818b",
+    "status": "intermediate-not-final",
+    "errors": [
+      "Caused by: java.lang.AssertionError: production traffic keeps11 model columns with8 visible columns",
+      "Caused by: java.lang.NullPointerException: Cannot invoke \"javax.swing.JButton.isEnabled()\" because the return value of \"kr.workbench.AuthUsability0531Test.named(java.awt.Component, String)\" is null",
+      "Caused by: java.lang.NullPointerException: Cannot invoke \"javax.swing.JButton.getText()\" because \"<local1>\" is null",
+      "Caused by: java.lang.AssertionError: JS advanced actions removed from primary toolbar",
+      "Caused by: java.lang.NullPointerException: Cannot invoke \"javax.swing.JPanel.getComponents()\" because \"<local3>\" is null",
+      "Caused by: java.lang.AssertionError: analysis history and recent source picker are outside the main layout",
+      "Caused by: java.lang.Error: Source component not connected to component tree hierarchy",
+      "Caused by: java.lang.AssertionError: compact table typography recovers after host theme replacement",
+      "Caused by: java.lang.AssertionError: Missing navigation tool: dashboard"
+    ],
+    "coreResult": "failed",
+    "failedGroups": [
+      "Appearance0534Test",
+      "AuthUsability0531Test",
+      "JsCompactUpgradeTest",
+      "PacketUiTest",
+      "JsDetailsWorkflowTest",
+      "JsResponseWorkflowTest",
+      "UiLayoutTest",
+      "JsUiOptimizationTest",
+      "SimpleAppearanceTest",
+      "SimpleDashboardIntegrationTest"
+    ]
+  },
+  {
+    "log": "approved-check2.log",
+    "sha256": "c64a0014334392c12327a5109e3f89a19237806b490f97f7297fd806202bc7f9",
+    "status": "intermediate-not-final",
+    "errors": [
+      "/workspace/burp-workbench-kr/simple/burp-workbench/src/test/java/kr/workbench/SimpleDashboardIntegrationTest.java:81: error: cannot find symbol"
+    ]
+  },
+  {
+    "log": "approved-check3.log",
+    "sha256": "36d945cc5e2f58149008804fafb90b10ab63db84641bf50a1966881412a288e2",
+    "status": "intermediate-not-final",
+    "errors": [
+      "Caused by: java.lang.AssertionError: findings use the released packet area in list-left-of-packets at 1004"
+    ],
+    "coreResult": "failed",
+    "failedGroups": [
+      "JsUiOptimizationTest"
+    ]
+  },
+  {
+    "log": "approved-check-final.log",
+    "sha256": "26224f509932ddee2b3258467473a7e965a05e4c98d149a85c1c206ba5ed1816",
+    "status": "intermediate-not-final",
+    "errors": [
+      "Caused by: java.lang.AssertionError: Mapper keeps readable rows and every captured item"
+    ],
+    "coreResult": "passed",
+    "failedGroups": []
+  }
+]

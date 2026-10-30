@@ -266,6 +266,26 @@ public final class SimplePreview extends WorkbenchTest {
         JTable mapperTable=(JTable)value(mapper,"table");if(mapperTable.getRowCount()>0)mapperTable.setRowSelectionInterval(0,0);
         capture(root,"08-mapper.png");
         click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
+        extension.openFeature("exposure");
+        var research=(ExposureResearchPanel)value(extension,"exposureResearch");
+        research.target.setText("simple.example.test");
+        research.importUrls(origin+"/swagger/index.html\n"+origin+"/api-docs\n"+origin+"/openapi.json");
+        research.category.setSelectedItem("공개 문서");research.importUrls(origin+"/documents/guide.pdf\n"+origin+"/public/manual.pdf");
+        research.category.setSelectedItem("관리 화면");research.importUrls(origin+"/admin/login");
+        research.category.setSelectedItem("API 문서");research.exposureTable.setRowSelectionInterval(0,0);
+        research.status.setText("화면 검증용 합성 URL · 대상 HTTP 전송 0건 · 실제 검색 결과 아님");
+        capture(root,"12-exposure-search.png");
+        var technology=new ExposureResearch.Product("nginx","nginx","1.22.1","Server: nginx/1.22.1",origin+"/api/documents/101","SYNTHETIC-UI:101");
+        research.observed.addItem(technology);research.fillProduct(technology);
+        var fixture=SimpleExposureResearchTest.fixture();
+        var examples=new ArrayList<ExposureResearch.Candidate>();
+        for(int i=1;i<=4;i++)examples.addAll(ExposureResearch.parseNvd(fixture.replace("CVE-2099-10001","CVE-2099-1000"+i).replace("9.8",i==1?"9.8":i==2?"8.1":"7.5")));
+        research.display(new ExposureResearch.Batch(examples,Set.of("CVE-2099-10001"),Map.of("CVE-2099-10001",.234,"CVE-2099-10002",.042),java.time.Instant.parse("2026-10-30T12:00:00Z"),"최신 조회 완료","최신 조회 완료",false),technology,false);
+        research.tabs.setSelectedIndex(1);research.cveTable.setRowSelectionInterval(0,0);
+        research.status.setText("화면 검증용 가상 CVE · 실제 취약점/조회 결과 아님 · 외부 API 호출 0건");
+        capture(root,"13-exposure-cve.png");
+        scenario("Research has two tabs and separate observed/affected/fixed details",research.tabs.getTabCount()==2&&research.evidence.getText().contains("SYNTHETIC-UI:101")&&research.fixedDetail.getText().contains("공지 확인"));
+
         click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); payloadFixture(value(entry,"payloadRunner"));capture(root,"07-payload.png");
         var phases=(JTabbedPane)SimpleWorkflowTest.named(root,"wb.payload.steps");
         phases.setSelectedIndex(1);capture(root,"07-payload-results.png");

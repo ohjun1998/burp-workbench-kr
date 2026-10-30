@@ -104,8 +104,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("도구");
     folder(root, "트래픽", "traffic", "mapper");
-    if (classic) folder(root, "탐색·정보 수집", "js", "environment");
-    else folder(root, "탐색·정보 수집", "js", "environment");
+    if (classic) folder(root, "탐색·정보 수집", "js", "environment", "exposure");
+    else folder(root, "탐색·정보 수집", "js", "environment", "exposure");
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
     if (classic) {
       folder(root, "데이터 도구", "data");

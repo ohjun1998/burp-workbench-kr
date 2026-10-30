@@ -74,6 +74,9 @@ public final class FeatureGuide {
           "1. ‘트래픽 → 요청·응답 목록’의 SCOPE를 설정하고 수집을 켠 뒤 사이트를 사용합니다.\n2. 같은 폴더의 ‘기능 자동 매핑’에서 기능·실행·세션과 분류 근거를 확인합니다.\n"
           + "3. 필요한 이름·메모를 정리하고 .fmkr 프로젝트를 저장하거나 엽니다. Chrome/Edge 도우미 연결은 선택 사항입니다.",
           "내장 Mapper를 그대로 사용합니다. OFF/SCOPE는 수집 화면과 공유합니다. 프로젝트에는 원본 쿠키·토큰·본문이 포함됩니다. 분류는 추정이며 검증 완료가 아닙니다."),
+      new Feature("exposure", "외부 노출·CVE 조사", "검색 노출 URL과 공개 CVE 후보를 근거와 함께 검토합니다.",
+          "1. 대상을 선택하고 검색식 복사 또는 Google 열기로 조사합니다. 결과 URL은 직접 가져옵니다.\n2. 관측 제품 또는 CPE 공급사·제품을 입력하고 CVE 후보 조회를 누릅니다.\n3. 관측/영향/수정 버전과 출처를 비교하고 미확인 조건을 검토합니다.",
+          "제품 식별자만 NVD에 전송합니다. Google 열기는 대상 도메인을 Google에 전달합니다. 대상 자동 검사는 없습니다. 최대 100건, 세션 캐시이며 조건 일치는 취약점 확정이 아닙니다."),
       new Feature("settings", "설정", "화면 크기와 목록·패킷 배치를 조정합니다.",
           "1. 상단 ‘설정’ 버튼을 누릅니다.\n2. 글자 크기·목록 간격·요청·응답 배치를 선택합니다.\n3. 필요하면 배치·화면 설정을 초기화합니다.",
           "화면 설정만 바꾸며 대상 요청을 전송하지 않습니다. Simple 설정은 기존 Workbench와 분리됩니다."));
@@ -89,7 +92,7 @@ public final class FeatureGuide {
       case "dashboard" -> "점검 관리·증거 → 점검 대시보드 · 상단 대시보드";
       case "traffic", "mapper" -> "트래픽 → " + title(id);
       case "data" -> "데이터 도구 → 데이터 변환·비교";
-      case "js", "environment", "passive" -> "탐색·정보 수집 → " + title(id);
+      case "js", "environment", "passive", "exposure" -> "탐색·정보 수집 → " + title(id);
       case "activity", "bounty" -> "점검 관리·증거 → " + title(id);
       case "auth", "response.recon", "payload" -> "보안 분석·검증 → " + title(id);
       case "settings" -> "상단 설정";

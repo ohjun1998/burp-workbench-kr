@@ -253,6 +253,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
 
   private JPanel root;
   private EnvironmentPanel environments;
+  private ExposureResearchPanel exposureResearch;
   private PassiveScanWorkspace passiveScan;
   private ActivityPanel activity;
   private StructuredComparePanel structuredCompare;
@@ -402,6 +403,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (root != null) root.putClientProperty("wb.skin.closed", true);
                     if (structuredCompare != null) structuredCompare.close();
                     if (responseRecon != null) responseRecon.close();
+                    if (exposureResearch != null) exposureResearch.close();
                     if (jsAnalysis != null) jsAnalysis.close();
                     if (trafficBrowser != null) trafficBrowser.close();
                     if (authCompare != null) authCompare.close();
@@ -651,6 +653,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       }
     });
     // Append this page so every retained engine keeps its original route index.
+    exposureResearch = new ExposureResearchPanel(api, url -> localScope.matches(url));
+    addPage("외부 노출·CVE 조사", "exposure", exposureResearch, false);
     addPage("대시보드", "dashboard", scopeDashboard, false);
     settingsActionReady = true;
     featureHelp.setName("wb.feature.help");
@@ -775,6 +779,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         if(bountySupport!=null)bountySupport.resetEvidenceProject();
         if(authCompare!=null)authCompare.resetChecklistProject();
         if(jsAnalysis!=null)jsAnalysis.resetBackgroundProject();
+        if(exposureResearch!=null)exposureResearch.resetProject();
         checklistTrafficBaselineStore=trafficStore;
         checklistTrafficBaseline=trafficStore==null?0:trafficStore.size();
         if (logTable != null) logTable.clearSelection();
@@ -1279,6 +1284,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if(unloaded.get()||!WorkbenchScope.contains(api,packet.url()))return;
     var request=packet.request();var response=packet.response();
     environments.observe(request,response);
+    if(exposureResearch!=null)exposureResearch.offer(request,response,packet.id());
     responseRecon.offer(request,response,packet);jsAnalysis.offer(request,response,packet);
     activity.observe(request,"통합 점검");activity.response(request,response);
     if(featureMapper!=null)featureMapper.observeCaptured(packet.capturedAt(),"통합 점검",request,response);
@@ -2037,6 +2043,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         environments.observe(t.request(), t.response());
 
         if (responseRecon != null) responseRecon.offer(t.request(), t.response(), t.packet());
+        if (exposureResearch != null) exposureResearch.offer(t.request(), t.response(), t.packet().id());
         if (activity != null) {
           activity.observe(t.request(), "트래픽 SCOPE");
           activity.response(t.request(), t.response());
@@ -2046,6 +2053,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void scopeChanged() {
+    if(exposureResearch!=null){exposureResearch.refreshQuery();exposureResearch.refreshExposures();}
     if (scopeInspectionPanel != null) scopeInspectionPanel.scopeChanged();
     workContext.configurationEdited();
     refreshScopeList();
@@ -2341,6 +2349,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           "응답 보안 관찰",
           () -> {
             if (admitted.get() && responseRecon != null) responseRecon.offer(r.initiatingRequest(), r, original.get());
+            if (admitted.get() && exposureResearch != null) exposureResearch.offer(r.initiatingRequest(), r, original.get() == null ? "" : original.get().id());
           });
       captureStage("JS 보관 응답 분석",()->{
         if(admitted.get()&&jsAnalysis!=null)jsAnalysis.offer(r.initiatingRequest(),r,original.get());
@@ -2496,6 +2505,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                           "가져온 응답 보안 관찰",
                           () -> {
                             if (responseRecon != null) responseRecon.offer(q, response, stored.packet());
+                            if (exposureResearch != null) exposureResearch.offer(q, response, stored.packet().id());
                           });
                       captureStage(
                           "가져온 요청 활동 관찰",

@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.9는 외부 노출·CVE 조사를 추가합니다.** Google 검색식·결과 URL과 NVD/KEV/EPSS 후보를 두 탭으로 검토합니다. [설치 JAR](simple/downloads/1.4.9/burp-workbench-simple-1.4.9.jar) · [구현 화면](simple/docs/images/1.4.9/README.md) · [기능·제한](simple/docs/RELEASE_SIMPLE_1.4.9_KR.md).
+
 **Simple 1.4.8은 시안의 단계·요약 줄·계정 비교·상세 정보·증거 편집 구성 요소를 다시 적용합니다.** [설치 JAR](simple/downloads/1.4.8/burp-workbench-simple-1.4.8.jar) · [8개 실제 화면](simple/docs/images/1.4.8/README.md) · [시안 비교](simple/docs/design/1.4.8/COMPARE.html) · [변경·검증](simple/docs/RELEASE_SIMPLE_1.4.8_KR.md). 아래 이전 버전은 보존 이력입니다.
 
 **Simple 1.4.7은 8개 도구의 세부 디자인을 적용합니다.** [설치 JAR](simple/downloads/1.4.7/burp-workbench-simple-1.4.7.jar) · [실제 8개 화면](simple/docs/images/1.4.7/README.md) · [시안/이전/현재 비교](simple/docs/design/1.4.7/COMPARE.html) · [변경·검증](simple/docs/RELEASE_SIMPLE_1.4.7_KR.md). 계정 카드·개수 배지·기능 트리와 공통 버튼·표·패킷·빈 상태를 정리했습니다.

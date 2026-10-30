@@ -1,0 +1,30 @@
+{
+  "theme": "light",
+  "version": "1.4.12",
+  "nativeSwing": true,
+  "targetHttpRequests": 0,
+  "screens": [
+    "traffic",
+    "mapper",
+    "js",
+    "environment",
+    "exposure.search",
+    "exposure.cve",
+    "auth",
+    "response.recon",
+    "payload",
+    "data",
+    "activity",
+    "bounty",
+    "dashboard",
+    "payload.results",
+    "bounty.replay",
+    "auth.accounts"
+  ],
+  "nativeBurpGui": false,
+  "result": "passed",
+  "syntheticPackets": true,
+  "checks": 25,
+  "jarSha256": "0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370",
+  "captureMode": "quick"
+}

@@ -1,0 +1,1739 @@
+{
+  "guideScreens": 16,
+  "steps": 96,
+  "themeChecks": 192,
+  "result": "passed",
+  "checks": [
+    {
+      "guide": "traffic",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.traffic.settings",
+      "x": 0.962812,
+      "y": 0.0645,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.traffic.settings",
+      "x": 0.962812,
+      "y": 0.0645,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.traffic.capture.mode",
+      "x": 0.483125,
+      "y": 0.064,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.traffic.capture.mode",
+      "x": 0.483125,
+      "y": 0.064,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.traffic.search",
+      "x": 0.30175,
+      "y": 0.1195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.traffic.search",
+      "x": 0.30175,
+      "y": 0.1195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.traffic.history.selected",
+      "x": 0.35075,
+      "y": 0.231,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.traffic.history.selected",
+      "x": 0.35075,
+      "y": 0.231,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.traffic.request.pretty",
+      "x": 0.168125,
+      "y": 0.508,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.traffic.request.pretty",
+      "x": 0.168125,
+      "y": 0.508,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.actions.traffic.selection",
+      "x": 0.955531,
+      "y": 0.1195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.actions.traffic.selection",
+      "x": 0.955531,
+      "y": 0.1195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 1,
+      "theme": "light",
+      "anchor": "fm.capture",
+      "x": 0.894375,
+      "y": 0.065,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "fm.capture",
+      "x": 0.894375,
+      "y": 0.065,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 2,
+      "theme": "light",
+      "anchor": "fm.feature.tree.selected",
+      "x": 0.216562,
+      "y": 0.242,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "fm.feature.tree.selected",
+      "x": 0.216562,
+      "y": 0.242,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 3,
+      "theme": "light",
+      "anchor": "fm.filters",
+      "x": 0.47,
+      "y": 0.117,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "fm.filters",
+      "x": 0.47,
+      "y": 0.117,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 4,
+      "theme": "light",
+      "anchor": "fm.history.selected",
+      "x": 0.645,
+      "y": 0.188,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "fm.history.selected",
+      "x": 0.645,
+      "y": 0.188,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 5,
+      "theme": "light",
+      "anchor": "fm.request",
+      "x": 0.419,
+      "y": 0.591,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "fm.request",
+      "x": 0.419,
+      "y": 0.591,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 6,
+      "theme": "light",
+      "anchor": "fm.feature.edit",
+      "x": 0.1675,
+      "y": 0.1555,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "fm.feature.edit",
+      "x": 0.1675,
+      "y": 0.1555,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.js.analysis.toggle",
+      "x": 0.194375,
+      "y": 0.068,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.js.analysis.toggle",
+      "x": 0.194375,
+      "y": 0.068,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.js.source.choice",
+      "x": 0.265,
+      "y": 0.125,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.js.source.choice",
+      "x": 0.265,
+      "y": 0.125,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.js.tab.0",
+      "x": 0.52125,
+      "y": 0.176,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.js.tab.0",
+      "x": 0.52125,
+      "y": 0.176,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.js.url.table.selected",
+      "x": 0.74125,
+      "y": 0.25,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.js.url.table.selected",
+      "x": 0.74125,
+      "y": 0.25,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.js.source.locate",
+      "x": 0.875313,
+      "y": 0.6105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.js.source.locate",
+      "x": 0.875313,
+      "y": 0.6105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.js.repeater.prepare",
+      "x": 0.946562,
+      "y": 0.6105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.js.repeater.prepare",
+      "x": 0.946562,
+      "y": 0.6105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.environment.origin",
+      "x": 0.256875,
+      "y": 0.066,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.environment.origin",
+      "x": 0.256875,
+      "y": 0.066,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.environment.observations.toggle",
+      "x": 0.1961,
+      "y": 0.1195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.environment.observations.toggle",
+      "x": 0.1961,
+      "y": 0.1195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.environment.candidates",
+      "x": 0.402313,
+      "y": 0.27952,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.environment.candidates",
+      "x": 0.402313,
+      "y": 0.27952,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.environment.candidate.settings",
+      "x": 0.619687,
+      "y": 0.1725,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.environment.candidate.settings",
+      "x": 0.619687,
+      "y": 0.1725,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.environment.single",
+      "x": 0.752812,
+      "y": 0.1725,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.environment.single",
+      "x": 0.752812,
+      "y": 0.1725,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.card.응답",
+      "x": 0.657,
+      "y": 0.55398,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.card.응답",
+      "x": 0.657,
+      "y": 0.55398,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.exposure.target",
+      "x": 0.271562,
+      "y": 0.0635,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.exposure.target",
+      "x": 0.271562,
+      "y": 0.0635,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.exposure.category",
+      "x": 0.215625,
+      "y": 0.156,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.exposure.category",
+      "x": 0.215625,
+      "y": 0.156,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.exposure.search.google",
+      "x": 0.951562,
+      "y": 0.1575,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.exposure.search.google",
+      "x": 0.951562,
+      "y": 0.1575,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.exposure.search.import",
+      "x": 0.920312,
+      "y": 0.2065,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.exposure.search.import",
+      "x": 0.920312,
+      "y": 0.2065,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.exposure.search.results.selected",
+      "x": 0.401562,
+      "y": 0.28,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.exposure.search.results.selected",
+      "x": 0.401562,
+      "y": 0.28,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.exposure.search.repeater",
+      "x": 0.894687,
+      "y": 0.5995,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.exposure.search.repeater",
+      "x": 0.894687,
+      "y": 0.5995,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.actions.exposure.cve.lookup",
+      "x": 0.24865,
+      "y": 0.1575,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.actions.exposure.cve.lookup",
+      "x": 0.24865,
+      "y": 0.1575,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.actions.exposure.cve.filters",
+      "x": 0.214725,
+      "y": 0.2,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.actions.exposure.cve.filters",
+      "x": 0.214725,
+      "y": 0.2,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.exposure.lookup",
+      "x": 0.893437,
+      "y": 0.1575,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.exposure.lookup",
+      "x": 0.893437,
+      "y": 0.1575,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.exposure.cve.results.selected",
+      "x": 0.384625,
+      "y": 0.279,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.exposure.cve.results.selected",
+      "x": 0.384625,
+      "y": 0.279,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.exposure.conditions",
+      "x": 0.232,
+      "y": 0.701,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.exposure.conditions",
+      "x": 0.232,
+      "y": 0.701,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.exposure.cve.source",
+      "x": 0.894687,
+      "y": 0.4745,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.exposure.cve.source",
+      "x": 0.894687,
+      "y": 0.4745,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.auth.detect",
+      "x": 0.196875,
+      "y": 0.068,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.auth.detect",
+      "x": 0.196875,
+      "y": 0.068,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.simple.auth.settings",
+      "x": 0.866563,
+      "y": 0.0665,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.simple.auth.settings",
+      "x": 0.866563,
+      "y": 0.0665,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.simple.auth.review",
+      "x": 0.9075,
+      "y": 0.2045,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.simple.auth.review",
+      "x": 0.9075,
+      "y": 0.2045,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.auth.history.selected",
+      "x": 0.672562,
+      "y": 0.28,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.auth.history.selected",
+      "x": 0.672562,
+      "y": 0.28,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.auth.inline.tabs",
+      "x": 0.24865,
+      "y": 0.581165,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.auth.inline.tabs",
+      "x": 0.24865,
+      "y": 0.581165,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.navigation.tree",
+      "x": 0.061938,
+      "y": 0.56129,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.navigation.tree",
+      "x": 0.061938,
+      "y": 0.56129,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.response.pages",
+      "x": 0.176559,
+      "y": 0.066975,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.response.pages",
+      "x": 0.176559,
+      "y": 0.066975,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.response.search",
+      "x": 0.54375,
+      "y": 0.1125,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.response.search",
+      "x": 0.54375,
+      "y": 0.1125,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.response.findings.selected",
+      "x": 0.384625,
+      "y": 0.188,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.response.findings.selected",
+      "x": 0.384625,
+      "y": 0.188,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.response.finding.response.text",
+      "x": 0.535675,
+      "y": 0.63776,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.response.finding.response.text",
+      "x": 0.535675,
+      "y": 0.63776,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.response.finding.tab.1",
+      "x": 0.242188,
+      "y": 0.45,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.response.finding.tab.1",
+      "x": 0.242188,
+      "y": 0.45,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.response.finding.evidence",
+      "x": 0.950937,
+      "y": 0.4455,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.response.finding.evidence",
+      "x": 0.950937,
+      "y": 0.4455,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.payload.step.prepare",
+      "x": 0.188438,
+      "y": 0.073,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.payload.step.prepare",
+      "x": 0.188438,
+      "y": 0.073,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.payload.mark",
+      "x": 0.859062,
+      "y": 0.2195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.payload.mark",
+      "x": 0.859062,
+      "y": 0.2195,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 3,
+      "theme": "light",
+      "anchor": "TabbedPane.scrollableViewport",
+      "x": 0.238607,
+      "y": 0.1735,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "TabbedPane.scrollableViewport",
+      "x": 0.238607,
+      "y": 0.1735,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.simple.payload.settings",
+      "x": 0.854688,
+      "y": 0.0685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.simple.payload.settings",
+      "x": 0.854688,
+      "y": 0.0685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.simple.payload.start",
+      "x": 0.915312,
+      "y": 0.0685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.simple.payload.start",
+      "x": 0.915312,
+      "y": 0.0685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.payload.step.results",
+      "x": 0.2975,
+      "y": 0.073,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.payload.step.results",
+      "x": 0.2975,
+      "y": 0.073,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 1,
+      "theme": "light",
+      "anchor": "TabbedPane.scrollableViewport",
+      "x": 0.180491,
+      "y": 0.0585,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "TabbedPane.scrollableViewport",
+      "x": 0.180491,
+      "y": 0.0585,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.data.codec.operation",
+      "x": 0.4775,
+      "y": 0.11,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.data.codec.operation",
+      "x": 0.4775,
+      "y": 0.11,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.codec.input",
+      "x": 0.210156,
+      "y": 0.16484,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.codec.input",
+      "x": 0.210156,
+      "y": 0.16484,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.data.codec.convert",
+      "x": 0.548125,
+      "y": 0.1105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.data.codec.convert",
+      "x": 0.548125,
+      "y": 0.1105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.codec.output",
+      "x": 0.665937,
+      "y": 0.14224,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.codec.output",
+      "x": 0.665937,
+      "y": 0.14224,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.data.codec.copy",
+      "x": 0.974375,
+      "y": 0.1105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.data.codec.copy",
+      "x": 0.974375,
+      "y": 0.1105,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.actions.activity.context",
+      "x": 0.177722,
+      "y": 0.0685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.actions.activity.context",
+      "x": 0.177722,
+      "y": 0.0685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 2,
+      "theme": "light",
+      "anchor": "TabbedPane.scrollableViewport",
+      "x": 0.190406,
+      "y": 0.1215,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "TabbedPane.scrollableViewport",
+      "x": 0.190406,
+      "y": 0.1215,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.actions.activity.url",
+      "x": 0.329813,
+      "y": 0.1675,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.actions.activity.url",
+      "x": 0.329813,
+      "y": 0.1675,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.activity.endpoints.selected",
+      "x": 0.359687,
+      "y": 0.243,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.activity.endpoints.selected",
+      "x": 0.359687,
+      "y": 0.243,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.activity.evidence",
+      "x": 0.875938,
+      "y": 0.9675,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.activity.evidence",
+      "x": 0.875938,
+      "y": 0.9675,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.activity.finishInput",
+      "x": 0.964063,
+      "y": 0.1675,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.activity.finishInput",
+      "x": 0.964063,
+      "y": 0.1675,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.simple.bounty.evidence",
+      "x": 0.242188,
+      "y": 0.071,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.simple.bounty.evidence",
+      "x": 0.242188,
+      "y": 0.071,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.bounty.evidence.add",
+      "x": 0.396875,
+      "y": 0.1835,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.bounty.evidence.add",
+      "x": 0.396875,
+      "y": 0.1835,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.bounty.evidence.packet.tabs",
+      "x": 0.720625,
+      "y": 0.302,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.bounty.evidence.packet.tabs",
+      "x": 0.720625,
+      "y": 0.302,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.simple.evidence.impact",
+      "x": 0.720625,
+      "y": 0.5158,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.simple.evidence.impact",
+      "x": 0.720625,
+      "y": 0.5158,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.bounty.evidence.preview",
+      "x": 0.830937,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.bounty.evidence.preview",
+      "x": 0.830937,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.bounty.evidence.save",
+      "x": 0.900937,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.bounty.evidence.save",
+      "x": 0.900937,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.scope.dashboard.inspect",
+      "x": 0.954375,
+      "y": 0.0695,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.scope.dashboard.inspect",
+      "x": 0.954375,
+      "y": 0.0695,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.scope.dashboard.account",
+      "x": 0.803125,
+      "y": 0.069,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.scope.dashboard.account",
+      "x": 0.803125,
+      "y": 0.069,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.scope.dashboard.card.api",
+      "x": 0.35875,
+      "y": 0.157,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.scope.dashboard.card.api",
+      "x": 0.35875,
+      "y": 0.157,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.scope.dashboard.bar.paths",
+      "x": 0.358125,
+      "y": 0.255,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.scope.dashboard.bar.paths",
+      "x": 0.358125,
+      "y": 0.255,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.scope.dashboard.results.selected",
+      "x": 0.264844,
+      "y": 0.528,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.scope.dashboard.results.selected",
+      "x": 0.264844,
+      "y": 0.528,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.scope.dashboard.repeater",
+      "x": 0.879062,
+      "y": 0.4685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.scope.dashboard.repeater",
+      "x": 0.879062,
+      "y": 0.4685,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.workspace.controls",
+      "x": 0.444094,
+      "y": 0.12166,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.workspace.controls",
+      "x": 0.444094,
+      "y": 0.12166,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.payload.results.table",
+      "x": 0.368287,
+      "y": 0.249,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.payload.results.table",
+      "x": 0.368287,
+      "y": 0.249,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.payload.results.table.selected",
+      "x": 0.444281,
+      "y": 0.313,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.payload.results.table.selected",
+      "x": 0.444281,
+      "y": 0.313,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.payload.workspace",
+      "x": 0.486375,
+      "y": 0.520915,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.payload.workspace",
+      "x": 0.486375,
+      "y": 0.520915,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.card.응답 (Response)",
+      "x": 0.762406,
+      "y": 0.7645,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.card.응답 (Response)",
+      "x": 0.762406,
+      "y": 0.7645,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.simple.payload.evidence",
+      "x": 0.867812,
+      "y": 0.1735,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.simple.payload.evidence",
+      "x": 0.867812,
+      "y": 0.1735,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.bounty.support",
+      "x": 0.185639,
+      "y": 0.128544,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.bounty.support",
+      "x": 0.185639,
+      "y": 0.128544,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.simple.replay.request",
+      "x": 0.276875,
+      "y": 0.24424,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.simple.replay.request",
+      "x": 0.276875,
+      "y": 0.24424,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.card.JSON 변수 추출 · 1.id=$.id → {{id|URL}}",
+      "x": 0.256563,
+      "y": 0.8026,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.card.JSON 변수 추출 · 1.id=$.id → {{id|URL}}",
+      "x": 0.256563,
+      "y": 0.8026,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.target.settings",
+      "x": 0.255312,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.target.settings",
+      "x": 0.255312,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.bounty.flow.run",
+      "x": 0.315937,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.bounty.flow.run",
+      "x": 0.315937,
+      "y": 0.1285,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 6,
+      "theme": "light",
+      "anchor": "wb.bounty.flow.results",
+      "x": 0.7925,
+      "y": 0.33324,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "wb.bounty.flow.results",
+      "x": 0.7925,
+      "y": 0.33324,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 1,
+      "theme": "light",
+      "anchor": "wb.auth.preparation.accounts",
+      "x": 0.3052,
+      "y": 0.098583,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 1,
+      "theme": "dark",
+      "anchor": "wb.auth.preparation.accounts",
+      "x": 0.3052,
+      "y": 0.098583,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 2,
+      "theme": "light",
+      "anchor": "wb.auth.preparation.account.0",
+      "x": 0.721,
+      "y": 0.29,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 2,
+      "theme": "dark",
+      "anchor": "wb.auth.preparation.account.0",
+      "x": 0.721,
+      "y": 0.29,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 3,
+      "theme": "light",
+      "anchor": "wb.auth.preparation.account.1",
+      "x": 0.721,
+      "y": 0.43,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 3,
+      "theme": "dark",
+      "anchor": "wb.auth.preparation.account.1",
+      "x": 0.721,
+      "y": 0.43,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 4,
+      "theme": "light",
+      "anchor": "wb.auth.preparation.account.2",
+      "x": 0.721,
+      "y": 0.57,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 4,
+      "theme": "dark",
+      "anchor": "wb.auth.preparation.account.2",
+      "x": 0.721,
+      "y": 0.57,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 5,
+      "theme": "light",
+      "anchor": "wb.auth.preparation.account.3",
+      "x": 0.7235,
+      "y": 0.71,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 5,
+      "theme": "dark",
+      "anchor": "wb.auth.preparation.account.3",
+      "x": 0.7235,
+      "y": 0.71,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 6,
+      "theme": "light",
+      "anchor": "unnamed close button",
+      "x": 0.045,
+      "y": 0.885,
+      "centerWithinVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "step": 6,
+      "theme": "dark",
+      "anchor": "unnamed close button",
+      "x": 0.045,
+      "y": 0.885,
+      "centerWithinVisibleAnchor": true
+    }
+  ],
+  "scope": "Centers checked against measured production Swing rectangles in both synthetic themes; unnamed close button visually reviewed.",
+  "finalJarSha256": "0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370",
+  "recheckedAgainst": "Final production capture anchors in both themes"
+}

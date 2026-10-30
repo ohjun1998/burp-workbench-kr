@@ -1,0 +1,22 @@
+{
+  "result": "passed",
+  "version": "1.4.12",
+  "theme": "dark",
+  "checks": 31,
+  "jarSha256": "0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370",
+  "nativeSwing": true,
+  "nativeBurpGui": false,
+  "syntheticPackets": true,
+  "display": "isolated Xorg dummy + xfwm4",
+  "windowWidths": [
+    1024,
+    1280,
+    1600
+  ],
+  "targetHttpRequests": 0,
+  "screenshots": [
+    "01-traffic-settings.png",
+    "02-payload-prepare.png",
+    "03-payload-results.png"
+  ]
+}

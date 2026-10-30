@@ -1,0 +1,80 @@
+{
+  "version": "1.4.12",
+  "artifact": "burp-workbench/dist/burp-workbench-simple-1.4.12.jar",
+  "toolchainMode": "strict-release17",
+  "java17ApiCompatibilityVerified": true,
+  "compilerNote": "Compiled with --release 17.",
+  "jarSha256": "7a3ed80a7532789bd74242bacd304848afffdfa0290e171679604bb9459bb131",
+  "renderedViews": 126,
+  "controls": 2184,
+  "scenarios": 426,
+  "retainedPrimaryTools": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "replayEvidenceModes": [
+    "manual-request-replay",
+    "evidence-editor"
+  ],
+  "clippedControls": [
+    {
+      "theme": "light",
+      "width": "1024",
+      "height": "720",
+      "view": "13-exposure-cve.png",
+      "label": "KEV만",
+      "name": "",
+      "controlWidth": "70",
+      "controlHeight": "29",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    },
+    {
+      "theme": "light",
+      "width": "1024",
+      "height": "720",
+      "view": "13-exposure-cve.png",
+      "label": "미확인 포함",
+      "name": "",
+      "controlWidth": "100",
+      "controlHeight": "29",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    },
+    {
+      "theme": "dark",
+      "width": "1024",
+      "height": "720",
+      "view": "13-exposure-cve.png",
+      "label": "KEV만",
+      "name": "",
+      "controlWidth": "70",
+      "controlHeight": "29",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    },
+    {
+      "theme": "dark",
+      "width": "1024",
+      "height": "720",
+      "view": "13-exposure-cve.png",
+      "label": "미확인 포함",
+      "name": "",
+      "controlWidth": "100",
+      "controlHeight": "29",
+      "fullyVisible": "false",
+      "scrollable": "false"
+    }
+  ],
+  "collapsedAreas": [],
+  "failedScenarios": [],
+  "missingCaptures": [],
+  "scope": "Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.",
+  "result": "failed"
+}

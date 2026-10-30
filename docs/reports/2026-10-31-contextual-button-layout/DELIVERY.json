@@ -1,0 +1,15 @@
+{
+  "version": "1.4.12",
+  "jarSha256": "0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370",
+  "sourceSha256": "0c6e3306267d4395db87401863c92b6a0e5ca3fb1ce5dd1d07c705bfcc67814b",
+  "sourceBytes": 99828080,
+  "imagesZipSha256": "a3c4fef53cb5356e49de2311d5c8aecf7596e4d1875254a0cbf7493e6104e3b5",
+  "imagesZipBytes": 15843944,
+  "publicPngs": 93,
+  "coreChecks": 7073,
+  "nativeChecks": 112,
+  "swingViews": 194,
+  "katanaChecks": 102,
+  "packageVerified": true,
+  "publicDownloadsVerified": false
+}

@@ -116,8 +116,12 @@ final class StructuredComparePanel extends JPanel implements AutoCloseable {
     super(new BorderLayout(8, 8)); this.api = api;
     projectIdentity = () -> WorkspaceResume.projectIdentity(api);
     setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-    JButton compare = new JButton("비교"), clear = new JButton("초기화");
+    JButton compare = new JButton("비교"), more = new JButton("더보기");
+    JMenuItem clear = new JMenuItem("초기화");
     compare.setName("wb.compare.run"); edit.setName("wb.compare.edit"); clear.setName("wb.compare.clear");
+    more.setName("wb.compare.more");
+    JPopupMenu options = new JPopupMenu(); options.setName("wb.actions.compare.more"); options.add(clear);
+    more.setComponentPopupMenu(options); more.addActionListener(e -> { if (more.isShowing()) options.show(more, 0, more.getHeight()); });
     cancel.setName("wb.compare.cancel"); cancel.setEnabled(false);
     cancel.setToolTipText("비교만 중지하고 이전 성공 결과를 유지합니다."); cancel.addActionListener(e -> cancelComparison());
     captureEvidence.setName("wb.compare.evidence"); loadLeft.setName("wb.compare.load.left"); loadRight.setName("wb.compare.load.right");
@@ -139,19 +143,30 @@ final class StructuredComparePanel extends JPanel implements AutoCloseable {
     resultTabs.setName("wb.compare.results");
     resultTabs.addTab("항목별 요약", summaryContent());
     resultTabs.addTab("원문·줄 차이", pair(leftView, rightView));
-    content.add(resultTabs, "result");
-    add(WorkbenchUi.header("응답·데이터 비교", "상태·헤더·JSON 항목 요약과 원문 차이 · 차이는 취약점 확정 아님",
-        WorkbenchUi.row(compare, cancel, edit, formatted, previous, next, captureEvidence, clear)), BorderLayout.NORTH);
+    JPanel resultActions = WorkbenchUi.row(edit, previous, next, captureEvidence);
+    resultActions.setName("wb.actions.compare.results");
+    JPanel resultWorkspace = new JPanel(new BorderLayout(0, 4));
+    resultWorkspace.setName("wb.compare.result.workspace");
+    resultWorkspace.add(CompactWorkbenchUi.toolbar(new JLabel("비교 결과"), resultActions), BorderLayout.NORTH);
+    resultWorkspace.add(resultTabs);
+    content.add(resultWorkspace, "result");
     add(content);
-    JButton criteria = new JButton("비교 기준"); criteria.setName("wb.compare.criteria");
+    JButton criteria = new JButton("비교 설정"); criteria.setName("wb.compare.criteria");
     criteria.getAccessibleContext().setAccessibleName("비교 범위와 기준 열기");
     criteria.setToolTipText("전체 비교 범위·제한·제외 항목과 파싱 안내 확인");
     criteria.addActionListener(e -> {
       if (criteriaWindow != null) { criteriaWindow.toFront(); return; }
       if (summary == null) summaryNote.setText("아직 비교한 결과가 없습니다. 비교는 입력별 앞65,536자·최대1,500줄, JSON4,096노드·깊이32와 항목256개를 표시합니다. 제한된 결과는 전체 응답의 모든 차이를 뜻하지 않으며 차이 자체로 취약점이 확정되지는 않습니다.");
-      criteriaWindow = WorkbenchUi.settingsWindow(this, "비교 범위·기준", summaryNote, false, () -> criteriaWindow = null);
+      JPanel settings = new JPanel(new BorderLayout(0, 6)); settings.setName("wb.compare.settings");
+      settings.add(WorkbenchUi.row(formatted), BorderLayout.NORTH);
+      settings.add(new JScrollPane(summaryNote));
+      criteriaWindow = WorkbenchUi.settingsWindow(this, "비교 설정·범위·기준", settings, false, () -> criteriaWindow = null);
     });
-    JPanel footer = new JPanel(new BorderLayout(6, 0)); footer.add(status); footer.add(criteria, BorderLayout.EAST);
+    JPanel settingsActions = WorkbenchUi.row(criteria, more); settingsActions.setName("wb.actions.compare.settings");
+    JPanel executionActions = WorkbenchUi.row(compare, cancel); executionActions.setName("wb.actions.compare.execution");
+    add(WorkbenchUi.header("응답·데이터 비교", "상태·헤더·JSON 항목 요약과 원문 차이 · 차이는 취약점 확정 아님",
+        CompactWorkbenchUi.toolbar(settingsActions, executionActions)), BorderLayout.NORTH);
+    JPanel footer = new JPanel(new BorderLayout(6, 0)); footer.add(status);
     add(footer, BorderLayout.SOUTH); status.addPropertyChangeListener("text", e -> status.setToolTipText(status.getText()));
     loadLeft.addActionListener(e -> sourceAction(() -> loadSelected(true)));
     loadRight.addActionListener(e -> sourceAction(() -> loadSelected(false)));
@@ -281,17 +296,23 @@ final class StructuredComparePanel extends JPanel implements AutoCloseable {
   }
   JPanel pair(JTextArea a, JTextArea b) {
     boolean input = a == leftInput;
-    JButton leftLoad = input ? loadLeft : new JButton("트래픽 가져오기"), rightLoad = input ? loadRight : new JButton("트래픽 가져오기");
-    if (!input) { leftLoad.addActionListener(e -> sourceAction(() -> loadSelected(true))); rightLoad.addActionListener(e -> sourceAction(() -> loadSelected(false))); }
-    leftLoad.setToolTipText("선택한 트래픽 1개의 응답을 왼쪽으로 가져옵니다. 서버 전송은 없습니다.");
-    rightLoad.setToolTipText("선택한 트래픽 1개의 응답을 오른쪽으로 가져옵니다. 서버 전송은 없습니다.");
-    JPanel left = new JPanel(new BorderLayout(0, 3)), right = new JPanel(new BorderLayout(0, 3));
-    left.add(WorkbenchUi.row(leftLoad, leftSourceLabels[input ? 0 : 1]), BorderLayout.NORTH);
-    right.add(WorkbenchUi.row(rightLoad, rightSourceLabels[input ? 0 : 1]), BorderLayout.NORTH);
-    left.add(new JScrollPane(a)); right.add(new JScrollPane(b));
-    JSplitPane split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
-        WorkbenchUi.card("왼쪽 데이터", left), WorkbenchUi.card("오른쪽 데이터", right), .5);
+    loadLeft.setToolTipText("선택한 트래픽 1개의 응답을 왼쪽으로 가져옵니다. 서버 전송은 없습니다.");
+    loadRight.setToolTipText("선택한 트래픽 1개의 응답을 오른쪽으로 가져옵니다. 서버 전송은 없습니다.");
+    JPanel left = dataSide("왼쪽 데이터", a, leftSourceLabels[input ? 0 : 1], input ? loadLeft : null, "left");
+    JPanel right = dataSide("오른쪽 데이터", b, rightSourceLabels[input ? 0 : 1], input ? loadRight : null, "right");
+    JSplitPane split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, left, right, .5);
     split.setName("wb.compare.sides"); JPanel panel = new JPanel(new BorderLayout()); panel.add(split); return panel;
+  }
+
+  private JPanel dataSide(String title, JTextArea area, JLabel source, JButton importer, String side) {
+    JPanel card = WorkbenchUi.card(title, new JScrollPane(area));
+    Component heading = ((BorderLayout) card.getLayout()).getLayoutComponent(BorderLayout.NORTH);
+    card.remove(heading);
+    JPanel context = WorkbenchUi.row(heading, source);
+    JPanel actions = importer == null ? new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)) : WorkbenchUi.row(importer);
+    actions.setName("wb.actions.compare." + (importer == null ? "original." : "input.") + side);
+    card.add(CompactWorkbenchUi.toolbar(context, actions), BorderLayout.NORTH);
+    return card;
   }
 
   /** Snapshot only the bounded inspected prefix; all computation happens off the EDT. */

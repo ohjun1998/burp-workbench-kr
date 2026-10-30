@@ -113,6 +113,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   boolean preparingSource, navigating;
   private final TargetWindow targetSettings;
   private JLabel sourceSummary;
+  private JButton selectedTools;
   final JTextField registry = new JTextField("https://registry.npmjs.org", 25);
   private volatile String currentSource = "";
   private final AtomicLong selectionGeneration = new AtomicLong();
@@ -257,6 +258,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     sources.setName("wb.js.sources");
     sourceUrl.setColumns(22);
     JButton tools = new JButton("추가 도구"), more = new JButton("더보기");
+    selectedTools = tools;
     JPopupMenu toolMenu = new JPopupMenu(), moreMenu = new JPopupMenu();
     // Simple keeps source and observed-packet work local. Optional registry queries
     // and active source-map discovery are not part of the visible execution path.
@@ -281,11 +283,15 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     more.setName("wb.js.more");more.setText("");more.setIcon(WorkspaceIcons.of("more"));more.setToolTipText("더보기");more.getAccessibleContext().setAccessibleName("더보기");more.setPreferredSize(new Dimension(36,34));
     resolve.setText("Repeater 준비");WorkbenchUi.primary(resolve);
     JPanel toolbar=new JPanel(new BorderLayout(0,6));toolbar.setName("wb.js.toolbar");
-    toolbar.add(WorkbenchUi.row(passive,target,tools,more),BorderLayout.NORTH);
+    JPanel contextActions=WorkbenchUi.row(passive,target,more);contextActions.setName("wb.actions.js.context");
+    toolbar.add(contextActions,BorderLayout.NORTH);
     for(JButton action:new JButton[]{analysisList,analysisDetails}){JMenuItem item=new JMenuItem(action.getText());item.addActionListener(e->action.doClick());moreMenu.add(item);}
     sources.setPreferredSize(new Dimension(290,34));sources.setName("wb.js.source.choice");
     JPanel sourceContext=new JPanel(new BorderLayout(8,0));sourceContext.add(WorkbenchUi.row(new JLabel("소스"),sources),BorderLayout.WEST);sourceContext.add(CompactWorkbenchUi.search(urlTable,"wb.js.findings.search","경로·메서드·입력값 검색"));
-    toolbar.add(CompactWorkbenchUi.toolbar(sourceContext,WorkbenchUi.row(locate,resolve)),BorderLayout.SOUTH);
+    sourceContext.setName("wb.actions.js.source");
+    toolbar.add(sourceContext,BorderLayout.SOUTH);
+    tools.setName("wb.js.selected.tools");locate.setName("wb.js.source.locate");resolve.setName("wb.js.repeater.prepare");
+    resultView.setDetailActions(tools,locate,resolve);
     resolve.addActionListener(e -> openResolvedDraft());
 
     header.removeAll();
@@ -670,6 +676,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     if(resultView!=null)resultView.selection();
     toRepeater.setEnabled(endpoint);
     resolve.setEnabled(endpoint);
+    if(selectedTools!=null)selectedTools.setEnabled(endpoint);
     locate.setEnabled(
         endpoint
             || current != null

@@ -521,11 +521,14 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     WorkbenchUi.primary(compare);
     JButton stop = button("중지", this::stop);
     stop.setName("wb.simple.auth.stop");
-    JPanel actions=WorkbenchUi.row(detection,ReferenceUi.field("대상 도메인",accountOrigin),settings);
+    JPanel accountContext=WorkbenchUi.row(detection,ReferenceUi.field("대상 도메인",accountOrigin));
+    accountContext.setName("wb.actions.auth.context");
+    JPanel accountActions=WorkbenchUi.row(settings);accountActions.setName("wb.actions.auth.accounts");
+    JPanel actions=CompactWorkbenchUi.toolbar(accountContext,accountActions);
     actions.setName("wb.auth.actions");top.add(actions);
     detection.setToolTipText("인증 탐지는 수집 OFF/SCOPE와 별도입니다. 후보를 계정에 지정한 뒤 선택 요청을 비교하세요.");
     counts.setToolTipText("인증 후보와 비교 기록 수");
-    JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setBorder(BorderFactory.createCompoundBorder(kr.packetui.VisualTheme.border(1,1,1,1),BorderFactory.createEmptyBorder(9,10,9,10)));summaries.setName("wb.auth.account.cards");
+    JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setBorder(BorderFactory.createCompoundBorder(kr.packetui.VisualTheme.border(1,1,1,1),BorderFactory.createEmptyBorder(5,8,5,8)));summaries.setName("wb.auth.account.cards");
     for(int i:new int[]{0,1,2,3}){final int slot=i;JButton card=accountCards[i];card.setName("wb.auth.account.card."+i);card.setHorizontalAlignment(SwingConstants.LEFT);card.addActionListener(e->safe(this::openAccountPreparation));if(i!=2)summaries.add(card);}
     top.add(summaries);
     // Retain this internal status model for the engine, without an automatic-mode control.
@@ -677,7 +680,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       public void changedUpdate(javax.swing.event.DocumentEvent event) { filterHistory(); }
     });
     JPanel triage = new JPanel(); triage.setLayout(new BoxLayout(triage, BoxLayout.Y_AXIS));
-    triage.add(CompactWorkbenchUi.toolbar(WorkbenchUi.row(historySearch,historyFilter,historyVisible),WorkbenchUi.row(compare,stop)));
+    JPanel executionActions=WorkbenchUi.row(compare,stop);executionActions.setName("wb.actions.auth.execution");
+    JPanel historyFilters=WorkbenchUi.row(historySearch,historyFilter,historyVisible);historyFilters.setName("wb.actions.auth.filters");
+    triage.add(CompactWorkbenchUi.toolbar(historyFilters,executionActions));
     JButton sessionRepair = button("계정·세션 보완", () -> repairCurrent(3)), policyRepair = button("권한 설정 보완", () -> repairCurrent(4)), writeRepair = button("쓰기 조회 보완", () -> repairCurrent(5));
     sessionRepair.setName("wb.auth.history.repair.session"); policyRepair.setName("wb.auth.history.repair.policy"); writeRepair.setName("wb.auth.history.repair.write");
     historyRepairState = () -> {
@@ -688,13 +693,13 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     history.getSelectionModel().addListSelectionListener(event -> historyRepairState.run());
     historyRepairState.run();
     JButton repairs=WorkspaceIcons.button("more","wb.auth.history.more","선택 비교 보완·기록 관리");
-    JPopupMenu repairMenu=new JPopupMenu();for(JButton action:new JButton[]{sessionRepair,policyRepair,writeRepair,button("기록 비우기",this::clearHistory)}){JMenuItem item=new JMenuItem(action.getText());item.setName(action.getName());item.setEnabled(action.isEnabled());action.addPropertyChangeListener("enabled",e->item.setEnabled(action.isEnabled()));item.addActionListener(e->action.doClick());repairMenu.add(item);}repairs.setComponentPopupMenu(repairMenu);repairs.addActionListener(e->repairMenu.show(repairs,0,repairs.getHeight()));actions.add(repairs);
+    JPopupMenu repairMenu=new JPopupMenu();for(JButton action:new JButton[]{sessionRepair,policyRepair,writeRepair,button("기록 비우기",this::clearHistory)}){JMenuItem item=new JMenuItem(action.getText());item.setName(action.getName());item.setEnabled(action.isEnabled());action.addPropertyChangeListener("enabled",e->item.setEnabled(action.isEnabled()));item.addActionListener(e->action.doClick());repairMenu.add(item);}repairs.setComponentPopupMenu(repairMenu);repairs.addActionListener(e->repairMenu.show(repairs,0,repairs.getHeight()));accountActions.add(repairs);
     historyCard.add(triage,BorderLayout.NORTH);
     historyCard.setName("wb.card.Record History");
     JButton closeDetails=button("닫기",comparisonWindow::closeWindow);
     details.add(WorkbenchUi.row(closeDetails),BorderLayout.SOUTH);
     JPanel candidateDisclosure=CompactWorkbenchUi.disclosure("wb.auth.candidates", "인증 후보", candidateScroll, false);
-    Component candidateToggle=candidateDisclosure.getComponent(0);candidateDisclosure.remove(candidateToggle);actions.add(candidateToggle);top.add(candidateDisclosure);
+    Component candidateToggle=candidateDisclosure.getComponent(0);candidateDisclosure.remove(candidateToggle);accountActions.add(candidateToggle);top.add(candidateDisclosure);
     JSplitPane lists=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,historyCard,inlinePreview,.42);
     lists.setName("wb.auth.tables");
     add(
@@ -1360,7 +1365,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       Candidate c = slots[i];if(i==0)accountOrigin.setText(c==null?"전체 대상":c.origin());
       JButton card=accountCards[i];if(i==2){Container parent=accountCards[0].getParent();if(parent!=null){if(c!=null&&card.getParent()==null)parent.add(card,2);else if(c==null&&card.getParent()!=null)parent.remove(card);parent.revalidate();}}
       ((AccountSummaryCard)card).summary(i==3?"비로그인":c!=null&&accounts.get(c.key())!=null&&!accounts.get(c.key()).name().isBlank()?accounts.get(c.key()).name()+(profileRoles[i].getText().isBlank()?"":" · "+profileRoles[i].getText()):label(i),c==null?"계정 연결 필요":c.headers().isEmpty()?"인증 정보 없음":accounts.get(c.key())!=null&&!accounts.get(c.key()).email().isBlank()?accounts.get(c.key()).email():profileOwners[i].getText().isBlank()?c.origin():profileOwners[i].getText(),c==null?"클릭하여 계정을 연결하세요":c.headers().isEmpty()?"인증 없이 요청을 비교합니다":profileRoles[i].getText().isBlank()?"연결됨 · 클릭하여 계정 설정":profileRoles[i].getText(),i==0&&c!=null);
-      card.setToolTipText(c==null?"원본 선택 후 계정 연결":c.origin()+" · 계정 설정 열기");
+      card.setToolTipText((c==null?"원본 선택 후 계정 연결":c.origin()+" · 계정 설정 열기")+" · "+card.getAccessibleContext().getAccessibleName());
       slotLabels[i].setText(
           c == null ? "미지정" : c.headers.isEmpty() ? "비로그인" : c.key.substring(0, 12));
       slotLabels[i].setToolTipText(

@@ -1,4 +1,7 @@
-# Workbench Simple 1.4.11
+# Workbench Simple 1.4.12
+
+승인한 13개 화면의 버튼 배치를 적용했습니다. 실행·중지를 인접 배치하고 선택 작업을 목록/상세 옆으로 옮겼으며 16개 Guide 예시도 갱신했습니다. [설치 JAR](downloads/1.4.12/burp-workbench-simple-1.4.12.jar) · [변경 안내](docs/RELEASE_SIMPLE_1.4.12_KR.md) · [실제 화면·검증](https://github.com/ohjun1998/burp-workbench-kr/blob/main/docs/reports/2026-10-31-contextual-button-layout/README.md).
+
 
 **Simple 1.4.11은 도구별 Guide와 빨간 번호 사용 설명을 제공합니다.** 현재 도구에 맞는 별도 가이드 창,16개 화면·96개 단계와 중복/보조 기능 정리를 적용합니다. [설치 JAR](downloads/1.4.11/burp-workbench-simple-1.4.11.jar) · [가이드·정리 검토 화면](docs/images/1.4.11/README.md) · [사용법](docs/RELEASE_SIMPLE_1.4.11_KR.md).
 

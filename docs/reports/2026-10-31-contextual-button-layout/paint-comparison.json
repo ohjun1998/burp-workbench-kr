@@ -1,0 +1,74 @@
+{
+  "scope": "Single isolated Linux native Swing idle sampling with synthetic Burp API and an instrumented RepaintManager. EDT thread CPU only; not total process CPU, Windows Burp or a repeated statistical benchmark. Guide resource refresh does not affect sampled tools.",
+  "display": "1920x1080 Xorg dummy + xfwm4",
+  "windowInput": "None during each 3-second sample",
+  "baseline1_4_11": {
+    "jarSha256": "634c8a67afc53c69a0e21acf453ed51723b423bb499521ae8cbac968a04b4847",
+    "samples": [
+      {
+        "route": "traffic",
+        "wallMs": 3000,
+        "edtCpuMs": 2433,
+        "dirtyRegionCalls": 890089,
+        "paintPasses": 380
+      }
+    ],
+    "complete": false,
+    "note": "Only traffic sample completed before old display ended."
+  },
+  "beforeFix1_4_12": {
+    "jarSha256": "0ba9ff1881856145c44c86e5c7b59a50d4db7632ce2fe1c5c0b9f127cce6abba",
+    "samples": [
+      {
+        "route": "traffic",
+        "wallMs": 3000,
+        "edtCpuMs": 2622,
+        "dirtyRegionCalls": 705911,
+        "paintPasses": 300
+      },
+      {
+        "route": "payload",
+        "wallMs": 3000,
+        "edtCpuMs": 2588,
+        "dirtyRegionCalls": 1043413,
+        "paintPasses": 444
+      },
+      {
+        "route": "data",
+        "wallMs": 3000,
+        "edtCpuMs": 2423,
+        "dirtyRegionCalls": 1053701,
+        "paintPasses": 447
+      }
+    ]
+  },
+  "afterFix1_4_12": {
+    "jarSha256": "7294da8f8515ca997d2a26cbb9934472e1d473a6167213eb97f74307ebc85b4d",
+    "samples": [
+      {
+        "route": "traffic",
+        "wallMs": 3000,
+        "edtCpuMs": 41,
+        "dirtyRegionCalls": 30,
+        "paintPasses": 10
+      },
+      {
+        "route": "payload",
+        "wallMs": 3000,
+        "edtCpuMs": 35,
+        "dirtyRegionCalls": 30,
+        "paintPasses": 10
+      },
+      {
+        "route": "data",
+        "wallMs": 3000,
+        "edtCpuMs": 30,
+        "dirtyRegionCalls": 30,
+        "paintPasses": 10
+      }
+    ],
+    "edtStateAfterSamples": "WAITING",
+    "watchedUiPropertyChurn": false
+  },
+  "diagnosticCause": "Repeated embedded Mapper ButtonUI replacement triggered reciprocal outer/embedded skin restoration."
+}

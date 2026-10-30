@@ -1,12 +1,12 @@
 package kr.featuremapper;
 
 import burp.api.montoya.MontoyaApi;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 /** Exact feature provenance and a local embedded-host callback; no HTTP is sent. */
 final class MapperAssessmentTest {
@@ -49,19 +49,38 @@ final class MapperAssessmentTest {
         public void assessmentDraft(String id,String title,List<String> endpoints){source.set(id);callbacks.incrementAndGet();}
       });
       var packet=workspace.mapper.accept(MapperTest.input(1,"GET","https://assessment.test/api/items/12","","{}","SESSION"));
-      Field selected=FeatureMapperWorkspace.class.getDeclaredField("selectedFeature");selected.setAccessible(true);
-      SwingUtilities.invokeAndWait(()->{try{selected.set(workspace,packet.primary);}catch(Exception e){throw new RuntimeException(e);}});
+      selectFeature(workspace,packet.primary);
       JButton button=(JButton)MapperUiWorkflowTest.named(panel,"fm.assessment.link");
       MapperTest.check(button!=null,"embedded mapping exposes the assessment link action");
       SwingUtilities.invokeAndWait(()->button.doClick(0));await(callbacks,1);
       MapperTest.check(callbacks.get()==1 && workspace.isAssessmentSourceCurrent(source.get()),"stored feature can be linked while traffic capture is OFF");
       allowed.set(false);SwingUtilities.invokeAndWait(()->button.doClick(0));await(failures,1);
       MapperTest.check(callbacks.get()==1 && failures.get()>0,"scope changes block task draft delivery");
-      SwingUtilities.invokeAndWait(()->{try{selected.set(workspace,null);}catch(Exception e){throw new RuntimeException(e);}});
+      selectFeature(workspace,null);
       MapperTest.check(!workspace.isAssessmentSourceCurrent(source.get()),"selection changes invalidate an open task review");
       MapperTest.check(MapperUiWorkflowTest.sent.get()==sendsBefore,"mapping task preparation sends no HTTP requests");
     } finally {workspace.close();SwingUtilities.invokeAndWait(()->{});}
     MapperTest.check(!workspace.isAssessmentSourceCurrent(source.get()),"unload invalidates pending mapping drafts");
+  }
+  private static void selectFeature(FeatureMapperWorkspace workspace,String feature)throws Exception {
+    SwingUtilities.invokeAndWait(()->{
+      try {
+        // Hidden headless fixtures have no timer-driven tree refresh. Rebuild the view,
+        // then select its real node so the production selection/action state is exercised.
+        MapperUiWorkflowTest.call(workspace,"refresh");
+        JTree tree=(JTree)MapperUiWorkflowTest.get(workspace,"tree");
+        if(feature==null){tree.clearSelection();return;}
+        var nodes=((DefaultMutableTreeNode)tree.getModel().getRoot()).depthFirstEnumeration();
+        while(nodes.hasMoreElements()){
+          var node=(DefaultMutableTreeNode)nodes.nextElement();
+          if(node.getUserObject() instanceof FeatureMapperWorkspace.FeatureNode selected
+              &&feature.equals(selected.id())){
+            tree.setSelectionPath(new TreePath(node.getPath()));return;
+          }
+        }
+        throw new AssertionError("Mapper feature tree fixture was not rebuilt: "+feature);
+      }catch(Exception error){throw new RuntimeException(error);}
+    });
   }
   private static void await(AtomicInteger value,int minimum)throws Exception {
     long end=System.nanoTime()+5_000_000_000L;

@@ -143,9 +143,13 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     pause.setEnabled(false);
     remaining.setEnabled(false);
     JButton settings = new JButton("후보 설정"), more = new JButton("더보기"), all = new JButton("전체 환경");
+    single.setName("wb.environment.single");start.setName("wb.environment.start");
+    pause.setName("wb.environment.pause");stop.setName("wb.environment.stop");
+    settings.setName("wb.environment.candidate.settings");more.setName("wb.environment.more");all.setName("wb.environment.all");
     JPanel toolbar = new JPanel();
     toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-    toolbar.add(WorkbenchUi.row(new JLabel("대상"),origins,new JLabel("계정"),account,targetSettings.button(),all));
+    JPanel context=CompactWorkbenchUi.toolbar(WorkbenchUi.row(new JLabel("대상"),origins,new JLabel("계정"),account),WorkbenchUi.row(targetSettings.button()));
+    context.setName("wb.actions.environment.context");toolbar.add(context);
 
     WorkbenchUi.primary(single);
     start.setToolTipText("전체 후보를 확인합니다. 실제 GET 요청을 전송합니다.");
@@ -196,13 +200,19 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
         });
     JPanel observations = CompactWorkbenchUi.disclosure("wb.environment.observations", "관찰 환경", new JScrollPane(technologies), false);
     observations.getComponent(1).setPreferredSize(new Dimension(600, 100));
+    Component observationsToggle=observations.getComponent(0);observations.remove(observationsToggle);
+    JPanel observationHeader=CompactWorkbenchUi.toolbar(observationsToggle,WorkbenchUi.row(selection,all));
+    observationHeader.setName("wb.actions.environment.filters");observations.add(observationHeader,BorderLayout.NORTH);
     JPanel lists = new JPanel(new BorderLayout(0, 4));
     lists.setName("wb.environment.candidates");
     lists.add(observations, BorderLayout.NORTH);
     JPanel candidatePanel=candidatePane();
     JTextField search=CompactWorkbenchUi.search(pathTable,"wb.environment.search","경로·상태·근거 검색");
-    JPanel commands=CompactWorkbenchUi.toolbar(search,WorkbenchUi.row(single,start,pause,stop,settings,more));
-    JPanel candidateHeader=new JPanel(new BorderLayout());candidateHeader.add(commands);candidateHeader.add(selection,BorderLayout.SOUTH);candidatePanel.add(candidateHeader,BorderLayout.NORTH);lists.add(candidatePanel);
+    JPanel execution=WorkbenchUi.row(single,start,pause,stop);execution.setName("wb.actions.environment.execution");
+    JPanel candidateActions=WorkbenchUi.row(settings,more);candidateActions.setName("wb.actions.environment.candidate.settings");
+    JPanel searchAndSettings=new JPanel(new BorderLayout(8,0));searchAndSettings.add(search);searchAndSettings.add(candidateActions,BorderLayout.EAST);
+    JPanel commands=CompactWorkbenchUi.toolbar(searchAndSettings,execution);commands.setName("wb.actions.environment.candidates");
+    candidatePanel.add(commands,BorderLayout.NORTH);lists.add(candidatePanel);
     JSplitPane messages = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("요청", packetTabs(requestView)),
         WorkbenchUi.card("응답", responsePane()), .5);

@@ -60,11 +60,12 @@ public final class SimpleScreenCleanupTest extends WorkbenchTest {
         mapperTable.clearSelection();int rows=mapperTable.getRowCount();
         classify.get(0).doClick();
         check(mapperTable.getRowCount()==rows&&mapperTable.getModel()==originalModel,"retained classification action safely handles no selection and keeps the original table model");
-        check(!buttons(mapperComponent,"기능 이름·상태·메모").isEmpty(),"feature naming and review metadata editing remain available");
+        var featureEdit=(AbstractButton)SimpleWorkflowTest.named(mapperComponent,"fm.feature.edit");
+        check(featureEdit!=null&&featureEdit.getAccessibleContext().getAccessibleName().equals("기능 이름·상태·메모")&&featureEdit.getActionListeners().length>0,"compact feature edit retains naming and review metadata editing with its full accessible label");
       });
       check(get(extension,"featureMapper")==mapper&&get(mapper,"mapper")==mapperModel,"cleanup keeps the exact mapper workspace and model engines");
       check(get(entry,"payloadRunner")==runner&&get(extension,"current")==selectedOriginal,"cleanup preserves the exact payload engine and selected original identity");
-      check(kr.featuremapper.BuildInfo.VERSION.equals("0.3.12"),"modified embedded mapper receives its own new component version");
+      check(kr.featuremapper.BuildInfo.VERSION.equals("0.3.13"),"modified embedded mapper receives its own new component version");
       check(PayloadIntegrationTest.sent.get()==sentBefore,"guide-independent cleanup navigation and retained preparation actions send zero HTTP");
     }finally{SimpleWorkflowTest.unload();}
     System.out.println("SimpleScreenCleanupTest: "+checks+" checks passed (retained production controls/models, zero HTTP)");

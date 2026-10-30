@@ -1549,8 +1549,22 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     boolean[] syncingQuick={false};JComboBox<String> accountChoice=new JComboBox<>(new String[]{"전체"});accountChoice.setEditable(true);accountChoice.setName("wb.traffic.account");accountChoice.setPreferredSize(new Dimension(160,34));
     accountChoice.addPopupMenuListener(new javax.swing.event.PopupMenuListener(){public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent e){for(var identity:trafficBrowser.identities.get())if(((DefaultComboBoxModel<String>)accountChoice.getModel()).getIndexOf(identity.label())<0)accountChoice.addItem(identity.label());}public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent e){}public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e){}});
     accountChoice.addActionListener(e->{if(syncingQuick[0])return;try{trafficBrowser.quickFilter(null,null,Objects.toString(accountChoice.getSelectedItem(),"전체").replaceFirst("^전체$",""));}catch(RuntimeException invalid){trafficBrowser.feedback.setText(invalid.getMessage());}});
-    scopeListButton.setText("SCOPE 설정");scopeListButton.setIcon(WorkspaceIcons.of("gear"));
-    controls.add(row(new JLabel("대상"),targetChoice,new JLabel("계정"),accountChoice,captureButton,scopeListButton,trafficBrowser.settingsButton), BorderLayout.NORTH);
+    scopeListButton.setText("수집 설정");scopeListButton.setIcon(WorkspaceIcons.of("gear"));
+    JButton trafficSettings=new JButton("설정 ▾");
+    trafficSettings.setIcon(WorkspaceIcons.of("gear"));trafficSettings.setName("wb.traffic.settings");
+    trafficSettings.setToolTipText("수집 설정 · 검색·목록 설정");
+    trafficSettings.getAccessibleContext().setAccessibleName("수집 설정 · 검색·목록 설정");
+    JPopupMenu trafficSettingsMenu=new JPopupMenu();
+    JMenuItem captureSettings=new JMenuItem("수집 설정");captureSettings.setName(scopeListButton.getName());
+    captureSettings.addActionListener(e->scopeListButton.doClick());trafficSettingsMenu.add(captureSettings);
+    JMenuItem searchSettings=new JMenuItem("검색·목록 설정");searchSettings.setName(trafficBrowser.settingsButton.getName());
+    searchSettings.addActionListener(e->trafficBrowser.settingsButton.doClick());trafficSettingsMenu.add(searchSettings);
+    trafficSettings.setComponentPopupMenu(trafficSettingsMenu);
+    trafficSettings.addActionListener(e->trafficSettingsMenu.show(trafficSettings,0,trafficSettings.getHeight()));
+    JPanel trafficContext=row(new JLabel("대상"),targetChoice,new JLabel("계정"),accountChoice,captureButton);
+    trafficContext.setName("wb.actions.traffic.context");
+    JPanel trafficConfiguration=row(trafficSettings);trafficConfiguration.setName("wb.actions.traffic.settings");
+    controls.add(CompactWorkbenchUi.toolbar(trafficContext,trafficConfiguration), BorderLayout.NORTH);
     JButton compareSelected = button("계정 비교 준비", this::prepareSimpleComparison);
     JButton repeatSelected = button("Repeater", this::prepareSimpleRepeater);
     JButton evidenceSelected = button("증거 추가", this::addSimpleEvidence);
@@ -1570,15 +1584,16 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     };
     logTable.getSelectionModel().addListSelectionListener(e -> selectedState.run());
     selectedState.run();
-    JPanel searchActions = new JPanel(new BorderLayout(8, 0));
     filter.setColumns(12);
-    JPanel queryRow=new JPanel(new BorderLayout(8,0)){@Override public void doLayout(){super.doLayout();Component input=((BorderLayout)getLayout()).getLayoutComponent(BorderLayout.CENTER),segments=((BorderLayout)getLayout()).getLayoutComponent(BorderLayout.EAST);if(input!=null&&segments!=null&&input.getWidth()>470){input.setSize(470,input.getHeight());segments.setLocation(478,segments.getY());}}};queryRow.add(filter);JPanel methods=new JPanel(new GridLayout(1,0));ButtonGroup methodGroup=new ButtonGroup();List<JToggleButton> quickMethods=new ArrayList<>();
+    filter.setMinimumSize(new Dimension(140,32));
+    JPanel queryRow=new JPanel(new BorderLayout(8,0));queryRow.setName("wb.actions.traffic.search");queryRow.add(filter);JPanel methods=new JPanel(new GridLayout(1,0));ButtonGroup methodGroup=new ButtonGroup();List<JToggleButton> quickMethods=new ArrayList<>();
     for(String label:new String[]{"전체","GET","POST","오류"}){JToggleButton b=new JToggleButton(label,label.equals("전체"));b.setName("wb.traffic.quick."+label);b.putClientProperty("wb.compact.button",true);b.putClientProperty("wb.filter.segment",true);methodGroup.add(b);methods.add(b);quickMethods.add(b);b.addActionListener(e->trafficBrowser.quickFilter(label.equals("오류")?"전체":label,label.equals("오류")?"오류":"전체",null));}
     trafficBrowser.quickStateChanged=()->{syncingQuick[0]=true;try{var q=trafficBrowser.query;methodGroup.clearSelection();for(JToggleButton b:quickMethods)b.setSelected(b.getText().equals("오류")?q.status().equals("오류"):q.status().equals("전체")&&b.getText().equals(q.method()));accountChoice.setSelectedItem(q.account().isEmpty()?"전체":q.account());}finally{syncingQuick[0]=false;}};trafficBrowser.quickStateChanged.run();
-    queryRow.add(methods,BorderLayout.EAST);searchActions.add(queryRow);
+    queryRow.add(methods,BorderLayout.EAST);
     compareSelected.setIcon(WorkspaceIcons.of("traffic"));repeatSelected.setIcon(WorkspaceIcons.of("mapper"));evidenceSelected.setIcon(WorkspaceIcons.of("bounty"));
-    searchActions.add(row(compareSelected, repeatSelected, evidenceSelected), BorderLayout.EAST);
-    JPanel footer=new JPanel(new BorderLayout());footer.add(trafficBrowser.conditionBar());footer.add(row(trafficBrowser.freezeView,trafficBrowser.newTraffic,selectionInfo),BorderLayout.EAST);messages.add(footer,BorderLayout.SOUTH);
+    JPanel selectedActions=row(selectionInfo,repeatSelected,evidenceSelected,compareSelected);selectedActions.setName("wb.actions.traffic.selection");
+    JPanel searchActions=CompactWorkbenchUi.toolbar(queryRow,selectedActions);
+    JPanel footer=new JPanel(new BorderLayout());footer.add(trafficBrowser.conditionBar());footer.add(row(trafficBrowser.freezeView,trafficBrowser.newTraffic),BorderLayout.EAST);messages.add(footer,BorderLayout.SOUTH);
     controls.add(searchActions, BorderLayout.SOUTH);
     JPanel main = page(controls, body);
     main.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));
@@ -2147,44 +2162,49 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       "Base64 → Gzip 해제"
     };
     JComboBox<String> operation = new JComboBox<>(ops);
+    operation.setName("wb.data.codec.operation");
+    JButton convert=button("변환",()->{
+      try{codecOut.setText(Core.transform((String)operation.getSelectedItem(),codecIn.getText()));}
+      catch(Exception e){error(e);}
+    });
+    convert.setName("wb.data.codec.convert");WorkbenchUi.primary(convert);
+    JButton reuse=button("출력 → 입력",()->codecIn.setText(codecOut.getText()));reuse.setName("wb.data.codec.reuse");
+    JButton copyOutput=button("복사",()->copy(codecOut.getText()));copyOutput.setName("wb.data.codec.copy");
+    JPanel inputActions=row(operation,convert);inputActions.setName("wb.actions.data.codec.input");
+    JPanel outputActions=row(reuse,copyOutput);outputActions.setName("wb.actions.data.codec.output");
+    JPanel input=new JPanel(new BorderLayout());input.setName("wb.codec.input");
+    input.add(CompactWorkbenchUi.toolbar(new JLabel("입력 (UTF-8 텍스트)"),inputActions),BorderLayout.NORTH);
+    input.add(new JScrollPane(codecIn));
+    JPanel output=new JPanel(new BorderLayout());output.setName("wb.codec.output");
+    output.add(CompactWorkbenchUi.toolbar(new JLabel("출력"),outputActions),BorderLayout.NORTH);
+    output.add(new JScrollPane(codecOut));
     JSplitPane editors =
         split(
             JSplitPane.HORIZONTAL_SPLIT,
-            labeled("입력 (UTF-8 텍스트)", new JScrollPane(codecIn)),
-            labeled("출력", new JScrollPane(codecOut)));
+            input,
+            output);
     editors.setName("wb.codec.messages");
-    return page(
-        row(
-            operation,
-            button(
-                "변환",
-                () -> {
-                  try {
-                    codecOut.setText(
-                        Core.transform((String) operation.getSelectedItem(), codecIn.getText()));
-                  } catch (Exception e) {
-                    error(e);
-                  }
-                }),
-            button("출력 → 입력", () -> codecIn.setText(codecOut.getText())),
-            button("복사", () -> copy(codecOut.getText()))),
-        editors);
+    JPanel panel=new JPanel(new BorderLayout());panel.add(editors);return panel;
   }
 
   private JPanel jwtPanel() {
     jwtOut.setEditable(false);
+    JButton decode=button("JWT 디코딩",()->jwtOut.setText(Core.jwt(jwtIn.getText())));decode.setName("wb.data.jwt.decode");WorkbenchUi.primary(decode);
+    JButton fromRequest=button("선택 요청에서 가져오기",this::selectedJwt);fromRequest.setName("wb.data.jwt.import");
+    JPanel inputActions=row(fromRequest,decode);inputActions.setName("wb.actions.data.jwt.input");
+    JPanel input=new JPanel(new BorderLayout());input.setName("wb.jwt.input");
+    input.add(CompactWorkbenchUi.toolbar(new JLabel("JWT 입력"),inputActions),BorderLayout.NORTH);
+    input.add(new JScrollPane(jwtIn));
+    JPanel output=new JPanel(new BorderLayout());output.setName("wb.jwt.output");
+    output.add(ReferenceUi.header(new JLabel("디코딩 결과 · 서명 검증 아님"),null),BorderLayout.NORTH);
+    output.add(new JScrollPane(jwtOut));
     JSplitPane editors =
         split(
             JSplitPane.HORIZONTAL_SPLIT,
-            labeled("JWT 입력", new JScrollPane(jwtIn)),
-            labeled("디코딩 결과", new JScrollPane(jwtOut)));
+            input,
+            output);
     editors.setName("wb.jwt.messages");
-    return page(
-        row(
-            button("JWT 디코딩", () -> jwtOut.setText(Core.jwt(jwtIn.getText()))),
-            button("선택 요청에서 가져오기", this::selectedJwt),
-            new JLabel("헤더·페이로드 보기 · 서명 검증 기능 없음")),
-        editors);
+    JPanel panel=new JPanel(new BorderLayout());panel.add(editors);return panel;
   }
 
   private JPanel jsPanel() {

@@ -64,7 +64,7 @@ final class MapperUi {
     c.setFont(font()); c.setForeground(ink());
     if(c instanceof JPanel p)p.setBackground("fm.card".equals(p.getName())?surface():background());
     if(c instanceof JLabel l&&Boolean.TRUE.equals(l.getClientProperty("fm.heading"))) {l.setFont(font().deriveFont(Font.BOLD,16f));l.setOpaque(true);l.setBackground(raised());}
-    if(c instanceof AbstractButton b && !(b instanceof JCheckBox) && !(b instanceof JRadioButton)) {b.setUI(new ButtonUi());b.setOpaque(false);b.setContentAreaFilled(false);b.setRolloverEnabled(true);b.setBorder(BorderFactory.createEmptyBorder(7,12,7,12));}
+    if(c instanceof AbstractButton b && !(b instanceof JCheckBox) && !(b instanceof JRadioButton)) {if(!(b.getUI() instanceof ButtonUi))b.setUI(new ButtonUi());b.setOpaque(false);b.setContentAreaFilled(false);b.setRolloverEnabled(true);b.setBorder(BorderFactory.createEmptyBorder(7,12,7,12));}
     if(c instanceof JCheckBox b){b.setIcon(kr.packetui.VisualTheme.checkIcon());b.setIconTextGap(6);b.setOpaque(false);}
     if(c instanceof JTextField t){t.setBackground(surface());t.setCaretColor(ink());t.setSelectionColor(selected());t.setBorder(kr.packetui.VisualTheme.border(7,10,7,10));}
     if(c instanceof JTextArea t){t.setBackground(surface());t.setCaretColor(ink());t.setSelectionColor(selected());t.setMargin(new Insets(8,10,8,10));if(Boolean.TRUE.equals(t.getClientProperty("fm.packet"))){t.setFont(new Font(Font.MONOSPACED,Font.PLAIN,14));kr.packetui.PacketStyle.install(t);}}

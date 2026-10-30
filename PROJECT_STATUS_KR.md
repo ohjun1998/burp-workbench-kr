@@ -1,5 +1,16 @@
 # 현재 개발 상태
 
+## Simple 1.4.6 · 승인 시안 구현 수정 — main 병합 완료
+
+사용자가 지적한 1.4.5와 승인 이미지의 차이를 수정했습니다. Workbench 상단 바·선형 메뉴 아이콘·Noto 기반 글꼴, 계정 요약 카드, JS 상세, 검사 단계, 도구별 표·패킷·증거 배치를 적용했습니다. 검증 커밋 `a797e8d1cd03c05411974bc0de6b84629a26ff5e`를 main `15a4683e06ed75e70bd100f9ce944406760d078a`로 일반 병합·push했습니다. 원격 JAR 해시가 검증 파일과 일치합니다.
+
+전체 검사 **5,897개**, 실제 Swing 렌더링 **164개**, Katana **102개** 통과. JAR SHA-256 `868b8f7369f5d71aa00b19635cfea83db8092b7e3dad501b5758c6ff0e6fd67b`. 실제 Burp GUI·Windows DPI/IME는 미실행입니다. 이전 모든 버전과 Next는 보존합니다.
+
+[JAR](simple/downloads/1.4.6/burp-workbench-simple-1.4.6.jar) · [8개 실제 화면](simple/docs/images/1.4.6/README.md) · [검증](simple/docs/VERIFICATION_SIMPLE_1.4.6.json) · [병합 기록](docs/reports/2026-10-30-simple-approved-design/MERGE_KR.md)
+
+아래 1.4.5 및 이전 항목은 보존 이력입니다. 1.4.5의 시안 적용 완료 설명은 시각적 일치가 부족해 이번 수정으로 대체합니다.
+
+
 ## Workbench Simple 1.4.5 · 승인한 도구별 디자인 main 반영
 
 2026-10-30T18:16:06.383383+09:00 기준 원격 main에 병합했습니다. 병합 커밋 `8971308b2f1f40ce1dfccb7e790d17e55d30fd3f`, 구현 커밋 `c16fa61`입니다. 사용자가 소스 적용과 main 병합을 명시적으로 요청했으며 GitHub API 접근 제한으로 PR API를 사용하지 않고 일반 Git 병합·push로 반영했습니다. 강제 push나 브랜치 보호 우회는 하지 않았습니다.

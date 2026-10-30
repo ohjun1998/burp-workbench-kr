@@ -1,0 +1,10 @@
+{
+  "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/main/simple/downloads/1.4.6/burp-workbench-simple-1.4.6.jar",
+  "bytes": 6226893,
+  "sha256": "868b8f7369f5d71aa00b19635cfea83db8092b7e3dad501b5758c6ff0e6fd67b",
+  "matchesLocal": true,
+  "verifiedAt": "2026-10-30T19:18:48.035525+09:00",
+  "mergeCommit": "15a4683e06ed75e70bd100f9ce944406760d078a",
+  "reviewedHead": "a797e8d1cd03c05411974bc0de6b84629a26ff5e",
+  "simpleTreeMatchesReviewedHead": true
+}

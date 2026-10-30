@@ -1,4 +1,6 @@
-# Workbench Simple 1.4.9
+# Workbench Simple 1.4.10
+
+**Simple 1.4.10은 독립 창·최대화·F11 전체화면과 36px 상단을 제공합니다.** Workbench 탭을 누르면 도구를 선택하는 별도 창이 열립니다. 메뉴 색상·마우스 반응·선택 강조와 간격도 정리했습니다. [설치 JAR](downloads/1.4.10/burp-workbench-simple-1.4.10.jar) · [화면](docs/images/1.4.10/README.md) · [사용법](docs/RELEASE_SIMPLE_1.4.10_KR.md).
 
 **Simple 1.4.9는 외부 노출·CVE 조사의 두 탭을 추가합니다.** 검색식·결과 URL 관리와 NVD/KEV/EPSS 조회, 관측·영향·수정 버전 상세를 제공합니다. [설치 JAR](downloads/1.4.9/burp-workbench-simple-1.4.9.jar) · [구현 화면](docs/images/1.4.9/README.md) · [기능·제한](docs/RELEASE_SIMPLE_1.4.9_KR.md).
 

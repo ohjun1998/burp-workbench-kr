@@ -5,15 +5,20 @@ import javax.swing.*;
 
 /** Small theme-aware icons with text alternatives supplied by each owning control. */
 final class WorkspaceIcons {
-  static Icon of(String kind) { return new Icon() {
+  static Icon of(String kind) {return icon(kind,null);}
+  private static Icon icon(String kind,Color tint) { return new Icon() {
     public int getIconWidth(){return 16;} public int getIconHeight(){return 16;}
     public void paintIcon(Component c,Graphics graphics,int x,int y){
       Graphics2D g=(Graphics2D)graphics.create();g.translate(x,y);WorkbenchSkin.antialias(g);
-      g.setColor(c instanceof JComponent j&&Boolean.TRUE.equals(j.getClientProperty("wb.icon.active"))?WorkbenchUi.accent():c.isEnabled()?c.getForeground():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
+      g.setColor(c instanceof JComponent j&&Boolean.TRUE.equals(j.getClientProperty("wb.icon.active"))?WorkbenchUi.accent():!c.isEnabled()?WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL):tint!=null?tint:c.getForeground());
       g.setStroke(new BasicStroke(1.5f,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
       if(kind.equals("menu")){for(int i=0;i<3;i++)g.drawLine(1,3+i*5,15,3+i*5);}
       else if(kind.equals("search")){g.drawOval(1,1,10,10);g.drawLine(10,10,15,15);}
       else if(kind.equals("target")){g.drawOval(2,2,12,12);g.drawOval(6,6,4,4);}
+      else if(kind.equals("fullscreen")){g.drawPolyline(new int[]{1,1,6},new int[]{6,1,1},3);g.drawPolyline(new int[]{10,15,15},new int[]{1,1,6},3);g.drawPolyline(new int[]{1,1,6},new int[]{10,15,15},3);g.drawPolyline(new int[]{10,15,15},new int[]{15,15,10},3);}
+      else if(kind.equals("dashboard")){g.drawRoundRect(1,1,14,14,2,2);g.drawLine(1,6,15,6);g.drawLine(6,6,6,15);}
+      else if(kind.equals("help")){g.drawOval(1,1,14,14);g.drawArc(5,4,6,5,0,180);g.drawLine(8,8,8,10);g.fillOval(7,12,2,2);}
+      else if(kind.equals("logs")){g.drawRoundRect(2,1,12,14,2,2);g.drawLine(5,5,11,5);g.drawLine(5,8,11,8);g.drawLine(5,11,9,11);}
       else if(kind.equals("filter")){g.drawPolyline(new int[]{1,15,10,10,6,6,1},new int[]{2,2,8,14,12,8,2},7);}
       else if(kind.equals("gear")){g.drawOval(3,3,10,10);g.drawOval(6,6,4,4);for(int i=0;i<8;i++){double a=i*Math.PI/4;g.drawLine(8+(int)(5*Math.cos(a)),8+(int)(5*Math.sin(a)),8+(int)(7*Math.cos(a)),8+(int)(7*Math.sin(a)));}}
       else if(kind.equals("arrow")){g.drawLine(1,8,14,8);g.drawPolyline(new int[]{10,14,10},new int[]{4,8,12},3);}
@@ -36,6 +41,7 @@ final class WorkspaceIcons {
       g.dispose();
     }
   }; }
+  static Icon navigation(String kind,Color tint,boolean group){Icon shape=icon(kind,tint);return new Icon(){public int getIconWidth(){return group?22:18;}public int getIconHeight(){return group?22:18;}public void paintIcon(Component c,Graphics g,int x,int y){if(group){Graphics2D gg=(Graphics2D)g.create();WorkbenchSkin.antialias(gg);gg.setColor(new Color(tint.getRed(),tint.getGreen(),tint.getBlue(),WorkbenchUi.dark()?36:24));gg.fillRoundRect(x,y,22,22,7,7);gg.dispose();}shape.paintIcon(c,g,x+(group?3:1),y+(group?3:1));}};}
   static JButton button(String kind,String name,String tip){
     JButton b=new JButton(of(kind));b.setName(name);b.setToolTipText(tip);b.getAccessibleContext().setAccessibleName(tip);
     b.putClientProperty("wb.compact.button",true);b.setPreferredSize(new Dimension(36,32));b.setMinimumSize(new Dimension(32,30));return b;

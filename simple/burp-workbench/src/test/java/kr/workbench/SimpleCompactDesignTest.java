@@ -108,8 +108,8 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
           check(SimpleWorkflowTest.toolSelected(root, tool), "compact design keeps the exact " + tool + " folder route");
         }
         extension.openFeature("traffic");root.setSize(1600,1000);for(int i=0;i<6;i++)UiLayoutTest.layout(root);
-        var brand=(JLabel)SimpleWorkflowTest.named(root,"wb.navigation.brand");var bar=SimpleWorkflowTest.named(root,"wb.navigation.toolbar");
-        check(brand.getText().equals("Workbench")&&bar.getHeight()<=50,"approved shell has the compact Workbench brand bar");
+        var brand=SimpleWorkflowTest.named(root,"wb.navigation.brand");var bar=SimpleWorkflowTest.named(root,"wb.navigation.toolbar");
+        check(brand==null&&bar.getHeight()<=36,"compact window shell removes duplicate branding and limits the common header to36px");
         var tree=(JTree)SimpleWorkflowTest.named(root,"wb.navigation.tree");var nodes=((javax.swing.tree.DefaultMutableTreeNode)tree.getModel().getRoot()).depthFirstEnumeration();int leaves=0;while(nodes.hasMoreElements())if(((javax.swing.tree.DefaultMutableTreeNode)nodes.nextElement()).isLeaf())leaves++;check(leaves==11,"approved sidebar has eleven leaves in five groups; auxiliary routes remain reachable separately");
         var nav=(JSplitPane)SimpleWorkflowTest.named(root,"wb.navigation.split");check(Math.abs(nav.getDividerLocation()-220)<10,"approved sidebar retains the reference width at 1600px");
         var traffic=(JTable)SimpleWorkflowTest.unchecked(extension,"logTable");check(java.util.stream.IntStream.range(0,traffic.getColumnCount()).mapToObj(traffic::getColumnName).toList().equals(List.of("NO","메서드","URL","상태","계정","시간","메모")),"traffic uses approved visible columns without discarding hidden metadata");

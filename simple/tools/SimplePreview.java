@@ -331,6 +331,21 @@ public final class SimplePreview extends WorkbenchTest {
         if(evidence.evidenceTable.getRowCount()>0)evidence.evidenceTable.setRowSelectionInterval(0,0);
         scenario("Original and comparison packets are captured together", evidence.evidenceCount() >= 3);
         capture(root,"05-evidence.png");
+        extension.openFeature("data");
+        var codecInput=(JTextArea)value(extension,"codecIn");var codecOutput=(JTextArea)value(extension,"codecOut");
+        codecInput.setText("{\n  \"target\": \"simple.example.test\",\n  \"purpose\": \"도구별 화면 확인용 합성 입력\"\n}");
+        var codecChoice=(JComboBox<?>)SimpleWorkflowTest.visibleComponents(root).stream().filter(c->c instanceof JComboBox<?> combo&&combo.getItemCount()>0&&"URL 인코딩 (form)".equals(combo.getItemAt(0))).findFirst().orElseThrow();
+        codecChoice.setSelectedItem("Base64 인코딩");SimpleWorkflowTest.clickText(((JTabbedPane)value(extension,"dataTabs")).getSelectedComponent(),"변환");
+        scenario("Data tool capture uses the real local conversion action",!codecOutput.getText().isBlank());
+        codecInput.setCaretPosition(0);codecOutput.setCaretPosition(0);capture(root,"14-data.png");
+        extension.openFeature("activity");
+        var progressPanel=(ActivityPanel)value(extension,"activity");
+        progressPanel.tracker.observe(request(origin+"/api/documents/101?view=summary","GET",true,List.of()),"화면 검증용 합성 요청");
+        progressPanel.tracker.observe(request(origin+"/api/projects","POST",true,List.of()),"화면 검증용 합성 요청");
+        progressPanel.refresh();if(progressPanel.table.getRowCount()>0)progressPanel.table.setRowSelectionInterval(0,0);
+        scenario("Progress capture derives rows from the real tracker using synthetic requests",progressPanel.table.getRowCount()>=2);capture(root,"15-progress.png");
+        extension.openFeature("dashboard");capture(root,"16-dashboard.png");
+
         String redacted = evidence.evidencePreview();
         scenario("Production preview excludes synthetic session values", !redacted.contains("ALICE_DEMO_SECRET")&&!redacted.contains("BOB_DEMO_SECRET"));
         var preview=evidence.evidencePreviewContent(()->{});

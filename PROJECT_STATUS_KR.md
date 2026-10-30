@@ -1,5 +1,15 @@
 # 현재 개발 상태
 
+## Simple 1.4.7 · 전체 화면 세부 디자인 — main 병합 완료
+
+첨부한 계정 카드·개수 배지 탭·기능 트리의 세부 표현을 8개 도구의 공통 버튼·입력·표·패킷·빈 상태까지 적용했습니다. 검증한 작업 커밋 `5c7c072e426fc26b023b5749725026745a2388e6`를 main `39eae232cbc5e7092130f5cb928a7ff6c1bd51c6`로 일반 병합하고 push했습니다. 공개 main JAR를 내려받아 로컬 검증 파일과 동일한 해시임을 확인했습니다.
+
+전체 검사 **5,903개**(150개 Java 회귀 그룹 5,591 · payload HTTP 136 · Mapper 147 · Node 29), 실제 Swing **164개 화면**, Katana **102개** 통과. 일반 표는 32px, 작은 표는 24px이며 개인화 글자 크기·배치를 유지합니다. 내장 Mapper 0.3.10 / helper 0.4.1. JAR SHA-256 `b52ec4a7edc194271387843b28673a1eb81c7fcd2d1ad806291b4c478dd87982`.
+
+[설치 JAR](simple/downloads/1.4.7/burp-workbench-simple-1.4.7.jar) · [8개 실제 화면](simple/docs/images/1.4.7/README.md) · [검증](simple/docs/VERIFICATION_SIMPLE_1.4.7.json) · [병합 기록](docs/reports/2026-10-30-simple-visual-details/MERGE_KR.md)
+
+실제 Burp GUI·Windows DPI/IME는 미실행이며 픽셀 동일성을 주장하지 않습니다. 아래 이전 버전과 배포 파일은 보존 이력입니다.
+
 ## Simple 1.4.6 · 승인 시안 구현 수정 — main 병합 완료
 
 사용자가 지적한 1.4.5와 승인 이미지의 차이를 수정했습니다. Workbench 상단 바·선형 메뉴 아이콘·Noto 기반 글꼴, 계정 요약 카드, JS 상세, 검사 단계, 도구별 표·패킷·증거 배치를 적용했습니다. 검증 커밋 `a797e8d1cd03c05411974bc0de6b84629a26ff5e`를 main `15a4683e06ed75e70bd100f9ce944406760d078a`로 일반 병합·push했습니다. 원격 JAR 해시가 검증 파일과 일치합니다.

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "curatedAtUtc": "2026-10-29T23:50:19.903757+00:00",
+  "sourceRootAtCuration": "/workspace/usability-goals-1.4.2/paired-v2",
+  "evidencePhase": "Three frozen 1.4.1 baseline probes and three FINAL packaged-product 1.4.2 after probes; intermediate after outputs excluded.",
+  "copiedFiles": [
+    {
+      "path": "protocol.json",
+      "sha256": "173334d64f3fd5480e02dee98f9b92d8c0f82d83847666d3d8b6b5d0b939b70f",
+      "bytes": 606,
+      "byteExactCopy": true
+    },
+    {
+      "path": "environment-before/metadata.json",
+      "sha256": "0b63f7e84707234919a82ebec3d612966ef4946e50f3ebde29b6c8b97b74bba3",
+      "bytes": 6569,
+      "byteExactCopy": true
+    },
+    {
+      "path": "environment-before/results/result.json",
+      "sha256": "1300241aacb3feb8928a01e667c87ebe72d2aaae1ac2a5e5b57f6da8cbac86c4",
+      "bytes": 4008,
+      "byteExactCopy": true
+    },
+    {
+      "path": "passive-before/metadata.json",
+      "sha256": "271c241bff5023ea4a8aa90cf447b6ef3409b3707bdb9b058a3c1750e610fbe3",
+      "bytes": 6492,
+      "byteExactCopy": true
+    },
+    {
+      "path": "passive-before/results/result.json",
+      "sha256": "e85f9c8cc578d5d34b54a9f2e3593ecb302025954d7646c1477172f22cc31aca",
+      "bytes": 2103,
+      "byteExactCopy": true
+    },
+    {
+      "path": "readiness-before/metadata.json",
+      "sha256": "e2a420ee25e1ca55b0f58a24eef25181924ba983393257fdda3b50747f9b4586",
+      "bytes": 6519,
+      "byteExactCopy": true
+    },
+    {
+      "path": "readiness-before/results/result.json",
+      "sha256": "d0946ca21346e3b3e0f2fa426079573dde2464c025e6ffcf1b4ed98ea6cbd566",
+      "bytes": 908,
+      "byteExactCopy": true
+    },
+    {
+      "path": "final/environment-after/metadata.json",
+      "sha256": "68a67b17b5995e6f2210aada082f92baf71cceb9a5ceb0555958ecfe27b9ac28",
+      "bytes": 6660,
+      "byteExactCopy": true
+    },
+    {
+      "path": "final/environment-after/results/result.json",
+      "sha256": "2cac241571d5a60e2c324267e9b6f8f18de90620ed1297cc781674d4ff750d25",
+      "bytes": 3803,
+      "byteExactCopy": true
+    },
+    {
+      "path": "final/passive-after/metadata.json",
+      "sha256": "b64ccdf11e792cd8751f7d6c59b964ef606c458307944762ed55f385c1f14ca9",
+      "bytes": 6579,
+      "byteExactCopy": true
+    },
+    {
+      "path": "final/passive-after/results/result.json",
+      "sha256": "dbbaf012ca034a5e0d3b7a7fb28f80f5ff4a669bda5c5bfbeb9aadcbd8313612",
+      "bytes": 2276,
+      "byteExactCopy": true
+    },
+    {
+      "path": "final/readiness-after/metadata.json",
+      "sha256": "93a2c20c498980d80198dfe893da7bd6cbfb07a7576b1222673b3330dad9ee4a",
+      "bytes": 6608,
+      "byteExactCopy": true
+    },
+    {
+      "path": "final/readiness-after/results/result.json",
+      "sha256": "6a5ad89ed6ccb082525839f0f4cfc9238d7f7ac3dde28447fc3f252b7b7d3dc1",
+      "bytes": 854,
+      "byteExactCopy": true
+    }
+  ],
+  "review": "JSON results contain component/condition booleans, counters, hashes, original IDs and input/command provenance. No HTTP headers, bodies, authentication values, ZIPs or private runtime files were copied. Automated string screening is heuristic and not a complete secret-detection guarantee.",
+  "excluded": [
+    "hidden product/source/adapter/dependency/class snapshots",
+    "private runtime homes/preferences/tmp",
+    "raw packets and original report ZIPs",
+    "unreviewed logs"
+  ],
+  "finalProductJarSHA256": "a10a6cfb2a51a4eb96ffafd07f7e31ec56df9d1a23158402b75de4ef65879bd8"
+}

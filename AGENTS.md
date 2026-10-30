@@ -1,5 +1,7 @@
 # Burp Workbench KR development
 
+- Workbench Simple **1.4.2** follows up the actual-workflow goals from main `65ae9273d3b58d47ddf7e3b96d0e118875bb15b3`: daily environment target/account choices, uninterrupted response reading, inline URL target recovery/Enter preparation, and accurate search preparation readiness. Report: `docs/reports/2026-10-30-simple-workflow-goals/REPORT_KR.md`; guide: `simple/docs/RELEASE_SIMPLE_1.4.2_KR.md`. Preserve all previous artifacts, frozen `audit/simple-usability` sources, eight tools, original-ID/account/SCOPE/budget/evidence contracts and original Next sources. The first new1.4.1 whole baseline failed; preserve it separately from historical passes.
+
 - Workbench Simple **1.4.1** improves five measured workflows from main `81b48defb81db7c656e913a8ebd6848e30621cf1`: uninterrupted detail reading, target/account completion, batched snapshot tables, batched URL imports and explicit dashboard result reveal. Evidence and limitations: `docs/reports/2026-10-30-simple-usability/REPORT_KR.md`; guide: `simple/docs/RELEASE_SIMPLE_1.4.1_KR.md`. Keep the eight tool entries, settings menus, original-ID/auth/SCOPE/budget contracts and previous artifacts. Synthetic EDT allocations are not retained heap/RSS; adapter Swing/HTTP is not native Burp GUI. Build/verify with the Simple commands below; do not edit original Next sources for this work.
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 

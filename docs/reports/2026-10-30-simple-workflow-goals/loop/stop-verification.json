@@ -1,0 +1,10 @@
+{
+  "ownedPid": 28571,
+  "port": 18888,
+  "ownedPortClosed": true,
+  "ownedProcessRunning": false,
+  "processState": "Z",
+  "verifiedAtUtc": "2026-10-29T23:48:28.298196+00:00",
+  "otherServicesChanged": false,
+  "scope": "Only the owned goals142 LOOP runtime, distinct from preserved 20261030 runtime."
+}

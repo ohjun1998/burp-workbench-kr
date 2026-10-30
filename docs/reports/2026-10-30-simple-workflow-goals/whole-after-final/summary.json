@@ -1,0 +1,106 @@
+{
+  "jarSHA256": "a10a6cfb2a51a4eb96ffafd07f7e31ec56df9d1a23158402b75de4ef65879bd8",
+  "confirmationRuns": [
+    {
+      "run": 1,
+      "passed": 115,
+      "failed": 0,
+      "engineHttpRequests": 42,
+      "loginSetupHttpRequests": 2,
+      "modules": [
+        "traffic",
+        "mapper",
+        "auth",
+        "js",
+        "environment",
+        "response.recon",
+        "payload",
+        "bounty"
+      ],
+      "summarySHA256": "0b400f33002722310c67d55f7a5f4702e6d148adcbc21152a43552594858a4bb",
+      "metadataSHA256": "24c0b02391a8a02c68046f10efd5c2667677639e8cbb599cb9fe40afc6952cd7",
+      "freshPrivateRuntimeRemoved": true
+    },
+    {
+      "run": 2,
+      "passed": 115,
+      "failed": 0,
+      "engineHttpRequests": 42,
+      "loginSetupHttpRequests": 2,
+      "modules": [
+        "traffic",
+        "mapper",
+        "auth",
+        "js",
+        "environment",
+        "response.recon",
+        "payload",
+        "bounty"
+      ],
+      "summarySHA256": "47a390cb33d9b0d9b6efc0f9a340937bb4592ea2d7d44abfd62e38d3af18c596",
+      "metadataSHA256": "95b5b87f94768e0ff7c5216bf5a05487c20f60d43b48e2d9b5dae6ec48942bda",
+      "freshPrivateRuntimeRemoved": true
+    },
+    {
+      "run": 3,
+      "passed": 115,
+      "failed": 0,
+      "engineHttpRequests": 42,
+      "loginSetupHttpRequests": 2,
+      "modules": [
+        "traffic",
+        "mapper",
+        "auth",
+        "js",
+        "environment",
+        "response.recon",
+        "payload",
+        "bounty"
+      ],
+      "summarySHA256": "724795f1ef3b007f25463391bf5583c26e25b6e91d92f4c50d44001369ab036e",
+      "metadataSHA256": "c082ca266537f154b096afe7c765eeae165c52ae1149a83371d8d172186391c6",
+      "freshPrivateRuntimeRemoved": true
+    },
+    {
+      "run": 4,
+      "passed": 115,
+      "failed": 0,
+      "engineHttpRequests": 42,
+      "loginSetupHttpRequests": 2,
+      "modules": [
+        "traffic",
+        "mapper",
+        "auth",
+        "js",
+        "environment",
+        "response.recon",
+        "payload",
+        "bounty"
+      ],
+      "summarySHA256": "3e25b6f243d3c920d31ee08bdbb4e0c9611f3b8edd25bae2e456d4d9ae8946f3",
+      "metadataSHA256": "7cd0adf88ddc89b76285bd9fed5afcd84ea35dd2fae3a9aacf79210b8d155aa2",
+      "freshPrivateRuntimeRemoved": true
+    },
+    {
+      "run": 5,
+      "passed": 115,
+      "failed": 0,
+      "engineHttpRequests": 42,
+      "loginSetupHttpRequests": 2,
+      "modules": [
+        "traffic",
+        "mapper",
+        "auth",
+        "js",
+        "environment",
+        "response.recon",
+        "payload",
+        "bounty"
+      ],
+      "summarySHA256": "cdbf2652c1dfbad92653cbc792266220e004b400a762045c5915d183aa081517",
+      "metadataSHA256": "37738b6b4fb0be6c30459ddd9aacc021855ff947095c5f60083efa273c4fd72b",
+      "freshPrivateRuntimeRemoved": true
+    }
+  ],
+  "repetitionsAreNotNewImprovementRounds": true
+}

@@ -1,7 +1,15 @@
 # 현재 개발 상태
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
-기준: 2026-10-30 (한국 시간). 현재 Simple 소스는 **Workbench Simple 1.4.1** 실사용 흐름 개선판이며 기존 **Workbench Next 0.53.4**와 Simple 1.4.0 및 과거 모든 배포·후보 기록을 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**은 유지합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.
+기준: 2026-10-30 (한국 시간). 현재 Simple 소스는 **Workbench Simple 1.4.2** 반복 작업·설정·복구 개선판이며 기존 **Workbench Next 0.53.4**와 Simple 1.4.0 및 과거 모든 배포·후보 기록을 함께 보관합니다. Next의 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**은 유지합니다. Simple의 내장 Mapper는0.3.6, 브라우저 helper는0.4.1입니다.
+
+## Workbench Simple 1.4.2 · 실사용 목표 후속 개선
+
+기준 main `65ae9273d3b58d47ddf7e3b96d0e118875bb15b3`의 배포1.4.1에서 대상·계정 선택, 수신 중 원본 읽기, URL 대상 준비 오류와 검색 완료 상태를 다시 재현합니다. 일상 조건과 관리 기능을 나누고 같은 작업의 필수 조작·설정창 진입·문서/표 갱신·EDT 비용·실패 후 복구를 비교합니다. 최초 새 전체 기준 실행의 실패도 보존하며, 이를 과거 5라운드 통과와 혼합하지 않습니다.
+
+[목표별 전후 보고서](docs/reports/2026-10-30-simple-workflow-goals/REPORT_KR.md) · [검증 근거](docs/reports/2026-10-30-simple-workflow-goals/VERIFICATION.json) · [1.4.2 배포 안내](simple/docs/RELEASE_SIMPLE_1.4.2_KR.md) · [사용자 요청·진행 기록](docs/chat-logs/2026-10-30/simple-workflow-goals.md)
+
+기존 8개 도구와 SCOPE·계정·요청 한도·원본 ID·증거 계약, Next 원본과 모든 이전 배포 파일을 보존합니다. 실제 Burp GUI·OS 클릭·Windows DPI/IME는 어댑터 검증과 구분합니다.
 
 ## Workbench Simple 1.4.1 · 전체 흐름 5라운드 개선
 

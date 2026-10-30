@@ -129,13 +129,15 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
                           if (observed) origins.setSelectedItem(origin);
                           else status.setText("등록된 대상의 응답을 요청·응답 목록에서 먼저 관찰하세요.");
                         }),
-                    WorkbenchUi.row(new JLabel("관찰된 대상"), origins),
+                    WorkbenchUi.row(targetSummary),
                     new JLabel("SCOPE 내 관찰된 응답을 기준으로 환경 후보를 구성합니다.")));
     setName("wb.environment");
     setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
     limit.setSelectedItem(100);
     limit.setPreferredSize(new Dimension(90,32));
     origins.setPreferredSize(new Dimension(360, 30));
+    origins.setName("wb.environment.origin");account.setName("wb.environment.account");
+    account.setPreferredSize(new Dimension(140,30));
     JMenuItem send = new JMenuItem("선택 URL → 비로그인 GET Repeater");
     stop.setEnabled(false);
     pause.setEnabled(false);
@@ -143,7 +145,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     JButton settings = new JButton("후보 설정"), more = new JButton("더보기"), all = new JButton("전체 환경");
     JPanel toolbar = new JPanel();
     toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-    toolbar.add(WorkbenchUi.row(targetSummary, targetSettings.button(), all));
+    toolbar.add(WorkbenchUi.row(new JLabel("대상"),origins,new JLabel("계정"),account,targetSettings.button(),all));
     toolbar.add(WorkbenchUi.row(single, start, pause, stop, settings, more));
     WorkbenchUi.primary(single);
     WorkbenchUi.primary(start);
@@ -221,7 +223,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
         .getSelectionModel()
         .addListSelectionListener(
             e -> {
-              if (!e.getValueIsAdjusting()) showSelected();
+              if (!refreshing && !e.getValueIsAdjusting()) showSelected();
             });
     account.addActionListener(e->refresh());
     limit.addActionListener(e -> refresh());
@@ -277,31 +279,33 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     return raw.length() > 65536 ? raw.substring(0, 65536) + "\n[미리보기 64K자 제한]" : raw;
   }
 
+  private boolean previewReady,previewFormatted;
+  private String previewUrl,previewAccount,displayedAccount;
+  private Packet previewPacket;
+  private EnvironmentProject.Entry previewSaved;
+
   void showSelected() {
-    String url = selectedUrl();
-    if (url == null) {
+    if(refreshing)return;
+    String url=selectedUrl(),owner=accountKey();Packet packet=url==null?null:currentPacket(url);
+    var saved=url==null?null:project.latest.get(owner+" GET "+url);
+    boolean pretty=formatted.isSelected();
+    if(previewReady&&Objects.equals(previewUrl,url)&&Objects.equals(previewAccount,owner)
+        &&previewPacket==packet&&Objects.equals(previewSaved,saved)&&previewFormatted==pretty)return;
+    if(url==null){
       requestView.setText("후보 경로를 선택하세요.");
       responseView.setText("검증 전 응답은 없습니다. 시작 버튼으로 검증하세요.");
-      return;
-    }
-    Packet p = currentPacket(url);
-    if (p != null) {
-      requestView.setText(formatted.isSelected() ? PacketFormat.pretty(p.request) : p.request);
-      responseView.setText(formatted.isSelected() ? PacketFormat.pretty(p.decoded) : p.response);
-    } else {
-      try {
-        requestView.setText(
-            formatted.isSelected()
-                ? PacketFormat.pretty(preview(HttpRequest.httpRequestFromUrl(url).toString()))
-                : preview(HttpRequest.httpRequestFromUrl(url).toString()));
-      } catch (Exception ex) {
-        requestView.setText("GET " + url + "\n[검증 전 요청 미리보기]");
-      }
-      var saved=project.latest.get(accountKey()+" GET "+url);
+    }else if(packet!=null){
+      requestView.setText(pretty?PacketFormat.pretty(packet.request):packet.request);
+      responseView.setText(pretty?PacketFormat.pretty(packet.decoded):packet.response);
+    }else{
+      try{
+        String request=preview(HttpRequest.httpRequestFromUrl(url).toString());
+        requestView.setText(pretty?PacketFormat.pretty(request):request);
+      }catch(Exception error){requestView.setText("GET "+url+"\n[검증 전 요청 미리보기]");}
       responseView.setText(saved==null?"미검증 · 시작 버튼으로 응답을 수집하세요.":"저장된 판정 · HTTP "+saved.status()+" · "+EnvironmentContent.title(saved.kind())+" · "+saved.change()+"\n원본 패킷은 저장하지 않습니다. 다시 GET 확인하면 현재 응답을 볼 수 있습니다.");
     }
-    requestView.setCaretPosition(0);
-    responseView.setCaretPosition(0);
+    requestView.setCaretPosition(0);responseView.setCaretPosition(0);
+    previewReady=true;previewUrl=url;previewAccount=owner;previewPacket=packet;previewSaved=saved;previewFormatted=pretty;
   }
 
   final AtomicLong observationEpoch = new AtomicLong();
@@ -341,125 +345,91 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   void applyObservation(Observation observation) {
     if (closed.get() || observation == null || observation.generation() != observationEpoch.get())
       return;
-    EnvironmentCatalog.Site observed = observation.site();
-    EnvironmentCatalog.Site site = catalog.sites.get(observed.origin);
-    if (site == null) {
-      if (catalog.sites.size() >= 50)
-        catalog.sites.remove(catalog.sites.keySet().iterator().next());
-      site = new EnvironmentCatalog.Site(observed.origin);
-      catalog.sites.put(site.origin, site);
+    EnvironmentCatalog.Site observed=observation.site();
+    EnvironmentCatalog.Site site=catalog.sites.get(observed.origin);boolean changed=false,selectedRemoved=false;
+    if(site==null){
+      if(catalog.sites.size()>=50){String retired=catalog.sites.keySet().iterator().next();catalog.sites.remove(retired);selectedRemoved=Objects.equals(retired,origins.getSelectedItem());}
+      site=new EnvironmentCatalog.Site(observed.origin);catalog.sites.put(site.origin,site);changed=true;
     }
-    for (var e : observed.detections.entrySet())
-      if (site.detections.size() < 40 || site.detections.containsKey(e.getKey()))
-        site.detections.put(e.getKey(), e.getValue());
-    for (String path : observed.observed) if (site.observed.size() < 100) site.observed.add(path);
-    for (String prefix : observed.prefixes) if (site.prefixes.size() < 8) site.prefixes.add(prefix);
-    for (String path : observed.managementRoots)
-      if (site.managementRoots.size() < 8) site.managementRoots.add(path);
-    for (var e : observed.discovered.entrySet()) {
-      var old = site.discovered.get(e.getKey());
-      if ((old == null && site.discovered.size() < 500)
-          || (old != null && old.score() < e.getValue().score())) {
-        site.discovered.put(e.getKey(), e.getValue());
-        site.associations.put(e.getKey(), observed.associations.get(e.getKey()));
+    for(var entry:observed.detections.entrySet())if(site.detections.size()<40||site.detections.containsKey(entry.getKey())){
+      if(!Objects.equals(site.detections.put(entry.getKey(),entry.getValue()),entry.getValue()))changed=true;
+    }
+    for(String path:observed.observed)if(site.observed.size()<100)changed|=site.observed.add(path);
+    for(String value:observed.prefixes)if(site.prefixes.size()<8)changed|=site.prefixes.add(value);
+    for(String value:observed.managementRoots)if(site.managementRoots.size()<8)changed|=site.managementRoots.add(value);
+    for(var entry:observed.discovered.entrySet()){
+      var old=site.discovered.get(entry.getKey());
+      if((old==null&&site.discovered.size()<500)||(old!=null&&old.score()<entry.getValue().score())){
+        site.discovered.put(entry.getKey(),entry.getValue());site.associations.put(entry.getKey(),observed.associations.get(entry.getKey()));changed=true;
       }
     }
-    boolean found = false;
-    for (int i = 0; i < origins.getItemCount(); i++)
-      if (origins.getItemAt(i).equals(site.origin)) found = true;
-    if (!found) {
-      origins.addItem(site.origin);
-      if (origins.getSelectedItem() == null) origins.setSelectedItem(site.origin);
+    boolean found=false;for(int i=0;i<origins.getItemCount();i++)if(origins.getItemAt(i).equals(site.origin))found=true;
+    if(!found){
+      boolean previous=refreshing;refreshing=true;
+      try{origins.addItem(site.origin);if(origins.getSelectedItem()==null)origins.setSelectedItem(site.origin);}
+      finally{refreshing=previous;}
     }
-    refresh();
+    if(selectedRemoved||!Objects.equals(displayedAccount,accountKey())
+        ||(changed&&Objects.equals(origins.getSelectedItem(),site.origin)))refresh();
   }
 
   public void observe(HttpRequest request, HttpResponse response) {
     applyObservation(prepareObservation(request, response));
   }
 
+  /** Only changed data produces a table event; column order, renderers and sort keys stay intact. */
+  static boolean replaceRows(DefaultTableModel model,List<Object[]> rows){
+    boolean equal=model.getRowCount()==rows.size();
+    if(equal)for(int row=0;row<rows.size()&&equal;row++)for(int column=0;column<model.getColumnCount();column++)
+      if(!Objects.equals(model.getValueAt(row,column),rows.get(row)[column])){equal=false;break;}
+    if(equal)return false;
+    var data=model.getDataVector();data.clear();
+    for(Object[] row:rows)data.add(new Vector<>(Arrays.asList(row)));
+    model.fireTableDataChanged();return true;
+  }
+
   void refresh() {
-    TargetWindow.show(
-        targetSummary, Objects.toString(origins.getSelectedItem(), ""), "대상 · 트래픽에서 선택하세요");
-    String selected = selectedUrl();
-    refreshing = true;
-    tech.setRowCount(0);
-    paths.setRowCount(0);
-    candidates = List.of();
-    var site = catalog.sites.get(origins.getSelectedItem());
-    if (site == null) {
-      category = null;
-      refreshing = false;
-      selection.setText("전체 환경");
-      showSelected();
-      return;
-    }
-    for (var d : site.detections.values())
-      tech.addRow(new Object[] {d.category(), d.name(), d.confidence(), d.evidence()});
-    if (category != null
-        && site.detections.values().stream().noneMatch(d -> d.category().equals(category)))
-      category = null;
-    for (int i = 0; i < tech.getRowCount(); i++)
-      if (category != null && tech.getValueAt(i, 0).equals(category)) {
-        int view = technologies.convertRowIndexToView(i);
-        technologies.setRowSelectionInterval(view, view);
-        break;
+    if(refreshing)return;
+    TargetWindow.show(targetSummary,Objects.toString(origins.getSelectedItem(),""),"대상 · 트래픽에서 선택하세요");
+    String selected=selectedUrl(),owner=accountKey();refreshing=true;
+    try{
+      var site=catalog.sites.get(origins.getSelectedItem());
+      List<Object[]> technologiesRows=new ArrayList<>(),pathRows=new ArrayList<>();
+      if(site==null){
+        category=null;candidates=List.of();replaceRows(tech,technologiesRows);replaceRows(paths,pathRows);
+        technologies.clearSelection();pathTable.clearSelection();selection.setText("전체 환경");return;
       }
-    refreshing = false;
-    selection.setText(category == null ? "전체 환경" : category + " 관련 후보");
-    EnvironmentCatalog.Site filtered = site;
-    if (category != null) {
-      filtered = new EnvironmentCatalog.Site(site.origin);
-      for (var entry : site.detections.entrySet())
-        if (entry.getValue().category().equals(category))
-          filtered.detections.put(entry.getKey(), entry.getValue());
-      filtered.prefixes.addAll(site.prefixes);
-      filtered.feedback.putAll(site.feedback);
-      if (filtered.detections.containsKey("Spring Boot / Actuator"))
-        filtered.managementRoots.addAll(site.managementRoots);
-      for (var entry : site.discovered.entrySet())
-        if (category.equals(site.associations.get(entry.getKey()))) {
-          filtered.discovered.put(entry.getKey(), entry.getValue());
-          filtered.associations.put(entry.getKey(), category);
-        }
-    }
-    try {
-      candidates =
-          catalog.candidates(
-              filtered,
-              prefix.getText(),
-              category == null && common.isSelected(),
-              (Integer) limit.getSelectedItem());
-      for (var c : candidates) {
-        Packet p = currentPacket(c.url());
-        var saved=project.latest.get(accountKey()+" GET "+c.url());
-        paths.addRow(
-            new Object[] {
-              c.url(),
-              c.source(),
-              c.purpose(),
-              p == null ? (saved!=null?"HTTP "+saved.status()+" · "+EnvironmentContent.title(saved.kind())+" · "+saved.change():(EnvironmentKnowledge.manualOnly(c.url()) ? "단일 검토" : "미검증")) : p.state
-            });
+      for(var detection:site.detections.values())technologiesRows.add(new Object[]{detection.category(),detection.name(),detection.confidence(),detection.evidence()});
+      replaceRows(tech,technologiesRows);
+      if(category!=null&&site.detections.values().stream().noneMatch(d->d.category().equals(category)))category=null;
+      if(category==null)technologies.clearSelection();
+      else for(int i=0;i<tech.getRowCount();i++)if(tech.getValueAt(i,0).equals(category)){
+        int view=technologies.convertRowIndexToView(i);if(view>=0)technologies.setRowSelectionInterval(view,view);break;
       }
-      if (selected != null)
-        for (int i = 0; i < candidates.size(); i++)
-          if (candidates.get(i).url().equals(selected)) {
-            int view = pathTable.convertRowIndexToView(i);
-            pathTable.setRowSelectionInterval(view, view);
-            break;
-          }
-      if (job == null)
-        status.setText(
-            "환경 "
-                + site.detections.size()
-                + " · 후보 URL "
-                + candidates.size()
-                + " · 응답 근거 우선 · 존재/취약점 미확인");
-    } catch (Exception ex) {
-      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",ex);
-      status.setText(ex.getMessage());
-    }
-    showSelected();
+      selection.setText(category==null?"전체 환경":category+" 관련 후보");
+      EnvironmentCatalog.Site filtered=site;
+      if(category!=null){
+        filtered=new EnvironmentCatalog.Site(site.origin);
+        for(var entry:site.detections.entrySet())if(entry.getValue().category().equals(category))filtered.detections.put(entry.getKey(),entry.getValue());
+        filtered.prefixes.addAll(site.prefixes);filtered.feedback.putAll(site.feedback);
+        if(filtered.detections.containsKey("Spring Boot / Actuator"))filtered.managementRoots.addAll(site.managementRoots);
+        for(var entry:site.discovered.entrySet())if(category.equals(site.associations.get(entry.getKey()))){filtered.discovered.put(entry.getKey(),entry.getValue());filtered.associations.put(entry.getKey(),category);}
+      }
+      candidates=catalog.candidates(filtered,prefix.getText(),category==null&&common.isSelected(),(Integer)limit.getSelectedItem());
+      for(var candidate:candidates){
+        Packet packet=currentPacket(candidate.url());var saved=project.latest.get(owner+" GET "+candidate.url());
+        String state=packet!=null?packet.state:saved!=null?"HTTP "+saved.status()+" · "+EnvironmentContent.title(saved.kind())+" · "+saved.change():EnvironmentKnowledge.manualOnly(candidate.url())?"단일 검토":"미검증";
+        pathRows.add(new Object[]{candidate.url(),candidate.source(),candidate.purpose(),state});
+      }
+      replaceRows(paths,pathRows);
+      int selectedView=-1;
+      if(selected!=null)for(int i=0;i<candidates.size();i++)if(candidates.get(i).url().equals(selected)){selectedView=pathTable.convertRowIndexToView(i);break;}
+      if(selectedView>=0)pathTable.setRowSelectionInterval(selectedView,selectedView);else pathTable.clearSelection();
+      if(job==null)status.setText("환경 "+site.detections.size()+" · 후보 URL "+candidates.size()+" · 응답 근거 우선 · 존재/취약점 미확인");
+    }catch(Exception error){
+      candidates=List.of();replaceRows(paths,List.of());pathTable.clearSelection();
+      Diagnostics.failure(EnvironmentPanel.this,"서버·경로 탐색",error);status.setText(error.getMessage());
+    }finally{displayedAccount=owner;refreshing=false;showSelected();}
   }
 
   JPanel settingsContent() {
@@ -480,7 +450,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
           }
         });
     return TargetWindow.options(
-        WorkbenchUi.row(new JLabel("검증 계정"), account, new JLabel("캡처된 세션 사용 · 갱신은 권한 비교에서 확인")),
+        new JLabel("계정은 메인 화면에서 선택 · 캡처된 세션 갱신은 계정 비교에서 확인"),
         WorkbenchUi.row(new JLabel("앱 접두 경로"), prefix, new JLabel("최대 후보 수"), limit, common),
         WorkbenchUi.row(compareMissing, repeatMissing, unverifiedOnly),
         WorkbenchUi.row(new JLabel("JSON 동적 필드 제외"), volatileFields),

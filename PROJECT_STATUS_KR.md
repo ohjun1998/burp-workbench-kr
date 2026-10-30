@@ -1,5 +1,15 @@
 # 현재 개발 상태
 
+## Simple 1.4.11 · 빨간 번호 가이드와 화면 정리 — main 병합 완료
+
+각 화면 오른쪽 위 Guide/F1로 별도 가이드 창을 엽니다. 16개 화면·96개 빨간 번호 설명, 번호/설명 선택 연동, 확대와 최대화를 제공합니다. 구형 텍스트 도움말·Mapper 중복 분류 버튼·입력값 검사 중복 준비 버튼·증거 작성 서식/글자 수 줄·현황 반복 제목의 5종을 제거했습니다. 추가 정리 후보는 실제 삭제와 구분해 빨간 점선으로 표시합니다.
+
+구현 `312a765732be25fda1c24644cefb01a0bf55e3d0`를 main `7694fb5e194961f8f0a60701420449330eb96a3c`로 일반 병합·push했습니다. 전체 검사 **6,964개** 후 창 제목/어두운 설명색 수정은 집중 **1,057개**로 확인했습니다. 최종 JAR 기준 실제 가이드 창 **50개**, Swing **194개 화면**, Katana **102개** 검사를 통과했습니다. 공개 JAR·전체 이미지 ZIP 재다운로드 체크섬과 이미지 ZIP CRC가 일치합니다.
+
+[설치 JAR](simple/downloads/1.4.11/burp-workbench-simple-1.4.11.jar) · [확장별 이미지](docs/reports/2026-10-31-numbered-guides/README.md) · [전체62장 ZIP](docs/reports/2026-10-31-numbered-guides/all-images.zip) · [사용법](simple/docs/RELEASE_SIMPLE_1.4.11_KR.md) · [검증 범위](docs/reports/2026-10-31-numbered-guides/VALIDATION_SCOPE_KR.md) · [병합](docs/reports/2026-10-31-numbered-guides/MERGE_KR.md)
+
+JAR SHA-256 `634c8a67afc53c69a0e21acf453ed51723b423bb499521ae8cbac968a04b4847`. 실제 Linux Swing/WM와 합성 Burp API/패킷을 사용했으며 Windows Burp 본체·DPI/IME는 미검증입니다. 가이드 예시는 사용자 패킷을 캡처하지 않습니다. 원본 Next와 이전 배포 파일은 보존했습니다. 내장 Mapper0.3.12/helper0.4.1.
+
 ## Simple 1.4.10 · 독립 창과 압축 메뉴 — main 병합 완료
 
 Workbench 탭으로 독립 창을 열고 같은 도구·입력·선택을 유지하면서 최대화/F11·Esc 전체화면을 사용합니다. 창 닫기는 숨김이며, 로드 해제는 화면/작업 자원을 정리합니다. 기존 설정·원본·Scope 보조 창의 편집·소유 관계도 유지합니다. 상단은36px 한 줄, 도구별 색상 아이콘·hover/선택 강조·조밀한 메뉴를 적용했습니다. 구현 `0a1e11c21c54d9fca6ddaab3150c0403365813e8`를 main `fc795088b75b872f01443e747b589c099b86683b`로 일반 병합·push했습니다.

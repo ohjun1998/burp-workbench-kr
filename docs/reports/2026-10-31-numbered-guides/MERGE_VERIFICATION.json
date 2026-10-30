@@ -1,0 +1,13 @@
+{
+  "version": "1.4.11",
+  "implementationCommit": "312a765732be25fda1c24644cefb01a0bf55e3d0",
+  "mainMergeCommit": "7694fb5e194961f8f0a60701420449330eb96a3c",
+  "remoteMainPushed": true,
+  "publishedJarSha256": "634c8a67afc53c69a0e21acf453ed51723b423bb499521ae8cbac968a04b4847",
+  "publishedImageZipSha256": "27a23c3b9b24a1bb854d9d732eefe4391b8c1cddf1f0a577782e1b2bb5827554",
+  "downloadChecksumsMatch": true,
+  "publishedImageZipCrcVerified": true,
+  "immutablePackageVerified": true,
+  "prCreated": false,
+  "prUnavailableReason": "GitHub CLI token invalid; normal merge under existing user authorization. No force push."
+}

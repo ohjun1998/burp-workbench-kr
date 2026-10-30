@@ -145,7 +145,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final AtomicLong credentialDropped=new AtomicLong();
   final Map<String,AuthAccount> accounts=new LinkedHashMap<>();
   final AuthInlinePreview inlinePreview = new AuthInlinePreview();
-  final JButton[] accountCards={new JButton(),new JButton(),new JButton(),new JButton()};
+  final JButton[] accountCards={new AccountSummaryCard(0),new AccountSummaryCard(1),new AccountSummaryCard(2),new AccountSummaryCard(3)};
   final JPanel packetDetails=new JPanel(new BorderLayout(0,6));
   final TargetWindow comparisonWindow=new TargetWindow(this,"비교 기록 상세",()->packetDetails);
   final TargetWindow candidateWindow;
@@ -523,7 +523,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     detection.setToolTipText("인증 탐지는 수집 OFF/SCOPE와 별도입니다. 후보를 계정에 지정한 뒤 선택 요청을 비교하세요.");
     actions.add(counts);
     JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setName("wb.auth.account.cards");
-    for(int i:new int[]{0,1,2,3}){final int slot=i;JButton card=accountCards[i];card.setName("wb.auth.account.card."+i);card.setHorizontalAlignment(SwingConstants.LEFT);card.setPreferredSize(new Dimension(180,54));card.addActionListener(e->safe(this::openAccountPreparation));if(i!=2)summaries.add(card);}
+    for(int i:new int[]{0,1,2,3}){final int slot=i;JButton card=accountCards[i];card.setName("wb.auth.account.card."+i);card.setHorizontalAlignment(SwingConstants.LEFT);card.addActionListener(e->safe(this::openAccountPreparation));if(i!=2)summaries.add(card);}
     top.add(summaries);
     // Retain this internal status model for the engine, without an automatic-mode control.
     automaticScope.setName("wb.auth.automatic.scope");
@@ -1347,7 +1347,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     for (int i = 0; i < SLOTS; i++) {
       Candidate c = slots[i];
       JButton card=accountCards[i];if(i==2){Container parent=accountCards[0].getParent();if(parent!=null){if(c!=null&&card.getParent()==null)parent.add(card,2);else if(c==null&&card.getParent()!=null)parent.remove(card);parent.revalidate();}}
-      card.setText("<html><b>"+Core.html(i==3?"비로그인":label(i))+"</b><br><font color='#718096'>"+(c==null?"계정 연결 필요":c.headers().isEmpty()?"인증 없이 비교":Core.html(profileRoles[i].getText().isBlank()?"연결됨":profileRoles[i].getText()))+"</font></html>");
+      ((AccountSummaryCard)card).summary(i==3?"비로그인":label(i),c==null?"계정 연결 필요":c.headers().isEmpty()?"인증 정보 없음":accounts.get(c.key())!=null&&!accounts.get(c.key()).email().isBlank()?accounts.get(c.key()).email():profileOwners[i].getText().isBlank()?c.origin():profileOwners[i].getText(),c==null?"클릭하여 계정을 연결하세요":c.headers().isEmpty()?"인증 없이 요청을 비교합니다":profileRoles[i].getText().isBlank()?"연결됨 · 클릭하여 계정 설정":profileRoles[i].getText(),i==0&&c!=null);
       card.setToolTipText(c==null?"원본 선택 후 계정 연결":c.origin()+" · 계정 설정 열기");
       slotLabels[i].setText(
           c == null ? "미지정" : c.headers.isEmpty() ? "비로그인" : c.key.substring(0, 12));

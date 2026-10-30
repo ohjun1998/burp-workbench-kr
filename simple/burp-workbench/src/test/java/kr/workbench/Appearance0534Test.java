@@ -84,7 +84,7 @@ public final class Appearance0534Test extends WorkbenchTest {
       check(second.table.convertColumnIndexToModel(0)==0,"project switch does not inherit previous column order");
       check(memory.saved.get(A).equals(saved)&&!memory.saved.containsKey(B),"switch alone never writes old state into new project");
       restored.display(125,false,false);
-      check(second.text.getFont().getSize2D()==17.5f&&second.table.getRowHeight()==35,"125 percent and comfortable rows applied together");
+      check(second.text.getFont().getSize2D()==17.5f&&second.table.getRowHeight()==40,"125 percent and comfortable rows applied together");
       memory.project=A;restored.refreshProject();
       check(restored.state().scale()==150&&second.table.convertColumnIndexToModel(0)==2,"returning to project restores original profile");
       restored.resetSurfaces();

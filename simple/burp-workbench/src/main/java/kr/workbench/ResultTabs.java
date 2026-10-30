@@ -31,8 +31,8 @@ final class ResultTabs extends JPanel {
       group.add(title);strip.add(title);titles.add(title);
     }
     viewport.setView(strip);
-    viewport.setPreferredSize(new Dimension(200, 32));
-    viewport.setMinimumSize(new Dimension(30, 32));
+    viewport.setPreferredSize(new Dimension(200, 40));
+    viewport.setMinimumSize(new Dimension(30, 40));
     previous.setName("wb.js.tabs.previous");next.setName("wb.js.tabs.next");
     previous.setToolTipText("결과 탭을 왼쪽으로 이동");next.setToolTipText("결과 탭을 오른쪽으로 이동");
     previous.getAccessibleContext().setAccessibleName("결과 탭 왼쪽 이동");
@@ -85,14 +85,16 @@ final class ResultTabs extends JPanel {
   private static final class Title extends JToggleButton {
     Title(String text) { super(text);putClientProperty("wb.compact.button",true); }
     @Override public Dimension getPreferredSize() {
-      return new Dimension(getFontMetrics(WorkbenchUi.font()).stringWidth(getText())+22,32);
+      return new Dimension(getFontMetrics(WorkbenchUi.font()).stringWidth(getText())+38,40);
     }
     @Override public Dimension getMaximumSize() { return getPreferredSize(); }
     @Override protected void paintComponent(Graphics graphics) {
       Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);
-      g.setColor(isSelected()?WorkbenchUi.selected():WorkbenchUi.raised());g.fillRect(0,0,getWidth(),getHeight());
-      g.setFont(WorkbenchUi.font());g.setColor(WorkbenchUi.ink());
-      FontMetrics fm=g.getFontMetrics();g.drawString(getText(),11,(getHeight()-fm.getHeight())/2+fm.getAscent());
+      g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());
+      java.util.regex.Matcher match=java.util.regex.Pattern.compile("^(.*) ([0-9]+)$").matcher(getText());boolean counted=match.matches();String title=counted?match.group(1):getText();
+      g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN));g.setColor(isSelected()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
+      FontMetrics fm=g.getFontMetrics();int baseline=(getHeight()-fm.getHeight())/2+fm.getAscent();g.drawString(title,12,baseline);
+      if(counted){String count=match.group(2);int x=20+fm.stringWidth(title),width=Math.max(28,fm.stringWidth(count)+16);g.setColor(isSelected()?WorkbenchUi.selected():WorkbenchUi.raised());g.fillRoundRect(x,(getHeight()-24)/2,width,24,24,24);g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(count,x+(width-fm.stringWidth(count))/2,baseline);}
       g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.line());
       g.fillRect(0,getHeight()-(isSelected()?2:1),getWidth(),isSelected()?2:1);
       if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}

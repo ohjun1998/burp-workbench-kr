@@ -1,0 +1,62 @@
+{
+  "version": "1.4.7",
+  "recordedAt": "2026-10-30T20:03:33.303043+09:00",
+  "status": "Passed complete local checks and actual Swing captures; native Burp GUI not run",
+  "baseCommit": "33efd3df7f23ca3451dd4ae3b5d3ddae1e86b5ae",
+  "branch": "account-a/simple-visual-details",
+  "artifact": "downloads/1.4.7/burp-workbench-simple-1.4.7.jar",
+  "jarSha256": "b52ec4a7edc194271387843b28673a1eb81c7fcd2d1ad806291b4c478dd87982",
+  "embeddedMapperVersion": "0.3.10",
+  "browserHelperVersion": "0.4.1",
+  "checks": {
+    "regressionGroups": 150,
+    "regressionChecks": 5591,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 147,
+    "browserHelperNodeChecks": 29,
+    "total": 5903,
+    "result": "passed",
+    "exitCode": 0,
+    "logSha256": "375852dfd577c8180a59f2d1908e0dd2553846e66b5f83b4dd359be35bf26311"
+  },
+  "ui": {
+    "primaryViews": 96,
+    "scopeViews": 68,
+    "totalRenderedCases": 164,
+    "controls": 3354,
+    "scenarios": 702,
+    "clippedControls": 0,
+    "collapsedAreas": 0,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "primarySizes": [
+      "1024x720",
+      "1280x800",
+      "1600x1000"
+    ]
+  },
+  "katana": {
+    "version": "1.8.0",
+    "checks": 102,
+    "result": "passed",
+    "binarySha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc"
+  },
+  "visualReview": {
+    "gallery": "images/1.4.7/README.md",
+    "captureManifest": "images/1.4.7/captures.json",
+    "comparison": "design/1.4.7/COMPARE.html",
+    "specification": "design/1.4.7/DETAILS_KR.md",
+    "limitations": "Generated raster mockups supply no exact design tokens. Actual data and engine fields retained. No pixel-equality claim."
+  },
+  "earlierAttempts": "verification/1.4.7/earlier-attempts.json",
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses"
+  ]
+}

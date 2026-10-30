@@ -35,7 +35,8 @@ public final class PacketInspectorTest extends WorkbenchTest {
       check(p.text.getText().equals(raw),"Windows editor-kit serialization cannot duplicate raw carriage returns");
       query(p,"userId");check(p.matches().size()==1&&p.matches().get(0).start()==raw.indexOf("userId"),"Windows search offsets use document text rather than OS-serialized line endings: count="+p.count.getText()+" spans="+p.matches()+" expected="+raw.indexOf("userId"));
       edt(()->p.search.setText(""));
-      mode(p,2);edt(()->check(p.text.getText().startsWith("00000000  50 4F 53 54")&&p.text.getText().contains("00000010"),"Hex shows byte offsets and the actual HTTP bytes"));
+      mode(p,3);edt(()->check(!p.copy.isEnabled(),"HTML Render disables text-only copy instead of clearing the clipboard"));
+      mode(p,2);edt(()->check(p.copy.isEnabled(),"returning to a text packet view restores copy"));edt(()->check(p.text.getText().startsWith("00000000  50 4F 53 54")&&p.text.getText().contains("00000010"),"Hex shows byte offsets and the actual HTTP bytes"));
       check(Arrays.equals(original,copy)&&Arrays.equals(p.previewBytes(),copy),"view changes do not alter original bytes");
       byte[] binary={0,10,13,32,65,(byte)128,(byte)255};edt(()->p.setPacket(binary,null));
       check(p.text.getText().contains("00 0A 0D 20 41 80 FF")&&p.text.getText().contains("... A.."),"Hex represents non-text bytes without lossy Unicode conversion");

@@ -46,7 +46,7 @@ public final class SimpleAppearanceTest extends WorkbenchTest {
       edt(() -> {}); edt(() -> {});
       edt(() -> {
         check(input.getText().equals("SIMPLE_UNSAVED_INPUT") && evidence.evidenceTitle.getText().equals("저장 전 작성 중인 제목"), "host theme replacement preserves unsaved input and evidence draft");
-        check(traffic.getRowHeight()==28 && traffic.getFont().getSize()==14, "compact table typography recovers after host theme replacement");
+        check(traffic.getRowHeight()==32 && traffic.getFont().getSize()==14, "compact table typography recovers after host theme replacement");
         check(mode.getText().equals("OFF"), "host theme replacement preserves capture OFF state");
         mode.setSize(mode.getPreferredSize());
         var picture=new BufferedImage(mode.getWidth(),mode.getHeight(),BufferedImage.TYPE_INT_RGB);

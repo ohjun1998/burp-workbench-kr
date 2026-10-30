@@ -113,6 +113,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   private final DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode("자동 발견 기능");
   private final DefaultTreeModel treeModel = new DefaultTreeModel(treeRoot);
   private final JTree tree = new JTree(treeModel);
+  private final JToggleButton treeToggle = new JToggleButton("기능 목록 · 접기",true);
   private final DefaultTableModel rows =
       new DefaultTableModel(new String[] {"NO", "메서드", "URL", "상태", "세션", "실행", "매핑"}, 0) {
         public boolean isCellEditable(int r, int c) {
@@ -311,7 +312,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     requestText.setName("fm.request");
     responseText.setName("fm.response");
     explanation.setName("fm.explanation");
-    tree.setRootVisible(true);
+    tree.setRootVisible(false);tree.setShowsRootHandles(true);javax.swing.ToolTipManager.sharedInstance().registerComponent(tree);
     DefaultTreeCellRenderer tr = new DefaultTreeCellRenderer();
     tr.putClientProperty("html.disable", true);
     tree.setCellRenderer(tr);
@@ -338,7 +339,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     JPanel treeBody = new JPanel(new BorderLayout(0, 4));
     treeBody.add(left.getComponent(0)); treeBody.add(actions, BorderLayout.SOUTH);
     left.removeAll();
-    JToggleButton treeToggle = new JToggleButton("기능 목록 · 접기", true);
+
     treeToggle.setName("fm.tree.toggle");
     left.add(treeToggle, BorderLayout.NORTH); left.add(treeBody);
     treeToggle.addActionListener(e -> {
@@ -361,7 +362,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
               if (!e.getValueIsAdjusting()) showSelected();
             });
     runs.setPreferredSize(new Dimension(135,36)); sessions.setPreferredSize(new Dimension(135,36));
-    JPanel filters = new JPanel(new BorderLayout(10,0));
+    JPanel filters = new MapperUi.Filters();
     filters.setName("fm.filters");
     filters.add(MapperUi.row(new JLabel("실행"),runs,new JLabel("세션"),sessions),BorderLayout.WEST);
     filters.add(search);filters.add(MapperUi.row(button("분류 수정",this::movePackets),button("Repeater",this::sendToRepeater)),BorderLayout.EAST);
@@ -412,9 +413,9 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     main.setName("fm.workspace"); MapperUi.split(main,.40);
     JSplitPane all = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, main);
     all.setName("fm.navigation.split"); MapperUi.split(all,.23);
-    all.putClientProperty("fm.initial.width",190); all.setResizeWeight(0);
-    all.setDividerLocation(190);
-    treeToggle.addActionListener(e->{boolean expanded=treeToggle.isSelected();left.setMinimumSize(new Dimension(expanded?160:40,60));all.setDividerLocation(expanded?190:48);all.putClientProperty("fm.initial.width",expanded?190:48);treeToggle.setText(expanded?"기능 목록 · 접기":">");treeToggle.setToolTipText(expanded?"기능 목록 접기":"기능 목록 펼치기");treeToggle.getAccessibleContext().setAccessibleName(treeToggle.getToolTipText());});
+    all.putClientProperty("fm.initial.width",230); all.setResizeWeight(0);
+    all.setDividerLocation(230);
+    treeToggle.addActionListener(e->{boolean expanded=treeToggle.isSelected();left.setMinimumSize(new Dimension(expanded?160:40,60));all.setDividerLocation(expanded?230:48);all.putClientProperty("fm.initial.width",expanded?230:48);treeToggle.setText(expanded?"기능 목록 · 접기":">");treeToggle.setToolTipText(expanded?"기능 목록 접기":"기능 목록 펼치기");treeToggle.getAccessibleContext().setAccessibleName(treeToggle.getToolTipText());});
     root.add(all);
 
     api.userInterface().applyThemeToComponent(root);
@@ -502,6 +503,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       synchronized (projectLock) {
         summaries = mapper.featureSummaries();
       }
+      treeToggle.putClientProperty("fm.feature.count",summaries.size());treeToggle.repaint();
       Map<String, DefaultMutableTreeNode> existing = new HashMap<>();
       for (int i = 0; i < treeRoot.getChildCount(); i++) {
         var group = (DefaultMutableTreeNode) treeRoot.getChildAt(i);
@@ -540,6 +542,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
         if (!active.contains(entry.getKey())) treeModel.removeNodeFromParent(entry.getValue());
       for (var group : groups.values())
         if (group.getChildCount() == 0) treeModel.removeNodeFromParent(group);
+      tree.expandPath(new TreePath(treeRoot.getPath()));
       for (int i = 0; i < tree.getRowCount(); i++) tree.expandRow(i);
     } finally {
       rebuilding = false;

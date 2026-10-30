@@ -21,7 +21,7 @@ public final class PacketStyleTest extends WorkbenchTest {
    paint(scroll);check(area.getText().equals(raw)&&area.getDocument()==document,"syntax painting preserves exact source and document identity");
    check(highlight.getStartOffset()==6&&highlight.getEndOffset()==9&&area.getHighlighter().getHighlights().length==1,"finding highlights and source offsets survive painting");
    BufferedImage image=new BufferedImage(area.getWidth(),area.getHeight(),BufferedImage.TYPE_INT_RGB);Graphics2D g=image.createGraphics();area.paint(g);g.dispose();boolean blue=false,green=false;
-   for(int y=0;y<image.getHeight();y++)for(int x=0;x<image.getWidth();x++){Color c=new Color(image.getRGB(x,y));blue|=c.equals(new Color(47,80,149))||c.equals(new Color(161,188,239));green|=c.equals(new Color(36,119,47))||c.equals(new Color(155,209,113));}
+   for(int y=0;y<image.getHeight();y++)for(int x=0;x<image.getWidth();x++){Color c=new Color(image.getRGB(x,y));blue|=c.equals(new Color(31,91,235))||c.equals(new Color(161,188,239));green|=c.equals(new Color(28,141,48))||c.equals(new Color(155,209,113));}
    check(blue&&green,"renderer paints distinct Burp-style syntax colors rather than plain monochrome text");
    area.setLineWrap(true);area.setWrapStyleWord(true);area.append("// "+"wrapped ".repeat(80)+"\nlast");for(int i=0;i<4;i++)UiLayoutTest.layout(scroll);paint(scroll);check(area.getLineCount()==6,"wrapped visual lines do not change logical source line count");
    area.setText("const x='"+"a".repeat(90000)+"';\nnext");for(int i=0;i<3;i++)UiLayoutTest.layout(scroll);paint(scroll);check(area.getText().length()>90000,"long source lines remain intact beyond syntax scan budget");

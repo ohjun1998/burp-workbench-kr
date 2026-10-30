@@ -55,6 +55,7 @@ final class MapperUiWorkflowTest {
           JScrollPane scroll=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,text);
           MapperTest.check(scroll.getRowHeader()!=null&&text.getText().equals(packet),"Mapper line gutter preserves packet CRLF and content");
         }}catch(Exception e){throw new RuntimeException(e);}
+        try {JTree tree=(JTree)get(ext,"tree");MapperTest.check(tree.getRowCount()>0&&!tree.isRootVisible(),"hidden technical tree root still expands into visible feature rows");int leaf=-1;for(int row=0;row<tree.getRowCount();row++)if(((javax.swing.tree.DefaultMutableTreeNode)tree.getPathForRow(row).getLastPathComponent()).getUserObject() instanceof FeatureMapperWorkspace.FeatureNode){leaf=row;break;}MapperTest.check(leaf>=0,"observed feature leaves remain reachable through the styled tree");}catch(Exception e){throw new RuntimeException(e);}
         JTable table=(JTable)named(root,"fm.history");
         MapperTest.check(table.getRowHeight()>=28&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2&&table.getRowCount()==4,"Mapper keeps readable rows and every captured item");
         ((JButton)named(root,"fm.navigation.settings")).doClick(0);

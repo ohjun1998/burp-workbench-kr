@@ -24,14 +24,15 @@ final class WorkbenchSkin {
     @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(34,d.height)); }
     @Override protected void paintComponent(Graphics graphics) {
       super.paintComponent(graphics);
+      Graphics2D iconGraphics=(Graphics2D)graphics.create();iconGraphics.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));WorkspaceIcons.of("search").paintIcon(this,iconGraphics,9,(getHeight()-16)/2);iconGraphics.dispose();
       if (getText().isEmpty() && !hasFocus()) {
         Graphics2D g=(Graphics2D)graphics.create();antialias(g);
         g.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
         g.setFont(WorkbenchUi.font());
         String text=placeholder;
         FontMetrics fm=g.getFontMetrics();
-        Shape old=g.getClip();g.clipRect(12,0,Math.max(0,getWidth()-24),getHeight());
-        g.drawString(text,12,(getHeight()-fm.getHeight())/2+fm.getAscent());g.setClip(old);g.dispose();
+        Shape old=g.getClip();g.clipRect(30,0,Math.max(0,getWidth()-40),getHeight());
+        g.drawString(text,30,(getHeight()-fm.getHeight())/2+fm.getAscent());g.setClip(old);g.dispose();
       }
     }
   }
@@ -67,20 +68,22 @@ final class WorkbenchSkin {
             ? (WorkbenchUi.dark() ? new Color(57, 222, 125) : new Color(20, 130, 70))
             : captureColor("OFF"));
       } else {
+        boolean primary=button.isEnabled()&&Boolean.TRUE.equals(button.getClientProperty("wb.primary"));
         Color fill = button.getBackground();
         if (Boolean.TRUE.equals(button.getClientProperty("wb.state.toggle"))) {
           if(button.getModel().isRollover() || button.getModel().isPressed())fill=fill.brighter();
         } else {
-          if (button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
-          if (button.getModel().isPressed()) fill = WorkbenchUi.selected();
+          if (!primary && button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
+          if (button.getModel().isPressed()) fill = primary?WorkbenchUi.accent().darker():WorkbenchUi.selected();
         }
         boolean segment=Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"));
+        if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.surface():WorkbenchUi.raised());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.isSelected()||button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
         if(!segment||button.getModel().isRollover()||button.getModel().isPressed()) {
-          g.setColor(fill);
+          g.setPaint(primary&&!button.getModel().isPressed()?new GradientPaint(0,0,new Color(255,126,61),0,button.getHeight(),WorkbenchUi.accent()):new GradientPaint(0,0,fill,0,button.getHeight(),fill));
           g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
         }
         if(!segment||button.hasFocus()) {
-          g.setColor(button.hasFocus() ? WorkbenchUi.accent() : WorkbenchUi.line());
+          g.setColor(button.hasFocus() || primary ? WorkbenchUi.accent() : WorkbenchUi.line());
           g.drawRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
         }
         super.paint(g, component);
@@ -99,7 +102,7 @@ final class WorkbenchSkin {
   }
   static void scroll(JScrollBar bar) {
     if(!(bar.getUI() instanceof ScrollUi))bar.setUI(new ScrollUi());
-    bar.setUnitIncrement(18);
+    bar.setUnitIncrement(18);bar.setPreferredSize(bar.getOrientation()==JScrollBar.VERTICAL?new Dimension(10,0):new Dimension(0,10));
   }
   private static final class ScrollUi extends BasicScrollBarUI {
     @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=WorkbenchUi.line();}
@@ -151,8 +154,8 @@ final class WorkbenchSkin {
           g.setColor(WorkbenchUi.background()); g.fillRect(0, 0, getWidth(), getHeight());
           g.setColor(WorkbenchUi.line());
           if (splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT)
-            g.drawLine(getWidth()/2, 7, getWidth()/2, getHeight()-7);
-          else g.drawLine(7, getHeight()/2, getWidth()-7, getHeight()/2);
+            g.drawLine(getWidth()/2, getHeight()/2-14, getWidth()/2, getHeight()/2+14);
+          else g.drawLine(getWidth()/2-14, getHeight()/2, getWidth()/2+14, getHeight()/2);
           g.dispose();
         }
       };
@@ -209,21 +212,23 @@ final class WorkbenchSkin {
       super.uninstallUI(component);
     }
     @Override protected void paintTabBackground(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
-      graphics.setColor(selected?WorkbenchUi.selected():WorkbenchUi.raised());graphics.fillRect(x,y,width,height);
+      graphics.setColor(WorkbenchUi.surface());graphics.fillRect(x,y,width,height);
     }
     @Override protected void paintTabBorder(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
-      graphics.setColor(selected?WorkbenchUi.accent():WorkbenchUi.line());graphics.drawLine(x,y+height-1,x+width,y+height-1);
+      graphics.setColor(selected?WorkbenchUi.accent():WorkbenchUi.line());graphics.fillRect(x,y+height-(selected?2:1),width,selected?2:1);
     }
     @Override protected void paintContentBorder(Graphics graphics,int placement,int selected) {}
   }
 
+  private static final class TableUi extends BasicTableUI {public void paint(Graphics graphics,JComponent component){super.paint(graphics,component);kr.packetui.VisualTheme.emptyTable(graphics,(JTable)component);}}
+
   static void table(JTable table) {
-    if (!(table.getUI().getClass() == BasicTableUI.class)) table.setUI(new BasicTableUI());
+    if (!(table.getUI() instanceof TableUi)) table.setUI(new TableUi());
     table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
       @Override public Component getTableCellRendererComponent(JTable owner, Object value, boolean selected, boolean focus, int row, int column) {
         super.getTableCellRendererComponent(owner, value, selected, focus, row, column);
         boolean compact=Boolean.TRUE.equals(owner.getClientProperty("wb.table.compact"));
-        setFont(owner.getFont().deriveFont(compact?Font.PLAIN:Font.BOLD)); setForeground(WorkbenchUi.ink());
+        setFont(WorkbenchUi.font().deriveFont(compact?Font.PLAIN:Font.BOLD,WorkbenchUi.displaySize(13f))); setForeground(WorkbenchUi.ink());
         setBackground(WorkbenchUi.raised());
         setIcon(null);
         if(owner.getRowSorter()!=null && !owner.getRowSorter().getSortKeys().isEmpty()) {

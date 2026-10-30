@@ -29,7 +29,7 @@ public final class UiLayoutTest {
   check(named(root,"wb.js.messages")==null&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS has no embedded packet area and passive keeps the shared packet layout");
   check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"payload editors and results above packets in reference layout");
   check(requestResponseTabs(root)==2 && named(root,"wb.bounty.evidence.packet.tabs") instanceof JTabbedPane,"paired packet readers remain persistent; compact evidence preview has explicit request/response tabs");
-  check(table.getRowHeight()==28&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2,"compact rows fit Gothic text with vertical padding");
+  check(table.getRowHeight()==32&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2,"compact rows fit Gothic text with vertical padding");
   check(table.getDefaultRenderer(Object.class) instanceof WorkbenchUi.Cells,"semantic method/status renderer installed");
   for(int size:new int[]{1000,1280,1600})SwingUtilities.invokeAndWait(()->{
    root.setSize(size,900);for(int i=0;i<tabs.getTabCount();i++){tabs.setSelectedIndex(i);layout(root);check(tabs.getComponentAt(i).getWidth()>0,"tab "+i+" laid out at "+size);}

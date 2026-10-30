@@ -148,7 +148,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     toolbar.add(WorkbenchUi.row(new JLabel("대상"),origins,new JLabel("계정"),account,targetSettings.button(),all));
     toolbar.add(WorkbenchUi.row(single, start, pause, stop, settings, more));
     WorkbenchUi.primary(single);
-    WorkbenchUi.primary(start);
+    start.setToolTipText("전체 후보를 확인합니다. 실제 GET 요청을 전송합니다.");
     add(
         WorkbenchUi.header(
             FeatureGuide.title("environment"), "서버 환경 관찰 → 경로 후보 선택 → GET 응답 확인", toolbar),
@@ -194,21 +194,17 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
           category = null;
           refresh();
         });
-    JSplitPane lists =
-        WorkbenchUi.split(
-            JSplitPane.VERTICAL_SPLIT,
-            WorkbenchUi.card("관찰한 환경", new JScrollPane(technologies)),
-            WorkbenchUi.card("추천 경로 · 미검증 후보", candidatePane()),
-            .35);
-    lists.setName("wb.environment.lists");
-    JSplitPane messages =
-        WorkbenchUi.split(
-            JSplitPane.VERTICAL_SPLIT,
-            WorkbenchUi.card("요청 REQUEST", new JScrollPane(requestView)),
-            WorkbenchUi.card("응답 RESPONSE", responsePane()),
-            .5);
+    JPanel observations = CompactWorkbenchUi.disclosure("wb.environment.observations", "관찰한 환경 · 펼치기 / 접기", new JScrollPane(technologies), false);
+    observations.getComponent(1).setPreferredSize(new Dimension(600, 100));
+    JPanel lists = new JPanel(new BorderLayout(0, 4));
+    lists.setName("wb.environment.candidates");
+    lists.add(observations, BorderLayout.NORTH);
+    lists.add(WorkbenchUi.card("추천 경로 · 미검증 후보", candidatePane()));
+    JSplitPane messages = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
+        WorkbenchUi.card("요청", new JScrollPane(requestView)),
+        WorkbenchUi.card("응답", responsePane()), .5);
     messages.setName("wb.environment.messages");
-    JSplitPane workspace = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, lists, messages, .45);
+    JSplitPane workspace = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, lists, messages, .4);
     workspace.setName("wb.environment.workspace");
     add(workspace);
     add(status, BorderLayout.SOUTH);

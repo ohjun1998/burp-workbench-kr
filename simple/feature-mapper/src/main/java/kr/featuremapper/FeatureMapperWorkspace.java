@@ -335,7 +335,17 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       assessment.setToolTipText("선택 기능의 API로 업무 초안을 만듭니다. 계정·범위 검토 후 연결하며 완료로 표시하지 않습니다.");
       actions.add(assessment);
     }
-    left.add(actions, BorderLayout.SOUTH);
+    JPanel treeBody = new JPanel(new BorderLayout(0, 4));
+    treeBody.add(left.getComponent(0)); treeBody.add(actions, BorderLayout.SOUTH);
+    left.removeAll();
+    JToggleButton treeToggle = new JToggleButton("기능 목록 · 접기", true);
+    treeToggle.setName("fm.tree.toggle");
+    left.add(treeToggle, BorderLayout.NORTH); left.add(treeBody);
+    treeToggle.addActionListener(e -> {
+      treeBody.setVisible(treeToggle.isSelected());
+      treeToggle.setText(treeToggle.isSelected() ? "기능 목록 · 접기" : "기능 목록 · 펼치기");
+      left.revalidate(); left.repaint();
+    });
     table.setName("fm.history");
     table.setAutoCreateRowSorter(true);
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -399,11 +409,11 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     top.add(filters, BorderLayout.NORTH);
     top.add(new JScrollPane(table));
     JSplitPane main = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, details);
-    main.setName("fm.workspace"); MapperUi.split(main,.45);
+    main.setName("fm.workspace"); MapperUi.split(main,.40);
     JSplitPane all = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, main);
     all.setName("fm.navigation.split"); MapperUi.split(all,.23);
-    all.putClientProperty("fm.initial.width",240); all.setResizeWeight(0);
-    all.setDividerLocation(240);
+    all.putClientProperty("fm.initial.width",190); all.setResizeWeight(0);
+    all.setDividerLocation(190);
     root.add(all);
 
     api.userInterface().applyThemeToComponent(root);

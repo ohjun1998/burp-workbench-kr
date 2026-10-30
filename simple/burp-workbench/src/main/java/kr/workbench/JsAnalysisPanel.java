@@ -185,6 +185,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     });
     analysisList.setName("wb.js.analysis.list");
     analysisList.addActionListener(e -> {requestArchivePage();analysisWindow.open();});
+    totals.setVisible(false);
     analysisDetails.setName("wb.js.analysis.details");
     detailsWindow.opener=JsAnalysisDetails::window;
     analysisDetails.addActionListener(e->{detailsWindow.closeWindow();detailsWindow.open();});
@@ -285,7 +286,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
         WorkbenchUi.header(FeatureGuide.title("js"), "JS에서 경로·입력·민감정보 후보 찾기 · 발견은 검증과 다름", null),
         BorderLayout.NORTH);
     JPanel actions=new JPanel(new BorderLayout(18,0));
-    actions.setName("wb.js.header.actions");actions.add(toolbar);actions.add(totals,BorderLayout.EAST);
+    actions.setName("wb.js.header.actions");actions.add(toolbar);
     header.add(actions);
     footer.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
     status.putClientProperty("wb.font.size",11);
@@ -306,6 +307,12 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     resolve.setToolTipText("선택 URL의 경로·메서드를 확인하고 동적 부분을 입력해 Repeater 초안을 준비합니다.");
     locate.setToolTipText("선택한 URL 또는 시크릿 후보의 원문 위치로 이동합니다.");
     results.addChangeListener(e -> refreshActions());
+    javax.swing.table.TableModel[] countModels={endpoints,secrets,domainModel,cloudModel};
+    String[] captions={"주요 경로","민감한 정보","도메인","클라우드"};
+    for(int index=0;index<countModels.length;index++){
+      final int tab=index;
+      countModels[index].addTableModelListener(e->results.setTitleAt(tab,captions[tab]+" "+countModels[tab].getRowCount()));
+    }
     refreshActions();
     clear.addActionListener(e -> clear());
     sources.addActionListener(

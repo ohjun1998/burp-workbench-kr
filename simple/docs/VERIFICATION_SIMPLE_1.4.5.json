@@ -1,0 +1,96 @@
+{
+  "version": "1.4.5",
+  "recordedAt": "2026-10-30T18:12:13.535604+09:00",
+  "status": "local-validation-passed; native Burp GUI not verified",
+  "baseCommit": "417349f70379ae5f794bc63e3ea7fae91aca9d8b",
+  "mainBaseCommit": "019aa1442bb522fe5f5172a34e7e89ca0ce870c8",
+  "artifact": "downloads/1.4.5/burp-workbench-simple-1.4.5.jar",
+  "jarSha256": "8b59ccbf803a92367a923e55364bc8e7df35fc3a5e060ab82cc6610c7d0a5e4c",
+  "embeddedMapperVersion": "0.3.8",
+  "browserHelperVersion": "0.4.1",
+  "katanaVersion": "1.8.0",
+  "toolchain": {
+    "java": "Temurin 17.0.17+10",
+    "mode": "strict-release17",
+    "python": "3.12.14",
+    "node": "24.19.0"
+  },
+  "design": {
+    "basis": "User-approved eight compact design mockups, large page names removed; implementation uses actual Swing controls and retained operational data",
+    "titleLocation": "folder navigation and breadcrumb only",
+    "readers": [
+      "selected-account baseline/response/request/judgement",
+      "selected response finding packet and affected URLs",
+      "selected evidence request/response alongside authored report"
+    ],
+    "payloadPhases": [
+      "request preparation",
+      "execution/results"
+    ],
+    "coreContracts": "original IDs, inputs, Scope, accounts, budgets, explicit sends, optional HTTP server fallback retained",
+    "preserved": [
+      "original Next sources",
+      "all earlier JARs and source ZIPs"
+    ]
+  },
+  "checks": {
+    "regressionGroups": 150,
+    "regressionChecks": 5602,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "mapperBrowserHelperChecks": 29,
+    "result": "passed",
+    "total": 5912,
+    "compactDesignChecks": 22,
+    "runtimeAvailabilityChecks": 119
+  },
+  "ui": {
+    "simpleUi": {
+      "renderedViews": 64,
+      "controls": 1328,
+      "scenarios": 260,
+      "result": "passed"
+    },
+    "scopeUi": {
+      "renderedViews": 68,
+      "controls": 1344,
+      "scenarios": 312,
+      "result": "passed"
+    }
+  },
+  "uiTotalViews": 132,
+  "katana": {
+    "checks": 102,
+    "cases": 5,
+    "result": "passed"
+  },
+  "initialFailures": {
+    "compile": "Context record accessor corrected before tests",
+    "firstFullCheck": [
+      "Appearance0534Test old 36px row baseline",
+      "JsRepeaterWorkflowTest old 8px toolbar gap",
+      "UiLayoutTest former environment split reference",
+      "UiPanelsOptimizationTest clear-selection detail placeholder"
+    ],
+    "firstLayout": "4 clipped controls from replaced auth history header; old header removed and clear action retained in toolbar",
+    "secondFullCheck": [
+      "AuthLayoutFitTest counted newly added summary label as an action; now checks exact four buttons and separately checks wrapping and inline reader"
+    ],
+    "newTestFixture": "Prepared required account assignments and changed invalid bracket path to literal bracket query before final checks"
+  },
+  "evidence": {
+    "full": "verification/1.4.5/check-summary.json",
+    "simpleUi": "verification/1.4.5/simpleUi.json",
+    "scopeUi": "verification/1.4.5/scopeUi.json",
+    "katana": "verification/1.4.5/katana.json",
+    "screenshots": "images/1.4.5/README.md"
+  },
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses"
+  ]
+}

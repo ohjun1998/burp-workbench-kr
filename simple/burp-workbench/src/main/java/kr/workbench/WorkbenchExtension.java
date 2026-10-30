@@ -1572,19 +1572,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             });
     scopeListButton = button("SCOPE 목록", this::showScopeList);
     scopeListButton.setName("wb.traffic.scope.list");
-    JPanel actions = new JPanel(new GridLayout(1, 2, 10, 0));
-    actions.add(scopeListButton);
-    actions.add(captureButton);
-    JPanel top = new JPanel(new BorderLayout(10, 0));
-    top.setName("wb.traffic.controls");
-    JPanel searching=new JPanel(new BorderLayout(6,0));searching.add(filter);
-    JPanel live=new JPanel();live.setName("wb.traffic.live.controls");live.setOpaque(false);
-    live.setLayout(new BoxLayout(live,BoxLayout.X_AXIS));
-    live.add(trafficBrowser.freezeView);live.add(Box.createHorizontalStrut(5));
-    live.add(trafficBrowser.newTraffic);live.add(Box.createHorizontalStrut(5));live.add(trafficBrowser.settingsButton);
-    searching.add(live,BorderLayout.EAST);
-    top.add(searching, BorderLayout.CENTER);
-    top.add(actions, BorderLayout.EAST);
     JPanel req = WorkbenchUi.card("요청  REQUEST", requestPacket),
         res = WorkbenchUi.card("응답  RESPONSE", responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
@@ -1595,7 +1582,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficListPanel(), messages, .30);
     body.setName("wb.traffic.workspace");
     JPanel controls = new JPanel(new BorderLayout(0, 5));
-    controls.add(top, BorderLayout.NORTH);
+    controls.setName("wb.traffic.controls");
+    controls.add(row(scopeListButton, captureButton, trafficBrowser.freezeView, trafficBrowser.newTraffic, trafficBrowser.settingsButton), BorderLayout.NORTH);
     controls.add(trafficBrowser.conditionBar(), BorderLayout.CENTER);
     JButton compareSelected = button("계정 비교 준비", this::prepareSimpleComparison);
     JButton repeatSelected = button("Repeater 준비", this::prepareSimpleRepeater);
@@ -1616,9 +1604,13 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     };
     logTable.getSelectionModel().addListSelectionListener(e -> selectedState.run());
     selectedState.run();
-    controls.add(row(compareSelected, repeatSelected, evidenceSelected, selectionInfo), BorderLayout.SOUTH);
+    JPanel searchActions = new JPanel(new BorderLayout(8, 0));
+    filter.setColumns(12);
+    searchActions.add(filter);
+    searchActions.add(row(compareSelected, repeatSelected, evidenceSelected, selectionInfo), BorderLayout.EAST);
+    controls.add(searchActions, BorderLayout.SOUTH);
     JPanel main = page(controls, body);
-    main.setBorder(BorderFactory.createEmptyBorder(8, 16, 12, 16));
+    main.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));
     main.setName("wb.traffic");
     trafficTools = new FolderNavigation.Pages();
     trafficTools.setName("wb.traffic.tools");

@@ -233,6 +233,10 @@ public final class SimplePreview extends WorkbenchTest {
         click(root,"wb.simple.tool.mapper"); capture(root,"08-mapper.png");
         click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
         click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); capture(root,"07-payload.png");
+        var phases=(JTabbedPane)SimpleWorkflowTest.named(root,"wb.payload.steps");
+        phases.setSelectedIndex(1);capture(root,"07-payload-results.png");
+        scenario("Payload results phase opens without starting inspection",!(boolean)value(value(entry,"payloadRunner"),"running"));
+        phases.setSelectedIndex(0);
         click(root,"wb.simple.tool.auth");
         auth.setDetection(true);
         var alice = request(origin+"/api/documents/101","GET",true,List.of(header("Cookie","SID=ALICE_DEMO_SECRET")));
@@ -256,6 +260,7 @@ public final class SimplePreview extends WorkbenchTest {
         run.note="예시 · 완료"; auth.runs.add(run);
         auth.historyModel.addRow(new Object[]{1,alice.url(),"","","","예시 · 완료"});
         auth.refresh(run); auth.history.setRowSelectionInterval(0,0); auth.show(run);
+        auth.inlinePreview.account.setSelectedIndex(1);
         capture(root,"04-auth-results.png");
         click(root,"wb.simple.tool.bounty"); click(root,"wb.simple.bounty.replay");
         SimpleWorkflowTest.clickText(evidence,"선택 요청 추가");

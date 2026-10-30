@@ -1,4 +1,8 @@
-# Workbench Simple 1.4.4
+# Workbench Simple 1.4.5
+
+**큰 본문 제목 없이 작업 도구 모음부터 시작하는 8개 도구의 새 배치를 적용합니다.** [1.4.5 JAR](downloads/1.4.5/burp-workbench-simple-1.4.5.jar) · [소스·체크섬](downloads/1.4.5/) · [변경·실제 화면](docs/RELEASE_SIMPLE_1.4.5_KR.md).
+
+아래는 이전 배포 이력입니다.
 
 **첨부한 Workbench 0.39.2처럼 작은 상단 도구 모음과 왼쪽 5개 폴더로 디자인·배치를 바꿉니다.** 한글 기본 글꼴·표·선택 강조를 맞추고 Simple 기능과 1.4.3 로드 수정을 유지합니다. [1.4.4 설치 JAR](downloads/1.4.4/burp-workbench-simple-1.4.4.jar) · [소스·체크섬](downloads/1.4.4/) · [배치·사용 안내](docs/RELEASE_SIMPLE_1.4.4_KR.md).
 

@@ -42,7 +42,7 @@ final class JsAnalysisActions {
     separator.setName("wb.js.actions.separator");
     JPanel primary=row(passive,target,separator,windows),secondary=row(request,locate,tools,more);
     primary.setName("wb.js.toolbar.primary");secondary.setName("wb.js.toolbar.secondary");
-    JPanel toolbar=new JPanel(new BorderLayout(0,9));toolbar.setName("wb.js.toolbar");
+    JPanel toolbar=new JPanel(new BorderLayout(0,3));toolbar.setName("wb.js.toolbar");
     toolbar.add(primary,BorderLayout.NORTH);toolbar.add(secondary,BorderLayout.SOUTH);
     return toolbar;
   }

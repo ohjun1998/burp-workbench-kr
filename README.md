@@ -1,4 +1,6 @@
 # Burp Workbench KR
+
+**Simple 1.4.3은 Burp 확장 추가 시 `HttpServer` 클래스 누락으로 전체 로드가 실패하는 문제를 수정합니다.** 브라우저 연결 불가 이유를 표시하고 일반 HTTP 작업을 사용할 수 있게 합니다. [수정 JAR](simple/downloads/1.4.3/burp-workbench-simple-1.4.3.jar) · [소스·체크섬](simple/downloads/1.4.3/) · [Burp Java 복구 안내](simple/docs/RELEASE_SIMPLE_1.4.3_KR.md). 이전 배포와 아래 검증 이력은 보존합니다.
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
 **SCOPE를 한 번 지정하고, 관측한 요청에서 필요한 점검과 증거 정리로 이어가는 한국어 Burp Suite 확장입니다.** 같은 대상과 원본을 도구마다 다시 입력하는 수고를 줄이고, 사용자가 비교·재현·판단에 집중하도록 돕습니다.

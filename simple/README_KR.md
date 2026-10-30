@@ -1,4 +1,8 @@
-# Workbench Simple 1.4.2
+# Workbench Simple 1.4.3
+
+**Burp 확장 추가 시 `com/sun/net/httpserver/HttpServer` 오류로 전체 로드가 중단되는 문제를 수정합니다.** 브라우저 연결 서버를 사용할 수 없으면 원인과 복구 방법을 표시하고 일반 HTTP 작업을 초기화합니다. 이 상태에서 브라우저 도우미·SPA 연결은 사용할 수 없습니다. [1.4.3 JAR](downloads/1.4.3/burp-workbench-simple-1.4.3.jar) · [소스·체크섬](downloads/1.4.3/) · [설치·Java 확인 방법](docs/RELEASE_SIMPLE_1.4.3_KR.md).
+
+아래는 보존한 1.4.2의 작업 흐름 안내입니다. 새 설치에는 위 1.4.3 파일을 사용하세요.
 
 **점검 대시보드에서 현재 실행의 수치를 보고, 카드·막대를 눌러 조건별 목록과 근거·원본을 확인합니다.** 기존 8개 도구와 Katana·SCOPE 통합 점검을 유지하고 기존 Next 및 Simple 1.0.0–1.4.1 JAR·소스·PDF를 보존합니다.
 

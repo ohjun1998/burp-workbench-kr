@@ -1,0 +1,83 @@
+{
+  "version": "1.4.3",
+  "recordedAt": "2026-10-30T16:06:13.879667+09:00",
+  "status": "local-validation-passed; user Burp GUI not verified",
+  "baseCommit": "019aa1442bb522fe5f5172a34e7e89ca0ce870c8",
+  "artifact": "downloads/1.4.3/burp-workbench-simple-1.4.3.jar",
+  "jarSha256": "e3656ab86a5ebf29ab1a212818822ddb1e50ae16d456ad3079f9bade5a9c3eae",
+  "embeddedMapperVersion": "0.3.7",
+  "browserHelperVersion": "0.4.1",
+  "katanaVersion": "1.8.0",
+  "toolchain": {
+    "python": "3.12.14",
+    "java": "Temurin 17.0.17+10",
+    "node": "24.19.0",
+    "mode": "strict-release17"
+  },
+  "baseline": {
+    "version": "1.4.2",
+    "command": "java --limit-modules java.se -Djava.awt.headless=true -cp <1.4.2 JAR, dependencies, adapters> kr.workbench.TestLauncher kr.workbench.SimpleWorkflowTest",
+    "exitCode": 1,
+    "cause": "NoClassDefFoundError: com/sun/net/httpserver/HttpServer",
+    "scope": "Reproduced missing-module startup failure with API/Swing adapters; not the user PC Burp process"
+  },
+  "checks": {
+    "regressionGroups": 147,
+    "regressionChecks": 5379,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 145,
+    "mapperBrowserHelperChecks": 29,
+    "total": 5689,
+    "runtimeAvailabilityRegression": 119,
+    "runtimeAvailabilityIncludedInRegressionCount": true,
+    "runtimeCases": [
+      "jdk.httpserver absent",
+      "HTTP server API hidden by loader",
+      "only HttpHandler hidden after server bind"
+    ],
+    "otherChecks": [
+      "unrelated linkage error still fails initialization",
+      "failed constructor releases server timer",
+      "OFF/SCOPE and HTTP mapping survive bridge failure"
+    ],
+    "result": "passed"
+  },
+  "ui": {
+    "simpleUi": {
+      "renderedViews": 60,
+      "controls": 1364,
+      "scenarios": 256,
+      "result": "passed"
+    },
+    "scopeUi": {
+      "renderedViews": 68,
+      "controls": 1344,
+      "scenarios": 312,
+      "result": "passed"
+    }
+  },
+  "katana": {
+    "checks": 102,
+    "cases": 5,
+    "result": "passed"
+  },
+  "intermediateRuns": [
+    "The first 1.4.3 full check was intentionally terminated (exit 143) after review reproduced a partial-loader server resource leak; it is not counted as a pass.",
+    "The final scope renderer first encountered transient missing test adapters during the full build; the same command passed after compilation completed.",
+    "Earlier 1.4.3 UI/Katana results for a previous candidate JAR are separate tmp/*-1.4.3 reports and are not final evidence."
+  ],
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses"
+  ],
+  "limits": [
+    "User-reported Burp Suite Community 2026.9.2 GUI was not available in this cloud environment.",
+    "Browser-helper/SPA transport remains unavailable in a runtime that cannot load jdk.httpserver; HTTP tools remain available.",
+    "The stack alone cannot distinguish a missing module from host class-loader visibility restrictions.",
+    "Native Burp, browser DOM, Windows DPI/IME and external-target behavior are not established by synthetic Swing/API tests."
+  ]
+}

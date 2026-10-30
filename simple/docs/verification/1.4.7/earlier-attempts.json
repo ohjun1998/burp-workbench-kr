@@ -1,0 +1,28 @@
+[
+  {
+    "stage": "early visual review",
+    "result": "failed",
+    "details": "Hidden root was not expanded, and 1024px Mapper search received negative width. Expanded root explicitly, added visible feature-row regression checks and responsive filter wrapping."
+  },
+  {
+    "stage": "first complete regression",
+    "result": "failed",
+    "groups": [
+      "Appearance0534Test",
+      "PacketUiTest",
+      "PacketStyleTest"
+    ],
+    "details": "Old visual expectations (35px scaled rows, filled HTTP badge, muted syntax RGB) disagreed with approved changes. Updated these expectations; original-byte/offset/theme/no-send assertions retained.",
+    "evidence": "earlier-test-summary.json"
+  },
+  {
+    "stage": "parallel render attempt",
+    "result": "interrupted",
+    "details": "Last render could not load WorkbenchTest while check rebuilt test classes. Final rendering ran only after compilation completed; no product runtime dependency was missing."
+  },
+  {
+    "stage": "copy-state review",
+    "result": "corrected before release",
+    "details": "Disable text copy in HTML Render; restore it in text modes. Two regression checks added."
+  }
+]

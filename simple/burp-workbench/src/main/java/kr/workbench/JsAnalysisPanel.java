@@ -317,7 +317,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     javax.swing.table.TableModel[] countModels={endpoints,secrets,domainModel,cloudModel};
     String[] captions={"주요 경로","민감한 정보","도메인","클라우드"};
     for(int index=0;index<countModels.length;index++){
-      final int tab=index;
+      final int tab=index;results.setTitleAt(tab,captions[tab]+" "+countModels[tab].getRowCount());
       countModels[index].addTableModelListener(e->results.setTitleAt(tab,captions[tab]+" "+countModels[tab].getRowCount()));
     }
     refreshActions();

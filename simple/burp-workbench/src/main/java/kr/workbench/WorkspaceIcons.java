@@ -16,7 +16,10 @@ final class WorkspaceIcons {
       else if(kind.equals("target")){g.drawOval(2,2,12,12);g.drawOval(6,6,4,4);}
       else if(kind.equals("filter")){g.drawPolyline(new int[]{1,15,10,10,6,6,1},new int[]{2,2,8,14,12,8,2},7);}
       else if(kind.equals("gear")){g.drawOval(3,3,10,10);g.drawOval(6,6,4,4);for(int i=0;i<8;i++){double a=i*Math.PI/4;g.drawLine(8+(int)(5*Math.cos(a)),8+(int)(5*Math.sin(a)),8+(int)(7*Math.cos(a)),8+(int)(7*Math.sin(a)));}}
+      else if(kind.equals("copy")){g.drawRoundRect(5,4,9,11,2,2);g.drawPolyline(new int[]{10,10,2,2,4},new int[]{3,1,1,12,12},5);}
       else if(kind.equals("more"))for(int i=0;i<3;i++)g.fillOval(1+i*6,7,3,3);
+      else if(kind.equals("security")){g.drawPolygon(new int[]{8,14,13,8,3,2},new int[]{1,4,10,15,10,4},6);g.drawPolyline(new int[]{5,7,11},new int[]{8,10,6},3);}
+      else if(kind.equals("discovery")){g.drawRect(6,1,4,4);g.drawLine(8,5,8,9);g.drawLine(3,9,13,9);g.drawLine(3,9,3,11);g.drawLine(13,9,13,11);g.drawRect(1,11,4,4);g.drawRect(11,11,4,4);}
       else if(kind.equals("group")){for(int i=0;i<4;i++)g.drawRoundRect(1+(i%2)*8,1+(i/2)*8,5,5,2,2);}
       else if(kind.equals("auth")){g.drawOval(5,1,6,6);g.drawArc(2,8,12,12,0,180);g.drawLine(2,14,14,14);}
       else if(kind.equals("traffic")){g.drawLine(3,2,3,13);g.drawLine(3,13,13,13);g.drawPolyline(new int[]{5,8,10,14},new int[]{10,5,8,3},4);}

@@ -185,7 +185,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       navigationControls.add(control);
     }
     if (classic) {
-      JLabel brand=new JLabel("Workbench");brand.setName("wb.navigation.brand");brand.putClientProperty("wb.font.size",18);brand.putClientProperty("wb.font.heading",true);
+      JLabel brand=new JLabel("Workbench");brand.setName("wb.navigation.brand");brand.putClientProperty("wb.font.size",20);brand.putClientProperty("wb.font.heading",true);
       navigationControls.add(Box.createHorizontalStrut(10));navigationControls.add(brand);
       navigationControls.setPreferredSize(new Dimension(DEFAULT_WIDTH-12,40));
       navigationControls.setBorder(BorderFactory.createMatteBorder(0,0,0,1,WorkbenchUi.line()));
@@ -488,10 +488,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
         boolean currentTool = active(getPathForRow(row).getLastPathComponent());
         if (currentTool || isRowSelected(row) || row == hovered) {
           g.setColor(currentTool ? WorkbenchUi.selected() : WorkbenchUi.background());
-          g.fillRoundRect(4, bounds.y + 2, getWidth() - 8, bounds.height - 4, 8, 8);
+          g.fillRect(4, bounds.y + 2, getWidth() - 8, bounds.height - 4);
           if (currentTool) {
             g.setColor(WorkbenchUi.accent());
-            g.fillRoundRect(4, bounds.y + 6, 3, bounds.height - 12, 3, 3);
+            g.fillRect(4, bounds.y + 2, 3, bounds.height - 4);
           }
         }
       }
@@ -526,7 +526,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       setText(node.toString());
       setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(14f)));
       setBorder(BorderFactory.createEmptyBorder(toolNode?8:row==0?18:30, 2, toolNode?8:10, 8));
-      Icon icon = WorkspaceIcons.of(toolNode?((Tool)node.getUserObject()).id():"group");
+      Icon icon = WorkspaceIcons.of(toolNode?((Tool)node.getUserObject()).id():node.toString().contains("보안")?"security":node.toString().contains("탐색")?"discovery":node.toString().contains("데이터")?"data":node.toString().contains("증거")?"activity":"group");
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
       setDisabledIcon(icon);

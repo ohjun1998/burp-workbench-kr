@@ -1,5 +1,7 @@
 # Workbench Simple 1.4.6
 
+**Simple 1.4.7은 계정 카드·개수 배지·기능 트리부터 공통 버튼·표·패킷까지 세부 디자인을 적용합니다.** [설치 JAR](downloads/1.4.7/burp-workbench-simple-1.4.7.jar) · [8개 실제 화면](docs/images/1.4.7/README.md) · [변경·검증](docs/RELEASE_SIMPLE_1.4.7_KR.md). 아래 이전 버전 파일과 설명은 보존 이력입니다.
+
 **승인 시안과 달랐던 1.4.5 화면을 다시 구성했습니다.** [1.4.6 JAR](downloads/1.4.6/burp-workbench-simple-1.4.6.jar) · [실제 8개 화면](docs/images/1.4.6/README.md) · [변경·검증](docs/RELEASE_SIMPLE_1.4.6_KR.md).
 
 아래 1.4.5 설명은 이전 배포 이력이며, 시각적 일치가 부족해 이번 버전에서 수정했습니다.

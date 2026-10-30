@@ -37,6 +37,9 @@ public final class SimpleCompactDesignTest extends WorkbenchTest {
             "inline account choice displays exact baseline and selected account response");
         check(auth.inlinePreview.differences.getText().contains("403")&&auth.inlinePreview.differences.getText().contains("200"),"account difference tab compares the selected exact response status lines");
         check(auth.accountCards[0].getParent()!=null&&auth.accountCards[2].getParent()==null&&auth.accountCards[3].getParent()!=null,"three summary cards occupy three cells without a blank unassigned account cell");
+        auth.mapCandidate(accounts.get(0),new AuthAccount("Alice","alice","101","문서 소유자","alice@compact.test"));auth.refreshSlots();
+        check(auth.accountCards[0].getAccessibleContext().getAccessibleName().contains("alice@compact.test")&&auth.accountCards[0].getAccessibleContext().getAccessibleName().contains("문서 소유자"),"account summary uses the assigned email and role without exposing session credentials");
+        check(!auth.accountCards[3].getAccessibleContext().getAccessibleName().contains("alice@compact.test"),"anonymous card never inherits a login identity");
         check(SwingUtilities.isDescendingFrom(auth.inlinePreview, auth), "comparison reader is mounted in the main workspace");
         auth.inlinePreview.showRun(null);
         check(!auth.inlinePreview.response.text.getText().contains("ACCOUNT_B_ORIGINAL"), "cleared account selection removes stale response");

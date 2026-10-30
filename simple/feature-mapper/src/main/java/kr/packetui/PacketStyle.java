@@ -23,9 +23,9 @@ public final class PacketStyle {
       scroll.setRowHeaderView(new Numbers(area));
   }
   private static boolean dark(JTextArea area) {Color c=area.getBackground();return c.getRed()+c.getGreen()+c.getBlue()<360;}
-  private static Color blue(JTextArea a) {return dark(a)?new Color(161,188,239):new Color(47,80,149);}
-  private static Color green(JTextArea a) {return dark(a)?new Color(155,209,113):new Color(36,119,47);}
-  private static Color orange(JTextArea a) {return dark(a)?new Color(245,159,79):new Color(164,80,16);}
+  private static Color blue(JTextArea a) {return dark(a)?new Color(161,188,239):new Color(31,91,235);}
+  private static Color green(JTextArea a) {return dark(a)?new Color(155,209,113):new Color(28,141,48);}
+  private static Color orange(JTextArea a) {return dark(a)?new Color(245,159,79):new Color(189,91,25);}
   private static Color muted(JTextArea a) {return dark(a)?new Color(139,155,176):new Color(104,119,139);}
 
   private static final class SyntaxUi extends BasicTextAreaUI {

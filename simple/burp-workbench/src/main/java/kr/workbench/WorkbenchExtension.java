@@ -1615,8 +1615,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     selectedState.run();
     JPanel searchActions = new JPanel(new BorderLayout(8, 0));
     filter.setColumns(12);
-    JPanel queryRow=new JPanel(new BorderLayout(8,0));queryRow.add(filter);JPanel methods=new JPanel(new GridLayout(1,0));ButtonGroup methodGroup=new ButtonGroup();List<JToggleButton> quickMethods=new ArrayList<>();
-    for(String label:new String[]{"전체","GET","POST","오류"}){JToggleButton b=new JToggleButton(label,label.equals("전체"));b.setName("wb.traffic.quick."+label);b.putClientProperty("wb.compact.button",true);methodGroup.add(b);methods.add(b);quickMethods.add(b);b.addActionListener(e->trafficBrowser.quickFilter(label.equals("오류")?"전체":label,label.equals("오류")?"오류":"전체",null));}
+    JPanel queryRow=new JPanel(new BorderLayout(8,0)){@Override public void doLayout(){super.doLayout();Component input=((BorderLayout)getLayout()).getLayoutComponent(BorderLayout.CENTER),segments=((BorderLayout)getLayout()).getLayoutComponent(BorderLayout.EAST);if(input!=null&&segments!=null&&input.getWidth()>470){input.setSize(470,input.getHeight());segments.setLocation(478,segments.getY());}}};queryRow.add(filter);JPanel methods=new JPanel(new GridLayout(1,0));ButtonGroup methodGroup=new ButtonGroup();List<JToggleButton> quickMethods=new ArrayList<>();
+    for(String label:new String[]{"전체","GET","POST","오류"}){JToggleButton b=new JToggleButton(label,label.equals("전체"));b.setName("wb.traffic.quick."+label);b.putClientProperty("wb.compact.button",true);b.putClientProperty("wb.filter.segment",true);methodGroup.add(b);methods.add(b);quickMethods.add(b);b.addActionListener(e->trafficBrowser.quickFilter(label.equals("오류")?"전체":label,label.equals("오류")?"오류":"전체",null));}
     trafficBrowser.quickStateChanged=()->{syncingQuick[0]=true;try{var q=trafficBrowser.query;methodGroup.clearSelection();for(JToggleButton b:quickMethods)b.setSelected(b.getText().equals("오류")?q.status().equals("오류"):q.status().equals("전체")&&b.getText().equals(q.method()));accountChoice.setSelectedItem(q.account().isEmpty()?"전체":q.account());}finally{syncingQuick[0]=false;}};trafficBrowser.quickStateChanged.run();
     queryRow.add(methods,BorderLayout.EAST);searchActions.add(queryRow);
     compareSelected.setIcon(WorkspaceIcons.of("traffic"));repeatSelected.setIcon(WorkspaceIcons.of("mapper"));evidenceSelected.setIcon(WorkspaceIcons.of("bounty"));
@@ -1992,7 +1992,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if (selected != null) selectScopeRule(selected);
     refreshScopeEditor();
     if (scopeListButton != null)
-      scopeListButton.setText("SCOPE 목록 (" + scopeModel.getRowCount() + ")");
+      scopeListButton.setText("설정");scopeListButton.setToolTipText("SCOPE 수집 범위 설정 · "+scopeModel.getRowCount()+"개 규칙");
   }
 
   private WorkbenchScope.Rule selectedScopeRule() {

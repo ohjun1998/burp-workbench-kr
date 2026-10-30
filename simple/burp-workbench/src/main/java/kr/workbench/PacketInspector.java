@@ -30,6 +30,8 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   final javax.swing.Timer debounce;
   final javax.swing.Timer syntaxDebounce;
   private final JPanel toolbar;
+  private final JPanel headerActions=new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.RIGHT,4,2));
+  final JButton copy=WorkspaceIcons.button("copy","", "표시 중인 패킷 복사");
   private final JPanel searchBar = new ResponsiveSearchBar();
   private final JPanel searchControls = new JPanel();
   final JButton searchOptions = new ToolButton("검색 옵션", "more");
@@ -102,7 +104,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
       modeChoices.add(tab);choices.add(tab);tabs.add(tab);tab.setSelected(value == mode);
       tab.addActionListener(e -> { clearTrafficContext();commitEdits();mode = value; render(); });
     }
-    JPanel actions = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.RIGHT, 4, 2));actions.add(wrap);actions.add(more);
+    JPanel actions=headerActions;copy.setName(name+".copy");copy.addActionListener(e->{try{Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new java.awt.datatransfer.StringSelection(text.getText()),null);}catch(IllegalStateException|java.awt.HeadlessException unavailable){copy.setToolTipText("클립보드를 사용할 수 없습니다. 텍스트를 선택해 복사하세요.");}});actions.add(copy);actions.add(wrap);actions.add(more);
     modePicker.setName(name+".mode");modePicker.getAccessibleContext().setAccessibleName("패킷 표시 방식");
     modePicker.addActionListener(event->{int index=modePicker.getSelectedIndex();if(index>=0&&Mode.values()[index]!=mode){clearTrafficContext();commitEdits();mode=Mode.values()[index];render();}});
     toolbar=new ResponsivePacketToolbar(choices,modePicker,actions);
@@ -124,7 +126,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     search.setName(name + ".search");search.setColumns(6);search.setMinimumSize(new Dimension(35, 28));
     search.setToolTipText("Search · Enter/F3 다음 · Shift+Enter/Shift+F3 이전 · Esc 비우기");
     JPanel input = new JPanel(new BorderLayout(2, 0));input.add(search);input.add(clear, BorderLayout.EAST);
-    JLabel label = new JLabel(WorkspaceIcons.of("search"));searchBar.add(label, BorderLayout.WEST);searchBar.add(input);
+    searchBar.add(input);
     searchControls.setLayout(new BoxLayout(searchControls,BoxLayout.X_AXIS));
     rebuildSearchControls(false);
     searchBar.add(searchControls, BorderLayout.EAST);add(searchBar, BorderLayout.SOUTH);
@@ -167,6 +169,8 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     owner.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(key), name);
     owner.getActionMap().put(name, new AbstractAction() { public void actionPerformed(ActionEvent e) { action.run(); } });
   }
+
+  Component titleActions(){return headerActions;}
 
   void setNativeAction(Runnable action) { nativeAction = action;more.setEnabled(action != null); }
   Mode mode() { return mode; }
@@ -323,7 +327,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     boolean html=mode==Mode.RENDER;
     remove(html?scroll:renderPanel);add(html?renderPanel:scroll,BorderLayout.CENTER);
     for(JComponent control:new JComponent[]{search,caseSensitive,regex,clear})control.setEnabled(!html);
-    searchBar.setVisible(!html);wrap.setEnabled(mode != Mode.HEX && !html);
+    searchBar.setVisible(!html);copy.setEnabled(!html);wrap.setEnabled(mode != Mode.HEX && !html);
     if(html){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
     revalidate();repaint();
     wrap.setToolTipText(mode == Mode.HEX ? "Hex는 바이트 열을 고정하고 가로 스크롤로 표시합니다." : "긴 줄 자동 줄바꿈");
@@ -342,13 +346,13 @@ final class PacketInspector extends JPanel implements AutoCloseable {
 
   void applyTheme() {
     setBackground(WorkbenchUi.surface());
-    WorkbenchUi.style(toolbar);WorkbenchUi.style(modePicker);WorkbenchUi.style(searchBar);WorkbenchUi.style(scroll);
-    for(AbstractButton b : new AbstractButton[]{previous,next,clear,caseSensitive,regex,wrap,more,searchOptions}) {
+    WorkbenchUi.style(toolbar);WorkbenchUi.style(headerActions);WorkbenchUi.style(modePicker);WorkbenchUi.style(searchBar);WorkbenchUi.style(scroll);
+    for(AbstractButton b : new AbstractButton[]{previous,next,clear,caseSensitive,regex,wrap,more,searchOptions,copy}) {
       b.setFont(WorkbenchUi.font());b.setBorder(BorderFactory.createEmptyBorder(3, 4, 3, 4));b.setMargin(new Insets(0,0,0,0));
       b.setPreferredSize(new Dimension(b==caseSensitive?Math.max(32,b.getFontMetrics(b.getFont()).stringWidth("Aa")+10):28,b==caseSensitive||b==regex?Math.max(28,b.getFontMetrics(b.getFont()).getHeight()+6):28));b.setMinimumSize(b.getPreferredSize());b.setMaximumSize(b.getPreferredSize());
     }
     searchBar.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,0,0,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(5,6,5,6)));
-    search.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12f)));search.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(WorkbenchUi.line()),BorderFactory.createEmptyBorder(2,5,2,5)));
+    search.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12f)));search.setBorder(kr.packetui.VisualTheme.border(3,30,3,6));
     count.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));count.setMinimumSize(count.getPreferredSize());count.setMaximumSize(new Dimension(400,28));scroll.setBorder(null);
     text.setFont(WorkbenchUi.textFont(text.getText()));text.setMargin(new Insets(8,8,8,8));text.setBorder(null);
     text.setBackground(WorkbenchUi.surface());text.setForeground(WorkbenchUi.ink());text.setCaretColor(WorkbenchUi.ink());
@@ -363,10 +367,11 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     SimpleAttributeSet normal=new SimpleAttributeSet();StyleConstants.setForeground(normal,WorkbenchUi.ink());
     StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(14));
     doc.setCharacterAttributes(0,doc.getLength(),normal,true);
+    SimpleAttributeSet spacing=new SimpleAttributeSet();StyleConstants.setLineSpacing(spacing,.20f);doc.setParagraphAttributes(0,doc.getLength(),spacing,false);
     if(mode==Mode.HEX)return;
-    Color blue=WorkbenchUi.dark()?new Color(161,188,239):new Color(47,80,149);
-    Color green=WorkbenchUi.dark()?new Color(155,209,113):new Color(36,119,47);
-    Color orange=WorkbenchUi.dark()?new Color(245,159,79):new Color(164,80,16);
+    Color blue=WorkbenchUi.dark()?new Color(161,188,239):new Color(31,91,235);
+    Color green=WorkbenchUi.dark()?new Color(155,209,113):new Color(28,141,48);
+    Color orange=WorkbenchUi.dark()?new Color(245,159,79):new Color(189,91,25);
     int head=value.indexOf("\n\n");if(head<0)head=value.indexOf("\r\n\r\n");if(head<0)head=value.length();
     int line=0;
     while(line<head) { int end=value.indexOf('\n',line);if(end<0||end>head)end=head;int colon=value.indexOf(':',line);paint(line,line==0?end:colon>=line&&colon<end?colon+1:line,blue);line=end+1; }
@@ -513,14 +518,14 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     ResponsivePacketToolbar(JPanel choices,JComboBox<String> picker,JPanel actions){super(new BorderLayout(4,0));this.choices=choices;this.picker=picker;this.actions=actions;add(choices,BorderLayout.WEST);add(actions,BorderLayout.EAST);}
     private void adapt(){
       if(getWidth()<=0)return;int intrinsic=0;for(Component choice:choices.getComponents())if(choice.isVisible())intrinsic+=choice.getPreferredSize().width;
-      boolean next=getWidth()<intrinsic+actions.getPreferredSize().width+4;
+      boolean next=getWidth()<intrinsic+(actions.getParent()==this?actions.getPreferredSize().width:0)+4;
       if(next==compact)return;compact=next;remove(next?choices:picker);add(next?picker:choices,BorderLayout.WEST);
     }
     @Override public void doLayout(){adapt();super.doLayout();}
     @Override public Dimension getPreferredSize(){adapt();return super.getPreferredSize();}
   }
 
-  private static final class Tab extends JToggleButton {
+  static final class Tab extends JToggleButton {
     Tab(String title){super(title);}
     @Override public Dimension getPreferredSize(){return new Dimension(Math.max(66,getFontMetrics(WorkbenchUi.font()).stringWidth(getText())+16),Math.max(34,getFontMetrics(WorkbenchUi.font()).getHeight()+8));}
     @Override protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN));g.setColor(isSelected()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(getText(),(getWidth()-g.getFontMetrics().stringWidth(getText()))/2,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRect(0,getHeight()-(isSelected()?3:1),getWidth(),isSelected()?3:1);if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}g.dispose();}
@@ -529,11 +534,11 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private static void paintTool(AbstractButton button,Graphics graphics,String kind) {
     Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);
     g.setColor(button.isSelected()&&button.isEnabled()?WorkbenchUi.selected():WorkbenchUi.surface());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);
-    g.setColor(button.hasFocus()?WorkbenchUi.accent():WorkbenchUi.line());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);
+    g.setColor(button.hasFocus()?WorkbenchUi.accent():WorkbenchUi.surface());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);
     g.setColor(button.isEnabled()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.setStroke(new BasicStroke(1.5f));int x=button.getWidth()/2,y=button.getHeight()/2;
     if(kind.equals("more")){for(int i=-1;i<=1;i++)g.fillOval(x+i*5-1,y-1,3,3);}
     else if(kind.equals("wrap")){g.drawLine(x-6,y-4,x+4,y-4);g.drawLine(x+4,y-4,x+4,y+2);g.drawLine(x+4,y+2,x-4,y+2);g.drawLine(x-4,y+2,x-1,y-1);g.drawLine(x-4,y+2,x-1,y+5);}
-    else {int d=kind.equals("up")?-1:1;g.drawLine(x,y-5*d,x,y+5*d);g.drawLine(x,y+5*d,x-4,y+d);g.drawLine(x,y+5*d,x+4,y+d);}
+    else {int d=kind.equals("up")?-1:1;g.drawPolyline(new int[]{x-4,x,x+4},new int[]{y-2*d,y+2*d,y-2*d},3);}
     g.dispose();
   }
   private static final class ToolButton extends JButton {

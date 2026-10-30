@@ -11,5 +11,7 @@
   "swingViews": 194,
   "katanaChecks": 102,
   "packageVerified": true,
-  "publicDownloadsVerified": false
+  "publicDownloadsVerified": true,
+  "implementationCommit": "2c448f726c25d5225f7031fd2b8ba85e778cca8b",
+  "mainMergeCommit": "7635cd282f8f57dc928722d3fe35d6597d991bff"
 }

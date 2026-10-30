@@ -1,0 +1,48 @@
+{
+  "version": "1.4.12",
+  "implementationCommit": "2c448f726c25d5225f7031fd2b8ba85e778cca8b",
+  "mainMergeCommit": "7635cd282f8f57dc928722d3fe35d6597d991bff",
+  "result": "passed",
+  "publicDownloads": [
+    {
+      "file": "simple/downloads/1.4.12/burp-workbench-simple-1.4.12.jar",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/main/simple/downloads/1.4.12/burp-workbench-simple-1.4.12.jar",
+      "httpStatus": 200,
+      "bytes": 8984605,
+      "sha256": "0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370",
+      "matchesLocal": true
+    },
+    {
+      "file": "simple/downloads/1.4.12/burp-workbench-simple-1.4.12-source.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/main/simple/downloads/1.4.12/burp-workbench-simple-1.4.12-source.zip",
+      "httpStatus": 200,
+      "bytes": 99828080,
+      "sha256": "0c6e3306267d4395db87401863c92b6a0e5ca3fb1ce5dd1d07c705bfcc67814b",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-contextual-button-layout/workbench-simple-1.4.12-images.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/main/docs/reports/2026-10-31-contextual-button-layout/workbench-simple-1.4.12-images.zip",
+      "httpStatus": 200,
+      "bytes": 15843944,
+      "sha256": "a3c4fef53cb5356e49de2311d5c8aecf7596e4d1875254a0cbf7493e6104e3b5",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-contextual-button-layout/images/actual/dark/traffic.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/main/docs/reports/2026-10-31-contextual-button-layout/images/actual/dark/traffic.png",
+      "httpStatus": 200,
+      "bytes": 122334,
+      "sha256": "d3dc568a96a56b94661823f3c20f7f167c26844d1f7ec92330fc2263fa102fab",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-contextual-button-layout/images/cve-narrow/dark.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/main/docs/reports/2026-10-31-contextual-button-layout/images/cve-narrow/dark.png",
+      "httpStatus": 200,
+      "bytes": 97710,
+      "sha256": "fc730de285448b959c37c105ee126a4e5ccbf1b4fb576c9af4c792e924208ac9",
+      "matchesLocal": true
+    }
+  ]
+}

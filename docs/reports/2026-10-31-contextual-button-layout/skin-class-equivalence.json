@@ -1,0 +1,26 @@
+{
+  "performanceProbeJar": "7294da8f8515ca997d2a26cbb9934472e1d473a6167213eb97f74307ebc85b4d",
+  "finalJar": "dd95eea4fd0a57c7520926a00314e85c236101fd472d0c9754f2e358297c0975",
+  "classes": [
+    {
+      "class": "kr/workbench/WorkbenchSkin.class",
+      "sha256": "c06b3d3df718a5419243a8e3f2c2e769de7c8d540c73185a5b9f4a8084d35317",
+      "identical": true
+    },
+    {
+      "class": "kr/workbench/WorkbenchSkin$3.class",
+      "sha256": "2d8e8fb6c12f8d2cb51a54604b0027d7bece9181e54b18f5ec083f5d8e37d3f8",
+      "identical": true
+    },
+    {
+      "class": "kr/workbench/WorkbenchSkin$4.class",
+      "sha256": "b3b9440dfab43c24edfedaafbec7a7b4b1e931bedb02cfe89ec34827e6e8aa80",
+      "identical": true
+    },
+    {
+      "class": "kr/featuremapper/MapperUi.class",
+      "sha256": "4bd5d96686a9e60ece7d8eff0e10bd949774fb5c45d669fdbb9fcf0ab6e13b78",
+      "identical": true
+    }
+  ]
+}

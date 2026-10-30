@@ -1,5 +1,17 @@
 # 현재 개발 상태
 
+## Simple 1.4.12 · 버튼 배치 시안 적용 — main 병합 완료
+
+승인한 13개 화면의 버튼 배치를 소스에 적용했습니다. 실행·중지를 함께 두고, 선택한 데이터의 Repeater·증거·출처 작업을 해당 목록/상세 위로 옮겼습니다. 변환·JWT·비교는 입력/출력·단계별 작업으로 구분하고, 계정 카드와 반복 제목을 압축했습니다. 좁은 CVE 창에서는 필터를 먼저 확보하고 최신성 정보를 아래로 보냅니다. Guide16화면·96번호를 현재 배치로 갱신했습니다.
+
+실제 창에서 발견한 기존 Workbench/Mapper 테마 재적용 반복도 수정했고, 독립적인 스타일 복원과 유휴 상태를 확인했습니다. 구현 `2c448f726c25d5225f7031fd2b8ba85e778cca8b`를 main `7635cd282f8f57dc928722d3fe35d6597d991bff`로 일반 병합·push했습니다.
+
+전체 **7,073개**(Java157개 그룹6,761 · payload HTTP136 · Mapper147 · Node29), Swing **194개 화면**, 실제 창 **112개**, Katana **102개** 통과. 비교·적용 화면·가이드를 포함한 PNG93장과 오프라인 이미지 갤러리를 제공합니다. 공개 JAR·소스 ZIP·이미지 ZIP·실제 화면2장을 재다운로드해 HTTP200/크기/체크섬을 확인했습니다.
+
+[설치 JAR](simple/downloads/1.4.12/burp-workbench-simple-1.4.12.jar) · [소스 ZIP](simple/downloads/1.4.12/burp-workbench-simple-1.4.12-source.zip) · [실제 화면·비교](docs/reports/2026-10-31-contextual-button-layout/README.md) · [이미지 ZIP](docs/reports/2026-10-31-contextual-button-layout/workbench-simple-1.4.12-images.zip) · [사용법](simple/docs/RELEASE_SIMPLE_1.4.12_KR.md) · [검증](docs/reports/2026-10-31-contextual-button-layout/VERIFICATION.json) · [병합](docs/reports/2026-10-31-contextual-button-layout/MERGE_KR.md)
+
+JAR SHA-256 `0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370`. 실제 Linux Swing/격리 창 관리자와 합성 Burp API 검증이며 Windows Burp·DPI/IME는 직접 검증하지 않았습니다. 원본 Next와 이전 배포 파일은 보존했습니다. 내장 Mapper0.3.13/helper0.4.1.
+
 ## Simple 1.4.11 · 빨간 번호 가이드와 화면 정리 — main 병합 완료
 
 각 화면 오른쪽 위 Guide/F1로 별도 가이드 창을 엽니다. 16개 화면·96개 빨간 번호 설명, 번호/설명 선택 연동, 확대와 최대화를 제공합니다. 구형 텍스트 도움말·Mapper 중복 분류 버튼·입력값 검사 중복 준비 버튼·증거 작성 서식/글자 수 줄·현황 반복 제목의 5종을 제거했습니다. 추가 정리 후보는 실제 삭제와 구분해 빨간 점선으로 표시합니다.

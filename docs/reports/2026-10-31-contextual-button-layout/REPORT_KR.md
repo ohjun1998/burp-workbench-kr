@@ -11,3 +11,5 @@
 이전 후보 기록(pre-*.json)은 수정 과정의 기능/배치 비교 자료입니다. 최종 근거는 VERIFICATION.json에 연결한 결과입니다. 실제 Burp 본체·Windows DPI/IME는 직접 검증하지 않았습니다. 원본 Next와 이전 배포 파일은 보존했습니다. 내장 Mapper0.3.13/helper0.4.1.
 
 JAR SHA-256: `0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370`.
+
+[그리기 수정본→중간 JAR의 Skin 클래스 동일성](skin-class-equivalence.json)과 [중간→최종 JAR의 전체 클래스 동일성](class-equivalence.json)을 함께 보존합니다. 공개 JAR·소스 ZIP·이미지 ZIP·화면2개의 HTTP200/재다운로드 체크섬은 [별도 기록](PUBLIC_DOWNLOAD_VERIFICATION.json)에 있습니다.

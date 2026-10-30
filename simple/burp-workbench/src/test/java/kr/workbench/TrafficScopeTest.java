@@ -13,7 +13,8 @@ public final class TrafficScopeTest extends WorkbenchTest {
   JPanel root=(JPanel)get(extension,"root");
   edt(()->{
    traffic.setRowSelectionInterval(0,0);
-   ((JButton)UiLayoutTest.named(root,"wb.traffic.scope.list")).doClick(0);
+   JButton settings=(JButton)UiLayoutTest.named(root,"wb.traffic.settings");
+   ((AbstractButton)UiLayoutTest.named(settings.getComponentPopupMenu(),"wb.traffic.scope.list")).doClick(0);
    check(openedScope.get()==lists,"primary SCOPE button exposes the retained scope editor");
    ((JTextField)UiLayoutTest.named(openedScope.get(),"wb.traffic.scope.url")).setText(outside.url());
    ((JButton)UiLayoutTest.named(openedScope.get(),"wb.traffic.scope.add")).doClick(0);

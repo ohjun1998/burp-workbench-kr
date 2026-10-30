@@ -22,6 +22,7 @@ public final class SimplePreview extends WorkbenchTest {
   static int width, height;
   static Path out;
   static final List<String> controls = new ArrayList<>();
+  static final List<String> anchors = new ArrayList<>();
   static final List<String> content = new ArrayList<>();
   static final List<String> scenarios = new ArrayList<>();
 
@@ -52,6 +53,9 @@ public final class SimplePreview extends WorkbenchTest {
 
   static void layout(Component component) {
     if (component instanceof Container parent) {
+      // Detached headless trees never become valid. Explicitly invalidate cached
+      // BoxLayout requirements before simulating a real window validation pass.
+      parent.invalidate();
       parent.doLayout();
       for (Component child : parent.getComponents()) layout(child);
     }
@@ -154,6 +158,27 @@ public final class SimplePreview extends WorkbenchTest {
   }
   static void inspect(Container root, Component component, String view, int w, int h) {
     if (!component.isVisible()) return;
+    if (component.getName() != null && !component.getName().isBlank()) {
+      Rectangle bounds = component == root ? new Rectangle(0,0,w,h)
+          : SwingUtilities.convertRectangle(component.getParent(), component.getBounds(), root);
+      Rectangle shown = component == root ? bounds : visible(root, component, bounds, w, h);
+      anchors.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()),
+          ""+bounds.x, ""+bounds.y, ""+bounds.width, ""+bounds.height,
+          ""+(bounds.width>0&&bounds.height>0&&shown.contains(bounds))));
+      Rectangle selection = null;
+      if (component instanceof JTable table && table.getSelectedRow() >= 0 && table.getColumnCount() > 0)
+        selection = table.getCellRect(table.getSelectedRow(), 0, true)
+            .union(table.getCellRect(table.getSelectedRow(), table.getColumnCount()-1, true));
+      if (component instanceof JTree tree && tree.getMinSelectionRow() >= 0)
+        selection = tree.getRowBounds(tree.getMinSelectionRow());
+      if (selection != null) {
+        Rectangle selected = SwingUtilities.convertRectangle(component, selection, root);
+        Rectangle selectedShown = visible(root, component, selected, w, h);
+        anchors.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()+".selected"),
+            ""+selected.x, ""+selected.y, ""+selected.width, ""+selected.height,
+            ""+(selected.width>0&&selected.height>0&&selectedShown.contains(selected))));
+      }
+    }
     boolean control = component instanceof AbstractButton button && button.getText()!=null && !button.getText().isBlank()
         || component instanceof JTextField || component instanceof JComboBox<?>;
     if (control) {
@@ -263,6 +288,16 @@ public final class SimplePreview extends WorkbenchTest {
         click(root,"wb.simple.tool.mapper");
         var mapper=(kr.featuremapper.FeatureMapperWorkspace)value(extension,"featureMapper");
         mapper.observeCaptured(System.currentTimeMillis(),"합성 UI 검증",request(origin+"/api/documents/101","GET",true,List.of()),response(200,"{\"id\":101,\"title\":\"문서 예시\"}"));invoke(mapper,"refresh");
+        var featureTree=(JTree)value(mapper,"tree");
+        var featureNodes=((javax.swing.tree.DefaultMutableTreeNode)featureTree.getModel().getRoot()).depthFirstEnumeration();
+        while(featureNodes.hasMoreElements()){
+          var node=(javax.swing.tree.DefaultMutableTreeNode)featureNodes.nextElement();
+          if(node.getUserObject()!=null&&node.getUserObject().getClass().getSimpleName().equals("FeatureNode")){
+            featureTree.setSelectionPath(new javax.swing.tree.TreePath(node.getPath()));break;
+          }
+        }
+        scenario("Mapper guide selects an actual feature before presenting local edit/link actions",
+            ((AbstractButton)SimpleWorkflowTest.named(root,"fm.feature.edit")).isEnabled());
         JTable mapperTable=(JTable)value(mapper,"table");if(mapperTable.getRowCount()>0)mapperTable.setRowSelectionInterval(0,0);
         capture(root,"08-mapper.png");
         click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
@@ -344,7 +379,18 @@ public final class SimplePreview extends WorkbenchTest {
         progressPanel.tracker.observe(request(origin+"/api/projects","POST",true,List.of()),"화면 검증용 합성 요청");
         progressPanel.refresh();if(progressPanel.table.getRowCount()>0)progressPanel.table.setRowSelectionInterval(0,0);
         scenario("Progress capture derives rows from the real tracker using synthetic requests",progressPanel.table.getRowCount()>=2);capture(root,"15-progress.png");
-        extension.openFeature("dashboard");capture(root,"16-dashboard.png");
+        extension.openFeature("dashboard");
+        var dashboard=(ScopeDashboardPanel)value(extension,"scopeDashboard");
+        var exampleOriginal=((DiskTrafficStore)value(extension,"trafficStore")).ref(1);
+        var exampleFinding=new ScopeInspection.Finding("SECRET","설정 정보 후보 · 합성 예시",exampleOriginal.url(),
+            "GET","Alice","형식 후보","높음","유효성 미검증","화면 검증용 합성 근거",exampleOriginal.id(),1,0,"button-layout-guide");
+        var examplePage=new ScopeInspection.Page(exampleOriginal.url(),"GET","Alice",200,"JSON",true,"합성 예시","guide",exampleOriginal);
+        dashboard.update(new ScopeInspection.Snapshot("화면 검증용 합성 결과",ScopeInspection.State.COMPLETED,
+            "합성 예시 · 실제 점검 실행 아님",1,1,0,0,0,0,List.of(exampleFinding),List.of(examplePage),List.of(),0,0),10,origin);
+        awaitUi(()->!dashboard.aggregating&&!dashboard.visibleRows.isEmpty(),"synthetic dashboard projection");
+        dashboard.table.setRowSelectionInterval(0,0);
+        scenario("Dashboard guide actions retain a real synthetic stored original",dashboard.original.isEnabled()&&dashboard.repeater.isEnabled()&&dashboard.evidence.isEnabled());
+        capture(root,"16-dashboard.png");
 
         String redacted = evidence.evidencePreview();
         scenario("Production preview excludes synthetic session values", !redacted.contains("ALICE_DEMO_SECRET")&&!redacted.contains("BOB_DEMO_SECRET"));
@@ -362,6 +408,8 @@ public final class SimplePreview extends WorkbenchTest {
       });
       scenario("Guide navigation sends zero HTTP",PayloadIntegrationTest.sent.get()==0);
     } finally { SimpleWorkflowTest.unload(); }
+    anchors.add(0,"theme,width,height,view,name,x,y,anchorWidth,anchorHeight,fullyVisible");
+    Files.write(out.resolve("anchors.csv"),anchors,StandardCharsets.UTF_8);
     controls.add(0,"theme,width,height,view,label,name,controlWidth,controlHeight,fullyVisible,scrollable");
     content.add(0,"theme,width,height,view,name,visibleWidth,visibleHeight");
     scenarios.add(0,"scenario,passed");

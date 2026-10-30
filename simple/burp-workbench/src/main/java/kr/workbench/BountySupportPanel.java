@@ -536,7 +536,10 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       return menu;
     });
     JPanel heading=new JPanel(new BorderLayout(8,0));heading.add(new JLabel("제목"),BorderLayout.WEST);heading.add(evidenceTitle);
-    top.add(CompactWorkbenchUi.toolbar(heading,WorkbenchUi.row(addEvidence,evidencePreview,evidenceSave,moreEvidence)));
+    JPanel documentActions = CompactWorkbenchUi.toolbar(heading,
+        WorkbenchUi.row(evidencePreview, evidenceSave, moreEvidence));
+    documentActions.setName("wb.actions.bounty.document");
+    top.add(documentActions);
     addEvidence.setToolTipText("수집한 원본, 계정 비교 또는 요청 재현 결과를 증거에 추가합니다.");
     evidencePreview.setToolTipText("ZIP에 저장할 보고서와 패킷의 민감 정보 가림을 먼저 확인합니다.");
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -548,10 +551,16 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceRedoAction.setName("wb.bounty.evidence.redo");
     evidenceDescribe.setName("wb.bounty.evidence.describe");
     evidenceCount.setName("wb.bounty.evidence.count");
-    evidenceUp.setText("위로 이동");evidenceDown.setText("아래로 이동");evidenceUndoAction.setText("");evidenceUndoAction.setIcon(WorkspaceIcons.of("undo"));evidenceRedoAction.setText("");evidenceRedoAction.setIcon(WorkspaceIcons.of("redo"));evidenceDescribe.setText("메모");evidenceRemove.setText("삭제");
-    for(JButton action:new JButton[]{evidenceUndoAction,evidenceRedoAction}){action.putClientProperty("wb.compact.button",true);action.setPreferredSize(new Dimension(32,32));}
+    evidenceUp.setText("↑");evidenceDown.setText("↓");evidenceUndoAction.setText("");evidenceUndoAction.setIcon(WorkspaceIcons.of("undo"));evidenceRedoAction.setText("");evidenceRedoAction.setIcon(WorkspaceIcons.of("redo"));evidenceDescribe.setText("메모");evidenceRemove.setText("삭제");
+    for(JButton action:new JButton[]{evidenceUp,evidenceDown,evidenceUndoAction,evidenceRedoAction}){action.putClientProperty("wb.compact.button",true);action.setPreferredSize(null);}
+    evidenceUp.getAccessibleContext().setAccessibleName("증거 위로 이동");
+    evidenceDown.getAccessibleContext().setAccessibleName("증거 아래로 이동");
+    evidenceUndoAction.getAccessibleContext().setAccessibleName("실행 취소");
+    evidenceRedoAction.getAccessibleContext().setAccessibleName("다시 실행");
     evidenceUp.setToolTipText("증거 위로 이동");evidenceDown.setToolTipText("증거 아래로 이동");evidenceUndoAction.setToolTipText("되돌리기 · Ctrl+Z");evidenceRedoAction.setToolTipText("다시 적용 · Ctrl+Y");
     JPanel itemActions=WorkbenchUi.row(evidenceUp,evidenceDown,evidenceRemove,evidenceUndoAction,evidenceRedoAction,evidenceDescribe);
+    itemActions.setName("wb.actions.bounty.items");
+    itemActions.setLayout(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 4, 3));
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Z"), "evidence-undo");
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Y"), "evidence-redo");
     evidenceTable.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), "evidence-description");
@@ -576,7 +585,16 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     JPanel preview=new JPanel(new BorderLayout(0,4));preview.add(ReferenceUi.header(evidencePacketLabel,null),BorderLayout.NORTH);preview.add(packetTabs);
     JSplitPane detail=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,preview,text,.35);
     detail.setName("wb.bounty.evidence.detail");
-    JPanel list=new JPanel(new BorderLayout(0,4));list.add(new JScrollPane(evidenceTable));JPanel listHeader=new JPanel(new BorderLayout(0,8));JLabel listTitle=new JLabel("증거 목록");listTitle.putClientProperty("wb.font.heading",true);listHeader.add(listTitle,BorderLayout.NORTH);listHeader.add(CompactWorkbenchUi.search(evidenceTable,"wb.bounty.evidence.search","증거 이름, 타입, 메모로 검색…"));listHeader.setBorder(BorderFactory.createEmptyBorder(10,12,10,12));list.add(listHeader,BorderLayout.NORTH);list.add(itemActions,BorderLayout.SOUTH);
+    JPanel list=new JPanel(new BorderLayout(0,4));
+    list.add(new JScrollPane(evidenceTable));
+    JPanel listHeader=new JPanel(new BorderLayout(0,4));
+    JLabel listTitle=new JLabel("증거 목록");listTitle.putClientProperty("wb.font.heading",true);
+    JPanel addActions = CompactWorkbenchUi.toolbar(listTitle, WorkbenchUi.row(addEvidence));
+    addActions.setName("wb.actions.bounty.add");
+    listHeader.add(addActions,BorderLayout.NORTH);
+    listHeader.add(CompactWorkbenchUi.search(evidenceTable,"wb.bounty.evidence.search","증거 이름, 타입, 메모로 검색…"));
+    listHeader.setBorder(BorderFactory.createEmptyBorder(4,6,6,6));
+    list.add(listHeader,BorderLayout.NORTH);list.add(itemActions,BorderLayout.SOUTH);
     JSplitPane body=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,list,detail,.35);
     body.setName("wb.bounty.evidence.body");
     p.add(body);

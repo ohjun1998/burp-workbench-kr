@@ -125,7 +125,11 @@ public final class JsRepeaterWorkflowTest {
       edt(()->{
         panel.setSize(1260,780);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
         var toolbar=(JPanel)UiLayoutTest.named(panel,"wb.js.toolbar");
-        verify(SwingUtilities.isDescendingFrom(panel.sources,toolbar)&&SwingUtilities.isDescendingFrom(panel.resolve,toolbar),"source selector and request preparation are inline above code/results");
+        var selectedActions=(JPanel)UiLayoutTest.named(panel,"wb.actions.js.detail");
+        verify(SwingUtilities.isDescendingFrom(panel.sources,toolbar)
+            &&SwingUtilities.isDescendingFrom(panel.resolve,selectedActions)
+            &&!SwingUtilities.isDescendingFrom(panel.resolve,toolbar),
+            "source selector stays above code/results while request preparation belongs to selected API detail");
         verify(!SwingUtilities.isDescendingFrom(panel.analysisList,panel)&&!SwingUtilities.isDescendingFrom(panel.analysisDetails,panel),"secondary analysis windows are available through the more menu instead of duplicate top buttons");
         verify(panel.passive.getWidth()>60&&panel.sources.getWidth()>150,"source context and analysis toggle remain readable");
         verify(panel.progress.getFont().getSize()==11&&panel.progress.getHorizontalAlignment()==SwingConstants.RIGHT&&!panel.progress.isOpaque(),"analysis counters are small, unboxed and right aligned");

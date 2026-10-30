@@ -101,6 +101,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   private final Diagnostics diagnostics = new Diagnostics();
   private final JButton logButton = new JButton("로그");
   private final JButton captureButton = new JButton();
+  private JButton featureEditButton, featureAssessmentButton, classifyButton, repeaterButton;
   interface DialogOpener { JDialog open(Component owner, String title, Component content, Runnable closed); }
   DialogOpener dialogOpener = MapperUi::window;
   private JDialog helpWindow, settingsWindow, logWindow;
@@ -285,6 +286,33 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     return b;
   }
 
+  /** Mapper is independently packaged, so its responsive context bar stays local. */
+  private static JPanel localToolbar(Component context,Component actions){
+    JPanel bar=new JPanel(new BorderLayout(8,4)){
+      boolean stacked;
+      void adapt(){
+        boolean next=getWidth()>0&&getWidth()<context.getMinimumSize().width+actions.getPreferredSize().width+16;
+        if(next!=stacked){stacked=next;remove(actions);add(actions,next?BorderLayout.SOUTH:BorderLayout.EAST);}
+      }
+      @Override public void doLayout(){adapt();super.doLayout();}
+      @Override public Dimension getPreferredSize(){adapt();return super.getPreferredSize();}
+    };
+    bar.add(context);bar.add(actions,BorderLayout.EAST);return bar;
+  }
+
+  private void refreshFeatureActions(){
+    boolean selected=false;
+    synchronized(projectLock){selected=mapper!=null&&selectedFeature!=null&&mapper.features.containsKey(selectedFeature);}
+    if(featureEditButton!=null)featureEditButton.setEnabled(selected);
+    if(featureAssessmentButton!=null)featureAssessmentButton.setEnabled(selected);
+  }
+
+  private void refreshPacketActions(){
+    boolean selected=!selectedPackets().isEmpty();
+    if(classifyButton!=null)classifyButton.setEnabled(selected);
+    if(repeaterButton!=null)repeaterButton.setEnabled(selected);
+  }
+
   private void buildUi() {
     root = new JPanel(new BorderLayout(8, 8));
     root.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
@@ -304,15 +332,17 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       if (embeddedHost == null) enabled.doClick(0);
       else { embeddedHost.toggleCapture(); updateIndicators(); }
     });
-    JPanel projectActions = MapperUi.row(new JLabel("프로젝트"),button("열기 ▾", () -> chooseFile(false)),button("저장", () -> chooseFile(true)),captureButton);
+    JPanel projectActions = MapperUi.row(new JLabel("프로젝트"),button("열기 ▾", () -> chooseFile(false)),button("저장", () -> chooseFile(true)));
+    projectActions.setName("wb.actions.mapper.project");
+    JPanel captureActions=MapperUi.row(captureButton);captureActions.setName("wb.actions.mapper.capture");
+    if(embeddedHost!=null)captureActions.add(button("매핑 설정",this::showSettings));
     JPanel toolbar = new JPanel(new BorderLayout(0,6)); if (embeddedHost == null) toolbar.add(header,BorderLayout.NORTH);
-    else projectActions.add(button("매핑 설정", this::showSettings));
-    toolbar.add(projectActions);
+    JPanel context=localToolbar(projectActions,captureActions);context.setName("wb.actions.mapper.context");toolbar.add(context);
     root.add(toolbar, BorderLayout.NORTH);
     requestText.setName("fm.request");
     responseText.setName("fm.response");
     explanation.setName("fm.explanation");
-    tree.setRootVisible(false);tree.setShowsRootHandles(true);javax.swing.ToolTipManager.sharedInstance().registerComponent(tree);
+    tree.setName("fm.feature.tree");tree.setRootVisible(false);tree.setShowsRootHandles(true);javax.swing.ToolTipManager.sharedInstance().registerComponent(tree);
     DefaultTreeCellRenderer tr = new DefaultTreeCellRenderer();
     tr.putClientProperty("html.disable", true);
     tree.setCellRenderer(tr);
@@ -323,20 +353,23 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
           if (selected instanceof DefaultMutableTreeNode node
               && node.getUserObject() instanceof FeatureNode f) selectedFeature = f.id;
           else selectedFeature = null;
-          fillRows();
+          fillRows();refreshFeatureActions();
         });
     JPanel left = new JPanel(new BorderLayout(4, 4));
     left.add(new JScrollPane(tree));
-    JPanel actions = new JPanel(new GridLayout(0, 1, 4, 4));
-    actions.add(button("기능 이름·상태·메모", this::editFeature));
+    featureEditButton=button("편집",this::editFeature);featureEditButton.setName("fm.feature.edit");
+    featureEditButton.setToolTipText("선택 기능의 이름·상태·메모 편집");
+    featureEditButton.getAccessibleContext().setAccessibleName("기능 이름·상태·메모");
+    JPanel actions=MapperUi.row(featureEditButton);actions.setName("wb.actions.mapper.feature");
     if (embeddedHost != null && embeddedHost.supportsAssessmentTasks()) {
-      JButton assessment = button("점검 업무로 연결", this::linkAssessment);
-      assessment.setName("fm.assessment.link");
-      assessment.setToolTipText("선택 기능의 API로 업무 초안을 만듭니다. 계정·범위 검토 후 연결하며 완료로 표시하지 않습니다.");
-      actions.add(assessment);
+      featureAssessmentButton = button("업무 연결", this::linkAssessment);
+      featureAssessmentButton.setName("fm.assessment.link");
+      featureAssessmentButton.getAccessibleContext().setAccessibleName("점검 업무로 연결");
+      featureAssessmentButton.setToolTipText("선택 기능의 API로 업무 초안을 만듭니다. 계정·범위 검토 후 연결하며 완료로 표시하지 않습니다.");
+      actions.add(featureAssessmentButton);
     }
     JPanel treeBody = new JPanel(new BorderLayout(0, 4));
-    treeBody.add(left.getComponent(0)); treeBody.add(actions, BorderLayout.SOUTH);
+    treeBody.add(left.getComponent(0)); treeBody.add(actions, BorderLayout.NORTH);refreshFeatureActions();
     left.removeAll();
 
     treeToggle.setName("fm.tree.toggle");
@@ -358,13 +391,16 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
         .getSelectionModel()
         .addListSelectionListener(
             e -> {
-              if (!e.getValueIsAdjusting()) showSelected();
+              if (!e.getValueIsAdjusting()) {showSelected();refreshPacketActions();}
             });
     runs.setPreferredSize(new Dimension(135,36)); sessions.setPreferredSize(new Dimension(135,36));
     JPanel filters = new MapperUi.Filters();
     filters.setName("fm.filters");
     filters.add(MapperUi.row(new JLabel("실행"),runs,new JLabel("세션"),sessions),BorderLayout.WEST);
-    filters.add(search);filters.add(MapperUi.row(button("분류 수정",this::movePackets),button("Repeater",this::sendToRepeater)),BorderLayout.EAST);
+    classifyButton=button("분류 수정",this::movePackets);classifyButton.setName("fm.packet.classify");
+    repeaterButton=button("Repeater",this::sendToRepeater);repeaterButton.setName("fm.packet.repeater");
+    JPanel packetActions=MapperUi.row(classifyButton,repeaterButton);packetActions.setName("wb.actions.mapper.packets");
+    filters.add(search);filters.add(packetActions,BorderLayout.EAST);refreshPacketActions();
     runs.addActionListener(
         e -> {
           if (!rebuilding) fillRows();
@@ -648,6 +684,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     }
     if (previousOwner != shownOwner || !keepIds.isEmpty() && selectedPackets().isEmpty())
       showSelected();
+    refreshFeatureActions();refreshPacketActions();
   }
 
   private List<Mapper.Packet> selectedPackets() {

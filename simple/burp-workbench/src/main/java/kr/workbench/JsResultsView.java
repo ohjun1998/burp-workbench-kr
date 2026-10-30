@@ -16,6 +16,7 @@ final class JsResultsView extends JPanel {
     @Override public Dimension getPreferredSize(){return new Dimension(80,28);}
   },shortcut=new JLabel("Ctrl+R · Repeater");
   final JPopupMenu popup=new JPopupMenu();
+  final JPanel detailActions=WorkbenchUi.row();
   final JComboBox<String> call=new JComboBox<>(new String[]{"전체","미호출","실제 호출","메서드 충돌","미확정"});
   final JCheckBox priority=new JCheckBox("우선 검토만"),fresh=new JCheckBox("신규만");
   final TargetWindow comparison,versionWindow;
@@ -30,7 +31,12 @@ final class JsResultsView extends JPanel {
     detail.setName("wb.js.inline.detail");inputDetail.setName("wb.js.inline.inputs");
     for(JTextArea area:List.of(detail,inputDetail)){area.setEditable(false);area.setLineWrap(true);area.setWrapStyleWord(true);area.putClientProperty("wb.prose",true);}
     JPanel information=new JPanel(new GridLayout(1,2,12,0));JPanel detailView=ReferenceUi.facts(detail);detailView.setName("wb.js.inline.detail");information.add(detailView);information.add(ReferenceUi.facts(inputDetail));
-    JSplitPane content=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,tabs,WorkbenchUi.card("경로 상세 정보",information),.55);content.setName("wb.js.inline.split");add(content);
+    JPanel detailCard=WorkbenchUi.card("경로 상세 정보",information);
+    Component detailTitle=((BorderLayout)detailCard.getLayout()).getLayoutComponent(BorderLayout.NORTH);
+    detailCard.remove(detailTitle);detailActions.setName("wb.actions.js.detail");
+    JPanel detailHeader=CompactWorkbenchUi.toolbar(detailTitle,detailActions);detailHeader.setName("wb.js.detail.header");
+    detailCard.add(detailHeader,BorderLayout.NORTH);
+    JSplitPane content=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,tabs,detailCard,.55);content.setName("wb.js.inline.split");add(content);
     owner.urlTable.putClientProperty("wb.search.apply",(Runnable)this::apply);
     summary.setName("wb.js.selection.summary");shortcut.setName("wb.js.selection.shortcut");
     summary.putClientProperty("wb.font.size",12);shortcut.putClientProperty("wb.font.size",11);
@@ -42,6 +48,10 @@ final class JsResultsView extends JPanel {
     comparison=new TargetWindow(owner,"트래픽 대조",()->tablePanel(traffic,"수집된 패킷의 메서드·필드 이름 근거 · 추가 요청 없음"));
     versionWindow=new TargetWindow(owner,"버전 비교",this::versionContent);
     before.addActionListener(e->compareChosen());after.addActionListener(e->compareChosen());
+  }
+  void setDetailActions(Component... actions){
+    detailActions.removeAll();for(Component action:actions)detailActions.add(action);
+    detailActions.revalidate();detailActions.repaint();
   }
   static DefaultTableModel model(String... columns){return new DefaultTableModel(columns,0){public boolean isCellEditable(int row,int col){return false;}};}
   static JPanel tablePanel(DefaultTableModel model,String text){JPanel p=new JPanel(new BorderLayout(0,6));JLabel hint=new JLabel(text);hint.setToolTipText(text);p.add(hint,BorderLayout.NORTH);JTable table=new JTable(model);table.setAutoCreateRowSorter(true);table.setRowHeight(26);JScrollPane scroll=new JScrollPane(table);scroll.setColumnHeaderView(table.getTableHeader());p.add(scroll);for(int i=0;i<table.getColumnCount();i++){String name=table.getColumnName(i);table.getColumnModel().getColumn(i).setPreferredWidth(name.contains("경로")?430:name.contains("추천")||name.contains("차이")?260:110);}p.setPreferredSize(new Dimension(850,430));WorkbenchUi.style(p);return p;}

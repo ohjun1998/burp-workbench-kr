@@ -33,13 +33,26 @@ public final class VisualGuideNative extends WorkbenchTest {
   static Object value(Object owner,String name){try{return get(owner,name);}catch(Exception failure){throw new IllegalStateException(name,failure);}}
   static String id(JPanel panel){return (String)call(panel,"selectedId");}
   static boolean ready(JPanel panel){return Boolean.TRUE.equals(call(panel,"imageReady"));}
-  static void key(Robot robot,int key){robot.keyPress(key);robot.keyRelease(key);robot.waitForIdle();}
+  /** Flush queued EDT work with a deadline; X11 global idle may never occur during periodic repaint. */
+  static void settle() {
+    if(EventQueue.isDispatchThread())throw new IllegalStateException("Native settle must run outside EDT");
+    java.util.concurrent.FutureTask<Void> barrier=new java.util.concurrent.FutureTask<>(()->null);
+    EventQueue.invokeLater(barrier);
+    try {
+      barrier.get(3,java.util.concurrent.TimeUnit.SECONDS);
+      Toolkit.getDefaultToolkit().sync();
+      Thread.sleep(80);
+    }catch(InterruptedException interrupted){Thread.currentThread().interrupt();throw new IllegalStateException("Native settle interrupted",interrupted);}
+    catch(java.util.concurrent.ExecutionException|java.util.concurrent.TimeoutException failure){throw new IllegalStateException("Native EDT settle deadline exceeded",failure);}
+  }
+
+  static void key(Robot robot,int key){robot.keyPress(key);robot.keyRelease(key);settle();}
   static void activate(Robot robot,Window window)throws Exception {
     Point[] point={null};edt(()->{window.toFront();window.requestFocus();point[0]=window.getLocationOnScreen();point[0].translate(320,12);});
-    robot.mouseMove(point[0].x,point[0].y);robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);robot.waitForIdle();await(window::isActive,"activate native guide window");
+    robot.mouseMove(point[0].x,point[0].y);robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);settle();await(window::isActive,"activate native guide window");
   }
   static void capture(Robot robot,Window window,Path output,String name)throws Exception {
-    Rectangle[] bounds={null};edt(()->bounds[0]=window.getBounds().intersection(window.getGraphicsConfiguration().getBounds()));robot.mouseMove(bounds[0].x+bounds[0].width/2,bounds[0].y+12);robot.waitForIdle();Thread.sleep(120);
+    Rectangle[] bounds={null};edt(()->bounds[0]=window.getBounds().intersection(window.getGraphicsConfiguration().getBounds()));robot.mouseMove(bounds[0].x+bounds[0].width/2,bounds[0].y+12);settle();Thread.sleep(120);
     ImageIO.write(robot.createScreenCapture(bounds[0]),"png",output.resolve(name).toFile());
   }
   static String text(Component component){StringBuilder result=new StringBuilder();if(component instanceof JTextComponent t)result.append(t.getText());if(component instanceof JLabel l)result.append(l.getText());if(component instanceof AbstractButton b)result.append(b.getText());if(component instanceof Container c)for(Component child:c.getComponents())result.append('\n').append(text(child));return result.toString();}
@@ -92,13 +105,13 @@ public final class VisualGuideNative extends WorkbenchTest {
       edt(()->guide.doClick(0));check(value(guides,"window")==window,"repeated Guide clicks reuse one guide window");
       check(main.getContentPane()==root&&originalTabs.getSelectedComponent()==selectedTool&&value(extension,"current")==selected[0]&&traffic.getSelectedRow()==1&&codec.getText().equals("PRIVATE_NATIVE_GUIDE_SENTINEL"),"opening guidance retains main components, original identity, selection and edits");
       check(!text(panel).contains("PRIVATE_NATIVE_GUIDE_SENTINEL"),"guide explanatory widgets contain no private current-work sentinel");
-      Robot robot=new Robot();robot.setAutoDelay(60);activate(robot,window);robot.waitForIdle();
+      Robot robot=new Robot();robot.setAutoDelay(60);activate(robot,window);settle();
       Component canvas=SimpleWorkflowTest.named(panel,"wb.visual.guide.image");check(canvas!=null&&canvas.isShowing(),"annotated guide image is visibly rendered");
       check(redPixels(robot,canvas)>700,"real guide rendering contains visible red numeric callouts");
       edt(()->call(panel,"selectStep",new Class<?>[]{int.class},2));check(((Number)call(panel,"selectedStep")).intValue()==2,"selecting explanation updates the highlighted numbered step");
       try {
         Point local=(Point)call(canvas,"markerCenter",new Class<?>[]{int.class},3);Point[] screen={null};edt(()->{screen[0]=canvas.getLocationOnScreen();screen[0].translate(local.x,local.y);});
-        robot.mouseMove(screen[0].x,screen[0].y);robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);robot.waitForIdle();
+        robot.mouseMove(screen[0].x,screen[0].y);robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);settle();
         check(((Number)call(panel,"selectedStep")).intValue()==3,"clicking red marker synchronizes the corresponding explanation");
       }catch(IllegalStateException missing){if(missing.getCause() instanceof NoSuchMethodException)throw new AssertionError("Native marker click requires markerCenter on canvas",missing);throw missing;}
       capture(robot,window,output,"01-guide-window.png");
@@ -123,7 +136,7 @@ public final class VisualGuideNative extends WorkbenchTest {
       Component beforeGuideHide=originalTabs.getSelectedComponent();edt(()->window.dispatchEvent(new WindowEvent(window,WindowEvent.WINDOW_CLOSING)));await(()->!window.isVisible(),"close only guide window");
       check(main.isVisible()&&originalTabs.getSelectedComponent()==beforeGuideHide&&codec.getText().equals("PRIVATE_NATIVE_GUIDE_SENTINEL"),"closing guidance leaves ongoing main work intact");
       edt(()->{controller.toggleFullScreen();guide.doClick(0);});await(()->controller.isFullScreen()&&window.isVisible()&&ready(panel),"show owned guide above fullscreen main");
-      JPanel glass=new JPanel();glass.setOpaque(true);glass.setBackground(Color.MAGENTA);edt(()->{window.setGlassPane(glass);glass.setVisible(true);main.toFront();});robot.waitForIdle();
+      JPanel glass=new JPanel();glass.setOpaque(true);glass.setBackground(Color.MAGENTA);edt(()->{window.setGlassPane(glass);glass.setVisible(true);main.toFront();});settle();
       Point[] colorPoint={null};edt(()->{colorPoint[0]=glass.getLocationOnScreen();colorPoint[0].translate(glass.getWidth()/2,glass.getHeight()/2);});
       check(robot.getPixelColor(colorPoint[0].x,colorPoint[0].y).equals(Color.MAGENTA),"owned guide is visually above fullscreen Workbench after parent focus");
       edt(()->glass.setVisible(false));activate(robot,window);

@@ -274,6 +274,9 @@ final class WorkbenchSkin {
 
   private static void watch(Component component, Runnable apply) {
     if (component instanceof JComponent j) {
+      // Embedded tools own their delegates and restoration listeners. Watching
+      // their children here makes the two skins restore each other repeatedly.
+      if (j.getClientProperty("wb.embedded.style") instanceof Runnable) return;
       if (Boolean.TRUE.equals(j.getClientProperty("wb.nativeEditor")) || Boolean.TRUE.equals(j.getClientProperty("wb.skin.watched"))) return;
       j.putClientProperty("wb.skin.watched", true);
       j.addPropertyChangeListener((PropertyChangeEvent event) -> {

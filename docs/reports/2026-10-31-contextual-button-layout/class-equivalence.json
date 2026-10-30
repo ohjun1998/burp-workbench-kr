@@ -1,0 +1,8 @@
+{
+  "previousJarSha256": "dd95eea4fd0a57c7520926a00314e85c236101fd472d0c9754f2e358297c0975",
+  "shippingJarSha256": "0e8476e05fe63213069b08f1324184f1f78383a7e24cae561ec6395eb1b16370",
+  "classCount": 1628,
+  "allJavaClassEntriesIdentical": true,
+  "sourceProof": "tmp/cve-native-fit-diagnostic/verified-narrow-summary.json",
+  "scope": "Resource-only Guide PNG/catalog refresh; all production Java class bytes identical."
+}

@@ -2,6 +2,8 @@ package kr.workbench;
 
 import java.util.*;
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import kr.featuremapper.FeatureMapperWorkspace;
 
 /** Mapper proposals are explicit, bounded task edits; classification never completes work. */
@@ -54,8 +56,7 @@ public final class MapperTaskDraft052Test extends WorkbenchTest {
       MapperIntegrationTest.send(fixture, "https://burp.test/api/items/12?private=value", 5201);
       Object original = ((Map<?, ?>) get(mapper, "packets")).values().iterator().next();
       String feature = (String) get(original, "primary");
-      var selected = FeatureMapperWorkspace.class.getDeclaredField("selectedFeature"); selected.setAccessible(true);
-      edt(() -> { try { selected.set(workspace, feature); } catch (Exception ex) { throw new RuntimeException(ex); } });
+      selectFeature(workspace, feature);
       JButton link = (JButton) UiLayoutTest.named(workspace.component(), "fm.assessment.link");
       TargetWindow first = openReview(panel, link);
       JList<?> accounts = (JList<?>) UiLayoutTest.named(first.content.get(), "wb.assessment.mapper.accounts");
@@ -95,6 +96,26 @@ public final class MapperTaskDraft052Test extends WorkbenchTest {
           && ((JLabel) UiLayoutTest.named(scopeChanged.content.get(), "wb.assessment.mapper.feedback")).getText().contains("변경"),
           "scope change during the real review preserves existing task scope");
     }
+  }
+
+  static void selectFeature(FeatureMapperWorkspace workspace,String feature) throws Exception {
+    edt(() -> {
+      try {
+        // Hidden headless fixtures do not run the showing-only refresh timer. Use the
+        // actual tree selection so the contextual button follows production UI state.
+        MapperIntegrationTest.invoke(workspace,"refresh",new Class<?>[0]);
+        JTree tree=(JTree)get(workspace,"tree");
+        var nodes=((DefaultMutableTreeNode)tree.getModel().getRoot()).depthFirstEnumeration();
+        while(nodes.hasMoreElements()) {
+          var node=(DefaultMutableTreeNode)nodes.nextElement();Object value=node.getUserObject();
+          if(value!=null&&value.getClass().getSimpleName().equals("FeatureNode")
+              &&feature.equals(get(value,"id"))) {
+            tree.setSelectionPath(new TreePath(node.getPath()));return;
+          }
+        }
+        throw new AssertionError("Mapper feature tree fixture was not rebuilt: "+feature);
+      } catch(Exception error) { throw new RuntimeException(error); }
+    });
   }
 
   static TargetWindow openReview(AssessmentPanel panel, JButton button) throws Exception {

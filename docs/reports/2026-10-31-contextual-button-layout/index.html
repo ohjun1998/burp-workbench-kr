@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simple 1.4.12 · 버튼 배치 구현 화면</title>
+<style>
+:root{color-scheme:dark;--bg:#10161e;--surface:#18212c;--ink:#e5edf7;--muted:#a7b6ca;--line:#344152;--accent:#ff8b47}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,sans-serif}main{max-width:1800px;margin:auto;padding:24px}h1{margin:0;font-size:26px}h2{margin:0;font-size:19px}p{margin:6px 0}a{color:#9aceff}button,select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:7px 12px}button{cursor:pointer}button[aria-pressed=true]{border-color:var(--accent);color:#ffd8bd}button:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid #8ecbff;outline-offset:3px}.note{color:var(--muted);max-width:1300px}.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:18px 0;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:7px}.segmented{display:flex;gap:6px}nav{display:flex;flex-wrap:wrap;gap:7px 13px;margin-bottom:22px}nav a{font-size:13px}article{border:1px solid var(--line);border-radius:8px;margin:22px 0;overflow:hidden;scroll-margin-top:12px}article>header{padding:15px 18px;background:var(--surface)}article>header p{color:var(--muted)}.supplement{font-size:12px;padding:2px 7px;border:1px solid var(--line);border-radius:9px;margin-left:7px;font-weight:400}.comparison{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,600px),1fr));gap:12px;padding:12px}figure{margin:0;border:1px solid var(--line);border-radius:5px;overflow:hidden;align-self:start}figcaption{padding:9px 12px;background:var(--surface);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}figure img{display:block;width:100%;height:auto;background:#18212c}.missing{padding:16px;border:1px dashed var(--line);color:var(--muted)}footer{color:var(--muted);padding:14px 0}.scope{font-weight:600;color:#ffb382}@media(max-width:700px){main{padding:12px}h1{font-size:22px}.controls{align-items:flex-start;flex-direction:column}select{max-width:100%}}
+</style>
+</head>
+<body><main>
+<h1>Simple 1.4.12 · 버튼 배치 구현 화면</h1>
+<p class="scope">운영 Swing 화면 · 합성 패킷/API 예시 · Mapper 0.3.13</p>
+<p class="note">기본13개 화면과 보조3개 화면을 두 테마로 제공합니다. 현재·이전·승인 시안 이미지를 함께 포함해 오프라인에서도 비교할 수 있습니다. 실제 Windows Burp 본체 캡처와 구분하며, 예시 값은 실제 점검 결과가 아닙니다. 설명과 비교 제목은 제품 이미지 바깥에 표시합니다.</p>
+<p><a href="README.md">이미지 전체 목록</a> · <a href="../2026-10-31-button-layout-proposal/README.md">승인 시안</a> · <a href="../2026-10-31-numbered-guides/README.md">이전1.4.11</a></p>
+<div class="controls"><div class="segmented" aria-label="캡처 테마"><button type="button" data-theme="dark" aria-pressed="true">어두운 테마</button><button type="button" data-theme="light" aria-pressed="false">밝은 테마</button></div><label for="comparison-mode">비교 방식 </label><select id="comparison-mode"><option value="actual">현재 구현만</option><option value="before">이전1.4.11 / 현재 구현</option><option value="proposal">승인 시안 / 현재 구현</option></select></div>
+<nav aria-label="도구별 바로가기" id="toc"></nav>
+<div id="screens"></div>
+<section id="native-examples"><h2>실제 Linux 창 · 가이드</h2><p class="note">격리한 Linux Swing/창 관리자와 합성 Burp API·패킷으로 연 창입니다. 가이드 본문은 JAR에 포함한 합성 예시이며, 실제 Windows Burp 본체 검증과 구분합니다.</p><h3>Guide 화면별 원본 · 어두운 테마</h3><nav aria-label="Guide 화면별 이미지"><a href="images/guides/dark/guide-traffic.png" target="_blank" rel="noopener">요청·응답 목록</a><a href="images/guides/dark/guide-mapper.png" target="_blank" rel="noopener">기능 자동 매핑</a><a href="images/guides/dark/guide-js.png" target="_blank" rel="noopener">JS에서 API 찾기</a><a href="images/guides/dark/guide-environment.png" target="_blank" rel="noopener">서버·경로 탐색</a><a href="images/guides/dark/guide-exposure-search.png" target="_blank" rel="noopener">검색 노출 조사</a><a href="images/guides/dark/guide-exposure-cve.png" target="_blank" rel="noopener">CVE 후보</a><a href="images/guides/dark/guide-auth.png" target="_blank" rel="noopener">계정 권한 비교</a><a href="images/guides/dark/guide-response-recon.png" target="_blank" rel="noopener">응답 보안 분석</a><a href="images/guides/dark/guide-payload.png" target="_blank" rel="noopener">입력값 검사 · 요청 준비</a><a href="images/guides/dark/guide-data.png" target="_blank" rel="noopener">데이터 변환·비교</a><a href="images/guides/dark/guide-activity.png" target="_blank" rel="noopener">점검 진행 현황</a><a href="images/guides/dark/guide-bounty.png" target="_blank" rel="noopener">재현·증거 정리</a><a href="images/guides/dark/guide-dashboard.png" target="_blank" rel="noopener">점검 대시보드</a><a href="images/guides/dark/guide-payload-results.png" target="_blank" rel="noopener">입력값 검사 · 실행·결과</a><a href="images/guides/dark/guide-bounty-replay.png" target="_blank" rel="noopener">요청 재현</a><a href="images/guides/dark/guide-auth-accounts.png" target="_blank" rel="noopener">인증 후보 연결</a></nav><h3>버튼 배치 창 예시 · 두 테마</h3><nav aria-label="버튼 배치 실제 창"><a href="images/native-buttons/dark/01-traffic-settings.png" target="_blank" rel="noopener">요청·응답 목록 · 설정 메뉴 · 어두움</a><a href="images/native-buttons/light/01-traffic-settings.png" target="_blank" rel="noopener">요청·응답 목록 · 설정 메뉴 · 밝음</a><a href="images/native-buttons/dark/02-payload-prepare.png" target="_blank" rel="noopener">입력값 검사 · 요청 준비 · 어두움</a><a href="images/native-buttons/light/02-payload-prepare.png" target="_blank" rel="noopener">입력값 검사 · 요청 준비 · 밝음</a><a href="images/native-buttons/dark/03-payload-results.png" target="_blank" rel="noopener">입력값 검사 · 실행·결과 · 어두움</a><a href="images/native-buttons/light/03-payload-results.png" target="_blank" rel="noopener">입력값 검사 · 실행·결과 · 밝음</a></nav><h3>CVE · 1024px 좁은 창</h3><p><a href="images/cve-narrow/dark.png" target="_blank" rel="noopener">어두운 테마</a> · <a href="images/cve-narrow/light.png" target="_blank" rel="noopener">밝은 테마</a></p><p class="note">일반·최대화와 밝은 Guide 예시는 <a href="README.md">이미지 전체 목록</a>에서 확인합니다.</p></section>
+<footer>이미지를 누르거나 ‘원본 크기’를 선택하면 전체 크기로 엽니다. 승인 시안은 여러 도구가 함께 있는 디자인 이미지이며 실제 구현 캡처와 구분합니다.</footer>
+</main>
+<script>
+const screens=[{"id": "traffic", "title": "요청·응답 목록", "proposal": "01-traffic-layout.png", "description": "설정 진입점을 통합하고 선택 요청의 Repeater·증거·계정 비교 작업을 목록 옆에 묶었습니다.", "before": true, "supplement": false}, {"id": "mapper", "title": "기능 자동 매핑", "proposal": "03-analysis-tools.png", "description": "기능 편집은 트리 제목줄, 패킷 분류·Repeater는 목록 제목줄에 배치했습니다.", "before": true, "supplement": false}, {"id": "js", "title": "JS에서 API 찾기", "proposal": "03-analysis-tools.png", "description": "원본 위치·Repeater 준비를 선택한 API의 상세 영역으로 옮겼습니다.", "before": true, "supplement": false}, {"id": "environment", "title": "서버·경로 탐색", "proposal": "02-execution-tools.png", "description": "경로 확인과 후보 설정을 목록 옆에 묶고 일시정지·중지를 함께 표시합니다.", "before": true, "supplement": false}, {"id": "exposure-search", "title": "외부 노출 조사 · 검색 노출", "proposal": "04-management-tools.png", "description": "검색식의 실행·복사는 검색식 옆에, 결과 URL 가져오기는 결과 목록 옆에 배치했습니다.", "before": true, "supplement": false}, {"id": "exposure-cve", "title": "외부 노출 조사 · CVE 후보", "proposal": "02-execution-tools.png", "description": "조회·취소는 제품 선택 옆에, 출처·근거 작업은 선택 CVE 상세 옆에 배치했습니다.", "before": true, "supplement": false}, {"id": "auth", "title": "계정 권한 비교", "proposal": "02-execution-tools.png", "description": "계정 설정을 계정 요약 옆에 두고 비교·중지는 요청 목록 위에 고정했습니다.", "before": true, "supplement": false}, {"id": "response-recon", "title": "응답 보안 분석", "proposal": "03-analysis-tools.png", "description": "선택한 관찰을 증거로 연결하는 작업을 관찰 상세 영역으로 옮겼습니다.", "before": true, "supplement": false}, {"id": "payload", "title": "입력값 보안 검사 · 요청 준비", "proposal": "02-execution-tools.png", "description": "설정·검사 시작·중지를 묶고 요청 편집 작업을 요청 영역 제목줄에 배치했습니다.", "before": true, "supplement": false}, {"id": "data", "title": "데이터 변환·비교", "proposal": "03-analysis-tools.png", "description": "변환 방식·변환은 입력에, 출력→입력·복사는 출력에 배치했습니다.", "before": true, "supplement": false}, {"id": "activity", "title": "점검 진행 현황", "proposal": "04-management-tools.png", "description": "URL 완료와 입력 완료를 각 목록 위에, 근거·Repeater 초안을 선택 URL 옆에 배치했습니다.", "before": true, "supplement": false}, {"id": "bounty", "title": "재현·증거 정리", "proposal": "04-management-tools.png", "description": "문서 미리보기·저장은 상단에, 추가·이동·삭제·메모는 증거 목록에 배치했습니다.", "before": true, "supplement": false}, {"id": "dashboard", "title": "점검 대시보드", "proposal": "04-management-tools.png", "description": "상단 실행 정보를 압축하고 원본·Repeater·증거 버튼을 선택 결과 상세 제목줄에 배치했습니다.", "before": true, "supplement": false}, {"id": "payload-results", "title": "입력값 보안 검사 · 실행·결과", "proposal": "02-execution-tools.png", "description": "결과의 Repeater·증거 작업은 실행·결과 단계에서만 표시합니다.", "before": false, "supplement": true}, {"id": "bounty-replay", "title": "재현·증거 정리 · 요청 재현", "proposal": "04-management-tools.png", "description": "원본 추가·설정·직접 순차 실행과 선택 단계 원문을 확인하는 보조 화면입니다.", "before": false, "supplement": true}, {"id": "auth-accounts", "title": "계정 권한 비교 · 인증 후보 연결", "proposal": "02-execution-tools.png", "description": "관측한 인증 후보를 계정에 지정하는 보조 화면입니다.", "before": false, "supplement": true}];
+let theme='dark';
+const mode=document.getElementById('comparison-mode');
+const host=document.getElementById('screens');
+const toc=document.getElementById('toc');
+for(const screen of screens){const link=document.createElement('a');link.href='#'+screen.id;link.textContent=screen.title;toc.append(link);}
+function imageFigure(path,title,alt){
+ const figure=document.createElement('figure');
+ const caption=document.createElement('figcaption');
+ const label=document.createElement('span');label.textContent=title;
+ const full=document.createElement('a');full.href=path;full.target='_blank';full.rel='noopener';full.textContent='원본 크기';caption.append(label,full);
+ const link=document.createElement('a');link.href=path;link.target='_blank';link.rel='noopener';
+ const image=document.createElement('img');image.src=path;image.alt=alt;image.loading='lazy';link.append(image);figure.append(caption,link);return figure;
+}
+function render(){
+ const fragment=document.createDocumentFragment();
+ for(const screen of screens){
+  const article=document.createElement('article');article.id=screen.id;
+  const heading=document.createElement('header');const title=document.createElement('h2');title.textContent=screen.title;
+  if(screen.supplement){const badge=document.createElement('span');badge.className='supplement';badge.textContent='보조 화면';title.append(badge);}
+  const description=document.createElement('p');description.textContent=screen.description;heading.append(title,description);article.append(heading);
+  const comparison=document.createElement('div');comparison.className='comparison';
+  if(mode.value==='before'){
+   if(screen.before)comparison.append(imageFigure('images/before/'+theme+'/'+screen.id+'.png','이전1.4.11 · '+theme,screen.title+' 이전 화면'));
+   else {const missing=document.createElement('p');missing.className='missing';missing.textContent='이 보조 화면의 이전 비교 캡처는 제공하지 않습니다.';comparison.append(missing);}
+  }
+  if(mode.value==='proposal')comparison.append(imageFigure('images/proposals/'+screen.proposal,'승인 시안 · 미적용 디자인 이미지',screen.title+'의 배치 제안이 포함된 승인 시안'));
+  comparison.append(imageFigure('images/actual/'+theme+'/'+screen.id+'.png','현재1.4.12 · '+(theme==='dark'?'어두운 테마':'밝은 테마'),screen.title+' 실제 Swing 구현 예시'));
+  article.append(comparison);fragment.append(article);
+ }
+ host.replaceChildren(fragment);
+}
+for(const button of document.querySelectorAll('[data-theme]'))button.addEventListener('click',()=>{theme=button.dataset.theme;for(const sibling of document.querySelectorAll('[data-theme]'))sibling.setAttribute('aria-pressed',String(sibling===button));render();});
+mode.addEventListener('change',render);render();
+</script>
+</body></html>

@@ -106,28 +106,19 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     var content = new ScrollContent();
     name(content, "content");
     content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-    var title = new JLabel("SCOPE 통합 점검 대시보드");
-    title.putClientProperty("wb.font.size", 20);
-    title.putClientProperty("wb.font.heading", true);
-    var heading = new JPanel(new BorderLayout(12, 0));
-    heading.add(title);
     name(inspect, "inspect");
     inspect.addActionListener(e -> { if (!closed) actions.inspect(); });
     WorkbenchUi.primary(inspect);
-    heading.add(inspect, BorderLayout.EAST);
-    addSection(content, heading, 3);
-
     name(target, "target"); name(run, "run"); name(traffic, "traffic");
     target.setMinimumSize(new Dimension(0, 20));
-    var context = new JPanel(new GridLayout(3, 1, 0, 2));
-    context.add(target); context.add(run); context.add(traffic);
+    run.setMinimumSize(new Dimension(0, 20));
+    traffic.setMinimumSize(new Dimension(0, 20));
     traffic.setToolTipText("전송 / 요청 한도는 예산 사용량입니다. 처리 수에는 실패가 포함될 수 있으며 전체 사이트 점검률이 아닙니다.");
-    addSection(content, context, 2);
     name(account, "account"); name(reset, "reset");
     account.setRenderer(new DefaultListCellRenderer() {
       { putClientProperty("html.disable", true); }
     });
-    account.setPrototypeDisplayValue(new AccountChoice("전체 결과 계정 / 비교 계정"));
+    account.setPrototypeDisplayValue(new AccountChoice("전체 결과 계정 · 계정 이름"));
     account.addItem(new AccountChoice(""));
     account.addActionListener(e -> { if (!rebuilding && !closed) { refresh(true); revealResults(); } });
     reset.setToolTipText("선택 분류는 유지하고 계정·중요도 조건을 해제합니다.");
@@ -138,7 +129,14 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       finally { rebuilding = false; }
       refresh(true); revealResults();
     });
-    addSection(content, WorkbenchUi.row(new JLabel("계정"), account, reset), 4);
+    JPanel filters = WorkbenchUi.row(new JLabel("계정"), account, reset, inspect);
+    filters.setName("wb.actions.dashboard.filters");
+    JPanel context = CompactWorkbenchUi.toolbar(target, filters);
+    context.setName("wb.actions.dashboard.context");
+    addSection(content, context, 2);
+    JPanel metadata = CompactWorkbenchUi.toolbar(run, traffic);
+    metadata.setName("wb.actions.dashboard.metadata");
+    addSection(content, metadata, 4);
 
     name(metricGrid, "cards");
     for (var value : CARD_GROUPS) {
@@ -197,9 +195,14 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     evidence.addActionListener(e -> handoff(actions::evidence));
     var details = new JPanel(new BorderLayout(0, 6));
     details.add(new JScrollPane(detail));
-    details.add(WorkbenchUi.row(original, repeater, evidence), BorderLayout.SOUTH);
+    JPanel selectionActions = CompactWorkbenchUi.toolbar(
+        new JLabel("선택 항목 근거"), WorkbenchUi.row(original, repeater, evidence));
+    selectionActions.setName("wb.actions.dashboard.selection");
+    JPanel detailCard = WorkbenchUi.card("선택 항목 근거", details);
+    detailCard.remove(((BorderLayout) detailCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
+    detailCard.add(ReferenceUi.header(selectionActions, null), BorderLayout.NORTH);
     var split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
-        WorkbenchUi.card("해당 결과 목록", resultViews), WorkbenchUi.card("선택 항목 근거", details), .61);
+        WorkbenchUi.card("해당 결과 목록", resultViews), detailCard, .61);
     name(split, "results.split");
     split.setPreferredSize(new Dimension(850, 320));
     split.setMaximumSize(new Dimension(Integer.MAX_VALUE, 500));
@@ -297,6 +300,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     target.setText(present ? "SCOPE: " + ScopeInspectionAnalysis.safeUrl(next.target()) : "SCOPE: 아직 선택한 실행이 없습니다.");
     target.setToolTipText(target.getText());
     run.setText(present ? "최신 실행 상태: " + current.id() + "  ·  " + state(current.state()) : "현재 실행: 없음");
+    run.setToolTipText(run.getText());
     traffic.setText(present ? "최신 요청: 전송 " + current.sent() + " / 한도 " + next.budget()
         + "  ·  처리 " + current.completed() + "  ·  대기 " + current.pending()
         + "  ·  실패 " + current.failed() + "  ·  제외 " + current.excluded() : "요청 기록 없음");

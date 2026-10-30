@@ -1,0 +1,13 @@
+{
+  "dateKorea": "2026-10-31",
+  "artifact": "button-layout-proposal",
+  "proposalOnly": true,
+  "applicationSourceChanged": false,
+  "jarChanged": false,
+  "pngs": 4,
+  "screenDesigns": 13,
+  "pngDecodingVerified": true,
+  "manifestSha256Verified": true,
+  "zipCrcVerified": true,
+  "zipSha256": "f4c436e079f81d0ff0259170f1e0a565c1908b88810d5713688cfef02cfbf0c1"
+}

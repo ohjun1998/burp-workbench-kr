@@ -1,0 +1,2147 @@
+{
+  "metadata": {
+    "title": "Workbench Simple 1.4.0 화면 따라하기 가이드",
+    "subtitle": "번호·박스·화살표로 따라가는 Scope·Katana 점검과 8개 도구",
+    "productVersion": "1.4.0",
+    "helperVersion": "0.5.0",
+    "mapperVersion": "0.3.7",
+    "katanaVersion": "1.8.0",
+    "styleReference": {
+      "url": "https://chatgpt.com/share/6ae2bf94-c1fc-83ee-9efb-4f2adc5ad86a?ogimg=plain",
+      "title": "사용방법 가이드 템플릿 안내",
+      "applied": [
+        "화면 하나에 하나의 작업",
+        "번호·화살표·박스로 클릭·입력·읽을 위치 표시",
+        "이미지 아래 짧은 동작 설명과 예상 결과",
+        "중요 영역 확대",
+        "목차·검색·이전/다음·다크모드"
+      ]
+    },
+    "captureNote": "운영 Swing 캡처는 합성 예제 패킷을 넣어 렌더링한 화면입니다. 실제 Burp GUI를 조작한 캡처가 아닙니다. helper 그림은 실제 Chromium 운영 popup의 로컬 Chrome API·연결 fixture 화면이며 native MV3/DNR 설치·실제 Burp 연결과 구분합니다.",
+    "baseImageRoot": "simple/docs/images/1.4.0/light/1280x800",
+    "browserImageRoot": "simple/docs/images/1.4.0/browser",
+    "coreFlow": [
+      "Scope·HTTP 계정 선택",
+      "Katana·통합 점검 시작",
+      "주요정보·원본 확인",
+      "미확인 항목 정리·선택 재점검",
+      "원문 보고서·제출용 증거 저장"
+    ],
+    "existingArtifactsPreserved": true,
+    "preparation": [
+      "Burp Extensions → Add → Java에서 Simple 1.4.0 JAR를 추가합니다. 필요 시 helper 0.5.0과 외부 Katana 1.8.0도 준비합니다.",
+      "기존 JAR·프로젝트·설정·배포 파일은 보관합니다. 한 확장에서만 수집하려면 기존 Workbench 로드를 해제한 뒤 Simple을 사용합니다.",
+      "실행할 URL·허용 경로와 필요한 HTTP 계정, 요청·시간 한도를 정합니다.",
+      "브라우저 탐색은 선택 사항입니다. 사용할 브라우저 프로필에서 필요한 로그인을 미리 마칩니다."
+    ],
+    "readerKey": [
+      {
+        "type": "click",
+        "meaning": "번호가 가리키는 버튼·탭을 선택합니다."
+      },
+      {
+        "type": "input",
+        "meaning": "해당 위치에 값을 입력하거나 옵션을 선택합니다."
+      },
+      {
+        "type": "read",
+        "meaning": "표시된 결과·근거·상태를 읽습니다. 클릭을 요구하는 표시가 아닙니다."
+      }
+    ],
+    "reportFormats": [
+      {
+        "file": "report.html",
+        "use": "분류·값·원문 위치·원본 ID를 사람에게 읽기 좋게 검토합니다."
+      },
+      {
+        "file": "report.json",
+        "use": "파싱값 value, 원문 표기 rawText와 위치·응답 SHA 등 정확한 기계 값을 읽습니다."
+      },
+      {
+        "file": "values.csv",
+        "use": "표 형태로 검토합니다. 수식 실행을 막는 보호 문자가 일부 셀에 붙을 수 있습니다."
+      }
+    ],
+    "sourceReferences": [
+      "simple/README_KR.md",
+      "simple/docs/GUIDE_SIMPLE_KR.md",
+      "simple/tools/build_simple_guide.py",
+      "simple/tools/scope_guide_content.py",
+      "simple/tools/katana_guide_content.py",
+      "simple/docs/VERIFICATION_SIMPLE_1.4.0.json"
+    ],
+    "katanaInstallation": [
+      "독립 소스 ZIP을 푼 루트에서는 python tools/install_katana.py --dest <외부 설치 경로>를 실행합니다.",
+      "저장소 루트에서는 python simple/tools/install_katana.py --dest <외부 설치 경로>를 실행합니다.",
+      "공식 배포·SHA-256 확인 설치가 끝나면 출력된 실행 파일 경로를 실행 조건에 입력합니다."
+    ],
+    "browserInstallation": [
+      "helper 0.5.0 ZIP을 새 폴더에 풀고 manifest.json이 보이는 폴더를 준비합니다.",
+      "Chrome은 chrome://extensions, Edge는 edge://extensions에서 개발자 모드를 켭니다.",
+      "압축해제된 확장 로드로 해당 폴더를 선택합니다. 이것은 설치 절차이며 이 책에 native 설치 화면을 캡처했다고 주장하지 않습니다."
+    ],
+    "resultTerms": [
+      {
+        "term": "관측 / 추정 / 미확인",
+        "meaning": "실제 응답 단서, 문맥 기반 후보, 아직 확인하지 못한 상태를 구분합니다."
+      },
+      {
+        "term": "HTTP 200",
+        "meaning": "응답 상태 관측입니다. 공통 홈·로그인·soft404일 수 있으므로 내용 확인과 별개입니다."
+      },
+      {
+        "term": "DYNAMIC_UNRESOLVED / STATIC_FRAGMENT_UNRESOLVED",
+        "meaning": "동적 식 또는 정적 조각의 입력·호스트 등이 미해결입니다. 없는 값을 만들거나 자동 실행하지 않습니다."
+      },
+      {
+        "term": "PATH_SHAPE_ONLY",
+        "meaning": "정적 경로 형태의 일치 후보입니다. 변수·계정·권한·메뉴 인과를 확인한 결과가 아닙니다."
+      },
+      {
+        "term": "RESPONSE_PENDING_ANALYSIS",
+        "meaning": "응답 원본은 있으나 제품 분석 완료 전입니다. complete=false이며 원문 추출 성공으로 완료 처리하지 않습니다."
+      },
+      {
+        "term": "화면·이력 / 원문 분류 보고서 / 제출 증거",
+        "meaning": "화면·이력은 가린 요약, 분류 보고서는 원문 값 포함, 제출 증거는 가림 미리보기로 검토하는 별도 출력입니다."
+      }
+    ]
+  },
+  "chapters": [
+    "01 준비와 시작",
+    "02 브라우저 탐색 준비 · 선택",
+    "03 원터치 점검",
+    "04 주요정보 확인",
+    "05 미확인과 재점검",
+    "06 계정과 변경 이력",
+    "07 원문과 보고서",
+    "08 기존 도구 연결",
+    "09 제출용 증거"
+  ],
+  "steps": [
+    {
+      "id": "step-01",
+      "sourceImage": "00-start.png",
+      "captureKind": "swing",
+      "chapter": "01 준비와 시작",
+      "title": "Simple에서 필요한 도구를 엽니다",
+      "goal": "원터치 점검과 기존 8개 도구의 위치를 익힙니다.",
+      "actions": [
+        "Scope 통합 점검으로 원터치 화면을 엽니다. JAR 설치는 준비사항의 Burp Extensions 경로를 따릅니다.",
+        "개별 분석은 상단의 요청·응답부터 재현·증거까지 8개 도구를 바로 선택합니다."
+      ],
+      "expected": "Scope 통합 점검 버튼과 요청·응답부터 재현·증거까지 8개 도구가 보입니다.",
+      "troubleshooting": "Simple 탭이 없으면 Extensions의 로드 오류와 선택한 JAR 버전을 먼저 확인합니다.",
+      "note": "이 그림은 Simple 운영 컴포넌트 캡처입니다. Burp Extensions 설치 화면을 직접 캡처한 그림은 아닙니다. 도구 이동은 요청을 보내지 않습니다.",
+      "highlights": [
+        {
+          "label": "통합 점검 열기",
+          "role": "click",
+          "controlName": "wb.scope.inspection.open",
+          "actionIndex": 1,
+          "rect": [
+            1032,
+            15,
+            123,
+            32
+          ]
+        },
+        {
+          "label": "기존 8개 도구",
+          "role": "read",
+          "targetSpec": "상단 요청·응답부터 재현·증거까지 도구 버튼 행",
+          "actionIndex": 2,
+          "rect": [
+            19,
+            60,
+            1242,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/00-start.png",
+      "sourceImageSha256": "13480ac3bfa7c26e884ea0c47f29a8e44415d0cef2fc30d4932211bacd3647dc",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답"
+    },
+    {
+      "id": "step-02",
+      "sourceImage": "00-scope-editor.png",
+      "captureKind": "swing",
+      "chapter": "01 준비와 시작",
+      "title": "점검할 URL을 SCOPE에 등록합니다",
+      "goal": "실제 조회를 허용할 호스트·포트·경로를 정합니다.",
+      "actions": [
+        "SCOPE 목록의 URL 입력란에 점검할 호스트·포트·경로를 입력합니다.",
+        "URL 추가를 눌러 대상을 등록합니다. 기존 행을 고치려면 URL 수정을 사용합니다.",
+        "목록의 URL과 체크 상태를 확인합니다. 의도한 경로와 하위 범위만 허용했는지 읽습니다."
+      ],
+      "expected": "의도한 URL이 목록에 추가되고 수집·점검할 범위가 체크됩니다.",
+      "troubleshooting": "요청이 제외되면 프로토콜·호스트·포트·경로와 제외 범위를 다시 확인합니다. 필요한 리소스가 범위 밖이면 일부 메뉴 탐색이 제한될 수 있습니다.",
+      "note": "범위 편집은 요청을 보내지 않습니다. 이미지의 예제 주소를 실제 대상으로 그대로 사용하지 않습니다.",
+      "highlights": [
+        {
+          "label": "점검 URL 입력",
+          "role": "input",
+          "controlName": "wb.traffic.scope.url",
+          "actionIndex": 1,
+          "rect": [
+            47,
+            456,
+            840,
+            31
+          ]
+        },
+        {
+          "label": "목록에 등록",
+          "role": "click",
+          "controlName": "wb.traffic.scope.add",
+          "actionIndex": 2,
+          "rect": [
+            20,
+            500,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "범위 체크 확인",
+          "role": "read",
+          "targetSpec": "SCOPE URL 목록과 행 체크박스",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            87,
+            873,
+            38
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/00-scope-editor.png",
+      "sourceImageSha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        13,
+        50,
+        873,
+        75
+      ]
+    },
+    {
+      "id": "step-03",
+      "sourceImage": "12-inspection-setup.png",
+      "captureKind": "swing",
+      "chapter": "01 준비와 시작",
+      "title": "대상 URL과 HTTP 계정을 선택합니다",
+      "goal": "이번 실행의 대상과 인증 주체를 분명히 합니다.",
+      "actions": [
+        "SCOPE 목록에서 대상을 고르거나 URL을 입력합니다. 대상을 바꿨다면 목록 새로고침으로 계정 목록을 다시 확인합니다.",
+        "HTTP 계정을 선택합니다. 계정별 노출 비교가 필요하면 해당 옵션을 켜고 비교할 프로필을 준비합니다.",
+        "실행 조건에서 요청 수·깊이·간격·타임아웃·본문 분석 한도를 확인합니다."
+      ],
+      "expected": "점검 URL과 사용할 HTTP 계정, 실행할 탐색 옵션이 정해집니다.",
+      "troubleshooting": "인증 계정이 없으면 계정 비교에서 인증 탐지를 켜고 계정별 요청을 관측한 뒤 필요한 프로필을 준비합니다.",
+      "note": "통합 점검 시작 전에는 대상 요청을 보내지 않습니다. 일반 트래픽의 OFF/SCOPE 수집과 명시적 통합 점검은 별개입니다.",
+      "highlights": [
+        {
+          "label": "대상 URL",
+          "role": "input",
+          "controlName": "wb.scope.inspection.url",
+          "actionIndex": 1,
+          "rect": [
+            12,
+            58,
+            994,
+            43
+          ]
+        },
+        {
+          "label": "HTTP 계정",
+          "role": "input",
+          "controlName": "wb.scope.inspection.profile",
+          "actionIndex": 2,
+          "rect": [
+            1019,
+            63,
+            153,
+            34
+          ]
+        },
+        {
+          "label": "한도 확인",
+          "role": "click",
+          "controlName": "wb.scope.inspection.settings",
+          "actionIndex": 3,
+          "rect": [
+            1180,
+            63,
+            80,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/12-inspection-setup.png",
+      "sourceImageSha256": "1b1bcff2460c19c4882441492762d587eafe0d40d2376de4226ff15e6c745829",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        12,
+        58,
+        1248,
+        86
+      ]
+    },
+    {
+      "id": "step-04",
+      "sourceImage": "23-katana-settings.png",
+      "captureKind": "swing",
+      "chapter": "01 준비와 시작",
+      "title": "Katana 실행 파일과 한도를 확인합니다",
+      "goal": "별도 설치한 Katana 1.8.0을 Workbench 실행 조건에 연결합니다.",
+      "actions": [
+        "실행 조건에서 설치한 Katana 1.8.0 실행 파일을 선택하거나 전체 경로를 입력합니다.",
+        "설치 확인을 눌러 실행 파일의 버전·설치 상태를 읽습니다.",
+        "Katana 페이지 한도·수집 시간과 공통 HTTP 요청 예산을 확인합니다."
+      ],
+      "expected": "설치 확인 결과와 실행 파일 경로가 표시됩니다. 통합 점검의 Katana 탐색을 선택해 사용할 준비가 됩니다.",
+      "troubleshooting": "파일 없음·실행 실패가 표시되면 운영체제에 맞는 실행 파일과 접근 권한을 확인합니다. 실패는 Katana 수집 성공으로 표시되지 않습니다.",
+      "note": "Katana는 별도 설치합니다. 폼 제출·자동 로그인은 수행하지 않습니다. 공급자 버전 확인도 기본 설정 위치의 오래된 resume 자료를 정리할 수 있으므로 필요한 기존 자료는 먼저 보관합니다.",
+      "highlights": [
+        {
+          "label": "실행 파일 경로",
+          "role": "input",
+          "controlName": "wb.scope.inspection.katana.executable",
+          "actionIndex": 1,
+          "rect": [
+            171,
+            267,
+            475,
+            30
+          ]
+        },
+        {
+          "label": "설치 상태 확인",
+          "role": "click",
+          "controlName": "wb.scope.inspection.katana.check",
+          "actionIndex": 2,
+          "rect": [
+            742,
+            267,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "페이지·시간 한도",
+          "role": "input",
+          "targetSpec": "실행 조건의 Katana 페이지 한도와 수집 시간 입력 영역",
+          "actionIndex": 3,
+          "rect": [
+            16,
+            339,
+            381,
+            34
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/23-katana-settings.png",
+      "sourceImageSha256": "ba2d8c593246fd9cb842d9789560e7096e1ae88a2e6eb6307b510304ec1bacdc",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        16,
+        262,
+        811,
+        112
+      ]
+    },
+    {
+      "id": "step-05",
+      "sourceImage": "helper-connected.png",
+      "captureKind": "browser",
+      "chapter": "02 브라우저 탐색 준비 · 선택",
+      "title": "브라우저 helper를 연결합니다",
+      "goal": "SPA 탐색에 사용할 브라우저 프로필을 로컬 Workbench와 연결합니다.",
+      "actions": [
+        "기능 매핑의 브라우저 연결에서 확인한 주소·토큰을 helper 입력란에 넣습니다.",
+        "연결 확인·저장으로 로컬 연결을 확인하고 현재 사이트 활성화를 누릅니다.",
+        "SPA 통합 탐색 허용을 켭니다. 필요한 로그인은 이 브라우저에서 마칩니다."
+      ],
+      "expected": "연결 상태와 활성 사이트, 요청·응답·실패·대기 상태를 확인할 수 있습니다.",
+      "troubleshooting": "연결이 안 되면 Workbench의 연결 주소·토큰, 대상 사이트 활성화와 브라우저 확장 접근 권한을 확인합니다.",
+      "note": "브라우저 로그인 세션은 HTTP 점검 계정과 별개입니다. 이 그림은 실제 Chromium의 운영 popup에 로컬 Chrome API·연결 fixture를 적용한 캡처이며 native MV3 설치·실제 Burp 연결을 증명하지 않습니다.",
+      "highlights": [
+        {
+          "label": "주소·토큰 입력",
+          "role": "input",
+          "targetSpec": "helper popup의 연결 주소와 가려진 연결 토큰 입력란",
+          "actionIndex": 1,
+          "rect": [
+            17,
+            99,
+            351,
+            129
+          ]
+        },
+        {
+          "label": "로컬 연결 확인",
+          "role": "click",
+          "targetSpec": "helper popup의 연결 확인·저장 버튼",
+          "actionIndex": 2,
+          "rect": [
+            18,
+            237,
+            241,
+            38
+          ]
+        },
+        {
+          "label": "SPA 허용",
+          "role": "click",
+          "targetSpec": "helper popup의 SPA 통합 탐색 허용 체크박스",
+          "actionIndex": 3,
+          "rect": [
+            20,
+            390,
+            162,
+            24
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/browser/helper-connected.png",
+      "sourceImageSha256": "b0a28f0cc0e48355771da217bdaaf5624a50e4b202791698fa13019debb1c857",
+      "sourceCaption": "helper 운영 popup + Chrome API·연결 fixture",
+      "zoomBox": [
+        14,
+        231,
+        259,
+        187
+      ]
+    },
+    {
+      "id": "step-06",
+      "sourceImage": "21-inspection-browser.png",
+      "captureKind": "swing",
+      "chapter": "02 브라우저 탐색 준비 · 선택",
+      "title": "SPA 메뉴 탐색을 준비합니다",
+      "goal": "로그인된 전용 탐색 탭의 메뉴·라우트·통신 관측을 함께 수집합니다.",
+      "actions": [
+        "helper 준비를 마친 뒤 통합 점검의 SPA 메뉴 탐색을 선택합니다.",
+        "브라우저 메뉴 탭에서 연결·탐색 상태와 부분·대기 사유를 확인합니다.",
+        "연결이 필요하면 기능 매핑에서 브라우저 연결을 엽니다. 실제 탐색은 통합 점검 시작에서 실행합니다."
+      ],
+      "expected": "브라우저 연결과 메뉴 탐색 상태, 부분·대기 사유를 구분해서 읽을 수 있습니다.",
+      "troubleshooting": "범위 밖 스크립트·리소스가 차단되면 일부 메뉴가 열리지 않을 수 있습니다. URL 규칙으로 안전하게 표현할 수 없는 범위는 표시 사유를 읽고 HTTP 모드로 점검합니다.",
+      "note": "브라우저 요청·응답 연결은 메타데이터 관측입니다. 응답 본문 분석이나 선택한 HTTP 계정의 접근 성공을 대신하지 않습니다. 종료 시 남은 대기는 미확인입니다.",
+      "highlights": [
+        {
+          "label": "SPA 탐색 선택",
+          "role": "click",
+          "controlName": "wb.scope.inspection.browser.mode",
+          "actionIndex": 1,
+          "rect": [
+            453,
+            17,
+            112,
+            27
+          ]
+        },
+        {
+          "label": "연결 상태 확인",
+          "role": "read",
+          "targetSpec": "브라우저 메뉴 탭의 연결·탐색 상태 영역",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            71
+          ]
+        },
+        {
+          "label": "연결 설정 열기",
+          "role": "click",
+          "controlName": "wb.scope.inspection.browser.connect",
+          "actionIndex": 3,
+          "rect": [
+            20,
+            542,
+            193,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/21-inspection-browser.png",
+      "sourceImageSha256": "da0c0391f7a212b0664ab7c463a727f9bebc919e567876e2cf77e756512cefb3",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        252,
+        1251,
+        73
+      ]
+    },
+    {
+      "id": "step-07",
+      "sourceImage": "13-inspection-progress.png",
+      "captureKind": "swing",
+      "chapter": "03 원터치 점검",
+      "title": "통합 점검을 시작하고 진행을 제어합니다",
+      "goal": "같은 실행에서 발견·조회·분석의 진행 상태를 확인합니다.",
+      "actions": [
+        "시작 전 상태에서 대상·HTTP 계정·탐색 옵션을 확인하고 통합 점검 시작을 누릅니다.",
+        "필요하면 일시정지·재개·중지로 진행을 제어합니다.",
+        "하단의 요청·확인·대기·제외·실패·부분 수와 현재 실행 상태를 읽습니다."
+      ],
+      "expected": "실행 상태와 누적 수치가 표시됩니다. 세션·요청 제한 등으로 보류되면 사유가 남습니다.",
+      "troubleshooting": "401 신원 실패나 429로 멈추면 계정·세션·제한 사유를 보완합니다. Scope·프로젝트가 달라졌다면 새 실행을 준비합니다.",
+      "note": "시작은 실제 조회 요청을 전송합니다. 이 그림은 이미 실행 중이어서 시작 버튼이 비활성입니다. 큐 완료는 사이트 전체 확인 완료와 다르며, 중지는 이미 발송한 요청의 응답 또는 타임아웃 뒤 마무리될 수 있습니다.",
+      "highlights": [
+        {
+          "label": "점검 실행",
+          "role": "click",
+          "controlName": "wb.scope.inspection.start",
+          "actionIndex": 1,
+          "rect": [
+            20,
+            113,
+            110,
+            32
+          ]
+        },
+        {
+          "label": "진행 제어",
+          "role": "click",
+          "targetSpec": "일시정지·재개·중지 버튼 행",
+          "actionIndex": 2,
+          "rect": [
+            137,
+            113,
+            193,
+            32
+          ]
+        },
+        {
+          "label": "실행 상태 읽기",
+          "role": "read",
+          "targetSpec": "화면 하단 요청·확인·대기·제외·실패·부분 상태줄",
+          "actionIndex": 3,
+          "rect": [
+            12,
+            750,
+            850,
+            23
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/13-inspection-progress.png",
+      "sourceImageSha256": "e8f4851a6f187c43829b4ea4d9674b12593e4f2fa39f8e954bde958c9adf212e",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        12,
+        745,
+        1000,
+        45
+      ]
+    },
+    {
+      "id": "step-08",
+      "sourceImage": "24-katana-results.png",
+      "captureKind": "swing",
+      "chapter": "03 원터치 점검",
+      "title": "Katana 수집 결과의 출처를 읽습니다",
+      "goal": "발견 메타데이터와 실제 응답 확인을 구분합니다.",
+      "actions": [
+        "Katana 수집 탭을 열고 수집 상태를 확인합니다.",
+        "결과 표에서 HTML·JS·폼·기술 등 발견 출처와 후보를 선택합니다.",
+        "아래 상세에서 차단·실패·미확인 사유를 읽고 실제 응답 원본과 연결됐는지 확인합니다."
+      ],
+      "expected": "각 후보의 발견 출처와 현재 처리 범위를 확인할 수 있습니다. 응답이 연결된 항목은 원본으로 이어집니다.",
+      "troubleshooting": "Katana가 실패했어도 일반 HTTP 점검 결과는 별도로 남을 수 있습니다. 실패 이유와 두 결과의 범위를 각각 확인합니다.",
+      "note": "JSONL에 경로·폼이 있다고 자동 재조회·폼 제출된 것은 아닙니다. Katana 종료와 사이트 전체 확인 완료를 구분합니다.",
+      "highlights": [
+        {
+          "label": "수집 결과 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 Katana 수집",
+          "actionIndex": 1,
+          "rect": [
+            905,
+            226,
+            98,
+            25
+          ]
+        },
+        {
+          "label": "출처·상태 확인",
+          "role": "read",
+          "targetSpec": "Katana 수집 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            323,
+            1251,
+            145
+          ]
+        },
+        {
+          "label": "사유·근거 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/24-katana-results.png",
+      "sourceImageSha256": "307f7e7b4c8929e2b3570505a5134438713309093c5d05988ddf4f069a7f91d1",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        15,
+        357,
+        1248,
+        112
+      ]
+    },
+    {
+      "id": "step-09",
+      "sourceImage": "14-inspection-environment.png",
+      "captureKind": "swing",
+      "chapter": "04 주요정보 확인",
+      "title": "서버·WAS·DB 단서의 근거를 읽습니다",
+      "goal": "환경 이름과 실제 관측 근거를 함께 확인합니다.",
+      "actions": [
+        "환경·DB 탭을 엽니다.",
+        "서버·WAS·프레임워크·프록시/CDN·DB 단서를 선택합니다.",
+        "상세에서 헤더·오류·설정 값의 출처, 원문 위치와 관측·추정·미확인 상태를 확인합니다."
+      ],
+      "expected": "기술 이름과 근거, 관측·추정·미확인 상태가 함께 표시됩니다.",
+      "troubleshooting": "서로 다른 기술이 보이면 프록시·오류 페이지 등 각 원본의 문맥을 확인합니다. 근거가 없으면 미확인으로 남깁니다.",
+      "note": "DB 단서는 HTTP 응답에서 관측한 정보입니다. DB 서버에 직접 연결하거나 제품·버전의 실제 구성을 확정하는 결과가 아닙니다.",
+      "highlights": [
+        {
+          "label": "환경·DB 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 환경·DB",
+          "actionIndex": 1,
+          "rect": [
+            61,
+            226,
+            69,
+            25
+          ]
+        },
+        {
+          "label": "기술 단서 선택",
+          "role": "read",
+          "targetSpec": "환경·DB 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            327
+          ]
+        },
+        {
+          "label": "원문 근거 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/14-inspection-environment.png",
+      "sourceImageSha256": "9e2f9af1217be4d6654f3aad84d922825e6407034c3f3de16a89263273c443cd",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        589,
+        1100,
+        105
+      ]
+    },
+    {
+      "id": "step-10",
+      "sourceImage": "15-inspection-paths.png",
+      "captureKind": "swing",
+      "chapter": "04 주요정보 확인",
+      "title": "주요 경로의 실제 응답을 확인합니다",
+      "goal": "관측 경로·문서 선언·기술 추정 후보를 나누어 읽습니다.",
+      "actions": [
+        "경로·응답 탭을 엽니다.",
+        "경로별 HTTP 상태·분류·분석 범위를 읽고 공통 홈·로그인·soft404·접근 제한을 구분합니다.",
+        "필요한 행을 고르고 원본 보기로 실제 응답 내용을 확인합니다."
+      ],
+      "expected": "경로별 실제 응답과 분석 범위, 제외·미확인 이유를 확인할 수 있습니다.",
+      "troubleshooting": "HTTP 200만 표시되면 원문이 해당 경로의 내용인지 확인합니다. 로그인·공통 화면이거나 대조가 불안정하면 내용 확인을 보류합니다.",
+      "note": "경로 이름이나 상태 코드만으로 실제 노출·취약점을 확정하지 않습니다.",
+      "highlights": [
+        {
+          "label": "경로·응답 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 경로·응답",
+          "actionIndex": 1,
+          "rect": [
+            130,
+            226,
+            77,
+            25
+          ]
+        },
+        {
+          "label": "응답 분류 확인",
+          "role": "read",
+          "targetSpec": "경로·응답 결과 표의 HTTP·분류·분석 범위 열",
+          "actionIndex": 2,
+          "rect": [
+            776,
+            253,
+            489,
+            327
+          ]
+        },
+        {
+          "label": "원문 열기",
+          "role": "click",
+          "controlName": "wb.scope.inspection.original",
+          "actionIndex": 3,
+          "rect": [
+            20,
+            710,
+            80,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/15-inspection-paths.png",
+      "sourceImageSha256": "72ea887857d06e2240cb6d53bf85ff77c4f15442ef4c1a8170f1989728f49dc2",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        776,
+        253,
+        488,
+        288
+      ]
+    },
+    {
+      "id": "step-11",
+      "sourceImage": "16-inspection-api.png",
+      "captureKind": "swing",
+      "chapter": "04 주요정보 확인",
+      "title": "API 문서·JS·실제 관측을 대조합니다",
+      "goal": "선언한 API와 실제 응답이 있는 API의 차이를 찾습니다.",
+      "actions": [
+        "API·명세 대조 탭을 엽니다.",
+        "문서 선언·JS 후보·실제 관측 출처를 읽고 문서에만 있는 항목과 실제 응답 항목을 구분합니다.",
+        "미확정 메서드·경로 변수·필수값은 원본을 확인하고 필요하면 API 찾기로 연결합니다."
+      ],
+      "expected": "문서에만 있는 항목과 실제 관측 항목, 미해결 템플릿을 구분할 수 있습니다.",
+      "troubleshooting": "동적 API가 실행되지 않으면 누락된 메서드·입력값·서버 식을 확인합니다. 값을 추측해 자동 전송하지 않습니다.",
+      "note": "명시적으로 참조된 Scope 내 sourceMappingURL은 제한된 후보로 처리합니다. 추정 .map 파일을 만들거나 미해결 식을 평가하지 않습니다.",
+      "highlights": [
+        {
+          "label": "API 대조 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 API·명세 대조",
+          "actionIndex": 1,
+          "rect": [
+            207,
+            226,
+            102,
+            25
+          ]
+        },
+        {
+          "label": "출처·상태 확인",
+          "role": "read",
+          "targetSpec": "API·명세 대조 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            327
+          ]
+        },
+        {
+          "label": "추가 분석 준비",
+          "role": "click",
+          "controlName": "wb.scope.inspection.js",
+          "actionIndex": 3,
+          "rect": [
+            435,
+            710,
+            88,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/16-inspection-api.png",
+      "sourceImageSha256": "b4816546f92f31b18c8daa017ed255597bd16b8d72956ad8fc889b5e72816c00",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        589,
+        1100,
+        105
+      ]
+    },
+    {
+      "id": "step-12",
+      "sourceImage": "17-inspection-secrets.png",
+      "captureKind": "swing",
+      "chapter": "04 주요정보 확인",
+      "title": "키·토큰·민감정보 후보를 검토합니다",
+      "goal": "가려진 값의 분류·중요도·확실성과 원문 문맥을 확인합니다.",
+      "actions": [
+        "키·민감정보 탭을 엽니다.",
+        "API 키·토큰·비밀번호·연결정보·개인정보 후보를 선택하고 가림 상태와 분류를 읽습니다.",
+        "상세에서 중요도·확실성·유효성 확인 상태와 원문 위치·문맥을 확인합니다."
+      ],
+      "expected": "화면의 값은 가려진 상태로 표시되며 중요도·확실성·유효성 확인 상태를 별도로 읽을 수 있습니다.",
+      "troubleshooting": "형식이 키와 같아도 공개 SDK 식별자나 예제 값일 수 있습니다. 원문 문맥과 분류를 확인합니다.",
+      "note": "발견한 키를 자동 사용하거나 외부 공급자에 보내 유효성을 검사하지 않습니다. 탐지 건수는 취약점 개수가 아닙니다.",
+      "highlights": [
+        {
+          "label": "민감정보 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 키·민감정보",
+          "actionIndex": 1,
+          "rect": [
+            309,
+            226,
+            90,
+            25
+          ]
+        },
+        {
+          "label": "후보·가림 확인",
+          "role": "read",
+          "targetSpec": "키·민감정보 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            145
+          ]
+        },
+        {
+          "label": "탐지 문맥 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/17-inspection-secrets.png",
+      "sourceImageSha256": "97769b9e13b35e6b9970e5d2e14946e6f4282f6929164cfc7a1049743fbec85b",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        589,
+        1100,
+        105
+      ]
+    },
+    {
+      "id": "step-13",
+      "sourceImage": "27-inspection-filter.png",
+      "captureKind": "swing",
+      "chapter": "04 주요정보 확인",
+      "title": "주요정보에 집중하고 결과를 검색합니다",
+      "goal": "현재 수집한 결과를 근거 종류에 맞게 좁혀 읽습니다.",
+      "actions": [
+        "결과 보기에서 주요정보를 선택합니다. 필요하면 미해결·예시·쿠키 등 다른 필터로 바꿉니다.",
+        "검색란에 경로·계정·가려진 결과·원본 ID를 입력하고 표시 건수를 읽습니다.",
+        "필터 초기화로 전체 결과에 돌아갑니다."
+      ],
+      "expected": "필터 조건에 맞는 행과 표시/전체 건수가 보입니다.",
+      "troubleshooting": "결과가 없어졌다면 검색어와 필터를 확인한 뒤 필터 초기화로 전체 결과를 다시 읽습니다.",
+      "note": "필터·검색은 현재 결과만 정리하며 요청을 보내지 않습니다. 주요정보 분류도 비인가 노출을 확정하는 판정은 아닙니다.",
+      "highlights": [
+        {
+          "label": "근거 종류 선택",
+          "role": "input",
+          "controlName": "wb.scope.inspection.result.filter",
+          "actionIndex": 1,
+          "rect": [
+            83,
+            163,
+            122,
+            32
+          ]
+        },
+        {
+          "label": "결과 검색",
+          "role": "input",
+          "controlName": "wb.scope.inspection.result.search",
+          "actionIndex": 2,
+          "rect": [
+            212,
+            163,
+            307,
+            32
+          ]
+        },
+        {
+          "label": "전체 결과 복귀",
+          "role": "click",
+          "controlName": "wb.scope.inspection.result.filter.clear",
+          "actionIndex": 3,
+          "rect": [
+            527,
+            163,
+            93,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/27-inspection-filter.png",
+      "sourceImageSha256": "be32f0c72446eaf2127c5148d856087d4c185f466f7035589c776e3200020260",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        18,
+        158,
+        713,
+        40
+      ]
+    },
+    {
+      "id": "step-14",
+      "sourceImage": "26-inspection-routes.png",
+      "captureKind": "swing",
+      "chapter": "05 미확인과 재점검",
+      "title": "경로별 발견부터 분석까지 추적합니다",
+      "goal": "발견 문자열과 실제 전송·응답·분석의 차이를 확인합니다.",
+      "actions": [
+        "탐색 커버리지 탭을 엽니다.",
+        "경로를 선택하고 발견 출처·계정·메서드·처리 상태와 실제 HTTP를 읽습니다.",
+        "상세에서 발견 → Scope → 큐 → 전송 → 응답 → 분석의 보유 근거와 미방문 사유를 확인합니다."
+      ],
+      "expected": "각 경로가 어느 단계까지 처리됐는지와 원본 연결을 확인할 수 있습니다.",
+      "troubleshooting": "실제 HTTP 값이 없다면 해당 행을 접근 성공으로 보지 말고 미방문·미해결 사유부터 확인합니다.",
+      "note": "브라우저 응답 메타데이터와 HTTP 계정의 본문 분석은 다릅니다. 401·부분 분석·변수 미해결을 성공으로 바꾸지 않습니다.",
+      "highlights": [
+        {
+          "label": "탐색 커버리지",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 탐색 커버리지",
+          "actionIndex": 1,
+          "rect": [
+            592,
+            226,
+            104,
+            25
+          ]
+        },
+        {
+          "label": "처리 상태·HTTP",
+          "role": "read",
+          "targetSpec": "탐색 커버리지 결과 표의 처리 상태와 실제 HTTP 열",
+          "actionIndex": 2,
+          "rect": [
+            704,
+            332,
+            559,
+            230
+          ]
+        },
+        {
+          "label": "처리 이력 상세",
+          "role": "read",
+          "targetSpec": "선택 경로 아래 발견·Scope·큐·요청·응답·분석 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/26-inspection-routes.png",
+      "sourceImageSha256": "bfbe4c576c4339ea295b1d5540e077efdbb61741970c322fad924b064447fd2a",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        13,
+        589,
+        1100,
+        106
+      ]
+    },
+    {
+      "id": "step-15",
+      "sourceImage": "20-inspection-coverage.png",
+      "captureKind": "swing",
+      "chapter": "05 미확인과 재점검",
+      "title": "미확인·제외·실패 사유를 정리합니다",
+      "goal": "자동 점검이 확인하지 못한 부분을 다음 작업으로 남깁니다.",
+      "actions": [
+        "미확인·범위 탭을 엽니다.",
+        "대기·범위 제외·실패·부분 분석 항목을 선택합니다.",
+        "상세에서 Scope·메서드·대용량·분석 한도 등 사유와 다음 확인에 필요한 조건을 읽습니다."
+      ],
+      "expected": "완료와 별도로 미검사·제외·실패의 근거가 남습니다.",
+      "troubleshooting": "대형 응답은 분석 바이트 한도와 실제 수신 상태를 각각 확인합니다. 미검사를 정상 결과에 합산하지 않습니다.",
+      "note": "중지 직전 수신한 원본은 RESPONSE_PENDING_ANALYSIS·complete=false로 남을 수 있습니다. 원문 추출 성공도 제품 분석 완료를 뜻하지 않습니다.",
+      "highlights": [
+        {
+          "label": "미확인·범위 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 미확인·범위",
+          "actionIndex": 1,
+          "rect": [
+            696,
+            226,
+            89,
+            25
+          ]
+        },
+        {
+          "label": "제외·실패 항목",
+          "role": "read",
+          "targetSpec": "미확인·범위 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            327
+          ]
+        },
+        {
+          "label": "사유와 조건 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/20-inspection-coverage.png",
+      "sourceImageSha256": "413559e6ef6985f6bea9c43cfd6fb2a050d3499516b7a30432b8fab6a3e11097",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        13,
+        589,
+        1100,
+        106
+      ]
+    },
+    {
+      "id": "step-16",
+      "sourceImage": "28-inspection-recheck.png",
+      "captureKind": "swing",
+      "chapter": "05 미확인과 재점검",
+      "title": "가능한 항목만 선택해 조회 재점검합니다",
+      "goal": "같은 실행의 남은 예산으로 필요한 조회만 다시 확인합니다.",
+      "actions": [
+        "대기열 처리 완료 또는 중지 뒤 탐색 커버리지의 필터에서 미확인·재점검을 선택합니다.",
+        "Ctrl 또는 Shift로 필요한 행을 선택하고 재점검 가능 여부와 사유를 읽습니다.",
+        "가능한 경우 선택 조회 재점검을 누릅니다. 조건이 바뀌었거나 예산이 끝났다면 새 점검을 준비합니다."
+      ],
+      "expected": "선택한 안전 조회만 같은 실행·현재 Scope·HTTP 계정·남은 예산으로 처리됩니다.",
+      "troubleshooting": "버튼이 비활성이면 실행·Scope·계정·남은 예산과 선택 행의 재점검 사유를 확인합니다. 이 합성 캡처에서는 실행기를 시작하지 않아 버튼이 비활성입니다.",
+      "note": "재점검은 실제 조회 요청을 전송합니다. 권한 거부·쓰기 요청·미해결 필수값을 자동 우회하거나 추측하지 않습니다.",
+      "highlights": [
+        {
+          "label": "재점검 필터",
+          "role": "input",
+          "controlName": "wb.scope.inspection.routes.filter",
+          "actionIndex": 1,
+          "rect": [
+            20,
+            257,
+            109,
+            33
+          ]
+        },
+        {
+          "label": "필요한 행 선택",
+          "role": "click",
+          "targetSpec": "탐색 커버리지 결과 표에서 재점검 후보 행",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            440,
+            1233,
+            36
+          ]
+        },
+        {
+          "label": "선택 조회 실행",
+          "role": "click",
+          "controlName": "wb.scope.inspection.routes.recheck",
+          "actionIndex": 3,
+          "rect": [
+            137,
+            257,
+            125,
+            33
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/28-inspection-recheck.png",
+      "sourceImageSha256": "b2ae68b629900520aaacc67b9c02759a0325809e05ee37107785e2f6a7dfb004",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        437,
+        1248,
+        40
+      ]
+    },
+    {
+      "id": "step-17",
+      "sourceImage": "29-inspection-correlations.png",
+      "captureKind": "swing",
+      "chapter": "05 미확인과 재점검",
+      "title": "동적 API의 경로 형태 후보를 읽습니다",
+      "goal": "미해결 템플릿과 실제 관측 주소의 정적 형태를 비교합니다.",
+      "actions": [
+        "탐색 커버리지의 필터에서 형태 일치 후보를 선택하고 필요한 행을 고릅니다.",
+        "상세의 선언 템플릿과 관측 주소 각각에 대해 계정·인증 revision·HTTP·원본을 확인합니다."
+      ],
+      "expected": "PATH_SHAPE_ONLY 연결의 두 출처와 비교 근거를 따로 읽을 수 있습니다.",
+      "troubleshooting": "연결이 없다고 경로가 없다고 판단하지 않습니다. 쿼리·fragment·구조 미확정이나 표시 한도 때문에 제외될 수 있습니다.",
+      "note": "형태 일치는 변수 복원·같은 계정·동일 권한·메뉴 동작 인과를 증명하지 않습니다. 후보를 표시할 때 새 요청이나 식 평가는 없습니다.",
+      "highlights": [
+        {
+          "label": "형태 일치 선택",
+          "controlName": "wb.scope.inspection.routes.filter",
+          "role": "input",
+          "actionIndex": 1,
+          "rect": [
+            20,
+            257,
+            109,
+            33
+          ]
+        },
+        {
+          "label": "선언·관측 구분",
+          "role": "read",
+          "targetSpec": "아래 상세의 PATH_SHAPE_ONLY 선언 템플릿과 관측 주소·계정·원본 영역",
+          "actionIndex": 2,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/29-inspection-correlations.png",
+      "sourceImageSha256": "d1a4deeee3f0c3acfa0c5b9fb61a5c512f1c77875b0abda9a34d1bd644042a4d",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        619,
+        1237,
+        77
+      ]
+    },
+    {
+      "id": "step-18",
+      "sourceImage": "18-inspection-access.png",
+      "captureKind": "swing",
+      "chapter": "06 계정과 변경 이력",
+      "title": "같은 경로의 계정별 응답 차이를 읽습니다",
+      "goal": "차이의 원인이 권한인지 세션·내용 변화인지 검토합니다.",
+      "actions": [
+        "계정별 노출 비교를 선택해 실행한 뒤 계정별 차이 탭을 엽니다.",
+        "항목을 골라 비로그인·HTTP 계정별 응답과 세션 확인 근거를 읽습니다.",
+        "정책 검증이 필요하면 계정 비교 준비로 연결합니다."
+      ],
+      "expected": "계정별 응답 차이와 확인·보류된 근거가 표시됩니다.",
+      "troubleshooting": "401이 보이면 해당 경로 응답과 신원·비로그인 대조 원본을 확인합니다. 신원이 유지돼도 그 경로의 권한은 별도 확인이 필요합니다.",
+      "note": "응답 차이만으로 권한 우회를 확정하지 않습니다. 브라우저의 로그인 계정은 여기의 HTTP 계정과 별개입니다.",
+      "highlights": [
+        {
+          "label": "계정별 차이 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 계정별 차이",
+          "actionIndex": 1,
+          "rect": [
+            502,
+            226,
+            90,
+            25
+          ]
+        },
+        {
+          "label": "차이와 세션 근거",
+          "role": "read",
+          "targetSpec": "계정별 차이 결과 표와 아래 상세",
+          "actionIndex": 2,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        },
+        {
+          "label": "정책 비교 준비",
+          "role": "click",
+          "controlName": "wb.scope.inspection.compare",
+          "actionIndex": 3,
+          "rect": [
+            229,
+            710,
+            110,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/18-inspection-access.png",
+      "sourceImageSha256": "8d05e7e852430cbb21c169a4dfafb8c767ad9a4b3d643bae5a8349564b2a32bf",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        589,
+        1100,
+        105
+      ]
+    },
+    {
+      "id": "step-19",
+      "sourceImage": "19-inspection-changes.png",
+      "captureKind": "swing",
+      "chapter": "06 계정과 변경 이력",
+      "title": "같은 조건의 이전 실행과 비교합니다",
+      "goal": "새 발견과 변경 후보를 구분하고 불완전 실행의 한계를 남깁니다.",
+      "actions": [
+        "같은 프로젝트·Origin·HTTP 계정·실행 조건으로 재점검한 뒤 이전 실행과 비교를 엽니다.",
+        "새 경로·API·키 지문·응답 변경과 해결 후보를 선택합니다.",
+        "상세의 비교 조건과 마스킹된 이력·지문을 읽습니다."
+      ],
+      "expected": "비교할 수 있는 실행끼리 마스킹된 이력과 지문 차이가 표시됩니다.",
+      "troubleshooting": "계정·Scope·조건·인증 revision이 달라 비교가 보류되면 조건을 맞춰 새 실행을 준비합니다. 1.4.0 첫 실행은 변경된 분석 규칙의 새 기준입니다.",
+      "note": "중지·실패·부분 실행으로 이전 발견의 해결을 확정하지 않습니다. 과거 요약 이력은 현재 세션 원본과 다릅니다.",
+      "highlights": [
+        {
+          "label": "이전 실행 비교",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 이전 실행과 비교",
+          "actionIndex": 1,
+          "rect": [
+            785,
+            226,
+            120,
+            25
+          ]
+        },
+        {
+          "label": "변경 후보 선택",
+          "role": "click",
+          "targetSpec": "이전 실행과 비교 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            289,
+            1251,
+            37
+          ]
+        },
+        {
+          "label": "비교 조건 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 비교 조건·이력 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/19-inspection-changes.png",
+      "sourceImageSha256": "eb24425d596583dd897db391e8ba4e2f1bfbc6ef9dd694989630fa18722fe6db",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        14,
+        589,
+        1100,
+        105
+      ]
+    },
+    {
+      "id": "step-20",
+      "sourceImage": "22-inspection-original.png",
+      "captureKind": "swing",
+      "chapter": "07 원문과 보고서",
+      "title": "발견 항목의 요청·응답 원본을 읽습니다",
+      "goal": "결과의 원본 보기를 열어 같은 OriginalID의 원문과 파싱 위치를 대조합니다.",
+      "actions": [
+        "원본 보기의 요청 본문과 표시 형식을 읽습니다.",
+        "응답 본문에서 탐지 문맥을 확인합니다. 앞 64 KiB 밖은 더 보기 버튼으로 전체 편집기에서 읽습니다.",
+        "응답 검색으로 필요한 문자열을 찾습니다. Pretty/Raw/Hex를 바꿔 문맥을 대조할 수 있습니다."
+      ],
+      "expected": "선택 결과의 불변 원본 ID에 연결된 요청·응답을 확인할 수 있습니다.",
+      "troubleshooting": "과거 이력의 원본이 현재 세션에 없으면 현재 원본으로 열 수 없습니다. 같은 원본 창을 더 열 수 없으면 기존 창을 닫고 다시 엽니다.",
+      "note": "본문 줄·문자 위치는 분석한 텍스트 기준이며 원시 패킷 바이트 위치와 다를 수 있습니다. 원본을 읽는 동작은 추가 요청을 보내지 않습니다.",
+      "highlights": [
+        {
+          "label": "요청 원문 읽기",
+          "role": "read",
+          "targetSpec": "원본 보기 창의 요청 본문 영역",
+          "actionIndex": 1,
+          "rect": [
+            24,
+            96,
+            580,
+            71
+          ]
+        },
+        {
+          "label": "응답 원문 읽기",
+          "role": "read",
+          "targetSpec": "원본 보기 창의 응답 본문 영역",
+          "actionIndex": 2,
+          "rect": [
+            667,
+            96,
+            589,
+            217
+          ]
+        },
+        {
+          "label": "응답 검색",
+          "role": "input",
+          "controlName": "wb.scope.inspection.original.response.search",
+          "actionIndex": 3,
+          "rect": [
+            697,
+            766,
+            368,
+            28
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/22-inspection-original.png",
+      "sourceImageSha256": "dc0cf1ac1788e9cc930ce87c37ad6b743dc7a9599c7c3813121f92c097f169b8",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        667,
+        191,
+        590,
+        121
+      ]
+    },
+    {
+      "id": "step-21",
+      "sourceImage": "25-inspection-report.png",
+      "captureKind": "swing",
+      "chapter": "07 원문과 보고서",
+      "title": "원문 값 분류 보고서를 저장합니다",
+      "goal": "API·키·토큰·민감정보를 값과 원문 근거별로 내보냅니다.",
+      "actions": [
+        "완료 또는 중지 뒤 분류 보고서 저장을 눌러 새 ZIP의 위치를 선택합니다.",
+        "하단의 저장 완료를 확인합니다. ZIP의 report.html로 검토하고 정확한 기계 값은 report.json으로 읽습니다."
+      ],
+      "expected": "새 ZIP이 저장되고 완료 상태가 표시됩니다. JSON에서 정확한 값·원문 위치·응답 SHA를 확인할 수 있습니다.",
+      "troubleshooting": "저장이 안 되면 현재 실행의 원본 유무와 새 파일 경로를 확인합니다. 한도·원본 누락·부분 분석 사유는 보고서에도 남습니다.",
+      "note": "분류 보고서에는 원문 값이 포함됩니다. 화면·이력의 가림이나 제출용 증거 ZIP과 별개입니다. 이 그림은 저장 완료 UI이며 실제 보고서 내용 화면은 아닙니다.",
+      "highlights": [
+        {
+          "label": "원문 보고서 저장",
+          "role": "click",
+          "controlName": "wb.scope.inspection.report",
+          "actionIndex": 1,
+          "rect": [
+            338,
+            113,
+            123,
+            32
+          ]
+        },
+        {
+          "label": "저장 완료 확인",
+          "role": "read",
+          "targetSpec": "하단 분류 보고서 저장 완료 상태줄",
+          "actionIndex": 2,
+          "rect": [
+            12,
+            771,
+            650,
+            23
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/25-inspection-report.png",
+      "sourceImageSha256": "a3d1588d176ec37d082e771ccdf010df4fc2a3e787ff1c1616d29e4f1edfb0d9",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        12,
+        748,
+        1000,
+        45
+      ]
+    },
+    {
+      "id": "step-22",
+      "sourceImage": "01-capture.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "SCOPE 트래픽 수집을 켭니다",
+      "goal": "직접 사용하는 사이트의 요청·응답을 도구에 연결합니다.",
+      "actions": [
+        "요청·응답 수집을 OFF에서 SCOPE로 바꿉니다.",
+        "Burp 프록시를 거쳐 사이트를 사용하고 목록에 허용 범위의 요청이 나타나는지 확인합니다.",
+        "목록 고정은 화면 갱신만 멈춥니다. 수집 중지와 구분해 사용합니다."
+      ],
+      "expected": "허용 범위의 새 요청이 목록에 표시됩니다.",
+      "troubleshooting": "목록이 비어 있으면 수집 SCOPE 상태, URL 체크와 프록시 경유를 확인하고 사이트를 다시 사용합니다.",
+      "note": "OFF에서는 새 트래픽과 수동 가져오기를 수집하지 않습니다. 목록 고정은 화면 갱신만 멈추며 수집을 중지하지 않습니다.",
+      "highlights": [
+        {
+          "label": "SCOPE 수집 상태",
+          "role": "click",
+          "controlName": "wb.traffic.capture.mode",
+          "actionIndex": 1,
+          "rect": [
+            1087,
+            166,
+            173,
+            41
+          ]
+        },
+        {
+          "label": "요청 목록 확인",
+          "role": "read",
+          "targetSpec": "요청·응답 도구의 요청 목록 표",
+          "actionIndex": 2,
+          "rect": [
+            18,
+            289,
+            1243,
+            101
+          ]
+        },
+        {
+          "label": "목록 고정 구분",
+          "role": "read",
+          "controlName": "wb.traffic.view.freeze",
+          "actionIndex": 3,
+          "rect": [
+            768,
+            171,
+            79,
+            33
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/01-capture.png",
+      "sourceImageSha256": "e9222f3b1809de308e1112d6487ddb44dfb1e4f74f20dade41685e52bc7f184e",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        1080,
+        162,
+        183,
+        49
+      ]
+    },
+    {
+      "id": "step-23",
+      "sourceImage": "02-request.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "선택 원본을 필요한 도구로 연결합니다",
+      "goal": "원본을 다시 입력하지 않고 비교·재현·증거로 이어갑니다.",
+      "actions": [
+        "검색으로 요청을 찾고 행을 선택해 원문을 읽습니다. 여러 건은 Ctrl 또는 Shift로 선택합니다.",
+        "계정 비교가 필요하면 계정 비교 준비로 원본을 연결합니다.",
+        "직접 재현이 필요하면 Repeater 준비로 요청을 복사합니다. 실제 전송은 Repeater의 Send로 실행합니다."
+      ],
+      "expected": "선택한 원본을 기반으로 도구의 준비 상태 또는 증거 초안이 만들어집니다.",
+      "troubleshooting": "직접 작업 버튼이 비활성이면 원본 행을 선택했는지와 필요한 계정·Scope 조건을 확인합니다.",
+      "note": "Repeater 준비는 요청 복사입니다. 실제 전송은 Repeater의 Send를 눌러 실행합니다.",
+      "highlights": [
+        {
+          "label": "원본 찾기",
+          "role": "input",
+          "controlName": "wb.traffic.search",
+          "actionIndex": 1,
+          "rect": [
+            18,
+            167,
+            743,
+            39
+          ]
+        },
+        {
+          "label": "비교 준비",
+          "role": "click",
+          "controlName": "wb.simple.traffic.compare",
+          "actionIndex": 2,
+          "rect": [
+            26,
+            244,
+            110,
+            32
+          ]
+        },
+        {
+          "label": "Repeater 준비",
+          "role": "click",
+          "controlName": "wb.simple.traffic.repeater",
+          "actionIndex": 3,
+          "rect": [
+            144,
+            244,
+            113,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/02-request.png",
+      "sourceImageSha256": "92f7f7635db52aa67644b587523a4571ae911349f401f44983b09da951058438",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        18,
+        239,
+        348,
+        42
+      ]
+    },
+    {
+      "id": "step-24",
+      "sourceImage": "08-mapper.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "기능·실행·세션을 함께 정리합니다",
+      "goal": "관측 패킷이 어떤 기능 흐름에 묶였는지 확인합니다.",
+      "actions": [
+        "상단의 기능 매핑을 엽니다.",
+        "기능·실행·세션과 연결 패킷의 분류 근거를 읽고 필요한 이름·상태·메모를 정리합니다.",
+        "프로젝트 저장으로 보관합니다. 필요한 기능은 점검 업무로 연결할 수 있습니다."
+      ],
+      "expected": "기능 흐름과 연결 패킷, 분류 근거와 메모를 확인할 수 있습니다.",
+      "troubleshooting": "분류가 어긋나면 선택 패킷의 분류 근거를 확인하고 분류 수정 또는 기능 메모로 보완합니다.",
+      "note": "자동 매핑은 기능 묶음입니다. 기능이 표시됐다는 것만으로 점검 완료가 되지 않습니다.",
+      "highlights": [
+        {
+          "label": "기능 매핑 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.mapper",
+          "actionIndex": 1,
+          "rect": [
+            175,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "기능·실행·세션",
+          "role": "read",
+          "targetSpec": "Mapper의 기능·실행·세션 목록 영역",
+          "actionIndex": 2,
+          "rect": [
+            10,
+            221,
+            600,
+            44
+          ]
+        },
+        {
+          "label": "프로젝트 보관",
+          "role": "click",
+          "targetSpec": "Mapper 상단 프로젝트 저장 버튼",
+          "actionIndex": 3,
+          "rect": [
+            18,
+            174,
+            106,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/08-mapper.png",
+      "sourceImageSha256": "6e14af7be2e3d15376af6136238c7adccf5889bff4970fb4ce06c3e610acce52",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        10,
+        170,
+        634,
+        96
+      ]
+    },
+    {
+      "id": "step-25",
+      "sourceImage": "10-js.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "선택 응답에서 API 후보를 찾습니다",
+      "goal": "JavaScript 문자열의 API·키 후보와 원문 위치를 확인합니다.",
+      "actions": [
+        "선택한 텍스트 응답을 API 찾기로 연결한 뒤 상단의 API 찾기를 엽니다.",
+        "분석 목록 버튼으로 목록을 열고 경로·민감정보 후보를 고릅니다.",
+        "분석 상세 버튼으로 상세를 열어 출처·원본 위치를 읽고 필요한 요청만 준비합니다."
+      ],
+      "expected": "선택 응답의 경로·민감정보 후보와 출처가 표시됩니다.",
+      "troubleshooting": "후보가 실행되지 않으면 동적 변수·메서드·필수값을 확인합니다. 코드 문자열을 실제 접근 성공으로 해석하지 않습니다.",
+      "note": "코드 분석은 JavaScript 실행이나 자동 요청 전송이 아닙니다. 시작 시 기존 History 전체를 자동 분석하지 않습니다.",
+      "highlights": [
+        {
+          "label": "API 찾기 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.js",
+          "actionIndex": 1,
+          "rect": [
+            487,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "분석 목록 열기",
+          "role": "click",
+          "controlName": "wb.js.analysis.list",
+          "actionIndex": 2,
+          "rect": [
+            260,
+            144,
+            94,
+            34
+          ]
+        },
+        {
+          "label": "분석 상세 열기",
+          "role": "click",
+          "controlName": "wb.js.analysis.details",
+          "actionIndex": 3,
+          "rect": [
+            355,
+            144,
+            94,
+            34
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/10-js.png",
+      "sourceImageSha256": "85d0f16a18fc37b1636bbad2e1a0425c37161ffc6e85b75e4a92df8af6e51b51",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        255,
+        139,
+        200,
+        43
+      ]
+    },
+    {
+      "id": "step-26",
+      "sourceImage": "09-environment.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "선택한 서버 경로를 직접 GET 확인합니다",
+      "goal": "환경 후보 중 필요한 경로만 수동으로 검증합니다.",
+      "actions": [
+        "상단의 서버·경로를 엽니다.",
+        "관측 사이트와 확인할 후보 경로를 선택합니다.",
+        "SCOPE·HTTP 계정·한도를 확인한 뒤 선택 경로 GET 확인을 누르고 응답 근거를 읽습니다."
+      ],
+      "expected": "선택 경로의 응답과 내용 확인·보류 근거가 표시됩니다.",
+      "troubleshooting": "공통 화면·로그인·접근 제한이면 원본과 대조 조건을 확인합니다. 후보 이름만으로 노출을 확정하지 않습니다.",
+      "note": "선택 경로 GET 확인은 실제 요청을 보냅니다. 후보를 읽거나 도구를 여는 동작은 요청을 보내지 않습니다.",
+      "highlights": [
+        {
+          "label": "서버·경로 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.environment",
+          "actionIndex": 1,
+          "rect": [
+            643,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "필요한 경로 선택",
+          "role": "click",
+          "targetSpec": "서버·경로 후보 표",
+          "actionIndex": 2,
+          "rect": [
+            519,
+            359,
+            744,
+            37
+          ]
+        },
+        {
+          "label": "선택 GET 확인",
+          "role": "click",
+          "targetSpec": "서버·경로의 선택 경로 GET 확인 버튼",
+          "actionIndex": 3,
+          "rect": [
+            22,
+            218,
+            140,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/09-environment.png",
+      "sourceImageSha256": "18765082b6fc2c3d0f99f090c2bae135293b8450d45c255af238d62fe06948bd",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        16,
+        213,
+        598,
+        42
+      ]
+    },
+    {
+      "id": "step-27",
+      "sourceImage": "03-analysis.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "응답 보안 단서를 원본과 확인합니다",
+      "goal": "오류·헤더·문서·저장 후 조회의 관측 근거를 검토합니다.",
+      "actions": [
+        "상단의 응답 분석을 엽니다.",
+        "관측 후보를 선택하고 원본 응답의 오류·헤더·문서 등 근거를 읽습니다.",
+        "필요한 항목은 선택 관찰 → 증거로 연결하고 실제 영향·재현 결과를 보완합니다."
+      ],
+      "expected": "분류된 관측과 원본 근거, 증거에 전달할 항목을 확인할 수 있습니다.",
+      "troubleshooting": "단서가 불명확하면 같은 원본의 요청·응답 문맥을 읽고 필요한 대조를 별도로 준비합니다.",
+      "note": "오류 정보·반사·헤더 관측만으로 취약점을 확정하지 않습니다. 이 분석은 관측 응답을 읽는 동작입니다.",
+      "highlights": [
+        {
+          "label": "응답 분석 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.response.recon",
+          "actionIndex": 1,
+          "rect": [
+            799,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "관측 근거 선택",
+          "role": "read",
+          "targetSpec": "응답 분석 결과 표와 상세 영역",
+          "actionIndex": 2,
+          "rect": [
+            10,
+            299,
+            376,
+            37
+          ]
+        },
+        {
+          "label": "증거로 전달",
+          "role": "click",
+          "controlName": "wb.response.finding.evidence",
+          "actionIndex": 3,
+          "rect": [
+            18,
+            223,
+            126,
+            31
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/03-analysis.png",
+      "sourceImageSha256": "79563f66334e119fe8227d4c7177c51a59dc96d41363a2998f62ff949a43b101",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        10,
+        263,
+        650,
+        75
+      ]
+    },
+    {
+      "id": "step-28",
+      "sourceImage": "04-auth-accounts.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "비교할 계정을 역할 슬롯에 연결합니다",
+      "goal": "인증 탐지로 후보를 준비한 뒤 계정 1·2·3과 비로그인에 연결합니다.",
+      "actions": [
+        "보관한 인증 후보 중 계정 1에 사용할 후보를 고릅니다.",
+        "계정 2에 비교할 다른 후보를 연결합니다. 필요한 경우 계정 3도 사용합니다.",
+        "비로그인 슬롯의 대상이 의도한 사이트인지 확인합니다."
+      ],
+      "expected": "비교할 계정 슬롯에 의도한 인증 후보와 대상이 표시됩니다.",
+      "troubleshooting": "후보가 없으면 인증 탐지 ON과 해당 계정의 실제 요청 관측을 확인합니다. 다른 사이트의 후보를 섞지 않습니다.",
+      "note": "인증 탐지는 일반 트래픽 OFF/SCOPE와 별도입니다. 후보 연결·설정 수정은 비교 요청을 보내지 않습니다.",
+      "highlights": [
+        {
+          "label": "첫 계정 연결",
+          "role": "input",
+          "controlName": "wb.auth.preparation.account.0",
+          "actionIndex": 1,
+          "rect": [
+            553,
+            73,
+            309,
+            32
+          ],
+          "markerSide": "right"
+        },
+        {
+          "label": "비교 계정 연결",
+          "role": "input",
+          "controlName": "wb.auth.preparation.account.1",
+          "actionIndex": 2,
+          "rect": [
+            553,
+            115,
+            309,
+            32
+          ],
+          "markerSide": "right"
+        },
+        {
+          "label": "비로그인 대조",
+          "role": "input",
+          "controlName": "wb.auth.preparation.account.3",
+          "actionIndex": 3,
+          "rect": [
+            567,
+            200,
+            289,
+            32
+          ],
+          "markerSide": "right"
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/04-auth-accounts.png",
+      "sourceImageSha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        504,
+        69,
+        359,
+        165
+      ]
+    },
+    {
+      "id": "step-29",
+      "sourceImage": "04-auth-results.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "계정별 직접 비교와 보류 사유를 읽습니다",
+      "goal": "정책·세션·쓰기 후 조회 조건에 맞춰 비교를 실행합니다.",
+      "actions": [
+        "원본을 준비하고 선택 요청 비교로 비교 준비 화면을 엽니다.",
+        "계정·판정 설정의 계정·정책·세션 조건을 적용한 뒤 준비 화면에서 비교를 시작합니다.",
+        "결과의 계정별 원본과 판정 근거, 세션·권한·쓰기 후 조회의 보류 사유를 읽습니다."
+      ],
+      "expected": "비교 결과와 함께 세션·권한·쓰기 후 조회의 확인 또는 보류 이유가 표시됩니다.",
+      "troubleshooting": "보류되면 계정·세션 보완, 권한 설정 보완, 쓰기 조회 보완 중 표시된 사유에 맞는 조건을 수정합니다.",
+      "note": "비교 시작은 실제 요청을 전송합니다. 상태 코드 차이만으로 권한 취약점을 확정하지 않습니다.",
+      "highlights": [
+        {
+          "label": "선택 요청 비교",
+          "role": "click",
+          "controlName": "wb.simple.auth.review",
+          "actionIndex": 1,
+          "rect": [
+            168,
+            148,
+            109,
+            33
+          ]
+        },
+        {
+          "label": "판정 조건 설정",
+          "role": "click",
+          "controlName": "wb.simple.auth.settings",
+          "actionIndex": 2,
+          "rect": [
+            344,
+            148,
+            110,
+            33
+          ]
+        },
+        {
+          "label": "보류 사유·원본",
+          "role": "read",
+          "targetSpec": "계정 비교 결과 표와 선택 결과 상세",
+          "actionIndex": 3,
+          "rect": [
+            9,
+            502,
+            1262,
+            27
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/04-auth-results.png",
+      "sourceImageSha256": "005505ac45b0b40deb63ebfa477df3af95f979ae93898c108b1954eee9d44212",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        9,
+        476,
+        1262,
+        53
+      ]
+    },
+    {
+      "id": "step-30",
+      "sourceImage": "07-payload.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "입력 위치와 대조 조건을 정해 검사합니다",
+      "goal": "선택 요청의 입력값을 기준·변경·대조 응답으로 검토합니다.",
+      "actions": [
+        "입력 위치·값을 지정하고 검사 설정에서 유형·간격·총 요청 한도를 정합니다.",
+        "입력값 검사 시작을 누르고 기준·변경·대조 응답을 읽습니다.",
+        "필요한 결과는 결과를 증거로 연결합니다. 기준·공격·대조 묶음 전체가 전달됩니다."
+      ],
+      "expected": "검사 조건과 결과 묶음, 원본에 기반한 검토 근거가 표시됩니다.",
+      "troubleshooting": "검사가 시작되지 않으면 입력 위치·SCOPE·인증·한도를 확인합니다. 결과 한 행은 해당 검사의 기준·공격·대조 묶음으로 증거에 전달됩니다.",
+      "note": "검사 시작은 실제 요청을 전송합니다. 이 그림은 실행 전 준비 상태로 결과를 증거로가 비활성입니다. 실제 검사 결과를 선택한 뒤 사용합니다.",
+      "highlights": [
+        {
+          "label": "검사 조건 정하기",
+          "role": "click",
+          "controlName": "wb.simple.payload.settings",
+          "actionIndex": 1,
+          "rect": [
+            18,
+            147,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "검사 직접 시작",
+          "role": "click",
+          "controlName": "wb.simple.payload.start",
+          "actionIndex": 2,
+          "rect": [
+            107,
+            147,
+            123,
+            32
+          ]
+        },
+        {
+          "label": "결과 증거 연결",
+          "role": "click",
+          "controlName": "wb.simple.payload.evidence",
+          "actionIndex": 3,
+          "rect": [
+            295,
+            147,
+            106,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/07-payload.png",
+      "sourceImageSha256": "54b31c94861a6a5c798a3d10947baec9c06ef4a32c4fe43bb8821390cbc90c9f",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        13,
+        143,
+        391,
+        42
+      ]
+    },
+    {
+      "id": "step-31",
+      "sourceImage": "11-replay.png",
+      "captureKind": "swing",
+      "chapter": "08 기존 도구 연결",
+      "title": "요청 흐름을 순서대로 직접 재현합니다",
+      "goal": "필요한 요청만 흐름에 넣어 실행·결과를 확인합니다.",
+      "actions": [
+        "요청 재현에서 선택 요청 추가로 필요한 원본을 순서에 넣습니다.",
+        "대상·순서를 확인하고 순차 실행을 누릅니다. 멈춰야 할 때 중지를 사용합니다.",
+        "실행 결과를 확인하고 필요한 항목을 결과 → 증거로 연결합니다."
+      ],
+      "expected": "순서대로 실행한 요청과 응답·중지 상태를 확인할 수 있습니다.",
+      "troubleshooting": "원본이 없거나 순서가 맞지 않으면 흐름을 고칩니다. 준비 상태만으로 실행 성공을 판단하지 않습니다.",
+      "note": "순차 실행은 실제 요청을 전송합니다. 이 그림은 실행 전으로 결과 → 증거가 비활성입니다. 실행 결과를 확인한 뒤 사용합니다.",
+      "highlights": [
+        {
+          "label": "요청 재현 열기",
+          "role": "click",
+          "controlName": "wb.simple.bounty.replay",
+          "actionIndex": 1,
+          "rect": [
+            16,
+            145,
+            79,
+            32
+          ]
+        },
+        {
+          "label": "순차 재현 실행",
+          "role": "click",
+          "controlName": "wb.bounty.flow.run",
+          "actionIndex": 2,
+          "rect": [
+            222,
+            195,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "결과 증거 전달",
+          "role": "click",
+          "controlName": "wb.bounty.flow.evidence",
+          "actionIndex": 3,
+          "rect": [
+            368,
+            195,
+            98,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/11-replay.png",
+      "sourceImageSha256": "a5980452be8e2a4f3c37bd406b2a95918c129a918d01c2ba45459c656b39dcd9",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        12,
+        190,
+        457,
+        43
+      ]
+    },
+    {
+      "id": "step-32",
+      "sourceImage": "05-evidence.png",
+      "captureKind": "swing",
+      "chapter": "09 제출용 증거",
+      "title": "원본과 설명을 증거 초안에 모읍니다",
+      "goal": "검토한 요청·비교·재현 결과를 읽기 좋은 순서로 정리합니다.",
+      "actions": [
+        "증거 추가로 검토한 원본·비교·재현 결과를 모읍니다.",
+        "항목 설명으로 설명 편집을 열어 적고 위로·아래로 표시 순서를 정리합니다.",
+        "가림 미리보기를 열어 제출본의 값을 확인합니다."
+      ],
+      "expected": "선택한 원본과 설명, 가림 정책을 적용할 증거 초안이 보입니다.",
+      "troubleshooting": "초안을 복원해도 HTTP 원본이 자동 복구된 것은 아닙니다. 원본 연결이 없는 항목은 필요한 자료를 다시 연결합니다.",
+      "note": "증거 편집과 초안 준비는 추가 요청을 보내지 않습니다. 원문 값 분류 보고서와 제출용 증거 ZIP은 다른 내보내기입니다.",
+      "highlights": [
+        {
+          "label": "증거 항목 추가",
+          "role": "click",
+          "controlName": "wb.bounty.evidence.add",
+          "actionIndex": 1,
+          "rect": [
+            16,
+            233,
+            90,
+            32
+          ]
+        },
+        {
+          "label": "항목 설명 열기",
+          "role": "click",
+          "controlName": "wb.bounty.evidence.describe",
+          "actionIndex": 2,
+          "rect": [
+            410,
+            275,
+            79,
+            32
+          ]
+        },
+        {
+          "label": "가림 미리보기",
+          "role": "click",
+          "controlName": "wb.bounty.evidence.preview",
+          "actionIndex": 3,
+          "rect": [
+            115,
+            233,
+            106,
+            32
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/05-evidence.png",
+      "sourceImageSha256": "b368ae199773441180626bad1447d3b46a711ec4948235df05e2066582ac6015",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        13,
+        231,
+        480,
+        79
+      ]
+    },
+    {
+      "id": "step-33",
+      "sourceImage": "06-redaction.png",
+      "captureKind": "swing",
+      "chapter": "09 제출용 증거",
+      "title": "가림 결과를 확인하고 증거 ZIP을 저장합니다",
+      "goal": "제출본에서 인증·민감 값의 노출과 원본 연결을 확인합니다.",
+      "actions": [
+        "미리보기의 인증·민감 값과 설명·이미지의 표시를 확인합니다.",
+        "닫기로 돌아가 증거 ZIP 저장을 누릅니다. ZIP의 보고서·evidence.json에서 설명·순서·가림·원본 연결을 확인합니다."
+      ],
+      "expected": "의도한 값이 가려진 제출용 ZIP이 만들어지고 저장 완료를 확인할 수 있습니다.",
+      "troubleshooting": "설명이나 첨부 이미지에 직접 적은 값은 별도로 검토합니다. 누락된 원본·순서·설명을 보완한 뒤 새 ZIP을 만듭니다.",
+      "note": "이 그림은 합성 Cookie 값의 가림 미리보기입니다. 원문 값을 담는 분류 보고서에는 이 가림 결과가 대신 적용되지 않습니다.",
+      "highlights": [
+        {
+          "label": "가림된 내용 확인",
+          "role": "read",
+          "targetSpec": "가림 미리보기 창의 본문과 [REDACTED] 표시 영역",
+          "actionIndex": 1,
+          "rect": [
+            58,
+            130,
+            180,
+            25
+          ]
+        },
+        {
+          "label": "창 닫기",
+          "role": "click",
+          "targetSpec": "가림 미리보기 창의 닫기 버튼",
+          "actionIndex": 2,
+          "rect": [
+            18,
+            752,
+            51,
+            33
+          ]
+        }
+      ],
+      "sourceRelativePath": "simple/docs/images/1.4.0/light/1280x800/06-redaction.png",
+      "sourceImageSha256": "5a07eeb2e32321d7adaaa40e7e59cdd17e98518f57cf22266ecad9d3d7dccc91",
+      "sourceCaption": "Simple 운영 Swing 컴포넌트 + 합성 예제 응답",
+      "zoomBox": [
+        20,
+        87,
+        770,
+        90
+      ]
+    }
+  ]
+}

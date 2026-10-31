@@ -1,0 +1,1681 @@
+{
+  "documentRevision": "2026-10-29",
+  "productVersion": "1.4.0",
+  "productCommit": "710af06020bfe205cb65d47d78fc60260f929bac",
+  "referenceConversation": "https://chatgpt.com/share/6ae2bf94-c1fc-83ee-9efb-4f2adc5ad86a",
+  "imagePixelsModified": false,
+  "annotations": "Document SVG/PDF vector overlay only; original pixels preserved.",
+  "screenshots": [
+    {
+      "step": "01",
+      "file": "assets/00-start.png",
+      "sha256": "13480ac3bfa7c26e884ea0c47f29a8e44415d0cef2fc30d4932211bacd3647dc",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "통합 점검 열기",
+          "role": "click",
+          "controlName": "wb.scope.inspection.open",
+          "actionIndex": 1,
+          "rect": [
+            1032,
+            15,
+            123,
+            32
+          ]
+        },
+        {
+          "label": "기존 8개 도구",
+          "role": "read",
+          "targetSpec": "상단 요청·응답부터 재현·증거까지 도구 버튼 행",
+          "actionIndex": 2,
+          "rect": [
+            19,
+            60,
+            1242,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        1012,
+        0,
+        163,
+        74
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "02",
+      "file": "assets/00-scope-editor.png",
+      "sha256": "73a998d08599307c983910e027a8bc6a5f5a591558281d7ad3b2d454e6194ba7",
+      "width": 900,
+      "height": 600,
+      "highlights": [
+        {
+          "label": "점검 URL 입력",
+          "role": "input",
+          "controlName": "wb.traffic.scope.url",
+          "actionIndex": 1,
+          "rect": [
+            47,
+            456,
+            840,
+            31
+          ]
+        },
+        {
+          "label": "목록에 등록",
+          "role": "click",
+          "controlName": "wb.traffic.scope.add",
+          "actionIndex": 2,
+          "rect": [
+            20,
+            500,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "범위 체크 확인",
+          "role": "read",
+          "targetSpec": "SCOPE URL 목록과 행 체크박스",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            87,
+            873,
+            38
+          ]
+        }
+      ],
+      "zoomBox": [
+        13,
+        50,
+        360,
+        75
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "03",
+      "file": "assets/12-inspection-setup.png",
+      "sha256": "1b1bcff2460c19c4882441492762d587eafe0d40d2376de4226ff15e6c745829",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "대상 URL",
+          "role": "input",
+          "controlName": "wb.scope.inspection.url",
+          "actionIndex": 1,
+          "rect": [
+            12,
+            58,
+            994,
+            43
+          ]
+        },
+        {
+          "label": "HTTP 계정",
+          "role": "input",
+          "controlName": "wb.scope.inspection.profile",
+          "actionIndex": 2,
+          "rect": [
+            1019,
+            63,
+            153,
+            34
+          ]
+        },
+        {
+          "label": "한도 확인",
+          "role": "click",
+          "controlName": "wb.scope.inspection.settings",
+          "actionIndex": 3,
+          "rect": [
+            1180,
+            63,
+            80,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        12,
+        58,
+        360,
+        86
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "04",
+      "file": "assets/23-katana-settings.png",
+      "sha256": "ba2d8c593246fd9cb842d9789560e7096e1ae88a2e6eb6307b510304ec1bacdc",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "실행 파일 경로",
+          "role": "input",
+          "controlName": "wb.scope.inspection.katana.executable",
+          "actionIndex": 1,
+          "rect": [
+            171,
+            267,
+            475,
+            30
+          ]
+        },
+        {
+          "label": "설치 상태 확인",
+          "role": "click",
+          "controlName": "wb.scope.inspection.katana.check",
+          "actionIndex": 2,
+          "rect": [
+            742,
+            267,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "페이지·시간 한도",
+          "role": "input",
+          "targetSpec": "실행 조건의 Katana 페이지 한도와 수집 시간 입력 영역",
+          "actionIndex": 3,
+          "rect": [
+            16,
+            339,
+            381,
+            34
+          ]
+        }
+      ],
+      "zoomBox": [
+        16,
+        262,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "05",
+      "file": "assets/helper-connected.png",
+      "sha256": "b0a28f0cc0e48355771da217bdaaf5624a50e4b202791698fa13019debb1c857",
+      "width": 420,
+      "height": 830,
+      "highlights": [
+        {
+          "label": "주소·토큰 입력",
+          "role": "input",
+          "targetSpec": "helper popup의 연결 주소와 가려진 연결 토큰 입력란",
+          "actionIndex": 1,
+          "rect": [
+            17,
+            99,
+            351,
+            129
+          ]
+        },
+        {
+          "label": "로컬 연결 확인",
+          "role": "click",
+          "targetSpec": "helper popup의 연결 확인·저장 버튼",
+          "actionIndex": 2,
+          "rect": [
+            18,
+            237,
+            241,
+            38
+          ]
+        },
+        {
+          "label": "SPA 허용",
+          "role": "click",
+          "targetSpec": "helper popup의 SPA 통합 탐색 허용 체크박스",
+          "actionIndex": 3,
+          "rect": [
+            20,
+            390,
+            162,
+            24
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        231,
+        259,
+        100
+      ],
+      "captureKind": "browser"
+    },
+    {
+      "step": "06",
+      "file": "assets/21-inspection-browser.png",
+      "sha256": "da0c0391f7a212b0664ab7c463a727f9bebc919e567876e2cf77e756512cefb3",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "SPA 탐색 선택",
+          "role": "click",
+          "controlName": "wb.scope.inspection.browser.mode",
+          "actionIndex": 1,
+          "rect": [
+            453,
+            17,
+            112,
+            27
+          ]
+        },
+        {
+          "label": "연결 상태 확인",
+          "role": "read",
+          "targetSpec": "브라우저 메뉴 탭의 연결·탐색 상태 영역",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            71
+          ]
+        },
+        {
+          "label": "연결 설정 열기",
+          "role": "click",
+          "controlName": "wb.scope.inspection.browser.connect",
+          "actionIndex": 3,
+          "rect": [
+            20,
+            542,
+            193,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        252,
+        360,
+        73
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "07",
+      "file": "assets/13-inspection-progress.png",
+      "sha256": "e8f4851a6f187c43829b4ea4d9674b12593e4f2fa39f8e954bde958c9adf212e",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "점검 실행",
+          "role": "click",
+          "controlName": "wb.scope.inspection.start",
+          "actionIndex": 1,
+          "rect": [
+            20,
+            113,
+            110,
+            32
+          ]
+        },
+        {
+          "label": "진행 제어",
+          "role": "click",
+          "targetSpec": "일시정지·재개·중지 버튼 행",
+          "actionIndex": 2,
+          "rect": [
+            137,
+            113,
+            193,
+            32
+          ]
+        },
+        {
+          "label": "실행 상태 읽기",
+          "role": "read",
+          "targetSpec": "화면 하단 요청·확인·대기·제외·실패·부분 상태줄",
+          "actionIndex": 3,
+          "rect": [
+            12,
+            750,
+            850,
+            23
+          ]
+        }
+      ],
+      "zoomBox": [
+        12,
+        745,
+        360,
+        45
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "08",
+      "file": "assets/24-katana-results.png",
+      "sha256": "307f7e7b4c8929e2b3570505a5134438713309093c5d05988ddf4f069a7f91d1",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "수집 결과 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 Katana 수집",
+          "actionIndex": 1,
+          "rect": [
+            905,
+            226,
+            98,
+            25
+          ]
+        },
+        {
+          "label": "출처·상태 확인",
+          "role": "read",
+          "targetSpec": "Katana 수집 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            323,
+            1251,
+            145
+          ]
+        },
+        {
+          "label": "사유·근거 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "zoomBox": [
+        15,
+        357,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "09",
+      "file": "assets/14-inspection-environment.png",
+      "sha256": "9e2f9af1217be4d6654f3aad84d922825e6407034c3f3de16a89263273c443cd",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "환경·DB 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 환경·DB",
+          "actionIndex": 1,
+          "rect": [
+            61,
+            226,
+            69,
+            25
+          ]
+        },
+        {
+          "label": "기술 단서 선택",
+          "role": "read",
+          "targetSpec": "환경·DB 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            327
+          ]
+        },
+        {
+          "label": "원문 근거 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        589,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "10",
+      "file": "assets/15-inspection-paths.png",
+      "sha256": "72ea887857d06e2240cb6d53bf85ff77c4f15442ef4c1a8170f1989728f49dc2",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "경로·응답 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 경로·응답",
+          "actionIndex": 1,
+          "rect": [
+            130,
+            226,
+            77,
+            25
+          ]
+        },
+        {
+          "label": "응답 분류 확인",
+          "role": "read",
+          "targetSpec": "경로·응답 결과 표의 HTTP·분류·분석 범위 열",
+          "actionIndex": 2,
+          "rect": [
+            776,
+            253,
+            489,
+            327
+          ]
+        },
+        {
+          "label": "원문 열기",
+          "role": "click",
+          "controlName": "wb.scope.inspection.original",
+          "actionIndex": 3,
+          "rect": [
+            20,
+            710,
+            80,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        776,
+        253,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "11",
+      "file": "assets/16-inspection-api.png",
+      "sha256": "b4816546f92f31b18c8daa017ed255597bd16b8d72956ad8fc889b5e72816c00",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "API 대조 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 API·명세 대조",
+          "actionIndex": 1,
+          "rect": [
+            207,
+            226,
+            102,
+            25
+          ]
+        },
+        {
+          "label": "출처·상태 확인",
+          "role": "read",
+          "targetSpec": "API·명세 대조 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            327
+          ]
+        },
+        {
+          "label": "추가 분석 준비",
+          "role": "click",
+          "controlName": "wb.scope.inspection.js",
+          "actionIndex": 3,
+          "rect": [
+            435,
+            710,
+            88,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        589,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "12",
+      "file": "assets/17-inspection-secrets.png",
+      "sha256": "97769b9e13b35e6b9970e5d2e14946e6f4282f6929164cfc7a1049743fbec85b",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "민감정보 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 키·민감정보",
+          "actionIndex": 1,
+          "rect": [
+            309,
+            226,
+            90,
+            25
+          ]
+        },
+        {
+          "label": "후보·가림 확인",
+          "role": "read",
+          "targetSpec": "키·민감정보 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            145
+          ]
+        },
+        {
+          "label": "탐지 문맥 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        589,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "13",
+      "file": "assets/27-inspection-filter.png",
+      "sha256": "be32f0c72446eaf2127c5148d856087d4c185f466f7035589c776e3200020260",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "근거 종류 선택",
+          "role": "input",
+          "controlName": "wb.scope.inspection.result.filter",
+          "actionIndex": 1,
+          "rect": [
+            83,
+            163,
+            122,
+            32
+          ]
+        },
+        {
+          "label": "결과 검색",
+          "role": "input",
+          "controlName": "wb.scope.inspection.result.search",
+          "actionIndex": 2,
+          "rect": [
+            212,
+            163,
+            307,
+            32
+          ]
+        },
+        {
+          "label": "전체 결과 복귀",
+          "role": "click",
+          "controlName": "wb.scope.inspection.result.filter.clear",
+          "actionIndex": 3,
+          "rect": [
+            527,
+            163,
+            93,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        18,
+        158,
+        360,
+        40
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "14",
+      "file": "assets/26-inspection-routes.png",
+      "sha256": "bfbe4c576c4339ea295b1d5540e077efdbb61741970c322fad924b064447fd2a",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "탐색 커버리지",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 탐색 커버리지",
+          "actionIndex": 1,
+          "rect": [
+            592,
+            226,
+            104,
+            25
+          ]
+        },
+        {
+          "label": "처리 상태·HTTP",
+          "role": "read",
+          "targetSpec": "탐색 커버리지 결과 표의 처리 상태와 실제 HTTP 열",
+          "actionIndex": 2,
+          "rect": [
+            704,
+            332,
+            559,
+            230
+          ]
+        },
+        {
+          "label": "처리 이력 상세",
+          "role": "read",
+          "targetSpec": "선택 경로 아래 발견·Scope·큐·요청·응답·분석 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "zoomBox": [
+        13,
+        589,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "15",
+      "file": "assets/20-inspection-coverage.png",
+      "sha256": "413559e6ef6985f6bea9c43cfd6fb2a050d3499516b7a30432b8fab6a3e11097",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "미확인·범위 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 미확인·범위",
+          "actionIndex": 1,
+          "rect": [
+            696,
+            226,
+            89,
+            25
+          ]
+        },
+        {
+          "label": "제외·실패 항목",
+          "role": "read",
+          "targetSpec": "미확인·범위 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            253,
+            1251,
+            327
+          ]
+        },
+        {
+          "label": "사유와 조건 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "zoomBox": [
+        13,
+        589,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "16",
+      "file": "assets/28-inspection-recheck.png",
+      "sha256": "b2ae68b629900520aaacc67b9c02759a0325809e05ee37107785e2f6a7dfb004",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "재점검 필터",
+          "role": "input",
+          "controlName": "wb.scope.inspection.routes.filter",
+          "actionIndex": 1,
+          "rect": [
+            20,
+            257,
+            109,
+            33
+          ]
+        },
+        {
+          "label": "필요한 행 선택",
+          "role": "click",
+          "targetSpec": "탐색 커버리지 결과 표에서 재점검 후보 행",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            440,
+            1233,
+            36
+          ]
+        },
+        {
+          "label": "선택 조회 실행",
+          "role": "click",
+          "controlName": "wb.scope.inspection.routes.recheck",
+          "actionIndex": 3,
+          "rect": [
+            137,
+            257,
+            125,
+            33
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        437,
+        360,
+        40
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "17",
+      "file": "assets/29-inspection-correlations.png",
+      "sha256": "d1a4deeee3f0c3acfa0c5b9fb61a5c512f1c77875b0abda9a34d1bd644042a4d",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "형태 일치 선택",
+          "controlName": "wb.scope.inspection.routes.filter",
+          "role": "input",
+          "actionIndex": 1,
+          "rect": [
+            20,
+            257,
+            109,
+            33
+          ]
+        },
+        {
+          "label": "선언·관측 구분",
+          "role": "read",
+          "targetSpec": "아래 상세의 PATH_SHAPE_ONLY 선언 템플릿과 관측 주소·계정·원본 영역",
+          "actionIndex": 2,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        619,
+        360,
+        77
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "18",
+      "file": "assets/18-inspection-access.png",
+      "sha256": "8d05e7e852430cbb21c169a4dfafb8c767ad9a4b3d643bae5a8349564b2a32bf",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "계정별 차이 탭",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 계정별 차이",
+          "actionIndex": 1,
+          "rect": [
+            502,
+            226,
+            90,
+            25
+          ]
+        },
+        {
+          "label": "차이와 세션 근거",
+          "role": "read",
+          "targetSpec": "계정별 차이 결과 표와 아래 상세",
+          "actionIndex": 2,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        },
+        {
+          "label": "정책 비교 준비",
+          "role": "click",
+          "controlName": "wb.scope.inspection.compare",
+          "actionIndex": 3,
+          "rect": [
+            229,
+            710,
+            110,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        589,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "19",
+      "file": "assets/19-inspection-changes.png",
+      "sha256": "eb24425d596583dd897db391e8ba4e2f1bfbc6ef9dd694989630fa18722fe6db",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "이전 실행 비교",
+          "role": "click",
+          "targetSpec": "결과 탭 행의 이전 실행과 비교",
+          "actionIndex": 1,
+          "rect": [
+            785,
+            226,
+            120,
+            25
+          ]
+        },
+        {
+          "label": "변경 후보 선택",
+          "role": "click",
+          "targetSpec": "이전 실행과 비교 결과 표",
+          "actionIndex": 2,
+          "rect": [
+            14,
+            289,
+            1251,
+            37
+          ]
+        },
+        {
+          "label": "비교 조건 읽기",
+          "role": "read",
+          "targetSpec": "선택 결과 아래 비교 조건·이력 상세 영역",
+          "actionIndex": 3,
+          "rect": [
+            13,
+            588,
+            1254,
+            110
+          ]
+        }
+      ],
+      "zoomBox": [
+        14,
+        589,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "20",
+      "file": "assets/22-inspection-original.png",
+      "sha256": "dc0cf1ac1788e9cc930ce87c37ad6b743dc7a9599c7c3813121f92c097f169b8",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "요청 원문 읽기",
+          "role": "read",
+          "targetSpec": "원본 보기 창의 요청 본문 영역",
+          "actionIndex": 1,
+          "rect": [
+            24,
+            96,
+            580,
+            71
+          ]
+        },
+        {
+          "label": "응답 원문 읽기",
+          "role": "read",
+          "targetSpec": "원본 보기 창의 응답 본문 영역",
+          "actionIndex": 2,
+          "rect": [
+            667,
+            96,
+            589,
+            217
+          ]
+        },
+        {
+          "label": "응답 검색",
+          "role": "input",
+          "controlName": "wb.scope.inspection.original.response.search",
+          "actionIndex": 3,
+          "rect": [
+            697,
+            766,
+            368,
+            28
+          ]
+        }
+      ],
+      "zoomBox": [
+        667,
+        191,
+        360,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "21",
+      "file": "assets/25-inspection-report.png",
+      "sha256": "a3d1588d176ec37d082e771ccdf010df4fc2a3e787ff1c1616d29e4f1edfb0d9",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "원문 보고서 저장",
+          "role": "click",
+          "controlName": "wb.scope.inspection.report",
+          "actionIndex": 1,
+          "rect": [
+            338,
+            113,
+            123,
+            32
+          ]
+        },
+        {
+          "label": "저장 완료 확인",
+          "role": "read",
+          "targetSpec": "하단 분류 보고서 저장 완료 상태줄",
+          "actionIndex": 2,
+          "rect": [
+            12,
+            771,
+            650,
+            23
+          ]
+        }
+      ],
+      "zoomBox": [
+        12,
+        748,
+        360,
+        45
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "22",
+      "file": "assets/01-capture.png",
+      "sha256": "e9222f3b1809de308e1112d6487ddb44dfb1e4f74f20dade41685e52bc7f184e",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "SCOPE 수집 상태",
+          "role": "click",
+          "controlName": "wb.traffic.capture.mode",
+          "actionIndex": 1,
+          "rect": [
+            1087,
+            166,
+            173,
+            41
+          ]
+        },
+        {
+          "label": "요청 목록 확인",
+          "role": "read",
+          "targetSpec": "요청·응답 도구의 요청 목록 표",
+          "actionIndex": 2,
+          "rect": [
+            18,
+            289,
+            1243,
+            101
+          ]
+        },
+        {
+          "label": "목록 고정 구분",
+          "role": "read",
+          "controlName": "wb.traffic.view.freeze",
+          "actionIndex": 3,
+          "rect": [
+            768,
+            171,
+            79,
+            33
+          ]
+        }
+      ],
+      "zoomBox": [
+        1080,
+        162,
+        183,
+        49
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "23",
+      "file": "assets/02-request.png",
+      "sha256": "92f7f7635db52aa67644b587523a4571ae911349f401f44983b09da951058438",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "원본 찾기",
+          "role": "input",
+          "controlName": "wb.traffic.search",
+          "actionIndex": 1,
+          "rect": [
+            18,
+            167,
+            743,
+            39
+          ]
+        },
+        {
+          "label": "비교 준비",
+          "role": "click",
+          "controlName": "wb.simple.traffic.compare",
+          "actionIndex": 2,
+          "rect": [
+            26,
+            244,
+            110,
+            32
+          ]
+        },
+        {
+          "label": "Repeater 준비",
+          "role": "click",
+          "controlName": "wb.simple.traffic.repeater",
+          "actionIndex": 3,
+          "rect": [
+            144,
+            244,
+            113,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        18,
+        239,
+        348,
+        42
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "24",
+      "file": "assets/08-mapper.png",
+      "sha256": "6e14af7be2e3d15376af6136238c7adccf5889bff4970fb4ce06c3e610acce52",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "기능 매핑 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.mapper",
+          "actionIndex": 1,
+          "rect": [
+            175,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "기능·실행·세션",
+          "role": "read",
+          "targetSpec": "Mapper의 기능·실행·세션 목록 영역",
+          "actionIndex": 2,
+          "rect": [
+            10,
+            221,
+            600,
+            44
+          ]
+        },
+        {
+          "label": "프로젝트 보관",
+          "role": "click",
+          "targetSpec": "Mapper 상단 프로젝트 저장 버튼",
+          "actionIndex": 3,
+          "rect": [
+            18,
+            174,
+            106,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        10,
+        170,
+        360,
+        96
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "25",
+      "file": "assets/10-js.png",
+      "sha256": "85d0f16a18fc37b1636bbad2e1a0425c37161ffc6e85b75e4a92df8af6e51b51",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "API 찾기 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.js",
+          "actionIndex": 1,
+          "rect": [
+            487,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "분석 목록 열기",
+          "role": "click",
+          "controlName": "wb.js.analysis.list",
+          "actionIndex": 2,
+          "rect": [
+            260,
+            144,
+            94,
+            34
+          ]
+        },
+        {
+          "label": "분석 상세 열기",
+          "role": "click",
+          "controlName": "wb.js.analysis.details",
+          "actionIndex": 3,
+          "rect": [
+            355,
+            144,
+            94,
+            34
+          ]
+        }
+      ],
+      "zoomBox": [
+        255,
+        139,
+        200,
+        43
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "26",
+      "file": "assets/09-environment.png",
+      "sha256": "18765082b6fc2c3d0f99f090c2bae135293b8450d45c255af238d62fe06948bd",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "서버·경로 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.environment",
+          "actionIndex": 1,
+          "rect": [
+            643,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "필요한 경로 선택",
+          "role": "click",
+          "targetSpec": "서버·경로 후보 표",
+          "actionIndex": 2,
+          "rect": [
+            519,
+            359,
+            744,
+            37
+          ]
+        },
+        {
+          "label": "선택 GET 확인",
+          "role": "click",
+          "targetSpec": "서버·경로의 선택 경로 GET 확인 버튼",
+          "actionIndex": 3,
+          "rect": [
+            22,
+            218,
+            140,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        16,
+        213,
+        360,
+        42
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "27",
+      "file": "assets/03-analysis.png",
+      "sha256": "79563f66334e119fe8227d4c7177c51a59dc96d41363a2998f62ff949a43b101",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "응답 분석 열기",
+          "role": "click",
+          "controlName": "wb.simple.tool.response.recon",
+          "actionIndex": 1,
+          "rect": [
+            799,
+            60,
+            150,
+            32
+          ]
+        },
+        {
+          "label": "관측 근거 선택",
+          "role": "read",
+          "targetSpec": "응답 분석 결과 표와 상세 영역",
+          "actionIndex": 2,
+          "rect": [
+            10,
+            299,
+            376,
+            37
+          ]
+        },
+        {
+          "label": "증거로 전달",
+          "role": "click",
+          "controlName": "wb.response.finding.evidence",
+          "actionIndex": 3,
+          "rect": [
+            18,
+            223,
+            126,
+            31
+          ]
+        }
+      ],
+      "zoomBox": [
+        10,
+        263,
+        360,
+        75
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "28",
+      "file": "assets/04-auth-accounts.png",
+      "sha256": "80b0330e5b41f700d91c4d21b307d0bb5d6d97ad5384314fc8fd4a004a049cec",
+      "width": 1000,
+      "height": 300,
+      "highlights": [
+        {
+          "label": "첫 계정 연결",
+          "role": "input",
+          "controlName": "wb.auth.preparation.account.0",
+          "actionIndex": 1,
+          "rect": [
+            553,
+            73,
+            309,
+            32
+          ],
+          "markerSide": "right"
+        },
+        {
+          "label": "비교 계정 연결",
+          "role": "input",
+          "controlName": "wb.auth.preparation.account.1",
+          "actionIndex": 2,
+          "rect": [
+            553,
+            115,
+            309,
+            32
+          ],
+          "markerSide": "right"
+        },
+        {
+          "label": "비로그인 대조",
+          "role": "input",
+          "controlName": "wb.auth.preparation.account.3",
+          "actionIndex": 3,
+          "rect": [
+            567,
+            200,
+            289,
+            32
+          ],
+          "markerSide": "right"
+        }
+      ],
+      "zoomBox": [
+        504,
+        69,
+        359,
+        100
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "29",
+      "file": "assets/04-auth-results.png",
+      "sha256": "005505ac45b0b40deb63ebfa477df3af95f979ae93898c108b1954eee9d44212",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "선택 요청 비교",
+          "role": "click",
+          "controlName": "wb.simple.auth.review",
+          "actionIndex": 1,
+          "rect": [
+            168,
+            148,
+            109,
+            33
+          ]
+        },
+        {
+          "label": "판정 조건 설정",
+          "role": "click",
+          "controlName": "wb.simple.auth.settings",
+          "actionIndex": 2,
+          "rect": [
+            344,
+            148,
+            110,
+            33
+          ]
+        },
+        {
+          "label": "보류 사유·원본",
+          "role": "read",
+          "targetSpec": "계정 비교 결과 표와 선택 결과 상세",
+          "actionIndex": 3,
+          "rect": [
+            9,
+            502,
+            1262,
+            27
+          ]
+        }
+      ],
+      "zoomBox": [
+        9,
+        476,
+        360,
+        53
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "30",
+      "file": "assets/07-payload.png",
+      "sha256": "54b31c94861a6a5c798a3d10947baec9c06ef4a32c4fe43bb8821390cbc90c9f",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "검사 조건 정하기",
+          "role": "click",
+          "controlName": "wb.simple.payload.settings",
+          "actionIndex": 1,
+          "rect": [
+            18,
+            147,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "검사 직접 시작",
+          "role": "click",
+          "controlName": "wb.simple.payload.start",
+          "actionIndex": 2,
+          "rect": [
+            107,
+            147,
+            123,
+            32
+          ]
+        },
+        {
+          "label": "결과 증거 연결",
+          "role": "click",
+          "controlName": "wb.simple.payload.evidence",
+          "actionIndex": 3,
+          "rect": [
+            295,
+            147,
+            106,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        13,
+        143,
+        360,
+        42
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "31",
+      "file": "assets/11-replay.png",
+      "sha256": "a5980452be8e2a4f3c37bd406b2a95918c129a918d01c2ba45459c656b39dcd9",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "요청 재현 열기",
+          "role": "click",
+          "controlName": "wb.simple.bounty.replay",
+          "actionIndex": 1,
+          "rect": [
+            16,
+            145,
+            79,
+            32
+          ]
+        },
+        {
+          "label": "순차 재현 실행",
+          "role": "click",
+          "controlName": "wb.bounty.flow.run",
+          "actionIndex": 2,
+          "rect": [
+            222,
+            195,
+            80,
+            32
+          ]
+        },
+        {
+          "label": "결과 증거 전달",
+          "role": "click",
+          "controlName": "wb.bounty.flow.evidence",
+          "actionIndex": 3,
+          "rect": [
+            368,
+            195,
+            98,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        12,
+        190,
+        360,
+        43
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "32",
+      "file": "assets/05-evidence.png",
+      "sha256": "b368ae199773441180626bad1447d3b46a711ec4948235df05e2066582ac6015",
+      "width": 1280,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "증거 항목 추가",
+          "role": "click",
+          "controlName": "wb.bounty.evidence.add",
+          "actionIndex": 1,
+          "rect": [
+            16,
+            233,
+            90,
+            32
+          ]
+        },
+        {
+          "label": "항목 설명 열기",
+          "role": "click",
+          "controlName": "wb.bounty.evidence.describe",
+          "actionIndex": 2,
+          "rect": [
+            410,
+            275,
+            79,
+            32
+          ]
+        },
+        {
+          "label": "가림 미리보기",
+          "role": "click",
+          "controlName": "wb.bounty.evidence.preview",
+          "actionIndex": 3,
+          "rect": [
+            115,
+            233,
+            106,
+            32
+          ]
+        }
+      ],
+      "zoomBox": [
+        13,
+        231,
+        360,
+        79
+      ],
+      "captureKind": "swing"
+    },
+    {
+      "step": "33",
+      "file": "assets/06-redaction.png",
+      "sha256": "5a07eeb2e32321d7adaaa40e7e59cdd17e98518f57cf22266ecad9d3d7dccc91",
+      "width": 1100,
+      "height": 800,
+      "highlights": [
+        {
+          "label": "가림된 내용 확인",
+          "role": "read",
+          "targetSpec": "가림 미리보기 창의 본문과 [REDACTED] 표시 영역",
+          "actionIndex": 1,
+          "rect": [
+            58,
+            130,
+            180,
+            25
+          ]
+        },
+        {
+          "label": "창 닫기",
+          "role": "click",
+          "targetSpec": "가림 미리보기 창의 닫기 버튼",
+          "actionIndex": 2,
+          "rect": [
+            18,
+            752,
+            51,
+            33
+          ]
+        }
+      ],
+      "zoomBox": [
+        20,
+        87,
+        360,
+        90
+      ],
+      "captureKind": "swing"
+    }
+  ]
+}

@@ -100,10 +100,13 @@ public final class SimplePreview extends WorkbenchTest {
   static void dashboardBounds(Container root) {
     for (String card : List.of("paths", "api", "environment", "secrets", "access", "coverage"))
       dashboardArea(root, "card." + card, 110, 76);
+    var distribution = (AbstractButton) SimpleWorkflowTest.named(root, "wb.flow.dashboard.distribution.toggle");
+    scenario("Dashboard keeps optional charts in an explicit disclosure", distribution != null && !distribution.isSelected());
+    scenario("Dashboard importance filter stays directly available", SimpleWorkflowTest.named(root, "wb.scope.dashboard.importance") != null);
     for (String bar : List.of("paths", "api", "environment", "secrets", "access", "coverage", "observations"))
-      dashboardArea(root, "bar." + bar, 160, 16);
+      scenario("Optional dashboard chart retains its original controller: " + bar, SimpleWorkflowTest.named(root, "wb.scope.dashboard.bar." + bar) != null);
     for (String severity : List.of("high", "medium", "low", "info"))
-      dashboardArea(root, "severity." + severity, 120, 16);
+      scenario("Optional importance chart retains its original controller: " + severity, SimpleWorkflowTest.named(root, "wb.scope.dashboard.severity." + severity) != null);
   }
   static void dashboardResults(Container root) {
     var scroll = (JScrollPane) SimpleWorkflowTest.named(root, "wb.scope.dashboard.scroll");
@@ -289,7 +292,7 @@ public final class SimplePreview extends WorkbenchTest {
         awaitUi(()->{var current=(JsAnalysis.Result)value(js,"current");return current!=null&&!current.endpoints().isEmpty();},"selected original JS analysis");
         scenario("JS analysis retains the selected HTTP source",js.sourceUrl.getText().startsWith(origin+"/assets/app.js")&&js.input.getText().contains("fetch("));
         if(js.urlTable.getRowCount()>0)js.urlTable.setRowSelectionInterval(0,0);
-        capture(root,"10-js.png");var details=(JPanel)SimpleWorkflowTest.named(root,"wb.js.inline.detail");scenario("Selected JS detail starts at the first labeled value",((JScrollPane)details.getComponent(0)).getViewport().getViewPosition().y==0);table.setRowSelectionInterval(1,1);
+        capture(root,"10-js.png");scenario("Approved JS reader retains the selected source with a separate detail disclosure",SimpleWorkflowTest.named(root,"wb.js.inline.detail")!=null&&js.input.getText().contains("fetch("));table.setRowSelectionInterval(1,1);
         click(root,"wb.simple.tool.mapper");
         var mapper=(kr.featuremapper.FeatureMapperWorkspace)value(extension,"featureMapper");
         mapper.observeCaptured(System.currentTimeMillis(),"합성 UI 검증",request(origin+"/api/documents/101","GET",true,List.of()),response(200,"{\"id\":101,\"title\":\"문서 예시\"}"));invoke(mapper,"refresh");
@@ -324,6 +327,9 @@ public final class SimplePreview extends WorkbenchTest {
         research.tabs.setSelectedIndex(1);research.cveTable.setRowSelectionInterval(0,0);
         research.status.setText("화면 검증용 가상 CVE · 실제 취약점/조회 결과 아님 · 외부 API 호출 0건");
         capture(root,"13-exposure-cve.png");
+        research.cveDetailTabs.setSelectedIndex(1);capture(root,"13-exposure-cve-evidence.png");
+        scenario("CVE evidence tab retains exact synthetic original metadata without a provider request",research.evidence.getText().contains("SYNTHETIC-UI:101"));
+        research.cveDetailTabs.setSelectedIndex(0);
         scenario("Research has two tabs and separate observed/affected/fixed details",research.tabs.getTabCount()==2&&research.evidence.getText().contains("SYNTHETIC-UI:101")&&research.fixedDetail.getText().contains("공지 확인"));
 
         click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); payloadFixture(value(entry,"payloadRunner"));capture(root,"07-payload.png");
@@ -341,7 +347,10 @@ public final class SimplePreview extends WorkbenchTest {
         auth.mapCandidate(credentials.get(0),new AuthAccount("Alice","alice","101","문서 소유자","alice@example.test"));
         auth.mapCandidate(credentials.get(1),new AuthAccount("Bob","bob","102","다른 사용자","bob@example.test"));
         auth.assign(0,credentials.get(0)); auth.assign(1,credentials.get(1)); auth.anonymous(3);
-        capture(WorkbenchUi.settingsBody(auth.preparationAccountChoices(),()->{}),"04-auth-accounts.png",Math.min(width,1000),300);
+        JPanel accountChoicesBody=WorkbenchUi.settingsBody(auth.preparationAccountChoices(),()->{});
+        for(Component child:((Container)((BorderLayout)accountChoicesBody.getLayout()).getLayoutComponent(BorderLayout.SOUTH)).getComponents())
+          if(child instanceof JButton close)close.setName("wb.auth.preparation.close");
+        capture(accountChoicesBody,"04-auth-accounts.png",Math.min(width,1000),300);
         var baseline = response(200,"{\"id\":101,\"title\":\"권한 점검용 문서\",\"ownerId\":\"alice\"}");
         var run = new AuthComparePanel.Run(1,alice,baseline,auth.context());
         run.baselineState=AuthComparePanel.Run.Baseline.VALID;

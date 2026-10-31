@@ -15,10 +15,10 @@ public final class AuthLayoutFitTest extends WorkbenchTest {
       var accountControls=SimpleWorkflowTest.visibleComponents(actions).stream()
           .filter(c->c instanceof AbstractButton).map(Component::getName).toList();
       var execution=UiLayoutTest.named(panel,"wb.actions.auth.execution");
-      check(accountControls.size()==4&&accountControls.containsAll(List.of("wb.auth.detect", "wb.simple.auth.settings", "wb.auth.history.more", "wb.auth.candidates.toggle"))
+      check(accountControls.size()==2&&accountControls.containsAll(List.of("wb.auth.detect", "wb.flow.auth.accounts.open"))
           &&SwingUtilities.isDescendingFrom(UiLayoutTest.named(panel,"wb.simple.auth.review"),(Container)execution)
           &&SwingUtilities.isDescendingFrom(UiLayoutTest.named(panel,"wb.simple.auth.stop"),(Container)execution),
-          "detection/settings stay above cards in adaptive groups and comparison/stop remain together beside result filters");
+          "detection and one account-policy menu stay above cards while comparison and stop remain beside records");
       check(!SwingUtilities.isDescendingFrom(panel.packetDetails,panel) && SwingUtilities.isDescendingFrom(panel.inlinePreview,panel),"inline comparison remains mounted while enlarged packet window stays independent");
       for(int width:new int[]{800,1024,1280,1600}){
         panel.setSize(width,800);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
@@ -35,12 +35,21 @@ public final class AuthLayoutFitTest extends WorkbenchTest {
           check(bounds.width>0&&bounds.height>0&&new Rectangle(0,0,actions.getWidth(),actions.getHeight()).contains(bounds),
               "account action stays fully visible inside adaptive toolbar: "+name+" at "+width);
         }
+        for(String name:List.of("wb.simple.auth.settings","wb.auth.history.more","wb.auth.candidates.toggle")){
+          var source=(AbstractButton)UiLayoutTest.named(panel,name);
+          var access=ApprovedWorkflowTestSupport.menuAccess(source,panel);
+          check(access!=null&&access.item().isEnabled()==source.isEnabled()
+                  &&!ApprovedWorkflowTestSupport.visible(source,panel),
+              "account policy entry retains the original controller and availability: "+name+" at "+width);
+        }
         Component origin=(Component)SimpleWorkflowTest.unchecked(panel,"accountOrigin");
         Rectangle originBounds=SwingUtilities.convertRectangle(origin.getParent(),origin.getBounds(),actions);
         check(originBounds.width>0&&originBounds.height>0&&new Rectangle(0,0,actions.getWidth(),actions.getHeight()).contains(originBounds),
             "account origin remains visible inside adaptive context at "+width);
       }
-      ((JToggleButton)UiLayoutTest.named(panel,"wb.auth.candidates.toggle")).doClick();UiLayoutTest.layout(panel);check(panel.candidates.getParent().getWidth()>0,"candidate controls remain accessible through disclosure");
+      var candidateToggle=(JToggleButton)UiLayoutTest.named(panel,"wb.auth.candidates.toggle");
+      ApprovedWorkflowTestSupport.menuAccess(candidateToggle,panel).item().doClick(0);
+      UiLayoutTest.layout(panel);check(candidateToggle.isSelected()&&panel.candidates.getParent().getWidth()>0,"actual account-policy menu reveals the retained candidate controls");
       var details=panel.candidateDetails;details.setSize(820,600);details.load(new AuthComparePanel.Candidate(1,"demo","https://example.test:443",java.util.Map.of(),1,""));
       for(int i=0;i<4;i++)UiLayoutTest.layout(details);
       check(details.name.getY()==details.role.getY()&&details.name.getX()<details.role.getX(),"account form uses two aligned columns");

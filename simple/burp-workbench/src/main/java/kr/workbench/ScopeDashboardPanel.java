@@ -50,6 +50,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
 
   final Actions actions;
   final JComboBox<AccountChoice> account = new JComboBox<>();
+  final JComboBox<String> importance = new JComboBox<>(new String[] {"전체 중요도", "높음", "중간", "낮음", "정보"});
   final JButton inspect = new JButton("통합 점검 열기"), reset = new JButton("조건 해제");
   final JButton original = new JButton("원본 보기"), repeater = new JButton("Repeater 준비"), evidence = new JButton("증거 추가");
   final JLabel target = new LiteralLabel("SCOPE: 아직 선택한 실행이 없습니다.");
@@ -108,7 +109,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
     name(inspect, "inspect");
     inspect.addActionListener(e -> { if (!closed) actions.inspect(); });
-    WorkbenchUi.primary(inspect);
+    inspect.putClientProperty("wb.primary", false); WorkbenchUi.primary(original);
     name(target, "target"); name(run, "run"); name(traffic, "traffic");
     target.setMinimumSize(new Dimension(0, 20));
     run.setMinimumSize(new Dimension(0, 20));
@@ -129,9 +130,17 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       finally { rebuilding = false; }
       refresh(true); revealResults();
     });
-    JPanel filters = WorkbenchUi.row(new JLabel("계정"), account, reset, inspect);
+    name(importance, "importance");
+    importance.setPrototypeDisplayValue("전체 중요도  ");
+    importance.addActionListener(e -> {
+      if (rebuilding || closed) return;
+      selectedSeverity = switch (importance.getSelectedIndex()) { case 1 -> "HIGH"; case 2 -> "MEDIUM"; case 3 -> "LOW"; case 4 -> "INFO"; default -> ""; };
+      if (!selectedSeverity.isEmpty()) group = ScopeInspectionDashboard.Group.SECRETS;
+      table.clearSelection(); refresh(true); revealResults();
+    });
+    JPanel filters = WorkbenchUi.row(new JLabel("계정"), account, importance, reset);
     filters.setName("wb.actions.dashboard.filters");
-    JPanel context = CompactWorkbenchUi.toolbar(target, filters);
+    JPanel context = CompactWorkbenchUi.toolbar(target, WorkbenchUi.row(inspect));
     context.setName("wb.actions.dashboard.context");
     addSection(content, context, 2);
     JPanel metadata = CompactWorkbenchUi.toolbar(run, traffic);
@@ -146,6 +155,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       cards.put(value, card); metricGrid.add(card);
     }
     addSection(content, metricGrid, 7);
+    addSection(content, filters, 4);
 
     var categories = new JPanel(new GridLayout(0, 1, 0, 2));
     for (var value : ScopeInspectionDashboard.Group.values()) {
@@ -174,7 +184,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     candidateNote.putClientProperty("wb.font.size", 11);
     secretChart.add(candidateNote, BorderLayout.SOUTH);
     charts.add(WorkbenchUi.card("민감정보 후보 중요도", secretChart));
-    addSection(content, charts, 7);
+    JPanel distribution = CompactWorkbenchUi.disclosure("wb.flow.dashboard.distribution", "분포 자세히", charts, false);
 
     name(table, "results"); table.putClientProperty("wb.table.compact", true);
     table.setAutoCreateRowSorter(true);
@@ -195,14 +205,12 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     evidence.addActionListener(e -> handoff(actions::evidence));
     var details = new JPanel(new BorderLayout(0, 6));
     details.add(new JScrollPane(detail));
-    JPanel selectionActions = CompactWorkbenchUi.toolbar(
-        new JLabel("선택 결과"), WorkbenchUi.row(original, repeater, evidence));
+    JPanel further = WorkflowUi.menu("wb.flow.dashboard.further", "다음 작업", repeater, evidence);
+    JPanel selectionActions = CompactWorkbenchUi.toolbar(new JLabel("선택 항목 근거"), WorkbenchUi.row(original, further));
     selectionActions.setName("wb.actions.dashboard.selection");
-    JPanel selectionFooter = new JPanel(new BorderLayout());
-    selectionFooter.setName("wb.placement.dashboard.selection");
-    selectionFooter.add(ReferenceUi.header(selectionActions, null));
-    details.add(selectionFooter, BorderLayout.SOUTH);
     JPanel detailCard = WorkbenchUi.card("선택 항목 근거", details);
+    detailCard.remove(((BorderLayout) detailCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
+    detailCard.add(ReferenceUi.header(selectionActions, null), BorderLayout.NORTH);
     var split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("해당 결과 목록", resultViews), detailCard, .61);
     name(split, "results.split");
@@ -212,6 +220,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     name(resultsSection, "results.area");
     resultsSection.add(filterSummary, BorderLayout.NORTH); resultsSection.add(split);
     addSection(content, resultsSection, 0);
+    addSection(content, distribution, 7);
     contentScroll = new JScrollPane(content);
     name(contentScroll, "scroll"); contentScroll.setBorder(null);
     contentScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -357,6 +366,9 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
   }
 
   private void refresh(boolean selectFirst) {
+    boolean previousRebuild = rebuilding; rebuilding = true;
+    try { importance.setSelectedIndex(switch (selectedSeverity) { case "HIGH" -> 1; case "MEDIUM" -> 2; case "LOW" -> 3; case "INFO" -> 4; default -> 0; }); }
+    finally { rebuilding = previousRebuild; }
     String accountValue = selectedAccount();
     Projection projected = projected(accountValue);
     if (projected == null) {
@@ -613,7 +625,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       rebuilding = true;
       try { account.removeAllItems(); account.addItem(new AccountChoice("")); }
       finally { rebuilding = false; }
-      inspect.setEnabled(false); account.setEnabled(false); reset.setEnabled(false);
+      inspect.setEnabled(false); account.setEnabled(false); importance.setEnabled(false); reset.setEnabled(false);
       target.setText("SCOPE: 대시보드 종료"); run.setText("현재 실행: 없음"); traffic.setText("요청 기록 없음");
       refresh(false);
       for (var card : cards.values()) card.setEnabled(false);

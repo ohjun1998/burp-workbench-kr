@@ -1,0 +1,10 @@
+{
+  "version": "1.4.16",
+  "group": "JsArchivePagingTest",
+  "checks": 52,
+  "attempts": 2,
+  "passedAttempts": 2,
+  "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+  "result": "passed",
+  "scope": "Isolated reruns after original 2-second async wait timed out during concurrent capture load; no source changes."
+}

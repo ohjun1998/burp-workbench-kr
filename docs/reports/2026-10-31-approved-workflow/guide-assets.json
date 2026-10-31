@@ -1,0 +1,134 @@
+{
+  "exampleVersion": "1.4.16",
+  "sourceImages": 32,
+  "files": [
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/activity.png",
+      "sha256": "edb455292b8db1575c2b8d9ad3a0f6d8fb3fedb62f9e1b158ceec296f2ebdb8d"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/auth-accounts.png",
+      "sha256": "40bd5369d38b6ab69a5320b9e928ab1100365c1042ed551377e387f9f2d18ca9"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/auth.png",
+      "sha256": "5be1a1f8278af79622d7902e76cb7a2cd89bb627550d48fdccc0d9606df5baff"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/bounty-replay.png",
+      "sha256": "1cd9da7ec99ed6774b2b71a3706b805a3e6b0b320e8e2e837259a0c481ca7f02"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/bounty.png",
+      "sha256": "c98a8ab9950fa457d0fa1d8e70d0f73f778b1405bd568c3796955bd29f6e3c09"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/dashboard.png",
+      "sha256": "7dab9e09789091d2e7aaa0bad12473efc0ac2870267f0cc45dd453e9a5c84b00"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/data.png",
+      "sha256": "7b1feabe3f8003397933a580600662f28d7de5ce8a34042e8145d9dfb934cddf"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/environment.png",
+      "sha256": "cc0bd8f3f84ed7367b7da6afcc5e191c473316cfd6dcbc326f093c929de43f08"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/exposure-cve.png",
+      "sha256": "10ead08aa425898de819d41db4e35c72968c2d53d9c3739de7fed536a4e61fdd"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/exposure-search.png",
+      "sha256": "b5c9ca5e4e33da52fff5413bfa728bdb9e4c8988e59caa7a3770a859cc2f3e70"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/js.png",
+      "sha256": "ee2444b84ae943764ef284016d791da721c55576944d08a5f090553814fea67f"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/mapper.png",
+      "sha256": "837dbca40498038bbbc9519e8a4817536e5ea7a34f59e09ecd60c17aa2447ac5"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/payload-results.png",
+      "sha256": "2adb0dc92d4f88e52507f14913fffc5eafc0bdbe3844b16d45bac07c00534fa4"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/payload.png",
+      "sha256": "645cb350e8e280dcec428276d9979887d157f9ccd8fc45d6c0a704069860b4b7"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/response-recon.png",
+      "sha256": "453329afaf684002180afca257885b7f9472685f475ae7a9d72f6977ac610ffe"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/dark/traffic.png",
+      "sha256": "496f618719953e0812ed4d985e9b972ca9a72122dd5d6507a1c9e665753a5875"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/activity.png",
+      "sha256": "81df9703b19875aa5a733de9ac12aefd1b034b78a0647dfc709796691d1a5180"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/auth-accounts.png",
+      "sha256": "4384fc80ce2400857d00280aa545e0d3e9d431865eec5be99bb9ced852269244"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/auth.png",
+      "sha256": "ef1d7bf2c3a8b8eb2a55af82e89ce29ef0b8640b2c4edd2ebd289ebb3a915c41"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/bounty-replay.png",
+      "sha256": "a78cfc6b7a9efc9bb119076cd49d9dc307951305f55f73c4dd27fd92cc4f7f57"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/bounty.png",
+      "sha256": "ef34313c3d42d0e20fe684a736c51c2a5a4f2313fbf50b76f89244216114d5ff"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/dashboard.png",
+      "sha256": "93ec3f6a8d5e89c9e8077b7aaa4aa0052b3e174e6d4bccb099ef3898827d9b40"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/data.png",
+      "sha256": "4b8ea35c5e90bd3af2815f940bdd21e822b580daa05b18419105cc7eaa713b8c"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/environment.png",
+      "sha256": "a475175a3eb9d33ee1ed69d8892338d8038d93080666fdb68c56b42b79c43945"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/exposure-cve.png",
+      "sha256": "8489063208098c3469eef310e2acf07b902a43653a4e976eeb5663973e72155a"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/exposure-search.png",
+      "sha256": "ad352b52c0daf1a06cdf35f7f3386defa4d5c32291ce5cf646d5b99635bd1b48"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/js.png",
+      "sha256": "e592f97bb4730ffaaf7aa08e7f0e63d7fbfe413b1a22145671f1a84a6ac964b6"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/mapper.png",
+      "sha256": "a1b2f3ee25cfa55d9806feaec5ac3873d080f8a871807a3cec7eb4f125e92e76"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/payload-results.png",
+      "sha256": "efecd136ea7cd09a617fe140090f51b2b460feaa8fdeda067ae755916ba0f2bf"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/payload.png",
+      "sha256": "c4710ee79415269c4035678b237c5d152109c37beeeb6cab1734f770170f037c"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/response-recon.png",
+      "sha256": "8045c22cc779e8be73d38018d1d5f57e4ada4c375c951fb46602132963b892f3"
+    },
+    {
+      "path": "simple/burp-workbench/src/main/resources/guides/screens/light/traffic.png",
+      "sha256": "2be9f5fd480555af38c6637d37a50db2673a7efa80929060fca95ecaa34dddae"
+    }
+  ]
+}

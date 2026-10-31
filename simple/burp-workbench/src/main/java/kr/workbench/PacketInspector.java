@@ -37,7 +37,9 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private final JPanel searchControls = new JPanel();
   final JButton searchOptions = new ToolButton("검색 옵션", "more");
   final JComboBox<String> modePicker = new JComboBox<>(new String[]{"Pretty", "Raw", "Hex", "Render"});
-  private boolean compactSearch;
+  private boolean compactSearch, searchExpanded, headerMerged;
+  private final JPanel modeTabs = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 0, 0));
+  private final JButton findButton = new JButton("검색");
   final JPanel trafficContextBar = new JPanel(new BorderLayout(4, 2));
   final JLabel trafficContextNotice = new JLabel();
   final JButton trafficPrevious = new JButton("이전 일치"), trafficNext = new JButton("다음 일치"), trafficReturn = new JButton("앞부분 보기");
@@ -98,7 +100,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     text.setName(name + ".text");text.setEditable(false);
     text.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty,"\n");
     text.getAccessibleContext().setAccessibleName("읽기 전용 요청·응답 패킷");
-    JPanel choices = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 0, 0));
+    JPanel choices = modeTabs;
     for (Mode value : Mode.values()) {
       String title = switch (value) { case PRETTY -> "Pretty"; case RAW -> "Raw"; case HEX -> "Hex"; case RENDER -> "Render"; };
       JToggleButton tab = new Tab(title);tab.setName(name + "." + title.toLowerCase());
@@ -131,6 +133,9 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     searchControls.setLayout(new BoxLayout(searchControls,BoxLayout.X_AXIS));
     rebuildSearchControls(false);
     searchBar.add(searchControls, BorderLayout.EAST);add(searchBar, BorderLayout.SOUTH);
+    searchBar.setVisible(false);
+    findButton.setName(name + ".search.open");
+    findButton.addActionListener(e -> showSearch());
     JPopupMenu searchMenu=new JPopupMenu();JCheckBoxMenuItem caseChoice=new JCheckBoxMenuItem("대소문자 구분"),regexChoice=new JCheckBoxMenuItem("정규식 검색");
     caseChoice.addActionListener(event->caseSensitive.doClick());regexChoice.addActionListener(event->regex.doClick());
     searchMenu.add(caseChoice);searchMenu.add(regexChoice);searchOptions.setName(name+".search.options");
@@ -152,8 +157,8 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     caseSensitive.addActionListener(e -> scheduleSearch());regex.addActionListener(e -> scheduleSearch());
     previous.addActionListener(e -> navigate(-1));next.addActionListener(e -> navigate(1));clear.addActionListener(e -> search.setText(""));
     bind(search, "ENTER", "next", () -> navigate(1));bind(search, "shift ENTER", "previous", () -> navigate(-1));
-    bind(search, "ESCAPE", "clear", () -> search.setText(""));
-    bind(this, "ctrl F", "find", () -> { search.requestFocusInWindow();search.selectAll(); });
+    bind(search, "ESCAPE", "clear", () -> { search.setText(""); searchExpanded=false; searchBar.setVisible(false); revalidate(); });
+    bind(this, "ctrl F", "find", this::showSearch);
     bind(this, "F3", "next", () -> navigate(1));bind(this, "shift F3", "previous", () -> navigate(-1));
     text.addComponentListener(new ComponentAdapter() { public void componentResized(ComponentEvent e) { lines.revalidate();lines.repaint(); } });
     if(editable)text.getDocument().addDocumentListener(new DocumentListener() {
@@ -171,7 +176,20 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     owner.getActionMap().put(name, new AbstractAction() { public void actionPerformed(ActionEvent e) { action.run(); } });
   }
 
-  Component titleActions(){return headerActions;}
+  Component titleActions(){
+    if (!headerMerged) {
+      headerMerged=true; headerActions.removeAll();
+      JPanel tools=WorkflowUi.menu(getName()+".tools", "원문 도구", tabs.get(2),tabs.get(3),copy,wrap,findButton,more);
+      headerActions.add(modeTabs); headerActions.add(tools); toolbar.putClientProperty("wb.workflow.merged",true); toolbar.setVisible(false);
+    }
+    return headerActions;
+  }
+
+  private void showSearch() {
+    if (!search.isEnabled()) return;
+    searchExpanded=true; searchBar.setVisible(true); revalidate();
+    search.requestFocusInWindow(); search.selectAll();
+  }
 
   void setNativeAction(Runnable action) { nativeAction = action;more.setEnabled(action != null); }
   Mode mode() { return mode; }
@@ -328,7 +346,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     boolean html=mode==Mode.RENDER;
     remove(html?scroll:renderPanel);add(html?renderPanel:scroll,BorderLayout.CENTER);
     for(JComponent control:new JComponent[]{search,caseSensitive,regex,clear})control.setEnabled(!html);
-    searchBar.setVisible(!html);copy.setEnabled(!html);wrap.setEnabled(mode != Mode.HEX && !html);
+    searchBar.setVisible(!html && (searchExpanded || !search.getText().isEmpty()));findButton.setEnabled(!html);copy.setEnabled(!html);wrap.setEnabled(mode != Mode.HEX && !html);
     if(html){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
     revalidate();repaint();
     wrap.setToolTipText(mode == Mode.HEX ? "Hex는 바이트 열을 고정하고 가로 스크롤로 표시합니다." : "긴 줄 자동 줄바꿈");
@@ -518,7 +536,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     private final JPanel choices,actions;private final JComboBox<String> picker;private boolean compact;
     ResponsivePacketToolbar(JPanel choices,JComboBox<String> picker,JPanel actions){super(new BorderLayout(4,0));this.choices=choices;this.picker=picker;this.actions=actions;add(choices,BorderLayout.WEST);add(actions,BorderLayout.EAST);}
     private void adapt(){
-      if(getWidth()<=0)return;int intrinsic=0;for(Component choice:choices.getComponents())if(choice.isVisible())intrinsic+=choice.getPreferredSize().width;
+      if(Boolean.TRUE.equals(getClientProperty("wb.workflow.merged"))||getWidth()<=0)return;int intrinsic=0;for(Component choice:choices.getComponents())if(choice.isVisible())intrinsic+=choice.getPreferredSize().width;
       boolean next=getWidth()<intrinsic+(actions.getParent()==this?actions.getPreferredSize().width:0)+4;
       if(next==compact)return;compact=next;remove(next?choices:picker);add(next?picker:choices,BorderLayout.WEST);
     }

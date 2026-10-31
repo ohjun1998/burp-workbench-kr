@@ -27,6 +27,7 @@ CAPTURES = [
     '23-katana-settings.png', '24-katana-results.png',
     '25-inspection-report.png',
     '27-dashboard.png', '28-dashboard-detail.png', '29-dashboard-empty-filter.png',
+    '30-dashboard-distribution.png',
 ]
 
 
@@ -104,6 +105,15 @@ def main() -> int:
             collapsed.append({'view': view, 'name': name, 'reason': 'missing'})
         else:
             collapsed.extend(r for r in found if int(r['visibleHeight']) < minimum or int(r['visibleWidth']) < 200)
+    for part in [*(f'bar.{key}' for key in ['paths', 'api', 'environment', 'secrets', 'access', 'coverage', 'observations']),
+                 *(f'severity.{key}' for key in ['high', 'medium', 'low', 'info'])]:
+        name = f'wb.scope.dashboard.{part}'
+        found = [r for r in controls if r['view'] == '30-dashboard-distribution.png' and r['name'] == name]
+        if not found:
+            collapsed.append({'view': '30-dashboard-distribution.png', 'name': name, 'reason': 'missing'})
+        else:
+            collapsed.extend(r for r in found if r['fullyVisible'] != 'true'
+                             or int(r['controlWidth']) < 200 or int(r['controlHeight']) < 20)
     for name, rows in [('controls', controls), ('content', content), ('scenarios', scenarios)]:
         if rows:
             with (args.out / f'scope-{name}.csv').open('w', encoding='utf-8', newline='') as target:
@@ -117,6 +127,7 @@ def main() -> int:
         'java17ApiCompatibilityVerified': not args.source_target,
         'renderedViews': views, 'controls': len(controls), 'scenarios': len(scenarios),
         'captureFiles': CAPTURES,
+        'dashboardViews': {'default': '27-dashboard.png', 'expandedDistribution': '30-dashboard-distribution.png'},
         'clippedControls': clipped, 'collapsedAreas': collapsed, 'failedScenarios': failed, 'missingCaptures': missing,
         'scope': 'Production Scope inspection components with synthetic wire packets and browser observations; zero target HTTP. Not native Burp GUI, live browser DOM or a live target assessment.',
         'result': 'passed' if not clipped and not collapsed and not failed and not missing else 'failed',

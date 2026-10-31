@@ -238,10 +238,20 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
                 prepareNavigation();
               }
             });
-    JSplitPane workspace = WorkbenchUi.split(
-        JSplitPane.HORIZONTAL_SPLIT,
-        WorkbenchUi.card("분석 원문", sourcePane()), newResultsView(), .40);
-    workspace.setName("wb.js.findings");
+    newResultsView();
+    // Keep the actual selected models, but make paths the first reading area.
+    // The old repeated facts remain available on demand below the source reader.
+    JSplitPane oldDetailSplit=(JSplitPane)((BorderLayout)resultView.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+    Component findingDetails=oldDetailSplit.getBottomComponent();
+    findingDetails.setPreferredSize(new Dimension(320,200));
+    oldDetailSplit.setTopComponent(null);oldDetailSplit.setBottomComponent(null);
+    resultView.removeAll();resultView.add(resultTabs);
+    JPanel sourceReader=new JPanel(new BorderLayout(0,6));
+    sourceReader.setName("wb.workflow.js.source");sourceReader.add(sourcePane());
+    JPanel analysisEvidence=CompactWorkbenchUi.disclosure("wb.workflow.js.evidence","발견 입력·분석 근거",findingDetails,false);
+    sourceReader.add(analysisEvidence,BorderLayout.SOUTH);
+    JSplitPane workspace=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,resultView,sourceReader,.52);
+    workspace.setName("wb.js.findings");workspace.putClientProperty("wb.workflow.fixedLayout",true);
     results.setName("wb.js.results");
     add(workspace);
     for (int i=0;i<results.getTabCount();i++) {
@@ -263,6 +273,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     // Simple keeps source and observed-packet work local. Optional registry queries
     // and active source-map discovery are not part of the visible execution path.
     JMenuItem observed=new JMenuItem("관찰된 API 패킷 보기");observed.addActionListener(e->openObservedPacket());toolMenu.add(observed);
+    observed.setEnabled(resolve.isEnabled());resolve.addPropertyChangeListener("enabled",e->observed.setEnabled(resolve.isEnabled()));
     tools.setToolTipText("선택한 API와 같은 경로에서 실제 관찰한 요청·응답을 확인합니다.");
     tools.putClientProperty("wb.simple.js.tools.menu", toolMenu);
     JMenuItem matchTraffic=new JMenuItem("트래픽 대조"),compareVersions=new JMenuItem("버전 비교");
@@ -280,28 +291,40 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     tools.addActionListener(e -> toolMenu.show(tools, 0, tools.getHeight()));
     more.addActionListener(e -> moreMenu.show(more, 0, more.getHeight()));
     JButton target = targetSettings.button();
-    more.setName("wb.js.more");more.setText("");more.setIcon(WorkspaceIcons.of("more"));more.setToolTipText("더보기");more.getAccessibleContext().setAccessibleName("더보기");more.setPreferredSize(new Dimension(36,34));
+    more.setName("wb.js.more");more.setText("분석 관리 ▾");more.setIcon(WorkspaceIcons.of("more"));more.setToolTipText("분석 이력·트래픽 대조·버전 비교·대상 설정");more.getAccessibleContext().setAccessibleName("분석 관리");
     resolve.setText("Repeater 준비");WorkbenchUi.primary(resolve);
-    JPanel toolbar=new JPanel(new BorderLayout(0,6));toolbar.setName("wb.js.toolbar");
-    JPanel contextActions=WorkbenchUi.row(passive,target,more);contextActions.setName("wb.actions.js.context");
-    toolbar.add(contextActions,BorderLayout.NORTH);
+    JMenuItem targetItem=new JMenuItem("대상 설정");targetItem.setName("wb.js.target.settings.menu");targetItem.addActionListener(e->target.doClick());moreMenu.addSeparator();moreMenu.add(targetItem);
     for(JButton action:new JButton[]{analysisList,analysisDetails}){JMenuItem item=new JMenuItem(action.getText());item.addActionListener(e->action.doClick());moreMenu.add(item);}
-    sources.setPreferredSize(new Dimension(290,34));sources.setName("wb.js.source.choice");
-    JPanel sourceContext=new JPanel(new BorderLayout(8,0));sourceContext.add(WorkbenchUi.row(new JLabel("소스"),sources),BorderLayout.WEST);sourceContext.add(CompactWorkbenchUi.search(urlTable,"wb.js.findings.search","경로·메서드·입력값 검색"));
-    sourceContext.setName("wb.actions.js.source");
-    toolbar.add(sourceContext,BorderLayout.SOUTH);
-    tools.setName("wb.js.selected.tools");locate.setName("wb.js.source.locate");resolve.setName("wb.js.repeater.prepare");
-    resultView.setDetailActions(tools,locate,resolve);
-    // Keep selected-finding actions at the end of the reading area, rather than
-    // mixing them with the detail title above the evidence.
-    Container previousActions=resultView.detailActions.getParent();
-    previousActions.remove(resultView.detailActions);
-    Component previousSelection=((BorderLayout)resultView.getLayout()).getLayoutComponent(BorderLayout.SOUTH);
-    resultView.remove(previousSelection);
-    JPanel selectedFinding=WorkbenchUi.row(resultView.summary,resultView.shortcut);
+    sources.setPreferredSize(new Dimension(320,32));sources.setMinimumSize(new Dimension(130,32));sources.setName("wb.js.source.choice");
+    JPanel sourceContext=WorkbenchUi.row(new JLabel("소스"),sources);sourceContext.setName("wb.actions.js.source");
+    JPanel contextActions=WorkbenchUi.row(passive,more);contextActions.setName("wb.actions.js.context");
+    JPanel originalTarget=new JPanel();originalTarget.setVisible(false);originalTarget.add(target);contextActions.add(originalTarget);
+    JPanel toolbar=CompactWorkbenchUi.toolbar(sourceContext,contextActions);toolbar.setName("wb.js.toolbar");
+    JTextField findingSearch=CompactWorkbenchUi.search(urlTable,"wb.js.findings.search","경로·메서드·입력 이름 검색");
+    JPanel tabsHeader=(JPanel)((BorderLayout)resultTabs.getLayout()).getLayoutComponent(BorderLayout.NORTH);
+    resultTabs.remove(tabsHeader);
+    JPanel findingHeader=new JPanel(new BorderLayout(0,5));findingHeader.add(tabsHeader,BorderLayout.NORTH);findingHeader.add(findingSearch);
+    resultTabs.add(findingHeader,BorderLayout.NORTH);
+    JButton types=new JButton("분석 유형 ▾");types.setName("wb.workflow.js.types");
+    JPopupMenu typeMenu=new JPopupMenu();
+    for(int index=3;index<results.getTabCount();index++){
+      final int tab=index;resultTabs.titles.get(index).setVisible(false);
+      JMenuItem item=new JMenuItem(results.getTitleAt(index));item.setName("wb.workflow.js.type."+index);
+      item.addActionListener(e->results.setSelectedIndex(tab));typeMenu.add(item);
+      results.addPropertyChangeListener("indexForTitle",e->item.setText(results.getTitleAt(tab)));
+    }
+    types.setComponentPopupMenu(typeMenu);types.addActionListener(e->typeMenu.show(types,0,types.getHeight()));
+    results.addChangeListener(e->types.setText(results.getSelectedIndex()<3?"분석 유형 ▾":results.getTitleAt(results.getSelectedIndex())+" ▾"));
+    resultTabs.extras.add(types,0);
+    tools.setName("wb.js.selected.tools");tools.setText("선택 경로 ▾");locate.setName("wb.js.source.locate");resolve.setName("wb.js.repeater.prepare");
+    JMenuItem location=new JMenuItem("원문 위치로 이동");location.setName("wb.js.source.locate.menu");location.addActionListener(e->locate.doClick());location.setEnabled(locate.isEnabled());
+    locate.addPropertyChangeListener("enabled",e->location.setEnabled(locate.isEnabled()));toolMenu.addSeparator();toolMenu.add(location);
+    JPanel retainedLocate=new JPanel();retainedLocate.setVisible(false);retainedLocate.add(locate);
+    resultView.setDetailActions(tools,resolve,retainedLocate);
+    JPanel selectedFinding=new JPanel(new BorderLayout(4,0));selectedFinding.add(resultView.summary);selectedFinding.add(resultView.shortcut,BorderLayout.SOUTH);
     JPanel findingActions=CompactWorkbenchUi.toolbar(selectedFinding,resultView.detailActions);
-    findingActions.setName("wb.placement.js.selection");
-    resultView.add(findingActions,BorderLayout.SOUTH);
+    findingActions.setName("wb.workflow.js.selection");
+    sourceReader.add(findingActions,BorderLayout.NORTH);
     resolve.addActionListener(e -> openResolvedDraft());
 
     header.removeAll();
@@ -659,10 +682,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   JPanel sourcePane() {
     JPanel p = new JPanel(new BorderLayout(0, 4));
     p.setName("wb.js.manual");
-    JPanel actions = new JPanel();
-    actions.setLayout(new BoxLayout(actions, BoxLayout.Y_AXIS));
-    actions.add(
-        WorkbenchUi.row(navigator.previous, navigator.next, navigator.filter, findingCount));
+    JPanel navigation=WorkbenchUi.row(navigator.previous,navigator.next,navigator.filter,findingCount);
+    JPanel actions=CompactWorkbenchUi.disclosure("wb.workflow.js.navigation","원문 감지 위치 탐색",navigation,false);
     navigator.previous.getAccessibleContext().setAccessibleName("이전 감지 위치");
     navigator.next.getAccessibleContext().setAccessibleName("다음 감지 위치");
     String legend = "원문 표시: 파랑 URL · 빨강 시크릿 · 초록 도메인/의존성 · 보라 소스맵";
@@ -686,12 +707,12 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     if(resultView!=null)resultView.selection();
     toRepeater.setEnabled(endpoint);
     resolve.setEnabled(endpoint);
-    if(selectedTools!=null)selectedTools.setEnabled(endpoint);
     locate.setEnabled(
         endpoint
             || current != null
                 && results.getSelectedIndex() == 1
                 && secretTable.getSelectedRow() >= 0);
+    if(selectedTools!=null)selectedTools.setEnabled(endpoint||locate.isEnabled());
   }
 
   public void startHistory() { startHistory(true); }

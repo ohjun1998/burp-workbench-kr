@@ -18,6 +18,8 @@ public final class SimpleDashboardRevealTest extends WorkbenchTest {
         scroll.setColumnHeaderView(table.getTableHeader());
     }
     if (component instanceof Container container) {
+      // Detached headless trees need explicit invalidation when disclosures change size.
+      container.invalidate();
       container.doLayout(); for (var child : container.getComponents()) layout(child);
     }
   }
@@ -91,15 +93,39 @@ public final class SimpleDashboardRevealTest extends WorkbenchTest {
       var panel = holder.get();
       try {
         settle(host);
-        edt(() -> check(!resultsVisible(host, panel) && y(panel) == 0,
-            "initial small dashboard keeps its overview instead of automatically scrolling to results"));
+        edt(() -> {
+          Component cards=SimpleWorkflowTest.named(panel,"wb.scope.dashboard.cards");
+          check(y(panel)==0 && cards.getHeight()>0 && shown(host,cards).height==cards.getHeight(),
+              "initial compact dashboard retains its full overview at scroll position zero: y="+y(panel));
+        });
         for (String control : List.of("card.api", "bar.api", "severity.high")) {
           edt(() -> position(panel, 0));
+          if(!control.startsWith("card.")){
+            edt(() -> {
+              var distribution=(JToggleButton)SimpleWorkflowTest.named(panel,"wb.flow.dashboard.distribution.toggle");
+              if(!distribution.isSelected())distribution.doClick(0);
+            });
+            settle(host);
+            edt(() -> {
+              var chart=(JComponent)SimpleWorkflowTest.named(panel,"wb.scope.dashboard."+control);
+              chart.scrollRectToVisible(new Rectangle(0,0,chart.getWidth(),chart.getHeight()));
+            });
+            settle(host);
+            edt(() -> {
+              Component chart=SimpleWorkflowTest.named(panel,"wb.scope.dashboard."+control);
+              check(shown(host,chart).height==chart.getHeight()&&chart.getHeight()>0,
+                  "expanded distribution makes the actual "+control+" action visible before use: bounds="+chart.getBounds()
+                      +" shown="+shown(host,chart)+" scroll="+scroll(panel).getViewport().getViewPosition()
+                      +" view="+scroll(panel).getViewport().getViewSize()+" extent="+scroll(panel).getViewport().getExtentSize());
+            });
+          }
           edt(() -> SimpleWorkflowTest.click(panel, "wb.scope.dashboard." + control));
           settle(host);
           edt(() -> check(resultsVisible(host, panel) && panel.selectedRow() != null,
               "one explicit " + control + " action reveals both the result list and selected detail"));
         }
+        edt(() -> ((JToggleButton)SimpleWorkflowTest.named(panel,"wb.flow.dashboard.distribution.toggle")).doClick(0));
+        settle(host);
         edt(() -> position(panel, 0));
         edt(() -> account(panel, "Bob")); settle(host);
         edt(() -> {
@@ -109,7 +135,7 @@ public final class SimpleDashboardRevealTest extends WorkbenchTest {
           check(bob.id().equals(selectedOriginal.get()), "revealed row hands off the same immutable Bob original");
           position(panel, 0);
         });
-        edt(() -> panel.severityButtons.get("INFO").doClick(0)); settle(host);
+        edt(() -> panel.importance.setSelectedIndex(4)); settle(host);
         edt(() -> check(panel.table.getRowCount() == 0 && shown(host, panel.emptyMessage).height >= 40
             && shown(host, panel.detail).height >= 80 && !panel.original.isEnabled(),
             "an explicit zero-result filter reveals its recovery message and clears original actions"));

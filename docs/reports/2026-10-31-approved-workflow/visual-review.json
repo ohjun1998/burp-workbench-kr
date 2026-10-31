@@ -1,0 +1,48 @@
+{
+  "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+  "pdfSha256": "63db249210bffe46d053585366b1fefab2966a49d2bff395d13a0b2c6554692e",
+  "imageZipSha256": "887c41259cb6ad53d002c091f8d8dd566ad8b83f5e72e6546206fc3f7072bd40",
+  "reviewedPages": [
+    {
+      "screen": "traffic",
+      "page": 1
+    },
+    {
+      "screen": "auth",
+      "page": 13
+    },
+    {
+      "screen": "payload",
+      "page": 17
+    },
+    {
+      "screen": "bounty",
+      "page": 23
+    },
+    {
+      "screen": "auth.accounts",
+      "page": 31
+    }
+  ],
+  "reviewedContactSheets": [
+    "contact-light.png",
+    "contact-dark.png"
+  ],
+  "result": "passed",
+  "trafficSelectionConsistency": {
+    "table": "GET https://simple.example.test/api/documents/101",
+    "context": "GET /api/documents/101 · 선택 1건",
+    "request": "GET /api/documents/101 HTTP/1.1",
+    "responseId": 101,
+    "matches": true
+  },
+  "checks": [
+    "Actual UI remains large and readable in comparison pages.",
+    "Approved prototype is visually separated from actual Swing capture.",
+    "Korean headings and all three implementation notes fit without clipping.",
+    "Account panel preserves 1000x300 source aspect ratio and is not stretched to full screen.",
+    "Both themes display all sixteen labeled screenshots.",
+    "All 32 packaged PNGs match the current capture sources and final JAR report."
+  ],
+  "scope": "Visual report review only; functional test results are recorded separately."
+}

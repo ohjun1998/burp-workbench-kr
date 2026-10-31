@@ -1,0 +1,24 @@
+{
+  "version": "1.4.16",
+  "result": "passed",
+  "command": "python simple/dev.py verify --java /workspace/.cloud-tools/jdk17/bin/java",
+  "sourceFingerprintFiles": 2195,
+  "archiveCrcAndExactEntryContentsVerified": true,
+  "artifacts": [
+    {
+      "file": "simple/downloads/1.4.16/burp-workbench-simple-1.4.16.jar",
+      "bytes": 8971891,
+      "sha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd"
+    },
+    {
+      "file": "simple/downloads/1.4.16/burp-workbench-simple-1.4.16-source.zip",
+      "bytes": 99841432,
+      "sha256": "7ea3cc63c39f688c9e332a2a67d3407d53fecb8c783d2b5e7fa087b7312b881b"
+    },
+    {
+      "file": "simple/downloads/1.4.16/feature-mapper-browser-helper-0.4.1.zip",
+      "bytes": 34685,
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+    }
+  ]
+}

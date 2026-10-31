@@ -38,11 +38,20 @@ public final class JsCompactUpgradeTest extends WorkbenchTest {
       edt(()->p.load("fetch('/api/admin/users');fetch('/api/posts');","https://m.test/main.js"));JsAnalysisPanelTest.waitDone(p);
       edt(()->{
         p.setSize(1280,800);for(int i=0;i<5;i++)UiLayoutTest.layout(p);
-        JButton more=(JButton)UiLayoutTest.named(p,"wb.js.more");check(more.getText().isEmpty()&&more.getIcon()!=null,"more is an accessible icon-only control");
+        JButton more=(JButton)UiLayoutTest.named(p,"wb.js.more");check(more.getText().contains("분석 관리")&&more.getIcon()!=null&&more.getAccessibleContext().getAccessibleName().contains("분석 관리"),"analysis management has a meaningful visible caption and accessible name");
         JPopupMenu menu=(JPopupMenu)more.getClientProperty("wb.js.more.menu");check(((JMenuItem)menu.getComponent(0)).getText().equals("트래픽 대조")&&((JMenuItem)menu.getComponent(1)).getText().equals("버전 비교"),"traffic and version comparison live only inside the more menu");
         check(p.urlTable.getColumnCount()==4&&p.urlTable.getColumnName(2).equals("호출 상태")&&p.urlTable.getColumnName(3).equals("변경"),"main API list has four compact informative columns");
         check(p.resultView.summary.getPreferredSize().height<=30&&UiLayoutTest.named(p,"wb.js.selection.shortcut")!=null,"selected-path evidence occupies one line and advertises Ctrl+R");
         check(!p.resultTabs.previous.isVisible()&&!p.resultTabs.next.isVisible()&&p.resultTabs.previous.getParent()==null,"tab arrows are removed from the visible layout");
+        JButton types=(JButton)UiLayoutTest.named(p,"wb.workflow.js.types");JPopupMenu categories=types.getComponentPopupMenu();
+        check(p.results.getTabCount()==7&&categories!=null&&categories.getComponentCount()==4,"all seven result models remain available with four secondary categories grouped in a menu");
+        for(int index=0;index<3;index++)check(p.resultTabs.titles.get(index).isVisible(),"primary result category stays directly visible: "+index);
+        for(int index=3;index<7;index++){
+          check(!p.resultTabs.titles.get(index).isVisible(),"secondary result category leaves the crowded direct tab strip: "+index);
+          JMenuItem item=(JMenuItem)categories.getComponent(index-3);item.doClick(0);
+          check(p.results.getSelectedIndex()==index&&types.getText().contains(p.results.getTitleAt(index)),"secondary menu opens its retained result model and names the active category: "+index);
+        }
+        p.results.setSelectedIndex(0);check(p.repeater.sessions.isEmpty(),"category navigation never creates or sends a request");
         int x=p.resultTabs.viewport.getViewPosition().x;p.resultTabs.strip.dispatchEvent(new MouseWheelEvent(p.resultTabs.strip,MouseEvent.MOUSE_WHEEL,System.currentTimeMillis(),0,5,5,0,false,MouseWheelEvent.WHEEL_UNIT_SCROLL,3,1));check(p.resultTabs.viewport.getViewPosition().x>=x,"wheel gestures move only the result tab strip");
         p.versions.record("https://m.test/main.js","baseline",JsAnalysis.analyze("fetch('/api/posts');","https://m.test/main.js"));p.versions.record("https://m.test/main.js","current",p.currentResult());p.versionHashes.put(p.currentSourceKey(),"current");p.resultView.refresh();
         p.resultView.call.setSelectedItem("미호출");p.resultView.fresh.setSelected(true);check(p.urlTable.getRowCount()==1&&p.urlTable.getValueAt(0,0).toString().endsWith("/api/admin/users"),"combined missed-call and new-version filters use an intersection");

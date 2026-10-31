@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.16은 승인한 16개 화면의 작업 흐름을 적용합니다.** 주 작업과 보조 메뉴를 구분하고, 접힌 설정·넓은 원문·증거 3열 구성을 제공합니다. [설치 JAR](simple/downloads/1.4.16/burp-workbench-simple-1.4.16.jar) · [실제 화면 PDF](docs/reports/2026-10-31-approved-workflow/workbench-simple-1.4.16-workflow.pdf) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.16_KR.md). 작업 브랜치에서 제공하며 main 미병합입니다.
+
 **Simple 1.4.15는 주요 버튼을 실제로 재배치합니다.** [설치 JAR](simple/downloads/1.4.15/burp-workbench-simple-1.4.15.jar) · [1.4.14 전후 비교 PDF](docs/reports/2026-10-31-button-placement-correction/workbench-simple-1.4.15-before-after.pdf) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.15_KR.md). 작업 브랜치에서 제공하며 main 미병합입니다.
 
 **Simple 1.4.14는 작업 공간과 버튼 배치를 정리합니다.** [설치 JAR](simple/downloads/1.4.14/burp-workbench-simple-1.4.14.jar) · [16개 화면 PDF](docs/reports/2026-10-31-layout-polish/workbench-simple-1.4.14-light-dark.pdf) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.14_KR.md). 작업 브랜치에서 제공하며 main 병합 완료를 뜻하지 않습니다.

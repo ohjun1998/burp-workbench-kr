@@ -30,6 +30,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
   final JTable table = new JTable(model), parameterTable = new JTable(params);
   final JLabel summary = new JLabel("활동 추적 준비됨");
   final JLabel selectedUrl = new JLabel("선택한 URL이 없습니다.");
+  final JTextArea selectedFacts = new JTextArea(3, 26);
   final JTextField search = new WorkbenchSkin.SearchField(14,"URL, 입력 이름 검색");
   final JComboBox<String> filter =
       new JComboBox<>(
@@ -104,8 +105,8 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     records.addActionListener(e -> recordMenu.show(records, 0, records.getHeight()));
     importHistory.setName("wb.activity.importHistory");
     records.setName("wb.activity.records");
-    JPanel context = CompactWorkbenchUi.toolbar(
-        WorkbenchUi.row(enabled, scope), WorkbenchUi.row(importHistory, records));
+    JPanel recordActions = WorkflowUi.menu("wb.actions.activity.records", "기록", importHistory, save, load, export, clear);
+    JPanel context = CompactWorkbenchUi.toolbar(WorkbenchUi.row(enabled, scope), recordActions);
     context.setName("wb.actions.activity.context");
     add(WorkbenchUi.header(FeatureGuide.title("activity"),
         "계정·URL·입력의 미점검 항목을 찾고 완료 상태 관리", context), BorderLayout.NORTH);
@@ -139,7 +140,11 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     int[] widths = {75, 340, 135, 60, 95, 135, 160, 190, 220};
     for (int i = 0; i < widths.length; i++)
       { var column = table.getColumnModel().getColumn(i); column.setPreferredWidth(widths[i]); column.setWidth(widths[i]); }
-    table.setToolTipText("가로 스크롤로 출처와 최근 활동을 확인할 수 있습니다.");
+    // Keep the full keyed model; source/count/review metadata belongs to the selected inspector.
+    for (int modelColumn : new int[] {8, 7, 6, 4, 3})
+      table.removeColumn(table.getColumnModel().getColumn(table.convertColumnIndexToView(modelColumn)));
+    CompactWorkbenchUi.columns(table, 75, 430, 135, 135);
+    table.setToolTipText("URL을 선택해 오른쪽에서 발견 출처·요청 수·최근 활동을 확인합니다.");
     JPanel searchBar = new JPanel(new BorderLayout(6, 0));
     searchBar.add(filter, BorderLayout.WEST); searchBar.add(search);
     searchBar.setName("wb.placement.activity.filters");
@@ -150,22 +155,32 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     selectedUrl.setMinimumSize(new Dimension(0, 24));
     JPanel urlActions = WorkbenchUi.row(finish);
     urlActions.setName("wb.actions.activity.url");
-    JPanel selectionActions = WorkbenchUi.row(evidence, draft);
-    selectionActions.setName("wb.actions.activity.selection");
-    JPanel urlFooter = CompactWorkbenchUi.toolbar(selectedUrl, WorkbenchUi.row(urlActions, selectionActions));
-    urlFooter.setName("wb.placement.activity.url");
-    urls.add(ReferenceUi.header(urlFooter, null), BorderLayout.SOUTH);
-    JPanel parameterActions = CompactWorkbenchUi.toolbar(
-        new JLabel("선택 입력 점검"), WorkbenchUi.row(finishParam));
+    JPanel selectionActions = WorkflowUi.menu("wb.actions.activity.selection", "선택 작업", evidence, draft);
+    JPanel selectedHead = CompactWorkbenchUi.toolbar(new JLabel("선택 URL"), WorkbenchUi.row(selectionActions, urlActions));
+    selectedHead.setName("wb.flow.activity.selection");
+    JPanel parameters = new JPanel(new BorderLayout(0, 8));
+    parameters.setName("wb.flow.activity.inspector");
+    selectedFacts.setName("wb.activity.selected.facts");
+    selectedFacts.setEditable(false); selectedFacts.setLineWrap(true); selectedFacts.setWrapStyleWord(true);
+    selectedFacts.putClientProperty("wb.prose", true);
+    selectedFacts.setBorder(BorderFactory.createEmptyBorder(4, 12, 8, 12));
+    JPanel selectedContext = new JPanel(new BorderLayout(0, 5));
+    selectedContext.add(ReferenceUi.header(selectedHead, null), BorderLayout.NORTH);
+    JPanel identity = new JPanel(new BorderLayout(0, 4));
+    selectedUrl.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 12));
+    identity.add(selectedUrl, BorderLayout.NORTH); identity.add(selectedFacts);
+    selectedContext.add(identity);
+    parameters.add(selectedContext, BorderLayout.NORTH);
+    JPanel inputs = new JPanel(new BorderLayout(0, 4));
+    JPanel parameterActions = CompactWorkbenchUi.toolbar(new JLabel("입력 점검"), WorkbenchUi.row(finishParam));
     parameterActions.setName("wb.actions.activity.parameters");
-    JPanel parameters = new JPanel(new BorderLayout(0, 4));
-    parameters.add(ReferenceUi.header(new JLabel("선택 URL 입력"), null), BorderLayout.NORTH);
-    parameters.add(new JScrollPane(parameterTable));
-    JPanel parameterFooter = new JPanel(new BorderLayout());
-    parameterFooter.setName("wb.placement.activity.parameters");
-    parameterFooter.add(ReferenceUi.header(parameterActions, null));
-    parameters.add(parameterFooter, BorderLayout.SOUTH);
-    JSplitPane split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, urls, parameters, .72);
+    inputs.add(ReferenceUi.header(parameterActions, null), BorderLayout.NORTH);
+    inputs.add(new JScrollPane(parameterTable));
+    JLabel distinction = WorkbenchUi.hint("URL 전체 완료와 개별 입력 완료는 별도로 기록합니다.");
+    distinction.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
+    inputs.add(distinction, BorderLayout.SOUTH);
+    parameters.add(inputs);
+    JSplitPane split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, urls, parameters, .66);
     JPanel endpointsPage = new JPanel(new BorderLayout(6, 6));
     endpointsPage.add(split);
     coveragePages.addTab("URL 점검 현황", endpointsPage);
@@ -512,6 +527,11 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     selectedKey = key;
     selectedUrl.setText(selected == null ? "선택한 URL이 없습니다." : "선택 URL · " + selected.method() + " " + selected.url());
     selectedUrl.setToolTipText(selected == null ? null : selected.url());
+    selectedFacts.setText(selected == null ? "목록에서 URL을 선택하면 발견 근거와 입력을 확인할 수 있습니다."
+        : "점검 상태  " + selected.state() + "\n발견 출처  " + selected.sources()
+            + "\n관측 요청  " + selected.observed() + "건 · Repeater 준비  " + selected.repeater() + "건");
+    selectedFacts.setToolTipText(selected == null ? null : "최근 활동: " + selected.last() + " · 재검토 근거: " + selected.review());
+    selectedFacts.setCaretPosition(0);
     parameterRows.update(
         parameterTable,
         selected == null ? List.of() : selected.parameters(),
@@ -770,6 +790,6 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     pendingRows.clear();
     selectedKey = null;
     selectedUrl.setText("선택한 URL이 없습니다.");
-    selectedUrl.setToolTipText(null);
+    selectedUrl.setToolTipText(null); selectedFacts.setText(""); selectedFacts.setToolTipText(null);
   }
 }

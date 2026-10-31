@@ -62,6 +62,56 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
     return Base64.getUrlEncoder().withoutPadding().encodeToString(text.getBytes(StandardCharsets.UTF_8));
   }
 
+  private static void selectedTrafficContext(WorkbenchExtension extension,JPanel root,JTable table,
+      int model,String method,String path,byte[] wire) {
+    int view=table.convertRowIndexToView(model);
+    check(view>=0,"selected original remains reachable in the current sorted or filtered view: "+path);
+    table.setRowSelectionInterval(view,view);
+    JLabel context=(JLabel)named(root,"wb.simple.traffic.selection");
+    String expected=method+" "+path+" · 선택 1건";
+    check(context.getText().equals(expected)&&context.getToolTipText().equals(expected),
+        "selection context immediately names the actual selected method and path: "+expected);
+    Object selected=((List<?>)SimpleWorkflowTest.unchecked(extension,"traffic")).get(model);
+    var selectedPacket=(DiskTrafficStore.PacketRef)SimpleWorkflowTest.unchecked(selected,"packet");
+    Object current=SimpleWorkflowTest.unchecked(extension,"current");
+    var currentPacket=(DiskTrafficStore.PacketRef)SimpleWorkflowTest.unchecked(current,"packet");
+    PacketInspector reader=(PacketInspector)SimpleWorkflowTest.unchecked(extension,"requestPacket");
+    check(currentPacket.id().equals(selectedPacket.id())
+            &&java.util.Arrays.equals(reader.previewBytes(),wire),
+        "selection context and reader retain the same exact original identity and bytes: "+path);
+  }
+
+  private static void trafficSelectionContext(WorkbenchExtension extension,JPanel root,
+      burp.api.montoya.http.message.requests.HttpRequest original) throws Exception {
+    var post=request("https://buttons.example.test/api/context-zeta?token=KEEP_POST", "POST",true,List.of());
+    var delete=request("https://buttons.example.test/api/context-alpha?token=KEEP_DELETE", "DELETE",true,List.of());
+    seedTraffic(extension,post,response(201,"CONTEXT_POST_ORIGINAL"));
+    seedTraffic(extension,delete,response(202,"CONTEXT_DELETE_ORIGINAL"));
+    JTable table=(JTable)SimpleWorkflowTest.unchecked(extension,"logTable");
+    TrafficBrowser browser=(TrafficBrowser)SimpleWorkflowTest.unchecked(extension,"trafficBrowser");
+    int before=PayloadIntegrationTest.sent.get();
+    edt(() -> {
+      table.getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(0,SortOrder.DESCENDING)));
+      selectedTrafficContext(extension,root,table,1,"POST","/api/context-zeta",post.toByteArray().getBytes());
+      selectedTrafficContext(extension,root,table,0,"GET","/api/17",original.toByteArray().getBytes());
+      browser.search.setText("/api/context-");
+    });
+    TrafficSearchUpgradeTest.idle(browser);
+    edt(() -> {
+      check(table.getRowCount()==2,"filtered selection context uses only the two matching original rows");
+      selectedTrafficContext(extension,root,table,1,"POST","/api/context-zeta",post.toByteArray().getBytes());
+      selectedTrafficContext(extension,root,table,2,"DELETE","/api/context-alpha",delete.toByteArray().getBytes());
+      browser.search.setText("");
+    });
+    TrafficSearchUpgradeTest.idle(browser);
+    edt(() -> {
+      table.getRowSorter().setSortKeys(List.of());
+      selectedTrafficContext(extension,root,table,0,"GET","/api/17",original.toByteArray().getBytes());
+      check(PayloadIntegrationTest.sent.get()==before,
+          "sorted and filtered original selection updates context without target HTTP");
+    });
+  }
+
   private static void researchActions() throws Exception {
     AtomicInteger providerCalls = new AtomicInteger();
     var client = new VulnerabilityClient(uri -> {
@@ -98,6 +148,10 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
             && panel.references.getItemAt(0).equals("https://nvd.nist.gov/vuln/detail/CVE-2099-10001")
             && panel.references.getItemAt(1).equals("https://example.test/security/advisory"),
             "selecting CVE detail retains observed version, original identity and real source reference");
+        var filterToggle=(JToggleButton)named(panel,"wb.flow.exposure.cve.filters.toggle");
+        check(!filterToggle.isSelected(),"advanced CVE filters are folded by default without changing their models");
+        filterToggle.doClick(0);
+        check(filterToggle.isSelected(),"the real filter entry reveals every retained advanced condition");
         for(int width:new int[]{760,1000,1300}){
           panel.setSize(width,720);
           for(int pass=0;pass<8;pass++){invalidateTree(panel);UiLayoutTest.layout(panel);}
@@ -195,8 +249,9 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
     Object runner = get(entry, "payloadRunner");
     int sends = PayloadIntegrationTest.sent.get();
     try {
-      seedTraffic(extension, request("https://buttons.example.test/api/17", "GET", true, List.of()),
-          response(200, "CONTEXT_BUTTON_ORIGINAL"));
+      var contextOriginal=request("https://buttons.example.test/api/17", "GET", true, List.of());
+      seedTraffic(extension,contextOriginal,response(200,"CONTEXT_BUTTON_ORIGINAL"));
+      trafficSelectionContext(extension,root,contextOriginal);
       Object original = get(extension, "current");
       edt(() -> {
         extension.openFeature("traffic");
@@ -205,14 +260,17 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
         local(root, "wb.simple.traffic.evidence", "wb.actions.traffic.selection");
         var settings = (JComponent) named(root, "wb.traffic.settings");
         JPopupMenu menu = settings.getComponentPopupMenu();
-        check(menu != null && menu.getComponentCount() == 2,
-            "one traffic settings entry retains the two distinct original setting categories");
+        check(menu != null,
+            "one traffic settings entry retains the original categories and view operations");
         List<String> menuNames = java.util.Arrays.stream(menu.getComponents()).map(Component::getName).toList();
-        check(menuNames.containsAll(List.of("wb.traffic.scope.list", "wb.traffic.search.settings")),
-            "combined settings preserve capture and search/list actions");
-        for (Component item : menu.getComponents())
-          check(item instanceof JMenuItem action && action.getActionListeners().length > 0,
-              "both traffic setting categories retain actual handlers");
+        check(menuNames.containsAll(List.of("wb.traffic.scope.list", "wb.traffic.search.settings",
+                "wb.traffic.view.freeze.menu", "wb.traffic.view.apply.menu")),
+            "combined settings preserve capture, search/list, freeze and new-traffic operations");
+        for (Component item : menu.getComponents()) {
+          if(item instanceof JMenuItem action)
+            check(action.getActionListeners().length>0,"traffic menu entries retain actual handlers");
+          else check(item instanceof JPopupMenu.Separator,"traffic menu separates configuration and view operations");
+        }
 
         extension.openFeature("data");
         local(root, "wb.data.codec.convert", "wb.actions.data.codec.input");
@@ -255,7 +313,7 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
         payload.setText(request); int at = request.indexOf("original"); payload.select(at, at + 8);
         stages.setSelectedIndex(0);
         check(!visible(named(root, "wb.simple.payload.evidence"), workspace)
-            && !visible(named(root, "wb.payload.repeater"), workspace),
+            && !ApprovedWorkflowTestSupport.available(named(root, "wb.payload.repeater"), workspace),
             "request preparation omits result-only evidence and Repeater controls");
         button(root, "wb.payload.mark").doClick(0);
         String marked = request.replace("q=original", "q=§PAYLOAD§");
@@ -266,7 +324,7 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
         check(payload.getText().equals(marked), "local formatted preview leaves request bytes unchanged");
         button(root, "wb.payload.step.results").doClick(0);
         check(stages.getSelectedIndex() == 1 && visible(named(root, "wb.simple.payload.evidence"), workspace)
-            && visible(named(root, "wb.payload.repeater"), workspace),
+            && ApprovedWorkflowTestSupport.available(named(root, "wb.payload.repeater"), workspace),
             "results step reveals the retained result-only actions in the result header");
         check(!button(root, "wb.payload.repeater").isEnabled(),
             "result Repeater cannot prepare an unselected result");
@@ -289,7 +347,9 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
         var evidence = (BountySupportPanel) SimpleWorkflowTest.unchecked(extension, "bountySupport");
         extension.openFeature("bounty");
         local(root, "wb.bounty.evidence.remove", "wb.actions.bounty.items");
-        local(root, "wb.bounty.evidence.undo", "wb.actions.bounty.items");
+        local(root, "wb.bounty.evidence.undo", "wb.flow.bounty.items");
+        check(visible(named(root, "wb.bounty.evidence.undo"), evidence),
+            "evidence undo stays directly available beside the item menu");
         EvidenceEditingTest.append(evidence, "FIRST_BUTTON_PACKET");
         EvidenceEditingTest.append(evidence, "SECOND_BUTTON_PACKET");
         String selectedId = evidence.evidence.get(evidence.evidence.size() - 1).evidenceId();

@@ -6,6 +6,7 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
  final MontoyaApi api;final ObservationTableModel findings=model("규칙","URL (쿼리 제외)","근거 위치","관찰 근거","관측 횟수"),documents=model("메서드","경로 템플릿","쿼리 이름","본문 이름","관찰 결과"),flowModel=model("마커","쓰기 URL","조회 URL","쓰기 응답","조회 재출력","HTML 출력","브라우저 실행","HTTP");
  final PacketInspector findingResponse=new PacketInspector("wb.response.finding.response"),findingRequest=new PacketInspector("wb.response.finding.request");
  final JTextArea findingUrls=new JTextArea();
+ final JLabel findingTitle=new JLabel("관찰을 선택하세요"),findingContext=new JLabel("관찰 후보 · 원문과 접근 정책을 대조하세요.");
  final JTable findingTable=new AuthLayout.Table(findings),apiTable=new JTable(documents),flowTable=new JTable(flowModel);final JLabel status=new JLabel("SCOPE 내 응답 자동 관찰 · 취약점 확정/추가 요청 없음");
  final StoredFlows flows=new StoredFlows();final LinkedHashMap<String,PassiveFindings.Finding> issues=new LinkedHashMap<>();final Map<String,Integer> counts=new HashMap<>();final Map<String,Set<String>> affected=new LinkedHashMap<>();volatile Map<String,Set<String>> displayedAffected=Map.of();final JTextArea findingDetail=new JTextArea(7,70);final LinkedHashMap<String,ApiInventory.Endpoint> inventory=new LinkedHashMap<>();final LinkedHashMap<String,Set<String>> observed=new LinkedHashMap<>();final Map<String,Set<String>> observedTemplates=new HashMap<>();
  final ThreadPoolExecutor worker=new ThreadPoolExecutor(1,1,0,TimeUnit.MILLISECONDS,new ArrayBlockingQueue<>(50),r->{Thread t=new Thread(r,"Workbench-response-recon");t.setDaemon(true);return t;});final AtomicLong generation=new AtomicLong();final AtomicBoolean closed=new AtomicBoolean(),counterUpdatePending=new AtomicBoolean();final AtomicInteger dropped=new AtomicInteger(),oversized=new AtomicInteger(),queueRejected=new AtomicInteger(),analysisErrors=new AtomicInteger();
@@ -44,23 +45,52 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   markerWindow=new TargetWindow(this,"저장/조회 · 고유 마커 등록",()->{JButton register=new JButton("마커 등록");register.addActionListener(e->{try{flows.register(marker.getText().strip());status.setText("마커 등록 · 실제 쓰기/조회 요청을 관찰합니다. 요청을 자동 전송하지 않습니다.");}catch(Exception ex){Diagnostics.failure(ResponseReconPanel.this,"응답 보안 분석",ex);status.setText(ex.getMessage());}});return TargetWindow.options(WorkbenchUi.row(new JLabel("고유 마커"),marker),new JLabel("WB_ / PR_ 접두어 · 최대 20개 · 원문 페이로드/인증값은 저장하지 않습니다."),WorkbenchUi.row(register));});
   draftWindow=new TargetWindow(this,"OpenAPI 초안 · 경로 변수 확정",()->{JButton send=new JButton("Repeater 초안 준비");send.addActionListener(e->{try{if(drafting==null)throw new IllegalArgumentException("API를 선택하세요.");if(drafting.contentType().equals("multipart/form-data"))throw new IllegalArgumentException("Multipart는 실제 트래픽을 가져와 파일 본문을 확인하세요.");var d=ApiInventory.draft(drafting,resolved.getText());HttpRequest q=HttpRequest.httpRequestFromUrl(d.url()).withMethod(d.method());if(!d.body().isEmpty())q=q.withHeader("Content-Type",drafting.contentType().isEmpty()?"application/json":drafting.contentType()).withBody(d.body());if(!WorkbenchScope.contains(api,q))throw new IllegalArgumentException("Scope 제외 · "+WorkbenchScope.reason(api,q));api.repeater().sendToRepeater(q,"OpenAPI 검토");status.setText("Repeater 초안 준비 · 인증/값/문서와 실제 메서드를 확인하세요.");}catch(Exception ex){Diagnostics.failure(ResponseReconPanel.this,"응답 보안 분석",ex);status.setText(ex.getMessage());}});return TargetWindow.options(WorkbenchUi.row(new JLabel("확정할 URL"),resolved),new JLabel("같은 Origin · 쿼리값/인증을 복사하지 않음 · 준비는 전송/완료 처리 아님"),WorkbenchUi.row(send));});
   JButton clear=new JButton("관찰 초기화");apiDraft.addActionListener(e->{int row=apiTable.getSelectedRow();if(row<0){status.setText("API 항목을 선택하세요.");return;}String key=documents.getValueAt(apiTable.convertRowIndexToModel(row),0)+" "+documents.getValueAt(apiTable.convertRowIndexToModel(row),1);drafting=displayedInventory.get(key);if(drafting==null)return;resolved.setText(drafting.url());draftWindow.closeWindow();draftWindow.open();});clear.addActionListener(e->{generation.incrementAndGet();analysisQueue.cancelQueued();worker.getQueue().clear();retries.clear();submit(()->{issues.clear();counts.clear();countedOriginals.clear();affected.clear();clearPackets();synchronized(browserImages){browserImages.clear();}inventory.clear();observed.clear();observedTemplates.clear();flows.clear();refresh(generation.get());});});
-  clear.setToolTipText("현재 Passive/API/저장·조회 관측과 마커를 모두 비웁니다. 원본 트래픽은 유지합니다.");JTabbedPane tabs=new JTabbedPane();tabs.setName("wb.response.pages");findingDetail.setEditable(false);findingDetail.setLineWrap(true);findingDetail.setWrapStyleWord(true);findingTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting()){showFinding();refreshActions();}});JPanel passivePage=new JPanel(new BorderLayout(4,4));findingCapture.setName("wb.response.finding.evidence");WorkbenchUi.primary(findingCapture);JButton more=new JButton("더보기");JPopupMenu maintenance=new JPopupMenu();JMenuItem clearItem=new JMenuItem("관찰 초기화");clearItem.addActionListener(e->clear.doClick());maintenance.add(clearItem);more.addActionListener(e->maintenance.show(more,0,more.getHeight()));
-  JPanel searchRow=CompactWorkbenchUi.toolbar(CompactWorkbenchUi.search(findingTable,"wb.response.search","분류·URL·관찰 내용 검색"),WorkbenchUi.row(more));searchRow.setName("wb.actions.response.context");
-  passivePage.add(searchRow,BorderLayout.NORTH);
-  JTabbedPane detailTabs=new JTabbedPane();findingUrls.setEditable(false);findingUrls.putClientProperty("wb.prose",true);
-  JSplitPane detailSplit=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,ReferenceUi.facts(findingDetail),WorkbenchUi.card("응답 본문 (Response)",findingResponse),.35);detailTabs.addTab("근거 상세",detailSplit);detailTabs.addTab("관련 요청",findingRequest);detailTabs.addTab("영향 URL",new JScrollPane(findingUrls));
-  detailSplit.setName("wb.response.finding.detail");
-  JPanel findingActions=WorkbenchUi.row(findingCapture);findingActions.setName("wb.actions.response.finding");
-  JSplitPane findingSplit=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,new JScrollPane(findingTable),detailTabs(detailTabs,findingActions),.34);
-  findingSplit.setName("wb.response.finding.split");passivePage.add(findingSplit);tabs.addTab("응답 관찰",passivePage);JPanel apiPage=new JPanel(new BorderLayout(4,4));apiDraft.setName("wb.response.api.draft");apiDraft.setToolTipText("선택 API의 URL 변수를 확인한 뒤 Repeater에 초안을 준비합니다. 서버로 전송하지 않습니다.");WorkbenchUi.primary(apiDraft);JPanel apiActions=CompactWorkbenchUi.toolbar(WorkbenchUi.hint("API 선택 → 경로 변수 확인 → 초안 준비"),WorkbenchUi.row(apiDraft));apiActions.setName("wb.actions.response.api");JPanel apiFooter=new JPanel(new BorderLayout());apiFooter.setName("wb.placement.response.api");apiFooter.add(apiActions);apiPage.add(apiFooter,BorderLayout.SOUTH);apiPage.add(new JScrollPane(apiTable));apiTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())refreshActions();});tabs.addTab("API 문서",apiPage);tabs.addTab("저장/조회 연결",storedContent());tabs.addTab("분석 처리·재시도",retries.content(this::retryOriginal));add(tabs);add(status,BorderLayout.SOUTH);WorkbenchUi.feedback(status);int[][] widths={{190,290,140,270,80},{90,300,180,180,230},{150,230,230,150,160,130,160,70}};int t=0;for(JTable table:List.of(findingTable,apiTable,flowTable)){table.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);for(int i=0;i<table.getColumnCount();i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[t][i]);t++;}findingTable.setName("wb.response.findings");CompactWorkbenchUi.columns(findingTable,140,340,110,320,70);refreshActions();WorkbenchUi.style(this);
+  clear.setName("wb.response.clear");clear.setToolTipText("현재 Passive/API/저장·조회 관측과 마커를 모두 비웁니다. 원본 트래픽은 유지합니다.");
+  JTabbedPane tabs=CompactWorkbenchUi.pages();tabs.putClientProperty("wb.external.tabs",true);tabs.setName("wb.response.pages");
+  findingDetail.setEditable(false);findingDetail.setLineWrap(true);findingDetail.setWrapStyleWord(true);
+  findingTitle.putClientProperty("html.disable",true);findingTitle.setName("wb.response.finding.title");
+  findingTitle.setFont(WorkbenchUi.font().deriveFont(Font.BOLD));findingContext.putClientProperty("html.disable",true);findingContext.setName("wb.response.finding.context");findingContext.putClientProperty("wb.secondary",true);
+  findingTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting()){showFinding();refreshActions();}});
+  findingCapture.setName("wb.response.finding.evidence");findingCapture.setText("증거로 정리");WorkbenchUi.primary(findingCapture);
+  JPanel list=new JPanel(new BorderLayout(0,6));list.setName("wb.flow.response.observations");
+  list.add(CompactWorkbenchUi.search(findingTable,"wb.response.search","관찰 분류·URL·원문 내용 검색"),BorderLayout.NORTH);list.add(new JScrollPane(findingTable));
+  JTabbedPane detailPages=new JTabbedPane();findingUrls.setEditable(false);findingUrls.putClientProperty("wb.prose",true);
+  JPanel responseReader=new JPanel(new BorderLayout(0,4));responseReader.setName("wb.response.finding.detail");responseReader.add(findingResponse);
+  responseReader.add(CompactWorkbenchUi.disclosure("wb.flow.response.facts","관측 세부 정보",ReferenceUi.facts(findingDetail),false),BorderLayout.SOUTH);
+  detailPages.addTab("응답 원문",responseReader);detailPages.addTab("관련 요청",findingRequest);detailPages.addTab("영향 URL",new JScrollPane(findingUrls));
+  JButton copyFinding=action("근거 복사",()->Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new java.awt.datatransfer.StringSelection(findingDetail.getText()),null));copyFinding.setName("wb.response.finding.copy");
+  JButton openRequest=action("원본 요청 보기",()->detailPages.setSelectedIndex(1));openRequest.setName("wb.response.finding.original");
+  JPanel findingActions=WorkbenchUi.row(WorkflowUi.menu("wb.flow.response.finding.options","관찰 작업",copyFinding,openRequest),findingCapture);findingActions.setName("wb.actions.response.finding");
+  Runnable auxiliaryState=()->{copyFinding.setEnabled(findingTable.getSelectedRow()>=0);openRequest.setEnabled(findingCapture.isEnabled());};
+  findingTable.getSelectionModel().addListSelectionListener(e->auxiliaryState.run());findingCapture.addPropertyChangeListener("enabled",e->auxiliaryState.run());auxiliaryState.run();
+  JPanel passivePage=new JPanel(new BorderLayout());
+  JSplitPane findingSplit=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,list,detailTabs(detailPages,findingActions),.31);
+  findingSplit.setName("wb.response.finding.split");passivePage.add(findingSplit);tabs.addTab("응답 관찰",passivePage);
+  JPanel apiPage=new JPanel(new BorderLayout(4,4));apiDraft.setName("wb.response.api.draft");apiDraft.setToolTipText("선택 API의 URL 변수를 확인한 뒤 Repeater에 초안을 준비합니다. 서버로 전송하지 않습니다.");WorkbenchUi.primary(apiDraft);
+  JPanel apiActions=CompactWorkbenchUi.toolbar(WorkbenchUi.hint("API 선택 → 경로 변수 확인 → 초안 준비"),WorkbenchUi.row(apiDraft));apiActions.setName("wb.actions.response.api");
+  JPanel apiHeader=new JPanel(new BorderLayout());apiHeader.setName("wb.placement.response.api");apiHeader.add(apiActions);apiPage.add(apiHeader,BorderLayout.NORTH);apiPage.add(new JScrollPane(apiTable));apiTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())refreshActions();});
+  tabs.addTab("API 문서",apiPage);tabs.addTab("저장/조회 연결",storedContent());tabs.addTab("분석 처리·재시도",retries.content(this::retryOriginal));
+  JPanel choices=new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT,4,0));choices.setName("wb.flow.response.modes");ButtonGroup modes=new ButtonGroup();List<JToggleButton> modeButtons=new ArrayList<>();
+  for(int i=0;i<3;i++){int index=i;JToggleButton choice=new JToggleButton(tabs.getTitleAt(i));choice.setName("wb.response.page."+i);choice.putClientProperty("wb.compact.button",true);choice.addActionListener(e->tabs.setSelectedIndex(index));modes.add(choice);choices.add(choice);modeButtons.add(choice);}
+  Runnable modeState=()->{for(int i=0;i<modeButtons.size();i++)modeButtons.get(i).setSelected(i==tabs.getSelectedIndex());};tabs.addChangeListener(e->modeState.run());modeState.run();
+  JButton retriesView=action("분석 처리·재시도",()->tabs.setSelectedIndex(3));retriesView.setName("wb.response.retries.open");
+  JPanel management=WorkflowUi.menu("wb.actions.response.context","분석 관리",retriesView,clear);
+  add(CompactWorkbenchUi.toolbar(choices,management),BorderLayout.NORTH);add(tabs);add(status,BorderLayout.SOUTH);WorkbenchUi.feedback(status);
+  int[][] widths={{190,290,140,270,80},{90,300,180,180,230},{150,230,230,150,160,130,160,70}};int t=0;for(JTable table:List.of(findingTable,apiTable,flowTable)){table.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);for(int i=0;i<table.getColumnCount();i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[t][i]);t++;}
+  findingTable.setName("wb.response.findings");
+  // Full location/evidence values stay in the model and selected reader instead of crowding the list.
+  findingTable.removeColumn(findingTable.getColumnModel().getColumn(3));findingTable.removeColumn(findingTable.getColumnModel().getColumn(2));
+  CompactWorkbenchUi.columns(findingTable,180,230,65);refreshActions();WorkbenchUi.style(this);
 
  }
 
  void showFinding(){
   int view=findingTable.getSelectedRow();
-  if(view<0){findingDetail.setText("");findingUrls.setText("");AuthComparePanel.loadInspector(findingRequest,null,null);AuthComparePanel.loadInspector(findingResponse,null,null);return;}
+  if(view<0){findingTitle.setText("관찰을 선택하세요");findingContext.setText("관찰 후보 · 원문과 접근 정책을 대조하세요.");findingDetail.setText("");findingUrls.setText("");AuthComparePanel.loadInspector(findingRequest,null,null);AuthComparePanel.loadInspector(findingResponse,null,null);return;}
   int row=findingTable.convertRowIndexToModel(view);
   String key=row<displayedFindingKeys.size()?displayedFindingKeys.get(row):"";
+  findingTitle.setText(String.valueOf(findings.getValueAt(row,0)));
+  findingContext.setText(findings.getValueAt(row,1)+" · "+findings.getValueAt(row,2)+" · 관찰 후보");findingContext.setToolTipText(findingContext.getText());
   String group=ApiInventory.origin(Objects.toString(findings.getValueAt(row,1),""))+"|"+findings.getValueAt(row,0)+"|"+findings.getValueAt(row,2)+"|"+findings.getValueAt(row,3);
   String text="분류: "+findings.getValueAt(row,0)+"\n\n위치: "+findings.getValueAt(row,2)+"\n\n관찰: "+findings.getValueAt(row,3)+"\n\n관찰 후보 · 취약점 확정 아님\n\n영향 URL (쿼리 값 제외 · 그룹별 최대 100개)\n"+String.join("\n",displayedAffected.getOrDefault(group,Set.of()));
   if(!text.equals(findingDetail.getText())){findingDetail.setText(text);findingDetail.setCaretPosition(0);}
@@ -74,13 +104,13 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   JPanel registration=WorkbenchUi.row(register);registration.setName("wb.actions.response.marker");page.add(registration,BorderLayout.NORTH);
   flowDetail.setEditable(false);flowDetail.setLineWrap(true);flowDetail.setWrapStyleWord(true);
   flowTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);flowTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting()){showFlowDetail();refreshActions();}});
-  JPanel flowActions=WorkbenchUi.row(flowCapture,flowBrowser,flowClear);flowActions.setName("wb.actions.response.flow");
-  JPanel selectedFlow=new JPanel(new BorderLayout(0,4));selectedFlow.add(new JLabel("선택 흐름 근거"),BorderLayout.NORTH);selectedFlow.add(new JScrollPane(flowDetail));
-  JPanel flowFooter=CompactWorkbenchUi.toolbar(Box.createHorizontalGlue(),flowActions);flowFooter.setName("wb.placement.response.flow");selectedFlow.add(flowFooter,BorderLayout.SOUTH);
-  page.add(WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,new JScrollPane(flowTable),selectedFlow,.6));
+  JPanel flowActions=WorkbenchUi.row(WorkflowUi.menu("wb.flow.response.browser.options","실행 근거",flowBrowser,flowClear),flowCapture);flowActions.setName("wb.actions.response.flow");
+  JPanel selectedFlow=new JPanel(new BorderLayout(0,4));selectedFlow.add(new JScrollPane(flowDetail));
+  JPanel flowHeader=CompactWorkbenchUi.toolbar(new JLabel("선택 흐름 근거"),flowActions);flowHeader.setName("wb.placement.response.flow");selectedFlow.add(flowHeader,BorderLayout.NORTH);
+  page.add(WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,new JScrollPane(flowTable),selectedFlow,.44));
   JLabel hint=WorkbenchUi.hint("마커 출력은 XSS 확정 아님 · 원본은 메모리에만 보관");hint.setToolTipText("원본 최대 100건 · 건당 128KiB · 쓰기/조회 응답을 다시 관찰하면 원본과 단계가 갱신됩니다.");page.add(hint,BorderLayout.SOUTH);return page;
  }
- /** Keep original tabs while anchoring the selected-finding handoff below its readers. */
+ /** Keep original readers while grouping evidence with the selected observation context. */
  JPanel detailTabs(JTabbedPane pages,JPanel actions){
   pages.putClientProperty("wb.external.tabs",true);pages.setName("wb.response.finding.pages");
   JPanel titles=WorkbenchUi.row();titles.setName("wb.response.finding.titles");ButtonGroup group=new ButtonGroup();
@@ -93,8 +123,9 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   pages.addChangeListener(e->sync.run());sync.run();
   JPanel pane=new JPanel(new BorderLayout(0,4));pane.setName("wb.response.finding.workspace");
   titles.setLayout(new WorkbenchUi.WrapLayout(FlowLayout.LEFT,0,0));
-  JPanel header=new JPanel(new BorderLayout());header.add(titles);header.setName("wb.response.finding.header");pane.add(header,BorderLayout.NORTH);pane.add(pages);
-  JPanel footer=CompactWorkbenchUi.toolbar(new JLabel("선택 관찰 작업"),actions);footer.setName("wb.placement.response.finding");pane.add(footer,BorderLayout.SOUTH);return pane;
+  JPanel context=new JPanel(new BorderLayout(0,3));context.add(findingTitle,BorderLayout.NORTH);context.add(findingContext);context.setMinimumSize(new Dimension(100,35));
+  JPanel handoff=CompactWorkbenchUi.toolbar(context,actions);handoff.setName("wb.placement.response.finding");
+  JPanel header=new JPanel(new BorderLayout(0,5));header.add(handoff,BorderLayout.NORTH);header.add(titles);header.setName("wb.response.finding.header");pane.add(header,BorderLayout.NORTH);pane.add(pages);return pane;
  }
  void refreshActions(){int found=findingTable.getSelectedRow();int n=found<0?-1:findingTable.convertRowIndexToModel(found);findingCapture.setEnabled(n>=0&&n<displayedFindingKeys.size()&&displayedFindingPackets.containsKey(displayedFindingKeys.get(n)));apiDraft.setEnabled(apiTable.getSelectedRow()>=0);int row=flowTable.getSelectedRow();int index=row<0?-1:flowTable.convertRowIndexToModel(row);var flow=index>=0&&index<displayedFlows.size()?displayedFlows.get(index):null;flowCapture.setEnabled(flow!=null&&flow.writeSource()!=null&&displayedFlowPackets.containsKey(flow.writeSource().id())&&(flow.readSource()==null||displayedFlowPackets.containsKey(flow.readSource().id())));flowBrowser.setEnabled(flow!=null&&flow.htmlObserved()&&flow.readSource()!=null);flowClear.setEnabled(flow!=null&&!flow.browserEvidence().isEmpty());}
 

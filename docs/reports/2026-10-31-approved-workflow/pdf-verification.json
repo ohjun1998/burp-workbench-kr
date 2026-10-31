@@ -1,0 +1,334 @@
+{
+  "pages": 32,
+  "bookmarks": 32,
+  "embeddedImages": 64,
+  "actualImages": 32,
+  "approvedReferenceImages": 32,
+  "sourcePixelsMatch": true,
+  "textBoundsPassed": true,
+  "bytes": 6425976,
+  "sha256": "63db249210bffe46d053585366b1fefab2966a49d2bff395d13a0b2c6554692e",
+  "checks": [
+    {
+      "page": 1,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/traffic.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 1,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/traffic.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 2,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/traffic.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 2,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/traffic.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 3,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/mapper.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 3,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/mapper.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 4,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/mapper.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 4,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/mapper.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 5,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/js.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 5,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/js.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 6,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/js.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 6,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/js.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 7,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/environment.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 7,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/environment.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 8,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/environment.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 8,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/environment.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 9,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/exposure-search.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 9,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/exposure.search.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 10,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/exposure-search.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 10,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/exposure.search.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 11,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/exposure-cve.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 11,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/exposure.cve.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 12,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/exposure-cve.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 12,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/exposure.cve.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 13,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/auth.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 13,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/auth.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 14,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/auth.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 14,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/auth.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 15,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/response-recon.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 15,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/response.recon.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 16,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/response-recon.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 16,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/response.recon.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 17,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/payload.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 17,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/payload.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 18,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/payload.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 18,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/payload.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 19,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/data.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 19,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/data.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 20,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/data.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 20,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/data.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 21,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/activity.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 21,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/activity.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 22,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/activity.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 22,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/activity.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 23,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/bounty.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 23,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/bounty.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 24,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/bounty.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 24,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/bounty.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 25,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/dashboard.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 25,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/dashboard.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 26,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/dashboard.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 26,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/dashboard.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 27,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/payload-results.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 27,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/payload.results.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 28,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/payload-results.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 28,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/payload.results.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 29,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/bounty-replay.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 29,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/bounty.replay.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 30,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/bounty-replay.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 30,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/bounty.replay.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 31,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/light/auth-accounts.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 31,
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/auth.accounts.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 32,
+      "source": "docs/reports/2026-10-31-approved-workflow/images/dark/auth-accounts.png",
+      "sourcePixelMatch": true
+    },
+    {
+      "page": 32,
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/auth.accounts.png",
+      "sourcePixelMatch": true
+    }
+  ],
+  "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd"
+}

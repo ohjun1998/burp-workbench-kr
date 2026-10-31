@@ -148,6 +148,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final AuthInlinePreview inlinePreview = new AuthInlinePreview();
   private javax.swing.table.TableColumn thirdAccountColumn;
   final JLabel accountOrigin=new JLabel("전체 대상");
+  private JButton workflowStop;
   final JButton[] accountCards={new AccountSummaryCard(0),new AccountSummaryCard(1),new AccountSummaryCard(2),new AccountSummaryCard(3)};
   final JPanel packetDetails=new JPanel(new BorderLayout(0,6));
   final TargetWindow comparisonWindow=new TargetWindow(this,"비교 기록 상세",()->packetDetails);
@@ -516,11 +517,14 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     // exports are intentionally absent from the running UI; comparison engines remain shared.
     JButton settings = button("계정·판정 설정", comparisonSettings::open);
     settings.setName("wb.simple.auth.settings");
-    JButton compare = button("선택 요청 비교", this::reviewSelection);
+    JButton compare = button("비교 준비", this::reviewSelection);
     compare.setName("wb.simple.auth.review");
     WorkbenchUi.primary(compare);
     JButton stop = button("중지", this::stop);
-    stop.setName("wb.simple.auth.stop");
+    stop.setName("wb.simple.auth.stop");workflowStop=stop;
+    stop.setEnabled(active.get()>0||recording.get()!=null);
+    state.addPropertyChangeListener("text",event->stop.setEnabled(active.get()>0||recording.get()!=null));
+    detection.setPreferredSize(new Dimension(126,32));
     JPanel accountContext=WorkbenchUi.row(detection,ReferenceUi.field("대상 도메인",accountOrigin));
     accountContext.setName("wb.actions.auth.context");
     JPanel accountActions=WorkbenchUi.row(settings);accountActions.setName("wb.actions.auth.accounts");
@@ -528,7 +532,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     actions.setName("wb.auth.actions");top.add(actions);
     detection.setToolTipText("인증 탐지는 수집 OFF/SCOPE와 별도입니다. 후보를 계정에 지정한 뒤 선택 요청을 비교하세요.");
     counts.setToolTipText("인증 후보와 비교 기록 수");
-    JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setBorder(BorderFactory.createCompoundBorder(kr.packetui.VisualTheme.border(1,1,1,1),BorderFactory.createEmptyBorder(5,8,5,8)));summaries.setName("wb.auth.account.cards");
+    JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setBorder(BorderFactory.createEmptyBorder(4,0,6,0));summaries.setName("wb.auth.account.cards");
     for(int i:new int[]{0,1,2,3}){final int slot=i;JButton card=accountCards[i];card.setName("wb.auth.account.card."+i);card.setHorizontalAlignment(SwingConstants.LEFT);card.addActionListener(e->safe(this::openAccountPreparation));if(i!=2)summaries.add(card);}
     top.add(summaries);
     // Retain this internal status model for the engine, without an automatic-mode control.
@@ -684,10 +688,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     JPanel historyFilters=new JPanel(new BorderLayout(6,0));
     historyFilters.add(historySearch);historyFilters.add(WorkbenchUi.row(historyFilter),BorderLayout.EAST);
     historyFilters.setName("wb.actions.auth.filters");
-    triage.add(historyFilters);
-    JPanel comparisonActions=CompactWorkbenchUi.toolbar(historyVisible,executionActions);
+    historySearch.setMinimumSize(new Dimension(120,32));
+    historyFilters.add(historyVisible,BorderLayout.WEST);
+    JPanel comparisonActions=CompactWorkbenchUi.toolbar(historyFilters,executionActions);
     comparisonActions.setName("wb.placement.auth.execution");
-    historyCard.add(comparisonActions,BorderLayout.SOUTH);
+    triage.add(comparisonActions);
     JButton sessionRepair = button("계정·세션 보완", () -> repairCurrent(3)), policyRepair = button("권한 설정 보완", () -> repairCurrent(4)), writeRepair = button("쓰기 조회 보완", () -> repairCurrent(5));
     sessionRepair.setName("wb.auth.history.repair.session"); policyRepair.setName("wb.auth.history.repair.policy"); writeRepair.setName("wb.auth.history.repair.write");
     historyRepairState = () -> {
@@ -705,7 +710,10 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     details.add(WorkbenchUi.row(closeDetails),BorderLayout.SOUTH);
     JPanel candidateDisclosure=CompactWorkbenchUi.disclosure("wb.auth.candidates", "인증 후보", candidateScroll, false);
     Component candidateToggle=candidateDisclosure.getComponent(0);candidateDisclosure.remove(candidateToggle);accountActions.add(candidateToggle);top.add(candidateDisclosure);
-    JSplitPane lists=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,historyCard,inlinePreview,.42);
+    accountActions.removeAll();
+    accountActions.add(WorkflowUi.menu("wb.flow.auth.accounts","계정·정책",settings,repairs,(AbstractButton)candidateToggle));
+    historyCard.setMinimumSize(new Dimension(120,120));
+    JSplitPane lists=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,historyCard,inlinePreview,.30);
     lists.setName("wb.auth.tables");
     add(
         WorkbenchUi.header(FeatureGuide.title("auth"), "비교 계정 지정 → 선택 요청 비교 → 응답·근거 확인", top),
@@ -796,6 +804,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
 
   /** Refresh passive reasons after selection or Scope changes; never applies settings or sends requests. */
   void refreshInlineValidation() {
+    if(workflowStop!=null)workflowStop.setEnabled(!closed.get()&&(active.get()>0||recording.get()!=null));
     if (!inlineValidationReady || closed.get()) return;
     comparisonValidation.refresh(); sessionValidation.refresh(); effectSettings.refreshValidation();
   }
@@ -1793,7 +1802,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   JPanel preparationAccountChoices() {
     JPanel panel = new JPanel(); panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     panel.setName("wb.auth.preparation.accounts");
-    panel.add(AuthReadiness.note("보관된 인증 후보를 역할에 직접 연결합니다. 연결·설정 수정은 요청을 전송하지 않습니다.", 2));
+    panel.add(AuthReadiness.note("선택한 인증 후보는 역할에 즉시 연결됩니다. 연결만으로 요청을 전송하지 않습니다.", 1));
     String targetOrigin = !preparationSelection.isEmpty() ? origin(preparationSelection.get(0).request())
         : Arrays.stream(slots).filter(Objects::nonNull).map(Candidate::origin).findFirst().orElse("");
     if (!targetOrigin.isEmpty() && Arrays.stream(slots).anyMatch(value -> value != null && !value.origin().equals(targetOrigin)))
@@ -1839,7 +1848,11 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
       row.setBorder(BorderFactory.createEmptyBorder(4, 0, 4, 0));
       choices.setMinimumSize(new Dimension(120, 32));
       row.add(role, BorderLayout.WEST); row.add(choices);
-      panel.add(row);
+      if(i==2){
+        JPanel extra=new JPanel(new BorderLayout()) {public Dimension getMaximumSize(){return new Dimension(Integer.MAX_VALUE,getPreferredSize().height);}};
+        extra.setAlignmentX(Component.LEFT_ALIGNMENT);
+        extra.add(CompactWorkbenchUi.disclosure("wb.auth.preparation.extra","추가 계정",row,slots[2]!=null));panel.add(extra);
+      }else panel.add(row);
     }
     for (Component child : panel.getComponents())
       if (child instanceof JComponent component) component.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -1872,7 +1885,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     feedback.setName("wb.auth.preparation.feedback"); WorkbenchUi.feedback(feedback);
     JButton refresh = new JButton("적용 상태 다시 확인"), proceed = new JButton(automatic ? "신규 요청 자동 비교 시작" : "비교 시작");
     proceed.setName("wb.auth.preparation.start"); refresh.setName("wb.auth.preparation.refresh");
-    JButton cancel = new JButton("닫기");
+    JButton cancel = new JButton("닫기"); cancel.setName("wb.auth.preparation.close");
     AtomicReference<ReadinessApproval> preview = new AtomicReference<>(), approved = new AtomicReference<>();
     AtomicReference<String> reviewedScope = new AtomicReference<>("");
     JPanel root = new JPanel(new BorderLayout(6, 6)); root.add(tabs);

@@ -84,6 +84,26 @@ public final class ButtonPlacementNative extends WorkbenchTest {
     settle();
   }
 
+  /** Activate the real visible grouped entry, then point at its real menu item. */
+  private static void clickAction(Robot robot, JPanel root, String name) throws Exception {
+    Component source=named(root,name);
+    if(source.isShowing()){click(robot,source);return;}
+    ApprovedWorkflowTestSupport.MenuAccess[] holder={null};
+    edt(()->holder[0]=ApprovedWorkflowTestSupport.menuAccess(source,root));
+    var access=holder[0];
+    if(access==null)throw new AssertionError("No visible action or menu for "+name);
+    click(robot,access.open());
+    await(()->access.open().getComponentPopupMenu().isShowing(),"grouped action menu opens for "+name);
+    java.util.LinkedList<JMenu> path=new java.util.LinkedList<>();
+    Component current=access.item();
+    while(current.getParent() instanceof JPopupMenu popup && popup.getInvoker() instanceof JMenu menu){
+      path.addFirst(menu);current=menu;
+    }
+    for(JMenu submenu:path){click(robot,submenu);await(()->submenu.getPopupMenu().isShowing(),"nested menu opens for "+name);}
+    await(()->access.item().isShowing(),"real grouped menu item is visible for "+name);
+    click(robot,access.item());
+  }
+
   private static void capture(Robot robot, JFrame frame, Path output, String name) throws Exception {
     settle(); Thread.sleep(150);
     Rectangle[] bounds = {null};
@@ -165,8 +185,10 @@ public final class ButtonPlacementNative extends WorkbenchTest {
       edt(() -> {
         Component capture = named(menu, "wb.traffic.scope.list");
         Component search = named(menu, "wb.traffic.search.settings");
-        check(capture.isShowing() && search.isShowing() && menu.getComponentCount() == 2,
-            "both capture and search/list setting categories are visible in the real popup");
+        check(capture.isShowing() && search.isShowing()
+                &&named(menu,"wb.traffic.view.freeze.menu").isShowing()
+                &&named(menu,"wb.traffic.view.apply.menu").isShowing(),
+            "capture, search/list and view operations are visible in the real grouped popup");
         check(onScreen(menu).contains(onScreen(capture)) && onScreen(menu).contains(onScreen(search)),
             "both menu entries have complete native popup bounds");
       });
@@ -188,7 +210,7 @@ public final class ButtonPlacementNative extends WorkbenchTest {
       String encoded = Base64.getEncoder().encodeToString(authored.getBytes(StandardCharsets.UTF_8));
       await(() -> codecOut.getText().equals(encoded), "native pointer activates input-local conversion");
       check(codecIn.getText().equals(authored), "native conversion preserves the exact authored UTF-8 input");
-      click(robot, named(root, "wb.data.codec.reuse"));
+      clickAction(robot, root, "wb.data.codec.reuse");
       await(() -> codecIn.getText().equals(encoded), "native output-local reuse copies the displayed output");
       check(codecOut.getText().equals(encoded), "output-local reuse keeps the original conversion result");
 
@@ -199,10 +221,14 @@ public final class ButtonPlacementNative extends WorkbenchTest {
       edt(() -> { extension.openFeature("payload"); workflow.setSelectedIndex(0); request.setText(requestText); });
       settle();
       Component evidence = named(root, "wb.simple.payload.evidence"), repeater = named(root, "wb.payload.repeater");
-      check(!evidence.isShowing() && !repeater.isShowing(),
-          "native preparation screen does not expose result-only actions");
-      check(named(root, "wb.payload.mark").isShowing() && named(root, "wb.payload.preview").isShowing(),
-          "native request editor displays its local marker and preview controls");
+      check(!ApprovedWorkflowTestSupport.available(evidence,root) && !ApprovedWorkflowTestSupport.available(repeater,root),
+          "native preparation screen does not expose result-only actions directly or through menus");
+      check(named(root, "wb.payload.mark").isShowing()
+              && ApprovedWorkflowTestSupport.available(named(root,"wb.payload.preview"),root),
+          "native request editor exposes marking and its grouped preview operation");
+      clickAction(robot,root,"wb.payload.preview");
+      clickAction(robot,root,"wb.payload.preview");
+      check(request.getText().equals(requestText),"real native grouped preview preserves authored request bytes");
       edt(() -> frame.setExtendedState(Frame.NORMAL));
       await(() -> (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) == 0, "restore normal window for resize matrix");
       for (int width : List.of(1024, 1280, 1600)) {
@@ -227,20 +253,24 @@ public final class ButtonPlacementNative extends WorkbenchTest {
       }
       capture(robot, frame, output, captures.get(1));
       click(robot, named(root, "wb.payload.step.results"));
-      await(() -> workflow.getSelectedIndex() == 1 && evidence.isShowing() && repeater.isShowing(),
-          "native results-step click reveals result-local controls");
+      await(() -> workflow.getSelectedIndex() == 1
+              && ApprovedWorkflowTestSupport.available(evidence,root)
+              && ApprovedWorkflowTestSupport.available(repeater,root),
+          "native results-step click reveals result-local primary and grouped controls");
       edt(() -> {
         Component actions = named(root, "wb.actions.payload.results");
         check(SwingUtilities.isDescendingFrom(evidence, (Container) actions)
             && SwingUtilities.isDescendingFrom(repeater, (Container) actions),
-            "visible native result actions belong to the results header");
+            "native primary and grouped result controllers belong to the results area");
         check(!((AbstractButton) evidence).isEnabled() && !((AbstractButton) repeater).isEnabled(),
             "empty native results keep evidence and Repeater disabled");
       });
       capture(robot, frame, output, captures.get(2));
       click(robot, named(root, "wb.payload.step.prepare"));
-      await(() -> workflow.getSelectedIndex() == 0 && !evidence.isShowing() && !repeater.isShowing(),
-          "native preparation-step click hides result-only controls again");
+      await(() -> workflow.getSelectedIndex() == 0
+              && !ApprovedWorkflowTestSupport.available(evidence,root)
+              && !ApprovedWorkflowTestSupport.available(repeater,root),
+          "native preparation-step click removes result-only entries from the visible workflow");
       check(request.getText().equals(requestText) && !Boolean.TRUE.equals(value(runner, "running")),
           "native stage navigation preserves request text and never starts an inspection");
       check(value(extension, "current") == original[0] && codecIn.getText().equals(encoded),

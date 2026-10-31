@@ -1,0 +1,106 @@
+[
+  {
+    "result": "passed",
+    "version": "1.4.16",
+    "theme": "light",
+    "checks": 32,
+    "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+    "nativeSwing": true,
+    "nativeBurpGui": false,
+    "syntheticPackets": true,
+    "display": "isolated Xorg dummy + xfwm4",
+    "windowWidths": [
+      1024,
+      1280,
+      1600
+    ],
+    "targetHttpRequests": 0,
+    "screenshots": [
+      "01-traffic-settings.png",
+      "02-payload-prepare.png",
+      "03-payload-results.png"
+    ]
+  },
+  {
+    "result": "passed",
+    "version": "1.4.16",
+    "theme": "dark",
+    "checks": 32,
+    "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+    "nativeSwing": true,
+    "nativeBurpGui": false,
+    "syntheticPackets": true,
+    "display": "isolated Xorg dummy + xfwm4",
+    "windowWidths": [
+      1024,
+      1280,
+      1600
+    ],
+    "targetHttpRequests": 0,
+    "screenshots": [
+      "01-traffic-settings.png",
+      "02-payload-prepare.png",
+      "03-payload-results.png"
+    ]
+  },
+  {
+    "version": "1.4.16",
+    "nativeSwing": true,
+    "targetHttpRequests": 0,
+    "screens": [
+      "traffic",
+      "mapper",
+      "js",
+      "environment",
+      "exposure.search",
+      "exposure.cve",
+      "auth",
+      "response.recon",
+      "payload",
+      "data",
+      "activity",
+      "bounty",
+      "dashboard",
+      "payload.results",
+      "bounty.replay",
+      "auth.accounts"
+    ],
+    "nativeBurpGui": false,
+    "result": "passed",
+    "syntheticPackets": true,
+    "checks": 25,
+    "theme": "light",
+    "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+    "captureMode": "quick"
+  },
+  {
+    "result": "passed",
+    "syntheticPackets": true,
+    "checks": 25,
+    "theme": "dark",
+    "version": "1.4.16",
+    "nativeSwing": true,
+    "targetHttpRequests": 0,
+    "screens": [
+      "traffic",
+      "mapper",
+      "js",
+      "environment",
+      "exposure.search",
+      "exposure.cve",
+      "auth",
+      "response.recon",
+      "payload",
+      "data",
+      "activity",
+      "bounty",
+      "dashboard",
+      "payload.results",
+      "bounty.replay",
+      "auth.accounts"
+    ],
+    "nativeBurpGui": false,
+    "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+    "captureMode": "quick"
+  }
+]

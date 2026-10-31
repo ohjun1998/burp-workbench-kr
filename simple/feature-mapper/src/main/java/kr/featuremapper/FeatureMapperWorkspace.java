@@ -102,6 +102,8 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   private final JButton logButton = new JButton("로그");
   private final JButton captureButton = new JButton();
   private JButton featureEditButton, featureAssessmentButton, classifyButton, repeaterButton;
+  private final JLabel selectionContext = new JLabel("요청을 선택해 기능 분류와 원문을 확인하세요.");
+  private final JToggleButton unclassified = new JToggleButton("미분류 요청 (0)");
   interface DialogOpener { JDialog open(Component owner, String title, Component content, Runnable closed); }
   DialogOpener dialogOpener = MapperUi::window;
   private JDialog helpWindow, settingsWindow, logWindow;
@@ -300,6 +302,24 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     bar.add(context);bar.add(actions,BorderLayout.EAST);return bar;
   }
 
+  /** Local controller-backed menus: standalone Mapper has no Workbench UI dependency. */
+  private static JPanel workflowMenu(String name,String caption,AbstractButton... actions){
+    JPanel group=MapperUi.row();group.setName(name);
+    JButton open=new JButton(caption+" ▾");open.setName(name+".open");
+    JPopupMenu popup=new JPopupMenu();popup.setName(name+".popup");
+    JPanel sources=new JPanel();sources.setName(name+".sources");sources.setVisible(false);
+    Runnable available=()->open.setEnabled(java.util.Arrays.stream(actions).anyMatch(AbstractButton::isEnabled));
+    for(AbstractButton source:actions){
+      JMenuItem item=source instanceof JToggleButton?new JCheckBoxMenuItem(source.getText(),source.isSelected()):new JMenuItem(source.getText());
+      item.setName(source.getName()==null?null:source.getName()+".menu");
+      Runnable mirror=()->{item.setText(source.getText());item.setEnabled(source.isEnabled());item.setToolTipText(source.getToolTipText());if(item instanceof JCheckBoxMenuItem toggle)toggle.setSelected(source.isSelected());available.run();};
+      item.addActionListener(e->source.doClick(0));source.addPropertyChangeListener(e->{if("enabled".equals(e.getPropertyName())||"text".equals(e.getPropertyName())||"toolTipText".equals(e.getPropertyName()))mirror.run();});
+      source.addItemListener(e->mirror.run());popup.add(item);sources.add(source);source.setVisible(false);mirror.run();
+    }
+    open.setComponentPopupMenu(popup);open.addActionListener(e->{if(open.isShowing())popup.show(open,0,open.getHeight());});
+    group.add(open);group.add(sources);available.run();return group;
+  }
+
   private void refreshFeatureActions(){
     boolean selected=false;
     synchronized(projectLock){selected=mapper!=null&&selectedFeature!=null&&mapper.features.containsKey(selectedFeature);}
@@ -311,6 +331,12 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     boolean selected=!selectedPackets().isEmpty();
     if(classifyButton!=null)classifyButton.setEnabled(selected);
     if(repeaterButton!=null)repeaterButton.setEnabled(selected);
+    String title="전체 요청";
+    synchronized(projectLock){
+      if(mapper!=null&&selectedFeature!=null&&mapper.features.containsKey(selectedFeature))title=mapper.features.get(selectedFeature).name;
+    }
+    selectionContext.setText((unclassified.isSelected()?"미분류 요청":title)+" · 표시 "+table.getRowCount()+"건 · 선택 "+table.getSelectedRowCount()+"건");
+    selectionContext.setToolTipText(selectionContext.getText());
   }
 
   private void buildUi() {
@@ -332,8 +358,9 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       if (embeddedHost == null) enabled.doClick(0);
       else { embeddedHost.toggleCapture(); updateIndicators(); }
     });
-    JPanel projectActions = MapperUi.row(new JLabel("프로젝트"),button("열기 ▾", () -> chooseFile(false)),button("저장", () -> chooseFile(true)));
-    projectActions.setName("wb.actions.mapper.project");
+    JButton projectOpen=button("프로젝트 열기",()->chooseFile(false)),projectSave=button("프로젝트 저장",()->chooseFile(true));
+    projectOpen.setName("fm.project.open");projectSave.setName("fm.project.save");
+    JPanel projectActions=workflowMenu("wb.actions.mapper.project","프로젝트",projectOpen,projectSave);
     JPanel captureActions=MapperUi.row(captureButton);captureActions.setName("wb.actions.mapper.capture");
     if(embeddedHost!=null)captureActions.add(button("매핑 설정",this::showSettings));
     JPanel toolbar = new JPanel(new BorderLayout(0,6)); if (embeddedHost == null) toolbar.add(header,BorderLayout.NORTH);
@@ -353,6 +380,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
           if (selected instanceof DefaultMutableTreeNode node
               && node.getUserObject() instanceof FeatureNode f) selectedFeature = f.id;
           else selectedFeature = null;
+          if(selectedFeature!=null)unclassified.setSelected(false);
           fillRows();refreshFeatureActions();
         });
     JPanel left = new JPanel(new BorderLayout(4, 4));
@@ -360,22 +388,30 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     featureEditButton=button("편집",this::editFeature);featureEditButton.setName("fm.feature.edit");
     featureEditButton.setToolTipText("선택 기능의 이름·상태·메모 편집");
     featureEditButton.getAccessibleContext().setAccessibleName("기능 이름·상태·메모");
-    JPanel actions=MapperUi.row(featureEditButton);actions.setName("wb.actions.mapper.feature");
+    List<AbstractButton> featureCommands=new ArrayList<>();featureCommands.add(featureEditButton);
     if (embeddedHost != null && embeddedHost.supportsAssessmentTasks()) {
       featureAssessmentButton = button("업무 연결", this::linkAssessment);
       featureAssessmentButton.setName("fm.assessment.link");
       featureAssessmentButton.getAccessibleContext().setAccessibleName("점검 업무로 연결");
       featureAssessmentButton.setToolTipText("선택 기능의 API로 업무 초안을 만듭니다. 계정·범위 검토 후 연결하며 완료로 표시하지 않습니다.");
-      actions.add(featureAssessmentButton);
+      featureCommands.add(featureAssessmentButton);
     }
+    JPanel actions=workflowMenu("wb.actions.mapper.feature","기능 편집",featureCommands.toArray(AbstractButton[]::new));
     JPanel treeBody = new JPanel(new BorderLayout(0, 4));
-    treeBody.add(left.getComponent(0)); treeBody.add(actions, BorderLayout.NORTH);refreshFeatureActions();
+    treeBody.add(left.getComponent(0));refreshFeatureActions();
     left.removeAll();
 
     treeToggle.setName("fm.tree.toggle");
-    left.add(treeToggle, BorderLayout.NORTH); left.add(treeBody);
+    treeToggle.setPreferredSize(new Dimension(110,32));treeToggle.setMinimumSize(new Dimension(64,32));
+    JPanel treeHeader=new JPanel(new BorderLayout(2,0));treeHeader.setName("fm.workflow.tree.header");
+    treeHeader.add(treeToggle);treeHeader.add(actions,BorderLayout.EAST);
+    left.add(treeHeader, BorderLayout.NORTH); left.add(treeBody);
+    unclassified.setName("fm.unclassified");unclassified.setHorizontalAlignment(SwingConstants.LEFT);
+    unclassified.setToolTipText("기능 연결이 없는 실제 요청만 표시합니다.");
+    unclassified.addActionListener(e->{boolean show=unclassified.isSelected();boolean previous=rebuilding;rebuilding=true;try{tree.clearSelection();selectedFeature=null;}finally{rebuilding=previous;}unclassified.setSelected(show);fillRows();});
+    left.add(unclassified,BorderLayout.SOUTH);
     treeToggle.addActionListener(e -> {
-      treeBody.setVisible(treeToggle.isSelected());
+      treeBody.setVisible(treeToggle.isSelected());actions.setVisible(treeToggle.isSelected());unclassified.setVisible(treeToggle.isSelected());
       treeToggle.setText(treeToggle.isSelected() ? "기능 목록 · 접기" : "기능 목록 · 펼치기");
       left.revalidate(); left.repaint();
     });
@@ -408,11 +444,12 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     filters.add(filterContext,BorderLayout.WEST);
     classifyButton=button("분류 수정",this::movePackets);classifyButton.setName("fm.packet.classify");
     repeaterButton=button("Repeater",this::sendToRepeater);repeaterButton.setName("fm.packet.repeater");
-    JPanel packetActions=MapperUi.row(classifyButton,repeaterButton);packetActions.setName("wb.actions.mapper.packets");
+    classifyButton.putClientProperty("fm.primary",true);
+    JPanel packetActions=MapperUi.row(classifyButton,workflowMenu("fm.workflow.request.options","선택 요청",repeaterButton));packetActions.setName("wb.actions.mapper.packets");
     filters.add(search);refreshPacketActions();
-    JPanel selectionFooter=localToolbar(new JLabel("선택 요청 작업"),packetActions);
+    selectionContext.setName("fm.selection.context");selectionContext.putClientProperty("html.disable",true);selectionContext.setMinimumSize(new Dimension(100,28));
+    JPanel selectionFooter=localToolbar(selectionContext,packetActions);
     selectionFooter.setName("wb.placement.mapper.selection");
-    selectionFooter.setBorder(BorderFactory.createMatteBorder(1,0,0,0,MapperUi.line()));
     runs.addActionListener(
         e -> {
           if (!rebuilding) fillRows();
@@ -454,9 +491,10 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     details.addTab("요청·응답", packets);
     details.addTab("매핑 근거", new JScrollPane(explanation));
     JPanel top = new JPanel(new BorderLayout());
-    top.add(filters, BorderLayout.NORTH);
+    JPanel listHeader=new JPanel(new BorderLayout(0,4));listHeader.setName("fm.workflow.list.header");
+    listHeader.add(filters,BorderLayout.NORTH);listHeader.add(selectionFooter);
+    top.add(listHeader, BorderLayout.NORTH);
     top.add(new JScrollPane(table));
-    top.add(selectionFooter,BorderLayout.SOUTH);
     JSplitPane main = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, details);
     main.setName("fm.workspace"); MapperUi.split(main,.40);
     JSplitPane all = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, main);
@@ -550,6 +588,8 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       List<Mapper.FeatureSummary> summaries;
       synchronized (projectLock) {
         summaries = mapper.featureSummaries();
+        long orphanCount=mapper.packetList(null).stream().filter(packet->packet.links.isEmpty()).count();
+        unclassified.setText("미분류 요청 ("+orphanCount+")");
       }
       treeToggle.putClientProperty("fm.feature.count",summaries.size());treeToggle.repaint();
       Map<String, DefaultMutableTreeNode> existing = new HashMap<>();
@@ -646,6 +686,10 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       synchronized (projectLock) {
         shownOwner = mapper;
         packets = mapper.packetRows(selectedFeature);
+        if(unclassified.isSelected()){
+          Set<Long> orphanIds=new HashSet<>();for(var packet:mapper.packetList(null))if(packet.links.isEmpty())orphanIds.add(packet.id);
+          packets=packets.stream().filter(packet->orphanIds.contains(packet.id())).toList();
+        }
       }
       Set<String> allRuns = new LinkedHashSet<>(), allSessions = new LinkedHashSet<>();
       allRuns.add("전체");

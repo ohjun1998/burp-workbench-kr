@@ -1,4 +1,6 @@
-# Workbench Simple 1.4.15
+# Workbench Simple 1.4.16
+
+승인한 16개 화면의 작업 흐름을 실제 확장에 적용했습니다. 주 작업과 보조 메뉴를 구분하고, 고급 설정을 접어 원문·결과·작성 영역을 넓혔습니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.16_KR.md) · [설치 JAR](downloads/1.4.16/burp-workbench-simple-1.4.16.jar) · [실제 화면 PDF](../docs/reports/2026-10-31-approved-workflow/workbench-simple-1.4.16-workflow.pdf). 이전 버전은 아래 보존합니다.
 
 1.4.14에 남아 있던 주요 버튼을 실제 작업 영역 아래로 재배치합니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.15_KR.md) · [설치 JAR](downloads/1.4.15/burp-workbench-simple-1.4.15.jar).
 

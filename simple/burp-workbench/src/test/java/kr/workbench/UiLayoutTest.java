@@ -24,11 +24,30 @@ public final class UiLayoutTest {
   check(table.getColumnCount()==7,"traffic shows the approved account/time/note columns and retains complete metadata model");
   check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
   check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"traffic requests and responses side by side below list");
-  check(((JSplitPane)named(root,"wb.environment.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&named(root,"wb.environment.observations.toggle") instanceof JToggleButton&&((JSplitPane)named(root,"wb.environment.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"environment full-width candidates and collapsible observations above paired packets");
+  var environmentWorkspace=(JSplitPane)named(root,"wb.environment.workspace");
+  var environmentMessages=(JTabbedPane)named(root,"wb.environment.messages");
+  check(environmentWorkspace.getOrientation()==JSplitPane.HORIZONTAL_SPLIT
+      &&Boolean.TRUE.equals(environmentWorkspace.getClientProperty("wb.workflow.fixedLayout"))
+      &&named(root,"wb.environment.observations.toggle") instanceof JToggleButton
+      &&java.util.stream.IntStream.range(0,environmentMessages.getTabCount()).mapToObj(environmentMessages::getTitleAt).toList().equals(List.of("응답","요청","판정 근거")),
+      "environment keeps candidates beside a fixed inspector with explicit response, request and decision views");
+  SwingUtilities.invokeAndWait(()->{
+   EnvironmentPanel environment=(EnvironmentPanel)unchecked(w,"environments");
+   String requestText=environment.requestView.getText(),responseText=environment.responseView.getText();
+   check(SwingUtilities.isDescendingFrom(environment.responseView,environmentMessages.getComponentAt(0))
+       &&SwingUtilities.isDescendingFrom(environment.requestView,environmentMessages.getComponentAt(1))
+       &&SwingUtilities.isDescendingFrom(environment.decisionView,environmentMessages.getComponentAt(2)),
+       "each environment inspector tab retains its original packet or decision model");
+   int before=PayloadIntegrationTest.sent.get();
+   for(int index=0;index<environmentMessages.getTabCount();index++)environmentMessages.setSelectedIndex(index);
+   environmentMessages.setSelectedIndex(0);
+   check(environment.requestView.getText().equals(requestText)&&environment.responseView.getText().equals(responseText)
+       &&PayloadIntegrationTest.sent.get()==before,"switching environment inspector views preserves originals and sends no HTTP");
+  });
   check(((JSplitPane)named(root,"wb.auth.tables")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&named(root,"wb.auth.workspace")==null,"auth main stacks credentials and history without embedded packets");
   check(named(root,"wb.js.messages")==null&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS has no embedded packet area and passive keeps the shared packet layout");
   check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"payload editors and results above packets in reference layout");
-  check(requestResponseTabs(root)==2 && named(root,"wb.bounty.evidence.packet.tabs") instanceof JTabbedPane,"paired packet readers remain persistent; compact evidence preview has explicit request/response tabs");
+  check(requestResponseTabs(root)==4 && named(root,"wb.bounty.evidence.packet.tabs") instanceof JTabbedPane,"environment and stored evidence expose both original request and response in explicit tabs");
   check(table.getRowHeight()==32&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2,"compact rows fit Gothic text with vertical padding");
   check(table.getDefaultRenderer(Object.class) instanceof WorkbenchUi.Cells,"semantic method/status renderer installed");
   for(int size:new int[]{1000,1280,1600})SwingUtilities.invokeAndWait(()->{

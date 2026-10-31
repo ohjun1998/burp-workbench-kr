@@ -89,8 +89,15 @@ if a.test:
   'AppearanceWorkflowTest':'Requires the original auxiliary/settings page contract; current folder styling and retained Simple inputs are checked by SimpleClassicLayoutTest, FolderNavigationTest and SimpleAppearanceTest'
  }
  adapted={
+  'TrafficScopeModesTest':'Count actual visible traffic controls and verify retained freeze/apply proxies in collection settings; retain capture/SCOPE/persistence guards',
+  'SimpleDashboardRevealTest':'Retain initial overview and zero scroll while allowing compact results to be visible; open real chart disclosure for chart actions and preserve reveal/ID/lifecycle/no-HTTP assertions',
+  'Appearance0534Test':'Open the approved folded packet search through Ctrl+F before retaining original narrow-search, scaled-font and exact-byte checks',
+  'UiLayoutTest':'Validate approved fixed horizontal environment master-detail with response/request/evidence tabs and retained models/no-HTTP contracts',
+  'JsUiOptimizationTest':'Validate fixed result/source split and explicitly opened bounded disclosures under both packet preferences; retain original reader and worker checks',
+  'JsCompactUpgradeTest':'Validate direct three analysis types plus real extra-type menu; preserve seven underlying models and source/filter checks',
+  'JsRepeaterWorkflowTest':'Select advanced analysis via its actual menu and test scrolling only when needed; preserve exact request, SCOPE and HTTP contracts',
   'BuildInfoTest':'Assert Simple artifact filename while retaining packaged JAR manifest/runtime consistency checks',
-  'PacketUiTest':'Assert named payload settings/start/stop/direct-evidence controls instead of the removed More menu; retain all shared packet preview, native-editor, raw-byte and syntax assertions',
+  'PacketUiTest':'Validate actual selected-path popup actions and retained payload controllers; retain shared packet preview, native-editor, raw-byte and syntax assertions',
   'NextIsolationTest':'Assert Simple display and storage namespace; preserve both stable and Next preference/archive fixtures',
   'FeatureGuideWorkflowTest':'Use the classic toolbar help action and current bounty title/eight-extension introductory guidance; retain routing/input/no-HTTP assertions',
   'DiagnosticsWorkflowTest':'Use the classic toolbar logs action; retain bounded concurrency, redaction, error selection/clear, lifecycle and no-HTTP checks',
@@ -99,7 +106,7 @@ if a.test:
   'UiPanelsOptimizationTest':'Restore original core manual-replay editor/result viewport assertions and verify route index 1; retain comparison, evidence, response, worker and image-state checks',
   'AuditRepairsTest':'Use the same original community JS fixture copied into Simple test resources, so regressions run independently of the original directory layout',
   'AuthSetupBundlesTest':'Assert exact BuildInfo.storageKey project UUID key instead of the historical Next prefix; retain bundle exchange, disk integrity, capacity and project-isolation checks',
-  'AuthLayoutFitTest':'Assert four named Simple controls instead of the former six-control toolbar; retain table minimum widths, viewport sizing, wrapping and account-detail layout checks',
+  'AuthLayoutFitTest':'Validate direct detection and account-policy menu with actual settings/repair/candidate proxies; retain all responsive widths, table sizing, wrapping and account-detail checks',
   'LayoutPassiveWorkflowTest':'Use retained explicit passive route instead of former traffic menu position zero; preserve collection fixture, target/packet isolation, shared layout, capacity and unload checks',
   'TrafficScopeTest':'Use actual primary SCOPE button/editor instead of removed duplicate context submenu; preserve scope-rule operations and verify coverage/environment through admitted SCOPE traffic rather than removed selected-packet backfill',
   'TargetCleanupTest':'Keep JS/URL target dialogs and current SCOPE choices while asserting daily environment origin/account selectors stay on the main page; preserve no-HTTP preparation, unapplied-draft isolation, exact owning target and unload checks'

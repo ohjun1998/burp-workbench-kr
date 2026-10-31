@@ -81,7 +81,8 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   boolean ioBusy;
   final javax.swing.Timer scanTimer = new javax.swing.Timer(250,e -> scanStatus());
   final MontoyaApi api;
-  final JTextArea requestView = message(), responseView = message();
+  final JTextArea requestView = message(), responseView = message(), decisionView = message();
+  final JLabel selectedPath = new JLabel("후보 경로를 선택하세요");
   final JButton start = new JButton("후보 목록 GET 확인"),
       single = new JButton("선택 경로 GET 확인"),
       stop = new JButton("중지");
@@ -148,7 +149,9 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     settings.setName("wb.environment.candidate.settings");more.setName("wb.environment.more");all.setName("wb.environment.all");
     JPanel toolbar = new JPanel();
     toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-    JPanel context=CompactWorkbenchUi.toolbar(WorkbenchUi.row(new JLabel("대상"),origins,new JLabel("계정"),account),WorkbenchUi.row(targetSettings.button()));
+    JPanel context=CompactWorkbenchUi.toolbar(
+        WorkbenchUi.row(new JLabel("대상"),origins,new JLabel("계정"),account),
+        WorkflowUi.menu("wb.flow.environment.settings","설정",targetSettings.button(),settings));
     context.setName("wb.actions.environment.context");toolbar.add(context);
 
     WorkbenchUi.primary(single);
@@ -169,6 +172,11 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     saveProject.addActionListener(e->projectFile(false));loadProject.addActionListener(e->projectFile(true));
     menu.add(copyItem);
     menu.add(clearItem);
+    more.setText("실행·관리 ▾");more.setComponentPopupMenu(menu);
+    JMenuItem runAll = new JMenuItem("후보 목록 GET 확인");runAll.setName("wb.environment.start.menu");
+    runAll.addActionListener(e->start.doClick());runAll.setEnabled(start.isEnabled());
+    start.addPropertyChangeListener("enabled",e->runAll.setEnabled(start.isEnabled()));
+    menu.insert(runAll,0);menu.insert(new JPopupMenu.Separator(),1);
     more.addActionListener(e -> menu.show(more, 0, more.getHeight()));
     technologies.setAutoCreateRowSorter(true);
     technologies.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -208,20 +216,23 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     lists.add(observations, BorderLayout.NORTH);
     JPanel candidatePanel=candidatePane();
     JTextField search=CompactWorkbenchUi.search(pathTable,"wb.environment.search","경로·상태·근거 검색");
-    JPanel execution=WorkbenchUi.row(single,start,pause,stop);execution.setName("wb.actions.environment.execution");
-    JPanel candidateActions=WorkbenchUi.row(settings,more);candidateActions.setName("wb.actions.environment.candidate.settings");
+    JPanel execution=WorkbenchUi.row(single,pause,stop);execution.setName("wb.actions.environment.execution");
+    JPanel executionSources=WorkbenchUi.row(start);executionSources.setVisible(false);execution.add(executionSources);
+    JPanel candidateActions=WorkbenchUi.row(more);candidateActions.setName("wb.actions.environment.candidate.settings");
     JPanel searchAndSettings=new JPanel(new BorderLayout(8,0));searchAndSettings.add(search);searchAndSettings.add(candidateActions,BorderLayout.EAST);
     searchAndSettings.setName("wb.actions.environment.candidates");
-    candidatePanel.add(searchAndSettings,BorderLayout.NORTH);
-    JPanel executionStrip=CompactWorkbenchUi.toolbar(new JLabel("선택 후보 확인"),execution);
+    candidatePanel.add(searchAndSettings,BorderLayout.NORTH);lists.add(candidatePanel);
+    selectedPath.setName("wb.flow.environment.selection");selectedPath.setMinimumSize(new Dimension(0,28));
+    JPanel executionStrip=CompactWorkbenchUi.toolbar(selectedPath,execution);
     executionStrip.setName("wb.placement.environment.execution");
-    candidatePanel.add(executionStrip,BorderLayout.SOUTH);lists.add(candidatePanel);
-    JSplitPane messages = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
-        WorkbenchUi.card("요청", packetTabs(requestView)),
-        WorkbenchUi.card("응답", responsePane()), .5);
-    messages.setName("wb.environment.messages");
-    JSplitPane workspace = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, lists, messages, .4);
-    workspace.setName("wb.environment.workspace");
+    JTabbedPane messages=new JTabbedPane();messages.setName("wb.environment.messages");
+    messages.addTab("응답",responsePane());messages.addTab("요청",packetTabs(requestView));
+    decisionView.setLineWrap(true);decisionView.setWrapStyleWord(true);decisionView.setName("wb.environment.decision");
+    messages.addTab("판정 근거",new JScrollPane(decisionView));
+    JPanel inspector=new JPanel(new BorderLayout(0,6));inspector.setName("wb.flow.environment.inspector");
+    inspector.add(executionStrip,BorderLayout.NORTH);inspector.add(messages);
+    JSplitPane workspace = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, lists, inspector, .51);
+    workspace.setName("wb.environment.workspace");workspace.putClientProperty("wb.workflow.fixedLayout",true);
     add(workspace);
     add(status, BorderLayout.SOUTH);
     WorkbenchUi.style(this);
@@ -305,7 +316,7 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
         &&previewPacket==packet&&Objects.equals(previewSaved,saved)&&previewFormatted==pretty)return;
     if(url==null){
       requestView.setText("후보 경로를 선택하세요.");
-      responseView.setText("검증 전 응답은 없습니다. 시작 버튼으로 검증하세요.");
+      responseView.setText("검증 전 응답은 없습니다. 후보를 선택한 뒤 선택 경로 GET 확인을 실행하세요.");
     }else if(packet!=null){
       requestView.setText(pretty?PacketFormat.pretty(packet.request):packet.request);
       responseView.setText(pretty?PacketFormat.pretty(packet.decoded):packet.response);
@@ -316,6 +327,9 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
       }catch(Exception error){requestView.setText("GET "+url+"\n[검증 전 요청 미리보기]");}
       responseView.setText(saved==null?"미검증 · 시작 버튼으로 응답을 수집하세요.":"저장된 판정 · HTTP "+saved.status()+" · "+EnvironmentContent.title(saved.kind())+" · "+saved.change()+"\n원본 패킷은 저장하지 않습니다. 다시 GET 확인하면 현재 응답을 볼 수 있습니다.");
     }
+    selectedPath.setText(url==null?"후보 경로를 선택하세요":url);
+    selectedPath.setToolTipText(url);
+    decisionView.setText(evidenceText());decisionView.setCaretPosition(0);
     requestView.setCaretPosition(0);responseView.setCaretPosition(0);
     previewReady=true;previewUrl=url;previewAccount=owner;previewPacket=packet;previewSaved=saved;previewFormatted=pretty;
   }
@@ -477,7 +491,6 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
 
   JPanel candidatePane() {
     JPanel p = new JPanel(new BorderLayout(0, 4));
-    p.add(selection, BorderLayout.NORTH);
     p.add(new JScrollPane(pathTable));
     return p;
   }
@@ -581,10 +594,14 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   void scanStatus(){var worker=scan;if(worker==null)return;pause.setText(worker.paused?"재개":"일시정지");status.setText((worker.paused?"일시정지 · "+worker.note:"검증 중")+" · 경로 "+worker.completed+" · 요청 "+worker.sent+" · 남음 "+worker.queue.size());}
   void togglePause(){var worker=scan;if(worker==null)return;try{if(worker.paused)worker.resume(profile(worker.queue.peek().url()));else worker.pause("사용자 일시정지",0);scanStatus();}catch(Exception error){status.setText(error.getMessage());}}
   void resumeRemaining(){if(!project.pendingAccount.equals(accountKey())){status.setText("저장 당시 계정으로 세션을 연결하고 재개하세요.");return;}runTasks(project.pending);}
+  String evidenceText(){
+    String url=selectedUrl();Packet packet=url==null?null:currentPacket(url);
+    if(packet!=null&&packet.result!=null){var f=packet.result.finding();return "결과: "+f.title()+"\n\n판단 근거: "+f.reason()+"\n\n비교: "+packet.state+"\n\n다음 확인: "+f.next()+"\n\nURL: "+url;}
+    var saved=url==null?null:project.latest.get(accountKey()+" GET "+url);
+    return saved==null?"검사한 경로를 선택하세요.":"저장된 판정: "+EnvironmentContent.title(saved.kind())+" · HTTP "+saved.status()+"\n변경: "+saved.change()+"\n검사 시각: "+java.time.Instant.ofEpochMilli(saved.time())+"\n원본 패킷은 저장하지 않습니다. 현재 상태는 다시 검사하세요.";
+  }
   JPanel evidenceContent(){
-    String url=selectedUrl();Packet packet=url==null?null:currentPacket(url);JTextArea text=message();text.setLineWrap(true);text.setWrapStyleWord(true);
-    if(packet!=null&&packet.result!=null){var f=packet.result.finding();text.setText("결과: "+f.title()+"\n\n판단 근거: "+f.reason()+"\n\n비교: "+packet.state+"\n\n다음 확인: "+f.next()+"\n\nURL: "+url);}
-    else{var saved=url==null?null:project.latest.get(accountKey()+" GET "+url);text.setText(saved==null?"검사한 경로를 선택하세요.":"저장된 판정: "+EnvironmentContent.title(saved.kind())+" · HTTP "+saved.status()+"\n변경: "+saved.change()+"\n검사 시각: "+java.time.Instant.ofEpochMilli(saved.time())+"\n원본 패킷은 저장하지 않습니다. 현재 상태는 다시 검사하세요.");}
+    JTextArea text=message();text.setLineWrap(true);text.setWrapStyleWord(true);text.setText(evidenceText());
     JPanel body=new JPanel(new BorderLayout());body.add(new JScrollPane(text));body.setPreferredSize(new Dimension(700,420));return body;
   }
   static String accountName(String key){return key.equals("anonymous")?"비로그인":"비교 계정 "+(Character.digit(key.charAt(5),10)+1);}

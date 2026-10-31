@@ -54,6 +54,8 @@ public final class Appearance0534Test extends WorkbenchTest {
       appearance.display(150,true,true);
       check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==21,"actual styled packet characters scale to 21px");
       check(Arrays.equals(wire,packet.previewBytes()),"display preference preserves exact packet preview bytes");
+      check(!ApprovedWorkflowTestSupport.visible(packet.search,packet),"packet search starts folded at the selected display scale");
+      packet.getActionMap().get("find").actionPerformed(new java.awt.event.ActionEvent(packet,0,"find"));
       packet.setSize(280,210);for(int pass=0;pass<5;pass++)UiLayoutTest.layout(packet);
       check(packet.modePicker.getParent()!=null,"narrow reader exposes every display mode in accessible picker");
       check(packet.searchOptions.getParent()!=null,"narrow reader exposes optional search toggles in menu");

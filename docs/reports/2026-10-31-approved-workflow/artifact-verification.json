@@ -1,0 +1,14 @@
+{
+  "version": "1.4.16",
+  "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+  "actualScreens": 32,
+  "themes": 2,
+  "pdfPages": 32,
+  "pdfSourcePixelMatches": 64,
+  "contactSheets": 2,
+  "zipFiles": 37,
+  "zipCrcPassed": true,
+  "pdfSha256": "63db249210bffe46d053585366b1fefab2966a49d2bff395d13a0b2c6554692e",
+  "imageZipSha256": "887c41259cb6ad53d002c091f8d8dd566ad8b83f5e72e6546206fc3f7072bd40",
+  "scope": "Actual synthetic Swing captures and approved reference, not native Windows Burp."
+}

@@ -76,6 +76,44 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
     while (keys.hasMoreElements()) { Object key = keys.nextElement(); if (UIManager.get(key) instanceof FontUIResource) UIManager.put(key, new FontUIResource(font.deriveFont(14f))); }
   }
 
+  /** Explicitly inspect the optional chart view without changing the default result-first capture. */
+  static void dashboardDistribution(ScopeDashboardPanel dashboard) {
+    var toggle = (AbstractButton) SimpleWorkflowTest.named(dashboard, "wb.flow.dashboard.distribution.toggle");
+    scenario("Expanded dashboard charts require an explicit disclosure action", toggle.isSelected());
+    var scroll = (JScrollPane) SimpleWorkflowTest.named(dashboard, "wb.scope.dashboard.scroll");
+    JViewport viewport = scroll.getViewport();
+    viewport.setViewPosition(new Point(0, Math.max(0,
+        viewport.getView().getHeight() - viewport.getExtentSize().height)));
+    for (String bar : List.of("paths", "api", "environment", "secrets", "access", "coverage", "observations"))
+      dashboardArea(dashboard, "bar." + bar, 200, 20);
+    for (String severity : List.of("high", "medium", "low", "info"))
+      dashboardArea(dashboard, "severity." + severity, 200, 20);
+  }
+
+  static void dashboardChartFilters(ScopeDashboardPanel dashboard, ScopeInspection.Snapshot snapshot) {
+    for (var entry : dashboard.categoryButtons.entrySet()) {
+      scenario("Expanded dashboard category chart remains enabled: " + entry.getKey(), entry.getValue().isEnabled());
+      entry.getValue().doClick(0);
+      var expected = ScopeInspectionDashboard.rows(snapshot,
+          new ScopeInspectionDashboard.Filter(entry.getKey(), "", ""));
+      scenario("Dashboard category chart preserves the original result identities: " + entry.getKey(),
+          dashboard.group == entry.getKey() && dashboard.selectedSeverity.isEmpty()
+              && dashboard.visibleRows.equals(expected) && dashboard.table.getRowCount() == expected.size());
+    }
+    int importanceIndex = 1;
+    for (var entry : dashboard.severityButtons.entrySet()) {
+      scenario("Expanded dashboard importance chart remains enabled: " + entry.getKey(), entry.getValue().isEnabled());
+      entry.getValue().doClick(0);
+      var expected = ScopeInspectionDashboard.rows(snapshot,
+          new ScopeInspectionDashboard.Filter(ScopeInspectionDashboard.Group.SECRETS, "", entry.getKey()));
+      scenario("Dashboard importance chart and direct filter share original result identities: " + entry.getKey(),
+          dashboard.group == ScopeInspectionDashboard.Group.SECRETS
+              && dashboard.selectedSeverity.equals(entry.getKey())
+              && dashboard.importance.getSelectedIndex() == importanceIndex++
+              && dashboard.visibleRows.equals(expected) && dashboard.table.getRowCount() == expected.size());
+    }
+  }
+
   public static void main(String[] args) throws Exception {
     out = Path.of(args[0]); theme = args[2]; width = Integer.parseInt(args[3]); height = Integer.parseInt(args[4]);
     Files.createDirectories(out); appearance(args[1]); ScopeInspectionFixture.installFactory();
@@ -208,16 +246,17 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
               dashboard.table.getRowCount() > 0 && panel.runner == null);
           capture(dashboard,"27-dashboard.png",width,height,()->dashboardBounds(dashboard));
           SimpleWorkflowTest.click(dashboard,"wb.scope.dashboard.card.secrets");
-          SimpleWorkflowTest.click(dashboard,"wb.scope.dashboard.severity.high");
+          dashboard.importance.setSelectedIndex(1);
           scenario("Dashboard high-severity secret filter retains matching synthetic candidates",
-              dashboard.table.getRowCount() > 0);
+              dashboard.table.getRowCount() > 0 && dashboard.visibleRows.equals(ScopeInspectionDashboard.rows(completed,
+                  new ScopeInspectionDashboard.Filter(ScopeInspectionDashboard.Group.SECRETS, "", "HIGH"))));
           dashboard.table.setRowSelectionInterval(0,0);
           scenario("Dashboard secret details preserve masking and inspection-state wording",
               !ScopeInspectionUiTest.visibleText(dashboard).contains(API_KEY)
                   && !dashboard.detail.getText().isBlank());
           String selectedDetail = dashboard.detail.getText();
           capture(dashboard,"28-dashboard-detail.png",width,height,()->dashboardRevealed(dashboard,false));
-          SimpleWorkflowTest.click(dashboard,"wb.scope.dashboard.severity.info");
+          dashboard.importance.setSelectedIndex(4);
           scenario("Dashboard unmatched severity filter shows an empty current result list",
               dashboard.table.getRowCount() == 0);
           scenario("Dashboard empty filter clears the previously selected secret details",
@@ -227,6 +266,14 @@ public final class ScopeInspectionPreview extends WorkbenchTest {
                   && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.repeater")).isEnabled()
                   && !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.evidence")).isEnabled());
           capture(dashboard,"29-dashboard-empty-filter.png",width,height,()->dashboardRevealed(dashboard,true));
+          dashboard.importance.setSelectedIndex(1);
+          SimpleWorkflowTest.click(dashboard,"wb.flow.dashboard.distribution.toggle");
+          capture(dashboard,"30-dashboard-distribution.png",width,height,()->dashboardDistribution(dashboard));
+          dashboardChartFilters(dashboard, completed);
+          SimpleWorkflowTest.click(dashboard,"wb.flow.dashboard.distribution.toggle");
+          scenario("Dashboard optional distribution returns to its compact default without losing controllers",
+              !((AbstractButton)SimpleWorkflowTest.named(dashboard,"wb.flow.dashboard.distribution.toggle")).isSelected()
+                  && !SimpleWorkflowTest.named(dashboard,"wb.scope.dashboard.charts").isVisible());
           scenario("Dashboard inspection projection and filters invoke no target actions",count.get() == 0);
         } finally { dashboard.close(); }
       });

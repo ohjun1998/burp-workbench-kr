@@ -1,0 +1,222 @@
+{
+  "result": "passed",
+  "version": "1.4.16",
+  "startedAt": "2026-10-31T05:36:21.315464+00:00",
+  "artifact": "burp-workbench/dist/burp-workbench-simple-1.4.16.jar",
+  "jarSha256": "34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd",
+  "jarUnchanged": true,
+  "katanaVersion": "1.8.0",
+  "platform": "linux_amd64",
+  "binarySha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc",
+  "officialArchiveSha256": "cb027ae99d0757061b70c07a15c7a80f62c5a535ab52c4a329f80c4b0a7309d2",
+  "officialArchive": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_linux_amd64.zip",
+  "binaryIdentity": "Pinned extraction hash from the official release archive; installer independently checks the official archive hash.",
+  "toolchainMode": "strict-release17",
+  "java17ApiCompatibilityVerified": true,
+  "javaRuntime": "openjdk version \"17.0.17\" 2025-10-21\nOpenJDK Runtime Environment Temurin-17.0.17+10 (build 17.0.17+10)\nOpenJDK 64-Bit Server VM Temurin-17.0.17+10 (build 17.0.17+10, mixed mode, sharing)",
+  "checks": 102,
+  "cases": [
+    {
+      "name": "http-native-multi-account",
+      "protocol": "HTTP",
+      "runnerState": "COMPLETED",
+      "nativeState": "COMPLETED",
+      "nativeComplete": true,
+      "sent": 66,
+      "actualRequests": 66,
+      "accountRequests": {
+        "Alice": 33,
+        "anonymous": 33
+      },
+      "proxyOriginals": 9,
+      "nativeRecords": 10,
+      "nativeEndpoints": 20,
+      "nativeExcluded": 3,
+      "blockedReasons": [
+        "GET/HEAD 외 메서드는 자동 실행하지 않음",
+        "전송 직전 live Scope 범위 밖 또는 실행 종료"
+      ],
+      "blockedCount": 3,
+      "candidateMethods": {
+        "?": 9,
+        "GET": 9,
+        "POST": 2
+      },
+      "pending": 0,
+      "partial": 43,
+      "findings": {
+        "ACCESS": 3,
+        "API": 10,
+        "COVERAGE": 94,
+        "DATABASE": 2,
+        "ENVIRONMENT": 226,
+        "INTERNAL": 4,
+        "INVENTORY": 2,
+        "KATANA": 32,
+        "PATH": 56,
+        "RESPONSE": 94,
+        "SECRET": 6
+      },
+      "observedNativeProcesses": 2,
+      "katanaTemporaryFilesChecked": 468
+    },
+    {
+      "name": "http-native-history-change",
+      "protocol": "HTTP",
+      "runnerState": "COMPLETED",
+      "nativeState": "COMPLETED",
+      "nativeComplete": true,
+      "sent": 66,
+      "actualRequests": 66,
+      "accountRequests": {
+        "Alice": 33,
+        "anonymous": 33
+      },
+      "proxyOriginals": 9,
+      "nativeRecords": 10,
+      "nativeEndpoints": 20,
+      "nativeExcluded": 3,
+      "blockedReasons": [
+        "GET/HEAD 외 메서드는 자동 실행하지 않음",
+        "전송 직전 live Scope 범위 밖 또는 실행 종료"
+      ],
+      "blockedCount": 3,
+      "candidateMethods": {
+        "?": 9,
+        "GET": 9,
+        "POST": 2
+      },
+      "pending": 0,
+      "partial": 43,
+      "findings": {
+        "ACCESS": 3,
+        "API": 10,
+        "COVERAGE": 94,
+        "DATABASE": 2,
+        "ENVIRONMENT": 226,
+        "INTERNAL": 4,
+        "INVENTORY": 2,
+        "KATANA": 32,
+        "PATH": 56,
+        "RESPONSE": 94,
+        "SECRET": 6
+      },
+      "observedNativeProcesses": 2,
+      "katanaTemporaryFilesChecked": 521
+    },
+    {
+      "name": "https-connect-native-multi-account",
+      "protocol": "HTTPS_CONNECT",
+      "runnerState": "COMPLETED",
+      "nativeState": "COMPLETED",
+      "nativeComplete": true,
+      "sent": 66,
+      "actualRequests": 66,
+      "accountRequests": {
+        "Alice": 33,
+        "anonymous": 33
+      },
+      "proxyOriginals": 9,
+      "nativeRecords": 10,
+      "nativeEndpoints": 20,
+      "nativeExcluded": 3,
+      "blockedReasons": [
+        "GET/HEAD 외 메서드는 자동 실행하지 않음",
+        "전송 직전 live Scope 범위 밖 또는 실행 종료"
+      ],
+      "blockedCount": 3,
+      "candidateMethods": {
+        "?": 9,
+        "GET": 9,
+        "POST": 2
+      },
+      "pending": 0,
+      "partial": 43,
+      "findings": {
+        "ACCESS": 3,
+        "API": 10,
+        "COVERAGE": 94,
+        "DATABASE": 2,
+        "ENVIRONMENT": 226,
+        "INTERNAL": 4,
+        "INVENTORY": 2,
+        "KATANA": 32,
+        "PATH": 56,
+        "RESPONSE": 138,
+        "SECRET": 6
+      },
+      "observedNativeProcesses": 2,
+      "katanaTemporaryFilesChecked": 498
+    },
+    {
+      "name": "native-pause-resume-stop",
+      "protocol": "HTTP",
+      "runnerState": "STOPPED",
+      "nativeState": "STOPPED",
+      "nativeComplete": false,
+      "sent": 9,
+      "actualRequests": 9,
+      "accountRequests": {
+        "Alice": 4,
+        "anonymous": 5
+      },
+      "proxyOriginals": 2,
+      "nativeRecords": 2,
+      "nativeEndpoints": 2,
+      "nativeExcluded": 0,
+      "blockedReasons": [],
+      "blockedCount": 0,
+      "candidateMethods": {
+        "?": 1,
+        "GET": 1
+      },
+      "pending": 40,
+      "partial": 1,
+      "findings": {
+        "API": 2,
+        "COVERAGE": 51,
+        "ENVIRONMENT": 8,
+        "KATANA": 3,
+        "PATH": 2,
+        "RESPONSE": 4
+      },
+      "observedNativeProcesses": 4,
+      "katanaTemporaryFilesChecked": 538
+    },
+    {
+      "name": "native-shared-budget",
+      "protocol": "HTTP",
+      "runnerState": "STOPPED",
+      "nativeState": "FAILED",
+      "nativeComplete": false,
+      "sent": 4,
+      "actualRequests": 4,
+      "accountRequests": {
+        "Alice": 3,
+        "anonymous": 1
+      },
+      "proxyOriginals": 0,
+      "nativeRecords": 1,
+      "nativeEndpoints": 1,
+      "nativeExcluded": 1,
+      "blockedReasons": [
+        "Montoya 전송·실행 제한으로 미완료"
+      ],
+      "blockedCount": 1,
+      "candidateMethods": {
+        "GET": 1
+      },
+      "pending": 16,
+      "partial": 1,
+      "findings": {
+        "COVERAGE": 4
+      },
+      "observedNativeProcesses": 2,
+      "katanaTemporaryFilesChecked": 428
+    }
+  ],
+  "privateValueLeakDetected": false,
+  "exitCode": 0,
+  "scope": "Actual pinned standard Katana process, production authenticated proxy and shared-budget Runner against isolated loopback HTTP/HTTPS targets. Not native Burp GUI, live browser DOM or an external target assessment.",
+  "tlsTrust": "Temporary in-memory fixture certificate trust only; no system/user CA installation."
+}

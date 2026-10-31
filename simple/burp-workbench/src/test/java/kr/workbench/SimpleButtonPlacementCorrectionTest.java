@@ -5,7 +5,7 @@ import burp.IBurpExtenderCallbacks;
 import java.awt.*;
 import javax.swing.*;
 
-/** Verify the selected-data commands actually moved below the readers, including narrow windows. */
+/** Approved workflows supersede the old footer rule; hierarchy must remain usable at narrow widths. */
 public final class SimpleButtonPlacementCorrectionTest extends WorkbenchTest {
   private static Component named(Component root, String name) {
     Component result = SimpleWorkflowTest.named(root, name);
@@ -28,12 +28,16 @@ public final class SimpleButtonPlacementCorrectionTest extends WorkbenchTest {
     }
     return new Rectangle(0, 0, root.getWidth(), root.getHeight()).contains(area);
   }
-  private static boolean belowTable(Component root, String tableName, String footerName) {
-    Component table = named(root, tableName), footer = named(root, footerName);
-    Component reader = SwingUtilities.getAncestorOfClass(JScrollPane.class, table);
-    if (reader == null) return false;
-    Rectangle a = bounds(reader, root), b = bounds(footer, root);
-    return a.height > 0 && b.height > 0 && b.y >= a.getMaxY() && b.x < a.getMaxX() && b.getMaxX() > a.x;
+  private static Component exposed(Component root,String name) {
+    Component action=named(root,name);
+    Component visible=ApprovedWorkflowTestSupport.representation(action,root);
+    if(visible==null)throw new AssertionError("No visible entry for "+name);
+    return visible;
+  }
+  private static boolean adjacent(Component root,String first,String second) {
+    Rectangle a=bounds(named(root,first),root),b=bounds(named(root,second),root);
+    return shown(named(root,first),root)&&shown(named(root,second),root)
+        &&Math.abs(a.y-b.y)<=2&&a.getMaxX()<=b.x;
   }
   public static void main(String[] args) throws Exception {
     BountyFeaturesTest.factory();
@@ -47,40 +51,63 @@ public final class SimpleButtonPlacementCorrectionTest extends WorkbenchTest {
       edt(() -> {
         for (int width : new int[]{1024, 1280, 1600}) {
           extension.openFeature("traffic"); layout(root, width);
-          Component trafficFooter = named(root, "wb.placement.traffic.selection");
-          check(belowTable(root, "wb.traffic.history", "wb.placement.traffic.selection"),
-              "traffic commands occupy the fixed strip below the result table at " + width);
-          boolean trafficActions = true;
-          for (String name : new String[]{"wb.simple.traffic.repeater", "wb.simple.traffic.evidence", "wb.simple.traffic.compare"}) {
-            Component action = named(root, name);
-            trafficActions &= SwingUtilities.isDescendingFrom(action, trafficFooter) && shown(action, root);
+          Component repeater=named(root,"wb.simple.traffic.repeater");
+          check(shown(repeater,root)
+                  &&Boolean.TRUE.equals(((JComponent)repeater).getClientProperty("wb.primary")),
+              "traffic makes selected-request preparation the visible primary action at " + width);
+          boolean grouped=true;
+          for(String name:new String[]{"wb.simple.traffic.evidence","wb.simple.traffic.compare"}) {
+            Component action=named(root,name),menuEntry=exposed(root,name);
+            var access=ApprovedWorkflowTestSupport.menuAccess(action,root);
+            grouped &= !ApprovedWorkflowTestSupport.visible(action,root) && access!=null
+                && shown(menuEntry,root) && access.item().isEnabled()==((AbstractButton)action).isEnabled();
           }
-          check(trafficActions, "all selected-request commands remain visible in that strip at " + width);
-          check(!SwingUtilities.isDescendingFrom(trafficFooter, named(root,"wb.traffic.controls")),
-              "selected-request strip is separate from the top search/filter region at " + width);
+          check(grouped,"secondary request actions share a real visible menu without duplicate buttons at " + width);
+          Component trafficTable=named(root,"wb.traffic.history");
+          JScrollPane tableScroll=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,trafficTable);
+          check(tableScroll!=null&&bounds(tableScroll,root).height>=90
+                  &&shown(named(root,"wb.traffic.search"),root),
+              "finding requests keeps a readable result area and visible search at " + width);
 
-          extension.openFeature("auth"); layout(root, width);
-          Component authFooter = named(root, "wb.placement.auth.execution");
-          check(belowTable(root, "wb.auth.history", "wb.placement.auth.execution"),
-              "account comparison commands sit below history and above its packet preview at " + width);
-          check(SwingUtilities.isDescendingFrom(named(root,"wb.simple.auth.review"),authFooter)
-                  && SwingUtilities.isDescendingFrom(named(root,"wb.simple.auth.stop"),authFooter)
-                  && shown(named(root,"wb.simple.auth.review"),root) && shown(named(root,"wb.simple.auth.stop"),root),
-              "account comparison and stop stay together and visible at " + width);
+          extension.openFeature("auth"); layout(root,width);
+          check(adjacent(root,"wb.simple.auth.review","wb.simple.auth.stop"),
+              "comparison preparation and stop stay together and visible at " + width);
+          check(Boolean.TRUE.equals(((JComponent)named(root,"wb.simple.auth.review")).getClientProperty("wb.primary"))
+                  &&shown(named(root,"wb.auth.history.search"),root),
+              "comparison has one clear preparation entry beside its visible record search at " + width);
+          Component role=named(root,"wb.auth.account.card.0");
+          check(shown(role,root)&&role.getHeight()<=50,
+              "compact role summary reserves space for response reading at " + width);
 
           extension.openFeature("payload");
           JTabbedPane phases = (JTabbedPane) named(root,"wb.payload.steps");
-          Component payload = named(root,"wb.payload.root"), footer = named(root,"wb.placement.payload.execution");
+          phases.setSelectedIndex(0);
+          Component payload = named(root,"wb.payload.root"), execution = named(root,"wb.actions.payload.execution");
           JTextArea request = (JTextArea) named(root,"wb.simple.payload.request");
           request.setText("GET /authored-placement-test?q=KEEP HTTP/1.1\r\nHost: example.test\r\n\r\n");
           String authored = request.getText();
+          JToggleButton candidates=(JToggleButton)named(root,"wb.payload.candidates.toggle");
+          JTextArea values=(JTextArea)named(root,"wb.simple.payload.values");
+          String authoredCandidates="SYNTHETIC_CANDIDATE_17\n한글 & <KEEP>";
+          values.setText(authoredCandidates);
+          check(!candidates.isSelected(),"candidate editing starts folded while the request remains primary at " + width);
+          candidates.doClick(0); layout(root,width);
+          check(candidates.isSelected()&&ApprovedWorkflowTestSupport.visible(values,root),
+              "the actual candidates entry reveals the retained editor at " + width);
+          candidates.doClick(0); layout(root,width);
+          check(values.getText().equals(authoredCandidates),"folding candidates preserves authored values at " + width);
           for (int phase = 0; phase < 2; phase++) {
             phases.setSelectedIndex(phase); layout(root,width);
             Component start = named(root,"wb.simple.payload.start"), stop = named(root,"wb.simple.payload.stop");
-            check(SwingUtilities.isDescendingFrom(start,footer) && SwingUtilities.isDescendingFrom(stop,footer)
-                    && !SwingUtilities.isDescendingFrom(footer,phases) && shown(start,root) && shown(stop,root)
-                    && bounds(footer,payload).y >= bounds(phases,payload).getMaxY(),
-                "payload execution stays below both phases with visible start/stop at " + width + "/" + phase);
+            check(SwingUtilities.isDescendingFrom(start,execution) && SwingUtilities.isDescendingFrom(stop,execution)
+                    && !SwingUtilities.isDescendingFrom(execution,phases),
+                "payload execution and stop remain outside either phase at " + width + "/" + phase);
+            String geometry = " start=" + bounds(start,root) + " stop=" + bounds(stop,root)
+                + " execution=" + bounds(execution,root);
+            check(shown(start,root) && shown(stop,root),
+                "payload start and stop stay fully visible at " + width + "/" + phase + geometry);
+            check(adjacent(root,"wb.simple.payload.start","wb.simple.payload.stop"),
+                "payload execution and stop stay adjacent at " + width + "/" + phase + geometry);
           }
           check(request.getText().equals(authored), "phase changes and responsive layout preserve authored request at " + width);
         }

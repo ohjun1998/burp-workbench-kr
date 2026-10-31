@@ -44,3 +44,7 @@
 전체7,176개 검사(Java6,864·payload HTTP136·Mapper147·Node29), Swing194개 배치, 실제 별도창112개, Katana102개 통과. 실제 버튼이동14화면/유지2화면을 좌표로 확인했습니다.
 
 JAR SHA-256: `4758e74ab9d0f268bbe2540b9c75cd565bab172a6576384cd1c4d46aa15987b9`.
+
+## 업로드 결과
+
+[배포 기록](PUBLISH_KR.md): 공개39개 파일을 재다운로드해HTTP200·크기·체크섬 일치를 확인했습니다. GitHub API의Forbidden 응답으로PR 생성·main 병합은 미완료입니다.

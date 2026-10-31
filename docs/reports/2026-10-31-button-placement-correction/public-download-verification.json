@@ -1,0 +1,319 @@
+{
+  "commit": "96e38a79864697bbcc4534236daf81b1b55b04e4",
+  "result": "passed",
+  "verifiedFiles": 39,
+  "checks": [
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/workbench-simple-1.4.15-before-after.pdf",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/workbench-simple-1.4.15-before-after.pdf",
+      "status": 200,
+      "bytes": 5553732,
+      "sha256": "9daf7ea3a1e4ea940e02e29bc2a27b97844fbe72bf1efe1eddd317a7926bd242",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/workbench-simple-1.4.15-images.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/workbench-simple-1.4.15-images.zip",
+      "status": 200,
+      "bytes": 2636027,
+      "sha256": "94ef64819045d0404f5b2420ab6eac8e8b071ce6de6ed5592b1cac78909a728d",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/traffic-before-after.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/traffic-before-after.png",
+      "status": 200,
+      "bytes": 123695,
+      "sha256": "6fa124ecf6a39f1ef955b886c12e533d5c6c88fa49aa025b2d33e2540e5a22a4",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/auth-before-after.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/auth-before-after.png",
+      "status": 200,
+      "bytes": 79336,
+      "sha256": "57110ebbc5e3eaad9f5ac465876c2dc500f10200c4256a89cf62b0a1315bce94",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/payload-before-after.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/payload-before-after.png",
+      "status": 200,
+      "bytes": 68997,
+      "sha256": "8686351a52561fdf402fa136158521669868c0617ce84a1062c31a4cba769824",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/activity.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/activity.png",
+      "status": 200,
+      "bytes": 117301,
+      "sha256": "854e57d93ede9f0f9820ca08eaf1b6181b135b0c9b75301bd7ec6389d8e31483",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/auth-accounts.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/auth-accounts.png",
+      "status": 200,
+      "bytes": 14740,
+      "sha256": "14d3ce53f266a807f7283932a3d0ff505794823c6adbffcd0e63c830b9d4f3f6",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/auth.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/auth.png",
+      "status": 200,
+      "bytes": 104133,
+      "sha256": "a5e5773177f2b39438561c10d18f1c181dc1ce90ffda75d9a1f8235fa45839ab",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/bounty-replay.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/bounty-replay.png",
+      "status": 200,
+      "bytes": 77263,
+      "sha256": "1e20f2064fa49062e654255771eb1cf556746c1dd2dff2937763b56c09b5f579",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/bounty.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/bounty.png",
+      "status": 200,
+      "bytes": 112904,
+      "sha256": "71b904a5f8c0b8c0eddb34693ece6b376e8add81b81675701e5614b636da73e4",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/dashboard.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/dashboard.png",
+      "status": 200,
+      "bytes": 126469,
+      "sha256": "f91e1e4f5543baf8de65b5ee1ab7e6f1a1d2b1db640ec5c1ea8770887c50d8e4",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/data.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/data.png",
+      "status": 200,
+      "bytes": 65857,
+      "sha256": "ebf43c5468dea4837d32a703f443c1f568bb434ba1bf0c2d5f922739fbfc5ae9",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/environment.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/environment.png",
+      "status": 200,
+      "bytes": 104753,
+      "sha256": "d8ea3c3ac91823b107cab6cde7b584234d3069a44659bf64a9c48fd5ecf98fff",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/exposure-cve.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/exposure-cve.png",
+      "status": 200,
+      "bytes": 133839,
+      "sha256": "b1f90d17399e88edf46251c7016d7c68e7efc76f116688ef6e84d183321bc391",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/exposure-search.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/exposure-search.png",
+      "status": 200,
+      "bytes": 112408,
+      "sha256": "3ca5eaf9e8ab9941d0fa117cb66966b8e6769989993f55bcf838702ff815e25d",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/js.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/js.png",
+      "status": 200,
+      "bytes": 109927,
+      "sha256": "138e8a798aceec7733ccc6e46734025ae595c552bed05fe3c34adf25cec0e4b0",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/mapper.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/mapper.png",
+      "status": 200,
+      "bytes": 76701,
+      "sha256": "177d80607aaa7d565e34b4b86bebca128133a8b1ee72cf8f6881a9a4c35b7a24",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/payload-results.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/payload-results.png",
+      "status": 200,
+      "bytes": 100461,
+      "sha256": "c77edd09cd3a65344624bb6c0cea88b3092d0bd97623eecebac0ed244c9ae8f8",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/payload.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/payload.png",
+      "status": 200,
+      "bytes": 69112,
+      "sha256": "1651d8a4cc62ab03209669a6bd20e485109c513b1337069c79076890cc0fde03",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/response-recon.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/response-recon.png",
+      "status": 200,
+      "bytes": 94605,
+      "sha256": "496e9865d9fa6e3b4241d7068bb840d7e11d010264b8991ade34b8d026074edb",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/dark/traffic.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/dark/traffic.png",
+      "status": 200,
+      "bytes": 113508,
+      "sha256": "7304bdf1cee41ce5a5f2a42e7e30fb7461ea8c0969217498abb04244b7e0868c",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/activity.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/activity.png",
+      "status": 200,
+      "bytes": 120568,
+      "sha256": "d6d8a28b9b74cbf82f6076c18ad2bca626741bd50d76280150ff7029884b5a8d",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/auth-accounts.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/auth-accounts.png",
+      "status": 200,
+      "bytes": 15383,
+      "sha256": "5156ec9879934625889d0adfb15f2e512514ddc0a2d3ca728435d9423745d622",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/auth.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/auth.png",
+      "status": 200,
+      "bytes": 107452,
+      "sha256": "0a62923d821a0b461f05418298cd44b7e56a48a0b5b36bbfd95c1217150fc0d0",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/bounty-replay.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/bounty-replay.png",
+      "status": 200,
+      "bytes": 80031,
+      "sha256": "2d78eaad18a97b589c217e8c6c5774d4e4c0dc4d05758c347f0cc62f0f5e3d51",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/bounty.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/bounty.png",
+      "status": 200,
+      "bytes": 116303,
+      "sha256": "5c14383fe895fb61d631510f4817ada97a9d9d686cbaaff57908f8b59f55a083",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/dashboard.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/dashboard.png",
+      "status": 200,
+      "bytes": 129666,
+      "sha256": "50e1eadddcf021752256e9695b8cf173e5d9c225f0d0bbc23132c2c6a92e9039",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/data.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/data.png",
+      "status": 200,
+      "bytes": 68389,
+      "sha256": "5935f7ccc1874f8fdf2d3d7bc47380d7aa0b218bb7b50df285024351cbe2d97a",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/environment.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/environment.png",
+      "status": 200,
+      "bytes": 107905,
+      "sha256": "3ddddbe0af72315ecc64d05698f8f5f1a54f71a3e5768dc99c3353f5c95d5067",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/exposure-cve.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/exposure-cve.png",
+      "status": 200,
+      "bytes": 136798,
+      "sha256": "490005fa46dea9b62467df9ace4d48c44016cde86022a03fda97556582ba610e",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/exposure-search.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/exposure-search.png",
+      "status": 200,
+      "bytes": 115111,
+      "sha256": "e90c3b3233cf3e963d77b28f43e0c52c34fe240152146b27def1cd2f40e9cb9c",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/js.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/js.png",
+      "status": 200,
+      "bytes": 112986,
+      "sha256": "2acc230721079fd8bba7e51c911a7903f1bdba4b96b8d942eef3e18e3cff38d0",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/mapper.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/mapper.png",
+      "status": 200,
+      "bytes": 79903,
+      "sha256": "0814da86040a048243d67a7b41e0cee8261a319907c6b13098d6936574e637d7",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/payload-results.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/payload-results.png",
+      "status": 200,
+      "bytes": 103692,
+      "sha256": "7f41d012fb09ec9f18ac49a269050dea9cc428d06a51c4633ac192c4674ac506",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/payload.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/payload.png",
+      "status": 200,
+      "bytes": 70967,
+      "sha256": "fc858839f6a9aac329e27e2f590396ec39e36328f5372cdf93e91e8f6d00985f",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/response-recon.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/response-recon.png",
+      "status": 200,
+      "bytes": 97624,
+      "sha256": "8bcdbf2a133d4314dfe16df31d589a7452721893df9c636e6b109a03737a280e",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-button-placement-correction/images/light/traffic.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/docs/reports/2026-10-31-button-placement-correction/images/light/traffic.png",
+      "status": 200,
+      "bytes": 115724,
+      "sha256": "b622eb7265bb3782a941e9e1bc4a7b042a34550259b6103d32779095184a3b9d",
+      "matchesLocal": true
+    },
+    {
+      "path": "simple/downloads/1.4.15/burp-workbench-simple-1.4.15.jar",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/simple/downloads/1.4.15/burp-workbench-simple-1.4.15.jar",
+      "status": 200,
+      "bytes": 8995671,
+      "sha256": "4758e74ab9d0f268bbe2540b9c75cd565bab172a6576384cd1c4d46aa15987b9",
+      "matchesLocal": true
+    },
+    {
+      "path": "simple/downloads/1.4.15/burp-workbench-simple-1.4.15-source.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/96e38a79864697bbcc4534236daf81b1b55b04e4/simple/downloads/1.4.15/burp-workbench-simple-1.4.15-source.zip",
+      "status": 200,
+      "bytes": 99860082,
+      "sha256": "647a489b28cb09d0f24a275c7ec7864f173c5bfaae7764315b8e60ff4bf231fc",
+      "matchesLocal": true
+    }
+  ]
+}

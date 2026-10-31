@@ -208,7 +208,7 @@ final class WorkbenchSkin {
   }
 
   private static final class TabsUi extends BasicTabbedPaneUI {
-    protected Insets getTabInsets(int placement,int index){return new Insets(10,18,10,18);}
+    protected Insets getTabInsets(int placement,int index){return new Insets(6,10,6,10);}
     protected void paintText(Graphics g,int placement,Font font,FontMetrics metrics,int index,String title,Rectangle rect,boolean selected){g.setFont(font.deriveFont(selected?Font.BOLD:Font.PLAIN));g.setColor(selected?WorkbenchUi.accent():WorkbenchUi.ink());g.drawString(title,rect.x,rect.y+metrics.getAscent());}
     protected Insets getContentBorderInsets(int placement){return new Insets(1,0,0,0);}
     @Override public void uninstallUI(JComponent component) {
@@ -216,10 +216,10 @@ final class WorkbenchSkin {
       super.uninstallUI(component);
     }
     @Override protected void paintTabBackground(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
-      graphics.setColor(WorkbenchUi.surface());graphics.fillRect(x,y,width,height);
+      graphics.setColor(selected?WorkbenchUi.selected():WorkbenchUi.surface());graphics.fillRoundRect(x+2,y+2,width-4,height-4,7,7);
     }
     @Override protected void paintTabBorder(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
-      graphics.setColor(selected?WorkbenchUi.accent():WorkbenchUi.line());graphics.fillRect(x,y+height-(selected?2:1),width,selected?2:1);
+      if(tabPane.hasFocus()&&selected){graphics.setColor(WorkbenchUi.accent());graphics.drawRoundRect(x+2,y+2,width-5,height-5,7,7);}
     }
     @Override protected void paintContentBorder(Graphics graphics,int placement,int selected) {}
   }
@@ -234,7 +234,7 @@ final class WorkbenchSkin {
       @Override public Component getTableCellRendererComponent(JTable owner, Object value, boolean selected, boolean focus, int row, int column) {
         super.getTableCellRendererComponent(owner, value, selected, focus, row, column);
         boolean compact=Boolean.TRUE.equals(owner.getClientProperty("wb.table.compact"));
-        setFont(WorkbenchUi.font().deriveFont(compact?Font.PLAIN:Font.BOLD,WorkbenchUi.displaySize(13f))); setForeground(WorkbenchUi.ink());
+        setFont(WorkbenchUi.font().deriveFont(Font.PLAIN,WorkbenchUi.displaySize(11f))); setForeground(kr.packetui.VisualTheme.muted());
         setBackground(WorkbenchUi.raised());
         setIcon(null);
         if(owner.getRowSorter()!=null && !owner.getRowSorter().getSortKeys().isEmpty()) {

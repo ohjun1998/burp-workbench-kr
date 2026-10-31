@@ -42,7 +42,7 @@ public final class SimplePreview extends WorkbenchTest {
         String body="<html>\n  <body>\n    <p>"+payloads[i].replace("<","&lt;").replace(">","&gt;")+"</p>\n  </body>\n</html>";
         byte[] wire=("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n"+body).getBytes(StandardCharsets.UTF_8);
         var response=new kr.payloadrunner.Engine.Response(200,wire.length,"text/html",body,false,wire,true);
-        var row=new kr.payloadrunner.Engine.Row(i+1,payloads[i],22+i,response,i==0?"기준 응답":"반사 관찰","화면 검증용 합성 데이터 · 브라우저 실행 미확인",request);
+        var row=new kr.payloadrunner.Engine.Row(i+1,payloads[i],22+i,response,i==0?"기준 응답":i==3?"대조 응답":"반사 관찰","화면 검증용 합성 데이터 · 브라우저 실행 미확인",request);
         entries.add(constructor.newInstance(row,proxy(burp.IHttpService.class,(p,m,a)->switch(m.getName()){case "getHost"->"simple.example.test";case "getPort"->443;case "getProtocol"->"https";default->def(m);})));model.addRow(new Object[]{row.index(),row.payload(),200,wire.length,row.millis(),row.verdict(),row.evidence()});
       }
       ((JTable)value(runner,"table")).setRowSelectionInterval(2,2);
@@ -117,7 +117,7 @@ public final class SimplePreview extends WorkbenchTest {
   }
   static void dashboardRevealed(Container root, boolean empty) {
     Component list = SimpleWorkflowTest.named(root, empty ? "wb.scope.dashboard.empty" : "wb.scope.dashboard.results");
-    Component detail = SimpleWorkflowTest.named(root, "wb.scope.dashboard.detail");
+    Component detail = SimpleWorkflowTest.named(root, "wb.scope.dashboard.detail.summary");
     Rectangle listBounds = SwingUtilities.convertRectangle(list.getParent(), list.getBounds(), root);
     Rectangle detailBounds = SwingUtilities.convertRectangle(detail.getParent(), detail.getBounds(), root);
     Rectangle listShown = visible(root, list, listBounds, root.getWidth(), root.getHeight());
@@ -199,7 +199,9 @@ public final class SimplePreview extends WorkbenchTest {
       controls.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(label), csv(component.getName()),
           ""+bounds.width, ""+bounds.height, ""+fullyVisible, ""+scrollable));
     }
-    if (component instanceof JTable || component instanceof javax.swing.text.JTextComponent) {
+    if (component instanceof JTable || component instanceof javax.swing.text.JTextComponent
+        || "wb.pdf.exposure.cve.facts".equals(component.getName())
+        || "wb.pdf.exposure.discovery.facts".equals(component.getName())) {
       var bounds = SwingUtilities.convertRectangle(component.getParent(), component.getBounds(), root);
       var clipping = visible(root, component, bounds, w, h);
       content.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()), ""+Math.max(0,clipping.width), ""+Math.max(0,clipping.height)));
@@ -308,7 +310,22 @@ public final class SimplePreview extends WorkbenchTest {
             ((AbstractButton)SimpleWorkflowTest.named(root,"fm.feature.edit")).isEnabled());
         JTable mapperTable=(JTable)value(mapper,"table");if(mapperTable.getRowCount()>0)mapperTable.setRowSelectionInterval(0,0);
         capture(root,"08-mapper.png");
-        click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
+        click(root,"wb.simple.tool.environment");
+        // Harness-only selected reading example from an already captured,
+        // unauthenticated synthetic request/response. Never execute a GET here.
+        var environment=(EnvironmentPanel)value(extension,"environments");
+        var environmentOriginal=((DiskTrafficStore)value(extension,"trafficStore")).ref(3);
+        String environmentUrl=environmentOriginal.url();
+        var environmentSite=environment.catalog.sites.get(origin);
+        environmentSite.discovered.put(environmentUrl,new EnvironmentCatalog.Candidate(environmentUrl,"수집된 요청 원본","합성 원문 읽기",100,"화면 검증 fixture · 추가 전송 없음"));
+        String environmentRequest=new String(environmentOriginal.request().toByteArray().getBytes(),StandardCharsets.UTF_8);
+        String environmentResponse=new String(environmentOriginal.response().toByteArray().getBytes(),StandardCharsets.UTF_8);
+        environment.packets.put(environmentUrl,new EnvironmentPanel.Packet(environmentUrl,environmentRequest,environmentResponse,"HTTP "+environmentOriginal.response().statusCode()+" · 합성 관찰 응답 · GET 확인 미실행",environmentResponse));
+        environment.packetAccounts.put(environmentUrl,environment.accountKey());environment.refresh();
+        for(int model=0;model<environment.paths.getRowCount();model++)if(environmentUrl.equals(environment.paths.getValueAt(model,0))){int view=environment.pathTable.convertRowIndexToView(model);environment.pathTable.setRowSelectionInterval(view,view);break;}
+        environment.showSelected();
+        scenario("Environment selected reader uses an already observed original response without performing a GET",environmentUrl.equals(environment.selectedUrl())&&environment.currentPacket(environmentUrl).response().equals(environmentResponse)&&environment.responseView.getText().contains("items"));
+        capture(root,"09-environment.png");
         extension.openFeature("exposure");
         var research=(ExposureResearchPanel)value(extension,"exposureResearch");
         research.target.setText("simple.example.test");
@@ -347,10 +364,30 @@ public final class SimplePreview extends WorkbenchTest {
         auth.mapCandidate(credentials.get(0),new AuthAccount("Alice","alice","101","문서 소유자","alice@example.test"));
         auth.mapCandidate(credentials.get(1),new AuthAccount("Bob","bob","102","다른 사용자","bob@example.test"));
         auth.assign(0,credentials.get(0)); auth.assign(1,credentials.get(1)); auth.anonymous(3);
-        JPanel accountChoicesBody=WorkbenchUi.settingsBody(auth.preparationAccountChoices(),()->{});
+        JTabbedPane preparationTabs=auth.preparationContent();
+        preparationTabs.setSelectedIndex(1);
+        JPanel accountChoicesBody=WorkbenchUi.settingsBody(preparationTabs,()->{});
         for(Component child:((Container)((BorderLayout)accountChoicesBody.getLayout()).getLayoutComponent(BorderLayout.SOUTH)).getComponents())
           if(child instanceof JButton close)close.setName("wb.auth.preparation.close");
-        capture(accountChoicesBody,"04-auth-accounts.png",Math.min(width,1000),300);
+        capture(accountChoicesBody,"04-auth-accounts.png",Math.min(width,1000),Math.min(height,760));
+        String[] preparationCaptures={"overview","accounts","policy"};
+        for(int tab=0;tab<preparationTabs.getTabCount();tab++) {
+          preparationTabs.setSelectedIndex(tab);
+          int selectedPreparationTab=tab;
+          if(preparationTabs.getSelectedComponent() instanceof JScrollPane pageScroll)
+            pageScroll.getViewport().setViewPosition(new Point(0,0));
+          capture(accountChoicesBody,"04-auth-accounts-full-"+preparationCaptures[tab]+".png",Math.min(width,1000),Math.min(height,760),()->{
+            if(preparationTabs.getSelectedComponent() instanceof JScrollPane pageScroll)
+              pageScroll.getViewport().setViewPosition(new Point(0,0));
+            Rectangle tabBounds=SwingUtilities.convertRectangle(preparationTabs,preparationTabs.getBoundsAt(selectedPreparationTab),accountChoicesBody);
+            scenario("Complete authentication preparation keeps tab "+selectedPreparationTab+" visible above its own scrolling page",
+                tabBounds.y>=0&&tabBounds.height>0&&tabBounds.y+tabBounds.height<=accountChoicesBody.getHeight());
+            if(selectedPreparationTab==0){
+              JTable readiness=(JTable)SimpleWorkflowTest.named(preparationTabs.getSelectedComponent(),"wb.auth.readiness.table");
+              scenario("Complete authentication overview contains actual selected-request readiness rows",readiness!=null&&readiness.getRowCount()>0);
+            }
+          });
+        }
         var baseline = response(200,"{\"id\":101,\"title\":\"권한 점검용 문서\",\"ownerId\":\"alice\"}");
         var run = new AuthComparePanel.Run(1,alice,baseline,auth.context());
         run.baselineState=AuthComparePanel.Run.Baseline.VALID;
@@ -370,7 +407,43 @@ public final class SimplePreview extends WorkbenchTest {
         scenario("Manual replay prepares the selected request without running",evidence.pages.getSelectedIndex()==1&&evidence.workflow.getText().contains("GET /api/documents/101")&&!evidence.running&&evidence.flowModel.getRowCount()==0);
         evidence.workflow.setName("wb.simple.replay.request");
         evidence.workflowDetail.setName("wb.simple.replay.result");
-        capture(root,"11-replay.png");
+        capture(root,"11-replay-empty.png");
+        // Harness-only completed examples use the already retained synthetic traffic originals.
+        // No production result is invented and no BountyWorkflow transport/run call is made.
+        var replayStore=(DiskTrafficStore)value(extension,"trafficStore");
+        var replayOriginals=List.of(replayStore.ref(1),replayStore.ref(2),replayStore.ref(3));
+        evidence.workflow.setText(String.join("\n===STEP===\n",replayOriginals.stream().map(original->new String(original.request().toByteArray().getBytes(),StandardCharsets.UTF_8)).toList()));
+        // This preview factory already owns the retained request objects. Construct the
+        // real immutable plan model without requesting a second Montoya parser factory.
+        var replaySteps=replayOriginals.stream().map(original->new BountyWorkflow.Step(new String(original.request().toByteArray().getBytes(),StandardCharsets.UTF_8))).toList();
+        var replayPlan=new BountyWorkflow.Plan(evidence.flowOrigin.getText(),replaySteps,List.of(),
+            evidence.flowWrites.isSelected(),(Integer)evidence.flowTimeout.getValue(),(Integer)evidence.flowBudget.getValue());
+        scenario("Synthetic replay preparation retains three exact original request steps without transport",
+            replayPlan.steps().size()==3&&replayPlan.steps().get(0).raw().equals(new String(replayOriginals.get(0).request().toByteArray().getBytes(),StandardCharsets.UTF_8))&&!evidence.running);
+        for(int step=0;step<replayOriginals.size();step++){
+          var original=replayOriginals.get(step);var packet=original.packet();
+          var result=new BountyWorkflow.Result(step+1,packet.request(),packet.response(),"합성 완료 · 실제 HTTP 전송 0건 · 관측 예시");
+          evidence.flowResults.add(result);
+          evidence.flowModel.addRow(new Object[]{result.step(),result.request().method(),Core.safeUrl(result.request().url()),
+              result.response()==null?"없음":result.response().statusCode(),result.state()});
+        }
+        evidence.refreshActions();evidence.flowTable.setRowSelectionInterval(1,1);
+        int replaySelected=evidence.flowTable.convertRowIndexToModel(evidence.flowTable.getSelectedRow());
+        var replayResult=evidence.flowResults.get(replaySelected);
+        var replayReader=(JTabbedPane)SimpleWorkflowTest.named(root,"wb.bounty.flow.packet.tabs");replayReader.setSelectedIndex(0);
+        scenario("Completed synthetic replay uses the actual selected result and exact retained request/response bytes",
+            replayResult.step()==2&&Arrays.equals(replayResult.request().toByteArray().getBytes(),replayOriginals.get(replaySelected).request().toByteArray().getBytes())
+            &&Arrays.equals(replayResult.response().toByteArray().getBytes(),replayOriginals.get(replaySelected).response().toByteArray().getBytes())
+            &&evidence.workflowDetail.getText().equals(replayResult.response().toString())&&evidence.workflowRequestDetail.getText().equals(replayResult.request().toString()));
+        scenario("Synthetic replay results enable evidence handoff while leaving execution idle and target HTTP at zero",
+            evidence.flowResults.size()==3&&evidence.flowCapture.isEnabled()&&!evidence.running&&PayloadIntegrationTest.sent.get()==0);
+        evidence.state.setText("화면 검증용 합성 재현 결과 3개 · 실제 HTTP 전송 0건 · 취약점 확인 아님");
+        evidence.workflow.setCaretPosition(0);evidence.workflowDetail.setCaretPosition(0);
+        capture(root,"11-replay.png",width,height,()->{
+          var reader=(JViewport)SwingUtilities.getAncestorOfClass(JViewport.class,evidence.workflowDetail);
+          scenario("Selected completed replay response remains readable in the actual visible reader",
+              reader!=null&&reader.getWidth()>=200&&reader.getHeight()>=65&&replayReader.getSelectedIndex()==0&&!evidence.workflowDetail.getText().isBlank());
+        });
         click(root,"wb.simple.bounty.evidence"); evidence.captureAuth();
         evidence.evidenceTitle.setText("문서 접근 권한 비교 · 작성 예시");
         evidence.impact.setText("다른 사용자와 비로그인 응답을 확인하고 접근 정책과 대조했습니다.\n이 가이드 화면의 패킷과 결과는 합성 데이터입니다.");

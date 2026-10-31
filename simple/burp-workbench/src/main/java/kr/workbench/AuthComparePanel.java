@@ -525,7 +525,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     stop.setEnabled(active.get()>0||recording.get()!=null);
     state.addPropertyChangeListener("text",event->stop.setEnabled(active.get()>0||recording.get()!=null));
     detection.setPreferredSize(new Dimension(126,32));
-    JPanel accountContext=WorkbenchUi.row(detection,ReferenceUi.field("대상 도메인",accountOrigin));
+    JPanel accountContext=WorkbenchUi.row(ReferenceUi.field("대상",accountOrigin),detection);
     accountContext.setName("wb.actions.auth.context");
     JPanel accountActions=WorkbenchUi.row(settings);accountActions.setName("wb.actions.auth.accounts");
     JPanel actions=CompactWorkbenchUi.toolbar(accountContext,accountActions);
@@ -1378,7 +1378,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     for (int i = 0; i < SLOTS; i++) {
       Candidate c = slots[i];if(i==0)accountOrigin.setText(c==null?"전체 대상":c.origin());
       JButton card=accountCards[i];if(i==2){Container parent=accountCards[0].getParent();if(parent!=null){if(c!=null&&card.getParent()==null)parent.add(card,2);else if(c==null&&card.getParent()!=null)parent.remove(card);parent.revalidate();}}
-      ((AccountSummaryCard)card).summary(i==3?"비로그인":c!=null&&accounts.get(c.key())!=null&&!accounts.get(c.key()).name().isBlank()?accounts.get(c.key()).name()+(profileRoles[i].getText().isBlank()?"":" · "+profileRoles[i].getText()):label(i),c==null?"계정 연결 필요":c.headers().isEmpty()?"인증 정보 없음":accounts.get(c.key())!=null&&!accounts.get(c.key()).email().isBlank()?accounts.get(c.key()).email():profileOwners[i].getText().isBlank()?c.origin():profileOwners[i].getText(),c==null?"클릭하여 계정을 연결하세요":c.headers().isEmpty()?"인증 없이 요청을 비교합니다":profileRoles[i].getText().isBlank()?"연결됨 · 클릭하여 계정 설정":profileRoles[i].getText(),i==0&&c!=null);
+      ((AccountSummaryCard)card).summary(i==3?"비로그인":c!=null&&accounts.get(c.key())!=null&&!accounts.get(c.key()).name().isBlank()?accounts.get(c.key()).name():label(i),c==null?"계정 연결 필요":c.headers().isEmpty()?"인증 정보 없음":accounts.get(c.key())!=null&&!accounts.get(c.key()).email().isBlank()?accounts.get(c.key()).email():profileOwners[i].getText().isBlank()?c.origin():profileOwners[i].getText(),c==null?"클릭하여 계정을 연결하세요":c.headers().isEmpty()?"인증 없이 요청을 비교합니다":profileRoles[i].getText().isBlank()?"연결됨 · 클릭하여 계정 설정":profileRoles[i].getText(),i==0&&c!=null);
       card.setToolTipText((c==null?"원본 선택 후 계정 연결":c.origin()+" · 계정 설정 열기")+" · "+card.getAccessibleContext().getAccessibleName());
       slotLabels[i].setText(
           c == null ? "미지정" : c.headers.isEmpty() ? "비로그인" : c.key.substring(0, 12));
@@ -1800,30 +1800,39 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
 
   JPanel preparationAccountChoices() {
-    JPanel panel = new JPanel(); panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    panel.setName("wb.auth.preparation.accounts");
-    panel.add(AuthReadiness.note("선택한 인증 후보는 역할에 즉시 연결됩니다. 연결만으로 요청을 전송하지 않습니다.", 1));
+    JPanel rows = new JPanel(); rows.setLayout(new BoxLayout(rows, BoxLayout.Y_AXIS));
+    rows.setBorder(BorderFactory.createEmptyBorder(16, 22, 16, 22));
     String targetOrigin = !preparationSelection.isEmpty() ? origin(preparationSelection.get(0).request())
         : Arrays.stream(slots).filter(Objects::nonNull).map(Candidate::origin).findFirst().orElse("");
+    JLabel target = WorkflowUi.context("wb.auth.preparation.origin", "연결 대상 "
+        + (targetOrigin.isEmpty() ? "원본 요청을 먼저 선택하세요" : targetOrigin)
+        + " · 같은 대상의 인증 후보만 표시합니다.");
+    target.putClientProperty("wb.font.size", 11); rows.add(target);
+    rows.add(Box.createVerticalStrut(10));
     if (!targetOrigin.isEmpty() && Arrays.stream(slots).anyMatch(value -> value != null && !value.origin().equals(targetOrigin)))
-      panel.add(button("다른 대상 계정 연결 해제", () -> {
+      rows.add(button("다른 대상 계정 연결 해제", () -> {
         for (int slot = 0; slot < SLOTS; slot++) if (slots[slot] != null && !slots[slot].origin().equals(targetOrigin)) clearSlot(slot);
         if (preparationRefresh != null) { preparationRefresh.run(); preparationTabs.setSelectedIndex(1); }
       }));
-    for (int i = 0; i < SLOTS; i++) {
+    for (int i : new int[]{0, 1, 3, 2}) {
       final int slot = i;
       JComboBox<CandidateChoice> choices = new JComboBox<>();
       choices.setName("wb.auth.preparation.account." + i);
-      choices.addItem(new CandidateChoice(null, "미지정"));
+      choices.setRenderer(new DefaultListCellRenderer() {
+        { putClientProperty("html.disable", true); }
+      });
+      choices.addItem(new CandidateChoice(null, i == 3 ? "사용 안 함" : "미지정"));
       if (i == 3) {
         String anonymousOrigin = targetOrigin.isEmpty() ? credentials.values().stream().map(Candidate::origin).findFirst().orElse("") : targetOrigin;
-        if (!anonymousOrigin.isEmpty()) choices.addItem(new CandidateChoice(new Candidate(0, "anonymous", anonymousOrigin, Map.of(), 1, ""), "비로그인 · " + anonymousOrigin));
+        if (!anonymousOrigin.isEmpty()) choices.addItem(new CandidateChoice(new Candidate(0, "anonymous", anonymousOrigin, Map.of(), 1, ""), "사용 · Cookie·Authorization 없음"));
       } else {
         for (Candidate candidate : credentials.values()) {
           if (!targetOrigin.isEmpty() && !targetOrigin.equals(candidate.origin())) continue;
           AuthAccount account = accounts.get(candidate.key());
           String name = account == null ? "후보 #" + candidate.no() : account.label();
-          choices.addItem(new CandidateChoice(candidate, name + " · " + candidate.origin()));
+          if (account != null && !account.email().isBlank() && !name.contains(account.email()))
+            name += " · " + account.email();
+          choices.addItem(new CandidateChoice(candidate, name));
         }
         if (slots[i] != null && (!slots[i].origin().equals(targetOrigin) || !credentials.containsKey(slots[i].key())))
           choices.addItem(new CandidateChoice(slots[i], label(i) + " · 현재 연결"));
@@ -1832,31 +1841,119 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         Candidate value = choices.getItemAt(at).candidate();
         if (slots[i] != null && value != null && value.key().equals(slots[i].key())) choices.setSelectedIndex(at);
       }
+      JLabel connection = new JLabel(); connection.setName("wb.auth.preparation.connection." + i);
+      connection.setHorizontalAlignment(SwingConstants.CENTER);
+      connection.setPreferredSize(new Dimension(72, 24));
+      connection.putClientProperty("wb.font.size", 11);
+      Runnable describe = () -> {
+        CandidateChoice choice = (CandidateChoice) choices.getSelectedItem();
+        boolean linked = choice != null && choice.candidate() != null;
+        connection.setText(linked ? slot == 3 ? "사용" : "연결됨" : "미지정");
+        connection.setForeground(linked ? WorkbenchUi.accent() : kr.packetui.VisualTheme.muted());
+        choices.setToolTipText(linked ? choice.candidate().origin() : "같은 대상의 인증 후보를 선택하세요.");
+        connection.getAccessibleContext().setAccessibleName((slot == 3 ? "비로그인" : "계정 " + (slot + 1)) + " · " + connection.getText());
+      };
       choices.addActionListener(event -> safe(() -> {
         CandidateChoice choice = (CandidateChoice) choices.getSelectedItem();
         if (choice == null || choice.candidate() == null) clearSlot(slot);
         else assign(slot, choice.candidate());
+        describe.run();
         state.setText("계정 연결 변경 · 적용 상태 다시 확인 후 비교하세요. 요청 전송 없음.");
       }));
       JLabel role = new JLabel(i == 3 ? "비로그인" : "계정 " + (i + 1));
-      role.setPreferredSize(new Dimension(80, 32));
+      role.putClientProperty("wb.font.heading", true); role.putClientProperty("wb.font.size", 12);
       role.setLabelFor(choices);
+      String description = i == 3 ? "인증 없이 응답 비교" : profileRoles[i].getText().isBlank()
+          ? i == 0 ? "첫 번째 비교 역할" : i == 1 ? "다른 사용자 역할" : "필요할 때만 연결" : profileRoles[i].getText();
+      JLabel hint = new JLabel(); hint.putClientProperty("wb.font.size", 11);
+      hint.putClientProperty("html.disable", true); hint.setText(description);
+      hint.setName("wb.auth.preparation.role.hint." + i);
+      hint.setForeground(kr.packetui.VisualTheme.muted());
+      JPanel roleColumn = new JPanel(new GridLayout(2, 1, 0, 4));
+      roleColumn.add(role); roleColumn.add(hint); roleColumn.setPreferredSize(new Dimension(155, 38));
       JPanel row = new JPanel(new BorderLayout(12, 0)) {
         public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE, getPreferredSize().height); }
       };
+      row.setName("wb.auth.preparation.role." + i);
       row.setAlignmentX(Component.LEFT_ALIGNMENT);
-      row.setBorder(BorderFactory.createEmptyBorder(4, 0, 4, 0));
+      row.setBorder(BorderFactory.createCompoundBorder(
+          BorderFactory.createMatteBorder(0, 0, i == 2 ? 0 : 1, 0, WorkbenchUi.line()),
+          BorderFactory.createEmptyBorder(12, 0, 12, 0)));
       choices.setMinimumSize(new Dimension(120, 32));
-      row.add(role, BorderLayout.WEST); row.add(choices);
+      row.add(roleColumn, BorderLayout.WEST); row.add(choices); row.add(connection, BorderLayout.EAST);
+      describe.run();
       if(i==2){
         JPanel extra=new JPanel(new BorderLayout()) {public Dimension getMaximumSize(){return new Dimension(Integer.MAX_VALUE,getPreferredSize().height);}};
         extra.setAlignmentX(Component.LEFT_ALIGNMENT);
-        extra.add(CompactWorkbenchUi.disclosure("wb.auth.preparation.extra","추가 계정",row,slots[2]!=null));panel.add(extra);
-      }else panel.add(row);
+        extra.add(CompactWorkbenchUi.disclosure("wb.auth.preparation.extra","추가 비교 계정 · " + (slots[2] == null ? "현재 미지정" : "연결됨"),row,slots[2]!=null));rows.add(extra);
+      }else rows.add(row);
     }
-    for (Component child : panel.getComponents())
+    JLabel note = WorkflowUi.context("wb.auth.preparation.accounts.note", "계정 선택은 즉시 연결됩니다. 연결·설정 변경만으로 요청을 보내지 않습니다.");
+    note.putClientProperty("wb.font.size", 11); rows.add(Box.createVerticalStrut(8)); rows.add(note);
+    for (Component child : rows.getComponents())
       if (child instanceof JComponent component) component.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JPanel panel = WorkbenchUi.card("인증 후보 연결", rows);
+    panel.setName("wb.auth.preparation.accounts");
     return panel;
+  }
+
+  /** The native review and captures share all three real preparation tabs. */
+  JTabbedPane preparationContent() {
+    return preparationContent(false, List.copyOf(preparationSelection.isEmpty() ? selected.get() : preparationSelection));
+  }
+
+  private JTabbedPane preparationContent(boolean automatic, List<HttpRequestResponse> originals) {
+    JTabbedPane tabs = new JTabbedPane(); tabs.setName("wb.auth.preparation.tabs");
+    JPanel overview = new JPanel(new BorderLayout()); overview.setName("wb.auth.preparation.overview");
+    try { updatePreparationOverview(overview, automatic, originals); }
+    catch (IllegalArgumentException error) {
+      overview.add(AuthReadiness.note(error.getMessage() + "\n계정·쓰기 조회 또는 세션·권한표 탭에서 설정을 보완하세요.", 5));
+      WorkbenchUi.style(overview);
+    }
+    JPanel comparison = new JPanel(new BorderLayout(4, 8)); comparison.setName("wb.auth.preparation.comparison");
+    comparison.add(preparationAccountChoices(), BorderLayout.NORTH);
+    comparison.add(settingsContent());
+    JScrollPane overviewScroll = new JScrollPane(overview);
+    overviewScroll.setName("wb.auth.preparation.overview.scroll");
+    tabs.addTab("1 적용 상태", overviewScroll);
+    tabs.addTab("2 계정·쓰기 조회", new JScrollPane(comparison));
+    tabs.addTab("3 세션·권한표", new JScrollPane(sessionSettingsContent()));
+    tabs.addChangeListener(event -> {
+      if (tabs.getSelectedIndex() == 1) {
+        Component previous = ((BorderLayout) comparison.getLayout()).getLayoutComponent(BorderLayout.NORTH);
+        if (previous != null) comparison.remove(previous);
+        JPanel choices = preparationAccountChoices(); WorkbenchUi.style(choices);
+        comparison.add(choices, BorderLayout.NORTH); comparison.revalidate();
+      }
+    });
+    return tabs;
+  }
+
+  record PreparationOverview(Context context, AuthReadiness.Report report, List<String> blocked) {
+    PreparationOverview { blocked = List.copyOf(blocked); }
+  }
+
+  /** Reads retained requests and current configuration only; never approves or executes a comparison. */
+  PreparationOverview updatePreparationOverview(JPanel overview, boolean automatic, List<HttpRequestResponse> originals) {
+    editable();
+    Context current = context(); List<String> blocked = new ArrayList<>();
+    if (!automatic) for (var rr : originals) {
+      try {
+        validate(rr.request(), rr.response(), current);
+        var effect = current.effectFor(rr.request());
+        if (effect.enabled() && !WorkbenchScope.contains(api, AuthEffectCheck.observer(effect, rr.request(), current.names())))
+          throw new IllegalArgumentException("처리 결과 GET 조회 URL이 SCOPE 밖입니다.");
+      } catch (IllegalArgumentException error) {
+        blocked.add(rr.request().method() + " " + java.net.URI.create(rr.request().url()).getPath() + " · " + error.getMessage());
+      }
+    }
+    AuthReadiness.Report report = automatic ? AuthReadiness.automatic(current)
+        : AuthReadiness.selected(current, originals.stream().map(HttpRequestResponse::request).toList());
+    overview.removeAll();
+    overview.add(AuthReadiness.content(current, report, blocked, this::editReadinessRow, preparationFocus, preparationSlot));
+    WorkbenchUi.style(overview); overview.revalidate(); overview.repaint();
+    if (overview.getParent() instanceof JViewport viewport) viewport.setViewPosition(new Point());
+    return new PreparationOverview(current, report, blocked);
   }
 
   ReadinessApproval unifiedReadiness(boolean automatic, List<HttpRequestResponse> originals) {
@@ -1865,21 +1962,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     comparisonSettings.closeWindow(); sessionSettings.closeWindow(); setupBundleWindow.closeWindow();
     long generation = preparationGeneration;
     long executionEpoch = epoch.get();
-    JTabbedPane tabs = new JTabbedPane(); tabs.setName("wb.auth.preparation.tabs");
-    JPanel overview = new JPanel(new BorderLayout());
-    JPanel comparison = new JPanel(new BorderLayout(4, 4));
-    comparison.add(preparationAccountChoices(), BorderLayout.NORTH);
-    comparison.add(new JScrollPane(settingsContent()));
-    tabs.addTab("1 적용 상태", overview);
-    tabs.addTab("2 계정·쓰기 조회", comparison);
-    tabs.addTab("3 세션·권한표", new JScrollPane(sessionSettingsContent()));
-    tabs.addChangeListener(event -> {
-      if (tabs.getSelectedIndex() == 1) {
-        Component previous = ((BorderLayout) comparison.getLayout()).getLayoutComponent(BorderLayout.NORTH);
-        if (previous != null) comparison.remove(previous);
-        comparison.add(preparationAccountChoices(), BorderLayout.NORTH); comparison.revalidate();
-      }
-    });
+    JTabbedPane tabs = preparationContent(automatic, originals);
+    JPanel overview = (JPanel) ((JScrollPane) tabs.getComponentAt(0)).getViewport().getView();
     preparationTabs = tabs;
     JLabel feedback = new JLabel("설정을 바꾸면 ‘적용 상태 다시 확인’으로 최신 조건을 검토하세요.");
     feedback.setName("wb.auth.preparation.feedback"); WorkbenchUi.feedback(feedback);
@@ -1903,18 +1987,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         editable();
         if (closed.get() || executionEpoch != epoch.get()) throw new IllegalArgumentException("비교 준비가 만료되었습니다. 닫고 다시 여세요.");
         if (!automatic) { validatePreparedSelection(); requireSamePreparedOriginals(originals, preparationSelection); if (generation != preparationGeneration) throw new IllegalArgumentException("준비 원본이 변경되었습니다."); }
-        Context current = context(); List<String> blocked = new ArrayList<>();
-        if (!automatic) for (var rr : originals) {
-          try {
-            validate(rr.request(), rr.response(), current);
-            var effect = current.effectFor(rr.request());
-            if (effect.enabled() && !WorkbenchScope.contains(api, AuthEffectCheck.observer(effect, rr.request(), current.names())))
-              throw new IllegalArgumentException("처리 결과 GET 조회 URL이 SCOPE 밖입니다.");
-          } catch (IllegalArgumentException error) { blocked.add(rr.request().method() + " " + java.net.URI.create(rr.request().url()).getPath() + " · " + error.getMessage()); }
-        }
-        AuthReadiness.Report report = automatic ? AuthReadiness.automatic(current)
-            : AuthReadiness.selected(current, originals.stream().map(HttpRequestResponse::request).toList());
-        overview.add(AuthReadiness.content(current, report, blocked, this::editReadinessRow, preparationFocus, preparationSlot));
+        PreparationOverview shown = updatePreparationOverview(overview, automatic, originals);
+        Context current = shown.context(); List<String> blocked = shown.blocked(); AuthReadiness.Report report = shown.report();
         preview.set(new ReadinessApproval(current, automatic ? null : preparedStamp(current)));
         reviewedScope.set(WorkbenchScope.registeredRules(api).toString());
         proceed.setEnabled(blocked.isEmpty());
@@ -1922,6 +1996,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         feedback.setText(blocked.isEmpty() ? "최신 설정의 적용 상태를 표시했습니다. 비교 버튼을 눌러야 요청을 전송합니다." : "전송할 수 없는 조건을 보완한 뒤 다시 확인하세요.");
       } catch (IllegalArgumentException error) {
         overview.add(AuthReadiness.note(error.getMessage() + "\n계정·쓰기 조회 또는 세션·권한표 탭에서 설정을 보완하세요.", 5)); feedback.setText(error.getMessage());
+        WorkbenchUi.style(overview);
       }
       tabs.setSelectedIndex(0); overview.revalidate(); overview.repaint();
     };

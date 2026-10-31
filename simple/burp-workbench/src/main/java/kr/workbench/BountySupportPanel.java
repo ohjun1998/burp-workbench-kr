@@ -80,6 +80,9 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
   final JTable evidenceTable = new JTable(evidenceModel);
   final JTextArea evidencePacketPreview = area(10), evidenceRequestPreview = area(10);
   final JLabel evidencePacketLabel = new JLabel("증거를 선택하세요.");
+  final JLabel evidenceListTitle = new JLabel("증거 0개"), evidenceAccount = new JLabel("계정 · 미연결"),
+      evidenceResponse = new JLabel("응답 · 증거 선택 전");
+  final JTextArea evidenceSourceInfo = area(3), workflowRequestDetail = area(10);
   final JLabel evidenceCount = new JLabel("증거 0 / 32개");
   record EvidenceEdit(List<BountyEvidence.Item> items, Map<String, String> executions,
       Map<String, Set<String>> sources, Map<String, String> parts, List<Integer> selected,
@@ -387,6 +390,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     evidenceRedoAction.setToolTipText(evidenceHistory.canRedo() ? "다시 실행: " + evidenceHistory.redoLabel() : "다시 실행할 편집이 없습니다.");
     evidenceDescribe.setEnabled(editable && selected.length == 1);
     evidenceCount.setText("증거 " + evidenceModel.getRowCount() + " / 32개 · 선택 " + selected.length + "개");
+    evidenceListTitle.setText("증거 " + evidenceModel.getRowCount() + "개");
   }
 
   JPanel workflowContent() {
@@ -412,32 +416,43 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       public void changedUpdate(javax.swing.event.DocumentEvent e) { syncContext.run(); }
     });
     flowBudget.addChangeListener(e -> syncContext.run()); flowWrites.addItemListener(e -> syncContext.run()); syncContext.run();
-    JPanel execution = CompactWorkbenchUi.toolbar(flowContext, WorkbenchUi.row(flowSettings.button(), flowRun, flowStop));
+    JButton settings=flowSettings.button();settings.setText("실행 설정");
+    JPanel execution = CompactWorkbenchUi.toolbar(flowContext, WorkbenchUi.row(settings, flowRun, flowStop));
     execution.setName("wb.actions.bounty.flow.execution");
     p.add(execution, BorderLayout.NORTH);
-    JPanel requestCard = WorkbenchUi.card("요청 단계 · ===STEP=== 줄로 구분", packetScroll(workflow));
-    requestCard.remove(((BorderLayout) requestCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
-    JPanel requestActions = CompactWorkbenchUi.toolbar(new JLabel("요청 단계 · ===STEP=== 줄로 구분"), WorkbenchUi.row(append));
+    JPanel requestBody=new JPanel(new BorderLayout(0,8));requestBody.add(packetScroll(workflow));
+    JLabel requestContext=new JLabel("같은 대상에서 순서대로 실행 · ===STEP=== 줄로 구분");
+    requestContext.setToolTipText(requestContext.getText());
+    JPanel requestActions = CompactWorkbenchUi.toolbar(requestContext, WorkbenchUi.row(append));
     requestActions.setName("wb.actions.bounty.flow.request");
-    requestCard.add(ReferenceUi.header(requestActions, null), BorderLayout.NORTH);
-    JPanel resultCard = WorkbenchUi.card("단계별 실행 결과", new JScrollPane(flowTable));
-    resultCard.remove(((BorderLayout) resultCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
-    JPanel resultActions = CompactWorkbenchUi.toolbar(new JLabel("단계별 실행 결과"), WorkbenchUi.row(flowCapture));
+    requestBody.add(requestActions,BorderLayout.NORTH);
+    JPanel requestCard = WorkbenchUi.card("요청 준비",requestBody);
+    JLabel resultContext=new JLabel("최근 실행 · 결과 0개");resultContext.setName("wb.bounty.flow.result.context");
+    flowModel.addTableModelListener(e->resultContext.setText("최근 실행 · 결과 "+flowModel.getRowCount()+"개"));
+    flowCapture.setText("결과를 증거로");
+    JPanel resultActions = CompactWorkbenchUi.toolbar(resultContext, WorkbenchUi.row(flowCapture));
     resultActions.setName("wb.actions.bounty.flow.results");
-    resultCard.add(ReferenceUi.header(resultActions, null), BorderLayout.NORTH);
     JPanel inputs = new JPanel(new BorderLayout(0, 6));
+    JPanel variables=new JPanel(new GridLayout(2,1,0,8));variables.add(WorkbenchUi.card("JSON 변수 추출 · 1.id=$.id → {{id|URL}}",new JScrollPane(extract)));
+    variables.add(WorkbenchUi.card("단계 기대 조건 · 1.HTTP=200 / 2.$.state=READY",new JScrollPane(flowChecks)));
+    variables.setPreferredSize(new Dimension(350, 200));
+    requestBody.add(CompactWorkbenchUi.disclosure("wb.flow.replay.variables", "변수 추출·단계 기대 조건", variables, false), BorderLayout.SOUTH);
     inputs.add(requestCard);
-    JPanel variables = WorkbenchUi.card("JSON 변수 추출 · 1.id=$.id → {{id|URL}}", new JScrollPane(extract));
-    variables.setPreferredSize(new Dimension(350, 140));
-    inputs.add(CompactWorkbenchUi.disclosure("wb.flow.replay.variables", "변수 추출 · 필요한 경우 펼치기", variables, false), BorderLayout.SOUTH);
     inputs.setName("wb.bounty.flow.inputs");
     workflowDetail.setEditable(false);
+    workflowRequestDetail.setEditable(false);workflowRequestDetail.setName("wb.bounty.flow.request.preview");
+    JTabbedPane flowPacketTabs=new JTabbedPane();flowPacketTabs.setName("wb.bounty.flow.packet.tabs");
+    flowPacketTabs.addTab("응답",packetScroll(workflowDetail));flowPacketTabs.addTab("요청",packetScroll(workflowRequestDetail));
+    JLabel selectedStep=new JLabel("단계를 선택하면 요청·응답을 표시합니다.");selectedStep.setName("wb.bounty.flow.selected");selectedStep.putClientProperty("html.disable",true);
+    JPanel selectedResult=new JPanel(new BorderLayout(0,6));selectedResult.add(selectedStep,BorderLayout.NORTH);selectedResult.add(flowPacketTabs);
+    selectedResult.setBorder(BorderFactory.createEmptyBorder(6,10,6,10));
+    JPanel resultList=new JPanel(new BorderLayout());resultList.add(resultActions,BorderLayout.NORTH);resultList.add(new JScrollPane(flowTable));
     JSplitPane results =
         WorkbenchUi.split(
             JSplitPane.VERTICAL_SPLIT,
-            resultCard,
-            WorkbenchUi.card("선택 단계 · 요청/응답", packetScroll(workflowDetail)),
-            .40);
+            resultList,
+            selectedResult,
+            .32);
     results.setName("wb.bounty.flow.results");
     flowTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     flowTable
@@ -447,20 +462,31 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
               if (!e.getValueIsAdjusting() && flowTable.getSelectedRow() >= 0) {
                 var r =
                     flowResults.get(flowTable.convertRowIndexToModel(flowTable.getSelectedRow()));
-                workflowDetail.setText(
-                    r.state()
-                        + "\nREQUEST\n"
-                        + r.request()
-                        + "\nRESPONSE\n"
-                        + Objects.toString(r.response(), "응답 없음"));
+                selectedStep.setText("단계 "+r.step()+" · "+r.request().method()+" "+Core.safeUrl(r.request().url()));
+                selectedStep.setToolTipText(r.state());
+                workflowDetail.setText(Objects.toString(r.response(), "응답 없음"));
+                workflowRequestDetail.setText(r.request().toString());workflowRequestDetail.setCaretPosition(0);
                 workflowDetail.setCaretPosition(0);
+              } else if (!e.getValueIsAdjusting()) {
+                selectedStep.setText("단계를 선택하면 요청·응답을 표시합니다.");workflowDetail.setText("");workflowRequestDetail.setText("");
               }
             });
     int[] widths = {65, 80, 230, 75, 190};
     for (int i = 0; i < widths.length; i++)
       { var column = flowTable.getColumnModel().getColumn(i); column.setPreferredWidth(widths[i]); column.setWidth(widths[i]); }
-    flowTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    JSplitPane body = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, inputs, results, .52);
+    flowTable.removeColumn(flowTable.getColumnModel().getColumn(flowTable.convertColumnIndexToView(1)));
+    flowTable.getColumnModel().getColumn(flowTable.convertColumnIndexToView(2)).setHeaderValue("요청");
+    flowTable.getColumnModel().getColumn(flowTable.convertColumnIndexToView(2)).setCellRenderer(new javax.swing.table.DefaultTableCellRenderer(){
+      @Override public Component getTableCellRendererComponent(JTable table,Object value,boolean selected,boolean focus,int row,int column){
+        int model=table.convertRowIndexToModel(row);return super.getTableCellRendererComponent(table,table.getModel().getValueAt(model,1)+" "+Objects.toString(value,""),selected,focus,row,column);
+      }
+    });
+    flowTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+    JPanel resultBody=new JPanel(new BorderLayout(0,6));resultBody.add(results);
+    JTextArea resultNote=area(2);resultNote.setEditable(false);resultNote.setOpaque(false);resultNote.setLineWrap(true);resultNote.setWrapStyleWord(true);resultNote.putClientProperty("wb.prose",true);
+    resultNote.setText("응답 수신은 취약점 확인을 의미하지 않습니다. 상태와 본문을 직접 대조하세요.");resultBody.add(resultNote,BorderLayout.SOUTH);
+    JPanel resultCard=WorkbenchUi.card("실행 결과",resultBody);
+    JSplitPane body = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, inputs, resultCard, .59);
     body.setName("wb.bounty.flow.body");
     p.add(body);
     return p;
@@ -468,7 +494,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
 
   JPanel flowSettingsContent() {
     return TargetWindow.options(
-        WorkbenchUi.card("단계 기대 조건 · 1.HTTP=200 / 2.$.state=READY", new JScrollPane(flowChecks)),
+        new JLabel("변수 추출·단계 기대 조건은 요청 준비의 접힘 영역에서 편집합니다."),
         WorkbenchUi.row(new JLabel("Origin"), flowOrigin),
         WorkbenchUi.row(
             flowWrites, new JLabel("대기(초)"), flowTimeout, new JLabel("총 요청 한도"), flowBudget),
@@ -555,7 +581,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       menu.addSeparator(); evidenceMenuItem(menu, "증거 비우기", evidenceClear.isEnabled(), this::clearEvidence);
       return menu;
     });
-    JPanel heading=new JPanel(new BorderLayout(8,0));heading.add(new JLabel("제목"),BorderLayout.WEST);heading.add(evidenceTitle);heading.add(evidenceCount,BorderLayout.EAST);
+    evidenceTitle.getAccessibleContext().setAccessibleName("증거 문서 제목");
+    JPanel heading=new JPanel(new BorderLayout(0,4));heading.add(evidenceTitle);
     heading.setName("wb.placement.bounty.title"); heading.setMinimumSize(new Dimension(180, 34));
     JPanel documentActions = WorkbenchUi.row(evidencePreview, evidenceSave, moreEvidence);
     documentActions.setName("wb.actions.bounty.document");
@@ -600,30 +627,51 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       area.setWrapStyleWord(true);
       area.putClientProperty("wb.prose", true);
     }
-    JSplitPane text = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,
-        WorkbenchUi.card("실제 영향", ReferenceUi.writing(impact)),
-        WorkbenchUi.card("재현 절차", ReferenceUi.writing(repro)), .36);
+    impact.setMargin(new Insets(10,12,10,12));repro.setMargin(new Insets(10,12,10,12));
+    JPanel impactField=evidenceWritingField("실제 영향",impact);
+    JPanel reproField=evidenceWritingField("재현 절차",repro);
+    JSplitPane text = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,impactField,reproField,.34);
     text.setName("wb.bounty.evidence.notes");
+    evidencePacketLabel.setName("wb.bounty.evidence.selected");
+    evidencePacketLabel.putClientProperty("html.disable",true);
+    JLabel draftBadge=new JLabel("검토 초안");draftBadge.setName("wb.bounty.evidence.draft.badge");
+    JPanel selectedContext=new JPanel(new BorderLayout(8,0));selectedContext.add(evidencePacketLabel);selectedContext.add(draftBadge,BorderLayout.EAST);
+    selectedContext.setName("wb.bounty.evidence.selected.context");
+    JPanel writer=new JPanel(new BorderLayout(0,12));writer.setBorder(BorderFactory.createEmptyBorder(12,12,12,12));
+    writer.add(selectedContext,BorderLayout.NORTH);writer.add(text);
+    JTextArea writingNote=area(2);writingNote.setText("저장 전 미리보기에서 보고서와 패킷의 민감 정보 가림을 확인하세요.");
+    writingNote.setEditable(false);writingNote.setOpaque(false);writingNote.setLineWrap(true);writingNote.setWrapStyleWord(true);writingNote.putClientProperty("wb.prose",true);
+    writer.add(writingNote,BorderLayout.SOUTH);
+    JPanel reportCard=WorkbenchUi.card("보고서 작성",writer);reportCard.setName("wb.bounty.evidence.report");
     evidencePacketPreview.setName("wb.bounty.evidence.packet");
     evidencePacketPreview.setEditable(false);evidencePacketPreview.setLineWrap(true); evidencePacketPreview.putClientProperty("wb.packet.syntax",true);
     evidenceRequestPreview.setName("wb.bounty.evidence.request");evidenceRequestPreview.setEditable(false);evidenceRequestPreview.setLineWrap(true);evidenceRequestPreview.putClientProperty("wb.packet.syntax",true);
-    JTabbedPane packetTabs=new JTabbedPane();packetTabs.setName("wb.bounty.evidence.packet.tabs");packetTabs.addTab("응답",new JScrollPane(evidencePacketPreview));packetTabs.addTab("요청",new JScrollPane(evidenceRequestPreview));
-    evidencePacketLabel.putClientProperty("wb.font.heading",true);evidencePacketLabel.setBorder(BorderFactory.createEmptyBorder(6,12,6,12));
-    JPanel preview=new JPanel(new BorderLayout(0,4));preview.add(ReferenceUi.header(evidencePacketLabel,null),BorderLayout.NORTH);preview.add(packetTabs);
-    text.setMinimumSize(new Dimension(230, 120)); preview.setMinimumSize(new Dimension(190, 120));
-    JSplitPane detail=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,text,preview,.59);
+    JPanel responseContent=new JPanel(new BorderLayout(0,8));
+    JPanel sourceFacts=new JPanel(new GridLayout(0,1,0,4));sourceFacts.setBorder(BorderFactory.createEmptyBorder(8,12,4,12));
+    evidenceAccount.putClientProperty("html.disable",true);evidenceResponse.putClientProperty("html.disable",true);
+    sourceFacts.add(evidenceAccount);sourceFacts.add(evidenceResponse);responseContent.add(sourceFacts,BorderLayout.NORTH);responseContent.add(new JScrollPane(evidencePacketPreview));
+    JTabbedPane packetTabs=new JTabbedPane();packetTabs.setName("wb.bounty.evidence.packet.tabs");packetTabs.addTab("응답",responseContent);packetTabs.addTab("요청",new JScrollPane(evidenceRequestPreview));
+    evidenceSourceInfo.setName("wb.bounty.evidence.source.info");evidenceSourceInfo.setEditable(false);evidenceSourceInfo.setLineWrap(true);evidenceSourceInfo.setWrapStyleWord(true);evidenceSourceInfo.putClientProperty("wb.prose",true);
+    JPanel sourceBody=new JPanel(new BorderLayout(0,8));sourceBody.add(packetTabs);
+    JPanel sourceDisclosure=CompactWorkbenchUi.disclosure("wb.bounty.evidence.source","연결 원본 정보",new JScrollPane(evidenceSourceInfo),false);
+    sourceDisclosure.setBorder(BorderFactory.createEmptyBorder(0,10,10,10));sourceBody.add(sourceDisclosure,BorderLayout.SOUTH);
+    JPanel preview=WorkbenchUi.card("원문 대조",sourceBody);preview.setName("wb.bounty.evidence.source.card");
+    reportCard.setMinimumSize(new Dimension(230, 120)); preview.setMinimumSize(new Dimension(190, 120));
+    JSplitPane detail=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,reportCard,preview,.59);
     detail.setName("wb.bounty.evidence.detail");
     JPanel list=new JPanel(new BorderLayout(0,4));
-    list.add(new JScrollPane(evidenceTable));
+    JPanel listBody=new JPanel(new BorderLayout(0,4));listBody.add(new JScrollPane(evidenceTable));
     JPanel listHeader=new JPanel(new BorderLayout(0,4));
-    JLabel listTitle=new JLabel("증거 목록");listTitle.putClientProperty("wb.font.heading",true);
-    JPanel addActions = CompactWorkbenchUi.toolbar(listTitle, WorkbenchUi.row(addEvidence));
+    evidenceListTitle.putClientProperty("wb.font.heading",true);
+    JPanel addActions = CompactWorkbenchUi.toolbar(evidenceListTitle, WorkbenchUi.row(addEvidence));
     addActions.setName("wb.actions.bounty.add");
-    listHeader.add(addActions,BorderLayout.NORTH);
+    list.add(ReferenceUi.header(addActions,null),BorderLayout.NORTH);
     listHeader.add(CompactWorkbenchUi.search(evidenceTable,"wb.bounty.evidence.search","증거 이름, 타입, 메모로 검색…"));
     listHeader.setBorder(BorderFactory.createEmptyBorder(4,6,6,6));
     listHeader.add(itemBar,BorderLayout.SOUTH);
-    list.add(listHeader,BorderLayout.NORTH);
+    listBody.add(listHeader,BorderLayout.NORTH);
+    evidenceCount.setBorder(BorderFactory.createEmptyBorder(6,10,8,10));listBody.add(evidenceCount,BorderLayout.SOUTH);
+    list.add(listBody);list.setBorder(kr.packetui.VisualTheme.border(1,1,1,1));list.setName("wb.bounty.evidence.list");
     list.setMinimumSize(new Dimension(180, 120));
     JSplitPane body=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,list,detail,.24);
     body.setName("wb.bounty.evidence.body");
@@ -632,11 +680,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     draftState.setEditable(false); draftState.setOpaque(false); draftState.setLineWrap(true);
     draftState.setWrapStyleWord(true); draftState.putClientProperty("wb.prose", true);
     draftState.setMinimumSize(new Dimension(180, 32));
-    // Keep draft feedback beside document actions so the packet and writing
-    // readers retain their height even in a 1024px workspace.
-    JPanel footer = new JPanel(new BorderLayout()); footer.add(draftState);
-    footer.setName("wb.placement.bounty.document");
-    p.add(footer, BorderLayout.SOUTH);
+    // Draft status describes this document and belongs below its title.
+    heading.add(draftState,BorderLayout.SOUTH);
     evidenceTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
     for (int modelColumn : new int[] {2, 1})
       evidenceTable.removeColumn(evidenceTable.getColumnModel().getColumn(evidenceTable.convertColumnIndexToView(modelColumn)));
@@ -644,15 +689,29 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     return p;
   }
 
+  JPanel evidenceWritingField(String title,JTextArea editor) {
+    JPanel field=new JPanel(new BorderLayout(0,6));
+    JLabel label=new JLabel(title);label.putClientProperty("wb.font.heading",true);field.add(label,BorderLayout.NORTH);
+    JPanel writing=ReferenceUi.writing(editor);writing.setBorder(kr.packetui.VisualTheme.border(1,1,1,1));field.add(writing);
+    field.setName("wb.bounty.evidence.field."+(editor==impact?"impact":"repro"));return field;
+  }
+
 
   void showEvidencePacket() {
     var selected=selectedEvidenceRows();
-    if(selected.isEmpty()||selected.get(0)>=evidence.size()){evidencePacketLabel.setText("증거를 선택하세요.");evidencePacketPreview.setText("");evidenceRequestPreview.setText("");return;}
+    if(selected.isEmpty()||selected.get(0)>=evidence.size()){
+      evidencePacketLabel.setText("선택 근거: 증거를 선택하세요.");evidencePacketPreview.setText("");evidenceRequestPreview.setText("");
+      evidenceAccount.setText("계정 · 미연결");evidenceResponse.setText("응답 · 증거 선택 전");evidenceSourceInfo.setText("");return;
+    }
     var item=evidence.get(selected.get(0));
-    evidencePacketLabel.setText(item.label());evidencePacketLabel.setToolTipText(item.url()+" · "+item.note());
+    evidencePacketLabel.setText("선택 근거: "+item.label());evidencePacketLabel.setToolTipText(Core.safeUrl(item.url())+" · "+item.note());
+    evidenceAccount.setText("계정 · "+(item.account().isBlank()?"연결 정보 없음":item.account()));
+    evidenceSourceInfo.setText(item.method()+" "+Core.safeUrl(item.url())+"\n원본 ID · "+item.evidenceId());evidenceSourceInfo.setCaretPosition(0);
     String value;
-    try { value=PacketFormat.pretty(item.response());String q=PacketFormat.pretty(item.request());if(!q.equals(evidenceRequestPreview.getText())){evidenceRequestPreview.setText(q);evidenceRequestPreview.setCaretPosition(0);} }
-    catch(RuntimeException unavailable){evidenceRequestPreview.setText("");value="원본 미리보기를 읽을 수 없습니다. 증거 원본을 다시 연결하세요.";}
+    try { String response=item.response();value=PacketFormat.pretty(response);String q=PacketFormat.pretty(item.request());if(!q.equals(evidenceRequestPreview.getText())){evidenceRequestPreview.setText(q);evidenceRequestPreview.setCaretPosition(0);}
+      String first=response.lines().findFirst().orElse("");evidenceResponse.setText("응답 · "+(first.isBlank()?"없음":first));
+    }
+    catch(RuntimeException unavailable){evidenceRequestPreview.setText("");evidenceResponse.setText("응답 · 원본 확인 필요");value="원본 미리보기를 읽을 수 없습니다. 증거 원본을 다시 연결하세요.";}
     if(!value.equals(evidencePacketPreview.getText())){evidencePacketPreview.setText(value);evidencePacketPreview.setCaretPosition(0);}
   }
   JButton evidenceMenuButton(String title, String name, Supplier<JPopupMenu> content) {

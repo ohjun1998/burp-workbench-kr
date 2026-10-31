@@ -56,16 +56,16 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   list.add(CompactWorkbenchUi.search(findingTable,"wb.response.search","관찰 분류·URL·원문 내용 검색"),BorderLayout.NORTH);list.add(new JScrollPane(findingTable));
   JTabbedPane detailPages=new JTabbedPane();findingUrls.setEditable(false);findingUrls.putClientProperty("wb.prose",true);
   JPanel responseReader=new JPanel(new BorderLayout(0,4));responseReader.setName("wb.response.finding.detail");responseReader.add(findingResponse);
-  responseReader.add(CompactWorkbenchUi.disclosure("wb.flow.response.facts","관측 세부 정보",ReferenceUi.facts(findingDetail),false),BorderLayout.SOUTH);
-  detailPages.addTab("응답 원문",responseReader);detailPages.addTab("관련 요청",findingRequest);detailPages.addTab("영향 URL",new JScrollPane(findingUrls));
+  findingDetail.putClientProperty("wb.prose",true);
+  detailPages.addTab("응답 원문",responseReader);detailPages.addTab("관련 요청",findingRequest);detailPages.addTab("영향 URL",new JScrollPane(findingUrls));detailPages.addTab("분석 근거",new JScrollPane(findingDetail));
   JButton copyFinding=action("근거 복사",()->Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new java.awt.datatransfer.StringSelection(findingDetail.getText()),null));copyFinding.setName("wb.response.finding.copy");
   JButton openRequest=action("원본 요청 보기",()->detailPages.setSelectedIndex(1));openRequest.setName("wb.response.finding.original");
   JPanel findingActions=WorkbenchUi.row(WorkflowUi.menu("wb.flow.response.finding.options","관찰 작업",copyFinding,openRequest),findingCapture);findingActions.setName("wb.actions.response.finding");
   Runnable auxiliaryState=()->{copyFinding.setEnabled(findingTable.getSelectedRow()>=0);openRequest.setEnabled(findingCapture.isEnabled());};
   findingTable.getSelectionModel().addListSelectionListener(e->auxiliaryState.run());findingCapture.addPropertyChangeListener("enabled",e->auxiliaryState.run());auxiliaryState.run();
   JPanel passivePage=new JPanel(new BorderLayout());
-  JSplitPane findingSplit=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,list,detailTabs(detailPages,findingActions),.31);
-  findingSplit.setName("wb.response.finding.split");passivePage.add(findingSplit);tabs.addTab("응답 관찰",passivePage);
+  JSplitPane findingSplit=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,list,detailTabs(detailPages,findingActions),.38);
+  findingSplit.setName("wb.response.finding.split");findingSplit.putClientProperty("wb.workflow.fixedLayout",true);passivePage.add(findingSplit);tabs.addTab("응답 관찰",passivePage);
   JPanel apiPage=new JPanel(new BorderLayout(4,4));apiDraft.setName("wb.response.api.draft");apiDraft.setToolTipText("선택 API의 URL 변수를 확인한 뒤 Repeater에 초안을 준비합니다. 서버로 전송하지 않습니다.");WorkbenchUi.primary(apiDraft);
   JPanel apiActions=CompactWorkbenchUi.toolbar(WorkbenchUi.hint("API 선택 → 경로 변수 확인 → 초안 준비"),WorkbenchUi.row(apiDraft));apiActions.setName("wb.actions.response.api");
   JPanel apiHeader=new JPanel(new BorderLayout());apiHeader.setName("wb.placement.response.api");apiHeader.add(apiActions);apiPage.add(apiHeader,BorderLayout.NORTH);apiPage.add(new JScrollPane(apiTable));apiTable.getSelectionModel().addListSelectionListener(e->{if(!e.getValueIsAdjusting())refreshActions();});
@@ -125,7 +125,16 @@ final class ResponseReconPanel extends JPanel implements AutoCloseable {
   titles.setLayout(new WorkbenchUi.WrapLayout(FlowLayout.LEFT,0,0));
   JPanel context=new JPanel(new BorderLayout(0,3));context.add(findingTitle,BorderLayout.NORTH);context.add(findingContext);context.setMinimumSize(new Dimension(100,35));
   JPanel handoff=CompactWorkbenchUi.toolbar(context,actions);handoff.setName("wb.placement.response.finding");
-  JPanel header=new JPanel(new BorderLayout(0,5));header.add(handoff,BorderLayout.NORTH);header.add(titles);header.setName("wb.response.finding.header");pane.add(header,BorderLayout.NORTH);pane.add(pages);return pane;
+  JPanel header=new JPanel(new BorderLayout(0,5));header.add(handoff,BorderLayout.NORTH);
+  JLabel explanation=new JLabel("관찰된 문자열·헤더와 원문을 대조하세요. 실제 영향과 재현 여부는 직접 확인합니다.");
+  explanation.putClientProperty("wb.secondary",true);explanation.setBorder(BorderFactory.createEmptyBorder(4,0,8,0));header.add(explanation);
+  header.setName("wb.response.finding.header");pane.add(header,BorderLayout.NORTH);
+  JPanel reading=new JPanel(new BorderLayout(0,4));reading.add(titles,BorderLayout.NORTH);reading.add(pages);
+  JPanel sourceTools=new JPanel(new CardLayout());sourceTools.add(findingResponse.titleActions(),"response");sourceTools.add(findingRequest.titleActions(),"request");sourceTools.add(new JPanel(),"other");
+  Runnable chooseTools=()->((CardLayout)sourceTools.getLayout()).show(sourceTools,pages.getSelectedIndex()==0?"response":pages.getSelectedIndex()==1?"request":"other");pages.addChangeListener(e->chooseTools.run());chooseTools.run();
+  JPanel readerCard=WorkbenchUi.card("원문 대조",reading);readerCard.setName("wb.card.pdf.response.reader");
+  readerCard.remove(((BorderLayout)readerCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
+  readerCard.add(ReferenceUi.header(new JLabel("원문 대조"),sourceTools),BorderLayout.NORTH);pane.add(readerCard);return pane;
  }
  void refreshActions(){int found=findingTable.getSelectedRow();int n=found<0?-1:findingTable.convertRowIndexToModel(found);findingCapture.setEnabled(n>=0&&n<displayedFindingKeys.size()&&displayedFindingPackets.containsKey(displayedFindingKeys.get(n)));apiDraft.setEnabled(apiTable.getSelectedRow()>=0);int row=flowTable.getSelectedRow();int index=row<0?-1:flowTable.convertRowIndexToModel(row);var flow=index>=0&&index<displayedFlows.size()?displayedFlows.get(index):null;flowCapture.setEnabled(flow!=null&&flow.writeSource()!=null&&displayedFlowPackets.containsKey(flow.writeSource().id())&&(flow.readSource()==null||displayedFlowPackets.containsKey(flow.readSource().id())));flowBrowser.setEnabled(flow!=null&&flow.htmlObserved()&&flow.readSource()!=null);flowClear.setEnabled(flow!=null&&!flow.browserEvidence().isEmpty());}
 

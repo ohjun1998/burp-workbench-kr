@@ -1,0 +1,80 @@
+{
+  "result": "passed",
+  "nativeChecks": 180,
+  "jarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+  "commandExitCode": 0,
+  "results": [
+    {
+      "suite": "buttons",
+      "theme": "light",
+      "checks": 40,
+      "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+      "modifiedAt": "2026-10-31T08:26:50.422695+00:00",
+      "result": "passed",
+      "targetHttpRequests": 0,
+      "guideScreens": null,
+      "screenshotPngs": 3
+    },
+    {
+      "suite": "buttons",
+      "theme": "dark",
+      "checks": 40,
+      "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+      "modifiedAt": "2026-10-31T08:27:22.587503+00:00",
+      "result": "passed",
+      "targetHttpRequests": 0,
+      "guideScreens": null,
+      "screenshotPngs": 3
+    },
+    {
+      "suite": "windows",
+      "theme": "light",
+      "checks": 25,
+      "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+      "modifiedAt": "2026-10-31T08:26:57.054860+00:00",
+      "result": "passed",
+      "targetHttpRequests": 0,
+      "guideScreens": null,
+      "screenshotPngs": 3
+    },
+    {
+      "suite": "windows",
+      "theme": "dark",
+      "checks": 25,
+      "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+      "modifiedAt": "2026-10-31T08:27:29.047667+00:00",
+      "result": "passed",
+      "targetHttpRequests": 0,
+      "guideScreens": null,
+      "screenshotPngs": 3
+    },
+    {
+      "suite": "guides",
+      "theme": "light",
+      "checks": 25,
+      "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+      "modifiedAt": "2026-10-31T08:27:11.583439+00:00",
+      "result": "passed",
+      "targetHttpRequests": 0,
+      "guideScreens": 16,
+      "screenshotPngs": 18
+    },
+    {
+      "suite": "guides",
+      "theme": "dark",
+      "checks": 25,
+      "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+      "modifiedAt": "2026-10-31T08:27:44.588046+00:00",
+      "result": "passed",
+      "targetHttpRequests": 0,
+      "guideScreens": 16,
+      "screenshotPngs": 18
+    }
+  ],
+  "cleanup": {
+    "lockRemoved": true,
+    "socketRemoved": true,
+    "xorgTerminatedNormally": true
+  },
+  "scope": "Actual isolated Linux Xorg dummy + xfwm4 and Robot with synthetic Burp adapters; no native Burp GUI or Windows validation."
+}

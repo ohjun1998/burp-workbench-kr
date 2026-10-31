@@ -83,6 +83,8 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   final MontoyaApi api;
   final JTextArea requestView = message(), responseView = message(), decisionView = message();
   final JLabel selectedPath = new JLabel("후보 경로를 선택하세요");
+  final JToggleButton allCandidates=new JToggleButton("전체",true),unverifiedCandidates=new JToggleButton("미검증"),responseCandidates=new JToggleButton("응답 확인");
+  private int candidateView;
   final JButton start = new JButton("후보 목록 GET 확인"),
       single = new JButton("선택 경로 GET 확인"),
       stop = new JButton("중지");
@@ -211,10 +213,19 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     Component observationsToggle=observations.getComponent(0);observations.remove(observationsToggle);
     JPanel observationHeader=CompactWorkbenchUi.toolbar(observationsToggle,WorkbenchUi.row(selection,all));
     observationHeader.setName("wb.actions.environment.filters");observations.add(observationHeader,BorderLayout.NORTH);
+    toolbar.add(observations);
     JPanel lists = new JPanel(new BorderLayout(0, 4));
     lists.setName("wb.environment.candidates");
-    lists.add(observations, BorderLayout.NORTH);
+    JLabel candidateCount=new JLabel("경로 후보 · "+paths.getRowCount()+"개");
+    candidateCount.setName("wb.pdf.environment.candidate.count");
+    paths.addTableModelListener(e->candidateCount.setText("경로 후보 · "+paths.getRowCount()+"개"));
+    JPanel candidateFilters=WorkbenchUi.row();candidateFilters.setName("wb.pdf.environment.filters");ButtonGroup candidateViews=new ButtonGroup();
+    JToggleButton[] viewButtons={allCandidates,unverifiedCandidates,responseCandidates};String[] viewNames={"all","unverified","response"};
+    for(int i=0;i<viewButtons.length;i++){int view=i;JToggleButton choice=viewButtons[i];choice.setName("wb.environment.filter."+viewNames[i]);choice.putClientProperty("wb.compact.button",true);candidateViews.add(choice);candidateFilters.add(choice);choice.addActionListener(e->{candidateView=view;applyCandidateFilter();});}
+    responseCandidates.setToolTipText("현재 계정에서 실제 HTTP 응답이나 저장된 HTTP 상태를 기록한 후보입니다. 취약점 확인을 뜻하지 않습니다.");
+    candidateCount.setMinimumSize(new Dimension(0,22));lists.add(ReferenceUi.header(CompactWorkbenchUi.toolbar(candidateCount,candidateFilters),null),BorderLayout.NORTH);
     JPanel candidatePanel=candidatePane();
+    pathTable.putClientProperty("wb.search.apply",(Runnable)this::applyCandidateFilter);
     JTextField search=CompactWorkbenchUi.search(pathTable,"wb.environment.search","경로·상태·근거 검색");
     JPanel execution=WorkbenchUi.row(single,pause,stop);execution.setName("wb.actions.environment.execution");
     JPanel executionSources=WorkbenchUi.row(start);executionSources.setVisible(false);execution.add(executionSources);
@@ -223,7 +234,9 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     searchAndSettings.setName("wb.actions.environment.candidates");
     candidatePanel.add(searchAndSettings,BorderLayout.NORTH);lists.add(candidatePanel);
     selectedPath.setName("wb.flow.environment.selection");selectedPath.setMinimumSize(new Dimension(0,28));
-    JPanel executionStrip=CompactWorkbenchUi.toolbar(selectedPath,execution);
+    JPanel executionStrip=new JPanel(new BorderLayout(0,8));
+    executionStrip.add(ReferenceUi.header(selectedPath,null),BorderLayout.NORTH);
+    executionStrip.add(execution);
     executionStrip.setName("wb.placement.environment.execution");
     JTabbedPane messages=new JTabbedPane();messages.setName("wb.environment.messages");
     messages.addTab("응답",responsePane());messages.addTab("요청",packetTabs(requestView));
@@ -231,7 +244,11 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     messages.addTab("판정 근거",new JScrollPane(decisionView));
     JPanel inspector=new JPanel(new BorderLayout(0,6));inspector.setName("wb.flow.environment.inspector");
     inspector.add(executionStrip,BorderLayout.NORTH);inspector.add(messages);
-    JSplitPane workspace = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, lists, inspector, .51);
+    JLabel manualReview=WorkbenchUi.hint("200 응답만으로 경로 노출이나 취약점을 확정하지 않습니다.");
+    manualReview.setVisible(true);
+    manualReview.setBorder(BorderFactory.createEmptyBorder(6,10,6,10));inspector.add(manualReview,BorderLayout.SOUTH);
+    inspector.setBorder(BorderFactory.createLineBorder(WorkbenchUi.line()));
+    JSplitPane workspace = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, lists, inspector, .54);
     workspace.setName("wb.environment.workspace");workspace.putClientProperty("wb.workflow.fixedLayout",true);
     add(workspace);
     add(status, BorderLayout.SOUTH);
@@ -493,6 +510,27 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     JPanel p = new JPanel(new BorderLayout(0, 4));
     p.add(new JScrollPane(pathTable));
     return p;
+  }
+
+  boolean hasCandidateResponse(String url){
+    Packet packet=currentPacket(url);EnvironmentProject.Entry saved=project.latest.get(accountKey()+" GET "+url);
+    return packet!=null&&(packet.result()!=null?packet.result().status()>0:packet.response().startsWith("HTTP/"))||saved!=null&&saved.status()>0;
+  }
+
+  /** Combine the quick view with literal search while retaining exact model selection. */
+  void applyCandidateFilter(){
+    String selected=selectedUrl();boolean previous=refreshing;refreshing=true;
+    try{
+      @SuppressWarnings("unchecked") javax.swing.table.TableRowSorter<DefaultTableModel> sorter=(javax.swing.table.TableRowSorter<DefaultTableModel>)pathTable.getRowSorter();
+      sorter.setRowFilter(new RowFilter<>(){public boolean include(Entry<? extends DefaultTableModel,? extends Integer> row){
+        String query=Objects.toString(pathTable.getClientProperty("wb.search.query"),"");boolean matches=query.isEmpty();
+        for(int column=0;column<row.getValueCount()&&!matches;column++)matches=row.getStringValue(column).toLowerCase(Locale.ROOT).contains(query);
+        boolean response=hasCandidateResponse(row.getStringValue(0));
+        return matches&&(candidateView==0||candidateView==1&&!response||candidateView==2&&response);
+      }});
+      int selectedView=-1;if(selected!=null)for(int row=0;row<paths.getRowCount();row++)if(selected.equals(paths.getValueAt(row,0))){selectedView=pathTable.convertRowIndexToView(row);break;}
+      if(selectedView>=0)pathTable.setRowSelectionInterval(selectedView,selectedView);else pathTable.clearSelection();
+    }finally{refreshing=previous;if(!refreshing)showSelected();}
   }
 
   JPanel packetTabs(JTextArea area){return packetTabs(area,null);}

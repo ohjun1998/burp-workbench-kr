@@ -51,7 +51,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
           layout(root, width);
           var toolbar = named(root, "wb.navigation.toolbar");
           Rectangle bounds = SwingUtilities.convertRectangle(guide.getParent(), guide.getBounds(), toolbar);
-          check(toolbar.getHeight() <= 36 && bounds.y >= 0 && bounds.y + bounds.height <= toolbar.getHeight(),
+          check(toolbar.getHeight() <= 46 && bounds.y >= 0 && bounds.y + bounds.height <= toolbar.getHeight(),
               "Guide preserves the compact one-row header at " + width + " pixels");
         }
         Object binding = root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).get(KeyStroke.getKeyStroke("F1"));

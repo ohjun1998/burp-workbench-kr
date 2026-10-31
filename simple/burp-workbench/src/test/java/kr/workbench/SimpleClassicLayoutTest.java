@@ -104,8 +104,8 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
         check(Math.abs(WorkbenchUi.font().getSize2D() - 14f * scale / 100f) < .01f
                 && WorkbenchUi.font().getPSName().equals(reference.getPSName()),
             "classic UI font retains its resource identity and requested " + scale + "% scale");
-        check(Math.abs(WorkbenchUi.textFont(ascii).getSize2D() - 14f * scale / 100f) < .01f,
-            "ASCII packet typography follows the same " + scale + "% display scale");
+        check(Math.abs(WorkbenchUi.textFont(ascii).getSize2D() - 12f * scale / 100f) < .01f,
+            "PDF 12px ASCII packet typography follows the same " + scale + "% display scale");
       }
     } finally { WorkbenchUi.setAppearance(previousScale, compact); }
   }
@@ -205,7 +205,7 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
             "primary and alias routes preserve the selected original and authored input");
         navigation.navigate("dashboard");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath()==null,
+                && tree.getSelectionPath().equals(route(tree, "dashboard")),
             "dashboard folder entry selects the production page and its own tree leaf");
         var current = (JLabel) SimpleWorkflowTest.named(root, "wb.navigation.current");
         check(current.getText().contains(FeatureGuide.title("dashboard")),
@@ -213,7 +213,7 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
         select(tree, "auth");
         SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath()==null,
+                && tree.getSelectionPath().equals(route(tree, "dashboard")),
             "compact dashboard action synchronizes the same page and folder selection");
       });
 

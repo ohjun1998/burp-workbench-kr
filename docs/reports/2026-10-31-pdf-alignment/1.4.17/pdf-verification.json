@@ -1,0 +1,13 @@
+{
+  "result": "passed",
+  "pages": 38,
+  "comparisonPages": 32,
+  "authFullTabAppendixPages": 6,
+  "originalImagePixelMatches": 70,
+  "imageAspectRatiosPreserved": true,
+  "textWithinPageBounds": true,
+  "scope": "Document-integrity checks; not pixel equality between design and production.",
+  "sha256": "6bb8ac9ddd47fd25f34ff60fa230530d3ef436f6c0f904873145e426f113e81f",
+  "bytes": 6654765,
+  "jarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d"
+}

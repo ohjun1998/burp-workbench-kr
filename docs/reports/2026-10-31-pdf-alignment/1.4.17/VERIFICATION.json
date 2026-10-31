@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "version": "1.4.17",
+  "result": "passed",
+  "verifiedAt": "2026-10-31T17:35:43.786672+09:00",
+  "baseCommit": "9bb8920c22ab932cab8022889f4b1b8ae03f62a5",
+  "recovery": "The interrupted 1.4.17 source was absent from the remote; continued from preserved 1.4.16 and the approved PDF.",
+  "jarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+  "toolchainMode": "strict-release17",
+  "javaRuntimeVersion": "17.0.21",
+  "counts": {
+    "javaGroups": 167,
+    "javaRegressionChecks": 7162,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 147,
+    "nodeTests": 29,
+    "fullProfileChecks": 7474,
+    "renderedViews": 258,
+    "nativeLinuxChecks": 180,
+    "katanaChecks": 102,
+    "guideScreens": 16,
+    "guideSteps": 96,
+    "guideThemeAnchorChecks": 192,
+    "comparisonPdfPages": 38
+  },
+  "evidence": {
+    "full-check-summary.json": "full-check-summary.json",
+    "final-check-receipt.json": "final-check-receipt.json",
+    "layout-report.json": "layout-report.json",
+    "scope-layout-report.json": "scope-layout-report.json",
+    "katana-verification.json": "katana-verification.json",
+    "native-verification.json": "native-verification.json",
+    "guide-class-equivalence.json": "guide-class-equivalence.json",
+    "guide-anchor-verification.json": "guide-anchor-verification.json",
+    "guide-assets.json": "guide-assets.json",
+    "first-full-test-summary.json": "first-full-test-summary.json"
+  },
+  "firstFullAttempt": {
+    "result": "failed",
+    "exitCode": 1,
+    "failedGroups": [
+      "Appearance0534Test",
+      "JsCompactUpgradeTest",
+      "PacketUiTest",
+      "UiLayoutTest",
+      "SimpleClassicLayoutTest",
+      "SimpleDashboardIntegrationTest",
+      "SimpleScreenCleanupTest"
+    ],
+    "diagnosis": "Earlier typography, hidden CSV, duplicate shortcut, primary color, packet-tab count, sidebar dashboard and Mapper-version expectations were updated to the approved PDF behavior. Original data, exact action bindings, scaling, no-send and lifecycle assertions were retained and independently checked before the final full rerun.",
+    "mapperAndNodeStages": "Not run in the failed attempt; executed in the final successful full profile."
+  },
+  "notRun": [
+    "Native Windows Burp GUI",
+    "Windows DPI/IME",
+    "manual browser/MV3",
+    "Docker lab stack",
+    "live external CVE/OAST/BApp/AI services"
+  ],
+  "scope": "Production Simple packaged-JAR regressions and isolated HTTP; real Linux Xorg/xfwm4/Robot with synthetic Burp adapters; pinned Katana loopback HTTP/HTTPS. Repeated views and themes are not independent assessments or pixel equality with the HTML design.",
+  "sourceRebuild": {
+    "result": "passed",
+    "command": "python dev.py build",
+    "exitCode": 0,
+    "sourceZipSha256": "12dcb5235d38318aa57e7e648381182489f55c61d9ab907d1cafa136857bad9a",
+    "publishedJarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+    "rebuiltJarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+    "byteForByteEqual": true,
+    "sourceDirectory": "tmp/pdf-alignment/source-rebuild-zfftmvum",
+    "scope": "Fresh extraction of the delivered independent source ZIP, bundled pinned dependencies, strict Java 17 build."
+  },
+  "distribution": {
+    "directory": "simple/downloads/1.4.17",
+    "files": {
+      "SHA256SUMS": {
+        "sizeBytes": 311,
+        "sha256": "bfa314b7415b559f91414d71dad8f95fd72f1c405b5c67514600bc75252e108c"
+      },
+      "burp-workbench-simple-1.4.17-source.zip": {
+        "sizeBytes": 99907963,
+        "sha256": "12dcb5235d38318aa57e7e648381182489f55c61d9ab907d1cafa136857bad9a"
+      },
+      "burp-workbench-simple-1.4.17.jar": {
+        "sizeBytes": 9020128,
+        "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d"
+      },
+      "feature-mapper-browser-helper-0.4.1.zip": {
+        "sizeBytes": 34685,
+        "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+      },
+      "manifest.json": {
+        "sizeBytes": 283831,
+        "sha256": "928b7ef3487df5e09ae8807faa4284bb8e2585937025bae6346fb41b8e8f13f0"
+      }
+    },
+    "packageVerify": "passed"
+  }
+}

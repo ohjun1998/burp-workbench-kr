@@ -310,7 +310,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     rendering = true;try { text.setText(page.text());text.setEditable(false); } finally { rendering = false; }
     text.getHighlighter().removeAllHighlights();matches = List.of();current = -1;currentHighlight = null;
     SimpleAttributeSet normal = new SimpleAttributeSet();StyleConstants.setForeground(normal, WorkbenchUi.ink());
-    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(text.getText()).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(14));
+    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(text.getText()).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(12));
     text.getStyledDocument().setCharacterAttributes(0, text.getDocument().getLength(), normal, true);
     try {
       if (page.end() > page.start()) text.getHighlighter().addHighlight(page.start(), page.end(),
@@ -384,7 +384,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private void colorize() {
     StyledDocument doc=text.getStyledDocument();String value=text.getText();
     SimpleAttributeSet normal=new SimpleAttributeSet();StyleConstants.setForeground(normal,WorkbenchUi.ink());
-    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(14));
+    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(12));
     doc.setCharacterAttributes(0,doc.getLength(),normal,true);
     SimpleAttributeSet spacing=new SimpleAttributeSet();StyleConstants.setLineSpacing(spacing,.20f);doc.setParagraphAttributes(0,doc.getLength(),spacing,false);
     if(mode==Mode.HEX)return;
@@ -547,7 +547,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   static final class Tab extends JToggleButton {
     Tab(String title){super(title);}
     @Override public Dimension getPreferredSize(){return new Dimension(Math.max(66,getFontMetrics(WorkbenchUi.font()).stringWidth(getText())+16),Math.max(34,getFontMetrics(WorkbenchUi.font()).getHeight()+8));}
-    @Override protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN));g.setColor(isSelected()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(getText(),(getWidth()-g.getFontMetrics().stringWidth(getText()))/2,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRect(0,getHeight()-(isSelected()?3:1),getWidth(),isSelected()?3:1);if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}g.dispose();}
+    @Override protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());if(isSelected()){g.setColor(WorkbenchUi.selected());g.fillRoundRect(2,3,getWidth()-4,getHeight()-6,7,7);}g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN,WorkbenchUi.displaySize(12f)));g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(getText(),(getWidth()-g.getFontMetrics().stringWidth(getText()))/2,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}g.dispose();}
   }
 
   private static void paintTool(AbstractButton button,Graphics graphics,String kind) {

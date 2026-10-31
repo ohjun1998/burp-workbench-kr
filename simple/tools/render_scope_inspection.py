@@ -46,6 +46,8 @@ def main() -> int:
     if not jar.is_file() or not (WB / 'build/tests').exists():
         parser.error('Build the current Simple JAR and test adapters first.')
     args.out.mkdir(parents=True, exist_ok=True)
+    # An interrupted run must not leave a prior successful report looking current.
+    (args.out / 'scope-layout-report.json').unlink(missing_ok=True)
     classes = args.out / '.classes'
     classes.mkdir(exist_ok=True)
     cp = os.pathsep.join(map(str, [jar, *sorted((WB / 'deps').glob('*.jar')), WB / 'build/tests']))
@@ -95,9 +97,9 @@ def main() -> int:
         ('22-inspection-original.png', 'wb.scope.inspection.original.response.text'): 100,
         ('24-katana-results.png', 'wb.scope.inspection.katana'): 100,
         ('28-dashboard-detail.png', 'wb.scope.dashboard.results'): 100,
-        ('28-dashboard-detail.png', 'wb.scope.dashboard.detail'): 80,
+        ('28-dashboard-detail.png', 'wb.scope.dashboard.detail.summary'): 80,
         ('29-dashboard-empty-filter.png', 'wb.scope.dashboard.empty'): 60,
-        ('29-dashboard-empty-filter.png', 'wb.scope.dashboard.detail'): 80,
+        ('29-dashboard-empty-filter.png', 'wb.scope.dashboard.detail.summary'): 80,
     }
     for (view, name), minimum in required.items():
         found = [r for r in content if r['view'] == view and r['name'] == name]

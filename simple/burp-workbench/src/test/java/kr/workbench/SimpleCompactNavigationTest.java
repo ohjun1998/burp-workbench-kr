@@ -28,10 +28,10 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
     int sent=PayloadIntegrationTest.sent.get();
     try {
       edt(()->{
-        check(SimpleWorkflowTest.named(root,"wb.navigation.brand")==null,"compact header omits the repeated large Workbench brand");
+        check(SimpleWorkflowTest.named(root,"wb.navigation.brand") instanceof JLabel brand && brand.getText().equals("Workbench"),"approved PDF header includes the compact Workbench wordmark once");
         for(int width:new int[]{1024,1280,1600}){
           layout(root,width);
-          check(toolbar.getHeight()>=32&&toolbar.getHeight()<=36,"header remains one compact row at "+width+" pixels");
+          check(toolbar.getHeight()==46,"approved PDF header remains one 46px row at "+width+" pixels");
           Rectangle line=SwingUtilities.convertRectangle(actions.getParent(),actions.getBounds(),toolbar);
           check(line.y>=0&&line.y+line.height<=toolbar.getHeight(),"header actions stay inside the same row at "+width);
           for(Component c:actions.getComponents())if(c instanceof AbstractButton button){
@@ -40,10 +40,10 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
           }
         }
         window.fullScreenButton.setText("전체화면 해제");layout(root,1024);
-        check(window.fullScreenButton.getText().isEmpty()&&window.fullScreenButton.getAccessibleContext().getAccessibleName().contains("해제")&&toolbar.getHeight()<=36,"fullscreen exit state updates accessibility without widening the toolbar");
+        check(window.fullScreenButton.getText().isEmpty()&&window.fullScreenButton.getAccessibleContext().getAccessibleName().contains("해제")&&toolbar.getHeight()==46,"fullscreen exit state updates accessibility without widening the PDF toolbar");
         var modelRoot=(DefaultMutableTreeNode)tree.getModel().getRoot();int leaves=0;
         for(int i=0;i<modelRoot.getChildCount();i++)leaves+=modelRoot.getChildAt(i).getChildCount();
-        check(modelRoot.getChildCount()==5&&leaves==11,"compact sidebar retains all five folders and eleven actual tool leaves");
+        check(modelRoot.getChildCount()==5&&leaves==12,"approved sidebar retains all five folders and twelve actual tool leaves including the dashboard");
         for(int row=0;row<tree.getRowCount();row++)tree.expandRow(row);
         layout(root,1024);Rectangle last=tree.getRowBounds(tree.getRowCount()-1);
         check(last.y+last.height<=570,"all sidebar rows fit vertically without the former permanent group gaps");

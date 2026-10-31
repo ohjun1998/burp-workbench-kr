@@ -1,3 +1,9 @@
+# Workbench Simple 1.4.17
+
+승인 PDF와 달랐던 공통 화면, 검사 결과의 실제 필터·응답 시간, 보고서 작성 카드, 인증 준비 창 전체3탭을 보완했습니다. 최종 JAR의 전체7,474개·두 테마/세 크기258화면·실제 Linux 창180개·Katana102개 검사를 통과했습니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.17_KR.md) · [설치 JAR](downloads/1.4.17/burp-workbench-simple-1.4.17.jar) · [독립 소스 ZIP](downloads/1.4.17/burp-workbench-simple-1.4.17-source.zip) · [시안과 실제 비교 PDF](../docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-pdf-alignment.pdf). 실제 Windows Burp GUI는 직접 검증하지 않았습니다.
+
+독립 소스 ZIP에서는 이 폴더의 `python dev.py check`, 저장소 전체에서는 `python simple/dev.py check`를 사용합니다. 아래는 이전 버전 설명입니다.
+
 # Workbench Simple 1.4.16
 
 승인한 16개 화면의 작업 흐름을 실제 확장에 적용했습니다. 주 작업과 보조 메뉴를 구분하고, 고급 설정을 접어 원문·결과·작성 영역을 넓혔습니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.16_KR.md) · [설치 JAR](downloads/1.4.16/burp-workbench-simple-1.4.16.jar) · [실제 화면 PDF](../docs/reports/2026-10-31-approved-workflow/workbench-simple-1.4.16-workflow.pdf). 이전 버전은 아래 보존합니다.

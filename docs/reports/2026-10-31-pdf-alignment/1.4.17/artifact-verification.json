@@ -1,0 +1,16 @@
+{
+  "version": "1.4.17",
+  "jarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+  "comparisonPages": 32,
+  "authFullTabAppendixPages": 6,
+  "actualImages": 32,
+  "referenceImages": 32,
+  "fullAuthTabImages": 6,
+  "pdfPages": 38,
+  "originalImagePixelMatches": 70,
+  "pdfSha256": "6bb8ac9ddd47fd25f34ff60fa230530d3ef436f6c0f904873145e426f113e81f",
+  "imageZipSha256": "af06dbc70276acd645e6ba221d451a4f86eded11c4e3ce8fea239b61c3b7e5d8",
+  "zipFiles": 77,
+  "zipCrcPassed": true,
+  "scope": "실제 운영 Swing 컴포넌트에 합성 패킷·계정 데이터를 넣은 캡처입니다. 실제 Windows Burp 본체·DPI/IME·외부 서비스 검증은 별도입니다."
+}

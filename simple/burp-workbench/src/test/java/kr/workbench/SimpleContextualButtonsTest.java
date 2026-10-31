@@ -68,14 +68,18 @@ public final class SimpleContextualButtonsTest extends WorkbenchTest {
     check(view>=0,"selected original remains reachable in the current sorted or filtered view: "+path);
     table.setRowSelectionInterval(view,view);
     JLabel context=(JLabel)named(root,"wb.simple.traffic.selection");
-    String expected=method+" "+path+" · 선택 1건";
-    check(context.getText().equals(expected)&&context.getToolTipText().equals(expected),
-        "selection context immediately names the actual selected method and path: "+expected);
     Object selected=((List<?>)SimpleWorkflowTest.unchecked(extension,"traffic")).get(model);
     var selectedPacket=(DiskTrafficStore.PacketRef)SimpleWorkflowTest.unchecked(selected,"packet");
+    TrafficBrowser browser=(TrafficBrowser)SimpleWorkflowTest.unchecked(extension,"trafficBrowser");
+    String expected=method+" "+path+" · "+selectedPacket.responseStatus()+" · "+browser.extra(model,8)+" · "+selectedPacket.time()+" · 선택 1건";
+    check(context.getText().equals(expected)&&context.getToolTipText().equals(expected),
+        "selection context immediately names the actual selected method/path/status/account/time: "+expected);
     Object current=SimpleWorkflowTest.unchecked(extension,"current");
     var currentPacket=(DiskTrafficStore.PacketRef)SimpleWorkflowTest.unchecked(current,"packet");
     PacketInspector reader=(PacketInspector)SimpleWorkflowTest.unchecked(extension,"requestPacket");
+    var summary=(JLabel)SimpleWorkflowTest.named(root,"wb.simple.traffic.selection");
+    check(summary.getText().contains(selectedPacket.responseStatus())&&summary.getText().contains(selectedPacket.time()),
+        "selection context shows the same original response status and time after sorting/filtering: "+path);
     check(currentPacket.id().equals(selectedPacket.id())
             &&java.util.Arrays.equals(reader.previewBytes(),wire),
         "selection context and reader retain the same exact original identity and bytes: "+path);

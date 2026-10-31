@@ -146,7 +146,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     CompactWorkbenchUi.columns(table, 75, 430, 135, 135);
     table.setToolTipText("URL을 선택해 오른쪽에서 발견 출처·요청 수·최근 활동을 확인합니다.");
     JPanel searchBar = new JPanel(new BorderLayout(6, 0));
-    searchBar.add(filter, BorderLayout.WEST); searchBar.add(search);
+    searchBar.add(search); searchBar.add(filter, BorderLayout.EAST);
     searchBar.setName("wb.placement.activity.filters");
     JPanel urls = new JPanel(new BorderLayout(0, 4));
     urls.add(searchBar, BorderLayout.NORTH);
@@ -172,15 +172,19 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     selectedContext.add(identity);
     parameters.add(selectedContext, BorderLayout.NORTH);
     JPanel inputs = new JPanel(new BorderLayout(0, 4));
-    JPanel parameterActions = CompactWorkbenchUi.toolbar(new JLabel("입력 점검"), WorkbenchUi.row(finishParam));
+    JPanel parameterActions = CompactWorkbenchUi.toolbar(new JLabel("선택 입력"), WorkbenchUi.row(finishParam));
     parameterActions.setName("wb.actions.activity.parameters");
-    inputs.add(ReferenceUi.header(parameterActions, null), BorderLayout.NORTH);
+    inputs.add(ReferenceUi.header(new JLabel("입력 점검"), new JLabel("선택 URL에 포함된 입력")), BorderLayout.NORTH);
     inputs.add(new JScrollPane(parameterTable));
     JLabel distinction = WorkbenchUi.hint("URL 전체 완료와 개별 입력 완료는 별도로 기록합니다.");
     distinction.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
-    inputs.add(distinction, BorderLayout.SOUTH);
+    JPanel inputFooter = new JPanel(new BorderLayout(6, 4));
+    inputFooter.add(parameterActions, BorderLayout.NORTH);
+    inputFooter.add(distinction, BorderLayout.SOUTH);
+    inputs.add(inputFooter, BorderLayout.SOUTH);
     parameters.add(inputs);
-    JSplitPane split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, urls, parameters, .66);
+    parameters.setBorder(kr.packetui.VisualTheme.border(1, 1, 1, 1));
+    JSplitPane split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, WorkbenchUi.card("URL 점검 목록", urls), parameters, .66);
     JPanel endpointsPage = new JPanel(new BorderLayout(6, 6));
     endpointsPage.add(split);
     coveragePages.addTab("URL 점검 현황", endpointsPage);
@@ -525,7 +529,7 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     String key = selected == null ? null : selected.key();
     if (!Objects.equals(key, selectedKey)) parameterTable.clearSelection();
     selectedKey = key;
-    selectedUrl.setText(selected == null ? "선택한 URL이 없습니다." : "선택 URL · " + selected.method() + " " + selected.url());
+    selectedUrl.setText(selected == null ? "선택한 URL이 없습니다." : selected.method() + " " + selected.url());
     selectedUrl.setToolTipText(selected == null ? null : selected.url());
     selectedFacts.setText(selected == null ? "목록에서 URL을 선택하면 발견 근거와 입력을 확인할 수 있습니다."
         : "점검 상태  " + selected.state() + "\n발견 출처  " + selected.sources()

@@ -1,0 +1,709 @@
+{
+  "version": "1.4.17",
+  "jarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+  "actualComparisonScreens": 32,
+  "referenceScreens": 32,
+  "authFullTabScreens": 6,
+  "files": [
+    {
+      "kind": "actual",
+      "screen": "traffic",
+      "theme": "light",
+      "file": "images/light/traffic.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/02-request.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "1f51e8f5bf57312540be98facc34d0704d79a7012c6c6bb5eb3735f2f6a388f7"
+    },
+    {
+      "kind": "reference",
+      "screen": "traffic",
+      "theme": "light",
+      "file": "reference/light/traffic.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/traffic.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "91d43527838f10b39a0b6c326fdac191ceb055576b5859e0ba76a2c928d946b4"
+    },
+    {
+      "kind": "actual",
+      "screen": "mapper",
+      "theme": "light",
+      "file": "images/light/mapper.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/08-mapper.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "70dd59791abb7a389b2a60d77ee05ce74405e8f88d667a6448a21479c649e6e1"
+    },
+    {
+      "kind": "reference",
+      "screen": "mapper",
+      "theme": "light",
+      "file": "reference/light/mapper.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/mapper.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "5fb8f6585a06103388fe2564edfd60979996a00a40cac9587c2e8326f610521d"
+    },
+    {
+      "kind": "actual",
+      "screen": "js",
+      "theme": "light",
+      "file": "images/light/js.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/10-js.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "00f5cb681c4695dc3402ef61b4bf0a43457845e50d27ae9f8f406f19de9168ae"
+    },
+    {
+      "kind": "reference",
+      "screen": "js",
+      "theme": "light",
+      "file": "reference/light/js.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/js.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "456ee7795279dff9a509dccfc6d90ecf8d314573d1a89814dff3d8d47266ac58"
+    },
+    {
+      "kind": "actual",
+      "screen": "environment",
+      "theme": "light",
+      "file": "images/light/environment.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/09-environment.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "525dc11be6ed5d899bc3061e3038b43e5c2a12a68448eca4e53bf4922d148ea2"
+    },
+    {
+      "kind": "reference",
+      "screen": "environment",
+      "theme": "light",
+      "file": "reference/light/environment.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/environment.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "d3305e12f19c604492cf69ca649295bfcb258c2441a1866f56769cee7a78990b"
+    },
+    {
+      "kind": "actual",
+      "screen": "exposure.search",
+      "theme": "light",
+      "file": "images/light/exposure.search.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/12-exposure-search.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "4ce34339ef02a04d4ad0040c9a212615656f20049044820540e659112a1cba0e"
+    },
+    {
+      "kind": "reference",
+      "screen": "exposure.search",
+      "theme": "light",
+      "file": "reference/light/exposure.search.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/exposure.search.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "972f167120228f5d04759583c95fb0239ce1e8f7c9a3e810d183270bd1a79a30"
+    },
+    {
+      "kind": "actual",
+      "screen": "exposure.cve",
+      "theme": "light",
+      "file": "images/light/exposure.cve.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/13-exposure-cve.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "df4bd8ae8484b6e40b65980f7eafc40b3bc19d1e7f3e6a2cea6633c9a77515fa"
+    },
+    {
+      "kind": "reference",
+      "screen": "exposure.cve",
+      "theme": "light",
+      "file": "reference/light/exposure.cve.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/exposure.cve.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "5e1bb60523102e0e329e144e6444dfa20a3d3577f4bc2c69096325a5b933e9d8"
+    },
+    {
+      "kind": "actual",
+      "screen": "auth",
+      "theme": "light",
+      "file": "images/light/auth.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/04-auth-results.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "42878ec9b3b79c8fecd3d3fdd6aecfdd290b0d70bf6a445fe3f1cade82a2f1cc"
+    },
+    {
+      "kind": "reference",
+      "screen": "auth",
+      "theme": "light",
+      "file": "reference/light/auth.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/auth.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "9e4227a7c8074de04fe6c34826eefe0ede3ef90debeb84e87c94ba2663291176"
+    },
+    {
+      "kind": "actual",
+      "screen": "response.recon",
+      "theme": "light",
+      "file": "images/light/response.recon.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/03-analysis.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "3f8062b8651e0b50996fe2b63d7c7b96b864e2109b59567ca7b10d1fdacf636d"
+    },
+    {
+      "kind": "reference",
+      "screen": "response.recon",
+      "theme": "light",
+      "file": "reference/light/response.recon.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/response.recon.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "2b18cdee77a739b38e174f95f0a9565976790beafbe7bd6eb3c80b3eec1605f5"
+    },
+    {
+      "kind": "actual",
+      "screen": "payload",
+      "theme": "light",
+      "file": "images/light/payload.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/07-payload.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "fc85b83bb8975063adb0cce9fd27a454be8989fe813b87064d02f0f252857a13"
+    },
+    {
+      "kind": "reference",
+      "screen": "payload",
+      "theme": "light",
+      "file": "reference/light/payload.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/payload.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "424bff189ac79d202f7c272f060fdef251ce2103880e43f55d5a8f7d4fa552d4"
+    },
+    {
+      "kind": "actual",
+      "screen": "data",
+      "theme": "light",
+      "file": "images/light/data.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/14-data.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "c2c9c870f37fd4b27ef519b7f40be00b6ce9f58210ea13a8bea4defc818a9187"
+    },
+    {
+      "kind": "reference",
+      "screen": "data",
+      "theme": "light",
+      "file": "reference/light/data.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/data.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "d023557633485554a274fa093f79a449aba76305f65bc1e32a198fd8f776a78f"
+    },
+    {
+      "kind": "actual",
+      "screen": "activity",
+      "theme": "light",
+      "file": "images/light/activity.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/15-progress.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "66dedb7444757a03d62b8fe5ef43e9538cf37e778b1cfa13ac90900ede37696e"
+    },
+    {
+      "kind": "reference",
+      "screen": "activity",
+      "theme": "light",
+      "file": "reference/light/activity.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/activity.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "675060f2ef51e40841574834702b7ca73f45854e18526f6f047c105a946d7519"
+    },
+    {
+      "kind": "actual",
+      "screen": "bounty",
+      "theme": "light",
+      "file": "images/light/bounty.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/05-evidence.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "3afd46df44a99ca5b6cc0e28ee37826ec6b1f94862d0ac7acf172e4abb65d92d"
+    },
+    {
+      "kind": "reference",
+      "screen": "bounty",
+      "theme": "light",
+      "file": "reference/light/bounty.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/bounty.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "9ee7ee03a86815f8133b8e946fd9dc6ca32cf1b939bb00e491afb8d56f39db5e"
+    },
+    {
+      "kind": "actual",
+      "screen": "dashboard",
+      "theme": "light",
+      "file": "images/light/dashboard.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/16-dashboard.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "697ab58bc82e04041b6e2a35727c5f0f0c2a914ba84f966d1cff75125425f626"
+    },
+    {
+      "kind": "reference",
+      "screen": "dashboard",
+      "theme": "light",
+      "file": "reference/light/dashboard.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/dashboard.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "2829b2e659e553514cbef0e64266c0cfde584d31da8fc23aa1c69b021d776a9d"
+    },
+    {
+      "kind": "actual",
+      "screen": "payload.results",
+      "theme": "light",
+      "file": "images/light/payload.results.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/07-payload-results.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "b271e1f26de56411d341bcdcb5320223cb61e4daa667d06c03352f76aab81b04"
+    },
+    {
+      "kind": "reference",
+      "screen": "payload.results",
+      "theme": "light",
+      "file": "reference/light/payload.results.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/payload.results.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "24e17fc403b64bcb864563b5c113a51e89646f5e6a1955ce668dbd3d9c47c6f5"
+    },
+    {
+      "kind": "actual",
+      "screen": "bounty.replay",
+      "theme": "light",
+      "file": "images/light/bounty.replay.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/11-replay.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "824553d22f8452c4d5eab9241e4394a57de523e1b81701e0cde8e72f2cc08e1c"
+    },
+    {
+      "kind": "reference",
+      "screen": "bounty.replay",
+      "theme": "light",
+      "file": "reference/light/bounty.replay.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/bounty.replay.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "7da136741ae57c87ef23fc07c814adace432df7dbced2381b45dbf966db85c16"
+    },
+    {
+      "kind": "actual",
+      "screen": "auth.accounts",
+      "theme": "light",
+      "file": "images/light/auth.accounts.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/04-auth-accounts.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "6976d8deb69d43cfb10409ab352353e627df567eb63567cadec88a988409c432"
+    },
+    {
+      "kind": "reference",
+      "screen": "auth.accounts",
+      "theme": "light",
+      "file": "reference/light/auth.accounts.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/light/auth.accounts.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "af68afe094295500386aa628ed983f32591dedc953434f315b9b43e782f214e0"
+    },
+    {
+      "kind": "actual",
+      "screen": "traffic",
+      "theme": "dark",
+      "file": "images/dark/traffic.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/02-request.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "0face2658c54b671b8dc076d47448dfaeed213b56bbc44f51740d7b3d4821324"
+    },
+    {
+      "kind": "reference",
+      "screen": "traffic",
+      "theme": "dark",
+      "file": "reference/dark/traffic.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/traffic.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "14815b4fe3dfd17aadbf71ed066effde49d7ce44d9d716d942a4609b93db74f1"
+    },
+    {
+      "kind": "actual",
+      "screen": "mapper",
+      "theme": "dark",
+      "file": "images/dark/mapper.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/08-mapper.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "977bad9781d0ec66ce209ff459319b37de934c25256dad8658ac6ce3d85b09d3"
+    },
+    {
+      "kind": "reference",
+      "screen": "mapper",
+      "theme": "dark",
+      "file": "reference/dark/mapper.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/mapper.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "fc5cb6647c5fec870374cc7a548b62ea0b359edb85b8d7a1cecfb6978f9b2a50"
+    },
+    {
+      "kind": "actual",
+      "screen": "js",
+      "theme": "dark",
+      "file": "images/dark/js.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/10-js.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "93b0eef7aaf26f9edd2a0ba0cfe8b52420a223abfcada6db9432f86d8d8a15ba"
+    },
+    {
+      "kind": "reference",
+      "screen": "js",
+      "theme": "dark",
+      "file": "reference/dark/js.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/js.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "39ffbb8242b03fa05471c20e9cfad5e5b1ab1cac811aaddebf524daa2bbefc8f"
+    },
+    {
+      "kind": "actual",
+      "screen": "environment",
+      "theme": "dark",
+      "file": "images/dark/environment.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/09-environment.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "15ef2c8d8b0d9f348961f7798d88ef8f554b11ad949912640bfddceb52469c38"
+    },
+    {
+      "kind": "reference",
+      "screen": "environment",
+      "theme": "dark",
+      "file": "reference/dark/environment.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/environment.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "06f630461086737e4131f8f5df6d88b02ba56389bdf1367e641d8bb817a50a48"
+    },
+    {
+      "kind": "actual",
+      "screen": "exposure.search",
+      "theme": "dark",
+      "file": "images/dark/exposure.search.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/12-exposure-search.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "14d1d03e83c71f0caa6878dfd2fb1fb4137879a9f70c338a62594c3d55783be3"
+    },
+    {
+      "kind": "reference",
+      "screen": "exposure.search",
+      "theme": "dark",
+      "file": "reference/dark/exposure.search.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/exposure.search.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "8ae4a224c484d41b6b7b8c68e2cc196b19ba5556ae68d0c93060a0a1e49931f8"
+    },
+    {
+      "kind": "actual",
+      "screen": "exposure.cve",
+      "theme": "dark",
+      "file": "images/dark/exposure.cve.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/13-exposure-cve.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "5a98b89182316e8b553abf63cd5dd7f839f36ba9788d7cf36c03940c42a9d65d"
+    },
+    {
+      "kind": "reference",
+      "screen": "exposure.cve",
+      "theme": "dark",
+      "file": "reference/dark/exposure.cve.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/exposure.cve.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "b6479f6c243ee2e8c10bcff868a256795a9e18040b98ed8004a127b7bd987837"
+    },
+    {
+      "kind": "actual",
+      "screen": "auth",
+      "theme": "dark",
+      "file": "images/dark/auth.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/04-auth-results.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "3c19baa91e032941eea3d0f2ff0add9632e45d8c3746e72473980125c1d19d8d"
+    },
+    {
+      "kind": "reference",
+      "screen": "auth",
+      "theme": "dark",
+      "file": "reference/dark/auth.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/auth.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "ea41fac90770da5d23bf805facb0a86328504bee3f7029eba245685afd9d25fe"
+    },
+    {
+      "kind": "actual",
+      "screen": "response.recon",
+      "theme": "dark",
+      "file": "images/dark/response.recon.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/03-analysis.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "6031b737b6aa9dc099874e5f8621b7a6e80a5e5d042aa83487c99222a37a4ac3"
+    },
+    {
+      "kind": "reference",
+      "screen": "response.recon",
+      "theme": "dark",
+      "file": "reference/dark/response.recon.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/response.recon.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "caa3be376ab7459721d95281f41d9065b91a6dda973fdfb33d81ed6f9d517671"
+    },
+    {
+      "kind": "actual",
+      "screen": "payload",
+      "theme": "dark",
+      "file": "images/dark/payload.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/07-payload.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "dc3192feba4d47ab6e56771bc39a7ed5e6312171c41573104dd37d1c874b5872"
+    },
+    {
+      "kind": "reference",
+      "screen": "payload",
+      "theme": "dark",
+      "file": "reference/dark/payload.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/payload.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "f4f1f0f1f9003e59164192c7508e42677c0cc5a548f7619f4e7373657864dac8"
+    },
+    {
+      "kind": "actual",
+      "screen": "data",
+      "theme": "dark",
+      "file": "images/dark/data.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/14-data.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "1f7919eacad02972ffe7aca5ade7059578f83e32c08ca9a3bfbd0ec9cff2a597"
+    },
+    {
+      "kind": "reference",
+      "screen": "data",
+      "theme": "dark",
+      "file": "reference/dark/data.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/data.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "eaf906cf03fba5829f3f55a708c8d2e34a2969db6362ba4a97cff814ab590224"
+    },
+    {
+      "kind": "actual",
+      "screen": "activity",
+      "theme": "dark",
+      "file": "images/dark/activity.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/15-progress.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "ead2c62891e4287979e689b72dccd77b6f2c321e251d3cf68c74acd782d30452"
+    },
+    {
+      "kind": "reference",
+      "screen": "activity",
+      "theme": "dark",
+      "file": "reference/dark/activity.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/activity.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "523c13a0665ea420eed439a261f7076ed24be6be6dea7eae4bc16130a0943b02"
+    },
+    {
+      "kind": "actual",
+      "screen": "bounty",
+      "theme": "dark",
+      "file": "images/dark/bounty.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/05-evidence.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "3b246a1a1dc8ef134f31a3defb3d83a7c50544fbbc64ecae18e4e2432915f22a"
+    },
+    {
+      "kind": "reference",
+      "screen": "bounty",
+      "theme": "dark",
+      "file": "reference/dark/bounty.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/bounty.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "74337f2359347106de7c0c3dffba9a6add3d15c56e14a264fa551d7127db4134"
+    },
+    {
+      "kind": "actual",
+      "screen": "dashboard",
+      "theme": "dark",
+      "file": "images/dark/dashboard.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/16-dashboard.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "11f71e653a0c102651b7370fe84dbebffacf7602940b36a59a45708fe558f2e5"
+    },
+    {
+      "kind": "reference",
+      "screen": "dashboard",
+      "theme": "dark",
+      "file": "reference/dark/dashboard.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/dashboard.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "4692463eeeda38f7022bb036fe84bf65a8abd39942c561c05fe3309941636320"
+    },
+    {
+      "kind": "actual",
+      "screen": "payload.results",
+      "theme": "dark",
+      "file": "images/dark/payload.results.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/07-payload-results.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "c561869d400105697c15d4dce9d90fe2605642f4e8ff195b80e5e8cae01a5629"
+    },
+    {
+      "kind": "reference",
+      "screen": "payload.results",
+      "theme": "dark",
+      "file": "reference/dark/payload.results.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/payload.results.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "1dec4715ffa28ff3333e193e516c40e9f0edcbd19f984890f830513675458890"
+    },
+    {
+      "kind": "actual",
+      "screen": "bounty.replay",
+      "theme": "dark",
+      "file": "images/dark/bounty.replay.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/11-replay.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "e0b966e35f6113d7a94d17831bd6c8e9ea78357660fab83d5ab882b5e83cd55c"
+    },
+    {
+      "kind": "reference",
+      "screen": "bounty.replay",
+      "theme": "dark",
+      "file": "reference/dark/bounty.replay.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/bounty.replay.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "8ac5b7cf3e461c871d21b713f900b7d3c8c869efce0bd147a93a176fc138e08b"
+    },
+    {
+      "kind": "actual",
+      "screen": "auth.accounts",
+      "theme": "dark",
+      "file": "images/dark/auth.accounts.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/04-auth-accounts.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "16b3b3988e0da1f145ba217de2af54eb13e3911cc74e04f87d56a03c668d6dc2"
+    },
+    {
+      "kind": "reference",
+      "screen": "auth.accounts",
+      "theme": "dark",
+      "file": "reference/dark/auth.accounts.png",
+      "source": "docs/reports/2026-10-31-workflow-design/images/dark/auth.accounts.png",
+      "width": 1600,
+      "height": 1000,
+      "sha256": "a0eab1dcd126dce7612562ba7266be09a348bdaec0d206fe690ef1da93bb2899"
+    },
+    {
+      "kind": "auth-full-tab",
+      "theme": "light",
+      "tab": "1 적용 상태",
+      "file": "auth-full-tabs/light/01.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/04-auth-accounts-full-overview.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "3128fe586bf062cbf180ca9c8d03b02b018899d58b496dbce505695eb425b55b"
+    },
+    {
+      "kind": "auth-full-tab",
+      "theme": "light",
+      "tab": "2 계정·쓰기 조회",
+      "file": "auth-full-tabs/light/02.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/04-auth-accounts-full-accounts.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "6976d8deb69d43cfb10409ab352353e627df567eb63567cadec88a988409c432"
+    },
+    {
+      "kind": "auth-full-tab",
+      "theme": "light",
+      "tab": "3 세션·권한표",
+      "file": "auth-full-tabs/light/03.png",
+      "source": "tmp/pdf-alignment/final-layout/light/1600x1000/04-auth-accounts-full-policy.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "38711683952779658e110b283ab41f56117927f4ca73c92cb39bfd983c29b23b"
+    },
+    {
+      "kind": "auth-full-tab",
+      "theme": "dark",
+      "tab": "1 적용 상태",
+      "file": "auth-full-tabs/dark/01.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/04-auth-accounts-full-overview.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "4d6d6ed479c7fc68b73e76e4af9d08007c5f0bf88c1c4286c25f944398c782fc"
+    },
+    {
+      "kind": "auth-full-tab",
+      "theme": "dark",
+      "tab": "2 계정·쓰기 조회",
+      "file": "auth-full-tabs/dark/02.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/04-auth-accounts-full-accounts.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "16b3b3988e0da1f145ba217de2af54eb13e3911cc74e04f87d56a03c668d6dc2"
+    },
+    {
+      "kind": "auth-full-tab",
+      "theme": "dark",
+      "tab": "3 세션·권한표",
+      "file": "auth-full-tabs/dark/03.png",
+      "source": "tmp/pdf-alignment/final-layout/dark/1600x1000/04-auth-accounts-full-policy.png",
+      "width": 1000,
+      "height": 760,
+      "sha256": "869d15031ee96242d7cb0931a6055a569d4bf25c2f89b1983f9c950aa892fb70"
+    }
+  ]
+}

@@ -1591,7 +1591,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         action.setToolTipText(count > 0 ? "선택 원본 " + count + "건 · 대상 요청은 자동 전송하지 않습니다." : "먼저 목록에서 요청을 선택하세요.");
       }
       String selectionText = count > 0 ? "선택 " + count + "건" : "요청을 선택하세요.";
-      if(count==1)try{Traffic selected=selectedTraffic().get(0);selectionText=selected.packet().method()+" "+java.net.URI.create(selected.packet().url()).getRawPath()+" · "+selectionText;}catch(RuntimeException ignored){}
+      if(count==1)try{
+        Traffic selected=selectedTraffic().get(0);
+        int modelRow=logTable.convertRowIndexToModel(logTable.getSelectedRow());
+        String identity=Objects.toString(trafficBrowser.extra(modelRow,8),"미매핑");
+        String status=selected.packet().responseStatus();
+        selectionText=selected.packet().method()+" "+java.net.URI.create(selected.packet().url()).getRawPath()
+            +" · "+(status==null||status.isBlank()?"응답 없음":status)+" · "+identity+" · "+selected.time()+" · "+selectionText;
+      }catch(RuntimeException ignored){}
       selectionInfo.setText(selectionText);selectionInfo.setToolTipText(selectionText);selectionInfo.setMinimumSize(new Dimension(140,28));
     };
     logTable.getSelectionModel().addListSelectionListener(e -> selectedState.run());
@@ -2185,23 +2192,30 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     convert.setName("wb.data.codec.convert");WorkbenchUi.primary(convert);
     JButton reuse=button("출력 → 입력",()->codecIn.setText(codecOut.getText()));reuse.setName("wb.data.codec.reuse");
     JButton copyOutput=button("복사",()->copy(codecOut.getText()));copyOutput.setName("wb.data.codec.copy");
-    JPanel inputActions=row(operation,convert);inputActions.setName("wb.actions.data.codec.input");
-    JPanel outputActions=row(WorkflowUi.menu("wb.workflow.data.codec.reuse","출력 작업",reuse),copyOutput);outputActions.setName("wb.actions.data.codec.output");
+    JPanel inputActions=row(new JLabel("변환 방식"),operation,convert);inputActions.setName("wb.actions.data.codec.input");
+    JPanel outputActions=row(copyOutput,WorkflowUi.menu("wb.workflow.data.codec.reuse","출력 작업",reuse));outputActions.setName("wb.actions.data.codec.output");
     JPanel input=new JPanel(new BorderLayout());input.setName("wb.codec.input");
-    input.add(ReferenceUi.header(new JLabel("입력 · UTF-8"),null),BorderLayout.NORTH);
     input.add(new JScrollPane(codecIn));
+    input.add(new JLabel("UTF-8 텍스트"),BorderLayout.SOUTH);
     JPanel output=new JPanel(new BorderLayout());output.setName("wb.codec.output");
-    output.add(CompactWorkbenchUi.toolbar(new JLabel("출력"),outputActions),BorderLayout.NORTH);
     output.add(new JScrollPane(codecOut));
+    output.add(new JLabel("출력 결과"),BorderLayout.SOUTH);
+    JPanel inputCard=WorkbenchUi.card("입력",input);
+    JPanel outputCard=WorkbenchUi.card("출력",output);
+    outputCard.remove(((BorderLayout)outputCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
+    outputCard.add(ReferenceUi.header(new JLabel("출력"),outputActions),BorderLayout.NORTH);
     JSplitPane editors =
         split(
             JSplitPane.HORIZONTAL_SPLIT,
-            input,
-            output);
+            inputCard,
+            outputCard);
     editors.setName("wb.codec.messages");
     JPanel panel=new JPanel(new BorderLayout(0,8));
     panel.add(CompactWorkbenchUi.toolbar(inputActions,new JLabel("로컬 변환 · 요청 전송 없음")),BorderLayout.NORTH);
-    panel.add(editors);return panel;
+    panel.add(editors);
+    JLabel preservation=new JLabel("입력과 출력은 각각 보존합니다. 출력 재사용은 직접 선택할 때만 입력에 반영합니다.");
+    preservation.putClientProperty("wb.secondary",true);preservation.putClientProperty("wb.font.size",11);
+    panel.add(preservation,BorderLayout.SOUTH);return panel;
   }
 
   private JPanel jwtPanel() {

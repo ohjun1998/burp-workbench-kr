@@ -19,7 +19,8 @@ import javax.swing.tree.*;
 
 /** Folder navigation over the existing page instances and their shared selection model. */
 final class FolderNavigation extends JPanel implements AutoCloseable {
-  private static final int DEFAULT_WIDTH = 220;
+  private static final int DEFAULT_WIDTH = 190;
+  private static final int NARROW_WIDTH = 174;
   private static final int MIN_WIDTH = 160;
   private static final int MAX_WIDTH = 420;
   private final MontoyaApi api;
@@ -32,6 +33,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   private final JSplitPane split;
   private final JButton toggle = new JButton();
   private final JLabel current = new JLabel();
+  private final JLabel breadcrumb = new JLabel();
   private final JButton back = new JButton("←"), forward = new JButton("→"), quick = new JButton("기능 찾기");
   private final NavigationViewState.ModelVersions modelVersions = new NavigationViewState.ModelVersions();
   private final List<Visit> visits = new ArrayList<>();
@@ -54,6 +56,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     Visit(String route, NavigationViewState view, Object extra) { this.route = route; this.view = view; this.extra = extra; }
   }
   private int menuWidth = DEFAULT_WIDTH;
+  private boolean customMenuWidth;
   private boolean hidden;
   private boolean adjusting;
   private boolean synchronizing;
@@ -98,7 +101,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     pages.setMinimumSize(new Dimension(360, 100));
     try {
       String width = read("width");
-      if (width != null) menuWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, Integer.parseInt(width)));
+      if (width != null) {
+        menuWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, Integer.parseInt(width)));
+        customMenuWidth = true;
+      }
     } catch (NumberFormatException ignored) {}
     hidden = Boolean.parseBoolean(read("hidden"));
 
@@ -109,7 +115,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
     if (classic) {
       folder(root, "데이터 도구", "data");
-      folder(root, "점검 관리·증거", "activity", "bounty");
+      folder(root, "점검 관리·증거", "activity", "bounty", "dashboard");
     } else folder(root, "점검 관리·증거", "bounty");
     tree = new NavigationTree(root);
     tree.setName("wb.navigation.tree");
@@ -144,6 +150,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     split.setDividerSize(7);
     split.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, event -> {
       if (adjusting || hidden || split.getWidth() <= 0) return;
+      customMenuWidth = true;
       menuWidth = constrained(split.getDividerLocation());
       write("width", Integer.toString(menuWidth));
       constrainDivider();
@@ -151,7 +158,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     split.addComponentListener(new ComponentAdapter() {
       @Override public void componentResized(ComponentEvent event) { constrainDivider(); }
     });
-    toggle.setName("wb.navigation.toggle");toggle.setIcon(WorkspaceIcons.of("menu"));toggle.putClientProperty("wb.segment.button",true);toggle.setPreferredSize(new Dimension(30,30));toggle.setMinimumSize(new Dimension(30,30));toggle.putClientProperty("wb.compact.button",true);
+    toggle.setName("wb.navigation.toggle");toggle.setIcon(WorkspaceIcons.of("menu"));toggle.putClientProperty("wb.segment.button",true);toggle.setPreferredSize(new Dimension(30,30));toggle.setMinimumSize(new Dimension(30,30));toggle.setMaximumSize(new Dimension(30,30));toggle.putClientProperty("wb.compact.button",true);
     toggle.addActionListener(event -> setMenuHidden(!hidden));
     back.setName("wb.navigation.back"); forward.setName("wb.navigation.forward");
     quick.setName("wb.navigation.quick");
@@ -163,6 +170,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     quick.addActionListener(e -> openQuickNavigation());
     current.setName("wb.navigation.current");
     current.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 6));
+    current.putClientProperty("wb.font.size", 12);
+    breadcrumb.setName("wb.navigation.breadcrumb");
+    breadcrumb.putClientProperty("wb.font.size", 12);
+    breadcrumb.putClientProperty("wb.secondary", true);
     JButton settings = new JButton("설정");
     settings.setName("wb.navigation.settings");
     settings.setToolTipText("Workbench Simple " + BuildInfo.VERSION + " · 화면 설정");
@@ -174,7 +185,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     version.setToolTipText("Workbench Next · 별도 배포 채널 · 기존 Workbench와 구분");
     JPanel navigationLine = new JPanel(new BorderLayout(8, 0));
     navigationLine.setName("wb.navigation.toolbar.line");
+    navigationLine.putClientProperty("wb.surface", classic);
     JPanel navigationControls = new JPanel();
+    navigationControls.putClientProperty("wb.surface", classic);
     navigationControls.setLayout(new BoxLayout(navigationControls, BoxLayout.X_AXIS));
     navigationControls.setBorder(classic ? BorderFactory.createEmptyBorder()
         : BorderFactory.createEmptyBorder(5, 8, 5, 8));
@@ -185,10 +198,28 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       navigationControls.add(control);
     }
 
+    if (classic) {
+      JLabel brand = new JLabel("Workbench", new BrandMark(), SwingConstants.LEADING);
+      brand.setName("wb.navigation.brand");
+      brand.setIconTextGap(7);
+      brand.putClientProperty("wb.font.size", 15);
+      brand.putClientProperty("wb.font.heading", true);
+      brand.setToolTipText("Workbench Simple " + BuildInfo.VERSION);
+      navigationControls.add(Box.createHorizontalStrut(7));
+      navigationControls.add(brand);
+      navigationControls.setPreferredSize(new Dimension(DEFAULT_WIDTH - 12, 38));
+    }
+
     navigationLine.add(navigationControls, BorderLayout.WEST);
-    navigationLine.add(current, BorderLayout.CENTER);
+    JPanel location = new JPanel(new BorderLayout());
+    location.setName("wb.navigation.location");
+    location.putClientProperty("wb.surface", classic);
+    if (classic) location.add(breadcrumb, BorderLayout.WEST);
+    location.add(current, BorderLayout.CENTER);
+    navigationLine.add(location, BorderLayout.CENTER);
     JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 3, 1));
     actions.setName("wb.navigation.actions");
+    actions.putClientProperty("wb.surface", classic);
     AbstractButton guideButton=null;
     for (AbstractButton shortcut : shortcuts) if (shortcut != null) {
       if(Boolean.TRUE.equals(shortcut.getClientProperty("wb.guide.button"))){guideButton=shortcut;continue;}
@@ -202,7 +233,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     if(guideButton!=null){guideButton.setPreferredSize(new Dimension(66,30));guideButton.setMinimumSize(new Dimension(66,30));guideButton.setMaximumSize(new Dimension(66,30));actions.add(guideButton);}
     for(Component c:actions.getComponents())if(c instanceof AbstractButton b)b.putClientProperty("wb.segment.button",true);
     navigationLine.add(actions, BorderLayout.EAST);
-    JPanel toolbar = new ResponsiveToolbar(navigationLine, actions);
+    JPanel toolbar = new ResponsiveToolbar(navigationLine, classic);
     add(toolbar, BorderLayout.NORTH);
     add(split, BorderLayout.CENTER);
     getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
@@ -398,13 +429,28 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
   /** Relayout is synchronous so a small window never needs a resize-event round trip to expose actions. */
   private static final class ResponsiveToolbar extends JPanel {
-    ResponsiveToolbar(JPanel line, JPanel actions) {
+    private final int height;
+    ResponsiveToolbar(JPanel line, boolean classic) {
       super(new BorderLayout());setName("wb.navigation.toolbar");
+      height = classic ? 46 : 36;
+      putClientProperty("wb.surface", classic);
       setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,1,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(0,5,0,6)));
       add(line,BorderLayout.CENTER);
     }
-    @Override public Dimension getPreferredSize(){Dimension d=super.getPreferredSize();return new Dimension(d.width,36);}
-    @Override public Dimension getMinimumSize(){return new Dimension(300,36);}
+    @Override public Dimension getPreferredSize(){Dimension d=super.getPreferredSize();return new Dimension(d.width,height);}
+    @Override public Dimension getMinimumSize(){return new Dimension(300,height);}
+  }
+
+  private static final class BrandMark implements Icon {
+    public int getIconWidth() { return 15; }
+    public int getIconHeight() { return 15; }
+    public void paintIcon(Component owner, Graphics graphics, int x, int y) {
+      Graphics2D g = (Graphics2D) graphics.create();
+      WorkbenchSkin.antialias(g);
+      g.setColor(WorkbenchUi.accent());
+      g.fillRoundRect(x, y, 15, 15, 8, 8);
+      g.dispose();
+    }
   }
 
   private boolean active(Object value) {
@@ -478,7 +524,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
     @Override protected void paintComponent(Graphics graphics) {
       Graphics2D g = (Graphics2D) graphics.create();
-      kr.packetui.VisualTheme.wash(g,getWidth(),getHeight(),kr.packetui.VisualTheme.sidebar(),WorkbenchUi.background());
+      if (classic) {
+        g.setColor(kr.packetui.VisualTheme.sidebar());
+        g.fillRect(0,0,getWidth(),getHeight());
+      } else kr.packetui.VisualTheme.wash(g,getWidth(),getHeight(),kr.packetui.VisualTheme.sidebar(),WorkbenchUi.background());
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       Rectangle clip = g.getClipBounds();
       for (int row = 0; row < getRowCount(); row++) {
@@ -523,16 +572,21 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       boolean toolNode = node.getUserObject() instanceof Tool;
       setText(node.toString());
-      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(toolNode?13.5f:12.5f)));
-      setBorder(BorderFactory.createEmptyBorder(toolNode?6:row==0?5:11, 2, toolNode?6:5, 8));
+      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN,
+          WorkbenchUi.displaySize(classic ? toolNode ? 12.5f : 10.5f : toolNode ? 13.5f : 12.5f)));
+      setBorder(BorderFactory.createEmptyBorder(toolNode ? classic ? 8 : 6 : classic ? 8 : row == 0 ? 5 : 11,
+          2, toolNode ? classic ? 8 : 6 : 5, 8));
       String kind=toolNode?((Tool)node.getUserObject()).id():groupIcon(node.toString());
-      Icon icon = WorkspaceIcons.navigation(kind,!toolNode||active(node)?WorkbenchUi.accent():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL),!toolNode);
+      Icon icon = classic && !toolNode ? null : WorkspaceIcons.navigation(kind,
+          active(node) ? WorkbenchUi.accent() : WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL), !toolNode);
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
       setDisabledIcon(icon);
       boolean available = !toolNode || indexOf(((Tool) node.getUserObject()).id()) >= 0;
       setEnabled(available);
-      setForeground(available ? active(node)?WorkbenchUi.accent():WorkbenchUi.ink() : WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
+      setForeground(available ? active(node) ? WorkbenchUi.accent()
+          : classic && !toolNode ? kr.packetui.VisualTheme.muted() : WorkbenchUi.ink()
+          : WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
       setToolTipText(toolNode?FeatureGuide.feature(((Tool)node.getUserObject()).id()).summary():node.toString()+" · 펼치기/접기");
       return this;
     }
@@ -652,6 +706,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
         current.setText(node.toString());
       }
       current.setToolTipText(node==null?current.getText():node.getParent()+" / "+node);
+      String group = node == null ? "" : Objects.toString(node.getParent(), "");
+      breadcrumb.setText(group.isEmpty() ? "" : group + "  ›");
+      breadcrumb.setToolTipText(group);
+      breadcrumb.setForeground(kr.packetui.VisualTheme.muted());
     } finally { synchronizing = false; }
     tree.repaint();
   }
@@ -689,6 +747,13 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     repaint();
   }
 
+  @Override public void doLayout() {
+    super.doLayout();
+    // Apply responsive defaults before children lay out, including an initial layout
+    // performed entirely on the EDT before queued resize events are delivered.
+    if (split != null) constrainDivider();
+  }
+
   private int minimumMenuWidth() {
     if(WorkbenchUi.appearanceScale()<=100)return MIN_WIDTH;
     int required=MIN_WIDTH;
@@ -707,7 +772,11 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
   private void constrainDivider() {
     adjusting = true;
-    try { split.setDividerLocation(hidden ? 0 : constrained(menuWidth)); }
+    try {
+      int requested = classic && !customMenuWidth && split.getWidth() > 0 && split.getWidth() <= 1300
+          ? NARROW_WIDTH : menuWidth;
+      split.setDividerLocation(hidden ? 0 : constrained(requested));
+    }
     finally { adjusting = false; }
   }
 

@@ -1,0 +1,11 @@
+{
+  "result": "passed",
+  "command": "python dev.py build",
+  "exitCode": 0,
+  "sourceZipSha256": "12dcb5235d38318aa57e7e648381182489f55c61d9ab907d1cafa136857bad9a",
+  "publishedJarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+  "rebuiltJarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+  "byteForByteEqual": true,
+  "sourceDirectory": "tmp/pdf-alignment/source-rebuild-zfftmvum",
+  "scope": "Fresh extraction of the delivered independent source ZIP, bundled pinned dependencies, strict Java 17 build."
+}

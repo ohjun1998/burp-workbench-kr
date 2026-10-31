@@ -104,10 +104,13 @@ public final class SimpleButtonPlacementCorrectionTest extends WorkbenchTest {
                 "payload execution and stop remain outside either phase at " + width + "/" + phase);
             String geometry = " start=" + bounds(start,root) + " stop=" + bounds(stop,root)
                 + " execution=" + bounds(execution,root);
-            check(shown(start,root) && shown(stop,root),
-                "payload start and stop stay fully visible at " + width + "/" + phase + geometry);
-            check(adjacent(root,"wb.simple.payload.start","wb.simple.payload.stop"),
-                "payload execution and stop stay adjacent at " + width + "/" + phase + geometry);
+            check(shown(stop,root) && (phase==0?shown(start,root):ApprovedWorkflowTestSupport.available(start,root)),
+                "payload stop and the phase-appropriate direct or menu execution stay available at " + width + "/" + phase + geometry);
+            if(phase==0)check(adjacent(root,"wb.simple.payload.start","wb.simple.payload.stop"),
+                "payload preparation execution and stop stay adjacent at " + width + "/" + phase + geometry);
+            else check(!ApprovedWorkflowTestSupport.visible(start,root)
+                    &&shown(named(root,"wb.simple.payload.evidence"),root),
+                "approved PDF results prioritize direct evidence and move reinspection into the actual management menu at " + width);
           }
           check(request.getText().equals(authored), "phase changes and responsive layout preserve authored request at " + width);
         }

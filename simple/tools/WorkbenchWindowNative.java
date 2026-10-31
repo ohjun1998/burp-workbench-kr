@@ -98,7 +98,7 @@ public final class WorkbenchWindowNative extends WorkbenchTest {
       Point[] dialogPoint={null};edt(()->{dialogPoint[0]=ownedPanel.getLocationOnScreen();dialogPoint[0].translate(ownedPanel.getWidth()/2,ownedPanel.getHeight()/2);});
       check(robot.getPixelColor(dialogPoint[0].x,dialogPoint[0].y).equals(Color.MAGENTA),"owned dialog remains visually above fullscreen parent after parent focus");
       Component nativeToolbar=SimpleWorkflowTest.named(root,"wb.navigation.toolbar.line");
-      check(nativeToolbar!=null&&nativeToolbar.getHeight()<=40,"fullscreen keeps the compact navigation header on one row");
+      check(nativeToolbar!=null&&nativeToolbar.getHeight()<=46,"fullscreen keeps the approved PDF navigation header on one row");
       edt(()->owned.get().setVisible(false));capture(robot,frame,output,"03-fullscreen.png");edt(()->{owned.get().setVisible(true);frame.toFront();controller.fullScreenButton.requestFocusInWindow();});robot.waitForIdle();activate(robot,frame,root);
       key(robot,KeyEvent.VK_ESCAPE);await(()->!controller.isFullScreen()&&device.getFullScreenWindow()==null&&!frame.isUndecorated(),"native Esc restores decorated window and releases fullscreen device");
       await(()->frame.getWidth()==1280&&frame.getHeight()==800,"fullscreen exit restores normal dimensions");

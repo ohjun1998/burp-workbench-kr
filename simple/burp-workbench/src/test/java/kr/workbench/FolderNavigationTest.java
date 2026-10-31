@@ -66,7 +66,7 @@ public final class FolderNavigationTest extends WorkbenchTest {
         check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "데이터 도구", "점검 관리·증거")),
             "five classic task folders preserve the requested navigation structure");
         List<String> leafIds = List.of("traffic", "mapper", "js", "environment", "exposure", "auth",
-            "response.recon", "payload", "data", "activity", "bounty");
+            "response.recon", "payload", "data", "activity", "bounty", "dashboard");
         check(leaves.equals(leafIds.stream().map(FeatureGuide::title).toList()),
             "classic leaf order retains eight engines, nested aliases and the current dashboard");
         JTable traffic = (JTable) unchecked(extension, "logTable");
@@ -188,7 +188,7 @@ public final class FolderNavigationTest extends WorkbenchTest {
         saved.put(BuildInfo.storageKey("wb.navigation.hidden"), "false");
         FolderNavigation recovered = new FolderNavigation(preferences(saved), new FolderNavigation.Pages(), () -> {}, null, null, true, null, null);
         recovered.restoreLayout();layout(recovered, 1024);
-        check(((JSplitPane) UiLayoutTest.named(recovered, "wb.navigation.split")).getDividerLocation() == 220,
+        check(((JSplitPane) UiLayoutTest.named(recovered, "wb.navigation.split")).getDividerLocation() == 174,
             "invalid saved width falls back to the default without blocking startup");
       });
     } finally {

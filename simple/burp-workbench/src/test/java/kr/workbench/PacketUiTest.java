@@ -29,7 +29,33 @@ public class PacketUiTest extends WorkbenchTest {
          .map(x->((JMenuItem)x).getText()).toList().containsAll(List.of("관찰된 API 패킷 보기","원문 위치로 이동"))
      &&!names.contains("NPM 존재 조회")&&!names.contains("수집 파일 저장"),
      "JS selected-path menu retains observed packet and original source navigation without extra utility buttons");
- Object runner=get(entry,"payloadRunner");JPanel panel=(JPanel)get(runner,"panel");List<String> actions=buttons(panel);check(List.of("wb.simple.payload.settings","wb.simple.payload.start","wb.simple.payload.stop","wb.simple.payload.evidence").stream().allMatch(name->UiLayoutTest.named(panel,name) instanceof JButton)&&!actions.contains("CSV 내보내기")&&!actions.contains("작업 창 열기")&&!actions.contains("더보기"),"Simple payload exposes settings, start, stop and direct evidence controls without CSV or standalone utility actions");JTextArea draft=(JTextArea)get(runner,"request");check(kr.packetui.PacketStyle.installed(draft),"payload request editor uses shared packet syntax and gutter");draft.setText(raw);((JToggleButton)get(runner,"requestPreview")).doClick();check(draft.getText().equals(raw),"payload structured preview preserves editable request bytes");check(components(panel).stream().filter(x->x instanceof PacketView).count()>=3,"payload draft and result request/response have common previews");}catch(Exception e){throw new RuntimeException(e);}});
+ Object runner=get(entry,"payloadRunner");JPanel panel=(JPanel)get(runner,"panel");List<String> actions=buttons(panel);
+ JButton settings=(JButton)get(runner,"settingsButton"),start=(JButton)get(runner,"start"),stop=(JButton)get(runner,"stopButton"),evidence=(JButton)get(runner,"evidenceButton"),csv=(JButton)get(runner,"export");
+ check(UiLayoutTest.named(panel,"wb.simple.payload.settings")==settings
+     &&UiLayoutTest.named(panel,"wb.simple.payload.start")==start
+     &&UiLayoutTest.named(panel,"wb.simple.payload.stop")==stop
+     &&UiLayoutTest.named(panel,"wb.simple.payload.evidence")==evidence
+     &&java.util.stream.Stream.of(settings,start,stop,evidence).allMatch(button->button.getActionListeners().length>0),
+     "PDF payload controls retain the exact named settings, start, stop and evidence controllers with their handlers");
+ w.selectPayloadRunnerPage();JTabbedPane phases=(JTabbedPane)get(runner,"workflow");phases.setSelectedIndex(0);
+ check(ApprovedWorkflowTestSupport.visible(start,panel)&&ApprovedWorkflowTestSupport.visible(stop,panel)
+     &&!ApprovedWorkflowTestSupport.visible(evidence,panel)&&!ApprovedWorkflowTestSupport.available(csv,panel),
+     "payload preparation prioritizes direct start and stop while result evidence and CSV are absent from visible actions");
+ phases.setSelectedIndex(1);
+ var csvMenu=ApprovedWorkflowTestSupport.menuAccess(csv,panel);
+ check(!ApprovedWorkflowTestSupport.visible(csv,panel)&&csvMenu!=null
+     &&csvMenu.item().getName().equals("wb.payload.export.menu")
+     &&csvMenu.item().getText().equals(csv.getText())&&csvMenu.item().isEnabled()==csv.isEnabled()
+     &&csv.getActionListeners().length>0,
+     "PDF results expose the retained CSV controller only through the actual inspection-management menu");
+ check(ApprovedWorkflowTestSupport.visible(evidence,panel)&&Boolean.TRUE.equals(evidence.getClientProperty("wb.primary"))
+     &&SwingUtilities.isDescendingFrom(evidence,(Container)UiLayoutTest.named(panel,"wb.actions.payload.execution"))
+     &&ApprovedWorkflowTestSupport.visible(stop,panel)&&!ApprovedWorkflowTestSupport.visible(start,panel)
+     &&ApprovedWorkflowTestSupport.available(start,panel)
+     &&!actions.contains("작업 창 열기")&&!actions.contains("더보기"),
+     "PDF results prioritize top-level evidence and direct stop while reinspection stays in its retained menu");
+ phases.setSelectedIndex(0);
+ JTextArea draft=(JTextArea)get(runner,"request");check(kr.packetui.PacketStyle.installed(draft),"payload request editor uses shared packet syntax and gutter");draft.setText(raw);((JToggleButton)get(runner,"requestPreview")).doClick();check(draft.getText().equals(raw),"payload structured preview preserves editable request bytes");check(components(panel).stream().filter(x->x instanceof PacketView).count()>=3,"payload draft and result request/response have common previews");}catch(Exception e){throw new RuntimeException(e);}});
  for(var h:PayloadIntegrationTest.modernUnloads)h.extensionUnloaded();for(var h:PayloadIntegrationTest.legacyUnloads)h.extensionUnloaded();edt(()->{});System.out.println("PacketUiTest: "+checks+" checks passed");
  }
 }

@@ -25,6 +25,30 @@ import javax.swing.*;
 
 /** Actual pointer/menu/window checks; synthetic Burp adapters and zero target HTTP. */
 public final class ButtonPlacementNative extends WorkbenchTest {
+  private static void payloadResults(Object runner) {
+    try {
+      Class<?> entry=Class.forName("kr.payloadrunner.PayloadRunnerPanel$Entry");
+      var constructor=entry.getDeclaredConstructor(kr.payloadrunner.Engine.Row.class,burp.IHttpService.class);
+      constructor.setAccessible(true);
+      @SuppressWarnings("unchecked") var entries=(List<Object>)get(runner,"entries");
+      var model=(javax.swing.table.DefaultTableModel)get(runner,"model");
+      var service=proxy(burp.IHttpService.class,(p,m,a)->switch(m.getName()) {
+        case "getHost"->"buttons.example.test";case "getPort"->443;case "getProtocol"->"https";default->def(m);
+      });
+      String[] payloads={"baseline","WB_CANARY_NATIVE","<b>WB_CANARY_NATIVE</b>","WB_CONTROL_NATIVE"};
+      String[] verdicts={"기준 응답","반사 관찰","반사 관찰","대조 응답"};
+      for(int i=0;i<payloads.length;i++) {
+        byte[] request=("GET /search?q="+i+" HTTP/1.1\r\nHost: buttons.example.test\r\nX-Original: "+payloads[i]+"\r\n\r\n").getBytes(StandardCharsets.UTF_8);
+        String body="NATIVE_PAYLOAD_RESPONSE_"+i;
+        byte[] wire=("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n"+body).getBytes(StandardCharsets.UTF_8);
+        var response=new kr.payloadrunner.Engine.Response(200,wire.length,"text/plain",body,false,wire,true);
+        var row=new kr.payloadrunner.Engine.Row(i,payloads[i],80+i,response,verdicts[i],"합성 결과 · 브라우저 실행 미확인",request);
+        entries.add(constructor.newInstance(row,service));
+        model.addRow(new Object[]{row.index(),row.payload(),200,wire.length,row.millis(),row.verdict(),row.evidence()});
+      }
+      ((JTable)get(runner,"table")).setRowSelectionInterval(2,2);
+    } catch(Exception error) {throw new IllegalStateException("Native payload fixture",error);}
+  }
   private static Object value(Object owner, String name) {
     try { return get(owner, name); }
     catch (Exception error) { throw new IllegalStateException(name, error); }
@@ -127,7 +151,7 @@ public final class ButtonPlacementNative extends WorkbenchTest {
     Component guide = named(root, "wb.visual.guide.open");
     Component toolbar = named(root, "wb.navigation.toolbar");
     Rectangle relative = SwingUtilities.convertRectangle(guide.getParent(), guide.getBounds(), toolbar);
-    check(guide.isShowing() && toolbar.getHeight() <= 36 && relative.y >= 0
+    check(guide.isShowing() && toolbar.getHeight() <= 46 && relative.y >= 0
         && relative.getMaxY() <= toolbar.getHeight() && relative.getMaxX() <= toolbar.getWidth()
         && toolbar.getWidth() - relative.getMaxX() <= 20,
         "Guide remains visible at the far right of the compact native header");
@@ -264,7 +288,49 @@ public final class ButtonPlacementNative extends WorkbenchTest {
             "native primary and grouped result controllers belong to the results area");
         check(!((AbstractButton) evidence).isEnabled() && !((AbstractButton) repeater).isEnabled(),
             "empty native results keep evidence and Repeater disabled");
+        check(evidence.isShowing()&&repeater.isShowing()
+                &&onScreen(evidence).y<onScreen(named(root,"wb.payload.results.table")).y,
+            "PDF result evidence and Repeater are direct actions above the table");
+        check(!named(root,"wb.simple.payload.start").isShowing()
+                &&ApprovedWorkflowTestSupport.available(named(root,"wb.simple.payload.start"),root)
+                &&named(root,"wb.simple.payload.stop").isShowing(),
+            "results move reinspection into its real management menu while stop stays direct");
       });
+      JButton management=(JButton)named(root,"wb.flow.payload.result.other.open");
+      click(robot,management);
+      JPopupMenu managementPopup=management.getComponentPopupMenu();
+      await(managementPopup::isShowing,"native pointer opens the result management menu");
+      check(named(managementPopup,"wb.simple.payload.start.menu").isShowing()
+              &&named(managementPopup,"wb.simple.payload.settings.menu").isShowing()
+              &&named(managementPopup,"wb.payload.export.menu").isShowing(),
+          "native result menu exposes retained reinspection, conditions and CSV actions");
+      click(robot,named(managementPopup,"wb.simple.payload.settings.menu"));
+      await(()->workflow.getSelectedIndex()==0,"native conditions menu returns to real request preparation");
+      check(((AbstractButton)named(root,"wb.payload.advanced.toggle")).isSelected()
+              &&request.getText().equals(requestText),
+          "actual result conditions menu expands retained settings without changing request bytes");
+      click(robot,named(root,"wb.payload.step.results"));
+      await(()->workflow.getSelectedIndex()==1,"return to native result workflow");
+      edt(()->payloadResults(runner));settle();
+      JTable resultTable=(JTable)named(root,"wb.payload.results.table");
+      check(resultTable.getColumnCount()==6&&resultTable.convertColumnIndexToView(4)>=0,
+          "native result table exposes recorded response duration beside status and size");
+      click(robot,named(root,"wb.payload.results.filter.observed"));
+      await(()->resultTable.getRowCount()==2,"native observation filter shows two recorded observations");
+      check(resultTable.convertRowIndexToModel(resultTable.getSelectedRow())==2,
+          "actual native result filter preserves the selected exact original model row");
+      click(robot,named(root,"wb.payload.results.filter.control"));
+      await(()->resultTable.getRowCount()==2&&resultTable.getSelectedRow()<0,
+          "native baseline/control filter clears a hidden observation selection");
+      check(!((AbstractButton)evidence).isEnabled()&&!((AbstractButton)repeater).isEnabled()
+              &&((JLabel)named(root,"wb.payload.results.selection")).getText().equals("결과 행을 선택하세요."),
+          "hidden native selection cannot retain a stale reader or enabled handoff");
+      click(robot,named(root,"wb.payload.results.filter.all"));
+      await(()->resultTable.getRowCount()==4,"native all-results filter restores every original row");
+      edt(()->resultTable.setRowSelectionInterval(2,2));settle();
+      check(((JSplitPane)named(root,"wb.payload.results.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT
+              &&!((AbstractButton)named(root,"wb.payload.results.reason.toggle")).isSelected(),
+          "native PDF readers stay side by side with full reasoning reachable through a disclosure");
       capture(robot, frame, output, captures.get(2));
       click(robot, named(root, "wb.payload.step.prepare"));
       await(() -> workflow.getSelectedIndex() == 0

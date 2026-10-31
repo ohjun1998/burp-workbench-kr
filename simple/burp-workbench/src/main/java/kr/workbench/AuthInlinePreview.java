@@ -19,15 +19,25 @@ final class AuthInlinePreview extends JPanel implements AutoCloseable {
 
   AuthInlinePreview() {
     super(new BorderLayout(0, 4)); setName("wb.auth.inline");
+    setBorder(kr.packetui.VisualTheme.border(1, 1, 1, 1));
     account.setName("wb.auth.inline.account");account.setPreferredSize(new java.awt.Dimension(200,32));
     for (int i = 0; i < 4; i++) account.addItem(i == 3 ? "비로그인" : "비교 계정 " + (i + 1));
-    selectedRequest.putClientProperty("wb.font.heading",true);selectedRequest.putClientProperty("wb.font.size",16);add(CompactWorkbenchUi.toolbar(selectedRequest,WorkbenchUi.row(new JLabel("비교 계정"),account,summary)),BorderLayout.NORTH);
+    selectedRequest.putClientProperty("wb.font.heading",true);selectedRequest.putClientProperty("wb.font.size",13);
+    selectedRequest.setName("wb.auth.inline.selected");
+    JPanel title = CompactWorkbenchUi.toolbar(selectedRequest, WorkbenchUi.row(summary));
+    title.setBorder(BorderFactory.createEmptyBorder(7, 12, 7, 12));
+    title.setName("wb.auth.inline.heading");
+    add(title,BorderLayout.NORTH);
     JTabbedPane tabs = new JTabbedPane(); tabs.setName("wb.auth.inline.tabs");
     tabs.addTab("응답 비교", WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("기준 응답", baseline), WorkbenchUi.card("계정 응답", response), .5));
     differences.setEditable(false);differences.setLineWrap(true);differences.setWrapStyleWord(true);differences.putClientProperty("wb.prose",true);differences.setName("wb.auth.inline.differences");JPanel comparison=new JPanel(new BorderLayout());comparison.add(WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,WorkbenchUi.card("기준 응답",differenceBaseline),WorkbenchUi.card("선택 계정 응답",differenceResponse),.5));JButton facts=new JButton("차이 항목 보기");facts.addActionListener(e->WorkbenchUi.settingsWindow(this,"계정 간 차이 · 상세 항목",new JScrollPane(differences),false,null));comparison.add(WorkbenchUi.row(facts),BorderLayout.SOUTH);tabs.addTab("계정 간 차이",comparison);
     tabs.addTab("선택 계정 요청", request); tabs.addTab("판정 근거", evidence);
-    add(tabs);
+    JPanel readers = new JPanel(new BorderLayout(0, 4));
+    JPanel accountActions = WorkbenchUi.row(new JLabel("비교 계정"), account);
+    accountActions.setName("wb.auth.inline.account.actions");
+    accountActions.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+    readers.add(accountActions, BorderLayout.NORTH); readers.add(tabs); add(readers);
     account.addActionListener(e -> { if (!updating) render(); });
     differenceBaseline.displayDecoration=this::decorateDifferences;differenceResponse.displayDecoration=this::decorateDifferences;
   }
@@ -42,7 +52,7 @@ final class AuthInlinePreview extends JPanel implements AutoCloseable {
   }
 
   private void render() {
-    var run = selected; int slot = Math.max(0, account.getSelectedIndex());selectedRequest.setText(run==null?"선택한 요청 상세":"선택한 요청 상세  "+run.original.method()+" "+run.original.url());selectedRequest.setToolTipText(selectedRequest.getText());
+    var run = selected; int slot = Math.max(0, account.getSelectedIndex());selectedRequest.setText(run==null?"선택한 요청 상세":run.original.method()+" "+run.original.url());selectedRequest.setToolTipText(selectedRequest.getText());
     summary.setText(run == null ? "비교 기록에서 항목을 선택하세요." : AuthRunSummary.of(run).label());
     summary.setToolTipText(run == null ? null : AuthRunSummary.of(run).reason());
     AuthComparePanel.loadInspector(baseline, null, run == null ? null : run.baseline());

@@ -11,6 +11,7 @@ import kr.payloadrunner.Adaptive;
 import kr.payloadrunner.CallbackProbe;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -51,6 +52,10 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
  final JLabel status=new JLabel("요청을 우클릭해 가져오거나 raw 요청을 붙여 넣으세요.");
  final DefaultTableModel model=new DefaultTableModel(new String[]{"#","페이로드","상태","bytes","ms","판정","근거"},0){public boolean isCellEditable(int r,int c){return false;}};
  final JTable table=new JTable(model);
+ final JToggleButton allResults=new JToggleButton(),observedResults=new JToggleButton(),controlResults=new JToggleButton();
+ final JLabel resultCount=new JLabel("검사 결과 · 0건");
+ private TableRowSorter<DefaultTableModel> resultSorter;
+ private int resultFilter;
  final JTabbedPane workflow=kr.workbench.CompactWorkbenchUi.pages();
  record Entry(Engine.Row row,IHttpService service){}
  final List<Entry> entries=new ArrayList<>();final AtomicBoolean cancel=new AtomicBoolean();volatile boolean running,closed;
@@ -84,7 +89,7 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
   evidenceButton.setName("wb.simple.payload.evidence");evidenceButton.setToolTipText("종료된 검사의 결과 행을 선택하면 기준·공격·대조 요청을 증거에 연결합니다.");evidenceButton.addActionListener(e->captureEvidence());evidenceButton.setEnabled(false);
   table.setName("wb.payload.results.table");
   start.setName("wb.simple.payload.start");stopButton.setName("wb.simple.payload.stop");settingsButton.setName("wb.simple.payload.settings");request.setName("wb.simple.payload.request");payloads.setName("wb.simple.payload.values");
-  model.addTableModelListener(e->refreshEvidenceAction());
+  model.addTableModelListener(e->{refreshEvidenceAction();refreshResultCounts();});
   Font mono=new Font(Font.MONOSPACED,Font.PLAIN,12);request.setFont(mono);payloads.setFont(mono);detail.setFont(mono);detail.setEditable(false);detail.setLineWrap(true);detail.setWrapStyleWord(true);
   request.putClientProperty("wb.packet.syntax",true);
   JPanel req=new JPanel(new BorderLayout());
@@ -107,25 +112,33 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
   advancedSettings=kr.workbench.CompactWorkbenchUi.disclosure("wb.payload.advanced","고급 실행 조건",inspectionSettings(),false);conditionBody.add(bounded(advancedSettings));
   JPanel conditions=WorkbenchUi.card("검사 조건",new JScrollPane(conditionBody));conditions.setName("wb.flow.payload.conditions");conditions.setPreferredSize(new Dimension(285,500));conditions.setMinimumSize(new Dimension(230,100));
   JPanel editors=new JPanel(new BorderLayout(10,0));editors.setName("wb.flow.payload.preparation");editors.add(req);editors.add(conditions,BorderLayout.EAST);editors.setMinimumSize(new Dimension(80,60));
-  table.setAutoCreateRowSorter(true);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);int[] widths={45,270,65,80,70,160,560};for(int i=0;i<widths.length;i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);table.moveColumn(5,1);table.moveColumn(3,2);for(int hidden:new int[]{4,6})table.removeColumn(table.getColumnModel().getColumn(table.convertColumnIndexToView(hidden)));table.moveColumn(table.convertColumnIndexToView(1),1);table.moveColumn(table.convertColumnIndexToView(5),table.getColumnCount()-1);kr.workbench.CompactWorkbenchUi.columns(table,55,380,90,100,180);for(int col:new int[]{0,2,3,4})table.getColumnModel().getColumn(col).setMaxWidth(col==0?60:col==4?200:110);mode.setToolTipText("적응형은 기준·탐색 응답을 분석해 후보 순서 조정, 대조·반복 요청, 조기 종료를 수행합니다. 전체 목록은 후보를 순서대로 전송합니다. 규칙 기반이며 AI 모델은 사용하지 않습니다.");
+  resultSorter=new TableRowSorter<>(model);resultSorter.setComparator(4,Comparator.comparingLong(value->((Number)value).longValue()));table.setRowSorter(resultSorter);table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);table.removeColumn(table.getColumnModel().getColumn(6));
+  String[] headers={"번호","검사값","HTTP","크기","응답 시간(ms)","관측 결과"};int[] widths={55,300,75,85,100,180};
+  kr.workbench.CompactWorkbenchUi.columns(table,widths);for(int i=0;i<headers.length;i++)table.getColumnModel().getColumn(i).setHeaderValue(headers[i]);
+  for(int col:new int[]{0,2,3,4})table.getColumnModel().getColumn(col).setMaxWidth(col==0?65:115);
+  mode.setToolTipText("적응형은 기준·탐색 응답을 분석해 후보 순서 조정, 대조·반복 요청, 조기 종료를 수행합니다. 전체 목록은 후보를 순서대로 전송합니다. 규칙 기반이며 AI 모델은 사용하지 않습니다.");
   repeater.setText("Repeater 열기");repeater.setName("wb.payload.repeater");
-  JPanel resultActions=WorkbenchUi.row(kr.workbench.WorkflowUi.menu("wb.flow.payload.result.other","다른 작업",repeater),evidenceButton);resultActions.setName("wb.actions.payload.results");
+  export.setName("wb.payload.export");clear.setName("wb.payload.clear");
+  JPanel management=kr.workbench.WorkflowUi.menu("wb.flow.payload.result.other","검사 관리",start,settingsButton,export,clear);
+  JPanel resultActions=new JPanel(new GridBagLayout());resultActions.setName("wb.actions.payload.results");GridBagConstraints resultCell=new GridBagConstraints();resultCell.insets=new Insets(0,3,0,3);resultActions.add(evidenceButton,resultCell);resultActions.add(repeater,resultCell);resultActions.add(management,resultCell);
+  ButtonGroup filters=new ButtonGroup();JToggleButton[] filterButtons={allResults,observedResults,controlResults};String[] filterNames={"all","observed","control"};
+  for(int i=0;i<filterButtons.length;i++){final int selectedFilter=i;JToggleButton filter=filterButtons[i];filter.setName("wb.payload.results.filter."+filterNames[i]);filter.putClientProperty("wb.compact.button",true);filters.add(filter);filter.addActionListener(e->filterResults(selectedFilter));}allResults.setSelected(true);observedResults.setToolTipText("기준·대조를 제외한 검사 결과입니다. 취약점 확정을 뜻하지 않습니다.");controlResults.setToolTipText("엔진이 기록한 기준·재검증·대조 단계입니다. 검사값 문자열로 분류하지 않습니다.");refreshResultCounts();
   JPanel resultBody=new JPanel(new BorderLayout(0,4));
-  JPanel resultCommands=kr.workbench.CompactWorkbenchUi.toolbar(new JLabel("검사 결과"),resultActions);
+  JPanel resultCommands=kr.workbench.CompactWorkbenchUi.toolbar(resultCount,WorkbenchUi.row(allResults,observedResults,controlResults));
   resultCommands.setName("wb.placement.payload.results");resultBody.add(resultCommands,BorderLayout.NORTH);resultBody.add(new JScrollPane(table));
   JSplitPane resultWorkspace=WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,resultBody,detailPane(detail),.40);
-  resultWorkspace.setName("wb.payload.workspace");
+  resultWorkspace.setName("wb.payload.workspace");resultWorkspace.putClientProperty("wb.workflow.fixedLayout",true);
   workflow.putClientProperty("wb.hidden.tabs",true);workflow.setName("wb.payload.steps");workflow.addTab("1 요청 준비",editors);workflow.addTab("2 실행·결과",resultWorkspace);
   panel.add(workflow,BorderLayout.CENTER);
   start.setText("검사 시작");start.setToolTipText("설정한 입력 위치에 시험 문자열을 넣어 실제 요청을 보냅니다. 기준·대조 요청도 총 요청 한도에 포함됩니다.");stopButton.setText("중지");
   settingsButton.setText("조건 확인");
   // Execution and cancellation stay on one baseline when the results-only condition action appears.
   // Let the outer toolbar move this group as a unit instead of wrapping individual controls.
-  JPanel controls=new JPanel(new GridBagLayout());controls.setName("wb.actions.payload.execution");GridBagConstraints actionCell=new GridBagConstraints();actionCell.anchor=GridBagConstraints.EAST;actionCell.insets=new Insets(2,3,2,3);controls.add(settingsButton,actionCell);controls.add(start,actionCell);controls.add(stopButton,actionCell);
+  JPanel controls=new JPanel(new GridBagLayout());controls.setName("wb.actions.payload.execution");GridBagConstraints actionCell=new GridBagConstraints();actionCell.anchor=GridBagConstraints.EAST;actionCell.insets=new Insets(2,3,2,3);controls.add(resultActions,actionCell);controls.add(start,actionCell);controls.add(stopButton,actionCell);
   progress.setStringPainted(true);progress.setPreferredSize(new Dimension(180,32));progress.putClientProperty("wb.reference.progress",true);progress.setString("대기");
   JToggleButton preparation=kr.workbench.ReferenceUi.step(1,"요청 준비"),resultsStep=kr.workbench.ReferenceUi.step(2,"실행 · 결과");preparation.setSelected(true);preparation.setName("wb.payload.step.prepare");resultsStep.setName("wb.payload.step.results");ButtonGroup steps=new ButtonGroup();steps.add(preparation);steps.add(resultsStep);preparation.addActionListener(e->workflow.setSelectedIndex(0));resultsStep.addActionListener(e->workflow.setSelectedIndex(1));workflow.addChangeListener(e->{preparation.setSelected(workflow.getSelectedIndex()==0);resultsStep.setSelected(workflow.getSelectedIndex()==1);});
   JPanel executionHeader=kr.workbench.CompactWorkbenchUi.toolbar(kr.workbench.ReferenceUi.stepRow(preparation,kr.workbench.ReferenceUi.arrow(),resultsStep),controls);executionHeader.setName("wb.placement.payload.execution");top.add(executionHeader);
-  Runnable phaseActions=()->{boolean results=workflow.getSelectedIndex()==1;settingsButton.setVisible(results);kr.workbench.WorkflowUi.secondary(start);kr.workbench.WorkflowUi.secondary(evidenceButton);if(results)WorkbenchUi.primary(evidenceButton);else WorkbenchUi.primary(start);};workflow.addChangeListener(e->phaseActions.run());phaseActions.run();
+  Runnable phaseActions=()->{boolean results=workflow.getSelectedIndex()==1;resultActions.setVisible(results);start.setVisible(!results);start.setText(results?"다시 검사":"검사 시작");kr.workbench.WorkflowUi.secondary(start);kr.workbench.WorkflowUi.secondary(evidenceButton);if(results)WorkbenchUi.primary(evidenceButton);else WorkbenchUi.primary(start);controls.revalidate();};workflow.addChangeListener(e->phaseActions.run());phaseActions.run();
   JPanel facts=kr.workbench.ReferenceUi.summary(kr.workbench.ReferenceUi.field("대상",targetSummary),kr.workbench.ReferenceUi.field("검사 유형",typeSummary),kr.workbench.ReferenceUi.field("계정",accountSummary));top.add(facts);
   status.setMinimumSize(new Dimension(0,24));
   JPanel executionState=new JPanel(new BorderLayout(12,0));executionState.add(status);executionState.add(progress,BorderLayout.EAST);executionState.setName("wb.flow.payload.status");
@@ -136,7 +149,7 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
   start.addActionListener(e->startScan());stopButton.addActionListener(e->{cancel.set(true);status.setText("후속 요청 중지 · 이미 보낸 요청은 응답/최대 "+responseTimeout.getValue()+"초 대기 후 종료");});
   clear.addActionListener(e->{if(!running){entries.clear();model.setRowCount(0);detail.setText("");}});
   repeater.addActionListener(e->{Entry entry=selected();if(entry!=null)callbacks.sendToRepeater(entry.service.getHost(),entry.service.getPort(),entry.service.getProtocol().equalsIgnoreCase("https"),entry.row.request(),"Payload Runner "+entry.row.index());});
-  table.getSelectionModel().addListSelectionListener(e->{refreshEvidenceAction();Entry entry=selected();if(entry!=null){var r=entry.row;detail.setText("판정: "+r.verdict()+"\n관찰 / 요청 선정 근거: "+r.evidence()+"\n\nREQUEST (byte view)\n"+new String(r.request(),StandardCharsets.ISO_8859_1)+"\n\nRESPONSE\n"+(r.response()==null?"응답 없음":"HTTP "+r.response().status()+" · "+r.response().mime()+" · "+r.response().wireLength()+" bytes\n"+r.response().text()+(r.response().truncated()?"\n[본문/보관 한도로 일부 생략]":"")));detail.setCaretPosition(0);}});
+  table.getSelectionModel().addListSelectionListener(e->{refreshEvidenceAction();Entry entry=selected();if(entry==null){detail.setText("");return;}var r=entry.row;detail.setText("판정: "+r.verdict()+"\n관찰 / 요청 선정 근거: "+r.evidence()+"\n\nREQUEST (byte view)\n"+new String(r.request(),StandardCharsets.ISO_8859_1)+"\n\nRESPONSE\n"+(r.response()==null?"응답 없음":"HTTP "+r.response().status()+" · "+r.response().mime()+" · "+r.response().wireLength()+" bytes\n"+r.response().text()+(r.response().truncated()?"\n[본문/보관 한도로 일부 생략]":"")));detail.setCaretPosition(0);});
   background.addActionListener(e->openTaskWindow());
   export.addActionListener(e->exportCSV());callbacks.customizeUiComponent(panel);phaseActions.run();WorkbenchUi.style(panel);status.putClientProperty("wb.font.size",12);refreshEvidenceAction();
  }
@@ -149,13 +162,31 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
  }
  JPanel bounded(JComponent content){JPanel panel=new JPanel(new BorderLayout()){public Dimension getMaximumSize(){return new Dimension(Integer.MAX_VALUE,getPreferredSize().height);}};panel.setAlignmentX(Component.LEFT_ALIGNMENT);panel.add(content);return panel;}
  JPanel conditionRow(String title,JComponent value){JPanel row=new JPanel(new BorderLayout(8,0)){public Dimension getMaximumSize(){return new Dimension(Integer.MAX_VALUE,getPreferredSize().height);}};JLabel label=new JLabel(title);label.setPreferredSize(new Dimension(82,32));label.putClientProperty("wb.secondary",true);label.setLabelFor(value);value.setMinimumSize(new Dimension(60,32));row.add(label,BorderLayout.WEST);row.add(value);row.setBorder(BorderFactory.createEmptyBorder(0,0,7,0));row.setAlignmentX(Component.LEFT_ALIGNMENT);return row;}
+ boolean controlResult(Engine.Row row){
+  String verdict=Objects.toString(row.verdict(),""),stage=Objects.toString(row.evidence(),"").split(" · ",2)[0];
+  // Engine reserves zero/negative indices for baseline, revalidation and identity controls,
+  // including a baseline halted by authentication or rate limiting. Adaptive.note retains
+  // the explicit output-control verdict when it replaces the original stage explanation.
+  return row.index()<=0||verdict.startsWith("기준 ")||verdict.startsWith("대조 ")||stage.startsWith("기준 ")
+   ||List.of("출력 대조 일치","출력 대조 미완료").contains(verdict)
+   ||List.of("후속 기준 재확인","SQL 오류 기준 재확인","SQL 기준 재확인","조건 대조 기준 재확인","존재하지 않는 파일 대조","서로 다른 출력 대조").contains(stage);
+ }
+ void refreshResultCounts(){long controls=entries.stream().filter(e->controlResult(e.row())).count();allResults.setText("전체 "+entries.size());observedResults.setText("관찰 "+(entries.size()-controls));controlResults.setText("기준·대조 "+controls);resultCount.setText("검사 결과 · "+entries.size()+"건");}
+ void filterResults(int filter){
+  Entry retained=selected();int modelRow=retained==null?-1:entries.indexOf(retained);resultFilter=filter;
+  resultSorter.setRowFilter(filter==0?null:new RowFilter<DefaultTableModel,Integer>(){public boolean include(RowFilter.Entry<? extends DefaultTableModel,? extends Integer> row){int index=row.getIdentifier();if(index<0||index>=entries.size())return false;return controlResult(entries.get(index).row())==(resultFilter==2);}});
+  int view=modelRow<0?-1:table.convertRowIndexToView(modelRow);if(view>=0)table.setRowSelectionInterval(view,view);else{table.clearSelection();detail.setText("");}refreshEvidenceAction();
+ }
  JPanel inspectionSettings(){if(inspectionOptions!=null)return inspectionOptions;JPanel options=new JPanel();inspectionOptions=options;options.setName("wb.payload.inspection.settings");options.setLayout(new BoxLayout(options,BoxLayout.Y_AXIS));options.add(WorkbenchUi.group("대상",scheme,host,new JLabel("포트"),port,scope));options.add(WorkbenchUi.group("기준값",base,helpButton));options.add(WorkbenchUi.group("실행 방식",mode));options.add(WorkbenchUi.row(new JLabel("응답 대기시간(초)"),responseTimeout,new JLabel("401/403/429/503 후속 요청 중단")));options.add(WorkbenchUi.row(new JLabel("기대 응답 문자열"),proof));options.add(WorkbenchUi.row(sessionControl));options.add(WorkbenchUi.group("신원 대조",identityPath,new JLabel("JSON 경로"),identityField,new JLabel("기대 사용자"),identityValue));options.add(WorkbenchUi.row(uploadReadback));options.add(WorkbenchUi.row(callbackMode,new JLabel("콜백 포트"),callbackPort));WorkbenchUi.style(options);return options;}
  void updateSummary(){String full=scheme.getSelectedItem()+"://"+host.getText()+":"+port.getValue()+" · "+Engine.label((Engine.Profile)profile.getSelectedItem())+" · "+mode.getSelectedItem();String target=host.getText();if(target.length()>35)target=target.substring(0,35)+"…";configSummary.setText(Engine.label((Engine.Profile)profile.getSelectedItem())+" · "+(mode.getSelectedIndex()==0?"적응형":"순차 전송")+" · "+target+":"+port.getValue());configSummary.setToolTipText(full);targetSummary.setText(target+":"+port.getValue());typeSummary.setText(Engine.label((Engine.Profile)profile.getSelectedItem()));accountSummary.setText(request.getText().matches("(?is).*\\r?\\n(?:Cookie|Authorization):.*")?"요청의 인증 사용":"비로그인 (익명)");int locations=0,at=0;while((at=request.getText().indexOf(Engine.MARK,at))>=0){locations++;at+=Engine.MARK.length();}positionSummary.setText(locations==0?"검사 위치를 표시하세요":"검사 위치 · "+locations+"곳");limitSummary.setText("최대 "+budget.getValue()+"회 · 기준·대조 포함");scopeSummary.setText(scope.isSelected()?"Workbench SCOPE 적용":"SCOPE 제한 해제");}
  JPanel detailPane(JTextArea source){
   PacketView req=new PacketView(),res=new PacketView();JTextArea evidence=new JTextArea(2,70);evidence.putClientProperty("wb.prose",true);evidence.setEditable(false);evidence.setLineWrap(true);evidence.setWrapStyleWord(true);
-  Runnable update=()->{Entry entry=source==detail?selected():selectedTask();if(entry==null||source.getText().isEmpty()){evidence.setText("결과 행을 선택하세요.");req.setPacket(null);res.setPacket(null);return;}var r=entry.row;evidence.setText("판정: "+r.verdict()+"\n관찰 / 요청 선정 근거: "+r.evidence());req.setPacket(PacketFormat.decode(r.request()));if(r.response()==null)res.setPacket("응답 없음");else{var response=r.response();res.setPacket(PacketFormat.decode(response.raw()),PacketFormat.response(response.raw(),response.status(),response.mime(),response.text())+(response.truncated()?"\n[일부 생략]":""));}};
+  JLabel summary=new JLabel("결과 행을 선택하세요.");summary.setName(source==detail?"wb.payload.results.selection":"wb.payload.task.selection");summary.setBorder(BorderFactory.createEmptyBorder(4,8,4,8));
+  Runnable update=()->{Entry entry=source==detail?selected():selectedTask();if(entry==null||source.getText().isEmpty()){evidence.setText("결과 행을 선택하세요.");summary.setText("결과 행을 선택하세요.");summary.setToolTipText(null);req.setPacket(null);res.setPacket(null);return;}var r=entry.row;evidence.setText("판정: "+r.verdict()+"\n관찰 / 요청 선정 근거: "+r.evidence()+"\n브라우저 실행: 미확인 ("+r.browserExecutionStatus()+")");summary.setText("선택 결과 · "+r.verdict()+" · 브라우저 실행 미확인");summary.setToolTipText(evidence.getText());req.setPacket(PacketFormat.decode(r.request()));if(r.response()==null)res.setPacket("응답 없음");else{var response=r.response();res.setPacket(PacketFormat.decode(response.raw()),PacketFormat.response(response.raw(),response.status(),response.mime(),response.text())+(response.truncated()?"\n[일부 생략]":""));}};
   source.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){public void insertUpdate(javax.swing.event.DocumentEvent e){update.run();}public void removeUpdate(javax.swing.event.DocumentEvent e){update.run();}public void changedUpdate(javax.swing.event.DocumentEvent e){update.run();}});update.run();
-  JPanel pane=new JPanel(new BorderLayout(0,5));JScrollPane reason=new JScrollPane(evidence);reason.setName("wb.flow.payload.reason");reason.setPreferredSize(new Dimension(400,46));reason.setBorder(kr.packetui.VisualTheme.border(1,8,1,8));pane.add(reason,BorderLayout.NORTH);pane.add(WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,WorkbenchUi.card("요청 (Request)",req),WorkbenchUi.card("응답 (Response)",res),.5));return pane;
+  JPanel pane=new JPanel(new BorderLayout(0,5));JScrollPane reason=new JScrollPane(evidence);reason.setName("wb.flow.payload.reason");reason.setPreferredSize(new Dimension(400,80));reason.setBorder(kr.packetui.VisualTheme.border(1,8,1,8));
+  if(source==detail){req.setName("wb.payload.result.request");res.setName("wb.payload.result.response");JSplitPane readers=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,WorkbenchUi.card("실제 요청",req),WorkbenchUi.card("실제 응답",res),.5);readers.setName("wb.payload.results.messages");readers.putClientProperty("wb.workflow.fixedLayout",true);pane.add(summary,BorderLayout.NORTH);pane.add(readers);pane.add(kr.workbench.CompactWorkbenchUi.disclosure("wb.payload.results.reason","선택 결과의 판정·전송 근거",reason,false),BorderLayout.SOUTH);}
+  else{pane.add(reason,BorderLayout.NORTH);pane.add(WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT,WorkbenchUi.card("요청 (Request)",req),WorkbenchUi.card("응답 (Response)",res),.5));}return pane;
  }
  Entry selectedTask(){if(taskTable==null||taskTable.getSelectedRow()<0)return null;int row=taskTable.convertRowIndexToModel(taskTable.getSelectedRow());return row<entries.size()?entries.get(row):null;}
  boolean packetHorizontal(){for(Container c=panel;c!=null;c=c.getParent())if(c instanceof JComponent j&&j.getClientProperty("wb.packet.horizontal") instanceof Boolean value)return value;return false;}

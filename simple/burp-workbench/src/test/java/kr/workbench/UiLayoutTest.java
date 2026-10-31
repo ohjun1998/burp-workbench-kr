@@ -20,7 +20,7 @@ public final class UiLayoutTest {
   WorkbenchExtension w=(WorkbenchExtension)WorkbenchTest.get(entry,"workbench");JPanel root=(JPanel)WorkbenchTest.get(w,"root");JTabbedPane tabs=(JTabbedPane)WorkbenchTest.get(w,"tabs");JTable table=(JTable)WorkbenchTest.get(w,"logTable");
   SwingUtilities.invokeAndWait(()->((PassiveScanWorkspace)unchecked(w,"passiveScan")).open("https://ui.test/",false));
   check(named(root,"wb.traffic.clear")==null&&named(root,"wb.traffic.export")==null&&named(root,"wb.traffic.search.clear")==null,"removed traffic controls are absent");
-  SwingUtilities.invokeAndWait(()->{JButton action=new JButton("실행");WorkbenchUi.primary(action);WorkbenchUi.style(action);action.setEnabled(false);check(action.getBackground().equals(WorkbenchUi.surface()),"disabled primary action has neutral background");action.setEnabled(true);check(action.getBackground().equals(WorkbenchUi.accent())&&action.getForeground().equals(Color.WHITE),"ready primary action restores accent");});
+  SwingUtilities.invokeAndWait(()->{JButton action=new JButton("실행");WorkbenchUi.primary(action);WorkbenchUi.style(action);action.setEnabled(false);check(action.getBackground().equals(WorkbenchUi.surface()),"disabled primary action has neutral background");action.setEnabled(true);check(action.getBackground().equals(kr.packetui.VisualTheme.primary())&&action.getForeground().equals(Color.WHITE),"ready primary action restores the PDF primary fill with white caption");});
   check(table.getColumnCount()==7,"traffic shows the approved account/time/note columns and retains complete metadata model");
   check(List.of("NO","메서드","URL","상태").equals(java.util.stream.IntStream.range(0,4).mapToObj(table::getColumnName).toList()),"NO/method/URL/status order");
   check(((JSplitPane)named(root,"wb.traffic.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"traffic requests and responses side by side below list");
@@ -47,7 +47,7 @@ public final class UiLayoutTest {
   check(((JSplitPane)named(root,"wb.auth.tables")).getOrientation()==JSplitPane.VERTICAL_SPLIT&&named(root,"wb.auth.workspace")==null,"auth main stacks credentials and history without embedded packets");
   check(named(root,"wb.js.messages")==null&&((JSplitPane)named(root,"wb.passive.messages")).getOrientation()==JSplitPane.HORIZONTAL_SPLIT,"JS has no embedded packet area and passive keeps the shared packet layout");
   check(((JSplitPane)named(root,"wb.payload.workspace")).getOrientation()==JSplitPane.VERTICAL_SPLIT,"payload editors and results above packets in reference layout");
-  check(requestResponseTabs(root)==4 && named(root,"wb.bounty.evidence.packet.tabs") instanceof JTabbedPane,"environment and stored evidence expose both original request and response in explicit tabs");
+  check(requestResponseTabs(root)==6 && named(root,"wb.bounty.evidence.packet.tabs") instanceof JTabbedPane && named(root,"wb.bounty.flow.packet.tabs") instanceof JTabbedPane,"environment, stored evidence and replay expose both original request and response in explicit tabs; count="+requestResponseTabs(root));
   check(table.getRowHeight()==32&&table.getRowHeight()>=table.getFontMetrics(table.getFont()).getHeight()+2,"compact rows fit Gothic text with vertical padding");
   check(table.getDefaultRenderer(Object.class) instanceof WorkbenchUi.Cells,"semantic method/status renderer installed");
   for(int size:new int[]{1000,1280,1600})SwingUtilities.invokeAndWait(()->{

@@ -52,7 +52,7 @@ public final class Appearance0534Test extends WorkbenchTest {
       first.root.add(packet,BorderLayout.SOUTH);packet.setPacket("HTTP/1.1 200 OK\r\n\r\n{\"value\":1}".getBytes(java.nio.charset.StandardCharsets.UTF_8),null);
       byte[] wire=packet.previewBytes();
       appearance.display(150,true,true);
-      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==21,"actual styled packet characters scale to 21px");
+      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==18,"PDF 12px styled packet characters scale to 18px at 150 percent");
       check(Arrays.equals(wire,packet.previewBytes()),"display preference preserves exact packet preview bytes");
       check(!ApprovedWorkflowTestSupport.visible(packet.search,packet),"packet search starts folded at the selected display scale");
       packet.getActionMap().get("find").actionPerformed(new java.awt.event.ActionEvent(packet,0,"find"));
@@ -64,10 +64,10 @@ public final class Appearance0534Test extends WorkbenchTest {
       packet.modePicker.setSelectedIndex(1);
       check(packet.mode()==PacketInspector.Mode.RAW&&Arrays.equals(wire,packet.previewBytes()),"compact mode picker changes view without changing wire");
       appearance.display(100,false,true);
-      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==14,"changing preference updates already loaded styled packet");
+      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==12,"changing preference restores the PDF 12px styled packet");
       appearance.display(150,true,true);packet.close();first.root.remove(packet);
-      check(first.text.getFont().getSize2D()==21f,"150 percent uses actual 21px editor font");
-      check(first.table.getFont().getSize2D()==19.5f&&first.table.getRowHeight()==36,"compact table scales font and row height together");
+      check(first.text.getFont().getSize2D()==21f,"150 percent scales the retained 14px text field to 21px");
+      check(first.table.getFont().getSize2D()==16.5f&&first.table.getRowHeight()==36,"compact table scales font and row height together");
       check(first.nativeEditor.getFont().getSize()==11,"native editor subtree remains untouched");
       first.table.moveColumn(2,0);first.table.getColumnModel().getColumn(0).setWidth(231);
       first.table.getColumnModel().getColumn(1).setWidth(145);

@@ -18,10 +18,15 @@ final class AccountSummaryCard extends JButton {
     boolean linked=!identity.isBlank()&&!identity.equals("계정 연결 필요");
     Color color=slot==3?WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL):WorkbenchUi.toneInk(slot==0?WorkbenchUi.Tone.ACTIVE:slot==1?WorkbenchUi.Tone.SUCCESS:WorkbenchUi.Tone.WARNING);
     int cy=getHeight()/2;g.setColor(WorkbenchUi.toneFill(slot==3?WorkbenchUi.Tone.NEUTRAL:slot==1?WorkbenchUi.Tone.SUCCESS:WorkbenchUi.Tone.ACTIVE));g.fillRoundRect(10,cy-12,24,24,7,7);
-    g.setFont(WorkbenchUi.font().deriveFont(Font.BOLD,WorkbenchUi.displaySize(12f)));g.setColor(color);String digit=slot==3?"—":Integer.toString(slot+1);g.drawString(digit,22-g.getFontMetrics().stringWidth(digit)/2,cy+4);
-    String badge=linked?(slot==3?"비로그인":reference?"계정 1":"연결됨"):"미연결";g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));int bw=Math.min(58,g.getFontMetrics().stringWidth(badge)+14),bx=getWidth()-bw-10;
+    g.setFont(WorkbenchUi.font().deriveFont(Font.BOLD,WorkbenchUi.displaySize(12f)));g.setColor(color);String digit=slot==3?"—":Character.toString((char)('A'+slot));g.drawString(digit,22-g.getFontMetrics().stringWidth(digit)/2,cy+4);
+    String badge=linked?"연결됨":"미연결";g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));int bw=Math.min(58,g.getFontMetrics().stringWidth(badge)+14),bx=getWidth()-bw-10;
     if(getWidth()>170){g.setColor(WorkbenchUi.toneFill(linked&&slot!=3?WorkbenchUi.Tone.ACTIVE:WorkbenchUi.Tone.NEUTRAL));g.fillRoundRect(bx,cy-10,bw,20,5,5);g.setColor(linked&&slot!=3?WorkbenchUi.accent():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(badge,bx+7,cy+4);}else bx=getWidth()-3;
-    g.setFont(WorkbenchUi.font().deriveFont(Font.BOLD,WorkbenchUi.displaySize(13f)));g.setColor(WorkbenchUi.ink());g.drawString(fit(g,title,Math.max(0,bx-48)),43,cy+5);g.dispose();
+    g.setFont(WorkbenchUi.font().deriveFont(Font.BOLD,WorkbenchUi.displaySize(12f)));g.setColor(WorkbenchUi.ink());
+    String name=fit(g,title,Math.max(0,bx-48));g.drawString(name,43,cy+5);
+    int detailX=43+g.getFontMetrics().stringWidth(name)+8;
+    String role=slot==3?"인증 정보 없음":description.startsWith("연결됨")||description.startsWith("클릭하여")?"":description;
+    g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));g.setColor(kr.packetui.VisualTheme.muted());
+    if(!role.isBlank()&&bx-detailX>35)g.drawString(fit(g,role,bx-detailX-5),detailX,cy+5);g.dispose();
   }
   private static String fit(Graphics2D g,String text,int width){if(g.getFontMetrics().stringWidth(text)<=width)return text;int end=text.length();while(end>0&&g.getFontMetrics().stringWidth(text.substring(0,end)+"…")>width)end--;return end==0?"":text.substring(0,end)+"…";}
 }

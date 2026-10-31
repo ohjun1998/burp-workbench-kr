@@ -40,7 +40,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final JTable urlTable = new JTable(endpoints){
     public String getToolTipText(MouseEvent event){int view=rowAtPoint(event.getPoint());if(current==null||view<0)return super.getToolTipText(event);var item=current.endpoints().get(convertRowIndexToModel(view));return "<html>"+item.url().replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")+"<br>"+JsFindingGroups.evidence(current,item).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")+"</html>";}
     @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer,int row,int column){
-      Component component=super.prepareRenderer(renderer,row,column);if(component instanceof JLabel label){int col=convertColumnIndexToModel(column);String value=Objects.toString(getValueAt(row,column),"");if(col==0){try{var uri=URI.create(value);if(uri.getHost()!=null)label.setText(uri.getRawPath());}catch(Exception ignored){}label.setToolTipText(value);}if(col==7||col==8){WorkbenchUi.Tone tone=value.equals("실제 호출")||value.equals("동일")?WorkbenchUi.Tone.SUCCESS:value.contains("충돌")?WorkbenchUi.Tone.ERROR:value.equals("신규")||value.contains("발견")?WorkbenchUi.Tone.WARNING:WorkbenchUi.Tone.NEUTRAL;label.setForeground(WorkbenchUi.toneInk(tone));label.setToolTipText(value);}}return component;
+      Component component=super.prepareRenderer(renderer,row,column);if(component instanceof JLabel label){int col=convertColumnIndexToModel(column);String value=Objects.toString(getValueAt(row,column),"");if(col==0){try{var uri=URI.create(value);if(uri.getHost()!=null)label.setText(uri.getRawPath());}catch(Exception ignored){}label.setToolTipText(value);}if(col==6){String source=JsVersions.base(currentSource);int slash=source.lastIndexOf('/');String file=slash>=0?source.substring(slash+1):source;label.putClientProperty("html.disable",Boolean.TRUE);label.setText(file+":"+value);label.setToolTipText("출처: "+source+":"+value);}if(col==7||col==8){WorkbenchUi.Tone tone=value.equals("실제 호출")||value.equals("동일")?WorkbenchUi.Tone.SUCCESS:value.contains("충돌")?WorkbenchUi.Tone.ERROR:value.equals("신규")||value.contains("발견")?WorkbenchUi.Tone.WARNING:WorkbenchUi.Tone.NEUTRAL;label.setForeground(WorkbenchUi.toneInk(tone));label.setToolTipText(value);}}return component;
     }
   }, secretTable = new JTable(secrets);
   final JLabel status = new JLabel("분석 목록에서 응답을 선택하세요.");
@@ -113,6 +113,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   boolean preparingSource, navigating;
   private final TargetWindow targetSettings;
   private JLabel sourceSummary;
+  final JLabel sourceCallLocation=new JLabel("호출 위치를 확인하려면 경로를 선택하세요");
   private JButton selectedTools;
   final JTextField registry = new JTextField("https://registry.npmjs.org", 25);
   private volatile String currentSource = "";
@@ -247,7 +248,9 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     oldDetailSplit.setTopComponent(null);oldDetailSplit.setBottomComponent(null);
     resultView.removeAll();resultView.add(resultTabs);
     JPanel sourceReader=new JPanel(new BorderLayout(0,6));
-    sourceReader.setName("wb.workflow.js.source");sourceReader.add(sourcePane());
+    sourceReader.setName("wb.workflow.js.source");
+    JPanel callSource=WorkbenchUi.card("호출 소스",sourcePane());
+    callSource.setName("wb.pdf.js.call.source");sourceReader.add(callSource);
     JPanel analysisEvidence=CompactWorkbenchUi.disclosure("wb.workflow.js.evidence","발견 입력·분석 근거",findingDetails,false);
     sourceReader.add(analysisEvidence,BorderLayout.SOUTH);
     JSplitPane workspace=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,resultView,sourceReader,.52);
@@ -321,7 +324,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     locate.addPropertyChangeListener("enabled",e->location.setEnabled(locate.isEnabled()));toolMenu.addSeparator();toolMenu.add(location);
     JPanel retainedLocate=new JPanel();retainedLocate.setVisible(false);retainedLocate.add(locate);
     resultView.setDetailActions(tools,resolve,retainedLocate);
-    JPanel selectedFinding=new JPanel(new BorderLayout(4,0));selectedFinding.add(resultView.summary);selectedFinding.add(resultView.shortcut,BorderLayout.SOUTH);
+    JPanel selectedFinding=new JPanel(new BorderLayout(4,0));selectedFinding.add(resultView.summary);
+    resultView.shortcut.setToolTipText("Ctrl+R · 선택한 경로의 Repeater 초안 준비");
     JPanel findingActions=CompactWorkbenchUi.toolbar(selectedFinding,resultView.detailActions);
     findingActions.setName("wb.workflow.js.selection");
     sourceReader.add(findingActions,BorderLayout.NORTH);
@@ -683,7 +687,9 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     JPanel p = new JPanel(new BorderLayout(0, 4));
     p.setName("wb.js.manual");
     JPanel navigation=WorkbenchUi.row(navigator.previous,navigator.next,navigator.filter,findingCount);
-    JPanel actions=CompactWorkbenchUi.disclosure("wb.workflow.js.navigation","원문 감지 위치 탐색",navigation,false);
+    JPanel sourceNavigation=new JPanel(new BorderLayout(0,4));
+    sourceNavigation.add(sourceSummary,BorderLayout.NORTH);sourceNavigation.add(navigation);
+    JPanel actions=CompactWorkbenchUi.disclosure("wb.workflow.js.navigation","원문 감지 위치 탐색",sourceNavigation,false);
     navigator.previous.getAccessibleContext().setAccessibleName("이전 감지 위치");
     navigator.next.getAccessibleContext().setAccessibleName("다음 감지 위치");
     String legend = "원문 표시: 파랑 URL · 빨강 시크릿 · 초록 도메인/의존성 · 보라 소스맵";
@@ -695,9 +701,11 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     scroll.setMinimumSize(new Dimension(160, 90));
     sourceSummary.setBorder(BorderFactory.createEmptyBorder(1, 8, 3, 8));
     sourceSummary.setName("wb.js.source.summary");
-    p.add(actions, BorderLayout.NORTH);
+    sourceCallLocation.setName("wb.pdf.js.call.location");sourceCallLocation.putClientProperty("html.disable",true);
+    sourceCallLocation.setBorder(BorderFactory.createEmptyBorder(7,10,7,10));
+    p.add(sourceCallLocation, BorderLayout.NORTH);
     p.add(scroll, BorderLayout.CENTER);
-    p.add(sourceSummary, BorderLayout.SOUTH);
+    p.add(actions, BorderLayout.SOUTH);
     return p;
   }
 

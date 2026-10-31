@@ -40,13 +40,16 @@ public final class SimpleLayoutPolishTest extends WorkbenchTest {
         extra.doClick(0);
         check(extra.isSelected(),"the real optional-account entry reveals its retained selector");
         for (int width : new int[]{600, 1000}) {
-          layout(form, width, 300);
+          layout(form, width, 520);
           int previous = -1;
-          for (int i : new int[]{0,1,2,3}) {
+          for (int i : new int[]{0,1,3,2}) {
             Component field = named(form, "wb.auth.preparation.account." + i);
             Rectangle b = SwingUtilities.convertRectangle(field.getParent(), field.getBounds(), form);
-            check(b.x <= 100 && b.width >= width - 110 && b.x + b.width <= width,
-                "account field uses the available width from a shared left label column at " + width);
+            Component connection = named(form, "wb.auth.preparation.connection." + i);
+            Rectangle state = SwingUtilities.convertRectangle(connection.getParent(), connection.getBounds(), form);
+            check(b.x >= 150 && b.x <= 220 && b.width >= width - 330 && b.x + b.width <= state.x
+                    && state.x + state.width <= width,
+                "PDF role, selector and connection columns share the row without overlap at " + width);
             check(b.y > previous && b.height >= 28, "account rows remain ordered and readable"); previous = b.y;
           }
         }

@@ -57,6 +57,8 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
   final JLabel run = new LiteralLabel("현재 실행: 없음"), traffic = new LiteralLabel("요청 기록 없음");
   final JLabel filterSummary = new LiteralLabel("통합 점검을 시작하면 결과를 확인할 수 있습니다.");
   final JTextArea detail = prose(7, 28), emptyMessage = prose(3, 35);
+  final JLabel detailTitle = new LiteralLabel("선택 결과");
+  final JTextArea detailFacts = prose(4, 28), detailSummary = prose(4, 28), detailOrigin = prose(3, 28);
   final Map<ScopeInspectionDashboard.Group, MetricButton> cards = new EnumMap<>(ScopeInspectionDashboard.Group.class);
   final Map<ScopeInspectionDashboard.Group, BarButton> categoryButtons = new EnumMap<>(ScopeInspectionDashboard.Group.class);
   final Map<String, BarButton> severityButtons = new LinkedHashMap<>();
@@ -131,7 +133,8 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       refresh(true); revealResults();
     });
     name(importance, "importance");
-    importance.setPrototypeDisplayValue("전체 중요도  ");
+    // Reserve the arrow and field padding as well as the complete selected caption.
+    importance.setPrototypeDisplayValue("전체 중요도 선택      ");
     importance.addActionListener(e -> {
       if (rebuilding || closed) return;
       selectedSeverity = switch (importance.getSelectedIndex()) { case 1 -> "HIGH"; case 2 -> "MEDIUM"; case 3 -> "LOW"; case 4 -> "INFO"; default -> ""; };
@@ -203,8 +206,31 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     original.addActionListener(e -> handoff(actions::original));
     repeater.addActionListener(e -> handoff(actions::repeater));
     evidence.addActionListener(e -> handoff(actions::evidence));
-    var details = new JPanel(new BorderLayout(0, 6));
-    details.add(new JScrollPane(detail));
+    var details = new JPanel(new BorderLayout(0, 10));
+    name(detailTitle, "detail.title"); name(detailFacts, "detail.facts");
+    name(detailSummary, "detail.summary"); name(detailOrigin, "detail.origin");
+    detailTitle.putClientProperty("wb.font.heading", true);
+    detailTitle.setBorder(BorderFactory.createEmptyBorder(8, 12, 4, 12));
+    var facts = new JPanel(new BorderLayout(0, 4));
+    facts.add(detailTitle, BorderLayout.NORTH);
+    detailFacts.setBorder(BorderFactory.createEmptyBorder(6, 12, 10, 12));
+    facts.add(detailFacts);
+    details.add(facts, BorderLayout.NORTH);
+    var summary = new JPanel(new BorderLayout(0, 6));
+    JLabel summaryTitle = new JLabel("근거 요약");
+    summaryTitle.setBorder(BorderFactory.createEmptyBorder(8, 12, 0, 12));
+    summary.add(summaryTitle, BorderLayout.NORTH);
+    summary.add(new JScrollPane(detailSummary));
+    details.add(summary);
+    var provenance = CompactWorkbenchUi.disclosure("wb.scope.dashboard.detail.provenance", "원본·처리 정보", new JScrollPane(detailOrigin), false);
+    details.add(provenance, BorderLayout.SOUTH);
+    // The complete document remains the authoritative model for copying/tests/error feedback.
+    // Display sections mirror it, so no source identifier, offset or diagnostic is discarded.
+    detail.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+      public void insertUpdate(javax.swing.event.DocumentEvent event) { presentDetail(); }
+      public void removeUpdate(javax.swing.event.DocumentEvent event) { presentDetail(); }
+      public void changedUpdate(javax.swing.event.DocumentEvent event) { presentDetail(); }
+    });
     JPanel further = WorkflowUi.menu("wb.flow.dashboard.further", "다음 작업", repeater, evidence);
     JPanel selectionActions = CompactWorkbenchUi.toolbar(new JLabel("선택 항목 근거"), WorkbenchUi.row(original, further));
     selectionActions.setName("wb.actions.dashboard.selection");
@@ -214,10 +240,13 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     var split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("해당 결과 목록", resultViews), detailCard, .61);
     name(split, "results.split");
-    split.setPreferredSize(new Dimension(850, 320));
+    split.setPreferredSize(new Dimension(850, 380));
     split.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
     name(filterSummary, "filter.summary");
     name(resultsSection, "results.area");
+    // Facts and provenance must not consume the actual evidence reader in short workspaces.
+    // The outer dashboard scrolls when this minimum cannot fit beneath the overview.
+    resultsSection.setMinimumSize(new Dimension(0, WorkbenchUi.displayPixels(360)));
     resultsSection.add(filterSummary, BorderLayout.NORTH); resultsSection.add(split);
     addSection(content, resultsSection, 0);
     addSection(content, distribution, 7);
@@ -577,16 +606,20 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
   private void selectedChanged() {
     var row = selectedRow();
     if (row == null) replaceText(detail, current.id().isEmpty() ? "통합 점검 결과의 숫자를 누르면 해당 목록을 확인할 수 있습니다." : "목록에서 항목을 선택하면 근거와 원본 위치를 확인할 수 있습니다.");
-    else replaceText(detail, row.title() + "\n\n계정: " + row.account()
-        + "\n상태: " + row.state() + "\n중요도: " + ScopeInspectionDashboard.severityLabel(row.severity())
-        + "\n확실성: " + row.confidence() + "\n요청: " + row.method() + " " + row.url()
-        + "\n\n" + row.detail() + "\n\n원본: " + (row.originalId().isEmpty() ? "현재 실행 원본 연결 없음" : row.originalId())
-        + "\n본문 줄: " + row.line() + " · 문자 위치: " + row.offset());
+    else replaceText(detail, detailText(row));
     boolean available = originalAvailable(row);
     for (var button : List.of(original, repeater, evidence)) {
       button.setEnabled(available);
       button.setToolTipText(available ? "선택 결과의 원본을 연결합니다. 준비·화면 이동은 요청을 전송하지 않습니다." : "현재 실행 원본이 연결된 결과를 선택하세요.");
     }
+  }
+
+  private static String detailText(ScopeInspectionDashboard.Row row) {
+    return row.title() + "\n\n계정: " + row.account()
+        + "\n상태: " + row.state() + "\n중요도: " + ScopeInspectionDashboard.severityLabel(row.severity())
+        + "\n확실성: " + row.confidence() + "\n요청: " + row.method() + " " + row.url()
+        + "\n\n" + row.detail() + "\n\n원본: " + (row.originalId().isEmpty() ? "현재 실행 원본 연결 없음" : row.originalId())
+        + "\n본문 줄: " + row.line() + " · 문자 위치: " + row.offset();
   }
 
   private void handoff(Consumer<String> action) {
@@ -606,6 +639,22 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       area.setText(value);
       area.setCaretPosition(0);
     }
+  }
+
+  private void presentDetail() {
+    String text = detail.getText();
+    var row = selectedRow();
+    boolean selected = row != null && text.equals(detailText(row));
+    detailTitle.setText(selected ? row.title() : "선택 결과");
+    detailTitle.setToolTipText(detailTitle.getText());
+    detailFacts.setVisible(selected);
+    detailFacts.setRows(selected ? 4 : 0);
+    replaceText(detailFacts, selected ? "요청: " + row.method() + " " + row.url()
+        + "\n관측 계정: " + row.account() + "\n상태: " + row.state()
+        + " · 중요도: " + ScopeInspectionDashboard.severityLabel(row.severity()) + "\n확실성: " + row.confidence() : "");
+    replaceText(detailSummary, selected ? row.detail() : text);
+    replaceText(detailOrigin, selected ? "원본: " + (row.originalId().isEmpty() ? "현재 실행 원본 연결 없음" : row.originalId())
+        + "\n본문 줄: " + row.line() + " · 문자 위치: " + row.offset() : "현재 실행 원본이 연결된 결과를 선택하세요.");
   }
 
   private boolean originalAvailable(ScopeInspectionDashboard.Row row) {

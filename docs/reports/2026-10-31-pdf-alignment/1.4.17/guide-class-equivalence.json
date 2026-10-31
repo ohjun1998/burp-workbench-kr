@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "classCount": 1647,
+  "classesEqual": true,
+  "preGuideJarSha256": "2f7e8442a04cc5e28d00aa5ec9dd9a663c319418afb5ffc4bb104c4ed6f82636",
+  "finalJarSha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+  "scope": "Only Guide resources and source metadata changed after the fully measured Guide source captures; compiled production classes are byte-for-byte equal."
+}

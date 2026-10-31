@@ -41,7 +41,8 @@ public final class SimpleDashboardRevealTest extends WorkbenchTest {
     return result.intersection(new Rectangle(0, 0, host.getWidth(), host.getHeight()));
   }
   private static boolean resultsVisible(JPanel host, ScopeDashboardPanel panel) {
-    return shown(host, panel.table).height >= 80 && shown(host, panel.detail).height >= 80;
+    Component reader = SimpleWorkflowTest.named(panel, "wb.scope.dashboard.detail.summary");
+    return shown(host, panel.table).height >= 80 && reader != null && shown(host, reader).height >= 80;
   }
   private static void account(ScopeDashboardPanel panel, String value) {
     for (int i = 0; i < panel.account.getItemCount(); i++)
@@ -122,7 +123,9 @@ public final class SimpleDashboardRevealTest extends WorkbenchTest {
           edt(() -> SimpleWorkflowTest.click(panel, "wb.scope.dashboard." + control));
           settle(host);
           edt(() -> check(resultsVisible(host, panel) && panel.selectedRow() != null,
-              "one explicit " + control + " action reveals both the result list and selected detail"));
+              "one explicit " + control + " action reveals both the result list and selected detail: table="
+                  + shown(host, panel.table) + " summary="
+                  + shown(host, SimpleWorkflowTest.named(panel, "wb.scope.dashboard.detail.summary"))));
         }
         edt(() -> ((JToggleButton)SimpleWorkflowTest.named(panel,"wb.flow.dashboard.distribution.toggle")).doClick(0));
         settle(host);
@@ -137,7 +140,7 @@ public final class SimpleDashboardRevealTest extends WorkbenchTest {
         });
         edt(() -> panel.importance.setSelectedIndex(4)); settle(host);
         edt(() -> check(panel.table.getRowCount() == 0 && shown(host, panel.emptyMessage).height >= 40
-            && shown(host, panel.detail).height >= 80 && !panel.original.isEnabled(),
+            && shown(host, SimpleWorkflowTest.named(panel, "wb.scope.dashboard.detail.summary")).height >= 80 && !panel.original.isEnabled(),
             "an explicit zero-result filter reveals its recovery message and clears original actions"));
         edt(() -> position(panel, 0));
         edt(() -> panel.reset.doClick(0)); settle(host);

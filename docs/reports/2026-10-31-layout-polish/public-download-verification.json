@@ -1,0 +1,319 @@
+{
+  "commit": "69e00d8f56e17e49c7912b7573660ef7e335ff33",
+  "result": "passed",
+  "verifiedFiles": 39,
+  "checks": [
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/workbench-simple-1.4.14-light-dark.pdf",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/workbench-simple-1.4.14-light-dark.pdf",
+      "status": 200,
+      "bytes": 2878645,
+      "sha256": "eb0124386ab752500a6294e5ff6ceaee01f3e89686e9252d812b69537b920a80",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/workbench-simple-1.4.14-images.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/workbench-simple-1.4.14-images.zip",
+      "status": 200,
+      "bytes": 2653280,
+      "sha256": "0ba88dbc230c3736c72bc40d95b004805178e6e92646137c828bf1b7f043ec27",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/dashboard-comparison.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/dashboard-comparison.png",
+      "status": 200,
+      "bytes": 127763,
+      "sha256": "bdb06d0c66a26e031a0347e48288c397cc41c6bf59e9451332ad79b05f164d20",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/replay-comparison.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/replay-comparison.png",
+      "status": 200,
+      "bytes": 79729,
+      "sha256": "ac96d7f86e1af42d0e97b80ff21bdd89c8923ca48e4184295f36bd0ad3325c58",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/comparison.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/comparison.png",
+      "status": 200,
+      "bytes": 130776,
+      "sha256": "22c0fa0a36e0039a6fbe87df710515cd8431dfaf58f238c287645427d6b37859",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/activity.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/activity.png",
+      "status": 200,
+      "bytes": 116732,
+      "sha256": "e87e82caa7495b01bdf462d5ad013d9e1258c476ad9b315f836e0d507de74bc9",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/auth-accounts.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/auth-accounts.png",
+      "status": 200,
+      "bytes": 14740,
+      "sha256": "14d3ce53f266a807f7283932a3d0ff505794823c6adbffcd0e63c830b9d4f3f6",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/auth.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/auth.png",
+      "status": 200,
+      "bytes": 104366,
+      "sha256": "d4b15b32d5f188e5e5940533a7ecac2c0ffcd4b6aab9cb22f3561fb5713ef1d0",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/bounty-replay.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/bounty-replay.png",
+      "status": 200,
+      "bytes": 77263,
+      "sha256": "1e20f2064fa49062e654255771eb1cf556746c1dd2dff2937763b56c09b5f579",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/bounty.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/bounty.png",
+      "status": 200,
+      "bytes": 112715,
+      "sha256": "766b6ff0e5063a002ce6b6b1b939a5bac30576438903bd9a1c3eebf3fe909cfc",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/dashboard.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/dashboard.png",
+      "status": 200,
+      "bytes": 125051,
+      "sha256": "71bcaac257d58cf4e379467bf61ea958e5209d13b00577738dbf18f72415f2fd",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/data.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/data.png",
+      "status": 200,
+      "bytes": 65580,
+      "sha256": "4dcc9582525bb28d362f1ed326b2437e383e185df805bd7dff784fd0b7a5357a",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/environment.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/environment.png",
+      "status": 200,
+      "bytes": 111975,
+      "sha256": "c1a881cb32ad1bf5dcc3b8044e8781e16dc341a4a0af53ca51a5dcb33acdf52a",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/exposure-cve.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/exposure-cve.png",
+      "status": 200,
+      "bytes": 132768,
+      "sha256": "9d579805c422e6587ff62b6789c140c26b011befe98ba4225bd898c8ad6123d0",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/exposure-search.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/exposure-search.png",
+      "status": 200,
+      "bytes": 111293,
+      "sha256": "d3531be2e47682bd845c7f7e4b0a1e5f088551106b633da70122064999416c10",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/js.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/js.png",
+      "status": 200,
+      "bytes": 112290,
+      "sha256": "deac98f1ccc2edc0c2317fb17569dfd342eb768cf1ae20cbc26668bdb49fd69e",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/mapper.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/mapper.png",
+      "status": 200,
+      "bytes": 75712,
+      "sha256": "317241b178024fc58cb5a461ce9574a7cecd2d13f133334392dffa31773c77aa",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/payload-results.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/payload-results.png",
+      "status": 200,
+      "bytes": 100757,
+      "sha256": "aacef64b344ca72d9ebd9a8b53344da80028a34f88e025cacef76a79b56338d2",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/payload.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/payload.png",
+      "status": 200,
+      "bytes": 69556,
+      "sha256": "5903d5c79b1ebe457381d8f324b2fd8306dda13a5371fa2052efdfe83ffbaf9e",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/response-recon.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/response-recon.png",
+      "status": 200,
+      "bytes": 94145,
+      "sha256": "da53271ce3a337f8e5f1f35f4a321766c8a8f70953c7ac9e256b601e76645bd5",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/dark/traffic.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/dark/traffic.png",
+      "status": 200,
+      "bytes": 117853,
+      "sha256": "f75a020b749db2b4aeb8188f4fe02350f85f43220cc462f8b8270c32fbd91da4",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/activity.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/activity.png",
+      "status": 200,
+      "bytes": 119927,
+      "sha256": "155ad3f4d0dc7007839da31ce1c2648e568a7382a8af252e1d082ac2a01885ec",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/auth-accounts.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/auth-accounts.png",
+      "status": 200,
+      "bytes": 15383,
+      "sha256": "5156ec9879934625889d0adfb15f2e512514ddc0a2d3ca728435d9423745d622",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/auth.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/auth.png",
+      "status": 200,
+      "bytes": 107634,
+      "sha256": "e448340dd47e8b358b30a28baa5d6026e9698bbddcd810cb662689ef9b36cfb0",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/bounty-replay.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/bounty-replay.png",
+      "status": 200,
+      "bytes": 80031,
+      "sha256": "2d78eaad18a97b589c217e8c6c5774d4e4c0dc4d05758c347f0cc62f0f5e3d51",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/bounty.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/bounty.png",
+      "status": 200,
+      "bytes": 116119,
+      "sha256": "c0fa0ab4bf98897f8ec0881dc2717814102cd82987c467e0d95fc8bb2fd06338",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/dashboard.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/dashboard.png",
+      "status": 200,
+      "bytes": 128295,
+      "sha256": "85709768fed3dc5ddf65e42fc24ce86f950b8f791635d7161ee4809300ed9248",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/data.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/data.png",
+      "status": 200,
+      "bytes": 68061,
+      "sha256": "756557699033e6b6164867be55ca6d6c2d61c709988e624d1c02f548d85d3e81",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/environment.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/environment.png",
+      "status": 200,
+      "bytes": 114710,
+      "sha256": "e91f990ef2c69694619e72b0a47489eb478436c260e1d9c6afde3317457f8311",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/exposure-cve.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/exposure-cve.png",
+      "status": 200,
+      "bytes": 135865,
+      "sha256": "9c13b140dd4c7c50f1bf00a8596c5c8731e174f78ed39dc2baaf1697a053d0ad",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/exposure-search.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/exposure-search.png",
+      "status": 200,
+      "bytes": 114208,
+      "sha256": "a9fd648506626fae6b1e3139347491ed944736062f1ad0f2fb6ce72fe9f4b2b9",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/js.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/js.png",
+      "status": 200,
+      "bytes": 115450,
+      "sha256": "7e17ad883b9bc79433f61587bf056434c421c3fd7af5e79bae30169dd369ab90",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/mapper.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/mapper.png",
+      "status": 200,
+      "bytes": 78849,
+      "sha256": "20aa0ff8931f32a69e0115b86755b42b8333d1a548e24ff0ba9e11b1744e5170",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/payload-results.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/payload-results.png",
+      "status": 200,
+      "bytes": 103853,
+      "sha256": "55caf3d31267c40acdfcacee06573b3703eb580c55e9b14411da8dc444b8e5fa",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/payload.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/payload.png",
+      "status": 200,
+      "bytes": 71689,
+      "sha256": "ba19759dcc52dde0abe82ec8111c54877c450a459851efb38d063cdb9baa37e8",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/response-recon.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/response-recon.png",
+      "status": 200,
+      "bytes": 97253,
+      "sha256": "15c22f2f44a46c559a2f30346f39852d6973e8b11202f823455bc1a221683e70",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-layout-polish/images/light/traffic.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/docs/reports/2026-10-31-layout-polish/images/light/traffic.png",
+      "status": 200,
+      "bytes": 122103,
+      "sha256": "383c232dc531de10ad38eb63ac46130404cb7b5a91f2c29ec3b200d42fd37c7e",
+      "matchesLocal": true
+    },
+    {
+      "path": "simple/downloads/1.4.14/burp-workbench-simple-1.4.14.jar",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/simple/downloads/1.4.14/burp-workbench-simple-1.4.14.jar",
+      "status": 200,
+      "bytes": 9009970,
+      "sha256": "80e6a697895df55d9a9e8458472b9a58bc7e5f172a34797f1235ad69ae4f0c50",
+      "matchesLocal": true
+    },
+    {
+      "path": "simple/downloads/1.4.14/burp-workbench-simple-1.4.14-source.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/69e00d8f56e17e49c7912b7573660ef7e335ff33/simple/downloads/1.4.14/burp-workbench-simple-1.4.14-source.zip",
+      "status": 200,
+      "bytes": 99868165,
+      "sha256": "a29b78697238114acb2fa7af80e219e6c093d4a0454723116a3181b8022eff71",
+      "matchesLocal": true
+    }
+  ]
+}

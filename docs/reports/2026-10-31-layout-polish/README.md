@@ -52,3 +52,7 @@
 전체 검사 완료 후Simple 입력 파일을 동결하고 `simple/dev.py package`, `simple/dev.py verify`로 배포 파일의 소스 지문·체크섬·ZIP 무결성을 확인합니다.
 
 전체 7,151개 검사(Java 6,839 · payload HTTP 136 · Mapper 147 · Node 29), Swing 194개 배치, 격리 실제 창 112개, Katana 102개를 통과했습니다.
+
+## 업로드 결과
+
+[배포 기록](PUBLISH_KR.md): 구현`69e00d8f56e17e49c7912b7573660ef7e335ff33`의 공개39개 파일을 재다운로드해HTTP200·크기·체크섬 일치를 확인했습니다. GitHub API가Forbidden을 반환해PR 생성과main 병합은 미완료입니다. 작업 브랜치의 파일을 사용할 수 있습니다.

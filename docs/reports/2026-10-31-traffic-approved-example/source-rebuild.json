@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "java": "17.0.21",
+  "mode": "strict --release 17",
+  "artifactJarSha256": "8e2d704834b3af061c7f5bddb9b091a200b42ebfcedd311954bf8f100c25b890",
+  "independentRebuildJarSha256": "8e2d704834b3af061c7f5bddb9b091a200b42ebfcedd311954bf8f100c25b890",
+  "sourceZip": "artifacts/burp-workbench-simple-1.4.17-traffic-review-source.zip"
+}

@@ -34,7 +34,7 @@ public final class SimpleAppearanceTest extends WorkbenchTest {
           mode.setSize(stable);
           var picture = new BufferedImage(stable.width,stable.height,BufferedImage.TYPE_INT_RGB);
           var graphics = picture.createGraphics(); mode.paint(graphics); graphics.dispose();
-          check(mode.getText().equals(expected) && picture.getRGB(19,stable.height/2)==WorkbenchSkin.captureColor(expected).getRGB(), "capture state text matches lamp: "+expected);
+          check(mode.getText().equals(expected) && picture.getRGB(3,3)==(expected.equals("SCOPE")?new Color(233,247,240):new Color(248,249,251)).getRGB(), "capture state and approved status chip agree: "+expected);
           check(mode.getPreferredSize().equals(stable), "capture state preserves button geometry: "+expected);
           mode.doClick(0);
         }
@@ -46,12 +46,12 @@ public final class SimpleAppearanceTest extends WorkbenchTest {
       edt(() -> {}); edt(() -> {});
       edt(() -> {
         check(input.getText().equals("SIMPLE_UNSAVED_INPUT") && evidence.evidenceTitle.getText().equals("저장 전 작성 중인 제목"), "host theme replacement preserves unsaved input and evidence draft");
-        check(traffic.getRowHeight()==32 && traffic.getFont().getSize()==12, "PDF table typography recovers after host theme replacement");
+        check(traffic.getRowHeight()==35 && traffic.getFont().getSize()==12, "PDF table typography recovers after host theme replacement");
         check(mode.getText().equals("OFF"), "host theme replacement preserves capture OFF state");
         mode.setSize(mode.getPreferredSize());
         var picture=new BufferedImage(mode.getWidth(),mode.getHeight(),BufferedImage.TYPE_INT_RGB);
         var graphics=picture.createGraphics();mode.paint(graphics);graphics.dispose();
-        check(picture.getRGB(19,mode.getHeight()/2)==WorkbenchSkin.captureColor("OFF").getRGB(), "capture lamp recovers after host button UI replacement");
+        check(picture.getRGB(3,3)==new Color(248,249,251).getRGB(), "capture status chip recovers after host button UI replacement");
         SimpleWorkflowTest.click(root,"wb.simple.tool.bounty");
         SimpleWorkflowTest.click(root,"wb.simple.tool.traffic");
         check(SimpleWorkflowTest.toolSelected(root,"traffic"), "folder navigation remains selected and usable after host theme replacement");

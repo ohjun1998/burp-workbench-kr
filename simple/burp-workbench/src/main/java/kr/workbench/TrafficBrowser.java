@@ -325,7 +325,7 @@ final class TrafficBrowser implements AutoCloseable {
     if(disk!=store.get())return;
     if(!selected.isEmpty()){
       int[] current=table.getSelectedRows();boolean same=current.length==selected.size();
-      if(same)for(int index=0;index<current.length;index++)if(table.convertRowIndexToModel(current[index])!=selected.get(index)){same=false;break;}
+      if(same)for(int index=0;index<current.length;index++)if(current[index]<0||current[index]>=table.getRowCount()||table.convertRowIndexToModel(current[index])!=selected.get(index)){same=false;break;}
       if(!same){table.getSelectionModel().setValueIsAdjusting(true);try{table.clearSelection();for(int raw:selected)if(raw<model.getRowCount()){int visible=table.convertRowIndexToView(raw);if(visible>=0)table.addRowSelectionInterval(visible,visible);}}finally{table.getSelectionModel().setValueIsAdjusting(false);}}
     }
     if(viewport!=null&&point!=null&&!point.equals(viewport.getViewPosition()))viewport.setViewPosition(point);

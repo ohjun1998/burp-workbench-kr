@@ -33,6 +33,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   private final JSplitPane split;
   private final JButton toggle = new JButton();
   private final JLabel current = new JLabel();
+  private JPanel trafficHeader, standardHeaderActions, headerLine, trafficFooter;
   private final JLabel breadcrumb = new JLabel();
   private final JButton back = new JButton("←"), forward = new JButton("→"), quick = new JButton("기능 찾기");
   private final NavigationViewState.ModelVersions modelVersions = new NavigationViewState.ModelVersions();
@@ -232,9 +233,21 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     if (logs != null) {if(classic)compactAction(logs,"logs","오류 기록");actions.add(logs);}
     if(guideButton!=null){guideButton.setPreferredSize(new Dimension(66,30));guideButton.setMinimumSize(new Dimension(66,30));guideButton.setMaximumSize(new Dimension(66,30));actions.add(guideButton);}
     for(Component c:actions.getComponents())if(c instanceof AbstractButton b)b.putClientProperty("wb.segment.button",true);
+    standardHeaderActions=actions;headerLine=navigationLine;
+    trafficHeader=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,4));trafficHeader.putClientProperty("wb.surface",true);
+    JLabel projectCaption=new JLabel("웹 애플리케이션 점검");projectCaption.putClientProperty("wb.font.size",11);projectCaption.putClientProperty("wb.secondary",true);trafficHeader.add(projectCaption);
+    JButton appearance=new JButton(new ApprovedTrafficIcon("moon",kr.packetui.VisualTheme.muted()));appearance.setPreferredSize(new Dimension(28,28));appearance.putClientProperty("wb.segment.button",true);appearance.setToolTipText("화면 설정 및 기존 창 도구");
+    JPopupMenu toolsMenu=new JPopupMenu();for(Component c:actions.getComponents())if(c instanceof AbstractButton action)toolsMenu.add(WorkflowUi.proxy(action));
+    appearance.setName("wb.traffic.header.tools");appearance.setComponentPopupMenu(toolsMenu);appearance.addActionListener(e->toolsMenu.show(appearance,0,appearance.getHeight()));trafficHeader.add(appearance);
+    AbstractButton originalGuide=guideButton;JButton explain=new JButton("화면 설명");explain.setName("wb.traffic.guide.open");explain.putClientProperty("wb.segment.button",true);explain.addActionListener(e->{if(originalGuide!=null)originalGuide.doClick(0);else if(help!=null)help.doClick(0);});trafficHeader.add(explain);
     navigationLine.add(actions, BorderLayout.EAST);
     JPanel toolbar = new ResponsiveToolbar(navigationLine, classic);
     add(toolbar, BorderLayout.NORTH);
+    trafficFooter=new JPanel(new BorderLayout());trafficFooter.setPreferredSize(new Dimension(0,20));
+    trafficFooter.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,0,0,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(0,206,0,16)));
+    JLabel footerVersion=new JLabel("Workbench Simple "+BuildInfo.VERSION),footerView=new JLabel("요청·응답 목록 · 라이트");
+    for(JLabel label:new JLabel[]{footerVersion,footerView}){label.putClientProperty("wb.font.size",9);label.putClientProperty("wb.secondary",true);}
+    footerView.putClientProperty("wb.traffic.footer",true);trafficFooter.add(footerVersion);trafficFooter.add(footerView,BorderLayout.EAST);add(trafficFooter,BorderLayout.SOUTH);
     add(split, BorderLayout.CENTER);
     getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
         KeyStroke.getKeyStroke("control shift M"), "toggleMenu");
@@ -447,6 +460,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     public void paintIcon(Component owner, Graphics graphics, int x, int y) {
       Graphics2D g = (Graphics2D) graphics.create();
       WorkbenchSkin.antialias(g);
+      if(owner instanceof JComponent c&&Boolean.TRUE.equals(c.getClientProperty("wb.traffic.brand"))){g.setColor(WorkbenchUi.selected());g.fillRoundRect(x+5,y+4,15,15,8,8);}
       g.setColor(WorkbenchUi.accent());
       g.fillRoundRect(x, y, 15, 15, 8, 8);
       g.dispose();
@@ -536,8 +550,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
         boolean currentTool = active(getPathForRow(row).getLastPathComponent());
         if (currentTool || isRowSelected(row) || row == hovered) {
           g.setColor(currentTool ? WorkbenchUi.selected() : kr.packetui.VisualTheme.hover());
-          g.fillRoundRect(4, bounds.y + 2, getWidth() - 8, bounds.height - 4,8,8);
-          if (currentTool) {
+          boolean exact=classic&&"traffic".equals(selectedToolId());
+          g.fillRoundRect(exact?9:4, bounds.y + (exact?1:2), getWidth()-(exact?18:8),bounds.height-(exact?2:4),8,8);
+          if (currentTool && !(classic&&"traffic".equals(selectedToolId()))) {
             g.setColor(WorkbenchUi.accent());
             g.fillRect(4, bounds.y + 2, 3, bounds.height - 4);
           }
@@ -545,6 +560,11 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       }
       g.dispose();
       super.paintComponent(graphics);
+      if(classic&&"traffic".equals(selectedToolId())&&getHeight()>850&&getRowCount()>0){Rectangle last=getRowBounds(getRowCount()-1);if(last!=null){
+        g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);int y=last.y+last.height+18;g.setColor(WorkbenchUi.line());g.drawLine(9,y,getWidth()-10,y);
+        Component context=ApprovedTrafficPanel.named(pages,"wb.traffic.target");String target=context instanceof JComboBox<?> box?Objects.toString(box.getSelectedItem(),""):"";
+        g.setFont(WorkbenchUi.font().deriveFont(10f));g.setColor(WorkbenchUi.ink());g.drawString(target,18,y+26);g.setColor(kr.packetui.VisualTheme.muted());g.drawString("현재 프로젝트 · 요청·응답 목록",18,y+44);g.dispose();
+      }}
       if (hasFocus() && getLeadSelectionPath() != null) {
         Rectangle bounds = getPathBounds(getLeadSelectionPath());
         if (bounds != null) {
@@ -572,13 +592,15 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       boolean toolNode = node.getUserObject() instanceof Tool;
       setText(node.toString());
-      setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN,
-          WorkbenchUi.displaySize(classic ? toolNode ? 12.5f : 10.5f : toolNode ? 13.5f : 12.5f)));
-      setBorder(BorderFactory.createEmptyBorder(toolNode ? classic ? 8 : 6 : classic ? 8 : row == 0 ? 5 : 11,
-          2, toolNode ? classic ? 8 : 6 : 5, 8));
+      boolean exact=classic&&"traffic".equals(selectedToolId())&&owner.getHeight()>850;
+      setFont(WorkbenchUi.font().deriveFont(!toolNode||exact&&active(node) ? Font.BOLD : Font.PLAIN,
+          WorkbenchUi.displaySize(exact ? toolNode?12f:10f : classic ? toolNode ? 12.5f : 10.5f : toolNode ? 13.5f : 12.5f)));
+      setBorder(BorderFactory.createEmptyBorder(exact ? toolNode?9:row==0?0:18 : toolNode?classic?8:6:classic?8:row==0?5:11,
+          exact?toolNode?5:10:2,exact?toolNode?9:7:toolNode?classic?8:6:5,8));
       String kind=toolNode?((Tool)node.getUserObject()).id():groupIcon(node.toString());
       Icon icon = classic && !toolNode ? null : WorkspaceIcons.navigation(kind,
           active(node) ? WorkbenchUi.accent() : WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL), !toolNode);
+      if(exact&&toolNode){icon=new ApprovedTrafficIcon(kind,active(node)?WorkbenchUi.accent():kr.packetui.VisualTheme.muted());setIconTextGap(9);}else setIconTextGap(8);
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
       setDisabledIcon(icon);
@@ -691,6 +713,15 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   }
 
   void refreshSelection() {
+    if(classic&&headerLine!=null){boolean exact="traffic".equals(selectedToolId());Component desired=exact?trafficHeader:standardHeaderActions;
+      Component navigation=((BorderLayout)headerLine.getLayout()).getLayoutComponent(BorderLayout.WEST);
+      if(navigation instanceof JPanel panel){panel.setBorder(BorderFactory.createEmptyBorder(0,exact?5:0,0,0));for(Component child:panel.getComponents())if(child instanceof JLabel brand){brand.setIconTextGap(exact?9:7);brand.putClientProperty("wb.traffic.brand",exact);}}
+      ((BorderLayout)headerLine.getLayout()).setHgap(exact?11:8);
+      if(((BorderLayout)headerLine.getLayout()).getLayoutComponent(BorderLayout.EAST)!=desired){headerLine.remove(exact?standardHeaderActions:trafficHeader);headerLine.add(desired,BorderLayout.EAST);
+        if(exact){standardHeaderActions.setVisible(false);trafficHeader.add(standardHeaderActions);}else{trafficHeader.remove(standardHeaderActions);standardHeaderActions.setVisible(true);}headerLine.revalidate();}
+      split.setDividerSize(exact?0:7);if(trafficFooter!=null)trafficFooter.setVisible(exact);
+    }
+
     Component selected = pages.getSelectedComponent();
     if (!(selected instanceof JComponent page)) return;
     DefaultMutableTreeNode node = tools.get(selectedToolId());
@@ -715,6 +746,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   }
 
   void restoreAppearance() {
+    if(trafficFooter!=null)for(Component c:trafficFooter.getComponents())if(c instanceof JLabel label&&Boolean.TRUE.equals(label.getClientProperty("wb.traffic.footer")))label.setText("요청·응답 목록 · "+(WorkbenchUi.dark()?"다크":"라이트"));
+    if(classic&&"traffic".equals(selectedToolId())){split.setDividerSize(0);sidebar.setBorder(null);}
+
     if (tree.getUI().getClass().getEnclosingClass() != NavigationTree.class) tree.updateUI();
     tree.setCellRenderer(renderer);
     tree.setRowHeight(0);
@@ -723,6 +757,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.getViewport().setBackground(kr.packetui.VisualTheme.sidebar());
     tree.treeDidChange();
+    if(classic){boolean exact="traffic".equals(selectedToolId());tree.setBorder(BorderFactory.createEmptyBorder(exact?13:4,9,6,exact?9:0));
+      if(tree.getUI() instanceof BasicTreeUI ui){ui.setLeftChildIndent(exact?2:8);ui.setRightChildIndent(exact?4:10);}}
     sidebar.setMinimumSize(new Dimension(minimumMenuWidth(),80));
     constrainDivider();
   }
@@ -732,7 +768,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.getViewport().setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.setVisible(!hidden);
-    split.setDividerSize(hidden ? 0 : 7);
+    split.setDividerSize(hidden || classic&&"traffic".equals(selectedToolId()) ? 0 : 7);
     toggle.setText("");toggle.putClientProperty("wb.segment.button",true);
     toggle.setToolTipText("왼쪽 폴더 메뉴 " + (hidden ? "보기" : "숨기기") + " · Ctrl+Shift+M");
     toggle.getAccessibleContext().setAccessibleName(hidden ? "메뉴 보기" : "메뉴 숨기기");

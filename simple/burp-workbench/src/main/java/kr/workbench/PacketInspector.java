@@ -176,6 +176,27 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     owner.getActionMap().put(name, new AbstractAction() { public void actionPerformed(ActionEvent e) { action.run(); } });
   }
 
+  private boolean approvedTraffic;
+  void approvedTrafficPresentation() {
+    if(approvedTraffic)return;
+    approvedTraffic=true;
+    headerActions.setPreferredSize(new Dimension(212,43));
+    headerActions.setLayout(new java.awt.LayoutManager(){
+      public void addLayoutComponent(String n,Component c){} public void removeLayoutComponent(Component c){}
+      public Dimension preferredLayoutSize(Container p){return new Dimension(212,43);}
+      public Dimension minimumLayoutSize(Container p){return new Dimension(150,35);}
+      public void layoutContainer(Container p){modeTabs.setBounds(0,4,102,35);if(p.getComponentCount()>1)p.getComponent(1).setBounds(109,6,91,31);}
+    });
+    modeTabs.setLayout(new java.awt.LayoutManager(){
+      public void addLayoutComponent(String n,Component c){} public void removeLayoutComponent(Component c){}
+      public Dimension preferredLayoutSize(Container p){return new Dimension(102,35);}public Dimension minimumLayoutSize(Container p){return preferredLayoutSize(p);}
+      public void layoutContainer(Container p){if(p.getComponentCount()>0)p.getComponent(0).setBounds(0,0,58,35);if(p.getComponentCount()>1)p.getComponent(1).setBounds(58,0,44,35);}
+    });
+    Component tools=headerActions.getComponent(1);
+    if(tools instanceof Container group)for(Component c:group.getComponents())if(c instanceof JButton b)ApprovedTrafficPanel.dropdown(b,"원문 도구");
+    applyTheme();
+  }
+
   Component titleActions(){
     if (!headerMerged) {
       headerMerged=true; headerActions.removeAll();
@@ -378,6 +399,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());
     WorkbenchUi.style(renderPanel);rendered.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES,true);
     if(mode==Mode.RENDER){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
+    if(approvedTraffic){text.setMargin(new Insets(0,0,0,0));text.setBorder(BorderFactory.createEmptyBorder(19,8,14,14));}
     colorize();lines.repaint();toolbar.revalidate();toolbar.repaint();searchBar.revalidate();displayDecoration.run();
   }
 
@@ -386,20 +408,20 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     SimpleAttributeSet normal=new SimpleAttributeSet();StyleConstants.setForeground(normal,WorkbenchUi.ink());
     StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(12));
     doc.setCharacterAttributes(0,doc.getLength(),normal,true);
-    SimpleAttributeSet spacing=new SimpleAttributeSet();StyleConstants.setLineSpacing(spacing,.20f);doc.setParagraphAttributes(0,doc.getLength(),spacing,false);
+    SimpleAttributeSet spacing=new SimpleAttributeSet();StyleConstants.setLineSpacing(spacing,approvedTraffic?.34f:.20f);doc.setParagraphAttributes(0,doc.getLength(),spacing,false);
     if(mode==Mode.HEX)return;
-    Color blue=WorkbenchUi.dark()?new Color(161,188,239):new Color(31,91,235);
+    Color blue=WorkbenchUi.dark()?new Color(161,188,239):approvedTraffic?new Color(37,93,167):new Color(31,91,235);
     Color green=WorkbenchUi.dark()?new Color(155,209,113):new Color(28,141,48);
     Color orange=WorkbenchUi.dark()?new Color(245,159,79):new Color(189,91,25);
     int head=value.indexOf("\n\n");if(head<0)head=value.indexOf("\r\n\r\n");if(head<0)head=value.length();
     int line=0;
-    while(line<head) { int end=value.indexOf('\n',line);if(end<0||end>head)end=head;int colon=value.indexOf(':',line);paint(line,line==0?end:colon>=line&&colon<end?colon+1:line,blue);line=end+1; }
+    while(line<head) { int end=value.indexOf('\n',line);if(end<0||end>head)end=head;int colon=value.indexOf(':',line);paint(line,line==0?end:colon>=line&&colon<end?colon+1:line,approvedTraffic&&line==0?(value.startsWith("HTTP/")?new Color(11,119,82):WorkbenchUi.ink()):blue);line=end+1; }
     int tokens=0;
     for(int i=head;i<value.length()&&tokens<4000;) {
       char c=value.charAt(i);int start=i;
-      if(c=='"'||c=='\'') { char quote=c;boolean escape=false;i++;while(i<value.length()){char next=value.charAt(i++);if(escape)escape=false;else if(next=='\\')escape=true;else if(next==quote)break;}int after=i;while(after<value.length()&&Character.isWhitespace(value.charAt(after)))after++;paint(start,i,after<value.length()&&value.charAt(after)==':'?blue:green);tokens++; }
-      else if(Character.isDigit(c)||c=='-'&&i+1<value.length()&&Character.isDigit(value.charAt(i+1))) { i++;while(i<value.length()&&"0123456789.eE+-".indexOf(value.charAt(i))>=0)i++;paint(start,i,orange);tokens++; }
-      else if(Character.isJavaIdentifierStart(c)) { i++;while(i<value.length()&&Character.isJavaIdentifierPart(value.charAt(i)))i++;if(List.of("true","false","null","var","let","const","function","return").contains(value.substring(start,i)))paint(start,i,orange);tokens++; }
+      if(c=='"'||c=='\'') { char quote=c;boolean escape=false;i++;while(i<value.length()){char next=value.charAt(i++);if(escape)escape=false;else if(next=='\\')escape=true;else if(next==quote)break;}int after=i;while(after<value.length()&&Character.isWhitespace(value.charAt(after)))after++;paint(start,i,after<value.length()&&value.charAt(after)==':'?blue:approvedTraffic?WorkbenchUi.ink():green);tokens++; }
+      else if(Character.isDigit(c)||c=='-'&&i+1<value.length()&&Character.isDigit(value.charAt(i+1))) { i++;while(i<value.length()&&"0123456789.eE+-".indexOf(value.charAt(i))>=0)i++;paint(start,i,approvedTraffic?WorkbenchUi.ink():orange);tokens++; }
+      else if(Character.isJavaIdentifierStart(c)) { i++;while(i<value.length()&&Character.isJavaIdentifierPart(value.charAt(i)))i++;if(List.of("true","false","null","var","let","const","function","return").contains(value.substring(start,i)))paint(start,i,approvedTraffic?WorkbenchUi.ink():orange);tokens++; }
       else i++;
     }
   }

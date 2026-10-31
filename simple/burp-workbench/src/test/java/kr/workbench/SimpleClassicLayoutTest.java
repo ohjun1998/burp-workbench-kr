@@ -69,8 +69,9 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
   }
 
   private static void inside(JPanel root, String name, String context) {
-    Component action = SimpleWorkflowTest.named(root, name);
-    check(action instanceof AbstractButton && visible(root, name), context + " exposes " + name);
+    Component source = SimpleWorkflowTest.named(root, name);
+    Component action = source==null?null:ApprovedWorkflowTestSupport.representation(source,root);
+    check(source instanceof AbstractButton && action!=null, context + " exposes original controller directly or through its visible menu: " + name);
     Point point = SwingUtilities.convertPoint(action, 0, 0, root);
     check(action.getWidth() > 0 && action.getHeight() > 0 && point.x >= 0 && point.y >= 0
             && point.x + action.getWidth() <= root.getWidth()

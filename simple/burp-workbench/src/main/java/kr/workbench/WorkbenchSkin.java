@@ -24,12 +24,12 @@ final class WorkbenchSkin {
     @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(32,d.height)); }
     @Override protected void paintComponent(Graphics graphics) {
       super.paintComponent(graphics);
-      Graphics2D iconGraphics=(Graphics2D)graphics.create();iconGraphics.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));WorkspaceIcons.of("search").paintIcon(this,iconGraphics,9,(getHeight()-16)/2);iconGraphics.dispose();
+      Graphics2D iconGraphics=(Graphics2D)graphics.create();iconGraphics.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));if(getClientProperty("wb.search.placeholder")!=null){Graphics2D small=(Graphics2D)iconGraphics.create();small.translate(10,(getHeight()-9)/2);small.scale(.5,.5);new ApprovedTrafficIcon("exposure",WorkbenchUi.ink()).paintIcon(this,small,0,0);small.dispose();}else WorkspaceIcons.of("search").paintIcon(this,iconGraphics,9,(getHeight()-16)/2);iconGraphics.dispose();
       if (getText().isEmpty() && !hasFocus()) {
         Graphics2D g=(Graphics2D)graphics.create();antialias(g);
         g.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
-        g.setFont(WorkbenchUi.font());
-        String text=placeholder;
+        g.setFont(getFont());
+        String text=getClientProperty("wb.search.placeholder") instanceof String custom?custom:placeholder;
         FontMetrics fm=g.getFontMetrics();
         Shape old=g.getClip();g.clipRect(30,0,Math.max(0,getWidth()-40),getHeight());
         g.drawString(text,30,(getHeight()-fm.getHeight())/2+fm.getAscent());g.setClip(old);g.dispose();

@@ -1374,10 +1374,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         "클릭: OFF ↔ SCOPE · OFF 수집 중지 / SCOPE 목록에서 체크한 Burp Scope·수동 URL 수집");
     logTable =
         new JTable(logModel) {
+          // The final row has no extra outer separator, matching the approved table edge.
+          @Override public Dimension getPreferredSize(){Dimension d=super.getPreferredSize();if(getRowCount()>0)d.height=Math.max(0,d.height-1);return d;}
           @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer,int row,int column){
             Component component=super.prepareRenderer(renderer,row,column);
             if(component instanceof JLabel label&&convertColumnIndexToModel(column)==2&&trafficBrowser!=null){
-              int raw=convertRowIndexToModel(row);label.setText(trafficBrowser.displayUrl(raw,Objects.toString(logModel.getValueAt(raw,2),"")));
+              int raw=convertRowIndexToModel(row);String url=Objects.toString(logModel.getValueAt(raw,2),"");
+              try{var uri=java.net.URI.create(url);url=uri.getRawPath()+(uri.getRawQuery()==null?"":"?"+uri.getRawQuery());}catch(IllegalArgumentException ignored){}
+              label.setText(trafficBrowser.displayUrl(raw,url));
             }
             return component;
           }
@@ -1529,8 +1533,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             });
     scopeListButton = button("SCOPE 목록", this::showScopeList);
     scopeListButton.setName("wb.traffic.scope.list");
-    JPanel req = WorkbenchUi.card("요청", requestPacket),
-        res = WorkbenchUi.card("응답", responsePacket);
+    JPanel req = ApprovedTrafficPanel.packetCard("요청", requestPacket),
+        res = ApprovedTrafficPanel.packetCard("응답", responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
     viewers.setName("wb.traffic.messages");
     JPanel messages = new JPanel(new BorderLayout(0, 6));
@@ -1586,6 +1590,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     selectionInfo.setName("wb.simple.traffic.selection");
     Runnable selectedState = () -> {
       int count = logTable.getSelectedRowCount();
+      selectionInfo.putClientProperty("wb.traffic.selection.parts",null);
       for (JButton action : new JButton[] {compareSelected, repeatSelected, evidenceSelected, payloadSelected, jsSelected}) {
         action.setEnabled(count > 0);
         action.setToolTipText(count > 0 ? "선택 원본 " + count + "건 · 대상 요청은 자동 전송하지 않습니다." : "먼저 목록에서 요청을 선택하세요.");
@@ -1596,6 +1601,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         int modelRow=logTable.convertRowIndexToModel(logTable.getSelectedRow());
         String identity=Objects.toString(trafficBrowser.extra(modelRow,8),"미매핑");
         String status=selected.packet().responseStatus();
+        selectionInfo.putClientProperty("wb.traffic.selection.parts",new String[]{selected.packet().method()+" "+java.net.URI.create(selected.packet().url()).getRawPath(),status,identity,selected.time()});
         selectionText=selected.packet().method()+" "+java.net.URI.create(selected.packet().url()).getRawPath()
             +" · "+(status==null||status.isBlank()?"응답 없음":status)+" · "+identity+" · "+selected.time()+" · "+selectionText;
       }catch(RuntimeException ignored){}
@@ -1616,10 +1622,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     selectionBar.setName("wb.placement.traffic.selection");
     trafficList.add(ReferenceUi.header(selectionBar,null),BorderLayout.SOUTH);
     controls.add(queryRow, BorderLayout.SOUTH);
-    JPanel main = page(controls, body);
-    main.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));
+    JPanel main = new ApprovedTrafficPanel(controls, body, viewers, logTable, selectionBar, selectionInfo, targetChoice, accountChoice, captureButton, filter, trafficSettings, repeatSelected, requestUse, requestPacket, responsePacket, trafficBrowser);
     main.setName("wb.traffic");
-    main.add(trafficBrowser.conditionBar(),BorderLayout.SOUTH);
+    // Search recovery remains available from the retained search/settings controllers.
+    ((ApprovedTrafficPanel)main).setFeedback(trafficBrowser.conditionBar());
     trafficTools = new FolderNavigation.Pages();
     trafficTools.setName("wb.traffic.tools");
     trafficTools.addTab("요청·응답", main);

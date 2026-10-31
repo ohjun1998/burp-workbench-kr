@@ -478,8 +478,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
     @Override protected void paintComponent(Graphics graphics) {
       Graphics2D g = (Graphics2D) graphics.create();
-      g.setColor(WorkbenchUi.background());
-      g.fillRect(0, 0, getWidth(), getHeight());
+      kr.packetui.VisualTheme.wash(g,getWidth(),getHeight(),kr.packetui.VisualTheme.sidebar(),WorkbenchUi.background());
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       Rectangle clip = g.getClipBounds();
       for (int row = 0; row < getRowCount(); row++) {
@@ -487,7 +486,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
         if (bounds == null || clip != null && !clip.intersects(0, bounds.y, getWidth(), bounds.height)) continue;
         boolean currentTool = active(getPathForRow(row).getLastPathComponent());
         if (currentTool || isRowSelected(row) || row == hovered) {
-          g.setColor(currentTool ? WorkbenchUi.selected() : WorkbenchUi.raised());
+          g.setColor(currentTool ? WorkbenchUi.selected() : kr.packetui.VisualTheme.hover());
           g.fillRoundRect(4, bounds.y + 2, getWidth() - 8, bounds.height - 4,8,8);
           if (currentTool) {
             g.setColor(WorkbenchUi.accent());
@@ -527,7 +526,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       setFont(WorkbenchUi.font().deriveFont(!toolNode ? Font.BOLD : Font.PLAIN, WorkbenchUi.displaySize(toolNode?13.5f:12.5f)));
       setBorder(BorderFactory.createEmptyBorder(toolNode?6:row==0?5:11, 2, toolNode?6:5, 8));
       String kind=toolNode?((Tool)node.getUserObject()).id():groupIcon(node.toString());
-      Icon icon = WorkspaceIcons.navigation(kind,iconColor(kind),!toolNode);
+      Icon icon = WorkspaceIcons.navigation(kind,!toolNode||active(node)?WorkbenchUi.accent():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL),!toolNode);
       setIcon(icon);
       // The payload page attaches after navigation. Reserve its icon width even while unavailable.
       setDisabledIcon(icon);
@@ -547,7 +546,6 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   }
 
   private static String groupIcon(String group){return switch(group){case "트래픽"->"traffic";case "탐색·정보 수집"->"discovery";case "보안 분석·검증"->"security";case "데이터 도구"->"data";default->"activity";};}
-  private static Color iconColor(String kind){boolean dark=WorkbenchUi.dark();return switch(kind){case "traffic","mapper"->dark?new Color(102,174,255):new Color(48,117,218);case "js","environment","exposure","discovery"->dark?new Color(103,210,185):new Color(25,145,126);case "auth","response.recon","payload","security"->dark?new Color(193,152,255):new Color(139,86,203);case "data"->dark?new Color(246,188,98):new Color(188,127,32);default->dark?new Color(241,143,170):new Color(196,83,119);};}
 
   private enum IconKind { FOLDER, OPEN_FOLDER, PAGE, RIGHT, DOWN }
 
@@ -664,7 +662,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setRowHeight(0);
     tree.setOpaque(false);
     tree.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f)));
-    tree.setBackground(WorkbenchUi.surface());
+    tree.setBackground(kr.packetui.VisualTheme.sidebar());
+    sidebar.getViewport().setBackground(kr.packetui.VisualTheme.sidebar());
     tree.treeDidChange();
     sidebar.setMinimumSize(new Dimension(minimumMenuWidth(),80));
     constrainDivider();
@@ -672,7 +671,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
   void restoreLayout() {
     restoreAppearance();
-    tree.setBackground(WorkbenchUi.surface());
+    tree.setBackground(kr.packetui.VisualTheme.sidebar());
+    sidebar.getViewport().setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.setVisible(!hidden);
     split.setDividerSize(hidden ? 0 : 7);
     toggle.setText("");toggle.putClientProperty("wb.segment.button",true);

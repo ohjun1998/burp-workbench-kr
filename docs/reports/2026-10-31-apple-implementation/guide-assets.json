@@ -1,0 +1,194 @@
+[
+  {
+    "guide": "traffic",
+    "theme": "light",
+    "source": "02-request.png",
+    "sha256": "ff627cd5400ae63de4adc49e8773a5440d1c79f2778ef42bc2ec6fc71e4bcff3"
+  },
+  {
+    "guide": "traffic",
+    "theme": "dark",
+    "source": "02-request.png",
+    "sha256": "e0387b82780e371402b5a514c7b6fb7e18960071ad92d5debac639c5a43b9d00"
+  },
+  {
+    "guide": "mapper",
+    "theme": "light",
+    "source": "08-mapper.png",
+    "sha256": "20aa0ff8931f32a69e0115b86755b42b8333d1a548e24ff0ba9e11b1744e5170"
+  },
+  {
+    "guide": "mapper",
+    "theme": "dark",
+    "source": "08-mapper.png",
+    "sha256": "317241b178024fc58cb5a461ce9574a7cecd2d13f133334392dffa31773c77aa"
+  },
+  {
+    "guide": "js",
+    "theme": "light",
+    "source": "10-js.png",
+    "sha256": "dd8a6e33649419d298b922ceb9c1b46cae28e493ee7e02ff8b3881f6b427e122"
+  },
+  {
+    "guide": "js",
+    "theme": "dark",
+    "source": "10-js.png",
+    "sha256": "36ea4ecb905e1d4c0117557d355cd743eebda7e2822ae58c3087f60e763ce9e8"
+  },
+  {
+    "guide": "environment",
+    "theme": "light",
+    "source": "09-environment.png",
+    "sha256": "a124880b05804820f05da2526db64e4961c4293eaa7b1445e5043b87fa317e50"
+  },
+  {
+    "guide": "environment",
+    "theme": "dark",
+    "source": "09-environment.png",
+    "sha256": "90f225a7ca9397d1cc779df1a9c8e7fb95abd6992a98baaa6586fbdb3c93d243"
+  },
+  {
+    "guide": "exposure.search",
+    "theme": "light",
+    "source": "12-exposure-search.png",
+    "sha256": "7d3fbb5de2d518625c80f9095c630d6ffe75895d5f85a206d1dcfbfd59efc1e6"
+  },
+  {
+    "guide": "exposure.search",
+    "theme": "dark",
+    "source": "12-exposure-search.png",
+    "sha256": "e78c672ed32d13f6ab73b41951e286b65df042df970d06e8d68df2856582e8d0"
+  },
+  {
+    "guide": "exposure.cve",
+    "theme": "light",
+    "source": "13-exposure-cve.png",
+    "sha256": "28d90b4011c30caf21d836379014af8945857b69809f4897af2ad25e1ca2341c"
+  },
+  {
+    "guide": "exposure.cve",
+    "theme": "dark",
+    "source": "13-exposure-cve.png",
+    "sha256": "6c254ddce8120f76487f11a357c83e9b3e02d8ba4586f944b35d32ee009895e9"
+  },
+  {
+    "guide": "auth",
+    "theme": "light",
+    "source": "04-auth-results.png",
+    "sha256": "27686ef102380757d5cfa5041fdb7d111d236218d407a9506c986f9450aed521"
+  },
+  {
+    "guide": "auth",
+    "theme": "dark",
+    "source": "04-auth-results.png",
+    "sha256": "f63809f7d73e90be737c556e368dba8505e8915c6c487fbcc51a307787bd8377"
+  },
+  {
+    "guide": "response.recon",
+    "theme": "light",
+    "source": "03-analysis.png",
+    "sha256": "e0ff8efbd71907dd0f0812b62dc76765e641e1de6995815a467df85caacb3bfc"
+  },
+  {
+    "guide": "response.recon",
+    "theme": "dark",
+    "source": "03-analysis.png",
+    "sha256": "e9e15c0554b4d75b1b87d11043d6f819f9c60785825285bb69d6759aa6a7d133"
+  },
+  {
+    "guide": "payload",
+    "theme": "light",
+    "source": "07-payload.png",
+    "sha256": "57794469b61fe953cea2d65ed1a503216fd1ad3a3b1165bb6189e64d104e6461"
+  },
+  {
+    "guide": "payload",
+    "theme": "dark",
+    "source": "07-payload.png",
+    "sha256": "9199e75e4d9e176efaf02be1366df4bfe25d2a3a2b0e7adc00a432ef0bfe80bc"
+  },
+  {
+    "guide": "data",
+    "theme": "light",
+    "source": "14-data.png",
+    "sha256": "6d3d0f4e6ef137b085b92fec57826db994b721162d6ac78238499d62eb457b27"
+  },
+  {
+    "guide": "data",
+    "theme": "dark",
+    "source": "14-data.png",
+    "sha256": "d07fd8030eec2f5baae0a584deb5761b114d73dee457ba9eca621ca76228cba5"
+  },
+  {
+    "guide": "activity",
+    "theme": "light",
+    "source": "15-progress.png",
+    "sha256": "2932a267ca5fd209e6728193d69141904a70f354f4939dfbc2bc0c69c34b9df5"
+  },
+  {
+    "guide": "activity",
+    "theme": "dark",
+    "source": "15-progress.png",
+    "sha256": "3d90b2708a696dc3569f5bd8452a1bf0627b186ed72c3f43cd590ebb2d41730e"
+  },
+  {
+    "guide": "bounty",
+    "theme": "light",
+    "source": "05-evidence.png",
+    "sha256": "f20cb702b8d31b6240ac559ad03f744da1a6535caeda4bc9c9f1d44f5a4ca23c"
+  },
+  {
+    "guide": "bounty",
+    "theme": "dark",
+    "source": "05-evidence.png",
+    "sha256": "4351d1c22a02749d8d28de7adf2aeb2eb30d46474778ca23d687583441bdfc1a"
+  },
+  {
+    "guide": "dashboard",
+    "theme": "light",
+    "source": "16-dashboard.png",
+    "sha256": "9e117649d4b2d2743a952db8aeaa243a38cddfa22a34114a4da6b994ccf233ef"
+  },
+  {
+    "guide": "dashboard",
+    "theme": "dark",
+    "source": "16-dashboard.png",
+    "sha256": "e4fa0f7a0382593703f5e02aa9166dc8a388ef486dcf3506d5114aac572a6083"
+  },
+  {
+    "guide": "payload.results",
+    "theme": "light",
+    "source": "07-payload-results.png",
+    "sha256": "68985c5e6ef3bd1d95a4191f720d5cd7316692a70580ac6300e16a32c30b9f39"
+  },
+  {
+    "guide": "payload.results",
+    "theme": "dark",
+    "source": "07-payload-results.png",
+    "sha256": "4985f9d9dc4186bb9b6950ba6b72f67a47ccb542ea896b2b73ae234cc7a93f2b"
+  },
+  {
+    "guide": "bounty.replay",
+    "theme": "light",
+    "source": "11-replay.png",
+    "sha256": "88277c6949533e88e4566c52e12273033de4cfcc601d8be982d1174611f0793e"
+  },
+  {
+    "guide": "bounty.replay",
+    "theme": "dark",
+    "source": "11-replay.png",
+    "sha256": "6f62ef7d66de58395dc2a2d9be6a4aa5c2fb6fefaa4525245ee19fd372f25463"
+  },
+  {
+    "guide": "auth.accounts",
+    "theme": "light",
+    "source": "04-auth-accounts.png",
+    "sha256": "33354529498f03fa2d0e5501560727767d9d868593d8b5022137f814dd063efb"
+  },
+  {
+    "guide": "auth.accounts",
+    "theme": "dark",
+    "source": "04-auth-accounts.png",
+    "sha256": "4185ab79a2542f96bda58eb7cb4b0200dd2b29af70687ad7a3eb9a81957fe7ed"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "version": "1.4.13",
+  "branch": "account-a/apple-design-implementation",
+  "baseCommit": "222aef191a34f7d6cd1014e941ecc7152341f640",
+  "pullRequestCreated": false,
+  "mergedToMain": false,
+  "pullRequestBlocker": "GitHub CLI reports the configured GH_TOKEN is invalid, including outside the filesystem/network sandbox. Git HTTPS transport will be used for the task branch. No credential values were read or recorded.",
+  "expectedJar": "simple/downloads/1.4.13/burp-workbench-simple-1.4.13.jar",
+  "expectedSource": "simple/downloads/1.4.13/burp-workbench-simple-1.4.13-source.zip",
+  "pdf": "docs/reports/2026-10-31-apple-implementation/workbench-simple-1.4.13-light-dark.pdf"
+}

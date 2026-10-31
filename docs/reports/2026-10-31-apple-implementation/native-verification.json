@@ -1,0 +1,106 @@
+[
+  {
+    "result": "passed",
+    "version": "1.4.13",
+    "theme": "light",
+    "checks": 31,
+    "jarSha256": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+    "nativeSwing": true,
+    "nativeBurpGui": false,
+    "syntheticPackets": true,
+    "display": "isolated Xorg dummy + xfwm4",
+    "windowWidths": [
+      1024,
+      1280,
+      1600
+    ],
+    "targetHttpRequests": 0,
+    "screenshots": [
+      "01-traffic-settings.png",
+      "02-payload-prepare.png",
+      "03-payload-results.png"
+    ]
+  },
+  {
+    "result": "passed",
+    "version": "1.4.13",
+    "theme": "dark",
+    "checks": 31,
+    "jarSha256": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+    "nativeSwing": true,
+    "nativeBurpGui": false,
+    "syntheticPackets": true,
+    "display": "isolated Xorg dummy + xfwm4",
+    "windowWidths": [
+      1024,
+      1280,
+      1600
+    ],
+    "targetHttpRequests": 0,
+    "screenshots": [
+      "01-traffic-settings.png",
+      "02-payload-prepare.png",
+      "03-payload-results.png"
+    ]
+  },
+  {
+    "checks": 25,
+    "theme": "light",
+    "version": "1.4.13",
+    "nativeSwing": true,
+    "targetHttpRequests": 0,
+    "screens": [
+      "traffic",
+      "mapper",
+      "js",
+      "environment",
+      "exposure.search",
+      "exposure.cve",
+      "auth",
+      "response.recon",
+      "payload",
+      "data",
+      "activity",
+      "bounty",
+      "dashboard",
+      "payload.results",
+      "bounty.replay",
+      "auth.accounts"
+    ],
+    "nativeBurpGui": false,
+    "result": "passed",
+    "syntheticPackets": true,
+    "jarSha256": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+    "captureMode": "quick"
+  },
+  {
+    "targetHttpRequests": 0,
+    "nativeSwing": true,
+    "version": "1.4.13",
+    "theme": "dark",
+    "checks": 25,
+    "syntheticPackets": true,
+    "result": "passed",
+    "nativeBurpGui": false,
+    "screens": [
+      "traffic",
+      "mapper",
+      "js",
+      "environment",
+      "exposure.search",
+      "exposure.cve",
+      "auth",
+      "response.recon",
+      "payload",
+      "data",
+      "activity",
+      "bounty",
+      "dashboard",
+      "payload.results",
+      "bounty.replay",
+      "auth.accounts"
+    ],
+    "jarSha256": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+    "captureMode": "quick"
+  }
+]

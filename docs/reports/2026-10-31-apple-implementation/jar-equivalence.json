@@ -1,0 +1,5 @@
+{
+  "jarSha256": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+  "matchesFinalLayoutAndNativeAndKatanaArtifact": true,
+  "changeAfterThoseChecks": "Only the test expectation for embedded Mapper version was updated from 0.3.13 to 0.3.14; deterministic rebuilt production JAR is byte-identical."
+}

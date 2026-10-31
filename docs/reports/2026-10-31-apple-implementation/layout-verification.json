@@ -1,0 +1,31 @@
+{
+  "version": "1.4.13",
+  "artifact": "burp-workbench/dist/burp-workbench-simple-1.4.13.jar",
+  "toolchainMode": "strict-release17",
+  "java17ApiCompatibilityVerified": true,
+  "compilerNote": "Compiled with --release 17.",
+  "jarSha256": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+  "renderedViews": 126,
+  "controls": 2184,
+  "scenarios": 426,
+  "retainedPrimaryTools": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "replayEvidenceModes": [
+    "manual-request-replay",
+    "evidence-editor"
+  ],
+  "clippedControls": [],
+  "collapsedAreas": [],
+  "failedScenarios": [],
+  "missingCaptures": [],
+  "scope": "Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.",
+  "result": "passed"
+}

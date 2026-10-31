@@ -1,0 +1,16 @@
+{
+  "version": "1.4.13",
+  "jarSourceFingerprintVerified": true,
+  "sourceZipCrcAndEveryEntryVerified": true,
+  "artifacts": {
+    "burp-workbench-simple-1.4.13.jar": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+    "burp-workbench-simple-1.4.13-source.zip": "7621e72512065ab8bfde0bdb3b84aa8ecc725a23cb1a4cc176c89afcff1f2f23",
+    "feature-mapper-browser-helper-0.4.1.zip": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+  },
+  "buildToolchain": {
+    "java17ApiCompatibilityVerified": true,
+    "javaRuntimeVersion": "17.0.17",
+    "toolchainMode": "strict-release17"
+  },
+  "scope": "package_simple.py creation verification passed; source files frozen before packaging."
+}

@@ -21,7 +21,7 @@ final class WorkbenchSkin {
     SearchField(int columns) { this(columns,"URL, 메서드, 상태 코드 검색"); }
     SearchField() { this(0); }
     SearchField(int columns,String placeholder) { super(columns); this.placeholder=placeholder; }
-    @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(34,d.height)); }
+    @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(32,d.height)); }
     @Override protected void paintComponent(Graphics graphics) {
       super.paintComponent(graphics);
       Graphics2D iconGraphics=(Graphics2D)graphics.create();iconGraphics.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));WorkspaceIcons.of("search").paintIcon(this,iconGraphics,9,(getHeight()-16)/2);iconGraphics.dispose();
@@ -45,7 +45,7 @@ final class WorkbenchSkin {
     String label=button.getText()==null?"":button.getText();if(button.getIcon()==null&&!label.startsWith("<html")&&!(button instanceof JToggleButton)&&!Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"))){String kind=label.contains("설정")?"gear":label.contains("Repeater")?"play":label.equals("중지")?"stop":label.contains("증거")&&label.contains("추가")?"plus":null;if(kind!=null)button.setIcon(WorkspaceIcons.of(kind));}
     button.setBorder(Boolean.TRUE.equals(button.getClientProperty("wb.compact.button"))
         ? BorderFactory.createEmptyBorder(5, 9, 5, 9)
-        : BorderFactory.createEmptyBorder(7, 12, 7, 12));
+        : BorderFactory.createEmptyBorder(4, 10, 4, 10));
   }
 
   private static final class ButtonUi extends BasicButtonUI {
@@ -75,16 +75,16 @@ final class WorkbenchSkin {
           if(button.getModel().isRollover() || button.getModel().isPressed())fill=fill.brighter();
         } else {
           if (!primary && button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
-          if (button.getModel().isPressed()) fill = primary?WorkbenchUi.accent().darker():WorkbenchUi.selected();
+          if (button.getModel().isPressed()) fill = primary?kr.packetui.VisualTheme.primary().darker():WorkbenchUi.selected();
         }
         boolean segment=Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"));
         if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.surface():WorkbenchUi.raised());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.isSelected()||button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
         if(!segment||button.getModel().isRollover()||button.getModel().isPressed()) {
-          g.setPaint(primary&&!button.getModel().isPressed()?new GradientPaint(0,0,new Color(255,126,61),0,button.getHeight(),WorkbenchUi.accent()):new GradientPaint(0,0,fill,0,button.getHeight(),fill));
+          g.setPaint(primary&&!button.getModel().isPressed()?new GradientPaint(0,0,kr.packetui.VisualTheme.primary(),0,button.getHeight(),kr.packetui.VisualTheme.primary()):new GradientPaint(0,0,fill,0,button.getHeight(),fill));
           g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
         }
         if(!segment||button.hasFocus()) {
-          g.setColor(button.hasFocus() || primary ? WorkbenchUi.accent() : WorkbenchUi.line());
+          g.setColor(button.hasFocus() ? WorkbenchUi.accent() : primary ? kr.packetui.VisualTheme.primary() : WorkbenchUi.line());
           g.drawRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
         }
         super.paint(g, component);
@@ -106,11 +106,11 @@ final class WorkbenchSkin {
     bar.setUnitIncrement(18);bar.setPreferredSize(bar.getOrientation()==JScrollBar.VERTICAL?new Dimension(10,0):new Dimension(0,10));
   }
   private static final class ScrollUi extends BasicScrollBarUI {
-    @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=WorkbenchUi.line();}
+    @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=kr.packetui.VisualTheme.thumb();}
     @Override protected JButton createDecreaseButton(int direction){return arrow(direction);}
     @Override protected JButton createIncreaseButton(int direction){return arrow(direction);}
     private JButton arrow(int direction){return new BasicArrowButton(direction,WorkbenchUi.background(),WorkbenchUi.line(),WorkbenchUi.ink(),WorkbenchUi.line()){@Override public Dimension getPreferredSize(){return new Dimension(0,0);}};}
-    @Override protected void paintThumb(Graphics graphics,JComponent component,Rectangle bounds){if(bounds.isEmpty()||!scrollbar.isEnabled())return;Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(isThumbRollover()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRoundRect(bounds.x+2,bounds.y+2,Math.max(2,bounds.width-4),Math.max(2,bounds.height-4),7,7);g.dispose();}
+    @Override protected void paintThumb(Graphics graphics,JComponent component,Rectangle bounds){if(bounds.isEmpty()||!scrollbar.isEnabled())return;Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(isThumbRollover()?WorkbenchUi.accent():kr.packetui.VisualTheme.thumb());g.fillRoundRect(bounds.x+2,bounds.y+2,Math.max(2,bounds.width-4),Math.max(2,bounds.height-4),7,7);g.dispose();}
   }
 
   static Color captureColor(String mode) {

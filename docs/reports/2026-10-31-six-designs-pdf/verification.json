@@ -1,0 +1,166 @@
+{
+  "file": "workbench-light-dark-six-designs.pdf",
+  "pages": 9,
+  "bookmarks": 9,
+  "bytes": 8185720,
+  "sha256": "6e2015aae2d9f9b96eba8da8cfa483f9175a9f3bf1fa03d988d7b0962ea979d7",
+  "type": "six generated UI design proposals, not application screenshots",
+  "productSourceModified": false,
+  "families": 3,
+  "screens": [
+    {
+      "key": "light-1",
+      "title": "라이트 1 · 미니멀 블루",
+      "family": "A",
+      "theme": "light",
+      "page": 4,
+      "width": 1586,
+      "height": 992,
+      "sourceSha256": "fe40ca2ea25732d40e83be4fa83d45c005d65c7810111763b6b77b52a7007105"
+    },
+    {
+      "key": "light-2",
+      "title": "라이트 2 · 소프트 아이보리",
+      "family": "B",
+      "theme": "light",
+      "page": 5,
+      "width": 1586,
+      "height": 992,
+      "sourceSha256": "1188c61b3ab25f296a287e19c19952262bee9697c8d3e4a55b5f508188081698"
+    },
+    {
+      "key": "light-3",
+      "title": "라이트 3 · 쿨그레이 청록",
+      "family": "C",
+      "theme": "light",
+      "page": 6,
+      "width": 1586,
+      "height": 992,
+      "sourceSha256": "a7cedaff26f24cff7d7027e23d415f85263ead848d67a72494c49e135460ddd3"
+    },
+    {
+      "key": "dark-1",
+      "title": "다크 1 · 차콜 블루",
+      "family": "A",
+      "theme": "dark",
+      "page": 7,
+      "width": 1586,
+      "height": 992,
+      "sourceSha256": "851f15090f419be8bb366560b3c7bb12adbcabcc06d6ce51e3b083dec5c2dccc"
+    },
+    {
+      "key": "dark-2",
+      "title": "다크 2 · 웜그레이 앰버",
+      "family": "B",
+      "theme": "dark",
+      "page": 8,
+      "width": 1586,
+      "height": 992,
+      "sourceSha256": "b9d2617f1cc1fd0f0480db81f3db125b99c2e30ab9c750667ebe3382198544d8"
+    },
+    {
+      "key": "dark-3",
+      "title": "다크 3 · 네이비 청록",
+      "family": "C",
+      "theme": "dark",
+      "page": 9,
+      "width": 1585,
+      "height": 992,
+      "sourceSha256": "0c05d73d10b89929e3c3e87ea20c78d27a5c2e32d6a301d45ad4f8c1eeef6f50"
+    }
+  ],
+  "placements": [
+    {
+      "page": 2,
+      "key": "light-1",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 2,
+      "key": "light-2",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 2,
+      "key": "light-3",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 3,
+      "key": "dark-1",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 3,
+      "key": "dark-2",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 3,
+      "key": "dark-3",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 4,
+      "key": "light-1",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 5,
+      "key": "light-2",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 6,
+      "key": "light-3",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 7,
+      "key": "dark-1",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 8,
+      "key": "dark-2",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    },
+    {
+      "page": 9,
+      "key": "dark-3",
+      "imageBounds": true,
+      "aspectRatioPreserved": true,
+      "originalPixelsPreserved": true
+    }
+  ],
+  "checks": {
+    "koreanTextExtraction": true,
+    "bookmarks": true,
+    "imageBounds": true,
+    "textBounds": true,
+    "aspectRatiosPreserved": true,
+    "originalImagePixelsPreserved": true
+  }
+}

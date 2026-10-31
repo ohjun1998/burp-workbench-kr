@@ -1,0 +1,81 @@
+{
+  "result": "passed",
+  "commit": "9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7",
+  "branch": "account-a/simple-1.4.17-completion",
+  "filesChecked": 9,
+  "files": [
+    {
+      "path": "simple/downloads/1.4.17/burp-workbench-simple-1.4.17.jar",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/simple/downloads/1.4.17/burp-workbench-simple-1.4.17.jar",
+      "httpStatus": 200,
+      "sizeBytes": 9020128,
+      "sha256": "b34ed19605de1178b1a21d5b70686eb3a834abf276e3b2e74bebda3bb3e6144d",
+      "matchesLocal": true
+    },
+    {
+      "path": "simple/downloads/1.4.17/burp-workbench-simple-1.4.17-source.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/simple/downloads/1.4.17/burp-workbench-simple-1.4.17-source.zip",
+      "httpStatus": 200,
+      "sizeBytes": 99907963,
+      "sha256": "12dcb5235d38318aa57e7e648381182489f55c61d9ab907d1cafa136857bad9a",
+      "matchesLocal": true
+    },
+    {
+      "path": "simple/downloads/1.4.17/SHA256SUMS",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/simple/downloads/1.4.17/SHA256SUMS",
+      "httpStatus": 200,
+      "sizeBytes": 311,
+      "sha256": "bfa314b7415b559f91414d71dad8f95fd72f1c405b5c67514600bc75252e108c",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-pdf-alignment.pdf",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-pdf-alignment.pdf",
+      "httpStatus": 200,
+      "sizeBytes": 6654765,
+      "sha256": "6bb8ac9ddd47fd25f34ff60fa230530d3ef436f6c0f904873145e426f113e81f",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-pdf-alignment-images.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-pdf-alignment-images.zip",
+      "httpStatus": 200,
+      "sizeBytes": 12849869,
+      "sha256": "af06dbc70276acd645e6ba221d451a4f86eded11c4e3ce8fea239b61c3b7e5d8",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-native-linux.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-native-linux.zip",
+      "httpStatus": 200,
+      "sizeBytes": 7110059,
+      "sha256": "476e863808c737d82d1ce6270edb182c71a1c84042f1c93dbaf0167063e0c064",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-pdf-alignment/1.4.17/images/light/payload.results.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/docs/reports/2026-10-31-pdf-alignment/1.4.17/images/light/payload.results.png",
+      "httpStatus": 200,
+      "sizeBytes": 94967,
+      "sha256": "b271e1f26de56411d341bcdcb5320223cb61e4daa667d06c03352f76aab81b04",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-pdf-alignment/1.4.17/images/dark/bounty.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/docs/reports/2026-10-31-pdf-alignment/1.4.17/images/dark/bounty.png",
+      "httpStatus": 200,
+      "sizeBytes": 125677,
+      "sha256": "3b246a1a1dc8ef134f31a3defb3d83a7c50544fbbc64ecae18e4e2432915f22a",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-10-31-pdf-alignment/1.4.17/auth-full-tabs/dark/01.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/9de662f1e3b9b3ea564931aa7a3535d81dd8d6b7/docs/reports/2026-10-31-pdf-alignment/1.4.17/auth-full-tabs/dark/01.png",
+      "httpStatus": 200,
+      "sizeBytes": 64716,
+      "sha256": "4d6d6ed479c7fc68b73e76e4af9d08007c5f0bf88c1c4286c25f944398c782fc",
+      "matchesLocal": true
+    }
+  ],
+  "scope": "HTTP GET through the configured proxy, normal TLS verification, no application Authorization header; complete response bytes match the local delivered artifacts."
+}

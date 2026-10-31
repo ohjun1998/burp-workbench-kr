@@ -1563,7 +1563,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     trafficSettings.addActionListener(e->trafficSettingsMenu.show(trafficSettings,0,trafficSettings.getHeight()));
     JPanel trafficContext=row(new JLabel("대상"),targetChoice,new JLabel("계정"),accountChoice,captureButton);
     trafficContext.setName("wb.actions.traffic.context");
-    JPanel trafficConfiguration=row(trafficSettings);trafficConfiguration.setName("wb.actions.traffic.settings");
+    JPanel trafficConfiguration=row(trafficBrowser.freezeView,trafficBrowser.newTraffic,trafficSettings);trafficConfiguration.setName("wb.actions.traffic.settings");
     controls.add(CompactWorkbenchUi.toolbar(trafficContext,trafficConfiguration), BorderLayout.NORTH);
     JButton compareSelected = button("계정 비교 준비", this::prepareSimpleComparison);
     JButton repeatSelected = button("Repeater", this::prepareSimpleRepeater);
@@ -1593,7 +1593,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     compareSelected.setIcon(WorkspaceIcons.of("traffic"));repeatSelected.setIcon(WorkspaceIcons.of("mapper"));evidenceSelected.setIcon(WorkspaceIcons.of("bounty"));
     JPanel selectedActions=row(selectionInfo,repeatSelected,evidenceSelected,compareSelected);selectedActions.setName("wb.actions.traffic.selection");
     JPanel searchActions=CompactWorkbenchUi.toolbar(queryRow,selectedActions);
-    JPanel footer=new JPanel(new BorderLayout());footer.add(trafficBrowser.conditionBar());footer.add(row(trafficBrowser.freezeView,trafficBrowser.newTraffic),BorderLayout.EAST);messages.add(footer,BorderLayout.SOUTH);
+    JPanel footer=new JPanel(new BorderLayout());footer.add(trafficBrowser.conditionBar());messages.add(footer,BorderLayout.SOUTH);
     controls.add(searchActions, BorderLayout.SOUTH);
     JPanel main = page(controls, body);
     main.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));

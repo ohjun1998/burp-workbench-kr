@@ -163,7 +163,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   final JLabel counts = new JLabel("인증 후보 0 · 비교 기록 0");
   final JLabel automaticScope = new JLabel("자동 비교 대상 · 계정 미지정");
   final JComboBox<String> historyFilter = new JComboBox<>(AuthResultTriage.LABELS);
-  final JTextField historySearch = new JTextField(14);
+  final JTextField historySearch = new WorkbenchSkin.SearchField(18, "URL·상태·계정으로 검색…");
   final JLabel historyVisible = new JLabel();
   TableRowSorter<DefaultTableModel> historySorter;
   Runnable historyRepairState = () -> {};
@@ -681,7 +681,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     });
     JPanel triage = new JPanel(); triage.setLayout(new BoxLayout(triage, BoxLayout.Y_AXIS));
     JPanel executionActions=WorkbenchUi.row(compare,stop);executionActions.setName("wb.actions.auth.execution");
-    JPanel historyFilters=WorkbenchUi.row(historySearch,historyFilter,historyVisible);historyFilters.setName("wb.actions.auth.filters");
+    JPanel historyFilters=new JPanel(new BorderLayout(6,0));
+    historyFilters.add(historySearch);historyFilters.add(WorkbenchUi.row(historyFilter,historyVisible),BorderLayout.EAST);
+    historyFilters.setName("wb.actions.auth.filters");
     triage.add(CompactWorkbenchUi.toolbar(historyFilters,executionActions));
     JButton sessionRepair = button("계정·세션 보완", () -> repairCurrent(3)), policyRepair = button("권한 설정 보완", () -> repairCurrent(4)), writeRepair = button("쓰기 조회 보완", () -> repairCurrent(5));
     sessionRepair.setName("wb.auth.history.repair.session"); policyRepair.setName("wb.auth.history.repair.policy"); writeRepair.setName("wb.auth.history.repair.write");
@@ -1824,8 +1826,20 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         else assign(slot, choice.candidate());
         state.setText("계정 연결 변경 · 적용 상태 다시 확인 후 비교하세요. 요청 전송 없음.");
       }));
-      panel.add(WorkbenchUi.row(new JLabel(i == 3 ? "비로그인" : "계정 " + (i + 1)), choices));
+      JLabel role = new JLabel(i == 3 ? "비로그인" : "계정 " + (i + 1));
+      role.setPreferredSize(new Dimension(80, 32));
+      role.setLabelFor(choices);
+      JPanel row = new JPanel(new BorderLayout(12, 0)) {
+        public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE, getPreferredSize().height); }
+      };
+      row.setAlignmentX(Component.LEFT_ALIGNMENT);
+      row.setBorder(BorderFactory.createEmptyBorder(4, 0, 4, 0));
+      choices.setMinimumSize(new Dimension(120, 32));
+      row.add(role, BorderLayout.WEST); row.add(choices);
+      panel.add(row);
     }
+    for (Component child : panel.getComponents())
+      if (child instanceof JComponent component) component.setAlignmentX(Component.LEFT_ALIGNMENT);
     return panel;
   }
 

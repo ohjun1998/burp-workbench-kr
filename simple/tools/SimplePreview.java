@@ -177,6 +177,11 @@ public final class SimplePreview extends WorkbenchTest {
         anchors.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()+".selected"),
             ""+selected.x, ""+selected.y, ""+selected.width, ""+selected.height,
             ""+(selected.width>0&&selected.height>0&&selectedShown.contains(selected))));
+        // An off-screen table row can be wider than its viewport. Keep the full-row
+        // diagnostic above and separately expose its visible part for guide markers.
+        anchors.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()+".selected.visible"),
+            ""+selectedShown.x, ""+selectedShown.y, ""+selectedShown.width, ""+selectedShown.height,
+            ""+(selectedShown.width>0&&selectedShown.height>0)));
       }
     }
     boolean control = component instanceof AbstractButton button && button.getText()!=null && !button.getText().isBlank()

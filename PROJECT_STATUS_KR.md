@@ -1,5 +1,13 @@
 # 현재 개발 상태
 
+## Simple 1.4.14 · Apple 테마 작업 공간 정리 — 작업 브랜치, 미병합
+
+`account-a/apple-layout-polish`에서 계정 입력 정렬, 대시보드 결과 높이 확장, URL 검색·열 너비, 재현/증거 버튼 위치와 공통 여백을 개선했습니다. 좁은 가로 스크롤 표의 빈 안내도 보이는 영역에 맞춥니다. 이전 Apple1.4.13 테마 구현을 포함합니다. Mapper0.3.15/helper0.4.1.
+
+전체7,151개 검사, Swing194개 배치, 격리 실제 창112개, Katana102개 통과. 16개 화면의 라이트·다크32장과16페이지PDF를 제공합니다. main 병합 완료를 뜻하지 않으며 기존 main 상태는 아래에 보존합니다.
+
+[설치 JAR](simple/downloads/1.4.14/burp-workbench-simple-1.4.14.jar) · [16개 화면 PDF](docs/reports/2026-10-31-layout-polish/workbench-simple-1.4.14-light-dark.pdf) · [화면·검증 기록](docs/reports/2026-10-31-layout-polish/README.md) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.14_KR.md)
+
 ## Simple 1.4.12 · 버튼 배치 시안 적용 — main 병합 완료
 
 승인한 13개 화면의 버튼 배치를 소스에 적용했습니다. 실행·중지를 함께 두고, 선택한 데이터의 Repeater·증거·출처 작업을 해당 목록/상세 위로 옮겼습니다. 변환·JWT·비교는 입력/출력·단계별 작업으로 구분하고, 계정 카드와 반복 제목을 압축했습니다. 좁은 CVE 창에서는 필터를 먼저 확보하고 최신성 정보를 아래로 보냅니다. Guide16화면·96번호를 현재 배치로 갱신했습니다.

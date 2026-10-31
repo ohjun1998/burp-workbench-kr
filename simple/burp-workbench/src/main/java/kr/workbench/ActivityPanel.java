@@ -136,12 +136,13 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     parameterTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    int[] widths = {75, 340, 135, 60, 75, 135, 160, 190, 220};
+    int[] widths = {75, 340, 135, 60, 95, 135, 160, 190, 220};
     for (int i = 0; i < widths.length; i++)
-      table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+      { var column = table.getColumnModel().getColumn(i); column.setPreferredWidth(widths[i]); column.setWidth(widths[i]); }
     table.setToolTipText("가로 스크롤로 출처와 최근 활동을 확인할 수 있습니다.");
-    JPanel urlActions = CompactWorkbenchUi.toolbar(
-        WorkbenchUi.row(filter, search), WorkbenchUi.row(finish));
+    JPanel searchBar = new JPanel(new BorderLayout(6, 0));
+    searchBar.add(filter, BorderLayout.WEST); searchBar.add(search);
+    JPanel urlActions = CompactWorkbenchUi.toolbar(searchBar, WorkbenchUi.row(finish));
     urlActions.setName("wb.actions.activity.url");
     JPanel urls = new JPanel(new BorderLayout(0, 4));
     urls.add(urlActions, BorderLayout.NORTH);

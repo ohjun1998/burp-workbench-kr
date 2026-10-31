@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.14는 작업 공간과 버튼 배치를 정리합니다.** [설치 JAR](simple/downloads/1.4.14/burp-workbench-simple-1.4.14.jar) · [16개 화면 PDF](docs/reports/2026-10-31-layout-polish/workbench-simple-1.4.14-light-dark.pdf) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.14_KR.md). 작업 브랜치에서 제공하며 main 병합 완료를 뜻하지 않습니다.
+
 **Simple 1.4.13은 Apple 디자인 언어를 참고한 라이트·다크 테마를 적용합니다.** 실버·화이트와 그래파이트 바탕, 파란 강조, 간결한 버튼·표·메뉴를 제공합니다. [설치 JAR](simple/downloads/1.4.13/burp-workbench-simple-1.4.13.jar) · [16개 화면 비교 PDF](docs/reports/2026-10-31-apple-implementation/workbench-simple-1.4.13-light-dark.pdf) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.13_KR.md).
 
 **Simple 1.4.12는 승인한 버튼 배치를 13개 화면에 적용합니다.** 실행·중지는 함께, 선택 항목 작업은 해당 목록·상세 옆에 배치하고 Guide 그림도 갱신했습니다. [설치 JAR](simple/downloads/1.4.12/burp-workbench-simple-1.4.12.jar) · [실제 화면](docs/reports/2026-10-31-contextual-button-layout/README.md) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.12_KR.md).

@@ -1,0 +1,66 @@
+[
+  {
+    "view": "16-dashboard.png",
+    "control": "wb.scope.dashboard.results.split",
+    "before": {
+      "x": 238,
+      "y": 438,
+      "anchorWidth": 1351,
+      "anchorHeight": 320
+    },
+    "after": {
+      "x": 238,
+      "y": 432,
+      "anchorWidth": 1351,
+      "anchorHeight": 557
+    }
+  },
+  {
+    "view": "04-auth-accounts.png",
+    "control": "wb.auth.preparation.account.0",
+    "before": {
+      "x": 553,
+      "y": 74,
+      "anchorWidth": 336,
+      "anchorHeight": 32
+    },
+    "after": {
+      "x": 105,
+      "y": 81,
+      "anchorWidth": 882,
+      "anchorHeight": 32
+    }
+  },
+  {
+    "view": "07-payload.png",
+    "control": "wb.payload.step.prepare",
+    "before": {
+      "x": 237,
+      "y": 46,
+      "anchorWidth": 129,
+      "anchorHeight": 54
+    },
+    "after": {
+      "x": 243,
+      "y": 48,
+      "anchorWidth": 129,
+      "anchorHeight": 40
+    }
+  },
+  {
+    "view": "04-auth-results.png",
+    "control": "wb.auth.history.search",
+    "before": {
+      "x": 243,
+      "y": 187,
+      "anchorWidth": 202,
+      "anchorHeight": 33
+    },
+    "after": {
+      "x": 235,
+      "y": 176,
+      "anchorWidth": 985,
+      "anchorHeight": 42
+    }
+  }
+]

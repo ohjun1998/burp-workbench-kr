@@ -397,13 +397,24 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     flowStop.setName("wb.bounty.flow.stop");
     flowCapture.setName("wb.bounty.flow.evidence");
     WorkbenchUi.primary(flowRun);
-    p.add(
-        WorkbenchUi.row(append, flowSettings.button(), flowRun, flowStop, flowCapture),
-        BorderLayout.NORTH);
+    append.setName("wb.bounty.flow.append");
+    JPanel execution = CompactWorkbenchUi.toolbar(WorkbenchUi.row(flowSettings.button()), WorkbenchUi.row(flowRun, flowStop));
+    execution.setName("wb.actions.bounty.flow.execution");
+    p.add(execution, BorderLayout.NORTH);
+    JPanel requestCard = WorkbenchUi.card("요청 단계 · ===STEP=== 줄로 구분", packetScroll(workflow));
+    requestCard.remove(((BorderLayout) requestCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
+    JPanel requestActions = CompactWorkbenchUi.toolbar(new JLabel("요청 단계 · ===STEP=== 줄로 구분"), WorkbenchUi.row(append));
+    requestActions.setName("wb.actions.bounty.flow.request");
+    requestCard.add(ReferenceUi.header(requestActions, null), BorderLayout.NORTH);
+    JPanel resultCard = WorkbenchUi.card("단계별 실행 결과", new JScrollPane(flowTable));
+    resultCard.remove(((BorderLayout) resultCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
+    JPanel resultActions = CompactWorkbenchUi.toolbar(new JLabel("단계별 실행 결과"), WorkbenchUi.row(flowCapture));
+    resultActions.setName("wb.actions.bounty.flow.results");
+    resultCard.add(ReferenceUi.header(resultActions, null), BorderLayout.NORTH);
     JSplitPane inputs =
         WorkbenchUi.split(
             JSplitPane.VERTICAL_SPLIT,
-            WorkbenchUi.card("요청 단계 · ===STEP=== 줄로 구분", packetScroll(workflow)),
+            requestCard,
             WorkbenchUi.card("JSON 변수 추출 · 1.id=$.id → {{id|URL}}", new JScrollPane(extract)),
             .73);
     inputs.setName("wb.bounty.flow.inputs");
@@ -411,7 +422,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     JSplitPane results =
         WorkbenchUi.split(
             JSplitPane.VERTICAL_SPLIT,
-            WorkbenchUi.card("단계별 실행 결과", new JScrollPane(flowTable)),
+            resultCard,
             WorkbenchUi.card("선택 단계 · 요청/응답", packetScroll(workflowDetail)),
             .40);
     results.setName("wb.bounty.flow.results");
@@ -432,9 +443,9 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
                 workflowDetail.setCaretPosition(0);
               }
             });
-    int[] widths = {45, 70, 230, 55, 190};
+    int[] widths = {65, 80, 230, 75, 190};
     for (int i = 0; i < widths.length; i++)
-      flowTable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+      { var column = flowTable.getColumnModel().getColumn(i); column.setPreferredWidth(widths[i]); column.setWidth(widths[i]); }
     flowTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     JSplitPane body = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, inputs, results, .52);
     body.setName("wb.bounty.flow.body");
@@ -594,7 +605,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     listHeader.add(addActions,BorderLayout.NORTH);
     listHeader.add(CompactWorkbenchUi.search(evidenceTable,"wb.bounty.evidence.search","증거 이름, 타입, 메모로 검색…"));
     listHeader.setBorder(BorderFactory.createEmptyBorder(4,6,6,6));
-    list.add(listHeader,BorderLayout.NORTH);list.add(itemActions,BorderLayout.SOUTH);
+    listHeader.add(itemActions,BorderLayout.SOUTH);
+    list.add(listHeader,BorderLayout.NORTH);
     JSplitPane body=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,list,detail,.35);
     body.setName("wb.bounty.evidence.body");
     p.add(body);

@@ -184,7 +184,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
       if (!e.getValueIsAdjusting() && !rebuilding) selectedChanged();
     });
     int[] widths = {220, 95, 72, 135, 100, 75, 300};
-    for (int i = 0; i < widths.length; i++) table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+    for (int i = 0; i < widths.length; i++) { var column = table.getColumnModel().getColumn(i); column.setPreferredWidth(widths[i]); column.setWidth(widths[i]); }
     var empty = new JPanel(new BorderLayout());
     name(emptyMessage, "empty"); empty.add(emptyMessage, BorderLayout.NORTH);
     resultViews.add(new JScrollPane(table), "rows"); resultViews.add(empty, "empty");
@@ -205,7 +205,7 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
         WorkbenchUi.card("해당 결과 목록", resultViews), detailCard, .61);
     name(split, "results.split");
     split.setPreferredSize(new Dimension(850, 320));
-    split.setMaximumSize(new Dimension(Integer.MAX_VALUE, 500));
+    split.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
     name(filterSummary, "filter.summary");
     name(resultsSection, "results.area");
     resultsSection.add(filterSummary, BorderLayout.NORTH); resultsSection.add(split);
@@ -231,8 +231,13 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
 
   private static void addSection(JPanel content, JComponent section, int gap) {
     section.setAlignmentX(Component.LEFT_ALIGNMENT);
-    content.add(section);
-    if (gap > 0) content.add(Box.createVerticalStrut(gap));
+    if (gap > 0) {
+      JPanel fixed = new JPanel(new BorderLayout()) {
+        public Dimension getMaximumSize() { return new Dimension(Integer.MAX_VALUE, getPreferredSize().height); }
+      };
+      fixed.setAlignmentX(Component.LEFT_ALIGNMENT); fixed.add(section);
+      content.add(fixed); content.add(Box.createVerticalStrut(gap));
+    } else content.add(section);
   }
 
   private static JTextArea prose(int rows, int columns) {
@@ -708,6 +713,8 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     @Override public int getScrollableUnitIncrement(Rectangle visible, int orientation, int direction) { return 24; }
     @Override public int getScrollableBlockIncrement(Rectangle visible, int orientation, int direction) { return Math.max(24, visible.height - 40); }
     @Override public boolean getScrollableTracksViewportWidth() { return true; }
-    @Override public boolean getScrollableTracksViewportHeight() { return false; }
+    @Override public boolean getScrollableTracksViewportHeight() {
+      return getParent() instanceof JViewport viewport && viewport.getHeight() >= getPreferredSize().height;
+    }
   }
 }

@@ -65,7 +65,7 @@ public final class SimpleScreenCleanupTest extends WorkbenchTest {
       });
       check(get(extension,"featureMapper")==mapper&&get(mapper,"mapper")==mapperModel,"cleanup keeps the exact mapper workspace and model engines");
       check(get(entry,"payloadRunner")==runner&&get(extension,"current")==selectedOriginal,"cleanup preserves the exact payload engine and selected original identity");
-      check(kr.featuremapper.BuildInfo.VERSION.equals("0.3.14"),"modified embedded mapper receives its own new component version");
+      check(kr.featuremapper.BuildInfo.VERSION.equals("0.3.15"),"modified embedded mapper receives its own new component version");
       check(PayloadIntegrationTest.sent.get()==sentBefore,"guide-independent cleanup navigation and retained preparation actions send zero HTTP");
     }finally{SimpleWorkflowTest.unload();}
     System.out.println("SimpleScreenCleanupTest: "+checks+" checks passed (retained production controls/models, zero HTTP)");

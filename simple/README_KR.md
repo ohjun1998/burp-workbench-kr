@@ -1,4 +1,6 @@
-# Workbench Simple 1.4.13
+# Workbench Simple 1.4.14
+
+16개 화면의 작업 공간과 버튼 배치를 정리했습니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.14_KR.md) · [설치 JAR](downloads/1.4.14/burp-workbench-simple-1.4.14.jar).
 
 Apple 디자인 언어를 참고한 라이트·다크 테마를 적용했습니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.13_KR.md) · [설치 JAR](downloads/1.4.13/burp-workbench-simple-1.4.13.jar). 아래 이전 버전 설명과 배포 파일은 보존합니다.
 

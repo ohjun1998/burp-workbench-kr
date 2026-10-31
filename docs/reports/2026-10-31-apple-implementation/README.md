@@ -4,7 +4,7 @@
 
 승인한 Apple 디자인 언어 참고 시안을 실제 Swing 소스에 적용했습니다. 실버·화이트와 중립 그래파이트, 파란 주요 버튼·선택 표시, 정돈된 아이콘과 얇은 가로 구분선을 공유합니다. 메뉴·버튼·제목줄·입력·표·코드·카드·가이드·내장 Mapper에 같은 테마를 적용합니다. 기존의 36px 상단, Guide/F1, 독립 창·전체화면, 도구 배치와 기존 기능은 유지합니다.
 
-모든 이미지는 합성 데이터를 넣은 운영 컴포넌트 캡처입니다. Apple 공식 UI·운영체제 블러 효과나 생성 시안과의 픽셀 단위 동일성을 의미하지 않습니다. 실제 Windows Burp·DPI/IME는 검증하지 않았습니다. 현재 결과는 작업 브랜치에 있으며, PR 생성에 필요한 GitHub API 인증은 사용할 수 없어 main에 병합하지 않았습니다.
+모든 이미지는 합성 데이터를 넣은 운영 컴포넌트 캡처입니다. Apple 공식 UI·운영체제 블러 효과나 생성 시안과의 픽셀 단위 동일성을 의미하지 않습니다. 실제 Windows Burp·DPI/IME는 검증하지 않았습니다. 현재 결과는 작업 브랜치에 있으며, PR 생성 요청이 GitHub API에서 `Forbidden`으로 차단되어 main에 병합하지 않았습니다.
 
 ![라이트·다크 실제 적용 비교](comparison.png)
 
@@ -38,3 +38,5 @@
 초기 기본 Java에는 Java 17 API 정의 파일이 없어 컴파일하지 못했습니다. 준비된 완전한 JDK 17로 `--release 17` 검사를 실행했습니다. 첫 전체 검사는 샌드박스의 로컬 소켓 제한으로 중단했고, 최종 전체 검사는 격리 loopback 서버를 실행할 수 있는 환경에서 다시 실행했습니다. 이 초기 실행들을 최종 통과 수에 합산하지 않습니다. 첫 전체 실행에서는 과거 Mapper 0.3.13을 고정한 검사 한 곳이 실패했습니다. 기대값을 새 0.3.14로 갱신했으며, [중간 실패 기록](pre-version-expectation-test-summary.json)을 보존합니다. 수정은 테스트 기대값뿐이며 [다시 빌드한 JAR](jar-equivalence.json)은 화면·실제 창·Katana 검증 때와 바이트까지 동일합니다.
 
 생성 시안: [승인한 라이트·다크 PDF](https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/1f6d2027ea46bcec54858d07f218fbe358991910/docs/reports/2026-10-31-apple-design-pdf/workbench-apple-inspired-light-dark.pdf).
+
+[공개 다운로드 재검증](PUBLIC_DOWNLOAD_VERIFICATION.json): 설치 JAR·소스 ZIP·PDF·비교 이미지 모두 HTTP 200 및 로컬 SHA-256 일치. [PR 생성 비교 화면](https://github.com/ohjun1998/burp-workbench-kr/compare/main...account-a:apple-design-implementation?expand=1).

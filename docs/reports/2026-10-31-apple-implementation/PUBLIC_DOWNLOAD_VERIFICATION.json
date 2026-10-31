@@ -1,0 +1,38 @@
+{
+  "commit": "977e0bbce2a7efce591da9051ca00f02aa2c7d45",
+  "result": "passed",
+  "downloads": [
+    {
+      "file": "simple/downloads/1.4.13/burp-workbench-simple-1.4.13.jar",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/977e0bbce2a7efce591da9051ca00f02aa2c7d45/simple/downloads/1.4.13/burp-workbench-simple-1.4.13.jar",
+      "status": 200,
+      "bytes": 8959881,
+      "sha256": "d87cca53a4ab4ab3c750ba742903acef7490ce6e5a27adc4808edbd7ff579456",
+      "matchesLocal": true
+    },
+    {
+      "file": "simple/downloads/1.4.13/burp-workbench-simple-1.4.13-source.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/977e0bbce2a7efce591da9051ca00f02aa2c7d45/simple/downloads/1.4.13/burp-workbench-simple-1.4.13-source.zip",
+      "status": 200,
+      "bytes": 99811135,
+      "sha256": "7621e72512065ab8bfde0bdb3b84aa8ecc725a23cb1a4cc176c89afcff1f2f23",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-apple-implementation/workbench-simple-1.4.13-light-dark.pdf",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/977e0bbce2a7efce591da9051ca00f02aa2c7d45/docs/reports/2026-10-31-apple-implementation/workbench-simple-1.4.13-light-dark.pdf",
+      "status": 200,
+      "bytes": 2828925,
+      "sha256": "406f0b2fa482ff838775334ce25190a5ed3c1561a666e337ea17ac992c02a833",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-apple-implementation/comparison.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/977e0bbce2a7efce591da9051ca00f02aa2c7d45/docs/reports/2026-10-31-apple-implementation/comparison.png",
+      "status": 200,
+      "bytes": 130398,
+      "sha256": "8bfe080d61a9e6783e55ef4e6605c5d23f352db4b4a377df6dfc8c3316d7ae7e",
+      "matchesLocal": true
+    }
+  ]
+}

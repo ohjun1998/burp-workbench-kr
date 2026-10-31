@@ -1535,8 +1535,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     viewers.setName("wb.traffic.messages");
     JPanel messages = new JPanel(new BorderLayout(0, 6));
     messages.add(viewers);
+    JPanel trafficList = new JPanel(new BorderLayout());
+    trafficList.setName("wb.placement.traffic.list"); trafficList.add(trafficListPanel());
     JSplitPane body =
-        WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficListPanel(), messages, .30);
+        WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficList, messages, .30);
     body.setName("wb.traffic.workspace");
     JPanel controls = new JPanel(new BorderLayout(0, 5));
     controls.setName("wb.traffic.controls");
@@ -1591,10 +1593,11 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     trafficBrowser.quickStateChanged=()->{syncingQuick[0]=true;try{var q=trafficBrowser.query;methodGroup.clearSelection();for(JToggleButton b:quickMethods)b.setSelected(b.getText().equals("오류")?q.status().equals("오류"):q.status().equals("전체")&&b.getText().equals(q.method()));accountChoice.setSelectedItem(q.account().isEmpty()?"전체":q.account());}finally{syncingQuick[0]=false;}};trafficBrowser.quickStateChanged.run();
     queryRow.add(methods,BorderLayout.EAST);
     compareSelected.setIcon(WorkspaceIcons.of("traffic"));repeatSelected.setIcon(WorkspaceIcons.of("mapper"));evidenceSelected.setIcon(WorkspaceIcons.of("bounty"));
-    JPanel selectedActions=row(selectionInfo,repeatSelected,evidenceSelected,compareSelected);selectedActions.setName("wb.actions.traffic.selection");
-    JPanel searchActions=CompactWorkbenchUi.toolbar(queryRow,selectedActions);
-    JPanel footer=new JPanel(new BorderLayout());footer.add(trafficBrowser.conditionBar());messages.add(footer,BorderLayout.SOUTH);
-    controls.add(searchActions, BorderLayout.SOUTH);
+    JPanel selectedActions=row(repeatSelected,evidenceSelected,compareSelected);selectedActions.setName("wb.actions.traffic.selection");
+    JPanel selectionBar=CompactWorkbenchUi.toolbar(row(trafficBrowser.conditionBar(),selectionInfo),selectedActions);
+    selectionBar.setName("wb.placement.traffic.selection");
+    trafficList.add(ReferenceUi.header(selectionBar,null),BorderLayout.SOUTH);
+    controls.add(queryRow, BorderLayout.SOUTH);
     JPanel main = page(controls, body);
     main.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));
     main.setName("wb.traffic");
@@ -2173,10 +2176,10 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     JPanel inputActions=row(operation,convert);inputActions.setName("wb.actions.data.codec.input");
     JPanel outputActions=row(reuse,copyOutput);outputActions.setName("wb.actions.data.codec.output");
     JPanel input=new JPanel(new BorderLayout());input.setName("wb.codec.input");
-    input.add(CompactWorkbenchUi.toolbar(new JLabel("입력 (UTF-8 텍스트)"),inputActions),BorderLayout.NORTH);
+    input.add(CompactWorkbenchUi.toolbar(new JLabel("입력 (UTF-8 텍스트)"),inputActions),BorderLayout.SOUTH);
     input.add(new JScrollPane(codecIn));
     JPanel output=new JPanel(new BorderLayout());output.setName("wb.codec.output");
-    output.add(CompactWorkbenchUi.toolbar(new JLabel("출력"),outputActions),BorderLayout.NORTH);
+    output.add(CompactWorkbenchUi.toolbar(new JLabel("출력"),outputActions),BorderLayout.SOUTH);
     output.add(new JScrollPane(codecOut));
     JSplitPane editors =
         split(
@@ -2193,7 +2196,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     JButton fromRequest=button("선택 요청에서 가져오기",this::selectedJwt);fromRequest.setName("wb.data.jwt.import");
     JPanel inputActions=row(fromRequest,decode);inputActions.setName("wb.actions.data.jwt.input");
     JPanel input=new JPanel(new BorderLayout());input.setName("wb.jwt.input");
-    input.add(CompactWorkbenchUi.toolbar(new JLabel("JWT 입력"),inputActions),BorderLayout.NORTH);
+    input.add(CompactWorkbenchUi.toolbar(new JLabel("JWT 입력"),inputActions),BorderLayout.SOUTH);
     input.add(new JScrollPane(jwtIn));
     JPanel output=new JPanel(new BorderLayout());output.setName("wb.jwt.output");
     output.add(ReferenceUi.header(new JLabel("디코딩 결과 · 서명 검증 아님"),null),BorderLayout.NORTH);

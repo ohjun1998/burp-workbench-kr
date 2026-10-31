@@ -682,9 +682,12 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     JPanel triage = new JPanel(); triage.setLayout(new BoxLayout(triage, BoxLayout.Y_AXIS));
     JPanel executionActions=WorkbenchUi.row(compare,stop);executionActions.setName("wb.actions.auth.execution");
     JPanel historyFilters=new JPanel(new BorderLayout(6,0));
-    historyFilters.add(historySearch);historyFilters.add(WorkbenchUi.row(historyFilter,historyVisible),BorderLayout.EAST);
+    historyFilters.add(historySearch);historyFilters.add(WorkbenchUi.row(historyFilter),BorderLayout.EAST);
     historyFilters.setName("wb.actions.auth.filters");
-    triage.add(CompactWorkbenchUi.toolbar(historyFilters,executionActions));
+    triage.add(historyFilters);
+    JPanel comparisonActions=CompactWorkbenchUi.toolbar(historyVisible,executionActions);
+    comparisonActions.setName("wb.placement.auth.execution");
+    historyCard.add(comparisonActions,BorderLayout.SOUTH);
     JButton sessionRepair = button("계정·세션 보완", () -> repairCurrent(3)), policyRepair = button("권한 설정 보완", () -> repairCurrent(4)), writeRepair = button("쓰기 조회 보완", () -> repairCurrent(5));
     sessionRepair.setName("wb.auth.history.repair.session"); policyRepair.setName("wb.auth.history.repair.policy"); writeRepair.setName("wb.auth.history.repair.write");
     historyRepairState = () -> {

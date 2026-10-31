@@ -292,6 +292,16 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     toolbar.add(sourceContext,BorderLayout.SOUTH);
     tools.setName("wb.js.selected.tools");locate.setName("wb.js.source.locate");resolve.setName("wb.js.repeater.prepare");
     resultView.setDetailActions(tools,locate,resolve);
+    // Keep selected-finding actions at the end of the reading area, rather than
+    // mixing them with the detail title above the evidence.
+    Container previousActions=resultView.detailActions.getParent();
+    previousActions.remove(resultView.detailActions);
+    Component previousSelection=((BorderLayout)resultView.getLayout()).getLayoutComponent(BorderLayout.SOUTH);
+    resultView.remove(previousSelection);
+    JPanel selectedFinding=WorkbenchUi.row(resultView.summary,resultView.shortcut);
+    JPanel findingActions=CompactWorkbenchUi.toolbar(selectedFinding,resultView.detailActions);
+    findingActions.setName("wb.placement.js.selection");
+    resultView.add(findingActions,BorderLayout.SOUTH);
     resolve.addActionListener(e -> openResolvedDraft());
 
     header.removeAll();

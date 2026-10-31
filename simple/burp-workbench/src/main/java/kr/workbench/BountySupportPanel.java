@@ -546,11 +546,11 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       menu.addSeparator(); evidenceMenuItem(menu, "증거 비우기", evidenceClear.isEnabled(), this::clearEvidence);
       return menu;
     });
-    JPanel heading=new JPanel(new BorderLayout(8,0));heading.add(new JLabel("제목"),BorderLayout.WEST);heading.add(evidenceTitle);
-    JPanel documentActions = CompactWorkbenchUi.toolbar(heading,
-        WorkbenchUi.row(evidencePreview, evidenceSave, moreEvidence));
+    JPanel heading=new JPanel(new BorderLayout(8,0));heading.add(new JLabel("제목"),BorderLayout.WEST);heading.add(evidenceTitle);heading.add(evidenceCount,BorderLayout.EAST);
+    heading.setName("wb.placement.bounty.title");
+    top.add(heading);
+    JPanel documentActions = WorkbenchUi.row(evidencePreview, evidenceSave, moreEvidence);
     documentActions.setName("wb.actions.bounty.document");
-    top.add(documentActions);
     addEvidence.setToolTipText("수집한 원본, 계정 비교 또는 요청 재현 결과를 증거에 추가합니다.");
     evidencePreview.setToolTipText("ZIP에 저장할 보고서와 패킷의 민감 정보 가림을 먼저 확인합니다.");
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -613,7 +613,12 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     draftState.setName("wb.bounty.evidence.draft.state");
     draftState.setEditable(false); draftState.setOpaque(false); draftState.setLineWrap(true);
     draftState.setWrapStyleWord(true); draftState.putClientProperty("wb.prose", true);
-    JPanel footer=new JPanel(new BorderLayout());footer.add(draftState);footer.add(evidenceCount,BorderLayout.EAST);p.add(footer, BorderLayout.SOUTH);
+    draftState.setMinimumSize(new Dimension(180, 32));
+    // Keep draft feedback beside document actions so the packet and writing
+    // readers retain their height even in a 1024px workspace.
+    JPanel footer = CompactWorkbenchUi.toolbar(draftState, documentActions);
+    footer.setName("wb.placement.bounty.document");
+    p.add(footer, BorderLayout.SOUTH);
     evidenceTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
     int[] widths = {135, 55, 190, 90};
     for (int i = 0; i < widths.length; i++)

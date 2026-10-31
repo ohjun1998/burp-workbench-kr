@@ -1,5 +1,13 @@
 # 현재 개발 상태
 
+## Simple1.4.15 · 주요 버튼 실제 재배치 — 작업 브랜치, 미병합
+
+설치1.4.14의 주요 버튼 위치가 그대로라는 지적을 확인하고14개 화면의 버튼 부모 영역을 실제로 변경했습니다. 요청재현·인증후보연결2개는 기존 배치를 유지합니다. 선택작업은 해당 목록/상세 아래로, 페이로드 실행·중지는 두단계 공통 하단으로 옮겼습니다. 앞선1.4.14는3화면만 버튼을 옮겼으며 전반적인 재배치 완료라는 안내는 과장되었습니다.
+
+전체7,176개 검사, Swing194개 배치, 실제 별도창112개, Katana102개 통과.16개 화면×라이트·다크의32페이지 전후PDF와32장 적용 이미지를 제공합니다. Mapper0.3.16/helper0.4.1. 작업브랜치`account-a/button-placement-correction`;main 미병합.
+
+[설치JAR](simple/downloads/1.4.15/burp-workbench-simple-1.4.15.jar) · [전후 비교PDF](docs/reports/2026-10-31-button-placement-correction/workbench-simple-1.4.15-before-after.pdf) · [화면·검증](docs/reports/2026-10-31-button-placement-correction/README.md)
+
 ## Simple 1.4.14 · Apple 테마 작업 공간 정리 — 작업 브랜치, 미병합
 
 `account-a/apple-layout-polish`에서 계정 입력 정렬, 대시보드 결과 높이 확장, URL 검색·열 너비, 재현/증거 버튼 위치와 공통 여백을 개선했습니다. 좁은 가로 스크롤 표의 빈 안내도 보이는 영역에 맞춥니다. 이전 Apple1.4.13 테마 구현을 포함합니다. Mapper0.3.15/helper0.4.1.

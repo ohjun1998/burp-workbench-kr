@@ -1,0 +1,555 @@
+{
+  "before": "1.4.14",
+  "after": "1.4.15",
+  "changedScreens": 14,
+  "retainedScreens": 2,
+  "minimumRepresentativeVerticalMove": 32,
+  "checks": [
+    {
+      "screen": "traffic",
+      "title": "요청·응답 목록",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1462,
+            92,
+            124,
+            32
+          ],
+          "after": [
+            1462,
+            395,
+            124,
+            32
+          ],
+          "deltaY": 303
+        },
+        "dark": {
+          "before": [
+            1462,
+            92,
+            124,
+            32
+          ],
+          "after": [
+            1462,
+            395,
+            124,
+            32
+          ],
+          "deltaY": 303
+        }
+      },
+      "control": "wb.simple.traffic.compare"
+    },
+    {
+      "screen": "mapper",
+      "title": "기능 자동 매핑",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1504,
+            98,
+            80,
+            32
+          ],
+          "after": [
+            1504,
+            414,
+            80,
+            32
+          ],
+          "deltaY": 316
+        },
+        "dark": {
+          "before": [
+            1504,
+            98,
+            80,
+            32
+          ],
+          "after": [
+            1504,
+            414,
+            80,
+            32
+          ],
+          "deltaY": 316
+        }
+      },
+      "control": "fm.packet.repeater"
+    },
+    {
+      "screen": "js",
+      "title": "JS에서 API 찾기",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1454,
+            589,
+            129,
+            32
+          ],
+          "after": [
+            1455,
+            931,
+            129,
+            32
+          ],
+          "deltaY": 342
+        },
+        "dark": {
+          "before": [
+            1454,
+            589,
+            129,
+            32
+          ],
+          "after": [
+            1455,
+            931,
+            129,
+            32
+          ],
+          "deltaY": 342
+        }
+      },
+      "control": "wb.js.repeater.prepare"
+    },
+    {
+      "screen": "environment",
+      "title": "서버·경로 탐색",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1160,
+            136,
+            133,
+            32
+          ],
+          "after": [
+            1160,
+            397,
+            133,
+            32
+          ],
+          "deltaY": 261
+        },
+        "dark": {
+          "before": [
+            1160,
+            136,
+            133,
+            32
+          ],
+          "after": [
+            1160,
+            397,
+            133,
+            32
+          ],
+          "deltaY": 261
+        }
+      },
+      "control": "wb.environment.single"
+    },
+    {
+      "screen": "exposure.search",
+      "title": "외부 노출 조사 · 검색 노출",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1375,
+            578,
+            129,
+            32
+          ],
+          "after": [
+            1457,
+            534,
+            129,
+            32
+          ],
+          "deltaY": -44
+        },
+        "dark": {
+          "before": [
+            1375,
+            578,
+            129,
+            32
+          ],
+          "after": [
+            1457,
+            534,
+            129,
+            32
+          ],
+          "deltaY": -44
+        }
+      },
+      "control": "wb.exposure.search.repeater"
+    },
+    {
+      "screen": "exposure.cve",
+      "title": "외부 노출 조사 · CVE 후보",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1391,
+            137,
+            103,
+            32
+          ],
+          "after": [
+            1391,
+            407,
+            103,
+            32
+          ],
+          "deltaY": 270
+        },
+        "dark": {
+          "before": [
+            1391,
+            137,
+            103,
+            32
+          ],
+          "after": [
+            1391,
+            407,
+            103,
+            32
+          ],
+          "deltaY": 270
+        }
+      },
+      "control": "wb.exposure.lookup"
+    },
+    {
+      "screen": "auth",
+      "title": "계정 권한 비교",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1410,
+            178,
+            104,
+            32
+          ],
+          "after": [
+            1410,
+            469,
+            104,
+            32
+          ],
+          "deltaY": 291
+        },
+        "dark": {
+          "before": [
+            1410,
+            178,
+            104,
+            32
+          ],
+          "after": [
+            1410,
+            469,
+            104,
+            32
+          ],
+          "deltaY": 291
+        }
+      },
+      "control": "wb.simple.auth.review"
+    },
+    {
+      "screen": "response.recon",
+      "title": "응답 보안 분석",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1465,
+            419,
+            121,
+            32
+          ],
+          "after": [
+            1465,
+            929,
+            121,
+            32
+          ],
+          "deltaY": 510
+        },
+        "dark": {
+          "before": [
+            1465,
+            419,
+            121,
+            32
+          ],
+          "after": [
+            1465,
+            929,
+            121,
+            32
+          ],
+          "deltaY": 510
+        }
+      },
+      "control": "wb.response.finding.evidence"
+    },
+    {
+      "screen": "payload",
+      "title": "입력값 보안 검사 · 요청 준비",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1437,
+            48,
+            75,
+            32
+          ],
+          "after": [
+            1437,
+            956,
+            75,
+            32
+          ],
+          "deltaY": 908
+        },
+        "dark": {
+          "before": [
+            1437,
+            48,
+            75,
+            32
+          ],
+          "after": [
+            1437,
+            956,
+            75,
+            32
+          ],
+          "deltaY": 908
+        }
+      },
+      "control": "wb.simple.payload.start"
+    },
+    {
+      "screen": "data",
+      "title": "데이터 변환·비교",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            858,
+            90,
+            46,
+            32
+          ],
+          "after": [
+            858,
+            958,
+            46,
+            32
+          ],
+          "deltaY": 868
+        },
+        "dark": {
+          "before": [
+            858,
+            90,
+            46,
+            32
+          ],
+          "after": [
+            858,
+            958,
+            46,
+            32
+          ],
+          "deltaY": 868
+        }
+      },
+      "control": "wb.data.codec.convert"
+    },
+    {
+      "screen": "activity",
+      "title": "점검 진행 현황",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1124,
+            138,
+            76,
+            32
+          ],
+          "after": [
+            882,
+            951,
+            76,
+            32
+          ],
+          "deltaY": 813
+        },
+        "dark": {
+          "before": [
+            1124,
+            138,
+            76,
+            32
+          ],
+          "after": [
+            882,
+            951,
+            76,
+            32
+          ],
+          "deltaY": 813
+        }
+      },
+      "control": "wb.activity.finish"
+    },
+    {
+      "screen": "bounty",
+      "title": "재현·증거 정리",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1402,
+            108,
+            99,
+            32
+          ],
+          "after": [
+            1402,
+            895,
+            99,
+            32
+          ],
+          "deltaY": 787
+        },
+        "dark": {
+          "before": [
+            1402,
+            108,
+            99,
+            32
+          ],
+          "after": [
+            1402,
+            895,
+            99,
+            32
+          ],
+          "deltaY": 787
+        }
+      },
+      "control": "wb.bounty.evidence.save"
+    },
+    {
+      "screen": "dashboard",
+      "title": "점검 대시보드",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1352,
+            435,
+            129,
+            32
+          ],
+          "after": [
+            1352,
+            954,
+            129,
+            32
+          ],
+          "deltaY": 519
+        },
+        "dark": {
+          "before": [
+            1352,
+            435,
+            129,
+            32
+          ],
+          "after": [
+            1352,
+            954,
+            129,
+            32
+          ],
+          "deltaY": 519
+        }
+      },
+      "control": "wb.scope.dashboard.repeater"
+    },
+    {
+      "screen": "payload.results",
+      "title": "입력값 보안 검사 · 실행·결과",
+      "actualButtonRelocation": true,
+      "themes": {
+        "light": {
+          "before": [
+            1348,
+            132,
+            101,
+            32
+          ],
+          "after": [
+            1348,
+            416,
+            101,
+            32
+          ],
+          "deltaY": 284
+        },
+        "dark": {
+          "before": [
+            1348,
+            132,
+            101,
+            32
+          ],
+          "after": [
+            1348,
+            416,
+            101,
+            32
+          ],
+          "deltaY": 284
+        }
+      },
+      "control": "wb.simple.payload.evidence"
+    },
+    {
+      "screen": "bounty.replay",
+      "title": "재현·증거 정리 · 요청 재현",
+      "actualButtonRelocation": false,
+      "themes": {},
+      "reason": "요청 재현과 인증 후보 연결의 이전 배치를 유지했습니다."
+    },
+    {
+      "screen": "auth.accounts",
+      "title": "계정 권한 비교 · 인증 후보 연결",
+      "actualButtonRelocation": false,
+      "themes": {},
+      "reason": "요청 재현과 인증 후보 연결의 이전 배치를 유지했습니다."
+    }
+  ]
+}

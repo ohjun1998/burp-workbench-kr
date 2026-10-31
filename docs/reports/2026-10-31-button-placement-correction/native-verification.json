@@ -1,0 +1,106 @@
+[
+  {
+    "result": "passed",
+    "version": "1.4.15",
+    "theme": "light",
+    "checks": 31,
+    "jarSha256": "4758e74ab9d0f268bbe2540b9c75cd565bab172a6576384cd1c4d46aa15987b9",
+    "nativeSwing": true,
+    "nativeBurpGui": false,
+    "syntheticPackets": true,
+    "display": "isolated Xorg dummy + xfwm4",
+    "windowWidths": [
+      1024,
+      1280,
+      1600
+    ],
+    "targetHttpRequests": 0,
+    "screenshots": [
+      "01-traffic-settings.png",
+      "02-payload-prepare.png",
+      "03-payload-results.png"
+    ]
+  },
+  {
+    "result": "passed",
+    "version": "1.4.15",
+    "theme": "dark",
+    "checks": 31,
+    "jarSha256": "4758e74ab9d0f268bbe2540b9c75cd565bab172a6576384cd1c4d46aa15987b9",
+    "nativeSwing": true,
+    "nativeBurpGui": false,
+    "syntheticPackets": true,
+    "display": "isolated Xorg dummy + xfwm4",
+    "windowWidths": [
+      1024,
+      1280,
+      1600
+    ],
+    "targetHttpRequests": 0,
+    "screenshots": [
+      "01-traffic-settings.png",
+      "02-payload-prepare.png",
+      "03-payload-results.png"
+    ]
+  },
+  {
+    "nativeSwing": true,
+    "targetHttpRequests": 0,
+    "screens": [
+      "traffic",
+      "mapper",
+      "js",
+      "environment",
+      "exposure.search",
+      "exposure.cve",
+      "auth",
+      "response.recon",
+      "payload",
+      "data",
+      "activity",
+      "bounty",
+      "dashboard",
+      "payload.results",
+      "bounty.replay",
+      "auth.accounts"
+    ],
+    "nativeBurpGui": false,
+    "result": "passed",
+    "syntheticPackets": true,
+    "checks": 25,
+    "theme": "light",
+    "version": "1.4.15",
+    "jarSha256": "4758e74ab9d0f268bbe2540b9c75cd565bab172a6576384cd1c4d46aa15987b9",
+    "captureMode": "quick"
+  },
+  {
+    "targetHttpRequests": 0,
+    "screens": [
+      "traffic",
+      "mapper",
+      "js",
+      "environment",
+      "exposure.search",
+      "exposure.cve",
+      "auth",
+      "response.recon",
+      "payload",
+      "data",
+      "activity",
+      "bounty",
+      "dashboard",
+      "payload.results",
+      "bounty.replay",
+      "auth.accounts"
+    ],
+    "nativeBurpGui": false,
+    "result": "passed",
+    "syntheticPackets": true,
+    "checks": 25,
+    "theme": "dark",
+    "version": "1.4.15",
+    "nativeSwing": true,
+    "jarSha256": "4758e74ab9d0f268bbe2540b9c75cd565bab172a6576384cd1c4d46aa15987b9",
+    "captureMode": "quick"
+  }
+]

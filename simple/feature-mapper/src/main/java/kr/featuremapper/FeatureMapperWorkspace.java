@@ -394,13 +394,25 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
               if (!e.getValueIsAdjusting()) {showSelected();refreshPacketActions();}
             });
     runs.setPreferredSize(new Dimension(135,36)); sessions.setPreferredSize(new Dimension(135,36));
-    JPanel filters = new MapperUi.Filters();
+    JPanel filterContext=MapperUi.row(new JLabel("실행"),runs,new JLabel("세션"),sessions);
+    JPanel filters = new JPanel(new BorderLayout(10,4)) {
+      boolean stacked;
+      private void adapt(){
+        boolean next=getWidth()>0&&getWidth()<filterContext.getPreferredSize().width+170;
+        if(next!=stacked){stacked=next;remove(filterContext);add(filterContext,next?BorderLayout.NORTH:BorderLayout.WEST);}
+      }
+      @Override public void doLayout(){adapt();super.doLayout();}
+      @Override public Dimension getPreferredSize(){adapt();return super.getPreferredSize();}
+    };
     filters.setName("fm.filters");
-    filters.add(MapperUi.row(new JLabel("실행"),runs,new JLabel("세션"),sessions),BorderLayout.WEST);
+    filters.add(filterContext,BorderLayout.WEST);
     classifyButton=button("분류 수정",this::movePackets);classifyButton.setName("fm.packet.classify");
     repeaterButton=button("Repeater",this::sendToRepeater);repeaterButton.setName("fm.packet.repeater");
     JPanel packetActions=MapperUi.row(classifyButton,repeaterButton);packetActions.setName("wb.actions.mapper.packets");
-    filters.add(search);filters.add(packetActions,BorderLayout.EAST);refreshPacketActions();
+    filters.add(search);refreshPacketActions();
+    JPanel selectionFooter=localToolbar(new JLabel("선택 요청 작업"),packetActions);
+    selectionFooter.setName("wb.placement.mapper.selection");
+    selectionFooter.setBorder(BorderFactory.createMatteBorder(1,0,0,0,MapperUi.line()));
     runs.addActionListener(
         e -> {
           if (!rebuilding) fillRows();
@@ -444,6 +456,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     JPanel top = new JPanel(new BorderLayout());
     top.add(filters, BorderLayout.NORTH);
     top.add(new JScrollPane(table));
+    top.add(selectionFooter,BorderLayout.SOUTH);
     JSplitPane main = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, details);
     main.setName("fm.workspace"); MapperUi.split(main,.40);
     JSplitPane all = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, main);

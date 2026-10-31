@@ -111,13 +111,15 @@ final class ExposureResearchPanel extends JPanel implements AutoCloseable {
     JPopupMenu menu=new JPopupMenu();menu.add(exposureRemove);more.setComponentPopupMenu(menu);exposureRemove.setName("wb.exposure.search.remove");
     exposureRemove.addActionListener(e->guard(this::removeExposure));more.addActionListener(e->menu.show(more,0,more.getHeight()));
     JPanel list=new JPanel(new BorderLayout(0,4));
-    list.add(actions("wb.actions.exposure.search.list",new JLabel("검색 결과 URL · 실제 노출 미확인"),flow(namedButton("wb.exposure.search.import","결과 URL 가져오기",this::importDialog),more)),BorderLayout.NORTH);
+    list.add(actions("wb.actions.exposure.search.list",new JLabel("검색 결과 URL · 실제 노출 미확인"),flow(namedButton("wb.exposure.search.import","결과 URL 가져오기",this::importDialog))),BorderLayout.NORTH);
     list.add(new JScrollPane(exposureTable));
 
     exposureRepeater.setName("wb.exposure.search.repeater");exposureCopy.setName("wb.exposure.search.copy");
     exposureRepeater.addActionListener(e->guard(this::repeater));exposureCopy.addActionListener(e->guard(()->copy(exposureDetail.getText())));
     JPanel detail=card("발견 근거 · 확인 상태",new JScrollPane(exposureDetail));
-    detail.add(actions("wb.actions.exposure.search.detail",new JLabel("발견 근거 · 확인 상태"),flow(exposureRepeater,exposureCopy)),BorderLayout.NORTH);
+    JPanel selectedUrl=actions("wb.actions.exposure.search.detail",new JLabel("선택 URL"),flow(more,exposureCopy,exposureRepeater));
+    JPanel selectedUrlStrip=new JPanel(new BorderLayout());selectedUrlStrip.setName("wb.placement.exposure.search.selection");selectedUrlStrip.add(selectedUrl);
+    list.add(selectedUrlStrip,BorderLayout.SOUTH);
     p.add(split(JSplitPane.VERTICAL_SPLIT,list,detail,.50));return p;
   }
   JPanel cvePage(){
@@ -127,9 +129,14 @@ final class ExposureResearchPanel extends JPanel implements AutoCloseable {
     lookup.setName("wb.exposure.lookup");cancel.setName("wb.exposure.cancel");
     JButton more=new JButton("⋯");more.setName("wb.exposure.cve.more");more.setToolTipText("CVE 조회 더보기");more.getAccessibleContext().setAccessibleName("CVE 조회 더보기");
     JPopupMenu menu=new JPopupMenu();more.setComponentPopupMenu(menu);JMenuItem cached=new JMenuItem("캐시 보기");cached.setName("wb.exposure.cve.cache");cached.addActionListener(e->guard(this::restoreCache));menu.add(cached);more.addActionListener(e->menu.show(more,0,more.getHeight()));
-    controls.add(actions("wb.actions.exposure.cve.lookup",flow(new JLabel("관측 제품"),observed,edit),flow(lookup,cancel,more)));
+    controls.add(actions("wb.placement.exposure.cve.product",flow(new JLabel("관측 제품"),observed,edit),new JPanel()));
     controls.add(mapping);
-    controls.add(actions("wb.actions.exposure.cve.filters",filterRow(new JLabel("CVSS ≥"),minimum,remote,kevOnly,unknown),freshness));p.add(controls,BorderLayout.NORTH);
+    controls.add(actions("wb.actions.exposure.cve.filters",filterRow(new JLabel("CVSS ≥"),minimum,remote,kevOnly,unknown),new JPanel()));p.add(controls,BorderLayout.NORTH);
+    freshness.setMinimumSize(new Dimension(0,24));freshness.setPreferredSize(new Dimension(220,24));
+    JPanel cveResults=new JPanel(new BorderLayout(0,4));cveResults.add(new JScrollPane(cveTable));
+    JPanel lookupStrip=actions("wb.actions.exposure.cve.lookup",freshness,flow(lookup,cancel,more));
+    JPanel lookupPlacement=new JPanel(new BorderLayout());lookupPlacement.setName("wb.placement.exposure.cve.execution");lookupPlacement.add(lookupStrip);
+    cveResults.add(lookupPlacement,BorderLayout.SOUTH);
     JPanel detail=new JPanel(new BorderLayout(0,7));JPanel cards=new JPanel(new GridLayout(1,3,7,0));
     cards.add(card("대상에서 관측",new JScrollPane(observedDetail)));cards.add(card("CVE 영향 버전",new JScrollPane(affectedDetail)));cards.add(card("수정 버전",new JScrollPane(fixedDetail)));cards.setPreferredSize(new Dimension(600,90));
     detail.add(split(JSplitPane.HORIZONTAL_SPLIT,card("조건 체크 · 적용 판정",new JScrollPane(conditions)),card("관측 근거 · 출처",new JScrollPane(evidence)),.5));
@@ -138,9 +145,12 @@ final class ExposureResearchPanel extends JPanel implements AutoCloseable {
     referenceOpen.setName("wb.exposure.cve.source");cveCopy.setName("wb.exposure.cve.copy");
     referenceOpen.addActionListener(e->guard(()->{if(references.getSelectedItem()!=null)browse(references.getSelectedItem().toString());}));cveCopy.addActionListener(e->guard(()->copy(cveNote())));
     JPanel detailTop=new JPanel(new BorderLayout(0,5));
-    detailTop.add(actions("wb.actions.exposure.cve.detail",flow(selectedCveTitle,references),flow(referenceOpen,cveCopy)),BorderLayout.NORTH);detailTop.add(cards);
+    detailTop.add(actions("wb.placement.exposure.cve.reference",flow(selectedCveTitle,references),new JPanel()),BorderLayout.NORTH);detailTop.add(cards);
     detail.add(detailTop,BorderLayout.NORTH);
-    p.add(split(JSplitPane.VERTICAL_SPLIT,new JScrollPane(cveTable),detail,.30));return p;
+    JPanel selectedCveActions=actions("wb.actions.exposure.cve.detail",new JLabel("선택 CVE"),flow(referenceOpen,cveCopy));
+    JPanel selectedCveStrip=new JPanel(new BorderLayout());selectedCveStrip.setName("wb.placement.exposure.cve.selection");selectedCveStrip.add(selectedCveActions);
+    detail.add(selectedCveStrip,BorderLayout.SOUTH);
+    p.add(split(JSplitPane.VERTICAL_SPLIT,cveResults,detail,.30));return p;
   }
   void updateExposureActions(){boolean selected=!closed&&selectedExposure()!=null;exposureRepeater.setEnabled(selected);exposureCopy.setEnabled(selected);exposureRemove.setEnabled(selected);}
   void updateCveActions(){boolean selected=!closed&&selectedCve()!=null&&selectedProduct!=null;cveCopy.setEnabled(selected);referenceOpen.setEnabled(selected&&references.getSelectedItem()!=null);}

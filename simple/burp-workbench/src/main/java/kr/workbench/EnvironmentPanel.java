@@ -211,8 +211,11 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     JPanel execution=WorkbenchUi.row(single,start,pause,stop);execution.setName("wb.actions.environment.execution");
     JPanel candidateActions=WorkbenchUi.row(settings,more);candidateActions.setName("wb.actions.environment.candidate.settings");
     JPanel searchAndSettings=new JPanel(new BorderLayout(8,0));searchAndSettings.add(search);searchAndSettings.add(candidateActions,BorderLayout.EAST);
-    JPanel commands=CompactWorkbenchUi.toolbar(searchAndSettings,execution);commands.setName("wb.actions.environment.candidates");
-    candidatePanel.add(commands,BorderLayout.NORTH);lists.add(candidatePanel);
+    searchAndSettings.setName("wb.actions.environment.candidates");
+    candidatePanel.add(searchAndSettings,BorderLayout.NORTH);
+    JPanel executionStrip=CompactWorkbenchUi.toolbar(new JLabel("선택 후보 확인"),execution);
+    executionStrip.setName("wb.placement.environment.execution");
+    candidatePanel.add(executionStrip,BorderLayout.SOUTH);lists.add(candidatePanel);
     JSplitPane messages = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("요청", packetTabs(requestView)),
         WorkbenchUi.card("응답", responsePane()), .5);

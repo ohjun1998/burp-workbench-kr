@@ -196,11 +196,13 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     var details = new JPanel(new BorderLayout(0, 6));
     details.add(new JScrollPane(detail));
     JPanel selectionActions = CompactWorkbenchUi.toolbar(
-        new JLabel("선택 항목 근거"), WorkbenchUi.row(original, repeater, evidence));
+        new JLabel("선택 결과"), WorkbenchUi.row(original, repeater, evidence));
     selectionActions.setName("wb.actions.dashboard.selection");
+    JPanel selectionFooter = new JPanel(new BorderLayout());
+    selectionFooter.setName("wb.placement.dashboard.selection");
+    selectionFooter.add(ReferenceUi.header(selectionActions, null));
+    details.add(selectionFooter, BorderLayout.SOUTH);
     JPanel detailCard = WorkbenchUi.card("선택 항목 근거", details);
-    detailCard.remove(((BorderLayout) detailCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
-    detailCard.add(ReferenceUi.header(selectionActions, null), BorderLayout.NORTH);
     var split = WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("해당 결과 목록", resultViews), detailCard, .61);
     name(split, "results.split");

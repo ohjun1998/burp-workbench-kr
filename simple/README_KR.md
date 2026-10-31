@@ -1,4 +1,6 @@
-# Workbench Simple 1.4.14
+# Workbench Simple 1.4.15
+
+1.4.14에 남아 있던 주요 버튼을 실제 작업 영역 아래로 재배치합니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.15_KR.md) · [설치 JAR](downloads/1.4.15/burp-workbench-simple-1.4.15.jar).
 
 16개 화면의 작업 공간과 버튼 배치를 정리했습니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.14_KR.md) · [설치 JAR](downloads/1.4.14/burp-workbench-simple-1.4.14.jar).
 

@@ -1,0 +1,50 @@
+{
+  "version": "1.4.15",
+  "artifact": "burp-workbench/dist/burp-workbench-simple-1.4.15.jar",
+  "toolchainMode": "strict-release17",
+  "java17ApiCompatibilityVerified": true,
+  "compilerNote": "Compiled with --release 17.",
+  "jarSha256": "8d507bab2130d5163c9821f8c52ed4cb74f0277abaedfc4075970305afd9e54d",
+  "renderedViews": 126,
+  "controls": 2184,
+  "scenarios": 426,
+  "retainedPrimaryTools": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "replayEvidenceModes": [
+    "manual-request-replay",
+    "evidence-editor"
+  ],
+  "clippedControls": [],
+  "collapsedAreas": [
+    {
+      "theme": "light",
+      "width": "1024",
+      "height": "720",
+      "view": "05-evidence.png",
+      "name": "wb.bounty.evidence.packet",
+      "visibleWidth": "450",
+      "visibleHeight": "58"
+    },
+    {
+      "theme": "dark",
+      "width": "1024",
+      "height": "720",
+      "view": "05-evidence.png",
+      "name": "wb.bounty.evidence.packet",
+      "visibleWidth": "450",
+      "visibleHeight": "58"
+    }
+  ],
+  "failedScenarios": [],
+  "missingCaptures": [],
+  "scope": "Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.",
+  "result": "failed"
+}

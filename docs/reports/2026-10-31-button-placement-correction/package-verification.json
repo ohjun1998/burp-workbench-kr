@@ -1,0 +1,34 @@
+{
+  "version": "1.4.15",
+  "files": [
+    {
+      "name": "SHA256SUMS",
+      "bytes": 311,
+      "sha256": "3881359b8beef6eef541354c1b9e32b3afc7d44e5de45c7eb4680b76002c3e7a"
+    },
+    {
+      "name": "burp-workbench-simple-1.4.15-source.zip",
+      "bytes": 99860082,
+      "sha256": "647a489b28cb09d0f24a275c7ec7864f173c5bfaae7764315b8e60ff4bf231fc"
+    },
+    {
+      "name": "burp-workbench-simple-1.4.15.jar",
+      "bytes": 8995671,
+      "sha256": "4758e74ab9d0f268bbe2540b9c75cd565bab172a6576384cd1c4d46aa15987b9"
+    },
+    {
+      "name": "feature-mapper-browser-helper-0.4.1.zip",
+      "bytes": 34685,
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+    },
+    {
+      "name": "manifest.json",
+      "bytes": 281956,
+      "sha256": "5e3649aa5a87fae5f93c07a28f47288e3459c82f823d4ef7dec4643267dc951d"
+    }
+  ],
+  "packageCommandPassed": true,
+  "sourceFrozen": true,
+  "result": "passed",
+  "separateVerifyCommandPassed": true
+}

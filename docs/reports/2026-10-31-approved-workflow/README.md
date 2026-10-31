@@ -138,3 +138,7 @@ PDF 삽입64장(실제32/시안32)은 각각 원본 픽셀과 일치하며 글�
 전체 7,300개 검사(Java 6,988·payload HTTP 136·Mapper 147·Node 29), Swing 204개 배치, 실제 별도 창 114개, Katana 102개, Guide 앵커 192개를 통과했습니다.
 
 JAR SHA-256: `34a14da4a57377e56a7aed1e29dc0eb9f28aa98fc295dcf1138b152f1f1fd6dd`.
+
+## 게시 상태
+
+공개 43개 파일의 HTTP 200·크기·SHA-256 일치를 확인했습니다. [게시 및 main 상태](PUBLISH_KR.md). GitHub API가 PR 생성 POST를 Forbidden으로 거부해 작업 브랜치에 게시했으며 main에는 병합하지 못했습니다.

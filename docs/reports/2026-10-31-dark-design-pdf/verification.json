@@ -1,0 +1,155 @@
+{
+  "file": "workbench-dark-design-proposal.pdf",
+  "pages": 18,
+  "bookmarks": 18,
+  "bytes": 23972428,
+  "sha256": "5fcfd75e3e2c1ea1594c8f48ce6557d0d2f3f105eae2c0fd5e4250f73e18ba82",
+  "type": "generated dark-mode design proposal, not implementation screenshots",
+  "productSourceModified": false,
+  "palette": {
+    "canvas": "#0B1220",
+    "panel": "#151F2E",
+    "text": "#E7EEF7",
+    "muted": "#A9B8CC",
+    "line": "#273447",
+    "accent": "#2DD4BF"
+  },
+  "screens": [
+    {
+      "screen": "traffic",
+      "title": "요청·응답 목록",
+      "page": 3,
+      "width": 1585,
+      "height": 992,
+      "sha256": "9489be861c699b403807845cc5863729fb0e9602d5a770d423e7650f05aeec84"
+    },
+    {
+      "screen": "mapper",
+      "title": "기능 자동 매핑",
+      "page": 4,
+      "width": 1586,
+      "height": 992,
+      "sha256": "3ee215c040797cf8adfed3a8f13f929e2a7dea6aa5e1effef6eb1de310aad533"
+    },
+    {
+      "screen": "js",
+      "title": "JS에서 API 찾기",
+      "page": 5,
+      "width": 1586,
+      "height": 992,
+      "sha256": "d6ee7721f5cb014aa0bc1b17124a357d95f1bb57612f1eee2f2bb738ae5c194a"
+    },
+    {
+      "screen": "environment",
+      "title": "서버·경로 탐색",
+      "page": 6,
+      "width": 1586,
+      "height": 992,
+      "sha256": "020dba6cd7acff7f6a4a53bd2fabe0739af19897bbbff9f3e949069384b366f5"
+    },
+    {
+      "screen": "exposure-search",
+      "title": "외부 노출 조사 · Google 검색",
+      "page": 7,
+      "width": 1586,
+      "height": 992,
+      "sha256": "ad1f1f686a99835da4c1c5d6bff6c3782aa0b48d64baedfd011750da251f1ec4"
+    },
+    {
+      "screen": "exposure-cve",
+      "title": "외부 노출 조사 · CVE 후보",
+      "page": 8,
+      "width": 1586,
+      "height": 992,
+      "sha256": "6e743e5ca4ddd2b9ef21a7048fb8384eeba6835b41521b816307f5923aef8e1e"
+    },
+    {
+      "screen": "auth",
+      "title": "계정 권한 비교",
+      "page": 9,
+      "width": 1585,
+      "height": 992,
+      "sha256": "4afb611f1a576c536129295af8e2f384bb9a16e1f6d7aec01d01e1883561050a"
+    },
+    {
+      "screen": "auth-accounts",
+      "title": "계정 권한 비교 · 인증 후보 연결",
+      "page": 10,
+      "width": 1586,
+      "height": 992,
+      "sha256": "c5b53f280d29f0899681f6c1b2b04dd87e787a0114ed0cbeb1566fd1261b9166"
+    },
+    {
+      "screen": "response-recon",
+      "title": "응답 보안 분석",
+      "page": 11,
+      "width": 1585,
+      "height": 992,
+      "sha256": "7ec9c9dfdbdd7c1a820d5286bc95e8735d725310068f4efadce1448b0cb5834d"
+    },
+    {
+      "screen": "payload",
+      "title": "입력값 보안 검사 · 요청 준비",
+      "page": 12,
+      "width": 1585,
+      "height": 992,
+      "sha256": "41bd8bec0d1786ad61268fba384fcecd88cfcaa2ed179785cdf1d1956a685ab3"
+    },
+    {
+      "screen": "payload-results",
+      "title": "입력값 보안 검사 · 실행·결과",
+      "page": 13,
+      "width": 1585,
+      "height": 992,
+      "sha256": "6e4c093352d1448a2d57bab3704d5cd89a920e182bc120d8be1f629355f727e9"
+    },
+    {
+      "screen": "data",
+      "title": "데이터 변환·비교",
+      "page": 14,
+      "width": 1586,
+      "height": 992,
+      "sha256": "7ca067b08199ae477961041be79f7445d42d7e8ac70e2aa7b2fa96856d2d37ca"
+    },
+    {
+      "screen": "activity",
+      "title": "점검 진행 현황",
+      "page": 15,
+      "width": 1586,
+      "height": 992,
+      "sha256": "281534daaf9f9dd82c0c51d4dceaa1fe375547959f60be181f3b4cccb26253e0"
+    },
+    {
+      "screen": "bounty",
+      "title": "재현·증거 정리",
+      "page": 16,
+      "width": 1586,
+      "height": 992,
+      "sha256": "43e4240318dabb52f8140fc38dfde6ef955cfef94dd0a02dd0ef316262cf980e"
+    },
+    {
+      "screen": "bounty-replay",
+      "title": "재현·증거 정리 · 요청 재현",
+      "page": 17,
+      "width": 1586,
+      "height": 992,
+      "sha256": "5865f5522b885878f3612f2cdd6f244d562aa858e35f9f7d994add269ee1a27f"
+    },
+    {
+      "screen": "dashboard",
+      "title": "점검 대시보드",
+      "page": 18,
+      "width": 1585,
+      "height": 992,
+      "sha256": "b8c5527745e5c98053fcdd087fd4134b5c22ccea31c220f35ee833ef8840b812"
+    }
+  ],
+  "checks": {
+    "koreanTextExtraction": true,
+    "bookmarks": true,
+    "imageBounds": true,
+    "textBounds": true,
+    "aspectRatiosPreserved": true,
+    "originalImagePixelsPreserved": true
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "result": "passed",
+  "commit": "f18b46c9ee0f079794446170dcc4631126e279b8",
+  "verifiedFiles": 39,
+  "checks": [
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/workbench-ux-flow-design.pdf",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/workbench-ux-flow-design.pdf",
+      "status": 200,
+      "bytes": 4130264,
+      "sha256": "1fe91f0bf6eb9a06204a687445b8ea0ebd2aec37e9f3a96bdaf61f9e92dda972",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/workbench-ux-flow-design.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/workbench-ux-flow-design.zip",
+      "status": 200,
+      "bytes": 9360878,
+      "sha256": "f6239415f87b409d89aa7fbd17f0350d27d52608c082d77846b1ed1e8ad32b1a",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/gallery.html",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/gallery.html",
+      "status": 200,
+      "bytes": 16032,
+      "sha256": "e0b83023e5e094389b644b3f275922444d818c28d0d4a03fb87c3d26c92276b6",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/auth-dark-preview.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/auth-dark-preview.png",
+      "status": 200,
+      "bytes": 155347,
+      "sha256": "830d44e0077bb9efc843a9ddff02a69d3d00c107b78003bbbb8f04d5e68cd4c1",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/evidence-dark-preview.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/evidence-dark-preview.png",
+      "status": 200,
+      "bytes": 185940,
+      "sha256": "3001a7604681ee9d3a578dec774e4a36810b070a6d2481ada8e6bf7c3a637c7a",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/traffic-light-preview.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/traffic-light-preview.png",
+      "status": 200,
+      "bytes": 185173,
+      "sha256": "f1d11b3daa59602e96704da283a24133d10f076e966969baf6527ec5b51e5f22",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/traffic-comparison.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/traffic-comparison.png",
+      "status": 200,
+      "bytes": 171019,
+      "sha256": "c891f67e40b06cb29c1d456e97e973bc1396792ee6e6d07ee377da6a0ebda69a",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/activity.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/activity.png",
+      "status": 200,
+      "bytes": 127887,
+      "sha256": "523c13a0665ea420eed439a261f7076ed24be6be6dea7eae4bc16130a0943b02",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/auth.accounts.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/auth.accounts.png",
+      "status": 200,
+      "bytes": 90041,
+      "sha256": "a0eab1dcd126dce7612562ba7266be09a348bdaec0d206fe690ef1da93bb2899",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/auth.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/auth.png",
+      "status": 200,
+      "bytes": 129698,
+      "sha256": "ea41fac90770da5d23bf805facb0a86328504bee3f7029eba245685afd9d25fe",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/bounty.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/bounty.png",
+      "status": 200,
+      "bytes": 161441,
+      "sha256": "74337f2359347106de7c0c3dffba9a6add3d15c56e14a264fa551d7127db4134",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/bounty.replay.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/bounty.replay.png",
+      "status": 200,
+      "bytes": 150001,
+      "sha256": "8ac5b7cf3e461c871d21b713f900b7d3c8c869efce0bd147a93a176fc138e08b",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/dashboard.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/dashboard.png",
+      "status": 200,
+      "bytes": 139490,
+      "sha256": "4692463eeeda38f7022bb036fe84bf65a8abd39942c561c05fe3309941636320",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/data.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/data.png",
+      "status": 200,
+      "bytes": 97629,
+      "sha256": "eaf906cf03fba5829f3f55a708c8d2e34a2969db6362ba4a97cff814ab590224",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/environment.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/environment.png",
+      "status": 200,
+      "bytes": 127446,
+      "sha256": "06f630461086737e4131f8f5df6d88b02ba56389bdf1367e641d8bb817a50a48",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/exposure.cve.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/exposure.cve.png",
+      "status": 200,
+      "bytes": 127763,
+      "sha256": "b6479f6c243ee2e8c10bcff868a256795a9e18040b98ed8004a127b7bd987837",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/exposure.search.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/exposure.search.png",
+      "status": 200,
+      "bytes": 132885,
+      "sha256": "8ae4a224c484d41b6b7b8c68e2cc196b19ba5556ae68d0c93060a0a1e49931f8",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/js.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/js.png",
+      "status": 200,
+      "bytes": 171206,
+      "sha256": "39ffbb8242b03fa05471c20e9cfad5e5b1ab1cac811aaddebf524daa2bbefc8f",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/mapper.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/mapper.png",
+      "status": 200,
+      "bytes": 143187,
+      "sha256": "fc5cb6647c5fec870374cc7a548b62ea0b359edb85b8d7a1cecfb6978f9b2a50",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/payload.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/payload.png",
+      "status": 200,
+      "bytes": 98487,
+      "sha256": "f4f1f0f1f9003e59164192c7508e42677c0cc5a548f7619f4e7373657864dac8",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/payload.results.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/payload.results.png",
+      "status": 200,
+      "bytes": 125771,
+      "sha256": "1dec4715ffa28ff3333e193e516c40e9f0edcbd19f984890f830513675458890",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/response.recon.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/response.recon.png",
+      "status": 200,
+      "bytes": 138790,
+      "sha256": "caa3be376ab7459721d95281f41d9065b91a6dda973fdfb33d81ed6f9d517671",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/dark/traffic.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/dark/traffic.png",
+      "status": 200,
+      "bytes": 154787,
+      "sha256": "14815b4fe3dfd17aadbf71ed066effde49d7ce44d9d716d942a4609b93db74f1",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/activity.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/activity.png",
+      "status": 200,
+      "bytes": 127324,
+      "sha256": "675060f2ef51e40841574834702b7ca73f45854e18526f6f047c105a946d7519",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/auth.accounts.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/auth.accounts.png",
+      "status": 200,
+      "bytes": 89313,
+      "sha256": "af68afe094295500386aa628ed983f32591dedc953434f315b9b43e782f214e0",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/auth.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/auth.png",
+      "status": 200,
+      "bytes": 129404,
+      "sha256": "9e4227a7c8074de04fe6c34826eefe0ede3ef90debeb84e87c94ba2663291176",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/bounty.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/bounty.png",
+      "status": 200,
+      "bytes": 160998,
+      "sha256": "9ee7ee03a86815f8133b8e946fd9dc6ca32cf1b939bb00e491afb8d56f39db5e",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/bounty.replay.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/bounty.replay.png",
+      "status": 200,
+      "bytes": 149234,
+      "sha256": "7da136741ae57c87ef23fc07c814adace432df7dbced2381b45dbf966db85c16",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/dashboard.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/dashboard.png",
+      "status": 200,
+      "bytes": 138968,
+      "sha256": "2829b2e659e553514cbef0e64266c0cfde584d31da8fc23aa1c69b021d776a9d",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/data.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/data.png",
+      "status": 200,
+      "bytes": 96699,
+      "sha256": "d023557633485554a274fa093f79a449aba76305f65bc1e32a198fd8f776a78f",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/environment.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/environment.png",
+      "status": 200,
+      "bytes": 126926,
+      "sha256": "d3305e12f19c604492cf69ca649295bfcb258c2441a1866f56769cee7a78990b",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/exposure.cve.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/exposure.cve.png",
+      "status": 200,
+      "bytes": 127521,
+      "sha256": "5e1bb60523102e0e329e144e6444dfa20a3d3577f4bc2c69096325a5b933e9d8",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/exposure.search.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/exposure.search.png",
+      "status": 200,
+      "bytes": 131829,
+      "sha256": "972f167120228f5d04759583c95fb0239ce1e8f7c9a3e810d183270bd1a79a30",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/js.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/js.png",
+      "status": 200,
+      "bytes": 170689,
+      "sha256": "456ee7795279dff9a509dccfc6d90ecf8d314573d1a89814dff3d8d47266ac58",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/mapper.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/mapper.png",
+      "status": 200,
+      "bytes": 143019,
+      "sha256": "5fb8f6585a06103388fe2564edfd60979996a00a40cac9587c2e8326f610521d",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/payload.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/payload.png",
+      "status": 200,
+      "bytes": 98450,
+      "sha256": "424bff189ac79d202f7c272f060fdef251ce2103880e43f55d5a8f7d4fa552d4",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/payload.results.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/payload.results.png",
+      "status": 200,
+      "bytes": 124991,
+      "sha256": "24e17fc403b64bcb864563b5c113a51e89646f5e6a1955ce668dbd3d9c47c6f5",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/response.recon.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/response.recon.png",
+      "status": 200,
+      "bytes": 138322,
+      "sha256": "2b18cdee77a739b38e174f95f0a9565976790beafbe7bd6eb3c80b3eec1605f5",
+      "matchesLocal": true
+    },
+    {
+      "file": "docs/reports/2026-10-31-workflow-design/images/light/traffic.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/f18b46c9ee0f079794446170dcc4631126e279b8/docs/reports/2026-10-31-workflow-design/images/light/traffic.png",
+      "status": 200,
+      "bytes": 153607,
+      "sha256": "91d43527838f10b39a0b6c326fdac191ceb055576b5859e0ba76a2c928d946b4",
+      "matchesLocal": true
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "file": "workbench-alternative-design-proposal.pdf",
+  "pages": 18,
+  "bookmarks": 18,
+  "bytes": 18622710,
+  "sha256": "f96468bbe8ba5f0c49664360fd11c3f8e724b302b71b16ca28c9d350164b163d",
+  "type": "generated design proposal, not implementation screenshots",
+  "productSourceModified": false,
+  "screens": [
+    {
+      "screen": "traffic",
+      "title": "요청·응답 목록",
+      "page": 3,
+      "width": 1586,
+      "height": 992,
+      "sha256": "57f18484737d6ee2524f5f38fe68774bf7886a3d135a124f89a9fe3b02ae447e"
+    },
+    {
+      "screen": "mapper",
+      "title": "기능 자동 매핑",
+      "page": 4,
+      "width": 1586,
+      "height": 992,
+      "sha256": "c416265036e481785889f897ca94055f569c555b2337a49b1b5d1ac303556156"
+    },
+    {
+      "screen": "js",
+      "title": "JS에서 API 찾기",
+      "page": 5,
+      "width": 1586,
+      "height": 992,
+      "sha256": "d78d38b9b76f4aa6ec3a5352a86ba910247531bf71c2d67647d64a23e7016974"
+    },
+    {
+      "screen": "environment",
+      "title": "서버·경로 탐색",
+      "page": 6,
+      "width": 1586,
+      "height": 992,
+      "sha256": "7f0a7da87b1974a87fb2c74da8397c02e0b558abcac767e774ed6e1e47719ecb"
+    },
+    {
+      "screen": "exposure-search",
+      "title": "외부 노출 조사 · Google 검색",
+      "page": 7,
+      "width": 1586,
+      "height": 992,
+      "sha256": "d783ac1bafa1379f1729d639377d420152ac007243c653db1d4d059bc33c13d8"
+    },
+    {
+      "screen": "exposure-cve",
+      "title": "외부 노출 조사 · CVE 후보",
+      "page": 8,
+      "width": 1586,
+      "height": 992,
+      "sha256": "ac2cff89232a3cb9a4fa67e5aafc536c0876530edd0d8f50d6d5ea89f16535f4"
+    },
+    {
+      "screen": "auth",
+      "title": "계정 권한 비교",
+      "page": 9,
+      "width": 1586,
+      "height": 992,
+      "sha256": "598c85b9ab6b7b7366adb07eb2a8b127f9e7419dad23cb094bb6d040739c4d47"
+    },
+    {
+      "screen": "auth-accounts",
+      "title": "계정 권한 비교 · 인증 후보 연결",
+      "page": 10,
+      "width": 1586,
+      "height": 992,
+      "sha256": "1d66695f458ad9243cf08446477f854f581d1893ac49eaeaf4b3dcf158762460"
+    },
+    {
+      "screen": "response-recon",
+      "title": "응답 보안 분석",
+      "page": 11,
+      "width": 1586,
+      "height": 992,
+      "sha256": "3d8d5d8e8bab2c840872bbcc3c1b9720dce2c8d2c3d8caac7ac18cd8bbcfd361"
+    },
+    {
+      "screen": "payload",
+      "title": "입력값 보안 검사 · 요청 준비",
+      "page": 12,
+      "width": 1585,
+      "height": 992,
+      "sha256": "40ffa860f1e90838adb28bc6dc846045f99c4a00e5916376d030c206261523c8"
+    },
+    {
+      "screen": "payload-results",
+      "title": "입력값 보안 검사 · 실행·결과",
+      "page": 13,
+      "width": 1586,
+      "height": 992,
+      "sha256": "d3c5a809ab6d789407f81e73144ff35a0f38353d569b8bbec8c6856e9c063d83"
+    },
+    {
+      "screen": "data",
+      "title": "데이터 변환·비교",
+      "page": 14,
+      "width": 1586,
+      "height": 992,
+      "sha256": "9c3d0a6d4e160617f7e42045100b1294f688f79dc9077f863e58b37126eb06f3"
+    },
+    {
+      "screen": "activity",
+      "title": "점검 진행 현황",
+      "page": 15,
+      "width": 1585,
+      "height": 992,
+      "sha256": "3a94ac5e8de37b12a86eefd83cd6c08b8fb0b46622dd7d719edbf49f404d02d9"
+    },
+    {
+      "screen": "bounty",
+      "title": "재현·증거 정리",
+      "page": 16,
+      "width": 1586,
+      "height": 992,
+      "sha256": "7bb06bb6acea224635980e1430381619f8546f12f195aac06612b35e276becb6"
+    },
+    {
+      "screen": "bounty-replay",
+      "title": "재현·증거 정리 · 요청 재현",
+      "page": 17,
+      "width": 1586,
+      "height": 992,
+      "sha256": "8dd4b8519da8db2b0ec62ae816535d775c77f67e65e7fd309e1acd6b8f147d78"
+    },
+    {
+      "screen": "dashboard",
+      "title": "점검 대시보드",
+      "page": 18,
+      "width": 1585,
+      "height": 992,
+      "sha256": "0381dfb191c1e9fb2ef0580dc98d09aabf96d87803150100e969f7c7194808cc"
+    }
+  ],
+  "checks": {
+    "koreanTextExtraction": true,
+    "bookmarks": true,
+    "imageBounds": true,
+    "aspectRatiosPreserved": true,
+    "originalImagePixelsPreserved": true
+  }
+}

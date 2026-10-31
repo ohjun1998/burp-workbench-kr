@@ -1,0 +1,1448 @@
+{
+  "screenCount": 16,
+  "captures": 64,
+  "runtimeErrors": [],
+  "externalRequestsBlocked": [],
+  "views": [
+    {
+      "screen": "traffic",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "요청·응답 목록 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청",
+          "height": 427
+        },
+        {
+          "title": "응답",
+          "height": 427
+        }
+      ]
+    },
+    {
+      "screen": "mapper",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "기능 자동 매핑 · UX 설계 시안",
+      "primary": [
+        "분류 수정"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "기능 · 12개",
+          "height": 862
+        },
+        {
+          "title": "요청",
+          "height": 484
+        },
+        {
+          "title": "응답",
+          "height": 484
+        }
+      ]
+    },
+    {
+      "screen": "js",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "JS에서 API 찾기 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "호출 소스",
+          "height": 774
+        }
+      ]
+    },
+    {
+      "screen": "environment",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "서버·경로 탐색 · UX 설계 시안",
+      "primary": [
+        "선택 경로 GET 확인"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "경로 후보 · 20개",
+          "height": 778
+        },
+        {
+          "title": "/api/documents/101",
+          "height": 778
+        }
+      ]
+    },
+    {
+      "screen": "exposure.search",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "외부 노출 조사 · 검색 노출 · UX 설계 시안",
+      "primary": [
+        "Google에서 열기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "가져온 URL · 6개",
+          "height": 740
+        },
+        {
+          "title": "선택 URL 근거",
+          "height": 740
+        }
+      ]
+    },
+    {
+      "screen": "exposure.cve",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "외부 노출 조사 · CVE 후보 · UX 설계 시안",
+      "primary": [
+        "CVE 후보 조회"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검토할 CVE 후보 · 4개",
+          "height": 734
+        },
+        {
+          "title": "CVE-2099-10001",
+          "height": 734
+        }
+      ]
+    },
+    {
+      "screen": "auth",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "계정 권한 비교 · UX 설계 시안",
+      "primary": [
+        "비교 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "비교 기록 · 4건",
+          "height": 218
+        },
+        {
+          "title": "GET /api/documents/101",
+          "height": 584
+        },
+        {
+          "title": "Alice · 문서 소유자",
+          "height": 451
+        },
+        {
+          "title": "Bob · 다른 사용자",
+          "height": 451
+        }
+      ]
+    },
+    {
+      "screen": "response.recon",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "응답 보안 분석 · UX 설계 시안",
+      "primary": [
+        "증거로 정리"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "원문 대조",
+          "height": 767
+        }
+      ]
+    },
+    {
+      "screen": "payload",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "입력값 보안 검사 · 요청 준비 · UX 설계 시안",
+      "primary": [
+        "검사 시작"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 요청",
+          "height": 784
+        },
+        {
+          "title": "검사 조건",
+          "height": 784
+        }
+      ]
+    },
+    {
+      "screen": "data",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "데이터 변환·비교 · UX 설계 시안",
+      "primary": [
+        "변환"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "입력",
+          "height": 778
+        },
+        {
+          "title": "출력",
+          "height": 778
+        }
+      ]
+    },
+    {
+      "screen": "activity",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "점검 진행 현황 · UX 설계 시안",
+      "primary": [
+        "완료 표시"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "URL 점검 목록",
+          "height": 822
+        },
+        {
+          "title": "선택 URL",
+          "height": 822
+        }
+      ]
+    },
+    {
+      "screen": "bounty",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "증거 정리 · UX 설계 시안",
+      "primary": [
+        "증거 ZIP 저장"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "증거 8개",
+          "height": 843
+        },
+        {
+          "title": "보고서 작성",
+          "height": 843
+        },
+        {
+          "title": "원문 대조",
+          "height": 843
+        }
+      ]
+    },
+    {
+      "screen": "dashboard",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "점검 대시보드 · UX 설계 시안",
+      "primary": [
+        "원본 보기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "실행 결과",
+          "height": 666
+        },
+        {
+          "title": "선택 항목 근거",
+          "height": 666
+        }
+      ]
+    },
+    {
+      "screen": "payload.results",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "입력값 보안 검사 · 실행·결과 · UX 설계 시안",
+      "primary": [
+        "결과를 증거로"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 결과 · 4건",
+          "height": 216
+        },
+        {
+          "title": "실제 요청",
+          "height": 499
+        },
+        {
+          "title": "실제 응답",
+          "height": 499
+        }
+      ]
+    },
+    {
+      "screen": "bounty.replay",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "요청 재현 · UX 설계 시안",
+      "primary": [
+        "순차 실행"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청 준비",
+          "height": 860
+        },
+        {
+          "title": "실행 결과",
+          "height": 860
+        }
+      ]
+    },
+    {
+      "screen": "auth.accounts",
+      "theme": "light",
+      "width": 1600,
+      "height": 1000,
+      "title": "계정 권한 비교 · 인증 후보 연결 · UX 설계 시안",
+      "primary": [
+        "닫기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "인증 후보 연결",
+          "height": 447
+        }
+      ]
+    },
+    {
+      "screen": "traffic",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "요청·응답 목록 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청",
+          "height": 303
+        },
+        {
+          "title": "응답",
+          "height": 303
+        }
+      ]
+    },
+    {
+      "screen": "mapper",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "기능 자동 매핑 · UX 설계 시안",
+      "primary": [
+        "분류 수정"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "기능 · 12개",
+          "height": 668
+        },
+        {
+          "title": "요청",
+          "height": 290
+        },
+        {
+          "title": "응답",
+          "height": 290
+        }
+      ]
+    },
+    {
+      "screen": "js",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "JS에서 API 찾기 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "호출 소스",
+          "height": 580
+        }
+      ]
+    },
+    {
+      "screen": "environment",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "서버·경로 탐색 · UX 설계 시안",
+      "primary": [
+        "선택 경로 GET 확인"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "경로 후보 · 20개",
+          "height": 590
+        },
+        {
+          "title": "/api/documents/101",
+          "height": 590
+        }
+      ]
+    },
+    {
+      "screen": "exposure.search",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "외부 노출 조사 · 검색 노출 · UX 설계 시안",
+      "primary": [
+        "Google에서 열기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "가져온 URL · 6개",
+          "height": 554
+        },
+        {
+          "title": "선택 URL 근거",
+          "height": 554
+        }
+      ]
+    },
+    {
+      "screen": "exposure.cve",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "외부 노출 조사 · CVE 후보 · UX 설계 시안",
+      "primary": [
+        "CVE 후보 조회"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검토할 CVE 후보 · 4개",
+          "height": 548
+        },
+        {
+          "title": "CVE-2099-10001",
+          "height": 548
+        }
+      ]
+    },
+    {
+      "screen": "auth",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "계정 권한 비교 · UX 설계 시안",
+      "primary": [
+        "비교 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "비교 기록 · 4건",
+          "height": 218
+        },
+        {
+          "title": "GET /api/documents/101",
+          "height": 396
+        },
+        {
+          "title": "Alice · 문서 소유자",
+          "height": 263
+        },
+        {
+          "title": "Bob · 다른 사용자",
+          "height": 263
+        }
+      ]
+    },
+    {
+      "screen": "response.recon",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "응답 보안 분석 · UX 설계 시안",
+      "primary": [
+        "증거로 정리"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "원문 대조",
+          "height": 573
+        }
+      ]
+    },
+    {
+      "screen": "payload",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "입력값 보안 검사 · 요청 준비 · UX 설계 시안",
+      "primary": [
+        "검사 시작"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 요청",
+          "height": 596
+        },
+        {
+          "title": "검사 조건",
+          "height": 596
+        }
+      ]
+    },
+    {
+      "screen": "data",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "데이터 변환·비교 · UX 설계 시안",
+      "primary": [
+        "변환"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "입력",
+          "height": 584
+        },
+        {
+          "title": "출력",
+          "height": 584
+        }
+      ]
+    },
+    {
+      "screen": "activity",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "점검 진행 현황 · UX 설계 시안",
+      "primary": [
+        "완료 표시"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "URL 점검 목록",
+          "height": 628
+        },
+        {
+          "title": "선택 URL",
+          "height": 628
+        }
+      ]
+    },
+    {
+      "screen": "bounty",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "증거 정리 · UX 설계 시안",
+      "primary": [
+        "증거 ZIP 저장"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "증거 8개",
+          "height": 649
+        },
+        {
+          "title": "보고서 작성",
+          "height": 649
+        },
+        {
+          "title": "원문 대조",
+          "height": 649
+        }
+      ]
+    },
+    {
+      "screen": "dashboard",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "점검 대시보드 · UX 설계 시안",
+      "primary": [
+        "원본 보기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "실행 결과",
+          "height": 472
+        },
+        {
+          "title": "선택 항목 근거",
+          "height": 472
+        }
+      ]
+    },
+    {
+      "screen": "payload.results",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "입력값 보안 검사 · 실행·결과 · UX 설계 시안",
+      "primary": [
+        "결과를 증거로"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 결과 · 4건",
+          "height": 216
+        },
+        {
+          "title": "실제 요청",
+          "height": 315
+        },
+        {
+          "title": "실제 응답",
+          "height": 315
+        }
+      ]
+    },
+    {
+      "screen": "bounty.replay",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "요청 재현 · UX 설계 시안",
+      "primary": [
+        "순차 실행"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청 준비",
+          "height": 666
+        },
+        {
+          "title": "실행 결과",
+          "height": 666
+        }
+      ]
+    },
+    {
+      "screen": "auth.accounts",
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "title": "계정 권한 비교 · 인증 후보 연결 · UX 설계 시안",
+      "primary": [
+        "닫기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "인증 후보 연결",
+          "height": 447
+        }
+      ]
+    },
+    {
+      "screen": "traffic",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "요청·응답 목록 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청",
+          "height": 427
+        },
+        {
+          "title": "응답",
+          "height": 427
+        }
+      ]
+    },
+    {
+      "screen": "mapper",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "기능 자동 매핑 · UX 설계 시안",
+      "primary": [
+        "분류 수정"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "기능 · 12개",
+          "height": 862
+        },
+        {
+          "title": "요청",
+          "height": 484
+        },
+        {
+          "title": "응답",
+          "height": 484
+        }
+      ]
+    },
+    {
+      "screen": "js",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "JS에서 API 찾기 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "호출 소스",
+          "height": 774
+        }
+      ]
+    },
+    {
+      "screen": "environment",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "서버·경로 탐색 · UX 설계 시안",
+      "primary": [
+        "선택 경로 GET 확인"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "경로 후보 · 20개",
+          "height": 778
+        },
+        {
+          "title": "/api/documents/101",
+          "height": 778
+        }
+      ]
+    },
+    {
+      "screen": "exposure.search",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "외부 노출 조사 · 검색 노출 · UX 설계 시안",
+      "primary": [
+        "Google에서 열기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "가져온 URL · 6개",
+          "height": 740
+        },
+        {
+          "title": "선택 URL 근거",
+          "height": 740
+        }
+      ]
+    },
+    {
+      "screen": "exposure.cve",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "외부 노출 조사 · CVE 후보 · UX 설계 시안",
+      "primary": [
+        "CVE 후보 조회"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검토할 CVE 후보 · 4개",
+          "height": 734
+        },
+        {
+          "title": "CVE-2099-10001",
+          "height": 734
+        }
+      ]
+    },
+    {
+      "screen": "auth",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "계정 권한 비교 · UX 설계 시안",
+      "primary": [
+        "비교 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "비교 기록 · 4건",
+          "height": 218
+        },
+        {
+          "title": "GET /api/documents/101",
+          "height": 584
+        },
+        {
+          "title": "Alice · 문서 소유자",
+          "height": 451
+        },
+        {
+          "title": "Bob · 다른 사용자",
+          "height": 451
+        }
+      ]
+    },
+    {
+      "screen": "response.recon",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "응답 보안 분석 · UX 설계 시안",
+      "primary": [
+        "증거로 정리"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "원문 대조",
+          "height": 767
+        }
+      ]
+    },
+    {
+      "screen": "payload",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "입력값 보안 검사 · 요청 준비 · UX 설계 시안",
+      "primary": [
+        "검사 시작"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 요청",
+          "height": 784
+        },
+        {
+          "title": "검사 조건",
+          "height": 784
+        }
+      ]
+    },
+    {
+      "screen": "data",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "데이터 변환·비교 · UX 설계 시안",
+      "primary": [
+        "변환"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "입력",
+          "height": 778
+        },
+        {
+          "title": "출력",
+          "height": 778
+        }
+      ]
+    },
+    {
+      "screen": "activity",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "점검 진행 현황 · UX 설계 시안",
+      "primary": [
+        "완료 표시"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "URL 점검 목록",
+          "height": 822
+        },
+        {
+          "title": "선택 URL",
+          "height": 822
+        }
+      ]
+    },
+    {
+      "screen": "bounty",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "증거 정리 · UX 설계 시안",
+      "primary": [
+        "증거 ZIP 저장"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "증거 8개",
+          "height": 843
+        },
+        {
+          "title": "보고서 작성",
+          "height": 843
+        },
+        {
+          "title": "원문 대조",
+          "height": 843
+        }
+      ]
+    },
+    {
+      "screen": "dashboard",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "점검 대시보드 · UX 설계 시안",
+      "primary": [
+        "원본 보기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "실행 결과",
+          "height": 666
+        },
+        {
+          "title": "선택 항목 근거",
+          "height": 666
+        }
+      ]
+    },
+    {
+      "screen": "payload.results",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "입력값 보안 검사 · 실행·결과 · UX 설계 시안",
+      "primary": [
+        "결과를 증거로"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 결과 · 4건",
+          "height": 216
+        },
+        {
+          "title": "실제 요청",
+          "height": 499
+        },
+        {
+          "title": "실제 응답",
+          "height": 499
+        }
+      ]
+    },
+    {
+      "screen": "bounty.replay",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "요청 재현 · UX 설계 시안",
+      "primary": [
+        "순차 실행"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청 준비",
+          "height": 860
+        },
+        {
+          "title": "실행 결과",
+          "height": 860
+        }
+      ]
+    },
+    {
+      "screen": "auth.accounts",
+      "theme": "dark",
+      "width": 1600,
+      "height": 1000,
+      "title": "계정 권한 비교 · 인증 후보 연결 · UX 설계 시안",
+      "primary": [
+        "닫기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "인증 후보 연결",
+          "height": 447
+        }
+      ]
+    },
+    {
+      "screen": "traffic",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "요청·응답 목록 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청",
+          "height": 303
+        },
+        {
+          "title": "응답",
+          "height": 303
+        }
+      ]
+    },
+    {
+      "screen": "mapper",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "기능 자동 매핑 · UX 설계 시안",
+      "primary": [
+        "분류 수정"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "기능 · 12개",
+          "height": 668
+        },
+        {
+          "title": "요청",
+          "height": 290
+        },
+        {
+          "title": "응답",
+          "height": 290
+        }
+      ]
+    },
+    {
+      "screen": "js",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "JS에서 API 찾기 · UX 설계 시안",
+      "primary": [
+        "Repeater 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "호출 소스",
+          "height": 580
+        }
+      ]
+    },
+    {
+      "screen": "environment",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "서버·경로 탐색 · UX 설계 시안",
+      "primary": [
+        "선택 경로 GET 확인"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "경로 후보 · 20개",
+          "height": 590
+        },
+        {
+          "title": "/api/documents/101",
+          "height": 590
+        }
+      ]
+    },
+    {
+      "screen": "exposure.search",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "외부 노출 조사 · 검색 노출 · UX 설계 시안",
+      "primary": [
+        "Google에서 열기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "가져온 URL · 6개",
+          "height": 554
+        },
+        {
+          "title": "선택 URL 근거",
+          "height": 554
+        }
+      ]
+    },
+    {
+      "screen": "exposure.cve",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "외부 노출 조사 · CVE 후보 · UX 설계 시안",
+      "primary": [
+        "CVE 후보 조회"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검토할 CVE 후보 · 4개",
+          "height": 548
+        },
+        {
+          "title": "CVE-2099-10001",
+          "height": 548
+        }
+      ]
+    },
+    {
+      "screen": "auth",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "계정 권한 비교 · UX 설계 시안",
+      "primary": [
+        "비교 준비"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "비교 기록 · 4건",
+          "height": 218
+        },
+        {
+          "title": "GET /api/documents/101",
+          "height": 396
+        },
+        {
+          "title": "Alice · 문서 소유자",
+          "height": 263
+        },
+        {
+          "title": "Bob · 다른 사용자",
+          "height": 263
+        }
+      ]
+    },
+    {
+      "screen": "response.recon",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "응답 보안 분석 · UX 설계 시안",
+      "primary": [
+        "증거로 정리"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "원문 대조",
+          "height": 573
+        }
+      ]
+    },
+    {
+      "screen": "payload",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "입력값 보안 검사 · 요청 준비 · UX 설계 시안",
+      "primary": [
+        "검사 시작"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 요청",
+          "height": 596
+        },
+        {
+          "title": "검사 조건",
+          "height": 596
+        }
+      ]
+    },
+    {
+      "screen": "data",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "데이터 변환·비교 · UX 설계 시안",
+      "primary": [
+        "변환"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "입력",
+          "height": 584
+        },
+        {
+          "title": "출력",
+          "height": 584
+        }
+      ]
+    },
+    {
+      "screen": "activity",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "점검 진행 현황 · UX 설계 시안",
+      "primary": [
+        "완료 표시"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "URL 점검 목록",
+          "height": 628
+        },
+        {
+          "title": "선택 URL",
+          "height": 628
+        }
+      ]
+    },
+    {
+      "screen": "bounty",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "증거 정리 · UX 설계 시안",
+      "primary": [
+        "증거 ZIP 저장"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "증거 8개",
+          "height": 649
+        },
+        {
+          "title": "보고서 작성",
+          "height": 649
+        },
+        {
+          "title": "원문 대조",
+          "height": 649
+        }
+      ]
+    },
+    {
+      "screen": "dashboard",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "점검 대시보드 · UX 설계 시안",
+      "primary": [
+        "원본 보기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "실행 결과",
+          "height": 472
+        },
+        {
+          "title": "선택 항목 근거",
+          "height": 472
+        }
+      ]
+    },
+    {
+      "screen": "payload.results",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "입력값 보안 검사 · 실행·결과 · UX 설계 시안",
+      "primary": [
+        "결과를 증거로"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "검사 결과 · 4건",
+          "height": 216
+        },
+        {
+          "title": "실제 요청",
+          "height": 315
+        },
+        {
+          "title": "실제 응답",
+          "height": 315
+        }
+      ]
+    },
+    {
+      "screen": "bounty.replay",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "요청 재현 · UX 설계 시안",
+      "primary": [
+        "순차 실행"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "요청 준비",
+          "height": 666
+        },
+        {
+          "title": "실행 결과",
+          "height": 666
+        }
+      ]
+    },
+    {
+      "screen": "auth.accounts",
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "title": "계정 권한 비교 · 인증 후보 연결 · UX 설계 시안",
+      "primary": [
+        "닫기"
+      ],
+      "clipped": [],
+      "bodyOverflow": false,
+      "panels": [
+        {
+          "title": "인증 후보 연결",
+          "height": 447
+        }
+      ]
+    }
+  ]
+}

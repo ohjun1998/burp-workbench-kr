@@ -1,0 +1,25 @@
+{
+  "mode": "Design proposal only",
+  "productionUnchanged": true,
+  "screens": 16,
+  "images": 32,
+  "renderedViews": 64,
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1600x1000",
+    "1280x800"
+  ],
+  "runtimeErrors": 0,
+  "clippedDefaultControls": 0,
+  "horizontalOverflow": 0,
+  "primaryActionsPerView": 1,
+  "prototypeInteractionChecks": 20,
+  "pdfPages": 37,
+  "pixelMatchedPdfImages": 42,
+  "externalRequests": 0,
+  "productionEngineTests": "Not run; production code unchanged.",
+  "directFileOpen": "Not validated due managed browser policy; local HTTP verified."
+}

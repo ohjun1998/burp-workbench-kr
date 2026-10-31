@@ -1,0 +1,28 @@
+{
+  "result": "passed",
+  "checks": 20,
+  "details": [
+    "one primary on traffic",
+    "related request actions open in one named menu",
+    "comparison stays available in grouped actions",
+    "Escape closes secondary menu",
+    "theme switches without leaving current route",
+    "account role flow opens connection design",
+    "connection done returns to comparison",
+    "advanced execution settings start folded",
+    "advanced conditions remain accessible",
+    "prepare-to-results design navigation works",
+    "result evidence flow opens report design",
+    "local UTF8 conversion sample keeps exact input meaning",
+    "conversion keeps authored input",
+    "reuse output sample preserves exact bytes",
+    "CVE provenance remains available under its detail tab",
+    "dashboard compact metrics act as filters",
+    "screen rationale opens as review guide",
+    "review guide explains task hierarchy",
+    "collapsed navigation gives workspace more width",
+    "prototype performs no external network requests"
+  ],
+  "scope": "Design prototype served over local HTTP; production extension unchanged.",
+  "directFileMode": "Not validated: managed Chromium blocks file:// navigation with ERR_BLOCKED_BY_ADMINISTRATOR."
+}

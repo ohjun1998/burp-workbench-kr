@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Workbench · 작업 흐름 설계 시안</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="app-header">
+  <div class="brand"><button class="icon-button" aria-label="메뉴 접기" data-action="nav-toggle" id="menu-toggle"></button><span class="brand-mark"></span><b>Workbench</b></div>
+  <div class="breadcrumb" id="breadcrumb"></div>
+  <div class="header-actions"><span class="project-label">웹 애플리케이션 점검</span><button class="icon-button" data-action="theme" aria-label="테마 전환" id="theme-toggle"></button><button class="header-guide" data-action="explain">화면 설명</button></div>
+</header>
+<div class="workspace"><aside class="sidebar" id="sidebar"></aside><main class="main" id="main"></main></div>
+<footer class="artifact-footer"><span>UX 설계 시안 · 합성 예시 데이터 · 확장 소스 미적용</span><span id="footer-label"></span></footer>
+<div class="toast" id="toast" role="status"></div>
+<dialog id="explain"><button class="dialog-close" data-action="close-dialog" aria-label="닫기">×</button><div id="explain-body"></div></dialog>
+<script src="ui.js"></script><script src="workflow.js"></script><script src="execution.js"></script><script src="management.js"></script><script src="app.js"></script>
+</body></html>

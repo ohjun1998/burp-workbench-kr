@@ -1,0 +1,15 @@
+{
+  "baseline": "d73e8215c5c3874a09974488122594a7af0a903e",
+  "result": "unchanged",
+  "productionPaths": [
+    "simple/",
+    "project/",
+    "downloads/"
+  ],
+  "productionTrees": {
+    "simple": "35b7d457b02c8b3934cf8202b80fa5395a15185a",
+    "project": "d438df5109889ef89e3ca362a89651d9bdf63ae0",
+    "downloads": "460f905ba796844096fa201979af2b5b69a1c3b2"
+  },
+  "artifactMode": "Design review only. No extension source, JAR or release changes."
+}

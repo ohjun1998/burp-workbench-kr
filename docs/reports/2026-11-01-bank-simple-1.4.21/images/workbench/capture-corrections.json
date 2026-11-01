@@ -1,0 +1,36 @@
+{
+  "scope": "Read-only annotation of one helper metadata column lookup; original run003 PNGs/manifest remain unmodified.",
+  "sourceRun": "native-runs/run-003",
+  "originalCaptureManifestSha256": "63a198f4470524207136fd806f2c5b71e86ebe45d03be427dfd145b6ee3d6289",
+  "originalCapturedClassSha256": "1e5808e6fed92216226245e3dbc9fed7f0942b818125140e270eaacc58f3c3ae",
+  "affectedRecords": [
+    {
+      "file": "light/js.png",
+      "originalField": "existingResultSelection.selectedEndpoint",
+      "originalValue": "?",
+      "actualVisibleSelectedUrl": "/login",
+      "actualVisibleMethod": "?",
+      "source": "http://127.0.0.1:24904/static/dashboard.js",
+      "sourceLineVisibleInImage": 96,
+      "evidenceSha256": "62b92fb66c16a22970cf809a6141e8883434c699cc0baa80bde133f2d8287fa5"
+    },
+    {
+      "file": "dark/js.png",
+      "originalField": "existingResultSelection.selectedEndpoint",
+      "originalValue": "?",
+      "actualVisibleSelectedUrl": "/login",
+      "actualVisibleMethod": "?",
+      "source": "http://127.0.0.1:24904/static/dashboard.js",
+      "sourceLineVisibleInImage": 96,
+      "evidenceSha256": "6a34549adbb38bc3c3cd99609fc21fef6fc8064b7cce04d57bcfc0eab413f322"
+    }
+  ],
+  "reason": "JTable visible column0 was the reordered method column, while the original model column0 stores the URL. The legacy helper recorded the method ? as selectedEndpoint and retained the first actual /login row.",
+  "endpointFieldUsedForAnalysis": false,
+  "authoritativeProductData": "../../results/js-analysis-final.json",
+  "helperSourceCorrection": "Future runs convert selected view rows to model rows and read endpoints model columns0(URL),1(method),6(line).",
+  "correctedHelperStrictJava17CompileVerified": true,
+  "correctedHelperNativeRerun": false,
+  "targetRequestsRepeatedForThisAnnotation": 0,
+  "productionJarOrProductDataChanged": false
+}

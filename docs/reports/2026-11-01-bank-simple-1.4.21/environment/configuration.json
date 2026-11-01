@@ -1,0 +1,10 @@
+{
+  "status": "saved",
+  "requiresPublish": true,
+  "fields": ["install_script", "start_skill"],
+  "networkSecretsAndRepositoryMembershipUnchanged": true,
+  "scriptsExecutedBySave": false,
+  "runtimeChangedBySave": false,
+  "publishedBySave": false,
+  "note": "Current bank preparation/start/status and independent ZIP reproduction were executed separately. Save persists instructions only; review/save/Publish in environment settings activates future restoration."
+}

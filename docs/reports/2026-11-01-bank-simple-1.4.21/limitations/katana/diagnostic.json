@@ -1,0 +1,91 @@
+{
+  "result": "NOT_RUN_ENVIRONMENT_CONSTRAINT",
+  "version": "1.8.0",
+  "command": [
+    "/workspace/tools/workbench-katana/1.8.0/katana",
+    "-u",
+    "http://127.0.0.1:24904/",
+    "-config",
+    "/workspace/tools/burp-workbench/bank-simple-1.4.21/katana-probe/config.yaml",
+    "-fc",
+    "/workspace/tools/burp-workbench/bank-simple-1.4.21/katana-probe/form-config.yaml",
+    "-cs",
+    "^http://127[.]0[.]0[.]1:24904/",
+    "-d",
+    "1",
+    "-c",
+    "1",
+    "-p",
+    "1",
+    "-ct",
+    "5s",
+    "-mdp",
+    "2",
+    "-timeout",
+    "2",
+    "-retry",
+    "0",
+    "-rl",
+    "1",
+    "-jsonl",
+    "-silent",
+    "-duc",
+    "-nc"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 0.064,
+  "target": "http://127.0.0.1:24904/",
+  "scope": "One official native binary availability diagnostic against the local bank with writable -config and -fc. Not a completed crawl or production ScopeKatana wrapper run.",
+  "homePreserved": true,
+  "binaryUnmodified": true,
+  "traceConnectCalls": 0,
+  "traceInetConnectCalls": 0,
+  "networkSendCalls": 0,
+  "jsonlRecords": 0,
+  "defaultConfigExistsAfter": false,
+  "evidence": [
+    "bounded-crawl.network.trace",
+    "bounded-crawl.stdout.jsonl",
+    "bounded-crawl.stderr.log",
+    "README_KR.md"
+  ],
+  "targetRequests": 0,
+  "nativeProcessExecuted": true,
+  "productionScopeKatanaWrapperUsed": false,
+  "crawlCompleted": false,
+  "zeroExitCodeIsProofOfCrawl": false,
+  "runtimeErrorObservedThisRun": false,
+  "errorVisibility": "The command used -silent; both output streams are empty. The read-only error was not logged in this run.",
+  "constraintEvidence": {
+    "homeDirectory": "/home/agent",
+    "homeMountReadOnly": true,
+    "requiredDefaultFormConfig": "/home/agent/.config/katana/form-config.yaml",
+    "requiredDefaultFormConfigExists": false,
+    "upstreamInitializerRunsBeforeCustomFormConfig": true,
+    "upstreamRunnerErrorCanReturnExitZero": true
+  },
+  "binary": {
+    "path": "/workspace/tools/workbench-katana/1.8.0/katana",
+    "version": "1.8.0",
+    "sha256": "3214c11a0548667b37ec17bbb691706b7e0de1f0f24b3ead2ee12c301ebc1bbc",
+    "officialAsset": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_linux_amd64.zip",
+    "officialAssetSha256": "cb027ae99d0757061b70c07a15c7a80f62c5a535ab52c4a329f80c4b0a7309d2"
+  },
+  "upstreamSources": [
+    {
+      "tag": "v1.8.0",
+      "url": "https://github.com/projectdiscovery/katana/blob/v1.8.0/internal/runner/options.go",
+      "detail": "initExampleFormFillConfig uses os.UserHomeDir()/.config/katana/form-config.yaml."
+    },
+    {
+      "tag": "v1.8.0",
+      "url": "https://github.com/projectdiscovery/katana/blob/v1.8.0/internal/runner/runner.go",
+      "detail": "New calls the default initializer before custom FormConfig."
+    },
+    {
+      "tag": "v1.8.0",
+      "url": "https://github.com/projectdiscovery/katana/blob/v1.8.0/cmd/katana/main.go",
+      "detail": "A runner creation error is logged then exits with status0."
+    }
+  ]
+}

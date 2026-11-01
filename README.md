@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.21로 실제 로컬 은행을 진단한 결과를 제공합니다.** 8개 주요 도구와 통합 점검·대시보드의 실제 값·화면, SQL 로그인 우회·계좌 노출·JWT 변조·음수 이체 재현과 정상 차단 대조를 구분했습니다. [도구별 결과](docs/reports/2026-11-01-bank-simple-1.4.21/README_KR.md) · [은행 사이트 ZIP](docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-site.zip) · [그림·HTML·CSV 결과 ZIP](docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-results.zip). 실제 HTTP·Linux Swing/호스트 어댑터 검증이며 Burp 본체 GUI 검증은 아닙니다. 배포 JAR는 변경하지 않았습니다.
+
 **Simple 1.4.21은 왼쪽 최상단에 통합 점검·대시보드를 컴팩트 강조형 두 줄로 배치합니다.** 아래 도구 목록을 스크롤해도 고정되며 기존 준비 창·결과 화면과 입력 상태를 유지합니다. [설치 JAR](simple/downloads/1.4.21/burp-workbench-simple-1.4.21.jar) · [소스 ZIP](simple/downloads/1.4.21/burp-workbench-simple-1.4.21-source.zip) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.21_KR.md) · [실제 화면·검증](docs/reports/2026-11-01-compact-primary-navigation/REPORT_KR.md). 이전 배포물은 보존합니다.
 
 **Simple 1.4.20은 승인 시안에 남아 있던 입력칸·숫자 컨트롤·카드 내부·필터·원문 간격을 보정합니다.** 기존 입력·원본·화면 설정을 유지합니다. [설치 JAR](simple/downloads/1.4.20/burp-workbench-simple-1.4.20.jar) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.20_KR.md) · [실제 화면·검증](docs/reports/2026-11-01-approved-review/REPORT_KR.md). 작업 브랜치이며 main 병합 여부와 구분합니다.

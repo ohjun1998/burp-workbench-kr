@@ -1,0 +1,1 @@
+[{"origin":"http://127.0.0.1:24904","detections":"[Detection[category=프레임워크, name=Flask / Werkzeug, confidence=헤더 근거, evidence=server: Werkzeug], Detection[category=API 도구, name=Swagger / OpenAPI, confidence=응답 구조 근거, evidence=OpenAPI/Swagger JSON 구조], Detection[category=API 도구, name=GraphQL, confidence=본문 근거 · 추정, evidence='/graphql']]"}]

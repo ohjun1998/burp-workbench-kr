@@ -1,0 +1,129 @@
+{
+  "result": "passed",
+  "verifiedAtUTC": "2026-11-01T10:29:12.687452+00:00",
+  "upstreamRepository": "https://github.com/Commando-X/vuln-bank",
+  "upstreamCommit": "4bb7cd5f46921959f034455e5615782481966177",
+  "upstreamLicense": "MIT LICENSE.md included",
+  "upstreamTrackedFiles": 58,
+  "upstreamFilesUnchanged": true,
+  "site": {
+    "result": "passed",
+    "base": "http://127.0.0.1:24904",
+    "host": "127.0.0.1",
+    "dbPort": 24914,
+    "sourceCommit": "4bb7cd5f46921959f034455e5615782481966177",
+    "upstreamTrackedFiles": 58,
+    "upstreamFilesUnchanged": true,
+    "database": "PGlite PostgreSQL18.6 WASM compatibility layer, not official PostgreSQL13",
+    "httpThreaded": false,
+    "fakeActors": [
+      "admin",
+      "wb_alice",
+      "wb_bob"
+    ],
+    "checks": [
+      {
+        "path": "/",
+        "status": 200
+      },
+      {
+        "path": "/login",
+        "status": 200
+      },
+      {
+        "path": "/static/dashboard.js",
+        "status": 200
+      },
+      {
+        "path": "/static/openapi.json",
+        "status": 200
+      },
+      {
+        "path": "/healthz",
+        "status": 200
+      },
+      {
+        "path": "/check_balance/<alice>",
+        "status": 200,
+        "balanceReturned": true
+      }
+    ],
+    "externalApplicationNetworkBlocked": true
+  },
+  "package": {
+    "path": "docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-site.zip",
+    "sha256": "14ff5d5704c0ee92814217e98f8ff036457a941a53a2c16caf67c1259517fc06",
+    "bytes": 1760609,
+    "entries": 66,
+    "zipCRCVerified": true,
+    "all58OriginalSourceHashesVerified": true,
+    "runtimeAuthDatabaseVenvNodeModulesExcluded": true
+  },
+  "independentExtractedPackageRun": {
+    "result": "passed",
+    "prepareExitCode": 0,
+    "startExitCode": 0,
+    "statusExitCode": 0,
+    "stopExitCode": 0,
+    "base": "http://127.0.0.1:25004",
+    "databasePort": 25014,
+    "readiness": {
+      "result": "passed",
+      "base": "http://127.0.0.1:25004",
+      "host": "127.0.0.1",
+      "dbPort": 25014,
+      "sourceCommit": "4bb7cd5f46921959f034455e5615782481966177",
+      "upstreamTrackedFiles": 58,
+      "upstreamFilesUnchanged": true,
+      "database": "PGlite PostgreSQL18.6 WASM compatibility layer, not official PostgreSQL13",
+      "httpThreaded": false,
+      "fakeActors": [
+        "admin",
+        "wb_alice",
+        "wb_bob"
+      ],
+      "checks": [
+        {
+          "path": "/",
+          "status": 200
+        },
+        {
+          "path": "/login",
+          "status": 200
+        },
+        {
+          "path": "/static/dashboard.js",
+          "status": 200
+        },
+        {
+          "path": "/static/openapi.json",
+          "status": 200
+        },
+        {
+          "path": "/healthz",
+          "status": 200
+        },
+        {
+          "path": "/check_balance/<alice>",
+          "status": 200,
+          "balanceReturned": true
+        }
+      ],
+      "externalApplicationNetworkBlocked": true
+    },
+    "ownedServicePortsClosedAfterStop": true,
+    "main24904ServicePreserved": true,
+    "logs": [
+      "prepare.log",
+      "start.log",
+      "status.log",
+      "stop.log"
+    ]
+  },
+  "notValidated": [
+    "Official PostgreSQL13 deployment",
+    "Concurrent requests and transaction isolation",
+    "Windows native execution",
+    "Real DeepSeek API or real bank data"
+  ]
+}

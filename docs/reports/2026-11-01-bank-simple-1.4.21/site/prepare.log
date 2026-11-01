@@ -1,0 +1,73 @@
+WARNING: The directory '/home/agent/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Collecting aniso8601==9.0.1 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 1))
+  Downloading aniso8601-9.0.1-py2.py3-none-any.whl.metadata (23 kB)
+Collecting certifi==2026.10.23 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 2))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting charset-normalizer==3.5.2 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 3))
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+Collecting click==8.5.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 4))
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting Flask==2.0.1 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 5))
+  Downloading Flask-2.0.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting Flask-Cors==4.0.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 6))
+  Downloading Flask_Cors-4.0.0-py2.py3-none-any.whl.metadata (5.4 kB)
+Collecting flask-swagger-ui==4.11.1 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 7))
+  Downloading flask_swagger_ui-4.11.1-py3-none-any.whl.metadata (2.4 kB)
+Collecting graphene==3.3 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 8))
+  Downloading graphene-3.3-py2.py3-none-any.whl.metadata (7.7 kB)
+Collecting graphql-core==3.2.13 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 9))
+  Downloading graphql_core-3.2.13-py3-none-any.whl.metadata (11 kB)
+Collecting graphql-relay==3.2.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 10))
+  Downloading graphql_relay-3.2.0-py3-none-any.whl.metadata (12 kB)
+Collecting idna==3.20 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 11))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting itsdangerous==2.2.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 12))
+  Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting Jinja2==3.0.3 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 13))
+  Downloading Jinja2-3.0.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting MarkupSafe==3.0.4 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 14))
+  Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+Collecting psycopg2-binary==2.9.9 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 15))
+  Downloading psycopg2_binary-2.9.9-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.4 kB)
+Collecting PyJWT==2.4.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 16))
+  Downloading PyJWT-2.4.0-py3-none-any.whl.metadata (4.1 kB)
+Collecting python-dotenv==1.0.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 17))
+  Downloading python_dotenv-1.0.0-py3-none-any.whl.metadata (21 kB)
+Collecting requests==2.31.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 18))
+  Downloading requests-2.31.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting urllib3==2.8.0 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 19))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting Werkzeug==2.0.1 (from -r /workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/bank-site/requirements-local-lock.txt (line 20))
+  Downloading Werkzeug-2.0.1-py3-none-any.whl.metadata (4.4 kB)
+Downloading aniso8601-9.0.1-py2.py3-none-any.whl (52 kB)
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+Downloading Flask-2.0.1-py3-none-any.whl (94 kB)
+Downloading Flask_Cors-4.0.0-py2.py3-none-any.whl (14 kB)
+Downloading flask_swagger_ui-4.11.1-py3-none-any.whl (1.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 3.3 MB/s eta 0:00:00
+Downloading graphene-3.3-py2.py3-none-any.whl (128 kB)
+Downloading graphql_core-3.2.13-py3-none-any.whl (268 kB)
+Downloading graphql_relay-3.2.0-py3-none-any.whl (16 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Downloading Jinja2-3.0.3-py3-none-any.whl (133 kB)
+Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Downloading psycopg2_binary-2.9.9-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 4.8 MB/s eta 0:00:00
+Downloading PyJWT-2.4.0-py3-none-any.whl (18 kB)
+Downloading python_dotenv-1.0.0-py3-none-any.whl (19 kB)
+Downloading requests-2.31.0-py3-none-any.whl (62 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading Werkzeug-2.0.1-py3-none-any.whl (288 kB)
+Installing collected packages: aniso8601, Werkzeug, urllib3, python-dotenv, PyJWT, psycopg2-binary, MarkupSafe, itsdangerous, idna, graphql-core, click, charset-normalizer, certifi, requests, Jinja2, graphql-relay, graphene, Flask, flask-swagger-ui, Flask-Cors
+Successfully installed Flask-2.0.1 Flask-Cors-4.0.0 Jinja2-3.0.3 MarkupSafe-3.0.4 PyJWT-2.4.0 Werkzeug-2.0.1 aniso8601-9.0.1 certifi-2026.10.23 charset-normalizer-3.5.2 click-8.5.0 flask-swagger-ui-4.11.1 graphene-3.3 graphql-core-3.2.13 graphql-relay-3.2.0 idna-3.20 itsdangerous-2.2.0 psycopg2-binary-2.9.9 python-dotenv-1.0.0 requests-2.31.0 urllib3-2.8.0
+
+added 9 packages in 737ms
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+{"prepared": true, "root": "/workspace/tools/burp-workbench/bank-simple-1.4.21/reproduction-check/runtime", "upstreamCommit": "4bb7cd5f46921959f034455e5615782481966177", "originalFilesVerified": true}

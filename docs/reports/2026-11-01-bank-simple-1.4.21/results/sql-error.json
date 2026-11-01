@@ -1,0 +1,1 @@
+{"status":500,"body":"{\"message\":\"unterminated quoted string at or near \\\"'''\\\"\\nLINE 1: SELECT username, balance FROM users WHERE account_number='''\\n                                                                 ^\\n\",\"status\":\"error\"}\n"}

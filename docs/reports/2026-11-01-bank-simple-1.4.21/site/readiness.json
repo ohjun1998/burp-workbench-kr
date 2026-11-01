@@ -1,0 +1,44 @@
+{
+  "result": "passed",
+  "base": "http://127.0.0.1:24904",
+  "host": "127.0.0.1",
+  "dbPort": 24914,
+  "sourceCommit": "4bb7cd5f46921959f034455e5615782481966177",
+  "upstreamTrackedFiles": 58,
+  "upstreamFilesUnchanged": true,
+  "database": "PGlite PostgreSQL18.6 WASM compatibility layer, not official PostgreSQL13",
+  "httpThreaded": false,
+  "fakeActors": [
+    "admin",
+    "wb_alice",
+    "wb_bob"
+  ],
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "path": "/static/dashboard.js",
+      "status": 200
+    },
+    {
+      "path": "/static/openapi.json",
+      "status": 200
+    },
+    {
+      "path": "/healthz",
+      "status": 200
+    },
+    {
+      "path": "/check_balance/<alice>",
+      "status": 200,
+      "balanceReturned": true
+    }
+  ],
+  "externalApplicationNetworkBlocked": true
+}

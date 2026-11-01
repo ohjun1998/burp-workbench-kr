@@ -1,0 +1,1 @@
+{"observations":"{}","query":"site:127.0.0.1 (inurl:swagger OR inurl:api-docs OR inurl:openapi)","cveResultRows":0,"externalProviderLookup":"NOT_RUN: no external CVE/Google provider calls; loopback lab only"}

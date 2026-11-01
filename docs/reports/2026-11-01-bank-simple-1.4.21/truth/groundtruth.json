@@ -1,0 +1,288 @@
+{
+  "result": "completed",
+  "source": "independentManualValidation",
+  "productDetected": false,
+  "executedAtUTC": "2026-11-01T10:30:58.326395+00:00",
+  "base": "http://127.0.0.1:24904",
+  "scope": "Owned isolated original VulnBank, loopback HTTP only. Independent contrasts, not a Workbench engine score.",
+  "requests": [
+    {
+      "evidenceId": "GTHTTP-001",
+      "actor": "anonymous",
+      "method": "GET",
+      "path": "/healthz",
+      "status": 200,
+      "responseBodyBytes": 32,
+      "privateRequestSHA256": "bbfd3ced89c9f921a82be0800f12d4dd2f23e48d8c8656d985d2fd8aa7da78f5",
+      "responseBodySHA256": "9de5dc5f92cce218c43608c1837b2c408141433e74ded41d11ac8931041acbe1",
+      "privateResponseMetadataSHA256": "e137fe92e8294671a5a52c0f9f0274fa451ce34c5af5d2db2e647b024849058a",
+      "privateEvidenceBasename": "GTHTTP-001",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": false,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-002",
+      "actor": "anonymous",
+      "method": "POST",
+      "path": "/login",
+      "status": 401,
+      "responseBodyBytes": 131,
+      "privateRequestSHA256": "4bd7dc47bd325f3b6ea1ccb0b91bbcc6025135973509a33139139496d87be06a",
+      "responseBodySHA256": "d8c2a7c3275dd530c01ebfdf24168fb19d07c63489119fd421c5555a0fa094fe",
+      "privateResponseMetadataSHA256": "94f37dea7d72891ea5ea4d701d24bb9bf07a26fd1654f68e6754a559874bda37",
+      "privateEvidenceBasename": "GTHTTP-002",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": false,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-003",
+      "actor": "anonymous",
+      "method": "POST",
+      "path": "/login",
+      "status": 200,
+      "responseBodyBytes": 403,
+      "privateRequestSHA256": "45840782cd2d05edf5f5f842a350d28ff86a31991644ca8b00413bada67039f4",
+      "responseBodySHA256": "f5fd858c2295d2454684e6daa3e8d41c62865a307369d40fb14c09da3bfa800f",
+      "privateResponseMetadataSHA256": "ca5d1d60d44d258373eb1affa11eba84e9735f83d2a5f854424d36b13e3af30b",
+      "privateEvidenceBasename": "GTHTTP-003",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": false,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-004",
+      "actor": "wb_bob",
+      "method": "GET",
+      "path": "/check_balance/3902391125",
+      "status": 200,
+      "responseBodyBytes": 88,
+      "privateRequestSHA256": "39ea767b83754043673e2c64c8d55bca13b619997707684f007aacc34f5b5463",
+      "responseBodySHA256": "a9304a92b903ffb11b17b5d092abf9a42c86e8d7fc1128d4edf50af575899939",
+      "privateResponseMetadataSHA256": "1da81e656488a450f9cccb1894dda9661f644ce358c802d24d450bc72d86e34a",
+      "privateEvidenceBasename": "GTHTTP-004",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": true,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-005",
+      "actor": "anonymous",
+      "method": "GET",
+      "path": "/check_balance/3902391125",
+      "status": 200,
+      "responseBodyBytes": 88,
+      "privateRequestSHA256": "69fc69a5ddc6b0e8692c8e8a64176e9faeec8a799d9b9cbcb819d89e2f3cffd1",
+      "responseBodySHA256": "a9304a92b903ffb11b17b5d092abf9a42c86e8d7fc1128d4edf50af575899939",
+      "privateResponseMetadataSHA256": "1da81e656488a450f9cccb1894dda9661f644ce358c802d24d450bc72d86e34a",
+      "privateEvidenceBasename": "GTHTTP-005",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": false,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-006",
+      "actor": "wb_alice",
+      "method": "GET",
+      "path": "/sup3r_s3cr3t_admin",
+      "status": 403,
+      "responseBodyBytes": 13,
+      "privateRequestSHA256": "be677e96b2dd90ceccecc8e1aa9a2807a69fa9bbdd08a42759ffc7460079da84",
+      "responseBodySHA256": "d134ca025a6c63b2555200885d71cb6e61f8097cdfd7ecf13675b3df0c721797",
+      "privateResponseMetadataSHA256": "03e90509c3d2697f17556518ca5ce150069fd3e11c698891d81a060e67382e6e",
+      "privateEvidenceBasename": "GTHTTP-006",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": true,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-007",
+      "actor": "admin",
+      "method": "GET",
+      "path": "/sup3r_s3cr3t_admin",
+      "status": 200,
+      "responseBodyBytes": 43044,
+      "privateRequestSHA256": "4a76c1262fe9e1834ca1247fbcc6ed52cc2020cbb5176b4df928b13012f0222c",
+      "responseBodySHA256": "d1c8f92dbe4405a5cf61159f2f98a0f9da5cb787f02893be1c04d470d2020d53",
+      "privateResponseMetadataSHA256": "b2e659a09337823113da024c95dc1083bf2a6f47cbe00db281be6a86e7ae1f88",
+      "privateEvidenceBasename": "GTHTTP-007",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": true,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-008",
+      "actor": "anonymous",
+      "method": "GET",
+      "path": "/sup3r_s3cr3t_admin",
+      "status": 401,
+      "responseBodyBytes": 29,
+      "privateRequestSHA256": "92b4324892f111175bd306ee9b73d59c5153a88a4ff59215a4d84a2e9155ac27",
+      "responseBodySHA256": "66b5f0b14ba8a1f0f85267e901d7298fa22e09adab6ba5efc282356013151771",
+      "privateResponseMetadataSHA256": "eb922a6cf699e75d7af5b5519d80e8e18f995e2e5d12814eae1f0ba4fc32c5f6",
+      "privateEvidenceBasename": "GTHTTP-008",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": false,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-009",
+      "actor": "wb_alice",
+      "method": "POST",
+      "path": "/request_loan",
+      "status": 400,
+      "responseBodyBytes": 69,
+      "privateRequestSHA256": "53e1475018068a9ddf839270c328d71f8c437c66f45beb456dbc751be0af5e71",
+      "responseBodySHA256": "ae6a14c51f83b1500c146782130a5a95aec7d1faeec81efacfdd1498b660a813",
+      "privateResponseMetadataSHA256": "beac5a70b5b0357394a151e8114cd4474ea5b548b6c20bba683180081ef7b906",
+      "privateEvidenceBasename": "GTHTTP-009",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": true,
+      "cookieHeaderPresent": false
+    },
+    {
+      "evidenceId": "GTHTTP-010",
+      "actor": "wb_alice_modified_claim_invalid_signature",
+      "method": "GET",
+      "path": "/sup3r_s3cr3t_admin",
+      "status": 200,
+      "responseBodyBytes": 43044,
+      "privateRequestSHA256": "e9ee6377b02cf2fc52de89c99d4065ae7778ac612c400f7235acf9f4dd515a55",
+      "responseBodySHA256": "d1c8f92dbe4405a5cf61159f2f98a0f9da5cb787f02893be1c04d470d2020d53",
+      "privateResponseMetadataSHA256": "b2e659a09337823113da024c95dc1083bf2a6f47cbe00db281be6a86e7ae1f88",
+      "privateEvidenceBasename": "GTHTTP-010",
+      "wireRepresentation": "HTTP application payload and parsed headers, not TCP framing",
+      "authorizationHeaderPresent": true,
+      "cookieHeaderPresent": false
+    }
+  ],
+  "requestCount": 10,
+  "cases": [
+    {
+      "id": "GT-SQLLOGIN",
+      "title": "SQL 입력에 의한 관리자 로그인 우회",
+      "category": "confirmed_vulnerability",
+      "confirmed": true,
+      "normalControl": {
+        "evidenceId": "GTHTTP-002",
+        "status": 401,
+        "tokenReturned": false
+      },
+      "test": {
+        "evidenceId": "GTHTTP-003",
+        "status": 200,
+        "usernameInput": "admin' -- ",
+        "tokenReturned": true,
+        "isAdmin": true
+      },
+      "interpretation": "독립 HTTP 대조 재현이며 Workbench 자동 탐지 결과가 아님"
+    },
+    {
+      "id": "GT-BOLA",
+      "title": "비로그인 타인 계좌·잔액 조회",
+      "category": "confirmed_vulnerability",
+      "confirmed": true,
+      "normalControl": {
+        "evidenceId": "GTHTTP-004",
+        "actor": "wb_bob",
+        "status": 200
+      },
+      "test": {
+        "evidenceId": "GTHTTP-005",
+        "actor": "anonymous",
+        "status": 200,
+        "accountNumber": "3902391125",
+        "returnedUsername": "wb_bob",
+        "returnedBalance": 1000.0
+      },
+      "interpretation": "HTTP200만이 아니라 실제 타인 계정명과 계좌 번호가 반환됨을 확인"
+    },
+    {
+      "id": "GT-ROLE-CONTROL",
+      "title": "관리자 화면의 정상 역할·인증 제어",
+      "category": "normal_control",
+      "controlPassed": true,
+      "responses": [
+        {
+          "evidenceId": "GTHTTP-006",
+          "actor": "wb_alice",
+          "status": 403
+        },
+        {
+          "evidenceId": "GTHTTP-007",
+          "actor": "admin",
+          "status": 200
+        },
+        {
+          "evidenceId": "GTHTTP-008",
+          "actor": "anonymous",
+          "status": 401
+        }
+      ],
+      "interpretation": "변조하지 않은 정상 토큰에서 Alice403·관리자200·비로그인401. 모든 API가 무조건 열려 있다는 의미가 아님"
+    },
+    {
+      "id": "GT-NEGATIVE-LOAN-CONTROL",
+      "title": "음수 대출 요청의 정상 입력 거절",
+      "category": "normal_control",
+      "controlPassed": true,
+      "test": {
+        "evidenceId": "GTHTTP-009",
+        "amount": -1,
+        "status": 400,
+        "message": "Loan amount must be greater than zero"
+      },
+      "interpretation": "거절되는 음수 대출 입력을 이체의 음수 처리 취약점과 구분"
+    },
+    {
+      "id": "GT-JWT-CLAIMS",
+      "title": "실제 로그인 JWT의 메타데이터",
+      "category": "observed_configuration",
+      "observed": {
+        "algorithm": "HS256",
+        "tokenType": "JWT",
+        "username": "wb_alice",
+        "isAdmin": false,
+        "issuedAtPresent": true,
+        "expirationPresent": false,
+        "tokenSHA256": "f240d89a60645af9b952b76194caf5af73ce9a6f2545a25b0f91a8147c465a24"
+      },
+      "interpretation": "실제 발급 토큰을 로컬 디코딩한 관측. 만료 항목 누락만으로 임의 서명 수용을 단정하지 않음"
+    },
+    {
+      "id": "GT-JWT-SIGNATURE",
+      "title": "잘못된 서명과 관리자 claim 변조 수용",
+      "category": "confirmed_vulnerability",
+      "confirmed": true,
+      "normalControl": {
+        "evidenceId": "GTHTTP-006",
+        "status": 403,
+        "isAdminClaim": false
+      },
+      "test": {
+        "evidenceId": "GTHTTP-010",
+        "status": 200,
+        "isAdminClaim": true,
+        "serverSigningKeyUsed": false,
+        "signatureIntentionallyInvalid": true,
+        "adminPageMarkerReturned": true,
+        "modifiedTokenSHA256": "86378beb8de7a078db63a5a0141dfabcbf3f92c70fc717526cd40ef4b80f4d8b"
+      },
+      "interpretation": "정상 Alice403과 대조한 독립 HTTP 권한 상승 재현. JWT 보기 도구의 자동 취약점 확정 기능을 의미하지 않음"
+    }
+  ],
+  "confirmedVulnerabilities": 3,
+  "normalControlsPassed": 2,
+  "observedConfigurationCases": 1,
+  "transfersOrRegistrationsSent": false,
+  "sourceFilesOrProductFilesModified": false,
+  "privateEvidenceOutsideRepository": true,
+  "publicOutputIncludesTokensPasswordsOrRawAdminHTML": false,
+  "limitations": [
+    "No full authorization coverage",
+    "No real bank or external endpoint",
+    "Not native Burp GUI",
+    "The negative loan POST is rejected; transfer/registration writes are not exercised by this validator"
+  ]
+}

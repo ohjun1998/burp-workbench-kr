@@ -1,5 +1,11 @@
 # 현재 개발 상태
 
+## Simple 1.4.21 · 실제 로컬 은행 도구별 결과 — 작업 브랜치, 미병합
+
+2026-11-01(Asia/Seoul), 고정한 원본 VulnBank를 loopback에 실행하고 동일 1.4.21 JAR로 주요8도구·보조도구·통합점검/대시보드13시나리오를 검증했습니다. 최종 core003은 실제HTTP89/수집89/수집처리오류0, 라이트·다크28PNG입니다. 별도 Bounty5요청에서 음수이체로 Alice1000→1005/Bob1000→995를 확인했고, 독립10요청에서 SQL로그인우회·무인증계좌조회·JWT변조3종과 정상차단2개를 대조했습니다. 후보·확정·관측·미실행을 분리하며 표시/증거연결의 제품한계2개도 보존합니다.
+
+은행 사이트ZIP은 원본58파일·MIT라이선스와 재현기동검증을 포함합니다. PGlite18.6·순차HTTP·Montoya호환호스트/실제HTTP·LinuxSwing 조건이며 실제BurpGUI·Windows·공식PG13 검증은 아닙니다. Simple소스·배포물은 그대로입니다. 브랜치 `account-a/bank-simple-1.4.21-results`, main 미병합. [도구별 실제값·다운로드](docs/reports/2026-11-01-bank-simple-1.4.21/README_KR.md).
+
 ## Simple 1.4.21 · 통합 점검·대시보드 컴팩트 강조형 — 작업 브랜치, 미병합
 
 2026-11-01(Asia/Seoul), 사용자가 선택한 C안으로 왼쪽 최상단에 통합 점검과 대시보드를 각각 42px 한 줄로 적용했습니다. 기존 준비 창·결과 화면·입력·원본·명시적 실행을 유지하고, 아래 목록을 스크롤해도 두 메뉴가 고정됩니다. 전체 8,101개 검사와 두 테마·네 크기의 실제 메뉴 808개 검사를 통과했습니다. 작업 브랜치는 `account-a/compact-primary-navigation`이며 1.4.20의 완료 변경을 포함합니다. [설치 JAR](simple/downloads/1.4.21/burp-workbench-simple-1.4.21.jar) · [소스 ZIP](simple/downloads/1.4.21/burp-workbench-simple-1.4.21-source.zip) · [실제 화면·검증](docs/reports/2026-11-01-compact-primary-navigation/REPORT_KR.md). main 병합이나 실제 Windows Burp 검증을 의미하지 않습니다.

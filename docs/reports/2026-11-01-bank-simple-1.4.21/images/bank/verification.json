@@ -1,0 +1,263 @@
+{
+  "result": "passed",
+  "capturedAtUTC": "2026-11-01T10:29:38.982Z",
+  "browser": {
+    "name": "Chromium",
+    "version": "154.0.8037.57"
+  },
+  "baseURL": "http://127.0.0.1:24904",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "source": "Unmodified pinned VulnBank application served on loopback; actual browser form login and original DOM.",
+  "checks": [
+    {
+      "id": "BR-01",
+      "title": "원본 은행 로그인 화면",
+      "result": "passed",
+      "detail": {
+        "status": 200,
+        "passwordInputType": "password"
+      }
+    },
+    {
+      "id": "BR-02",
+      "title": "실제 로그인 폼으로 Alice 로그인",
+      "result": "passed",
+      "detail": {
+        "username": "wb_alice",
+        "accountNumber": "1791279111",
+        "displayedBalance": "$1000.0"
+      }
+    },
+    {
+      "id": "BR-03",
+      "title": "실제 이체 양식 · 제출 전 상태",
+      "result": "passed",
+      "detail": {
+        "recipientAccount": "3902391125",
+        "amount": "1.00",
+        "submitted": false
+      }
+    },
+    {
+      "id": "BR-04",
+      "title": "실제 거래 내역 화면",
+      "result": "passed",
+      "detail": {
+        "renderedTransactionItems": 0,
+        "displayedEmptyState": true
+      }
+    },
+    {
+      "id": "BR-05",
+      "title": "원본 은행 테마 버튼의 다크 화면",
+      "result": "passed",
+      "detail": {
+        "theme": "dark"
+      }
+    },
+    {
+      "id": "BR-06",
+      "title": "실제 정적 JS/API 응답과 외부 요청 차단",
+      "result": "passed",
+      "detail": {
+        "localResponses": 18,
+        "blockedExternalRequests": 2
+      }
+    }
+  ],
+  "captures": [
+    {
+      "name": "01-login.png",
+      "label": "은행 로그인 화면 · 실제 원본 앱",
+      "page": "/login",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 196612,
+      "sha256": "5679a191345e8c39a2703680e9313328ae821d7bbec54879468f0faab0f95dec",
+      "originalBrowserScreenshot": true,
+      "visibleTokenOrPassword": false
+    },
+    {
+      "name": "02-dashboard-light.png",
+      "label": "로그인한 Alice 계좌·잔액",
+      "page": "/dashboard",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 150906,
+      "sha256": "61d0f26ef8ad9a8856609ad6ef0614bda3f8dba8a41bfbf3a119351c5e43c5d2",
+      "originalBrowserScreenshot": true,
+      "visibleTokenOrPassword": false
+    },
+    {
+      "name": "03-transfer-form.png",
+      "label": "Bob에게 이체하는 실제 양식 · 제출하지 않음",
+      "page": "/dashboard#transfers",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 77115,
+      "sha256": "0f24946035e8206bc843368f8508cb4f767e0be7b5e348b79cdc926a559ca3cf",
+      "originalBrowserScreenshot": true,
+      "visibleTokenOrPassword": false
+    },
+    {
+      "name": "04-transactions.png",
+      "label": "실제 거래 내역 · 사이트 응답 기준",
+      "page": "/dashboard#transactions",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 65610,
+      "sha256": "8ce6621e29f8bd61d9ac7ae7742c80755b7265c83f3353c8cacabbebda0f49fd",
+      "originalBrowserScreenshot": true,
+      "visibleTokenOrPassword": false
+    },
+    {
+      "name": "05-dashboard-dark.png",
+      "label": "은행 자체 다크 테마 · Alice 계좌",
+      "page": "/dashboard#transactions",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 152375,
+      "sha256": "3e77ea2a1337dc497b2549c0ea953884dfa846729afae42dca47d0433b248219",
+      "originalBrowserScreenshot": true,
+      "visibleTokenOrPassword": false
+    }
+  ],
+  "localResponses": [
+    {
+      "path": "/login",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/style.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/auth.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/favicon.svg",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/login",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/dashboard",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/style.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/dashboard.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/uploads/user.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/dashboard.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/vuln-disclaimer.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/transactions/1791279111",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/virtual-cards",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/bill-categories",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/bill-payments/history",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/favicon.svg",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/favicon.svg",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/static/favicon.svg",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "blockedExternalRequests": [
+    {
+      "origin": "https://fonts.googleapis.com",
+      "path": "/css2",
+      "method": "GET"
+    },
+    {
+      "origin": "https://fonts.googleapis.com",
+      "path": "/css2",
+      "method": "GET"
+    }
+  ],
+  "requestFailures": [
+    {
+      "origin": "https://fonts.googleapis.com",
+      "path": "/css2",
+      "type": "stylesheet",
+      "local": false,
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "origin": "https://fonts.googleapis.com",
+      "path": "/css2",
+      "type": "stylesheet",
+      "local": false,
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "failedLocalHttpResponses": 0,
+  "failedLocalResourceRequests": 0,
+  "consoleErrorCount": 2,
+  "pageErrorCount": 0,
+  "dialogs": [],
+  "newIsolatedContext": true,
+  "externalRequestsBlocked": true,
+  "originalScreenshots": true,
+  "diagnosticVulnerabilityClaims": false,
+  "transferSubmittedByBrowserCapture": false,
+  "browserHelperExtensionLoaded": false,
+  "notRun": [
+    "Native Burp browser",
+    "Feature Mapper MV3 browser-helper integration"
+  ]
+}

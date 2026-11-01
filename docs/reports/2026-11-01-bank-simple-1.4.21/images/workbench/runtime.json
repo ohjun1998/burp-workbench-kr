@@ -1,0 +1,10 @@
+{
+  "version": "1.4.21",
+  "jar": "/workspace/burp-workbench-kr/simple/downloads/1.4.21/burp-workbench-simple-1.4.21.jar",
+  "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "artifactUnchanged": true,
+  "exitCode": 0,
+  "nativeSwing": true,
+  "nativeBurpGui": false,
+  "scope": "Released Workbench Simple JAR on isolated Linux Xorg/xfwm4 with an actual loopback-bank HTTP adapter."
+}

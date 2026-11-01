@@ -1,0 +1,28 @@
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20820 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20817 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20821 --- SIGURG {si_signo=SIGURG, si_code=SI_TKILL, si_pid=20817, si_uid=1000} ---
+20823 +++ exited with 0 +++
+20825 +++ exited with 0 +++
+20821 +++ exited with 0 +++
+20819 +++ exited with 0 +++
+20818 +++ exited with 0 +++
+20824 +++ exited with 0 +++
+20822 +++ exited with 0 +++
+20820 +++ exited with 0 +++
+20817 +++ exited with 0 +++

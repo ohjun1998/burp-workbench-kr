@@ -1,0 +1,1 @@
+[{"area":"점검 진행 현황","type":"IllegalArgumentException","location":"kr.workbench.AssessmentTracker.attachEvidenceFile(AssessmentTracker.java:1281)\nkr.workbench.ActivityPanel.lambda$evidenceSaved$43(ActivityPanel.java:737)\nkr.workbench.ActivityPanel.lambda$submit$30(ActivityPanel.java:395)"}]

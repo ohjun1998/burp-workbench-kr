@@ -1,0 +1,14 @@
+{
+  "result": "passed",
+  "rendering": "Same saved HTML served by an ephemeral loopback read-only static server",
+  "managedBrowserFileUrlBlocked": true,
+  "fileUrlExecutionVerified": false,
+  "toolCards": 13,
+  "coreFilterCards": 8,
+  "searchFilterMatches": 2,
+  "lightAndDarkImagesLoaded": 13,
+  "pageErrors": 0,
+  "externalHttpRequests": 0,
+  "usesSavedResultFilesOnly": true,
+  "additionalBankRequests": 0
+}

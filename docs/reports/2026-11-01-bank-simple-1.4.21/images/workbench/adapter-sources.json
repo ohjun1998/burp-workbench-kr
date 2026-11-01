@@ -1,0 +1,10 @@
+{
+  "toolchain": "strict-release17",
+  "sources": {
+    "SimpleWorkflowTest.java": "59eef888b4470296ecf31b6b78ea7f218b2299cf364023872ed0d0f7e8b407ea",
+    "WorkbenchTest.java": "0243425e1ab1932c0d6d315808a612dd0bf6046b4af3037d06b0348779e4c7e1",
+    "PayloadIntegrationTest.java": "9d2e02a18cfe063c870f5741840e358103e9b39b65dc92a639cfd5a2e879dd46",
+    "ScopeInspectionFixture.java": "17a09be5280698f24c1cd11a739d62e8264bf2d368a7b7d65b24312a3da83b9d"
+  },
+  "usesPrebuiltTestClasses": false
+}

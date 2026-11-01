@@ -600,8 +600,18 @@ public final class SimplePreview extends WorkbenchTest {
         var progressPanel=(ActivityPanel)value(extension,"activity");
         progressPanel.tracker.observe(request(origin+"/api/documents/101?view=summary","GET",true,List.of()),"화면 검증용 합성 요청");
         progressPanel.tracker.observe(request(origin+"/api/projects","POST",true,List.of()),"화면 검증용 합성 요청");
-        progressPanel.refresh();if(progressPanel.table.getRowCount()>0)progressPanel.table.setRowSelectionInterval(0,0);
-        scenario("Progress capture derives rows from the real tracker using synthetic requests",progressPanel.table.getRowCount()>=2);capture(root,"15-progress.png");
+        progressPanel.refresh();
+        int progressSelection=-1;
+        for(int view=0;view<progressPanel.table.getRowCount();view++){
+          int model=progressPanel.table.convertRowIndexToModel(view);
+          String url=String.valueOf(progressPanel.model.getValueAt(model,1));
+          if(url.contains("/api/documents/101")&&progressPanel.model.getValueAt(model,5) instanceof Number remaining&&remaining.intValue()>=2){progressSelection=view;break;}
+        }
+        if(progressSelection>=0){progressPanel.table.setRowSelectionInterval(progressSelection,progressSelection);progressPanel.showParameters();if(progressPanel.parameterTable.getRowCount()>0)progressPanel.parameterTable.setRowSelectionInterval(0,0);}
+        scenario("Progress capture derives rows and a selected endpoint with real parameter inputs from the synthetic tracker",
+            progressPanel.table.getRowCount()>=2&&progressSelection>=0&&progressPanel.selected()!=null
+                &&progressPanel.selected().url().contains("/api/documents/101")&&progressPanel.parameterTable.getRowCount()>=2&&progressPanel.finishParam.isEnabled());
+        capture(root,"15-progress.png");
         extension.openFeature("dashboard");
         var dashboard=(ScopeDashboardPanel)value(extension,"scopeDashboard");
         var exampleOriginal=((DiskTrafficStore)value(extension,"trafficStore")).ref(1);

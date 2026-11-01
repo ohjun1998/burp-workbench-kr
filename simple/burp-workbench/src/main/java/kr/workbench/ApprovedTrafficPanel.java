@@ -49,13 +49,13 @@ final class ApprovedTrafficPanel extends JPanel {
     totals.setBounds(16,h-30,w/2,22);notice.setBounds(Math.max(16,getWidth()-335),h-30,319,22);
     boolean filtered=!browser.search.getText().isBlank()||!browser.query.equals(TrafficQuery.defaults());
     totals.setVisible(!filtered);notice.setVisible(!filtered);if(feedback!=null)feedback.setBounds(16,h-35,w,filtered?32:0);
-    styleReference();refreshTotals();
+    styleReference();refreshTotals();if(getWidth()>32)table.putClientProperty("wb.approved.columns.pending",false);
   }
   void styleReference(){
     setBackground(WorkbenchUi.background());
     for(JComponent c:new JComponent[]{target,account,search,settings,repeater,use,summary,totals,notice,capture})c.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12f)));
     for(JComboBox<?> box:new JComboBox<?>[]{target,account}){if(!(box.getUI() instanceof FlatCombo))box.setUI(new FlatCombo());box.setBackground(WorkbenchUi.surface());box.setForeground(WorkbenchUi.ink());box.setBorder(kr.packetui.VisualTheme.border(3,8,3,8));}
-    search.setBackground(WorkbenchUi.dark()?WorkbenchUi.raised():new Color(241,242,244));search.setBorder(kr.packetui.VisualTheme.border(5,28,5,8));
+    search.setBackground(ApprovedReadingDesign.searchFill());search.setBorder(kr.packetui.VisualTheme.border(5,28,5,8));
     summary.setUI(new SelectionUi());
     dropdown(settings,"수집 설정");repeater.setIcon(null);
     JButton useButton=(JButton)named(use,"wb.workflow.traffic.use.open");if(useButton!=null)dropdown(useButton,"요청 활용");
@@ -63,7 +63,7 @@ final class ApprovedTrafficPanel extends JPanel {
     totals.setForeground(kr.packetui.VisualTheme.muted());notice.setForeground(kr.packetui.VisualTheme.muted());notice.setHorizontalAlignment(SwingConstants.RIGHT);
     table.setRowHeight(35);table.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12f)));table.getTableHeader().setPreferredSize(new Dimension(0,31));
     JScrollPane ts=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,table);if(ts!=null)ts.setBorder(null);table.setShowHorizontalLines(true);table.setGridColor(WorkbenchUi.line());table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    int[] widths={98,124,442,132,114,160,308};int available=Math.max(500,getWidth()-32);boolean memo=browser.query.memo();if(!memo)widths[2]+=widths[6];
+    int[] widths={98,124,442,132,114,160,308};int available=getWidth()>32?Math.max(500,getWidth()-32):1378;boolean memo=browser.query.memo();if(!memo)widths[2]+=widths[6];
     for(int i=0;i<table.getColumnCount();i++){
       var col=table.getColumnModel().getColumn(i);int slot=switch(col.getModelIndex()){case 0->0;case 1->1;case 2->2;case 3->3;case 8->4;case 4->5;case 10->6;default->-1;};if(slot<0)continue;
       boolean supplied=Boolean.TRUE.equals(table.getClientProperty("wb.appearance.columns.restored"));int previous=col.getWidth();
@@ -76,7 +76,7 @@ final class ApprovedTrafficPanel extends JPanel {
     }
     for(Component child:readers.getComponents())if(child instanceof JPanel card){Component head=((BorderLayout)card.getLayout()).getLayoutComponent(BorderLayout.NORTH);if(head!=null)head.setPreferredSize(new Dimension(200,43));}
     for(Component child:readers.getComponents())if(child instanceof JPanel card){
-      card.setBorder(new javax.swing.border.AbstractBorder(){public Insets getBorderInsets(Component c){return new Insets(1,1,1,1);}public void paintBorder(Component c,Graphics graphics,int x,int y,int w,int h){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.line());g.drawRoundRect(x,y,w-1,h-1,10,10);g.dispose();}});
+      card.setBorder(new javax.swing.border.AbstractBorder(){public Insets getBorderInsets(Component c){return new Insets(1,1,1,1);}public void paintBorder(Component c,Graphics graphics,int x,int y,int w,int h){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.line());g.drawRoundRect(x,y,w-1,h-1,20,20);g.dispose();}});
     }
     request.approvedTrafficPresentation();response.approvedTrafficPresentation();
     for(Component child:controls.getComponents())if(child instanceof Container p)for(Component c:p.getComponents())if(c instanceof JLabel label){label.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12f)));label.setForeground(kr.packetui.VisualTheme.muted());}
@@ -87,8 +87,8 @@ final class ApprovedTrafficPanel extends JPanel {
   static void dropdown(JButton button,String caption){button.setText(caption);button.setIcon(new ApprovedTrafficIcon("chevron",WorkbenchUi.ink()));button.setHorizontalTextPosition(SwingConstants.LEFT);button.setIconTextGap(4);}
   static JPanel packetCard(String title,PacketInspector packet){
     JPanel card=new JPanel(new BorderLayout()){
-      protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRoundRect(0,0,getWidth(),getHeight(),10,10);g.dispose();}
-      protected void paintChildren(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();g.clip(new java.awt.geom.RoundRectangle2D.Double(0,0,getWidth(),getHeight(),10,10));super.paintChildren(g);g.dispose();}
+      protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRoundRect(0,0,getWidth(),getHeight(),20,20);g.dispose();}
+      protected void paintChildren(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();g.clip(new java.awt.geom.RoundRectangle2D.Double(0,0,getWidth(),getHeight(),20,20));super.paintChildren(g);g.dispose();}
     };
     card.setOpaque(false);card.setName("wb.card."+title);card.putClientProperty("wb.card",true);card.putClientProperty("wb.surface",true);
     JLabel heading=new JLabel(title);heading.putClientProperty("wb.font.size",13);heading.putClientProperty("wb.font.heading",true);heading.setBorder(BorderFactory.createEmptyBorder(0,12,0,0));

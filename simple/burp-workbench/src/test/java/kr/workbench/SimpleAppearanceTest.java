@@ -129,10 +129,11 @@ public final class SimpleAppearanceTest extends WorkbenchTest {
           check(accountEditor.getBackground().equals(WorkbenchUi.surface())&&accountEditor.getForeground().equals(WorkbenchUi.ink()),
               "the actual editable account field follows the local palette in "+dark);
           root.setSize(1600,1000);for(int pass=0;pass<5;pass++)UiLayoutTest.layout(root);
-          var editorImage=new BufferedImage(accountEditor.getWidth(),accountEditor.getHeight(),BufferedImage.TYPE_INT_RGB);
-          var editorGraphics=editorImage.createGraphics();accountEditor.paint(editorGraphics);editorGraphics.dispose();
-          check(editorImage.getRGB(accountEditor.getWidth()-5,accountEditor.getHeight()/2)==WorkbenchUi.surface().getRGB(),
-              "the actual account editor paints the chosen surface instead of its host background in "+dark);
+          var editorImage=new BufferedImage(account.getWidth(),account.getHeight(),BufferedImage.TYPE_INT_RGB);
+          var editorGraphics=editorImage.createGraphics();account.paint(editorGraphics);editorGraphics.dispose();
+          Point editorPixel=SwingUtilities.convertPoint(accountEditor,accountEditor.getWidth()-5,accountEditor.getHeight()/2,account);
+          check(editorImage.getRGB(editorPixel.x,editorPixel.y)==WorkbenchUi.surface().getRGB(),
+              "the actual account input composite paints the chosen surface with its transparent editor in "+dark);
           for(JComboBox<?> combo:new JComboBox<?>[]{account,target,generic}){
             combo.setSize(Math.max(180,combo.getWidth()),32);combo.doLayout();
             var comboImage=new BufferedImage(combo.getWidth(),32,BufferedImage.TYPE_INT_RGB);

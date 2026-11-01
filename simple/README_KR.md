@@ -1,3 +1,9 @@
+# Workbench Simple 1.4.20
+
+승인한 16개 화면과 다시 대조해 입력 컨트롤, 카드 내부 여백·구분선·모서리, 배너·필터·아이콘·원문 표시를 보완했습니다. 숫자 입력은 기존 모델과 키보드 증감을 유지한 채 시안의 단일 테두리로 표시합니다. 선택 상자 안쪽의 중복 테두리도 제거했습니다. 입력 문서·원문 바이트·선택과 SCOPE·취소·명시적 실행 동작을 유지합니다.
+
+[설치 JAR](downloads/1.4.20/burp-workbench-simple-1.4.20.jar) · [독립 소스 ZIP](downloads/1.4.20/burp-workbench-simple-1.4.20-source.zip) · [변경 안내](docs/RELEASE_SIMPLE_1.4.20_KR.md) · [승인 시안·1.4.19·수정본 비교와 검증](../docs/reports/2026-11-01-approved-review/REPORT_KR.md)
+
 # Workbench Simple 1.4.19
 
 상단 달 모양 버튼으로 Workbench의 라이트·다크 테마를 바로 전환합니다. 설정·전체 화면·오류 기록 등의 기존 도구는 별도의 톱니 메뉴에서 이름과 아이콘으로 선택합니다. 아이콘 전용 버튼에서 메뉴를 만들 때 빈 행으로 표시되던 문제도 수정했습니다.

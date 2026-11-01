@@ -11,9 +11,12 @@ import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
+import javax.swing.plaf.basic.BasicTextPaneUI;
 
 /** Read-only packet views. Formatting and search never modify retained HTTP bytes. */
 final class PacketInspector extends JPanel implements AutoCloseable {
+  /** The packet surface is Workbench-owned; a host painter must not fill it with a cached color. */
+  private static final class PacketTextUi extends BasicTextPaneUI {}
   enum Mode { PRETTY, RAW, HEX, RENDER }
   static final int PREVIEW_BYTES = 65536, MAX_MATCHES = 2000;
   final JTextPane text;
@@ -91,6 +94,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     if(editable)mode=Mode.RAW;
     setName(name);
     text = new JTextPane() {
+      @Override public void updateUI(){if(!(getUI() instanceof PacketTextUi))setUI(new PacketTextUi());}
       @Override public void setText(String value) {
         Document document=getDocument();
         if(document==null){super.setText(value);return;}
@@ -107,6 +111,11 @@ final class PacketInspector extends JPanel implements AutoCloseable {
         return mode != Mode.HEX && wrap.isSelected() || getParent() != null && getUI().getPreferredSize(this).width <= getParent().getWidth();
       }
     };
+    // Non-resource caret/highlighter survive a host UI replacement with their offsets and tags.
+    Caret previousCaret=text.getCaret();DefaultCaret localCaret=new DefaultCaret();
+    if(previousCaret!=null)localCaret.setBlinkRate(previousCaret.getBlinkRate());
+    if(previousCaret instanceof DefaultCaret previous)localCaret.setUpdatePolicy(previous.getUpdatePolicy());
+    text.setCaret(localCaret);text.setHighlighter(new DefaultHighlighter());
     rendered.setName(name+".render");rendered.getAccessibleContext().setAccessibleName("받은 HTML 본문 정적 Render");
     text.setName(name + ".text");text.setEditable(false);
     text.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty,"\n");
@@ -396,6 +405,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   void applyTheme() {
+    if(!(text.getUI() instanceof PacketTextUi))text.setUI(new PacketTextUi());
     setBackground(WorkbenchUi.surface());
     WorkbenchUi.style(toolbar);WorkbenchUi.style(headerActions);WorkbenchUi.style(modePicker);WorkbenchUi.style(searchBar);WorkbenchUi.style(scroll);
     for(AbstractButton b : new AbstractButton[]{previous,next,clear,caseSensitive,regex,wrap,more,searchOptions,copy}) {

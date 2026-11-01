@@ -1,0 +1,74 @@
+PASS theme action opens no tools popup
+PASS theme click repaints the real workspace background
+PASS direct theme choice is persisted through the configured API
+PASS local theme switch preserves host UI defaults
+PASS theme toggle preserves selection and authored input
+PASS theme switch preserves actual combo editor/document and pending draft without committing its filter
+PASS actual editable account field uses local theme background and text
+PASS account after first moon click actual displayed current-value background uses the local theme
+PASS account after first moon click actual detached dropdown list uses local text/surface colors
+PASS account after first moon click actual detached dropdown selection uses local colors
+PASS target after first moon click actual displayed current-value background uses the local theme
+PASS target after first moon click actual detached dropdown list uses local text/surface colors
+PASS target after first moon click actual detached dropdown selection uses local colors
+PASS embedded Mapper execution selector actual displayed current-value background uses the local theme
+PASS embedded Mapper execution selector actual detached dropdown list uses local text/surface colors
+PASS embedded Mapper execution selector actual detached dropdown selection uses local colors
+PASS embedded Mapper session selector actual displayed current-value background uses the local theme
+PASS embedded Mapper session selector actual detached dropdown list uses local text/surface colors
+PASS embedded Mapper session selector actual detached dropdown selection uses local colors
+PASS theme roundtrip restores actual workspace colors
+PASS restored local theme is persisted
+PASS theme roundtrip preserves exact combo editor/document and pending draft without committing its filter
+PASS restored editable account field uses local theme background and text
+PASS account after theme roundtrip actual displayed current-value background uses the local theme
+PASS account after theme roundtrip actual detached dropdown list uses local text/surface colors
+PASS account after theme roundtrip actual detached dropdown selection uses local colors
+PASS target after theme roundtrip actual displayed current-value background uses the local theme
+PASS target after theme roundtrip actual detached dropdown list uses local text/surface colors
+PASS target after theme roundtrip actual detached dropdown selection uses local colors
+PASS embedded Mapper execution selector actual displayed current-value background uses the local theme
+PASS embedded Mapper execution selector actual detached dropdown list uses local text/surface colors
+PASS embedded Mapper execution selector actual detached dropdown selection uses local colors
+PASS embedded Mapper session selector actual displayed current-value background uses the local theme
+PASS embedded Mapper session selector actual detached dropdown list uses local text/surface colors
+PASS embedded Mapper session selector actual detached dropdown selection uses local colors
+PASS actual header popup retains six original controllers
+PASS native popup remains inside display bounds
+PASS header tools popup remains fully inside the working window
+PASS header entry has a readable caption: wb.simple.dashboard.open.menu
+PASS menu caption/icon fits its native row: 대시보드
+PASS menu entry has compact readable height: 대시보드
+PASS menu caption contrasts against its actual theme background: 대시보드
+PASS compact source icon remains visible in menu: 대시보드
+PASS header entry has a readable caption: wb.scope.inspection.open.menu
+PASS menu caption/icon fits its native row: Scope 통합 점검
+PASS menu entry has compact readable height: Scope 통합 점검
+PASS menu caption contrasts against its actual theme background: Scope 통합 점검
+PASS compact source icon remains visible in menu: Scope 통합 점검
+PASS header entry has a readable caption: wb.window.fullscreen.menu
+PASS menu caption/icon fits its native row: 전체화면
+PASS menu entry has compact readable height: 전체화면
+PASS menu caption contrasts against its actual theme background: 전체화면
+PASS compact source icon remains visible in menu: 전체화면
+PASS header entry has a readable caption: wb.navigation.settings.menu
+PASS menu caption/icon fits its native row: 화면 설정
+PASS menu entry has compact readable height: 화면 설정
+PASS menu caption contrasts against its actual theme background: 화면 설정
+PASS compact source icon remains visible in menu: 화면 설정
+PASS header entry has a readable caption: wb.navigation.logs.menu
+PASS menu caption/icon fits its native row: 로그
+PASS menu entry has compact readable height: 로그
+PASS menu caption contrasts against its actual theme background: 로그
+PASS compact source icon remains visible in menu: 로그
+PASS header entry has a readable caption: wb.visual.guide.open.menu
+PASS menu caption/icon fits its native row: Guide
+PASS menu entry has compact readable height: Guide
+PASS menu caption contrasts against its actual theme background: Guide
+PASS Guide menu retains real owned modeless window
+PASS opening Guide preserves traffic selection and authored input
+PASS fullscreen proxy caption updates while source remains icon-only
+PASS restored fullscreen caption stays synchronized
+PASS dashboard route preserves authored source input
+PASS header menu and guidance send zero target HTTP
+HeaderToolsNative: 73 checks passed / 1.4.20 / dark / 1600x1000

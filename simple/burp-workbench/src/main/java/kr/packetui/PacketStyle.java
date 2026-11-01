@@ -45,7 +45,7 @@ public final class PacketStyle {
 
   private static final class SpacedMetrics extends FontMetrics {
     private final FontMetrics original;SpacedMetrics(FontMetrics m){super(m.getFont());original=m;}
-    public int getHeight(){return Math.max(original.getHeight(),Math.round(getFont().getSize2D()*20f/12f));}
+    public int getHeight(){return Math.max(original.getHeight(),Math.round(getFont().getSize2D()*1.78f));}
     public int getAscent(){return original.getAscent();}public int getDescent(){return original.getDescent();}public int getLeading(){return getHeight()-getAscent()-getDescent();}
     public int charWidth(char c){return original.charWidth(c);}public int charWidth(int c){return original.charWidth(c);}public int stringWidth(String s){return original.stringWidth(s);}public int charsWidth(char[] c,int offset,int length){return original.charsWidth(c,offset,length);}public int[] getWidths(){return original.getWidths();}
     public java.awt.font.FontRenderContext getFontRenderContext(){return original.getFontRenderContext();}
@@ -102,7 +102,11 @@ public final class PacketStyle {
     }
     @Override protected void paintComponent(Graphics graphics) {
       Graphics2D g=(Graphics2D)graphics.create();g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-      g.setColor(area.getBackground());g.fillRect(0,0,getWidth(),getHeight());g.setFont(area.getFont());g.setColor(muted(area));
+      g.setColor(area.getBackground());g.fillRect(0,0,getWidth(),getHeight());
+      if(Boolean.TRUE.equals(area.getClientProperty("wb.approved.firstline.gutter"))&&area.getDocument().getLength()>0)try{
+        Rectangle2D row=area.modelToView2D(0);if(row!=null){int y=(int)row.getY(),h=(int)row.getHeight();g.setColor(VisualTheme.selected());g.fillRect(0,y,getWidth(),h);g.setColor(VisualTheme.accent());g.fillRect(0,y,2,h);}
+      }catch(BadLocationException ignored){}
+      g.setFont(area.getFont());g.setColor(muted(area));
       FontMetrics metrics=g.getFontMetrics();Rectangle clip=g.getClipBounds();
       int position=area.viewToModel2D(new Point(0,Math.max(0,clip.y)));
       Element root=area.getDocument().getDefaultRootElement();

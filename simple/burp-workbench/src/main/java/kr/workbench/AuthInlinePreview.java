@@ -80,7 +80,7 @@ final class AuthInlinePreview extends JPanel implements AutoCloseable {
       if(center instanceof JLabel label){label.putClientProperty("html.disable",true);String name=selected==null?(i==0?"기준 계정":"비교 계정"):selected.context.labels()[slot];String role=selected==null?"":selected.context.roles()[slot];label.setText(name+(role.isBlank()?"":" · "+role));}
       JComponent tools=(JComponent)pair[i].titleActions();if(tools.getParent()==head){head.remove(tools);JPanel retained=new JPanel();retained.setVisible(false);retained.add(tools);head.add(retained,BorderLayout.SOUTH);}
       JLabel badge=head.getClientProperty("wb.approved.account.badge") instanceof JLabel b?b:new JLabel();if(badge.getParent()!=head){head.putClientProperty("wb.approved.account.badge",badge);head.add(badge,BorderLayout.EAST);badge.setBorder(BorderFactory.createEmptyBorder(0,0,0,12));}
-      var packet=selected==null?null:i==0?selected.baseline():selected.packets[slot].response;String status=packet==null?"응답 없음":Integer.toString(packet.statusCode());badge.setIcon(WorkbenchUi.statusIcon((slot==3?"비로그인":"계정 "+(slot+1))+" · "+status));
+      var packet=selected==null?null:i==0?selected.baseline():selected.packets[slot].response;String status=packet==null?"응답 없음":Integer.toString(packet.statusCode());badge.setIcon(ApprovedIdentityDesign.accountStatus((slot==3?"비로그인":"계정 "+(slot+1))+" · "+status,slot));
     }
   }
 

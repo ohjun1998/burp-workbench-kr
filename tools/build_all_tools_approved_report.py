@@ -6,7 +6,9 @@ import csv
 import hashlib
 import html
 import json
+import re
 import shutil
+import zipfile
 import fitz
 from PIL import Image
 
@@ -52,6 +54,25 @@ FRAMES = {
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def jar_version(path):
+    with zipfile.ZipFile(path) as jar:
+        manifest = jar.read('META-INF/MANIFEST.MF').decode('utf-8')
+    headers = []
+    for line in manifest.splitlines():
+        if not line:
+            break  # Named sections do not describe the application version.
+        if line.startswith(' ') and headers:
+            headers[-1] += line[1:]
+        else:
+            headers.append(line)
+    attributes = {name.casefold(): value.strip() for header in headers
+                  for name, separator, value in [header.partition(':')] if separator}
+    version = attributes.get('implementation-version', '')
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._+-]*', version):
+        raise ValueError('JAR manifest requires a filename-safe Implementation-Version')
+    return version
 
 
 def write(path, value):
@@ -134,6 +155,7 @@ def main():
     parser.add_argument('--jar', required=True, type=Path)
     parser.add_argument('--reference-geometry', type=Path)
     args = parser.parse_args()
+    version = jar_version(args.jar)
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
     evidence = audit(args.captures, args.jar)
@@ -159,7 +181,7 @@ def main():
         target.mkdir(parents=True, exist_ok=True)
         for name in ('controls.csv', 'anchors.csv', 'content.csv', 'scenarios.csv', 'execution.log'):
             shutil.copyfile(folder / name, target / name)
-    write(out / 'native-verification.json', {'version': '1.4.18', 'jarSha256': sha(args.jar),
+    write(out / 'native-verification.json', {'version': version, 'jarSha256': sha(args.jar),
           'runtime': 'Linux Xorg dummy / xfwm4 / Java17 / Robot screen capture',
           'fixture': 'Production Swing with synthetic Burp adapters; zero target HTTP',
           'sets': evidence, 'result': 'passed',
@@ -173,13 +195,13 @@ def main():
         for key, (title, _) in VIEWS.items():
             page = document.new_page(width=1680, height=650)
             page.insert_font(fontname='KR', fontfile=str(font))
-            page.insert_text((24, 30), f'Workbench Simple 1.4.18 · {title} · {theme}', fontname='KR', fontsize=18)
+            page.insert_text((24, 30), f'Workbench Simple {version} · {title} · {theme}', fontname='KR', fontsize=18)
             page.insert_text((24, 64), '승인 시안', fontname='KR', fontsize=13)
             page.insert_text((856, 64), '실제 실행 창 · Robot 캡처', fontname='KR', fontsize=13)
             page.insert_image(fitz.Rect(24, 82, 824, 582), filename=str(approved / theme / f'{key}.png'))
             page.insert_image(fitz.Rect(856, 82, 1656, 582), filename=str(out / 'images' / theme / f'{key}.png'))
             page.insert_text((24, 615), '합성 데이터·건수·선택 상태는 다릅니다. Java/브라우저 렌더링까지 픽셀 차이 0을 검증한 자료가 아닙니다.', fontname='KR', fontsize=11)
-    pdf = out / 'workbench-simple-1.4.18-approved-actual.pdf'
+    pdf = out / f'workbench-simple-{version}-approved-actual.pdf'
     document.save(pdf, garbage=4, deflate=True)
     document.close()
     cards = []
@@ -191,12 +213,13 @@ def main():
             cards.append(f'<section data-theme="{theme}" id="{key}-{theme}"><h2>{html.escape(title)} · {theme}</h2>'
                          f'<div class="pair"><figure><figcaption>승인 시안</figcaption><a href="{ref}"><img loading="lazy" src="{ref}"></a></figure>'
                          f'<figure><figcaption>실제 실행 창</figcaption><a href="{actual}"><img loading="lazy" src="{actual}"></a></figure></div></section>')
-    (out / 'COMPARE.html').write_text('''<!doctype html><html lang="ko"><meta charset="utf-8"><title>Simple1.4.18 승인 시안·실제 창</title>
+    (out / 'COMPARE.html').write_text(f'''<!doctype html><html lang="ko"><meta charset="utf-8"><title>Simple{html.escape(version)} 승인 시안·실제 창</title>
+''' + '''
 <style>body{font:14px system-ui;margin:24px;background:#f4f5f7;color:#202631}nav{position:sticky;top:0;padding:12px;background:#fff;border:1px solid #ddd}button{margin-right:8px;padding:8px 14px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}figure{margin:0}figcaption{margin:8px 0}img{width:100%;border:1px solid #dbe2ec}section{margin:36px 0}h1{font-size:23px}@media(max-width:900px){.pair{grid-template-columns:1fr}}</style>
-<h1>Workbench Simple1.4.18 · 승인 시안과 실제 창</h1><p>이미지를 누르면 원본1600×1000을 엽니다. 실제 Swing 창은 합성 Burp 어댑터로 실행하고 Robot으로 캡처했습니다. 실제 데이터·건수와 Java 글자 렌더링은 시안과 다릅니다.</p>
-<nav><button onclick="show('light')">라이트</button><button onclick="show('dark')">다크</button><a href="workbench-simple-1.4.18-approved-actual.pdf">전체 비교 PDF</a></nav>
+''' + f'''<h1>Workbench Simple{html.escape(version)} · 승인 시안과 실제 창</h1><p>이미지를 누르면 원본1600×1000을 엽니다. 실제 Swing 창은 합성 Burp 어댑터로 실행하고 Robot으로 캡처했습니다. 실제 데이터·건수와 Java 글자 렌더링은 시안과 다릅니다.</p>
+<nav><button onclick="show('light')">라이트</button><button onclick="show('dark')">다크</button><a href="{pdf.name}">전체 비교 PDF</a></nav>
 ''' + ''.join(cards) + '''<script>function show(theme){document.querySelectorAll('section').forEach(s=>s.hidden=s.dataset.theme!==theme)}show('light')</script></html>''')
-    print(json.dumps({'result': 'passed', 'nativeSets': len(evidence), 'actualImages': len(image_manifest), 'pdfPages': 32, 'pdfSha256': sha(pdf)}, ensure_ascii=False))
+    print(json.dumps({'result': 'passed', 'version': version, 'nativeSets': len(evidence), 'actualImages': len(image_manifest), 'pdfPages': 32, 'pdfSha256': sha(pdf)}, ensure_ascii=False))
 
 
 if __name__ == '__main__':

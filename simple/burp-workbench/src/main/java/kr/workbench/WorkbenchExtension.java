@@ -211,7 +211,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JDialog commonSettingsWindow;
 
   public void addPayloadRunnerPage(Component page) {
-    if(page instanceof JPanel panel){ApprovedLayouts.payload(panel);ApprovedLayouts.decorate(panel);}
+    if(page instanceof JPanel panel){ApprovedLayouts.payload(panel);ApprovedLayouts.decorate(panel);ApprovedPayloadDesign.install(panel);}
     WorkbenchUi.style(page);
     Diagnostics.bind(page, diagnostics);
     payloadPage = page;

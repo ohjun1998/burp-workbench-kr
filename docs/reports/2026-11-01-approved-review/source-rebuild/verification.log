@@ -1,0 +1,5 @@
+PASS release artifacts and all current-source fingerprints match the release manifest
+PASS every delivered JAR build input matches the source archive fingerprint and checkout
+PASS source ZIP CRC, safe extraction and every extracted-source/build-input fingerprint
+START independent extracted-source build
+PASS strict independent source build reproduces the frozen release JAR byte-for-byte

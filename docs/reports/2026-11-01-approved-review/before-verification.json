@@ -1,0 +1,536 @@
+{
+  "result": "passed",
+  "version": "1.4.19",
+  "validatedAtUTC": "2026-11-01T08:44:52.978628+00:00",
+  "jar": "simple/downloads/1.4.19/burp-workbench-simple-1.4.19.jar",
+  "jarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+  "jarCRCVerified": true,
+  "display": ":97",
+  "runtime": "Temurin17 / native Swing on pre-existing isolated Xorg / Robot",
+  "compiler": "--release 17",
+  "previewSource": "simple/tools/SimplePreview.java",
+  "previewSourceSha256": "4c8fb3e282c44e503dc84f2cf0e43929172d0b0aba252f841adc33d4d86fb470",
+  "helperClasses": [
+    "kr/workbench/SimplePreview.class"
+  ],
+  "classpathOrder": [
+    "published 1.4.19 JAR",
+    "external SimplePreview-only classes",
+    "current test adapters",
+    "pinned dependency JARs"
+  ],
+  "sets": [
+    {
+      "theme": "light",
+      "dimensions": "1600x1000",
+      "exitCode": 0,
+      "screens": 27,
+      "scenarios": 100,
+      "failedScenarios": 0,
+      "controls": 467,
+      "clippedControlsOutsideScroll": 0,
+      "images": [
+        {
+          "file": "00-scope-editor.png",
+          "size": [
+            900,
+            600
+          ],
+          "sha256": "58efe8c912820c8016d54f66133267c24c1e591dde2c54aae7dbdc63b3e29f03",
+          "crcVerified": true
+        },
+        {
+          "file": "00-start.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "4afacc77848ec62bc5a90d0e97e47379ea1d2482ad3bef8289d24d27accfeb28",
+          "crcVerified": true
+        },
+        {
+          "file": "01-capture.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "d24f042b8c8e86368911f7b766cc6bb44fdbfe5785c8b688396810aac6321235",
+          "crcVerified": true
+        },
+        {
+          "file": "02-request.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "d24f042b8c8e86368911f7b766cc6bb44fdbfe5785c8b688396810aac6321235",
+          "crcVerified": true
+        },
+        {
+          "file": "03-analysis.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "3ca4226dc682b36e7df835270e8ab0e4346074da97393e5ef1eecb9ddb2ae021",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts-full-accounts.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "6d4ef5bf3eebdf0a8c2a5274c2714472d1a871961a7e744110910ee192e1ee0d",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts-full-overview.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "a6561b609af8c1812e7724329f65b03c36584aa3d416a12a2b26a341274456c1",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts-full-policy.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "5258930c60a0c1cb3dd8a9510261be66558869d6c8915f0eefb4dd8cb223f5ac",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "df5b58919360a5ee8253aee09b77ccf734d7516c9acc8d6ccb66251942b9e77d",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-connections.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "ea3396efd38367bdefb4529af487eb73136694d1a1dc88c7182281eb012433e7",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-results.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "2d1b4d7bb015637bf1c14625fceb72f0f94309b725837cec0a28369fd50561b1",
+          "crcVerified": true
+        },
+        {
+          "file": "05-evidence.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "e9e748b4faecefafcc1c44b0153a92cbbf1eccf1cfc6c57b060718635b3bbeb0",
+          "crcVerified": true
+        },
+        {
+          "file": "06-redaction.png",
+          "size": [
+            1100,
+            800
+          ],
+          "sha256": "8c07b1df4f14045539bba91d568053c21d1483327f6c42a5184c976b65acc146",
+          "crcVerified": true
+        },
+        {
+          "file": "07-payload-results.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "279aecaebece0184e03c17fcd9278f2880150b82d5449cb937771452de1622cb",
+          "crcVerified": true
+        },
+        {
+          "file": "07-payload.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "df50818780e91c3d8daf66d433a9cdd78a926b98c53df9cedb94463bca2b8e9c",
+          "crcVerified": true
+        },
+        {
+          "file": "08-mapper.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "6556fc1e31377d60ae1e78dd6a1490784a82a7cd006f4867aaad7bd7c45fcf9c",
+          "crcVerified": true
+        },
+        {
+          "file": "09-environment.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "9243392f1582573cd1e614c4c8e2e0ecc9a344a2987c2c3b0b2b74f0767a0ca2",
+          "crcVerified": true
+        },
+        {
+          "file": "10-js.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "4cfd3623b4cee6d6b7af55cbfa0c6d33eb6d74bb74ce069dc2681ac27d3d3f5f",
+          "crcVerified": true
+        },
+        {
+          "file": "11-replay-empty.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "ae6670e99421d616f3d909975c8aa934b73b6144a9f8abd7833c802a197692e0",
+          "crcVerified": true
+        },
+        {
+          "file": "11-replay.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "9162590438441541f54fc0c2ec476e21cd61a7d15db2d47226a4047b437e7a41",
+          "crcVerified": true
+        },
+        {
+          "file": "12-exposure-search.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "39ef66105b852a7b70e1df2aa78870d3499219aa9a2de0d871b07719f395ab37",
+          "crcVerified": true
+        },
+        {
+          "file": "13-exposure-cve-evidence.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "2681d0c5bf923cb538c023a28bf7ce2a8ae7732fbb5e9249529b520aa910d481",
+          "crcVerified": true
+        },
+        {
+          "file": "13-exposure-cve.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "0632586d135c01e5f9f7c7a138e2e4cd4a98d80559ed21f0306e88c8f621f654",
+          "crcVerified": true
+        },
+        {
+          "file": "14-data.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "edc8497931950ff77fcc8933003fc6e21278441a9450e1e91fe8266ef429277d",
+          "crcVerified": true
+        },
+        {
+          "file": "15-progress.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "54fe62c72d43b75c38b69e4beb8a7e75cb2c0a19ca4f0b1225b5e619e9b82030",
+          "crcVerified": true
+        },
+        {
+          "file": "16-dashboard.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "0315490f849ec868e8b1043ce2efdf5e923d4c9d2c3be166788d475ed1115b0a",
+          "crcVerified": true
+        },
+        {
+          "file": "26-dashboard-empty.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "c7cf8e4491df34c92689829934c49a181e477affb2a9047238e01cb0b8c47c86",
+          "crcVerified": true
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "dimensions": "1600x1000",
+      "exitCode": 0,
+      "screens": 27,
+      "scenarios": 100,
+      "failedScenarios": 0,
+      "controls": 467,
+      "clippedControlsOutsideScroll": 0,
+      "images": [
+        {
+          "file": "00-scope-editor.png",
+          "size": [
+            900,
+            600
+          ],
+          "sha256": "fa69d826bb319645feba1ca45f2a9f7b88d86652af761475fa959033a7948ea2",
+          "crcVerified": true
+        },
+        {
+          "file": "00-start.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "99b26342d11a6b700aa2955ea82ce95b6aafc929afe0235cb3e7e1d0038f9c87",
+          "crcVerified": true
+        },
+        {
+          "file": "01-capture.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "a47b27bc7254d3a120f2d72bb139875449bfa46b56492efd74a564608f0b210f",
+          "crcVerified": true
+        },
+        {
+          "file": "02-request.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "a47b27bc7254d3a120f2d72bb139875449bfa46b56492efd74a564608f0b210f",
+          "crcVerified": true
+        },
+        {
+          "file": "03-analysis.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "b3b985785925c42dca990fc47c0a6113ac9324c3d78f920254eabb85b1bb90a7",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts-full-accounts.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "f8f10fbb62500f86fbbc553bb270a4f6a97730a58bbcb9e8a716c21310de644b",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts-full-overview.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "d15f46f47819172c53a960e12a22937b00089fd908974ce4ac14174782fc8d0e",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts-full-policy.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "d03a25f3309c4650c5eecdcc0ea83af36d830d00d6a95fbc01899811983d0162",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-accounts.png",
+          "size": [
+            1000,
+            760
+          ],
+          "sha256": "f8f10fbb62500f86fbbc553bb270a4f6a97730a58bbcb9e8a716c21310de644b",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-connections.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "c0f19c51db48e448a02da825a34c1ef1dffc970d29fd8b649c7a0cb821ff9569",
+          "crcVerified": true
+        },
+        {
+          "file": "04-auth-results.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "7e69dc185b735d46c4014672647f8023eb7156318517d7d5d67769562b8898e0",
+          "crcVerified": true
+        },
+        {
+          "file": "05-evidence.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "5262ea46e94e76eee867df1ca26eb81920bcbe1b9ff0ba11ba652434ab937707",
+          "crcVerified": true
+        },
+        {
+          "file": "06-redaction.png",
+          "size": [
+            1100,
+            800
+          ],
+          "sha256": "1d8e1428a74ea302a3f5fa5a53df68248addedb21ef221654ab186c507779b4f",
+          "crcVerified": true
+        },
+        {
+          "file": "07-payload-results.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "808a783160139784d3c97a4e33e39bcd1aca81e6529f0e843f6a3f17251cac7f",
+          "crcVerified": true
+        },
+        {
+          "file": "07-payload.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "f0450e9f8fe47e9852d476b63739bd2b56563ad6a899e89bad4f91ec9f4cb971",
+          "crcVerified": true
+        },
+        {
+          "file": "08-mapper.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "bbe02c81c1241dffddf3b3141a313af682ee01aa3733747e4ab156bfda07a969",
+          "crcVerified": true
+        },
+        {
+          "file": "09-environment.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "0b3344e3de2662227cb91bf752bc0db53e6584162a8ded24fa915c082f021f6a",
+          "crcVerified": true
+        },
+        {
+          "file": "10-js.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "61a54f35ceee788ede279c8f59d0d64040ca564f98d570dced1e433796ba3f6e",
+          "crcVerified": true
+        },
+        {
+          "file": "11-replay-empty.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "e6b5c2adad059e718f13b12319b2bc22c5f778b39c522dc032c251ba02150453",
+          "crcVerified": true
+        },
+        {
+          "file": "11-replay.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "c0208fb4eb50ad5f4ba9a9f41e70a9c4d4855dd45cbaeafb53cccc7c8623bb14",
+          "crcVerified": true
+        },
+        {
+          "file": "12-exposure-search.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "08a50b1b8dd8254f37018ba0b0f01905c3420387468bcbc49e5722b3dcb0cfd5",
+          "crcVerified": true
+        },
+        {
+          "file": "13-exposure-cve-evidence.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "9f94279e36d4ae676e67343bd0be0916d4b6a5291e0c88ad97f84682e156640e",
+          "crcVerified": true
+        },
+        {
+          "file": "13-exposure-cve.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "46ac71f4a436aad1d58466146c665eaa61ee7600fa2a7a0f24a64d72c02637af",
+          "crcVerified": true
+        },
+        {
+          "file": "14-data.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "382cb17f688152b8e7913d43210c50766d7a865c3dc4ed3c05105a907a6e87ca",
+          "crcVerified": true
+        },
+        {
+          "file": "15-progress.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "decec5970631f280439ce3306e62e11c0d762b7498872def41a86e35aa49c59d",
+          "crcVerified": true
+        },
+        {
+          "file": "16-dashboard.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "279581074d03c733c40e084fb48a67fbb77f44a391a923473f8ec89764b865c0",
+          "crcVerified": true
+        },
+        {
+          "file": "26-dashboard-empty.png",
+          "size": [
+            1600,
+            1000
+          ],
+          "sha256": "2eeba34496ec36fab9f9bd2c511ee24bfe72e4b791942458d258b47a18f67f1a",
+          "crcVerified": true
+        }
+      ]
+    }
+  ],
+  "targetHTTP": 0,
+  "scope": "Before screenshots of the unchanged published1.4.19 JAR with current synthetic fixtures; not native Burp GUI. Old clipping/style defects are retained and are not final1.4.20 readiness gates."
+}

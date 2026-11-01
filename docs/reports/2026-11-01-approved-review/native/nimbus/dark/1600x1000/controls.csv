@@ -1,0 +1,467 @@
+theme,width,height,view,label,name,controlWidth,controlHeight,fullyVisible,scrollable
+"dark",900,600,"00-scope-editor.png","wb.traffic.scope.url","wb.traffic.scope.url",842,31,true,true
+"dark",900,600,"00-scope-editor.png","URL 추가","wb.traffic.scope.add",69,32,true,true
+"dark",900,600,"00-scope-editor.png","URL 수정","wb.traffic.scope.edit",69,32,true,true
+"dark",900,600,"00-scope-editor.png","선택 삭제","wb.traffic.scope.remove",67,32,true,true
+"dark",900,600,"00-scope-editor.png","일괄 삭제","wb.traffic.scope.clear",67,32,true,true
+"dark",900,600,"00-scope-editor.png","닫기","",42,32,true,false
+"dark",1600,1000,"26-dashboard-empty.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"26-dashboard-empty.png","통합 점검 열기","wb.scope.dashboard.inspect",92,32,true,true
+"dark",1600,1000,"26-dashboard-empty.png","관측 경로 0건","wb.scope.dashboard.card.paths",223,88,true,true
+"dark",1600,1000,"26-dashboard-empty.png","API·명세 항목 0건","wb.scope.dashboard.card.api",223,88,true,true
+"dark",1600,1000,"26-dashboard-empty.png","환경·DB 단서 0건","wb.scope.dashboard.card.environment",223,88,true,true
+"dark",1600,1000,"26-dashboard-empty.png","키·민감정보 후보 0건","wb.scope.dashboard.card.secrets",223,88,true,true
+"dark",1600,1000,"26-dashboard-empty.png","계정·권한 검토 0건","wb.scope.dashboard.card.access",223,88,true,true
+"dark",1600,1000,"26-dashboard-empty.png","미확인·제한 항목 0건","wb.scope.dashboard.card.coverage",223,88,true,true
+"dark",1600,1000,"26-dashboard-empty.png","wb.scope.dashboard.account","wb.scope.dashboard.account",180,31,true,true
+"dark",1600,1000,"26-dashboard-empty.png","wb.scope.dashboard.importance","wb.scope.dashboard.importance",180,31,true,true
+"dark",1600,1000,"26-dashboard-empty.png","조건 해제","wb.scope.dashboard.reset",70,31,true,true
+"dark",1600,1000,"26-dashboard-empty.png","원본 보기","wb.scope.dashboard.original",90,31,true,true
+"dark",1600,1000,"26-dashboard-empty.png","다음 작업","wb.flow.dashboard.further.open",90,31,true,true
+"dark",1600,1000,"26-dashboard-empty.png","원본·처리 정보","wb.scope.dashboard.detail.provenance.toggle",449,36,true,true
+"dark",1600,1000,"26-dashboard-empty.png","분포 자세히","wb.flow.dashboard.distribution.toggle",1378,32,true,true
+"dark",1600,1000,"00-start.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"00-start.png","wb.traffic.target","wb.traffic.target",180,31,true,false
+"dark",1600,1000,"00-start.png","wb.traffic.account","wb.traffic.account",180,31,true,false
+"dark",1600,1000,"00-start.png","","",164,25,true,false
+"dark",1600,1000,"00-start.png","OFF","wb.traffic.capture.mode",94,22,true,false
+"dark",1600,1000,"00-start.png","수집 설정","wb.traffic.settings",91,31,true,false
+"dark",1600,1000,"00-start.png","wb.traffic.search","wb.traffic.search",1183,34,true,false
+"dark",1600,1000,"00-start.png","전체","wb.traffic.quick.전체",45,30,true,false
+"dark",1600,1000,"00-start.png","GET","wb.traffic.quick.GET",45,30,true,false
+"dark",1600,1000,"00-start.png","POST","wb.traffic.quick.POST",45,30,true,false
+"dark",1600,1000,"00-start.png","오류","wb.traffic.quick.오류",45,30,true,false
+"dark",1600,1000,"00-start.png","요청 활용","wb.workflow.traffic.use.open",89,31,true,false
+"dark",1600,1000,"00-start.png","Repeater 준비","wb.simple.traffic.repeater",98,31,true,false
+"dark",1600,1000,"00-start.png","Pretty","wb.traffic.request.pretty",58,35,true,false
+"dark",1600,1000,"00-start.png","Raw","wb.traffic.request.raw",44,35,true,false
+"dark",1600,1000,"00-start.png","원문 도구","wb.traffic.request.tools.open",91,31,true,false
+"dark",1600,1000,"00-start.png","Pretty","wb.traffic.response.pretty",58,35,true,false
+"dark",1600,1000,"00-start.png","Raw","wb.traffic.response.raw",44,35,true,false
+"dark",1600,1000,"00-start.png","원문 도구","wb.traffic.response.tools.open",91,31,true,false
+"dark",1600,1000,"01-capture.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"01-capture.png","wb.traffic.target","wb.traffic.target",180,31,true,false
+"dark",1600,1000,"01-capture.png","wb.traffic.account","wb.traffic.account",180,31,true,false
+"dark",1600,1000,"01-capture.png","","",164,25,true,false
+"dark",1600,1000,"01-capture.png","SCOPE","wb.traffic.capture.mode",94,22,true,false
+"dark",1600,1000,"01-capture.png","수집 설정","wb.traffic.settings",91,31,true,false
+"dark",1600,1000,"01-capture.png","wb.traffic.search","wb.traffic.search",1183,34,true,false
+"dark",1600,1000,"01-capture.png","전체","wb.traffic.quick.전체",45,30,true,false
+"dark",1600,1000,"01-capture.png","GET","wb.traffic.quick.GET",45,30,true,false
+"dark",1600,1000,"01-capture.png","POST","wb.traffic.quick.POST",45,30,true,false
+"dark",1600,1000,"01-capture.png","오류","wb.traffic.quick.오류",45,30,true,false
+"dark",1600,1000,"01-capture.png","요청 활용","wb.workflow.traffic.use.open",89,31,true,false
+"dark",1600,1000,"01-capture.png","Repeater 준비","wb.simple.traffic.repeater",98,31,true,false
+"dark",1600,1000,"01-capture.png","Pretty","wb.traffic.request.pretty",58,35,true,false
+"dark",1600,1000,"01-capture.png","Raw","wb.traffic.request.raw",44,35,true,false
+"dark",1600,1000,"01-capture.png","원문 도구","wb.traffic.request.tools.open",91,31,true,false
+"dark",1600,1000,"01-capture.png","Pretty","wb.traffic.response.pretty",58,35,true,false
+"dark",1600,1000,"01-capture.png","Raw","wb.traffic.response.raw",44,35,true,false
+"dark",1600,1000,"01-capture.png","원문 도구","wb.traffic.response.tools.open",91,31,true,false
+"dark",1600,1000,"02-request.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"02-request.png","wb.traffic.target","wb.traffic.target",180,31,true,false
+"dark",1600,1000,"02-request.png","wb.traffic.account","wb.traffic.account",180,31,true,false
+"dark",1600,1000,"02-request.png","","",164,25,true,false
+"dark",1600,1000,"02-request.png","SCOPE","wb.traffic.capture.mode",94,22,true,false
+"dark",1600,1000,"02-request.png","수집 설정","wb.traffic.settings",91,31,true,false
+"dark",1600,1000,"02-request.png","wb.traffic.search","wb.traffic.search",1183,34,true,false
+"dark",1600,1000,"02-request.png","전체","wb.traffic.quick.전체",45,30,true,false
+"dark",1600,1000,"02-request.png","GET","wb.traffic.quick.GET",45,30,true,false
+"dark",1600,1000,"02-request.png","POST","wb.traffic.quick.POST",45,30,true,false
+"dark",1600,1000,"02-request.png","오류","wb.traffic.quick.오류",45,30,true,false
+"dark",1600,1000,"02-request.png","요청 활용","wb.workflow.traffic.use.open",89,31,true,false
+"dark",1600,1000,"02-request.png","Repeater 준비","wb.simple.traffic.repeater",98,31,true,false
+"dark",1600,1000,"02-request.png","Pretty","wb.traffic.request.pretty",58,35,true,false
+"dark",1600,1000,"02-request.png","Raw","wb.traffic.request.raw",44,35,true,false
+"dark",1600,1000,"02-request.png","원문 도구","wb.traffic.request.tools.open",91,31,true,false
+"dark",1600,1000,"02-request.png","Pretty","wb.traffic.response.pretty",58,35,true,false
+"dark",1600,1000,"02-request.png","Raw","wb.traffic.response.raw",44,35,true,false
+"dark",1600,1000,"02-request.png","원문 도구","wb.traffic.response.tools.open",91,31,true,false
+"dark",1600,1000,"03-analysis.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"03-analysis.png","응답 관찰 1","wb.response.page.0",79,30,true,false
+"dark",1600,1000,"03-analysis.png","API 문서 0","wb.response.page.1",74,30,true,false
+"dark",1600,1000,"03-analysis.png","저장·조회 연결 0","wb.response.page.2",106,30,true,false
+"dark",1600,1000,"03-analysis.png","분석 관리","wb.actions.response.context.open",86,34,true,false
+"dark",1600,1000,"03-analysis.png","wb.response.search","wb.response.search",520,34,true,false
+"dark",1600,1000,"03-analysis.png","관찰 작업","wb.flow.response.finding.options.open",86,32,true,false
+"dark",1600,1000,"03-analysis.png","증거로 정리","wb.response.finding.evidence",78,32,true,false
+"dark",1600,1000,"03-analysis.png","응답 원문","wb.response.finding.tab.0",67,30,true,false
+"dark",1600,1000,"03-analysis.png","관련 요청","wb.response.finding.tab.1",67,30,true,false
+"dark",1600,1000,"03-analysis.png","영향 URL","wb.response.finding.tab.2",69,30,true,false
+"dark",1600,1000,"03-analysis.png","분석 근거","wb.response.finding.tab.3",67,30,true,false
+"dark",1600,1000,"03-analysis.png","원문 보기","wb.approved.response.reading.response.open",91,32,true,false
+"dark",1600,1000,"10-js.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"10-js.png","wb.js.source.choice","wb.js.source.choice",123,31,true,false
+"dark",1600,1000,"10-js.png","분석 ON","wb.js.analysis.toggle",56,22,true,false
+"dark",1600,1000,"10-js.png","분석 관리","wb.js.more",86,31,true,false
+"dark",1600,1000,"10-js.png","주요 경로 3","wb.js.tab.0",52,30,true,true
+"dark",1600,1000,"10-js.png","민감한 정보 0","wb.js.tab.1",74,30,true,true
+"dark",1600,1000,"10-js.png","도메인 0","wb.js.tab.2",63,30,true,true
+"dark",1600,1000,"10-js.png","분석 유형","wb.workflow.js.types",86,31,true,false
+"dark",1600,1000,"10-js.png","wb.js.findings.search","wb.js.findings.search",695,34,true,false
+"dark",1600,1000,"10-js.png","분석 근거","wb.approved.js.evidence.open",86,32,true,false
+"dark",1600,1000,"10-js.png","선택 경로","wb.js.selected.tools",86,32,true,false
+"dark",1600,1000,"10-js.png","Repeater 준비","wb.js.repeater.prepare",98,32,true,false
+"dark",1600,1000,"08-mapper.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"08-mapper.png","프로젝트","wb.actions.mapper.project.open",82,31,true,false
+"dark",1600,1000,"08-mapper.png","SCOPE","fm.capture",94,22,true,false
+"dark",1600,1000,"08-mapper.png","매핑 설정","",67,31,true,false
+"dark",1600,1000,"08-mapper.png","기능 목록 · 접기","fm.tree.toggle",110,43,true,false
+"dark",1600,1000,"08-mapper.png","기능 편집","wb.actions.mapper.feature.open",91,31,true,false
+"dark",1600,1000,"08-mapper.png","미분류 요청 (0)","fm.unclassified",216,44,true,true
+"dark",1600,1000,"08-mapper.png","","",180,31,true,false
+"dark",1600,1000,"08-mapper.png","","",180,31,true,false
+"dark",1600,1000,"08-mapper.png","","",710,34,true,false
+"dark",1600,1000,"08-mapper.png","선택 요청","fm.workflow.request.options.open",90,31,true,false
+"dark",1600,1000,"08-mapper.png","분류 수정","fm.packet.classify",70,31,true,false
+"dark",1600,1000,"08-mapper.png","Pretty","wb.mapper.request.pretty",58,35,true,false
+"dark",1600,1000,"08-mapper.png","Raw","wb.mapper.request.raw",44,35,true,false
+"dark",1600,1000,"08-mapper.png","원문 도구","wb.mapper.request.tools.open",91,31,true,false
+"dark",1600,1000,"08-mapper.png","Pretty","wb.mapper.response.pretty",58,35,true,false
+"dark",1600,1000,"08-mapper.png","Raw","wb.mapper.response.raw",44,35,true,false
+"dark",1600,1000,"08-mapper.png","원문 도구","wb.mapper.response.tools.open",91,31,true,false
+"dark",1600,1000,"09-environment.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"09-environment.png","wb.environment.origin","wb.environment.origin",180,31,true,false
+"dark",1600,1000,"09-environment.png","wb.environment.account","wb.environment.account",82,31,true,false
+"dark",1600,1000,"09-environment.png","설정·관리","wb.flow.environment.settings.open",94,34,true,false
+"dark",1600,1000,"09-environment.png","관찰 환경 · 0개 단서","wb.environment.observations.toggle",1378,36,true,false
+"dark",1600,1000,"09-environment.png","전체","wb.environment.filter.all",40,32,true,false
+"dark",1600,1000,"09-environment.png","미검증","wb.environment.filter.unverified",51,32,true,false
+"dark",1600,1000,"09-environment.png","응답 확인","wb.environment.filter.response",65,32,true,false
+"dark",1600,1000,"09-environment.png","wb.environment.search","wb.environment.search",616,31,true,false
+"dark",1600,1000,"09-environment.png","일괄 실행","wb.environment.more",86,31,true,false
+"dark",1600,1000,"09-environment.png","선택 경로 GET 확인","wb.environment.single",120,31,true,false
+"dark",1600,1000,"09-environment.png","일시정지","wb.environment.pause",80,31,true,false
+"dark",1600,1000,"09-environment.png","중지","wb.environment.stop",60,31,true,false
+"dark",1600,1000,"09-environment.png","응답","wb.environment.messages.tab.0",42,30,true,false
+"dark",1600,1000,"09-environment.png","요청","wb.environment.messages.tab.1",42,30,true,false
+"dark",1600,1000,"09-environment.png","판정 근거","wb.environment.messages.tab.2",67,30,true,false
+"dark",1600,1000,"09-environment.png","원문 도구","wb.approved.environment.packet.open",86,34,true,false
+"dark",1600,1000,"12-exposure-search.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"12-exposure-search.png","wb.exposure.target","wb.exposure.target",180,31,true,false
+"dark",1600,1000,"12-exposure-search.png","하위 도메인 포함","",110,31,true,false
+"dark",1600,1000,"12-exposure-search.png","검색 노출","wb.exposure.tabs.tab.0",67,30,true,false
+"dark",1600,1000,"12-exposure-search.png","CVE 후보","wb.exposure.tabs.tab.1",67,30,true,false
+"dark",1600,1000,"12-exposure-search.png","wb.exposure.category","wb.exposure.category",85,31,true,false
+"dark",1600,1000,"12-exposure-search.png","wb.exposure.query","wb.exposure.query",1033,34,true,false
+"dark",1600,1000,"12-exposure-search.png","검색식 복사","wb.exposure.search.query.copy",101,31,true,false
+"dark",1600,1000,"12-exposure-search.png","Google에서 열기","wb.exposure.search.google",130,31,true,false
+"dark",1600,1000,"12-exposure-search.png","URL 가져오기","wb.exposure.search.import",92,31,true,false
+"dark",1600,1000,"12-exposure-search.png","목록 관리","wb.exposure.search.more",89,31,true,false
+"dark",1600,1000,"12-exposure-search.png","Repeater 준비","wb.exposure.search.repeater",98,31,true,true
+"dark",1600,1000,"12-exposure-search.png","근거 복사","wb.exposure.search.copy",88,31,true,true
+"dark",1600,1000,"12-exposure-search.png","발견 정보 원문","wb.pdf.exposure.discovery.original.toggle",476,36,true,true
+"dark",1600,1000,"13-exposure-cve.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"13-exposure-cve.png","wb.exposure.target","wb.exposure.target",180,31,true,false
+"dark",1600,1000,"13-exposure-cve.png","하위 도메인 포함","",110,31,true,false
+"dark",1600,1000,"13-exposure-cve.png","검색 노출","wb.exposure.tabs.tab.0",67,30,true,false
+"dark",1600,1000,"13-exposure-cve.png","CVE 후보","wb.exposure.tabs.tab.1",67,30,true,false
+"dark",1600,1000,"13-exposure-cve.png","wb.exposure.observed","wb.exposure.observed",82,31,true,false
+"dark",1600,1000,"13-exposure-cve.png","수정 ▾","wb.exposure.product.edit",53,31,true,false
+"dark",1600,1000,"13-exposure-cve.png","CVE 후보 조회","wb.exposure.lookup",92,32,true,false
+"dark",1600,1000,"13-exposure-cve.png","취소","wb.exposure.cancel",42,32,true,false
+"dark",1600,1000,"13-exposure-cve.png","더보기","wb.exposure.cve.more",72,32,true,false
+"dark",1600,1000,"13-exposure-cve.png","필터","wb.flow.exposure.cve.filters.toggle",42,31,true,false
+"dark",1600,1000,"13-exposure-cve.png","대상 적용 조건","wb.flow.exposure.cve.detail.tabs.tab.0",92,30,true,true
+"dark",1600,1000,"13-exposure-cve.png","관측 근거","wb.flow.exposure.cve.detail.tabs.tab.1",67,30,true,true
+"dark",1600,1000,"13-exposure-cve.png","출처 열기","wb.exposure.cve.source",88,31,true,true
+"dark",1600,1000,"13-exposure-cve.png","CVE 근거 복사","wb.exposure.cve.copy",113,31,true,true
+"dark",1600,1000,"13-exposure-cve-evidence.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","wb.exposure.target","wb.exposure.target",180,31,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","하위 도메인 포함","",110,31,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","검색 노출","wb.exposure.tabs.tab.0",67,30,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","CVE 후보","wb.exposure.tabs.tab.1",67,30,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","wb.exposure.observed","wb.exposure.observed",82,31,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","수정 ▾","wb.exposure.product.edit",53,31,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","CVE 후보 조회","wb.exposure.lookup",92,32,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","취소","wb.exposure.cancel",42,32,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","더보기","wb.exposure.cve.more",72,32,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","필터","wb.flow.exposure.cve.filters.toggle",42,31,true,false
+"dark",1600,1000,"13-exposure-cve-evidence.png","대상 적용 조건","wb.flow.exposure.cve.detail.tabs.tab.0",92,30,true,true
+"dark",1600,1000,"13-exposure-cve-evidence.png","관측 근거","wb.flow.exposure.cve.detail.tabs.tab.1",67,30,true,true
+"dark",1600,1000,"13-exposure-cve-evidence.png","출처 열기","wb.exposure.cve.source",88,31,true,true
+"dark",1600,1000,"13-exposure-cve-evidence.png","CVE 근거 복사","wb.exposure.cve.copy",113,31,true,true
+"dark",1600,1000,"07-payload.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"07-payload.png","선택 값 표시","wb.payload.mark",84,31,true,false
+"dark",1600,1000,"07-payload.png","편집","wb.flow.payload.edit.open",65,31,true,false
+"dark",1600,1000,"07-payload.png","wb.payload.condition.profile","wb.payload.condition.profile",112,31,true,true
+"dark",1600,1000,"07-payload.png","wb.payload.condition.encoding","wb.payload.condition.encoding",96,31,true,true
+"dark",1600,1000,"07-payload.png","Spinner.formattedTextField","Spinner.formattedTextField",162,25,true,true
+"dark",1600,1000,"07-payload.png","Spinner.formattedTextField","Spinner.formattedTextField",162,25,true,true
+"dark",1600,1000,"07-payload.png","검사 후보 · 10개","wb.payload.candidates.toggle",255,36,true,true
+"dark",1600,1000,"07-payload.png","고급 실행 조건","wb.payload.advanced.toggle",255,36,true,true
+"dark",1600,1000,"07-payload.png","요청 준비","wb.payload.step.prepare",67,30,true,false
+"dark",1600,1000,"07-payload.png","실행 · 결과","wb.payload.step.results",77,30,true,false
+"dark",1600,1000,"07-payload.png","검사 시작","wb.simple.payload.start",87,32,true,false
+"dark",1600,1000,"07-payload.png","중지","wb.simple.payload.stop",62,32,true,false
+"dark",1600,1000,"07-payload-results.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"07-payload-results.png","전체 4","wb.payload.results.filter.all",50,32,true,false
+"dark",1600,1000,"07-payload-results.png","관찰 2","wb.payload.results.filter.observed",50,32,true,false
+"dark",1600,1000,"07-payload-results.png","기준·대조 2","wb.payload.results.filter.control",79,32,true,false
+"dark",1600,1000,"07-payload-results.png","요청 보기","wb.approved.payload.request.tools.open",92,31,true,false
+"dark",1600,1000,"07-payload-results.png","응답 보기","wb.approved.payload.response.tools.open",92,31,true,false
+"dark",1600,1000,"07-payload-results.png","선택 결과의 판정·전송 근거","wb.payload.results.reason.toggle",1378,32,true,false
+"dark",1600,1000,"07-payload-results.png","요청 준비","wb.payload.step.prepare",67,30,true,false
+"dark",1600,1000,"07-payload-results.png","실행 · 결과","wb.payload.step.results",77,30,true,false
+"dark",1600,1000,"07-payload-results.png","결과를 증거로","wb.simple.payload.evidence",89,32,true,false
+"dark",1600,1000,"07-payload-results.png","Repeater 열기","wb.payload.repeater",98,32,true,false
+"dark",1600,1000,"07-payload-results.png","검사 관리","wb.flow.payload.result.other.open",86,32,true,false
+"dark",1600,1000,"07-payload-results.png","중지","wb.simple.payload.stop",62,32,true,false
+"dark",1000,760,"04-auth-accounts.png","대용량 응답 해시 비교 · 최대 4MiB","",212,20,true,true
+"dark",1000,760,"04-auth-accounts.png","","",198,31,true,true
+"dark",1000,760,"04-auth-accounts.png","쓰기 요청 재전송 허용","",141,20,true,true
+"dark",1000,760,"04-auth-accounts.png","","",198,31,true,true
+"dark",1000,760,"04-auth-accounts.png","헤더 적용","",67,32,true,true
+"dark",1000,760,"04-auth-accounts.png","차이 색상 표시","",102,20,true,true
+"dark",1000,760,"04-auth-accounts.png","요청·응답 정렬","",106,20,true,true
+"dark",1000,760,"04-auth-accounts.png","","",306,31,true,true
+"dark",1000,760,"04-auth-accounts.png","쿠키 설정 적용","",112,32,true,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,true,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,true,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",438,31,false,true
+"dark",1000,760,"04-auth-accounts.png","동적 필드 후보","",92,32,false,true
+"dark",1000,760,"04-auth-accounts.png","","",438,31,false,true
+"dark",1000,760,"04-auth-accounts.png","배열 순서 무시","",102,20,false,true
+"dark",1000,760,"04-auth-accounts.png","","",258,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",119,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",56,31,false,true
+"dark",1000,760,"04-auth-accounts.png","규칙 불러오기","",89,32,false,true
+"dark",1000,760,"04-auth-accounts.png","선택 규칙 삭제","",92,32,false,true
+"dark",1000,760,"04-auth-accounts.png","","",186,31,false,true
+"dark",1000,760,"04-auth-accounts.png","규칙 저장·갱신","wb.auth.effect.rule.save",96,32,false,true
+"dark",1000,760,"04-auth-accounts.png","새 규칙","",56,32,false,true
+"dark",1000,760,"04-auth-accounts.png","","",354,31,false,true
+"dark",1000,760,"04-auth-accounts.png","쓰기 요청 전후 조회로 처리 결과 확인","",222,20,false,true
+"dark",1000,760,"04-auth-accounts.png","","",90,32,false,true
+"dark",1000,760,"04-auth-accounts.png","wb.auth.effect.path","wb.auth.effect.path",282,31,false,true
+"dark",1000,760,"04-auth-accounts.png","선택 요청 연결","",92,32,false,true
+"dark",1000,760,"04-auth-accounts.png","wb.auth.effect.url","wb.auth.effect.url",438,31,false,true
+"dark",1000,760,"04-auth-accounts.png","관측 GET 후보","wb.auth.effect.observed.reads",92,32,false,true
+"dark",1000,760,"04-auth-accounts.png","wb.auth.effect.jsonpath","wb.auth.effect.jsonpath",258,31,false,true
+"dark",1000,760,"04-auth-accounts.png","보관 JSON 필드","wb.auth.effect.observed.fields",101,32,false,true
+"dark",1000,760,"04-auth-accounts.png","","",234,31,false,true
+"dark",1000,760,"04-auth-accounts.png","","",180,32,false,true
+"dark",1000,760,"04-auth-accounts.png","Spinner.formattedTextField","Spinner.formattedTextField",11,25,false,true
+"dark",1000,760,"04-auth-accounts.png","준비한 요청 다시 확인","",128,32,false,true
+"dark",1000,760,"04-auth-accounts.png","설정 확인","wb.auth.settings.confirm",87,32,false,true
+"dark",1000,760,"04-auth-accounts.png","wb.auth.preparation.account.0","wb.auth.preparation.account.0",667,38,true,true
+"dark",1000,760,"04-auth-accounts.png","wb.auth.preparation.account.1","wb.auth.preparation.account.1",667,38,true,true
+"dark",1000,760,"04-auth-accounts.png","wb.auth.preparation.account.3","wb.auth.preparation.account.3",667,38,true,true
+"dark",1000,760,"04-auth-accounts.png","추가 비교 계정 · 현재 미지정","wb.auth.preparation.extra.toggle",918,32,true,true
+"dark",1000,760,"04-auth-accounts.png","닫기","wb.auth.preparation.close",42,32,true,false
+"dark",1000,760,"04-auth-accounts-full-overview.png","wb.auth.readiness.filter","wb.auth.readiness.filter",92,31,true,true
+"dark",1000,760,"04-auth-accounts-full-overview.png","wb.auth.readiness.search","wb.auth.readiness.search",234,31,true,true
+"dark",1000,760,"04-auth-accounts-full-overview.png","이 계정 설정","wb.auth.readiness.fix.account",101,32,true,true
+"dark",1000,760,"04-auth-accounts-full-overview.png","이 요청 권한표 수정","wb.auth.readiness.fix.policy",117,32,true,true
+"dark",1000,760,"04-auth-accounts-full-overview.png","이 요청 쓰기 조회 수정","wb.auth.readiness.fix.effect",131,32,true,true
+"dark",1000,760,"04-auth-accounts-full-overview.png","닫기","wb.auth.preparation.close",42,32,true,false
+"dark",1000,760,"04-auth-accounts-full-accounts.png","대용량 응답 해시 비교 · 최대 4MiB","",212,20,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",198,31,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","쓰기 요청 재전송 허용","",141,20,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",198,31,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","헤더 적용","",67,32,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","차이 색상 표시","",102,20,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","요청·응답 정렬","",106,20,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",306,31,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","쿠키 설정 적용","",112,32,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",438,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","동적 필드 후보","",92,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",438,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","배열 순서 무시","",102,20,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",258,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",119,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",56,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","규칙 불러오기","",89,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","선택 규칙 삭제","",92,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",186,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","규칙 저장·갱신","wb.auth.effect.rule.save",96,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","새 규칙","",56,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",354,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","쓰기 요청 전후 조회로 처리 결과 확인","",222,20,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",90,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","wb.auth.effect.path","wb.auth.effect.path",282,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","선택 요청 연결","",92,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","wb.auth.effect.url","wb.auth.effect.url",438,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","관측 GET 후보","wb.auth.effect.observed.reads",92,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","wb.auth.effect.jsonpath","wb.auth.effect.jsonpath",258,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","보관 JSON 필드","wb.auth.effect.observed.fields",101,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",234,31,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","","",180,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","Spinner.formattedTextField","Spinner.formattedTextField",11,25,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","준비한 요청 다시 확인","",128,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","설정 확인","wb.auth.settings.confirm",87,32,false,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","wb.auth.preparation.account.0","wb.auth.preparation.account.0",667,38,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","wb.auth.preparation.account.1","wb.auth.preparation.account.1",667,38,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","wb.auth.preparation.account.3","wb.auth.preparation.account.3",667,38,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","추가 비교 계정 · 현재 미지정","wb.auth.preparation.extra.toggle",918,32,true,true
+"dark",1000,760,"04-auth-accounts-full-accounts.png","닫기","wb.auth.preparation.close",42,32,true,false
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",78,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","계정 목록 갱신","",92,32,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","이 슬롯을 새 점검 계정으로 등록","",178,32,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","비교 전 갱신","",90,20,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",438,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",114,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",78,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","계정 목록 갱신","",92,32,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","이 슬롯을 새 점검 계정으로 등록","",178,32,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","비교 전 갱신","",90,20,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",438,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",114,31,true,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",78,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","계정 목록 갱신","",92,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","이 슬롯을 새 점검 계정으로 등록","",178,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","비교 전 갱신","",90,20,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",438,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",114,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",78,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","계정 목록 갱신","",92,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","이 슬롯을 새 점검 계정으로 등록","",178,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","비교 전 갱신","",90,20,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",438,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",114,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",162,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","","",138,31,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","선택 요청 추가","",92,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","행 추가","",56,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","선택 행 삭제","",81,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","준비한 요청 다시 확인","",128,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","설정 확인","wb.auth.session.confirm",87,32,false,true
+"dark",1000,760,"04-auth-accounts-full-policy.png","닫기","wb.auth.preparation.close",42,32,true,false
+"dark",1600,1000,"04-auth-results.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"04-auth-results.png","인증 탐지 ON","wb.auth.detect",96,22,true,false
+"dark",1600,1000,"04-auth-results.png","계정·정책","wb.flow.auth.accounts.open",90,32,true,false
+"dark",1600,1000,"04-auth-results.png","Alice","wb.auth.account.card.0",452,41,true,false
+"dark",1600,1000,"04-auth-results.png","Bob","wb.auth.account.card.1",452,41,true,false
+"dark",1600,1000,"04-auth-results.png","비로그인","wb.auth.account.card.3",452,41,true,false
+"dark",1600,1000,"04-auth-results.png","wb.auth.history.search","wb.auth.history.search",368,32,true,false
+"dark",1600,1000,"04-auth-results.png","wb.auth.history.filter","wb.auth.history.filter",108,31,true,false
+"dark",1600,1000,"04-auth-results.png","비교 준비","wb.simple.auth.review",70,31,true,false
+"dark",1600,1000,"04-auth-results.png","중지","wb.simple.auth.stop",61,31,true,false
+"dark",1600,1000,"04-auth-results.png","응답 비교","wb.auth.inline.tabs.tab.0",67,30,true,false
+"dark",1600,1000,"04-auth-results.png","계정 간 차이","wb.auth.inline.tabs.tab.1",81,30,true,false
+"dark",1600,1000,"04-auth-results.png","선택 계정 요청","wb.auth.inline.tabs.tab.2",92,30,true,false
+"dark",1600,1000,"04-auth-results.png","판정 근거","wb.auth.inline.tabs.tab.3",67,30,true,false
+"dark",1600,1000,"04-auth-results.png","wb.auth.inline.account","wb.auth.inline.account",129,31,true,false
+"dark",1600,1000,"04-auth-connections.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"04-auth-connections.png","인증 탐지 ON","wb.auth.detect",96,22,true,false
+"dark",1600,1000,"04-auth-connections.png","계정·정책","wb.flow.auth.accounts.open",90,32,true,false
+"dark",1600,1000,"04-auth-connections.png","Alice","wb.auth.account.card.0",452,41,true,false
+"dark",1600,1000,"04-auth-connections.png","Bob","wb.auth.account.card.1",452,41,true,false
+"dark",1600,1000,"04-auth-connections.png","비로그인","wb.auth.account.card.3",452,41,true,false
+"dark",1600,1000,"04-auth-connections.png","wb.auth.history.search","wb.auth.history.search",368,32,true,false
+"dark",1600,1000,"04-auth-connections.png","wb.auth.history.filter","wb.auth.history.filter",108,31,true,false
+"dark",1600,1000,"04-auth-connections.png","비교 준비","wb.simple.auth.review",70,31,true,false
+"dark",1600,1000,"04-auth-connections.png","중지","wb.simple.auth.stop",61,31,true,false
+"dark",1600,1000,"04-auth-connections.png","응답 비교","wb.auth.inline.tabs.tab.0",67,30,true,false
+"dark",1600,1000,"04-auth-connections.png","계정 간 차이","wb.auth.inline.tabs.tab.1",81,30,true,false
+"dark",1600,1000,"04-auth-connections.png","선택 계정 요청","wb.auth.inline.tabs.tab.2",92,30,true,false
+"dark",1600,1000,"04-auth-connections.png","판정 근거","wb.auth.inline.tabs.tab.3",67,30,true,false
+"dark",1600,1000,"04-auth-connections.png","wb.auth.inline.account","wb.auth.inline.account",129,31,true,false
+"dark",1600,1000,"04-auth-connections.png","wb.auth.preparation.account.0","wb.auth.preparation.account.0",592,31,true,false
+"dark",1600,1000,"04-auth-connections.png","wb.auth.preparation.account.1","wb.auth.preparation.account.1",592,31,true,false
+"dark",1600,1000,"04-auth-connections.png","사용","wb.auth.connections.anonymous.use",75,22,true,false
+"dark",1600,1000,"04-auth-connections.png","추가 비교 계정 · 현재 미지정","wb.auth.preparation.extra.toggle",850,36,true,false
+"dark",1600,1000,"04-auth-connections.png","인증 후보 관리","wb.auth.connections.manage",92,31,true,false
+"dark",1600,1000,"04-auth-connections.png","닫기","wb.auth.connections.close",42,31,true,false
+"dark",1600,1000,"11-replay-empty.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"11-replay-empty.png","실행 설정","wb.target.settings",87,32,true,false
+"dark",1600,1000,"11-replay-empty.png","순차 실행","wb.bounty.flow.run",87,32,true,false
+"dark",1600,1000,"11-replay-empty.png","중지","wb.bounty.flow.stop",62,32,true,false
+"dark",1600,1000,"11-replay-empty.png","선택 요청 추가","wb.bounty.flow.append",112,31,true,false
+"dark",1600,1000,"11-replay-empty.png","변수 추출·단계 기대 조건","wb.flow.replay.variables.toggle",782,36,true,false
+"dark",1600,1000,"11-replay-empty.png","결과를 증거로","wb.bounty.flow.evidence",89,31,true,false
+"dark",1600,1000,"11-replay.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"11-replay.png","실행 설정","wb.target.settings",87,32,true,false
+"dark",1600,1000,"11-replay.png","순차 실행","wb.bounty.flow.run",87,32,true,false
+"dark",1600,1000,"11-replay.png","중지","wb.bounty.flow.stop",62,32,true,false
+"dark",1600,1000,"11-replay.png","선택 요청 추가","wb.bounty.flow.append",112,31,true,false
+"dark",1600,1000,"11-replay.png","변수 추출·단계 기대 조건","wb.flow.replay.variables.toggle",782,36,true,false
+"dark",1600,1000,"11-replay.png","결과를 증거로","wb.bounty.flow.evidence",89,31,true,false
+"dark",1600,1000,"05-evidence.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"05-evidence.png","","",1035,31,true,false
+"dark",1600,1000,"05-evidence.png","가림 미리보기","wb.bounty.evidence.preview",110,31,true,false
+"dark",1600,1000,"05-evidence.png","증거 ZIP 저장","wb.bounty.evidence.save",112,31,true,false
+"dark",1600,1000,"05-evidence.png","문서 설정","wb.bounty.evidence.more",91,31,true,false
+"dark",1600,1000,"05-evidence.png","증거 추가","wb.bounty.evidence.add",87,32,true,false
+"dark",1600,1000,"05-evidence.png","wb.bounty.evidence.search","wb.bounty.evidence.search",283,31,true,false
+"dark",1600,1000,"05-evidence.png","항목 작업","wb.actions.bounty.items.open",89,31,true,false
+"dark",1600,1000,"05-evidence.png","실행 취소","wb.bounty.evidence.undo",89,31,true,false
+"dark",1600,1000,"05-evidence.png","연결 원본 정보","wb.bounty.evidence.source.toggle",400,36,true,false
+"dark",1600,1000,"14-data.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"14-data.png","인코딩·변환","null.tab.0",82,30,true,false
+"dark",1600,1000,"14-data.png","JWT 내용 확인","null.tab.1",94,30,true,false
+"dark",1600,1000,"14-data.png","응답·데이터 비교","null.tab.2",107,30,true,false
+"dark",1600,1000,"14-data.png","wb.data.codec.operation","wb.data.codec.operation",230,31,true,false
+"dark",1600,1000,"14-data.png","변환","wb.data.codec.convert",65,31,true,false
+"dark",1600,1000,"14-data.png","복사","wb.data.codec.copy",65,31,true,false
+"dark",1600,1000,"14-data.png","출력 작업","wb.workflow.data.codec.reuse.open",91,31,true,false
+"dark",1600,1000,"15-progress.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"15-progress.png","추적 ON","",46,22,true,false
+"dark",1600,1000,"15-progress.png","Scope만","",61,22,true,false
+"dark",1600,1000,"15-progress.png","기록","wb.actions.activity.records.open",61,34,true,false
+"dark",1600,1000,"15-progress.png","URL 점검","null.tab.0",69,30,true,false
+"dark",1600,1000,"15-progress.png","미확정 경로","null.tab.1",78,30,true,false
+"dark",1600,1000,"15-progress.png","계정별 점검","null.tab.2",78,30,true,false
+"dark",1600,1000,"15-progress.png","업무별 현황","null.tab.3",78,30,true,false
+"dark",1600,1000,"15-progress.png","","",648,31,true,false
+"dark",1600,1000,"15-progress.png","","",71,31,true,false
+"dark",1600,1000,"15-progress.png","완료 표시","wb.activity.finish",91,31,true,false
+"dark",1600,1000,"15-progress.png","발견 근거","wb.activity.evidence",87,31,true,false
+"dark",1600,1000,"15-progress.png","선택 작업","wb.actions.activity.selection.open",86,31,true,false
+"dark",1600,1000,"15-progress.png","입력 완료 표시","wb.activity.finishInput",95,31,true,false
+"dark",1600,1000,"16-dashboard.png","화면 설명","wb.traffic.guide.open",67,32,true,false
+"dark",1600,1000,"16-dashboard.png","통합 점검 열기","wb.scope.dashboard.inspect",92,32,true,true
+"dark",1600,1000,"16-dashboard.png","관측 경로 1건","wb.scope.dashboard.card.paths",223,88,true,true
+"dark",1600,1000,"16-dashboard.png","API·명세 항목 0건","wb.scope.dashboard.card.api",223,88,true,true
+"dark",1600,1000,"16-dashboard.png","환경·DB 단서 0건","wb.scope.dashboard.card.environment",223,88,true,true
+"dark",1600,1000,"16-dashboard.png","키·민감정보 후보 1건","wb.scope.dashboard.card.secrets",223,88,true,true
+"dark",1600,1000,"16-dashboard.png","계정·권한 검토 0건","wb.scope.dashboard.card.access",223,88,true,true
+"dark",1600,1000,"16-dashboard.png","미확인·제한 항목 0건","wb.scope.dashboard.card.coverage",223,88,true,true
+"dark",1600,1000,"16-dashboard.png","wb.scope.dashboard.account","wb.scope.dashboard.account",180,31,true,true
+"dark",1600,1000,"16-dashboard.png","wb.scope.dashboard.importance","wb.scope.dashboard.importance",180,31,true,true
+"dark",1600,1000,"16-dashboard.png","조건 해제","wb.scope.dashboard.reset",70,31,true,true
+"dark",1600,1000,"16-dashboard.png","원본 보기","wb.scope.dashboard.original",90,31,true,true
+"dark",1600,1000,"16-dashboard.png","다음 작업","wb.flow.dashboard.further.open",90,31,true,true
+"dark",1600,1000,"16-dashboard.png","원본·처리 정보","wb.scope.dashboard.detail.provenance.toggle",449,36,true,true
+"dark",1600,1000,"16-dashboard.png","분포 자세히","wb.flow.dashboard.distribution.toggle",1378,32,true,true
+"dark",1100,800,"06-redaction.png","닫기","",42,32,true,false

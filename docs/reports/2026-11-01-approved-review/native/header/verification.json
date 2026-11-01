@@ -1,0 +1,290 @@
+{
+  "result": "passed",
+  "version": "1.4.20",
+  "jarSha256": "be2ad66272f6039c64033cf19314d9bddacb503113fea00dd74cbcaaa87f0230",
+  "checks": 292,
+  "configurations": [
+    {
+      "theme": "light",
+      "windowSize": "1600x1000",
+      "checks": 73,
+      "entries": [
+        {
+          "text": "대시보드",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.simple.dashboard.open.menu",
+          "icon": true
+        },
+        {
+          "text": "Scope 통합 점검",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.scope.inspection.open.menu",
+          "icon": true
+        },
+        {
+          "text": "전체화면",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.window.fullscreen.menu",
+          "icon": true
+        },
+        {
+          "text": "화면 설정",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.navigation.settings.menu",
+          "icon": true
+        },
+        {
+          "text": "로그",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.navigation.logs.menu",
+          "icon": true
+        },
+        {
+          "text": "Guide",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.visual.guide.open.menu",
+          "icon": false
+        }
+      ],
+      "capturedPngSha256": {
+        "header-tools-menu.png": "d2d2dd4ebf5af6c6305380ac22703037a0d2bcc212820a5586aa4cac97cc3721",
+        "theme-toggled.png": "6b87b703e605bf71d775d434ae29f90b7bbdae1dc54f78f73c794817a0e8e918"
+      },
+      "capturedPngDimensions": {
+        "header-tools-menu.png": [
+          1590,
+          966
+        ],
+        "theme-toggled.png": [
+          1590,
+          966
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "windowSize": "1024x768",
+      "checks": 73,
+      "entries": [
+        {
+          "text": "대시보드",
+          "icon": true,
+          "name": "wb.simple.dashboard.open.menu",
+          "contrast": 15.202622914317665,
+          "height": 25,
+          "width": 151
+        },
+        {
+          "text": "Scope 통합 점검",
+          "icon": true,
+          "name": "wb.scope.inspection.open.menu",
+          "contrast": 15.202622914317665,
+          "height": 25,
+          "width": 151
+        },
+        {
+          "text": "전체화면",
+          "icon": true,
+          "name": "wb.window.fullscreen.menu",
+          "contrast": 15.202622914317665,
+          "height": 25,
+          "width": 151
+        },
+        {
+          "text": "화면 설정",
+          "icon": true,
+          "name": "wb.navigation.settings.menu",
+          "contrast": 15.202622914317665,
+          "height": 25,
+          "width": 151
+        },
+        {
+          "text": "로그",
+          "icon": true,
+          "name": "wb.navigation.logs.menu",
+          "contrast": 15.202622914317665,
+          "height": 25,
+          "width": 151
+        },
+        {
+          "text": "Guide",
+          "icon": false,
+          "name": "wb.visual.guide.open.menu",
+          "contrast": 15.202622914317665,
+          "height": 25,
+          "width": 151
+        }
+      ],
+      "capturedPngSha256": {
+        "header-tools-menu.png": "b317b61e6bad59828b45dfc78bec32deabdfd7f2e3b6882c2eb4bb1b473e1654",
+        "theme-toggled.png": "26c4082526f9f29dc46175dc27741d79556576c1c58c86475161d9b89fb1ccad"
+      },
+      "capturedPngDimensions": {
+        "header-tools-menu.png": [
+          1014,
+          734
+        ],
+        "theme-toggled.png": [
+          1014,
+          734
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "windowSize": "1600x1000",
+      "checks": 73,
+      "entries": [
+        {
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.simple.dashboard.open.menu",
+          "icon": true,
+          "text": "대시보드"
+        },
+        {
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.scope.inspection.open.menu",
+          "icon": true,
+          "text": "Scope 통합 점검"
+        },
+        {
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.window.fullscreen.menu",
+          "icon": true,
+          "text": "전체화면"
+        },
+        {
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.navigation.settings.menu",
+          "icon": true,
+          "text": "화면 설정"
+        },
+        {
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.navigation.logs.menu",
+          "icon": true,
+          "text": "로그"
+        },
+        {
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.visual.guide.open.menu",
+          "icon": false,
+          "text": "Guide"
+        }
+      ],
+      "capturedPngSha256": {
+        "header-tools-menu.png": "b3c31eefc84be2ca7588cbeaa9fc084701694deedcf73e644e7587c41cf1c133",
+        "theme-toggled.png": "36cc5313868a0e069d033d4580b0e1f1683ea62059c87326304a040eaeb81876"
+      },
+      "capturedPngDimensions": {
+        "header-tools-menu.png": [
+          1590,
+          966
+        ],
+        "theme-toggled.png": [
+          1590,
+          966
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "windowSize": "1024x768",
+      "checks": 73,
+      "entries": [
+        {
+          "contrast": 13.605869551285917,
+          "height": 25,
+          "width": 151,
+          "text": "대시보드",
+          "icon": true,
+          "name": "wb.simple.dashboard.open.menu"
+        },
+        {
+          "contrast": 13.605869551285917,
+          "height": 25,
+          "width": 151,
+          "text": "Scope 통합 점검",
+          "icon": true,
+          "name": "wb.scope.inspection.open.menu"
+        },
+        {
+          "contrast": 13.605869551285917,
+          "height": 25,
+          "width": 151,
+          "text": "전체화면",
+          "icon": true,
+          "name": "wb.window.fullscreen.menu"
+        },
+        {
+          "contrast": 13.605869551285917,
+          "height": 25,
+          "width": 151,
+          "text": "화면 설정",
+          "icon": true,
+          "name": "wb.navigation.settings.menu"
+        },
+        {
+          "contrast": 13.605869551285917,
+          "height": 25,
+          "width": 151,
+          "text": "로그",
+          "icon": true,
+          "name": "wb.navigation.logs.menu"
+        },
+        {
+          "contrast": 13.605869551285917,
+          "height": 25,
+          "width": 151,
+          "text": "Guide",
+          "icon": false,
+          "name": "wb.visual.guide.open.menu"
+        }
+      ],
+      "capturedPngSha256": {
+        "header-tools-menu.png": "6a219e2f01ba65f215a9a1d64d5c4483c0f26d34fcf83ac75bb5f8f8588fdb20",
+        "theme-toggled.png": "7616bb266ba0eb82a27ffdab9864de2550bb6eaf4570b901c8d695e3777b5f97"
+      },
+      "capturedPngDimensions": {
+        "header-tools-menu.png": [
+          1014,
+          734
+        ],
+        "theme-toggled.png": [
+          1014,
+          734
+        ]
+      }
+    }
+  ],
+  "captureCount": 8,
+  "nativeSwing": true,
+  "nativeBurpGui": false,
+  "syntheticPackets": true,
+  "targetHttpRequests": 0,
+  "scope": "Actual isolated Linux Xorg/xfwm4 Swing header theme switching, visible menu controllers, Guide, authored input/selection, fullscreen and Escape; real Robot captures with synthetic Burp adapters."
+}

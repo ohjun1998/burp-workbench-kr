@@ -214,21 +214,38 @@ final class WorkspaceAppearance implements AutoCloseable {
   }
   private void discover(Component component, String path, boolean restoreNew) {
     if (component instanceof JComponent nativeComponent && Boolean.TRUE.equals(nativeComponent.getClientProperty("wb.nativeEditor"))) return;
+    if (component instanceof JLayer<?> layer && layer.getView() instanceof JComponent view
+        && view.getClientProperty("wb.approved.rounded.owner") == layer) {
+      discover(view, path, restoreNew);
+      return;
+    }
     if (component instanceof JTable table && table.getColumnCount() > 0 && table.getColumnCount() <= MAX_COLUMNS) {
       String key = id(component, path, 't');
       table.putClientProperty("wb.appearance.id", key);
       if (!tables.containsKey(table) && tables.size() < MAX_SURFACES) {
         tableDefaults.put(table, captureColumns(table));
-        if (state.columns.containsKey(key)) restoreColumns(table, state.columns.get(key));
+        if (state.columns.containsKey(key)) restoreSavedColumns(table, key);
         TableColumnModelListener listener = new TableColumnModelListener() {
           public void columnAdded(TableColumnModelEvent event) { schedule(); }
           public void columnRemoved(TableColumnModelEvent event) { schedule(); }
-          public void columnMoved(TableColumnModelEvent event) { if (event.getFromIndex() != event.getToIndex()) schedule(); }
-          public void columnMarginChanged(ChangeEvent event) { schedule(); }
+          public void columnMoved(TableColumnModelEvent event) {
+            if (event.getFromIndex() == event.getToIndex()) return;
+            if (!applying && Boolean.TRUE.equals(table.getClientProperty("wb.approved.traffic.columns")))
+              table.putClientProperty("wb.appearance.columns.restored", true);
+            schedule();
+          }
+          public void columnMarginChanged(ChangeEvent event) {
+            // A real header drag takes ownership immediately, before a layout or the save timer.
+            // Programmatic construction/style widths must remain eligible for the approved baseline.
+            if (!applying && Boolean.TRUE.equals(table.getClientProperty("wb.approved.traffic.columns"))
+                && table.getTableHeader() != null && table.getTableHeader().getResizingColumn() != null)
+              table.putClientProperty("wb.appearance.columns.restored", true);
+            schedule();
+          }
           public void columnSelectionChanged(ListSelectionEvent event) { }
         };
         table.getColumnModel().addColumnModelListener(listener); tables.put(table, listener);
-      } else if (restoreNew && state.columns.containsKey(key)) restoreColumns(table, state.columns.get(key));
+      } else if (restoreNew && state.columns.containsKey(key)) restoreSavedColumns(table, key);
       return;
     }
     if (component instanceof JSplitPane split) {
@@ -261,6 +278,10 @@ final class WorkspaceAppearance implements AutoCloseable {
     catch (RuntimeException error) { problem = "프로젝트 저장 상태를 확인하지 못했습니다. 화면 설정을 저장하지 않습니다."; changed.run(); return; }
     Map<String, Columns> columns = new HashMap<>(state.columns); Map<String, Double> ratios = new HashMap<>(state.ratios);
     for (JTable table : tables.keySet()) {
+      // The approved traffic owner has not received its first real viewport yet.
+      // Capturing here would turn a temporary construction width into a user profile.
+      if (Boolean.TRUE.equals(table.getClientProperty("wb.approved.columns.pending"))
+          && !Boolean.TRUE.equals(table.getClientProperty("wb.appearance.columns.restored"))) continue;
       String key = Objects.toString(table.getClientProperty("wb.appearance.id"), "");
       if (surfaceKey(key) && (columns.size() < MAX_SURFACES || columns.containsKey(key))) {
         Columns value = captureColumns(table); if (value != null) columns.put(key, value);
@@ -280,6 +301,24 @@ final class WorkspaceAppearance implements AutoCloseable {
     List<Integer> order = new ArrayList<>(), widths = new ArrayList<>();
     for (int i = 0; i < n; i++) { TableColumn column = table.getColumnModel().getColumn(i); order.add(column.getModelIndex()); widths.add(Math.max(24,Math.min(2000,column.getWidth()))); }
     return new Columns(signature(table), order, widths);
+  }
+  private void restoreSavedColumns(JTable table,String key) {
+    Columns saved=state.columns.get(key);
+    List<Integer> canonical=List.of(0,1,2,3,8,4,10);
+    if(state.scale==100&&!state.compact&&"wb.traffic.history".equals(table.getName())
+        &&Boolean.TRUE.equals(table.getClientProperty("wb.approved.traffic.columns"))
+        &&table.getModel().getColumnCount()==11&&table.getColumnCount()==7
+        &&saved!=null&&saved.signature.equals(signature(table))&&saved.order.equals(canonical)
+        &&saved.widths.equals(List.of(65,80,430,75,105,175,215))
+        &&table.getClientProperty("wb.approved.columns.reset") instanceof Runnable reset) {
+      Set<Integer> visible=new HashSet<>();for(int i=0;i<table.getColumnCount();i++)visible.add(table.getColumnModel().getColumn(i).getModelIndex());
+      if(visible.equals(new HashSet<>(canonical))){
+        Map<String,Columns> retained=new HashMap<>(state.columns);retained.remove(key);
+        state=new State(state.project,state.scale,state.compact,state.horizontal,retained,state.ratios);
+        table.putClientProperty("wb.appearance.columns.restored",false);table.putClientProperty("wb.approved.columns.pending",true);reset.run();return;
+      }
+    }
+    restoreColumns(table,saved);
   }
   private static void restoreColumns(JTable table, Columns columns) {
     if (columns == null || table.getColumnCount() != columns.order.size() || !signature(table).equals(columns.signature)) return;

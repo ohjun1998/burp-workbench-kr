@@ -1,0 +1,64 @@
+{
+  "version": "1.4.20",
+  "jarSha256": "be2ad66272f6039c64033cf19314d9bddacb503113fea00dd74cbcaaa87f0230",
+  "runtime": "Linux Xorg dummy / xfwm4 / Java17 / Robot screen capture",
+  "fixture": "Production Swing with synthetic Burp adapters; zero target HTTP",
+  "sets": [
+    {
+      "theme": "light",
+      "size": "1600x1000",
+      "screens": 27,
+      "controls": 466,
+      "scenarios": 100,
+      "clippedControlsOutsideScroll": 0,
+      "failedScenarios": 0
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "screens": 27,
+      "controls": 466,
+      "scenarios": 100,
+      "clippedControlsOutsideScroll": 0,
+      "failedScenarios": 0
+    },
+    {
+      "theme": "light",
+      "size": "1024x768",
+      "screens": 27,
+      "controls": 466,
+      "scenarios": 100,
+      "clippedControlsOutsideScroll": 0,
+      "failedScenarios": 0
+    },
+    {
+      "theme": "dark",
+      "size": "1600x1000",
+      "screens": 27,
+      "controls": 466,
+      "scenarios": 100,
+      "clippedControlsOutsideScroll": 0,
+      "failedScenarios": 0
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "screens": 27,
+      "controls": 466,
+      "scenarios": 100,
+      "clippedControlsOutsideScroll": 0,
+      "failedScenarios": 0
+    },
+    {
+      "theme": "dark",
+      "size": "1024x768",
+      "screens": 27,
+      "controls": 466,
+      "scenarios": 100,
+      "clippedControlsOutsideScroll": 0,
+      "failedScenarios": 0
+    }
+  ],
+  "result": "passed",
+  "limits": "No claim of native Windows Burp, external provider verification or zero pixel differences."
+}

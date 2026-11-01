@@ -40,6 +40,18 @@ final class ApprovedLayouts {
     JPanel dashboard=(JPanel)n(workspace,"wb.scope.dashboard.root");if(dashboard!=null)dashboard(dashboard);
     JPanel mapper=(JPanel)n(workspace,"fm.root");if(mapper!=null)mapper(mapper);
     decorate(workspace);
+    JPanel traffic=ancestor(n(workspace,"wb.traffic.account"),ApprovedTrafficPanel.class);if(traffic!=null)ApprovedReadingDesign.traffic(traffic);
+    if(auth!=null)ApprovedIdentityDesign.auth(auth);
+    if(bounty!=null)ApprovedEvidenceDesign.bounty(bounty);
+    if(js!=null)ApprovedReadingDesign.js(js);
+    if(environment!=null)ApprovedIdentityDesign.environment(environment);
+    if(response!=null)ApprovedReadingDesign.response(response);
+    if(exposure!=null)ApprovedResearchDesign.exposure(exposure);
+    if(activity!=null)ApprovedEvidenceDesign.activity(activity);
+    if(data!=null)ApprovedReadingDesign.data(data);
+    if(payload!=null)ApprovedPayloadDesign.install(payload);
+    if(dashboard!=null)ApprovedResearchDesign.dashboard(dashboard);
+    if(mapper!=null)ApprovedMapperDesign.install(mapper);
   }
   static JPanel ancestor(Component c,Class<?> type){for(Component at=c;at!=null;at=at.getParent())if(type.isInstance(at))return (JPanel)at;return null;}
   static void decorate(Component root){
@@ -158,10 +170,10 @@ final class ApprovedLayouts {
     JPanel search=panel(n(page,"wb.actions.environment.candidates"));search.setBorder(BorderFactory.createEmptyBorder(9,11,10,11));search.setPreferredSize(new Dimension(0,50));
     widths(controller.pathTable,new int[]{0,1,3},new String[]{"경로","발견 근거","확인 상태"},354,200,170);
     JPanel inspector=panel(n(page,"wb.flow.environment.inspector"));inspector.putClientProperty("wb.card",true);inspector.putClientProperty("wb.surface",true);inspector.setBorder(ApprovedUi.CARD_BORDER);((BorderLayout)inspector.getLayout()).setVgap(0);
-    JPanel execution=panel(n(page,"wb.placement.environment.execution"));execution.setPreferredSize(new Dimension(0,126));Component title=region(execution,BorderLayout.NORTH);if(title!=null)title.setPreferredSize(new Dimension(0,39));
+    JPanel execution=panel(n(page,"wb.placement.environment.execution"));execution.setPreferredSize(new Dimension(0,133));Component title=region(execution,BorderLayout.NORTH);if(title!=null)title.setPreferredSize(new Dimension(0,39));
     JPanel actions=panel(n(page,"wb.actions.environment.execution"));for(Component c:actions.getComponents())if(c instanceof AbstractButton b){b.putClientProperty("wb.font.size",11);b.putClientProperty("wb.compact.button",true);}JPanel metadata=new JPanel(new BorderLayout());JLabel status=new JLabel(),who=new JLabel();ApprovedUi.chip(status);who.putClientProperty("wb.font.size",11);who.putClientProperty("wb.secondary",true);metadata.add(status,BorderLayout.WEST);metadata.add(who,BorderLayout.EAST);execution.add(metadata);
-    ApprovedUi.layout(execution,p->{at(title,0,0,p.getWidth(),39);at(actions,0,39,p.getWidth(),46);at(metadata,14,92,p.getWidth()-28,22);});
-    ApprovedUi.layout(actions,p->{at(p.getComponent(0),14,12,120,31);int count=p.getComponentCount();if(count>1)at(p.getComponent(1),p.getWidth()-162,12,80,31);if(count>2)at(p.getComponent(2),p.getWidth()-72,12,60,31);});
+    ApprovedUi.layout(execution,p->{at(title,0,0,p.getWidth(),39);at(actions,0,39,p.getWidth(),46);at(metadata,14,98,p.getWidth()-28,22);});
+    ApprovedUi.layout(actions,p->{at(p.getComponent(0),14,14,120,31);int count=p.getComponentCount();if(count>1)at(p.getComponent(1),p.getWidth()-162,14,80,31);if(count>2)at(p.getComponent(2),p.getWidth()-72,14,60,31);});
     Runnable selection=()->{int row=controller.pathTable.getSelectedRow();if(row>=controller.pathTable.getRowCount())row=-1;String state=row<0?"미선택":String.valueOf(controller.pathTable.getModel().getValueAt(controller.pathTable.convertRowIndexToModel(row),3));status.setText(state);who.setText("GET · "+java.util.Objects.toString(controller.account.getSelectedItem(),"비로그인"));};controller.pathTable.getSelectionModel().addListSelectionListener(e->selection.run());controller.account.addActionListener(e->selection.run());controller.paths.addTableModelListener(e->selection.run());selection.run();
     JTabbedPane messages=(JTabbedPane)n(page,"wb.environment.messages");externalTabs(messages,inspector,BorderLayout.CENTER,34);
     java.util.List<AbstractButton> packetCommands=new java.util.ArrayList<>();for(int i=0;i<2;i++){Component area=i==0?controller.responseView:controller.requestView;Container packet=area.getParent();while(packet!=null&&region(packet,BorderLayout.NORTH)==null)packet=packet.getParent();if(packet!=null){Component packetHeader=region(packet,BorderLayout.NORTH);if(i==0)for(Component c:all(packetHeader))if(c instanceof AbstractButton b){b.setName(b.getText().equals("Raw")?"wb.environment.packet.raw":b.getText().equals("JSON")?"wb.environment.packet.pretty":"wb.environment.packet.evidence");packetCommands.add(b);}packetHeader.setVisible(false);}}

@@ -46,11 +46,13 @@ final class WorkbenchSkin {
     button.setBorder(Boolean.TRUE.equals(button.getClientProperty("wb.compact.button"))
         ? BorderFactory.createEmptyBorder(5, 9, 5, 9)
         : BorderFactory.createEmptyBorder(4, 10, 4, 10));
+    if(button.getClientProperty("wb.approved.button.insets") instanceof Insets insets)button.setBorder(BorderFactory.createEmptyBorder(insets.top,insets.left,insets.bottom,insets.right));
   }
 
   private static final class ButtonUi extends BasicButtonUI {
     @Override public void update(Graphics graphics, JComponent component) { paint(graphics, component); }
     @Override public Dimension getPreferredSize(JComponent component) {
+      if(Boolean.TRUE.equals(component.getClientProperty("wb.approved.disclosure"))){Dimension size=super.getPreferredSize(component);return new Dimension(size.width+12,36);}
       if (Boolean.TRUE.equals(component.getClientProperty("wb.capture")))
         return new Dimension(132, 34);
       if(Boolean.TRUE.equals(component.getClientProperty("wb.approved.analysis")))return new Dimension("wb.auth.detect".equals(component.getName())?96:56,22);
@@ -81,7 +83,15 @@ final class WorkbenchSkin {
           if (button.getModel().isPressed()) fill = primary?kr.packetui.VisualTheme.primary().darker():WorkbenchUi.selected();
         }
         boolean segment=Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"));
-        if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.selected():WorkbenchUi.background());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
+        if(Boolean.TRUE.equals(button.getClientProperty("wb.approved.disclosure"))){
+          g.setColor(WorkbenchUi.surface());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,14,14);
+          g.setColor(button.hasFocus()?WorkbenchUi.accent():WorkbenchUi.line());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,14,14);
+          g.setColor(kr.packetui.VisualTheme.muted());Object pointSize=button.getClientProperty("wb.font.size");g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(pointSize instanceof Number n?n.floatValue():11f)));
+          String caption=button.getText()==null?"":button.getText().replaceFirst("^[▸▾▶▼]\\s*","").replaceFirst("\\s*[▾▸⌄⌃]$","");
+          Shape clip=g.getClip();g.clipRect(12,0,Math.max(0,button.getWidth()-35),button.getHeight());g.drawString(caption,12,(button.getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());g.setClip(clip);
+          int x=button.getWidth()-16,y=button.getHeight()/2;g.setStroke(new BasicStroke(1.2f,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));g.drawPolyline(new int[]{x-3,x,x+3},button.isSelected()?new int[]{y+1,y-2,y+1}:new int[]{y-1,y+2,y-1},3);g.dispose();return;
+        }
+        if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.selected():Boolean.TRUE.equals(button.getClientProperty("wb.approved.filter.surface"))?WorkbenchUi.surface():button.getParent()==null?WorkbenchUi.background():button.getParent().getBackground());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
         if(!segment||button.getModel().isRollover()||button.getModel().isPressed()) {
           g.setPaint(primary&&!button.getModel().isPressed()?new GradientPaint(0,0,kr.packetui.VisualTheme.primary(),0,button.getHeight(),kr.packetui.VisualTheme.primary()):new GradientPaint(0,0,fill,0,button.getHeight(),fill));
           g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
@@ -94,6 +104,10 @@ final class WorkbenchSkin {
       }
       g.dispose();
     }
+    @Override protected void paintText(Graphics graphics,AbstractButton button,Rectangle bounds,String text){
+      Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setFont(button.getFont());g.setColor(button.isEnabled()?button.getForeground():kr.packetui.VisualTheme.muted());
+      BasicGraphicsUtils.drawStringUnderlineCharAt(g,text,button.getDisplayedMnemonicIndex(),bounds.x,bounds.y+g.getFontMetrics().getAscent());g.dispose();
+    }
     @Override protected void paintFocus(Graphics g, AbstractButton b, Rectangle view, Rectangle text, Rectangle icon) {}
   }
 
@@ -103,9 +117,11 @@ final class WorkbenchSkin {
   }
   /** Keeps the detached popup list and editable child on the local palette as well as the outer box. */
   static class ComboUi extends BasicComboBoxUI {
+    @Override protected void installDefaults(){super.installDefaults();squareButton=false;padding=new Insets(0,0,0,0);}
     void refreshPalette(){
       if(listBox!=null){listBox.setBackground(WorkbenchUi.surface());listBox.setForeground(WorkbenchUi.ink());listBox.setSelectionBackground(WorkbenchUi.selected());listBox.setSelectionForeground(WorkbenchUi.ink());}
-      if(editor!=null){editor.setBackground(WorkbenchUi.surface());editor.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());if(editor instanceof javax.swing.text.JTextComponent text){text.setCaretColor(WorkbenchUi.ink());text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());}}
+      if(arrowButton!=null)arrowButton.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());
+      if(editor!=null){editor.setBackground(WorkbenchUi.surface());editor.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());if(editor instanceof JTextField field)ApprovedInputs.text(field);if(editor instanceof javax.swing.text.JTextComponent text){text.setCaretColor(WorkbenchUi.ink());text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());}}
     }
     @Override protected void configureEditor(){super.configureEditor();refreshPalette();}
     @Override protected ComboPopup createPopup(){return new BasicComboPopup(comboBox){@Override public void show(){refreshPalette();super.show();}};}
@@ -116,14 +132,20 @@ final class WorkbenchSkin {
       Component value=comboBox.getRenderer().getListCellRendererComponent(listBox,comboBox.getSelectedItem(),-1,selected,false);
       value.setFont(comboBox.getFont());value.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());value.setBackground(selected?WorkbenchUi.selected():comboBox.getBackground());
       Insets in=padding==null?new Insets(0,0,0,0):padding;
+      if(value instanceof JComponent component)component.setBorder(ApprovedInputs.INNER);
       currentValuePane.paintComponent(graphics,value,comboBox,bounds.x+in.left,bounds.y+in.top,Math.max(0,bounds.width-in.left-in.right),Math.max(0,bounds.height-in.top-in.bottom),value instanceof JPanel);
     }
-    @Override public Dimension getPreferredSize(JComponent component){Dimension size=super.getPreferredSize(component);return new Dimension(size.width,Math.max(32,size.height));}
+    @Override public Dimension getPreferredSize(JComponent component){Dimension size=super.getPreferredSize(component);return new Dimension(size.width,Math.max(31,size.height));}
     @Override protected JButton createArrowButton(){JButton arrow=new JButton(){protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setColor(WorkbenchUi.ink());g.setStroke(new BasicStroke(1.3f));int x=getWidth()/2,y=getHeight()/2;g.drawPolyline(new int[]{x-4,x,x+4},new int[]{y-2,y+2,y-2},3);g.dispose();}};arrow.putClientProperty("wb.nativeEditor",true);arrow.setBorder(null);arrow.setPreferredSize(new Dimension(25,30));return arrow;}
   }
   static void scroll(JScrollBar bar) {
     if(!(bar.getUI() instanceof ScrollUi))bar.setUI(new ScrollUi());
     bar.setUnitIncrement(18);bar.setPreferredSize(bar.getOrientation()==JScrollBar.VERTICAL?new Dimension(10,0):new Dimension(0,10));
+  }
+  static void separator(JSeparator separator){if(!(separator.getUI() instanceof SeparatorUi))separator.setUI(new SeparatorUi());separator.setOpaque(false);}
+  private static final class SeparatorUi extends BasicSeparatorUI {
+    @Override public void paint(Graphics graphics,JComponent component){graphics.setColor(WorkbenchUi.line());if(((JSeparator)component).getOrientation()==SwingConstants.VERTICAL)graphics.drawLine(0,0,0,component.getHeight()-1);else graphics.drawLine(0,0,component.getWidth()-1,0);}
+    @Override public Dimension getPreferredSize(JComponent component){return ((JSeparator)component).getOrientation()==SwingConstants.VERTICAL?new Dimension(1,0):new Dimension(0,1);}
   }
   private static final class ScrollUi extends BasicScrollBarUI {
     @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=kr.packetui.VisualTheme.thumb();}
@@ -173,7 +195,7 @@ final class WorkbenchSkin {
       BasicSplitPaneDivider divider = new BasicSplitPaneDivider(this) {
         @Override public void paint(Graphics graphics) {
           Graphics2D g = (Graphics2D) graphics.create();
-          g.setColor(WorkbenchUi.background()); g.fillRect(0, 0, getWidth(), getHeight());
+          g.setColor(Boolean.TRUE.equals(splitPane.getClientProperty("wb.approved.surface.divider"))?WorkbenchUi.surface():WorkbenchUi.background()); g.fillRect(0, 0, getWidth(), getHeight());
           if(Boolean.TRUE.equals(splitPane.getClientProperty("wb.workflow.fixedLayout"))){g.dispose();return;}
           g.setColor(WorkbenchUi.line());
           if (splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT)
@@ -230,6 +252,7 @@ final class WorkbenchSkin {
   }
 
   private static final class TabsUi extends BasicTabbedPaneUI {
+    @Override protected void paintTab(Graphics graphics,int placement,Rectangle[] rectangles,int index,Rectangle icon,Rectangle text){Rectangle bounds=rectangles[index];graphics.setColor(index==tabPane.getSelectedIndex()?WorkbenchUi.selected():WorkbenchUi.surface());graphics.fillRoundRect(bounds.x+2,bounds.y+2,bounds.width-4,bounds.height-4,7,7);super.paintTab(graphics,placement,rectangles,index,icon,text);}
     protected Insets getTabInsets(int placement,int index){return new Insets(6,10,6,10);}
     protected void paintText(Graphics g,int placement,Font font,FontMetrics metrics,int index,String title,Rectangle rect,boolean selected){g.setFont(font.deriveFont(selected?Font.BOLD:Font.PLAIN));g.setColor(selected?WorkbenchUi.accent():WorkbenchUi.ink());g.drawString(title,rect.x,rect.y+metrics.getAscent());}
     protected Insets getContentBorderInsets(int placement){return new Insets(1,0,0,0);}
@@ -237,9 +260,7 @@ final class WorkbenchSkin {
       detachTabViewport((JTabbedPane)component);
       super.uninstallUI(component);
     }
-    @Override protected void paintTabBackground(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
-      graphics.setColor(selected?WorkbenchUi.selected():WorkbenchUi.surface());graphics.fillRoundRect(x+2,y+2,width-4,height-4,7,7);
-    }
+    @Override protected void paintTabBackground(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {}
     @Override protected void paintTabBorder(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
       if(tabPane.hasFocus()&&selected){graphics.setColor(WorkbenchUi.accent());graphics.drawRoundRect(x+2,y+2,width-5,height-5,7,7);}
     }

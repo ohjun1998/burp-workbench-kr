@@ -1,0 +1,13 @@
+{
+  "result": "passed",
+  "checks": [
+    "43 original feature IDs,135 observations and embedded data preserved; URL hidden by default",
+    "Feature selection: balance13/admin6/input variant2; original URL available on disclosure",
+    "All135 observations and Korean alias search across4 merchant observations",
+    "All three layouts work; dark and light screenshots captured",
+    "No body overflow at1480/1024/390px; mobile screenshot captured"
+  ],
+  "javascriptErrors": [],
+  "networkAttempts": [],
+  "sourceDataUnchanged": true
+}

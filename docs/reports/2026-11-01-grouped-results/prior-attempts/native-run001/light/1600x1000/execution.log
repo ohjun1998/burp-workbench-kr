@@ -1,0 +1,16 @@
+PASS Production root remains displayed for traffic
+PASS Traffic exposes A grouping through its retained collection settings menu
+PASS Traffic A-group display uses the original asynchronous query engine
+PASS Traffic group caption shows a short function label
+PASS Traffic group expansion exposes every original member
+PASS Traffic group collapse restores its compact view
+PASS Traffic grouping retains its existing model and column objects
+PASS Production root remains displayed for mapper
+java.lang.AssertionError: Embedded Mapper retains original feature leaves inside the Workbench
+	at kr.workbench.WorkbenchTest.check(WorkbenchTest.java:59)
+	at kr.workbench.GroupedToolsNavigationNative.verifyMapper(GroupedToolsNavigationNative.java:74)
+	at kr.workbench.GroupedToolsNavigationNative.main(GroupedToolsNavigationNative.java:157)
+java.lang.AssertionError: Embedded Mapper retains original feature leaves inside the Workbench
+	at kr.workbench.WorkbenchTest.check(WorkbenchTest.java:59)
+	at kr.workbench.GroupedToolsNavigationNative.verifyMapper(GroupedToolsNavigationNative.java:74)
+	at kr.workbench.GroupedToolsNavigationNative.main(GroupedToolsNavigationNative.java:157)

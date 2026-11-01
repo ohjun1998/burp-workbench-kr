@@ -508,7 +508,11 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
 
   JPanel candidatePane() {
     JPanel p = new JPanel(new BorderLayout(0, 4));
-    p.add(new JScrollPane(pathTable));
+    pathTable.getColumnModel().getColumn(0).setHeaderValue("기능·경로");
+    p.add(GroupedResults.attach(new JScrollPane(pathTable),"wb.environment.paths.grouped",row->{
+      if(row<0||row>=paths.getRowCount())return null;
+      String url=Objects.toString(paths.getValueAt(row,0),"");return ResultLabels.pathItem(url,url);
+    },0));
     return p;
   }
 
@@ -649,7 +653,12 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
     for(var e:project.history)model.addRow(new Object[]{clock.format(java.time.Instant.ofEpochMilli(e.time())),accountName(e.account()),e.status(),EnvironmentContent.title(e.kind()),e.change(),e.url()});
     JTable table=new JTable(model);table.setAutoCreateRowSorter(true);table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     int[] widths={125,110,65,140,100,400};for(int i=0;i<widths.length;i++)table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
-    JPanel body=new JPanel(new BorderLayout());body.add(new JScrollPane(table));body.setPreferredSize(new Dimension(900,500));return body;
+    table.setName("wb.environment.changes");table.getColumnModel().getColumn(5).setHeaderValue("기능·경로");
+    JPanel body=new JPanel(new BorderLayout());body.add(GroupedResults.attach(new JScrollPane(table),"wb.environment.changes.grouped",row->{
+      if(row<0||row>=model.getRowCount())return null;
+      String url=Objects.toString(model.getValueAt(row,5),"");
+      return ResultLabels.pathItem(model.getValueAt(row,0)+"|"+model.getValueAt(row,1)+"|"+url+"|"+row,url);
+    },5));body.setPreferredSize(new Dimension(900,500));return body;
   }
 
   EnvironmentProject projectSnapshot(){

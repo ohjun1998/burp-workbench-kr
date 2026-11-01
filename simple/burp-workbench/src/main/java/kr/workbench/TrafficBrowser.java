@@ -231,7 +231,8 @@ final class TrafficBrowser implements AutoCloseable {
       if(prefix!=null){String wire=HttpText.decode(prefix,null);boolean complete=wire.contains("\r\n\r\n")||wire.contains("\n\n");String header=wire.split("\\r?\\n\\r?\\n",2)[0];identity=complete?sessionKey(header):"unresolved:"+ref.id();if(complete)who=label(header,ref.url(),profiles);}
       if(!who.equals("미매핑"))labels.put(row,who);
       if(!predicate.matchesFields(ref.method(),ref.responseStatus(),who))continue;
-      boolean found=predicate.matchesText(ref.method()+" "+ref.url()+" "+ref.responseStatus(),cancelled);
+      boolean found=predicate.matchesText(ref.method()+" "+ref.url()+" "+ref.responseStatus(),cancelled)
+          ||predicate.matchesText(ResultLabels.shortName(ref.url()),cancelled);
       if(!found&&q.range()>0){
         String request=HttpText.decode(ref.requestPrefix(SEARCH_BYTES),null);if(ref.requestLength()>SEARCH_BYTES)partial++;
         found=predicate.matchesText(request,cancelled);
@@ -273,7 +274,13 @@ final class TrafficBrowser implements AutoCloseable {
     var ref=store.get().ref(row);Mark mark=marks.getOrDefault(ref.id(),new Mark(false,""));View v=view;Group g=v==null?null:v.groups().get(row);
     return switch(column){case 7->mark.star()?"★":"☆";case 8->v==null?"미매핑":v.accounts().getOrDefault(row,"미매핑");case 9->g==null?1:g.members().size();case 10->mark.note();default->"";};
   }
-  String displayUrl(int raw,String original){View v=view;Group g=v==null?null:v.groups().get(raw);return g!=null&&g.members().size()>1?(expanded.contains(g.key())?"▾ ":"▸ ")+g.path():original;}
+  String displayUrl(int raw,String original){
+    View v=view;Group g=v==null?null:v.groups().get(raw);
+    String label=simpleView?ResultLabels.shortName(original):original;
+    if(g!=null&&g.members().size()>1)
+      return (expanded.contains(g.key())?"▾ ":"▸ ")+(simpleView?ResultLabels.shortName(g.path())+" · "+g.members().size()+"건":g.path());
+    return label;
+  }
   void toggleStar(int raw){ensureProjectState();var ref=store.get().ref(raw);setStars(new int[]{raw},!marks.getOrDefault(ref.id(),new Mark(false,"")).star());}
   void setSelectedStars(boolean value){ensureProjectState();int[] selected=table.getSelectedRows();if(selected.length==0)throw new IllegalArgumentException("중요 표시를 변경할 요청을 선택하세요.");if(selected.length>MAX_MARK_SELECTION)throw new IllegalArgumentException("한 번에 "+MAX_MARK_SELECTION+"건까지 중요 표시를 변경할 수 있습니다.");int[] rows=Arrays.stream(selected).map(table::convertRowIndexToModel).toArray();setStars(rows,value);}
   void setStars(int[] rows,boolean value){
@@ -334,6 +341,10 @@ final class TrafficBrowser implements AutoCloseable {
   JPanel conditionBar(){return conditionBar;}
   /** Saved-filter management belongs in search settings, leaving the running list compact. */
   void useSimpleView(){simpleView=true;presetControls.setVisible(false);refreshRecoveryControls();}
+  void groupedView(boolean selected){
+    ensureProjectState();TrafficQuery q=query;
+    commitQuery(new TrafficQuery(q.method(),q.status(),q.range(),q.sensitive(),q.regex(),selected,q.normalize(),q.important(),q.memo(),q.account(),q.minutes()),projectIdentity);
+  }
   SearchPosition capturePosition(){ensureProjectState();return new SearchPosition(query,search.getText(),projectIdentity);}
   void restorePosition(SearchPosition position){
     Objects.requireNonNull(position);requireProject(position.project());

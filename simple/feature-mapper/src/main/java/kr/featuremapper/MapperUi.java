@@ -157,22 +157,28 @@ final class MapperUi {
     private String caption="",count="";private boolean active,child;
     FeatureRenderer(){setOpaque(false);putClientProperty("html.disable",true);}
     public Component getTreeCellRendererComponent(JTree tree,Object value,boolean active,boolean expanded,boolean leaf,int row,boolean focus){
-      String original=String.valueOf(value),text=original;int packets=0;this.active=active;this.child=leaf;
+      String text=String.valueOf(value),context=text;this.active=active;this.child=leaf;count="";
       if(value instanceof javax.swing.tree.DefaultMutableTreeNode node){
-        if(node.getUserObject() instanceof FeatureMapperWorkspace.FeatureNode){text=original.replaceFirst("^[^/]+ / ","").replaceFirst(" · /[^\\[]*", " ").replaceFirst(" \\[.*$","").strip();packets=packets(original);}
-        else {if(original.contains(" / "))text=original.split(" / ",2)[1];packets=node.getChildCount();}
+        if(node.getUserObject() instanceof FeatureMapperWorkspace.FeatureNode feature){
+          text=feature.label();count=feature.packets()+"건";context=text+" · "+count+" · "+feature.state();
+        } else if(node.getUserObject() instanceof FeatureMapperWorkspace.GroupNode group){
+          text=group.label();count=group.features()+"개";context=text+" · "+count;
+        } else if(node.getUserObject() instanceof FeatureMapperWorkspace.AllFeaturesNode all){
+          text=all.toString();count=all.packets()+"건";context=text+" · "+count;
+        }
       }
-      caption=text;count=Integer.toString(packets);setToolTipText(original);getAccessibleContext().setAccessibleName(original);
+      caption=text;setToolTipText(context);getAccessibleContext().setAccessibleName(context);
       int depth=tree.getPathForRow(row)==null?2:tree.getPathForRow(row).getPathCount();setPreferredSize(new Dimension(Math.max(90,tree.getWidth()-(depth-1)*20-20),40));return this;
     }
     protected void paintComponent(Graphics graphics){
       Graphics2D g=(Graphics2D)graphics.create();kr.packetui.VisualTheme.smooth(g);g.setFont(font().deriveFont(11f));int countWidth=g.getFontMetrics().stringWidth(count),captionX=child?0:12,available=Math.max(0,getWidth()-countWidth-20-captionX);
-      Color countInk=active?accent():ink();g.setColor(new Color(countInk.getRed(),countInk.getGreen(),countInk.getBlue(),child?129:153));g.drawString(count,Math.max(0,getWidth()-countWidth-12),(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());
+      Color countInk=active?accent():ink();int countX=Math.max(0,getWidth()-countWidth-12);
+      if(child&&!count.isEmpty()){g.setColor(active?surface():background());g.fillRoundRect(countX-5,(getHeight()-20)/2,countWidth+10,20,7,7);}
+      g.setColor(new Color(countInk.getRed(),countInk.getGreen(),countInk.getBlue(),child?180:153));g.drawString(count,countX,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());
       g.setFont(font().deriveFont(active?Font.BOLD:Font.PLAIN,12f));g.setColor(active?accent():child?new Color(ink().getRed(),ink().getGreen(),ink().getBlue(),214):ink());
       String visible=caption;FontMetrics metrics=g.getFontMetrics();if(metrics.stringWidth(visible)>available){while(!visible.isEmpty()&&metrics.stringWidth(visible+"…")>available)visible=visible.substring(0,visible.offsetByCodePoints(visible.length(),-1));visible=visible.isEmpty()?"":visible+"…";}
       g.drawString(visible,captionX,(getHeight()-metrics.getHeight())/2+metrics.getAscent());g.dispose();
     }
-    private static int packets(String original){var found=java.util.regex.Pattern.compile("\\[([0-9]+)건").matcher(original);if(!found.find())return 0;try{return Integer.parseInt(found.group(1));}catch(NumberFormatException ignored){return 0;}}
   }
   /** Keeps the canonical context text and tooltip, while presenting its live title and counts separately. */
   private static final class ContextUi extends javax.swing.plaf.basic.BasicLabelUI {
@@ -206,7 +212,7 @@ final class MapperUi {
     public void paintIcon(Component c,Graphics graphics,int x,int y){Graphics2D g=(Graphics2D)graphics.create();g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);if(leaf){g.setColor(ink());g.drawRoundRect(x+5,y+3,11,16,2,2);g.drawLine(x+8,y+8,x+13,y+8);}else{g.setColor(new Color(246,147,46));g.fillRoundRect(x+2,y+5,18,14,3,3);g.fillRoundRect(x+3,y+3,8,6,2,2);g.setColor(new Color(255,185,79));g.fillRoundRect(x+2,y+9,18,10,3,3);}g.dispose();}
   }
   static final class Search extends JTextField {
-    Search(){super(16);setToolTipText("URL, 메서드, 매핑 내용 검색");}
-    protected void paintComponent(Graphics graphics){super.paintComponent(graphics);Graphics2D g=(Graphics2D)graphics.create();kr.packetui.VisualTheme.smooth(g);g.setColor(kr.packetui.VisualTheme.muted());g.setStroke(new BasicStroke(1.2f));int y=getHeight()/2;g.drawOval(12,y-5,7,7);g.drawLine(18,y+1,22,y+5);if(getText().isEmpty()&&!hasFocus()){g.setFont(getFont());g.drawString("URL · 메서드 · 매핑으로 검색",30,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());}g.dispose();}
+    Search(){super(16);setToolTipText("기능명 · URL · 메서드 검색");}
+    protected void paintComponent(Graphics graphics){super.paintComponent(graphics);Graphics2D g=(Graphics2D)graphics.create();kr.packetui.VisualTheme.smooth(g);g.setColor(kr.packetui.VisualTheme.muted());g.setStroke(new BasicStroke(1.2f));int y=getHeight()/2;g.drawOval(12,y-5,7,7);g.drawLine(18,y+1,22,y+5);if(getText().isEmpty()&&!hasFocus()){g.setFont(getFont());g.drawString("기능명 · URL · 메서드 검색",30,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());}g.dispose();}
   }
 }

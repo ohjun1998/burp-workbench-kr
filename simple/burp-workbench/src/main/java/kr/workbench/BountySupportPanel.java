@@ -446,7 +446,10 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     JLabel selectedStep=new JLabel("단계를 선택하면 요청·응답을 표시합니다.");selectedStep.setName("wb.bounty.flow.selected");selectedStep.putClientProperty("html.disable",true);
     JPanel selectedResult=new JPanel(new BorderLayout(0,6));selectedResult.add(selectedStep,BorderLayout.NORTH);selectedResult.add(flowPacketTabs);
     selectedResult.setBorder(BorderFactory.createEmptyBorder(6,10,6,10));
-    JPanel resultList=new JPanel(new BorderLayout());resultList.add(resultActions,BorderLayout.NORTH);resultList.add(new JScrollPane(flowTable));
+    JPanel resultList=new JPanel(new BorderLayout());resultList.add(resultActions,BorderLayout.NORTH);
+    resultList.add(GroupedResults.attach(new JScrollPane(flowTable),"wb.bounty.flow.grouped",row->
+        ResultLabels.pathItem("replay:"+flowModel.getValueAt(row,0)+"|"+flowModel.getValueAt(row,1)+"|"+flowModel.getValueAt(row,2),
+            Objects.toString(flowModel.getValueAt(row,2),"")),2));
     JSplitPane results =
         WorkbenchUi.split(
             JSplitPane.VERTICAL_SPLIT,
@@ -660,7 +663,14 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     JSplitPane detail=WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,reportCard,preview,.59);
     detail.setName("wb.bounty.evidence.detail");
     JPanel list=new JPanel(new BorderLayout(0,4));
-    JPanel listBody=new JPanel(new BorderLayout(0,4));listBody.add(new JScrollPane(evidenceTable));
+    JPanel listBody=new JPanel(new BorderLayout(0,4));
+    listBody.add(GroupedResults.attach(new JScrollPane(evidenceTable),"wb.bounty.evidence.grouped",row->{
+      String url=Objects.toString(evidenceModel.getValueAt(row,2),"");
+      String id=row<evidence.size()?evidence.get(row).evidenceId():"evidence:"+evidenceModel.getValueAt(row,0)+"|"+url+"|"+row;
+      var item=ResultLabels.pathItem(id,url);
+      String title=Objects.toString(evidenceModel.getValueAt(row,0),"");
+      return new GroupedResults.Item(id,item.groupKey(),item.groupLabel(),item.functionKey(),title.isBlank()?item.label():title,url);
+    },2));
     JPanel listHeader=new JPanel(new BorderLayout(0,4));
     evidenceListTitle.putClientProperty("wb.font.heading",true);
     JPanel addActions = CompactWorkbenchUi.toolbar(evidenceListTitle, WorkbenchUi.row(addEvidence));
@@ -1564,7 +1574,10 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     top.add(address);
     top.add(new JLabel("Pro Collaborator 연계 · 대상 요청은 자동 전송하지 않음 · 콜백 자체는 취약점 확정 아님"));
     p.add(top, BorderLayout.NORTH);
-    p.add(new JScrollPane(oastTable));
+    p.add(GroupedResults.attach(new JScrollPane(oastTable),"wb.bounty.oast.grouped",row->{
+      String url=Objects.toString(oastModel.getValueAt(row,4),""),kind=Objects.toString(oastModel.getValueAt(row,1),"OAST");
+      return new GroupedResults.Item("oast:"+oastModel.getValueAt(row,0),"oast:"+kind,kind,url,ResultLabels.shortName(url),url);
+    },4));
     JPanel bottom = new JPanel(new BorderLayout());
     bottom.add(
         WorkbenchUi.card(

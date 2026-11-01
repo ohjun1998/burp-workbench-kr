@@ -1,0 +1,6 @@
+{
+  "status": "failed-harness",
+  "lookAndFeel": "metal",
+  "reason": "Initial Mapper tree assertion ran before the500ms production publication timer; corrected harness waits for worker and feature publication.",
+  "sourceChanged": false
+}

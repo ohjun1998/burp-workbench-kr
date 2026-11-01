@@ -1,0 +1,19 @@
+PASS Production root remains displayed for traffic
+PASS Traffic exposes A grouping through its retained collection settings menu
+PASS Traffic A-group display uses the original asynchronous query engine
+PASS Traffic group caption shows a short function label
+PASS Traffic group expansion exposes every original member
+PASS Traffic group collapse restores its compact view
+PASS Traffic grouping retains its existing model and column objects
+PASS Production root remains displayed for mapper
+PASS Embedded Mapper retains original feature leaves inside the Workbench
+PASS Embedded Mapper uses the retained visible request table
+PASS Embedded Mapper collapse survives the real workspace refresh
+PASS Embedded Mapper all-observations clears only the view selection
+PASS Production root remains displayed for js
+java.lang.NullPointerException: Cannot invoke "javax.swing.JTree.getModel()" because "<local4>" is null
+	at kr.workbench.GroupedToolsNavigationNative.verifyGroup(GroupedToolsNavigationNative.java:90)
+	at kr.workbench.GroupedToolsNavigationNative.main(GroupedToolsNavigationNative.java:161)
+java.lang.NullPointerException: Cannot invoke "javax.swing.JTree.getModel()" because "<local4>" is null
+	at kr.workbench.GroupedToolsNavigationNative.verifyGroup(GroupedToolsNavigationNative.java:90)
+	at kr.workbench.GroupedToolsNavigationNative.main(GroupedToolsNavigationNative.java:161)

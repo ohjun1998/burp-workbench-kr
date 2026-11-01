@@ -1,0 +1,107 @@
+{
+  "result": "passed",
+  "candidateStage": "responsive widths before final API projection",
+  "version": "1.4.22",
+  "jarSha256": "4ba797df9f6d6499ce164dfdbbb0701ceeddb70f6081c5f59f8bae3db2c1977a",
+  "checks": 1656,
+  "configurations": [
+    {
+      "lookAndFeel": "metal",
+      "theme": "light",
+      "windowSize": "1600x1000",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "metal",
+      "theme": "light",
+      "windowSize": "1280x800",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "metal",
+      "theme": "light",
+      "windowSize": "1024x768",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "metal",
+      "theme": "dark",
+      "windowSize": "1600x1000",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "metal",
+      "theme": "dark",
+      "windowSize": "1280x800",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "metal",
+      "theme": "dark",
+      "windowSize": "1024x768",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "nimbus",
+      "theme": "light",
+      "windowSize": "1600x1000",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "nimbus",
+      "theme": "light",
+      "windowSize": "1280x800",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "nimbus",
+      "theme": "light",
+      "windowSize": "1024x768",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "nimbus",
+      "theme": "dark",
+      "windowSize": "1600x1000",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "nimbus",
+      "theme": "dark",
+      "windowSize": "1280x800",
+      "checks": 138,
+      "captures": 13
+    },
+    {
+      "lookAndFeel": "nimbus",
+      "theme": "dark",
+      "windowSize": "1024x768",
+      "checks": 138,
+      "captures": 13
+    }
+  ],
+  "captureCount": 156,
+  "toolViews": 13,
+  "columnWidthGateExecuted": true,
+  "targetHttpRequests": 0,
+  "inspectionStarted": false,
+  "nativeSwing": true,
+  "nativeBurpGui": false,
+  "syntheticPackets": true,
+  "syntheticSnapshot": true,
+  "emptyResultFixtures": [
+    "auth",
+    "response.recon"
+  ],
+  "scope": "Displayed production Swing on isolated Linux Xorg: all13 tool views, physical grouped navigation, original metadata disclosure, retained model/column/sorter/ID/bytes, readable column widths. Synthetic metadata only; no native Burp/Windows/DPI claim."
+}

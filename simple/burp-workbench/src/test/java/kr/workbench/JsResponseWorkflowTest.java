@@ -26,6 +26,13 @@ public final class JsResponseWorkflowTest {
     if(root instanceof Container c)for(Component child:c.getComponents())if(contains(child,text))return true;
     return false;
   }
+  static JTable resultTable(Component component){
+    if(component instanceof JTable table)return table;
+    if(component instanceof Container parent)for(Component child:parent.getComponents()){
+      JTable table=resultTable(child);if(table!=null)return table;
+    }
+    return null;
+  }
   static void doubleClick(JTable table){
     table.setSize(900,300);
     table.dispatchEvent(new MouseEvent(table,MouseEvent.MOUSE_CLICKED,System.currentTimeMillis(),0,3,3,2,false,MouseEvent.BUTTON1));
@@ -83,7 +90,8 @@ public final class JsResponseWorkflowTest {
       panel.results.setSelectedIndex(1);doubleClick(panel.secretTable);
       verify(!panel.toRepeater.isEnabled()&&packetContent.get()!=null,"secret findings open packets without enabling a stale endpoint shortcut");
       for(int tab=2;tab<7;tab++){
-        var table=(JTable)((JScrollPane)panel.results.getComponentAt(tab)).getViewport().getView();
+        JTable table=resultTable(panel.results.getComponentAt(tab));
+        if(table==null)throw new AssertionError("Result tab has no retained table: "+tab);
         if(table.getRowCount()==0){var model=(DefaultTableModel)table.getModel();model.addRow(new Object[model.getColumnCount()]);}
         panel.results.setSelectedIndex(tab);int before=opened.get();doubleClick(table);
         verify(opened.get()==before+1,"double-click opens the source packet from result tab "+tab);

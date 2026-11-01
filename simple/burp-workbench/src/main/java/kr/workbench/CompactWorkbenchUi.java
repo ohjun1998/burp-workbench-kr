@@ -58,13 +58,15 @@ public final class CompactWorkbenchUi {
         @SuppressWarnings("unchecked")
         TableRowSorter<javax.swing.table.TableModel> sorter =
             (TableRowSorter<javax.swing.table.TableModel>) table.getRowSorter();
-        sorter.setRowFilter(query.isEmpty() ? null : new RowFilter<>() {
+        RowFilter<javax.swing.table.TableModel,Integer> filter=query.isEmpty() ? null : new RowFilter<>() {
           public boolean include(Entry<? extends javax.swing.table.TableModel, ? extends Integer> row) {
             for (int i = 0; i < row.getValueCount(); i++)
               if (row.getStringValue(i).toLowerCase(java.util.Locale.ROOT).contains(query)) return true;
             return false;
           }
-        });
+        };
+        table.putClientProperty("wb.search.filter",filter);
+        sorter.setRowFilter(filter);
       }
       public void insertUpdate(DocumentEvent e) { changed(); }
       public void removeUpdate(DocumentEvent e) { changed(); }

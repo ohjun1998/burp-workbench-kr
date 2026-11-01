@@ -143,7 +143,10 @@ final class ExposureResearchPanel extends JPanel implements AutoCloseable {
     exposureRemove.addActionListener(e->guard(this::removeExposure));more.addActionListener(e->menu.show(more,0,more.getHeight()));
     JPanel list=new JPanel(new BorderLayout(0,4));
     list.add(actions("wb.actions.exposure.search.list",new JLabel("가져온 URL · 실제 노출 미확인"),flow(namedButton("wb.exposure.search.import","URL 가져오기",this::importDialog),more)),BorderLayout.NORTH);
-    list.add(new JScrollPane(exposureTable));
+    list.add(GroupedResults.attach(new JScrollPane(exposureTable),"wb.exposure.search.grouped",row->{
+      String kind=Objects.toString(exposureModel.getValueAt(row,0),"노출 경로"),url=Objects.toString(exposureModel.getValueAt(row,1),"");
+      return new GroupedResults.Item("exposure:"+kind+"|"+url,"exposure:"+kind,kind,url,ResultLabels.shortName(url),url);
+    },1));
 
     exposureRepeater.setName("wb.exposure.search.repeater");exposureCopy.setName("wb.exposure.search.copy");
     exposureRepeater.addActionListener(e->guard(this::repeater));exposureCopy.addActionListener(e->guard(()->copy(exposureDetail.getText())));

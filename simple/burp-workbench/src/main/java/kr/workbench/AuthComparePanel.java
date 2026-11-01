@@ -674,7 +674,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     details.add(WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, packets,
         AuthLayout.card("판정 근거","", evidence,button("크게 보기",()->{WorkbenchUi.style(expandedEvidence);expandedEvidence.showRun(detailRun==null?current():detailRun);evidenceWindow.open();})), .70));
     JPanel historyCard = new JPanel(new BorderLayout(0,4));
-    historyCard.add(new JScrollPane(history));
+    historyCard.add(GroupedResults.attach(new JScrollPane(history), "wb.auth.history.grouped",
+        row -> ResultLabels.pathItem("auth:" + historyModel.getValueAt(row, 0),
+            Objects.toString(historyModel.getValueAt(row, 1), "")), 1));
     historyFilter.setName("wb.auth.history.filter"); historySearch.setName("wb.auth.history.search");
     historyVisible.setName("wb.auth.history.visible");
     historyFilter.addActionListener(event -> filterHistory());

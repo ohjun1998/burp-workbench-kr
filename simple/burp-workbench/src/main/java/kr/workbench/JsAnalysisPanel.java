@@ -24,6 +24,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
       secrets = model("시크릿 후보", "값 (가림)", "지문", "줄", "근거");
   final DefaultTableModel historyModel = model("출처 URL", "주요 경로", "민감한 정보", "분석 상태");
   final JTable historyTable = new JTable(historyModel);
+  private JComponent groupedHistory;
   final JTextField historySearch = new JTextField(12);
   final JButton historyPrevious = new JButton("이전 200개"), historyNext = new JButton("다음 200개");
   final JLabel historyPageLabel = new JLabel("200개씩 표시"), archiveUsage = new JLabel("디스크 이력 · 자동 삭제 없음");
@@ -40,7 +41,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final JTable urlTable = new JTable(endpoints){
     public String getToolTipText(MouseEvent event){int view=rowAtPoint(event.getPoint());if(current==null||view<0)return super.getToolTipText(event);var item=current.endpoints().get(convertRowIndexToModel(view));return "<html>"+item.url().replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")+"<br>"+JsFindingGroups.evidence(current,item).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\n","<br>")+"</html>";}
     @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer,int row,int column){
-      Component component=super.prepareRenderer(renderer,row,column);if(component instanceof JLabel label){int col=convertColumnIndexToModel(column);String value=Objects.toString(getValueAt(row,column),"");if(col==0){try{var uri=URI.create(value);if(uri.getHost()!=null)label.setText(uri.getRawPath());}catch(Exception ignored){}label.setToolTipText(value);}if(col==6){String source=JsVersions.base(currentSource);int slash=source.lastIndexOf('/');String file=slash>=0?source.substring(slash+1):source;label.putClientProperty("html.disable",Boolean.TRUE);label.setText(file+":"+value);label.setToolTipText("출처: "+source+":"+value);}if(col==7||col==8){WorkbenchUi.Tone tone=value.equals("실제 호출")||value.equals("동일")?WorkbenchUi.Tone.SUCCESS:value.contains("충돌")?WorkbenchUi.Tone.ERROR:value.equals("신규")||value.contains("발견")?WorkbenchUi.Tone.WARNING:WorkbenchUi.Tone.NEUTRAL;label.setForeground(WorkbenchUi.toneInk(tone));label.setToolTipText(value);}}return component;
+      Component component=super.prepareRenderer(renderer,row,column);if(component instanceof JLabel label){int col=convertColumnIndexToModel(column);String value=Objects.toString(getValueAt(row,column),"");if(col==0){label.setText(ResultLabels.shortName(value));label.setToolTipText(value);}if(col==6){String source=JsVersions.base(currentSource);int slash=source.lastIndexOf('/');String file=slash>=0?source.substring(slash+1):source;label.putClientProperty("html.disable",Boolean.TRUE);label.setText(file+":"+value);label.setToolTipText("출처: "+source+":"+value);}if(col==7||col==8){WorkbenchUi.Tone tone=value.equals("실제 호출")||value.equals("동일")?WorkbenchUi.Tone.SUCCESS:value.contains("충돌")?WorkbenchUi.Tone.ERROR:value.equals("신규")||value.contains("발견")?WorkbenchUi.Tone.WARNING:WorkbenchUi.Tone.NEUTRAL;label.setForeground(WorkbenchUi.toneInk(tone));label.setToolTipText(value);}}return component;
     }
   }, secretTable = new JTable(secrets);
   final JLabel status = new JLabel("분석 목록에서 응답을 선택하세요.");
@@ -210,7 +211,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     secretTable.setAutoCreateRowSorter(true);
     urlTable.setRowHeight(26);
     secretTable.setRowHeight(26);
-    results.addTab("주요 경로", new JScrollPane(urlTable));
+    urlTable.getColumnModel().getColumn(0).setHeaderValue("기능·경로");
+    results.addTab("주요 경로", GroupedResults.attach(new JScrollPane(urlTable),"wb.js.endpoints.grouped",this::endpointItem,0));
     results.addTab("민감한 정보", new JScrollPane(secretTable));
     for (var pair :
         new Object[][] {
@@ -222,7 +224,14 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
         }) {
       JTable t = new JTable((DefaultTableModel) pair[1]);
       t.setAutoCreateRowSorter(true);
-      results.addTab((String) pair[0], new JScrollPane(t));
+      DefaultTableModel model=(DefaultTableModel)pair[1];
+      JScrollPane scroll=new JScrollPane(t);
+      JComponent view=scroll;
+      if(model==domainModel)view=GroupedResults.attach(scroll,"wb.js.domains.grouped",this::domainItem);
+      else if(model==cloudModel)view=GroupedResults.attach(scroll,"wb.js.clouds.grouped",row->resourceItem(model,row,1,"clouds"),1);
+      else if(model==mapModel)view=GroupedResults.attach(scroll,"wb.js.maps.grouped",row->resourceItem(model,row,0,"maps"),0);
+      else if(model==recoveredModel)view=GroupedResults.attach(scroll,"wb.js.recovered.grouped",row->resourceItem(model,row,1,"recovered"),1);
+      results.addTab((String) pair[0], view);
     }
     historyTable.setAutoCreateRowSorter(true);
     historyTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -259,8 +268,8 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     add(workspace);
     for (int i=0;i<results.getTabCount();i++) {
       Component view=results.getComponentAt(i);
-      if (view instanceof JScrollPane pane && pane.getViewport().getView() instanceof JTable table)
-        bindPacketOpening(table);
+      JTable table=resultTable(view);
+      if(table!=null)bindPacketOpening(table);
     }
     bindPacketOpening(historyTable);
     JPanel footer = new JPanel(new BorderLayout());
@@ -492,7 +501,42 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     panel.add(TargetWindow.options(new JLabel("항목 선택: 분석 결과 보기 · 더블클릭: 발견 출처 패킷"),
         WorkbenchUi.row(new JLabel("검색"),historySearch,historyPrevious,historyNext,historyPageLabel),
         WorkbenchUi.row(protect,remove,settings),archiveUsage),BorderLayout.NORTH);
-    JScrollPane scroll=new JScrollPane(historyTable);scroll.setPreferredSize(new Dimension(740,330));panel.add(scroll);return panel;
+    if(groupedHistory==null){JScrollPane scroll=new JScrollPane(historyTable);scroll.setPreferredSize(new Dimension(740,330));groupedHistory=GroupedResults.attach(scroll,"wb.js.history.grouped",row->{if(row<0||row>=historyModel.getRowCount())return null;String source=Objects.toString(historyModel.getValueAt(row,0),"");return ResultLabels.pathItem(source,source);},0);}
+    panel.add(groupedHistory);return panel;
+  }
+
+  private GroupedResults.Item endpointItem(int row){
+    if(row<0||row>=endpoints.getRowCount())return null;
+    if(current==null||row>=current.endpoints().size())return ResultLabels.rowItem(endpoints,row,0);
+    JsAnalysis.Endpoint endpoint=current.endpoints().get(row);
+    String function=JsFindingGroups.key(endpoint);
+    var item=ResultLabels.pathItem(currentSource+"|"+function+"|site:"+endpoint.start()+":"+endpoint.length()+":"+endpoint.line()+":"+endpoint.kind()+"|row:"+row,endpoint.url());
+    return new GroupedResults.Item(item.rowId(),item.groupKey(),item.groupLabel(),function,item.label(),
+        "URL: "+endpoint.url()+"\n메서드: "+endpoint.method()+"\n출처: "+currentSource+"\n호출 위치: "+endpoint.line());
+  }
+
+  private GroupedResults.Item domainItem(int row){
+    if(row<0||row>=domainModel.getRowCount())return null;
+    String host=Objects.toString(domainModel.getValueAt(row,0),""),relation=Objects.toString(domainModel.getValueAt(row,1),"발견 호스트");
+    return new GroupedResults.Item(host,"domains:"+relation,relation,host,host,
+        "호스트: "+host+"\n출처 관계: "+relation+"\n클라우드: "+domainModel.getValueAt(row,2)+"\n줄: "+domainModel.getValueAt(row,3));
+  }
+
+  private GroupedResults.Item resourceItem(DefaultTableModel model,int row,int urlColumn,String kind){
+    if(row<0||row>=model.getRowCount())return null;
+    String url=Objects.toString(model.getValueAt(row,urlColumn),"");
+    String name=model==recoveredModel?Objects.toString(model.getValueAt(row,0),""):"";
+    var item=ResultLabels.pathItem(kind+"|"+url+"|"+name,url);
+    if(model==cloudModel){String provider=Objects.toString(model.getValueAt(row,0),"클라우드");return new GroupedResults.Item(item.rowId(),"cloud:"+provider,provider+" 리소스",url,item.label(),"서비스: "+provider+"\nURL: "+url);}
+    String title=model==recoveredModel?name:item.label();
+    return new GroupedResults.Item(item.rowId(),"source-maps","소스맵·복원 원본",url+"|"+name,title,
+        (name.isEmpty()?"":"원본 이름: "+name+"\n")+"map 출처: "+url);
+  }
+
+  private static JTable resultTable(Component component){
+    if(component instanceof JTable table)return table;
+    if(component instanceof Container container)for(Component child:container.getComponents()){JTable table=resultTable(child);if(table!=null)return table;}
+    return null;
   }
 
   private String selectedHistoryKey(){int row=historyTable.getSelectedRow();return row<0?"":Objects.toString(historyModel.getValueAt(historyTable.convertRowIndexToModel(row),0),"");}
@@ -1397,7 +1441,9 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     try {
       results.setSelectedIndex(f.tab());
       Component c = results.getComponentAt(f.tab());
-      if (c instanceof JScrollPane pane && pane.getViewport().getView() instanceof JTable table) {
+      JTable table=resultTable(c);
+      if (table!=null) {
+        GroupedResults.revealRow(table,f.row());
         int row = table.convertRowIndexToView(f.row());
         if (row >= 0) {
           table.setRowSelectionInterval(row, row);

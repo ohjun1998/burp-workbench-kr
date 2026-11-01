@@ -1,0 +1,29 @@
+{
+  "toolchain": "OpenJDK17.0.21+9",
+  "compilation": "--release17",
+  "test": "ScopeKatanaProxyTest",
+  "testSourceSha256": "e22da240b10d94c3e1ca9e83547c675ca64b53cfe31b79a664490b03d9860a99",
+  "serialRuns": [
+    {
+      "run": 1,
+      "result": "passed",
+      "checks": 49,
+      "finalConnectionOutcome": "ConnectException"
+    },
+    {
+      "run": 2,
+      "result": "passed",
+      "checks": 49,
+      "finalConnectionOutcome": "ConnectException"
+    },
+    {
+      "run": 3,
+      "result": "passed",
+      "checks": 49,
+      "finalConnectionOutcome": "ConnectException"
+    }
+  ],
+  "applicationProxySourceChanged": false,
+  "priorFailureDirectCause": "Unconfirmed: the failing run did not record local/remote socket endpoints.",
+  "deterministicProbe": "After closing a listener, explicitly binding a client to the same loopback source/destination port connects and echoes its own byte without any server; a distinct bound source gets ConnectException."
+}

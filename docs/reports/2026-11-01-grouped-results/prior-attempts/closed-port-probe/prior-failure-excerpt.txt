@@ -1,0 +1,9 @@
+PASS close terminates accepted idle sockets as well as the listener
+java.lang.AssertionError: closed proxy cannot accept a new crawler connection
+	at kr.workbench.WorkbenchTest.check(WorkbenchTest.java:59)
+	at kr.workbench.ScopeKatanaProxyTest.main(ScopeKatanaProxyTest.java:176)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at kr.workbench.TestLauncher.main(TestLauncher.java:4)

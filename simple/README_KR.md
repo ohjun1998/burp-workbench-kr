@@ -1,3 +1,9 @@
+# Workbench Simple 1.4.22
+
+승인한 **A 그룹형**을 Simple의 URL·경로 중심 결과 목록에 적용했습니다. 통합 점검·대시보드·기능 매핑과 각 분석 도구에서 업무별 접이식 그룹, 짧은 표시명과 건수로 결과를 살펴볼 수 있습니다. 요청·응답 목록은 수집 설정의 **A 그룹형으로 보기**로 전환합니다. 원본 URL은 선택 상세에서 확인하며, 검사 입력값·JSON 필드 경로·요청/응답 원문은 실제 값을 표시합니다.
+
+[설치 JAR](downloads/1.4.22/burp-workbench-simple-1.4.22.jar) · [독립 소스 ZIP](downloads/1.4.22/burp-workbench-simple-1.4.22-source.zip) · [변경 안내](docs/RELEASE_SIMPLE_1.4.22_KR.md) · [실제 화면·검증](../docs/reports/2026-11-01-grouped-results/REPORT_KR.md)
+
 # Workbench Simple 1.4.21
 
 왼쪽 최상단에 **통합 점검·대시보드**를 컴팩트 강조형 두 줄로 배치했습니다. 아래 도구 목록을 스크롤해도 두 항목은 보입니다. 통합 점검은 기존 준비 창을 열고, 대시보드는 기존 현재 실행 결과 화면을 엽니다. 메뉴를 누르는 동작만으로 점검을 시작하지 않습니다.

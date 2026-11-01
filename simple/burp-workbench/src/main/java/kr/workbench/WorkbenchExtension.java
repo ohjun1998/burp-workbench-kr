@@ -1509,7 +1509,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         0, (a, b) -> Long.compare(((Number) a).longValue(), ((Number) b).longValue()));
     filter.setName("wb.traffic.search");
     filter.setColumns(20);
-    filter.setToolTipText("메서드·URL·상태 검색 · Ctrl+F");
+    filter.setToolTipText("기능명·메서드·URL·상태 검색 · Ctrl+F");
     trafficBrowser=new TrafficBrowser(logTable,logModel,filter,api,()->trafficStore,this::refreshTrafficInfo);
     trafficBrowser.useSimpleView();
     trafficBrowser.onViewPublished(this::refreshSelectedSearchContext);
@@ -1582,6 +1582,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     captureSettings.addActionListener(e->scopeListButton.doClick());trafficSettingsMenu.add(captureSettings);
     JMenuItem searchSettings=new JMenuItem("검색·목록 설정");searchSettings.setName(trafficBrowser.settingsButton.getName());
     searchSettings.addActionListener(e->trafficBrowser.settingsButton.doClick());trafficSettingsMenu.add(searchSettings);
+    JCheckBoxMenuItem groupedView=new JCheckBoxMenuItem("A 그룹형으로 보기",trafficBrowser.query.group());
+    groupedView.setName("wb.traffic.grouped");
+    groupedView.addActionListener(e->trafficBrowser.groupedView(groupedView.isSelected()));
+    trafficSettingsMenu.add(groupedView);
+    trafficSettingsMenu.addPopupMenuListener(new javax.swing.event.PopupMenuListener(){
+      public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent e){groupedView.setSelected(trafficBrowser.query.group());}
+      public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent e){}
+      public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e){}
+    });
     trafficSettings.setComponentPopupMenu(trafficSettingsMenu);
     trafficSettings.addActionListener(e->trafficSettingsMenu.show(trafficSettings,0,trafficSettings.getHeight()));
     JPanel trafficContext=row(new JLabel("대상"),targetChoice,new JLabel("계정"),accountChoice,captureButton);

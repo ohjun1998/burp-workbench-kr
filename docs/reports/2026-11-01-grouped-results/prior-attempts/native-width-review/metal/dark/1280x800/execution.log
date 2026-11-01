@@ -1,0 +1,111 @@
+PASS Production root remains displayed for traffic
+PASS Traffic exposes A grouping through its retained collection settings menu
+PASS Traffic A-group display uses the original asynchronous query engine
+PASS Traffic group caption shows a short function label
+PASS Traffic group expansion exposes every original member
+PASS Traffic group collapse restores its compact view
+PASS Traffic grouping retains its existing model and column objects
+PASS Production root remains displayed for mapper
+PASS Embedded Mapper retains original feature leaves inside the Workbench
+PASS Embedded Mapper uses the retained visible request table
+PASS Embedded Mapper collapse survives the real workspace refresh
+PASS Embedded Mapper all-observations clears only the view selection
+PASS Production root remains displayed for js
+PASS js: grouped tree displayed without technical root
+PASS js: grouped view retains all-observations entry
+PASS js: group collapse survives model refresh
+PASS js: function selection filters the retained table
+PASS js: selection retains model and column objects
+PASS js: selected view row resolves original model row
+PASS js: displayed URL column uses short caption
+PASS js: selected original metadata remains available
+PASS js: all-observations restores prior visible row count
+PASS js: grouping retains the active sorter object
+PASS js: grouping leaves every source cell unchanged
+PASS Production root remains displayed for environment
+PASS environment: grouped tree displayed without technical root
+PASS environment: grouped view retains all-observations entry
+PASS environment: group collapse survives model refresh
+PASS environment: function selection filters the retained table
+PASS environment: selection retains model and column objects
+PASS environment: selected view row resolves original model row
+PASS environment: displayed URL column uses short caption
+PASS environment: selected original metadata remains available
+PASS environment: all-observations restores prior visible row count
+PASS environment: grouping retains the active sorter object
+PASS environment: grouping leaves every source cell unchanged
+PASS Production root remains displayed for exposure
+PASS exposure: grouped tree displayed without technical root
+PASS exposure: grouped view retains all-observations entry
+PASS exposure: group collapse survives model refresh
+PASS exposure: function selection filters the retained table
+PASS exposure: selection retains model and column objects
+PASS exposure: selected view row resolves original model row
+PASS exposure: displayed URL column uses short caption
+PASS exposure: selected original metadata remains available
+PASS exposure: all-observations restores prior visible row count
+PASS exposure: grouping retains the active sorter object
+PASS exposure: grouping leaves every source cell unchanged
+PASS Production root remains displayed for auth
+PASS auth: grouped tree displayed without technical root
+PASS auth: grouped view retains all-observations entry
+PASS auth: grouping leaves every source cell unchanged
+PASS Production root remains displayed for response.recon
+PASS response.recon: grouped tree displayed without technical root
+PASS response.recon: grouped view retains all-observations entry
+PASS response.recon: grouping leaves every source cell unchanged
+PASS Production root remains displayed for payload
+PASS Production root remains displayed for data
+PASS Production root remains displayed for activity
+PASS activity: grouped tree displayed without technical root
+PASS activity: grouped view retains all-observations entry
+PASS activity: group collapse survives model refresh
+PASS activity: function selection filters the retained table
+PASS activity: selection retains model and column objects
+PASS activity: selected view row resolves original model row
+PASS activity: displayed URL column uses short caption
+PASS activity: selected original metadata remains available
+PASS activity: all-observations restores prior visible row count
+PASS activity: grouping retains the active sorter object
+PASS activity: grouping leaves every source cell unchanged
+PASS Production root remains displayed for bounty
+PASS bounty: grouped tree displayed without technical root
+PASS bounty: grouped view retains all-observations entry
+PASS bounty: group collapse survives model refresh
+PASS bounty: function selection filters the retained table
+PASS bounty: selection retains model and column objects
+PASS bounty: selected view row resolves original model row
+PASS bounty: selected original metadata remains available
+PASS bounty: all-observations restores prior visible row count
+PASS bounty: grouping retains the active sorter object
+PASS bounty: grouping leaves every source cell unchanged
+PASS Production root remains displayed for dashboard
+PASS dashboard: grouped tree displayed without technical root
+PASS dashboard: grouped view retains all-observations entry
+PASS dashboard: group collapse survives model refresh
+PASS dashboard: function selection filters the retained table
+PASS dashboard: selection retains model and column objects
+PASS dashboard: selected view row resolves original model row
+PASS dashboard: selected original metadata remains available
+PASS dashboard: all-observations restores prior visible row count
+PASS dashboard: grouping retains the active sorter object
+PASS dashboard: grouping leaves every source cell unchanged
+PASS Opening integration starts no inspection runner
+PASS scope: grouped tree displayed without technical root
+PASS scope: grouped view retains all-observations entry
+PASS scope: group collapse survives model refresh
+PASS scope: function selection filters the retained table
+PASS scope: selection retains model and column objects
+PASS scope: selected view row resolves original model row
+PASS scope: selected view row resolves original model row
+PASS scope: selected view row resolves original model row
+PASS scope: displayed URL column uses short caption
+PASS scope: selected original metadata remains available
+PASS scope: all-observations restores prior visible row count
+PASS scope: grouping retains the active sorter object
+PASS scope: grouping leaves every source cell unchanged
+PASS All13 tool views and grouping send zero requests or start inspections
+PASS All-tool grouping preserves authored data document
+PASS Every captured original ID,URL and exact request/response bytes retained
+PASS All-tool display and grouped navigation emit zero asynchronous Swing failures
+GroupedToolsNavigationNative: 110 checks passed / dark / 1280x800

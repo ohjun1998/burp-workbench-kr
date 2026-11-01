@@ -19,9 +19,18 @@ public final class SimpleResearchDesignTest extends WorkbenchTest {
     try{
       edt(()->{
         root.setSize(1600,1000);extension.openFeature("exposure");exposure.target.setText("research.example.test");exposure.importUrls("https://research.example.test/swagger/index.html\nhttps://research.example.test/api-docs");exposure.exposureTable.setRowSelectionInterval(1,1);layout(root);
-        String selected=exposure.selectedExposure().url();var model=exposure.exposureTable.getModel();var document=exposure.exposureDetail.getDocument();
+      });
+      edt(()->{}); // Let the grouped view publish the imported records before inspecting its disclosure.
+      edt(()->{
+        var selectedSource=exposure.selectedExposure();String selected=selectedSource.url();var model=exposure.exposureTable.getModel();var document=exposure.exposureDetail.getDocument();
+        String originalUrl=exposure.exposureTable.getValueAt(0,1).toString();
         var cell=exposure.exposureTable.getCellRenderer(0,1).getTableCellRendererComponent(exposure.exposureTable,exposure.exposureTable.getValueAt(0,1),false,false,0,1);
-        check(cell instanceof JLabel label&&label.getText().equals(exposure.exposureTable.getValueAt(0,1)),"the URL column displays the real full URL rather than silently dropping its origin");
+        check(cell instanceof JLabel label&&label.getText().equals(ResultLabels.shortName(originalUrl)),"the approved grouped URL column displays its short function name");
+        check(model.getValueAt(exposure.exposureTable.convertRowIndexToModel(0),1).equals(originalUrl)&&exposure.selectedExposure()==selectedSource,"short labels retain the exact full URL and selected source identity");
+        var groupedOriginal=(JToggleButton)named(root,"wb.exposure.search.grouped.original.toggle");groupedOriginal.doClick(0);layout(root);
+        var groupedReader=(JTextArea)named(root,"wb.exposure.search.grouped.original");
+        check(groupedOriginal.isSelected()&&groupedReader.isVisible()&&groupedReader.getText().contains(selected)&&groupedReader.getText().contains("관측 ID: exposure:"+selectedSource.category()+"|"+selected),"the grouped original disclosure exposes the full selected URL and stable source ID");
+        groupedOriginal.doClick(0);layout(root);
         for(int i=0;i<4;i++)WorkbenchUi.style(root);layout(root);
         check(exposure.exposureTable.getModel()==model&&exposure.exposureDetail.getDocument()==document&&exposure.selectedExposure().url().equals(selected),"research restyling preserves the selected source, table model and copied-evidence document");
         check(exposure.exposureRepeater.getIcon()==null,"restyling does not reintroduce the unapproved play icon on selected URL preparation");

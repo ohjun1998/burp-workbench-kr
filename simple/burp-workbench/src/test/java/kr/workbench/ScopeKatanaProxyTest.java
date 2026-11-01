@@ -23,7 +23,19 @@ public final class ScopeKatanaProxyTest extends WorkbenchTest {
     return "Basic " + Base64.getEncoder().encodeToString(URI.create(proxy.address()).getRawUserInfo().getBytes(StandardCharsets.US_ASCII));
   }
   static Socket socket(ScopeKatanaProxy proxy) throws IOException {
-    Socket socket = new Socket(); socket.connect(new InetSocketAddress("127.0.0.1", URI.create(proxy.address()).getPort()), 2000); socket.setSoTimeout(5000); return socket;
+    int destination = URI.create(proxy.address()).getPort();
+    for (int attempt = 0; attempt < 8; attempt++) {
+      Socket socket = new Socket();
+      try {
+        // Linux can connect an automatically assigned loopback source port to itself
+        // after the destination listener closes. A distinct bound source excludes that.
+        socket.bind(new InetSocketAddress("127.0.0.1", 0));
+        if (socket.getLocalPort() == destination) { socket.close(); continue; }
+        socket.connect(new InetSocketAddress("127.0.0.1", destination), 2000);
+        socket.setSoTimeout(5000); return socket;
+      } catch (IOException failure) { socket.close(); throw failure; }
+    }
+    throw new AssertionError("Could not allocate a distinct loopback source port");
   }
   static String request(ScopeKatanaProxy proxy, String method, String url, String host, String extra) {
     return method + " " + url + " HTTP/1.1\r\nHost: " + host + "\r\nProxy-Authorization: " + auth(proxy) + "\r\n" + extra + "\r\n";
@@ -172,8 +184,11 @@ public final class ScopeKatanaProxyTest extends WorkbenchTest {
         secureProxy.close(); boolean ended; try { ended = idle.getInputStream().read() < 0; } catch (IOException expected) { ended = true; }
         check(ended, "close terminates accepted idle sockets as well as the listener");
       }
-      boolean closed = false; try (Socket ignored = socket(secureProxy)) { } catch (IOException expected) { closed = true; }
-      check(closed, "closed proxy cannot accept a new crawler connection");
+      boolean closed = false; String endpoints;
+      try (Socket connected = socket(secureProxy)) {
+        endpoints = "local=" + connected.getLocalSocketAddress() + ", remote=" + connected.getRemoteSocketAddress();
+      } catch (IOException expected) { closed = true; endpoints = expected.getClass().getSimpleName(); }
+      check(closed, "closed proxy cannot accept a new crawler connection (" + endpoints + ")");
     } finally { secureProxy.close(); }
     System.out.println("ScopeKatanaProxyTest: " + checks + " checks passed (loopback HTTP/CONNECT/TLS only; no target network or CA installation)");
   }

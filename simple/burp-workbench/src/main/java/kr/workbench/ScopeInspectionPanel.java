@@ -132,7 +132,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     katanaStatus.setEditable(false);katanaStatus.setLineWrap(true);katanaStatus.setWrapStyleWord(true);
     ((JPanel)pages.getComponentAt(pages.getTabCount()-1)).add(katanaStatus,BorderLayout.NORTH);
     JPanel browserPage=new JPanel(new BorderLayout(5,5));browserStatus.setEditable(false);browserStatus.setLineWrap(true);browserStatus.setWrapStyleWord(true);name(browserStatus,"browser.status");
-    browserPage.add(browserStatus,BorderLayout.NORTH);browserPage.add(new JScrollPane(createTable("browser",new String[]{"계정/실행 주체","화면·API","상태","근거"})));
+    browserPage.add(browserStatus,BorderLayout.NORTH);browserPage.add(groupedTable("browser",createTable("browser",new String[]{"계정/실행 주체","화면·API","상태","근거"})));
     JButton connect=new JButton("기능 매핑에서 브라우저 연결");name(connect,"browser.connect");connect.addActionListener(e->actions.tool("mapper",null));
     browserPage.add(WorkbenchUi.row(connect,new JLabel("브라우저 도우미 연결 · 현재 사이트 활성화 · SPA 통합 탐색 허용")),BorderLayout.SOUTH);pages.addTab("브라우저 메뉴",browserPage);
     detail.setEditable(false);detail.setLineWrap(true);detail.setWrapStyleWord(true);name(detail,"detail");
@@ -176,9 +176,40 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
   private void addFindingsTab(String title,String key){
     JTable table=createTable(key,new String[]{"분류","내용","계정","상태","확실성","중요도","URL"});
     table.getColumnModel().getColumn(1).setPreferredWidth(230);table.getColumnModel().getColumn(6).setPreferredWidth(300);
-    JPanel body=new JPanel(new BorderLayout());body.setName("wb.scope.inspection.tab."+key);body.add(new JScrollPane(table));pages.addTab(title,body);
+    JPanel body=new JPanel(new BorderLayout());body.setName("wb.scope.inspection.tab."+key);body.add(groupedTable(key,table));pages.addTab(title,body);
   }
-  private void addPathsTab(){JTable table=createTable("paths",new String[]{"계정","메서드","URL","HTTP","분류","분석 범위"});table.getColumnModel().getColumn(2).setPreferredWidth(340);JPanel body=new JPanel(new BorderLayout());body.setName("wb.scope.inspection.tab.paths");body.add(new JScrollPane(table));pages.addTab("경로·응답",body);}
+  private void addPathsTab(){JTable table=createTable("paths",new String[]{"계정","메서드","URL","HTTP","분류","분석 범위"});table.getColumnModel().getColumn(2).setPreferredWidth(340);JPanel body=new JPanel(new BorderLayout());body.setName("wb.scope.inspection.tab.paths");body.add(groupedTable("paths",table));pages.addTab("경로·응답",body);}
+
+  private JComponent groupedTable(String key,JTable table){
+    return GroupedResults.attach(new JScrollPane(table),"wb.scope.inspection.grouped."+key,
+        row->groupedItem(key,row),key.equals("paths")?2:key.equals("browser")?1:6);
+  }
+
+  private GroupedResults.Item groupedItem(String key,int row){
+    if(key.equals("paths")&&row>=0&&row<current.pages().size()){
+      var page=current.pages().get(row);
+      String id=page.original()==null?"path:"+page.account()+"|"+page.method()+"|"+page.url()+"|"+row:page.original().id();
+      return ResultLabels.pathItem(id,page.url());
+    }
+    if(key.equals("browser")){
+      JTable table=tables.get(key);
+      String value=table!=null&&row>=0&&row<table.getModel().getRowCount()?Objects.toString(table.getModel().getValueAt(row,1),""):"";
+      return ResultLabels.pathItem(current.id()+"|browser|"+row,value);
+    }
+    var findings=rows.getOrDefault(key,List.of());
+    if(row>=0&&row<findings.size()){
+      var finding=findings.get(row);
+      String id="finding:"+ScopeInspectionAnalysis.hash(findingSelection(finding).toString())+"|"+row;
+      if(finding.category().equals("API")||finding.category().equals("INVENTORY")){
+        var path=ResultLabels.pathItem(id,finding.url());
+        return new GroupedResults.Item(id,path.groupKey(),path.groupLabel(),
+            finding.category()+"|"+finding.title()+"|"+finding.url(),path.label(),finding.url());
+      }
+      return new GroupedResults.Item(id,finding.category(),ScopeDashboardPanel.groupedCategory(finding.category()),
+          finding.category()+"|"+finding.title(),finding.title(),finding.url());
+    }
+    return ResultLabels.pathItem(key+"|"+row,"");
+  }
   JPanel settingsContent(){
     JButton choose=new JButton("파일 선택");name(choose,"katana.choose");choose.addActionListener(e->{
       if(GraphicsEnvironment.isHeadless()){katanaCheckResult.setText("실행파일의 절대경로를 입력하세요.");return;}
@@ -385,7 +416,7 @@ final class ScopeInspectionPanel extends JPanel implements AutoCloseable {
     if(rebuilding)return;
     var finding=selectedFinding();
     String text;
-    if(finding!=null)text=finding.title()+"\n"+finding.state()+" · "+finding.confidence()+" · "+finding.severity()+"\n"+finding.detail()+"\n원본: "+finding.originalId()+" · 본문 줄 "+finding.line()+" · 문자 위치 "+finding.offset();
+    if(finding!=null)text=finding.title()+"\n"+finding.state()+" · "+finding.confidence()+" · "+finding.severity()+"\n요청: "+finding.method()+" "+finding.url()+"\n"+finding.detail()+"\n원본: "+finding.originalId()+" · 본문 줄 "+finding.line()+" · 문자 위치 "+finding.offset();
     else{
       var ref=selectedOriginal();
       text=ref==null?"원본이 연결된 결과를 선택하세요.":"원본 "+ref.id()+"\n"+ref.method()+" "+ScopeInspectionAnalysis.safeUrl(ref.url())+"\n요청 "+ref.requestLength()+" bytes · 응답 "+ref.responseLength()+" bytes";

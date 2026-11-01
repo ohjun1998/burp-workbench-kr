@@ -1,0 +1,214 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/burp-workbench-kr/simple/burp-workbench/build_all.py --java /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java --javac /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/javac --test --test-group SimpleApprovedAllToolsTest --test-group UiPanelsOptimizationTest --test-group SimpleResultLabelsTest --test-group SimpleGroupedJsSelectionTest --test-group SimpleGroupedResultsTest --test-group SimpleGroupedScopeResultsTest --test-group SimpleGroupedToolListsTest --skip-payload
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-simple-1.4.22.jar 9285083 bytes
+Note: /workspace/burp-workbench-kr/simple/burp-workbench/src/test/java/kr/workbench/MapperIntegrationTest.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+PASS approved 190px navigation remains available on traffic
+PASS navigation retains the production root on traffic
+PASS approved 190px navigation remains available on mapper
+PASS navigation retains the production root on mapper
+PASS approved 190px navigation remains available on js
+PASS navigation retains the production root on js
+PASS approved 190px navigation remains available on environment
+PASS navigation retains the production root on environment
+PASS approved 190px navigation remains available on exposure
+PASS navigation retains the production root on exposure
+PASS approved 190px navigation remains available on auth
+PASS navigation retains the production root on auth
+PASS approved 190px navigation remains available on response.recon
+PASS navigation retains the production root on response.recon
+PASS approved 190px navigation remains available on payload
+PASS navigation retains the production root on payload
+PASS approved 190px navigation remains available on data
+PASS navigation retains the production root on data
+PASS approved 190px navigation remains available on activity
+PASS navigation retains the production root on activity
+PASS approved 190px navigation remains available on bounty
+PASS navigation retains the production root on bounty
+PASS approved 190px navigation remains available on dashboard
+PASS navigation retains the production root on dashboard
+PASS JS analysis and filter menu has a visible invoker
+PASS source location navigation is reachable through the actual analysis menu
+PASS JS display columns retain all original metadata
+PASS CVE filter remains visible beside the real summary chips
+PASS CVE expanded conditions expose the original retained controls
+PASS CVE table preserves EPSS in its underlying model
+PASS environment status column uses actual scan status rather than diagnosis text
+PASS environment raw and formatted controls have a visible tools menu
+PASS embedded viewers copy the real wire prefixes without retaining mutable caller bytes
+PASS Mapper Raw switches the actual inspector while preserving wire bytes
+PASS nested Mapper packet styling reuses its delegate instead of oscillating between owners
+Fontconfig error: No writable cache directories
+java.lang.reflect.InvocationTargetException
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1371)
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1346)
+	at java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)
+	at kr.workbench.WorkbenchTest.edt(WorkbenchTest.java:80)
+	at kr.workbench.SimpleApprovedAllToolsTest.main(SimpleApprovedAllToolsTest.java:24)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at kr.workbench.TestLauncher.main(TestLauncher.java:4)
+Caused by: java.lang.AssertionError: Mapper request card retains its full height beside the approved280px grouped navigation: java.awt.Rectangle[x=498,y=482,width=569,height=484]
+	at kr.workbench.WorkbenchTest.check(WorkbenchTest.java:59)
+	at kr.workbench.SimpleApprovedAllToolsTest.lambda$main$2(SimpleApprovedAllToolsTest.java:52)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+PASS comparison starts with input actions and no stale navigation
+PASS side-local import buttons preserve original evidence order
+PASS compact source tooltip still redacts query values
+PASS comparison result enables editing and difference navigation
+PASS returning to input disables navigation into hidden old results
+PASS changing view alone does not invalidate original evidence
+PASS loading another source clears stale result actions
+PASS reset clears evidence availability and each side source status
+PASS idle empty workflow offers no stop or missing-results export
+PASS empty evidence offers no save or preview
+PASS adding real evidence enables preview and save
+PASS human-written report fields wrap instead of requiring horizontal scrolling
+PASS clear action immediately removes stale save availability
+PASS response actions require a selected usable source
+PASS selecting retained passive evidence enables export
+PASS clearing passive selection clears its detail and disables export
+PASS expired source cannot advertise evidence export
+PASS image-only evidence can be cleared without advertising an empty packet ZIP
+PASS clearing image-only evidence removes its hash and resets button state
+PASS another browser image can be attached after clearing the first
+PASS Simple retains manual request replay as a core workflow at 1024
+PASS workflow editor remains usable at 1024
+PASS selected response remains visible below results at 1024
+PASS result table retains multiple readable rows at 1024
+PASS Simple retains manual request replay as a core workflow at 1280
+PASS workflow editor remains usable at 1280
+PASS selected response remains visible below results at 1280
+PASS result table retains multiple readable rows at 1280
+PASS fixture worker started
+PASS busy worker disables duplicate run and offers stop
+PASS completion restores idle action state
+UiPanelsOptimizationTest: 31 checks passed
+Fontconfig error: No writable cache directories
+PASS ordinary login remains distinct from a merchant login
+PASS merchant qualifier requires both route segments
+PASS an HTTP origin without a path is a home screen
+PASS opaque source references retain exact identity and a meaningful caption: inline
+PASS opaque source references retain exact identity and a meaningful caption: webpack
+PASS opaque source references retain exact identity and a meaningful caption: data
+PASS opaque source references retain exact identity and a meaningful caption: blob
+PASS opaque source references retain exact identity and a meaningful caption: mailto
+PASS opaque source references retain exact identity and a meaningful caption: node
+PASS a static API specification is grouped with documentation
+PASS an encoded name apostrophe does not become an input probe
+PASS probe caption omits route/query text while preserving the complete original URL
+PASS malformed imported escapes remain displayable
+SimpleResultLabelsTest: 13 checks passed
+PASS manual analysis retains both calls to the same endpoint and a separate document endpoint
+PASS duplicate endpoint fixture has separate original call-site offsets
+PASS original disclosure assigns separate observation IDs to the two real call sites sharing one URL
+PASS one function filter includes both original call sites without merging them
+PASS function filtering keeps the selected second call site without selecting its duplicate URL
+PASS sorting grouped duplicate URLs preserves the one selected original call site
+PASS observation metadata refresh never broadens one call-site selection to duplicate URL rows
+PASS group filtering and status updates retain the actual result, table model and source document
+PASS returning to all observations keeps exactly the same selected call-site row
+PASS display grouping preserves duplicate original URL values and both exact source offsets
+PASS call-site grouping, selection and metadata refresh send no HTTP or Repeater requests
+PASS closing the grouped JavaScript reader sends no HTTP requests
+SimpleGroupedJsSelectionTest: 12 checks passed
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS grouping retains original model, sorter and column model
+PASS initial selected stable row ID remains selected
+PASS URL values stay exact in the original table model
+PASS URL renderer shows the short function while retaining the original tooltip
+PASS function selection filters only the view and retains the selected ID
+PASS sorting retains selected original row identity
+PASS collapsing the selected function parent keeps its view filter
+PASS collapsed parent state survives a model update
+PASS model refresh retains function filtering and selected ID
+PASS an externally replaced RowFilter composes with the group filter
+PASS clearing the external filter keeps the active function filter
+PASS programmatic reveal clears only group filtering
+PASS existing literal search also finds the short Korean function name
+PASS account function selects its original row
+PASS a replacement dataset without the selected function resets to all rows
+PASS reattaching the same table reuses one grouping controller and its listeners
+PASS reattachment keeps the original table inside the reused wrapper
+PASS grouping never rewrites or removes original model rows
+PASS unchanged group refresh does not emit an artificial empty selection to owner readers
+PASS unchanged refresh preserves the owner's packet document and reading position
+PASS an existing literal search remains applied when grouping attaches
+PASS changing a search that predates grouping replaces its old literal condition
+PASS a genuine external filter stays AND-composed with an alias search
+PASS clearing alias search preserves the genuine external filter
+PASS different function keys sharing a label receive stable visible suffixes
+PASS label disambiguation never merges or changes original function rows
+SimpleGroupedResultsTest: 26 checks passed (view-only groups, external filter composition and stable selection)
+Fontconfig error: No writable cache directories
+PASS grouped dashboard retains both distinct framework observations
+PASS repeated framework observations share one two-observation navigation leaf
+PASS framework group filtering preserves both original table records
+PASS group selection keeps the exact selected original and URL in dashboard details
+PASS original action delegates the actual selected source ID after grouping
+PASS dashboard renders a short function label while preserving the original URL model cell
+PASS switching cards clears an unavailable subgroup instead of hiding the new API results
+PASS sorted grouped inspection findings retain their exact original packet
+PASS inspection selection exposes exact URL and original ID in details
+PASS inspection URL cells are shortened only in the renderer
+PASS every inspection observation tab uses grouped navigation: summary
+PASS every inspection observation tab uses grouped navigation: environment
+PASS every inspection observation tab uses grouped navigation: paths
+PASS every inspection observation tab uses grouped navigation: api
+PASS every inspection observation tab uses grouped navigation: secrets
+PASS every inspection observation tab uses grouped navigation: observations
+PASS every inspection observation tab uses grouped navigation: access
+PASS every inspection observation tab uses grouped navigation: coverage
+PASS every inspection observation tab uses grouped navigation: changes
+PASS every inspection observation tab uses grouped navigation: katana
+PASS every inspection observation tab uses grouped navigation: browser
+PASS grouping leaves full original request and response bytes unchanged
+PASS grouping, selection and original delegation send no target HTTP
+SimpleGroupedScopeResultsTest: 23 checks passed
+Fontconfig error: No writable cache directories
+PASS wb.auth.history.grouped groups the retained actual table
+PASS wb.auth.history.grouped keeps its original model for selection and actions
+PASS wb.response.findings.grouped groups the retained actual table
+PASS wb.response.findings.grouped keeps its original model for selection and actions
+PASS wb.response.api.grouped groups the retained actual table
+PASS wb.response.api.grouped keeps its original model for selection and actions
+PASS wb.response.flows.grouped groups the retained actual table
+PASS wb.response.flows.grouped keeps its original model for selection and actions
+PASS wb.exposure.search.grouped groups the retained actual table
+PASS wb.exposure.search.grouped keeps its original model for selection and actions
+PASS wb.activity.endpoints.grouped groups the retained actual table
+PASS wb.activity.endpoints.grouped keeps its original model for selection and actions
+PASS wb.activity.pending.grouped groups the retained actual table
+PASS wb.activity.pending.grouped keeps its original model for selection and actions
+PASS wb.bounty.flow.grouped groups the retained actual table
+PASS wb.bounty.flow.grouped keeps its original model for selection and actions
+PASS wb.bounty.evidence.grouped groups the retained actual table
+PASS wb.bounty.evidence.grouped keeps its original model for selection and actions
+PASS grouping preserves both imported discovery records
+PASS the discovery model keeps the complete original URL
+PASS selected discovery still opens the exact original detail
+PASS discovery list uses a short label while the original stays in the model
+PASS grouping retains the original explicit Repeater handler
+PASS grouped list construction import and selection send zero target HTTP
+SimpleGroupedToolListsTest: 24 checks passed (actual grouped tables and original discovery detail, zero HTTP)
+Fontconfig error: No writable cache directories
+SIMPLE_CHECK_SUMMARY {"version": "1.4.22", "toolchainMode": "strict-release17", "javaRuntimeVersion": "17.0.21", "java17ApiCompatibilityVerified": true, "groups": {"UiPanelsOptimizationTest": 31, "SimpleResultLabelsTest": 13, "SimpleGroupedJsSelectionTest": 12, "SimpleGroupedResultsTest": 26, "SimpleGroupedScopeResultsTest": 23, "SimpleGroupedToolListsTest": 24}, "regressionGroups": 6, "regressionChecks": 129, "payloadHttpChecks": 0, "excludedGroups": {"UiCleanupTest": "Asserts removed WorkContext header, exact 15-item auxiliary menu and absence of direct next-step buttons; replaced by SimpleWorkflowTest and Simple layout rendering", "AppearanceWorkflowTest": "Requires the original auxiliary/settings page contract; current folder styling and retained Simple inputs are checked by SimpleClassicLayoutTest, FolderNavigationTest and SimpleAppearanceTest"}, "adaptedGroups": {"TrafficScopeModesTest": "Count actual visible traffic controls and verify retained freeze/apply proxies in collection settings; retain capture/SCOPE/persistence guards", "SimpleDashboardRevealTest": "Retain initial overview and zero scroll while allowing compact results to be visible; open real chart disclosure for chart actions and preserve reveal/ID/lifecycle/no-HTTP assertions", "Appearance0534Test": "Open the approved folded packet search through Ctrl+F and scale the approved 13px field/32px compact row; retain narrow-search, native-editor isolation and exact-byte checks", "UiLayoutTest": "Validate approved fixed horizontal environment master-detail with response/request/evidence tabs and retained models/no-HTTP contracts", "JsUiOptimizationTest": "Validate fixed result/source split and explicitly opened bounded disclosures under both packet preferences; retain original reader and worker checks", "JsCompactUpgradeTest": "Validate direct three analysis types plus real extra-type menu; preserve seven underlying models and source/filter checks", "JsRepeaterWorkflowTest": "Select advanced analysis via its actual menu and test scrolling only when needed; preserve exact request, SCOPE and HTTP contracts", "BuildInfoTest": "Assert Simple artifact filename while retaining packaged JAR manifest/runtime consistency checks", "PacketUiTest": "Validate actual selected-path popup actions and retained payload controllers; retain shared packet preview, native-editor, raw-byte and syntax assertions", "NextIsolationTest": "Assert Simple display and storage namespace; preserve both stable and Next preference/archive fixtures", "FeatureGuideWorkflowTest": "Use the approved visible screen-guide proxy and F1, retaining its source action, far-right placement, routing/input/no-HTTP assertions", "DiagnosticsWorkflowTest": "Use the approved header menu for retained log/settings/help controllers; retain bounded concurrency, redaction, error selection/clear, lifecycle and no-HTTP checks", "FolderNavigationTest": "Restore the 0.39.2-style five folders with Simple identity and nested-tool aliases; retain actual tree selection, input, width, hide/restore and no-HTTP contracts", "RenderAuthUiTest": "Match the requested 0.39.2 ASCII fixed-width/Korean fallback fonts instead of requiring one UI/packet font; retain HTML sanitization, exact bytes, no-network and auth contracts", "UiPanelsOptimizationTest": "Restore original core manual-replay editor/result viewport assertions and verify route index 1; retain comparison, evidence, response, worker and image-state checks", "AuditRepairsTest": "Use the same original community JS fixture copied into Simple test resources, so regressions run independently of the original directory layout", "AuthSetupBundlesTest": "Assert exact BuildInfo.storageKey project UUID key instead of the historical Next prefix; retain bundle exchange, disk integrity, capacity and project-isolation checks", "AuthLayoutFitTest": "Validate direct detection and account-policy menu with actual settings/repair/candidate proxies; retain all responsive widths, table sizing, wrapping and account-detail checks", "LayoutPassiveWorkflowTest": "Use retained explicit passive route and the fixed approved traffic geometry; preserve passive shared-layout selection, collection fixture, target/packet isolation, capacity and unload checks", "TrafficScopeTest": "Use actual primary SCOPE button/editor instead of removed duplicate context submenu; preserve scope-rule operations and verify coverage/environment through admitted SCOPE traffic rather than removed selected-packet backfill", "AuthRunSummaryTest": "Approved rectangular chips replace icon badges; retain correct sorted run, summary text, semantic verdict color and source evidence", "AuthResponseWorkflowTest": "Approved rectangular chips replace icon badges; retain HTTP-200 logical-denial rules, semantic color, exact requests and no-HTTP contracts", "TargetCleanupTest": "Keep JS/URL target dialogs and current SCOPE choices while asserting daily environment origin/account selectors stay on the main page; preserve no-HTTP preparation, unapplied-draft isolation, exact owning target and unload checks"}, "failedGroups": ["SimpleApprovedAllToolsTest"], "result": "failed", "subset": true}
+ERROR: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3', '/workspace/burp-workbench-kr/simple/burp-workbench/build_all.py', '--java', '/workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java', '--javac', '/workspace/tools/burp-workbench/jdk-17.0.21+9/bin/javac', '--test', '--test-group', 'SimpleApprovedAllToolsTest', '--test-group', 'UiPanelsOptimizationTest', '--test-group', 'SimpleResultLabelsTest', '--test-group', 'SimpleGroupedJsSelectionTest', '--test-group', 'SimpleGroupedResultsTest', '--test-group', 'SimpleGroupedScopeResultsTest', '--test-group', 'SimpleGroupedToolListsTest', '--skip-payload']' returned non-zero exit status 1.

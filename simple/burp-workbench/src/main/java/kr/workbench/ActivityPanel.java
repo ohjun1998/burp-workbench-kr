@@ -150,7 +150,9 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     searchBar.setName("wb.placement.activity.filters");
     JPanel urls = new JPanel(new BorderLayout(0, 4));
     urls.add(searchBar, BorderLayout.NORTH);
-    urls.add(new JScrollPane(table));
+    urls.add(GroupedResults.attach(new JScrollPane(table), "wb.activity.endpoints.grouped", row ->
+        ResultLabels.pathItem("activity:" + model.getValueAt(row, 0) + "|" + model.getValueAt(row, 1),
+            Objects.toString(model.getValueAt(row, 1), "")), 1));
     selectedUrl.setName("wb.activity.selectedUrl");
     selectedUrl.setMinimumSize(new Dimension(0, 24));
     JPanel urlActions = WorkbenchUi.row(finish);
@@ -189,7 +191,14 @@ final class ActivityPanel extends JPanel implements AutoCloseable {
     endpointsPage.add(split);
     coveragePages.addTab("URL 점검 현황", endpointsPage);
     JPanel pendingPage = new JPanel(new BorderLayout(6, 6));
-    pendingPage.add(new JScrollPane(pendingTable));
+    pendingPage.add(GroupedResults.attach(new JScrollPane(pendingTable), "wb.activity.pending.grouped", row -> {
+      String url = Objects.toString(pendingModel.getValueAt(row, 1), "");
+      String id = "pending:" + pendingModel.getValueAt(row, 0) + "|" + url + "|"
+          + pendingModel.getValueAt(row, 2) + "|" + pendingModel.getValueAt(row, 3);
+      String source = Objects.toString(pendingModel.getValueAt(row, 2), "");
+      return new GroupedResults.Item(id, "pending", "미확정 경로", url, ResultLabels.shortName(url),
+          "미확정 경로: " + url + "\n출처: " + source);
+    }, 1, 2));
     pendingPage.add(
         WorkbenchUi.row(new JLabel("확정 URL"), pendingResolved, resolve, sourceButton),
         BorderLayout.SOUTH);

@@ -1,0 +1,7 @@
+{
+  "status": "failed-harness",
+  "lookAndFeel": "metal",
+  "reason": "Scope original-information toggle was below an enclosing viewport; physical-click harness now scrolls the requested component through all ancestor viewports.",
+  "sourceChangedByHarness": false,
+  "completedPageViews": 12
+}

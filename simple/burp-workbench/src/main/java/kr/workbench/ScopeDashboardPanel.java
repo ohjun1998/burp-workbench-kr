@@ -200,7 +200,8 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     for (int i = 0; i < widths.length; i++) { var column = table.getColumnModel().getColumn(i); column.setPreferredWidth(widths[i]); column.setWidth(widths[i]); }
     var empty = new JPanel(new BorderLayout());
     name(emptyMessage, "empty"); empty.add(emptyMessage, BorderLayout.NORTH);
-    resultViews.add(new JScrollPane(table), "rows"); resultViews.add(empty, "empty");
+    resultViews.add(GroupedResults.attach(new JScrollPane(table), "wb.scope.dashboard.grouped",
+        this::groupedItem, 6), "rows"); resultViews.add(empty, "empty");
     name(detail, "detail");
     name(original, "original"); name(repeater, "repeater"); name(evidence, "evidence");
     original.addActionListener(e -> handoff(actions::original));
@@ -601,6 +602,37 @@ final class ScopeDashboardPanel extends JPanel implements AutoCloseable {
     if (selected < 0) return null;
     int index = table.convertRowIndexToModel(selected);
     return index < visibleRows.size() ? visibleRows.get(index) : null;
+  }
+
+  private GroupedResults.Item groupedItem(int rowIndex) {
+    if (rowIndex < 0 || rowIndex >= visibleRows.size())
+      return ResultLabels.pathItem("dashboard:" + rowIndex, "");
+    var row = visibleRows.get(rowIndex);
+    if (group == ScopeInspectionDashboard.Group.PATHS) return ResultLabels.pathItem(row.id(), row.url());
+    if (row.category().equals("API") || row.category().equals("INVENTORY")) {
+      var path = ResultLabels.pathItem(row.id(), row.url());
+      return new GroupedResults.Item(row.id(), path.groupKey(), path.groupLabel(),
+          row.category() + "|" + row.title() + "|" + row.url(), path.label(), row.url());
+    }
+    return new GroupedResults.Item(row.id(), row.category(), groupedCategory(row.category()),
+        row.category() + "|" + row.title(), row.title(), row.url());
+  }
+
+  static String groupedCategory(String category) {
+    return switch (category) {
+      case "ENVIRONMENT" -> "환경 관측";
+      case "DATABASE" -> "DB 단서";
+      case "API" -> "API 후보";
+      case "INVENTORY" -> "명세 대조";
+      case "SECRET" -> "키·민감정보 후보";
+      case "INTERNAL" -> "내부정보 관측";
+      case "RESPONSE" -> "응답 보안 관측";
+      case "ACCESS", "ACCOUNT", "PERMISSION" -> "계정별 차이";
+      case "COVERAGE" -> "점검 범위";
+      case "KATANA" -> "Katana 수집";
+      case "CHANGE" -> "이전 실행과 비교";
+      default -> category.isBlank() ? "기타 관측" : category;
+    };
   }
 
   private void selectedChanged() {

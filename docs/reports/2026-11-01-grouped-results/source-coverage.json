@@ -1,0 +1,48 @@
+{
+  "description": "Explicit URL-list opt-in sites; generated Scope tabs share their installation site. Raw inputs, payload values and JSON field paths retain their value-oriented display.",
+  "groupedResultSites": [
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/ActivityPanel.java",
+      "attachSites": 2
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/AuthComparePanel.java",
+      "attachSites": 1
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/BountySupportPanel.java",
+      "attachSites": 3
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/EnvironmentPanel.java",
+      "attachSites": 2
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/ExposureResearchPanel.java",
+      "attachSites": 1
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/JsAnalysisPanel.java",
+      "attachSites": 6
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/PassiveScanPanel.java",
+      "attachSites": 2
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/ResponseReconPanel.java",
+      "attachSites": 3
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/ScopeDashboardPanel.java",
+      "attachSites": 1
+    },
+    {
+      "source": "simple/burp-workbench/src/main/java/kr/workbench/ScopeInspectionPanel.java",
+      "attachSites": 1
+    }
+  ],
+  "mapper": "simple/feature-mapper/src/main/java/kr/featuremapper/FeatureMapperWorkspace.java",
+  "traffic": "simple/burp-workbench/src/main/java/kr/workbench/TrafficBrowser.java",
+  "finalCandidateSha256": "d5ac13a818d0fd641c72cd093cd86c21c3fea7793e01e3cc5b8da25900f0ff7c"
+}

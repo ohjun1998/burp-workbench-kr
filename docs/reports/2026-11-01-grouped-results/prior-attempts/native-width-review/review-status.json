@@ -1,0 +1,14 @@
+{
+  "status": "functional-checks-passed-readability-review-required",
+  "jarSha256": "da29b22587fe00836d93e6f91936479ff5735de77065286b582a780dba9c8da4",
+  "functionalChecks": 1320,
+  "captureCount": 156,
+  "columnWidthGateExecuted": false,
+  "nativeBurpGui": false,
+  "syntheticMetadata": true,
+  "visualFindings": [
+    "JS result table columns compress to ellipses at1024x768 after adding218px group navigation.",
+    "Bounty evidence table columns compress to ellipses within its roughly300px card even at1600x1000."
+  ],
+  "scope": "Raw per-case verification reports cover functional navigation/data retention. They do not establish completion of the visual readability review."
+}

@@ -117,7 +117,18 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
   private final AtomicBoolean collect = new AtomicBoolean(true), scope = new AtomicBoolean(false);
   private final DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode("자동 발견 기능");
   private final DefaultTreeModel treeModel = new DefaultTreeModel(treeRoot);
-  private final JTree tree = new JTree(treeModel);
+  private boolean collapsingFeatureGroup;
+  private final JTree tree = new JTree(treeModel) {
+    @Override public void collapsePath(TreePath path) {
+      boolean previous=collapsingFeatureGroup;collapsingFeatureGroup=true;
+      try {super.collapsePath(path);} finally {collapsingFeatureGroup=previous;}
+    }
+  };
+  private Mapper groupedOwner;
+  private final Map<String, Boolean> groupExpansion = new HashMap<>();
+  private Map<String, String> featureDisplayNames = Map.of();
+  private final JToggleButton originalInfoToggle = new JToggleButton("원본 정보 보기");
+  private final JTextArea originalInfoText = new JTextArea(5, 40);
   private final JToggleButton treeToggle = new JToggleButton("기능 목록 · 접기",true);
   private final DefaultTableModel rows =
       new DefaultTableModel(new String[] {"NO", "메서드", "URL", "상태", "세션", "실행", "매핑"}, 0) {
@@ -335,10 +346,35 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     if(repeaterButton!=null)repeaterButton.setEnabled(selected);
     String title="전체 요청";
     synchronized(projectLock){
-      if(mapper!=null&&selectedFeature!=null&&mapper.features.containsKey(selectedFeature))title=mapper.features.get(selectedFeature).name;
+      if(mapper!=null&&selectedFeature!=null&&mapper.features.containsKey(selectedFeature))
+        title=featureDisplayNames.getOrDefault(selectedFeature,mapper.features.get(selectedFeature).name);
     }
     selectionContext.setText((unclassified.isSelected()?"미분류 요청":title)+" · 표시 "+table.getRowCount()+"건 · 선택 "+table.getSelectedRowCount()+"건");
     selectionContext.setToolTipText(selectionContext.getText());
+    refreshOriginalInfo();
+  }
+
+  private void refreshOriginalInfo() {
+    StringBuilder text = new StringBuilder();
+    synchronized (projectLock) {
+      if (mapper != null) synchronized (mapper) {
+        Mapper.Feature feature = mapper.features.get(selectedFeature);
+        if (feature != null) text.append("원래 기능명: ").append(feature.name)
+            .append("\n기능 ID: ").append(feature.id).append("\n점검 상태: ").append(feature.state)
+            .append("\n원본 분류 키: ").append(feature.key);
+      }
+      List<Mapper.Packet> packets = selectedPackets();
+      if (!packets.isEmpty()) {
+        Mapper.Packet packet = packets.get(0);
+        if (text.length() > 0) text.append('\n');
+        text.append("관측 ID: ").append(packet.id).append("\nURL: ").append(packet.url);
+      }
+    }
+    String value = text.length() == 0 ? "기능이나 요청을 선택하면 원본 정보를 확인할 수 있습니다." : text.toString();
+    if (!originalInfoText.getText().equals(value)) {
+      originalInfoText.setText(value);
+      originalInfoText.setCaretPosition(0);
+    }
   }
 
   private void buildUi() {
@@ -377,12 +413,15 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     tree.setCellRenderer(tr);
     tree.addTreeSelectionListener(
         e -> {
-          if (rebuilding) return;
+          if (rebuilding || collapsingFeatureGroup) return;
           Object selected = tree.getLastSelectedPathComponent();
-          if (selected instanceof DefaultMutableTreeNode node
-              && node.getUserObject() instanceof FeatureNode f) selectedFeature = f.id;
-          else selectedFeature = null;
-          if(selectedFeature!=null)unclassified.setSelected(false);
+          if (selected instanceof DefaultMutableTreeNode node) {
+            if (node.getUserObject() instanceof FeatureNode feature) selectedFeature=feature.id();
+            else if (node.getUserObject() instanceof GroupNode) return;
+            else selectedFeature=null;
+            if (node.getUserObject() instanceof FeatureNode || node.getUserObject() instanceof AllFeaturesNode)
+              unclassified.setSelected(false);
+          } else selectedFeature=null;
           fillRows();refreshFeatureActions();
         });
     JPanel left = new JPanel(new BorderLayout(4, 4));
@@ -411,9 +450,10 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     unclassified.setName("fm.unclassified");unclassified.setHorizontalAlignment(SwingConstants.LEFT);
     unclassified.setToolTipText("기능 연결이 없는 실제 요청만 표시합니다.");
     unclassified.addActionListener(e->{boolean show=unclassified.isSelected();boolean previous=rebuilding;rebuilding=true;try{tree.clearSelection();selectedFeature=null;}finally{rebuilding=previous;}unclassified.setSelected(show);fillRows();});
-    left.add(unclassified,BorderLayout.SOUTH);
+    JPanel featureFoot = new JPanel(new GridLayout(0,1,0,4));
+    featureFoot.add(unclassified);featureFoot.add(originalInfoToggle);left.add(featureFoot,BorderLayout.SOUTH);
     treeToggle.addActionListener(e -> {
-      treeBody.setVisible(treeToggle.isSelected());actions.setVisible(treeToggle.isSelected());unclassified.setVisible(treeToggle.isSelected());
+      treeBody.setVisible(treeToggle.isSelected());actions.setVisible(treeToggle.isSelected());unclassified.setVisible(treeToggle.isSelected());originalInfoToggle.setVisible(treeToggle.isSelected());
       treeToggle.setText(treeToggle.isSelected() ? "기능 목록 · 접기" : "기능 목록 · 펼치기");
       left.revalidate(); left.repaint();
     });
@@ -429,7 +469,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
         .getSelectionModel()
         .addListSelectionListener(
             e -> {
-              if (!e.getValueIsAdjusting()) {showSelected();refreshPacketActions();}
+              if (!rebuilding && !e.getValueIsAdjusting()) {showSelected();refreshPacketActions();}
             });
     runs.setPreferredSize(new Dimension(135,36)); sessions.setPreferredSize(new Dimension(135,36));
     JPanel filterContext=MapperUi.row(new JLabel("실행"),runs,new JLabel("세션"),sessions);
@@ -492,12 +532,19 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     JTabbedPane details = new JTabbedPane();
     details.addTab("요청·응답", packets);
     details.addTab("매핑 근거", new JScrollPane(explanation));
+    originalInfoToggle.setName("fm.feature.original.toggle");
+    originalInfoText.setName("fm.feature.original");originalInfoText.setEditable(false);
+    originalInfoText.setLineWrap(true);originalInfoText.setWrapStyleWord(true);
+    JScrollPane originalScroll = new JScrollPane(originalInfoText);originalScroll.setVisible(false);
+    JPanel detailArea = new JPanel(new BorderLayout(0,6));
+    detailArea.add(originalScroll,BorderLayout.NORTH);detailArea.add(details);
+    originalInfoToggle.addActionListener(e->{originalScroll.setVisible(originalInfoToggle.isSelected());detailArea.revalidate();});
     JPanel top = new JPanel(new BorderLayout());
     JPanel listHeader=new JPanel(new BorderLayout(0,4));listHeader.setName("fm.workflow.list.header");
     listHeader.add(filters,BorderLayout.NORTH);listHeader.add(selectionFooter);
     top.add(listHeader, BorderLayout.NORTH);
     top.add(new JScrollPane(table));
-    JSplitPane main = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, details);
+    JSplitPane main = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, detailArea);
     main.setName("fm.workspace"); MapperUi.split(main,.40);
     JSplitPane all = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, main);
     all.setName("fm.navigation.split"); MapperUi.split(all,.23);
@@ -575,10 +622,19 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     if(logWindow!=null)logWindow.setMinimumSize(new Dimension(680,420));
   }
 
-  record FeatureNode(String id, String label) {
+  record FeatureNode(String id, String label, int packets, String state, String originalName, String origin) {
+    FeatureNode(String id, String label) { this(id,label,0,"",label,""); }
     public String toString() {
       return label;
     }
+  }
+
+  record GroupNode(String key, String label, int features) {
+    public String toString() { return label; }
+  }
+
+  record AllFeaturesNode(long packets) {
+    public String toString() { return "전체 관측 그룹"; }
   }
 
   private void refresh() {
@@ -588,52 +644,105 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     try {
       // Feature counts are indexed: no feature-by-feature full packet scan.
       List<Mapper.FeatureSummary> summaries;
+      Map<String, FeaturePresentation.Source> sources = new HashMap<>();
+      long totalPackets;
       synchronized (projectLock) {
-        summaries = mapper.featureSummaries();
-        long orphanCount=mapper.packetList(null).stream().filter(packet->packet.links.isEmpty()).count();
-        unclassified.setText("미분류 요청 ("+orphanCount+")");
+        synchronized (mapper) {
+          summaries = mapper.featureSummaries();
+          for (var feature : mapper.featureList())
+            sources.put(feature.id,new FeaturePresentation.Source(feature.key,feature.renamed));
+          totalPackets = mapper.count();
+          long orphanCount=mapper.packetList(null).stream().filter(packet->packet.links.isEmpty()).count();
+          unclassified.setText("미분류 요청 ("+orphanCount+")");
+        }
+      }
+      if (groupedOwner != mapper) {
+        groupedOwner = mapper;
+        groupExpansion.clear();
+        treeRoot.removeAllChildren();treeModel.nodeStructureChanged(treeRoot);
       }
       treeToggle.putClientProperty("fm.feature.count",summaries.size());treeToggle.repaint();
       Map<String, DefaultMutableTreeNode> existing = new HashMap<>();
+      Map<String, DefaultMutableTreeNode> groups = new HashMap<>();
+      DefaultMutableTreeNode allNode = null;
       for (int i = 0; i < treeRoot.getChildCount(); i++) {
         var group = (DefaultMutableTreeNode) treeRoot.getChildAt(i);
+        if (group.getUserObject() instanceof AllFeaturesNode) { allNode=group;continue; }
+        if (group.getUserObject() instanceof GroupNode value) {
+          groups.put(value.key(),group);
+          groupExpansion.put(value.key(),tree.isExpanded(new TreePath(group.getPath())));
+        }
         for (int j = 0; j < group.getChildCount(); j++) {
           var node = (DefaultMutableTreeNode) group.getChildAt(j);
           if (node.getUserObject() instanceof FeatureNode f) existing.put(f.id, node);
         }
       }
-      Map<String, DefaultMutableTreeNode> groups = new LinkedHashMap<>();
-      for (int i = 0; i < treeRoot.getChildCount(); i++) {
-        var group = (DefaultMutableTreeNode) treeRoot.getChildAt(i);
-        groups.put(String.valueOf(group.getUserObject()), group);
+      AllFeaturesNode allValue = new AllFeaturesNode(totalPackets);
+      if (allNode == null) {
+        allNode = new DefaultMutableTreeNode(allValue);
+        treeModel.insertNodeInto(allNode,treeRoot,0);
+      } else if (!allValue.equals(allNode.getUserObject())) {
+        allNode.setUserObject(allValue);treeModel.nodeChanged(allNode);
       }
+      List<FeaturePresentation.Group> presentation = FeaturePresentation.groups(summaries,sources);
+      Map<String,String> displayNames = new HashMap<>();
       Set<String> active = new HashSet<>();
-      for (var f : summaries) {
-        active.add(f.id());
-        String key = f.origin() + " / " + f.entity();
-        var parent = groups.get(key);
+      Set<String> activeGroups = new HashSet<>();
+      int groupIndex = 1;
+      for (var group : presentation) {
+        activeGroups.add(group.key());
+        var parent = groups.get(group.key());
+        GroupNode groupValue = new GroupNode(group.key(),group.label(),group.entries().size());
         if (parent == null) {
-          parent = new DefaultMutableTreeNode(key);
-          groups.put(key, parent);
-          treeModel.insertNodeInto(parent, treeRoot, treeRoot.getChildCount());
+          parent = new DefaultMutableTreeNode(groupValue);
+          groups.put(group.key(),parent);
+          treeModel.insertNodeInto(parent, treeRoot,groupIndex);
+        } else {
+          if (!groupValue.equals(parent.getUserObject())) {parent.setUserObject(groupValue);treeModel.nodeChanged(parent);}
+          if (treeRoot.getIndex(parent)!=groupIndex) {
+            treeModel.removeNodeFromParent(parent);treeModel.insertNodeInto(parent,treeRoot,groupIndex);
+          }
         }
-        FeatureNode value =
-            new FeatureNode(f.id(), f.name() + " [" + f.packets() + "건 · " + f.state() + "]");
-        var node = existing.get(f.id());
-        if (node == null) {
-          node = new DefaultMutableTreeNode(value);
-          treeModel.insertNodeInto(node, parent, parent.getChildCount());
-        } else if (!value.equals(node.getUserObject())) {
-          node.setUserObject(value);
-          treeModel.nodeChanged(node);
+        groupIndex++;
+        int childIndex = 0;
+        for (var entry : group.entries()) {
+          active.add(entry.id());displayNames.put(entry.id(),entry.label());
+          FeatureNode value = new FeatureNode(entry.id(),entry.label(),entry.packets(),entry.state(),entry.originalName(),entry.origin());
+          var node = existing.get(entry.id());
+          if (node == null) {
+            node = new DefaultMutableTreeNode(value);
+            treeModel.insertNodeInto(node,parent,childIndex);
+          } else {
+            if (node.getParent()!=parent||parent.getIndex(node)!=childIndex) {
+              treeModel.removeNodeFromParent(node);treeModel.insertNodeInto(node,parent,childIndex);
+            }
+            if (!value.equals(node.getUserObject())) {node.setUserObject(value);treeModel.nodeChanged(node);}
+          }
+          childIndex++;
         }
       }
+      featureDisplayNames = Map.copyOf(displayNames);
       for (var entry : existing.entrySet())
         if (!active.contains(entry.getKey())) treeModel.removeNodeFromParent(entry.getValue());
-      for (var group : groups.values())
-        if (group.getChildCount() == 0) treeModel.removeNodeFromParent(group);
+      for (var entry : groups.entrySet())
+        if (!activeGroups.contains(entry.getKey())) treeModel.removeNodeFromParent(entry.getValue());
+      if (selectedFeature != null && !active.contains(selectedFeature)) selectedFeature=null;
       tree.expandPath(new TreePath(treeRoot.getPath()));
-      for (int i = 0; i < tree.getRowCount(); i++) tree.expandRow(i);
+      for (var group : presentation) {
+        TreePath path = new TreePath(groups.get(group.key()).getPath());
+        if (groupExpansion.getOrDefault(group.key(),group.initiallyExpanded())) tree.expandPath(path);
+        else tree.collapsePath(path);
+      }
+      boolean expands = tree.getExpandsSelectedPaths();tree.setExpandsSelectedPaths(false);
+      try {
+        if (selectedFeature != null) {
+          DefaultMutableTreeNode selected = findFeatureNode(selectedFeature);
+          if (selected != null) {
+            TreePath path = new TreePath(selected.getPath());
+            if (tree.isVisible(path)) tree.setSelectionPath(path);
+          }
+        }
+      } finally {tree.setExpandsSelectedPaths(expands);}
     } finally {
       rebuilding = false;
     }
@@ -657,6 +766,15 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     } catch (IOException e) {
       failure("저장 크기", e);
     }
+  }
+
+  private DefaultMutableTreeNode findFeatureNode(String id) {
+    var nodes = treeRoot.depthFirstEnumeration();
+    while (nodes.hasMoreElements()) {
+      var node = (DefaultMutableTreeNode)nodes.nextElement();
+      if (node.getUserObject() instanceof FeatureNode feature && feature.id().equals(id)) return node;
+    }
+    return null;
   }
 
   private static void updateOptions(JComboBox<String> combo, Set<String> options, String selected) {
@@ -705,11 +823,18 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       run = String.valueOf(runs.getSelectedItem());
       session = String.valueOf(sessions.getSelectedItem());
       String term = search.getText().toLowerCase(Locale.ROOT);
+      Set<Long> featureMatches = new HashSet<>();
+      if (!term.isBlank()) synchronized (projectLock) {
+        for (var entry : featureDisplayNames.entrySet())
+          if (entry.getValue().toLowerCase(Locale.ROOT).contains(term))
+            for (var packet : mapper.packetRows(entry.getKey())) featureMatches.add(packet.id());
+      }
       List<Mapper.PacketRow> visible = new ArrayList<>();
       for (var p : packets) {
         if (!run.equals("전체") && !p.run().equals(run)
             || !session.equals("전체") && !p.session().equals(session)
-            || !(p.method() + " " + p.url()).toLowerCase(Locale.ROOT).contains(term)) continue;
+            || (!(p.method() + " " + p.url()).toLowerCase(Locale.ROOT).contains(term)
+                && !featureMatches.contains(p.id()))) continue;
         visible.add(p);
       }
       // Normal capture appends rows. Update only changed cells; filter changes reconcile IDs.

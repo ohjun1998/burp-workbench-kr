@@ -1,0 +1,2 @@
+closed-listener self-connect: connected=true, local=/127.0.0.1:35303, remote=/127.0.0.1:35303, selfEcho=true
+distinct-source closed-listener control: ConnectException

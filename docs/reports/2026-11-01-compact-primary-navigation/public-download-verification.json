@@ -1,0 +1,67 @@
+{
+  "result": "passed",
+  "commit": "03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d",
+  "verifiedAtUTC": "2026-11-01T10:05:41.358381+00:00",
+  "scope": "Public immutable raw commit downloads, exact bytes/SHA256 and JAR/ZIP CRC; no additional app tests.",
+  "records": [
+    {
+      "path": "simple/downloads/1.4.21/burp-workbench-simple-1.4.21.jar",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/simple/downloads/1.4.21/burp-workbench-simple-1.4.21.jar",
+      "httpStatus": 200,
+      "bytes": 9233759,
+      "sha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "matchesLocal": true,
+      "archiveCRCVerified": true
+    },
+    {
+      "path": "simple/downloads/1.4.21/burp-workbench-simple-1.4.21-source.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/simple/downloads/1.4.21/burp-workbench-simple-1.4.21-source.zip",
+      "httpStatus": 200,
+      "bytes": 100037471,
+      "sha256": "32936ec51dd6dff09e54e0329e04e597a9aaf1f2f2620d93bdaedcad11923d5b",
+      "matchesLocal": true,
+      "archiveCRCVerified": true
+    },
+    {
+      "path": "simple/downloads/1.4.21/feature-mapper-browser-helper-0.4.1.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/simple/downloads/1.4.21/feature-mapper-browser-helper-0.4.1.zip",
+      "httpStatus": 200,
+      "bytes": 34685,
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2",
+      "matchesLocal": true,
+      "archiveCRCVerified": true
+    },
+    {
+      "path": "simple/downloads/1.4.21/SHA256SUMS",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/simple/downloads/1.4.21/SHA256SUMS",
+      "httpStatus": 200,
+      "bytes": 311,
+      "sha256": "08ed0b643a7e88a6015202a9923a6be9e8a0b6779faf14447743d5a7cfd6d3ba",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-compact-primary-navigation/REPORT_KR.md",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/docs/reports/2026-11-01-compact-primary-navigation/REPORT_KR.md",
+      "httpStatus": 200,
+      "bytes": 6552,
+      "sha256": "275619650731f92b6c62d49fb64db5191b004f748e63a900268b0eea33a0a03b",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-compact-primary-navigation/native/primary/light/1600x1000/01-navigation.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/docs/reports/2026-11-01-compact-primary-navigation/native/primary/light/1600x1000/01-navigation.png",
+      "httpStatus": 200,
+      "bytes": 77759,
+      "sha256": "c82284a61006aa9e1342c61f40ce4d0b710545d97c98db785a5e9296b8aac004",
+      "matchesLocal": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-compact-primary-navigation/native/primary/dark/1600x1000/03-dashboard.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/docs/reports/2026-11-01-compact-primary-navigation/native/primary/dark/1600x1000/03-dashboard.png",
+      "httpStatus": 200,
+      "bytes": 92732,
+      "sha256": "872587239c496eaf8acebc07427c0a93cf91d6e9cd8df34fdeeebd31e27fc5af",
+      "matchesLocal": true
+    }
+  ]
+}

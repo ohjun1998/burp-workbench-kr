@@ -89,5 +89,14 @@
   "historicalExcludedGroups": {
     "UiCleanupTest": "Asserts removed WorkContext header, exact 15-item auxiliary menu and absence of direct next-step buttons; replaced by SimpleWorkflowTest and Simple layout rendering",
     "AppearanceWorkflowTest": "Requires the original auxiliary/settings page contract; current folder styling and retained Simple inputs are checked by SimpleClassicLayoutTest, FolderNavigationTest and SimpleAppearanceTest"
+  },
+  "publicDelivery": {
+    "result": "passed",
+    "sourceCommit": "03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d",
+    "verifiedDownloads": 7,
+    "allHttp200": true,
+    "sha256Matches": true,
+    "jarAndZipCrcVerified": true,
+    "evidence": "public-download-verification.json"
   }
 }

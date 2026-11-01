@@ -45,3 +45,5 @@
 최종 JAR SHA-256: `9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c`
 
 [전체 검증 요약](verification.json)
+
+공개 커밋 `03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d`의 JAR·소스 ZIP·도우미 ZIP·체크섬·당시 보고서·두 실제 화면을 다시 내려받았습니다. 7개 모두 HTTP200·크기·SHA-256이 일치하고 JAR/ZIP CRC도 통과했습니다. [공개 다운로드 검증](public-download-verification.json).

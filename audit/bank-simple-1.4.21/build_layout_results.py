@@ -112,7 +112,7 @@ def main() -> None:
         {"key": "coverage", "label": "미확인·제한", "count": categories["COVERAGE"]},
     ]
 
-    template_path = HERE / "layout-results-template.html"
+    template_path = HERE / "layout-results-template.html.in"
     css_path = HERE / "layout-results.css"
     font_path = REPOSITORY / "simple/burp-workbench/src/main/resources/fonts/WorkbenchSans-Regular.otf"
     # Workbench Sans is the renamed Noto/Adobe font. OFL.txt in this directory

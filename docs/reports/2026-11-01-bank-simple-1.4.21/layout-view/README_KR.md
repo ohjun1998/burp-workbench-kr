@@ -2,6 +2,8 @@
 
 [저장용 ZIP](Workbench_Simple_1.4.21_Results_Layout_KR.zip)을 내려받아 압축을 풀고 안의 HTML을 더블클릭합니다. [.html 원본](Workbench_Simple_1.4.21_Results_Layout_KR.html)도 제공합니다.
 
+미리보기에서도 **`Workbench_Simple_1.4.21_Results_Layout_KR.html`**을 엽니다. 생성용 `layout-results-template.html.in`에는 데이터 자리표시자가 남아 있어 직접 실행할 수 없습니다. 템플릿이 HTML 미리보기로 오인되지 않도록 파일 형식을 구분했습니다. 완성 HTML·ZIP·생성 당시의 입력 지문은 그대로 보존했습니다.
+
 실제 Workbench Simple1.4.21의 왼쪽 메뉴·결과 표·계정 비교·요청/응답 패널·대시보드 배치를 참고해 **저장된 실행값 중심의 HTML**로 재구성했습니다. 기존 설명 보고서와 별도의 결과 열람 화면입니다.
 
 - 왼쪽 메뉴에서13개 도구 선택

@@ -1,3 +1,9 @@
+# Workbench Simple 1.4.19
+
+상단 달 모양 버튼으로 Workbench의 라이트·다크 테마를 바로 전환합니다. 설정·전체 화면·오류 기록 등의 기존 도구는 별도의 톱니 메뉴에서 이름과 아이콘으로 선택합니다. 아이콘 전용 버튼에서 메뉴를 만들 때 빈 행으로 표시되던 문제도 수정했습니다.
+
+[설치 JAR](downloads/1.4.19/burp-workbench-simple-1.4.19.jar) · [독립 소스 ZIP](downloads/1.4.19/burp-workbench-simple-1.4.19-source.zip) · [변경 안내](docs/RELEASE_SIMPLE_1.4.19_KR.md) · [실제 화면·검증](../docs/reports/2026-11-01-header-tools/REPORT_KR.md)
+
 # Workbench Simple 1.4.18
 
 요청·응답 목록에 적용한 승인 시안 기준을 나머지 도구와 결과·계정 연결 화면까지 확장했습니다. 메뉴와 버튼, 표의 열 순서, 카드와 원문 읽기 영역을 조정했습니다. 기존 원본 ID·바이트와 검사 엔진, SCOPE·중지·계정 준비 동작을 유지합니다.

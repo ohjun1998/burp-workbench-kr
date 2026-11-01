@@ -7,7 +7,10 @@ import javax.swing.border.AbstractBorder;
 /** Drawing primitives shared by both distributions; never installs global Swing defaults. */
 public final class VisualTheme {
   private VisualTheme() {}
-  public static boolean dark(){Color c=UIManager.getColor("Panel.background");return c!=null&&c.getRed()+c.getGreen()+c.getBlue()<360;}
+  private static volatile Boolean darkOverride;
+  /** Extension-classloader-local preference; null follows the host without changing its defaults. */
+  public static void setDarkOverride(Boolean value){darkOverride=value;}
+  public static boolean dark(){Boolean chosen=darkOverride;if(chosen!=null)return chosen;Color c=UIManager.getColor("Panel.background");return c!=null&&c.getRed()+c.getGreen()+c.getBlue()<360;}
   /** Local neutral material palette, shared with the embedded Mapper. */
   public static Color background(){return dark()?new Color(21,24,30):new Color(245,246,248);}
   public static Color surface(){return dark()?new Color(29,34,42):Color.WHITE;}

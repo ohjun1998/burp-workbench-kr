@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.19는 달 버튼의 라이트·다크 전환과 빈 메뉴 표시를 수정합니다.** 기존 설정·전체 화면·오류 기록은 별도 톱니 메뉴에서 이름과 아이콘으로 표시합니다. [설치 JAR](simple/downloads/1.4.19/burp-workbench-simple-1.4.19.jar) · [소스 ZIP](simple/downloads/1.4.19/burp-workbench-simple-1.4.19-source.zip) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.19_KR.md) · [실제 화면과 검증](docs/reports/2026-11-01-header-tools/REPORT_KR.md). 작업 브랜치에서 제공하며 main 미병합입니다.
+
 **Simple 1.4.17은 PDF 시안과 달랐던 배치를 보완합니다.** 공통 화면·입력값 검사 결과의 필터/응답 시간·증거 보고서 카드·인증 준비 창 전체3탭을 수정하고, 최종 JAR로 전체7,474개·화면258개·Linux 창180개·Katana102개 검사를 통과했습니다. [설치 JAR](simple/downloads/1.4.17/burp-workbench-simple-1.4.17.jar) · [소스 ZIP](simple/downloads/1.4.17/burp-workbench-simple-1.4.17-source.zip) · [시안/실제 비교 PDF](docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-pdf-alignment.pdf) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.17_KR.md) · [실제 검증](docs/reports/2026-10-31-pdf-alignment/1.4.17/VERIFICATION.json). 작업 브랜치에서 제공하며 main 미병합입니다.
 
 **Simple 1.4.16은 승인한 16개 화면의 작업 흐름을 적용합니다.** 주 작업과 보조 메뉴를 구분하고, 접힌 설정·넓은 원문·증거 3열 구성을 제공합니다. [설치 JAR](simple/downloads/1.4.16/burp-workbench-simple-1.4.16.jar) · [실제 화면 PDF](docs/reports/2026-10-31-approved-workflow/workbench-simple-1.4.16-workflow.pdf) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.16_KR.md). 작업 브랜치에서 제공하며 main 미병합입니다.

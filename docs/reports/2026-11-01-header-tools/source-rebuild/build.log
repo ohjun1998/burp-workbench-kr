@@ -1,0 +1,6 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /tmp/header-tools-1.4.19-independent-source/burp-workbench/build_all.py --java /workspace/.dev-tools/jdk-17.0.21+9/bin/java
+Note: /tmp/header-tools-1.4.19-independent-source/burp-workbench/src/main/java/kr/packetui/PacketStyle.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /tmp/header-tools-1.4.19-independent-source/burp-workbench/dist/burp-workbench-simple-1.4.19.jar 9097838 bytes

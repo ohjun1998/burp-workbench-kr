@@ -174,6 +174,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private Component payloadPage;
   private final JButton visualGuide = new JButton("Guide");
   private VisualGuideWindow visualGuideWindow;
+  private WorkbenchTheme theme;
   private final Diagnostics diagnostics = new Diagnostics();
   private final JButton logButton = new JButton("로그");
   private JPanel logContent;
@@ -417,6 +418,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     }
                     if (passiveScan != null) passiveScan.close();
                     if (activity != null) activity.close();
+                    if (theme != null) theme.close();
                     WorkbenchScope.release(api);
                   });
             });
@@ -438,6 +440,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       api.logging()
           .logToOutput("Workbench Simple loaded. SCOPE 수집과 선택한 요청의 직접 실행을 사용하세요.");
     } catch (Exception e) {
+      if (theme != null) theme.close();
       if (captureObservations != null) captureObservations.close();
       if (featureMapper != null) featureMapper.close();
       captureStage("초기화 실패 저장소 정리", trafficStore::close);
@@ -497,6 +500,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void buildUi() {
+    theme = new WorkbenchTheme(api);
     root = new JPanel(new BorderLayout());
     root.setName("wb.root");
     tabs =
@@ -684,6 +688,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     workbenchWindow = new WorkbenchWindow(root);
     navigation = new FolderNavigation(api, tabs, this::openSettings, null, logButton,
         true, dashboard, inspect, workbenchWindow.fullScreenButton, visualGuide);
+    navigation.setThemeAction(theme::toggle);
     root.add(navigation);
     ApprovedLayouts.install(root);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
@@ -697,6 +702,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     WorkbenchUi.style(root);
     navigation.restoreLayout();
     WorkbenchUi.style(workbenchWindow.launcher);
+    theme.bind(root, () -> {
+      navigation.restoreAppearance();
+      WorkbenchUi.style(workbenchWindow.launcher);
+      if (commonSettingsContent != null) WorkbenchUi.style(commonSettingsContent);
+      if (visualGuideWindow != null) visualGuideWindow.panel.refreshTheme();
+    });
     api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB, workbenchWindow.launcher);
     WorkbenchSkin.install(root, navigation::restoreLayout);
     workspaceResume = WorkspaceResume.forApi(api);

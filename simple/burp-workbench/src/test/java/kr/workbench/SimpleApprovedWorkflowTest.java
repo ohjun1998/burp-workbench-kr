@@ -97,6 +97,42 @@ public final class SimpleApprovedWorkflowTest extends WorkbenchTest {
       originalSetting.setEnabled(false);
       check(!nested.getItem(0).isEnabled(),"nested actions track original selection availability");
 
+      AtomicInteger compactCalls = new AtomicInteger();
+      JButton compact = new JButton("");
+      compact.setName("wb.approved.compact");
+      compact.setActionCommand("RETAINED_COMPACT_ACTION");
+      compact.getAccessibleContext().setAccessibleName("전체화면");
+      compact.setIcon(WorkspaceIcons.of("fullscreen"));
+      compact.addActionListener(event -> {
+        check(event.getSource()==compact && "RETAINED_COMPACT_ACTION".equals(event.getActionCommand()),
+            "an icon-only menu action forwards through the exact retained controller");
+        compactCalls.incrementAndGet();
+      });
+      JMenuItem compactProxy=WorkflowUi.proxy(compact);
+      check("전체화면".equals(compactProxy.getText()) && compactProxy.getIcon()==compact.getIcon(),
+          "an icon-only controller produces a readable caption and its real icon in a menu");
+      compact.getAccessibleContext().setAccessibleName("창 모드");
+      check("창 모드".equals(compactProxy.getText()),
+          "a state change published only through accessibility updates an already-built menu caption");
+      compact.setIcon(WorkspaceIcons.of("gear"));
+      check(compactProxy.getIcon()==compact.getIcon(),
+          "an already-built menu follows replacement of the retained controller icon");
+      compact.setEnabled(false);compactProxy.doClick(0);
+      check(!compactProxy.isEnabled() && compactCalls.get()==0,
+          "a disabled icon-only controller cannot be invoked through its menu representation");
+      compact.setEnabled(true);compactProxy.doClick(0);
+      check(compactCalls.get()==1,
+          "explicit use of an enabled icon-only menu invokes its retained handler exactly once");
+      compact.setText("명시한 메뉴 이름");
+      compact.getAccessibleContext().setAccessibleName("별도 접근성 설명");
+      check("명시한 메뉴 이름".equals(compactProxy.getText()),
+          "an authored visible caption takes precedence over a different accessible description");
+      compact.setText("");
+      check("별도 접근성 설명".equals(compactProxy.getText()),
+          "returning to icon-only presentation restores its latest accessible caption");
+      check(compactCalls.get()==1,
+          "caption, accessibility, icon and availability synchronization never invokes an action");
+
       PacketInspector packet = new PacketInspector("wb.approved.packet");
       try {
         String wire = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{\"id\":9007199254740993,\"note\":\"KEEP 한글\"}";

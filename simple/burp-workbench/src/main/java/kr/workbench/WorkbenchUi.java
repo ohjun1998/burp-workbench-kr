@@ -9,7 +9,7 @@ import java.awt.*;
 /** Local component styling only; never modifies Burp's global look-and-feel. */
 public final class WorkbenchUi {
  private WorkbenchUi(){}
- public static boolean dark(){Color c=UIManager.getColor("Panel.background");return c!=null&&(c.getRed()+c.getGreen()+c.getBlue())<360;}
+ public static boolean dark(){return kr.packetui.VisualTheme.dark();}
  public static Color surface(){return kr.packetui.VisualTheme.surface();}
  public static Color raised(){return kr.packetui.VisualTheme.raised();}
  public static Color background(){return kr.packetui.VisualTheme.background();}
@@ -72,6 +72,8 @@ public final class WorkbenchUi {
   if(c instanceof JPanel p){p.setAlignmentX(Component.LEFT_ALIGNMENT);p.setBackground(Boolean.TRUE.equals(p.getClientProperty("wb.surface"))||insideCard(p)?surface():background());if(p.getLayout() instanceof FlowLayout f&&!(f instanceof WrapLayout))p.setLayout(new WrapLayout(f.getAlignment(),8,5));if(p.getName()!=null&&p.getName().startsWith("wb.card."))p.setBackground(surface());}
   if(c instanceof JLabel l&&l.getFont()!=null){if(l.getParent()!=null&&l.getParent().getName()!=null&&l.getParent().getName().startsWith("wb.card.")){l.setFont(font().deriveFont(Font.BOLD,displaySize(13f)));l.setOpaque(true);l.setBackground(surface());}}
   if(c instanceof JLabel secondary&&Boolean.TRUE.equals(secondary.getClientProperty("wb.secondary")))secondary.setForeground(toneInk(Tone.NEUTRAL));
+  if(c instanceof JPopupMenu popup){popup.setBackground(surface());popup.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(line()),BorderFactory.createEmptyBorder(4,0,4,0)));}
+  if(c instanceof JMenuItem item)item.setBackground(surface());
   if(c instanceof JLabel l&&Boolean.TRUE.equals(l.getClientProperty("wb.status")))statusPaint(l);
   if(c instanceof AbstractButton b&&(b instanceof JButton||b instanceof JToggleButton&&!(b instanceof JCheckBox)&&!(b instanceof JRadioButton))){b.setFont(font().deriveFont(displaySize(12f)));WorkbenchSkin.button(b);b.setMargin(b.getName()!=null&&b.getName().startsWith("wb.settings.")?new Insets(2,6,2,6):new Insets(5,11,5,11));b.setFocusPainted(true);buttonPaint(b);if(!Boolean.TRUE.equals(b.getClientProperty("wb.button.watch"))){b.putClientProperty("wb.button.watch",true);b.addPropertyChangeListener("enabled",e->buttonPaint(b));b.addPropertyChangeListener("wb.primary",e->buttonPaint(b));}if(b.getToolTipText()==null)b.setToolTipText(b.getText());}
   if(c instanceof JCheckBox b){b.setIcon(kr.packetui.VisualTheme.checkIcon());b.setIconTextGap(6);b.setOpaque(false);if(b.getToolTipText()==null)b.setToolTipText(b.getText());}

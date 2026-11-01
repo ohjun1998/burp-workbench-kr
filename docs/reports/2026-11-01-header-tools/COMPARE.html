@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simple 1.4.19 · 상단 도구와 테마 전환 실제 화면</title>
+<style>
+  :root{font-family:system-ui,sans-serif;color:#202631;background:#f4f6f9;line-height:1.6}
+  body{margin:0;padding:24px;max-width:1900px;margin-inline:auto}h1{font-size:24px;margin:0 0 8px}p{margin:8px 0 16px}a{color:#075fce}
+  .controls{display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:white;border:1px solid #dce2eb;padding:12px 16px;border-radius:8px;margin-block:20px}
+  select,button{font:inherit;border:1px solid #bdc8d8;border-radius:5px;background:white;color:inherit;padding:4px 10px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}figure{margin:0;background:white;border:1px solid #dce2eb;border-radius:8px;overflow:hidden;min-width:0}
+  figcaption{padding:12px 16px;border-bottom:1px solid #dce2eb;font-weight:600}.caption-note{font-weight:400;font-size:13px;color:#536175}
+  .viewport{overflow:auto;max-height:78vh;background:#e6ebf2}.viewport img{display:block;width:auto;height:auto;max-width:100%;margin-inline:auto}.pixel .viewport img{max-width:none;margin-inline:0}
+  .toggle{margin-top:20px}.small{font-size:13px;color:#536175}code{word-break:break-all}
+  @media(max-width:900px){body{padding:14px}.grid{grid-template-columns:1fr}}
+</style>
+<h1>Simple 1.4.19 · 상단 도구와 테마 전환</h1>
+<p>달 버튼은 라이트·다크 테마를 바로 전환합니다. 기존 도구는 별도 톱니 버튼에서 이름과 아이콘으로 표시됩니다.</p>
+<p class="small">운영 Swing 컴포넌트와 합성 Burp API 어댑터를 Linux Xorg에서 실행한 Robot 원본 캡처입니다. 실제 Windows Burp 본체 검증은 포함하지 않습니다. 이미지 파일은 보정·재표본화하지 않았으며, 클릭하면 원본 PNG를 엽니다.</p>
+<div class="controls">
+  <label>시작 테마 <select id="theme"><option value="dark">다크</option><option value="light">라이트</option></select></label>
+  <label>창 크기 <select id="dimensions"><option value="1600x1000">1600 × 1000</option><option value="1024x768">1024 × 768</option></select></label>
+  <button id="zoom" type="button" aria-pressed="false">100% 원본 크기</button>
+  <span id="geometry" class="small"></span>
+</div>
+<div class="grid">
+  <figure>
+    <figcaption>수정 전 · 1.4.18 달 버튼의 빈 메뉴<div class="caption-note">빈 행 5개와 마지막 Guide는 수정 전 실제 표시 결과입니다.</div></figcaption>
+    <div class="viewport"><a id="before-link"><img id="before" alt=""></a></div>
+  </figure>
+  <figure>
+    <figcaption>수정 후 · 1.4.19 톱니 버튼의 도구 메뉴<div class="caption-note">6개 항목을 원래 기능에 연결하고 메뉴를 창 안에 표시합니다.</div></figcaption>
+    <div class="viewport"><a id="after-link"><img id="after" alt=""></a></div>
+  </figure>
+</div>
+<figure class="toggle">
+  <figcaption>수정 후 · 달 버튼을 한 번 누른 실제 화면<div id="toggle-caption" class="caption-note"></div></figcaption>
+  <div class="viewport"><a id="toggle-link"><img id="toggle" alt=""></a></div>
+</figure>
+<p class="small"><a href="REPORT_KR.md">변경·검증 보고서</a> · <a href="after/verification.json">최종 JAR 해시·실제 창 검사·원본 이미지 해시</a></p>
+<script>
+  const byId=id=>document.getElementById(id);
+  function render(){
+    const theme=byId('theme').value,size=byId('dimensions').value;
+    const original=theme==='dark'?'다크':'라이트',opposite=theme==='dark'?'라이트':'다크';
+    const images={before:`before/${theme}/${size}/header-tools-menu.png`,after:`after/${theme}/${size}/header-tools-menu.png`,toggle:`after/${theme}/${size}/theme-toggled.png`};
+    for(const [id,path] of Object.entries(images)){
+      byId(id).src=path;byId(`${id}-link`).href=path;byId(`${id}-link`).target='_blank';byId(`${id}-link`).rel='noopener';
+      byId(id).alt=`${id==='before'?'수정 전':id==='after'?'수정 후 도구 메뉴':'달 버튼 클릭 후'} · ${id==='toggle'?opposite:original} · 창 ${size}`;
+    }
+    byId('geometry').textContent=size==='1600x1000'?'장식 포함 창 1600×1000 · 원본 콘텐츠 PNG 1590×966':'장식 포함 창 1024×768 · 원본 콘텐츠 PNG 1014×734';
+    byId('toggle-caption').textContent=`${original}에서 ${opposite}로 즉시 전환한 화면입니다. 계정 입력란과 드롭다운도 현재 테마를 사용합니다. 기존 입력·선택과 저장한 테마를 실제 창 검사에서 확인했습니다.`;
+  }
+  byId('theme').addEventListener('change',render);byId('dimensions').addEventListener('change',render);
+  byId('zoom').addEventListener('click',()=>{const pixel=document.body.classList.toggle('pixel');byId('zoom').setAttribute('aria-pressed',String(pixel));byId('zoom').textContent=pixel?'화면 너비에 맞춤':'100% 원본 크기';});
+  render();
+</script>
+</html>

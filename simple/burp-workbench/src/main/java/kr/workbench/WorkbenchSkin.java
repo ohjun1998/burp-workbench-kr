@@ -99,8 +99,25 @@ final class WorkbenchSkin {
 
   static void combo(JComboBox<?> combo) {
     if(!(combo.getUI() instanceof ComboUi))combo.setUI(new ComboUi());
+    ((ComboUi)combo.getUI()).refreshPalette();
   }
-  private static final class ComboUi extends BasicComboBoxUI {
+  /** Keeps the detached popup list and editable child on the local palette as well as the outer box. */
+  static class ComboUi extends BasicComboBoxUI {
+    void refreshPalette(){
+      if(listBox!=null){listBox.setBackground(WorkbenchUi.surface());listBox.setForeground(WorkbenchUi.ink());listBox.setSelectionBackground(WorkbenchUi.selected());listBox.setSelectionForeground(WorkbenchUi.ink());}
+      if(editor!=null){editor.setBackground(WorkbenchUi.surface());editor.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());if(editor instanceof javax.swing.text.JTextComponent text){text.setCaretColor(WorkbenchUi.ink());text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());}}
+    }
+    @Override protected void configureEditor(){super.configureEditor();refreshPalette();}
+    @Override protected ComboPopup createPopup(){return new BasicComboPopup(comboBox){@Override public void show(){refreshPalette();super.show();}};}
+    @Override public void paint(Graphics graphics,JComponent component){refreshPalette();super.paint(graphics,component);}
+    @Override public void paintCurrentValueBackground(Graphics graphics,Rectangle bounds,boolean focus){graphics.setColor(comboBox.getBackground());graphics.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);}
+    @Override public void paintCurrentValue(Graphics graphics,Rectangle bounds,boolean focus){
+      refreshPalette();boolean selected=focus&&!isPopupVisible(comboBox);
+      Component value=comboBox.getRenderer().getListCellRendererComponent(listBox,comboBox.getSelectedItem(),-1,selected,false);
+      value.setFont(comboBox.getFont());value.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());value.setBackground(selected?WorkbenchUi.selected():comboBox.getBackground());
+      Insets in=padding==null?new Insets(0,0,0,0):padding;
+      currentValuePane.paintComponent(graphics,value,comboBox,bounds.x+in.left,bounds.y+in.top,Math.max(0,bounds.width-in.left-in.right),Math.max(0,bounds.height-in.top-in.bottom),value instanceof JPanel);
+    }
     @Override public Dimension getPreferredSize(JComponent component){Dimension size=super.getPreferredSize(component);return new Dimension(size.width,Math.max(32,size.height));}
     @Override protected JButton createArrowButton(){JButton arrow=new JButton(){protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setColor(WorkbenchUi.ink());g.setStroke(new BasicStroke(1.3f));int x=getWidth()/2,y=getHeight()/2;g.drawPolyline(new int[]{x-4,x,x+4},new int[]{y-2,y+2,y-2},3);g.dispose();}};arrow.putClientProperty("wb.nativeEditor",true);arrow.setBorder(null);arrow.setPreferredSize(new Dimension(25,30));return arrow;}
   }
@@ -110,6 +127,7 @@ final class WorkbenchSkin {
   }
   private static final class ScrollUi extends BasicScrollBarUI {
     @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=kr.packetui.VisualTheme.thumb();}
+    @Override protected void paintTrack(Graphics graphics,JComponent component,Rectangle bounds){graphics.setColor(WorkbenchUi.background());graphics.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);}
     @Override protected JButton createDecreaseButton(int direction){return arrow(direction);}
     @Override protected JButton createIncreaseButton(int direction){return arrow(direction);}
     private JButton arrow(int direction){return new BasicArrowButton(direction,WorkbenchUi.background(),WorkbenchUi.line(),WorkbenchUi.ink(),WorkbenchUi.line()){@Override public Dimension getPreferredSize(){return new Dimension(0,0);}};}

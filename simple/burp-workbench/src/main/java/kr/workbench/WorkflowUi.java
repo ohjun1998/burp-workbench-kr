@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
+import javax.accessibility.AccessibleContext;
 
 /** Groups existing controllers without duplicating engines, listeners or user data. */
 public final class WorkflowUi {
@@ -63,13 +64,20 @@ public final class WorkflowUi {
         ? new JCheckBoxMenuItem() : new JMenuItem();
     item.setName(source.getName() == null ? null : source.getName() + ".menu");
     Runnable sync = () -> {
-      item.setText(source.getText()); item.setEnabled(source.isEnabled());
+      // Header controls may be icon-only; their accessible name retains the action caption.
+      String caption = source.getText();
+      if (caption == null || caption.isBlank()) caption = source.getAccessibleContext().getAccessibleName();
+      if (caption == null || caption.isBlank()) caption = source.getToolTipText();
+      item.setText(caption); item.setIcon(source.getIcon()); item.setEnabled(source.isEnabled());
       item.setToolTipText(source.getToolTipText()); item.setSelected(source.isSelected());
-      item.getAccessibleContext().setAccessibleName(source.getAccessibleContext().getAccessibleName());
+      item.getAccessibleContext().setAccessibleName(caption);
     };
     sync.run();
     source.addPropertyChangeListener(e -> {
       if (List.of("text", "enabled", "ToolTipText", "icon").contains(e.getPropertyName())) sync.run();
+    });
+    source.getAccessibleContext().addPropertyChangeListener(e -> {
+      if (AccessibleContext.ACCESSIBLE_NAME_PROPERTY.equals(e.getPropertyName())) sync.run();
     });
     source.addItemListener(e -> sync.run());
     if (!(source instanceof JMenu))

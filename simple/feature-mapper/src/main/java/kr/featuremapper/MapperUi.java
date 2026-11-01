@@ -5,6 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
@@ -17,7 +19,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 /** Local, theme-aware styling; never changes Burp's UIManager defaults. */
 final class MapperUi {
   private static Font bundled;
-  static boolean dark() { Color c=UIManager.getColor("Panel.background"); return c!=null&&c.getRed()+c.getGreen()+c.getBlue()<360; }
+  static boolean dark() { return kr.packetui.VisualTheme.dark(); }
   static Color background() {return kr.packetui.VisualTheme.background();}
   static Color surface() {return kr.packetui.VisualTheme.surface();}
   static Color raised() {return kr.packetui.VisualTheme.raised();}
@@ -70,7 +72,7 @@ final class MapperUi {
     if(c instanceof JTextField t){t.setBackground(surface());t.setCaretColor(ink());t.setSelectionColor(selected());t.setBorder(kr.packetui.VisualTheme.border(7,10,7,10));}
     if(c instanceof JTextArea t){t.setBackground(surface());t.setCaretColor(ink());t.setSelectionColor(selected());t.setMargin(new Insets(8,10,8,10));if(Boolean.TRUE.equals(t.getClientProperty("fm.packet"))){t.putClientProperty("wb.approved.packet",true);t.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));kr.packetui.PacketStyle.install(t);}}
     if(c instanceof JScrollPane p){p.setBorder(p.getViewport().getView() instanceof JTable?null:BorderFactory.createLineBorder(line()));p.getViewport().setBackground(surface());}
-    if(c instanceof JComboBox<?> b){if(!(b.getUI() instanceof ComboUi))b.setUI(new ComboUi());b.setBackground(surface());b.setMaximumRowCount(16);}
+    if(c instanceof JComboBox<?> b){if(!(b.getUI() instanceof ComboUi))b.setUI(new ComboUi());b.setBackground(surface());((ComboUi)b.getUI()).refreshPalette();b.setMaximumRowCount(16);}
     if(c instanceof JScrollBar b){if(!(b.getUI() instanceof ScrollUi))b.setUI(new ScrollUi());b.setUnitIncrement(18);b.setPreferredSize(b.getOrientation()==JScrollBar.VERTICAL?new Dimension(10,0):new Dimension(0,10));}
     if(c instanceof JTable t){if(!(t.getUI() instanceof TableUi))t.setUI(new TableUi());t.setFont(font().deriveFont(12f));t.setRowHeight(35);t.setBackground(surface());t.setForeground(ink());t.setGridColor(line());t.setShowVerticalLines(false);t.setIntercellSpacing(new Dimension(0,1));t.setFillsViewportHeight(true);t.setSelectionBackground(selected());t.setSelectionForeground(ink());t.setDefaultRenderer(Object.class,new Cells());t.setDefaultRenderer(String.class,new Cells());t.getTableHeader().setFont(font().deriveFont(Font.PLAIN,11f));t.getTableHeader().setBackground(raised());t.getTableHeader().setForeground(ink());t.getTableHeader().setPreferredSize(new Dimension(0,31));t.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer(){public Component getTableCellRendererComponent(JTable owner,Object value,boolean selected,boolean focus,int row,int column){super.getTableCellRendererComponent(owner,value,selected,focus,row,column);setFont(font().deriveFont(Font.PLAIN,11f));setBackground(raised());setForeground(ink());setBorder(BorderFactory.createEmptyBorder(0,9,0,9));return this;}});return;}
     if(c instanceof JTree t){if(!(t.getUI() instanceof TreeUi))t.setUI(new TreeUi());t.setRowHeight(40);t.setBackground(surface());t.setFont(font().deriveFont(12f));t.setCellRenderer(new DefaultTreeCellRenderer(){
@@ -107,10 +109,26 @@ final class MapperUi {
       if(text.matches("[1-5][0-9]{2}")||name.equals("매핑")){boolean good=text.startsWith("2")||text.equals("높음"),neutral=text.equals("401")||text.equals("404");badge=good?(dark()?new Color(32,60,51):new Color(233,247,240)):neutral?raised():(dark()?new Color(67,55,39):new Color(255,244,222));setForeground(good?(dark()?new Color(103,213,164):new Color(11,119,82)):neutral?ink():(dark()?new Color(237,186,101):new Color(171,104,11)));setFont(t.getFont().deriveFont(11f));}return this;}
   }
   private static final class ComboUi extends BasicComboBoxUI {
+    void refreshPalette(){
+      if(listBox!=null){listBox.setBackground(surface());listBox.setForeground(ink());listBox.setSelectionBackground(selected());listBox.setSelectionForeground(ink());}
+      if(editor!=null){editor.setBackground(surface());editor.setForeground(comboBox.isEnabled()?ink():kr.packetui.VisualTheme.muted());if(editor instanceof javax.swing.text.JTextComponent text){text.setCaretColor(ink());text.setSelectionColor(selected());text.setSelectedTextColor(ink());}}
+    }
+    protected void configureEditor(){super.configureEditor();refreshPalette();}
+    protected ComboPopup createPopup(){return new BasicComboPopup(comboBox){public void show(){refreshPalette();super.show();}};}
+    public void paint(Graphics graphics,JComponent component){refreshPalette();super.paint(graphics,component);}
+    public void paintCurrentValueBackground(Graphics graphics,Rectangle bounds,boolean focus){graphics.setColor(comboBox.getBackground());graphics.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);}
+    public void paintCurrentValue(Graphics graphics,Rectangle bounds,boolean focus){
+      refreshPalette();boolean marked=focus&&!isPopupVisible(comboBox);
+      Component value=comboBox.getRenderer().getListCellRendererComponent(listBox,comboBox.getSelectedItem(),-1,marked,false);
+      value.setFont(comboBox.getFont());value.setForeground(comboBox.isEnabled()?ink():kr.packetui.VisualTheme.muted());value.setBackground(marked?selected():comboBox.getBackground());
+      Insets in=padding==null?new Insets(0,0,0,0):padding;
+      currentValuePane.paintComponent(graphics,value,comboBox,bounds.x+in.left,bounds.y+in.top,Math.max(0,bounds.width-in.left-in.right),Math.max(0,bounds.height-in.top-in.bottom),value instanceof JPanel);
+    }
     protected JButton createArrowButton(){return new JButton(){protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();g.setColor(surface());g.fillRect(0,0,getWidth(),getHeight());g.setColor(ink());g.setStroke(new BasicStroke(1.3f));int x=getWidth()/2,y=getHeight()/2;g.drawPolyline(new int[]{x-4,x,x+4},new int[]{y-2,y+2,y-2},3);g.dispose();}public Dimension getPreferredSize(){return new Dimension(25,30);}};}
   }
   private static final class ScrollUi extends BasicScrollBarUI {
     protected void configureScrollBarColors(){trackColor=background();thumbColor=kr.packetui.VisualTheme.thumb();}
+    protected void paintTrack(Graphics graphics,JComponent component,Rectangle bounds){graphics.setColor(background());graphics.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);}
     protected JButton createDecreaseButton(int direction){return arrow(direction);}
     protected JButton createIncreaseButton(int direction){return arrow(direction);}
     private JButton arrow(int direction){return new BasicArrowButton(direction,background(),line(),ink(),line()){public Dimension getPreferredSize(){return new Dimension(0,0);}};}

@@ -63,7 +63,7 @@ final class ApprovedUi {
     if(c instanceof JSplitPane split&&split.getClientProperty("wb.approved.divider") instanceof Runnable apply)apply.run();
     if(c instanceof JPanel panel&&Boolean.TRUE.equals(panel.getClientProperty("wb.card")))panel.setBorder(CARD_BORDER);
   }
-  private static class FlatCombo extends BasicComboBoxUI {
+  static class FlatCombo extends WorkbenchSkin.ComboUi {
     protected JButton createArrowButton(){JButton b=new JButton(new ApprovedTrafficIcon("chevron",WorkbenchUi.ink()));b.putClientProperty("wb.segment.button",true);b.setBorder(null);b.setContentAreaFilled(false);return b;}
   }
   private static final class ProductCombo extends FlatCombo {

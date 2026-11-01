@@ -1,0 +1,18 @@
+{
+  "result": "passed",
+  "version": "1.4.19",
+  "sourceArchive": "simple/downloads/1.4.19/burp-workbench-simple-1.4.19-source.zip",
+  "sourceArchiveSha256": "c87e6c9efc1e79711af821bdcafeebe7e3435b3220bc6c3ec3a4a5d90fef2955",
+  "sourceFiles": 2217,
+  "jarBuildInputs": 273,
+  "zipCrc": "passed",
+  "sourceFingerprints": "passed",
+  "jarBuildInputHashes": "passed",
+  "command": "python dev.py build",
+  "java17ApiCompatibilityVerified": true,
+  "toolchain": "Temurin JDK17 --release17",
+  "publishedJarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+  "rebuiltJarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+  "byteIdentical": true,
+  "workspace": "/tmp/header-tools-1.4.19-independent-source"
+}

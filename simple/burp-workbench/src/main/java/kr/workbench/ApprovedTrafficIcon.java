@@ -13,7 +13,7 @@ final class ApprovedTrafficIcon implements Icon {
   public int getIconHeight(){return 15;}
   private static void line(Graphics2D g,double... points){Path2D p=new Path2D.Double();p.moveTo(points[0],points[1]);for(int i=2;i<points.length;i+=2)p.lineTo(points[i],points[i+1]);g.draw(p);}
   public void paintIcon(Component c,Graphics graphics,int x,int y){
-    Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.translate(x,y);g.scale(15d/24,15d/24);g.setColor(color);g.setStroke(new BasicStroke(1.5f,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+    Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.translate(x,y);g.scale(15d/24,15d/24);g.setColor("chevron".equals(kind)?c==null?WorkbenchUi.ink():c.getForeground():color);g.setStroke(new BasicStroke(1.5f,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
     switch(kind){
       case "chevron"->line(g,8,10,12,14,16,10);
       case "traffic","dashboard"->{line(g,3,3,3,21,21,21);line(g,7,16,7,12);line(g,12,16,12,7);line(g,17,16,17,9);}
@@ -28,6 +28,7 @@ final class ApprovedTrafficIcon implements Icon {
       case "activity"->line(g,5,12,9,16,19,5);
       case "bounty","evidence"->{line(g,5,3,14,3,19,8,19,21,5,21,5,3);line(g,14,3,14,9,19,9);line(g,8,13,16,13);line(g,8,17,14,17);}
       case "moon"->{Path2D p=new Path2D.Double();p.moveTo(20,15);p.curveTo(12,19,5,11,9,3);p.curveTo(-3,6,5,26,17,20);p.curveTo(19,19,20,17,20,15);g.draw(p);}
+      case "sun"->{g.draw(new Ellipse2D.Double(7,7,10,10));for(int i=0;i<8;i++){double a=i*Math.PI/4;line(g,12+8*Math.cos(a),12+8*Math.sin(a),12+10*Math.cos(a),12+10*Math.sin(a));}}
       default->g.draw(new Ellipse2D.Double(4,4,16,16));
     }
     g.dispose();

@@ -59,7 +59,7 @@ public final class DiagnosticsWorkflowTest extends WorkbenchTest {
           for(int i=0;i<pages.getTabCount();i++) {
             pages.setSelectedIndex(i);UiLayoutTest.layout(root);
             if(!"설정".equals(pages.getTitleAt(i))){
-              JButton tools=(JButton)UiLayoutTest.named(root,"wb.traffic.header.tools"),visibleGuide=(JButton)UiLayoutTest.named(root,"wb.traffic.guide.open");
+              JButton tools=(JButton)UiLayoutTest.named(root,"wb.navigation.tools.open"),visibleGuide=(JButton)UiLayoutTest.named(root,"wb.traffic.guide.open");
               Rectangle toolBounds=SwingUtilities.convertRectangle(tools.getParent(),tools.getBounds(),root),guideBounds=SwingUtilities.convertRectangle(visibleGuide.getParent(),visibleGuide.getBounds(),root);
               check(new Rectangle(0,0,root.getWidth(),46).contains(toolBounds)&&new Rectangle(0,0,root.getWidth(),46).contains(guideBounds),"approved header tools and guide stay fully visible on tool "+i);
               for(AbstractButton source:List.of(help,settings,logs)){

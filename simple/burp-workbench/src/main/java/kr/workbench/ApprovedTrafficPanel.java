@@ -109,7 +109,7 @@ final class ApprovedTrafficPanel extends JPanel {
   }
   private static final class QuickUi extends BasicButtonUI {public void paint(Graphics graphics,JComponent c){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);AbstractButton b=(AbstractButton)c;if(b.isSelected()){g.setColor(WorkbenchUi.selected());g.fillRoundRect(0,0,c.getWidth(),c.getHeight(),7,7);}g.setColor(b.isSelected()?WorkbenchUi.accent():kr.packetui.VisualTheme.muted());g.setFont(c.getFont().deriveFont(b.isSelected()?Font.BOLD:Font.PLAIN));g.drawString(b.getText(),(c.getWidth()-g.getFontMetrics().stringWidth(b.getText()))/2,20);g.dispose();}}
   private static final class HeaderCell extends DefaultTableCellRenderer {public Component getTableCellRendererComponent(JTable t,Object value,boolean selected,boolean focus,int row,int column){super.getTableCellRendererComponent(t,value,selected,focus,row,column);setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));setForeground(kr.packetui.VisualTheme.muted());setBackground(WorkbenchUi.raised());setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,1,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(0,11,0,0)));return this;}}
-  private static final class FlatCombo extends BasicComboBoxUI {
+  private static final class FlatCombo extends ApprovedUi.FlatCombo {
     protected JButton createArrowButton(){JButton b=new JButton();b.setVisible(false);return b;}
     protected Rectangle rectangleForCurrentValue(){Insets i=comboBox.getInsets();return new Rectangle(i.left,i.top,comboBox.getWidth()-i.left-i.right,comboBox.getHeight()-i.top-i.bottom);}
   }

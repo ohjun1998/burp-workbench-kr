@@ -121,6 +121,37 @@ public final class SimplePreview extends WorkbenchTest {
   static boolean nativeCapture(){return Boolean.getBoolean("wb.preview.native");}
   static void nativeReady(Container root){JFrame frame=nativeWindows.get(root);frame.setVisible(true);frame.toFront();frame.requestFocus();for(int pass=0;pass<6;pass++){frame.validate();layout(root);var loop=Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();SwingUtilities.invokeLater(loop::exit);loop.enter();}awaitUi(frame::isActive,"native capture window focus");}
   static void nativeClick(Component control){try{if(control==null||!control.isShowing())throw new AssertionError("Native control is not showing");Point point=control.getLocationOnScreen();Robot robot=new Robot();robot.mouseMove(point.x+control.getWidth()/2,point.y+control.getHeight()/2);robot.mousePress(java.awt.event.InputEvent.BUTTON1_DOWN_MASK);robot.mouseRelease(java.awt.event.InputEvent.BUTTON1_DOWN_MASK);}catch(AWTException e){throw new IllegalStateException(e);}}
+  /** A model resize can finish before Xorg/WM configure events and Swing revalidation settle. */
+  static void nativeConnectorClick(Component control){
+    Window window=control==null?null:SwingUtilities.getWindowAncestor(control);
+    if(window==null)throw new AssertionError("Native connector control has no window");
+    window.toFront();window.requestFocus();window.validate();
+    Rectangle[] previous={null,null};long[] stableSince={0};
+    try{
+      awaitUi(()->{
+        Toolkit.getDefaultToolkit().sync();
+        if(!window.isActive()||!window.isValid()||!control.isShowing()||!control.isEnabled()){
+          stableSince[0]=0;return false;
+        }
+        Rectangle frame=new Rectangle(window.getLocationOnScreen(),window.getSize());
+        Rectangle target=new Rectangle(control.getLocationOnScreen(),control.getSize());
+        if(stableSince[0]==0||!frame.equals(previous[0])||!target.equals(previous[1])){
+          previous[0]=frame;previous[1]=target;stableSince[0]=System.nanoTime();return false;
+        }
+        return stableSince[0]!=0&&System.nanoTime()-stableSince[0]>=java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(150);
+      },"native connector control has stable active screen bounds");
+    }catch(IllegalStateException failure){throw new IllegalStateException(failure.getMessage()+" · "+nativeControlState(control),failure);}
+    nativeClick(control);
+  }
+  static String nativeControlState(Component control){
+    Window window=control==null?null:SwingUtilities.getWindowAncestor(control);
+    return "selected="+(control instanceof AbstractButton button?button.isSelected():"n/a")
+        +", window="+(window==null?"none":window.getBounds())+", active="+(window!=null&&window.isActive())
+        +", control="+(control==null?"none":control.getBounds())+", showing="+(control!=null&&control.isShowing());
+  }
+  static void awaitConnectorState(java.util.function.BooleanSupplier ready,Component control,String reason){
+    try{awaitUi(ready,reason);}catch(IllegalStateException failure){throw new IllegalStateException(failure.getMessage()+" · "+nativeControlState(control),failure);}
+  }
   static void nativeEscape(){try{Robot robot=new Robot();robot.keyPress(java.awt.event.KeyEvent.VK_ESCAPE);robot.keyRelease(java.awt.event.KeyEvent.VK_ESCAPE);robot.mouseMove(1800,1100);}catch(AWTException e){throw new IllegalStateException(e);}}
   static JDialog nativeConnector(){for(Window window:Window.getWindows())if(window instanceof JDialog dialog&&dialog.isShowing()&&"wb.auth.connections".equals(dialog.getContentPane().getName()))return dialog;return null;}
   static boolean sameGlass(JRootPane owner,Component glass,boolean visible){return owner.getGlassPane()==glass&&glass.isVisible()==visible;}
@@ -500,10 +531,10 @@ public final class SimplePreview extends WorkbenchTest {
           JRootPane connectorOwner=SwingUtilities.getRootPane(root);Component originalGlass=connectorOwner.getGlassPane();boolean originalGlassVisible=originalGlass.isVisible();
           auth.openAccountConnections();final JDialog connected=nativeConnector();
           scenario("Native compact account connector opens its actual retained role models",connected!=null);
-          JToggleButton extra=(JToggleButton)SimpleWorkflowTest.named(connected.getContentPane(),"wb.auth.preparation.extra.toggle");nativeClick(extra);
-          awaitUi(()->extra.isSelected()&&connected.getHeight()==517,"native optional third role expands its window");
+          JToggleButton extra=(JToggleButton)SimpleWorkflowTest.named(connected.getContentPane(),"wb.auth.preparation.extra.toggle");nativeConnectorClick(extra);
+          awaitConnectorState(()->extra.isSelected()&&connected.getHeight()==517,extra,"native optional third role expands its window");
           scenario("Native optional third role remains reachable",SimpleWorkflowTest.named(connected.getContentPane(),"wb.auth.preparation.account.2").isShowing());
-          nativeClick(extra);awaitUi(()->!extra.isSelected()&&connected.getHeight()==447,"native optional role folds");
+          nativeConnectorClick(extra);awaitConnectorState(()->!extra.isSelected()&&connected.getHeight()==447,extra,"native optional role folds");
           capture(root,"04-auth-connections.png");auth.closeReadiness();
           nativeConnectorReentry(root,auth,connectorOwner,originalGlass,originalGlassVisible);
         }else capture(auth.accountConnectionsContent(),"04-auth-connections.png",900,447);

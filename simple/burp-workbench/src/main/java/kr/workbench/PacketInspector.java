@@ -70,6 +70,17 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   record Span(int start, int end) {}
   record SearchResult(List<Span> spans, boolean capped, String error) {}
 
+  /** Existing highlights keep their offsets and tags when the local palette changes. */
+  private static final class SearchPainter extends DefaultHighlighter.DefaultHighlightPainter {
+    private final boolean active;
+    SearchPainter(boolean active) { super(null); this.active=active; }
+    @Override public Color getColor() {
+      return WorkbenchUi.dark()
+          ? active ? new Color(154,100,34) : new Color(112,94,30)
+          : active ? new Color(255,190,92) : new Color(255,233,144);
+    }
+  }
+
   PacketInspector(String name) {
     this(name, false);
   }
@@ -335,7 +346,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     text.getStyledDocument().setCharacterAttributes(0, text.getDocument().getLength(), normal, true);
     try {
       if (page.end() > page.start()) text.getHighlighter().addHighlight(page.start(), page.end(),
-          new DefaultHighlighter.DefaultHighlightPainter(WorkbenchUi.dark() ? new Color(154,100,34) : new Color(255,190,92)));
+          new SearchPainter(true));
     } catch (BadLocationException error) { throw new IllegalStateException(error); }
     text.setCaretPosition(Math.min(page.start(), text.getDocument().getLength()));
     String label = "목록 검색 문맥 · " + page.location() + " · 일치 " + (trafficPage + 1) + "/" + trafficContext.pages().size()
@@ -505,7 +516,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private void showMatches(SearchResult result) {
     matches=result.spans();current=-1;
     if(result.error()!=null){count.setText(result.error().contains("오류")?"오류":"제한");count.setToolTipText(result.error()+" · 검색식 또는 검색어를 줄여 주세요.");count.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.ERROR));return;}
-    Highlighter.HighlightPainter painter=new DefaultHighlighter.DefaultHighlightPainter(WorkbenchUi.dark()?new Color(112,94,30):new Color(255,233,144));
+    Highlighter.HighlightPainter painter=new SearchPainter(false);
     try{for(Span span:matches)text.getHighlighter().addHighlight(span.start(),span.end(),painter);}catch(BadLocationException ex){throw new IllegalStateException(ex);}
     count.setToolTipText(result.capped()?"앞 "+MAX_MATCHES+"개 일치 결과만 강조·이동합니다.":null);
     previous.setEnabled(!matches.isEmpty());next.setEnabled(!matches.isEmpty());
@@ -516,7 +527,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     if(matches.isEmpty())return;
     current=current<0?(delta>0?0:matches.size()-1):Math.floorMod(current+delta,matches.size());
     Span span=matches.get(current);Highlighter h=text.getHighlighter();if(currentHighlight!=null)h.removeHighlight(currentHighlight);
-    try{currentHighlight=h.addHighlight(span.start(),span.end(),new DefaultHighlighter.DefaultHighlightPainter(WorkbenchUi.dark()?new Color(154,100,34):new Color(255,190,92)));text.setCaretPosition(span.start());Rectangle box=text.modelToView2D(span.start())==null?null:text.modelToView2D(span.start()).getBounds();if(box!=null)text.scrollRectToVisible(box);}catch(BadLocationException ex){throw new IllegalStateException(ex);}
+    try{currentHighlight=h.addHighlight(span.start(),span.end(),new SearchPainter(true));text.setCaretPosition(span.start());Rectangle box=text.modelToView2D(span.start())==null?null:text.modelToView2D(span.start()).getBounds();if(box!=null)text.scrollRectToVisible(box);}catch(BadLocationException ex){throw new IllegalStateException(ex);}
     count.setText((current+1)+" / "+matches.size()+(count.getToolTipText()!=null?"+":""));
   }
 

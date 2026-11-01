@@ -1,0 +1,345 @@
+{
+  "result": "passed",
+  "version": "1.4.19",
+  "jarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+  "checks": 296,
+  "cases": [
+    {
+      "result": "passed",
+      "sourceVersion": "1.4.19",
+      "theme": "dark",
+      "windowWidth": 1024,
+      "windowHeight": 768,
+      "checks": 75,
+      "entries": [
+        {
+          "icon": true,
+          "text": "대시보드",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.simple.dashboard.open.menu"
+        },
+        {
+          "icon": true,
+          "text": "Scope 통합 점검",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.scope.inspection.open.menu"
+        },
+        {
+          "icon": true,
+          "text": "전체화면",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.window.fullscreen.menu"
+        },
+        {
+          "icon": true,
+          "text": "화면 설정",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.navigation.settings.menu"
+        },
+        {
+          "icon": true,
+          "text": "로그",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.navigation.logs.menu"
+        },
+        {
+          "icon": false,
+          "text": "Guide",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917,
+          "name": "wb.visual.guide.open.menu"
+        }
+      ],
+      "jarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+      "targetHttpRequests": 0,
+      "nativeSwing": true,
+      "nativeBurpGui": false,
+      "syntheticPackets": true,
+      "path": "dark/1024x768/verification.json"
+    },
+    {
+      "result": "passed",
+      "sourceVersion": "1.4.19",
+      "theme": "dark",
+      "windowWidth": 1600,
+      "windowHeight": 1000,
+      "checks": 73,
+      "entries": [
+        {
+          "name": "wb.simple.dashboard.open.menu",
+          "icon": true,
+          "text": "대시보드",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917
+        },
+        {
+          "name": "wb.scope.inspection.open.menu",
+          "icon": true,
+          "text": "Scope 통합 점검",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917
+        },
+        {
+          "name": "wb.window.fullscreen.menu",
+          "icon": true,
+          "text": "전체화면",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917
+        },
+        {
+          "name": "wb.navigation.settings.menu",
+          "icon": true,
+          "text": "화면 설정",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917
+        },
+        {
+          "name": "wb.navigation.logs.menu",
+          "icon": true,
+          "text": "로그",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917
+        },
+        {
+          "name": "wb.visual.guide.open.menu",
+          "icon": false,
+          "text": "Guide",
+          "width": 151,
+          "height": 25,
+          "contrast": 13.605869551285917
+        }
+      ],
+      "jarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+      "targetHttpRequests": 0,
+      "nativeSwing": true,
+      "nativeBurpGui": false,
+      "syntheticPackets": true,
+      "path": "dark/1600x1000/verification.json"
+    },
+    {
+      "result": "passed",
+      "sourceVersion": "1.4.19",
+      "theme": "light",
+      "windowWidth": 1024,
+      "windowHeight": 768,
+      "checks": 75,
+      "entries": [
+        {
+          "text": "대시보드",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.simple.dashboard.open.menu",
+          "icon": true
+        },
+        {
+          "text": "Scope 통합 점검",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.scope.inspection.open.menu",
+          "icon": true
+        },
+        {
+          "text": "전체화면",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.window.fullscreen.menu",
+          "icon": true
+        },
+        {
+          "text": "화면 설정",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.navigation.settings.menu",
+          "icon": true
+        },
+        {
+          "text": "로그",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.navigation.logs.menu",
+          "icon": true
+        },
+        {
+          "text": "Guide",
+          "width": 151,
+          "height": 25,
+          "contrast": 15.202622914317665,
+          "name": "wb.visual.guide.open.menu",
+          "icon": false
+        }
+      ],
+      "jarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+      "targetHttpRequests": 0,
+      "nativeSwing": true,
+      "nativeBurpGui": false,
+      "syntheticPackets": true,
+      "path": "light/1024x768/verification.json"
+    },
+    {
+      "result": "passed",
+      "sourceVersion": "1.4.19",
+      "theme": "light",
+      "windowWidth": 1600,
+      "windowHeight": 1000,
+      "checks": 73,
+      "entries": [
+        {
+          "width": 151,
+          "text": "대시보드",
+          "icon": true,
+          "name": "wb.simple.dashboard.open.menu",
+          "contrast": 15.202622914317665,
+          "height": 25
+        },
+        {
+          "width": 151,
+          "text": "Scope 통합 점검",
+          "icon": true,
+          "name": "wb.scope.inspection.open.menu",
+          "contrast": 15.202622914317665,
+          "height": 25
+        },
+        {
+          "width": 151,
+          "text": "전체화면",
+          "icon": true,
+          "name": "wb.window.fullscreen.menu",
+          "contrast": 15.202622914317665,
+          "height": 25
+        },
+        {
+          "width": 151,
+          "text": "화면 설정",
+          "icon": true,
+          "name": "wb.navigation.settings.menu",
+          "contrast": 15.202622914317665,
+          "height": 25
+        },
+        {
+          "width": 151,
+          "text": "로그",
+          "icon": true,
+          "name": "wb.navigation.logs.menu",
+          "contrast": 15.202622914317665,
+          "height": 25
+        },
+        {
+          "width": 151,
+          "text": "Guide",
+          "icon": false,
+          "name": "wb.visual.guide.open.menu",
+          "contrast": 15.202622914317665,
+          "height": 25
+        }
+      ],
+      "jarSha256": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+      "targetHttpRequests": 0,
+      "nativeSwing": true,
+      "nativeBurpGui": false,
+      "syntheticPackets": true,
+      "path": "light/1600x1000/verification.json"
+    }
+  ],
+  "targetHttpRequests": 0,
+  "nativeSwing": true,
+  "nativeBurpGui": false,
+  "syntheticPackets": true,
+  "windowSizes": [
+    "1600x1000",
+    "1024x768"
+  ],
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "screenshots": {
+    "dark/1024x768/header-tools-menu.png": {
+      "sha256": "58be0257d44a3e53e43d557c2f7bedcb93d82e6b12bb42503cc769a3ee58ba70",
+      "width": 1014,
+      "height": 734
+    },
+    "dark/1024x768/theme-toggled.png": {
+      "sha256": "245e8c0a772b0390ccf8f1ea1e36e3e0de3ca6624cbd74385ffaaf31e6388a91",
+      "width": 1014,
+      "height": 734
+    },
+    "dark/1600x1000/header-tools-menu.png": {
+      "sha256": "8e0a9d5c6c67fe57a2ecb7748716ba04ea284a6d2558493c3ea1e00821f28ba9",
+      "width": 1590,
+      "height": 966
+    },
+    "dark/1600x1000/theme-toggled.png": {
+      "sha256": "efb007a9b979902d78ddf17af6f00f16f66b5713d3c5cd36c167a2cc1dfdf287",
+      "width": 1590,
+      "height": 966
+    },
+    "light/1024x768/header-tools-menu.png": {
+      "sha256": "89e7651278f613266b1948096277021d470db721f96dc4f64f899e36e2a30fc7",
+      "width": 1014,
+      "height": 734
+    },
+    "light/1024x768/theme-toggled.png": {
+      "sha256": "e059f987987b5c24e7b527ad5c0b5af838db3b2a163a95e7babd907d86509b17",
+      "width": 1014,
+      "height": 734
+    },
+    "light/1600x1000/header-tools-menu.png": {
+      "sha256": "e7d03da04686fadadf2def21c480a6c2c97ebe7eb8e7070ed2784c44e64c0b4f",
+      "width": 1590,
+      "height": 966
+    },
+    "light/1600x1000/theme-toggled.png": {
+      "sha256": "bfb7a330560c09607fd27b99677ba33c20619d388fbfa3f0c4cd5235b5ffbf34",
+      "width": 1590,
+      "height": 966
+    }
+  },
+  "actualScreenshotContent": "Robot screen pixels of production workspace; declared dimensions are decorated JFrame dimensions; content PNG dimensions exclude window chrome",
+  "nativeHarness": {
+    "tools/HeaderToolsNative.java": "230e3426f1d299c846dd1c103a8accedb68c0e797c3891d109b339758307d782",
+    "tools/run_header_tools_native.sh": "39a1173691b21cca9ff183ad013576e78e5aa00a14deb38b441ed585c299cb81"
+  },
+  "coverage": [
+    "Moon Robot click changes local theme directly and persists preference without changing host UI defaults",
+    "Actual editable account field, document, pending draft, selected filter and authored input survive both theme states",
+    "Actual account/target/Mapper run/Mapper session current-value pixels and detached popup palettes match both themes",
+    "Visible narrow-window traffic scrollbar track pixels match both themes",
+    "Six tools menu entries retain readable captions/icons/contrast and fit inside actual window",
+    "Actual Guide/fullscreen/dynamic fullscreen caption/dashboard/Escape actions preserve controllers and send zero target HTTP"
+  ],
+  "visualReview": {
+    "reviewed": [
+      "dark/1024x768/theme-toggled.png",
+      "light/1600x1000/theme-toggled.png",
+      "dark/1600x1000/header-tools-menu.png",
+      "light/1024x768/header-tools-menu.png"
+    ],
+    "result": "No blank menu rows; popup remains inside working window; account editor white island and stale dark scrollbar track are corrected in toggled screens"
+  },
+  "limitations": [
+    "Linux Xorg / xfwm4 with synthetic Burp API adapters",
+    "No Windows native Burp GUI result",
+    "No live external provider HTTP invoked"
+  ]
+}

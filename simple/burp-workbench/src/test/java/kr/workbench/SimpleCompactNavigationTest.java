@@ -39,8 +39,41 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
             check(button.getAccessibleContext().getAccessibleName()!=null&&!button.getAccessibleContext().getAccessibleName().isBlank()&&button.getToolTipText()!=null,"compact action retains an accessible name and tooltip: "+button.getName());
           }
         }
+        var tools=(JButton)SimpleWorkflowTest.named(root,"wb.navigation.tools.open");
+        JPopupMenu toolsMenu=tools.getComponentPopupMenu();
+        int sourceCount=0;
+        for(Component c:actions.getComponents())if(c instanceof AbstractButton source){
+          sourceCount++;
+          var menu=(JMenuItem)SimpleWorkflowTest.named(toolsMenu,source.getName()+".menu");
+          check(menu!=null && menu.getText()!=null && !menu.getText().isBlank(),
+              "the actual shared header popup has no blank action row: "+source.getName());
+          if(source.getText().isBlank()){
+            check(menu.getText().equals(source.getAccessibleContext().getAccessibleName())
+                    && menu.getIcon()==source.getIcon() && menu.getIcon()!=null,
+                "the actual header menu restores the compact source caption and icon: "+source.getName());
+          }
+        }
+        check(sourceCount==toolsMenu.getComponentCount(),
+            "the header popup has one readable row for every retained shortcut");
         window.fullScreenButton.setText("전체화면 해제");layout(root,1024);
         check(window.fullScreenButton.getText().isEmpty()&&window.fullScreenButton.getAccessibleContext().getAccessibleName().contains("해제")&&toolbar.getHeight()==46,"fullscreen exit state updates accessibility without widening the PDF toolbar");
+        var fullScreenMenu=(JMenuItem)SimpleWorkflowTest.named(toolsMenu,"wb.window.fullscreen.menu");
+        check("전체화면 해제".equals(fullScreenMenu.getText()),
+            "the assembled header popup follows fullscreen state after the compact source clears its text");
+        window.fullScreenButton.getAccessibleContext().setAccessibleName("전체화면");
+        check("전체화면".equals(fullScreenMenu.getText()),
+            "an accessible-only fullscreen update replaces the assembled menu caption immediately");
+        var dashboardMenu=(JCheckBoxMenuItem)SimpleWorkflowTest.named(toolsMenu,"wb.simple.dashboard.open.menu");
+        dashboardMenu.doClick(0);
+        check(dashboardMenu.isSelected()&&pages.getSelectedComponent()==value(extension,"scopeDashboard"),
+            "the visible header dashboard menu opens the retained page and reflects its selected state");
+        extension.openFeature("traffic");
+        check(!dashboardMenu.isSelected(),
+            "leaving the dashboard clears the actual header menu state through its retained model");
+        ((JMenuItem)SimpleWorkflowTest.named(toolsMenu,"wb.visual.guide.open.menu")).doClick(0);
+        var visualGuide=(VisualGuideWindow)value(extension,"visualGuideWindow");
+        check(visualGuide!=null&&"traffic".equals(visualGuide.panel.selectedId()),
+            "the actual header Guide row opens the current tool documentation controller");
         var modelRoot=(DefaultMutableTreeNode)tree.getModel().getRoot();int leaves=0;
         for(int i=0;i<modelRoot.getChildCount();i++)leaves+=modelRoot.getChildAt(i).getChildCount();
         check(modelRoot.getChildCount()==5&&leaves==12,"approved sidebar retains all five folders and twelve actual tool leaves including the dashboard");

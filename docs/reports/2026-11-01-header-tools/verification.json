@@ -1,0 +1,56 @@
+{
+  "result": "passed",
+  "version": "1.4.19",
+  "embeddedMapperVersion": "0.3.20",
+  "browserHelperVersion": "0.4.1",
+  "artifacts": {
+    "burp-workbench-simple-1.4.19.jar": "56a744862b09ddd50e2599658c02e275577cd8901f870e9333ca7692eb63ea1d",
+    "burp-workbench-simple-1.4.19-source.zip": "c87e6c9efc1e79711af821bdcafeebe7e3435b3220bc6c3ec3a4a5d90fef2955",
+    "feature-mapper-browser-helper-0.4.1.zip": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+  },
+  "checks": {
+    "totalChecks": 7634,
+    "workbenchGroups": 168,
+    "workbenchChecks": 7322,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 147,
+    "browserHelperNodeChecks": 29,
+    "completionMethod": "Complete Workbench run plus focused rerun after correcting only the obsolete embedded-version assertion; unchanged production JAR",
+    "evidence": "checks/check-summary.json"
+  },
+  "nativeHeaderTheme": {
+    "checks": 296,
+    "evidence": "after/verification.json"
+  },
+  "nativeAllTools": {
+    "scenarios": 600,
+    "controlRecords": 2802,
+    "captures": 162,
+    "clippedOutsideScroll": 0,
+    "evidence": "native-all/verification.json"
+  },
+  "nativeRegressions": {
+    "checks": 180,
+    "evidence": "native-regressions/verification.json"
+  },
+  "independentSourceRebuild": {
+    "result": "passed",
+    "byteIdentical": true,
+    "sourceFiles": 2217,
+    "jarBuildInputs": 273,
+    "evidence": "source-rebuild/verification.json"
+  },
+  "delivery": {
+    "branch": "account-a/header-tools-menu-fix",
+    "baseCommit": "f07fe9a9ac2b158d9dfd37f597c37e252532470c",
+    "mainMerged": false,
+    "pullRequestCreated": false,
+    "pullRequestLimitation": "GitHub API host is unavailable under the current enforced network policy"
+  },
+  "limits": [
+    "Actual Linux Xorg/xfwm4 Swing windows with synthetic Burp API adapters",
+    "No native Windows Burp GUI/DPI/IME validation",
+    "No zero-pixel-equality claim",
+    "Native capture scenarios send zero target HTTP; loopback payload checks are separate"
+  ]
+}

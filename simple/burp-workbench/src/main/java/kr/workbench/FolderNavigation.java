@@ -34,6 +34,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   private final JButton toggle = new JButton();
   private final JLabel current = new JLabel();
   private JPanel trafficHeader, standardHeaderActions, headerLine, trafficFooter;
+  private JButton themeToggle;
+  private Runnable themeAction = () -> {};
   private final JLabel breadcrumb = new JLabel();
   private final JButton back = new JButton("←"), forward = new JButton("→"), quick = new JButton("기능 찾기");
   private final NavigationViewState.ModelVersions modelVersions = new NavigationViewState.ModelVersions();
@@ -236,9 +238,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     standardHeaderActions=actions;headerLine=navigationLine;
     trafficHeader=new JPanel(new FlowLayout(FlowLayout.RIGHT,12,4));trafficHeader.putClientProperty("wb.surface",true);
     JLabel projectCaption=new JLabel("웹 애플리케이션 점검");projectCaption.putClientProperty("wb.font.size",11);projectCaption.putClientProperty("wb.secondary",true);trafficHeader.add(projectCaption);
-    JButton appearance=new JButton(new ApprovedTrafficIcon("moon",kr.packetui.VisualTheme.muted()));appearance.setPreferredSize(new Dimension(28,28));appearance.putClientProperty("wb.segment.button",true);appearance.setToolTipText("화면 설정 및 기존 창 도구");
-    JPopupMenu toolsMenu=new JPopupMenu();for(Component c:actions.getComponents())if(c instanceof AbstractButton action)toolsMenu.add(WorkflowUi.proxy(action));
-    appearance.setName("wb.traffic.header.tools");appearance.setComponentPopupMenu(toolsMenu);appearance.addActionListener(e->toolsMenu.show(appearance,0,appearance.getHeight()));trafficHeader.add(appearance);
+    themeToggle=new JButton();themeToggle.setName("wb.traffic.header.tools");themeToggle.setPreferredSize(new Dimension(28,28));themeToggle.putClientProperty("wb.segment.button",true);themeToggle.addActionListener(e->{if(!closed)themeAction.run();});trafficHeader.add(themeToggle);
+    JPopupMenu toolsMenu=new JPopupMenu();toolsMenu.setName("wb.navigation.tools.popup");for(Component c:actions.getComponents())if(c instanceof AbstractButton action)toolsMenu.add(WorkflowUi.proxy(action));
+    JButton toolsButton=new JButton(WorkspaceIcons.of("gear"));toolsButton.setName("wb.navigation.tools.open");toolsButton.setPreferredSize(new Dimension(28,28));toolsButton.putClientProperty("wb.segment.button",true);toolsButton.setToolTipText("설정 및 창 도구");toolsButton.getAccessibleContext().setAccessibleName("설정 및 창 도구");toolsButton.setComponentPopupMenu(toolsMenu);toolsButton.addActionListener(e->{WorkbenchUi.style(toolsMenu);toolsMenu.show(toolsButton,toolsButton.getWidth()-toolsMenu.getPreferredSize().width,toolsButton.getHeight());});trafficHeader.add(toolsButton);
     AbstractButton originalGuide=guideButton;JButton explain=new JButton("화면 설명");explain.setName("wb.traffic.guide.open");explain.putClientProperty("wb.segment.button",true);explain.addActionListener(e->{if(originalGuide!=null)originalGuide.doClick(0);else if(help!=null)help.doClick(0);});trafficHeader.add(explain);
     navigationLine.add(actions, BorderLayout.EAST);
     JPanel toolbar = new ResponsiveToolbar(navigationLine, classic);
@@ -278,6 +280,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     button.setPreferredSize(new Dimension(30,30));button.setMinimumSize(new Dimension(30,30));button.setMaximumSize(new Dimension(30,30));
     button.addPropertyChangeListener("text",event->{String next=button.getText();if(next!=null&&!next.isEmpty()){button.getAccessibleContext().setAccessibleName(next);button.setText("");}});
   }
+
+  void setThemeAction(Runnable action) { themeAction=Objects.requireNonNull(action);restoreAppearance(); }
 
   /** Route callbacks only open retained UI components; the host must not execute network actions. */
   void configureRoutes(Consumer<String> opener, Supplier<String> currentRoute, Supplier<String> projectIdentity) {
@@ -754,6 +758,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
   void restoreAppearance() {
     updateApprovedFooter();
+    if(themeToggle!=null){String caption=WorkbenchUi.dark()?"라이트 모드로 전환":"다크 모드로 전환";themeToggle.setIcon(new ApprovedTrafficIcon(WorkbenchUi.dark()?"sun":"moon",kr.packetui.VisualTheme.muted()));themeToggle.setToolTipText(caption);themeToggle.getAccessibleContext().setAccessibleName(caption);}
+    if(trafficFooter!=null)trafficFooter.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,0,0,0,WorkbenchUi.line()),BorderFactory.createEmptyBorder(0,206,0,16)));
     if(classic&&approvedShell()){split.setDividerSize(0);sidebar.setBorder(null);}
 
     if (tree.getUI().getClass().getEnclosingClass() != NavigationTree.class) tree.updateUI();

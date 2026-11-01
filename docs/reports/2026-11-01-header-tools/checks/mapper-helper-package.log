@@ -1,0 +1,352 @@
++ /workspace/.dev-tools/jdk-17.0.21+9/bin/java com.sun.tools.javac.Main --release 17 -encoding UTF-8 -cp /workspace/burp-workbench-kr/simple/burp-workbench/deps/montoya-2026.jar:/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-simple-1.4.19.jar -d /workspace/burp-workbench-kr/simple/feature-mapper/build/tests /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/BrowserBodyObservationTest.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/BrowserFixture.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/InspectionBridgeTest.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/MapperAssessmentTest.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/MapperHardeningTest.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/MapperOptimizationTest.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/MapperTest.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/MapperUiPreview.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/MapperUiWorkflowTest.java /workspace/burp-workbench-kr/simple/feature-mapper/src/test/java/kr/featuremapper/NativeMapperCheck.java
+PASS response file ID links upload to post creation
+PASS created post ID links follow-up detail request
+PASS one creation feature contains prerequisite upload, save and follow-up read
+PASS observed dynamic IDs normalize without deleting original URL
+PASS prerequisite retains its original packet and function
+PASS cross-account packets cannot inherit another session's ID chain
+PASS cross-origin responses cannot create data dependencies
+PASS matching ID in a different entity path is not a link
+PASS method change creates a distinct functional action
+PASS same feature after an idle gap starts a fresh execution
+PASS typed one-digit object IDs still link within the same entity and session
+PASS close repetitions share an execution while preserving both packets
+PASS GraphQL operations separate despite identical method and URL
+PASS GraphQL named mutation is inferred without operationName
+PASS body action values remain meaningful mapping signals
+PASS password-change fields infer a functional label
+PASS static resource remains available under common requests
+PASS observed OpenAPI summary supplies a function name
+PASS invalid JSON does not interrupt raw traffic retention
+PASS GraphQL batch operations retain distinct batch semantics
+PASS no selected auth material does not invent an account identity
+PASS early browser event maps a packet to its screen action
+PASS browser timing evidence identifies context without claiming causal certainty
+PASS same feature in another browser tab has a separate execution
+PASS indistinguishable parallel packets retract a tentative browser assignment
+PASS late bridge events can enrich already-retained packets
+PASS manual correction becomes an automatic project rule
+PASS function status persists across newly collected traffic
+PASS screen context cannot map packets on a different origin
+PASS page-observed UTF-8 hash maps only the matching body at an identical URL
+PASS page observation provenance is distinct from authenticated causality
+PASS distinct PATCH bodies retain distinct browser actions and runs
+PASS ambiguity retracts page-observation provenance along with browser attribution
+PASS page metadata cannot bypass captured-body hash comparison
+PASS unknown hash provenance is rejected
+PASS capture retains more than the prior 250-row limit
+PASS large wire packets are preserved while analysis has independent bounds
+PASS 2 MiB request and response preserve exact binary bytes
+PASS project import restores all traffic rows
+PASS project import restores exact request and response bytes
+PASS project restores function labels and review state
+PASS saved session salt keeps fingerprint grouping stable across reload
+PASS capture continues after reopening a project
+PASS invalid import is rejected without changing the active project
+PASS session credentials are not stored in mapping metadata
+PASS active raw store exists before unload
+PASS close removes private temporary raw storage
+PASS feature index preserves every membership and capture order after ancestor propagation
+PASS feature index preserves every membership and capture order after late browser mapping
+PASS feature index preserves every membership and capture order after ambiguous browser retraction
+PASS feature index preserves every membership and capture order after manual correction
+PASS feature index preserves every membership and capture order after project import
+PASS unrelated browser URLs examine zero packet/event candidates
+PASS body-hash index distinguishes identical method and URL
+PASS hashless event retains conservative ambiguity across bodies
+PASS distinct simultaneous tab actions retract browser attribution
+PASS ambiguous browser retraction preserves an explicit user correction
+PASS feature index preserves every membership and capture order after body and tab ambiguity
+PASS browser correlation keeps the exclusive 2500 ms boundary
+PASS out-of-order old packet expires from browser candidates without deleting raw traffic
+PASS browser event history retains the latest 2000 events
+PASS project close defers raw-file deletion while a save snapshot owns it
+PASS save snapshot excludes later packets and detaches mutable mapping metadata
+PASS save snapshot keeps feature state from its capture boundary
+PASS snapshot remains byte-exact after project replacement and close
+PASS last save lease deletes a closed project's private packet file
+PASS capture completes while snapshot output is deliberately blocked
+PASS closed mapper retains metadata for in-flight read-only snapshot consumers
+PASS snapshot copies only its fixed prefix despite concurrent append and close
+PASS unchanged Mapper rows emit no table replacement or cell events
+PASS new capture appends one UI row without rebuilding existing rows
+PASS project replacement clears old selection and packet details even when packet IDs repeat
+PASS Mapper preview reads bounded prefixes and preserves original packet lengths
+PASS bounded preview leaves large original request and response byte-exact
+PASS Mapper toolbar uses help, settings, log order
+PASS Mapper footer is removed to enlarge packet editors
+PASS Mapper bundled Korean font renders all toolbar captions
+PASS Mapper requestText uses shared packet syntax
+PASS Mapper line gutter preserves packet CRLF and content
+PASS Mapper responseText uses shared packet syntax
+PASS Mapper line gutter preserves packet CRLF and content
+PASS hidden technical tree root still expands into visible feature rows
+PASS observed feature leaves remain reachable through the styled tree
+PASS Mapper keeps readable rows and every captured item
+PASS Mapper settings open separately from the current traffic view
+PASS settings distinguish HTTP classification from actual helper authentication and linkage
+PASS connection status never displays the pairing token
+PASS compact capture button can stop collection
+PASS capture indicator reflects the separate native Scope setting
+PASS Mapper errors populate the actual log view
+PASS Mapper log omits packet-bearing exception messages
+PASS Mapper clear log action releases diagnostic records
+PASS Mapper packet style returns after host re-theming
+PASS Mapper local appearance returns after host look-and-feel replacement
+PASS Mapper log access survives host re-theming
+PASS Mapper layout, settings and logs send no HTTP requests
+PASS Mapper host re-theming and diagnostics emit no asynchronous errors
+PASS same-time browser events preserve distinct request body hashes
+PASS browser mapped count excludes unrelated HTTP packets
+PASS mapping evidence records exact method URL time and body-hash agreement
+PASS same-time browser events preserve distinct HTTP methods
+PASS hashless browser evidence stays explicitly unverified
+PASS different method URL body and time cannot become a click attribution
+PASS malformed body hash is rejected before indexing
+PASS ambiguous request retracts both mapping evidence and mapped count
+PASS retracted mapping removes stale exact-match evidence
+PASS project restore reconstructs browser linkage counts from stored evidence
+PASS running bridge never claims an authenticated helper connection
+PASS failed authentication increments rejection without marking connected
+PASS health requires its exact endpoint path
+PASS pairing success is separate from receiving any click request
+PASS transport counts received metadata even when the sink does not collect it
+PASS connection diagnostics contain neither pairing token nor target request data
+PASS idle authenticated transport does not claim a live connection forever
+PASS unloaded bridge reports a closed transport
+PASS assessment draft deduplicates APIs and removes query credentials
+PASS same feature has a stable opaque assessment source ID
+PASS assessment draft uses the latest feature label
+PASS renaming or classifying a feature preserves its task identity
+PASS different mapping projects never share task identities
+PASS save and reload retain feature task identity
+PASS save and reload retain exact API candidates
+PASS expired features cannot create task drafts
+PASS embedded mapping exposes the assessment link action
+PASS stored feature can be linked while traffic capture is OFF
+PASS scope changes block task draft delivery
+PASS selection changes invalidate an open task review
+PASS mapping task preparation sends no HTTP requests
+PASS unload invalidates pending mapping drafts
+PASS bridge binds exclusively to loopback
+PASS bridge rejects unpaired callers
+PASS paired health check succeeds
+PASS real loopback HTTP bridge delivers browser metadata
+PASS bridge requires JSON content type
+PASS malformed events do not reach mapper
+PASS close shuts down the bridge listener
+MapperTest: 136 checks passed
+PASS unpaired callers cannot obtain inspection commands
+PASS authenticated helper obtains its data-only command
+PASS command transport is JSON rather than executable script
+PASS command task details are not cached
+PASS bridge never exposes command replies to arbitrary web origins
+PASS command endpoint accepts only authenticated GET
+PASS malformed or path-bearing origin cannot obtain a command
+PASS malformed or path-bearing origin cannot obtain a command
+PASS malformed or path-bearing origin cannot obtain a command
+PASS explicit browser inspection uses the authenticated existing event transport
+PASS inspection transport still reports delivery separately from Scope acceptance
+InspectionBridgeTest: 11 checks passed (loopback only)
++ node --test --test-reporter=tap --test-isolation=none /workspace/burp-workbench-kr/simple/feature-mapper/tests/browser-helper.test.mjs
+TAP version 13
+# Subtest: loopback pairing excludes remote endpoints and credentials
+ok 1 - loopback pairing excludes remote endpoints and credentials
+  ---
+  duration_ms: 1.152492
+  type: 'test'
+  ...
+# Subtest: page context removes query and fragment data
+ok 2 - page context removes query and fragment data
+  ---
+  duration_ms: 0.147202
+  type: 'test'
+  ...
+# Subtest: actions stay within their tab, frame, origin and short window
+ok 3 - actions stay within their tab, frame, origin and short window
+  ---
+  duration_ms: 0.177128
+  type: 'test'
+  ...
+# Subtest: content observer sends labels and never reads input values
+ok 4 - content observer sends labels and never reads input values
+  ---
+  duration_ms: 1.944017
+  type: 'test'
+  ...
+# Subtest: normal mapping is observational without blocking or credential permissions; explicit inspection is separate
+ok 5 - normal mapping is observational without blocking or credential permissions; explicit inspection is separate
+  ---
+  duration_ms: 0.315546
+  type: 'test'
+  ...
+# Subtest: site permission patterns omit ports while origins retain them
+ok 6 - site permission patterns omit ports while origins retain them
+  ---
+  duration_ms: 0.17866
+  type: 'test'
+  ...
+# Subtest: a delayed network callback selects its original action, not a newer click
+ok 7 - a delayed network callback selects its original action, not a newer click
+  ---
+  duration_ms: 0.188035
+  type: 'test'
+  ...
+# Subtest: worker startup waits for saved settings and delivery recovers after an earlier error
+ok 8 - worker startup waits for saved settings and delivery recovers after an earlier error
+  ---
+  duration_ms: 287.598723
+  type: 'test'
+  ...
+# Subtest: MAIN observer preserves fetch/XHR behavior and hashes UTF-8 POST/PATCH without forwarding body bytes
+ok 9 - MAIN observer preserves fetch/XHR behavior and hashes UTF-8 POST/PATCH without forwarding body bytes
+  ---
+  duration_ms: 7.44372
+  type: 'test'
+  ...
+# Subtest: body observation is bounded, opt-in, same-origin and skips unsupported bodies/accessors
+ok 10 - body observation is bounded, opt-in, same-origin and skips unsupported bodies/accessors
+  ---
+  duration_ms: 26.104209
+  type: 'test'
+  ...
+# Subtest: page digest matching requires a unique real request and rejects ambiguity, replay and cross-document data
+ok 11 - page digest matching requires a unique real request and rejects ambiguity, replay and cross-document data
+  ---
+  duration_ms: 0.506005
+  type: 'test'
+  ...
+# Subtest: body snapshots do not execute overridden buffer, view or Blob properties
+ok 12 - body snapshots do not execute overridden buffer, view or Blob properties
+  ---
+  duration_ms: 7.496229
+  type: 'test'
+  ...
+# Subtest: disabled generations cannot publish a digest after re-enabling
+ok 13 - disabled generations cannot publish a digest after re-enabling
+  ---
+  duration_ms: 21.220783
+  type: 'test'
+  ...
+# Subtest: content settings initialization cannot undo a later disable
+ok 14 - content settings initialization cannot undo a later disable
+  ---
+  duration_ms: 0.902584
+  type: 'test'
+  ...
+# Subtest: bounded digest registries fail closed under saturation and recover after stale hashes expire
+ok 15 - bounded digest registries fail closed under saturation and recover after stale hashes expire
+  ---
+  duration_ms: 1.940312
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 375.224847
++ node --test --test-reporter=tap --test-isolation=none /workspace/burp-workbench-kr/simple/feature-mapper/tests/inspection-browser.test.mjs
+TAP version 13
+# Subtest: inspection Scope enforces origin, literal path boundary, conservative exclusions and ambiguity rejection
+ok 1 - inspection Scope enforces origin, literal path boundary, conservative exclusions and ambiguity rejection
+  ---
+  duration_ms: 2.004128
+  type: 'test'
+  ...
+# Subtest: DNR rules guard only the dedicated tab and allow scoped GET/HEAD without unsafe methods or redirect destinations
+ok 2 - DNR rules guard only the dedicated tab and allow scoped GET/HEAD without unsafe methods or redirect destinations
+  ---
+  duration_ms: 1.073392
+  type: 'test'
+  ...
+# Subtest: browser telemetry removes query/fragment values, separates hash routes, and never forwards credentials or bodies
+ok 3 - browser telemetry removes query/fragment values, separates hash routes, and never forwards credentials or bodies
+  ---
+  duration_ms: 6.06778
+  type: 'test'
+  ...
+# Subtest: actual DOM explorer opens navigation details and finds hash routes without reading forms or dangerous actions
+ok 4 - actual DOM explorer opens navigation details and finds hash routes without reading forms or dangerous actions
+  ---
+  duration_ms: 2.061786
+  type: 'test'
+  ...
+# Subtest: MAIN guard preserves allowed fetch/XHR and blocks writes, outside requests, forms and popup escape
+ok 5 - MAIN guard preserves allowed fetch/XHR and blocks writes, outside requests, forms and popup escape
+  ---
+  duration_ms: 18.39345
+  type: 'test'
+  ...
+# Subtest: dedicated browser service installs guards before navigation, visits SPA routes, then closes before guard removal
+ok 6 - dedicated browser service installs guards before navigation, visits SPA routes, then closes before guard removal
+  ---
+  duration_ms: 4524.592144
+  type: 'test'
+  ...
+# Subtest: unsupported transport Scope rule fails closed before the first target navigation
+ok 7 - unsupported transport Scope rule fails closed before the first target navigation
+  ---
+  duration_ms: 1.103138
+  type: 'test'
+  ...
+# Subtest: site opt-out cancels the dedicated task without touching other user tabs
+ok 8 - site opt-out cancels the dedicated task without touching other user tabs
+  ---
+  duration_ms: 1.797787
+  type: 'test'
+  ...
+# Subtest: inspection helper adds only explicit tab guards and a separate opt-in without cookie/debugger permissions
+ok 9 - inspection helper adds only explicit tab guards and a separate opt-in without cookie/debugger permissions
+  ---
+  duration_ms: 0.564753
+  type: 'test'
+  ...
+# Subtest: DOM route and remaining-menu limits are explicit without adding unsafe actions
+ok 10 - DOM route and remaining-menu limits are explicit without adding unsafe actions
+  ---
+  duration_ms: 3.224934
+  type: 'test'
+  ...
+# Subtest: initial routes are harvested before a read-only navigation tab replaces the document links
+ok 11 - initial routes are harvested before a read-only navigation tab replaces the document links
+  ---
+  duration_ms: 4919.034009
+  type: 'test'
+  ...
+# Subtest: remaining navigation after the twelve-action document bound is reported partial
+ok 12 - remaining navigation after the twelve-action document bound is reported partial
+  ---
+  duration_ms: 6325.858704
+  type: 'test'
+  ...
+# Subtest: persistent DOM loading reaches its bounded wait and reports partial rather than empty completion
+ok 13 - persistent DOM loading reaches its bounded wait and reports partial rather than empty completion
+  ---
+  duration_ms: 3009.79865
+  type: 'test'
+  ...
+# Subtest: read-only navigation retries a replaced frame within the bounded DOM wait
+ok 14 - read-only navigation retries a replaced frame within the bounded DOM wait
+  ---
+  duration_ms: 3515.39381
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22348.998036
+COMPLETE_CHECK_RESULT {"result": "passed", "regressionGroups": 168, "regressionChecks": 7322, "payloadHttpChecks": 136, "mapperJavaChecks": 147, "mapperBrowserHelperChecks": 29, "totalChecks": 7634}
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/burp-workbench-kr/simple/package_simple.py
+Simple package verified: /workspace/burp-workbench-kr/simple/downloads/1.4.19.building
+Simple release created: /workspace/burp-workbench-kr/simple/downloads/1.4.19
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python /workspace/burp-workbench-kr/simple/package_simple.py --verify
+Simple package verified: /workspace/burp-workbench-kr/simple/downloads/1.4.19

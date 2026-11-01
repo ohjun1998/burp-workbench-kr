@@ -1,0 +1,101 @@
+scenario,passed
+"All eight retained primary tools are visible in the classic folders",true
+"Scope editor opens exact production body",true
+"Main dashboard opens the production appended page without starting inspection",true
+"Empty dashboard has no manufactured result rows",true
+"Dashboard named visual exists: card.paths",true
+"Dashboard visual keeps readable visible bounds: card.paths",true
+"Dashboard metric caption and number retain their painted width: card.paths",true
+"Dashboard named visual exists: card.api",true
+"Dashboard visual keeps readable visible bounds: card.api",true
+"Dashboard metric caption and number retain their painted width: card.api",true
+"Dashboard named visual exists: card.environment",true
+"Dashboard visual keeps readable visible bounds: card.environment",true
+"Dashboard metric caption and number retain their painted width: card.environment",true
+"Dashboard named visual exists: card.secrets",true
+"Dashboard visual keeps readable visible bounds: card.secrets",true
+"Dashboard metric caption and number retain their painted width: card.secrets",true
+"Dashboard named visual exists: card.access",true
+"Dashboard visual keeps readable visible bounds: card.access",true
+"Dashboard metric caption and number retain their painted width: card.access",true
+"Dashboard named visual exists: card.coverage",true
+"Dashboard visual keeps readable visible bounds: card.coverage",true
+"Dashboard metric caption and number retain their painted width: card.coverage",true
+"Dashboard keeps optional charts in an explicit disclosure",true
+"Dashboard importance filter stays directly available",true
+"Optional dashboard chart retains its original controller: paths",true
+"Optional dashboard chart retains its original controller: api",true
+"Optional dashboard chart retains its original controller: environment",true
+"Optional dashboard chart retains its original controller: secrets",true
+"Optional dashboard chart retains its original controller: access",true
+"Optional dashboard chart retains its original controller: coverage",true
+"Optional dashboard chart retains its original controller: observations",true
+"Optional importance chart retains its original controller: high",true
+"Optional importance chart retains its original controller: medium",true
+"Optional importance chart retains its original controller: low",true
+"Optional importance chart retains its original controller: info",true
+"Native screen has no unexpected account overlay: 26-dashboard-empty.png",true
+"Native screen has no unexpected account overlay: 00-start.png",true
+"Traffic feedback and visible originals share a settled snapshot",true
+"Native screen has no unexpected account overlay: 01-capture.png",true
+"Native screen has no unexpected account overlay: 02-request.png",true
+"Production response analysis displays a synthetic observation",true
+"Native screen has no unexpected account overlay: 03-analysis.png",true
+"JS analysis retains the selected HTTP source",true
+"Native JS filter is reachable from the visible analysis menu",true
+"Native screen has no unexpected account overlay: 10-js.png",true
+"Approved JS reader retains the selected source with a separate detail disclosure",true
+"Mapper guide selects an actual feature before presenting local edit/link actions",true
+"Native Mapper modes preserve selected source bytes",true
+"Native screen has no unexpected account overlay: 08-mapper.png",true
+"Environment selected reader uses an already observed original response without performing a GET",true
+"Native environment packet menu invokes the original format model",true
+"Native screen has no unexpected account overlay: 09-environment.png",true
+"Native screen has no unexpected account overlay: 12-exposure-search.png",true
+"Native CVE filter exposes the actual minimum score input",true
+"Native screen has no unexpected account overlay: 13-exposure-cve.png",true
+"Native screen has no unexpected account overlay: 13-exposure-cve-evidence.png",true
+"CVE evidence tab retains exact synthetic original metadata without a provider request",true
+"Research has two tabs and separate observed/affected/fixed details",true
+"Native screen has no unexpected account overlay: 07-payload.png",true
+"Native screen has no unexpected account overlay: 07-payload-results.png",true
+"Payload results phase opens without starting inspection",true
+"Synthetic account candidates are retained",true
+"Complete authentication preparation keeps tab 0 visible above its own scrolling page",true
+"Complete authentication overview contains actual selected-request readiness rows",true
+"Complete authentication preparation keeps tab 1 visible above its own scrolling page",true
+"Complete authentication preparation keeps tab 2 visible above its own scrolling page",true
+"Native screen has no unexpected account overlay: 04-auth-results.png",true
+"Approved authentication readers keep their10px gap across theme restoration",true
+"Native compact account connector opens its actual retained role models",true
+"Native optional third role remains reachable",true
+"Native connector close immediately restores the original owner glass",true
+"Native same-EDT connector replacement disposes the first window",true
+"Native same-EDT replacement close restores the original glass and visibility",true
+"Native queued close callbacks retain the reopened connector controller",true
+"Native normal connector Escape restores the original glass after replacement",true
+"Native owner reshow cannot resurrect a connector disposed while hidden",true
+"Native owner hide and reshow preserve the same live connector",true
+"Native retained connector close restores the original glass",true
+"Manual replay prepares the selected request without running",true
+"Native screen has no unexpected account overlay: 11-replay-empty.png",true
+"Synthetic replay preparation retains three exact original request steps without transport",true
+"Completed synthetic replay uses the actual selected result and exact retained request/response bytes",true
+"Synthetic replay results enable evidence handoff while leaving execution idle and target HTTP at zero",true
+"Selected completed replay response remains readable in the actual visible reader",true
+"Native screen has no unexpected account overlay: 11-replay.png",true
+"Original and comparison packets are captured together",true
+"Native screen has no unexpected account overlay: 05-evidence.png",true
+"Data tool capture uses the real local conversion action",true
+"Native screen has no unexpected account overlay: 14-data.png",true
+"Progress capture derives rows and a selected endpoint with real parameter inputs from the synthetic tracker",true
+"Native screen has no unexpected account overlay: 15-progress.png",true
+"Dashboard guide actions retain a real synthetic stored original",true
+"Native screen has no unexpected account overlay: 16-dashboard.png",true
+"Production preview excludes synthetic session values",true
+"Production redaction preview contains a masked Cookie example",true
+"Guide navigation sends zero HTTP",true
+"Native unload fixture keeps a real compact connector open",true
+"Native unload disposes the open compact connector",true
+"Native unload restores original owner glass and visibility",true
+"Native connector lifecycle sends zero HTTP",true

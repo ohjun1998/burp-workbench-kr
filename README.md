@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Simple 1.4.21은 왼쪽 최상단에 통합 점검·대시보드를 컴팩트 강조형 두 줄로 배치합니다.** 아래 도구 목록을 스크롤해도 고정되며 기존 준비 창·결과 화면과 입력 상태를 유지합니다. [설치 JAR](simple/downloads/1.4.21/burp-workbench-simple-1.4.21.jar) · [소스 ZIP](simple/downloads/1.4.21/burp-workbench-simple-1.4.21-source.zip) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.21_KR.md) · [실제 화면·검증](docs/reports/2026-11-01-compact-primary-navigation/REPORT_KR.md). 이전 배포물은 보존합니다.
+
 **Simple 1.4.20은 승인 시안에 남아 있던 입력칸·숫자 컨트롤·카드 내부·필터·원문 간격을 보정합니다.** 기존 입력·원본·화면 설정을 유지합니다. [설치 JAR](simple/downloads/1.4.20/burp-workbench-simple-1.4.20.jar) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.20_KR.md) · [실제 화면·검증](docs/reports/2026-11-01-approved-review/REPORT_KR.md). 작업 브랜치이며 main 병합 여부와 구분합니다.
 
 **Simple 1.4.19는 달 버튼의 라이트·다크 전환과 빈 메뉴 표시를 수정합니다.** 기존 설정·전체 화면·오류 기록은 별도 톱니 메뉴에서 이름과 아이콘으로 표시합니다. [설치 JAR](simple/downloads/1.4.19/burp-workbench-simple-1.4.19.jar) · [소스 ZIP](simple/downloads/1.4.19/burp-workbench-simple-1.4.19-source.zip) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.19_KR.md) · [실제 화면과 검증](docs/reports/2026-11-01-header-tools/REPORT_KR.md). 작업 브랜치에서 제공하며 main 미병합입니다.

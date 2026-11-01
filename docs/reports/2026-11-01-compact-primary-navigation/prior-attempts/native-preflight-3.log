@@ -1,0 +1,43 @@
+dbus-daemon[5211]: [session uid=1000 pid=5211 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.0' (uid=1000 pid=5271 comm="xfwm4 --compositor=off" label="kernel")
+dbus-daemon[5211]: [session uid=1000 pid=5211 pidfd=5] Successfully activated service 'org.a11y.Bus'
+dbus-daemon[5282]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=5271 comm="xfwm4 --compositor=off" label="kernel")
+dbus-daemon[5211]: [session uid=1000 pid=5211 pidfd=5] Activating service name='org.xfce.Xfconf' requested by ':1.2' (uid=1000 pid=5271 comm="xfwm4 --compositor=off" label="kernel")
+dbus-daemon[5282]: Successfully activated service 'org.a11y.atspi.Registry'
+SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
+dbus-daemon[5211]: [session uid=1000 pid=5211 pidfd=5] Successfully activated service 'org.xfce.Xfconf'
+PASS five ordinary groups and eleven leaves remain
+PASS only dashboard is removed from the lower tree; every ordinary route remains
+PASS two top rows retain their distinct action and current-page semantics
+PASS initial: pinned column header is visible
+PASS initial: both controls use the real pinned primary panel
+PASS initial: two compact rows remain exactly 42 pixels high
+PASS initial: the compact rows retain their six-pixel gap
+PASS initial: complete rows stay inside both the sidebar header and real workspace
+PASS initial: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS initial: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS initial: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS initial: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS Robot capture stays inside isolated display: 01-navigation.png
+PASS opening the real preparation panel does not start inspection
+PASS Robot capture stays inside isolated display: 02-inspection.png
+PASS a repeated physical click reuses the visible preparation window and controller
+PASS inspection is an action and does not masquerade as dashboard selection
+PASS dashboard navigation retains its original page and snapshot objects
+PASS dashboard breadcrumb identifies integrated inspection and current dashboard
+PASS dashboard removes stale lower-tree highlight
+PASS dashboard: pinned column header is visible
+PASS dashboard: both controls use the real pinned primary panel
+PASS dashboard: two compact rows remain exactly 42 pixels high
+PASS dashboard: the compact rows retain their six-pixel gap
+PASS dashboard: complete rows stay inside both the sidebar header and real workspace
+PASS dashboard: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS dashboard: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS dashboard: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS dashboard: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS Robot capture stays inside isolated display: 03-dashboard.png
+java.lang.AssertionError: Header popup timeout: Alt+Left restores dashboard and primary selection
+	at kr.workbench.HeaderToolsNative.await(HeaderToolsNative.java:30)
+	at kr.workbench.CompactPrimaryNavigationNative.run(CompactPrimaryNavigationNative.java:294)
+	at kr.workbench.CompactPrimaryNavigationNative.main(CompactPrimaryNavigationNative.java:183)
+
+(xfconfd:5290): xfconfd-WARNING **: 09:36:45.514: Name org.xfce.Xfconf lost on the message dbus, exiting.

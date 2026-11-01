@@ -1,0 +1,1359 @@
+{
+  "result": "passed",
+  "version": "1.4.21",
+  "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "checks": 808,
+  "configurations": [
+    {
+      "theme": "light",
+      "windowSize": "1600x1000",
+      "checks": 101,
+      "geometry": [
+        {
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "initial",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "dashboard",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "scrolled-bottom",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "sidebar-restored",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "theme-toggled",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "final",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ]
+        }
+      ],
+      "evidence": "light/1600x1000/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "565353cae4ef7472ad5cd076a4fab0947facbcc48d60af6cb2557ed02d145193",
+        "02-inspection.png": "cbdb855dbc0b4f3fe169792b319a8a6a51d564d2896a648fa87db92ba0e3e302",
+        "01-navigation.png": "c82284a61006aa9e1342c61f40ce4d0b710545d97c98db785a5e9296b8aac004",
+        "05-theme-toggled.png": "56ea7c08a3e654f5e716956928840f0c501a1db3179f8931ad0ad87251ab57fa",
+        "04-sidebar-bottom.png": "565353cae4ef7472ad5cd076a4fab0947facbcc48d60af6cb2557ed02d145193",
+        "06-restored-navigation.png": "565353cae4ef7472ad5cd076a4fab0947facbcc48d60af6cb2557ed02d145193"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1590,
+          966
+        ],
+        "02-inspection.png": [
+          1860,
+          1000
+        ],
+        "03-dashboard.png": [
+          1590,
+          966
+        ],
+        "04-sidebar-bottom.png": [
+          1590,
+          966
+        ],
+        "05-theme-toggled.png": [
+          1590,
+          966
+        ],
+        "06-restored-navigation.png": [
+          1590,
+          966
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "windowSize": "1280x800",
+      "checks": 101,
+      "geometry": [
+        {
+          "phase": "initial",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "dashboard",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "scrolled-bottom",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "sidebar-restored",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "theme-toggled",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "final",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        }
+      ],
+      "evidence": "light/1280x800/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "cebc0a0528582dc7175efb8cbd6c486f3e729adf3fb71234b2b330e1ef594cb0",
+        "02-inspection.png": "44d002206abbe9ec7ea3c4991b3a1aa1b11afdd6f167cb1e676e89ff739135aa",
+        "01-navigation.png": "222d902fa7303e99b7807bc3d1034ac2cfa774b28a1550e966891e4c6e57c395",
+        "05-theme-toggled.png": "a74b46d76a2d8347b4bc99cf6cd37658c23c313f4d2f438225951806506dfb53",
+        "04-sidebar-bottom.png": "d6feaca3a9dc977039132515917b73b2ce3bd0e3f43fdbd0b14edd184105ee5c",
+        "06-restored-navigation.png": "d6feaca3a9dc977039132515917b73b2ce3bd0e3f43fdbd0b14edd184105ee5c"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1270,
+          766
+        ],
+        "02-inspection.png": [
+          1604,
+          800
+        ],
+        "03-dashboard.png": [
+          1270,
+          766
+        ],
+        "04-sidebar-bottom.png": [
+          1270,
+          766
+        ],
+        "05-theme-toggled.png": [
+          1270,
+          766
+        ],
+        "06-restored-navigation.png": [
+          1270,
+          766
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "windowSize": "1024x768",
+      "checks": 101,
+      "geometry": [
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "initial"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "dashboard"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "scrolled-bottom"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "sidebar-restored"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "theme-toggled"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "final"
+        }
+      ],
+      "evidence": "light/1024x768/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "4f6dd1c84302170fb4d3d593ecbe7b65c4d85904a11e3598ec6853a883d72dde",
+        "02-inspection.png": "3288e126159efce303bb2559a22340ec8aefa488fe7197d04288b0eebb9fa703",
+        "01-navigation.png": "93b11e21babb1d1b995f4bc7c7a0167d6e3080bd30dbccf6b73fc92779f5ac53",
+        "05-theme-toggled.png": "5d17a323c28af458812ae19bc12ff62ececbce82b809ca5271cdfacc515d1eb8",
+        "04-sidebar-bottom.png": "c1a4b87d8e4c190c1b429c6ac662e27e0faaca8efe1083bf0bd1c909ac089b19",
+        "06-restored-navigation.png": "c1a4b87d8e4c190c1b429c6ac662e27e0faaca8efe1083bf0bd1c909ac089b19"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1014,
+          734
+        ],
+        "02-inspection.png": [
+          1860,
+          890
+        ],
+        "03-dashboard.png": [
+          1014,
+          734
+        ],
+        "04-sidebar-bottom.png": [
+          1014,
+          734
+        ],
+        "05-theme-toggled.png": [
+          1014,
+          734
+        ],
+        "06-restored-navigation.png": [
+          1014,
+          734
+        ]
+      }
+    },
+    {
+      "theme": "light",
+      "windowSize": "1024x600",
+      "checks": 101,
+      "geometry": [
+        {
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "initial",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "dashboard",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "scrolled-bottom",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "sidebar-restored",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "theme-toggled",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "final",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ]
+        }
+      ],
+      "evidence": "light/1024x600/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "6ccedfcd77b73d39bb91e32eb9d175c0170a886ad442d83c14d116e40e1d09c7",
+        "02-inspection.png": "e876d8e1e46705f3f19df19c71c380e3cb1f6a51eb28dfa9537328cb18eb0889",
+        "01-navigation.png": "efa995441b19a681b6c230781cae75f065f9bf32fc99cd0014f5d619a402a421",
+        "05-theme-toggled.png": "bf156f54bc7d32591b98d45fa4ee782e4a86aa502c383741e7ca179fc6986cea",
+        "04-sidebar-bottom.png": "868d69f08cbc9b08410fb6b08541ffefb409fad774f059f4f1791374441b6c3c",
+        "06-restored-navigation.png": "868d69f08cbc9b08410fb6b08541ffefb409fad774f059f4f1791374441b6c3c"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1014,
+          566
+        ],
+        "02-inspection.png": [
+          1860,
+          890
+        ],
+        "03-dashboard.png": [
+          1014,
+          566
+        ],
+        "04-sidebar-bottom.png": [
+          1014,
+          566
+        ],
+        "05-theme-toggled.png": [
+          1014,
+          566
+        ],
+        "06-restored-navigation.png": [
+          1014,
+          566
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "windowSize": "1600x1000",
+      "checks": 101,
+      "geometry": [
+        {
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "initial",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "dashboard",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "scrolled-bottom",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "sidebar-restored",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "theme-toggled",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ]
+        },
+        {
+          "inspect": [
+            44,
+            127,
+            172,
+            42
+          ],
+          "phase": "final",
+          "header": [
+            35,
+            115,
+            190,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            172,
+            42
+          ]
+        }
+      ],
+      "evidence": "dark/1600x1000/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "872587239c496eaf8acebc07427c0a93cf91d6e9cd8df34fdeeebd31e27fc5af",
+        "02-inspection.png": "964ac29fd0f3ea6c8f4be1ab88951626b5642c1667339d91f47aec0fc431b177",
+        "01-navigation.png": "f69907374188ef59f93bfb8515cba7e405e6411a576ca3e3efdfd5b52225e1a3",
+        "05-theme-toggled.png": "787d2e8328d049f60298f9c75e7d6009f4e1a0f520aa38863c0d03c8a6a202d1",
+        "04-sidebar-bottom.png": "872587239c496eaf8acebc07427c0a93cf91d6e9cd8df34fdeeebd31e27fc5af",
+        "06-restored-navigation.png": "872587239c496eaf8acebc07427c0a93cf91d6e9cd8df34fdeeebd31e27fc5af"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1590,
+          966
+        ],
+        "02-inspection.png": [
+          1860,
+          1000
+        ],
+        "03-dashboard.png": [
+          1590,
+          966
+        ],
+        "04-sidebar-bottom.png": [
+          1590,
+          966
+        ],
+        "05-theme-toggled.png": [
+          1590,
+          966
+        ],
+        "06-restored-navigation.png": [
+          1590,
+          966
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "windowSize": "1280x800",
+      "checks": 101,
+      "geometry": [
+        {
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "initial",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "dashboard",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "scrolled-bottom",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "sidebar-restored",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "theme-toggled",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "final",
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        }
+      ],
+      "evidence": "dark/1280x800/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "e63ecc19c9f9da23abbee24b9fbbebf8a4a70be8748d75b8329f11c44ecf0a40",
+        "02-inspection.png": "62719a797bed0e6a4d71e269ac0d71c01ae127999ea3dc27722523701a456a1d",
+        "01-navigation.png": "01245cdc6c815a377669f613f8c131c1169171c38cf8aa4680f8b0571fe2087e",
+        "05-theme-toggled.png": "c87f06d63c451ce93ab5c890c27f4cf5bd74435c6b9501bd619db129b68b014d",
+        "04-sidebar-bottom.png": "3e3aab4b5319e8bb05692f5fb29fb6d68e1ddb5ecda20578d85d8d25a7b9f083",
+        "06-restored-navigation.png": "3e3aab4b5319e8bb05692f5fb29fb6d68e1ddb5ecda20578d85d8d25a7b9f083"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1270,
+          766
+        ],
+        "02-inspection.png": [
+          1860,
+          890
+        ],
+        "03-dashboard.png": [
+          1270,
+          766
+        ],
+        "04-sidebar-bottom.png": [
+          1270,
+          766
+        ],
+        "05-theme-toggled.png": [
+          1270,
+          766
+        ],
+        "06-restored-navigation.png": [
+          1270,
+          766
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "windowSize": "1024x768",
+      "checks": 101,
+      "geometry": [
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "initial"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "dashboard"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "scrolled-bottom"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "sidebar-restored"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "theme-toggled"
+        },
+        {
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "phase": "final"
+        }
+      ],
+      "evidence": "dark/1024x768/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "da444402e6a49b97f9903f91036a0b5d3cfb1aba790ecae4f9ced48727a8101e",
+        "02-inspection.png": "98fee6ee5908f85c8b03d30c3425467a6d456c8399b8a75e98ec533706d855e3",
+        "01-navigation.png": "217b4efbeb1e3723e0bd46d8fb7400d63acf913858678689e8fc02ad0c84c569",
+        "05-theme-toggled.png": "bf8c5591e79c31885e1199ebda5d6a3910a11d9fcbcfdd96afb764c981f98160",
+        "04-sidebar-bottom.png": "4dbde3f703348d2c873483a21c8b834237c234561d294597cd12bdf597ab750f",
+        "06-restored-navigation.png": "4dbde3f703348d2c873483a21c8b834237c234561d294597cd12bdf597ab750f"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1014,
+          734
+        ],
+        "02-inspection.png": [
+          1860,
+          890
+        ],
+        "03-dashboard.png": [
+          1014,
+          734
+        ],
+        "04-sidebar-bottom.png": [
+          1014,
+          734
+        ],
+        "05-theme-toggled.png": [
+          1014,
+          734
+        ],
+        "06-restored-navigation.png": [
+          1014,
+          734
+        ]
+      }
+    },
+    {
+      "theme": "dark",
+      "windowSize": "1024x600",
+      "checks": 101,
+      "geometry": [
+        {
+          "phase": "initial",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "dashboard",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "scrolled-bottom",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "sidebar-restored",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "theme-toggled",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        },
+        {
+          "phase": "final",
+          "inspect": [
+            44,
+            127,
+            162,
+            42
+          ],
+          "dashboard": [
+            44,
+            175,
+            162,
+            42
+          ],
+          "header": [
+            35,
+            115,
+            180,
+            114
+          ]
+        }
+      ],
+      "evidence": "dark/1024x600/verification.json",
+      "capturedPngSha256": {
+        "03-dashboard.png": "8c490e85836df45cc4450dbde38aee0385d215fcb20fbdb9e255036443522d1c",
+        "02-inspection.png": "c77207c50417890b2e31db042d36d3c0fe2c0213267374e001f9c6b55c3612ca",
+        "01-navigation.png": "a832fa991c2f33c8b78550753c3400b20e137e30ab90e8329ce5e73096993824",
+        "05-theme-toggled.png": "ab8b5a6ca19c56366ea3b08370a19f6845efbe0c9b39c8b3ca3b4fcb47eaeafd",
+        "04-sidebar-bottom.png": "c132913b381521aa1f8dc4e76d82cebca5b70177816cd9c793bbdad00341e378",
+        "06-restored-navigation.png": "c132913b381521aa1f8dc4e76d82cebca5b70177816cd9c793bbdad00341e378"
+      },
+      "capturedPngDimensions": {
+        "01-navigation.png": [
+          1014,
+          566
+        ],
+        "02-inspection.png": [
+          1860,
+          890
+        ],
+        "03-dashboard.png": [
+          1014,
+          566
+        ],
+        "04-sidebar-bottom.png": [
+          1014,
+          566
+        ],
+        "05-theme-toggled.png": [
+          1014,
+          566
+        ],
+        "06-restored-navigation.png": [
+          1014,
+          566
+        ]
+      }
+    }
+  ],
+  "captureCount": 48,
+  "nativeSwing": true,
+  "nativeBurpGui": false,
+  "syntheticPackets": true,
+  "targetHttpRequests": 0,
+  "inspectionStarted": false,
+  "scope": "Actual compact primary rows, physical click/Tab/Space/Enter/history, retained preparation and dashboard state, lower-tree scrolling, sidebar and theme on isolated Xorg/xfwm4."
+}

@@ -1,0 +1,698 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/burp-workbench-kr/simple/burp-workbench/build_all.py --java /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java --javac /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/javac --test --test-group SimpleCompactPrimaryNavigationTest --test-group FolderNavigationTest --test-group SimpleCompactNavigationTest --test-group SimpleCompactDesignTest --test-group SimpleClassicLayoutTest --test-group SimplePdfShellLayoutTest --test-group SimpleDashboardIntegrationTest --test-group SimpleAppearanceUpgradeTest --test-group SimpleTrafficColumnDefaultsTest --test-group Navigation0532Test --test-group NavigationLifecycle0534Test --test-group SimpleBridgeRuntimeTest --skip-payload
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-simple-1.4.21.jar 9233759 bytes
+Note: /workspace/burp-workbench-kr/simple/burp-workbench/src/test/java/kr/workbench/MapperIntegrationTest.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+PASS two promoted controls retain their approved readable captions
+PASS presentation buttons keep their own models and delegate explicit actions to the source controllers
+PASS a real promoted inspection click delegates exactly once
+PASS source availability immediately disables its promoted action
+PASS disabled promoted actions cannot dispatch through mouse or Enter
+PASS source re-enablement restores its promoted action
+PASS the actual Enter binding delegates to the original preparation controller once
+PASS re-clicking a source that keeps its current route selected never leaves the promoted toggle deselected
+PASS programmatic source selection changes update the promoted toggle
+PASS source model replacement retains live selection synchronization
+PASS closing promoted presentation disables its own controls without disabling the original sources
+PASS disposed promoted actions remain inert after explicit calls and later source changes
+PASS exactly two promoted actions occupy the existing sidebar column header
+PASS sidebar promotion preserves the existing tree viewport and both page-split component identities
+PASS the promoted dashboard has no duplicate lower-folder leaf
+PASS promotion itself does not construct or start inspection
+PASS the actual promoted inspection action opens the retained preparation panel without either runner
+PASS inspection preparation preserves the active page, folder selection and route history
+PASS repeated preparation reuses the same target-window controller and panel with authored target input intact
+PASS the actual promoted dashboard reuses its existing page and retains selection on repeated clicks
+PASS the dashboard breadcrumb describes its promoted inspection context
+PASS Back restores the retained traffic page, selected original and its folder highlight
+PASS Forward restores the promoted dashboard selection without a synthetic folder node
+PASS opening another retained tool clears promoted selection and selects its actual leaf
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/100/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/100/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/100/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/150/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/150/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/150/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/100/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/100/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/100/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/150/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/150/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/150/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS navigation, preparations, themes and menu visibility preserve exact source models, documents and selected original
+PASS all promoted preparation/navigation actions send zero target HTTP and never start a scan
+PASS closed production navigation disables promoted actions and leaves pages, dialogs and HTTP untouched
+SimpleCompactPrimaryNavigationTest: 75 checks passed (retained controllers, compact actual geometry, zero HTTP)
+PASS folder tree, resizable split and persistent toggle exist
+PASS five classic task folders preserve the requested navigation structure
+PASS classic leaf order retains eight engines and nested aliases without duplicating the promoted dashboard
+PASS two visible primary actions occupy the retained sidebar header above the existing folder tree
+PASS folder selection opens production tool: traffic
+PASS folder selection opens production tool: mapper
+PASS folder selection opens production tool: js
+PASS folder selection opens production tool: environment
+PASS folder selection opens production tool: exposure
+PASS folder selection opens production tool: auth
+PASS folder selection opens production tool: response.recon
+PASS folder selection opens production tool: payload
+PASS folder selection opens production tool: data
+PASS data leaf opens the retained conversion/comparison page
+PASS folder selection opens production tool: activity
+PASS progress leaf opens the existing assessment workspace
+PASS folder selection opens production tool: bounty
+PASS the actual promoted dashboard action opens its retained page and replaces the folder highlight
+PASS the actual promoted inspection action opens the original preparation dialog without starting work or changing the page
+PASS all classic routes preserve selected traffic and unsaved editor work
+PASS classic layout keeps Simple extension identity without a Next version badge
+PASS legacy data feature opens retained auxiliary tab without losing manual content
+PASS URL candidate collection opens its existing engine under server and path workspace
+PASS progress keeps its existing manual completion engine separate from automatic classification
+PASS Mapper help route returns to classification without completing work
+PASS auxiliary navigation returns to exact selected traffic without sending HTTP
+PASS programmatic tool navigation expands its folder and selects the matching leaf
+PASS the old horizontal tool strip reserves no page height at 1024
+PASS menu divider accepts user width at 1024
+PASS hide frees content width and leaves a visible restore action at 1024
+PASS show restores the user's previous width at 1024
+PASS hide/show preserves tool, folder expansion, manual input and selected traffic at 1024
+PASS the old horizontal tool strip reserves no page height at 1280
+PASS menu divider accepts user width at 1280
+PASS hide frees content width and leaves a visible restore action at 1280
+PASS show restores the user's previous width at 1280
+PASS hide/show preserves tool, folder expansion, manual input and selected traffic at 1280
+PASS the old horizontal tool strip reserves no page height at 1440
+PASS menu divider accepts user width at 1440
+PASS hide frees content width and leaves a visible restore action at 1440
+PASS show restores the user's previous width at 1440
+PASS hide/show preserves tool, folder expansion, manual input and selected traffic at 1440
+PASS oversized drag is clamped to protect the workspace
+PASS programmatic navigation updates the selected tool while respecting the hidden menu
+PASS Ctrl+F navigation also synchronizes the folder selection
+PASS settings remains a separate action and preserves the active tool
+PASS folder selection, resize, hide/show and settings send zero HTTP requests
+PASS a bare classic constructor without both source actions retains its original dashboard leaf
+PASS saved hidden state restores without reserving a divider
+PASS show restores saved width and persists visibility
+PASS user width is persisted in Burp preferences
+PASS keyboard menu shortcut toggles and persists visibility
+PASS invalid saved width falls back to the default without blocking startup
+FolderNavigationTest: 53 checks passed (production Swing; zero HTTP)
+PASS approved PDF header includes the compact Workbench wordmark once
+PASS approved PDF header remains one 46px row at 1024 pixels
+PASS header actions stay inside the same row at 1024
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS approved PDF header remains one 46px row at 1280 pixels
+PASS header actions stay inside the same row at 1280
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS approved PDF header remains one 46px row at 1600 pixels
+PASS header actions stay inside the same row at 1600
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS the actual shared header popup has no blank action row: wb.simple.dashboard.open
+PASS the actual header menu restores the compact source caption and icon: wb.simple.dashboard.open
+PASS the actual shared header popup has no blank action row: wb.scope.inspection.open
+PASS the actual header menu restores the compact source caption and icon: wb.scope.inspection.open
+PASS the actual shared header popup has no blank action row: wb.window.fullscreen
+PASS the actual header menu restores the compact source caption and icon: wb.window.fullscreen
+PASS the actual shared header popup has no blank action row: wb.navigation.settings
+PASS the actual header menu restores the compact source caption and icon: wb.navigation.settings
+PASS the actual shared header popup has no blank action row: wb.navigation.logs
+PASS the actual header menu restores the compact source caption and icon: wb.navigation.logs
+PASS the actual shared header popup has no blank action row: wb.visual.guide.open
+PASS the header popup has one readable row for every retained shortcut
+PASS fullscreen exit state updates accessibility without widening the PDF toolbar
+PASS the assembled header popup follows fullscreen state after the compact source clears its text
+PASS an accessible-only fullscreen update replaces the assembled menu caption immediately
+PASS the visible header dashboard menu opens the retained page and reflects its selected state
+PASS leaving the dashboard clears the actual header menu state through its retained model
+PASS the actual header Guide row opens the current tool documentation controller
+PASS compact primary navigation retains five folders and eleven tools without a duplicate dashboard leaf
+PASS the production sidebar promotes inspection preparation and the retained dashboard into two actual controls
+PASS all folder rows remain inside the full scrollable tree content below the fixed primary header
+PASS scrolling the actual last folder leaf exposes its full row in the remaining viewport
+PASS both primary actions remain fixed and fully visible while the folder list scrolls: first=java.awt.Rectangle[x=9,y=12,width=146,height=42] -> java.awt.Rectangle[x=9,y=12,width=146,height=42], second=java.awt.Rectangle[x=9,y=60,width=146,height=42] -> java.awt.Rectangle[x=9,y=60,width=146,height=42], visible=java.awt.Rectangle[x=0,y=0,width=174,height=654]
+PASS hover paints a visible background beyond the text without a timer
+PASS leaving the sidebar clears the hover decoration
+PASS compact sidebar selection opens the existing JS route
+PASS selected tool uses the approved full-row blue selection fill
+PASS tool hover exposes the actual feature explanation
+PASS folder collapse remains available in the compact tree
+PASS compact navigation retains auth and CVE engine instances
+PASS compact menu selection hover and fullscreen labels send zero target requests
+SimpleCompactNavigationTest: 74 checks passed (production Swing controls; zero HTTP)
+PASS long labeled values wrap and scroll instead of clipping the source
+PASS inline account choice displays exact baseline and selected account response
+PASS account difference tab compares the selected exact response status lines
+PASS difference panes retain the selected packet with actual differing ranges
+PASS clearing packet search preserves difference decoration
+PASS Raw mode reapplies differences without altering source
+PASS three summary cards occupy three cells without a blank unassigned account cell
+PASS account summary uses the assigned email and role without exposing session credentials
+PASS anonymous card never inherits a login identity
+PASS comparison reader is mounted in the main workspace
+PASS cleared account selection removes stale response
+PASS finding search treats bracket characters literally
+PASS filtered row uses model identity to show the correct response
+PASS affected URL grouping retains its original normalized-location mapping
+PASS related-request and affected-URL tabs use the selected original mapping
+PASS filtering away a row clears stale packet and selection
+PASS filtering clears both additional detail tabs
+PASS evidence reader shows selected stored response
+PASS reading another packet does not overwrite authored report text
+PASS reading evidence does not replace immutable evidence identity
+PASS filtered evidence row resolves exact stored packet
+PASS remove through evidence search targets model identity
+PASS manual Markdown editing preserves authored report text and packet evidence after formatting-toolbar removal
+PASS environment observations start compact with candidates in focus
+PASS observation disclosure retains the existing environment table
+PASS switching preparation/results preserves exact payload input
+PASS visible results step opens the retained workflow page
+PASS return to preparation preserves authored request
+PASS changing phase and reading details never starts a payload run or sends HTTP
+PASS compact design keeps the exact traffic folder route
+PASS compact design keeps the exact mapper folder route
+PASS compact design keeps the exact auth folder route
+PASS compact design keeps the exact js folder route
+PASS compact design keeps the exact environment folder route
+PASS compact design keeps the exact response.recon folder route
+PASS compact design keeps the exact payload folder route
+PASS compact design keeps the exact bounty folder route
+PASS approved PDF shell restores the compact Workbench wordmark in one46px header
+PASS approved sidebar keeps eleven tool leaves in five groups after promoting the dashboard
+PASS two primary inspection and dashboard rows remain available above the existing tools
+PASS approved PDF sidebar retains the reference190px width at1600px
+PASS traffic uses approved visible columns without discarding hidden metadata
+PASS quick filters preserve free text and apply existing query engine
+PASS error segment covers both server and client HTTP errors
+PASS quick filter controls follow restored query state
+PASS folding the mapper tree reclaims its width
+PASS expanding restores mapper tree width
+PASS JS inline detail follows the selected original model row
+PASS inline JS search filters the existing result model
+PASS search stays combined when existing result filters refresh
+PASS filtered JS detail cannot show the previous source row
+PASS literal JS search clears stale inline details
+PASS visible custom result tab shows the actual source count
+SimpleCompactDesignTest: 53 checks passed
+PASS the packaged classic UI includes the approved Noto-derived Workbench Sans font
+PASS classic UI typography uses the bundled reference font with readable Korean tool names
+PASS ASCII request text retains the reference monospaced code typography
+PASS packet text selects a font that displays Korean response content
+PASS when the host monospace lacks Korean glyphs packet text falls back to the bundled font
+PASS classic UI font retains its resource identity and requested 125% scale
+PASS PDF 12px ASCII packet typography follows the same 125% display scale
+PASS classic UI font retains its resource identity and requested 150% scale
+PASS PDF 12px ASCII packet typography follows the same 150% display scale
+PASS the production Simple workspace mounts the real folder navigation and retained pages
+PASS the large eight-button Simple header is replaced by the requested classic shell
+PASS classic layout omits the later Next badge and extra work-context header
+PASS the five task folders follow the attached 0.39.2 layout
+PASS expanded folders expose the retained traffic tool
+PASS expanded folders expose the retained mapper tool
+PASS expanded folders expose the retained auth tool
+PASS expanded folders expose the retained js tool
+PASS expanded folders expose the retained environment tool
+PASS expanded folders expose the retained response.recon tool
+PASS expanded folders expose the retained payload tool
+PASS expanded folders expose the retained bounty tool
+PASS actual folder selection opens traffic
+PASS actual folder selection opens mapper
+PASS actual folder selection opens auth
+PASS actual folder selection opens js
+PASS actual folder selection opens environment
+PASS actual folder selection opens response.recon
+PASS actual folder selection opens payload
+PASS actual folder selection opens bounty
+PASS folder navigation reuses the existing traffic engine
+PASS folder navigation reuses the existing mapper engine
+PASS folder navigation reuses the existing auth engine
+PASS folder navigation reuses the existing js engine
+PASS folder navigation reuses the existing environment engine
+PASS folder navigation reuses the existing response.recon engine
+PASS folder navigation reuses the existing payload engine
+PASS folder navigation reuses the existing bounty engine
+PASS classic navigation retains the Alt+1 tool shortcut
+PASS Alt+1 opens the retained traffic engine and selects its folder leaf
+PASS classic navigation retains the Alt+2 tool shortcut
+PASS Alt+2 opens the retained mapper engine and selects its folder leaf
+PASS classic navigation retains the Alt+3 tool shortcut
+PASS Alt+3 opens the retained auth engine and selects its folder leaf
+PASS classic navigation retains the Alt+4 tool shortcut
+PASS Alt+4 opens the retained js engine and selects its folder leaf
+PASS classic navigation retains the Alt+5 tool shortcut
+PASS Alt+5 opens the retained environment engine and selects its folder leaf
+PASS classic navigation retains the Alt+6 tool shortcut
+PASS Alt+6 opens the retained response.recon engine and selects its folder leaf
+PASS classic navigation retains the Alt+7 tool shortcut
+PASS Alt+7 opens the retained payload engine and selects its folder leaf
+PASS classic navigation retains the Alt+8 tool shortcut
+PASS Alt+8 opens the retained bounty engine and selects its folder leaf
+PASS classic data leaf opens the retained nested tool rather than a new engine
+PASS nested route keeps the actual data leaf selected
+PASS classic data content fills the working pane without a duplicate tab-strip row
+PASS hidden inner tabs retain the exact data controller across folder navigation
+PASS classic passive leaf opens the retained nested tool rather than a new engine
+PASS nested route keeps the actual passive leaf selected
+PASS classic passive content fills the working pane without a duplicate tab-strip row
+PASS hidden inner tabs retain the exact passive controller across folder navigation
+PASS classic activity leaf opens the retained nested tool rather than a new engine
+PASS nested route keeps the actual activity leaf selected
+PASS classic activity content fills the working pane without a duplicate tab-strip row
+PASS hidden inner tabs retain the exact activity controller across folder navigation
+PASS primary and alias routes preserve the selected original and authored input
+PASS dashboard navigation selects its promoted control and clears the previous folder leaf
+PASS compact breadcrumb describes the dashboard instead of the previously selected tool
+PASS the retained compact dashboard source synchronizes its same page and promoted selection
+PASS compact Scope action opens the current production inspection controller
+PASS opening Scope settings retains the active dashboard and original page instances
+PASS classic Settings action keeps the active tool and opens current display settings
+PASS light 1024x720 uses the selected host palette
+PASS light 1024x720 retains a readable sidebar and working area
+PASS light 1024x720 keeps the classic navigation toolbar compact
+PASS light 1024x720 exposes original controller directly or through its visible menu: wb.navigation.toggle
+PASS light 1024x720 keeps wb.navigation.toggle inside the available workspace
+PASS light 1024x720 exposes original controller directly or through its visible menu: wb.visual.guide.open
+PASS light 1024x720 keeps wb.visual.guide.open inside the available workspace
+PASS light 1024x720 exposes original controller directly or through its visible menu: wb.navigation.settings
+PASS light 1024x720 keeps wb.navigation.settings inside the available workspace
+PASS light 1024x720 exposes original controller directly or through its visible menu: wb.navigation.logs
+PASS light 1024x720 keeps wb.navigation.logs inside the available workspace
+PASS light 1024x720 exposes original controller directly or through its visible menu: wb.simple.dashboard.open
+PASS light 1024x720 keeps wb.simple.dashboard.open inside the available workspace
+PASS light 1024x720 exposes original controller directly or through its visible menu: wb.scope.inspection.open
+PASS light 1024x720 keeps wb.scope.inspection.open inside the available workspace
+PASS light 1024x720 retains the reference list-above and request/response-side-by-side arrangement
+PASS light 1024x720 leaves both packet readers usable beside the folder menu
+PASS light 1280x800 uses the selected host palette
+PASS light 1280x800 retains a readable sidebar and working area
+PASS light 1280x800 keeps the classic navigation toolbar compact
+PASS light 1280x800 exposes original controller directly or through its visible menu: wb.navigation.toggle
+PASS light 1280x800 keeps wb.navigation.toggle inside the available workspace
+PASS light 1280x800 exposes original controller directly or through its visible menu: wb.visual.guide.open
+PASS light 1280x800 keeps wb.visual.guide.open inside the available workspace
+PASS light 1280x800 exposes original controller directly or through its visible menu: wb.navigation.settings
+PASS light 1280x800 keeps wb.navigation.settings inside the available workspace
+PASS light 1280x800 exposes original controller directly or through its visible menu: wb.navigation.logs
+PASS light 1280x800 keeps wb.navigation.logs inside the available workspace
+PASS light 1280x800 exposes original controller directly or through its visible menu: wb.simple.dashboard.open
+PASS light 1280x800 keeps wb.simple.dashboard.open inside the available workspace
+PASS light 1280x800 exposes original controller directly or through its visible menu: wb.scope.inspection.open
+PASS light 1280x800 keeps wb.scope.inspection.open inside the available workspace
+PASS light 1280x800 retains the reference list-above and request/response-side-by-side arrangement
+PASS light 1280x800 leaves both packet readers usable beside the folder menu
+PASS dark 1024x720 uses the selected host palette
+PASS dark 1024x720 retains a readable sidebar and working area
+PASS dark 1024x720 keeps the classic navigation toolbar compact
+PASS dark 1024x720 exposes original controller directly or through its visible menu: wb.navigation.toggle
+PASS dark 1024x720 keeps wb.navigation.toggle inside the available workspace
+PASS dark 1024x720 exposes original controller directly or through its visible menu: wb.visual.guide.open
+PASS dark 1024x720 keeps wb.visual.guide.open inside the available workspace
+PASS dark 1024x720 exposes original controller directly or through its visible menu: wb.navigation.settings
+PASS dark 1024x720 keeps wb.navigation.settings inside the available workspace
+PASS dark 1024x720 exposes original controller directly or through its visible menu: wb.navigation.logs
+PASS dark 1024x720 keeps wb.navigation.logs inside the available workspace
+PASS dark 1024x720 exposes original controller directly or through its visible menu: wb.simple.dashboard.open
+PASS dark 1024x720 keeps wb.simple.dashboard.open inside the available workspace
+PASS dark 1024x720 exposes original controller directly or through its visible menu: wb.scope.inspection.open
+PASS dark 1024x720 keeps wb.scope.inspection.open inside the available workspace
+PASS dark 1024x720 retains the reference list-above and request/response-side-by-side arrangement
+PASS dark 1024x720 leaves both packet readers usable beside the folder menu
+PASS dark 1280x800 uses the selected host palette
+PASS dark 1280x800 retains a readable sidebar and working area
+PASS dark 1280x800 keeps the classic navigation toolbar compact
+PASS dark 1280x800 exposes original controller directly or through its visible menu: wb.navigation.toggle
+PASS dark 1280x800 keeps wb.navigation.toggle inside the available workspace
+PASS dark 1280x800 exposes original controller directly or through its visible menu: wb.visual.guide.open
+PASS dark 1280x800 keeps wb.visual.guide.open inside the available workspace
+PASS dark 1280x800 exposes original controller directly or through its visible menu: wb.navigation.settings
+PASS dark 1280x800 keeps wb.navigation.settings inside the available workspace
+PASS dark 1280x800 exposes original controller directly or through its visible menu: wb.navigation.logs
+PASS dark 1280x800 keeps wb.navigation.logs inside the available workspace
+PASS dark 1280x800 exposes original controller directly or through its visible menu: wb.simple.dashboard.open
+PASS dark 1280x800 keeps wb.simple.dashboard.open inside the available workspace
+PASS dark 1280x800 exposes original controller directly or through its visible menu: wb.scope.inspection.open
+PASS dark 1280x800 keeps wb.scope.inspection.open inside the available workspace
+PASS dark 1280x800 retains the reference list-above and request/response-side-by-side arrangement
+PASS dark 1280x800 leaves both packet readers usable beside the folder menu
+PASS classic menu hide immediately returns its width to the existing working page
+PASS classic menu restore preserves the user's chosen sidebar width
+PASS menu resize and hide/show preserve the active page and unsaved editors
+PASS classic layout, all folder routes, dashboard and settings opening send no target requests
+SimpleClassicLayoutTest: 144 checks passed (production Swing/API adapters; zero target HTTP)
+PASS a bare shell without both production shortcut controllers retains its original folder-only navigation
+PASS approved PDF shell retains its Workbench wordmark and local vector mark at 1024
+PASS approved header is one 46px row at 1024
+PASS fresh layout follows the approved responsive sidebar width at 1024
+PASS visible dashboard leaf opens its retained page and updates the breadcrumb at 1024
+PASS a second real route changes the breadcrumb without replacing its page at 1024
+PASS route selection preserves authored page bytes at 1024
+PASS explicit user divider width overrides the PDF default at 1024
+PASS the retained header action restores a hidden sidebar at 1024
+PASS hide and restore preserve the exact user width at 1024
+PASS settings help and log controllers remain connected after shell placement at 1024
+PASS a bare shell without both production shortcut controllers retains its original folder-only navigation
+PASS approved PDF shell retains its Workbench wordmark and local vector mark at 1280
+PASS approved header is one 46px row at 1280
+PASS fresh layout follows the approved responsive sidebar width at 1280
+PASS visible dashboard leaf opens its retained page and updates the breadcrumb at 1280
+PASS a second real route changes the breadcrumb without replacing its page at 1280
+PASS route selection preserves authored page bytes at 1280
+PASS explicit user divider width overrides the PDF default at 1280
+PASS the retained header action restores a hidden sidebar at 1280
+PASS hide and restore preserve the exact user width at 1280
+PASS settings help and log controllers remain connected after shell placement at 1280
+PASS a bare shell without both production shortcut controllers retains its original folder-only navigation
+PASS approved PDF shell retains its Workbench wordmark and local vector mark at 1600
+PASS approved header is one 46px row at 1600
+PASS fresh layout follows the approved responsive sidebar width at 1600
+PASS visible dashboard leaf opens its retained page and updates the breadcrumb at 1600
+PASS a second real route changes the breadcrumb without replacing its page at 1600
+PASS route selection preserves authored page bytes at 1600
+PASS explicit user divider width overrides the PDF default at 1600
+PASS the retained header action restores a hidden sidebar at 1600
+PASS hide and restore preserve the exact user width at 1600
+PASS settings help and log controllers remain connected after shell placement at 1600
+SimplePdfShellLayoutTest: 33 checks passed (retained routes, zero HTTP)
+PASS dashboard preserves traffic/auth engine indices 0 and 1
+PASS dashboard is appended with its own stable feature ID
+PASS extension startup does not construct or start inspection
+PASS production primary sidebar dashboard action opens the appended page
+PASS dashboard navigation selects its visible primary action and clears the previous folder highlight
+PASS clicking the current dashboard keeps its navigation highlight selected
+PASS opening an empty dashboard remains read-only and leaves inspection unconstructed
+PASS all eight original tools retain engine instances and unsaved inputs across dashboard round trips
+PASS return navigation reuses the same dashboard instance
+PASS dashboard inspect action opens the existing production integration window
+PASS opening inspection from dashboard does not start an HTTP runner
+PASS actual inspection accept publishes the same run and target into dashboard
+PASS production listener shows one shared path while preserving two account-specific candidates
+PASS account drill-down selects Bob's own original despite a shared candidate fingerprint
+PASS original action resolves the selected ID into Bob's actual packet inspector
+PASS Repeater preparation receives the exact selected original request without changing account identity
+PASS inspector and Repeater preparation send zero target HTTP
+PASS evidence capture keeps Bob's selected bytes, account and original-ID attribution together
+PASS evidence handoff reaches the retained evidence route at index 3
+PASS unknown original IDs never resolve to a nearby packet
+PASS returning from evidence preserves the current filtered selection
+PASS clearing the live snapshot clears dashboard rows and disables old packet actions
+PASS cleared original cannot be reopened through a stale action
+PASS cleared original cannot be sent to Repeater through a stale action
+PASS cleared original cannot be added as evidence through a stale action
+PASS a newly published live snapshot restores available dashboard results
+PASS project transition clears inspection originals, dashboard results and previous-project evidence together
+PASS previous-project original is rejected after project transition
+PASS previous-project Repeater handoff is rejected after project transition
+PASS previous-project evidence handoff is rejected after project transition
+PASS loading, filtering, navigation, handoffs and lifecycle cleanup perform zero target HTTP
+SimpleDashboardIntegrationTest: 31 checks passed (production adapter, no native Burp/HTTP)
+PASS the pre-upgrade hierarchy actually persists a custom333px column
+PASS the actual Mapper wrapper occupies its old slot without shifting the right table subtree
+PASS the actual Mapper wrapper retains its original panel and tree model
+PASS Mapper retains its pre-upgrade persistence key
+PASS Mapper restores old custom widths and column order after construction values were reset
+PASS Mapper theme changes preserve the exact original model and restored columns
+PASS Mapper theme changes preserve the exact original model and restored columns
+PASS Mapper wrapping and restoration preserve the selected original row
+PASS the pre-upgrade hierarchy actually persists a custom333px column
+PASS the actual rounded layer replaces the old card in its original sibling slot
+PASS Rounded card retains its pre-upgrade persistence key
+PASS Rounded card restores old custom widths and column order after construction values were reset
+PASS Rounded card theme changes preserve the exact original model and restored columns
+PASS Rounded card theme changes preserve the exact original model and restored columns
+PASS the pre-upgrade hierarchy actually persists a custom333px column
+PASS the actual response header replaces the old search slot without shifting its table subtree
+PASS Response findings retains its pre-upgrade persistence key
+PASS Response findings restores old custom widths and column order after construction values were reset
+PASS Response findings theme changes preserve the exact original model and restored columns
+PASS Response findings theme changes preserve the exact original model and restored columns
+PASS response header replacement and themes preserve the original search document and selection
+PASS appearance upgrade, restored columns and theme changes send zero target HTTP
+SimpleAppearanceUpgradeTest: 22 checks passed (pre-upgrade profiles, actual presentation helpers, zero HTTP)
+PASS fresh construction widths are not captured/restored as a user profile before real traffic geometry
+PASS first real traffic viewport records the approved column widths
+PASS the exact old default width tuple migrates to approved geometry instead of being treated as a manual profile
+PASS migrated defaults persist only after approved real geometry is available
+PASS genuinely custom333px width and reordered columns restore exactly
+PASS project B independently migrates its own exact legacy defaults
+PASS project B migration never rewrites project A's custom column metadata
+PASS returning to project A preserves its exact manual order and widths after migration elsewhere
+PASS migration excludes custom scale/density/order and nontraffic surfaces: 125/false/false/false
+PASS migration excludes custom scale/density/order and nontraffic surfaces: 100/true/false/false
+PASS migration excludes custom scale/density/order and nontraffic surfaces: 100/false/true/false
+PASS migration excludes custom scale/density/order and nontraffic surfaces: 100/false/false/true
+PASS programmatic first-layout columns remain the approved baseline without claiming a manual profile
+PASS the actual table-header mouse handler starts the URL resize gesture
+PASS a real header drag owns its333px width immediately before debounced persistence
+PASS normal composed traffic relayout preserves the fresh user's drag before the save timer fires
+PASS the actual dragged width restores exactly after another project's baseline is visited
+PASS resetting surfaces releases manual ownership and restores actual approved traffic geometry
+PASS header resizing, project restoration and display reset send zero target HTTP
+SimpleTrafficColumnDefaultsTest: 19 checks passed (bounded metadata migration; no network)
+PASS JWT alias opens its precise retained subpage
+PASS evidence goal ranks its precise route first
+PASS Korean purpose locates comparison
+PASS purpose search is case insensitive
+PASS purpose search only scans fixed feature metadata
+PASS oversized pasted search input is rejected before catalog scanning
+PASS recent routes precede full feature catalog
+PASS opening a second view creates a history entry
+PASS back opens exact retained page and subtab
+PASS back restores selected original row while model is unchanged
+PASS back restores previous viewport
+PASS external in-memory traffic query hook restores prior filter
+PASS back exposes forward navigation
+PASS forward restores next page and its query checkpoint
+PASS new route after back discards obsolete forward branch
+PASS special evidence route retains its origin in history
+PASS changed table model never restores a stale row index
+PASS replacement model never receives obsolete selection
+PASS Ctrl+K palette reuses local search panel
+PASS palette Enter opens exact JWT alias without executing actions
+PASS closing palette clears transient search text
+PASS no-match Enter has no navigation side effect
+PASS Escape closes and resets palette
+PASS restoring wide host after temporary narrow layout and theme recovery keeps navigation controls on one row
+PASS recovered navigation still exposes feature search at560minimum width
+PASS compact560 navigation action remains visible: wb.navigation.back
+PASS compact560 navigation action remains visible: wb.navigation.forward
+PASS compact560 navigation action remains visible: wb.navigation.quick
+PASS compact560 navigation action remains visible: wb.navigation.settings
+PASS quick search input, results and open action fit560x300 minimum window
+PASS Ctrl+K is scoped to focused Workbench descendants
+PASS palette installs no window/global shortcut that captures other Burp tabs
+PASS project switch clears navigation state and recent screens before restoration
+PASS new project builds its own fresh history
+PASS explicit reset clears prior work navigation
+PASS unresolved project disables cross-view restoration
+PASS history is bounded to24entries and recents to8metadata routes
+PASS nested subtab events enter history after coalesced navigation completes
+PASS forward restores nested tab selection
+PASS after-change callback captures bookmarked route rather than newly selected destination
+PASS project change during palette document notification clears history without recursive edits
+PASS unload releases history and recent metadata
+PASS closed navigation never reopens retained work
+Navigation0532Test: 43 checks passed (retained Swing views; no network execution)
+PASS live selected original has a restorable navigation bookmark
+PASS disposed host skin rejects navigation capture before touching the live store
+PASS queued navigation still sees selected rows before queued Swing cleanup
+PASS host unload has already closed the authoritative store before queued cleanup
+PASS navigation capture safely declines the selected but closed-store original
+PASS queued destination callbacks after real unload do not raise EDT storage errors
+PASS late restore cannot reopen navigation or its disposed traffic worker
+NavigationLifecycle0534Test: 7 checks passed
+PASS missing-module has the intended module-presence precondition
+PASS missing-module cannot resolve its required HTTP-server type through the extension loader
+PASS missing-module registers the single Workbench suite tab
+PASS missing-module completes the legacy/modern extension entry point
+PASS missing-module reports an unavailable bridge instead of a false active connection
+PASS missing-module explains the unavailable browser connection and runtime prerequisite
+PASS missing-module states the preserved HTTP mapping capability
+PASS missing-module retains the traffic navigation action
+PASS missing-module opens the traffic tool
+PASS missing-module retains the mapper navigation action
+PASS missing-module opens the mapper tool
+PASS missing-module retains the auth navigation action
+PASS missing-module opens the auth tool
+PASS missing-module retains the js navigation action
+PASS missing-module opens the js tool
+PASS missing-module retains the environment navigation action
+PASS missing-module opens the environment tool
+PASS missing-module retains the response.recon navigation action
+PASS missing-module opens the response.recon tool
+PASS missing-module retains the payload navigation action
+PASS missing-module opens the payload tool
+PASS missing-module retains the bounty navigation action
+PASS missing-module opens the bounty tool
+PASS missing-module preserves OFF collection when the helper is unavailable
+PASS missing-module preserves SCOPE rejection without the helper
+PASS missing-module captures and automatically maps one admitted HTTP response
+PASS missing-module retains the mapped original packet store
+PASS missing-module opens the actual Mapper settings after bridge failure
+PASS missing-module keeps browser-unavailable status visible in settings
+PASS missing-module refresh retains the runtime recovery instruction
+PASS missing-module initialization, navigation and observed mapping send no target requests
+PASS missing-module unload closes the Mapper UI without a bridge
+PASS missing-module unload deletes temporary mapped originals
+PASS missing-module unload stops the file and preview workers
+PASS missing-module emits no asynchronous Swing errors during refresh and unload
+BRIDGE_RUNTIME_CHILD missing-module checks=35
+PASS missing-module child completes within its startup/cleanup deadline
+PASS missing-module child exits successfully
+PASS missing-module reports its own completed behavioral checks
+PASS missing-module executes the complete startup, mapping and cleanup scenario
+PASS missing-module emits exactly one completed scenario summary
+PASS loader-isolation scenario retains the real HTTP-server module
+PASS hidden-module has the intended module-presence precondition
+PASS hidden-module cannot resolve its required HTTP-server type through the extension loader
+PASS hidden-module registers the single Workbench suite tab
+PASS hidden-module completes the legacy/modern extension entry point
+PASS hidden-module reports an unavailable bridge instead of a false active connection
+PASS hidden-module explains the unavailable browser connection and runtime prerequisite
+PASS hidden-module states the preserved HTTP mapping capability
+PASS hidden-module retains the traffic navigation action
+PASS hidden-module opens the traffic tool
+PASS hidden-module retains the mapper navigation action
+PASS hidden-module opens the mapper tool
+PASS hidden-module retains the auth navigation action
+PASS hidden-module opens the auth tool
+PASS hidden-module retains the js navigation action
+PASS hidden-module opens the js tool
+PASS hidden-module retains the environment navigation action
+PASS hidden-module opens the environment tool
+PASS hidden-module retains the response.recon navigation action
+PASS hidden-module opens the response.recon tool
+PASS hidden-module retains the payload navigation action
+PASS hidden-module opens the payload tool
+PASS hidden-module retains the bounty navigation action
+PASS hidden-module opens the bounty tool
+PASS hidden-module preserves OFF collection when the helper is unavailable
+PASS hidden-module preserves SCOPE rejection without the helper
+PASS hidden-module captures and automatically maps one admitted HTTP response
+PASS hidden-module retains the mapped original packet store
+PASS hidden-module opens the actual Mapper settings after bridge failure
+PASS hidden-module keeps browser-unavailable status visible in settings
+PASS hidden-module refresh retains the runtime recovery instruction
+PASS hidden-module initialization, navigation and observed mapping send no target requests
+PASS hidden-module unload closes the Mapper UI without a bridge
+PASS hidden-module unload deletes temporary mapped originals
+PASS hidden-module unload stops the file and preview workers
+PASS unrelated missing application classes still fail extension initialization
+PASS server resource probe observes the real bound-server timer
+PASS server resource probe returns to baseline after normal stop
+PASS partial-module has the intended module-presence precondition
+PASS partial-module cannot resolve its required HTTP-server type through the extension loader
+PASS partial-module registers the single Workbench suite tab
+PASS partial-module completes the legacy/modern extension entry point
+PASS partial-module reports an unavailable bridge instead of a false active connection
+PASS partial-module explains the unavailable browser connection and runtime prerequisite
+PASS partial-module states the preserved HTTP mapping capability
+PASS partial-module retains the traffic navigation action
+PASS partial-module opens the traffic tool
+PASS partial-module retains the mapper navigation action
+PASS partial-module opens the mapper tool
+PASS partial-module retains the auth navigation action
+PASS partial-module opens the auth tool
+PASS partial-module retains the js navigation action
+PASS partial-module opens the js tool
+PASS partial-module retains the environment navigation action
+PASS partial-module opens the environment tool
+PASS partial-module retains the response.recon navigation action
+PASS partial-module opens the response.recon tool
+PASS partial-module retains the payload navigation action
+PASS partial-module opens the payload tool
+PASS partial-module retains the bounty navigation action
+PASS partial-module opens the bounty tool
+PASS partial-module preserves OFF collection when the helper is unavailable
+PASS partial-module preserves SCOPE rejection without the helper
+PASS partial-module captures and automatically maps one admitted HTTP response
+PASS partial-module retains the mapped original packet store
+PASS partial-module opens the actual Mapper settings after bridge failure
+PASS partial-module keeps browser-unavailable status visible in settings
+PASS partial-module refresh retains the runtime recovery instruction
+PASS partial-module initialization, navigation and observed mapping send no target requests
+PASS partial-module unload closes the Mapper UI without a bridge
+PASS partial-module unload deletes temporary mapped originals
+PASS partial-module unload stops the file and preview workers
+PASS partial-module emits no asynchronous Swing errors during refresh and unload
+BRIDGE_RUNTIME_CHILD partial-module checks=35
+PASS partial HTTP-server linkage failure releases its already-bound server timer
+PASS hidden-module emits no asynchronous Swing errors during refresh and unload
+BRIDGE_RUNTIME_CHILD hidden-module checks=74
+PASS hidden-module child completes within its startup/cleanup deadline
+PASS hidden-module child exits successfully
+PASS hidden-module reports its own completed behavioral checks
+PASS hidden-module executes the complete startup, mapping and cleanup scenario
+PASS hidden-module emits exactly one completed scenario summary
+SimpleBridgeRuntimeTest: 119 checks passed (isolated runtime and class-loader startup)
+SIMPLE_CHECK_SUMMARY {"version": "1.4.21", "toolchainMode": "strict-release17", "javaRuntimeVersion": "17.0.21", "java17ApiCompatibilityVerified": true, "groups": {"SimpleCompactPrimaryNavigationTest": 75, "FolderNavigationTest": 53, "SimpleCompactNavigationTest": 74, "SimpleCompactDesignTest": 53, "SimpleClassicLayoutTest": 144, "SimplePdfShellLayoutTest": 33, "SimpleDashboardIntegrationTest": 31, "SimpleAppearanceUpgradeTest": 22, "SimpleTrafficColumnDefaultsTest": 19, "Navigation0532Test": 43, "NavigationLifecycle0534Test": 7, "SimpleBridgeRuntimeTest": 119}, "regressionGroups": 12, "regressionChecks": 673, "payloadHttpChecks": 0, "excludedGroups": {"UiCleanupTest": "Asserts removed WorkContext header, exact 15-item auxiliary menu and absence of direct next-step buttons; replaced by SimpleWorkflowTest and Simple layout rendering", "AppearanceWorkflowTest": "Requires the original auxiliary/settings page contract; current folder styling and retained Simple inputs are checked by SimpleClassicLayoutTest, FolderNavigationTest and SimpleAppearanceTest"}, "adaptedGroups": {"TrafficScopeModesTest": "Count actual visible traffic controls and verify retained freeze/apply proxies in collection settings; retain capture/SCOPE/persistence guards", "SimpleDashboardRevealTest": "Retain initial overview and zero scroll while allowing compact results to be visible; open real chart disclosure for chart actions and preserve reveal/ID/lifecycle/no-HTTP assertions", "Appearance0534Test": "Open the approved folded packet search through Ctrl+F and scale the approved 13px field/32px compact row; retain narrow-search, native-editor isolation and exact-byte checks", "UiLayoutTest": "Validate approved fixed horizontal environment master-detail with response/request/evidence tabs and retained models/no-HTTP contracts", "JsUiOptimizationTest": "Validate fixed result/source split and explicitly opened bounded disclosures under both packet preferences; retain original reader and worker checks", "JsCompactUpgradeTest": "Validate direct three analysis types plus real extra-type menu; preserve seven underlying models and source/filter checks", "JsRepeaterWorkflowTest": "Select advanced analysis via its actual menu and test scrolling only when needed; preserve exact request, SCOPE and HTTP contracts", "BuildInfoTest": "Assert Simple artifact filename while retaining packaged JAR manifest/runtime consistency checks", "PacketUiTest": "Validate actual selected-path popup actions and retained payload controllers; retain shared packet preview, native-editor, raw-byte and syntax assertions", "NextIsolationTest": "Assert Simple display and storage namespace; preserve both stable and Next preference/archive fixtures", "FeatureGuideWorkflowTest": "Use the approved visible screen-guide proxy and F1, retaining its source action, far-right placement, routing/input/no-HTTP assertions", "DiagnosticsWorkflowTest": "Use the approved header menu for retained log/settings/help controllers; retain bounded concurrency, redaction, error selection/clear, lifecycle and no-HTTP checks", "FolderNavigationTest": "Restore the 0.39.2-style five folders with Simple identity and nested-tool aliases; retain actual tree selection, input, width, hide/restore and no-HTTP contracts", "RenderAuthUiTest": "Match the requested 0.39.2 ASCII fixed-width/Korean fallback fonts instead of requiring one UI/packet font; retain HTML sanitization, exact bytes, no-network and auth contracts", "UiPanelsOptimizationTest": "Restore original core manual-replay editor/result viewport assertions and verify route index 1; retain comparison, evidence, response, worker and image-state checks", "AuditRepairsTest": "Use the same original community JS fixture copied into Simple test resources, so regressions run independently of the original directory layout", "AuthSetupBundlesTest": "Assert exact BuildInfo.storageKey project UUID key instead of the historical Next prefix; retain bundle exchange, disk integrity, capacity and project-isolation checks", "AuthLayoutFitTest": "Validate direct detection and account-policy menu with actual settings/repair/candidate proxies; retain all responsive widths, table sizing, wrapping and account-detail checks", "LayoutPassiveWorkflowTest": "Use retained explicit passive route and the fixed approved traffic geometry; preserve passive shared-layout selection, collection fixture, target/packet isolation, capacity and unload checks", "TrafficScopeTest": "Use actual primary SCOPE button/editor instead of removed duplicate context submenu; preserve scope-rule operations and verify coverage/environment through admitted SCOPE traffic rather than removed selected-packet backfill", "AuthRunSummaryTest": "Approved rectangular chips replace icon badges; retain correct sorted run, summary text, semantic verdict color and source evidence", "AuthResponseWorkflowTest": "Approved rectangular chips replace icon badges; retain HTTP-200 logical-denial rules, semantic color, exact requests and no-HTTP contracts", "TargetCleanupTest": "Keep JS/URL target dialogs and current SCOPE choices while asserting daily environment origin/account selectors stay on the main page; preserve no-HTTP preparation, unapplied-draft isolation, exact owning target and unload checks"}, "failedGroups": [], "result": "passed", "subset": true}

@@ -66,9 +66,17 @@ public final class FolderNavigationTest extends WorkbenchTest {
         check(groups.equals(List.of("트래픽", "탐색·정보 수집", "보안 분석·검증", "데이터 도구", "점검 관리·증거")),
             "five classic task folders preserve the requested navigation structure");
         List<String> leafIds = List.of("traffic", "mapper", "js", "environment", "exposure", "auth",
-            "response.recon", "payload", "data", "activity", "bounty", "dashboard");
+            "response.recon", "payload", "data", "activity", "bounty");
         check(leaves.equals(leafIds.stream().map(FeatureGuide::title).toList()),
-            "classic leaf order retains eight engines, nested aliases and the current dashboard");
+            "classic leaf order retains eight engines and nested aliases without duplicating the promoted dashboard");
+        JButton primaryInspect = (JButton) UiLayoutTest.named(panel, "wb.navigation.primary.inspect");
+        JToggleButton primaryDashboard = (JToggleButton) UiLayoutTest.named(panel, "wb.navigation.primary.dashboard");
+        JScrollPane sidebar = (JScrollPane) UiLayoutTest.named(panel, "wb.navigation.sidebar");
+        Component primary = UiLayoutTest.named(panel, "wb.navigation.primary");
+        check(primaryInspect != null && primaryDashboard != null && primary != null
+                && sidebar.getColumnHeader() != null && sidebar.getColumnHeader().getView() == primary
+                && "통합 점검".equals(primaryInspect.getText()) && "대시보드".equals(primaryDashboard.getText()),
+            "two visible primary actions occupy the retained sidebar header above the existing folder tree");
         JTable traffic = (JTable) unchecked(extension, "logTable");
         traffic.setRowSelectionInterval(0, 0);
         Object source = unchecked(extension, "current");
@@ -93,6 +101,20 @@ public final class FolderNavigationTest extends WorkbenchTest {
           if (id.equals("passive")) check(explorationTools.getSelectedIndex() == 1, "URL leaf opens the retained candidate collector");
           if (id.equals("activity")) check(mapperTools.getSelectedIndex() == 1, "progress leaf opens the existing assessment workspace");
         }
+        primaryDashboard.doClick(0);
+        check(pages.getSelectedComponent() == unchecked(extension, "scopeDashboard")
+                && primaryDashboard.isSelected() && tree.getSelectionPath() == null
+                && ((JLabel) UiLayoutTest.named(panel, "wb.navigation.breadcrumb")).getText().contains("통합 점검"),
+            "the actual promoted dashboard action opens its retained page and replaces the folder highlight");
+        List<Component> inspectionDialogs = new ArrayList<>();
+        extension.dialogOpener = (owner, title, content, modal, closed) -> { inspectionDialogs.add(content); return null; };
+        Component dashboardPage = pages.getSelectedComponent();
+        primaryInspect.doClick(0);
+        ScopeInspectionPanel inspection = (ScopeInspectionPanel) unchecked(extension, "scopeInspectionPanel");
+        check(inspection != null && inspectionDialogs.size() == 1 && inspectionDialogs.get(0) == inspection
+                && inspection.runner == null && pages.getSelectedComponent() == dashboardPage
+                && PayloadIntegrationTest.sent.get() == 0,
+            "the actual promoted inspection action opens the original preparation dialog without starting work or changing the page");
         check(unchecked(extension, "current") == source && traffic.getSelectedRow() == 0
             && codec.getText().equals("UNSAVED_FOLDER_INPUT") && payload.getText().equals("UNSAVED_PAYLOAD_INPUT"),
             "all classic routes preserve selected traffic and unsaved editor work");
@@ -172,6 +194,10 @@ public final class FolderNavigationTest extends WorkbenchTest {
         JPanel content = new JPanel();content.putClientProperty("wb.feature.id", "traffic");
         pages2.addTab("요청·응답 목록", content);
         FolderNavigation navigation = new FolderNavigation(preferences(saved), pages2, () -> {}, null, null, true, null, null);
+        JTree legacyTree = (JTree) UiLayoutTest.named(navigation, "wb.navigation.tree");
+        check(UiLayoutTest.named(navigation, "wb.navigation.primary") == null
+                && path(legacyTree, FeatureGuide.title("dashboard")) != null,
+            "a bare classic constructor without both source actions retains its original dashboard leaf");
         WorkbenchUi.style(navigation);navigation.restoreLayout();
         layout(navigation, 1280);
         JSplitPane split = (JSplitPane) UiLayoutTest.named(navigation, "wb.navigation.split");

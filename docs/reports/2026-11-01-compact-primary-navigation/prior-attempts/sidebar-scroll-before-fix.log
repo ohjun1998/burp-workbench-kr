@@ -1,0 +1,93 @@
+Fontconfig error: No writable cache directories
+PASS approved PDF header includes the compact Workbench wordmark once
+PASS approved PDF header remains one 46px row at 1024 pixels
+PASS header actions stay inside the same row at 1024
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS approved PDF header remains one 46px row at 1280 pixels
+PASS header actions stay inside the same row at 1280
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS approved PDF header remains one 46px row at 1600 pixels
+PASS header actions stay inside the same row at 1600
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS the actual shared header popup has no blank action row: wb.simple.dashboard.open
+PASS the actual header menu restores the compact source caption and icon: wb.simple.dashboard.open
+PASS the actual shared header popup has no blank action row: wb.scope.inspection.open
+PASS the actual header menu restores the compact source caption and icon: wb.scope.inspection.open
+PASS the actual shared header popup has no blank action row: wb.window.fullscreen
+PASS the actual header menu restores the compact source caption and icon: wb.window.fullscreen
+PASS the actual shared header popup has no blank action row: wb.navigation.settings
+PASS the actual header menu restores the compact source caption and icon: wb.navigation.settings
+PASS the actual shared header popup has no blank action row: wb.navigation.logs
+PASS the actual header menu restores the compact source caption and icon: wb.navigation.logs
+PASS the actual shared header popup has no blank action row: wb.visual.guide.open
+PASS the header popup has one readable row for every retained shortcut
+PASS fullscreen exit state updates accessibility without widening the PDF toolbar
+PASS the assembled header popup follows fullscreen state after the compact source clears its text
+PASS an accessible-only fullscreen update replaces the assembled menu caption immediately
+PASS the visible header dashboard menu opens the retained page and reflects its selected state
+PASS leaving the dashboard clears the actual header menu state through its retained model
+PASS the actual header Guide row opens the current tool documentation controller
+PASS compact primary navigation retains five folders and eleven tools without a duplicate dashboard leaf
+PASS the production sidebar promotes inspection preparation and the retained dashboard into two actual controls
+PASS all folder rows remain inside the full scrollable tree content below the fixed primary header
+PASS scrolling the actual last folder leaf exposes its full row in the remaining viewport
+java.lang.reflect.InvocationTargetException
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1371)
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1346)
+	at java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)
+	at kr.workbench.WorkbenchTest.edt(WorkbenchTest.java:80)
+	at kr.workbench.SimpleCompactNavigationTest.main(SimpleCompactNavigationTest.java:30)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at kr.workbench.TestLauncher.main(TestLauncher.java:4)
+Caused by: java.lang.AssertionError: both primary actions remain fixed and fully visible while the folder list scrolls: first=java.awt.Rectangle[x=9,y=12,width=146,height=42] -> java.awt.Rectangle[x=-6,y=12,width=146,height=42], second=java.awt.Rectangle[x=9,y=60,width=146,height=42] -> java.awt.Rectangle[x=-6,y=60,width=146,height=42], visible=java.awt.Rectangle[x=0,y=0,width=174,height=654]
+	at kr.workbench.WorkbenchTest.check(WorkbenchTest.java:59)
+	at kr.workbench.SimpleCompactNavigationTest.lambda$main$1(SimpleCompactNavigationTest.java:96)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)

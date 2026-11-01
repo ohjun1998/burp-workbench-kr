@@ -1,5 +1,13 @@
 # 현재 개발 상태
 
+## Simple 1.4.21 · 통합 점검·대시보드 컴팩트 강조형 — 작업 브랜치, 미병합
+
+2026-11-01(Asia/Seoul), 사용자가 선택한 C안으로 왼쪽 최상단에 통합 점검과 대시보드를 각각 42px 한 줄로 적용했습니다. 기존 준비 창·결과 화면·입력·원본·명시적 실행을 유지하고, 아래 목록을 스크롤해도 두 메뉴가 고정됩니다. 전체 8,101개 검사와 두 테마·네 크기의 실제 메뉴 808개 검사를 통과했습니다. 작업 브랜치는 `account-a/compact-primary-navigation`이며 1.4.20의 완료 변경을 포함합니다. [설치 JAR](simple/downloads/1.4.21/burp-workbench-simple-1.4.21.jar) · [소스 ZIP](simple/downloads/1.4.21/burp-workbench-simple-1.4.21-source.zip) · [실제 화면·검증](docs/reports/2026-11-01-compact-primary-navigation/REPORT_KR.md). main 병합이나 실제 Windows Burp 검증을 의미하지 않습니다.
+
+## Simple 1.4.20 · 승인 시안 입력·카드 세부 보정 — 작업 브랜치, 미병합
+
+중단된 보정을 복구하고 기본 숫자·콤보 입력의 테두리, 카드·필터·원문 여백과 재현 결과 버튼 잘림을 수정했습니다. 기존 열 너비·순서 저장 경로, 입력 문서·모델·원본 ID/바이트를 유지합니다. 전체 8,016개 검사와 Metal/Nimbus 실제 창, 독립 소스 ZIP 재빌드의 JAR 바이트 일치를 확인했습니다. Mapper0.3.21/helper0.4.1. `account-a/approved-controls-review`에 올렸고 main 미병합입니다. [설치 JAR](simple/downloads/1.4.20/burp-workbench-simple-1.4.20.jar) · [실제 화면·검증](docs/reports/2026-11-01-approved-review/REPORT_KR.md).
+
 ## Simple1.4.19 · 달 버튼 테마 전환·빈 메뉴 수정 — 작업 브랜치, 미병합
 
 2026-11-01(Asia/Seoul), 달/해 버튼을 실제 라이트·다크 전환으로 수정하고 기존 창 도구를 별도 톱니 메뉴로 옮겼습니다. 이름·아이콘이 빠지던 메뉴와 계정 선택칸·Mapper·스크롤·검색 강조의 테마 잔류를 수정했습니다. 입력 문서·미완성 입력·커서·필터·원본·기존 컨트롤러를 유지하며 Burp 전체 테마 설정은 변경하지 않습니다. Mapper0.3.20/helper0.4.1.

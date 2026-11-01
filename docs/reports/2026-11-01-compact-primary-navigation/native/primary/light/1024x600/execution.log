@@ -1,0 +1,102 @@
+PASS five ordinary groups and eleven leaves remain
+PASS only dashboard is removed from the lower tree; every ordinary route remains
+PASS two top rows retain their distinct action and current-page semantics
+PASS initial: pinned column header is visible
+PASS initial: both controls use the real pinned primary panel
+PASS initial: two compact rows remain exactly 42 pixels high
+PASS initial: the compact rows retain their six-pixel gap
+PASS initial: complete rows stay inside both the sidebar header and real workspace
+PASS initial: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS initial: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS initial: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS initial: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS Robot capture stays inside isolated display: 01-navigation.png
+PASS opening the real preparation panel does not start inspection
+PASS Robot capture stays inside isolated display: 02-inspection.png
+PASS a repeated physical click reuses the visible preparation window and controller
+PASS inspection is an action and does not masquerade as dashboard selection
+PASS dashboard navigation retains its original page and snapshot objects
+PASS dashboard breadcrumb identifies integrated inspection and current dashboard
+PASS dashboard removes stale lower-tree highlight
+PASS dashboard: pinned column header is visible
+PASS dashboard: both controls use the real pinned primary panel
+PASS dashboard: two compact rows remain exactly 42 pixels high
+PASS dashboard: the compact rows retain their six-pixel gap
+PASS dashboard: complete rows stay inside both the sidebar header and real workspace
+PASS dashboard: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS dashboard: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS dashboard: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS dashboard: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS Robot capture stays inside isolated display: 03-dashboard.png
+PASS history retains exact selected traffic row
+PASS closing and keyboard reopening preserves the actual preparation panel, document and draft
+PASS keyboard opening also leaves inspection unstarted
+PASS keyboard dashboard navigation preserves existing snapshot
+PASS new primary action and original header menu delegate to the same retained preparation controller
+PASS scrolling to the final ordinary leaf leaves the two primary rows pinned
+PASS scrolled-bottom: pinned column header is visible
+PASS scrolled-bottom: both controls use the real pinned primary panel
+PASS scrolled-bottom: two compact rows remain exactly 42 pixels high
+PASS scrolled-bottom: the compact rows retain their six-pixel gap
+PASS scrolled-bottom: complete rows stay inside both the sidebar header and real workspace
+PASS scrolled-bottom: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS scrolled-bottom: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS scrolled-bottom: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS scrolled-bottom: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS Robot capture stays inside isolated display: 04-sidebar-bottom.png
+PASS actual ordinary tree node remains selected: traffic
+PASS ordinary route clears primary dashboard selection: traffic
+PASS actual ordinary tree node remains selected: mapper
+PASS ordinary route clears primary dashboard selection: mapper
+PASS actual ordinary tree node remains selected: js
+PASS ordinary route clears primary dashboard selection: js
+PASS actual ordinary tree node remains selected: environment
+PASS ordinary route clears primary dashboard selection: environment
+PASS actual ordinary tree node remains selected: exposure
+PASS ordinary route clears primary dashboard selection: exposure
+PASS actual ordinary tree node remains selected: auth
+PASS ordinary route clears primary dashboard selection: auth
+PASS actual ordinary tree node remains selected: response.recon
+PASS ordinary route clears primary dashboard selection: response.recon
+PASS actual ordinary tree node remains selected: payload
+PASS ordinary route clears primary dashboard selection: payload
+PASS actual ordinary tree node remains selected: data
+PASS ordinary route clears primary dashboard selection: data
+PASS actual ordinary tree node remains selected: activity
+PASS ordinary route clears primary dashboard selection: activity
+PASS actual ordinary tree node remains selected: bounty
+PASS ordinary route clears primary dashboard selection: bounty
+PASS sidebar hide and restore retain width and ordinary scroll position
+PASS sidebar-restored: pinned column header is visible
+PASS sidebar-restored: both controls use the real pinned primary panel
+PASS sidebar-restored: two compact rows remain exactly 42 pixels high
+PASS sidebar-restored: the compact rows retain their six-pixel gap
+PASS sidebar-restored: complete rows stay inside both the sidebar header and real workspace
+PASS sidebar-restored: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS sidebar-restored: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS sidebar-restored: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS sidebar-restored: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS theme-toggled: pinned column header is visible
+PASS theme-toggled: both controls use the real pinned primary panel
+PASS theme-toggled: two compact rows remain exactly 42 pixels high
+PASS theme-toggled: the compact rows retain their six-pixel gap
+PASS theme-toggled: complete rows stay inside both the sidebar header and real workspace
+PASS theme-toggled: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS theme-toggled: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS theme-toggled: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS theme-toggled: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS navigation, sidebar and theme preserve authored documents and pending preparation input
+PASS theme and sidebar operations retain dashboard snapshot
+PASS Robot capture stays inside isolated display: 05-theme-toggled.png
+PASS final: pinned column header is visible
+PASS final: both controls use the real pinned primary panel
+PASS final: two compact rows remain exactly 42 pixels high
+PASS final: the compact rows retain their six-pixel gap
+PASS final: complete rows stay inside both the sidebar header and real workspace
+PASS final: primary control has no clipped edge: wb.navigation.primary.inspect
+PASS final: primary control keeps icon and accessible caption: wb.navigation.primary.inspect
+PASS final: primary control has no clipped edge: wb.navigation.primary.dashboard
+PASS final: primary control keeps icon and accessible caption: wb.navigation.primary.dashboard
+PASS Robot capture stays inside isolated display: 06-restored-navigation.png
+PASS all primary actions, routes, keyboard and theme operations send zero target HTTP and start no inspection
+CompactPrimaryNavigationNative: 101 checks passed / 1.4.21 / light / 1024x600

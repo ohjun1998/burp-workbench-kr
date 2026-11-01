@@ -1,0 +1,93 @@
+{
+  "result": "passed",
+  "version": "1.4.21",
+  "deliveryBranch": "account-a/compact-primary-navigation",
+  "baseCommit": "c71b4f7f00c920e9b2342697cfb503cd6a552ab0",
+  "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "embeddedMapperVersion": "0.3.21",
+  "browserHelperVersion": "0.4.1",
+  "core": {
+    "result": "passed",
+    "subset": false,
+    "regressionGroups": 178,
+    "regressionChecks": 7789,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 147,
+    "mapperBrowserHelperChecks": 29,
+    "failedGroups": [],
+    "toolchainMode": "strict-release17",
+    "javaRuntimeVersion": "17.0.21"
+  },
+  "coreTotalChecks": 8101,
+  "coreEvidence": "checks/check-summary.json",
+  "primaryNavigation": {
+    "result": "passed",
+    "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+    "checks": 808,
+    "captureCount": 48,
+    "targetHttpRequests": 0,
+    "inspectionStarted": false,
+    "nativeSwing": true,
+    "nativeBurpGui": false,
+    "syntheticPackets": true,
+    "configurationCount": 8,
+    "evidence": "native/primary/verification.json"
+  },
+  "allToolNative": {
+    "metal": {
+      "result": "passed",
+      "lookAndFeel": "metal",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "scenarios": 600,
+      "controlRecords": 3048,
+      "captureCount": 162,
+      "clippedOutsideScroll": 0,
+      "failedScenarios": 0,
+      "targetHttpRequests": 0,
+      "configurationCount": 6,
+      "evidence": "native/all-tools/metal/verification.json"
+    },
+    "nimbus": {
+      "result": "passed",
+      "lookAndFeel": "nimbus",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "scenarios": 400,
+      "controlRecords": 2032,
+      "captureCount": 108,
+      "clippedOutsideScroll": 0,
+      "failedScenarios": 0,
+      "targetHttpRequests": 0,
+      "configurationCount": 4,
+      "evidence": "native/all-tools/nimbus/verification.json"
+    }
+  },
+  "independentSourceRebuild": {
+    "result": "passed",
+    "sourceZipEntries": 2238,
+    "jarBuildInputs": 282,
+    "byteIdentical": true,
+    "rebuiltJarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+    "evidence": "source-rebuild/source-rebuild-verification.json"
+  },
+  "packageVerified": true,
+  "simpleSourcesFrozenBeforePackaging": true,
+  "olderReleaseArtifactsAndOriginalNextUnchanged": true,
+  "countsOverlapAndAreNotSummed": true,
+  "mainMerged": false,
+  "pullRequestCreated": false,
+  "pullRequestLimitation": "api.github.com is blocked by the current cloud network policy; Git HTTPS push remains available.",
+  "notRun": [
+    "Native Burp GUI",
+    "Windows DPI/IME",
+    "manual browser operation",
+    "Docker lab stack",
+    "live external OAST/BApp/AI services",
+    "original lab all-features and bounty HTTP harnesses",
+    "Live Katana crawling",
+    "Original Next full profile"
+  ],
+  "historicalExcludedGroups": {
+    "UiCleanupTest": "Asserts removed WorkContext header, exact 15-item auxiliary menu and absence of direct next-step buttons; replaced by SimpleWorkflowTest and Simple layout rendering",
+    "AppearanceWorkflowTest": "Requires the original auxiliary/settings page contract; current folder styling and retained Simple inputs are checked by SimpleClassicLayoutTest, FolderNavigationTest and SimpleAppearanceTest"
+  }
+}

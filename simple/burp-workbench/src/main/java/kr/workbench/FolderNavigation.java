@@ -30,6 +30,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   private final JTree tree;
   private final TreeCellRenderer renderer = new NavigationRenderer();
   private final JScrollPane sidebar;
+  private CompactPrimaryNavigation primaryNavigation;
   private final JSplitPane split;
   private final JButton toggle = new JButton();
   private final JLabel current = new JLabel();
@@ -111,6 +112,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     } catch (NumberFormatException ignored) {}
     hidden = Boolean.parseBoolean(read("hidden"));
 
+    AbstractButton inspectionShortcut = shortcut(shortcuts, "wb.scope.inspection.open");
+    AbstractButton dashboardShortcut = shortcut(shortcuts, "wb.simple.dashboard.open");
+    boolean promoted = classic && inspectionShortcut != null && dashboardShortcut != null;
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("도구");
     folder(root, "트래픽", "traffic", "mapper");
     if (classic) folder(root, "탐색·정보 수집", "js", "environment", "exposure");
@@ -118,7 +122,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     folder(root, "보안 분석·검증", "auth", "response.recon", "payload");
     if (classic) {
       folder(root, "데이터 도구", "data");
-      folder(root, "점검 관리·증거", "activity", "bounty", "dashboard");
+      if (promoted) folder(root, "점검 관리·증거", "activity", "bounty");
+      else folder(root, "점검 관리·증거", "activity", "bounty", "dashboard");
     } else folder(root, "점검 관리·증거", "bounty");
     tree = new NavigationTree(root);
     tree.setName("wb.navigation.tree");
@@ -144,6 +149,11 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     sidebar = new JScrollPane(tree);
     sidebar.setName("wb.navigation.sidebar");
     sidebar.setMinimumSize(new Dimension(MIN_WIDTH, 80));sidebar.setBorder(null);
+    if (promoted) {
+      primaryNavigation = new CompactPrimaryNavigation(inspectionShortcut, dashboardShortcut);
+      sidebar.setColumnHeaderView(primaryNavigation);
+      sidebar.getColumnHeader().setName("wb.navigation.primary.viewport");
+    }
     sidebar.setPreferredSize(new Dimension(menuWidth, 400));
     split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidebar, pages);
     split.setName("wb.navigation.split");
@@ -269,6 +279,12 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     pages.addChangeListener(event -> { refreshSelection(); navigationChanged(); });
     refreshSelection();
     updateHistoryActions();
+  }
+
+  private static AbstractButton shortcut(AbstractButton[] shortcuts, String name) {
+    for (AbstractButton shortcut : shortcuts)
+      if (shortcut != null && name.equals(shortcut.getName())) return shortcut;
+    return null;
   }
 
   private static void compactAction(AbstractButton button,String icon,String accessible) {
@@ -442,7 +458,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       public void actionPerformed(ActionEvent event) { action.run(); }
     });
   }
-  public void close() { closed = true; resetHistory(); quickWindow.close(); }
+  public void close() { closed = true; resetHistory(); quickWindow.close(); if(primaryNavigation!=null)primaryNavigation.close(); }
 
   /** Relayout is synchronous so a small window never needs a resize-event round trip to expose actions. */
   private static final class ResponsiveToolbar extends JPanel {
@@ -480,6 +496,16 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   /** Local UI delegate and vector icons avoid OS-dependent folders and tree guide lines. */
   private final class NavigationTree extends JTree {
     @Override public boolean getScrollableTracksViewportWidth(){return classic||super.getScrollableTracksViewportWidth();}
+    @Override public void scrollRectToVisible(Rectangle rectangle) {
+      if (classic && getParent() instanceof JViewport viewport) {
+        // The classic menu tracks its viewport width. An oversized renderer's preferred
+        // rectangle must not scroll the tree and its fixed column header sideways.
+        Rectangle vertical = new Rectangle(rectangle);
+        vertical.x = 0;
+        vertical.width = Math.min(Math.max(0, rectangle.width), Math.max(0, viewport.getExtentSize().width));
+        super.scrollRectToVisible(vertical);
+      } else super.scrollRectToVisible(rectangle);
+    }
     private int hovered = -1;
 
     NavigationTree(TreeNode root) {
@@ -566,7 +592,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       }
       g.dispose();
       super.paintComponent(graphics);
-      if(classic&&approvedShell()&&getHeight()>850&&getRowCount()>0){Rectangle last=getRowBounds(getRowCount()-1);if(last!=null){
+      if(classic&&approvedShell()&&getRowCount()>0){Rectangle last=getRowBounds(getRowCount()-1);if(last!=null&&getHeight()>=last.y+last.height+76){
         g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);int y=last.y+last.height+18;g.setColor(WorkbenchUi.line());g.drawLine(9,y,getWidth()-10,y);
         Component context=ApprovedTrafficPanel.named(pages,"wb.traffic.target");String target=context instanceof JComboBox<?> box?Objects.toString(box.getSelectedItem(),""):"";
         g.setFont(WorkbenchUi.font().deriveFont(10f));g.setColor(WorkbenchUi.ink());g.drawString(target,18,y+26);g.setColor(kr.packetui.VisualTheme.muted());g.drawString("현재 프로젝트 · "+(WorkbenchScope.registeredRules(api).isEmpty()?"수집 범위 미설정":"수집 범위 설정됨"),18,y+44);g.dispose();
@@ -747,10 +773,12 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       }
       current.setToolTipText(node==null?current.getText():node.getParent()+" / "+node);
       String group = node == null ? "" : Objects.toString(node.getParent(), "");
+      if (node == null && primaryNavigation != null && "dashboard".equals(selectedToolId())) group = "통합 점검";
       breadcrumb.setText(group.isEmpty() ? "" : group + "  ›");
       breadcrumb.setToolTipText(group);
       breadcrumb.setForeground(kr.packetui.VisualTheme.muted());
     } finally { synchronizing = false; }
+    if(primaryNavigation!=null)primaryNavigation.refreshSelection();
     updateApprovedFooter();tree.repaint();
   }
 
@@ -769,6 +797,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(15f)));
     tree.setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.getViewport().setBackground(kr.packetui.VisualTheme.sidebar());
+    if(primaryNavigation!=null){
+      primaryNavigation.restoreAppearance();
+      sidebar.getColumnHeader().setBackground(kr.packetui.VisualTheme.sidebar());
+    }
     tree.treeDidChange();
     if(classic){boolean exact=approvedShell();tree.setBorder(BorderFactory.createEmptyBorder(exact?13:4,9,6,exact?9:0));
       if(tree.getUI() instanceof BasicTreeUI ui){ui.setLeftChildIndent(exact?2:8);ui.setRightChildIndent(exact?4:10);}}

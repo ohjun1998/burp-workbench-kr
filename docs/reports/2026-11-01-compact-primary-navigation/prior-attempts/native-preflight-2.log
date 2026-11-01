@@ -1,0 +1,17 @@
+dbus-daemon[4672]: [session uid=1000 pid=4672 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.0' (uid=1000 pid=4710 comm="xfwm4 --compositor=off" label="kernel")
+dbus-daemon[4672]: [session uid=1000 pid=4672 pidfd=5] Successfully activated service 'org.a11y.Bus'
+dbus-daemon[4721]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=4710 comm="xfwm4 --compositor=off" label="kernel")
+dbus-daemon[4672]: [session uid=1000 pid=4672 pidfd=5] Activating service name='org.xfce.Xfconf' requested by ':1.3' (uid=1000 pid=4710 comm="xfwm4 --compositor=off" label="kernel")
+dbus-daemon[4721]: Successfully activated service 'org.a11y.atspi.Registry'
+SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
+dbus-daemon[4672]: [session uid=1000 pid=4672 pidfd=5] Successfully activated service 'org.xfce.Xfconf'
+java.lang.AssertionError: Header popup timeout: active main workspace; active=true, valid=false, showing=true, bounds=java.awt.Rectangle[x=30,y=40,width=1024,height=600]
+	at kr.workbench.CompactPrimaryNavigationNative.ready(CompactPrimaryNavigationNative.java:69)
+	at kr.workbench.CompactPrimaryNavigationNative.run(CompactPrimaryNavigationNative.java:211)
+	at kr.workbench.CompactPrimaryNavigationNative.main(CompactPrimaryNavigationNative.java:170)
+Caused by: java.lang.AssertionError: Header popup timeout: active main workspace
+	at kr.workbench.HeaderToolsNative.await(HeaderToolsNative.java:30)
+	at kr.workbench.CompactPrimaryNavigationNative.ready(CompactPrimaryNavigationNative.java:65)
+	... 2 more
+
+(xfconfd:4729): xfconfd-WARNING **: 09:34:51.223: Name org.xfce.Xfconf lost on the message dbus, exiting.

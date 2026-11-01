@@ -1,0 +1,2 @@
+Picked up JAVA_TOOL_OPTIONS: -Dswing.defaultlaf=javax.swing.plaf.nimbus.NimbusLookAndFeel
+Captured production Simple Swing components: light 1600x1000; synthetic packets, zero HTTP, not actual Burp GUI.

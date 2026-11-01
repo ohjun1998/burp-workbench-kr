@@ -1,0 +1,157 @@
+{
+  "result": "passed",
+  "version": "1.4.21",
+  "lookAndFeel": "metal",
+  "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "theme": "light",
+  "workspaceSize": "1280x800",
+  "scenarios": 100,
+  "controls": 508,
+  "clippedOutsideScroll": 0,
+  "failedScenarios": 0,
+  "clippedControlsOutsideScroll": [],
+  "capturedPngDimensions": {
+    "26-dashboard-empty.png": [
+      1280,
+      800
+    ],
+    "11-replay-empty.png": [
+      1280,
+      800
+    ],
+    "13-exposure-cve-evidence.png": [
+      1280,
+      800
+    ],
+    "13-exposure-cve.png": [
+      1280,
+      800
+    ],
+    "02-request.png": [
+      1280,
+      800
+    ],
+    "04-auth-accounts-full-accounts.png": [
+      1000,
+      760
+    ],
+    "06-redaction.png": [
+      1100,
+      800
+    ],
+    "16-dashboard.png": [
+      1280,
+      800
+    ],
+    "08-mapper.png": [
+      1280,
+      800
+    ],
+    "14-data.png": [
+      1280,
+      800
+    ],
+    "15-progress.png": [
+      1280,
+      800
+    ],
+    "04-auth-accounts-full-overview.png": [
+      1000,
+      760
+    ],
+    "00-start.png": [
+      1280,
+      800
+    ],
+    "12-exposure-search.png": [
+      1280,
+      800
+    ],
+    "05-evidence.png": [
+      1280,
+      800
+    ],
+    "00-scope-editor.png": [
+      900,
+      600
+    ],
+    "03-analysis.png": [
+      1280,
+      800
+    ],
+    "10-js.png": [
+      1280,
+      800
+    ],
+    "01-capture.png": [
+      1280,
+      800
+    ],
+    "07-payload-results.png": [
+      1280,
+      800
+    ],
+    "04-auth-connections.png": [
+      1280,
+      800
+    ],
+    "07-payload.png": [
+      1280,
+      800
+    ],
+    "04-auth-accounts-full-policy.png": [
+      1000,
+      760
+    ],
+    "04-auth-accounts.png": [
+      1000,
+      760
+    ],
+    "04-auth-results.png": [
+      1280,
+      800
+    ],
+    "09-environment.png": [
+      1280,
+      800
+    ],
+    "11-replay.png": [
+      1280,
+      800
+    ]
+  },
+  "capturedPngSha256": {
+    "00-scope-editor.png": "7aff5b1c454daf18801c881345ffc0403a2fc34e21eb0b8ec079b210d7b071f2",
+    "00-start.png": "69dbd1e7e95043a872a4f918e429695bef479ad28d184f4a12dae588bcc72b70",
+    "01-capture.png": "db7c147820326265ff142720cf9ef521815ff4c295d787207eee2692d8060a85",
+    "02-request.png": "db7c147820326265ff142720cf9ef521815ff4c295d787207eee2692d8060a85",
+    "03-analysis.png": "2d9b01a59dca0efa5dd258f1f7762b337bd8143f11588b6bc44b7a43096a8eef",
+    "04-auth-accounts-full-accounts.png": "bd11430cc979016877ee31f9e9a1cf2faa0346b9ec7eca437b16f2a98967461d",
+    "04-auth-accounts-full-overview.png": "fc9a145d5dcaa3eeb52e655f15474c2706d859f325ba3565e661f40da30d1b0d",
+    "04-auth-accounts-full-policy.png": "1b500f104bb5a2249e8c0bb20aeae0db94726c4f75c07baf9fa8b2f15c5690c2",
+    "04-auth-accounts.png": "bd11430cc979016877ee31f9e9a1cf2faa0346b9ec7eca437b16f2a98967461d",
+    "04-auth-connections.png": "b275f402d1382a0f086f3d67ced6c3394cba008678be4fecc0de6fde15b234df",
+    "04-auth-results.png": "8a6277291b4e7a8db7406fa0eed0cd44023a813c551a6d9aaadfaa52ecfc014e",
+    "05-evidence.png": "223a470cad09d46d35f3c7cea1bb9b81e05581d2e4abff4221c4dd624fee7d00",
+    "06-redaction.png": "eeeddf8bc888a0433c767755e412ac6f2571e552e4d7e9cd4a3e113404d5c6c8",
+    "07-payload-results.png": "879f871fd2b3a3194ce9a0224eb23550fe3995396a027007478b2272ebd0edb3",
+    "07-payload.png": "9b12be00fde3821fbcf0c304a4b711dab08285ab1870bc961e3bd318859dd844",
+    "08-mapper.png": "2e9dbff51f59db5157a167e7420299ee223cce8576383f0e5f49351ca5d9b711",
+    "09-environment.png": "6a6bda131036090658f07cbb08877197abee6644cecb1b54308e6fb76af1c6a3",
+    "10-js.png": "0d3ac66fb4396caeec1b501ce5a2376144fa897a884ec1396cec1fee9a047580",
+    "11-replay-empty.png": "d96f44414e2d960ce9a7b184e353e80c534c04004bc6b19a3dbcc2a1144b027d",
+    "11-replay.png": "8b7031adbcd22f244b2163af30e655d9d25044743151176e38efb55e874d47e5",
+    "12-exposure-search.png": "f58b3f00126c9f06ff89cda6b2742500f7b26b2841e325779f9cfbe7f1a06315",
+    "13-exposure-cve-evidence.png": "85aee0ded7982153c496988a08c7027530bb3c8a239023e88651a3cbf6c1a8be",
+    "13-exposure-cve.png": "f5dafde354c9552933e91c71462e30469e6bdd3eee02415cfe878c9cc822a7b8",
+    "14-data.png": "fd46ab6fb64ed922990cb53125d9ce609086f34664565e6917f20dd0001c304b",
+    "15-progress.png": "06e3424b2baa2b2cf82f23621cc4e86379cedeb75433ef6c397c771453ee7bb8",
+    "16-dashboard.png": "9fcb6ecc460a01ebcbd0a864a27594c4f00945631b2debe3b7dc5b63f35f367b",
+    "26-dashboard-empty.png": "3ff6a14c42d59fca7772d8fd5be6f1565eba455f4849d8f076dd8be6b5263fd2"
+  },
+  "nativeSwing": true,
+  "nativeBurpGui": false,
+  "syntheticPackets": true,
+  "targetHttpRequests": 0,
+  "fullWorkspaceEvidence": "tmp/compact-primary-regression/metal/light/1280x800"
+}

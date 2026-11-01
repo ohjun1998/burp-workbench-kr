@@ -1,0 +1,6 @@
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+before treeSize=java.awt.Dimension[width=164,height=597] preferred=java.awt.Dimension[width=189,height=597] viewport=java.awt.Rectangle[x=0,y=35,width=164,height=540] headerPosition=java.awt.Point[x=0,y=0] primary=java.awt.Rectangle[x=9,y=12,width=146,height=42]
+immediate treeSize=java.awt.Dimension[width=164,height=597] preferred=java.awt.Dimension[width=189,height=597] viewport=java.awt.Rectangle[x=15,y=51,width=164,height=540] headerPosition=java.awt.Point[x=15,y=0] primary=java.awt.Rectangle[x=-6,y=12,width=146,height=42]
+after-EDT-and-timers treeSize=java.awt.Dimension[width=164,height=597] preferred=java.awt.Dimension[width=189,height=597] viewport=java.awt.Rectangle[x=15,y=51,width=164,height=540] headerPosition=java.awt.Point[x=15,y=0] primary=java.awt.Rectangle[x=-6,y=12,width=146,height=42]
+after-explicit-layout treeSize=java.awt.Dimension[width=164,height=597] preferred=java.awt.Dimension[width=189,height=597] viewport=java.awt.Rectangle[x=0,y=51,width=164,height=540] headerPosition=java.awt.Point[x=0,y=0] primary=java.awt.Rectangle[x=9,y=12,width=146,height=42]

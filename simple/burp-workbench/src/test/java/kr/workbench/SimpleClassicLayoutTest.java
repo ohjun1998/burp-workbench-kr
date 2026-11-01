@@ -206,16 +206,18 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
             "primary and alias routes preserve the selected original and authored input");
         navigation.navigate("dashboard");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath().equals(route(tree, "dashboard")),
-            "dashboard folder entry selects the production page and its own tree leaf");
+                && tree.getSelectionPath()==null
+                &&((AbstractButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard")).isSelected(),
+            "dashboard navigation selects its promoted control and clears the previous folder leaf");
         var current = (JLabel) SimpleWorkflowTest.named(root, "wb.navigation.current");
         check(current.getText().contains(FeatureGuide.title("dashboard")),
             "compact breadcrumb describes the dashboard instead of the previously selected tool");
         select(tree, "auth");
         SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath().equals(route(tree, "dashboard")),
-            "compact dashboard action synchronizes the same page and folder selection");
+                && tree.getSelectionPath()==null
+                &&((AbstractButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard")).isSelected(),
+            "the retained compact dashboard source synchronizes its same page and promoted selection");
       });
 
       var opened = new AtomicReference<Component>();

@@ -76,13 +76,15 @@ public final class SimpleDashboardIntegrationTest extends WorkbenchTest {
         check(tabs.getComponentAt(tabs.getTabCount() - 1) == dashboard && feature(dashboard).equals("dashboard"),
             "dashboard is appended with its own stable feature ID");
         check(field(extension, "scopeInspectionPanel") == null, "extension startup does not construct or start inspection");
-        SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
-        check(tabs.getSelectedComponent() == dashboard, "production top-bar dashboard action opens the appended page");
-        check(SimpleWorkflowTest.toolSelected(root,"dashboard") && !SimpleWorkflowTest.toolSelected(root,"traffic")
-                && SimpleWorkflowTest.toolVisible(root,"dashboard"),
-            "dashboard navigation selects its visible PDF sidebar leaf and replaces the previous tool highlight");
-        SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
-        check(((javax.swing.AbstractButton) SimpleWorkflowTest.named(root,"wb.simple.dashboard.open")).isSelected(),
+        SimpleWorkflowTest.click(root, "wb.navigation.primary.dashboard");
+        check(tabs.getSelectedComponent() == dashboard, "production primary sidebar dashboard action opens the appended page");
+        var dashboardAction = (javax.swing.AbstractButton) SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard");
+        var navigationTree = (javax.swing.JTree) SimpleWorkflowTest.named(root,"wb.navigation.tree");
+        check(dashboardAction.isSelected() && navigationTree.getSelectionPath() == null
+                && SimpleWorkflowTest.visibleComponents(root).contains(dashboardAction),
+            "dashboard navigation selects its visible primary action and clears the previous folder highlight");
+        SimpleWorkflowTest.click(root, "wb.navigation.primary.dashboard");
+        check(dashboardAction.isSelected(),
             "clicking the current dashboard keeps its navigation highlight selected");
         check(field(extension, "scopeInspectionPanel") == null && dashboard.current.id().isEmpty(),
             "opening an empty dashboard remains read-only and leaves inspection unconstructed");
@@ -96,7 +98,7 @@ public final class SimpleDashboardIntegrationTest extends WorkbenchTest {
           SimpleWorkflowTest.click(root, "wb.simple.tool." + tool);
           pages.put(tool, tabs.getSelectedComponent());
         }
-        SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
+        SimpleWorkflowTest.click(root, "wb.navigation.primary.dashboard");
         boolean retained = true;
         for (String tool : tools) {
           SimpleWorkflowTest.click(root, "wb.simple.tool." + tool);
@@ -105,7 +107,7 @@ public final class SimpleDashboardIntegrationTest extends WorkbenchTest {
         check(retained && js.input.getText().equals("fetch('/api/dashboard-retained-input');")
             && payloadInput.getText().equals("DASHBOARD_MANUALLY_PREPARED_INPUT"),
             "all eight original tools retain engine instances and unsaved inputs across dashboard round trips");
-        SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
+        SimpleWorkflowTest.click(root, "wb.navigation.primary.dashboard");
         check(tabs.getSelectedComponent() == dashboard, "return navigation reuses the same dashboard instance");
         SimpleWorkflowTest.click(dashboard, "wb.scope.dashboard.inspect");
         check(field(extension, "scopeInspectionPanel") instanceof ScopeInspectionPanel
@@ -162,7 +164,7 @@ public final class SimpleDashboardIntegrationTest extends WorkbenchTest {
         check(SimpleWorkflowTest.selectedFeature(tabs).equals("bounty") && evidence.pages.getSelectedIndex() == 3,
             "evidence handoff reaches the retained evidence route at index 3");
         rejects(() -> dashboard.actions.original("unknown-original"), "unknown original IDs never resolve to a nearby packet");
-        SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
+        SimpleWorkflowTest.click(root, "wb.navigation.primary.dashboard");
         check(dashboard.selectedRow() != null && dashboard.selectedRow().originalId().equals(bobOriginal.id()),
             "returning from evidence preserves the current filtered selection");
         inspection.accept(empty());

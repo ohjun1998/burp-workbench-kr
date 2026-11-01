@@ -54,6 +54,8 @@ public final class SimplePdfShellLayoutTest extends WorkbenchTest {
           layout(navigation,width);
           JSplitPane split = (JSplitPane) SimpleWorkflowTest.named(navigation,"wb.navigation.split");
           Component toolbar = SimpleWorkflowTest.named(navigation,"wb.navigation.toolbar");
+          check(SimpleWorkflowTest.named(navigation,"wb.navigation.primary")==null,
+              "a bare shell without both production shortcut controllers retains its original folder-only navigation");
           JLabel brand = (JLabel) SimpleWorkflowTest.named(navigation,"wb.navigation.brand");
           JLabel breadcrumb = (JLabel) SimpleWorkflowTest.named(navigation,"wb.navigation.breadcrumb");
           check(brand != null && "Workbench".equals(brand.getText()) && brand.getIcon()!=null,

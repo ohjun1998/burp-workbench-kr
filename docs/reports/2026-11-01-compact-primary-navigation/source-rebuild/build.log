@@ -1,0 +1,6 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/burp-workbench-kr/tmp/source-rebuild-1.4.21/burp-workbench/build_all.py --java /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java --javac /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/javac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/burp-workbench-kr/tmp/source-rebuild-1.4.21/burp-workbench/dist/burp-workbench-simple-1.4.21.jar 9233759 bytes

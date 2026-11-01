@@ -1,3 +1,9 @@
+# Workbench Simple 1.4.21
+
+왼쪽 최상단에 **통합 점검·대시보드**를 컴팩트 강조형 두 줄로 배치했습니다. 아래 도구 목록을 스크롤해도 두 항목은 보입니다. 통합 점검은 기존 준비 창을 열고, 대시보드는 기존 현재 실행 결과 화면을 엽니다. 메뉴를 누르는 동작만으로 점검을 시작하지 않습니다.
+
+[설치 JAR](downloads/1.4.21/burp-workbench-simple-1.4.21.jar) · [독립 소스 ZIP](downloads/1.4.21/burp-workbench-simple-1.4.21-source.zip) · [변경 안내](docs/RELEASE_SIMPLE_1.4.21_KR.md) · [실제 화면·검증](../docs/reports/2026-11-01-compact-primary-navigation/REPORT_KR.md)
+
 # Workbench Simple 1.4.20
 
 승인한 16개 화면과 다시 대조해 입력 컨트롤, 카드 내부 여백·구분선·모서리, 배너·필터·아이콘·원문 표시를 보완했습니다. 숫자 입력은 기존 모델과 키보드 증감을 유지한 채 시안의 단일 테두리로 표시합니다. 선택 상자 안쪽의 중복 테두리도 제거했습니다. 입력 문서·원문 바이트·선택과 SCOPE·취소·명시적 실행 동작을 유지합니다.

@@ -1,0 +1,15 @@
+Main-thread excerpt of the retained diagnostic stack, not a full JVM thread dump.
+
+"main" #1 prio=5 os_prio=0 cpu=411.37ms elapsed=77.94s tid=0x00007f0724029cf0 nid=0x19a9 in Object.wait()  [0x00007f0729de6000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(java.base@17.0.21/Native Method)
+	- waiting on <no object reference available>
+	at sun.awt.SunToolkit.waitForIdle(java.desktop@17.0.21/SunToolkit.java:1610)
+	- locked <0x000000060005d2b8> (a java.lang.Object)
+	at sun.awt.SunToolkit.realSync(java.desktop@17.0.21/SunToolkit.java:1531)
+	at sun.awt.SunToolkit.realSync(java.desktop@17.0.21/SunToolkit.java:1439)
+	at java.awt.Robot.waitForIdle(java.desktop@17.0.21/Robot.java:759)
+	- locked <0x0000000601787200> (a java.awt.Robot)
+	at kr.workbench.CompactPrimaryNavigationNative.chord(CompactPrimaryNavigationNative.java:59)
+	at kr.workbench.CompactPrimaryNavigationNative.run(CompactPrimaryNavigationNative.java:327)
+	at kr.workbench.CompactPrimaryNavigationNative.main(CompactPrimaryNavigationNative.java:205)

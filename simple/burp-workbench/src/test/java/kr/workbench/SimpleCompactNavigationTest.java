@@ -76,11 +76,31 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
             "the actual header Guide row opens the current tool documentation controller");
         var modelRoot=(DefaultMutableTreeNode)tree.getModel().getRoot();int leaves=0;
         for(int i=0;i<modelRoot.getChildCount();i++)leaves+=modelRoot.getChildAt(i).getChildCount();
-        check(modelRoot.getChildCount()==5&&leaves==12,"approved sidebar retains all five folders and twelve actual tool leaves including the dashboard");
+        check(modelRoot.getChildCount()==5&&leaves==11,"compact primary navigation retains five folders and eleven tools without a duplicate dashboard leaf");
+        check(SimpleWorkflowTest.named(root,"wb.navigation.primary.inspect") instanceof JButton
+                &&SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard") instanceof JToggleButton,
+            "the production sidebar promotes inspection preparation and the retained dashboard into two actual controls");
         for(int row=0;row<tree.getRowCount();row++)tree.expandRow(row);
         layout(root,1024);Rectangle last=tree.getRowBounds(tree.getRowCount()-1);
-        check(last.y+last.height<=((JViewport)tree.getParent()).getExtentSize().height,"all approved sidebar rows fit within the actual viewport");
+        JViewport viewport=(JViewport)tree.getParent();
+        check(last!=null&&last.height>0&&last.y+last.height<=tree.getHeight(),
+            "all folder rows remain inside the full scrollable tree content below the fixed primary header");
+        var sidebar=(JScrollPane)SimpleWorkflowTest.named(root,"wb.navigation.sidebar");
+        var inspect=(JButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.inspect");
+        var dashboard=(JToggleButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard");
+        Rectangle fixedInspect=SwingUtilities.convertRectangle(inspect.getParent(),inspect.getBounds(),sidebar);
+        Rectangle fixedDashboard=SwingUtilities.convertRectangle(dashboard.getParent(),dashboard.getBounds(),sidebar);
+        tree.scrollPathToVisible(tree.getPathForRow(tree.getRowCount()-1));Rectangle shown=viewport.getViewRect();
+        check(last.y>=shown.y&&last.y+last.height<=shown.y+shown.height,
+            "scrolling the actual last folder leaf exposes its full row in the remaining viewport");
+        check(fixedInspect.equals(SwingUtilities.convertRectangle(inspect.getParent(),inspect.getBounds(),sidebar))
+                &&fixedDashboard.equals(SwingUtilities.convertRectangle(dashboard.getParent(),dashboard.getBounds(),sidebar))
+                &&sidebar.getVisibleRect().contains(fixedInspect)&&sidebar.getVisibleRect().contains(fixedDashboard),
+            "both primary actions remain fixed and fully visible while the folder list scrolls: first="+fixedInspect
+                +" -> "+SwingUtilities.convertRectangle(inspect.getParent(),inspect.getBounds(),sidebar)+", second="+fixedDashboard
+                +" -> "+SwingUtilities.convertRectangle(dashboard.getParent(),dashboard.getBounds(),sidebar)+", visible="+sidebar.getVisibleRect());
         TreePath discovery=SimpleWorkflowTest.toolPath(root,"js");Rectangle hovered=tree.getPathBounds(discovery);
+        tree.scrollPathToVisible(discovery);
         int x=tree.getWidth()-12,y=hovered.y+hovered.height/2;int before=pixel(tree,x,y);
         tree.dispatchEvent(new MouseEvent(tree,MouseEvent.MOUSE_MOVED,System.currentTimeMillis(),0,x,y,0,false));
         check(pixel(tree,x,y)!=before,"hover paints a visible background beyond the text without a timer");

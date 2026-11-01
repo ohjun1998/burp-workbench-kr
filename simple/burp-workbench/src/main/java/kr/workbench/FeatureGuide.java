@@ -11,7 +11,7 @@ public final class FeatureGuide {
   }
   private static final List<Feature> FEATURES = List.of(
       new Feature("dashboard", "점검 대시보드", "현재 SCOPE 통합 점검 결과를 수치로 보고 클릭한 조건의 목록·근거·원본을 확인합니다.",
-          "1. 상단 대시보드 또는 왼쪽 ‘점검 관리·증거 → 점검 대시보드’를 엽니다. 통합 점검 열기에서 SCOPE·계정·실행 조건을 확인하고 점검을 직접 시작합니다.\n"
+          "1. 왼쪽 최상단 ‘대시보드’를 엽니다. 같은 위치의 ‘통합 점검’에서 SCOPE·계정·실행 조건을 확인하고 점검을 직접 시작합니다.\n"
           + "2. 현재 실행의 관측 경로·API·환경·민감정보·계정 차이·미확인 카드를 선택합니다. 계정 필터와 민감정보 중요도 막대로 목록을 좁힙니다.\n"
           + "3. 항목을 선택해 상태·확실성·원본 위치를 확인하고 원본 보기·Repeater 준비·증거 추가로 이어갑니다.\n"
           + "4. 필터 해제로 같은 분류의 전체 목록으로 돌아갑니다. 현재 실행만 표시하며 프로젝트 변경 시 이전 실행을 정리합니다.",
@@ -89,7 +89,7 @@ public final class FeatureGuide {
   public static String title(String id) { return feature(id).title(); }
   public static String location(String id) {
     return switch (id) {
-      case "dashboard" -> "점검 관리·증거 → 점검 대시보드 · 상단 대시보드";
+      case "dashboard" -> "왼쪽 최상단 → 대시보드 · 통합 점검 결과";
       case "traffic", "mapper" -> "트래픽 → " + title(id);
       case "data" -> "데이터 도구 → 데이터 변환·비교";
       case "js", "environment", "passive", "exposure" -> "탐색·정보 수집 → " + title(id);

@@ -1,0 +1,423 @@
+{
+  "result": "passed",
+  "version": "1.4.21",
+  "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "images": [
+    {
+      "theme": "light",
+      "view": "traffic",
+      "title": "요청·응답 목록",
+      "originalCapture": "02-request.png",
+      "path": "images/all-tools/light/traffic.png",
+      "sha256": "0ca5ffe26c1ffda778fe67271dcd90d0117fe5fcd3cb8a247a9aef71e71f9813",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "mapper",
+      "title": "기능 자동 매핑",
+      "originalCapture": "08-mapper.png",
+      "path": "images/all-tools/light/mapper.png",
+      "sha256": "e3231d2b25df569683aaec88df0dab49043eb409659368b1deaa64715146e5c0",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "js",
+      "title": "JS에서 API 찾기",
+      "originalCapture": "10-js.png",
+      "path": "images/all-tools/light/js.png",
+      "sha256": "d1dd0034a1b2cec164338d437f1f31b845c2eb1530ffa08dc4cde8640a1b26a7",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "response.recon",
+      "title": "응답 보안 분석",
+      "originalCapture": "03-analysis.png",
+      "path": "images/all-tools/light/response.recon.png",
+      "sha256": "e53d00553eb85cfe63c8e426befa72b03ce57050c4f169ce4fa31362d27c2cf0",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "auth",
+      "title": "계정 권한 비교",
+      "originalCapture": "04-auth-results.png",
+      "path": "images/all-tools/light/auth.png",
+      "sha256": "46e600738dded1d1aa6bd9645e75ab31796ec864fa5e3d48ef3996342c1eeab6",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "auth.accounts",
+      "title": "인증 후보 연결",
+      "originalCapture": "04-auth-connections.png",
+      "path": "images/all-tools/light/auth.accounts.png",
+      "sha256": "95e3b9eb9251de3643d8dee92cfb3c38b4c6ab722155b0caddd569d3fed70cf1",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "payload",
+      "title": "입력값 검사 · 준비",
+      "originalCapture": "07-payload.png",
+      "path": "images/all-tools/light/payload.png",
+      "sha256": "ecb78ead7d4b72e4e4ba8bf4bb2291fc84ec0b94f371c8f59f1172717fbb2f0d",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "payload.results",
+      "title": "입력값 검사 · 결과",
+      "originalCapture": "07-payload-results.png",
+      "path": "images/all-tools/light/payload.results.png",
+      "sha256": "e443e31cfa501cf59b2b060705f0e7709b14a553bb39b84d4d19da2c12f9eddc",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "environment",
+      "title": "서버·경로 탐색",
+      "originalCapture": "09-environment.png",
+      "path": "images/all-tools/light/environment.png",
+      "sha256": "7b0e457b7b64c604098e30bbcd45af51c7fb4b647a3ef4117960e2132a7059d0",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "exposure.search",
+      "title": "외부 노출 조사",
+      "originalCapture": "12-exposure-search.png",
+      "path": "images/all-tools/light/exposure.search.png",
+      "sha256": "a240ab7eab024680aa9d201e7ad0ac84bc115365953aa7602a3569bf6670aa96",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "exposure.cve",
+      "title": "CVE 후보",
+      "originalCapture": "13-exposure-cve.png",
+      "path": "images/all-tools/light/exposure.cve.png",
+      "sha256": "fca765afb89889416b45661a1708a4e17eba8d8bfb7cd56218d0f643a1f4aa95",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "activity",
+      "title": "점검 진행 현황",
+      "originalCapture": "15-progress.png",
+      "path": "images/all-tools/light/activity.png",
+      "sha256": "d2caac208d24f8300493e8b1ea25be579065ae451679c3d79f2c7723554f5b48",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "bounty",
+      "title": "증거 정리",
+      "originalCapture": "05-evidence.png",
+      "path": "images/all-tools/light/bounty.png",
+      "sha256": "50069f2905106106a1dfce4511df9881a3cb4644fbcf43c045d103f6e58bf619",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "bounty.replay",
+      "title": "업무 흐름 재현",
+      "originalCapture": "11-replay.png",
+      "path": "images/all-tools/light/bounty.replay.png",
+      "sha256": "7793a8a66b329b7d00b0ee200d8f9174346db0a7bf4d7f40fce29516c3c37bc0",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "dashboard",
+      "title": "점검 대시보드",
+      "originalCapture": "16-dashboard.png",
+      "path": "images/all-tools/light/dashboard.png",
+      "sha256": "b107f670d28e897af05489069e8e37fe66db91734c2f97cbe482c569fb5b50da",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "light",
+      "view": "data",
+      "title": "데이터 변환·비교",
+      "originalCapture": "14-data.png",
+      "path": "images/all-tools/light/data.png",
+      "sha256": "b228efc2dc1d7e06b32e65f9a1ad827dda2ffd71e1d435eb660d897732512bd0",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "traffic",
+      "title": "요청·응답 목록",
+      "originalCapture": "02-request.png",
+      "path": "images/all-tools/dark/traffic.png",
+      "sha256": "dc0f1faa6423906880c9fda3903dc85b22bf7f8be35d1406d3fc7dfcd6df0fb3",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "mapper",
+      "title": "기능 자동 매핑",
+      "originalCapture": "08-mapper.png",
+      "path": "images/all-tools/dark/mapper.png",
+      "sha256": "440cae43d3a748a8d6def9cd2320c3bdd31444f8a0e5280676b1fc9173303b78",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "js",
+      "title": "JS에서 API 찾기",
+      "originalCapture": "10-js.png",
+      "path": "images/all-tools/dark/js.png",
+      "sha256": "102a006a76bb1f65364cb139332bad64a49b190f1d881bc51960c2f7255ae01c",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "response.recon",
+      "title": "응답 보안 분석",
+      "originalCapture": "03-analysis.png",
+      "path": "images/all-tools/dark/response.recon.png",
+      "sha256": "6d71a74fad4e3d2013b966062d205653241eb38e30cb35d8ef865fc5b04b2bb6",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "auth",
+      "title": "계정 권한 비교",
+      "originalCapture": "04-auth-results.png",
+      "path": "images/all-tools/dark/auth.png",
+      "sha256": "a36897c90d2407d03bed8f875c8fc79d6ec8f6489bc4966776634258523d7a5f",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "auth.accounts",
+      "title": "인증 후보 연결",
+      "originalCapture": "04-auth-connections.png",
+      "path": "images/all-tools/dark/auth.accounts.png",
+      "sha256": "dd0f4a4a15f5214f46bfa4b9a48bce35b722100716995c67ac00976aa8f24904",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "payload",
+      "title": "입력값 검사 · 준비",
+      "originalCapture": "07-payload.png",
+      "path": "images/all-tools/dark/payload.png",
+      "sha256": "5034c0d395d1fe4bb1ae26f4bac914b1d3907e2e9358f6b196219990639ffb8a",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "payload.results",
+      "title": "입력값 검사 · 결과",
+      "originalCapture": "07-payload-results.png",
+      "path": "images/all-tools/dark/payload.results.png",
+      "sha256": "4c50bceca748d1aa07c076c7e7c10a22d846f6ef8003dab248ae08dced4c3c37",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "environment",
+      "title": "서버·경로 탐색",
+      "originalCapture": "09-environment.png",
+      "path": "images/all-tools/dark/environment.png",
+      "sha256": "15ec67e28e57602e1ec8c1df3932e221660a1de0101e74f6d080fbd64257f1f9",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "exposure.search",
+      "title": "외부 노출 조사",
+      "originalCapture": "12-exposure-search.png",
+      "path": "images/all-tools/dark/exposure.search.png",
+      "sha256": "6e5cb7ebe5d74c3723a4487336534365cb5852f9974678e53085a25e7c5a4157",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "exposure.cve",
+      "title": "CVE 후보",
+      "originalCapture": "13-exposure-cve.png",
+      "path": "images/all-tools/dark/exposure.cve.png",
+      "sha256": "9ad3ca12d156817cd6f19af45d59570e0c05efa4b63b0ffde5bb98bd83d35a85",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "activity",
+      "title": "점검 진행 현황",
+      "originalCapture": "15-progress.png",
+      "path": "images/all-tools/dark/activity.png",
+      "sha256": "9b266fa58193ed54a575c406ba0715ddeb0c15255aa85848bcee2b0d4ce16c27",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "bounty",
+      "title": "증거 정리",
+      "originalCapture": "05-evidence.png",
+      "path": "images/all-tools/dark/bounty.png",
+      "sha256": "f59d862880cecf7fc2320f530a8e1e9058b526c9a3dec4683cec0f23bf8d756c",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "bounty.replay",
+      "title": "업무 흐름 재현",
+      "originalCapture": "11-replay.png",
+      "path": "images/all-tools/dark/bounty.replay.png",
+      "sha256": "16a23b42f6f8d1ae68d8827b7acf29edb1ca97a7415ac8c9718ada3ba599c8a7",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "dashboard",
+      "title": "점검 대시보드",
+      "originalCapture": "16-dashboard.png",
+      "path": "images/all-tools/dark/dashboard.png",
+      "sha256": "a79687876f65bcb9b16f0588c949ed48554199427c6062a4b4f3b604eb795c31",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "theme": "dark",
+      "view": "data",
+      "title": "데이터 변환·비교",
+      "originalCapture": "14-data.png",
+      "path": "images/all-tools/dark/data.png",
+      "sha256": "174a0baff37798d909fab97ad96d6b958c23257e332abd9bdeba0d98cfbb769e",
+      "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+      "dimensions": [
+        1600,
+        1000
+      ]
+    }
+  ]
+}

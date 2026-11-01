@@ -1,0 +1,10 @@
+{
+  "result": "passed",
+  "zipFilename": "Workbench_Simple_1.4.21_Bank_Results_KR.zip",
+  "bytes": 5293651,
+  "sha256": "a411ac3bceee9ad821151690bbfec38582736e0c1fdd9fd48f9b45b974525439",
+  "zipCRCVerified": true,
+  "containedHtmlSha256": "1cf292b16138d041736d013e538d0fac833fa8579ea6a4027013b36bd757c724",
+  "containedHtmlByteIdentical": true,
+  "entries": 2
+}

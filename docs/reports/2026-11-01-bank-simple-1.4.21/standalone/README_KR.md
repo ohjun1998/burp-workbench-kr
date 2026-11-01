@@ -1,5 +1,7 @@
 # 확장 도구별 실제 결과 · 단일 HTML
 
+[저장용 ZIP 다운로드](Workbench_Simple_1.4.21_Bank_Results_KR.zip)를 제공합니다. 압축을 풀고 안의 HTML을 더블클릭합니다. GitHub raw HTML 링크는 원시 텍스트로 열릴 수 있어 저장용 ZIP을 추가했습니다.
+
 [Workbench_Simple_1.4.21_Bank_Results_KR.html](Workbench_Simple_1.4.21_Bank_Results_KR.html)을 저장하고 브라우저로 엽니다. ZIP 해제나 은행·서버 기동 없이 이 파일 하나로 결과를 볼 수 있습니다.
 
 - 주요8개를 포함한13개 도구의 실제 결과·수치·후보 해석

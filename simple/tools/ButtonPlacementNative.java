@@ -148,7 +148,7 @@ public final class ButtonPlacementNative extends WorkbenchTest {
   }
 
   private static void guidePosition(JPanel root) {
-    Component guide = named(root, "wb.visual.guide.open");
+    Component guide = named(root, "wb.traffic.guide.open");
     Component toolbar = named(root, "wb.navigation.toolbar");
     Rectangle relative = SwingUtilities.convertRectangle(guide.getParent(), guide.getBounds(), toolbar);
     check(guide.isShowing() && toolbar.getHeight() <= 46 && relative.y >= 0

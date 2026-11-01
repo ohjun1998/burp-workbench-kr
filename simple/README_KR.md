@@ -1,3 +1,11 @@
+# Workbench Simple 1.4.18
+
+요청·응답 목록에 적용한 승인 시안 기준을 나머지 도구와 결과·계정 연결 화면까지 확장했습니다. 메뉴와 버튼, 표의 열 순서, 카드와 원문 읽기 영역을 조정했습니다. 기존 원본 ID·바이트와 검사 엔진, SCOPE·중지·계정 준비 동작을 유지합니다.
+
+[변경 안내](docs/RELEASE_SIMPLE_1.4.18_KR.md) · [설치 JAR](downloads/1.4.18/burp-workbench-simple-1.4.18.jar) · [독립 소스 ZIP](downloads/1.4.18/burp-workbench-simple-1.4.18-source.zip) · [승인 시안·실제 창 비교](../docs/reports/2026-10-31-all-tools-approved/1.4.18/REPORT_KR.md)
+
+아래 이전 버전과 배포 파일은 보존합니다.
+
 # Workbench Simple 1.4.17
 
 승인 PDF와 달랐던 공통 화면, 검사 결과의 실제 필터·응답 시간, 보고서 작성 카드, 인증 준비 창 전체3탭을 보완했습니다. 최종 JAR의 전체7,474개·두 테마/세 크기258화면·실제 Linux 창180개·Katana102개 검사를 통과했습니다. [변경 안내](docs/RELEASE_SIMPLE_1.4.17_KR.md) · [설치 JAR](downloads/1.4.17/burp-workbench-simple-1.4.17.jar) · [독립 소스 ZIP](downloads/1.4.17/burp-workbench-simple-1.4.17-source.zip) · [시안과 실제 비교 PDF](../docs/reports/2026-10-31-pdf-alignment/1.4.17/workbench-simple-1.4.17-pdf-alignment.pdf). 실제 Windows Burp GUI는 직접 검증하지 않았습니다.

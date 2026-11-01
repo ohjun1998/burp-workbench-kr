@@ -210,6 +210,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JDialog commonSettingsWindow;
 
   public void addPayloadRunnerPage(Component page) {
+    if(page instanceof JPanel panel){ApprovedLayouts.payload(panel);ApprovedLayouts.decorate(panel);}
     WorkbenchUi.style(page);
     Diagnostics.bind(page, diagnostics);
     payloadPage = page;
@@ -271,6 +272,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       jsIn = area("", 10),
       jsOut = area("", 10);
   private HttpRequestEditor requestView;
+  private final PacketInspector mapperRequestPacket=new PacketInspector("wb.mapper.request"),mapperResponsePacket=new PacketInspector("wb.mapper.response");
   private final PacketInspector requestPacket = new PacketInspector("wb.traffic.request"),
       responsePacket = new PacketInspector("wb.traffic.response");
   private HttpResponseEditor responseView;
@@ -399,6 +401,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (responseNativeWindow != null) responseNativeWindow.dispose();
                     requestPacket.close();
                     responsePacket.close();
+                    mapperRequestPacket.close();mapperResponsePacket.close();
                     if (timer != null) timer.stop();
                     if (root != null) root.putClientProperty("wb.skin.closed", true);
                     if (structuredCompare != null) structuredCompare.close();
@@ -621,6 +624,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           public boolean supportsAssessmentTasks() { return true; }
           public Map<String,Object> inspectionCommand(String origin) { return scopeInspectionPanel==null?Map.of():scopeInspectionPanel.browserCommand(origin); }
           public void inspectionEvent(Map<String,Object> event) { if(scopeInspectionPanel!=null)scopeInspectionPanel.browserEvent(event); }
+          public void selectedPacket(byte[] request,int requestLength,byte[] response,int responseLength){if(!unloaded.get()){mapperRequestPacket.setPacket(request,null,requestLength);mapperResponsePacket.setPacket(response,null,responseLength);}}
           public boolean allowsAssessmentUrl(String url) {
             return !unloaded.get() && localScope.matchesTraffic(url);
           }
@@ -632,6 +636,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             mapperTools.setSelectedComponent(activity);
           }
         });
+    mapperPage.putClientProperty("wb.mapper.request.inspector",mapperRequestPacket);mapperPage.putClientProperty("wb.mapper.response.inspector",mapperResponsePacket);
     mapperTools = new FolderNavigation.Pages();
     mapperTools.setName("wb.mapper.tools");
     mapperTools.addTab("기능 분류·실행", mapperPage);
@@ -680,6 +685,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     navigation = new FolderNavigation(api, tabs, this::openSettings, null, logButton,
         true, dashboard, inspect, workbenchWindow.fullScreenButton, visualGuide);
     root.add(navigation);
+    ApprovedLayouts.install(root);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
     mapperTools.addChangeListener(e -> updateFeatureHelp());

@@ -36,32 +36,40 @@ public final class PacketStyle {
         @Override protected int drawUnselectedText(Graphics g,int x,int y,int start,int end)throws BadLocationException {return (int)draw(area,this,(Graphics2D)g,x,y,start,end);}
       };
       return new PlainView(element) {
+        @Override protected void updateMetrics(){super.updateMetrics();if(Boolean.TRUE.equals(area.getClientProperty("wb.approved.packet"))&&!(metrics instanceof SpacedMetrics))metrics=new SpacedMetrics(metrics);}
         @Override protected float drawUnselectedText(Graphics2D g,float x,float y,int start,int end)throws BadLocationException {return draw(area,this,g,x,y,start,end);}
         @Override protected int drawUnselectedText(Graphics g,int x,int y,int start,int end)throws BadLocationException {return (int)draw(area,this,(Graphics2D)g,x,y,start,end);}
       };
     }
   }
 
+  private static final class SpacedMetrics extends FontMetrics {
+    private final FontMetrics original;SpacedMetrics(FontMetrics m){super(m.getFont());original=m;}
+    public int getHeight(){return Math.max(original.getHeight(),Math.round(getFont().getSize2D()*20f/12f));}
+    public int getAscent(){return original.getAscent();}public int getDescent(){return original.getDescent();}public int getLeading(){return getHeight()-getAscent()-getDescent();}
+    public int charWidth(char c){return original.charWidth(c);}public int charWidth(int c){return original.charWidth(c);}public int stringWidth(String s){return original.stringWidth(s);}public int charsWidth(char[] c,int offset,int length){return original.charsWidth(c,offset,length);}public int[] getWidths(){return original.getWidths();}
+    public java.awt.font.FontRenderContext getFontRenderContext(){return original.getFontRenderContext();}
+  }
   private static float draw(JTextArea area,TabExpander tabs,Graphics2D g,float x,float y,int start,int end)throws BadLocationException {
     Segment segment=new Segment();int length=end-start;
     area.getDocument().getText(start,Math.min(length,8192),segment);
     String line=new String(segment.array,segment.offset,segment.count);
-    int cursor=0;
+    boolean approved=Boolean.TRUE.equals(area.getClientProperty("wb.approved.packet"));int cursor=0;
     int colon=line.indexOf(':');
     if(line.stripTrailing().matches("(?:HTTP/[^ ]+ .*|(?:GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS) .*|[A-Za-z][A-Za-z0-9-]*:.*)")) {
       int head=line.startsWith("HTTP/")||colon<0?line.indexOf(' '):colon+1;
-      if(head>0){x=part(area,tabs,g,x,y,start,head,blue(area));cursor=head;}
+      if(head>0){if(approved&&line.startsWith("HTTP/"))head=line.length();x=part(area,tabs,g,x,y,start,head,approved?(line.startsWith("HTTP/")?(dark(area)?new Color(103,213,164):new Color(11,119,82)):colon>=0?(dark(area)?new Color(154,196,255):new Color(37,93,167)):area.getForeground()):blue(area));cursor=head;}
     }
     Matcher matcher=TOKENS.matcher(line);
     while(matcher.find()) {
       if(matcher.start()<cursor)continue;
       if(matcher.start()>cursor)x=part(area,tabs,g,x,y,start+cursor,matcher.start()-cursor,area.getForeground());
       String token=matcher.group();Color color;
-      if(token.startsWith("//")||token.startsWith("/*")||token.startsWith("<!--"))color=muted(area);
+      if(token.startsWith("//")||token.startsWith("/*")||token.startsWith("<!--"))color=approved?area.getForeground():muted(area);
       else if(token.startsWith("\"")||token.startsWith("'")) {
         int next=matcher.end();while(next<line.length()&&Character.isWhitespace(line.charAt(next)))next++;
-        color=next<line.length()&&line.charAt(next)==':'?blue(area):green(area);
-      } else color=token.startsWith("<")||Character.isJavaIdentifierStart(token.charAt(0))?blue(area):orange(area);
+        color=next<line.length()&&line.charAt(next)==':'?(approved?(dark(area)?new Color(154,196,255):new Color(37,93,167)):blue(area)):approved?area.getForeground():green(area);
+      } else color=approved?area.getForeground():token.startsWith("<")||Character.isJavaIdentifierStart(token.charAt(0))?blue(area):orange(area);
       x=part(area,tabs,g,x,y,start+matcher.start(),matcher.end()-matcher.start(),color);cursor=matcher.end();
     }
     if(cursor<length)x=part(area,tabs,g,x,y,start+cursor,length-cursor,area.getForeground());

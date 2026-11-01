@@ -1,0 +1,755 @@
+{
+  "reference": "Approved prototype DOM at1600x1000; the approved PNGs are supplied alongside actual screenshots.",
+  "scope": "Principal cards and readers, rather than an exhaustive pixel comparison.",
+  "frames": [
+    {
+      "view": "traffic",
+      "anchor": "wb.traffic.request^",
+      "reference": [
+        206,
+        512,
+        684,
+        427
+      ],
+      "actual": [
+        206,
+        512,
+        683,
+        427
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        -1,
+        0
+      ]
+    },
+    {
+      "view": "traffic",
+      "anchor": "wb.traffic.response^",
+      "reference": [
+        900,
+        512,
+        684,
+        427
+      ],
+      "actual": [
+        901,
+        512,
+        683,
+        427
+      ],
+      "deltaXYWH": [
+        1,
+        0,
+        -1,
+        0
+      ]
+    },
+    {
+      "view": "mapper",
+      "anchor": "fm.navigation.split:left",
+      "reference": [
+        206,
+        104,
+        218,
+        862
+      ],
+      "actual": [
+        206,
+        104,
+        218,
+        862
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "view": "mapper",
+      "anchor": "wb.mapper.request^",
+      "reference": [
+        436,
+        482,
+        569,
+        484
+      ],
+      "actual": [
+        436,
+        482,
+        569,
+        484
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "view": "mapper",
+      "anchor": "wb.mapper.response^",
+      "reference": [
+        1015,
+        482,
+        569,
+        484
+      ],
+      "actual": [
+        1015,
+        482,
+        569,
+        484
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "view": "js",
+      "anchor": "wb.pdf.js.call.source",
+      "reference": [
+        915.36,
+        148,
+        668.63,
+        774
+      ],
+      "actual": [
+        915,
+        148,
+        669,
+        774
+      ],
+      "deltaXYWH": [
+        -0.36,
+        0,
+        0.37,
+        0
+      ]
+    },
+    {
+      "view": "response.recon",
+      "anchor": "wb.card.pdf.response.reader",
+      "reference": [
+        739.61,
+        198.59,
+        844.39,
+        767.41
+      ],
+      "actual": [
+        740,
+        198,
+        844,
+        768
+      ],
+      "deltaXYWH": [
+        0.39,
+        -0.59,
+        -0.39,
+        0.59
+      ]
+    },
+    {
+      "view": "auth",
+      "anchor": "wb.card.Record History",
+      "reference": [
+        206,
+        155,
+        1378,
+        217.5
+      ],
+      "actual": [
+        206,
+        155,
+        1378,
+        218
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        0.5
+      ]
+    },
+    {
+      "view": "auth",
+      "anchor": "wb.auth.inline",
+      "reference": [
+        206,
+        382.5,
+        1378,
+        583.5
+      ],
+      "actual": [
+        206,
+        383,
+        1378,
+        583
+      ],
+      "deltaXYWH": [
+        0,
+        0.5,
+        0,
+        -0.5
+      ]
+    },
+    {
+      "view": "auth",
+      "anchor": "wb.card.기준 응답",
+      "reference": [
+        207,
+        472.5,
+        683,
+        450.91
+      ],
+      "actual": [
+        207,
+        473,
+        683,
+        450
+      ],
+      "deltaXYWH": [
+        0,
+        0.5,
+        0,
+        -0.91
+      ]
+    },
+    {
+      "view": "auth",
+      "anchor": "wb.card.계정 응답",
+      "reference": [
+        900,
+        472.5,
+        683,
+        450.91
+      ],
+      "actual": [
+        900,
+        473,
+        683,
+        450
+      ],
+      "deltaXYWH": [
+        0,
+        0.5,
+        0,
+        -0.91
+      ]
+    },
+    {
+      "view": "auth.accounts",
+      "anchor": "wb.auth.connections",
+      "reference": [
+        445,
+        289.41,
+        900,
+        447.19
+      ],
+      "actual": [
+        445,
+        289,
+        900,
+        447
+      ],
+      "deltaXYWH": [
+        0,
+        -0.41,
+        0,
+        -0.19
+      ]
+    },
+    {
+      "view": "payload",
+      "anchor": "text=검사 요청^^",
+      "reference": [
+        206,
+        144,
+        1081,
+        784.41
+      ],
+      "actual": [
+        206,
+        144,
+        1081,
+        784
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        -0.41
+      ]
+    },
+    {
+      "view": "payload",
+      "anchor": "wb.flow.payload.conditions",
+      "reference": [
+        1299,
+        144,
+        285,
+        784.41
+      ],
+      "actual": [
+        1299,
+        144,
+        285,
+        784
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        -0.41
+      ]
+    },
+    {
+      "view": "payload.results",
+      "anchor": "wb.payload.workspace:top",
+      "reference": [
+        206,
+        148,
+        1378,
+        215.5
+      ],
+      "actual": [
+        206,
+        148,
+        1378,
+        215
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        -0.5
+      ]
+    },
+    {
+      "view": "payload.results",
+      "anchor": "wb.card.실제 요청",
+      "reference": [
+        206,
+        421.09,
+        684,
+        498.91
+      ],
+      "actual": [
+        206,
+        421,
+        683,
+        499
+      ],
+      "deltaXYWH": [
+        0,
+        -0.09,
+        -1,
+        0.09
+      ]
+    },
+    {
+      "view": "payload.results",
+      "anchor": "wb.card.실제 응답",
+      "reference": [
+        900,
+        421.09,
+        684,
+        498.91
+      ],
+      "actual": [
+        901,
+        421,
+        683,
+        499
+      ],
+      "deltaXYWH": [
+        1,
+        -0.09,
+        -1,
+        0.09
+      ]
+    },
+    {
+      "view": "environment",
+      "anchor": "wb.environment.candidates",
+      "reference": [
+        206,
+        150,
+        733.58,
+        778.41
+      ],
+      "actual": [
+        206,
+        150,
+        734,
+        778
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0.42,
+        -0.41
+      ]
+    },
+    {
+      "view": "environment",
+      "anchor": "wb.flow.environment.inspector",
+      "reference": [
+        951.58,
+        150,
+        632.42,
+        778.41
+      ],
+      "actual": [
+        952,
+        150,
+        632,
+        778
+      ],
+      "deltaXYWH": [
+        0.42,
+        0,
+        -0.42,
+        -0.41
+      ]
+    },
+    {
+      "view": "exposure.search",
+      "anchor": "wb.flow.exposure.search.masterdetail:left",
+      "reference": [
+        206,
+        188,
+        860.06,
+        740.41
+      ],
+      "actual": [
+        206,
+        188,
+        860,
+        740
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        -0.06,
+        -0.41
+      ]
+    },
+    {
+      "view": "exposure.search",
+      "anchor": "wb.card.선택 URL 근거",
+      "reference": [
+        1078.06,
+        188,
+        505.92,
+        740.41
+      ],
+      "actual": [
+        1078,
+        188,
+        506,
+        740
+      ],
+      "deltaXYWH": [
+        -0.06,
+        0,
+        0.08,
+        -0.41
+      ]
+    },
+    {
+      "view": "exposure.cve",
+      "anchor": "wb.flow.exposure.cve.masterdetail:left",
+      "reference": [
+        206,
+        232,
+        766.88,
+        734
+      ],
+      "actual": [
+        206,
+        232,
+        767,
+        734
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0.12,
+        0
+      ]
+    },
+    {
+      "view": "exposure.cve",
+      "anchor": "wb.flow.exposure.cve.masterdetail:right",
+      "reference": [
+        984.88,
+        232,
+        599.13,
+        734
+      ],
+      "actual": [
+        985,
+        232,
+        599,
+        734
+      ],
+      "deltaXYWH": [
+        0.12,
+        0,
+        -0.13,
+        0
+      ]
+    },
+    {
+      "view": "activity",
+      "anchor": "wb.card.URL 점검 목록",
+      "reference": [
+        206,
+        144,
+        894.95,
+        822
+      ],
+      "actual": [
+        206,
+        144,
+        895,
+        822
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0.05,
+        0
+      ]
+    },
+    {
+      "view": "activity",
+      "anchor": "wb.flow.activity.inspector",
+      "reference": [
+        1112.95,
+        144,
+        471.03,
+        822
+      ],
+      "actual": [
+        1113,
+        144,
+        471,
+        822
+      ],
+      "deltaXYWH": [
+        0.05,
+        0,
+        -0.03,
+        0
+      ]
+    },
+    {
+      "view": "bounty",
+      "anchor": "wb.bounty.evidence.list",
+      "reference": [
+        206,
+        123,
+        309.48,
+        843
+      ],
+      "actual": [
+        206,
+        123,
+        309,
+        843
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        -0.48,
+        0
+      ]
+    },
+    {
+      "view": "bounty",
+      "anchor": "wb.bounty.evidence.report",
+      "reference": [
+        527.48,
+        123,
+        618.97,
+        843
+      ],
+      "actual": [
+        527,
+        123,
+        619,
+        843
+      ],
+      "deltaXYWH": [
+        -0.48,
+        0,
+        0.03,
+        0
+      ]
+    },
+    {
+      "view": "bounty",
+      "anchor": "wb.bounty.evidence.source.card",
+      "reference": [
+        1158.45,
+        123,
+        425.55,
+        843
+      ],
+      "actual": [
+        1158,
+        123,
+        426,
+        843
+      ],
+      "deltaXYWH": [
+        -0.45,
+        0,
+        0.45,
+        0
+      ]
+    },
+    {
+      "view": "bounty.replay",
+      "anchor": "wb.card.요청 준비",
+      "reference": [
+        206,
+        106,
+        808.44,
+        860
+      ],
+      "actual": [
+        206,
+        106,
+        808,
+        860
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        -0.44,
+        0
+      ]
+    },
+    {
+      "view": "bounty.replay",
+      "anchor": "wb.card.실행 결과",
+      "reference": [
+        1026.44,
+        106,
+        557.56,
+        860
+      ],
+      "actual": [
+        1026,
+        106,
+        558,
+        860
+      ],
+      "deltaXYWH": [
+        -0.44,
+        0,
+        0.44,
+        0
+      ]
+    },
+    {
+      "view": "dashboard",
+      "anchor": "wb.card.해당 결과 목록",
+      "reference": [
+        206,
+        252.5,
+        886.69,
+        665.5
+      ],
+      "actual": [
+        206,
+        252,
+        887,
+        666
+      ],
+      "deltaXYWH": [
+        0,
+        -0.5,
+        0.31,
+        0.5
+      ]
+    },
+    {
+      "view": "dashboard",
+      "anchor": "wb.card.선택 항목 근거",
+      "reference": [
+        1104.69,
+        252.5,
+        479.31,
+        665.5
+      ],
+      "actual": [
+        1105,
+        252,
+        479,
+        666
+      ],
+      "deltaXYWH": [
+        0.31,
+        -0.5,
+        -0.31,
+        0.5
+      ]
+    },
+    {
+      "view": "data",
+      "anchor": "wb.card.입력",
+      "reference": [
+        206,
+        148,
+        683,
+        778.41
+      ],
+      "actual": [
+        206,
+        148,
+        683,
+        778
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        -0.41
+      ]
+    },
+    {
+      "view": "data",
+      "anchor": "wb.card.출력",
+      "reference": [
+        901,
+        148,
+        683,
+        778.41
+      ],
+      "actual": [
+        901,
+        148,
+        683,
+        778
+      ],
+      "deltaXYWH": [
+        0,
+        0,
+        0,
+        -0.41
+      ]
+    }
+  ],
+  "maximumAbsoluteCoordinateDifference": 1
+}

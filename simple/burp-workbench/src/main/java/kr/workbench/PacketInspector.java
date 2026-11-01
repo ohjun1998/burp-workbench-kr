@@ -415,7 +415,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     Color orange=WorkbenchUi.dark()?new Color(245,159,79):new Color(189,91,25);
     int head=value.indexOf("\n\n");if(head<0)head=value.indexOf("\r\n\r\n");if(head<0)head=value.length();
     int line=0;
-    while(line<head) { int end=value.indexOf('\n',line);if(end<0||end>head)end=head;int colon=value.indexOf(':',line);paint(line,line==0?end:colon>=line&&colon<end?colon+1:line,approvedTraffic&&line==0?(value.startsWith("HTTP/")?new Color(11,119,82):WorkbenchUi.ink()):blue);line=end+1; }
+    while(line<head) { int end=value.indexOf('\n',line);if(end<0||end>head)end=head;int colon=value.indexOf(':',line);paint(line,line==0?end:colon>=line&&colon<end?colon+1:line,approvedTraffic&&line==0?(value.startsWith("HTTP/")?(WorkbenchUi.dark()?new Color(103,213,164):new Color(11,119,82)):WorkbenchUi.ink()):blue);line=end+1; }
     int tokens=0;
     for(int i=head;i<value.length()&&tokens<4000;) {
       char c=value.charAt(i);int start=i;

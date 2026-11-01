@@ -1,0 +1,27 @@
+PASS active tool offers a visible top-right Guide text button
+PASS Guide stays inside the approved PDF single-row header
+PASS guide is a separate resizable modeless window owned by Workbench
+PASS guide uses the actual production annotated panel
+PASS Guide opens the currently selected traffic screen
+PASS guide step descriptions retain readable contrast against their actual theme surfaces
+PASS repeated Guide clicks reuse one guide window
+PASS opening guidance retains main components, original identity, selection and edits
+PASS guide explanatory widgets contain no private current-work sentinel
+PASS annotated guide image is visibly rendered
+PASS real guide rendering contains visible red numeric callouts
+PASS selecting explanation updates the highlighted numbered step
+PASS clicking red marker synchronizes the corresponding explanation
+PASS guide offers its own maximize action
+PASS native F11 roundtrip affects only the Guide window and preserves main mode
+PASS context refresh retains the same guide window
+PASS all primary and extended tool guides are available locally
+PASS native guide window caption follows every dropdown-selected screen
+PASS closing guidance leaves ongoing main work intact
+PASS owned guide is visually above fullscreen Workbench after parent focus
+INFO native Guide Escape focus=javax.swing.JDialog owner=javax.swing.JFrame guideActive=true guideFocused=true
+PASS guide Escape preserves parent fullscreen state
+PASS guide controls, image loading and navigation send zero target HTTP
+PASS unloading disposes guidance and closes its controller
+PASS late Guide actions cannot resurrect a window after unload
+PASS native guide run uses one unchanged packaged JAR throughout
+VisualGuideNative: 25 checks passed (real Swing/WM; synthetic Burp adapters; zero target HTTP)

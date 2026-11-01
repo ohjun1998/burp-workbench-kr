@@ -1,0 +1,290 @@
+[
+  {
+    "guide": "traffic",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/02-request.png",
+    "image": "screens/light/traffic.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "f9bbee42b338c838fc3360b05842f1bbbe05acb42567210a91814b1147d65759"
+  },
+  {
+    "guide": "traffic",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/02-request.png",
+    "image": "screens/dark/traffic.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "29925c87a008e1c4a269d980fbc65ff9c56985fe4ad03d70b5a10106bba8fe2a"
+  },
+  {
+    "guide": "mapper",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/08-mapper.png",
+    "image": "screens/light/mapper.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "91232ea8a52b778e38388f7b3d9db135228bb0cb23ebb9613801dbf321076284"
+  },
+  {
+    "guide": "mapper",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/08-mapper.png",
+    "image": "screens/dark/mapper.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "270e4efa477574227cf79146d92fa7885e6736ab73de816323a395edd085b14a"
+  },
+  {
+    "guide": "js",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/10-js.png",
+    "image": "screens/light/js.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "1f8470cc26d8f41558f6fcbca90b405f3a9db336b86e8f6afbc8e803d747f582"
+  },
+  {
+    "guide": "js",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/10-js.png",
+    "image": "screens/dark/js.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "df4ef24055ab92e96085d1406d3f616cf3f664c5b65d5e6378392401180d701e"
+  },
+  {
+    "guide": "environment",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/09-environment.png",
+    "image": "screens/light/environment.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "d7c0a8ff0e3a357dac74b7483a50603fc126863b39791534a58a2a9d223c349f"
+  },
+  {
+    "guide": "environment",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/09-environment.png",
+    "image": "screens/dark/environment.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "27a3af5f9ed4dbca9657283d02863c4124d7b6955a330e745c7c93f5e78cdb8d"
+  },
+  {
+    "guide": "exposure.search",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/12-exposure-search.png",
+    "image": "screens/light/exposure-search.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "831ba760f7bc00bebcffaff4dc9c5ea7ca8687fdfedc6fa9da94c8d5d6ccfa86"
+  },
+  {
+    "guide": "exposure.search",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/12-exposure-search.png",
+    "image": "screens/dark/exposure-search.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "689fbc70eb3d2676c38dd208567b849c898658f4e708fc2ffc5a64141eed3287"
+  },
+  {
+    "guide": "exposure.cve",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/13-exposure-cve.png",
+    "image": "screens/light/exposure-cve.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "ea81666f230eeb60834f514bcf2e9b56a4325d8b8919a6f243d1ef82e221dae8"
+  },
+  {
+    "guide": "exposure.cve",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/13-exposure-cve.png",
+    "image": "screens/dark/exposure-cve.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "1617813901cf6b6df5e011e5d305fd03f753f1a9d15b0709ab075cabb2d2ce58"
+  },
+  {
+    "guide": "auth",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/04-auth-results.png",
+    "image": "screens/light/auth.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "305f63f5a3b039186a89410e414ca59798002eae05ae7fbb3fc9a0fdcdcaf76c"
+  },
+  {
+    "guide": "auth",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/04-auth-results.png",
+    "image": "screens/dark/auth.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "44894c7869cef848ad9c3ead74c9ba7361363a512f911bc36ce510f782b7678e"
+  },
+  {
+    "guide": "response.recon",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/03-analysis.png",
+    "image": "screens/light/response-recon.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "38fb2a78bfad822fdafcbb0ca8e2fa91b32e74a375c260a20722a421a135d17e"
+  },
+  {
+    "guide": "response.recon",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/03-analysis.png",
+    "image": "screens/dark/response-recon.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "f89a3104c684c4ebd339f247faed9620def3baed9a5ebf2917403d90f97920e3"
+  },
+  {
+    "guide": "payload",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/07-payload.png",
+    "image": "screens/light/payload.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "9e7e20d8041c3c030c50348bd96228456eb7c1770e0d2b23be810abd9b0ad4c2"
+  },
+  {
+    "guide": "payload",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/07-payload.png",
+    "image": "screens/dark/payload.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "ed275dc97f2e73016439783ce90272b01777def4ad08a9c96038de5b7f173030"
+  },
+  {
+    "guide": "data",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/14-data.png",
+    "image": "screens/light/data.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "c17d71472d8622f7983cb67e4bc6092bac76a22147626a97543d19753251545b"
+  },
+  {
+    "guide": "data",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/14-data.png",
+    "image": "screens/dark/data.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "be2185f683e6cbb7835747a925f98e585a002439c9b6fcdec00edd46901122f3"
+  },
+  {
+    "guide": "activity",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/15-progress.png",
+    "image": "screens/light/activity.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "581a75de5c919c141960e45806c739a7545a90d6224d94e3e07c48a14ff87334"
+  },
+  {
+    "guide": "activity",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/15-progress.png",
+    "image": "screens/dark/activity.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "3142b18ccc8f1192051a09a99615a3d3383a5fe7c906606905e6d06202ddf5fa"
+  },
+  {
+    "guide": "bounty",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/05-evidence.png",
+    "image": "screens/light/bounty.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "a841aab53c487b0d1fbdeaa0e8d90f4d28671555ec23f2d8483e72d7783a5474"
+  },
+  {
+    "guide": "bounty",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/05-evidence.png",
+    "image": "screens/dark/bounty.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "087eec7ca4f9d9a2e3fe402f36d841e25adefc157eb44fdd539c6ce5669229ce"
+  },
+  {
+    "guide": "dashboard",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/16-dashboard.png",
+    "image": "screens/light/dashboard.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "cc0a36cf47a87288244ca6ddf44936e3bcde293fbed0759f07a80494953907a3"
+  },
+  {
+    "guide": "dashboard",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/16-dashboard.png",
+    "image": "screens/dark/dashboard.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "2b04ed38fe043fb66f2895e24064877d1d88be1c7be5b8c20391931847404041"
+  },
+  {
+    "guide": "payload.results",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/07-payload-results.png",
+    "image": "screens/light/payload-results.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "09cebf856678dc135ae6c31e13e220094e7e2365905d2e9d5dc3fef869a5b086"
+  },
+  {
+    "guide": "payload.results",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/07-payload-results.png",
+    "image": "screens/dark/payload-results.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "3d41ab1dad0541f20545c482e7d42f83c61ae434ae0400f9ef6b6c9d2f2cead9"
+  },
+  {
+    "guide": "bounty.replay",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/11-replay.png",
+    "image": "screens/light/bounty-replay.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "63c82af6fb2b39c065f81beff2e350d3fa2fd1f9cf6f7bb62755432274e9c620"
+  },
+  {
+    "guide": "bounty.replay",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/11-replay.png",
+    "image": "screens/dark/bounty-replay.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "d663e8fa7dbd2f50cb8c37b76069a0bfd0a036e020c26d2bd8e10dabba5dff7a"
+  },
+  {
+    "guide": "auth.accounts",
+    "theme": "light",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/light/1600x1000/04-auth-connections.png",
+    "image": "screens/light/auth-accounts.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "5b804231ffc1a5f80fea8b037ec649beb2b64e07dbddd7b9b559177fe2a01987"
+  },
+  {
+    "guide": "auth.accounts",
+    "theme": "dark",
+    "source": "/workspace/burp-workbench-kr/tmp/approved-all/guide-release/dark/1600x1000/04-auth-connections.png",
+    "image": "screens/dark/auth-accounts.png",
+    "width": 1600,
+    "height": 1000,
+    "sha256": "2a334a4da20ba668854576f43f4b6d3bff2566e79c016a204cf6daa370e4f65d"
+  }
+]

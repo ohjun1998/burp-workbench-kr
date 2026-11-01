@@ -475,12 +475,14 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
   /** Local UI delegate and vector icons avoid OS-dependent folders and tree guide lines. */
   private final class NavigationTree extends JTree {
+    @Override public boolean getScrollableTracksViewportWidth(){return classic||super.getScrollableTracksViewportWidth();}
     private int hovered = -1;
 
     NavigationTree(TreeNode root) {
       super(root);
       setOpaque(false);
       setBorder(BorderFactory.createEmptyBorder(4, 9, 6, 0));
+      addComponentListener(new ComponentAdapter(){public void componentResized(ComponentEvent e){treeDidChange();}});
       addMouseMotionListener(new MouseMotionAdapter() {
         @Override public void mouseMoved(MouseEvent event) {
           int row = rowAt(event);
@@ -550,9 +552,9 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
         boolean currentTool = active(getPathForRow(row).getLastPathComponent());
         if (currentTool || isRowSelected(row) || row == hovered) {
           g.setColor(currentTool ? WorkbenchUi.selected() : kr.packetui.VisualTheme.hover());
-          boolean exact=classic&&"traffic".equals(selectedToolId());
+          boolean exact=classic&&approvedShell();
           g.fillRoundRect(exact?9:4, bounds.y + (exact?1:2), getWidth()-(exact?18:8),bounds.height-(exact?2:4),8,8);
-          if (currentTool && !(classic&&"traffic".equals(selectedToolId()))) {
+          if (currentTool && !(classic&&approvedShell())) {
             g.setColor(WorkbenchUi.accent());
             g.fillRect(4, bounds.y + 2, 3, bounds.height - 4);
           }
@@ -560,10 +562,10 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       }
       g.dispose();
       super.paintComponent(graphics);
-      if(classic&&"traffic".equals(selectedToolId())&&getHeight()>850&&getRowCount()>0){Rectangle last=getRowBounds(getRowCount()-1);if(last!=null){
+      if(classic&&approvedShell()&&getHeight()>850&&getRowCount()>0){Rectangle last=getRowBounds(getRowCount()-1);if(last!=null){
         g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);int y=last.y+last.height+18;g.setColor(WorkbenchUi.line());g.drawLine(9,y,getWidth()-10,y);
         Component context=ApprovedTrafficPanel.named(pages,"wb.traffic.target");String target=context instanceof JComboBox<?> box?Objects.toString(box.getSelectedItem(),""):"";
-        g.setFont(WorkbenchUi.font().deriveFont(10f));g.setColor(WorkbenchUi.ink());g.drawString(target,18,y+26);g.setColor(kr.packetui.VisualTheme.muted());g.drawString("현재 프로젝트 · 요청·응답 목록",18,y+44);g.dispose();
+        g.setFont(WorkbenchUi.font().deriveFont(10f));g.setColor(WorkbenchUi.ink());g.drawString(target,18,y+26);g.setColor(kr.packetui.VisualTheme.muted());g.drawString("현재 프로젝트 · "+(WorkbenchScope.registeredRules(api).isEmpty()?"수집 범위 미설정":"수집 범위 설정됨"),18,y+44);g.dispose();
       }}
       if (hasFocus() && getLeadSelectionPath() != null) {
         Rectangle bounds = getPathBounds(getLeadSelectionPath());
@@ -580,6 +582,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
 
   private final class NavigationRenderer extends JLabel implements TreeCellRenderer {
     @Override public void updateUI() { setUI(new javax.swing.plaf.basic.BasicLabelUI()); }
+    @Override public Dimension getPreferredSize(){Dimension d=super.getPreferredSize();d.width=Math.max(getIcon()==null?140:165,d.width);return d;}
     NavigationRenderer() {
       setOpaque(false);
       setIconTextGap(8);
@@ -592,7 +595,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       boolean toolNode = node.getUserObject() instanceof Tool;
       setText(node.toString());
-      boolean exact=classic&&"traffic".equals(selectedToolId())&&owner.getHeight()>850;
+      boolean exact=classic&&approvedShell();
       setFont(WorkbenchUi.font().deriveFont(!toolNode||exact&&active(node) ? Font.BOLD : Font.PLAIN,
           WorkbenchUi.displaySize(exact ? toolNode?12f:10f : classic ? toolNode ? 12.5f : 10.5f : toolNode ? 13.5f : 12.5f)));
       setBorder(BorderFactory.createEmptyBorder(exact ? toolNode?9:row==0?0:18 : toolNode?classic?8:6:classic?8:row==0?5:11,
@@ -702,6 +705,8 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     return -1;
   }
 
+  private boolean approvedShell(){return classic;}
+
   private String selectedToolId() {
     String route = currentRoute();
     String id = switch (route) {
@@ -713,7 +718,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
   }
 
   void refreshSelection() {
-    if(classic&&headerLine!=null){boolean exact="traffic".equals(selectedToolId());Component desired=exact?trafficHeader:standardHeaderActions;
+    if(classic&&headerLine!=null){boolean exact=approvedShell();Component desired=exact?trafficHeader:standardHeaderActions;
       Component navigation=((BorderLayout)headerLine.getLayout()).getLayoutComponent(BorderLayout.WEST);
       if(navigation instanceof JPanel panel){panel.setBorder(BorderFactory.createEmptyBorder(0,exact?5:0,0,0));for(Component child:panel.getComponents())if(child instanceof JLabel brand){brand.setIconTextGap(exact?9:7);brand.putClientProperty("wb.traffic.brand",exact);}}
       ((BorderLayout)headerLine.getLayout()).setHgap(exact?11:8);
@@ -742,12 +747,14 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
       breadcrumb.setToolTipText(group);
       breadcrumb.setForeground(kr.packetui.VisualTheme.muted());
     } finally { synchronizing = false; }
-    tree.repaint();
+    updateApprovedFooter();tree.repaint();
   }
 
+  private void updateApprovedFooter(){if(trafficFooter!=null)for(Component c:trafficFooter.getComponents())if(c instanceof JLabel label&&Boolean.TRUE.equals(label.getClientProperty("wb.traffic.footer")))label.setText((selectedToolId().isBlank()?"작업 공간":FeatureGuide.title(selectedToolId()))+" · "+(WorkbenchUi.dark()?"다크":"라이트"));}
+
   void restoreAppearance() {
-    if(trafficFooter!=null)for(Component c:trafficFooter.getComponents())if(c instanceof JLabel label&&Boolean.TRUE.equals(label.getClientProperty("wb.traffic.footer")))label.setText("요청·응답 목록 · "+(WorkbenchUi.dark()?"다크":"라이트"));
-    if(classic&&"traffic".equals(selectedToolId())){split.setDividerSize(0);sidebar.setBorder(null);}
+    updateApprovedFooter();
+    if(classic&&approvedShell()){split.setDividerSize(0);sidebar.setBorder(null);}
 
     if (tree.getUI().getClass().getEnclosingClass() != NavigationTree.class) tree.updateUI();
     tree.setCellRenderer(renderer);
@@ -757,7 +764,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.getViewport().setBackground(kr.packetui.VisualTheme.sidebar());
     tree.treeDidChange();
-    if(classic){boolean exact="traffic".equals(selectedToolId());tree.setBorder(BorderFactory.createEmptyBorder(exact?13:4,9,6,exact?9:0));
+    if(classic){boolean exact=approvedShell();tree.setBorder(BorderFactory.createEmptyBorder(exact?13:4,9,6,exact?9:0));
       if(tree.getUI() instanceof BasicTreeUI ui){ui.setLeftChildIndent(exact?2:8);ui.setRightChildIndent(exact?4:10);}}
     sidebar.setMinimumSize(new Dimension(minimumMenuWidth(),80));
     constrainDivider();
@@ -768,7 +775,7 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     tree.setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.getViewport().setBackground(kr.packetui.VisualTheme.sidebar());
     sidebar.setVisible(!hidden);
-    split.setDividerSize(hidden || classic&&"traffic".equals(selectedToolId()) ? 0 : 7);
+    split.setDividerSize(hidden || classic&&approvedShell() ? 0 : 7);
     toggle.setText("");toggle.putClientProperty("wb.segment.button",true);
     toggle.setToolTipText("왼쪽 폴더 메뉴 " + (hidden ? "보기" : "숨기기") + " · Ctrl+Shift+M");
     toggle.getAccessibleContext().setAccessibleName(hidden ? "메뉴 보기" : "메뉴 숨기기");

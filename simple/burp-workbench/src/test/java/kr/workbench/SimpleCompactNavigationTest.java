@@ -46,7 +46,7 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
         check(modelRoot.getChildCount()==5&&leaves==12,"approved sidebar retains all five folders and twelve actual tool leaves including the dashboard");
         for(int row=0;row<tree.getRowCount();row++)tree.expandRow(row);
         layout(root,1024);Rectangle last=tree.getRowBounds(tree.getRowCount()-1);
-        check(last.y+last.height<=570,"all sidebar rows fit vertically without the former permanent group gaps");
+        check(last.y+last.height<=((JViewport)tree.getParent()).getExtentSize().height,"all approved sidebar rows fit within the actual viewport");
         TreePath discovery=SimpleWorkflowTest.toolPath(root,"js");Rectangle hovered=tree.getPathBounds(discovery);
         int x=tree.getWidth()-12,y=hovered.y+hovered.height/2;int before=pixel(tree,x,y);
         tree.dispatchEvent(new MouseEvent(tree,MouseEvent.MOUSE_MOVED,System.currentTimeMillis(),0,x,y,0,false));
@@ -56,7 +56,7 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
         tree.setSelectionPath(discovery);layout(root,1024);
         check(pages.getSelectedComponent()==value(extension,"jsAnalysis")||SimpleWorkflowTest.selectedFeature(pages).equals("js"),"compact sidebar selection opens the existing JS route");
         Rectangle selected=tree.getPathBounds(discovery);
-        check(pixel(tree,5,selected.y+6)==WorkbenchUi.accent().getRGB(),"selected tool has a strong full-row accent marker");
+        check(pixel(tree,12,selected.y+selected.height/2)==WorkbenchUi.selected().getRGB(),"selected tool uses the approved full-row blue selection fill");
         MouseEvent tipEvent=new MouseEvent(tree,MouseEvent.MOUSE_MOVED,System.currentTimeMillis(),0,40,selected.y+selected.height/2,0,false);
         check(tree.getToolTipText(tipEvent).equals(FeatureGuide.feature("js").summary()),"tool hover exposes the actual feature explanation");
         var group=(DefaultMutableTreeNode)modelRoot.getChildAt(1);TreePath groupPath=new TreePath(group.getPath());tree.collapsePath(groupPath);

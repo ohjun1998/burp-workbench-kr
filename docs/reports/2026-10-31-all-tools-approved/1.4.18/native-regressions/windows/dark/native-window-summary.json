@@ -1,0 +1,1 @@
+{"screenshots":["01-window.png","02-maximized.png","03-fullscreen.png"],"checks":25,"nativeBurpGui":false,"theme":"dark","display":"isolated Xorg dummy + xfwm4","nativeSwing":true,"version":"1.4.18","result":"passed","syntheticPackets":true,"targetHttpRequests":0,"jarSha256":"0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"}

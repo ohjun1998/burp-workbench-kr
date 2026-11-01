@@ -1,0 +1,1 @@
+{"targetHttpRequests":0,"syntheticPackets":true,"result":"passed","version":"1.4.18","nativeSwing":true,"display":"isolated Xorg dummy + xfwm4","theme":"light","nativeBurpGui":false,"checks":25,"screenshots":["01-window.png","02-maximized.png","03-fullscreen.png"],"jarSha256":"0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"}

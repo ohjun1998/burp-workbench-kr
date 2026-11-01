@@ -1,0 +1,43 @@
+{
+  "checks": 180,
+  "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1",
+  "result": "passed",
+  "suites": [
+    {
+      "suite": "buttons/dark",
+      "checks": 40,
+      "result": "passed",
+      "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"
+    },
+    {
+      "suite": "buttons/light",
+      "checks": 40,
+      "result": "passed",
+      "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"
+    },
+    {
+      "suite": "guides/dark",
+      "checks": 25,
+      "result": "passed",
+      "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"
+    },
+    {
+      "suite": "guides/light",
+      "checks": 25,
+      "result": "passed",
+      "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"
+    },
+    {
+      "suite": "windows/dark",
+      "checks": 25,
+      "result": "passed",
+      "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"
+    },
+    {
+      "suite": "windows/light",
+      "checks": 25,
+      "result": "passed",
+      "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"
+    }
+  ]
+}

@@ -27,6 +27,8 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     void failure(String stage, Exception error);
     default Map<String,Object> inspectionCommand(String origin) { return Map.of("state","idle"); }
     default void inspectionEvent(Map<String,Object> event) {}
+    /** Bounded display prefixes only; retained packets remain the transmission source. */
+    default void selectedPacket(byte[] request,int requestLength,byte[] response,int responseLength) {}
     default boolean supportsAssessmentTasks() { return false; }
     default boolean allowsAssessmentUrl(String url) { return acceptsUrl(url); }
     default void assessmentDraft(String sourceId, String title, List<String> endpoints) {
@@ -501,7 +503,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
     all.setName("fm.navigation.split"); MapperUi.split(all,.23);
     all.putClientProperty("fm.initial.width",230); all.setResizeWeight(0);
     all.setDividerLocation(230);
-    treeToggle.addActionListener(e->{boolean expanded=treeToggle.isSelected();left.setMinimumSize(new Dimension(expanded?160:40,60));all.setDividerLocation(expanded?230:48);all.putClientProperty("fm.initial.width",expanded?230:48);treeToggle.setText(expanded?"기능 목록 · 접기":">");treeToggle.setToolTipText(expanded?"기능 목록 접기":"기능 목록 펼치기");treeToggle.getAccessibleContext().setAccessibleName(treeToggle.getToolTipText());});
+    treeToggle.addActionListener(e->{boolean expanded=treeToggle.isSelected();left.setMinimumSize(new Dimension(expanded?160:40,60));all.setDividerLocation(expanded?(embeddedHost==null?230:218):48);all.putClientProperty("fm.initial.width",expanded?(embeddedHost==null?230:218):48);treeToggle.setText(expanded?"기능 목록 · 접기":">");treeToggle.setToolTipText(expanded?"기능 목록 접기":"기능 목록 펼치기");treeToggle.getAccessibleContext().setAccessibleName(treeToggle.getToolTipText());});
     root.add(all);
 
     api.userInterface().applyThemeToComponent(root);
@@ -776,6 +778,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
       requestText.setText("");
       responseText.setText("");
       explanation.setText("");
+      if(embeddedHost!=null)embeddedHost.selectedPacket(new byte[0],0,new byte[0],0);
       return;
     }
     Mapper.Packet p = selected.get(0);
@@ -799,6 +802,7 @@ public final class FeatureMapperWorkspace implements HttpHandler, AutoCloseable 
                     requestText.setCaretPosition(0);
                     responseText.setCaretPosition(0);
                     explanation.setText(raw.explanation());
+                    if(embeddedHost!=null)embeddedHost.selectedPacket(raw.request(),raw.requestBytes(),raw.response(),raw.responseBytes());
                   });
             } catch (Exception e) {
               if (generation == selectionGeneration.get()) failure("원본 읽기", e);

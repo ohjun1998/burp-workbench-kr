@@ -1,0 +1,16 @@
+{
+  "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1",
+  "actualImageContactSheetReviewed": 32,
+  "pdfPagesChecked": 32,
+  "pdfImageCountPerPage": 2,
+  "pdfPagesVisuallySampled": [
+    0,
+    5,
+    10,
+    16,
+    21
+  ],
+  "unexpectedAccountOverlaysFound": false,
+  "reviewScope": "New lifecycle-fixed final JAR: all32 actual images re-exported and inspected as a contact sheet; representative PDF pages rendered. Only auth.accounts intentionally includes the live compact account dialog. Not an exhaustive per-pixel identity judgment.",
+  "result": "passed"
+}

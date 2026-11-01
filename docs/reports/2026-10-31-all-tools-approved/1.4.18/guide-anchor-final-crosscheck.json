@@ -1,0 +1,3272 @@
+{
+  "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1",
+  "themeChecks": 192,
+  "result": "passed",
+  "scope": "Packaged guide marker centers checked again against the final lifecycle-fixed native screenshot anchors. Existing guide source PNGs remain frozen; actual timestamps and fixture selection may differ.",
+  "checks": [
+    {
+      "guide": "traffic",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.traffic.settings",
+      "pixelCenter": [
+        1537.5008,
+        77.5
+      ],
+      "newVisibleRectangle": [
+        1492.0,
+        62.0,
+        91.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.traffic.settings",
+      "pixelCenter": [
+        1537.5008,
+        77.5
+      ],
+      "newVisibleRectangle": [
+        1492.0,
+        62.0,
+        91.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.traffic.capture.mode",
+      "pixelCenter": [
+        687.0,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        640.0,
+        66.0,
+        94.0,
+        22.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.traffic.capture.mode",
+      "pixelCenter": [
+        687.0,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        640.0,
+        66.0,
+        94.0,
+        22.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.traffic.search",
+      "pixelCenter": [
+        620.0496,
+        121.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        1183.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.traffic.search",
+      "pixelCenter": [
+        620.0496,
+        121.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        1183.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.traffic.history.selected.visible",
+      "pixelCenter": [
+        492.2496,
+        231.5
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        214.0,
+        1145.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.traffic.history.selected.visible",
+      "pixelCenter": [
+        492.2496,
+        231.5
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        214.0,
+        1145.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.traffic.request.pretty",
+      "pixelCenter": [
+        705.0,
+        534.5
+      ],
+      "newVisibleRectangle": [
+        676.0,
+        517.0,
+        58.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.traffic.request.pretty",
+      "pixelCenter": [
+        705.0,
+        534.5
+      ],
+      "newVisibleRectangle": [
+        676.0,
+        517.0,
+        58.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.workflow.traffic.use.open",
+      "pixelCenter": [
+        1432.4992,
+        485.5
+      ],
+      "newVisibleRectangle": [
+        1388.0,
+        470.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "traffic",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.workflow.traffic.use.open",
+      "pixelCenter": [
+        1432.4992,
+        485.5
+      ],
+      "newVisibleRectangle": [
+        1388.0,
+        470.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "light",
+      "step": 1,
+      "anchor": "fm.capture",
+      "pixelCenter": [
+        341.0,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        294.0,
+        66.0,
+        94.0,
+        22.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "fm.capture",
+      "pixelCenter": [
+        341.0,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        294.0,
+        66.0,
+        94.0,
+        22.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "light",
+      "step": 2,
+      "anchor": "fm.feature.tree.selected.visible",
+      "pixelCenter": [
+        298.49920000000003,
+        289.0
+      ],
+      "newVisibleRectangle": [
+        263.0,
+        269.0,
+        71.0,
+        40.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "fm.feature.tree.selected.visible",
+      "pixelCenter": [
+        298.49920000000003,
+        289.0
+      ],
+      "newVisibleRectangle": [
+        263.0,
+        269.0,
+        71.0,
+        40.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "light",
+      "step": 3,
+      "anchor": "fm.filters",
+      "pixelCenter": [
+        723.0,
+        121.0
+      ],
+      "newVisibleRectangle": [
+        436.0,
+        104.0,
+        1148.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "fm.filters",
+      "pixelCenter": [
+        723.0,
+        121.0
+      ],
+      "newVisibleRectangle": [
+        436.0,
+        104.0,
+        1148.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "light",
+      "step": 4,
+      "anchor": "fm.history.selected.visible",
+      "pixelCenter": [
+        895.2,
+        240.5
+      ],
+      "newVisibleRectangle": [
+        436.0,
+        223.0,
+        1148.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "fm.history.selected.visible",
+      "pixelCenter": [
+        895.2,
+        240.5
+      ],
+      "newVisibleRectangle": [
+        436.0,
+        223.0,
+        1148.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.mapper.request.text",
+      "pixelCenter": [
+        610.2496,
+        596.24
+      ],
+      "newVisibleRectangle": [
+        479.0,
+        526.0,
+        525.0,
+        439.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.mapper.request.text",
+      "pixelCenter": [
+        610.2496,
+        596.24
+      ],
+      "newVisibleRectangle": [
+        479.0,
+        526.0,
+        525.0,
+        439.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.actions.mapper.feature.open",
+      "pixelCenter": [
+        375.0,
+        124.0
+      ],
+      "newVisibleRectangle": [
+        334.0,
+        108.0,
+        82.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "mapper",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.actions.mapper.feature.open",
+      "pixelCenter": [
+        375.0,
+        124.0
+      ],
+      "newVisibleRectangle": [
+        334.0,
+        108.0,
+        82.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.js.analysis.toggle",
+      "pixelCenter": [
+        397.0,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        369.0,
+        66.0,
+        56.0,
+        22.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.js.analysis.toggle",
+      "pixelCenter": [
+        397.0,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        369.0,
+        66.0,
+        56.0,
+        22.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.js.source.choice",
+      "pixelCenter": [
+        299.50079999999997,
+        76.5
+      ],
+      "newVisibleRectangle": [
+        238.0,
+        61.0,
+        123.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.js.source.choice",
+      "pixelCenter": [
+        299.50079999999997,
+        76.5
+      ],
+      "newVisibleRectangle": [
+        238.0,
+        61.0,
+        123.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.workflow.js.types",
+      "pixelCenter": [
+        858.0,
+        120.5
+      ],
+      "newVisibleRectangle": [
+        815.0,
+        105.0,
+        86.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.workflow.js.types",
+      "pixelCenter": [
+        858.0,
+        120.5
+      ],
+      "newVisibleRectangle": [
+        815.0,
+        105.0,
+        86.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.js.url.table.selected.visible",
+      "pixelCenter": [
+        449.2496,
+        235.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        219.0,
+        695.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.js.url.table.selected.visible",
+      "pixelCenter": [
+        449.2496,
+        235.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        219.0,
+        695.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.js.selected.tools",
+      "pixelCenter": [
+        1431.0,
+        122.0
+      ],
+      "newVisibleRectangle": [
+        1388.0,
+        106.0,
+        86.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.js.selected.tools",
+      "pixelCenter": [
+        1431.0,
+        122.0
+      ],
+      "newVisibleRectangle": [
+        1388.0,
+        106.0,
+        86.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.js.repeater.prepare",
+      "pixelCenter": [
+        1529.0,
+        122.0
+      ],
+      "newVisibleRectangle": [
+        1480.0,
+        106.0,
+        98.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "js",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.js.repeater.prepare",
+      "pixelCenter": [
+        1529.0,
+        122.0
+      ],
+      "newVisibleRectangle": [
+        1480.0,
+        106.0,
+        98.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.environment.origin",
+      "pixelCenter": [
+        325.0,
+        77.5
+      ],
+      "newVisibleRectangle": [
+        235.0,
+        62.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.environment.origin",
+      "pixelCenter": [
+        325.0,
+        77.5
+      ],
+      "newVisibleRectangle": [
+        235.0,
+        62.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.environment.observations.toggle",
+      "pixelCenter": [
+        536.72,
+        120.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        1378.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.environment.observations.toggle",
+      "pixelCenter": [
+        536.72,
+        120.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        1378.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.environment.paths.selected.visible",
+      "pixelCenter": [
+        387.50079999999997,
+        291.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        275.0,
+        722.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.environment.paths.selected.visible",
+      "pixelCenter": [
+        387.50079999999997,
+        291.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        275.0,
+        722.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.flow.environment.settings.open",
+      "pixelCenter": [
+        1553.5008,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        1523.0,
+        60.0,
+        61.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.flow.environment.settings.open",
+      "pixelCenter": [
+        1553.5008,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        1523.0,
+        60.0,
+        61.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.environment.single",
+      "pixelCenter": [
+        1027.0,
+        217.5
+      ],
+      "newVisibleRectangle": [
+        967.0,
+        202.0,
+        120.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.environment.single",
+      "pixelCenter": [
+        1027.0,
+        217.5
+      ],
+      "newVisibleRectangle": [
+        967.0,
+        202.0,
+        120.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.environment.messages",
+      "pixelCenter": [
+        1116.8,
+        327.352
+      ],
+      "newVisibleRectangle": [
+        953.0,
+        311.0,
+        630.0,
+        584.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "environment",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.environment.messages",
+      "pixelCenter": [
+        1116.8,
+        327.352
+      ],
+      "newVisibleRectangle": [
+        953.0,
+        311.0,
+        630.0,
+        584.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.exposure.target",
+      "pixelCenter": [
+        325.0,
+        77.5
+      ],
+      "newVisibleRectangle": [
+        235.0,
+        62.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.exposure.target",
+      "pixelCenter": [
+        325.0,
+        77.5
+      ],
+      "newVisibleRectangle": [
+        235.0,
+        62.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.exposure.category",
+      "pixelCenter": [
+        248.4992,
+        160.5
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        145.0,
+        85.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.exposure.category",
+      "pixelCenter": [
+        248.4992,
+        160.5
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        145.0,
+        85.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.exposure.search.google",
+      "pixelCenter": [
+        1519.0,
+        160.5
+      ],
+      "newVisibleRectangle": [
+        1454.0,
+        145.0,
+        130.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.exposure.search.google",
+      "pixelCenter": [
+        1519.0,
+        160.5
+      ],
+      "newVisibleRectangle": [
+        1454.0,
+        145.0,
+        130.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.exposure.search.import",
+      "pixelCenter": [
+        921.4992000000001,
+        207.0
+      ],
+      "newVisibleRectangle": [
+        876.0,
+        191.0,
+        91.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.exposure.search.import",
+      "pixelCenter": [
+        921.4992000000001,
+        207.0
+      ],
+      "newVisibleRectangle": [
+        876.0,
+        191.0,
+        91.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.exposure.search.results.selected.visible",
+      "pixelCenter": [
+        481.56,
+        280.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        263.0,
+        858.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.exposure.search.results.selected.visible",
+      "pixelCenter": [
+        481.56,
+        280.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        263.0,
+        858.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.exposure.search.repeater",
+      "pixelCenter": [
+        1151.0,
+        485.0
+      ],
+      "newVisibleRectangle": [
+        1092.0,
+        469.0,
+        118.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.search",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.exposure.search.repeater",
+      "pixelCenter": [
+        1151.0,
+        485.0
+      ],
+      "newVisibleRectangle": [
+        1092.0,
+        469.0,
+        118.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.exposure.observed",
+      "pixelCenter": [
+        303.0,
+        161.5
+      ],
+      "newVisibleRectangle": [
+        263.0,
+        146.0,
+        80.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.exposure.observed",
+      "pixelCenter": [
+        303.0,
+        161.5
+      ],
+      "newVisibleRectangle": [
+        263.0,
+        146.0,
+        80.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.flow.exposure.cve.filters.toggle",
+      "pixelCenter": [
+        495.0,
+        204.5
+      ],
+      "newVisibleRectangle": [
+        474.0,
+        189.0,
+        42.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.flow.exposure.cve.filters.toggle",
+      "pixelCenter": [
+        495.0,
+        204.5
+      ],
+      "newVisibleRectangle": [
+        474.0,
+        189.0,
+        42.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.exposure.lookup",
+      "pixelCenter": [
+        1406.0,
+        162.0
+      ],
+      "newVisibleRectangle": [
+        1360.0,
+        146.0,
+        92.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.exposure.lookup",
+      "pixelCenter": [
+        1406.0,
+        162.0
+      ],
+      "newVisibleRectangle": [
+        1360.0,
+        146.0,
+        92.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.exposure.cve.results.selected.visible",
+      "pixelCenter": [
+        436.5008,
+        320.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        303.0,
+        765.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.exposure.cve.results.selected.visible",
+      "pixelCenter": [
+        436.5008,
+        320.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        303.0,
+        765.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.pdf.exposure.cve.facts",
+      "pixelCenter": [
+        1135.7504000000001,
+        394.2
+      ],
+      "newVisibleRectangle": [
+        987.0,
+        359.0,
+        595.0,
+        176.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.pdf.exposure.cve.facts",
+      "pixelCenter": [
+        1135.7504000000001,
+        394.2
+      ],
+      "newVisibleRectangle": [
+        987.0,
+        359.0,
+        595.0,
+        176.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.exposure.cve.source",
+      "pixelCenter": [
+        1033.5008,
+        612.0
+      ],
+      "newVisibleRectangle": [
+        1000.0,
+        596.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "exposure.cve",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.exposure.cve.source",
+      "pixelCenter": [
+        1033.5008,
+        612.0
+      ],
+      "newVisibleRectangle": [
+        1000.0,
+        596.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.auth.detect",
+      "pixelCenter": [
+        484.0,
+        76.5
+      ],
+      "newVisibleRectangle": [
+        421.0,
+        61.0,
+        126.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.auth.detect",
+      "pixelCenter": [
+        484.0,
+        76.5
+      ],
+      "newVisibleRectangle": [
+        421.0,
+        61.0,
+        126.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.auth.account.card.0",
+      "pixelCenter": [
+        433.0,
+        124.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        104.0,
+        452.0,
+        41.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.auth.account.card.0",
+      "pixelCenter": [
+        433.0,
+        124.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        104.0,
+        452.0,
+        41.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.simple.auth.review",
+      "pixelCenter": [
+        1475.5008,
+        174.0
+      ],
+      "newVisibleRectangle": [
+        1442.0,
+        158.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.simple.auth.review",
+      "pixelCenter": [
+        1475.5008,
+        174.0
+      ],
+      "newVisibleRectangle": [
+        1442.0,
+        158.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.auth.history.selected.visible",
+      "pixelCenter": [
+        784.92,
+        248.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        231.0,
+        1376.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.auth.history.selected.visible",
+      "pixelCenter": [
+        784.92,
+        248.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        231.0,
+        1376.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.auth.inline.tabs",
+      "pixelCenter": [
+        372.12,
+        495.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        473.0,
+        1376.0,
+        450.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.auth.inline.tabs",
+      "pixelCenter": [
+        372.12,
+        495.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        473.0,
+        1376.0,
+        450.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.auth.inline.account",
+      "pixelCenter": [
+        1492.5008,
+        448.5
+      ],
+      "newVisibleRectangle": [
+        1428.0,
+        433.0,
+        129.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.auth.inline.account",
+      "pixelCenter": [
+        1492.5008,
+        448.5
+      ],
+      "newVisibleRectangle": [
+        1428.0,
+        433.0,
+        129.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.response.page.0",
+      "pixelCenter": [
+        244.4992,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        212.0,
+        62.0,
+        65.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.response.page.0",
+      "pixelCenter": [
+        244.4992,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        212.0,
+        62.0,
+        65.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.response.search",
+      "pixelCenter": [
+        466.0,
+        121.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        520.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.response.search",
+      "pixelCenter": [
+        466.0,
+        121.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        520.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.response.findings.selected.visible",
+      "pixelCenter": [
+        362.40000000000003,
+        193.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        176.0,
+        518.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.response.findings.selected.visible",
+      "pixelCenter": [
+        362.40000000000003,
+        193.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        176.0,
+        518.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.response.finding.response.text",
+      "pixelCenter": [
+        927.0,
+        387.08
+      ],
+      "newVisibleRectangle": [
+        783.0,
+        277.0,
+        800.0,
+        688.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.response.finding.response.text",
+      "pixelCenter": [
+        927.0,
+        387.08
+      ],
+      "newVisibleRectangle": [
+        783.0,
+        277.0,
+        800.0,
+        688.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.response.finding.tab.1",
+      "pixelCenter": [
+        841.4992,
+        258.0
+      ],
+      "newVisibleRectangle": [
+        808.0,
+        243.0,
+        67.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.response.finding.tab.1",
+      "pixelCenter": [
+        841.4992,
+        258.0
+      ],
+      "newVisibleRectangle": [
+        808.0,
+        243.0,
+        67.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.response.finding.evidence",
+      "pixelCenter": [
+        1539.0,
+        122.0
+      ],
+      "newVisibleRectangle": [
+        1500.0,
+        106.0,
+        78.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "response.recon",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.response.finding.evidence",
+      "pixelCenter": [
+        1539.0,
+        122.0
+      ],
+      "newVisibleRectangle": [
+        1500.0,
+        106.0,
+        78.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.payload.step.prepare",
+      "pixelCenter": [
+        239.50079999999997,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        62.0,
+        67.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.payload.step.prepare",
+      "pixelCenter": [
+        239.50079999999997,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        62.0,
+        67.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.payload.mark",
+      "pixelCenter": [
+        1172.4992,
+        163.0
+      ],
+      "newVisibleRectangle": [
+        1132.0,
+        147.0,
+        81.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.payload.mark",
+      "pixelCenter": [
+        1172.4992,
+        163.0
+      ],
+      "newVisibleRectangle": [
+        1132.0,
+        147.0,
+        81.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.payload.candidates.toggle",
+      "pixelCenter": [
+        1441.4992,
+        453.0
+      ],
+      "newVisibleRectangle": [
+        1311.0,
+        437.0,
+        261.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.payload.candidates.toggle",
+      "pixelCenter": [
+        1441.4992,
+        453.0
+      ],
+      "newVisibleRectangle": [
+        1311.0,
+        437.0,
+        261.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.payload.condition.budget",
+      "pixelCenter": [
+        1486.5008,
+        291.0
+      ],
+      "newVisibleRectangle": [
+        1401.0,
+        273.0,
+        171.0,
+        36.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.payload.condition.budget",
+      "pixelCenter": [
+        1486.5008,
+        291.0
+      ],
+      "newVisibleRectangle": [
+        1401.0,
+        273.0,
+        171.0,
+        36.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.simple.payload.start",
+      "pixelCenter": [
+        1479.4992,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        1446.0,
+        61.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.simple.payload.start",
+      "pixelCenter": [
+        1479.4992,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        1446.0,
+        61.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.payload.step.results",
+      "pixelCenter": [
+        314.50079999999997,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        276.0,
+        62.0,
+        77.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.payload.step.results",
+      "pixelCenter": [
+        314.50079999999997,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        276.0,
+        62.0,
+        77.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "light",
+      "step": 1,
+      "anchor": "null.tab.0",
+      "pixelCenter": [
+        210.51039999999998,
+        75.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        82.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "null.tab.0",
+      "pixelCenter": [
+        210.51039999999998,
+        75.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        82.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.data.codec.operation",
+      "pixelCenter": [
+        375.0,
+        119.5
+      ],
+      "newVisibleRectangle": [
+        260.0,
+        104.0,
+        230.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.data.codec.operation",
+      "pixelCenter": [
+        375.0,
+        119.5
+      ],
+      "newVisibleRectangle": [
+        260.0,
+        104.0,
+        230.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.codec.input",
+      "pixelCenter": [
+        309.1504,
+        254.33
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        188.0,
+        681.0,
+        737.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.codec.input",
+      "pixelCenter": [
+        309.1504,
+        254.33
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        188.0,
+        681.0,
+        737.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.data.codec.convert",
+      "pixelCenter": [
+        530.4992000000001,
+        119.5
+      ],
+      "newVisibleRectangle": [
+        498.0,
+        104.0,
+        65.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.data.codec.convert",
+      "pixelCenter": [
+        530.4992000000001,
+        119.5
+      ],
+      "newVisibleRectangle": [
+        498.0,
+        104.0,
+        65.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.codec.output",
+      "pixelCenter": [
+        1065.44,
+        265.29999999999995
+      ],
+      "newVisibleRectangle": [
+        902.0,
+        192.0,
+        681.0,
+        733.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.codec.output",
+      "pixelCenter": [
+        1065.44,
+        265.29999999999995
+      ],
+      "newVisibleRectangle": [
+        902.0,
+        192.0,
+        681.0,
+        733.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.workflow.data.codec.reuse.open",
+      "pixelCenter": [
+        1524.4992,
+        170.5
+      ],
+      "newVisibleRectangle": [
+        1479.0,
+        155.0,
+        91.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "data",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.workflow.data.codec.reuse.open",
+      "pixelCenter": [
+        1524.4992,
+        170.5
+      ],
+      "newVisibleRectangle": [
+        1479.0,
+        155.0,
+        91.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.actions.activity.context",
+      "pixelCenter": [
+        412.6992,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        1378.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.actions.activity.context",
+      "pixelCenter": [
+        412.6992,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        1378.0,
+        34.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "light",
+      "step": 2,
+      "anchor": "null.tab.0",
+      "pixelCenter": [
+        211.64000000000001,
+        119.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        94.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "null.tab.0",
+      "pixelCenter": [
+        211.64000000000001,
+        119.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        104.0,
+        94.0,
+        30.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.placement.activity.filters",
+      "pixelCenter": [
+        474.8992,
+        200.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        184.0,
+        893.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.placement.activity.filters",
+      "pixelCenter": [
+        474.8992,
+        200.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        184.0,
+        893.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.activity.endpoints.selected.visible",
+      "pixelCenter": [
+        519.5504,
+        268.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        251.0,
+        893.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.activity.endpoints.selected.visible",
+      "pixelCenter": [
+        519.5504,
+        268.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        251.0,
+        893.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.actions.activity.selection.open",
+      "pixelCenter": [
+        1443.0,
+        168.0
+      ],
+      "newVisibleRectangle": [
+        1400.0,
+        152.0,
+        86.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.actions.activity.selection.open",
+      "pixelCenter": [
+        1443.0,
+        168.0
+      ],
+      "newVisibleRectangle": [
+        1400.0,
+        152.0,
+        86.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.activity.finishInput",
+      "pixelCenter": [
+        1543.5008,
+        943.0
+      ],
+      "newVisibleRectangle": [
+        1510.0,
+        927.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "activity",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.activity.finishInput",
+      "pixelCenter": [
+        1543.5008,
+        943.0
+      ],
+      "newVisibleRectangle": [
+        1510.0,
+        927.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.placement.bounty.title",
+      "pixelCenter": [
+        516.5008,
+        85.5
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        1035.0,
+        51.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.placement.bounty.title",
+      "pixelCenter": [
+        516.5008,
+        85.5
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        1035.0,
+        51.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.bounty.evidence.add",
+      "pixelCenter": [
+        465.00000000000006,
+        142.0
+      ],
+      "newVisibleRectangle": [
+        422.0,
+        126.0,
+        86.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.bounty.evidence.add",
+      "pixelCenter": [
+        465.00000000000006,
+        142.0
+      ],
+      "newVisibleRectangle": [
+        422.0,
+        126.0,
+        86.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.actions.bounty.items.open",
+      "pixelCenter": [
+        263.4992,
+        238.5
+      ],
+      "newVisibleRectangle": [
+        219.0,
+        223.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.actions.bounty.items.open",
+      "pixelCenter": [
+        263.4992,
+        238.5
+      ],
+      "newVisibleRectangle": [
+        219.0,
+        223.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.simple.evidence.repro",
+      "pixelCenter": [
+        718.7008,
+        554.75
+      ],
+      "newVisibleRectangle": [
+        542.0,
+        438.0,
+        589.0,
+        467.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.simple.evidence.repro",
+      "pixelCenter": [
+        718.7008,
+        554.75
+      ],
+      "newVisibleRectangle": [
+        542.0,
+        438.0,
+        589.0,
+        467.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.bounty.evidence.preview",
+      "pixelCenter": [
+        1298.4992,
+        85.5
+      ],
+      "newVisibleRectangle": [
+        1254.0,
+        70.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.bounty.evidence.preview",
+      "pixelCenter": [
+        1298.4992,
+        85.5
+      ],
+      "newVisibleRectangle": [
+        1254.0,
+        70.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.bounty.evidence.save",
+      "pixelCenter": [
+        1395.5008,
+        85.5
+      ],
+      "newVisibleRectangle": [
+        1351.0,
+        70.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.bounty.evidence.save",
+      "pixelCenter": [
+        1395.5008,
+        85.5
+      ],
+      "newVisibleRectangle": [
+        1351.0,
+        70.0,
+        89.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.scope.dashboard.inspect",
+      "pixelCenter": [
+        1532.0,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        1486.0,
+        62.0,
+        92.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.scope.dashboard.inspect",
+      "pixelCenter": [
+        1532.0,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        1486.0,
+        62.0,
+        92.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.scope.dashboard.account",
+      "pixelCenter": [
+        325.0,
+        223.5
+      ],
+      "newVisibleRectangle": [
+        235.0,
+        208.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.scope.dashboard.account",
+      "pixelCenter": [
+        325.0,
+        223.5
+      ],
+      "newVisibleRectangle": [
+        235.0,
+        208.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.scope.dashboard.card.api",
+      "pixelCenter": [
+        548.5007999999999,
+        150.0
+      ],
+      "newVisibleRectangle": [
+        437.0,
+        106.0,
+        223.0,
+        88.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.scope.dashboard.card.api",
+      "pixelCenter": [
+        548.5007999999999,
+        150.0
+      ],
+      "newVisibleRectangle": [
+        437.0,
+        106.0,
+        223.0,
+        88.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.scope.dashboard.importance",
+      "pixelCenter": [
+        553.0,
+        223.5
+      ],
+      "newVisibleRectangle": [
+        463.0,
+        208.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.scope.dashboard.importance",
+      "pixelCenter": [
+        553.0,
+        223.5
+      ],
+      "newVisibleRectangle": [
+        463.0,
+        208.0,
+        180.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.scope.dashboard.results.selected.visible",
+      "pixelCenter": [
+        516.7504,
+        339.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        323.0,
+        885.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.scope.dashboard.results.selected.visible",
+      "pixelCenter": [
+        516.7504,
+        339.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        323.0,
+        885.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.scope.dashboard.original",
+      "pixelCenter": [
+        1451.5008,
+        271.0
+      ],
+      "newVisibleRectangle": [
+        1418.0,
+        255.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "dashboard",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.scope.dashboard.original",
+      "pixelCenter": [
+        1451.5008,
+        271.0
+      ],
+      "newVisibleRectangle": [
+        1418.0,
+        255.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.workspace.controls",
+      "pixelCenter": [
+        853.6592,
+        124.74000000000001
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        1378.0,
+        78.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.workspace.controls",
+      "pixelCenter": [
+        853.6592,
+        124.74000000000001
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        60.0,
+        1378.0,
+        78.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.payload.results.table.selected.visible",
+      "pixelCenter": [
+        413.40000000000003,
+        308.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        292.0,
+        1376.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.payload.results.table.selected.visible",
+      "pixelCenter": [
+        413.40000000000003,
+        308.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        292.0,
+        1376.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.payload.results.table.selected.visible",
+      "pixelCenter": [
+        963.8,
+        309.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        292.0,
+        1376.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.payload.results.table.selected.visible",
+      "pixelCenter": [
+        963.8,
+        309.5
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        292.0,
+        1376.0,
+        35.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.payload.results.reason.toggle",
+      "pixelCenter": [
+        619.4,
+        946.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        930.0,
+        1378.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.payload.results.reason.toggle",
+      "pixelCenter": [
+        619.4,
+        946.0
+      ],
+      "newVisibleRectangle": [
+        206.0,
+        930.0,
+        1378.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.card.실제 응답",
+      "pixelCenter": [
+        1140.0496,
+        645.55
+      ],
+      "newVisibleRectangle": [
+        901.0,
+        421.0,
+        683.0,
+        499.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.card.실제 응답",
+      "pixelCenter": [
+        1140.0496,
+        645.55
+      ],
+      "newVisibleRectangle": [
+        901.0,
+        421.0,
+        683.0,
+        499.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.simple.payload.evidence",
+      "pixelCenter": [
+        1249.4992,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        1205.0,
+        61.0,
+        89.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "payload.results",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.simple.payload.evidence",
+      "pixelCenter": [
+        1249.4992,
+        77.0
+      ],
+      "newVisibleRectangle": [
+        1205.0,
+        61.0,
+        89.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.bounty.flow.append",
+      "pixelCenter": [
+        961.0,
+        164.0
+      ],
+      "newVisibleRectangle": [
+        915.0,
+        148.0,
+        92.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.bounty.flow.append",
+      "pixelCenter": [
+        961.0,
+        164.0
+      ],
+      "newVisibleRectangle": [
+        915.0,
+        148.0,
+        92.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.simple.replay.request",
+      "pixelCenter": [
+        417.08,
+        263.1
+      ],
+      "newVisibleRectangle": [
+        249.0,
+        190.0,
+        764.0,
+        731.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.simple.replay.request",
+      "pixelCenter": [
+        417.08,
+        263.1
+      ],
+      "newVisibleRectangle": [
+        249.0,
+        190.0,
+        764.0,
+        731.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.flow.replay.variables.toggle",
+      "pixelCenter": [
+        448.80000000000007,
+        945.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        929.0,
+        806.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.flow.replay.variables.toggle",
+      "pixelCenter": [
+        448.80000000000007,
+        945.0
+      ],
+      "newVisibleRectangle": [
+        207.0,
+        929.0,
+        806.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.target.settings",
+      "pixelCenter": [
+        1393.5008,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        1350.0,
+        62.0,
+        87.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.target.settings",
+      "pixelCenter": [
+        1393.5008,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        1350.0,
+        62.0,
+        87.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.bounty.flow.run",
+      "pixelCenter": [
+        1476.5008,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        1443.0,
+        62.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.bounty.flow.run",
+      "pixelCenter": [
+        1476.5008,
+        78.0
+      ],
+      "newVisibleRectangle": [
+        1443.0,
+        62.0,
+        67.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.bounty.flow.results",
+      "pixelCenter": [
+        1193.8,
+        297.0
+      ],
+      "newVisibleRectangle": [
+        1027.0,
+        146.0,
+        556.0,
+        755.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "bounty.replay",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.bounty.flow.results",
+      "pixelCenter": [
+        1193.8,
+        297.0
+      ],
+      "newVisibleRectangle": [
+        1027.0,
+        146.0,
+        556.0,
+        755.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "light",
+      "step": 1,
+      "anchor": "wb.auth.connections",
+      "pixelCenter": [
+        715.0,
+        322.52500000000003
+      ],
+      "newVisibleRectangle": [
+        445.0,
+        289.0,
+        900.0,
+        447.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "dark",
+      "step": 1,
+      "anchor": "wb.auth.connections",
+      "pixelCenter": [
+        715.0,
+        322.52500000000003
+      ],
+      "newVisibleRectangle": [
+        445.0,
+        289.0,
+        900.0,
+        447.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "light",
+      "step": 2,
+      "anchor": "wb.auth.preparation.account.0",
+      "pixelCenter": [
+        964.6000000000001,
+        409.5
+      ],
+      "newVisibleRectangle": [
+        639.0,
+        394.0,
+        592.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "dark",
+      "step": 2,
+      "anchor": "wb.auth.preparation.account.0",
+      "pixelCenter": [
+        964.6000000000001,
+        409.5
+      ],
+      "newVisibleRectangle": [
+        639.0,
+        394.0,
+        592.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "light",
+      "step": 3,
+      "anchor": "wb.auth.preparation.account.1",
+      "pixelCenter": [
+        1023.8,
+        479.5
+      ],
+      "newVisibleRectangle": [
+        639.0,
+        464.0,
+        592.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "dark",
+      "step": 3,
+      "anchor": "wb.auth.preparation.account.1",
+      "pixelCenter": [
+        1023.8,
+        479.5
+      ],
+      "newVisibleRectangle": [
+        639.0,
+        464.0,
+        592.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "light",
+      "step": 4,
+      "anchor": "wb.auth.preparation.extra.toggle",
+      "pixelCenter": [
+        894.9999999999999,
+        608.0
+      ],
+      "newVisibleRectangle": [
+        470.0,
+        592.0,
+        850.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "dark",
+      "step": 4,
+      "anchor": "wb.auth.preparation.extra.toggle",
+      "pixelCenter": [
+        894.9999999999999,
+        608.0
+      ],
+      "newVisibleRectangle": [
+        470.0,
+        592.0,
+        850.0,
+        32.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "light",
+      "step": 5,
+      "anchor": "wb.auth.preparation.account.3",
+      "pixelCenter": [
+        1023.8,
+        549.5
+      ],
+      "newVisibleRectangle": [
+        639.0,
+        534.0,
+        592.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "dark",
+      "step": 5,
+      "anchor": "wb.auth.preparation.account.3",
+      "pixelCenter": [
+        1023.8,
+        549.5
+      ],
+      "newVisibleRectangle": [
+        639.0,
+        534.0,
+        592.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "light",
+      "step": 6,
+      "anchor": "wb.auth.connections.close",
+      "pixelCenter": [
+        1299.0,
+        697.5
+      ],
+      "newVisibleRectangle": [
+        1278.0,
+        682.0,
+        42.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    },
+    {
+      "guide": "auth.accounts",
+      "theme": "dark",
+      "step": 6,
+      "anchor": "wb.auth.connections.close",
+      "pixelCenter": [
+        1299.0,
+        697.5
+      ],
+      "newVisibleRectangle": [
+        1278.0,
+        682.0,
+        42.0,
+        31.0
+      ],
+      "withinFinalVisibleAnchor": true
+    }
+  ]
+}

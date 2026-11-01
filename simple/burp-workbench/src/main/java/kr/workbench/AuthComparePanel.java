@@ -110,9 +110,9 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
                   cell.getAccessibleContext().setAccessibleDescription(cell.getToolTipText()+" · "+cell.getText());
                 } else if (modelColumn == 7) {
                   var result=AuthRunSummary.of(run);
-                  cell.setText(result.label()); cell.setIcon(result.verdict().icon());
+                  cell.setText(result.label()); cell.setIcon(null);if(cell instanceof WorkbenchUi.Cells styled)styled.responseBadge(result.label());
                   cell.setForeground(WorkbenchUi.toneInk(result.verdict().tone));
-                  cell.setBackground(isCellSelected(row,column)?WorkbenchUi.selected():WorkbenchUi.toneFill(result.verdict().tone));
+                  cell.setBackground(isCellSelected(row,column)?WorkbenchUi.selected():WorkbenchUi.surface());
                   cell.setToolTipText(result.reason());
                   cell.getAccessibleContext().setAccessibleDescription(result.label()+" · "+result.reason());
                 }
@@ -533,7 +533,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     detection.setToolTipText("인증 탐지는 수집 OFF/SCOPE와 별도입니다. 후보를 계정에 지정한 뒤 선택 요청을 비교하세요.");
     counts.setToolTipText("인증 후보와 비교 기록 수");
     JPanel summaries=new JPanel(new GridLayout(1,0,8,0));summaries.setBorder(BorderFactory.createEmptyBorder(4,0,6,0));summaries.setName("wb.auth.account.cards");
-    for(int i:new int[]{0,1,2,3}){final int slot=i;JButton card=accountCards[i];card.setName("wb.auth.account.card."+i);card.setHorizontalAlignment(SwingConstants.LEFT);card.addActionListener(e->safe(this::openAccountPreparation));if(i!=2)summaries.add(card);}
+    for(int i:new int[]{0,1,2,3}){final int slot=i;JButton card=accountCards[i];card.setName("wb.auth.account.card."+i);card.setHorizontalAlignment(SwingConstants.LEFT);card.addActionListener(e->safe(this::openAccountConnections));if(i!=2)summaries.add(card);}
     top.add(summaries);
     // Retain this internal status model for the engine, without an automatic-mode control.
     automaticScope.setName("wb.auth.automatic.scope");
@@ -1783,6 +1783,14 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
         && WorkContext.authFingerprint(reviewed).equals(WorkContext.authFingerprint(current));
   }
 
+  private TargetWindow accountConnections;
+  void openAccountConnections(){
+    editable();if(preparationSelection.isEmpty()){var originals=List.copyOf(selected.get());if(originals.isEmpty())throw new IllegalArgumentException("계정을 연결할 원본 요청을 먼저 선택하세요.");prepareSelection(originals);}
+    if(accountConnections==null){accountConnections=new TargetWindow(this,"인증 후보 연결",this::accountConnectionsContent);accountConnections.opener=ApprovedAccountConnections::window;}
+    accountConnections.closeWindow();accountConnections.open();
+  }
+  JPanel accountConnectionsContent(){return ApprovedAccountConnections.content(this,()->{if(accountConnections!=null)accountConnections.closeWindow();},()->{if(accountConnections!=null)accountConnections.closeWindow();openAccountPreparation();});}
+
   void openAccountPreparation() {
     editable();
     if (preparationTabs != null) { preparationRefresh.run(); preparationTabs.setSelectedIndex(1); return; }
@@ -2073,6 +2081,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   }
 
   void closeReadiness() {
+    if(accountConnections!=null)accountConnections.closeWindow();
     if (readinessDialog != null) { readinessDialog.dispose(); readinessDialog = null; }
   }
 
@@ -2628,7 +2637,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     SwingUtilities.invokeLater(this::closeReadiness);
     detectionEnabled=false;candidateEpoch.incrementAndGet();credentialQueue.clear();
     dynamicWindows.forEach(TargetWindow::close);dynamicWindows.clear();candidateWindow.close();comparisonWindow.close();evidenceWindow.close();detailShortcuts.close();capturedRepeater.close();candidateDetails.clear();
-    inlinePreview.close();
+    if(accountConnections!=null)accountConnections.close();inlinePreview.close();
     for(int i=0;i<SLOTS+1;i++){requestViews[i].close();responseViews[i].close();}
     accounts.clear();detailRun=null;
     comparisonSettings.close();

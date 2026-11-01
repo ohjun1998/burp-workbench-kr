@@ -1,0 +1,26 @@
+PASS registered Burp suite component is the launcher and retained workspace is separate
+PASS loading alone does not open a native window before the launcher is shown
+PASS an unselected outer Burp tab does not open Workbench
+PASS normal mode is a standard resizable decorated frame owning the exact workspace
+PASS workspace owns its desktop frame while launcher stays in Burp
+PASS maximized workspace gains vertical space outside the synthetic Burp chrome
+PASS native close hides without disposing the retained workspace
+PASS inner-tab reopen retains the same frame, tool and unsaved edits
+PASS reopen preserves exact original identity and selected row
+PASS repeated opens keep one live Workbench frame
+PASS modeless tool dialogs are owned by the separate Workbench frame
+PASS fullscreen retains exact frame, working components and edits
+PASS F11 preserves visible owned dialog peer, close callback and unsaved input
+PASS owned dialog remains visually above fullscreen parent after parent focus
+PASS fullscreen keeps the approved PDF navigation header on one row
+PASS Esc preserves the same visible dialog and unsaved input
+PASS retained header-menu fullscreen action uses the real desktop controller
+PASS fullscreen close hides main and dialog and releases device without disposing inputs
+PASS launcher button reapplies fullscreen and restores retained dialog inputs
+PASS repeated hide calls preserve the dialogs scheduled for reopen
+PASS window navigation, maximize, fullscreen and dialogs send zero target HTTP requests
+PASS unload disposes native frame, releases fullscreen device and blocks queued tab-open callback
+PASS owned dialog is disposed with one close callback only on unload
+PASS unloaded launcher and fullscreen actions cannot reopen
+PASS unload releases global window shortcuts
+WorkbenchWindowNative: 25 checks passed (real Swing/WM, synthetic Burp adapters, zero target HTTP)

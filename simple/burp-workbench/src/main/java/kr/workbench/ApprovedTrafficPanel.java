@@ -24,6 +24,7 @@ final class ApprovedTrafficPanel extends JPanel {
     putClientProperty("wb.embedded.style",(Runnable)this::applyReferenceTheme);
     add(controls);add(body);add(totals);add(notice);
     body.putClientProperty("wb.workflow.fixedLayout",true);readers.putClientProperty("wb.workflow.fixedLayout",true);
+    body.setOrientation(JSplitPane.VERTICAL_SPLIT);readers.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
     totals.setName("wb.traffic.reference.counts");notice.setName("wb.traffic.reference.notice");
     table.getModel().addTableModelListener(e->{refreshTotals();SwingUtilities.invokeLater(this::styleReference);});table.getSelectionModel().addListSelectionListener(e->refreshTotals());
     search.putClientProperty("wb.search.placeholder","URL · 메서드 · 상태로 검색");
@@ -65,9 +66,13 @@ final class ApprovedTrafficPanel extends JPanel {
     int[] widths={98,124,442,132,114,160,308};int available=Math.max(500,getWidth()-32);boolean memo=browser.query.memo();if(!memo)widths[2]+=widths[6];
     for(int i=0;i<table.getColumnCount();i++){
       var col=table.getColumnModel().getColumn(i);int slot=switch(col.getModelIndex()){case 0->0;case 1->1;case 2->2;case 3->3;case 8->4;case 4->5;case 10->6;default->-1;};if(slot<0)continue;
+      boolean supplied=Boolean.TRUE.equals(table.getClientProperty("wb.appearance.columns.restored"));int previous=col.getWidth();
       col.setMaxWidth(Integer.MAX_VALUE);col.setMinWidth(1);int used=0;for(int before=0;before<6;before++)used+=Math.round(widths[before]*available/1378f);
-      int width=slot==6?available-used:Math.round(widths[slot]*available/1378f);if(slot==6&&!memo){col.setMinWidth(0);col.setMaxWidth(0);width=0;}
-      col.setPreferredWidth(Math.max(0,width));col.setWidth(Math.max(0,width));if(slot==0)col.setHeaderValue("번호");col.setCellRenderer(new ReferenceCell());
+      int width=slot==6?available-used:Math.round(widths[slot]*available/1378f);
+      if(slot==6&&!memo){if(previous>0)table.putClientProperty("wb.traffic.memo.width",previous);col.setMinWidth(0);col.setMaxWidth(0);col.setPreferredWidth(0);col.setWidth(0);}
+      else if(!supplied){col.setPreferredWidth(Math.max(0,width));col.setWidth(Math.max(0,width));}
+      else if(slot==6&&previous==0){int restored=table.getClientProperty("wb.traffic.memo.width") instanceof Number n?n.intValue():width;col.setPreferredWidth(restored);col.setWidth(restored);}
+      if(slot==0)col.setHeaderValue("번호");col.setCellRenderer(new ReferenceCell());
     }
     for(Component child:readers.getComponents())if(child instanceof JPanel card){Component head=((BorderLayout)card.getLayout()).getLayoutComponent(BorderLayout.NORTH);if(head!=null)head.setPreferredSize(new Dimension(200,43));}
     for(Component child:readers.getComponents())if(child instanceof JPanel card){

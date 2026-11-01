@@ -92,7 +92,7 @@ public final class VisualGuideNative extends WorkbenchTest {
       var originalTabs=(JTabbedPane)get(extension,"tabs");var traffic=(JTable)get(extension,"logTable");var codec=(JTextArea)get(extension,"codecIn");
       for(int i=0;i<3;i++)seedTraffic(extension,request("https://guide.example.test/api/documents/"+(100+i),"GET",true,List.of(header("Cookie","PRIVATE_NATIVE_GUIDE_SENTINEL"))),response(200,"{\"id\":"+(100+i)+"}"));
       Object[] selected={null};edt(()->{extension.openFeature("traffic");traffic.setRowSelectionInterval(1,1);codec.setText("PRIVATE_NATIVE_GUIDE_SENTINEL");selected[0]=value(extension,"current");});
-      AbstractButton guide=(AbstractButton)SimpleWorkflowTest.named(root,"wb.visual.guide.open");check(guide!=null&&guide.getText().equals("Guide"),"active tool offers a visible top-right Guide text button");
+      AbstractButton guide=(AbstractButton)SimpleWorkflowTest.named(root,"wb.traffic.guide.open");check(guide!=null&&guide.getText().equals("화면 설명"),"active tool offers a visible top-right Guide text button");
       Component toolbar=SimpleWorkflowTest.named(root,"wb.navigation.toolbar");check(toolbar!=null&&toolbar.getHeight()<=46,"Guide stays inside the approved PDF single-row header");
       final Component selectedTool=originalTabs.getSelectedComponent();
       edt(()->guide.doClick(0));await(()->value(extension,"visualGuideWindow")!=null&&value(value(extension,"visualGuideWindow"),"window") instanceof JDialog d&&d.isShowing(),"Guide action opens its modeless dialog");

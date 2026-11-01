@@ -154,7 +154,7 @@ final class WorkspaceAppearance implements AutoCloseable {
     if (next.equals(project)) { discoverIfNeeded(); return false; }
     saveTimer.stop();
     applying = true;
-    try { tableDefaults.forEach(WorkspaceAppearance::restoreColumns); } finally { applying = false; }
+    try { tableDefaults.forEach((table,columns)->{restoreColumns(table,columns);table.putClientProperty("wb.appearance.columns.restored",false);}); } finally { applying = false; }
     detach(); project = next; state = null; blocked = false; problem = "";
     if (!uuid(project)) {
       problem = "프로젝트 저장을 사용할 수 없습니다. 화면 설정은 저장되지 않습니다.";
@@ -188,7 +188,7 @@ final class WorkspaceAppearance implements AutoCloseable {
     state = new State(project, state.scale, state.compact, state.horizontal, Map.of(), Map.of());
     applying = true;
     try {
-      for (var entry : tableDefaults.entrySet()) restoreColumns(entry.getKey(), entry.getValue());
+      for (var entry : tableDefaults.entrySet()){restoreColumns(entry.getKey(), entry.getValue());entry.getKey().putClientProperty("wb.appearance.columns.restored",false);}
       WorkbenchUi.packetLayout(root, state.horizontal);
       for (var entry : splitDefaults.entrySet())
         if (!managedSplit(entry.getKey())) WorkbenchUi.restoreSplit(entry.getKey(), entry.getValue());
@@ -287,6 +287,7 @@ final class WorkspaceAppearance implements AutoCloseable {
     for (int i = 0; i < table.getColumnCount(); i++) visible.add(table.getColumnModel().getColumn(i).getModelIndex());
     // Hidden columns belong to the owning tool. Restore only the same visible subset of this exact model schema.
     if (!visible.equals(new HashSet<>(columns.order))) return;
+    table.putClientProperty("wb.appearance.columns.restored",true);
     for (int i = 0; i < columns.order.size(); i++) {
       int wanted = columns.order.get(i), index = table.convertColumnIndexToView(wanted);
       if (index >= 0 && index != i) table.moveColumn(index, i);

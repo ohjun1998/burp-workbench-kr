@@ -42,7 +42,7 @@ final class WorkbenchSkin {
     button.setOpaque(false);
     button.setContentAreaFilled(false);
     button.setRolloverEnabled(true);
-    String label=button.getText()==null?"":button.getText();if(button.getIcon()==null&&!label.startsWith("<html")&&!(button instanceof JToggleButton)&&!Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"))){String kind=label.contains("설정")?"gear":label.contains("Repeater")?"play":label.equals("중지")?"stop":label.contains("증거")&&label.contains("추가")?"plus":null;if(kind!=null)button.setIcon(WorkspaceIcons.of(kind));}
+    String label=button.getText()==null?"":button.getText();if(button.getIcon()==null&&!label.startsWith("<html")&&!(button instanceof JToggleButton)&&!Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"))&&!Boolean.TRUE.equals(button.getClientProperty("wb.no.auto.icon"))){String kind=label.contains("설정")?"gear":label.contains("Repeater")?"play":label.equals("중지")?"stop":label.contains("증거")&&label.contains("추가")?"plus":null;if(kind!=null)button.setIcon(WorkspaceIcons.of(kind));}
     button.setBorder(Boolean.TRUE.equals(button.getClientProperty("wb.compact.button"))
         ? BorderFactory.createEmptyBorder(5, 9, 5, 9)
         : BorderFactory.createEmptyBorder(4, 10, 4, 10));
@@ -53,6 +53,7 @@ final class WorkbenchSkin {
     @Override public Dimension getPreferredSize(JComponent component) {
       if (Boolean.TRUE.equals(component.getClientProperty("wb.capture")))
         return new Dimension(132, 34);
+      if(Boolean.TRUE.equals(component.getClientProperty("wb.approved.analysis")))return new Dimension("wb.auth.detect".equals(component.getName())?96:56,22);
       if (Boolean.TRUE.equals(component.getClientProperty("wb.analysis.lamp")))
         return new Dimension(132, 34);
       Dimension size = super.getPreferredSize(component);
@@ -62,7 +63,9 @@ final class WorkbenchSkin {
       AbstractButton button = (AbstractButton) component;
       Graphics2D g = (Graphics2D) graphics.create();
       antialias(g);
-      if (Boolean.TRUE.equals(button.getClientProperty("wb.capture"))) {
+      if(Boolean.TRUE.equals(button.getClientProperty("wb.approved.analysis"))){
+        boolean on=button.isSelected();g.setColor(on?(WorkbenchUi.dark()?new Color(32,60,51):new Color(233,247,240)):WorkbenchUi.raised());g.fillRoundRect(0,0,button.getWidth(),button.getHeight(),5,5);g.setColor(on?(WorkbenchUi.dark()?new Color(103,213,164):new Color(11,119,82)):kr.packetui.VisualTheme.muted());g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));String caption="wb.auth.detect".equals(button.getName())?(on?"인증 후보 수집 중":"인증 후보 수집 꺼짐"):(on?"분석 ON":"분석 OFF");g.drawString(caption,8,(button.getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());
+      } else if (Boolean.TRUE.equals(button.getClientProperty("wb.capture"))) {
         capture(g, (JButton)button);
       } else if (Boolean.TRUE.equals(button.getClientProperty("wb.analysis.lamp"))) {
         lamp(g, button, button.getText(), button.isSelected()
@@ -78,7 +81,7 @@ final class WorkbenchSkin {
           if (button.getModel().isPressed()) fill = primary?kr.packetui.VisualTheme.primary().darker():WorkbenchUi.selected();
         }
         boolean segment=Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"));
-        if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.surface():WorkbenchUi.raised());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.isSelected()||button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
+        if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.selected():WorkbenchUi.background());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
         if(!segment||button.getModel().isRollover()||button.getModel().isPressed()) {
           g.setPaint(primary&&!button.getModel().isPressed()?new GradientPaint(0,0,kr.packetui.VisualTheme.primary(),0,button.getHeight(),kr.packetui.VisualTheme.primary()):new GradientPaint(0,0,fill,0,button.getHeight(),fill));
           g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
@@ -153,6 +156,7 @@ final class WorkbenchSkin {
         @Override public void paint(Graphics graphics) {
           Graphics2D g = (Graphics2D) graphics.create();
           g.setColor(WorkbenchUi.background()); g.fillRect(0, 0, getWidth(), getHeight());
+          if(Boolean.TRUE.equals(splitPane.getClientProperty("wb.workflow.fixedLayout"))){g.dispose();return;}
           g.setColor(WorkbenchUi.line());
           if (splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT)
             g.drawLine(getWidth()/2, getHeight()/2-14, getWidth()/2, getHeight()/2+14);

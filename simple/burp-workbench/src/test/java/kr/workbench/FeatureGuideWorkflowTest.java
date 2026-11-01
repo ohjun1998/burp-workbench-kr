@@ -30,7 +30,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
     var input = (JTextArea) get(extension, "codecIn");
     Object runner = get(entry, "payloadRunner");
     var payloadInput = (JTextArea) get(runner, "request");
-    var guide = (JButton) named(root, "wb.visual.guide.open");
+    var guide = (JButton) named(root, "wb.traffic.guide.open");
     AtomicReference<Action> f1 = new AtomicReference<>();
     int sentBefore = PayloadIntegrationTest.sent.get();
     boolean unloaded = false;
@@ -40,10 +40,10 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
       Object original = get(extension, "current");
       check(original != null, "guide workflow begins with a selected stored original packet");
       edt(() -> {
-        check(guide != null && guide.isEnabled() && guide.getText().equals("Guide"),
+        check(guide != null && guide.isEnabled() && guide.getText().equals("화면 설명"),
             "each active tool exposes a plainly labeled Guide action without executing a scan");
-        var actions = (JPanel) named(root, "wb.navigation.actions");
-        check(actions.getComponent(actions.getComponentCount() - 1) == guide,
+        var actions = guide.getParent();
+        check(java.util.Arrays.stream(actions.getComponents()).filter(Component::isVisible).reduce((a,b)->b).orElse(null) == guide,
             "Guide is the far-right action in the shared tool header");
         check(named(root, "wb.feature.help") == null,
             "the duplicate legacy help icon is removed from the shared header");

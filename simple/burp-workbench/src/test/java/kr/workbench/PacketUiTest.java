@@ -24,7 +24,7 @@ public class PacketUiTest extends WorkbenchTest {
  JsAnalysisPanel js=(JsAnalysisPanel)get(w,"jsAnalysis");List<String> names=buttons(js);
  var selectedTools=(JComponent)UiLayoutTest.named(js,"wb.js.selected.tools");
  JPopupMenu selectedMenu=(JPopupMenu)selectedTools.getClientProperty("wb.simple.js.tools.menu");
- check(names.contains("선택 경로 ▾")&&selectedMenu!=null&&UiLayoutTest.named(js,"wb.js.more")!=null
+ check(selectedTools instanceof AbstractButton b&&b.getText().replace(" ▾", "").equals("선택 경로")&&selectedMenu!=null&&UiLayoutTest.named(js,"wb.js.more")!=null
      &&java.util.Arrays.stream(selectedMenu.getComponents()).filter(x->x instanceof JMenuItem)
          .map(x->((JMenuItem)x).getText()).toList().containsAll(List.of("관찰된 API 패킷 보기","원문 위치로 이동"))
      &&!names.contains("NPM 존재 조회")&&!names.contains("수집 파일 저장"),

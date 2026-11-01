@@ -94,6 +94,7 @@ def main():
     parser.add_argument('--recipes',type=Path,default=Path('docs/reports/2026-10-31-pdf-alignment/1.4.17/guide-recipes.json'))
     parser.add_argument('--stage',type=Path,default=Path('tmp/pdf-alignment/guide-staging'))
     parser.add_argument('--example-version',default='1.4.17')
+    parser.add_argument('--compact-accounts',action='store_true',help='Use the approved compact role dialog in its actual1600x1000 parent window')
     parser.add_argument('--apply',action='store_true',help='After complete validation, replace the packaged catalog and32 source screenshots')
     args=parser.parse_args()
     source=args.source if args.source.is_absolute() else args.repo/args.source
@@ -106,9 +107,9 @@ def main():
     tables={theme:list(csv.DictReader((directories[theme]/'anchors.csv').open())) for theme in THEMES}
     manifest=[];proof=[];mapping=[];image_sources=[]
     for guide in catalog['guides']:
-        key=guide['id'];view=SOURCES[key]
+        key=guide['id'];view='04-auth-connections.png' if key=='auth.accounts' and args.compact_accounts else SOURCES[key]
         require(len(guide['steps'])==len(recipes[key])==6,f'{key}: expected six usage steps')
-        image_size=(1000,760) if key=='auth.accounts' else (1600,1000)
+        image_size=(1000,760) if key=='auth.accounts' and not args.compact_accounts else (1600,1000)
         hashes={}
         for theme in THEMES:
             original=directories[theme]/view

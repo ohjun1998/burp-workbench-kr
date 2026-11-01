@@ -93,6 +93,7 @@ final class BountyEvidence {
     String label() {
       return label;
     }
+    String sourceKind(){return sourceNote.startsWith("권한 비교 실행 #")?"권한 비교":sourceNote.startsWith("업무 흐름")?"업무 흐름":"원본 요청";}
 
     String method() {
       return method;

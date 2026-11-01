@@ -1,0 +1,41 @@
+PASS Guide remains visible at the far right of the compact native header
+PASS traffic settings retains its real two-category popup
+PASS capture, search/list and view operations are visible in the real grouped popup
+PASS both menu entries have complete native popup bounds
+PASS closing a popup does not hide the Workbench window
+PASS opening and closing settings preserves exact selected traffic original
+PASS native conversion preserves the exact authored UTF-8 input
+PASS output-local reuse keeps the original conversion result
+PASS native preparation screen does not expose result-only actions directly or through menus
+PASS native request editor exposes marking and its grouped preview operation
+PASS real native grouped preview preserves authored request bytes
+PASS execution and stop remain fully visible inside the native payload viewport at 1024px
+PASS execution and stop remain adjacent on the same native action row at 1024px
+PASS native resize preserves the exact authored request and preparation phase at 1024px
+PASS Guide remains visible at the far right of the compact native header
+PASS execution and stop remain fully visible inside the native payload viewport at 1280px
+PASS execution and stop remain adjacent on the same native action row at 1280px
+PASS native resize preserves the exact authored request and preparation phase at 1280px
+PASS Guide remains visible at the far right of the compact native header
+PASS execution and stop remain fully visible inside the native payload viewport at 1600px
+PASS execution and stop remain adjacent on the same native action row at 1600px
+PASS native resize preserves the exact authored request and preparation phase at 1600px
+PASS Guide remains visible at the far right of the compact native header
+PASS native primary and grouped result controllers belong to the results area
+PASS empty native results keep evidence and Repeater disabled
+PASS PDF result evidence and Repeater are direct actions above the table
+PASS results move reinspection into its real management menu while stop stays direct
+PASS native result menu exposes retained reinspection, conditions and CSV actions
+PASS actual result conditions menu expands retained settings without changing request bytes
+PASS native result table exposes recorded response duration beside status and size
+PASS actual native result filter preserves the selected exact original model row
+PASS hidden native selection cannot retain a stale reader or enabled handoff
+PASS native PDF readers stay side by side with full reasoning reachable through a disclosure
+PASS native stage navigation preserves request text and never starts an inspection
+PASS native tool navigation and resize retain selected original and converted input
+PASS close and reopen retain the same frame and authored request phase
+PASS all native button placement checks send zero target HTTP
+PASS unload disposes the real native window after contextual button use
+PASS late launcher activation cannot recreate an unloaded workspace
+PASS native placement checks use one unchanged loaded JAR
+ButtonPlacementNative: 40 checks passed (real pointer/menu/Swing/WM, zero target HTTP)

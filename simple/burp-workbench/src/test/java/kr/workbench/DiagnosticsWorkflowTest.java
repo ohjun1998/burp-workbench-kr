@@ -59,13 +59,13 @@ public final class DiagnosticsWorkflowTest extends WorkbenchTest {
           for(int i=0;i<pages.getTabCount();i++) {
             pages.setSelectedIndex(i);UiLayoutTest.layout(root);
             if(!"설정".equals(pages.getTitleAt(i))){
-              boolean visible=true;
-              for(Component action:List.of(help,settings,logs)){
-                Rectangle bounds=SwingUtilities.convertRectangle(action.getParent(),action.getBounds(),root);
-                visible&=new Rectangle(0,0,root.getWidth(),root.getHeight()).contains(bounds);
-                for(Container parent=action.getParent();parent!=null&&parent!=root;parent=parent.getParent())visible&=SwingUtilities.convertRectangle(parent,new Rectangle(0,0,parent.getWidth(),parent.getHeight()),root).contains(bounds);
+              JButton tools=(JButton)UiLayoutTest.named(root,"wb.traffic.header.tools"),visibleGuide=(JButton)UiLayoutTest.named(root,"wb.traffic.guide.open");
+              Rectangle toolBounds=SwingUtilities.convertRectangle(tools.getParent(),tools.getBounds(),root),guideBounds=SwingUtilities.convertRectangle(visibleGuide.getParent(),visibleGuide.getBounds(),root);
+              check(new Rectangle(0,0,root.getWidth(),46).contains(toolBounds)&&new Rectangle(0,0,root.getWidth(),46).contains(guideBounds),"approved header tools and guide stay fully visible on tool "+i);
+              for(AbstractButton source:List.of(help,settings,logs)){
+                Component proxy=UiLayoutTest.named(tools.getComponentPopupMenu(),source.getName()+".menu");
+                check(proxy instanceof JMenuItem item&&item.isEnabled()==source.isEnabled(),"visible header menu retains the exact help/settings/log availability on tool "+i);
               }
-              check(visible,"classic help, settings and log buttons stay fully visible on tool "+i);
             }
           }
         } catch(Exception e) {throw new IllegalStateException(e);}

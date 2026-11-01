@@ -1,0 +1,59 @@
+{
+  "version": "1.4.18",
+  "completedAt": "2026-11-01T14:19:30.487354+09:00",
+  "result": "passed",
+  "jarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1",
+  "artifacts": {
+    "SHA256SUMS": {
+      "bytes": 311,
+      "sha256": "4bea4ad6ff1027d576b4592e5f5ee685404407e04961607c892c3df39a0654e7"
+    },
+    "burp-workbench-simple-1.4.18-source.zip": {
+      "bytes": 99937284,
+      "sha256": "95ad6fb73a1d9b53338c2c6ab5ef2e542fffae4771f90e68afe89045409ef6d3"
+    },
+    "burp-workbench-simple-1.4.18.jar": {
+      "bytes": 9090003,
+      "sha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1"
+    },
+    "feature-mapper-browser-helper-0.4.1.zip": {
+      "bytes": 34685,
+      "sha256": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+    },
+    "manifest.json": {
+      "bytes": 285261,
+      "sha256": "7eb99ce07c723efd15f75c4a19fadde7846db120846c73d51c33cf2d61cadc31"
+    }
+  },
+  "packagedChecks": {
+    "total": 7540,
+    "workbenchGroups": 168,
+    "workbenchChecks": 7228,
+    "payloadHttpChecks": 136,
+    "mapperJavaChecks": 147,
+    "browserHelperChecks": 29,
+    "summary": "checks/check-summary.json"
+  },
+  "native": {
+    "captureSets": 6,
+    "screenshots": 162,
+    "scenarios": 600,
+    "windowRegressionChecks": 180,
+    "source": "native-verification.json"
+  },
+  "sourceRebuild": {
+    "report": "source-rebuild/verification.json",
+    "result": "passed"
+  },
+  "guideAnchorCrosscheck": "guide-anchor-final-crosscheck.json",
+  "scope": [
+    "Production Swing on Linux Xorg / synthetic Burp adapters",
+    "No native Windows Burp verification or exhaustive pixel equality claim"
+  ],
+  "delivery": {
+    "branch": "account-a/all-tools-approved-layout",
+    "mergedIntoMain": false,
+    "pullRequestCreated": false,
+    "pullRequestLimit": "GitHub API request returned Forbidden; Git transport is available."
+  }
+}

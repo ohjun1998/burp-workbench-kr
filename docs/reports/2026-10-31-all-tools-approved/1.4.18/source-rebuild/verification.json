@@ -1,0 +1,32 @@
+{
+  "version": "1.4.18",
+  "result": "passed",
+  "sourceArchive": "/workspace/burp-workbench-kr/simple/downloads/1.4.18/burp-workbench-simple-1.4.18-source.zip",
+  "sourceDirectory": "/tmp/approved-all-1.4.18-source-rebuild",
+  "scope": "Independent extraction and strict Java17 build from the delivered source ZIP; no target HTTP or native Burp GUI.",
+  "packagedArtifacts": {
+    "burp-workbench-simple-1.4.18.jar": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1",
+    "burp-workbench-simple-1.4.18-source.zip": "95ad6fb73a1d9b53338c2c6ab5ef2e542fffae4771f90e68afe89045409ef6d3",
+    "feature-mapper-browser-helper-0.4.1.zip": "11fe3655c8dd7d7ab53714f5d01fb1b1c392a8db8be776f52ac7e975912698d2"
+  },
+  "archiveCrc": "passed",
+  "sourceFilesVerified": 2215,
+  "buildCommand": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "dev.py",
+    "build",
+    "--java",
+    "/workspace/.dev-tools/jdk-17.0.21+9/bin/java"
+  ],
+  "buildExitCode": 0,
+  "packagedJarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1",
+  "rebuiltJarSha256": "0beaa976294bf74b924a2be3d95c03d699b631baf751144670c851fb713cfca1",
+  "byteIdentical": true,
+  "jarDeclaredBuildInputsVerified": 272,
+  "buildToolchain": {
+    "java17ApiCompatibilityVerified": true,
+    "javaRuntimeVersion": "17.0.21",
+    "toolchainMode": "strict-release17"
+  },
+  "elapsedSeconds": 254.75
+}

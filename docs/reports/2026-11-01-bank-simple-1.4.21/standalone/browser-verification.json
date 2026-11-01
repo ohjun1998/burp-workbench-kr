@@ -1,0 +1,17 @@
+{
+  "result": "passed",
+  "singleHtmlServedWithNoAssetDirectory": true,
+  "allEmbeddedAssetHashesVerified": 64,
+  "embeddedOriginalPngs": 35,
+  "toolCards": 13,
+  "coreFilterCards": 8,
+  "searchFilterPassed": true,
+  "allInlineImagesLoaded": true,
+  "lightDarkSwitchPassed": true,
+  "jsonAndMarkdownViewerPassed": true,
+  "csvDownloadFingerprintMatches": true,
+  "documentHttpRequests": 1,
+  "additionalResourceOrBankRequests": 0,
+  "pageErrors": 0,
+  "managedBrowserFileUrlPolicy": "file URL is blocked in this managed Chromium; the same standalone file was tested through a loopback server that serves only this HTML."
+}

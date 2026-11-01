@@ -1,0 +1,401 @@
+{
+  "format": "standalone-bank-results-html",
+  "version": "1.4.21",
+  "sourceReport": "../RESULTS.html",
+  "sourceCoreJarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "output": "Workbench_Simple_1.4.21_Bank_Results_KR.html",
+  "outputBytes": 8110706,
+  "outputSha256": "1cf292b16138d041736d013e538d0fac833fa8579ea6a4027013b36bd757c724",
+  "newBankRequests": 0,
+  "toolRows": 13,
+  "embeddedOriginalPngs": 35,
+  "assetCount": 64,
+  "assets": {
+    "README_KR.md": {
+      "mime": "text/markdown",
+      "filename": "README_KR.md",
+      "sha256": "d5aaf953008beaf9c30b79705997c7718687daa05755b005de16f2981fb4d9e8",
+      "bytes": 10665
+    },
+    "tool-results.csv": {
+      "mime": "text/csv",
+      "filename": "tool-results.csv",
+      "sha256": "b77dcd30ee1aed7d4757b1598c253a3ca7f61429c57c6b63c5dcb2145d7e03ba",
+      "bytes": 5703
+    },
+    "report-data.json": {
+      "mime": "application/json",
+      "filename": "report-data.json",
+      "sha256": "9c68b66b5ada65319665634a53fee8062ce4a0865d8522f86bc975941342dcbd",
+      "bytes": 9489
+    },
+    "downloads/workbench-simple-1.4.21-bank-site.zip": {
+      "mime": "application/zip",
+      "filename": "workbench-simple-1.4.21-bank-site.zip",
+      "sha256": "14ff5d5704c0ee92814217e98f8ff036457a941a53a2c16caf67c1259517fc06",
+      "bytes": 1760609
+    },
+    "results/traffic.json": {
+      "mime": "application/json",
+      "filename": "traffic.json",
+      "sha256": "c2b5487ce227e10e0e6442bd24e1b02af6b7b452e1450802bfed7aed826162b3",
+      "bytes": 112
+    },
+    "results/transport-index.json": {
+      "mime": "application/json",
+      "filename": "transport-index.json",
+      "sha256": "1bd3f23cf05a99e49843a225e55276a9ab6cf9b171f76cd70f7fd54154e43e4e",
+      "bytes": 40776
+    },
+    "results/original-id-index.json": {
+      "mime": "application/json",
+      "filename": "original-id-index.json",
+      "sha256": "987a64d2865f033c87b598d21c78b5b697921b698b9184780ebf1497f4af7f3c",
+      "bytes": 57872
+    },
+    "images/workbench/light/traffic.png": {
+      "mime": "image/png",
+      "filename": "traffic.png",
+      "sha256": "0922e5ba3ab5309d096eb4fa09d28d4e1cbdf7a4045910a6f96657ebc69f9c76",
+      "bytes": 76310
+    },
+    "images/workbench/dark/traffic.png": {
+      "mime": "image/png",
+      "filename": "traffic.png",
+      "sha256": "59618ec085e742c71f5076ef057d9f70a7909e6091a05dbdc9f89bb34fdc0628",
+      "bytes": 73721
+    },
+    "results/mapper-final.json": {
+      "mime": "application/json",
+      "filename": "mapper-final.json",
+      "sha256": "9e6322d64588085964ffa41ccfd92eb792c77933fd90675f2f5bc933ac0a103a",
+      "bytes": 110209
+    },
+    "results/measurement-stages.json": {
+      "mime": "application/json",
+      "filename": "measurement-stages.json",
+      "sha256": "fb6983f490e4ad221c4ac6639ad304da4dbf51e03988fbb731050410de4ca880",
+      "bytes": 931
+    },
+    "images/workbench/light/mapper.png": {
+      "mime": "image/png",
+      "filename": "mapper.png",
+      "sha256": "6b897332ba4dee5b3b815356daaf78eb59a03affd0f91e5b331c405dc5d57d88",
+      "bytes": 99767
+    },
+    "images/workbench/dark/mapper.png": {
+      "mime": "image/png",
+      "filename": "mapper.png",
+      "sha256": "e13da403d81afc5c0f6a15c21cbdd11d252b48302fa831bcaf095c7e38df7eed",
+      "bytes": 96887
+    },
+    "results/auth-comparisons.json": {
+      "mime": "application/json",
+      "filename": "auth-comparisons.json",
+      "sha256": "c7a21398e407c2af6b7b5052c0fd92ba0515992ec17ffbba92072283f94bb8ea",
+      "bytes": 3080
+    },
+    "truth/groundtruth.json": {
+      "mime": "application/json",
+      "filename": "groundtruth.json",
+      "sha256": "5d71ea421a98e6cdcafeedb05dd82500dba29baa882c6e2c565530e33578c2ec",
+      "bytes": 11718
+    },
+    "product-observations.md": {
+      "mime": "text/markdown",
+      "filename": "product-observations.md",
+      "sha256": "dcd5af018669a3f3a08386154ed34cb5b16b3a8cb3f7668b83d7e3e60dc06e38",
+      "bytes": 5179
+    },
+    "images/workbench/light/auth.png": {
+      "mime": "image/png",
+      "filename": "auth.png",
+      "sha256": "08ba53ba46dac5d829ecf63a10ee87ae97a39bea6f87fb3722f35b80e643e77b",
+      "bytes": 119278
+    },
+    "images/workbench/dark/auth.png": {
+      "mime": "image/png",
+      "filename": "auth.png",
+      "sha256": "3f2f268736870cf63fd85a3a15723ff95778b8bd7a94018018b372bf18d5cf2c",
+      "bytes": 116615
+    },
+    "results/js-analysis-final.json": {
+      "mime": "application/json",
+      "filename": "js-analysis-final.json",
+      "sha256": "e14bb3aeed2e86e41dea6abc3e48c2500622c85554ad87058b0c2cd085fa38e4",
+      "bytes": 34668
+    },
+    "images/workbench/light/js.png": {
+      "mime": "image/png",
+      "filename": "js.png",
+      "sha256": "62b92fb66c16a22970cf809a6141e8883434c699cc0baa80bde133f2d8287fa5",
+      "bytes": 159089
+    },
+    "images/workbench/dark/js.png": {
+      "mime": "image/png",
+      "filename": "js.png",
+      "sha256": "6a34549adbb38bc3c3cd99609fc21fef6fc8064b7cce04d57bcfc0eab413f322",
+      "bytes": 155576
+    },
+    "results/environment-final.json": {
+      "mime": "application/json",
+      "filename": "environment-final.json",
+      "sha256": "b8ea78cbd9625653f7eb22e8cc72dbc6d6dab2fb9847288d01c1e9db390a9239",
+      "bytes": 397
+    },
+    "results/path-results.json": {
+      "mime": "application/json",
+      "filename": "path-results.json",
+      "sha256": "7a5f50cda6f081e5e188bb270479c9a8c0f4b9b5112d98486e618a2a53aa4a48",
+      "bytes": 656
+    },
+    "images/workbench/light/environment.png": {
+      "mime": "image/png",
+      "filename": "environment.png",
+      "sha256": "c6cd5929462b8afe0d52928fe1f5850bc2017bd69f8c305653824364ccdde080",
+      "bytes": 135996
+    },
+    "images/workbench/dark/environment.png": {
+      "mime": "image/png",
+      "filename": "environment.png",
+      "sha256": "d8f97090ef0b434d07d3bc9a86ef96e21b639dd2c37f62a191df7d82e2212ad9",
+      "bytes": 133195
+    },
+    "results/response-findings.json": {
+      "mime": "application/json",
+      "filename": "response-findings.json",
+      "sha256": "53c35c915069c594d677eef8c1352295b4c598105f07015deb1cab11aa0f9d43",
+      "bytes": 1026
+    },
+    "results/sql-error.json": {
+      "mime": "application/json",
+      "filename": "sql-error.json",
+      "sha256": "1ee51999fea8497ceaaca4fc47a2c2b278b1a965caf0dfeb275c879eb27a3783",
+      "bytes": 258
+    },
+    "images/workbench/light/response.recon.png": {
+      "mime": "image/png",
+      "filename": "response.recon.png",
+      "sha256": "2ac60a42ce63b80ea0ffb5609f9ee9b1141472c08ea67885f5e71aa52e9d2ff3",
+      "bytes": 91860
+    },
+    "images/workbench/dark/response.recon.png": {
+      "mime": "image/png",
+      "filename": "response.recon.png",
+      "sha256": "24b5877f83ba198c46dee01a1e9f1f993f07f4508863926e3cb44df2d174d75d",
+      "bytes": 89585
+    },
+    "results/payload-sql.json": {
+      "mime": "application/json",
+      "filename": "payload-sql.json",
+      "sha256": "7f099684e3fe58e215e28570ddeb9bad963b558006dfb9a7352dd221a1e9ff4b",
+      "bytes": 750
+    },
+    "images/workbench/light/payload.png": {
+      "mime": "image/png",
+      "filename": "payload.png",
+      "sha256": "90a40c1329c09ede98aed48302f04abe3352032beaca3e4294878d8b432fdc0d",
+      "bytes": 98634
+    },
+    "images/workbench/dark/payload.png": {
+      "mime": "image/png",
+      "filename": "payload.png",
+      "sha256": "f72043cf295396fbb3844a98d8f1f9eb1295125ae2002ae21bc7844b2d36fe11",
+      "bytes": 95993
+    },
+    "results/workflow.json": {
+      "mime": "application/json",
+      "filename": "workflow.json",
+      "sha256": "7c0f2d57c70c469b081cfe24ef7ff154fddd3a6c56b963c7f469fddfe054f595",
+      "bytes": 172
+    },
+    "results/business/business-negative-transfer.json": {
+      "mime": "application/json",
+      "filename": "business-negative-transfer.json",
+      "sha256": "9aa6b6f154e988225ed35f47288428545ab9cd50b86a016e16e1a9b4cefd3e21",
+      "bytes": 1554
+    },
+    "results/redacted-evidence.zip": {
+      "mime": "application/zip",
+      "filename": "redacted-evidence.zip",
+      "sha256": "6c41df2786a827a3e592e3bc044f271a62a6d7ca3dc2e88cd745ecd0b13615ee",
+      "bytes": 6780
+    },
+    "images/workbench/light/bounty.png": {
+      "mime": "image/png",
+      "filename": "bounty.png",
+      "sha256": "4c03238bbe0e7b656b212bb90aa5df2081f23ffbc365138eb473854635444442",
+      "bytes": 99295
+    },
+    "images/workbench/dark/bounty.png": {
+      "mime": "image/png",
+      "filename": "bounty.png",
+      "sha256": "98ad211e3fbbb3c32eff87b92001056c35e2b36b64d6057d4acf28af22963ae0",
+      "bytes": 97359
+    },
+    "results/structured-comparison.json": {
+      "mime": "application/json",
+      "filename": "structured-comparison.json",
+      "sha256": "2e6321bde3a34fc629c8970d9b3d31b4af88120d7dd9e3489b0077f70b944d70",
+      "bytes": 303
+    },
+    "results/jwt-analysis.json": {
+      "mime": "application/json",
+      "filename": "jwt-analysis.json",
+      "sha256": "516952d5f62a6fe387469d80426b4ac1d90458c7eddeae9af11aca92fb43d1d6",
+      "bytes": 674
+    },
+    "images/workbench/light/data.png": {
+      "mime": "image/png",
+      "filename": "data.png",
+      "sha256": "31bbb40b68c91ddceb06c124e900ce2ae7e084bd52267fcb4baf4cf639fc7912",
+      "bytes": 70798
+    },
+    "images/workbench/dark/data.png": {
+      "mime": "image/png",
+      "filename": "data.png",
+      "sha256": "25c901f416f51f76143603d2abc1d6ab1f2ac17cd4888b9c72b56f9eff20b252",
+      "bytes": 69179
+    },
+    "results/activity-final.json": {
+      "mime": "application/json",
+      "filename": "activity-final.json",
+      "sha256": "2e560a3e7ed3497073d8a76890d082d7dbfb9f6e8597d59003e30408d96ee6a5",
+      "bytes": 42163
+    },
+    "results/activity.json": {
+      "mime": "application/json",
+      "filename": "activity.json",
+      "sha256": "954bf6817c35114f0b959027dd4eb3cdbf3b3e151d52f16080d7718cf0023ff6",
+      "bytes": 26861
+    },
+    "images/workbench/light/activity.png": {
+      "mime": "image/png",
+      "filename": "activity.png",
+      "sha256": "a39b377753340bcb2382dba2bb745f28071160cb222ec61573f9c17fec4d4ccd",
+      "bytes": 137656
+    },
+    "images/workbench/dark/activity.png": {
+      "mime": "image/png",
+      "filename": "activity.png",
+      "sha256": "c92bb22d20eddc43bed977a76a9478e076ecb96d7556354b4272fbc6d2685fda",
+      "bytes": 134511
+    },
+    "results/exposure-research-final.json": {
+      "mime": "application/json",
+      "filename": "exposure-research-final.json",
+      "sha256": "b916853ebd6a5cadcb661506961819df7bdf2eba3e658a0382510f55cc1155f6",
+      "bytes": 209
+    },
+    "images/workbench/light/exposure.png": {
+      "mime": "image/png",
+      "filename": "exposure.png",
+      "sha256": "bebc2cfc41e597bd3fdc6079829ecc19e2bb6b735941b7dae211c0acaf0b6c71",
+      "bytes": 97411
+    },
+    "images/workbench/dark/exposure.png": {
+      "mime": "image/png",
+      "filename": "exposure.png",
+      "sha256": "173f64970433919e563ddd7f21a4505ab2da5d61858d6835984cd2f1b7a26eed",
+      "bytes": 95263
+    },
+    "results/scope-inspection.json": {
+      "mime": "application/json",
+      "filename": "scope-inspection.json",
+      "sha256": "53e68088b2970c9c9d7ff2d85c160844de710200a106ca314d7982982bcfc486",
+      "bytes": 197412
+    },
+    "limitations/katana/README_KR.md": {
+      "mime": "text/markdown",
+      "filename": "README_KR.md",
+      "sha256": "6dced0ec09beffcad650efb8c436e6794d7e93feb18e03f9e95d2bdeb3e5e46d",
+      "bytes": 2649
+    },
+    "images/workbench/light/scope.png": {
+      "mime": "image/png",
+      "filename": "scope.png",
+      "sha256": "8f9b4dbd783acea5adc89be4690e88747c393c79ab31202f9dc76b6b473eb63b",
+      "bytes": 83610
+    },
+    "images/workbench/dark/scope.png": {
+      "mime": "image/png",
+      "filename": "scope.png",
+      "sha256": "4d7bf971fb77b6c876dd56101454fa8afe17a10bb88e5a8eb2dc7b6ec69ff928",
+      "bytes": 81959
+    },
+    "results/dashboard.json": {
+      "mime": "application/json",
+      "filename": "dashboard.json",
+      "sha256": "5187332931d630499eada4a98df6300b3ebb6afca6f3b77bd62098bf8d5487ba",
+      "bytes": 90
+    },
+    "images/workbench/light/dashboard.png": {
+      "mime": "image/png",
+      "filename": "dashboard.png",
+      "sha256": "0027b3d4e53f9dcbc059c7d6714d4025513b57cb442b5f9c6488d0fb883a13ee",
+      "bytes": 128597
+    },
+    "images/workbench/dark/dashboard.png": {
+      "mime": "image/png",
+      "filename": "dashboard.png",
+      "sha256": "dfc5691531b630b0fe910f5791343566fda9c6327219c8465246f2ccdced7bef",
+      "bytes": 125557
+    },
+    "images/bank/01-login.png": {
+      "mime": "image/png",
+      "filename": "01-login.png",
+      "sha256": "5679a191345e8c39a2703680e9313328ae821d7bbec54879468f0faab0f95dec",
+      "bytes": 196612
+    },
+    "images/bank/02-dashboard-light.png": {
+      "mime": "image/png",
+      "filename": "02-dashboard-light.png",
+      "sha256": "61d0f26ef8ad9a8856609ad6ef0614bda3f8dba8a41bfbf3a119351c5e43c5d2",
+      "bytes": 150906
+    },
+    "images/bank/03-transfer-form.png": {
+      "mime": "image/png",
+      "filename": "03-transfer-form.png",
+      "sha256": "0f24946035e8206bc843368f8508cb4f767e0be7b5e348b79cdc926a559ca3cf",
+      "bytes": 77115
+    },
+    "images/bank/04-transactions.png": {
+      "mime": "image/png",
+      "filename": "04-transactions.png",
+      "sha256": "8ce6621e29f8bd61d9ac7ae7742c80755b7265c83f3353c8cacabbebda0f49fd",
+      "bytes": 65610
+    },
+    "images/bank/05-dashboard-dark.png": {
+      "mime": "image/png",
+      "filename": "05-dashboard-dark.png",
+      "sha256": "3e77ea2a1337dc497b2549c0ea953884dfa846729afae42dca47d0433b248219",
+      "bytes": 152375
+    },
+    "images/business/alice-after.png": {
+      "mime": "image/png",
+      "filename": "alice-after.png",
+      "sha256": "f2057052e01b2b73d998c30e0224dd68aa215c7e3650b0fc6d14e35465d2652c",
+      "bytes": 25261
+    },
+    "images/business/bob-after.png": {
+      "mime": "image/png",
+      "filename": "bob-after.png",
+      "sha256": "045f7c551fd5d7a4eeaa009adb42f2402207199f72f8c452c5efb7692e1ec51f",
+      "bytes": 25580
+    },
+    "images/workbench/light/auth-judgement.png": {
+      "mime": "image/png",
+      "filename": "auth-judgement.png",
+      "sha256": "350063e70b457e2d5bb994a9963f6d6a9a765797d61165e2e0bfc98bed533716",
+      "bytes": 133166
+    },
+    "images/workbench/dark/auth-judgement.png": {
+      "mime": "image/png",
+      "filename": "auth-judgement.png",
+      "sha256": "8e60ab8b781d84e8aad5f26b5d1d4d6ad4db6e3c5d62e807a154661048748074",
+      "bytes": 130336
+    }
+  },
+  "inputsMatchPreviouslyVerifiedFrozenPublicReport": true,
+  "relativeRuntimeAssetsRequired": false
+}

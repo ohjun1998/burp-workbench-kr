@@ -1,0 +1,935 @@
+{
+  "result": "failed",
+  "htmlFilename": "Workbench_Simple_1.4.22_Grouped_Results_KR.html",
+  "htmlSha256": "23d6193c522296b47bbecfe563e86a47ef1af573798695ff8e73b657c11a5e79",
+  "originalHtmlSha256": "b3939ff7be194077078192c84f8a6feb2120adfcc26628e29fd025490a8cf3f0",
+  "embeddedDataSha256": "c3e6897e70bfce6b8e4ad04a55c5fcbc63df83816723bcd6dce4c7192d0d858b",
+  "embeddedOriginalBytesUnchanged": true,
+  "checks": [
+    {
+      "id": "PROVENANCE",
+      "title": "Original bank-result JSON and displayed source versions are explicit",
+      "result": "passed",
+      "milliseconds": 28,
+      "dataSha256": "c3e6897e70bfce6b8e4ad04a55c5fcbc63df83816723bcd6dce4c7192d0d858b",
+      "originalHtmlSha256": "b3939ff7be194077078192c84f8a6feb2120adfcc26628e29fd025490a8cf3f0",
+      "traffic": 89,
+      "scopeFindings": 525
+    },
+    {
+      "id": "VIEWS",
+      "title": "All13 saved-result tools retain their complete rows under both themes",
+      "result": "passed",
+      "milliseconds": 3954,
+      "pages": 13,
+      "themes": 2
+    },
+    {
+      "id": "GROUPS",
+      "title": "Group and leaf filters preserve all original rows and expose exact original information",
+      "result": "passed",
+      "milliseconds": 3809,
+      "resultGroups": [
+        {
+          "page": "traffic",
+          "total": 89,
+          "groupRows": 18,
+          "leafRows": 3,
+          "selectedIndex": 5
+        },
+        {
+          "page": "mapper",
+          "total": 135,
+          "groupRows": 18,
+          "leafRows": 3,
+          "selectedIndex": 5
+        },
+        {
+          "page": "auth",
+          "total": 3,
+          "groupRows": 1,
+          "leafRows": 1,
+          "selectedIndex": 0
+        },
+        {
+          "page": "js",
+          "total": 19,
+          "groupRows": 4,
+          "leafRows": 1,
+          "selectedIndex": 1
+        },
+        {
+          "page": "environment",
+          "total": 4,
+          "groupRows": 1,
+          "leafRows": 1,
+          "selectedIndex": 2
+        },
+        {
+          "page": "response",
+          "total": 5,
+          "groupRows": 2,
+          "leafRows": 2,
+          "selectedIndex": 0
+        },
+        {
+          "page": "bounty",
+          "total": 5,
+          "groupRows": 5,
+          "leafRows": 2,
+          "selectedIndex": 0
+        },
+        {
+          "page": "activity",
+          "total": 91,
+          "groupRows": 14,
+          "leafRows": 1,
+          "selectedIndex": 1
+        },
+        {
+          "page": "scope",
+          "total": 525,
+          "groupRows": 10,
+          "leafRows": 2,
+          "selectedIndex": 2
+        },
+        {
+          "page": "dashboard",
+          "total": 46,
+          "groupRows": 2,
+          "leafRows": 1,
+          "selectedIndex": 20
+        }
+      ]
+    },
+    {
+      "id": "DASHBOARD",
+      "title": "Six real projection counts and API/environment group displays remain distinct",
+      "result": "failed",
+      "message": "API candidates not split into assets and documents",
+      "milliseconds": 175
+    }
+  ],
+  "checkCount": 4,
+  "passedChecks": 3,
+  "pageErrors": [],
+  "additionalHttpAttempts": [],
+  "servedRequests": [
+    {
+      "method": "GET",
+      "path": "/grouped.html"
+    }
+  ],
+  "bankRequests": 0,
+  "singleHtmlWithoutAssetDirectory": true,
+  "geometry": [
+    {
+      "page": "traffic",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [
+        {
+          "text": "#",
+          "width": 136.859375,
+          "minimum": 16.660049438476562
+        },
+        {
+          "text": "메서드",
+          "width": 136.859375,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 406.53125,
+          "minimum": 56
+        },
+        {
+          "text": "상태",
+          "width": 136.859375,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "크기",
+          "width": 180.890625,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "mapper",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 83.046875,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능",
+          "width": 221.3125,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "HTTP",
+          "width": 83.046875,
+          "minimum": 40.708221435546875
+        },
+        {
+          "text": "동작",
+          "width": 92.0625,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "auth",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 4,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 101.921875,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 296.4375,
+          "minimum": 56
+        },
+        {
+          "text": "admin",
+          "width": 137.65625,
+          "minimum": 45.92823791503906
+        },
+        {
+          "text": "wb_alice",
+          "width": 137.65625,
+          "minimum": 56
+        },
+        {
+          "text": "wb_bob",
+          "width": 104.875,
+          "minimum": 55.85231018066406
+        },
+        {
+          "text": "비로그인",
+          "width": 102.1875,
+          "minimum": 54.16033935546875
+        },
+        {
+          "text": "검토 상태",
+          "width": 117.265625,
+          "minimum": 56
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "js",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 84.15625,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 287.53125,
+          "minimum": 56
+        },
+        {
+          "text": "상태",
+          "width": 107.78125,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "environment",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "기능·대상",
+          "width": 225.546875,
+          "minimum": 56
+        },
+        {
+          "text": "HTTP",
+          "width": 120.671875,
+          "minimum": 40.708221435546875
+        },
+        {
+          "text": "분류",
+          "width": 133.25,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "response",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "분석 항목",
+          "width": 148.1875,
+          "minimum": 56
+        },
+        {
+          "text": "위치",
+          "width": 209.265625,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "기능·대상",
+          "width": 122.015625,
+          "minimum": 56
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "payload",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [],
+      "smallHeaders": [],
+      "groupCount": 0,
+      "horizontalTables": 0
+    },
+    {
+      "page": "bounty",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 4,
+      "headers": [
+        {
+          "text": "순서",
+          "width": 121.390625,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "메서드",
+          "width": 121.390625,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 134.5,
+          "minimum": 56
+        },
+        {
+          "text": "HTTP",
+          "width": 121.421875,
+          "minimum": 40.708221435546875
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "data",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [],
+      "smallHeaders": [],
+      "groupCount": 0,
+      "horizontalTables": 0
+    },
+    {
+      "page": "activity",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 74.71875,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 255.28125,
+          "minimum": 56
+        },
+        {
+          "text": "관측",
+          "width": 74.71875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "상태",
+          "width": 74.75,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "scope",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "내용",
+          "width": 216.46875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "기능·대상",
+          "width": 218.640625,
+          "minimum": 56
+        },
+        {
+          "text": "계정",
+          "width": 64.171875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "중요도",
+          "width": 73.15625,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "상태",
+          "width": 115.046875,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 1
+    },
+    {
+      "page": "dashboard",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "기능·대상",
+          "width": 203.484375,
+          "minimum": 56
+        },
+        {
+          "text": "계정",
+          "width": 68.6875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "HTTP",
+          "width": 68.5,
+          "minimum": 40.708221435546875
+        },
+        {
+          "text": "분류",
+          "width": 138.796875,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "exposure",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [],
+      "smallHeaders": [],
+      "groupCount": 0,
+      "horizontalTables": 0
+    },
+    {
+      "page": "traffic",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [
+        {
+          "text": "#",
+          "width": 136.859375,
+          "minimum": 16.660049438476562
+        },
+        {
+          "text": "메서드",
+          "width": 136.859375,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 406.53125,
+          "minimum": 56
+        },
+        {
+          "text": "상태",
+          "width": 136.859375,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "크기",
+          "width": 180.890625,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "mapper",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 83.046875,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능",
+          "width": 221.3125,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "HTTP",
+          "width": 83.046875,
+          "minimum": 40.708221435546875
+        },
+        {
+          "text": "동작",
+          "width": 92.0625,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "auth",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 4,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 101.921875,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 296.4375,
+          "minimum": 56
+        },
+        {
+          "text": "admin",
+          "width": 137.65625,
+          "minimum": 45.92823791503906
+        },
+        {
+          "text": "wb_alice",
+          "width": 137.65625,
+          "minimum": 56
+        },
+        {
+          "text": "wb_bob",
+          "width": 104.875,
+          "minimum": 55.85231018066406
+        },
+        {
+          "text": "비로그인",
+          "width": 102.1875,
+          "minimum": 54.16033935546875
+        },
+        {
+          "text": "검토 상태",
+          "width": 117.265625,
+          "minimum": 56
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "js",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 84.15625,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 287.53125,
+          "minimum": 56
+        },
+        {
+          "text": "상태",
+          "width": 107.78125,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "environment",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "기능·대상",
+          "width": 225.546875,
+          "minimum": 56
+        },
+        {
+          "text": "HTTP",
+          "width": 120.671875,
+          "minimum": 40.708221435546875
+        },
+        {
+          "text": "분류",
+          "width": 133.25,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "response",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "분석 항목",
+          "width": 148.1875,
+          "minimum": 56
+        },
+        {
+          "text": "위치",
+          "width": 209.265625,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "기능·대상",
+          "width": 122.015625,
+          "minimum": 56
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "payload",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [],
+      "smallHeaders": [],
+      "groupCount": 0,
+      "horizontalTables": 0
+    },
+    {
+      "page": "bounty",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 4,
+      "headers": [
+        {
+          "text": "순서",
+          "width": 121.390625,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "메서드",
+          "width": 121.390625,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 134.5,
+          "minimum": 56
+        },
+        {
+          "text": "HTTP",
+          "width": 121.421875,
+          "minimum": 40.708221435546875
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "data",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [],
+      "smallHeaders": [],
+      "groupCount": 0,
+      "horizontalTables": 0
+    },
+    {
+      "page": "activity",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "메서드",
+          "width": 74.71875,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "기능·대상",
+          "width": 255.28125,
+          "minimum": 56
+        },
+        {
+          "text": "관측",
+          "width": 74.71875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "상태",
+          "width": 74.75,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "scope",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "내용",
+          "width": 216.46875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "기능·대상",
+          "width": 218.640625,
+          "minimum": 56
+        },
+        {
+          "text": "계정",
+          "width": 64.171875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "중요도",
+          "width": 73.15625,
+          "minimum": 43.12025451660156
+        },
+        {
+          "text": "상태",
+          "width": 115.046875,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 1
+    },
+    {
+      "page": "dashboard",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 2,
+      "headers": [
+        {
+          "text": "기능·대상",
+          "width": 203.484375,
+          "minimum": 56
+        },
+        {
+          "text": "계정",
+          "width": 68.6875,
+          "minimum": 32.080169677734375
+        },
+        {
+          "text": "HTTP",
+          "width": 68.5,
+          "minimum": 40.708221435546875
+        },
+        {
+          "text": "분류",
+          "width": 138.796875,
+          "minimum": 32.080169677734375
+        }
+      ],
+      "smallHeaders": [],
+      "groupCount": 1,
+      "horizontalTables": 0
+    },
+    {
+      "page": "exposure",
+      "width": 1440,
+      "height": 1000,
+      "bodyWidth": 1440,
+      "viewportWidth": 1440,
+      "outsideCards": [],
+      "cardCount": 3,
+      "headers": [],
+      "smallHeaders": [],
+      "groupCount": 0,
+      "horizontalTables": 0
+    }
+  ],
+  "screenshots": [
+    "light-traffic.png",
+    "light-mapper.png",
+    "light-auth.png",
+    "light-js.png",
+    "light-environment.png",
+    "light-response.png",
+    "light-payload.png",
+    "light-bounty.png",
+    "light-data.png",
+    "light-activity.png",
+    "light-scope.png",
+    "light-dashboard.png",
+    "light-exposure.png",
+    "dark-traffic.png",
+    "dark-mapper.png",
+    "dark-auth.png",
+    "dark-js.png",
+    "dark-environment.png",
+    "dark-response.png",
+    "dark-payload.png",
+    "dark-bounty.png",
+    "dark-data.png",
+    "dark-activity.png",
+    "dark-scope.png",
+    "dark-dashboard.png",
+    "dark-exposure.png"
+  ],
+  "scope": "HTML presentation of preserved1.4.21 execution records using1.4.22 grouped display. No new bank diagnosis and no native Burp claim.",
+  "fileUrlNotExercised": "Managed Chromium file URL policy; one-file loopback server used."
+}

@@ -1,0 +1,141 @@
+{
+  "format": "workbench-grouped-results-html",
+  "displayVersion": "1.4.22",
+  "recordedExecutionVersion": "1.4.21",
+  "recordedCoreHttpRequests": 89,
+  "recordedScopeFindings": 525,
+  "sourceHtml": {
+    "sha256": "b3939ff7be194077078192c84f8a6feb2120adfcc26628e29fd025490a8cf3f0",
+    "path": "docs/reports/2026-11-01-bank-simple-1.4.21/layout-view/Workbench_Simple_1.4.21_Results_Layout_KR.html"
+  },
+  "embeddedOriginalJsonSha256": "c3e6897e70bfce6b8e4ad04a55c5fcbc63df83816723bcd6dce4c7192d0d858b",
+  "sourceDisplayJarSha256": "d5ac13a818d0fd641c72cd093cd86c21c3fea7793e01e3cc5b8da25900f0ff7c",
+  "html": {
+    "filename": "Workbench_Simple_1.4.22_Grouped_Results_KR.html",
+    "sha256": "cd11f4331c7f747fc663fdd9ab91cf622cc3778c3b2732d65a68db3805e88c0b",
+    "bytes": 8174322
+  },
+  "zip": {
+    "filename": "Workbench_Simple_1.4.22_Grouped_Results_KR.zip",
+    "sha256": "7cef3ead8e87c2645d8ee228b80c84e57bb8e154cb6250e99179807fda4684d8",
+    "bytes": 4641431,
+    "crcVerified": true
+  },
+  "nativeCaptures": {
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/traffic.png": {
+      "sha256": "41e0662d7af6386d57eae29e680f1fe0045cf057726720f96070c4d1eb7d5183",
+      "bytes": 87945
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/mapper.png": {
+      "sha256": "0f7496736ff294daa331fe6e05e7b80cf38aa4d95a3480cbabd9d2e1d49b804d",
+      "bytes": 94649
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/auth.png": {
+      "sha256": "ce1aea263fbef1f1492bf77253a132fb8f084d05680dfd7be984a31a1a2e5f36",
+      "bytes": 95413
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/js.png": {
+      "sha256": "ad460a66b56dc714c73477a6fe9c4f4200b0705ba6dab391ff96ba75a25b613f",
+      "bytes": 144761
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/environment.png": {
+      "sha256": "7ca6b2cde7f08bd070033c0ec08a44b98da3677d906d8c861f2bb9fdc6a726b9",
+      "bytes": 135753
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/response-recon.png": {
+      "sha256": "be9bd5764c1920ae35cf697361902fbd00adad99fbe404f2a21fc9b2ab4fd976",
+      "bytes": 82974
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/payload.png": {
+      "sha256": "af22c2fceef0d93b037677f7aed32a8b413239b03e4e0923c5347cfc012e47b0",
+      "bytes": 93020
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/bounty.png": {
+      "sha256": "0a0a3674e822ce7a31a55b9b7de837522130f3b3ac1cebbe8a915fa1afa90830",
+      "bytes": 109067
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/data.png": {
+      "sha256": "765c95871f8b5de39de1813ab9a56c6711a58c6fd9ff882a1a20d68adfe45ff6",
+      "bytes": 72745
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/activity.png": {
+      "sha256": "3f69a946b6df2ca277fdd55a4d702b4818fc9fd2e8d2f89e4f7f588446f5cf4e",
+      "bytes": 146310
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/scope.png": {
+      "sha256": "f60e3d72feb6b84147627d033a8c4914908f297795bc05f012d93e5c3b246679",
+      "bytes": 86709
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/dashboard.png": {
+      "sha256": "c24fb4e7bfc4f5ed0849fcf89ece68713b05d842e4f04c1194af103e1a371689",
+      "bytes": 158849
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/light/1600x1000/exposure.png": {
+      "sha256": "4845a4d159324ddc70ca2aa931c3be804c6573af2bf0d4fcc2ca1cec9748cdf3",
+      "bytes": 150939
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/traffic.png": {
+      "sha256": "588939d9d647668b3c405f83aedddaa2558c63a069f46ff509712a00ead45326",
+      "bytes": 85557
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/mapper.png": {
+      "sha256": "1292586b8457aff541243f91a620a3a69f1e1cd4be738efd450834005ec95d3c",
+      "bytes": 92247
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/auth.png": {
+      "sha256": "8bccebb2c9325f6d67053551bd118c0e080e20b28a4a9b398111d86e5b87af5d",
+      "bytes": 93394
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/js.png": {
+      "sha256": "efabf0148cfaf917f9592a6fafb4697a9a4c6542ac36bdd3ecd5b1efc4f18c5d",
+      "bytes": 142058
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/environment.png": {
+      "sha256": "feb4c75d28a860fd70756a834bc7f2e6fb034626d8a792dbc04db7d0e544f199",
+      "bytes": 133018
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/response-recon.png": {
+      "sha256": "d472874edfcb05aa16be9d21c406d235bbefe68b5d12db6d273dd33d51ea04e7",
+      "bytes": 80860
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/payload.png": {
+      "sha256": "9d95beebc0bc0f257f801bfa6aef0834adb677c91d261304695f1b7c5ffcb58b",
+      "bytes": 91186
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/bounty.png": {
+      "sha256": "fa79051c984ef5f6f88fe02773c184d797ec4251dec3b99ba1d2f6e112eee499",
+      "bytes": 106996
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/data.png": {
+      "sha256": "f9287cd260c40ed465d5c840c33f40a6ea978943325c459b5b0772f6c9e28dd6",
+      "bytes": 70974
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/activity.png": {
+      "sha256": "0a51f0a0decf11f69e2209c43bccb2d3f88c871ad7fb5e30e42948b3328bdb79",
+      "bytes": 143117
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/scope.png": {
+      "sha256": "98bc8a4adfdb2823927440e9822a9b1ddbc403ddc931801127c83da4119728f4",
+      "bytes": 85269
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/dashboard.png": {
+      "sha256": "cdb24a3dc300a77dd40564475f26e2c13cda012839034713822e187fd930b714",
+      "bytes": 155892
+    },
+    "docs/reports/2026-11-01-grouped-results/native/metal/dark/1600x1000/exposure.png": {
+      "sha256": "e6bcadb3c1c07dff452bda956b7b314c5f1c45102d7fcb6bf98dcf17631e292a",
+      "bytes": 148406
+    }
+  },
+  "generatorInputs": {
+    "build_report.py": "38d5743e9deb76e8c8f9dbf107ae8cda40430e8c2d60f3ca7bad909f27bd2012",
+    "ExportPresentation.java": "404d27e6c99122423615863a63a8949e48d6f099cc086550b68559b324e63d14",
+    "grouped-results.js": "beb760d889d9b3b8975de24e8f7fdec20a3726af47c574d3430c5a365520c5b5",
+    "grouped-results.css": "6935e0097e01ccb7e77feae94c008d809020d86120f3a86507851044828237ec"
+  },
+  "toolPages": 13,
+  "embeddedScreenshots": 26,
+  "newNetworkRequests": 0,
+  "recordedDataByteIdentical": true,
+  "standalone": true
+}

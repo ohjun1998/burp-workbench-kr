@@ -1,0 +1,106 @@
+{
+  "result": "passed",
+  "commit": "a448f98960323177f1e23e199e8227511ce01830",
+  "verifiedAtUTC": "2026-11-01T11:07:30.036916+00:00",
+  "scope": "Public immutable commit downloads, byte/SHA match, ZIP CRC; no new bank or engine requests.",
+  "records": [
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-site.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-site.zip",
+      "httpStatus": 200,
+      "bytes": 1760609,
+      "sha256": "14ff5d5704c0ee92814217e98f8ff036457a941a53a2c16caf67c1259517fc06",
+      "matchesFrozenCommitFile": true,
+      "archiveCRCVerified": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-results.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-results.zip",
+      "httpStatus": 200,
+      "bytes": 5199371,
+      "sha256": "9beed03cb4dc9383dfe31bf60ee618763cf32252c21fbe6fd12cfc1a8a691e38",
+      "matchesFrozenCommitFile": true,
+      "archiveCRCVerified": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/README_KR.md",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/README_KR.md",
+      "httpStatus": 200,
+      "bytes": 10665,
+      "sha256": "d5aaf953008beaf9c30b79705997c7718687daa05755b005de16f2981fb4d9e8",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/TOOL_RESULTS_KR.md",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/TOOL_RESULTS_KR.md",
+      "httpStatus": 200,
+      "bytes": 2555,
+      "sha256": "608cb9dc50f6d7b04066a65babcc12a65d70df95ddb39bdaf0091160b9d0d566",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/RESULTS.html",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/RESULTS.html",
+      "httpStatus": 200,
+      "bytes": 20180,
+      "sha256": "5d84d51fde2e13d490726eb7708fef139d09f1bc9b0b87f58c78cee70a1b1daa",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/tool-results.csv",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/tool-results.csv",
+      "httpStatus": 200,
+      "bytes": 5703,
+      "sha256": "b77dcd30ee1aed7d4757b1598c253a3ca7f61429c57c6b63c5dcb2145d7e03ba",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/verification.json",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/verification.json",
+      "httpStatus": 200,
+      "bytes": 1260,
+      "sha256": "13db8b5ae27b20be1428c34c32392a01b0d4771a35d5f56df24b92b51b37ef73",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/images/workbench/light/auth.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/images/workbench/light/auth.png",
+      "httpStatus": 200,
+      "bytes": 119278,
+      "sha256": "08ba53ba46dac5d829ecf63a10ee87ae97a39bea6f87fb3722f35b80e643e77b",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/images/workbench/light/payload.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/images/workbench/light/payload.png",
+      "httpStatus": 200,
+      "bytes": 98634,
+      "sha256": "90a40c1329c09ede98aed48302f04abe3352032beaca3e4294878d8b432fdc0d",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/images/bank/02-dashboard-light.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/images/bank/02-dashboard-light.png",
+      "httpStatus": 200,
+      "bytes": 150906,
+      "sha256": "61d0f26ef8ad9a8856609ad6ef0614bda3f8dba8a41bfbf3a119351c5e43c5d2",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/images/business/alice-after.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/images/business/alice-after.png",
+      "httpStatus": 200,
+      "bytes": 25261,
+      "sha256": "f2057052e01b2b73d998c30e0224dd68aa215c7e3650b0fc6d14e35465d2652c",
+      "matchesFrozenCommitFile": true
+    },
+    {
+      "path": "docs/reports/2026-11-01-bank-simple-1.4.21/images/business/bob-after.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/a448f98960323177f1e23e199e8227511ce01830/docs/reports/2026-11-01-bank-simple-1.4.21/images/business/bob-after.png",
+      "httpStatus": 200,
+      "bytes": 25580,
+      "sha256": "045f7c551fd5d7a4eeaa009adb42f2402207199f72f8c452c5efb7692e1ec51f",
+      "matchesFrozenCommitFile": true
+    }
+  ]
+}

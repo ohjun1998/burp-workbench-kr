@@ -1,0 +1,132 @@
+{
+  "format": "workbench-layout-recorded-results",
+  "version": "1.4.21",
+  "sourceCoreJarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "sourceHashes": {
+    "docs/reports/2026-11-01-bank-simple-1.4.21/verification.json": "13db8b5ae27b20be1428c34c32392a01b0d4771a35d5f56df24b92b51b37ef73",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/results.json": "09ec698d8650c22bed573de1257c53f2c371a0e0a44a44078d245ba00bcaab06",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/transport-index.json": "1bd3f23cf05a99e49843a225e55276a9ab6cf9b171f76cd70f7fd54154e43e4e",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/layout-view/safe-packets.json": "525560b85ec4776a256ab1c2a28d788b4ce73762844fd3364f9d9612a7d8d4de",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/mapper-final.json": "9e6322d64588085964ffa41ccfd92eb792c77933fd90675f2f5bc933ac0a103a",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/auth-comparisons.json": "c7a21398e407c2af6b7b5052c0fd92ba0515992ec17ffbba92072283f94bb8ea",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/js-analysis-final.json": "e14bb3aeed2e86e41dea6abc3e48c2500622c85554ad87058b0c2cd085fa38e4",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/environment-final.json": "b8ea78cbd9625653f7eb22e8cc72dbc6d6dab2fb9847288d01c1e9db390a9239",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/path-results.json": "7a5f50cda6f081e5e188bb270479c9a8c0f4b9b5112d98486e618a2a53aa4a48",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/response-findings.json": "53c35c915069c594d677eef8c1352295b4c598105f07015deb1cab11aa0f9d43",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/payload-sql.json": "7f099684e3fe58e215e28570ddeb9bad963b558006dfb9a7352dd221a1e9ff4b",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/workflow.json": "7c0f2d57c70c469b081cfe24ef7ff154fddd3a6c56b963c7f469fddfe054f595",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/business/business-negative-transfer.json": "9aa6b6f154e988225ed35f47288428545ab9cd50b86a016e16e1a9b4cefd3e21",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/business/transport-index.json": "bbabfff7d73c25bde27998d91cace39804709871cf10c66a9f31c0c4acc1b10a",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/evidence.json": "c91c414797147747623f5385836c93ad57c44de69d99ffc00617bf7be956fda3",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/structured-comparison.json": "2e6321bde3a34fc629c8970d9b3d31b4af88120d7dd9e3489b0077f70b944d70",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/jwt-analysis.json": "516952d5f62a6fe387469d80426b4ac1d90458c7eddeae9af11aca92fb43d1d6",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/activity-final.json": "2e560a3e7ed3497073d8a76890d082d7dbfb9f6e8597d59003e30408d96ee6a5",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/scope-inspection.json": "53e68088b2970c9c9d7ff2d85c160844de710200a106ca314d7982982bcfc486",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/dashboard.json": "5187332931d630499eada4a98df6300b3ebb6afca6f3b77bd62098bf8d5487ba",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/exposure-research-final.json": "b916853ebd6a5cadcb661506961819df7bdf2eba3e658a0382510f55cc1155f6",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/original-id-index.json": "987a64d2865f033c87b598d21c78b5b697921b698b9184780ebf1497f4af7f3c",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/diagnostics.json": "f0dc267d7f2d048f66869cb50954e7c2ad312d5bbd23c3c90258327726bf83d1",
+    "docs/reports/2026-11-01-bank-simple-1.4.21/package-verification.json": "c480de5bcebbd3659b253c8686525c7a0779dc86bd9abc375921b09302f3568d",
+    "audit/bank-simple-1.4.21/layout-results-template.html": "7b8caac65489fc0e4390f40f9008e5bb5c6924a6beee5df6046f3adce7070a4c",
+    "audit/bank-simple-1.4.21/layout-results.css": "7257df7e39956683876303eb781e6292642249f43cee80877af6c7ad9ca49c4f",
+    "simple/burp-workbench/src/main/resources/fonts/WorkbenchSans-Regular.otf": "853ab204e0243ed6f5c5eb6e5034677dd90bb44585133206eaf56d30164ba28b",
+    "simple/burp-workbench/src/main/resources/fonts/NOTO-LICENSE.txt": "849f4ea9c214fa4ac3593b770c699f387534b11ce671264c1b10d85bdcb5997b",
+    "audit/bank-simple-1.4.21/build_layout_results.py": "efac948a7bd1c20a38578f09ee92b2f3c4e7ba0dd8a51394aa8e3179ea6e9713"
+  },
+  "sourceBytes": {
+    "docs/reports/2026-11-01-bank-simple-1.4.21/verification.json": 1260,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/results.json": 2035,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/transport-index.json": 40776,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/layout-view/safe-packets.json": 1000039,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/mapper-final.json": 110209,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/auth-comparisons.json": 3080,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/js-analysis-final.json": 34668,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/environment-final.json": 397,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/path-results.json": 656,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/response-findings.json": 1026,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/payload-sql.json": 750,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/workflow.json": 172,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/business/business-negative-transfer.json": 1554,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/business/transport-index.json": 2297,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/evidence.json": 115,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/structured-comparison.json": 303,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/jwt-analysis.json": 674,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/activity-final.json": 42163,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/scope-inspection.json": 197412,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/dashboard.json": 90,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/exposure-research-final.json": 209,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/original-id-index.json": 57872,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/results/diagnostics.json": 305,
+    "docs/reports/2026-11-01-bank-simple-1.4.21/package-verification.json": 11544,
+    "audit/bank-simple-1.4.21/layout-results-template.html": 32523,
+    "audit/bank-simple-1.4.21/layout-results.css": 15608,
+    "simple/burp-workbench/src/main/resources/fonts/WorkbenchSans-Regular.otf": 2154636,
+    "simple/burp-workbench/src/main/resources/fonts/NOTO-LICENSE.txt": 14712,
+    "audit/bank-simple-1.4.21/build_layout_results.py": 10942
+  },
+  "html": {
+    "filename": "Workbench_Simple_1.4.21_Results_Layout_KR.html",
+    "bytes": 4241949,
+    "sha256": "b3939ff7be194077078192c84f8a6feb2120adfcc26628e29fd025490a8cf3f0"
+  },
+  "zip": {
+    "filename": "Workbench_Simple_1.4.21_Results_Layout_KR.zip",
+    "bytes": 2029082,
+    "sha256": "e4ba4665c71b4b3038e23a73447d51b0e5dd976d7c03eec8e63734f2b4cb0c2c",
+    "entries": 2,
+    "crcVerified": true,
+    "containedHtmlByteIdentical": true
+  },
+  "font": {
+    "family": "Workbench Sans",
+    "bytes": 2154636,
+    "sha256": "853ab204e0243ed6f5c5eb6e5034677dd90bb44585133206eaf56d30164ba28b",
+    "licenseSource": "simple/burp-workbench/src/main/resources/fonts/NOTO-LICENSE.txt"
+  },
+  "metrics": {
+    "toolPages": 13,
+    "coreToolPages": 8,
+    "coreNetworkRequests": 89,
+    "businessNetworkRequests": 5,
+    "mapperObservations": 135,
+    "mapperGroups": 43,
+    "dashboardCards": [
+      {
+        "key": "paths",
+        "label": "관측 경로",
+        "count": 46
+      },
+      {
+        "key": "api",
+        "label": "API·명세",
+        "count": 183
+      },
+      {
+        "key": "environment",
+        "label": "환경·DB 단서",
+        "count": 53
+      },
+      {
+        "key": "secret",
+        "label": "키·민감정보 후보",
+        "count": 7
+      },
+      {
+        "key": "access",
+        "label": "계정·권한 검토",
+        "count": 0
+      },
+      {
+        "key": "coverage",
+        "label": "미확인·제한",
+        "count": 126
+      }
+    ],
+    "scopeFindingRows": 525
+  },
+  "newBankRequests": 0,
+  "readOnlyResults": true,
+  "screenshotsUsedAsResultLayout": false,
+  "externalRuntimeAssetsRequired": false,
+  "validationScope": "Input identity, source/font hashes, template assembly and ZIP integrity; browser behavior is checked separately."
+}

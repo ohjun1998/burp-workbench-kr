@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+[실제 도구 배치로 구성한 결과값 전용 HTML·ZIP](docs/reports/2026-11-01-bank-simple-1.4.21/layout-view/README_KR.md)을 제공합니다. 왼쪽 메뉴에서13개 도구의 실행값과 비교 패널을 확인할 수 있습니다.
+
 [은행 도구별 결과 · 이미지와 근거를 포함한 단일 HTML](docs/reports/2026-11-01-bank-simple-1.4.21/standalone/Workbench_Simple_1.4.21_Bank_Results_KR.html)을 제공합니다. 파일 하나로13개 도구의 결과와35개 실제 화면을 확인할 수 있습니다.
 
 **Simple 1.4.21로 실제 로컬 은행을 진단한 결과를 제공합니다.** 8개 주요 도구와 통합 점검·대시보드의 실제 값·화면, SQL 로그인 우회·계좌 노출·JWT 변조·음수 이체 재현과 정상 차단 대조를 구분했습니다. [도구별 결과](docs/reports/2026-11-01-bank-simple-1.4.21/README_KR.md) · [은행 사이트 ZIP](docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-site.zip) · [그림·HTML·CSV 결과 ZIP](docs/reports/2026-11-01-bank-simple-1.4.21/downloads/workbench-simple-1.4.21-bank-results.zip). 실제 HTTP·Linux Swing/호스트 어댑터 검증이며 Burp 본체 GUI 검증은 아닙니다. 배포 JAR는 변경하지 않았습니다.

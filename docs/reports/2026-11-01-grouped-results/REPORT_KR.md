@@ -68,3 +68,5 @@ JS의 동일 URL 호출은 기능별 건수를 합산하되 호출 위치별 선
 닫힌 loopback 포트에 TCP self-connect가 성공할 수 있는 Linux/JDK 현상을 별도 프로브로 재현했다. 프록시 앱 소스는 변경하지 않고 `ScopeKatanaProxyTest`의 연결 소스 포트를 명시적으로 할당해 목적지와 겹치는 경우를 배제했다. 기존 Scope·TLS·취소·종료 assertions는 유지했으며, 개선된 검사는 별도 직렬 실행 3회에서 각각 49개를 통과했다. 이전 실패 당시에는 endpoint 로그가 없어 직접 원인은 확정하지 않았다. 근거는 `prior-attempts/closed-port-probe/`에 기록했다.
 
 `prior-attempts/`와 별도의 이전 Mapper 전용 보고서 폴더는 중간 후보의 기록이다. 이 수치를 최종 전체 검증과 합산하지 않는다. 실제 Linux Swing과 합성 Burp API 어댑터 검증은 실제 Windows Burp 본체·DPI/IME 검증이 아니다. 은행 1.4.21의 기존 결과 HTML·ZIP과 이전 설치 패키지는 보존했다.
+
+보고서에 복사한 위 콘솔 로그는 줄끝 공백만 정규화했다. 검사 원본 출력은 실행 작업 공간에 보존했으며, 검사 결과와 패키지·이미지의 SHA 검증 값은 바꾸지 않았다.

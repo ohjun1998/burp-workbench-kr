@@ -4291,7 +4291,7 @@ PASS no run still exposes all four zero severity buckets
 PASS completed and failed counters never invent observed endpoint rows
 PASS high severity normalization: HIGH
 PASS high severity normalization: high
-PASS high severity normalization:  높음 
+PASS high severity normalization:  높음
 PASS high severity normalization: CRITICAL
 PASS high severity normalization: 치명적
 PASS medium severity normalization: MEDIUM
@@ -4304,7 +4304,7 @@ PASS low severity normalization: 낮음
 PASS nonseverity values remain informational: INFO
 PASS nonseverity values remain informational: 정보
 PASS nonseverity values remain informational: INFORMATIONAL
-PASS nonseverity values remain informational: 
+PASS nonseverity values remain informational:
 PASS nonseverity values remain informational: unknown
 PASS missing severity remains informational
 PASS severity labels remain Korean

@@ -1,0 +1,38 @@
+PASS starts with target sends disabled
+PASS opening never sends to target
+PASS denied approval cannot send
+PASS denial consumes no target budget
+PASS out of scope denied before approval
+PASS scope denial does not ask approval
+PASS foreign origin denied
+PASS Host mismatch denied
+PASS selected test identity is applied
+PASS original packet is unchanged
+PASS target redirect following is disabled
+PASS changed test account invalidates approval boundary
+PASS each target request needs a fresh approval
+PASS target budget exhaustion prevents send
+PASS budget exhausted at exactly two requests
+PASS 429 stops subsequent traffic
+PASS rate limit leaves gate stopped
+PASS scope rechecked after approval
+PASS scope revocation sends nothing
+PASS stop during approval invalidates request
+PASS stop prevents pending send
+PASS local model remains available without arming targets
+PASS model origin is not a general loopback bypass
+PASS model query parameters blocked
+PASS batch sends cannot bypass approvals
+PASS request engine cannot bypass gate
+PASS Intruder automation outside budget is blocked
+PASS unbudgeted WebSocket path blocked
+PASS default backend is local compatible API
+PASS local endpoint carried to upstream settings
+PASS MCP begins disabled
+PASS in-memory preference API supports typed keys
+PASS memory preferences delete works
+PASS upstream JAR checksum enforced
+PASS unload also blocks model calls
+PASS unloaded API refuses access
+PASS close is idempotent
+CustomAgentTest: 37 checks passed

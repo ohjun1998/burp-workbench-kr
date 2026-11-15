@@ -1,5 +1,7 @@
 # Burp Workbench KR
 
+**Workbench Next 0.56.0 검토 후보**: Custom AI Agent 1.1.0을 Next 안에 내장하고 Halogen 연결 및 요청별 승인·SCOPE·계정·예산 제한을 제공합니다. [설치 JAR](downloads/extensions/0.56.0/burp-workbench-kr-0.56.0.jar) · [사용 안내](docs/RELEASE_0.56.0_CUSTOM_AGENT_KR.md) · [PR #109](https://github.com/ohjun1998/burp-workbench-kr/pull/109). 아래 main/Simple 배포 이력과 구분하며 아직 main에 병합하지 않았습니다.
+
 **Simple 1.4.12는 승인한 버튼 배치를 13개 화면에 적용합니다.** 실행·중지는 함께, 선택 항목 작업은 해당 목록·상세 옆에 배치하고 Guide 그림도 갱신했습니다. [설치 JAR](simple/downloads/1.4.12/burp-workbench-simple-1.4.12.jar) · [실제 화면](docs/reports/2026-10-31-contextual-button-layout/README.md) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.12_KR.md).
 
 **Simple 1.4.11은 오른쪽 위 Guide 버튼으로 빨간 번호 사용 설명을 엽니다.** 16개 화면·96개 단계의 별도 가이드 창과 중복/보조 기능 정리를 제공합니다. [설치 JAR](simple/downloads/1.4.11/burp-workbench-simple-1.4.11.jar) · [가이드·정리 검토 이미지](simple/docs/images/1.4.11/README.md) · [사용법](simple/docs/RELEASE_SIMPLE_1.4.11_KR.md).
@@ -147,6 +149,7 @@ python dev.py check
 **트래픽 → 기능 자동 매핑 → 기능 분류·실행**에서 사용합니다. 별도 Mapper JAR를 추가하지 않아도 기능·실행·세션·패킷·분류 근거·메모와 `.fmkr` 프로젝트 저장/열기를 사용할 수 있습니다. 수집 버튼은 요청·응답 목록과 같은 OFF/SCOPE 상태이며, OFF와 Scope 밖의 브라우저 이벤트도 보관하지 않습니다. Chrome/Edge의 버튼 이름까지 연결하려면 [다운로드 목록](downloads/README.md)에서 사용하는 확장 버전에 맞는 브라우저 도우미를 확인하고 **매핑 설정 → 브라우저 연결**의 주소·토큰을 입력합니다. 0.53.4·0.53.3·0.53.1의 내장 Mapper는 0.3.5입니다. 이전 별도 Mapper 확장은 해제하고 통합 Workbench를 사용하세요. [자세한 사용법](feature-mapper/README_KR.md).
 
 [날짜별 작업 대화](docs/chat-logs/README.md)는 GitHub 변경과 함께 기록합니다. 이 버전의 안내서는 [Next 0.53.4 설치·사용 안내](docs/RELEASE_0.53.4_NEXT_KR.md)입니다. [0.25.4 PDF](downloads/guides/0.25.4-readable/Burp_Workbench_KR_0.25.4_guide.pdf)는 이전 화면을 설명하는 보존 자료입니다.
+
 
 
 

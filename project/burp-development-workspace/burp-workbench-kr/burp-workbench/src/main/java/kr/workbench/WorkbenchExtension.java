@@ -256,6 +256,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JsAnalysisPanel jsAnalysis;
   private AuthComparePanel authCompare;
   private BountySupportPanel bountySupport;
+  private CustomAgentPanel customAgent;
+  private JFrame customAgentWindow;
+  private volatile AutoLlmPanel autoLlm;
+  private JFrame autoLlmWindow;
+  private LocalLlmPanel localLlm;
+  private JFrame localLlmWindow;
   private kr.featuremapper.FeatureMapperWorkspace featureMapper;
   private JLabel selectionInfo = new JLabel("요청을 선택하세요");
   private JLabel status = new JLabel("준비됨"), stats = new JLabel();
@@ -398,6 +404,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (trafficBrowser != null) trafficBrowser.close();
                     if (authCompare != null) authCompare.close();
                     if (bountySupport != null) bountySupport.close();
+                    if (customAgent != null) customAgent.close();
+                    if (customAgentWindow != null) customAgentWindow.dispose();
+                    if (autoLlm != null) autoLlm.close();
+                    if (autoLlmWindow != null) autoLlmWindow.dispose();
+                    if (localLlm != null) localLlm.close();
+                    if (localLlmWindow != null) localLlmWindow.dispose();
                     traffic.clear();
                     if (environments != null) {
                       environments.close();
@@ -753,6 +765,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         backgroundJobs.reset();
         if (navigation != null) navigation.resetHistory();
         if(bountySupport!=null)bountySupport.resetEvidenceProject();
+        if(localLlm!=null)localLlm.reset();
+        if(autoLlm!=null)autoLlm.reset();
+        if(customAgent!=null){customAgent.close();customAgent=null;if(customAgentWindow!=null)customAgentWindow.dispose();customAgentWindow=null;}
         if(authCompare!=null)authCompare.resetChecklistProject();
         if(jsAnalysis!=null)jsAnalysis.resetBackgroundProject();
         checklistTrafficBaselineStore=trafficStore;
@@ -1170,7 +1185,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     open.setName("wb.common.settings.open");
     WorkbenchUi.primary(open);
     page.add(
-        WorkbenchUi.header("설정", "공통 설정은 별도 창에서 관리합니다.", WorkbenchUi.row(open)),
+        WorkbenchUi.header("설정", "공통 설정은 별도 창에서 관리합니다.", WorkbenchUi.row(open, button("로컬 LLM 자동 점검", this::openAutoLlm), button("Custom AI Agent", this::openCustomAgent))),
         BorderLayout.NORTH);
     return page;
   }
@@ -1314,6 +1329,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             () ->
                 selectedTraffic()
                     .forEach(t -> api.repeater().sendToRepeater(t.request(), "Workbench"))));
+    trafficMenu.add(trafficAction("로컬 LLM 분석 준비", () -> {
+      List<Traffic> chosen = selectedTraffic();
+      if (chosen.size() > 4) throw new IllegalArgumentException("LLM 분석할 요청·응답은 최대 4개입니다.");
+      prepareLocalLlm(chosen.stream().map(t -> HttpRequestResponse.httpRequestResponse(t.request(),t.response())).toList(),
+          chosen.stream().map(t -> t.packet().id()).toList());
+    }));
     trafficMenu.add(trafficAction("입력값 검사에 요청 연결", this::selectedPayload));
     trafficMenu.add(
         trafficAction(
@@ -2130,6 +2151,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               }
             }
           });
+      captureStage("로컬 LLM 자동 점검", () -> { if(admitted.get() && autoLlm!=null)autoLlm.offer(original.get()); });
       captureStage(
           "응답 보안 관찰",
           () -> {
@@ -2321,7 +2343,74 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                 .limit(20)
                 .forEach(rr -> api.repeater().sendToRepeater(rr.request(), "Workbench")));
     menu.add(repeater);
+    JMenuItem llm = new JMenuItem("로컬 LLM 분석 준비");
+    llm.addActionListener(x -> SwingUtilities.invokeLater(() -> {
+      try { prepareLocalLlm(picked, picked.stream().map(rr -> "Burp 선택-" + UUID.randomUUID()).toList()); }
+      catch (RuntimeException ex) { error(ex); }
+    }));
+    menu.add(llm);
     return List.of(menu);
+  }
+
+  private void openCustomAgent() {
+    if(unloaded.get())return;
+    if(customAgent==null){
+      customAgent=new CustomAgentPanel(api,authCompare,()->current==null?null:current.packet().packet(),()->autoLlm!=null&&autoLlm.busy());
+      customAgentWindow=new JFrame("Workbench Next · Custom AI Agent");
+      customAgentWindow.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+      customAgentWindow.setContentPane(customAgent);customAgentWindow.setSize(1300,950);customAgentWindow.setMinimumSize(new Dimension(1000,760));
+      customAgentWindow.addWindowListener(new java.awt.event.WindowAdapter(){public void windowClosing(java.awt.event.WindowEvent e){customAgent.stop();}});
+      customAgentWindow.setLocationRelativeTo(root);
+    }
+    customAgentWindow.setVisible(true);customAgentWindow.toFront();
+  }
+
+  private void openAutoLlm() {
+    if(unloaded.get())return;
+    if(autoLlm==null){autoLlm=new AutoLlmPanel(api,authCompare,bountySupport);autoLlm.externalBusy=()->customAgent!=null&&customAgent.active();
+      autoLlmWindow=new JFrame("Workbench Next · 범위 제한 자동 점검");autoLlmWindow.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+      autoLlmWindow.setContentPane(autoLlm);autoLlmWindow.setSize(1100,850);autoLlmWindow.setMinimumSize(new Dimension(850,700));
+      api.userInterface().applyThemeToComponent(autoLlm);autoLlmWindow.setLocationRelativeTo(root);
+    }
+    autoLlmWindow.setVisible(true);autoLlmWindow.toFront();
+  }
+
+  private void prepareLocalLlm(List<HttpRequestResponse> selected, List<String> ids) {
+    if (unloaded.get()) return;
+    if (selected.size() < 1 || selected.size() > 4)
+      throw new IllegalArgumentException("LLM 분석할 요청·응답을 1~4개 선택하세요.");
+    List<HttpRequestResponse> packets = EvidenceLinks.checked(api, selected);
+    String project = WorkspaceResume.projectIdentity(api);
+    StringBuilder preview = new StringBuilder("[선택 원본의 가림 미리보기 · 관측 자료만 포함]\n"
+        + "본문은 JSON/폼만 포함됩니다. 기타 본문·잘린 부분은 원본에서 확인하세요.\n"
+        + "계정 비교는 같은 요청의 서로 다른 계정 응답을 선택하고 역할·기대 권한을 아래에 적으세요.\n\n");
+    for (int i=0; i<packets.size(); i++) {
+      var rr = packets.get(i);
+      String text = BountyEvidence.localLlmPreview(rr.request().toString(), rr.response().toString());
+      preview.append("원본 ID: ").append(ids.get(i)).append("\n")
+          .append(text.substring(0, Math.min(11000, text.length())))
+          .append(text.length()>11000?"\n[11,000자 미리보기 제한 · 이후 생략]":"").append("\n\n");
+    }
+    if (localLlm == null) {
+      localLlm = new LocalLlmPanel(() -> WorkspaceResume.projectIdentity(api));
+      localLlmWindow = new JFrame("Workbench Next · 로컬 LLM 분석");
+      localLlmWindow.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+      localLlmWindow.setContentPane(localLlm); localLlmWindow.setSize(1000,760);
+      localLlmWindow.setMinimumSize(new Dimension(800,600));
+      api.userInterface().applyThemeToComponent(localLlm);
+      localLlmWindow.setLocationRelativeTo(root);
+    }
+    List<String> originalIds = List.copyOf(ids);
+    localLlm.prepare(new LocalLlmPanel.Context(project, preview.toString(), () -> {
+      if (unloaded.get() || !project.equals(WorkspaceResume.projectIdentity(api)))
+        throw new IllegalArgumentException("프로젝트가 바뀌었거나 확장이 종료되었습니다.");
+      EvidenceLinks.checked(api, packets);
+    }, () -> packets.forEach(rr -> api.repeater().sendToRepeater(rr.request(), "Workbench LLM 원본")), note -> {
+      String linked = "원본 ID: " + String.join(", ", originalIds) + "\n" + note;
+      bountySupport.captureObserved(packets, linked.substring(0,Math.min(4096,linked.length())));
+      tabs.setSelectedComponent(bountySupport);
+    }));
+    localLlmWindow.setVisible(true); localLlmWindow.toFront();
   }
 
   private void export() {
@@ -2388,4 +2477,5 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         root, e.getMessage(), "Workbench KR", JOptionPane.INFORMATION_MESSAGE);
   }
 }
+
 

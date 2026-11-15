@@ -1,0 +1,13 @@
+{
+  "targetHttpRequests": 0,
+  "modelCallAttempts": 1,
+  "syntheticInputOnly": true,
+  "result": "passed",
+  "action": "REVIEW",
+  "availabilityRisk": false,
+  "reason": "관측 데이터는 GET /profile의 정적·공개 응답(200, owner 필드)만 포함하며, 계정 A/B 비교를 위한 동적·차별적 데이터가 없습니다. 요청은 GET이고 최대 3회 동일 재전송으로 가용성 영향이 낮지만, 비교 가치가 없는 정적·공개 응답이므로 REVIEW로 분류합니다.",
+  "elapsedMillis": 2899,
+  "jarSha256": "c94ab745200a1d64afc1f8e15bcf2a181e842702f3fac6caf15160589a2259d7",
+  "testedAtUtc": "2026-11-15T05:05:02.093665+00:00",
+  "meaning": "Structured-plan transport/schema smoke test only; synthetic REVIEW did not test active target execution. Public/static interpretation was not established by the supplied evidence."
+}

@@ -1,0 +1,110 @@
+{
+  "version": "0.54.0",
+  "status": "candidate_verified_not_merged",
+  "sourceCommit": "e6ac9f7e1a482443fdd51b835a709e74d793c3c4",
+  "artifactCommit": "cc4221de2634b16bb1df46a1ccf9640b2d9830ca",
+  "ciUrl": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43674853888",
+  "ci": {
+    "version": "0.54.0",
+    "regressionGroups": 125,
+    "regressionChecks": 4321,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 4825,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed",
+    "mapperJavaChecks": 134,
+    "mapperNodeChecks": 15
+  },
+  "local": {
+    "java": "26.0.2",
+    "targetRelease": 17,
+    "fullExtensionBuild": "passed",
+    "noNetworkLlmChecks": 34,
+    "evidenceRedactionChecks": 7,
+    "packagingUnitChecks": 5,
+    "sourceArchiveEntries": 388,
+    "sourceFingerprintVerification": "passed",
+    "syntheticSwingCapture": "800x600; production panel with synthetic context; not native Burp"
+  },
+  "artifacts": {
+    "jarSha256": "715fc79048ae6d9b0a031a374a0c08726b73af0d33188cbf030a6e9b8e5150a7",
+    "sourceZipSha256": "bd6d0fc7b376eb591e37f46ee9053538e75408fd0234cdc00e74271cdb701dee",
+    "localJdk26BuildSha256": "d003ce1a440d53cb3c6dc1edb8ceeebdb0a8110d26bc143ed255b99365a036cd"
+  },
+  "notVerified": [
+    "Vulnerability-analysis accuracy: live connection smoke test only",
+    "Native Burp GUI",
+    "Local loopback tests: managed environment denies socket creation",
+    "Full local suite: sockets denied and Node 22+ not installed"
+  ],
+  "priorFailures": [
+    {
+      "run": 43673936701,
+      "reason": "SecretSet adapter compilation mismatch; fixed"
+    },
+    {
+      "run": 43674549781,
+      "reason": "UiCleanupTest expected old exact menu; updated to include approved new item"
+    },
+    {
+      "run": 43674853878,
+      "reason": "Broader CI read 0.54.0 manifest before candidate artifact commit; current branch now contains it"
+    }
+  ],
+  "notes": [
+    "Local developer copy was retrieved through GitHub connector plus verified source archive; it is not a full git-history clone.",
+    "Local and CI counts overlap; do not add them as unique checks.",
+    "Native user Burp/browser/proxy settings and Strix were not modified."
+  ],
+  "extendedCi": {
+    "testedHead": "0b64e30185b6122f88acedd99db2a10a6aea059c",
+    "buildAndVerify": {
+      "run": 43675634794,
+      "result": "passed",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43675634794",
+      "coverage": [
+        "full regression/HTTP",
+        "role portals",
+        "authentication combinations",
+        "50-operation authorization comparison",
+        "login lifecycle",
+        "full and focused Swing layouts",
+        "packaging fingerprints"
+      ]
+    },
+    "candidate": {
+      "run": 43675634841,
+      "result": "passed"
+    },
+    "durability": {
+      "run": 43675634786,
+      "result": "passed",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43675634786",
+      "coverage": [
+        "Windows Java regression",
+        "Windows synthetic native Repeater window",
+        "10 storage/cache regression iterations",
+        "Windows PowerShell controlled startup checks",
+        "Linux real ENOSPC rollback/recovery in private tmpfs",
+        "Linux and Windows 180-second capture"
+      ]
+    },
+    "countPolicy": "Repeated CI runs and repeated storage tests are not additional unique check counts."
+  },
+  "liveProbe": {
+    "tool": "tools/check_live_llm.py",
+    "compiledAgainstPublishedJar": true,
+    "managedEnvironmentAttempt": "SocketException: Operation not permitted",
+    "userTerminalResult": "passed",
+    "requestData": "synthetic only; one model call; no target-site requests",
+    "nativeBurpGui": "not yet verified",
+    "evidence": "docs/reports/2026-11-15-local-llm/live-model-result.json",
+    "testedAtUtc": "2026-11-15T04:33:43.920108+00:00",
+    "elapsedMillis": 16719,
+    "answerCharacters": 1775,
+    "finishReason": "stop",
+    "jarSha256": "715fc79048ae6d9b0a031a374a0c08726b73af0d33188cbf030a6e9b8e5150a7"
+  }
+}

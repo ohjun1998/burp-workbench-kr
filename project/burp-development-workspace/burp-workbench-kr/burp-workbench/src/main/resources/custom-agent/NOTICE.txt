@@ -1,0 +1,16 @@
+Custom AI Agent 1.1.0 (six2dez), MIT license.
+Upstream: https://github.com/six2dez/burp-ai-agent/tree/v1.1.0
+Embedded artifact: Custom-AI-Agent-full-1.1.0.jar (unmodified)
+SHA-256: bb6c098f3ca525f94032759435033627945fef5d091a1597b80e2c442515eae5
+
+Workbench hosts the upstream UI and core scanners in an isolated class loader.
+The integration disables CLI, drop-in backends, external MCP clients and full-build
+plug-in service providers, retaining the full-build HTTP access policy.
+Only the configured loopback OpenAI-compatible endpoint is allowed for model
+traffic. Target requests require current Workbench SCOPE, the configured test
+account, a bounded session budget and per-request approval. Batch requests,
+unbudgeted engines, Intruder, WebSockets and native Scanner job starts are disabled.
+Upstream settings are kept in memory for this session. Upstream bundled profiles
+may be installed by upstream under ~/.burp-ai-agent/AGENTS.
+This is an integration of trusted third-party code, not a Java security sandbox.
+Third-party dependency notices inside the upstream JAR are preserved unchanged.

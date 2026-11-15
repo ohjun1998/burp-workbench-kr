@@ -1,0 +1,15 @@
+Workbench Next 0.56.0 · Custom AI Agent 통합
+
+설치 파일:
+/home/kwonohjun/workbench-next-custom-agent/downloads/extensions/0.56.0/burp-workbench-kr-0.56.0.jar
+
+1. Burp Extensions에서 기존 Workbench Next를 언로드합니다.
+2. Add → Java에서 위 JAR 하나를 추가합니다. Custom AI Agent를 별도 확장으로 중복 로드하지 않습니다.
+3. Next 설정 → Custom AI Agent → 모델 주소 확인 → Agent 열기.
+4. 내장 화면의 MCP를 켜고 선택 요청의 Agent 도구를 사용합니다.
+5. 능동 검사는 SCOPE·Origin·테스트 계정·예산 설정 후 전송 준비 및 요청별 승인으로 실행합니다.
+
+Java 21 이상 필요. 기존 배포는 보존했습니다. 실제 Burp GUI와 Halogen 대화는 아직 별도 확인이 필요합니다.
+상세 사용법: docs/RELEASE_0.56.0_CUSTOM_AGENT_KR.md
+검증: docs/VERIFICATION_0.56.0_CUSTOM_AGENT.json
+GitHub PR: https://github.com/ohjun1998/burp-workbench-kr/pull/109

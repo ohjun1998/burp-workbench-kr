@@ -256,6 +256,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JsAnalysisPanel jsAnalysis;
   private AuthComparePanel authCompare;
   private BountySupportPanel bountySupport;
+  private CustomAgentPanel customAgent;
+  private JFrame customAgentWindow;
   private volatile AutoLlmPanel autoLlm;
   private JFrame autoLlmWindow;
   private LocalLlmPanel localLlm;
@@ -402,6 +404,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (trafficBrowser != null) trafficBrowser.close();
                     if (authCompare != null) authCompare.close();
                     if (bountySupport != null) bountySupport.close();
+                    if (customAgent != null) customAgent.close();
+                    if (customAgentWindow != null) customAgentWindow.dispose();
                     if (autoLlm != null) autoLlm.close();
                     if (autoLlmWindow != null) autoLlmWindow.dispose();
                     if (localLlm != null) localLlm.close();
@@ -763,6 +767,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         if(bountySupport!=null)bountySupport.resetEvidenceProject();
         if(localLlm!=null)localLlm.reset();
         if(autoLlm!=null)autoLlm.reset();
+        if(customAgent!=null){customAgent.close();customAgent=null;if(customAgentWindow!=null)customAgentWindow.dispose();customAgentWindow=null;}
         if(authCompare!=null)authCompare.resetChecklistProject();
         if(jsAnalysis!=null)jsAnalysis.resetBackgroundProject();
         checklistTrafficBaselineStore=trafficStore;
@@ -1180,7 +1185,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     open.setName("wb.common.settings.open");
     WorkbenchUi.primary(open);
     page.add(
-        WorkbenchUi.header("설정", "공통 설정은 별도 창에서 관리합니다.", WorkbenchUi.row(open, button("로컬 LLM 자동 점검", this::openAutoLlm))),
+        WorkbenchUi.header("설정", "공통 설정은 별도 창에서 관리합니다.", WorkbenchUi.row(open, button("로컬 LLM 자동 점검", this::openAutoLlm), button("Custom AI Agent", this::openCustomAgent))),
         BorderLayout.NORTH);
     return page;
   }
@@ -2347,9 +2352,22 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     return List.of(menu);
   }
 
+  private void openCustomAgent() {
+    if(unloaded.get())return;
+    if(customAgent==null){
+      customAgent=new CustomAgentPanel(api,authCompare,()->current==null?null:current.packet().packet(),()->autoLlm!=null&&autoLlm.busy());
+      customAgentWindow=new JFrame("Workbench Next · Custom AI Agent");
+      customAgentWindow.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+      customAgentWindow.setContentPane(customAgent);customAgentWindow.setSize(1300,950);customAgentWindow.setMinimumSize(new Dimension(1000,760));
+      customAgentWindow.addWindowListener(new java.awt.event.WindowAdapter(){public void windowClosing(java.awt.event.WindowEvent e){customAgent.stop();}});
+      customAgentWindow.setLocationRelativeTo(root);
+    }
+    customAgentWindow.setVisible(true);customAgentWindow.toFront();
+  }
+
   private void openAutoLlm() {
     if(unloaded.get())return;
-    if(autoLlm==null){autoLlm=new AutoLlmPanel(api,authCompare,bountySupport);
+    if(autoLlm==null){autoLlm=new AutoLlmPanel(api,authCompare,bountySupport);autoLlm.externalBusy=()->customAgent!=null&&customAgent.active();
       autoLlmWindow=new JFrame("Workbench Next · 범위 제한 자동 점검");autoLlmWindow.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
       autoLlmWindow.setContentPane(autoLlm);autoLlmWindow.setSize(1100,850);autoLlmWindow.setMinimumSize(new Dimension(850,700));
       api.userInterface().applyThemeToComponent(autoLlm);autoLlmWindow.setLocationRelativeTo(root);

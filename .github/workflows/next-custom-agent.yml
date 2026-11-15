@@ -1,0 +1,64 @@
+name: Next 0.56.0 Custom AI Agent integration
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: custom-agent-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  candidate:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'account-a/next-0560-custom-agent'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Build pinned upstream integration and boot actual Agent UI
+        run: |
+          python dev.py build
+          python tools/check_custom_agent.py
+      - name: Full checks and immutable candidate
+        run: |
+          if test -f downloads/extensions/0.56.0/manifest.json; then
+            python dev.py check
+            python tools/package_downloads.py --verify
+          else
+            python dev.py release
+          fi
+      - name: Upload candidate and actual upstream boot evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: next-0560-custom-agent-${{ github.event.pull_request.head.sha }}
+          path: |
+            build/custom-agent-check/
+            downloads/extensions/0.56.0/
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/test-*.txt
+          retention-days: 30
+      - name: Publish verified candidate to the task branch
+        env:
+          TASK_BRANCH: account-a/next-0560-custom-agent
+        run: |
+          if git ls-files --error-unmatch downloads/extensions/0.56.0/manifest.json >/dev/null 2>&1; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p docs/reports/2026-11-15-custom-agent
+          cp build/custom-agent-check/* docs/reports/2026-11-15-custom-agent/
+          git add downloads/extensions/0.56.0 docs/reports/2026-11-15-custom-agent docs/chat-logs/2026-11-15/next-custom-agent.md
+          git commit -m 'build: publish verified Next 0.56.0 embedded agent candidate'
+          git push origin "HEAD:refs/heads/$TASK_BRANCH"

@@ -65,8 +65,11 @@ final class AutoLlmPanel extends JPanel implements AutoCloseable {
     });lifecycle.start();controls(false);
   }
   private void safe(Runnable task){try{task.run();}catch(RuntimeException e){state.setText(e.getMessage());}}
+  java.util.function.BooleanSupplier externalBusy=()->false;
+  boolean busy(){return engine!=null&&engine.snapshot().busy();}
   private void begin() {
     if(closed)return;
+    if(externalBusy.getAsBoolean())throw new IllegalArgumentException("Custom AI Agent 대상 전송을 먼저 중지하세요.");
     if(engine!=null && engine.snapshot().busy())throw new IllegalArgumentException("진행 중 요청이 끝난 뒤 시작하세요.");
     if(!readOnly.isSelected()||!privateData.isSelected())throw new IllegalArgumentException("조회 경로 및 테스트 계정 사용 확인이 필요합니다.");
     if(auth.record.isSelected())throw new IllegalArgumentException("기존 신규 요청 자동 비교를 중지하세요. 중복 재전송을 방지합니다.");

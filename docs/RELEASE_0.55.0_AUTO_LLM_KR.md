@@ -35,4 +35,14 @@ SQLi 시간 지연, 부하 검사, 대용량 처리, 파일 업로드, 결제·�
 
 ## 검증
 
-운영 Java 코드 빌드와 새 엔진의 예산·속도·개별 승인·중지 검사를 수행 중입니다. 실제 결과는 PR/검증 기록에 기록하며 0.54.0 실모델 성공을 0.55.0 자동 검사 성공으로 대체하지 않습니다. 실제 사용자 Burp GUI는 Linux 화면 제어 미지원으로 별도 확인 대상입니다.
+운영 Java 빌드와 엔진 42개, 합성 Montoya 패널 16개, 기존 LLM의 네트워크 없는 검사 34개, 증거 가림 7개가 통과했습니다. 실제 사용자 터미널에서 Halogen 구조화 검사안 요청도 2.9초에 성공했습니다. 합성 입력의 결과는 REVIEW였고 대상 요청은 0건입니다. 모델의 공개/정적 정보라는 해석은 관측으로 증명되지 않았으므로 분석 품질 또는 실제 취약점 발견 성공으로 해석하지 않습니다.
+
+배포 후보 CI 전체 **4,886개** 검사와 Mapper Java 134개·Node 15개, 배포 무결성 검사가 통과했습니다. 설치 JAR와 소스 ZIP을 로컬로 가져와 SHA-256, ZIP CRC, 소스 393개 지문 일치를 확인했습니다. 확대 CI는 배포 파일이 포함된 커밋에서 다시 확인합니다.
+
+[설치 JAR](../downloads/extensions/0.55.0/burp-workbench-kr-0.55.0.jar) · [소스 ZIP](../downloads/extensions/0.55.0/burp-workbench-kr-0.55.0-source.zip)
+
+전체 CI와 배포 무결성 결과는 [검증 기록](VERIFICATION_0.55.0_AUTO_LLM.json) 및 [PR #108](https://github.com/ohjun1998/burp-workbench-kr/pull/108)에 기록합니다. 실제 Burp GUI는 Linux 화면 제어 미지원으로 별도 확인 대상입니다.
+
+![850×700 합성 입력으로 확인한 운영 패널](reports/2026-11-15-auto-llm/synthetic-panel-850.png)
+
+실모델 계획만 다시 확인하려면 `python3 tools/check_live_auto_llm.py`를 사용합니다. 대상 사이트에는 요청하지 않습니다. 이 후속 진단 도구는 저장소에 별도로 제공하며 이미 포장한 배포 ZIP은 수정하지 않습니다.

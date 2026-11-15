@@ -1,0 +1,3718 @@
+{
+  "description": "Actual Next production AI panel, settings and request-confirmation pane; synthetic fixtures only",
+  "nativeBurpValidation": false,
+  "limitations": [
+    "Simulated Swing light/dark appearance; native Burp appearance may differ",
+    "No real Halogen inference, Codex login/subscription request, or target HTTP was performed",
+    "Request-confirmation preview never shows a modal dialog, invokes the prompt, or supplies a decision",
+    "Settings controls outside a scroll viewport remain reachable by scrolling"
+  ],
+  "releaseJar": "project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.54.0.jar",
+  "releaseJarSha256": "91519dcb2cb5e84c99e12abf45d2e7df9889281aa44bd0f1968f6f7a297793a8",
+  "previewSourceSha256": {
+    "tools/LocalLlmUiPreview.java": "be770fd5f955374f565a97472b2c1d455fd92e6cb111c12d16966e26145e593a",
+    "tools/render_local_llm_ui.py": "52956f0577b6eb0e7fc88e10827e083e72bf1fed7a4e4e78175858290267b8f4"
+  },
+  "java": "Temurin OpenJDK 17.0.21+9 (Linux x86_64)",
+  "pngCount": 28,
+  "targetRequests": 0,
+  "inferenceActionsInvoked": 0,
+  "enabledButtonsMeasured": 84,
+  "minimumUsefulViewportHeight": 50,
+  "violationCount": 0,
+  "violations": [],
+  "runs": [
+    {
+      "theme": "light",
+      "width": 1024,
+      "height": 720,
+      "nativeBurpValidation": false,
+      "syntheticFixturesOnly": true,
+      "targetRequests": 0,
+      "inferenceActionsInvoked": 0,
+      "approval": {
+        "modalShown": false,
+        "defaultSelection": "취소",
+        "options": [
+          "확인 후 실행",
+          "취소"
+        ],
+        "promptInvoked": false,
+        "decisionUninitialized": true
+      },
+      "pngCount": 7,
+      "views": [
+        {
+          "name": "empty-input",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "png": "light/1024x720/empty-input.png",
+          "sha256": "91d562a7bb23bd2a73c447224174c60005b4dcb00426e4c3c40acf10235a544b"
+        },
+        {
+          "name": "function-classifications",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "png": "light/1024x720/function-classifications.png",
+          "sha256": "37f317c6e371b1046af9abf7fe4d151bd515473d4d77feba240051d6e60e3463"
+        },
+        {
+          "name": "outbound-preview",
+          "requiredContent": [
+            "wb.local.llm.preview",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "png": "light/1024x720/outbound-preview.png",
+          "sha256": "e7cb6a3a452c51f1d8f1ace4ca3c2e19de841d074915a9719375071a71b58909"
+        },
+        {
+          "name": "report-draft",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.report"
+          ],
+          "png": "light/1024x720/report-draft.png",
+          "sha256": "1aa17142c53ffbd3844a2ee15fe2fa7e912ddf0f10cf40149c1a699e0de783b0"
+        },
+        {
+          "name": "settings-local",
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "png": "light/1024x720/settings-local.png",
+          "sha256": "31031d3798c0ebba14bb2f8b6276b246f24ebda89b0e45b268566f00fc93bee5"
+        },
+        {
+          "name": "settings-subscription",
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "png": "light/1024x720/settings-subscription.png",
+          "sha256": "ebf7b2c908e67c9125012723d6b776549d080191b742e32fa8cd57f6b27b4fac"
+        },
+        {
+          "name": "request-approval",
+          "requiredContent": [
+            "wb.active.requests.approval"
+          ],
+          "png": "light/1024x720/request-approval.png",
+          "sha256": "7a952b06d049c4de8998c6be622e9626f2c0eedc7dc8a34e3dc218547f73d5fa"
+        }
+      ],
+      "controls": [
+        {
+          "view": "empty-input",
+          "label": "AI 분석",
+          "enabled": false,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 위치",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "width": 80,
+            "height": 32,
+            "x": 116,
+            "y": 331
+          },
+          "visible": {
+            "width": 80,
+            "height": 32,
+            "x": 116,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 → Repeater",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "width": 130,
+            "height": 32,
+            "x": 204,
+            "y": 331
+          },
+          "visible": {
+            "width": 130,
+            "height": 32,
+            "x": 204,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "선택 제안 → 증거",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "width": 127,
+            "height": 32,
+            "x": 342,
+            "y": 331
+          },
+          "visible": {
+            "width": 127,
+            "height": 32,
+            "x": 342,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "visible": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "visible": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "visible": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "visible": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "visible": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "visible": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "보고서 초안 추가",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 123,
+            "height": 32,
+            "x": 18,
+            "y": 331
+          },
+          "visible": {
+            "width": 123,
+            "height": 32,
+            "x": 18,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 연결 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 110,
+            "height": 32,
+            "x": 23,
+            "y": 251
+          },
+          "visible": {
+            "width": 110,
+            "height": 32,
+            "x": 23,
+            "y": 251
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 모델 목록",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 110,
+            "height": 32,
+            "x": 141,
+            "y": 251
+          },
+          "visible": {
+            "width": 110,
+            "height": 32,
+            "x": 141,
+            "y": 251
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "구독 로그인 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 123,
+            "height": 32,
+            "x": 23,
+            "y": 125
+          },
+          "visible": {
+            "width": 123,
+            "height": 32,
+            "x": 23,
+            "y": 125
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "확인 후 실행",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "width": 95,
+            "height": 28,
+            "x": 414,
+            "y": 679
+          },
+          "visible": {
+            "width": 95,
+            "height": 28,
+            "x": 414,
+            "y": 679
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "취소",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "width": 95,
+            "height": 28,
+            "x": 515,
+            "y": 679
+          },
+          "visible": {
+            "width": 95,
+            "height": 28,
+            "x": 515,
+            "y": 679
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        }
+      ],
+      "content": [
+        {
+          "name": "wb.local.llm.context",
+          "view": "empty-input",
+          "viewport": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          }
+        },
+        {
+          "name": "wb.local.llm.results",
+          "view": "empty-input",
+          "viewport": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "component": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          }
+        },
+        {
+          "name": "preview.ai.detail",
+          "view": "empty-input",
+          "viewport": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "component": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          }
+        },
+        {
+          "name": "wb.local.llm.context",
+          "view": "function-classifications",
+          "viewport": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          }
+        },
+        {
+          "name": "wb.local.llm.results",
+          "view": "function-classifications",
+          "viewport": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "component": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          }
+        },
+        {
+          "name": "preview.ai.detail",
+          "view": "function-classifications",
+          "viewport": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "component": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          }
+        },
+        {
+          "name": "wb.local.llm.preview",
+          "view": "outbound-preview",
+          "viewport": {
+            "width": 984,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 984,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          }
+        },
+        {
+          "name": "wb.local.llm.results",
+          "view": "outbound-preview",
+          "viewport": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "component": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          }
+        },
+        {
+          "name": "preview.ai.detail",
+          "view": "outbound-preview",
+          "viewport": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "component": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          }
+        },
+        {
+          "name": "wb.local.llm.context",
+          "view": "report-draft",
+          "viewport": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          }
+        },
+        {
+          "name": "wb.local.llm.report",
+          "view": "report-draft",
+          "viewport": {
+            "width": 1001,
+            "height": 311,
+            "x": 11,
+            "y": 373
+          },
+          "component": {
+            "width": 1001,
+            "height": 311,
+            "x": 11,
+            "y": 373
+          }
+        },
+        {
+          "name": "preview.ai.connection",
+          "view": "settings-local",
+          "viewport": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          },
+          "component": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          }
+        },
+        {
+          "name": "preview.ai.connection",
+          "view": "settings-subscription",
+          "viewport": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          },
+          "component": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          }
+        },
+        {
+          "name": "wb.active.requests.approval",
+          "view": "request-approval",
+          "viewport": {
+            "width": 955,
+            "height": 658,
+            "x": 58,
+            "y": 11
+          },
+          "component": {
+            "width": 955,
+            "height": 658,
+            "x": 58,
+            "y": 11
+          }
+        }
+      ],
+      "violations": []
+    },
+    {
+      "theme": "light",
+      "width": 1280,
+      "height": 800,
+      "nativeBurpValidation": false,
+      "syntheticFixturesOnly": true,
+      "targetRequests": 0,
+      "inferenceActionsInvoked": 0,
+      "approval": {
+        "promptInvoked": false,
+        "decisionUninitialized": true,
+        "modalShown": false,
+        "defaultSelection": "취소",
+        "options": [
+          "확인 후 실행",
+          "취소"
+        ]
+      },
+      "pngCount": 7,
+      "views": [
+        {
+          "png": "light/1280x800/empty-input.png",
+          "name": "empty-input",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "sha256": "c506fcdb2f451f311b5f850ad70548e4a107627e27399d11b525bb8e0102ab94"
+        },
+        {
+          "png": "light/1280x800/function-classifications.png",
+          "name": "function-classifications",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "sha256": "9d1be42aa887ccbde4e4d4f123734ea9b82f4d91eb38a09cf55d19bd9c3e64bf"
+        },
+        {
+          "png": "light/1280x800/outbound-preview.png",
+          "name": "outbound-preview",
+          "requiredContent": [
+            "wb.local.llm.preview",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "sha256": "bd858c3faad955cc026265b7c5c217bfffc74253d28d8ca03d6e7eb2d96d4677"
+        },
+        {
+          "png": "light/1280x800/report-draft.png",
+          "name": "report-draft",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.report"
+          ],
+          "sha256": "ab8a64bdff83e85476bdb68b347b925dcc497faa1a7a50f42cbe12e92c70b2dd"
+        },
+        {
+          "png": "light/1280x800/settings-local.png",
+          "name": "settings-local",
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "sha256": "7db3cf2305d0e11a1a64fb9db4e5bacd7c48b78c075a8deca7f433de96260cc8"
+        },
+        {
+          "png": "light/1280x800/settings-subscription.png",
+          "name": "settings-subscription",
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "sha256": "4aada57b15f0387bb7632d2598db9cb2383711ebadaa110aaa6acdff6dcbf561"
+        },
+        {
+          "png": "light/1280x800/request-approval.png",
+          "name": "request-approval",
+          "requiredContent": [
+            "wb.active.requests.approval"
+          ],
+          "sha256": "3a55b9f80a53e2de6a9c9f421242208f2b3c740e0c5fbd4f8bf2ec9bb222a941"
+        }
+      ],
+      "controls": [
+        {
+          "view": "empty-input",
+          "label": "AI 분석",
+          "enabled": false,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "visible": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 위치",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "x": 116,
+            "y": 355,
+            "width": 80,
+            "height": 32
+          },
+          "visible": {
+            "x": 116,
+            "y": 355,
+            "width": 80,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 → Repeater",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "x": 204,
+            "y": 355,
+            "width": 130,
+            "height": 32
+          },
+          "visible": {
+            "x": 204,
+            "y": 355,
+            "width": 130,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "선택 제안 → 증거",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "x": 342,
+            "y": 355,
+            "width": 127,
+            "height": 32
+          },
+          "visible": {
+            "x": 342,
+            "y": 355,
+            "width": 127,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "visible": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 388,
+            "y": 355,
+            "width": 80,
+            "height": 32
+          },
+          "visible": {
+            "x": 388,
+            "y": 355,
+            "width": 80,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 476,
+            "y": 355,
+            "width": 130,
+            "height": 32
+          },
+          "visible": {
+            "x": 476,
+            "y": 355,
+            "width": 130,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 614,
+            "y": 355,
+            "width": 127,
+            "height": 32
+          },
+          "visible": {
+            "x": 614,
+            "y": 355,
+            "width": 127,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "visible": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 388,
+            "y": 355,
+            "width": 80,
+            "height": 32
+          },
+          "visible": {
+            "x": 388,
+            "y": 355,
+            "width": 80,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 476,
+            "y": 355,
+            "width": 130,
+            "height": 32
+          },
+          "visible": {
+            "x": 476,
+            "y": 355,
+            "width": 130,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 614,
+            "y": 355,
+            "width": 127,
+            "height": 32
+          },
+          "visible": {
+            "x": 614,
+            "y": 355,
+            "width": 127,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 145,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "visible": {
+            "x": 220,
+            "y": 13,
+            "width": 50,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "visible": {
+            "x": 278,
+            "y": 13,
+            "width": 67,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "보고서 초안 추가",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 18,
+            "y": 355,
+            "width": 123,
+            "height": 32
+          },
+          "visible": {
+            "x": 18,
+            "y": 355,
+            "width": 123,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 연결 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 23,
+            "y": 251,
+            "width": 110,
+            "height": 32
+          },
+          "visible": {
+            "x": 23,
+            "y": 251,
+            "width": 110,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 모델 목록",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 141,
+            "y": 251,
+            "width": 110,
+            "height": 32
+          },
+          "visible": {
+            "x": 141,
+            "y": 251,
+            "width": 110,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 20,
+            "y": 751,
+            "width": 50,
+            "height": 32
+          },
+          "visible": {
+            "x": 20,
+            "y": 751,
+            "width": 50,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "구독 로그인 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 23,
+            "y": 125,
+            "width": 123,
+            "height": 32
+          },
+          "visible": {
+            "x": 23,
+            "y": 125,
+            "width": 123,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "x": 20,
+            "y": 751,
+            "width": 50,
+            "height": 32
+          },
+          "visible": {
+            "x": 20,
+            "y": 751,
+            "width": 50,
+            "height": 32
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "확인 후 실행",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "x": 542,
+            "y": 759,
+            "width": 95,
+            "height": 28
+          },
+          "visible": {
+            "x": 542,
+            "y": 759,
+            "width": 95,
+            "height": 28
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "취소",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "x": 643,
+            "y": 759,
+            "width": 95,
+            "height": 28
+          },
+          "visible": {
+            "x": 643,
+            "y": 759,
+            "width": 95,
+            "height": 28
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        }
+      ],
+      "content": [
+        {
+          "name": "wb.local.llm.context",
+          "view": "empty-input",
+          "viewport": {
+            "x": 11,
+            "y": 154,
+            "width": 1257,
+            "height": 158
+          },
+          "component": {
+            "x": 11,
+            "y": 154,
+            "width": 1257,
+            "height": 158
+          }
+        },
+        {
+          "name": "wb.local.llm.results",
+          "view": "empty-input",
+          "viewport": {
+            "x": 11,
+            "y": 433,
+            "width": 1257,
+            "height": 135
+          },
+          "component": {
+            "x": 11,
+            "y": 433,
+            "width": 1257,
+            "height": 135
+          }
+        },
+        {
+          "name": "preview.ai.detail",
+          "view": "empty-input",
+          "viewport": {
+            "x": 11,
+            "y": 577,
+            "width": 1257,
+            "height": 187
+          },
+          "component": {
+            "x": 11,
+            "y": 577,
+            "width": 1257,
+            "height": 187
+          }
+        },
+        {
+          "name": "wb.local.llm.context",
+          "view": "function-classifications",
+          "viewport": {
+            "x": 11,
+            "y": 154,
+            "width": 1257,
+            "height": 158
+          },
+          "component": {
+            "x": 11,
+            "y": 154,
+            "width": 1257,
+            "height": 158
+          }
+        },
+        {
+          "name": "wb.local.llm.results",
+          "view": "function-classifications",
+          "viewport": {
+            "x": 11,
+            "y": 433,
+            "width": 1257,
+            "height": 135
+          },
+          "component": {
+            "x": 11,
+            "y": 433,
+            "width": 1257,
+            "height": 135
+          }
+        },
+        {
+          "name": "preview.ai.detail",
+          "view": "function-classifications",
+          "viewport": {
+            "x": 11,
+            "y": 577,
+            "width": 1240,
+            "height": 187
+          },
+          "component": {
+            "x": 11,
+            "y": 577,
+            "width": 1240,
+            "height": 187
+          }
+        },
+        {
+          "name": "wb.local.llm.preview",
+          "view": "outbound-preview",
+          "viewport": {
+            "x": 11,
+            "y": 154,
+            "width": 1240,
+            "height": 158
+          },
+          "component": {
+            "x": 11,
+            "y": 154,
+            "width": 1240,
+            "height": 158
+          }
+        },
+        {
+          "name": "wb.local.llm.results",
+          "view": "outbound-preview",
+          "viewport": {
+            "x": 11,
+            "y": 433,
+            "width": 1257,
+            "height": 135
+          },
+          "component": {
+            "x": 11,
+            "y": 433,
+            "width": 1257,
+            "height": 135
+          }
+        },
+        {
+          "name": "preview.ai.detail",
+          "view": "outbound-preview",
+          "viewport": {
+            "x": 11,
+            "y": 577,
+            "width": 1240,
+            "height": 187
+          },
+          "component": {
+            "x": 11,
+            "y": 577,
+            "width": 1240,
+            "height": 187
+          }
+        },
+        {
+          "name": "wb.local.llm.context",
+          "view": "report-draft",
+          "viewport": {
+            "x": 11,
+            "y": 154,
+            "width": 1257,
+            "height": 158
+          },
+          "component": {
+            "x": 11,
+            "y": 154,
+            "width": 1257,
+            "height": 158
+          }
+        },
+        {
+          "name": "wb.local.llm.report",
+          "view": "report-draft",
+          "viewport": {
+            "x": 11,
+            "y": 397,
+            "width": 1257,
+            "height": 367
+          },
+          "component": {
+            "x": 11,
+            "y": 397,
+            "width": 1257,
+            "height": 367
+          }
+        },
+        {
+          "name": "preview.ai.connection",
+          "view": "settings-local",
+          "viewport": {
+            "x": 14,
+            "y": 482,
+            "width": 1252,
+            "height": 253
+          },
+          "component": {
+            "x": 14,
+            "y": 482,
+            "width": 1252,
+            "height": 253
+          }
+        },
+        {
+          "name": "preview.ai.connection",
+          "view": "settings-subscription",
+          "viewport": {
+            "x": 14,
+            "y": 482,
+            "width": 1252,
+            "height": 253
+          },
+          "component": {
+            "x": 14,
+            "y": 482,
+            "width": 1252,
+            "height": 253
+          }
+        },
+        {
+          "name": "wb.active.requests.approval",
+          "view": "request-approval",
+          "viewport": {
+            "x": 58,
+            "y": 11,
+            "width": 1211,
+            "height": 738
+          },
+          "component": {
+            "x": 58,
+            "y": 11,
+            "width": 1211,
+            "height": 738
+          }
+        }
+      ],
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "width": 1024,
+      "height": 720,
+      "nativeBurpValidation": false,
+      "syntheticFixturesOnly": true,
+      "targetRequests": 0,
+      "inferenceActionsInvoked": 0,
+      "approval": {
+        "options": [
+          "확인 후 실행",
+          "취소"
+        ],
+        "promptInvoked": false,
+        "decisionUninitialized": true,
+        "modalShown": false,
+        "defaultSelection": "취소"
+      },
+      "pngCount": 7,
+      "views": [
+        {
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "png": "dark/1024x720/empty-input.png",
+          "name": "empty-input",
+          "sha256": "065754c90870811811aa4ebdae71d9ab68756e8d9c89f584c65a2b1ec6fb003e"
+        },
+        {
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "png": "dark/1024x720/function-classifications.png",
+          "name": "function-classifications",
+          "sha256": "ad406ff891affc5b738d151c671a08bef871e1841acc155243a092e4017b9bd9"
+        },
+        {
+          "requiredContent": [
+            "wb.local.llm.preview",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "png": "dark/1024x720/outbound-preview.png",
+          "name": "outbound-preview",
+          "sha256": "28ccfa89458e90ca1834cb34c5c896bc5e192fe7f8716241efe2c75bea206aa5"
+        },
+        {
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.report"
+          ],
+          "png": "dark/1024x720/report-draft.png",
+          "name": "report-draft",
+          "sha256": "b9723a2f826ca59fe6e03355d6ad2e29f72d091b47fd9072b86a9b792392642a"
+        },
+        {
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "png": "dark/1024x720/settings-local.png",
+          "name": "settings-local",
+          "sha256": "2d490dee11b1bebee21b6002a2736233cfa97c3c8819993c8846cb5570933539"
+        },
+        {
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "png": "dark/1024x720/settings-subscription.png",
+          "name": "settings-subscription",
+          "sha256": "40e8e9ff36e82cb4fabfcf03fa4d0aee71419343a92756ef7a2df8c06bef39d7"
+        },
+        {
+          "requiredContent": [
+            "wb.active.requests.approval"
+          ],
+          "png": "dark/1024x720/request-approval.png",
+          "name": "request-approval",
+          "sha256": "4d248b60dc6bc7d8e5dd69a607c398b029cd4caa05c03b81b0557541b984b3e4"
+        }
+      ],
+      "controls": [
+        {
+          "view": "empty-input",
+          "label": "AI 분석",
+          "enabled": false,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 위치",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "width": 80,
+            "height": 32,
+            "x": 116,
+            "y": 331
+          },
+          "visible": {
+            "width": 80,
+            "height": 32,
+            "x": 116,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 → Repeater",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "width": 130,
+            "height": 32,
+            "x": 204,
+            "y": 331
+          },
+          "visible": {
+            "width": 130,
+            "height": 32,
+            "x": 204,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "선택 제안 → 증거",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "width": 127,
+            "height": 32,
+            "x": 342,
+            "y": 331
+          },
+          "visible": {
+            "width": 127,
+            "height": 32,
+            "x": 342,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "visible": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "visible": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "visible": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "visible": {
+            "width": 80,
+            "height": 32,
+            "x": 388,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "visible": {
+            "width": 130,
+            "height": 32,
+            "x": 476,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "visible": {
+            "width": 127,
+            "height": 32,
+            "x": 614,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 145,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 220,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "visible": {
+            "width": 67,
+            "height": 32,
+            "x": 278,
+            "y": 13
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "보고서 초안 추가",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 123,
+            "height": 32,
+            "x": 18,
+            "y": 331
+          },
+          "visible": {
+            "width": 123,
+            "height": 32,
+            "x": 18,
+            "y": 331
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 연결 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 110,
+            "height": 32,
+            "x": 23,
+            "y": 251
+          },
+          "visible": {
+            "width": 110,
+            "height": 32,
+            "x": 23,
+            "y": 251
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 모델 목록",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 110,
+            "height": 32,
+            "x": 141,
+            "y": 251
+          },
+          "visible": {
+            "width": 110,
+            "height": 32,
+            "x": 141,
+            "y": 251
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "구독 로그인 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 123,
+            "height": 32,
+            "x": 23,
+            "y": 125
+          },
+          "visible": {
+            "width": 123,
+            "height": 32,
+            "x": 23,
+            "y": 125
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "visible": {
+            "width": 50,
+            "height": 32,
+            "x": 20,
+            "y": 671
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "확인 후 실행",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "width": 95,
+            "height": 28,
+            "x": 414,
+            "y": 679
+          },
+          "visible": {
+            "width": 95,
+            "height": 28,
+            "x": 414,
+            "y": 679
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "취소",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "width": 95,
+            "height": 28,
+            "x": 515,
+            "y": 679
+          },
+          "visible": {
+            "width": 95,
+            "height": 28,
+            "x": 515,
+            "y": 679
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        }
+      ],
+      "content": [
+        {
+          "view": "empty-input",
+          "viewport": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "name": "wb.local.llm.context"
+        },
+        {
+          "view": "empty-input",
+          "viewport": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "component": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "name": "wb.local.llm.results"
+        },
+        {
+          "view": "empty-input",
+          "viewport": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "component": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "name": "preview.ai.detail"
+        },
+        {
+          "view": "function-classifications",
+          "viewport": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "name": "wb.local.llm.context"
+        },
+        {
+          "view": "function-classifications",
+          "viewport": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "component": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "name": "wb.local.llm.results"
+        },
+        {
+          "view": "function-classifications",
+          "viewport": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "component": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "name": "preview.ai.detail"
+        },
+        {
+          "view": "outbound-preview",
+          "viewport": {
+            "width": 984,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 984,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "name": "wb.local.llm.preview"
+        },
+        {
+          "view": "outbound-preview",
+          "viewport": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "component": {
+            "width": 1001,
+            "height": 108,
+            "x": 11,
+            "y": 409
+          },
+          "name": "wb.local.llm.results"
+        },
+        {
+          "view": "outbound-preview",
+          "viewport": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "component": {
+            "width": 984,
+            "height": 158,
+            "x": 11,
+            "y": 526
+          },
+          "name": "preview.ai.detail"
+        },
+        {
+          "view": "report-draft",
+          "viewport": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "component": {
+            "width": 1001,
+            "height": 134,
+            "x": 11,
+            "y": 154
+          },
+          "name": "wb.local.llm.context"
+        },
+        {
+          "view": "report-draft",
+          "viewport": {
+            "width": 1001,
+            "height": 311,
+            "x": 11,
+            "y": 373
+          },
+          "component": {
+            "width": 1001,
+            "height": 311,
+            "x": 11,
+            "y": 373
+          },
+          "name": "wb.local.llm.report"
+        },
+        {
+          "view": "settings-local",
+          "viewport": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          },
+          "component": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          },
+          "name": "preview.ai.connection"
+        },
+        {
+          "view": "settings-subscription",
+          "viewport": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          },
+          "component": {
+            "width": 996,
+            "height": 213,
+            "x": 14,
+            "y": 442
+          },
+          "name": "preview.ai.connection"
+        },
+        {
+          "view": "request-approval",
+          "viewport": {
+            "width": 955,
+            "height": 658,
+            "x": 58,
+            "y": 11
+          },
+          "component": {
+            "width": 955,
+            "height": 658,
+            "x": 58,
+            "y": 11
+          },
+          "name": "wb.active.requests.approval"
+        }
+      ],
+      "violations": []
+    },
+    {
+      "theme": "dark",
+      "width": 1280,
+      "height": 800,
+      "nativeBurpValidation": false,
+      "syntheticFixturesOnly": true,
+      "targetRequests": 0,
+      "inferenceActionsInvoked": 0,
+      "approval": {
+        "decisionUninitialized": true,
+        "promptInvoked": false,
+        "options": [
+          "확인 후 실행",
+          "취소"
+        ],
+        "defaultSelection": "취소",
+        "modalShown": false
+      },
+      "pngCount": 7,
+      "views": [
+        {
+          "png": "dark/1280x800/empty-input.png",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "name": "empty-input",
+          "sha256": "d5bbcfdb7d1da22054234c16e2bc26cf6c44f23d272fd6af1370ea9a71cb77a1"
+        },
+        {
+          "png": "dark/1280x800/function-classifications.png",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "name": "function-classifications",
+          "sha256": "1b0faae5af72cf94be29b29b9b7cf816faa76461cbee60a52caa1d798c994a0d"
+        },
+        {
+          "png": "dark/1280x800/outbound-preview.png",
+          "requiredContent": [
+            "wb.local.llm.preview",
+            "wb.local.llm.results",
+            "preview.ai.detail"
+          ],
+          "name": "outbound-preview",
+          "sha256": "feccfbe96ae331f052508480522ba8ffa6401f3a7d59b65a471d08c01d217a99"
+        },
+        {
+          "png": "dark/1280x800/report-draft.png",
+          "requiredContent": [
+            "wb.local.llm.context",
+            "wb.local.llm.report"
+          ],
+          "name": "report-draft",
+          "sha256": "be24d28b8428c3aca99de0f6272963664cdc37c64118eaf0280504072c10df20"
+        },
+        {
+          "png": "dark/1280x800/settings-local.png",
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "name": "settings-local",
+          "sha256": "b626d44fa1ed986c18528c94ed6341bf66d8495660926b1e3e1b25acf6f09fd4"
+        },
+        {
+          "png": "dark/1280x800/settings-subscription.png",
+          "requiredContent": [
+            "preview.ai.connection"
+          ],
+          "name": "settings-subscription",
+          "sha256": "13532d86ac6de37f8d7dfa96914e3ad4e2e4b413136e3e57e21315d5928e5e4f"
+        },
+        {
+          "png": "dark/1280x800/request-approval.png",
+          "requiredContent": [
+            "wb.active.requests.approval"
+          ],
+          "name": "request-approval",
+          "sha256": "1a7ca4cce0a66ca7ab128d3a237a6b034001923bfa372fb5a496daba32062360"
+        }
+      ],
+      "controls": [
+        {
+          "view": "empty-input",
+          "label": "AI 분석",
+          "enabled": false,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "visible": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 위치",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 116,
+            "height": 32,
+            "width": 80
+          },
+          "visible": {
+            "y": 355,
+            "x": 116,
+            "height": 32,
+            "width": 80
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "원본 → Repeater",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 204,
+            "height": 32,
+            "width": 130
+          },
+          "visible": {
+            "y": 355,
+            "x": 204,
+            "height": 32,
+            "width": 130
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "empty-input",
+          "label": "선택 제안 → 증거",
+          "enabled": false,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 342,
+            "height": 32,
+            "width": 127
+          },
+          "visible": {
+            "y": 355,
+            "x": 342,
+            "height": 32,
+            "width": 127
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "visible": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 388,
+            "height": 32,
+            "width": 80
+          },
+          "visible": {
+            "y": 355,
+            "x": 388,
+            "height": 32,
+            "width": 80
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 476,
+            "height": 32,
+            "width": 130
+          },
+          "visible": {
+            "y": 355,
+            "x": 476,
+            "height": 32,
+            "width": 130
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "function-classifications",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 614,
+            "height": 32,
+            "width": 127
+          },
+          "visible": {
+            "y": 355,
+            "x": 614,
+            "height": 32,
+            "width": 127
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "visible": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 위치",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 388,
+            "height": 32,
+            "width": 80
+          },
+          "visible": {
+            "y": 355,
+            "x": 388,
+            "height": 32,
+            "width": 80
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "원본 → Repeater",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 476,
+            "height": 32,
+            "width": 130
+          },
+          "visible": {
+            "y": 355,
+            "x": 476,
+            "height": 32,
+            "width": 130
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "outbound-preview",
+          "label": "선택 제안 → 증거",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 614,
+            "height": 32,
+            "width": 127
+          },
+          "visible": {
+            "y": 355,
+            "x": 614,
+            "height": 32,
+            "width": 127
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 분석",
+          "enabled": true,
+          "name": "wb.local.llm.analyze",
+          "bounds": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 145,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "중지",
+          "enabled": false,
+          "name": "wb.local.llm.stop",
+          "bounds": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "visible": {
+            "y": 13,
+            "x": 220,
+            "height": 32,
+            "width": 50
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "AI 설정",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "visible": {
+            "y": 13,
+            "x": 278,
+            "height": 32,
+            "width": 67
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "report-draft",
+          "label": "보고서 초안 추가",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 355,
+            "x": 18,
+            "height": 32,
+            "width": 123
+          },
+          "visible": {
+            "y": 355,
+            "x": 18,
+            "height": 32,
+            "width": 123
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 연결 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 251,
+            "x": 23,
+            "height": 32,
+            "width": 110
+          },
+          "visible": {
+            "y": 251,
+            "x": 23,
+            "height": 32,
+            "width": 110
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "로컬 모델 목록",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 251,
+            "x": 141,
+            "height": 32,
+            "width": 110
+          },
+          "visible": {
+            "y": 251,
+            "x": 141,
+            "height": 32,
+            "width": 110
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-local",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 751,
+            "x": 20,
+            "height": 32,
+            "width": 50
+          },
+          "visible": {
+            "y": 751,
+            "x": 20,
+            "height": 32,
+            "width": 50
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "구독 로그인 확인",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 125,
+            "x": 23,
+            "height": 32,
+            "width": 123
+          },
+          "visible": {
+            "y": 125,
+            "x": 23,
+            "height": 32,
+            "width": 123
+          },
+          "fullyVisible": true,
+          "scrollable": true,
+          "reachableByScroll": false
+        },
+        {
+          "view": "settings-subscription",
+          "label": "닫기",
+          "enabled": true,
+          "name": "",
+          "bounds": {
+            "y": 751,
+            "x": 20,
+            "height": 32,
+            "width": 50
+          },
+          "visible": {
+            "y": 751,
+            "x": 20,
+            "height": 32,
+            "width": 50
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "확인 후 실행",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "y": 759,
+            "x": 542,
+            "height": 28,
+            "width": 95
+          },
+          "visible": {
+            "y": 759,
+            "x": 542,
+            "height": 28,
+            "width": 95
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        },
+        {
+          "view": "request-approval",
+          "label": "취소",
+          "enabled": true,
+          "name": "OptionPane.button",
+          "bounds": {
+            "y": 759,
+            "x": 643,
+            "height": 28,
+            "width": 95
+          },
+          "visible": {
+            "y": 759,
+            "x": 643,
+            "height": 28,
+            "width": 95
+          },
+          "fullyVisible": true,
+          "scrollable": false,
+          "reachableByScroll": false
+        }
+      ],
+      "content": [
+        {
+          "component": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1257
+          },
+          "view": "empty-input",
+          "name": "wb.local.llm.context"
+        },
+        {
+          "component": {
+            "y": 433,
+            "x": 11,
+            "height": 135,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 433,
+            "x": 11,
+            "height": 135,
+            "width": 1257
+          },
+          "view": "empty-input",
+          "name": "wb.local.llm.results"
+        },
+        {
+          "component": {
+            "y": 577,
+            "x": 11,
+            "height": 187,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 577,
+            "x": 11,
+            "height": 187,
+            "width": 1257
+          },
+          "view": "empty-input",
+          "name": "preview.ai.detail"
+        },
+        {
+          "component": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1257
+          },
+          "view": "function-classifications",
+          "name": "wb.local.llm.context"
+        },
+        {
+          "component": {
+            "y": 433,
+            "x": 11,
+            "height": 135,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 433,
+            "x": 11,
+            "height": 135,
+            "width": 1257
+          },
+          "view": "function-classifications",
+          "name": "wb.local.llm.results"
+        },
+        {
+          "component": {
+            "y": 577,
+            "x": 11,
+            "height": 187,
+            "width": 1240
+          },
+          "viewport": {
+            "y": 577,
+            "x": 11,
+            "height": 187,
+            "width": 1240
+          },
+          "view": "function-classifications",
+          "name": "preview.ai.detail"
+        },
+        {
+          "component": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1240
+          },
+          "viewport": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1240
+          },
+          "view": "outbound-preview",
+          "name": "wb.local.llm.preview"
+        },
+        {
+          "component": {
+            "y": 433,
+            "x": 11,
+            "height": 135,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 433,
+            "x": 11,
+            "height": 135,
+            "width": 1257
+          },
+          "view": "outbound-preview",
+          "name": "wb.local.llm.results"
+        },
+        {
+          "component": {
+            "y": 577,
+            "x": 11,
+            "height": 187,
+            "width": 1240
+          },
+          "viewport": {
+            "y": 577,
+            "x": 11,
+            "height": 187,
+            "width": 1240
+          },
+          "view": "outbound-preview",
+          "name": "preview.ai.detail"
+        },
+        {
+          "component": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 154,
+            "x": 11,
+            "height": 158,
+            "width": 1257
+          },
+          "view": "report-draft",
+          "name": "wb.local.llm.context"
+        },
+        {
+          "component": {
+            "y": 397,
+            "x": 11,
+            "height": 367,
+            "width": 1257
+          },
+          "viewport": {
+            "y": 397,
+            "x": 11,
+            "height": 367,
+            "width": 1257
+          },
+          "view": "report-draft",
+          "name": "wb.local.llm.report"
+        },
+        {
+          "component": {
+            "y": 482,
+            "x": 14,
+            "height": 253,
+            "width": 1252
+          },
+          "viewport": {
+            "y": 482,
+            "x": 14,
+            "height": 253,
+            "width": 1252
+          },
+          "view": "settings-local",
+          "name": "preview.ai.connection"
+        },
+        {
+          "component": {
+            "y": 482,
+            "x": 14,
+            "height": 253,
+            "width": 1252
+          },
+          "viewport": {
+            "y": 482,
+            "x": 14,
+            "height": 253,
+            "width": 1252
+          },
+          "view": "settings-subscription",
+          "name": "preview.ai.connection"
+        },
+        {
+          "component": {
+            "y": 11,
+            "x": 58,
+            "height": 738,
+            "width": 1211
+          },
+          "viewport": {
+            "y": 11,
+            "x": 58,
+            "height": 738,
+            "width": 1211
+          },
+          "view": "request-approval",
+          "name": "wb.active.requests.approval"
+        }
+      ],
+      "violations": []
+    }
+  ]
+}

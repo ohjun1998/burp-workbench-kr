@@ -1,3 +1,7 @@
+# Workbench Next 0.54.0 개발 브랜치
+
+Next 0.53.4에 ChatGPT 구독/Codex CLI와 Halogen을 작업별로 배정하는 AI 검토·기능별 패킷 분류·계정 비교 해설·JS/API 맥락 분석·증거 보고서 초안을 추가합니다. 분석은 명시적으로 실행하며 원본 ID와 기존 판정을 보존합니다. [사용법](docs/RELEASE_0.54.0_NEXT_KR.md) · [검증](docs/VERIFICATION_0.54.0.json). 이 변경은 별도 PR이며 main 병합 상태는 PR을 확인하세요.
+
 # Burp Workbench KR
 
 **Simple 1.4.12는 승인한 버튼 배치를 13개 화면에 적용합니다.** 실행·중지는 함께, 선택 항목 작업은 해당 목록·상세 옆에 배치하고 Guide 그림도 갱신했습니다. [설치 JAR](simple/downloads/1.4.12/burp-workbench-simple-1.4.12.jar) · [실제 화면](docs/reports/2026-10-31-contextual-button-layout/README.md) · [변경 안내](simple/docs/RELEASE_SIMPLE_1.4.12_KR.md).

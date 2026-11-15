@@ -671,7 +671,7 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     };
     history.getSelectionModel().addListSelectionListener(event -> historyRepairState.run());
     historyRepairState.run();
-    triage.add(WorkbenchUi.row(sessionRepair, policyRepair, writeRepair));
+    triage.add(WorkbenchUi.row(sessionRepair, policyRepair, writeRepair, button("AI 비교 해설",()->aiReview.run())));
     triage.add(AuthLayout.verdictLegend()); historyCard.add(triage,BorderLayout.SOUTH);
     historyCard.setName("wb.card.Record History");
     JButton closeDetails=button("닫기",comparisonWindow::closeWindow);
@@ -2033,6 +2033,14 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
   void execute(Run run) {
     Context c = run.context;
     try {
+      if(closed.get()||c.epoch()!=epoch.get())return;
+      if(!approveActiveComparison(run)) {
+        // Cancelling one pending original also stops queued/automatic replays, rather than
+        // replacing a cancelled dialog with another burst immediately afterwards.
+        SwingUtilities.invokeAndWait(()->{run.note="중지";stop();state.setText("사용자 확인 취소 · 계정 비교 요청을 전송하지 않았습니다.");});
+        return;
+      }
+      if(closed.get()||c.epoch()!=epoch.get())return;
       if(!checkBaseline(run))return;
       boolean first = true;
       for (int i = 0; i < SLOTS; i++) {
@@ -2183,6 +2191,29 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     }
   }
 
+  boolean approveActiveComparison(Run run) {
+    Context c=run.context;
+    Set<String> targets=new LinkedHashSet<>();targets.add(run.original.url());
+    int upper=GraphqlSemantics.read(run.original)?1:0,profiles=0;
+    for(int i=0;i<SLOTS;i++) {
+      if(c.profiles()[i]==null)continue;
+      profiles++;upper++;
+      if(c.sessions()[i].enabled()){targets.add(c.sessions()[i].url());upper++;}
+      if(c.sessionChecks()[i]!=null){targets.add(c.sessionChecks()[i].url());upper+=2;}
+      if(GraphqlSemantics.read(run.original))upper++; // A missing/hidden object can recheck its owner baseline.
+      var effect=c.effectFor(run.original);
+      if(effect.enabled()){targets.add(effect.url());upper+=1+effect.attempts();}
+    }
+    if(!WorkbenchScope.contains(api,run.original))
+      throw new IllegalArgumentException("계정 비교 원본이 현재 SCOPE 밖입니다.");
+    // Each refresh/identity/effect sender still validates its resolved request's current Scope.
+    return ActiveRequestApproval.confirm(this,"계정 권한 비교 · 원본 1건",targets,
+        "비교 계정 "+profiles+"개 · 확장 자체 요청의 보수적 상한 "+upper+"회. 기준 재조회·계정 비교·설정한 갱신/신원 검사·쓰기 전후 조회를 포함합니다.\n"
+        +"계정 사이 500ms, 일부 대조/후속 조회는 즉시 전송합니다.\n"
+        +(GraphqlSemantics.read(run.original)?"읽기로 분류된 원본도 서버 구현에 따라 상태를 바꿀 수 있습니다.":"쓰기 원본을 계정별로 재전송하여 실제 상태가 변경될 수 있습니다.")
+        +"\n자동 비교도 원본마다 확인합니다. 취소하면 대기 중/자동 비교도 중지하며 대상에 요청하지 않습니다.");
+  }
+
   ExecutionLedger.State executionState(Run run) {
     if (closed.get() || run.context.epoch() != epoch.get() || run.note.equals("중지")) return ExecutionLedger.State.CANCELLED;
     if (run.baselineState == Run.Baseline.INVALID || run.note.startsWith("중단") || run.note.equals("대기열 거부")) return ExecutionLedger.State.FAILED;
@@ -2323,6 +2354,8 @@ public final class AuthComparePanel extends JPanel implements AutoCloseable {
     if (detailRun == run || detailRun==null && current() == run) show(run);
     state.setText("비교 기록 " + runs.size() + " · 비교 작업 " + active.get() + " · 제외 " + dropped);
   }
+
+  Runnable aiReview=()->{};
 
   Run current() {
     int row = history.getSelectedRow();

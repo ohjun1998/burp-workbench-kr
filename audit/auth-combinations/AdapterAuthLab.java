@@ -12,6 +12,8 @@ import static kr.workbench.WorkbenchTest.*;
 /** CI fallback: production controller with real loopback HTTP and explicit API adapters. */
 public final class AdapterAuthLab {
     public static void main(String[] args)throws Exception{
+    TestLauncher.simulateUserConsent(); // Test-only explicit user-consent simulation for controlled HTTP adapters.
+
         BountyFeaturesTest.factory();AtomicInteger transport=new AtomicInteger();
         var client=java.net.http.HttpClient.newBuilder().followRedirects(java.net.http.HttpClient.Redirect.NEVER).build();
         var http=proxy(Http.class,(p,m,a)->{

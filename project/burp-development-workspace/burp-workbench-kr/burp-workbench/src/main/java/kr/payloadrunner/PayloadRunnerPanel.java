@@ -5,6 +5,7 @@ import kr.workbench.WorkbenchUi;import kr.workbench.FeatureGuide;
 import kr.workbench.PacketView;
 import kr.workbench.PacketFormat;
 import kr.workbench.PayloadSessionCheck;
+import kr.workbench.ActiveRequestApproval;
 
 import kr.payloadrunner.Engine;
 import kr.payloadrunner.Adaptive;
@@ -51,7 +52,7 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
  final DefaultTableModel model=new DefaultTableModel(new String[]{"#","페이로드","상태","bytes","ms","판정","근거"},0){public boolean isCellEditable(int r,int c){return false;}};
  final JTable table=new JTable(model);
  record Entry(Engine.Row row,IHttpService service){}
- final List<Entry> entries=new ArrayList<>();final AtomicBoolean cancel=new AtomicBoolean();volatile boolean running,closed;
+ final List<Entry> entries=new ArrayList<>();final AtomicBoolean cancel=new AtomicBoolean();volatile boolean running,closed,confirming;
  final ExecutorService worker=Executors.newSingleThreadExecutor(r->{Thread t=new Thread(r,"PayloadRunner-KR");t.setDaemon(true);return t;});
  private Runnable onImported=()->{};
  private java.util.function.BiConsumer<IHttpService,List<Engine.Row>> evidenceSink;
@@ -123,16 +124,47 @@ public final class PayloadRunnerPanel implements IContextMenuFactory,IExtensionS
  Entry selected(){int i=table.getSelectedRow();if(i<0)return null;int row=table.convertRowIndexToModel(i);return row<entries.size()?entries.get(row):null;}
  void message(String s){JOptionPane.showMessageDialog(panel,s,"입력값 보안 검사",JOptionPane.INFORMATION_MESSAGE);}
  void setBusy(boolean b){running=b;settingsButton.setEnabled(!b);for(JComponent c:new JComponent[]{start,mark,reset,clear,host,scheme,port,profile,encoding,base,payloads,request,interval,budget,proof,scope,mode,uploadReadback,callbackMode,callbackPort,responseTimeout,sessionControl,identityPath,identityField,identityValue})c.setEnabled(!b);stopButton.setEnabled(b);}
- void startScan(){if(running||closed)return;try{if(transport!=null&&transport.busy())throw new IllegalArgumentException("이전 Legacy 요청이 실제로 종료된 뒤 다시 시작하세요.");
+ record InspectionPlan(Engine.Config config,PayloadSessionCheck.Config identityCheck,String hostname,int port,boolean secure,
+   boolean adaptive,boolean readback,boolean localCallback,boolean enforceScope,int listenPort,int timeoutMs){}
+ InspectionPlan inspectionPlan(){
   List<String> lines=Arrays.stream(payloads.getText().split("\\r?\\n",-1)).filter(s->!s.isBlank()).toList();
   var config=new Engine.Config((Engine.Profile)profile.getSelectedItem(),(Engine.Encoding)encoding.getSelectedItem(),request.getText(),base.getText(),lines,(Integer)interval.getValue(),(Integer)budget.getValue(),proof.getText());
   PayloadSessionCheck.Config identityCheck=sessionControl.isSelected()?new PayloadSessionCheck.Config(identityPath.getText().strip(),identityField.getText().strip(),identityValue.getText()):null;
   String hostname=host.getText().strip();if(hostname.isBlank()||hostname.contains("/")||hostname.contains(" "))throw new IllegalArgumentException("대상 호스트를 확인하세요");
-  IHttpService service=callbacks.getHelpers().buildHttpService(hostname,(Integer)port.getValue(),scheme.getSelectedItem().equals("https"));
+  return new InspectionPlan(config,identityCheck,hostname,(Integer)port.getValue(),scheme.getSelectedItem().equals("https"),
+    mode.getSelectedIndex()==0,uploadReadback.isSelected(),callbackMode.isSelected()&&config.profile()==Engine.Profile.SSRF,
+    scope.isSelected(),(Integer)callbackPort.getValue(),((Integer)responseTimeout.getValue())*1000);
+ }
+ boolean stillCurrent(InspectionPlan approved){try{return approved.equals(inspectionPlan());}catch(RuntimeException changed){return false;}}
+ static String approvalDetails(InspectionPlan plan){
+  var config=plan.config();String raw=config.template();int insertion=raw.indexOf(Engine.MARK),lineEnd=raw.indexOf("\r\n"),body=raw.indexOf("\r\n\r\n");
+  String position=insertion<lineEnd?"요청 줄(경로·쿼리 등)":insertion<body?"헤더":"본문";
+  String method=raw.substring(0,raw.indexOf(' '));
+  return "검사 유형: "+Engine.label(config.profile())+" / "+(plan.adaptive()?"응답 기반 적응형":"전체 목록 순차 전송")
+    +"\n전송 서버: "+(plan.secure()?"https":"http")+"://"+plan.hostname()+":"+plan.port()
+    +"\n메서드: "+method+" · 입력 위치: "+position+" · §PAYLOAD§ 1곳 · 원본 오프셋 "+insertion
+    +"\n인코딩: "+config.encoding()+" · 선택 페이로드 "+config.payloads().size()+"개"
+    +"\n총 요청 한도: "+config.budget()+"회 (기준·안정성·공격·대조·재검증·신원 대조·재조회 모두 포함)"
+    +"\n요청 간격: "+config.intervalMs()+"ms · 병렬 요청: 1개 · 응답 대기: "+plan.timeoutMs()/1000+"초"
+    +(config.intervalMs()==0?"\n간격 0ms: 응답 직후 다음 요청을 보내 짧은 시간에 반복될 수 있습니다.":"")
+    +"\n신원 대조 GET: "+(plan.identityCheck()==null?"사용 안 함":"사용 · 같은 대상 · 총 예산 포함")
+    +"\n업로드 반환 URL 재조회: "+(plan.adaptive()&&plan.readback()?"같은 대상만 허용 · 총 예산 포함":"사용 안 함")
+    +"\nSSRF 로컬 콜백: "+(plan.localCallback()?"포트 "+plan.listenPort()+" · 서버의 추가 연결을 관측":"사용 안 함")
+    +"\nSCOPE 제한: "+(plan.enforceScope()?"현재 SCOPE를 매 요청 전에 재확인":"해제됨")
+    +"\n영향: 시험 문자열 전송으로 데이터 생성·변경·업로드·재처리와 서버의 추가 요청이 발생할 수 있습니다. GET도 상태를 바꿀 수 있습니다. 자동 복구는 하지 않습니다."
+    +"\n이 실행에만 적용합니다. 취소하면 기준·대조 요청도 보내지 않습니다.";
+ }
+ void startScan(){if(running||closed||confirming)return;try{if(transport!=null&&transport.busy())throw new IllegalArgumentException("이전 Legacy 요청이 실제로 종료된 뒤 다시 시작하세요.");
+  final InspectionPlan plan=inspectionPlan();var config=plan.config();var identityCheck=plan.identityCheck();List<String> lines=config.payloads();
+  IHttpService service=callbacks.getHelpers().buildHttpService(plan.hostname(),plan.port(),plan.secure());
   byte[] original=Engine.render(config.template(),config.baseline(),config.encoding());
-  var url=callbacks.getHelpers().analyzeRequest(service,original).getUrl();if(scope.isSelected()&&!inScope(url))throw new IllegalArgumentException("대상이 SCOPE 밖입니다. 트래픽 우클릭 → SCOPE 지정으로 주소를 추가하세요");
+  var url=callbacks.getHelpers().analyzeRequest(service,original).getUrl();if(plan.enforceScope()&&!inScope(url))throw new IllegalArgumentException("대상이 SCOPE 밖입니다. 트래픽 우클릭 → SCOPE 지정으로 주소를 추가하세요");
+  List<String> targets=new ArrayList<>();targets.add(url.toExternalForm());if(identityCheck!=null)targets.add(new java.net.URL(url,identityCheck.path()).toExternalForm());
+  boolean accepted;confirming=true;try{accepted=ActiveRequestApproval.confirm(panel,"입력값 보안 검사 · 반복 요청 실행",targets,approvalDetails(plan));}finally{confirming=false;}
+  if(!accepted){status.setText("실행 확인 취소 · 기준·대조·페이로드 요청 0회");return;}
+  if(closed||running)return;if(!stillCurrent(plan)){status.setText("확인 중 대상·설정이 변경되었습니다. 새 계획을 다시 확인한 뒤 시작하세요.");return;}
   entries.clear();model.setRowCount(0);detail.setText("");request.setCaretPosition(0);payloads.setCaretPosition(0);cancel.set(false);setBusy(true);progress.setMaximum(lines.size());progress.setValue(0);progress.setString("0 / "+lines.size());status.setText("백그라운드 · 기준 응답 수집 중…");
-  boolean adaptive=mode.getSelectedIndex()==0,readback=uploadReadback.isSelected(),localCallback=callbackMode.isSelected()&&config.profile()==Engine.Profile.SSRF,enforceScope=scope.isSelected();int listenPort=(Integer)callbackPort.getValue(),timeoutMs=((Integer)responseTimeout.getValue())*1000;
+  boolean adaptive=plan.adaptive(),readback=plan.readback(),localCallback=plan.localCallback(),enforceScope=plan.enforceScope();int listenPort=plan.listenPort(),timeoutMs=plan.timeoutMs();
   worker.submit(()->{try{Engine.Transport transport=bytes->{if(closed||cancel.get())throw new InterruptedException("중지");if(enforceScope&&!inScope(callbacks.getHelpers().analyzeRequest(service,bytes).getUrl()))throw new SecurityException("후속 요청이 SCOPE 밖입니다");return this.transport.send(service,bytes,timeoutMs,cancel);};
    java.util.function.Consumer<Engine.Row> receive=row->{if(!closed)SwingUtilities.invokeLater(()->{entries.add(new Entry(row,service));model.addRow(new Object[]{row.index(),row.payload(),row.response()==null?"—":row.response().status(),row.response()==null?0:row.response().wireLength(),row.millis(),row.verdict(),row.evidence()});progress.setValue(Math.min(lines.size(),Math.max(0,row.index())));progress.setString(adaptive?"적응형 · 관찰 "+entries.size():Math.max(0,row.index())+" / "+lines.size());status.setText("백그라운드 · "+row.verdict());});};
    String finished;

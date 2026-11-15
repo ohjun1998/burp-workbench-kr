@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * emits no HTTP.
  */
 public final class BountySupportPanel extends JPanel implements AutoCloseable {
+  Runnable aiReview=()->{}, aiFlowReview=()->{};
   final MontoyaApi api;
   final Supplier<List<HttpRequestResponse>> selected;
   final AuthComparePanel auth;
@@ -375,7 +376,7 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     flowCapture.setName("wb.bounty.flow.evidence");
     WorkbenchUi.primary(flowRun);
     p.add(
-        WorkbenchUi.row(append, flowSettings.button(), flowRun, flowStop, flowCapture),
+        WorkbenchUi.row(append, flowSettings.button(), flowRun, flowStop, flowCapture, action("AI 업무 로직 검토",()->aiFlowReview.run())),
         BorderLayout.NORTH);
     JSplitPane inputs =
         WorkbenchUi.split(
@@ -451,6 +452,21 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
             (Integer) flowBudget.getValue());
     var checks = BountyWorkflow.checks(plan, flowChecks.getText());
     if (running) throw new IllegalArgumentException("진행 중");
+    List<String> approvalTargets=new ArrayList<>();
+    List<String> methods=new ArrayList<>();
+    for(var step:plan.steps()){
+      String[] first=step.raw().replace("\r\n","\n").split("\n",2)[0].split(" ");
+      approvalTargets.add((plan.origin()+first[1]).replace("{","%7B").replace("}","%7D").replace("|","%7C"));methods.add(first[0]);
+    }
+    String requestPlan="입력 순서대로 최대 "+plan.steps().size()+"단계 · 전체 요청 한도 "+plan.budget()+"회\n"
+        +"메서드: "+String.join(" → ",methods)+" · 동시 요청 1개 · 단계 사이 추가 지연 0ms · 타임아웃 "+plan.timeout()+"초\n"
+        +"쓰기 단계 허용: "+plan.writes()+". POST/PUT/PATCH/DELETE 및 상태 변경 GET은 실제 데이터를 바꿀 수 있습니다.\n"
+        +"후속 단계의 변수는 앞선 응답에서 치환하며, 위 목록의 템플릿을 사용해 동일 Origin·SCOPE에서만 전송합니다.\n"
+        +"응답 없음·크기 한도·비성공 HTTP·기대 조건 불일치·변수 추출 실패·대상/메서드/SCOPE 변경 또는 사용자 중지 시 후속 단계를 중단합니다. 리다이렉트는 추적하지 않습니다.";
+    if(!ActiveRequestApproval.confirm(this,"업무 요청 순차 실행",approvalTargets,requestPlan)){
+      state.setText("승인하지 않아 업무 요청을 실행하지 않았습니다.");return;
+    }
+    if(running||closed.get())return;
     flowResults.clear();
     flowModel.setRowCount(0);
     state.setText("순차 실행 중");
@@ -512,7 +528,8 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       menu.addSeparator(); evidenceMenuItem(menu, "증거 비우기", evidenceClear.isEnabled(), this::clearEvidence);
       return menu;
     });
-    top.add(WorkbenchUi.row(addEvidence, evidencePreview, evidenceSave, moreEvidence));
+    JButton aiDraft=action("AI 보고서 초안",()->aiReview.run());aiDraft.setName("wb.bounty.ai.report");
+    top.add(WorkbenchUi.row(addEvidence, evidencePreview, evidenceSave, aiDraft, moreEvidence));
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     evidenceTable.setToolTipText("Ctrl/Shift로 여러 증거 선택 · 화면 순서대로 ZIP에 저장합니다.");
     evidenceRemove.setName("wb.bounty.evidence.remove");
@@ -1026,6 +1043,14 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
     for (int i = 0; i < checked.size(); i++) remember(checked.get(i), "연결 원본 " + (i + 1), note);
     pages.setSelectedIndex(3);
     state.setText("원본 " + checked.size() + "개 증거 추가 · 가림 미리보기 후 저장하세요.");
+  }
+
+  void appendAiReportDraft(String draft) {
+    requireEvidenceEdit();
+    if(draft==null||draft.isBlank()||draft.length()>32768)throw new IllegalArgumentException("AI 보고서 초안 크기 확인");
+    repro.append("\n\n[AI 초안 · 근거와 실제 영향 수동 확인]\n"+draft);
+    pages.setSelectedIndex(3);
+    state.setText("AI 초안을 기존 재현 설명 아래에 추가했습니다. 검토 후 저장하세요.");
   }
 
   String evidencePreview() {

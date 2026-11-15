@@ -1,3 +1,10 @@
+# Next 0.54.0 local LLM task branch
+
+- User explicitly requested implementing LLM integration in original Next, not Simple. Current task branch bumps Next to0.54.0; previous0.53.4 artifacts and Simple sources remain immutable. Do not treat historical Simple-only or completed0.53.4 scope notes below as blocking this new authorized Next task.
+- LocalLlmConfig/Client/Tasks/Panel and NextLlmBridge provide manual, session-only AI review; CodexSubscriptionClient provides official ChatGPT-subscription CLI runs for FUNCTIONS/REPORT by default, local Halogen for other tasks. Never switch providers on refusal automatically or use API-key authentication for subscription jobs. Preserve immutable source IDs/current Scope, redacted previews, bounded single worker/cancellation, no tool execution or target sends, exact originals for Repeater/evidence, and stale project/report guards. AI group suggestions must never call Mapper.move automatically.
+- User requires explicit per-run confirmation before availability-impacting automated requests. Preserve ActiveRequestApproval default-cancel/no cached grants, pre-dispatch payload/env/URL/flow/JS gates, per-original auth replay and cookie-combination gates. Cancel must send zero baseline/control/target requests and automatic auth cancellation stops queued admission. TestLauncher.simulateUserConsent is test-only and excluded from shipped JAR; never autoapprove a headless production run.
+- New tests: LocalLlmClientTest, LocalLlmTasksTest, LocalLlmPanelTest, NextLocalLlmIntegrationTest. Guide docs/RELEASE_0.54.0_NEXT_KR.md; verification docs/VERIFICATION_0.54.0.json. Run python dev.py check before versioned packaging. M5/Halogen real inference and native Burp GUI are separate unexecuted validation unless actual evidence is added.
+
 # Burp Workbench KR development
 
 - Embedded theme restoration must remain bounded: `WorkbenchSkin.watch` delegates the `wb.embedded.style` subtree to its own owner; `MapperUi.style` retains an existing custom ButtonUi. `SimpleEmbeddedThemeTest` exercises repeated outer styling and foreign-UI replacement without repaint feedback. Do not make both owners watch/restore the same subtree.

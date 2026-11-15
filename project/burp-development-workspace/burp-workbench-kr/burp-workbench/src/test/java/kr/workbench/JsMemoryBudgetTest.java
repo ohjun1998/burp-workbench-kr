@@ -498,83 +498,53 @@ public final class JsMemoryBudgetTest {
   }
 
   private static void lateDiscoveryFailure(boolean close) throws Exception {
-    var panel =
-        new JsAnalysisPanel(
-            WorkbenchTest.proxy(
-                burp.api.montoya.MontoyaApi.class,
-                (proxy, method, args) -> WorkbenchTest.def(method)),
-            () -> {});
+    var previousFactory = burp.api.montoya.internal.ObjectFactoryLocator.FACTORY;
+    var previousPrompt = ActiveRequestApproval.prompt;
     var entered = new CountDownLatch(1);
     var release = new CountDownLatch(1);
-    var fail = new AtomicBoolean();
-    var maps =
-        new java.util.AbstractList<JsMiner.MapRef>() {
-          public JsMiner.MapRef get(int index) {
-            throw new IndexOutOfBoundsException();
-          }
-
-          public int size() {
-            return 0;
-          }
-
-          @Override
-          public Object[] toArray() {
-            if (fail.get()) {
-              entered.countDown();
-              // Model a provider that finishes after cancellation instead of honoring interruption.
-              boolean interrupted = false;
-              while (true) {
-                try {
-                  release.await();
-                  break;
-                } catch (InterruptedException ex) {
-                  interrupted = true;
-                }
-              }
-              if (interrupted) Thread.interrupted();
-              throw new IllegalStateException("late discovery fixture");
-            }
-            return new Object[0];
-          }
-        };
+    var requests = new AtomicInteger();
+    var approvals = new AtomicInteger();
+    burp.api.montoya.internal.ObjectFactoryLocator.FACTORY = WorkbenchTest.proxy(
+        burp.api.montoya.internal.MontoyaObjectFactory.class, (proxy, method, args) -> switch (method.getName()) {
+          case "httpRequestFromUrl" -> WorkbenchTest.request((String) args[0], "GET", true, List.of());
+          case "requestOptions" -> WorkbenchTest.proxy(burp.api.montoya.http.RequestOptions.class, (p, m, a) -> p);
+          default -> WorkbenchTest.def(method);
+        });
+    // Production now obtains consent before queueing an active job. Exercise a real approved
+    // transport failure instead of mutating the cached map list before candidate validation.
+    ActiveRequestApproval.prompt = (owner, plan) -> { approvals.incrementAndGet(); return true; };
+    var http = WorkbenchTest.proxy(burp.api.montoya.http.Http.class, (proxy, method, args) -> {
+      if (!method.getName().equals("sendRequest")) return WorkbenchTest.def(method);
+      requests.incrementAndGet(); entered.countDown();
+      boolean interrupted = false;
+      while (true) {
+        try { release.await(); break; }
+        catch (InterruptedException ignored) { interrupted = true; }
+      }
+      if (interrupted) Thread.interrupted();
+      throw new IllegalStateException("late discovery fixture");
+    });
+    var panel = new JsAnalysisPanel(WorkbenchTest.proxy(burp.api.montoya.MontoyaApi.class,
+        (proxy, method, args) -> method.getName().equals("http") ? http : WorkbenchTest.def(method)), () -> {});
     try {
       edt(() -> panel.load("fetch('/a');", "https://test/a.js"));
       JsAnalysisPanelTest.waitDone(panel);
-      var cache = (JsSourceCache) WorkbenchTest.get(panel, "cache");
-      var original = cache.result("https://test/a.js");
-      cache.result(
-          "https://test/a.js",
-          new JsAnalysis.Result(
-              original.endpoints(),
-              original.secrets(),
-              original.status(),
-              false,
-              new JsMiner.Result(List.of(), List.of(), List.of(), maps, List.of(), "")));
-      fail.set(true);
       edt(panel::discover);
-      check(
-          entered.await(5, TimeUnit.SECONDS),
-          "late discovery failure fixture enters before " + (close ? "close" : "clear"));
-      edt(
-          () -> {
-            if (close) panel.close();
-            else panel.clear();
-            panel.status.setText("NEW_STATE");
-          });
+      check(entered.await(5, TimeUnit.SECONDS) && approvals.get() == 1 && requests.get() == 1,
+          "approved discovery transport enters before " + (close ? "close" : "clear"));
+      edt(() -> { if (close) panel.close(); else panel.clear(); panel.status.setText("NEW_STATE"); });
       release.countDown();
       var executor = (ThreadPoolExecutor) WorkbenchTest.get(panel, "worker");
       if (close) {
-        check(
-            executor.awaitTermination(5, TimeUnit.SECONDS),
-            "closed discovery worker terminates after late error");
+        check(executor.awaitTermination(5, TimeUnit.SECONDS), "closed discovery worker terminates after late error");
         edt(() -> {});
       } else JsAnalysisPanelTest.waitDone(panel);
-      check(
-          panel.status.getText().equals("NEW_STATE"),
-          "late discovery error cannot overwrite status after " + (close ? "close" : "clear"));
+      check(panel.status.getText().equals("NEW_STATE") && requests.get() == 1,
+          "late discovery error cannot overwrite status or send a follow-up after " + (close ? "close" : "clear"));
     } finally {
-      release.countDown();
-      edt(panel::close);
+      release.countDown(); edt(panel::close);
+      ActiveRequestApproval.prompt = previousPrompt;
+      burp.api.montoya.internal.ObjectFactoryLocator.FACTORY = previousFactory;
     }
   }
 

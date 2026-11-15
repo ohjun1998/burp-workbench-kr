@@ -1,3 +1,7 @@
+# Next 0.54.0 작업 브랜치 다운로드
+
+[설치 JAR](extensions/0.54.0/burp-workbench-kr-0.54.0.jar) · [소스 ZIP](extensions/0.54.0/burp-workbench-kr-0.54.0-source.zip) · [사용법](../docs/RELEASE_0.54.0_NEXT_KR.md) · [검증](../docs/VERIFICATION_0.54.0.json). 별도 PR의 개발 결과이며 main 병합 상태는 PR에서 확인하세요.
+
 # Workbench Next / 기존 버전 다운로드
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 

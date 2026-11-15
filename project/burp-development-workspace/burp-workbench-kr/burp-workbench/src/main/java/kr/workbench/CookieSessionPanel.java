@@ -115,6 +115,14 @@ final class CookieSessionPanel extends JPanel implements AutoCloseable,Scrollabl
     owner.editable();var config=config();int slot=account.getSelectedIndex();var candidate=owner.slots[slot];
     if(candidate==null||candidate.headers().isEmpty())throw new IllegalArgumentException("인증 후보를 비교 계정으로 지정한 뒤 검사하세요.");
     CookieSessionProbe.cookies(candidate.headers());
+    long reviewedGeneration=generation.get(),reviewedEpoch=owner.epoch.get();
+    if(!ActiveRequestApproval.confirm(this,"쿠키·세션 조합 검사",List.of(config.url()),
+        "같은 GET API에 쿠키 전체/비로그인/제외/단독/조합을 직렬 전송합니다. 최대128회, 요청 사이 최소120ms, 동시1개입니다.\n"
+        +"로그인 실패/방어 정책에 의해 계정이 잠기거나 가용성에 영향을 줄 수 있습니다. 취소하면 첫 요청도 보내지 않습니다.")) {
+      summary.setText("사용자 확인 취소 · 세션 검사 요청을 전송하지 않았습니다.");return;
+    }
+    if(reviewedGeneration!=generation.get()||reviewedEpoch!=owner.epoch.get()||candidate!=owner.slots[slot]||!config.equals(config()))
+      throw new IllegalArgumentException("검토 중 계정/대상/설정이 변경되었습니다. 다시 검사하여 확인하세요.");
     invalidateResult();long token=generation.get(),parentEpoch=owner.epoch.get();
     Set<String> names=Set.copyOf(owner.authNames);busy(true);owner.active.incrementAndGet();
     summary.setText("검사 중 · 전체 세션/비로그인 대조와 쿠키 제외·단독·조합을 순서대로 확인합니다.");

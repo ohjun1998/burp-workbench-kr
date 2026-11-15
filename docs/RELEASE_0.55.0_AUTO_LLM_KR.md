@@ -37,7 +37,7 @@ SQLi 시간 지연, 부하 검사, 대용량 처리, 파일 업로드, 결제·�
 
 운영 Java 빌드와 엔진 42개, 합성 Montoya 패널 16개, 기존 LLM의 네트워크 없는 검사 34개, 증거 가림 7개가 통과했습니다. 실제 사용자 터미널에서 Halogen 구조화 검사안 요청도 2.9초에 성공했습니다. 합성 입력의 결과는 REVIEW였고 대상 요청은 0건입니다. 모델의 공개/정적 정보라는 해석은 관측으로 증명되지 않았으므로 분석 품질 또는 실제 취약점 발견 성공으로 해석하지 않습니다.
 
-배포 후보 CI 전체 **4,886개** 검사와 Mapper Java 134개·Node 15개, 배포 무결성 검사가 통과했습니다. 설치 JAR와 소스 ZIP을 로컬로 가져와 SHA-256, ZIP CRC, 소스 393개 지문 일치를 확인했습니다. 확대 CI는 배포 파일이 포함된 커밋에서 다시 확인합니다.
+배포 후보 CI 전체 **4,886개** 검사와 Mapper Java 134개·Node 15개, 배포 무결성 검사가 통과했습니다. 설치 JAR와 소스 ZIP을 로컬로 가져와 SHA-256, ZIP CRC, 소스 393개 지문 일치를 확인했습니다. [확대 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43680360985)의 인증 조합·50업무 권한 비교·화면 배치·패키징 검증도 통과했습니다. [Windows/Linux 내구성 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43679645573)의 반복 저장소·디스크 부족 복구·양 OS 180초 수집도 통과했습니다. 반복 실행 수는 고유 검사 수에 더하지 않습니다.
 
 [설치 JAR](../downloads/extensions/0.55.0/burp-workbench-kr-0.55.0.jar) · [소스 ZIP](../downloads/extensions/0.55.0/burp-workbench-kr-0.55.0-source.zip)
 

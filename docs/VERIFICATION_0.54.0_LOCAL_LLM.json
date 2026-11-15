@@ -34,7 +34,7 @@
     "localJdk26BuildSha256": "d003ce1a440d53cb3c6dc1edb8ceeebdb0a8110d26bc143ed255b99365a036cd"
   },
   "notVerified": [
-    "Live Halogen/Qwen inference",
+    "Vulnerability-analysis accuracy: live connection smoke test only",
     "Native Burp GUI",
     "Local loopback tests: managed environment denies socket creation",
     "Full local suite: sockets denied and Node 22+ not installed"
@@ -97,8 +97,14 @@
     "tool": "tools/check_live_llm.py",
     "compiledAgainstPublishedJar": true,
     "managedEnvironmentAttempt": "SocketException: Operation not permitted",
-    "userTerminalResult": "awaiting build/live-llm/result.json",
+    "userTerminalResult": "passed",
     "requestData": "synthetic only; one model call; no target-site requests",
-    "nativeBurpGui": "not yet verified"
+    "nativeBurpGui": "not yet verified",
+    "evidence": "docs/reports/2026-11-15-local-llm/live-model-result.json",
+    "testedAtUtc": "2026-11-15T04:33:43.920108+00:00",
+    "elapsedMillis": 16719,
+    "answerCharacters": 1775,
+    "finishReason": "stop",
+    "jarSha256": "715fc79048ae6d9b0a031a374a0c08726b73af0d33188cbf030a6e9b8e5150a7"
   }
 }

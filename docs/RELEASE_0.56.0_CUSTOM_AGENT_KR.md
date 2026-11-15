@@ -18,6 +18,8 @@ Agent 창을 닫으면 대상 전송을 중지합니다. 모델 대화까지 종
 
 ## 통합판 제한
 
+Burp 내장 Scanner의 수동/능동 ScanCheck 연동은 Pro 기능입니다. Community에서는 내장 Scanner 연동 없이 Agent의 수동 메뉴를 중심으로 사용합니다. 실제 Community/Pro GUI를 각각 실행해 검증한 것은 아닙니다.
+
 - 이 통합판의 모델 전송은 지정한 로컬 OpenAI 호환 API의 models/chat-completions 경로로 제한합니다.
 - CLI·drop-in 백엔드·외부 MCP 클라이언트·전체 빌드의 추가 플러그인은 로드하지 않습니다. 내부 MCP는 원본 핵심 도구만 제공합니다.
 - 일괄 전송·별도 RequestEngine·Intruder·WebSocket·Collaborator·Burp Scanner 작업 시작은 연결하지 않습니다. 이러한 경로가 필요한 원본 기능은 제한 메시지를 표시할 수 있습니다.
@@ -32,3 +34,9 @@ Agent 창을 닫으면 대상 전송을 중지합니다. 모델 대화까지 종
 원본 부팅 검사는 합성 Montoya API와 별도 임시 사용자 홈을 사용합니다. native Burp GUI, 실제 Halogen 대화, 내부 MCP 연결 및 실제 대상 능동 검사는 미검증입니다. 초기 확대 CI는 산출물이 아직 커밋되기 전 manifest 부재로 실패했고, 산출물 추가 후 다시 확인합니다. [검증 기록](VERIFICATION_0.56.0_CUSTOM_AGENT.json)에 실행 기준과 한계를 구분합니다.
 
 출처: https://github.com/six2dez/burp-ai-agent/tree/v1.1.0 (MIT). 원본 라이선스와 의존성 고지는 내장 JAR에 보존합니다.
+
+## 통합 화면
+
+아래 그림은 실제 통합 패널의 Agent 열기 버튼으로 원본 UI를 로드한 합성 Montoya 화면입니다. native Burp 캡처가 아닙니다.
+
+![Next 내부 Custom AI Agent 화면](reports/2026-11-15-custom-agent/integrated-panel.png)

@@ -1,0 +1,14 @@
+upstream: Custom AI Agent 1.1.0 (GitHub full build)
+upstream: Backend diagnostics enabled.
+upstream: No AiBackendFactory found via ServiceLoader; falling back to built-ins.
+upstream: Total backends registered: 7
+upstream: [Diagnostics] Burp PROFESSIONAL at load: api.ai().isEnabled() = false
+upstream: Stopped MCP server
+upstream: [ChatPanel] Failed to restore sessions: Workbench 통합판에서 지원하지 않는 동작: Agent 영구 데이터 저장
+upstream: AI ScanCheck registered with Burp Scanner (Pro feature)
+upstream: AI PassiveScanCheck registered with Burp Scanner (Pro feature)
+upstream: AI Agent extension loaded. Backends discovered: openai-compatible, lmstudio, nvidia-nim, ollama, perplexity
+upstream: Privacy mode: STRICT. Change it in Settings > Privacy. Context captured from menus is previewed before being sent to the AI.
+PASS real integration panel loaded upstream UI through load button
+PASS opening the integration panel leaves targets stopped
+CustomAgentPanelPreview: 2 checks passed

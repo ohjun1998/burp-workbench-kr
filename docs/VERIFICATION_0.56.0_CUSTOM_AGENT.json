@@ -28,7 +28,10 @@
     "actualNetworkRequests": 0,
     "nativeBurp": false,
     "sourceFingerprints": 401,
-    "zipCrc": "passed"
+    "zipCrc": "passed",
+    "panelLoadButtonChecks": 2,
+    "panelScreenshot": "reports/2026-11-15-custom-agent/integrated-panel.png",
+    "fullLayoutAttempt": "blocked by sandbox socket creation when existing Feature Mapper starts; moved to GitHub CI"
   },
   "artifacts": {
     "jarSha256": "e6f778f6fdd417e6cac6f1f5b953db487c81ef7118d8150308fa18652f9048ce",
@@ -37,7 +40,9 @@
   "expandedCi": {
     "initialRun": 43683716400,
     "initialResult": "failed before artifact commit: manifest missing",
-    "rerun": "pending"
+    "rerun": 43684676869,
+    "rerunResult": "core regression, role portals, authentication combinations, 50-operation comparison and login passed; layout fixture timed out waiting for JSON candidates at 1280x800",
+    "targetedUiRerun": "pending; production and layout fixture unchanged"
   },
   "notValidated": [
     "native Burp GUI",
@@ -50,5 +55,11 @@
     "Existing 0.55.0 GET account comparator remains separate.",
     "CLI, drop-in, external MCP client and full-build SPI plug-ins are excluded.",
     "Upstream chat save/restore logs a disabled-persistence message; persistent sessions are intentionally unavailable."
-  ]
+  ],
+  "durability": {
+    "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43683716235",
+    "linux": "passed",
+    "windows": "passed",
+    "nativeBurp": false
+  }
 }

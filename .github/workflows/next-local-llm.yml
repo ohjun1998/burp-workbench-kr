@@ -39,25 +39,6 @@ jobs:
             python dev.py release
             python tools/package_downloads.py --verify
           fi
-      - name: Prepare bounded connector transfer of the verified files
-        run: |
-          if git ls-files --error-unmatch downloads/extensions/0.54.0/manifest.json >/dev/null 2>&1; then exit 0; fi
-          python - <<'PYTRANSFER'
-          from pathlib import Path
-          import hashlib,json
-          root=Path('downloads/extensions/0.54.0')
-          folder=root/'transport';folder.mkdir(exist_ok=True)
-          manifest={}
-          for path in sorted(root.glob('*')):
-              if path.suffix not in ('.jar','.zip'): continue
-              data=path.read_bytes();parts=[]
-              for index,offset in enumerate(range(0,len(data),512*1024)):
-                  name=f'{path.name}.{index:03d}.part'
-                  block=data[offset:offset+512*1024];(folder/name).write_bytes(block)
-                  parts.append({'name':name,'sha256':hashlib.sha256(block).hexdigest()})
-              manifest[path.name]={'sha256':hashlib.sha256(data).hexdigest(),'parts':parts}
-          (folder/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-          PYTRANSFER
       - name: Upload candidate and verification
         uses: actions/upload-artifact@v7
         with:

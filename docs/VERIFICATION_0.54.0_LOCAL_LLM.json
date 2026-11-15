@@ -1,0 +1,61 @@
+{
+  "version": "0.54.0",
+  "status": "candidate_verified_not_merged",
+  "sourceCommit": "e6ac9f7e1a482443fdd51b835a709e74d793c3c4",
+  "artifactCommit": "cc4221de2634b16bb1df46a1ccf9640b2d9830ca",
+  "ciUrl": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43674853888",
+  "ci": {
+    "version": "0.54.0",
+    "regressionGroups": 125,
+    "regressionChecks": 4321,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 4825,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed",
+    "mapperJavaChecks": 134,
+    "mapperNodeChecks": 15
+  },
+  "local": {
+    "java": "26.0.2",
+    "targetRelease": 17,
+    "fullExtensionBuild": "passed",
+    "noNetworkLlmChecks": 34,
+    "evidenceRedactionChecks": 7,
+    "packagingUnitChecks": 5,
+    "sourceArchiveEntries": 388,
+    "sourceFingerprintVerification": "passed",
+    "syntheticSwingCapture": "800x600; production panel with synthetic context; not native Burp"
+  },
+  "artifacts": {
+    "jarSha256": "715fc79048ae6d9b0a031a374a0c08726b73af0d33188cbf030a6e9b8e5150a7",
+    "sourceZipSha256": "bd6d0fc7b376eb591e37f46ee9053538e75408fd0234cdc00e74271cdb701dee",
+    "localJdk26BuildSha256": "d003ce1a440d53cb3c6dc1edb8ceeebdb0a8110d26bc143ed255b99365a036cd"
+  },
+  "notVerified": [
+    "Live Halogen/Qwen inference",
+    "Native Burp GUI",
+    "Local loopback tests: managed environment denies socket creation",
+    "Full local suite: sockets denied and Node 22+ not installed"
+  ],
+  "priorFailures": [
+    {
+      "run": 43673936701,
+      "reason": "SecretSet adapter compilation mismatch; fixed"
+    },
+    {
+      "run": 43674549781,
+      "reason": "UiCleanupTest expected old exact menu; updated to include approved new item"
+    },
+    {
+      "run": 43674853878,
+      "reason": "Broader CI read 0.54.0 manifest before candidate artifact commit; current branch now contains it"
+    }
+  ],
+  "notes": [
+    "Local developer copy was retrieved through GitHub connector plus verified source archive; it is not a full git-history clone.",
+    "Local and CI counts overlap; do not add them as unique checks.",
+    "Native user Burp/browser/proxy settings and Strix were not modified."
+  ]
+}

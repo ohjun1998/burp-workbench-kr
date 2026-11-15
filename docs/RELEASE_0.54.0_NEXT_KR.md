@@ -35,3 +35,15 @@ sh run-local.sh build
 Python 3.10+, JDK 17+, 전체 검사에는 Node 22+가 필요합니다. `run-local.sh`는 PATH 또는 `~/BurpSuite/jre/bin`의 Java를 찾습니다. `llm-test --no-http`는 포트 권한이 없는 환경용이며 HTTP 검사를 생략했다고 명시합니다. 전체 검사는 격리된 loopback 서버를 사용합니다. 사용자 Burp·프록시·브라우저 설정을 변경하지 않습니다.
 
 빌드 파일은 `project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.54.0.jar`입니다. 검증 후 배포 파일은 `downloads/extensions/0.54.0/`에 추가합니다. 기존 버전 덮어쓰기는 패키저가 거부합니다.
+
+## 이번 검증과 다운로드
+
+[전체 검사·배포 생성 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43674853888)에서 소스 `e6ac9f7e1a482443fdd51b835a709e74d793c3c4`의 회귀 125개 그룹·4,321개, payload HTTP136·전체 기능 HTTP102·모의 진단 HTTP266, 총 **4,825개**를 통과했습니다. Mapper Java134·Node15도 별도로 통과했습니다. 이전 실패/취소 실행을 합산하지 않습니다.
+
+로컬에서는 JDK26으로 Java17 대상 전체 확장 빌드, 네트워크 없는 LLM34·증거 가림7·패키징5 검사를 통과했습니다. 소스 ZIP388항목 CRC와 모든 소스 지문, 다운로드 JAR·ZIP의 SHA-256을 확인했습니다. [자세한 검증·제한](VERIFICATION_0.54.0_LOCAL_LLM.json).
+
+[설치 JAR](../downloads/extensions/0.54.0/burp-workbench-kr-0.54.0.jar) · [소스 ZIP](../downloads/extensions/0.54.0/burp-workbench-kr-0.54.0-source.zip) · [체크섬](../downloads/extensions/0.54.0/SHA256SUMS) · [PR #107](https://github.com/ohjun1998/burp-workbench-kr/pull/107).
+
+로컬 개발 폴더는 GitHub 연결 도구와 검증 소스 ZIP으로 구성한 사본이며 전체 Git 이력의 clone은 아닙니다. 실제 Halogen·native Burp는 관리 환경의 socket 제한으로 직접 검증하지 못했습니다. JDK26으로 재빌드한 dist 파일은 CI의 JDK17 설치 JAR와 바이트가 다르며, 기본 설치 링크는 CI 검증 JAR를 가리킵니다. main 병합은 별도입니다.
+
+![800×600 합성 자료로 렌더링한 실제 분석 패널](reports/2026-11-15-local-llm/synthetic-panel-800.png)

@@ -1,0 +1,105 @@
+{
+  "version": "0.55.0",
+  "status": "candidate_verified_not_merged",
+  "sourceCommit": "be80cb754e61c9903a819fab38f6d5e41c9e0d32",
+  "pullRequest": 108,
+  "local": {
+    "productionBuild": "passed",
+    "targetJavaRelease": 17,
+    "engineChecks": 42,
+    "syntheticMontoyaPanelChecks": 16,
+    "existingNoSocketLlmChecks": 34,
+    "evidenceRedactionChecks": 7,
+    "syntheticPanelCapture": "850x700; actual Swing panel with synthetic host; not native Burp",
+    "java": "25.0.5.0.3",
+    "sourceArchiveEntries": 393,
+    "sourceFingerprintVerification": "passed: all 393 source files byte-identical",
+    "zipCrc": "passed"
+  },
+  "automaticRecipe": "GET with declared test accounts A, B, A; exact read path and current scope required",
+  "availabilityApproval": "Per-plan confirmation required for model-flagged availability risk; one use; expires after 180 seconds; cannot enable unsupported write/load tests",
+  "pending": [
+    "Native user Burp GUI",
+    "Automatic target checks against a user-configured real target; all target tests so far use synthetic adapters/fixtures"
+  ],
+  "limits": [
+    "No arbitrary model-generated requests or commands",
+    "No automated time-delay SQLi, load, writes, upload or destructive tests",
+    "Same body/status alone does not confirm authorization vulnerability",
+    "Scopes and budgets apply to this coordinator; other tools have separate budgets",
+    "Local socket operations denied; actual target/live-model networking not executed in this managed shell"
+  ],
+  "ciRuns": {
+    "candidate": 43679645558,
+    "buildAndVerify": 43679645568,
+    "durability": 43679645573
+  },
+  "livePlan": {
+    "result": "passed",
+    "testedJarSha256": "c94ab745200a1d64afc1f8e15bcf2a181e842702f3fac6caf15160589a2259d7",
+    "action": "REVIEW",
+    "elapsedMillis": 2899,
+    "evidence": "docs/reports/2026-11-15-auto-llm/live-plan-result.json",
+    "note": "Model client unchanged after this test; final transport guards have separate regression tests. This is not a quality or automatic exploitation success claim."
+  },
+  "artifactCommit": "236f8a2eb9521044f61c20e6794b3e45879aa964",
+  "ci": {
+    "version": "0.55.0",
+    "result": "passed",
+    "regressionGroups": 127,
+    "regressionChecks": 4382,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 4886,
+    "mapperJavaChecks": 134,
+    "mapperNodeChecks": 15,
+    "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43679645558"
+  },
+  "artifacts": {
+    "burp-workbench-kr-0.55.0.jar": "df08a6384607f5ad65293862c28e8239a9b4a0ef5bffc02b530c0f966df4f3dc",
+    "burp-workbench-kr-0.55.0-source.zip": "e048c67693ab1b2b724c4a98cb205856e2fc4cbf02b00c8a85a83226a77bc716"
+  },
+  "priorFailures": [
+    {
+      "run": 43679645568,
+      "reason": "Expanded authentication harness started on source commit before 0.55.0 manifest was committed; full 4886 checks and role portals passed; rerun required with artifacts"
+    }
+  ],
+  "extendedCi": {
+    "durability": {
+      "run": 43679645573,
+      "testedSource": "be80cb754e61c9903a819fab38f6d5e41c9e0d32",
+      "result": "passed",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43679645573",
+      "coverage": [
+        "Windows Java regression",
+        "Windows synthetic native Repeater window",
+        "Repeated storage/cache regressions",
+        "Linux real ENOSPC rollback/recovery in private tmpfs",
+        "180-second sustained capture on both operating systems",
+        "Controlled Windows startup script checks"
+      ]
+    },
+    "buildAndVerify": {
+      "run": 43680360985,
+      "testedHead": "3d059028c8467a905f11bf98adffbce7b1ef029f",
+      "result": "passed",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43680360985",
+      "coverage": [
+        "Full regression and HTTP checks",
+        "Role portals",
+        "Authentication combinations",
+        "50-operation authorization comparison",
+        "Login lifecycle",
+        "Full and focused Swing layouts",
+        "Packaging fingerprints"
+      ]
+    },
+    "candidateReverify": {
+      "run": 43680360951,
+      "result": "passed"
+    }
+  },
+  "countPolicy": "Local checks and repeated CI/storage iterations overlap; do not add them as unique checks."
+}

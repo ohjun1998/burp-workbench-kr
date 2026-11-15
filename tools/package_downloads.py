@@ -33,7 +33,8 @@ def lab_version():
 
 
 def source_files():
-    files = [ROOT / 'dev.py', ROOT / 'tools/package_downloads.py']
+    files = [ROOT / 'dev.py', ROOT / 'tools/package_downloads.py',
+             ROOT / 'run-local.sh', ROOT / 'tools/check_local_llm.py', ROOT / 'tools/check_auto_llm.py']
     for part in ['src', 'deps']:
         files.extend(p for p in (WB / part).rglob('*') if p.is_file())
     files.extend(WB / name for name in ['build_all.py', 'release_info.py', 'shade_rhino.py', 'engine-lock.json', 'LICENSE', 'THIRD_PARTY_NOTICES.md'])
@@ -172,3 +173,4 @@ Oracle 시작에 시간이 필요합니다. 포트 8088, 8443, 8091, 8092 충돌
 
 if __name__ == '__main__':
     main()
+

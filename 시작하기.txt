@@ -1,25 +1,15 @@
-Workbench Next 0.55.0 · 범위 제한 자동 점검
+Workbench Next 0.56.0 · Custom AI Agent 통합
 
-설치 JAR:
-  downloads/extensions/0.55.0/burp-workbench-kr-0.55.0.jar
+설치 파일:
+/home/kwonohjun/workbench-next-custom-agent/downloads/extensions/0.56.0/burp-workbench-kr-0.56.0.jar
 
-Burp → Extensions → 기존 Next 로드 해제 → Add → Java → 위 JAR
-Workbench → 설정 → 로컬 LLM 자동 점검
+1. Burp Extensions에서 기존 Workbench Next를 언로드합니다.
+2. Add → Java에서 위 JAR 하나를 추가합니다. Custom AI Agent를 별도 확장으로 중복 로드하지 않습니다.
+3. Next 설정 → Custom AI Agent → 모델 주소 확인 → Agent 열기.
+4. 내장 화면의 MCP를 켜고 선택 요청의 Agent 도구를 사용합니다.
+5. 능동 검사는 SCOPE·Origin·테스트 계정·예산 설정 후 전송 준비 및 요청별 승인으로 실행합니다.
 
-1. SCOPE 수집을 켜고 허가된 대상을 지정합니다.
-2. 권한 비교의 첫 두 슬롯에 테스트 계정 A/B를 연결합니다.
-3. 자동 점검에서 Origin·정확한 조회 경로·예산을 지정하고 시작합니다.
-4. A로 탐색하면 새 응답을 모델이 분석하고 고정 GET 계정 비교를 실행합니다.
-5. 가용성 우려 항목은 개별 승인 전까지 전송하지 않습니다.
-
-자세한 범위·승인·중지·제한: docs/RELEASE_0.55.0_AUTO_LLM_KR.md
-검증 기록: docs/VERIFICATION_0.55.0_AUTO_LLM.json
-GitHub PR: https://github.com/ohjun1998/burp-workbench-kr/pull/108
-
-로컬 빌드: sh run-local.sh build
-집중 검사: python3 tools/check_auto_llm.py
-전체 검사: sh run-local.sh check
-실모델 계획만 확인: python3 tools/check_live_auto_llm.py
-
-GitHub 연결 도구로 가져온 개발 소스 사본이며 전체 Git 이력 clone은 아닙니다.
-이전 0.54.0: ~/workbench-next-local-llm
+Java 21 이상 필요. 기존 배포는 보존했습니다. 실제 Burp GUI와 Halogen 대화는 아직 별도 확인이 필요합니다.
+상세 사용법: docs/RELEASE_0.56.0_CUSTOM_AGENT_KR.md
+검증: docs/VERIFICATION_0.56.0_CUSTOM_AGENT.json
+GitHub PR: https://github.com/ohjun1998/burp-workbench-kr/pull/109

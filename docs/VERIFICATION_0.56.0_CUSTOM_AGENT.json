@@ -1,0 +1,54 @@
+{
+  "version": "0.56.0",
+  "upstream": {
+    "version": "1.1.0",
+    "jarSha256": "bb6c098f3ca525f94032759435033627945fef5d091a1597b80e2c442515eae5",
+    "modified": false
+  },
+  "sourceCommit": "06ba357106762f6c8cdb910f875ec18b5fd6bb77",
+  "artifactCommit": "b5da93bd11d473f82938e49973d2bd1ea5b149bd",
+  "candidateCi": {
+    "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43683716289",
+    "result": "passed",
+    "totalChecks": 4923,
+    "regressionChecks": 4419,
+    "regressionGroups": 128,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "upstreamBootChecks": 10,
+    "mapperJavaChecks": 134,
+    "mapperNodeChecks": 15
+  },
+  "local": {
+    "runtime": "Java 25",
+    "transmissionBoundaryChecks": 37,
+    "upstreamBootChecks": 10,
+    "userHome": "temporary isolated home",
+    "actualNetworkRequests": 0,
+    "nativeBurp": false,
+    "sourceFingerprints": 401,
+    "zipCrc": "passed"
+  },
+  "artifacts": {
+    "jarSha256": "e6f778f6fdd417e6cac6f1f5b953db487c81ef7118d8150308fa18652f9048ce",
+    "sourceZipSha256": "f1e6eac4d02c96a5ae24b8653b77f40ce42a6f7ec44b43994ac0642ed70c3baf"
+  },
+  "expandedCi": {
+    "initialRun": 43683716400,
+    "initialResult": "failed before artifact commit: manifest missing",
+    "rerun": "pending"
+  },
+  "notValidated": [
+    "native Burp GUI",
+    "live Halogen chat through upstream Agent",
+    "internal MCP connection",
+    "actual active vulnerability tests"
+  ],
+  "notes": [
+    "Per-request approval applies to every embedded Agent target request.",
+    "Existing 0.55.0 GET account comparator remains separate.",
+    "CLI, drop-in, external MCP client and full-build SPI plug-ins are excluded.",
+    "Upstream chat save/restore logs a disabled-persistence message; persistent sessions are intentionally unavailable."
+  ]
+}

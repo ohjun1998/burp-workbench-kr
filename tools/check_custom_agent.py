@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Compile and boot the real embedded upstream JAR with synthetic Montoya, no target traffic."""
 from pathlib import Path
-import os, subprocess, sys
+import os, subprocess, sys, tempfile
 r=Path(__file__).resolve().parents[1]
 w=r/'project/burp-development-workspace/burp-workbench-kr/burp-workbench'
 sys.path.insert(0,str(w))
@@ -12,7 +12,9 @@ subprocess.run(['javac','--release','17','-encoding','UTF-8','-cp',cp,'-d',str(o
 evidence=r/'build/custom-agent-check';evidence.mkdir(parents=True,exist_ok=True)
 for name in ['CustomAgentTest','CustomAgentBootTest']:
     cmd=['java','-Djava.awt.headless=true',f'-Dcustom.agent.capture={evidence}/upstream-embedded.png','-cp',cp+os.pathsep+str(out),'kr.workbench.TestLauncher','kr.workbench.'+name]
-    result=subprocess.run(cmd,cwd=w,text=True,capture_output=True)
+    with tempfile.TemporaryDirectory(prefix="workbench-agent-test-home-") as home:
+        cmd.insert(1,"-Duser.home="+home)
+        result=subprocess.run(cmd,cwd=w,text=True,capture_output=True)
     (evidence/(name+'.log')).write_text(result.stdout+result.stderr)
     print(result.stdout+result.stderr,flush=True)
     if result.returncode:raise SystemExit(result.returncode)

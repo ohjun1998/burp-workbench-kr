@@ -158,6 +158,6 @@ final class AutoLlmEngine implements AutoCloseable {
     if(b.status()==200 && b.body().equals(a.body()))return "동일 데이터 반환 재현 · 인가 취약점 후보, 기대 권한·데이터 소유 확인 필요";
     return "계정별 응답 차이 관측 · 권한 정책과 반환 데이터 추가 검토";
   }
-  private synchronized void put(long run, Result r){if(run==generation){results.put(r.id(),r);while(results.size()>100)results.remove(results.keySet().iterator().next());publish();}}
+  private synchronized void put(long run, Result r){if(run==generation){if(running)status=r.state().equals("사용자 확인 대기")?"신규 응답 대기 · 가용성 우려 항목은 개별 승인 필요":"신규 응답 대기";results.put(r.id(),r);while(results.size()>100)results.remove(results.keySet().iterator().next());publish();}}
   public synchronized void close(){closed=true;reset();}
 }

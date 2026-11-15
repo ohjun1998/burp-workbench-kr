@@ -96,6 +96,7 @@ final class AutoLlmPanel extends JPanel implements AutoCloseable {
         if(!engine.snapshot().running())throw new java.util.concurrent.CancellationException();
         var original=(HttpRequestResponse)input.original();
         HttpRequest q=Core.sessionRequest(original.request(),profiles.get(account).headers(),authNames);
+        validateDestination(q,config.origin());
         if(!WorkbenchScope.contains(api,q))throw new IllegalArgumentException("전송 직전 SCOPE 이탈");
         long began=System.nanoTime();var rr=api.http().sendRequest(q,RequestOptions.requestOptions().withResponseTimeout(10000).withRedirectionMode(RedirectionMode.NEVER));
         long elapsed=(System.nanoTime()-began)/1000000;
@@ -115,7 +116,8 @@ final class AutoLlmPanel extends JPanel implements AutoCloseable {
     target.offer(new AutoLlmEngine.Source(ref.id(),ref.method(),ref.url(),ref.source(),(int)Math.min(Integer.MAX_VALUE,(long)ref.requestLength()+ref.responseLength()),()->{
       var rr=ref.packet();EvidenceLinks.checked(api,List.of(rr));
       if(rr.response().statusCode()==429 || rr.response().statusCode()>=500)throw new IllegalArgumentException("관측 응답에서 오류/가용성 우려 확인 · 추가 전송 중지");
-      if(rr.request().hasHeader("X-HTTP-Method-Override")||rr.request().hasHeader("X-Method-Override")||rr.request().body().length()!=0)throw new IllegalArgumentException("GET 본문은 자동 검사 제외");
+      validateDestination(rr.request(),AutoLlmEngine.origin(ref.url()));
+      if(rr.request().headers().stream().anyMatch(h->Set.of("x-http-method-override","x-method-override","transfer-encoding","expect").contains(h.name().toLowerCase(Locale.ROOT)) || h.name().equalsIgnoreCase("content-length")&&!h.value().strip().equals("0"))||rr.request().body().length()!=0)throw new IllegalArgumentException("GET 본문은 자동 검사 제외");
       // An observed A request must match the declared baseline identity; do not guess its owner.
       for(String name:authNames){String expected=profiles.get(0).headers().entrySet().stream().filter(e->e.getKey().equalsIgnoreCase(name)).map(Map.Entry::getValue).findFirst().orElse("");
         long count=rr.request().headers().stream().filter(h->h.name().equalsIgnoreCase(name)).count();
@@ -123,6 +125,17 @@ final class AutoLlmPanel extends JPanel implements AutoCloseable {
       String text=BountyEvidence.localLlmPreview(rr.request().toString(),rr.response().toString());
       return new AutoLlmEngine.Capture(rr,"원본 ID: "+ref.id()+"\n"+text.substring(0,Math.min(16000,text.length())));
     }));
+  }
+  static void validateDestination(HttpRequest q,String expected) {
+    var u=java.net.URI.create(q.url());var service=q.httpService();
+    String actualHost=service.host().replace("[","").replace("]","");String urlHost=u.getHost().replace("[","").replace("]","");
+    int port=u.getPort()<0?(u.getScheme().equals("https")?443:80):u.getPort();
+    if(!AutoLlmEngine.origin(q.url()).equals(expected)||!actualHost.equalsIgnoreCase(urlHost)||service.port()!=port||service.secure()!=u.getScheme().equals("https"))
+      throw new IllegalArgumentException("URL과 실제 전송 서버가 달라 자동 검사 제외");
+    long hosts=q.headers().stream().filter(h->h.name().equalsIgnoreCase("host")).count();
+    if(hosts>1)throw new IllegalArgumentException("중복 Host 헤더 자동 검사 제외");
+    String host=q.headerValue("Host");
+    if(host!=null&&!AutoLlmEngine.origin(u.getScheme()+"://"+host).equals(expected))throw new IllegalArgumentException("Host와 전송 대상 불일치");
   }
   private void render(AutoLlmEngine.Snapshot s) {
     String selected=selected()==null?null:selected().id();snapshot=s;rows.setRowCount(0);int index=0;

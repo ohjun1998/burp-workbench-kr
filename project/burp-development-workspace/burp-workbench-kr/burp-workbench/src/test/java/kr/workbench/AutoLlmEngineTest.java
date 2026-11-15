@@ -24,7 +24,7 @@ public final class AutoLlmEngineTest {
     var c=cfg(6,2);
     ok(AutoLlmEngine.admitted(c,src("1")),"allowed source");
     for(var s:List.of(source("x","GET","https://evil.test/profile","PROXY",100),source("x","GET","https://example.test/profile","EXTENSIONS",100),source("x","GET","https://example.test/profile/child","PROXY",100),source("x","GET","https://example.test/profile","PROXY",131073)))ok(!AutoLlmEngine.admitted(c,s),"admission block");
-    for(var s:List.of(source("x","POST","https://example.test/profile","PROXY",100),source("x","GET","https://example.test/profile?action=delete","PROXY",100),source("x","GET","https://example.test/profile?token=secret","PROXY",100)))ok(!AutoLlmEngine.readOnly(s),"unsafe request block");
+    for(var s:List.of(source("x","POST","https://example.test/profile","PROXY",100),source("x","GET","https://example.test/profile?action=delete","PROXY",100),source("x","GET","https://example.test/profile?token=secret","PROXY",100),source("x","GET","https://example.test/profile?sid=secret","PROXY",100)))ok(!AutoLlmEngine.readOnly(s),"unsafe request block");
     try{new AutoLlmEngine.Config("P","https://example.test",Set.of("/*"),3,1,1000,3000);throw new AssertionError();}catch(IllegalArgumentException e){checks++;}
     Host h=new Host();try(var e=new AutoLlmEngine(h,(s,k)->plan(false),s->{})){
       e.start(cfg(3,5));e.offer(src("1"));e.offer(src("1"));await(()->e.snapshot().results().size()==1);

@@ -28,6 +28,13 @@ public final class AutoLlmPanelTest extends WorkbenchTest {
   });
   var panel=box.get();var engine=(AutoLlmEngine)get(panel,"engine");
   HttpRequest q=request("https://auto.test/profile?id=1","GET",true,List.of(header("Cookie","A")));var response=response(200,"{\"owner\":\"A\"}");registerTrafficPacket(q,response);
+  AutoLlmPanel.validateDestination(q,"https://auto.test:443");check(true,"URL and transport agree");
+  rejects(()->AutoLlmPanel.validateDestination(q,"https://other.test:443"),"different declared origin blocked");
+  var foreign=request("https://evil.test/profile","GET",true,List.of()).httpService();
+  var changedTransport=proxy(HttpRequest.class,(p,m,a)->m.getName().equals("httpService")?foreign:m.invoke(q,a));
+  rejects(()->AutoLlmPanel.validateDestination(changedTransport,"https://auto.test:443"),"service override cannot escape scope");
+  var wrongHost=request(q.url(),"GET",true,List.of(header("Host","evil.test")));
+  rejects(()->AutoLlmPanel.validateDestination(wrongHost,"https://auto.test:443"),"Host header cannot change destination");
   try(var store=new DiskTrafficStore()){
    var ref=store.append("now","Proxy",q,response);panel.offer(ref);AutoLlmEngineTest.await(()->engine.snapshot().results().size()==1);edt(()->{});
    check(sent.size()==3,"panel sends exactly three production requests");check(sent.get(0).headerValue("Cookie").equals("A")&&sent.get(1).headerValue("Cookie").equals("B")&&sent.get(2).headerValue("Cookie").equals("A"),"credential replacement follows A B A");

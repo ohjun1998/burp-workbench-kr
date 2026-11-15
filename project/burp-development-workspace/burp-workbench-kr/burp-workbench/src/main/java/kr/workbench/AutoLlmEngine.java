@@ -72,7 +72,7 @@ final class AutoLlmEngine implements AutoCloseable {
     URI u=URI.create(s.url());
     // Explicit allowlist is still required: GET itself is not a read-only guarantee.
     String target=Objects.toString(u.getPath(),"")+"?"+Objects.toString(u.getQuery(),"");
-    return s.method().equals("GET") && !target.toLowerCase(Locale.ROOT).matches(".*(?:logout|delete|remove|reset|purchase|transfer|withdraw|checkout|sendmail|export|download|report|sleep|benchmark|stress|token|password|session|api[_-]?key|authorization).*" );
+    return s.method().equals("GET") && !target.toLowerCase(Locale.ROOT).matches(".*[?&](?:sid|auth|jwt|access_key|csrf)=.*") && !target.toLowerCase(Locale.ROOT).matches(".*(?:logout|delete|remove|reset|purchase|transfer|withdraw|checkout|sendmail|export|download|report|sleep|benchmark|stress|token|password|session|api[_-]?key|authorization).*" );
   }
   synchronized void start(Config c) {
     if(closed || busy)throw new IllegalStateException("진행 중 요청이 끝난 뒤 시작하세요.");

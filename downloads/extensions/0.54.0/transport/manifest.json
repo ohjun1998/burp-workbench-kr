@@ -1,0 +1,84 @@
+{
+  "burp-workbench-kr-0.54.0-source.zip": {
+    "sha256": "bd6d0fc7b376eb591e37f46ee9053538e75408fd0234cdc00e74271cdb701dee",
+    "parts": [
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.000.part",
+        "sha256": "655584c72baacd1220d2980049cc36015085e994b72bcbfe1d490c3305ca4ddf"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.001.part",
+        "sha256": "f958bcfbb06fed849f6de7308b910637c38fd6e22f41a4cc0b17c945cfbeebe5"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.002.part",
+        "sha256": "28190941595f244d82dbfcc9dc249ce58ea476528085c5c71de8a645b9d9f4c6"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.003.part",
+        "sha256": "be58092a939e1d6ad278f4e1bfa2741f63c340cf4b6de03952767f6d354258b1"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.004.part",
+        "sha256": "3e369e49b19053f2cc99dfecff2503b23ef001e1be10a30641ca1e34028e3277"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.005.part",
+        "sha256": "23103fba55d3c6d9c64ff1185fd5acb523f3ac6b3d98894e50bffc0fb35e690b"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.006.part",
+        "sha256": "34e40659795807d8e6ad3bafd7d4139da5e46c8f6f7c235f4da0f65b149e32a7"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.007.part",
+        "sha256": "f984e7da02bec20491b44f0e1d793986af0091dda4a57df3e762b3d72892282c"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0-source.zip.008.part",
+        "sha256": "c3fe5c57c14cee57f008c6ade17d6de2e88c9164cdd777bd19009b4f5bcfd927"
+      }
+    ]
+  },
+  "burp-workbench-kr-0.54.0.jar": {
+    "sha256": "715fc79048ae6d9b0a031a374a0c08726b73af0d33188cbf030a6e9b8e5150a7",
+    "parts": [
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.000.part",
+        "sha256": "c2ce5137306c1e1dd64f9410ed3855c61f69d5d65d8e1db1173200f2c3e4103d"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.001.part",
+        "sha256": "22eb85a96d0340bfadc96ce6f6b28262977b916868a66808fec4f83cd080b482"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.002.part",
+        "sha256": "9b8129032a33b7c179054615bdcdf8da9ca91ebeb1a5786d6e93d92c60c423cc"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.003.part",
+        "sha256": "737ad81a79537c2266fe533faebb4cdfbc01339cb8d3ac0bff678988bec72b6f"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.004.part",
+        "sha256": "fa86458be7463bcac8f679c7b4262aff2f21a8d2e93ab1b132d97236f8298332"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.005.part",
+        "sha256": "da4a87af1f6a16620a614bd4fc545b8985537473bfe8072d56db24e6c1463098"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.006.part",
+        "sha256": "583e93d210dcea8ed633676e7a64bebf56f642e41b32e5d54fc6c6bd6a4d8cdf"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.007.part",
+        "sha256": "b481a90cab9112bb1ec8562c57a5c515ebc9257e8e0127960ac807293b7d7c05"
+      },
+      {
+        "name": "burp-workbench-kr-0.54.0.jar.008.part",
+        "sha256": "7e527bd78cd46f88ae31ae386ecb2a44db3d8b9714818ce2ebe58aefe7224a1c"
+      }
+    ]
+  }
+}

@@ -180,11 +180,11 @@ final class BountyEvidence {
 
   /** Reuse export redaction, including reflected credentials across both packets. */
   static String localLlmPreview(String request, String response) {
-    Set<String> secrets = new HashSet<>();
+    SecretSet secrets = new SecretSet();
     collectPacketSecrets(request, false, Set.of(), secrets);
     collectPacketSecrets(response, false, Set.of(), secrets);
-    return "REQUEST\n" + packet(request, Set.of(), secrets, true, false)
-        + "\nRESPONSE\n" + packet(response, Set.of(), secrets, true, false);
+    return "REQUEST\n" + packet(request, Set.of(), secrets.values, true, false)
+        + "\nRESPONSE\n" + packet(response, Set.of(), secrets.values, true, false);
   }
 
   static String esc(String s) {

@@ -1321,6 +1321,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     .forEach(t -> api.repeater().sendToRepeater(t.request(), "Workbench"))));
     trafficMenu.add(trafficAction("로컬 LLM 분석 준비", () -> {
       List<Traffic> chosen = selectedTraffic();
+      if (chosen.size() > 4) throw new IllegalArgumentException("LLM 분석할 요청·응답은 최대 4개입니다.");
       prepareLocalLlm(chosen.stream().map(t -> HttpRequestResponse.httpRequestResponse(t.request(),t.response())).toList(),
           chosen.stream().map(t -> t.packet().id()).toList());
     }));
@@ -2362,6 +2363,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       localLlmWindow.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
       localLlmWindow.setContentPane(localLlm); localLlmWindow.setSize(1000,760);
       localLlmWindow.setMinimumSize(new Dimension(800,600));
+      api.userInterface().applyThemeToComponent(localLlm);
       localLlmWindow.setLocationRelativeTo(root);
     }
     List<String> originalIds = List.copyOf(ids);

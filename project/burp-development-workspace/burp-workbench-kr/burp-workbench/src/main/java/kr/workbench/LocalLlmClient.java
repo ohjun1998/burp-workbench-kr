@@ -83,7 +83,19 @@ final class LocalLlmClient {
       int status = c.getResponseCode();
       if (status != 200) throw new IOException("로컬 LLM HTTP " + status + " · 주소·모델·서버 상태를 확인하세요.");
       byte[] bytes;
-      try (InputStream in = c.getInputStream()) { bytes = in.readNBytes(RESPONSE_LIMIT + 1); }
+      try (InputStream in = c.getInputStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+        byte[] block = new byte[8192];
+        while (true) {
+          call.check();
+          if (System.nanoTime() - start >= TimeUnit.SECONDS.toNanos(settings.seconds()))
+            throw new IOException("분석 제한 시간이 지났습니다.");
+          int count = in.read(block, 0, Math.min(block.length, RESPONSE_LIMIT + 1 - out.size()));
+          if (count < 0) break;
+          out.write(block, 0, count);
+          if (out.size() > RESPONSE_LIMIT) break;
+        }
+        bytes = out.toByteArray();
+      }
       call.check();
       if (bytes.length > RESPONSE_LIMIT) throw new IOException("모델 응답이 256 KiB 제한을 넘었습니다.");
       try {

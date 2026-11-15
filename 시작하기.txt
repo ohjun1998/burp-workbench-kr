@@ -1,0 +1,48 @@
+Workbench Next 0.54.0 · 로컬 LLM 연동
+
+작업 폴더
+  /home/kwonohjun/workbench-next-local-llm
+
+GitHub 검토
+  https://github.com/ohjun1998/burp-workbench-kr/pull/107
+  브랜치: account-a/next-0540-local-llm
+  main 병합과 실제 Burp/Halogen 실사용 검증은 별도입니다.
+
+설치할 파일
+  downloads/extensions/0.54.0/burp-workbench-kr-0.54.0.jar
+  기존 Next 로드를 해제한 다음 Burp → Extensions → Add → Java에서 선택합니다.
+  사용자 Burp·브라우저·프록시 설정은 자동 변경하지 않습니다.
+
+사용 순서
+  1. 대상 URL을 Workbench SCOPE에 추가합니다.
+  2. 요청·응답 1~4개 선택 → 우클릭 → 로컬 LLM 분석 준비.
+  3. Halogen 주소 http://127.0.0.1:8731/v1 확인.
+     모델 ID halogen-qwen3.8-flash-next 확인 (openai/ 접두사 제외).
+  4. 전송 미리보기에서 가림·관측 자료를 확인한 뒤 분석합니다.
+  5. 미검증 가설을 검토하고 원본을 Repeater에 준비하거나 증거에 추가합니다.
+
+로컬 명령 (이 폴더에서)
+  sh run-local.sh doctor                 Java/Python 도구 확인
+  sh run-local.sh llm-test --no-http     네트워크 없는 집중 검사
+  sh run-local.sh llm-test               격리 HTTP 포함 집중 검사
+  sh run-local.sh build                  설치 JAR 재빌드
+  sh run-local.sh check                  전체 회귀·HTTP·Mapper 검사
+
+전체 check에는 Node 22+와 loopback 포트 생성 권한이 추가로 필요합니다.
+현재 에이전트 관리 환경은 socket/DNS 접근을 차단합니다.
+관리 환경에서의 로컬 확인과 GitHub CI의 실제 HTTP 검사를 구분합니다.
+Halogen은 먼저 별도로 실행되어 있어야 하며 이 확장이 서버를 자동 시작하지 않습니다.
+
+사용 안내
+  docs/RELEASE_0.54.0_NEXT_KR.md
+검증 기록
+  docs/VERIFICATION_0.54.0_LOCAL_LLM.json
+
+GitHub 연결 도구로 가져온 개발 소스와 검증된 소스 ZIP의 로컬 사본입니다.
+전체 과거 배포·스크린샷·Git 이력을 복제한 git clone은 아닙니다.
+
+실제 Halogen 응답 확인 (사용자 터미널)
+  python3 tools/check_live_llm.py
+  결과: build/live-llm/result.json
+  합성 입력으로 모델에 한 번 요청하며 대상 사이트에는 요청하지 않습니다.
+  자세한 실모델·Burp 확인 순서: docs/LIVE_LLM_CHECK_KR.md

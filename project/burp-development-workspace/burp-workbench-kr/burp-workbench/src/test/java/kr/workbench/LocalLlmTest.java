@@ -81,6 +81,13 @@ public final class LocalLlmTest {
       check(payload.get("model").equals("test-model")&&payload.get("stream").equals(false),"wire config");
       check(!payload.containsKey("tools"),"no tools in request");
       check(((java.util.List<?>)payload.get("messages")).size()==2,"instructions isolated from data");
+      String planJson="{\"action\":\"COMPARE_ACCOUNTS\",\"availabilityRisk\":true,\"reason\":\"추가 확인 필요\"}";
+      response.set(MetadataExport.json(java.util.Map.of("choices",java.util.List.of(java.util.Map.of("message",java.util.Map.of("content",planJson),"finish_reason","stop")))));
+      var plan=client.plan(settings,"원본 ID: 123",new LocalLlmClient.Call());
+      check(plan.availabilityRisk() && plan.action().equals("COMPARE_ACCOUNTS"),"structured plan over real HTTP");
+      check(request.get().contains("availabilityRisk")&&!request.get().contains("\"tools\""),"plan instructions isolated and no tool execution");
+      response.set(MetadataExport.json(java.util.Map.of("choices",java.util.List.of(java.util.Map.of("message",java.util.Map.of("content",planJson),"finish_reason","length")))));
+      try{client.plan(settings,"data",new LocalLlmClient.Call());throw new AssertionError("truncated plan accepted");}catch(java.io.IOException expected){checks++;}
       for(String invalid:new String[]{"not json","{\"choices\":[]}","{\"choices\":[{\"message\":{\"content\":null}}]}","x".repeat(LocalLlmClient.RESPONSE_LIMIT+1)}){
         response.set(invalid);try{client.analyze(settings,"test","data",new LocalLlmClient.Call());throw new AssertionError("invalid response");}catch(java.io.IOException expected){checks++;}
       }

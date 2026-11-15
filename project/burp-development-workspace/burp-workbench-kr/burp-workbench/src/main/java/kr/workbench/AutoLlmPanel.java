@@ -114,6 +114,7 @@ final class AutoLlmPanel extends JPanel implements AutoCloseable {
     AutoLlmEngine target=engine;if(target==null||ref==null)return;
     target.offer(new AutoLlmEngine.Source(ref.id(),ref.method(),ref.url(),ref.source(),(int)Math.min(Integer.MAX_VALUE,(long)ref.requestLength()+ref.responseLength()),()->{
       var rr=ref.packet();EvidenceLinks.checked(api,List.of(rr));
+      if(rr.response().statusCode()==429 || rr.response().statusCode()>=500)throw new IllegalArgumentException("관측 응답에서 오류/가용성 우려 확인 · 추가 전송 중지");
       if(rr.request().hasHeader("X-HTTP-Method-Override")||rr.request().hasHeader("X-Method-Override")||rr.request().body().length()!=0)throw new IllegalArgumentException("GET 본문은 자동 검사 제외");
       // An observed A request must match the declared baseline identity; do not guess its owner.
       for(String name:authNames){String expected=profiles.get(0).headers().entrySet().stream().filter(e->e.getKey().equalsIgnoreCase(name)).map(Map.Entry::getValue).findFirst().orElse("");

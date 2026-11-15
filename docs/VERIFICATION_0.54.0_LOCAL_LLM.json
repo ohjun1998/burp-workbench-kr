@@ -57,5 +57,48 @@
     "Local developer copy was retrieved through GitHub connector plus verified source archive; it is not a full git-history clone.",
     "Local and CI counts overlap; do not add them as unique checks.",
     "Native user Burp/browser/proxy settings and Strix were not modified."
-  ]
+  ],
+  "extendedCi": {
+    "testedHead": "0b64e30185b6122f88acedd99db2a10a6aea059c",
+    "buildAndVerify": {
+      "run": 43675634794,
+      "result": "passed",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43675634794",
+      "coverage": [
+        "full regression/HTTP",
+        "role portals",
+        "authentication combinations",
+        "50-operation authorization comparison",
+        "login lifecycle",
+        "full and focused Swing layouts",
+        "packaging fingerprints"
+      ]
+    },
+    "candidate": {
+      "run": 43675634841,
+      "result": "passed"
+    },
+    "durability": {
+      "run": 43675634786,
+      "result": "passed",
+      "url": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43675634786",
+      "coverage": [
+        "Windows Java regression",
+        "Windows synthetic native Repeater window",
+        "10 storage/cache regression iterations",
+        "Windows PowerShell controlled startup checks",
+        "Linux real ENOSPC rollback/recovery in private tmpfs",
+        "Linux and Windows 180-second capture"
+      ]
+    },
+    "countPolicy": "Repeated CI runs and repeated storage tests are not additional unique check counts."
+  },
+  "liveProbe": {
+    "tool": "tools/check_live_llm.py",
+    "compiledAgainstPublishedJar": true,
+    "managedEnvironmentAttempt": "SocketException: Operation not permitted",
+    "userTerminalResult": "awaiting build/live-llm/result.json",
+    "requestData": "synthetic only; one model call; no target-site requests",
+    "nativeBurpGui": "not yet verified"
+  }
 }

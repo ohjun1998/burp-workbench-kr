@@ -47,3 +47,5 @@ Python 3.10+, JDK 17+, 전체 검사에는 Node 22+가 필요합니다. `run-loc
 로컬 개발 폴더는 GitHub 연결 도구와 검증 소스 ZIP으로 구성한 사본이며 전체 Git 이력의 clone은 아닙니다. 실제 Halogen·native Burp는 관리 환경의 socket 제한으로 직접 검증하지 못했습니다. JDK26으로 재빌드한 dist 파일은 CI의 JDK17 설치 JAR와 바이트가 다르며, 기본 설치 링크는 CI 검증 JAR를 가리킵니다. main 병합은 별도입니다.
 
 ![800×600 합성 자료로 렌더링한 실제 분석 패널](reports/2026-11-15-local-llm/synthetic-panel-800.png)
+
+후속 검증: [일반 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43675634794)와 [Windows/Linux 내구성 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43675634786)도 소스 입력이 동일한 `0b64e30185b6122f88acedd99db2a10a6aea059c`에서 통과했습니다. 실제 모델과 사용자 Burp 확인은 [실사용 검증 안내](LIVE_LLM_CHECK_KR.md)를 따릅니다. 후속 검증 도구는 저장소의 `tools/check_live_llm.py`에 별도로 제공하며 기존 배포 ZIP을 덮어쓰지 않습니다.

@@ -1,0 +1,93 @@
+name: Next 0.55.0 local LLM candidate
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: auto-llm-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  candidate:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'account-a/next-0550-auto-llm'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Focused real loopback and Swing tests
+        run: python tools/check_local_llm.py
+      - name: Full checks and immutable candidate packaging
+        run: |
+          if test -f downloads/extensions/0.55.0/manifest.json; then
+            python dev.py check
+            python tools/package_downloads.py --verify
+          else
+            python dev.py release
+            python tools/package_downloads.py --verify
+          fi
+      - name: Upload candidate and verification
+        uses: actions/upload-artifact@v7
+        with:
+          name: next-0.55.0-auto-llm-${{ github.event.pull_request.head.sha }}
+          path: |
+            downloads/extensions/0.55.0/
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/check-summary.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit tested candidate files to the task branch
+        env:
+          CANDIDATE_BRANCH: account-a/next-0550-auto-llm
+        run: |
+          if git ls-files --error-unmatch downloads/extensions/0.55.0/manifest.json >/dev/null 2>&1; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p docs/chat-logs/2026-11-15
+          cat > docs/chat-logs/2026-11-15/next-auto-llm-artifacts.md <<'EOF'
+          # Next 0.55.0 산출물 업로드
+
+          사용자 원문: "github에 위치한 것, 여기 로컬로 복사하고 실행 및 테스트 할 수 있도록 설정하고, 완성된 파일은 github에 업로드 해줘"
+
+          자동 작업 결과 요약: 새 LLM 집중 검사와 python dev.py release, 패키징 검증을 통과한 0.55.0 JAR·소스 ZIP·체크섬·manifest를 작업 브랜치에 추가했습니다. 구체적인 실행 기록은 이 커밋을 만든 Next 0.55.0 local LLM candidate Actions 실행에 있습니다. 실제 Halogen·native Burp GUI 검증이나 main 병합을 뜻하지 않습니다. 사용자 요청과 설명은 next-auto-llm.md에 함께 기록합니다.
+          EOF
+          python - <<'PYTRANSFER'
+          import pathlib, hashlib, json
+          folder=pathlib.Path('downloads/extensions/0.55.0')
+          transfer=folder/'transport';transfer.mkdir(exist_ok=True)
+          manifest={}
+          for file in sorted(folder.glob('*.jar'))+sorted(folder.glob('*.zip')):
+              parts=[]
+              data=file.read_bytes()
+              for i,start in enumerate(range(0,len(data),512*1024)):
+                  name=file.name+'.part'+str(i)
+                  content=data[start:start+512*1024];(transfer/name).write_bytes(content)
+                  parts.append({'name':name,'sha256':hashlib.sha256(content).hexdigest()})
+              manifest[file.name]={'sha256':hashlib.sha256(data).hexdigest(),'parts':parts}
+          (transfer/'index.json').write_text(json.dumps(manifest))
+          PYTRANSFER
+          git add downloads/extensions/0.55.0 docs/chat-logs/2026-11-15/next-auto-llm-artifacts.md
+          git commit -m 'build: add verified Next 0.55.0 candidate artifacts'
+          git push origin "HEAD:refs/heads/$CANDIDATE_BRANCH"
+      - name: Upload failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: next-0550-failure-${{ github.event.pull_request.head.sha }}
+          path: |
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/test-*.txt
+            project/burp-development-workspace/burp-workbench-kr/burp-workbench/validation/all-features/.run/
+          include-hidden-files: true
+          retention-days: 14

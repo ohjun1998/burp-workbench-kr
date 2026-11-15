@@ -1,0 +1,16 @@
+{
+  "syntheticInputOnly": true,
+  "targetHttpRequests": 0,
+  "modelCallAttempts": 1,
+  "endpoint": "http://127.0.0.1:8731/v1",
+  "model": "halogen-qwen3.8-flash-next",
+  "result": "passed",
+  "elapsedMillis": 16719,
+  "finishReason": "stop",
+  "answerCharacters": 1775,
+  "answerSha256": "414fd1b296f45c8a2c5a98cb6ad1af7371dbe1bc821dddc0cde1b212b66d9347",
+  "meaning": "실제 배포 클라이언트의 로컬 모델 HTTP 응답 수신 확인; 분석 정확도와 native Burp GUI 검증은 별도",
+  "testedAtUtc": "2026-11-15T04:33:43.920108+00:00",
+  "jarSha256": "715fc79048ae6d9b0a031a374a0c08726b73af0d33188cbf030a6e9b8e5150a7",
+  "executionContext": "User terminal; result file inspected by assistant"
+}

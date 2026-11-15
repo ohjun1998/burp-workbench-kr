@@ -1,0 +1,11 @@
+Workbench Next 0.55.0 범위 제한 자동 점검
+
+설정 → 로컬 LLM 자동 점검
+사용 순서 및 개별 승인: docs/RELEASE_0.55.0_AUTO_LLM_KR.md
+검증 상태: PR에서 확인 (현재 개발 후보)
+
+로컬 빌드: sh run-local.sh build
+집중 검사: python3 tools/check_auto_llm.py
+전체 검사: sh run-local.sh check
+
+이전 0.54.0은 ~/workbench-next-local-llm 에 보존합니다.

@@ -132,6 +132,10 @@ c.write_text(json.dumps({'env':e}))
       var timed=client.execute(plan(client,2,10),()->true,null);check(timed.status().equals("timed_out"),"elapsed deadline terminates owned wrapper");
       check(!Files.exists(timed.workDirectory().resolve("runtime-config.json")),"timeout removes private config");
       Map<String,String> aliases=new HashMap<>();for(String key:List.of("OPENAI_API_KEY","OPENAI_BASE_URL","LLM_API_BASE","LLM_API_TYPE","LLM_EXTRA_HEADERS","LLM_EXTRA_BODY","DEDUPE_LLM_API_BASE","STRIX_DEDUPE_LLM","STRIX_DOCKER_SANDBOX_NETWORK","ANTHROPIC_API_KEY","STRIX_LLM"))aliases.put(key,"x");aliases.put("PATH","p");aliases.put("HOME","h");SimpleStrixClient.clearProviderEnvironment(aliases);check(aliases.equals(Map.of("PATH","p","HOME","h")),"clear provider/extra/dedupe/network aliases without repurposing HOME or PATH");
+      try(SimpleStrixClient defaultRoot=new SimpleStrixClient(home,null)){
+        var isolated=defaultRoot.execute(plan(defaultRoot,1,10),()->true,null);
+        check(isolated.status().equals("completed")&&isolated.workDirectory().startsWith(home.resolve(BuildInfo.STORAGE_DIRECTORY).resolve("strix-runs"))&&!isolated.workDirectory().startsWith(home.resolve(".burp-workbench")),"default runs remain inside the Simple storage namespace");
+      }
     }finally{if(unrelated!=null)unrelated.destroyForcibly();erase(home);}
     System.out.println("SimpleStrixClientTest: "+checks+" checks passed (fake wrapper only; no Strix/model/target calls)");
   }

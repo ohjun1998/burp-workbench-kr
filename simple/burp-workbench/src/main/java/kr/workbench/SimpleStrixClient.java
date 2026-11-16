@@ -70,7 +70,7 @@ public final class SimpleStrixClient implements AutoCloseable {
   SimpleStrixClient(Path userHome, Path ownedWorkRoot){
     home=userHome.toAbsolutePath().normalize(); wrapper=home.resolve(".strix/bin/strix");
     config=home.resolve(".strix/cli-config.json");
-    workRoot=ownedWorkRoot==null?home.resolve(".burp-workbench/strix-owned-runs"):ownedWorkRoot.toAbsolutePath().normalize();
+    workRoot=ownedWorkRoot==null?home.resolve(BuildInfo.STORAGE_DIRECTORY).resolve("strix-runs"):ownedWorkRoot.toAbsolutePath().normalize();
   }
   public boolean busy(){synchronized(lock){return busy||ownedAlive();}}
   public ModelInfo inspectLocalModel() throws IOException {return localModel(readConfig());}

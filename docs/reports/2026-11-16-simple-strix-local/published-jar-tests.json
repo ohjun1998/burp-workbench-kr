@@ -1,0 +1,29 @@
+{
+  "releaseJarSha256": "a61e81a4f4131f4226a8057d3b7974678c4941856370fdf1b79dbe470d374fd2",
+  "jarFirstClasspath": true,
+  "compiledCurrentTestAdapters": true,
+  "isolatedTestHome": true,
+  "productionInputsModified": false,
+  "tests": [
+    {
+      "name": "SimpleStrixClientTest",
+      "expectedChecks": 63,
+      "passed": true,
+      "exitCode": 0,
+      "actualChecks": 63,
+      "adapterSha256": "ac3d6375b478bf2fddd89921173d203c06c988f7b5766fa41fd2beaaecbb2078"
+    },
+    {
+      "name": "SimpleStrixIntegrationTest",
+      "expectedChecks": 26,
+      "passed": true,
+      "exitCode": 0,
+      "actualChecks": 26,
+      "adapterSha256": "59602fbe609e4cceca4981695401e8d0dfe669afa45f14731e24f450b700b376"
+    }
+  ],
+  "releaseJarUnchanged": true,
+  "result": "passed",
+  "logDirectory": "/tmp/simple-strix-published-jar-tests-80cymelz",
+  "totalChecks": 89
+}

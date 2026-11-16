@@ -1,6 +1,10 @@
-# Simple 1.4.13 · 기존 Strix 로컬/구독 진단 연동 후보
+# Simple 1.4.13 · Strix 로컬/구독 진단 연결 후보
 
-사용자가 Simple에서 기존 Strix 실행·중지·로그·보고서를연결하는범위를명시승인했고, Halogen/Qwen3.8과Strix ChatGPT구독선택 및단계별HTML가이드를요청했습니다. 새후보는1.4.13이며기존Strix설치와Next는수정하지않습니다. 집중6그룹271개·실제Strix패널합성28뷰배치위반0을로컬에서확인했고전체CI/배포검증은진행예정입니다. 실제사용자Burp/모델진단을검증한것은아닙니다. 작업브랜치 account-a/simple-strix-local, 결과·가이드 docs/reports/2026-11-16-simple-strix-local/.
+Simple에서 기존 Strix CLI의 시작·중지·로그·이번 실행 보고서를 연결하고, Halogen/Qwen 3.8 또는 Strix 자체 ChatGPT 구독 인증을 선택합니다. 사용자에게 범위를 설명하고 명시 승인을 받은 Simple 측 변경이며 기존 Strix 설치·래퍼·모니터는 수정하지 않았습니다.
+
+검증 소스 `609c252a9543f0e5ef8db800f28e09f147efe62d`가 [Actions 43874202784](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43874202784)에서 전체 Simple 7,162개, Katana 102개, 기존 Simple/Scope UI 84/68화면, Strix UI 28화면 검사를 통과했습니다. JAR와 소스 ZIP을 생성·검증하고 작업 브랜치에 게시했습니다. 실제 사용자 Burp·모델 추론·대상 진단은 별도 미검증이며 최종 JAR의 가이드 캡처는 합성 자료입니다. 최대 에이전트 턴은 HTTP 요청 예산이 아닙니다.
+
+[설치 JAR](simple/downloads/1.4.13/burp-workbench-simple-1.4.13.jar) · [소스 ZIP](simple/downloads/1.4.13/burp-workbench-simple-1.4.13-source.zip) · [이미지 가이드](docs/reports/2026-11-16-simple-strix-local/guide/index.html) · [검증·제한](docs/reports/2026-11-16-simple-strix-local/README_KR.md) · [작업 기록](docs/chat-logs/2026-11-16/simple-strix-local.md). 작업 브랜치 `account-a/simple-strix-local`; main 병합 여부는 PR의 실제 상태를 기준으로 확인합니다.
 
 # Next 0.54.1 · AI 통합 후보 마무리
 

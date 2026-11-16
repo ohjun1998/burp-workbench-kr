@@ -256,6 +256,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private JsAnalysisPanel jsAnalysis;
   private AuthComparePanel authCompare;
   private BountySupportPanel bountySupport;
+  LocalLlmPanel localLlm;
+  private TargetWindow aiOriginalWindow;
   private kr.featuremapper.FeatureMapperWorkspace featureMapper;
   private JLabel selectionInfo = new JLabel("요청을 선택하세요");
   private JLabel status = new JLabel("준비됨"), stats = new JLabel();
@@ -341,6 +343,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       generation.incrementAndGet();
       traffic.clear();
       if(trafficBrowser!=null)trafficBrowser.clear();
+      if(localLlm!=null)localLlm.resetProject();
+      if(aiOriginalWindow!=null)aiOriginalWindow.closeWindow();
       current = null;
       workContext.clear();
       captureStage("임시 저장소 정리", previous::close);
@@ -398,6 +402,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (trafficBrowser != null) trafficBrowser.close();
                     if (authCompare != null) authCompare.close();
                     if (bountySupport != null) bountySupport.close();
+                    if (localLlm != null) localLlm.close();
+                    if (aiOriginalWindow != null) aiOriginalWindow.close();
                     traffic.clear();
                     if (environments != null) {
                       environments.close();
@@ -569,6 +575,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             authCompare,
             activity);
     addPage("점검 지원", "bounty", bountySupport, false);
+    localLlm = new LocalLlmPanel(api);
+    bountySupport.pages.addTab("AI 검토", localLlm);
+    localLlm.evidenceSink = this::captureObserved;
+    localLlm.sourceNavigator = this::showAiOriginal;
+    responseRecon.aiReview = this::prepareResponseAi;
+    authCompare.aiReview = this::prepareAuthAi;
+    jsAnalysis.aiReview = this::prepareJsAi;
+    bountySupport.aiReview = this::prepareReportAi;
+    bountySupport.aiFlowReview = this::prepareFlowAi;
     activity.assessmentPanel.preparationNavigator = this::prepareRemainingCheck;
     activity.assessmentPanel.executionNavigator = id -> {
       AuthComparePanel.Run run = selectAssessmentExecution(id);
@@ -755,6 +770,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         if(bountySupport!=null)bountySupport.resetEvidenceProject();
         if(authCompare!=null)authCompare.resetChecklistProject();
         if(jsAnalysis!=null)jsAnalysis.resetBackgroundProject();
+        if(localLlm!=null)localLlm.resetProject();
+        if(aiOriginalWindow!=null)aiOriginalWindow.closeWindow();
         checklistTrafficBaselineStore=trafficStore;
         checklistTrafficBaseline=trafficStore==null?0:trafficStore.size();
         if (logTable != null) logTable.clearSelection();
@@ -1342,6 +1359,15 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     scopeMenu.add(trafficAction("SCOPE 목록 보기", this::showScopeList));
     trafficMenu.addSeparator();
     trafficMenu.add(scopeMenu);
+    trafficMenu.addSeparator();
+    JMenuItem aiResponse = trafficAction("선택 패킷 AI 보안 검토", () -> prepareSelectedAi(LocalLlmTasks.Task.RESPONSE));
+    aiResponse.setName("wb.traffic.ai.response");
+    JMenuItem aiFunctions = trafficAction("선택 패킷 AI 기능별 분류", () -> prepareSelectedAi(LocalLlmTasks.Task.FUNCTIONS));
+    aiFunctions.setName("wb.traffic.ai.functions");
+    trafficMenu.add(aiResponse); trafficMenu.add(aiFunctions);
+    trafficMenu.add(trafficAction("관련 패킷 AI 업무 로직 검토",()->prepareSelectedAi(LocalLlmTasks.Task.LOGIC)));
+    trafficMenu.addSeparator();
+
     logTable.putClientProperty("wb.traffic.popup", trafficMenu);
     logTable.addMouseListener(
         new java.awt.event.MouseAdapter() {
@@ -2032,6 +2058,129 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         .setContents(new java.awt.datatransfer.StringSelection(text), null);
   }
 
+  private void prepareSelectedAi(LocalLlmTasks.Task task) {
+    // Validate count before loading any disk packet, and preserve the exact selected originals.
+    if(logTable.getSelectedRowCount()<1||logTable.getSelectedRowCount()>24)
+      throw new IllegalArgumentException("AI 검토는 트래픽 원본 1~24개를 선택하세요.");
+    List<NextLlmBridge.Entry> entries=new ArrayList<>();
+    long bytes=0;
+    for(int view:logTable.getSelectedRows()) {
+      var ref=trafficStore.ref(logTable.convertRowIndexToModel(view));
+      bytes+=(long)ref.requestLength()+ref.responseLength();
+      if(bytes>8L*1024*1024)throw new IllegalArgumentException("선택 원본 합계 8 MiB 초과 · 기능별로 나눠 선택하세요.");
+      var rr=ref.packet();
+      entries.add(new NextLlmBridge.Entry(ref.id(),rr,activity.tracker.assessments.match(rr.request()),""));
+    }
+    openAi(task,task==LocalLlmTasks.Task.FUNCTIONS
+        ? "선택한 원본을 업무 기능별로 분류하세요. 같은 API가 여러 기능에 속할 수 있으며, 근거가 부족하면 미분류로 남기세요. 계정 ID는 사용자가 연결한 정보이며 실제 신원을 증명하지 않습니다. 필요하면 현재 화면/행동/기대 기능을 아래에 보충합니다."
+        : "기존 관측 패킷의 보안 검토입니다. 사실·가설·반증 조건과 최소 추가 검증을 구분하세요.",entries);
+  }
+
+  private void openAi(LocalLlmTasks.Task task,String context,List<NextLlmBridge.Entry> entries) {
+    var prepared=NextLlmBridge.prepare(api,task,context,entries);
+    localLlm.prepare(prepared.input(),prepared.originals());
+    localLlm.reportSink=value->{throw new IllegalArgumentException("증거 묶음의 AI 보고서 초안에서 준비한 결과만 추가할 수 있습니다.");};
+    if(aiOriginalWindow!=null)aiOriginalWindow.closeWindow();
+    tabs.setSelectedComponent(bountySupport);bountySupport.pages.setSelectedComponent(localLlm);
+  }
+
+  private void prepareResponseAi() {
+    var entries=new ArrayList<NextLlmBridge.Entry>();
+    String context;
+    if(responseRecon.analysisPages.getSelectedIndex()==2) {
+      var flow=responseRecon.selectedFlow();context=StoredFlows.describe(flow);
+      var write=responseRecon.displayedFlowPackets.get(flow.writeSource().id());
+      entries.add(new NextLlmBridge.Entry(flow.writeSource().id(),write,"","쓰기 관측"));
+      if(flow.readSource()!=null&&!flow.readSource().id().equals(flow.writeSource().id()))
+        entries.add(new NextLlmBridge.Entry(flow.readSource().id(),responseRecon.displayedFlowPackets.get(flow.readSource().id()),"","조회 관측"));
+    }else {
+      int row=responseRecon.findingTable.getSelectedRow();
+      if(responseRecon.analysisPages.getSelectedIndex()!=0||row<0)
+        throw new IllegalArgumentException("응답 관찰 또는 저장/조회 연결에서 분석할 행을 선택하세요.");
+      int index=responseRecon.findingTable.convertRowIndexToModel(row);
+      if(index>=responseRecon.displayedFindingKeys.size())throw new IllegalArgumentException("관측이 갱신되었습니다. 다시 선택하세요.");
+      String key=responseRecon.displayedFindingKeys.get(index);
+      context="기존 규칙 관측 · "+responseRecon.findings.getValueAt(index,0)+" · "+responseRecon.findings.getValueAt(index,2)+" · "+responseRecon.findings.getValueAt(index,3);
+      entries.add(new NextLlmBridge.Entry("response-"+UUID.randomUUID(),responseRecon.displayedFindingPackets.get(key),"",context));
+    }
+    openAi(LocalLlmTasks.Task.RESPONSE,context,entries);
+  }
+
+  private void prepareAuthAi() {
+    var run=authCompare.current();
+    if(run==null)throw new IllegalArgumentException("권한 비교 History에서 종료된 결과를 선택하세요.");
+    var execution=activity.tracker.assessments.execution(run.executionId);
+    if(execution!=null&&execution.state()==ExecutionLedger.State.RUNNING)
+      throw new IllegalArgumentException("비교 종료 후 AI 해설을 준비하세요.");
+    var entries=new ArrayList<NextLlmBridge.Entry>();int index=0;
+    for(var entry:AuthEvidenceSnapshot.capture(run)) {
+      String note=entry.note();if(note.length()>2048)note=note.substring(0,2048)+"\n[설명 일부 · 전체 비교 기록을 확인하세요]";
+      entries.add(new NextLlmBridge.Entry("auth-"+run.executionId+"-"+(index++),
+          HttpRequestResponse.httpRequestResponse(entry.request(),entry.response()),entry.account(),entry.label()+"\n"+note));
+    }
+    openAi(LocalLlmTasks.Task.AUTH,"실행 당시 계정 비교의 정책·기준·자료 차이와 쓰기 전후 관측을 해설하세요. 기존 판정은 별도 근거이며, 정책·소유관계가 불명확하면 보류합니다.",entries);
+  }
+
+  private void prepareJsAi() {
+    var result=jsAnalysis.currentResult();String key=jsAnalysis.currentSourceKey();
+    if(result==null)throw new IllegalArgumentException("JS 분석 목록에서 관측한 응답을 선택하세요.");
+    // Retries retains exact disk refs; never choose a newer packet merely sharing the URL.
+    var candidates=jsAnalysis.retries.snapshot().stream().filter(e->e.original()!=null&&e.original().url().equals(key)).toList();
+    if(candidates.size()!=1)throw new IllegalArgumentException("해당 JS의 원본이 없거나 여러 버전이 있습니다. 트래픽에서 정확한 원본을 선택해 AI 검토의 JS·API 작업을 고르세요.");
+    var ref=candidates.get(0).original();
+    StringBuilder context=new StringBuilder("정적 분석 후보이며 실제 호출·취약점이 확인된 결과가 아닙니다. 상태: ").append(result.status());
+    for(var endpoint:result.endpoints().stream().limit(40).toList())
+      context.append("\n").append(endpoint.method()).append(' ').append(endpoint.url()).append(" · 줄 ").append(endpoint.line()).append(" · 본문키 ").append(endpoint.bodyKeys()).append(" · ").append(endpoint.complete()?"경로 해석됨":"미확정 경로");
+    if(result.endpoints().size()>40)context.append("\n[API 후보 앞40개만 포함]");
+    openAi(LocalLlmTasks.Task.JS,context.toString(),List.of(new NextLlmBridge.Entry(ref.id(),ref.packet(),"","정적 분석의 관측 원본")));
+  }
+
+  private void prepareReportAi() {
+    if(bountySupport.running)throw new IllegalArgumentException("증거 작업 종료 후 AI 초안을 준비하세요.");
+    var items=List.copyOf(bountySupport.evidence);
+    var entries=new ArrayList<NextLlmBridge.Entry>();
+    for(var item:items)entries.add(new NextLlmBridge.Entry(item.evidenceId(),item.originalPacket(),item.account(),item.label()+"\n"+item.note()));
+    var ids=items.stream().map(BountyEvidence.Item::evidenceId).toList();
+    openAi(LocalLlmTasks.Task.REPORT,bountySupport.evidencePreview(),entries);
+    String project=WorkspaceResume.projectIdentity(api);
+    String reportState=aiReportState();
+    localLlm.reportSink=draft->{
+      if(!WorkspaceResume.projectIdentity(api).equals(project)||!bountySupport.evidence.stream().map(BountyEvidence.Item::evidenceId).toList().equals(ids)||!aiReportState().equals(reportState))
+        throw new IllegalArgumentException("증거 묶음/프로젝트가 변경되었습니다. AI 보고서를 다시 준비하세요.");
+      bountySupport.appendAiReportDraft(draft);
+    };
+  }
+
+  private void prepareFlowAi() {
+    if(bountySupport.running)throw new IllegalArgumentException("업무 실행 종료 후 AI 검토를 준비하세요.");
+    String batch=UUID.randomUUID().toString();
+    var entries=new ArrayList<NextLlmBridge.Entry>();
+    for(var step:List.copyOf(bountySupport.flowResults))
+      entries.add(new NextLlmBridge.Entry("flow-"+batch+"-"+step.step(),
+          HttpRequestResponse.httpRequestResponse(step.request(),step.response()),
+          activity.tracker.assessments.match(step.request()),"관측 순서 "+step.step()+" · "+step.state()));
+    openAi(LocalLlmTasks.Task.LOGIC,"관측한 업무 단계 순서를 보존해 기대 규칙·전후 상태·인가/소유 관계를 검토하세요. 아래에 업무 목적과 기대 규칙을 보충합니다. 설정한 기대 조건:\n"+bountySupport.flowChecks.getText(),entries);
+  }
+
+  private String aiReportState() {
+    var metadata=bountySupport.evidence.stream().map(item->Map.of("id",item.evidenceId(),"packet",item.packetId(),
+        "label",item.label(),"note",item.note(),"account",item.account())).toList();
+    return LocalLlmPanel.digest(bountySupport.evidencePreview()+"\n"+MetadataExport.json(metadata));
+  }
+
+  private void showAiOriginal(String id) {
+    var rr=localLlm.originals.get(id);
+    if(rr==null||!WorkbenchScope.contains(api,rr.request()))throw new IllegalArgumentException("현재 SCOPE 안의 연결 원본이 필요합니다.");
+    if(aiOriginalWindow!=null)aiOriginalWindow.close();
+    aiOriginalWindow=new TargetWindow(localLlm,"AI 연결 원본 · "+id,()->{
+      PacketView request=new PacketView(),response=new PacketView();
+      request.setPacket(JsAnalysisPanel.packetPreview(rr.request().toByteArray()));
+      response.setPacket(rr.response()==null?"응답 없음":JsAnalysisPanel.packetPreview(rr.response().toByteArray()));
+      return WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,request,response,.5);
+    });
+    aiOriginalWindow.open();
+  }
+
   private List<Traffic> selectedTraffic() {
     List<Traffic> out = new ArrayList<>();
     for (int row : logTable.getSelectedRows())
@@ -2321,6 +2470,22 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                 .limit(20)
                 .forEach(rr -> api.repeater().sendToRepeater(rr.request(), "Workbench")));
     menu.add(repeater);
+    for(var task:List.of(LocalLlmTasks.Task.RESPONSE,LocalLlmTasks.Task.FUNCTIONS)) {
+      JMenuItem aiItem=new JMenuItem(task==LocalLlmTasks.Task.FUNCTIONS?"AI 기능별 패킷 분류":"AI 응답 보안 검토");
+      aiItem.addActionListener(event->SwingUtilities.invokeLater(()->{
+        if(unloaded.get())return;
+        try{
+          if(picked.size()>24)throw new IllegalArgumentException("AI 검토는 원본1~24개씩 선택하세요.");
+          String batch=UUID.randomUUID().toString();int index=0;
+          var entries=new ArrayList<NextLlmBridge.Entry>();
+          for(var rr:picked)entries.add(new NextLlmBridge.Entry("history-"+batch+"-"+(index++),rr,
+              activity.tracker.assessments.match(rr.request()),"Burp에서 직접 선택한 관측 원본"));
+          openAi(task,"선택한 관측 패킷을 검토하세요. 현재 화면·행동과 기대 정책은 사용자가 보충하며, 모호한 기능은 미분류로 남기세요.",entries);
+        }catch(RuntimeException error){status.setText(error.getMessage());}
+      }));
+      menu.add(aiItem);
+    }
+    menu.addSeparator();
     return List.of(menu);
   }
 

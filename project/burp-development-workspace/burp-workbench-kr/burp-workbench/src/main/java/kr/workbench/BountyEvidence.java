@@ -138,6 +138,18 @@ final class BountyEvidence {
           : packet.response().length() > EvidencePacketStore.PREVIEW_BYTES;
     }
 
+    burp.api.montoya.http.message.HttpRequestResponse originalPacket() {
+      if(packet==null||!packet.hasResponse()||(long)packet.request().length()+packet.response().length()>128*1024)
+        throw new IllegalArgumentException("AI 보고서는 완전한 보관 원본이 필요합니다. 텍스트/부분 증거는 원본을 다시 연결하세요.");
+      try(var lease=packet.retain();var q=new ByteArrayOutputStream();var s=new ByteArrayOutputStream()){
+        packet.copyRequestTo(q);packet.copyResponseTo(s);
+        var service=burp.api.montoya.http.message.requests.HttpRequest.httpRequestFromUrl(url).httpService();
+        return burp.api.montoya.http.message.HttpRequestResponse.httpRequestResponse(
+          burp.api.montoya.http.message.requests.HttpRequest.httpRequest(service,burp.api.montoya.core.ByteArray.byteArray(q.toByteArray())),
+          burp.api.montoya.http.message.responses.HttpResponse.httpResponse(burp.api.montoya.core.ByteArray.byteArray(s.toByteArray())));
+      }catch(IOException error){throw new IllegalArgumentException("보관 증거 원본을 읽을 수 없습니다.");}
+    }
+
     EvidencePacketStore.Lease retain() {
       return packet == null ? null : packet.retain();
     }

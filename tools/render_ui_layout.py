@@ -246,6 +246,10 @@ def main():
     if hashlib.sha256(jar.read_bytes()).hexdigest()!=jar_hash:raise SystemExit('The JAR changed during rendering. Re-run after the build finishes.')
     (args.out/'layout-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(f'{len(gate_failures)} collapsed key work areas; {len(small)} controls below 24px.')
+    for failure in gate_failures:
+        measured=', '.join(f"{row['visibleWidth']}x{row['visibleHeight']}" for row in failure['actual']) or 'missing'
+        print(f"{failure['theme']} {failure['size']} {failure['view']}: {failure['name']} "
+              f"requires 160x{failure['minimumHeight']} visible pixels; actual {measured}")
     print(f'{len(text_rows)} tab/header labels measured; {len(text_failures)} selected tabs or headings clipped.')
     print(f'{len(scenario_rows)} synthetic workflow state assertions; {len(scenario_failures)} missing or failed.')
     if args.guide_only:print(f'{len(guide_rows)} guide bodies measured; {len(guide_failures)} wrap or control visibility failures.')

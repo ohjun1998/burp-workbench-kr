@@ -109,6 +109,8 @@ public final class BountyWorkflowAudit extends CommunityExtensionAudit {
         }
     }
     public static void main(String[] args) throws Exception {
+    TestLauncher.simulateUserConsent(); // Test-only explicit user-consent simulation for controlled HTTP adapters.
+
         port = Integer.parseInt(args[0]); base = "http://127.0.0.1:" + port; Path out = Path.of(args[1]); int code = 0;
         try {
             verify("new lab page served", get("/bounty-lab", guest).body().contains("버그바운티 흐름 실습"));

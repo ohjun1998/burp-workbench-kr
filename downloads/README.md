@@ -1,9 +1,13 @@
+# Next 0.54.1 다운로드
+
+[설치 JAR](extensions/0.54.1/burp-workbench-kr-0.54.1.jar) · [소스 ZIP](extensions/0.54.1/burp-workbench-kr-0.54.1-source.zip) · [체크섬](extensions/0.54.1/SHA256SUMS) · [사용법](../docs/RELEASE_0.54.1_NEXT_KR.md) · [검증](../docs/VERIFICATION_0.54.1.json). 0.54.0 AI 통합 후보의 증거 작성 영역 배치 문제를 수정한 후속 버전입니다. 실제 검증·병합 상태는 검증 기록과 해당 PR을 확인하세요.
+
 # Workbench Next / 기존 버전 다운로드
 <!-- main-merge-0.53.4: 56b56e961d0d73e777228e60fdfc1a1e544496fd; pr-head: 64cc557bab399ae27d239ea928c266e810daf85d; pr: 94; merged-at-utc: 2026-10-27T05:19:48Z -->
 
-파일을 열고 **Download raw file**을 누르세요. 현재 main 배포는 **자동 검증을 통과한 0.53.4 사용자 편의성 안정화판**입니다. 이전 0.53.3·0.53.1 배포와 당시 기록을 보존합니다. 0.53.2는 PR 화면 회귀가 남았던 보존 후보판입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 파일·기록·PDF는 보존합니다.
+파일을 열고 **Download raw file**을 누르세요. 아래 0.53.4 안내는 이전 main 배포의 보존 기록입니다. 최신 0.54.1은 위 링크와 검증 기록을 확인하세요. 이전 0.53.3·0.53.1 배포와 당시 기록을 보존합니다. 0.53.2는 PR 화면 회귀가 남았던 보존 후보판입니다. 버전별 검증 상태를 확인해 선택하세요. 기존 파일·기록·PDF는 보존합니다.
 
-## 현재 main 배포: Workbench Next 0.53.4
+## 이전 main 배포: Workbench Next 0.53.4
 
 초안 복원·다단계 편집 복구·목록 고정·일괄 중요 표시·화면 개인화·키보드·비동기 비교·증거 작성 지원 8개를 제공합니다. [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)을 **2026-10-27 14:19:48 (한국 시간)**에 main에 병합했습니다. 병합 커밋은 `56b56e961d0d73e777228e60fdfc1a1e544496fd`, 최종 PR head는 `64cc557bab399ae27d239ea928c266e810daf85d`입니다. 소스 `937c42defbc4d76187f1d189b36b84f4272dd76a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40451792261)에서 Linux·Windows 각각 회귀 123개 그룹·4,270개와 페이로드 HTTP 136개·전체 기능 HTTP 102개·모의 진단 HTTP 266개, 총 **4,774개**를 통과했습니다. 플랫폼별 반복 실행은 고유 검사 수로 합산하지 않습니다. 전체 화면 **576뷰·8,088개 컨트롤·246개 상태**와 집중 화면 **414뷰·4,308개 컨트롤·246개 상태**의 배치 게이트를 모두 통과했습니다. 전체·집중 검사는 겹치므로 합산하지 않습니다. [0.53.4 검증 기록](../docs/VERIFICATION_0.53.4.json)에서 범위와 미실행 항목을 확인하세요. 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·Docker·외부 AI/OAST/BApp 서비스는 이번 검증에서 실행하지 않았습니다.
 

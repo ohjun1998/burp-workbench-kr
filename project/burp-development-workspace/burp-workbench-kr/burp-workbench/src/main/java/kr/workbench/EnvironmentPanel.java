@@ -555,14 +555,19 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
   void runTasks(List<EnvironmentProject.Pending> tasks){
     if(closed.get()||job!=null||ioBusy||tasks.isEmpty())return;
     try{
-      for(var task:tasks)if(!WorkbenchScope.contains(api,HttpRequest.httpRequestFromUrl(task.url())))throw new IllegalArgumentException("SCOPE 밖 대기 경로 · 범위를 확인하세요.");
-      var profile=profile(tasks.get(0).url());
+      final var plannedTasks=List.copyOf(tasks);
+      for(var task:plannedTasks)if(!WorkbenchScope.contains(api,HttpRequest.httpRequestFromUrl(task.url())))throw new IllegalArgumentException("SCOPE 밖 대기 경로 · 범위를 확인하세요.");
+      var profile=profile(plannedTasks.get(0).url());
       var ignored=AuthJudgement.rules(volatileFields.getText(),"","").ignored();
       String app=EnvironmentCatalog.prefix(prefix.getText());var site=catalog.sites.get(EnvironmentCatalog.origin(java.net.URI.create(tasks.get(0).url())));
       var options=new EnvironmentScan.Options(compareMissing.isSelected(),repeatMissing.isSelected(),ignored,(Integer)delay.getValue(),1000*(Integer)timeout.getValue(),(Integer)budget.getValue(),(Integer)depth.getValue(),follow.isSelected(),true,app,site==null?List.of():List.copyOf(site.prefixes));
+      if(!confirmScan("서버·경로 탐색 시작",plannedTasks,options,profile,0)){
+        status.setText("승인하지 않아 서버·경로 요청을 시작하지 않았습니다.");return;
+      }
+      if(closed.get()||job!=null||ioBusy)return;
       stopping.set(false);
       job=new SwingWorker<>(){
-        EnvironmentScan worker=new EnvironmentScan(api,options,profile,tasks,r->publish(new Packet(r.url(),r.request(),r.response(),r.state(),r.decoded(),r,profile.account())),()->closed.get()||stopping.get());
+        EnvironmentScan worker=new EnvironmentScan(api,options,profile,plannedTasks,r->publish(new Packet(r.url(),r.request(),r.response(),r.state(),r.decoded(),r,profile.account())),()->closed.get()||stopping.get());
         {scan=worker;}
         protected Void doInBackground(){worker.run();return null;}
         protected void process(List<Packet> updates){
@@ -589,13 +594,31 @@ public final class EnvironmentPanel extends JPanel implements AutoCloseable {
       setRunning(true);scanTimer.start();job.execute();
     }catch(Exception error){Diagnostics.failure(this,"서버·경로 탐색",error);status.setText(error.getMessage());}
   }
+  boolean confirmScan(String operation,List<EnvironmentProject.Pending> tasks,EnvironmentScan.Options options,EnvironmentScan.Profile profile,int sent){
+    var targets=new ArrayList<String>();for(var task:tasks)targets.add(task.url());
+    if(profile.check()!=null)targets.add(profile.check().url());
+    String plan="초기/남은 경로 "+tasks.size()+"개 · 계정 "+profile.account()+"\n"
+        +"기준·신원·후속 요청 포함 전체 한도 "+options.budget()+"회 · 이미 전송 "+sent+"회 · 남은 최대 "+Math.max(0,options.budget()-sent)+"회\n"
+        +"동시 요청 1개 · 요청 간격 "+options.delay()+"ms · 요청 타임아웃 "+options.timeout()+"ms\n"
+        +"없는 경로 대조 "+(options.compare()?(options.repeat()?"최대 2회씩":"최대 1회씩"):"사용 안 함")
+        +" · 각 경로의 적용 루트 아래 /wb-missing-<무작위> GET · 신원 검사가 설정되면 해당 URL도 요청\n"
+        +"후속 경로 "+(options.follow()?"동일 Origin·현재 SCOPE에서 발견한 경로를 깊이 "+options.depth()+"까지 추가":"추가 안 함")+" · 대기 경로 최대 500개\n"
+        +"GET도 서버 상태를 바꿀 수 있습니다. 리다이렉트는 추적하지 않습니다.\n"
+        +"HTTP429·보안 확인 화면·세션 변경 시 일시정지, SCOPE 제외·요청 한도·사용자 중지 시 중단합니다. 재개 시 다시 승인합니다.";
+    return ActiveRequestApproval.confirm(this,operation,targets,plan);
+  }
   void setRunning(boolean running){
     start.setEnabled(!running&&!ioBusy);single.setEnabled(!running&&!ioBusy);stop.setEnabled(running);pause.setEnabled(running);pause.setText("일시정지");
     for(JComponent c:List.of(technologies,origins,prefix,limit,common,repeatMissing,volatileFields,compareMissing,account,delay,timeout,budget,depth,follow))c.setEnabled(!running&&!ioBusy);
     remaining.setEnabled(!running&&!ioBusy&&!project.pending.isEmpty());
   }
   void scanStatus(){var worker=scan;if(worker==null)return;pause.setText(worker.paused?"재개":"일시정지");status.setText((worker.paused?"일시정지 · "+worker.note:"검증 중")+" · 경로 "+worker.completed+" · 요청 "+worker.sent+" · 남음 "+worker.queue.size());}
-  void togglePause(){var worker=scan;if(worker==null)return;try{if(worker.paused)worker.resume(profile(worker.queue.peek().url()));else worker.pause("사용자 일시정지",0);scanStatus();}catch(Exception error){status.setText(error.getMessage());}}
+  void togglePause(){var worker=scan;if(worker==null)return;try{if(worker.paused){
+    var remaining=worker.remaining();if(remaining.isEmpty())return;var next=profile(remaining.get(0).url());int sent=worker.sent;
+    if(!confirmScan("서버·경로 탐색 재개",remaining,worker.options,next,sent)){status.setText("승인하지 않아 일시정지를 유지합니다.");return;}
+    if(scan!=worker||!worker.paused||worker.sent!=sent||!remaining.equals(worker.remaining())){status.setText("대기 경로가 변경되었습니다. 다시 재개를 선택하세요.");return;}
+    worker.resume(next);
+   }else worker.pause("사용자 일시정지",0);scanStatus();}catch(Exception error){status.setText(error.getMessage());}}
   void resumeRemaining(){if(!project.pendingAccount.equals(accountKey())){status.setText("저장 당시 계정으로 세션을 연결하고 재개하세요.");return;}runTasks(project.pending);}
   JPanel evidenceContent(){
     String url=selectedUrl();Packet packet=url==null?null:currentPacket(url);JTextArea text=message();text.setLineWrap(true);text.setWrapStyleWord(true);

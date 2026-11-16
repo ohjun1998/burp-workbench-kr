@@ -58,6 +58,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
   final Map<String,String> versionHashes=new ConcurrentHashMap<>();
   final JsModuleLinks modules=new JsModuleLinks();
   JsResultsView resultView;
+  Runnable aiReview=()->{};
   JsAnalysis.Result currentResult(){return current;}
   String currentSourceKey(){return currentSource;}
 
@@ -277,6 +278,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     JMenuItem matchTraffic=new JMenuItem("트래픽 대조"),compareVersions=new JMenuItem("버전 비교");
     matchTraffic.setName("wb.js.traffic.compare");compareVersions.setName("wb.js.version.compare");
     matchTraffic.addActionListener(e->resultView.openTraffic());compareVersions.addActionListener(e->openVersionComparison());
+    JMenuItem aiItem=new JMenuItem("AI JS·API 검토");aiItem.setName("wb.js.ai.review");aiItem.addActionListener(e->{try{aiReview.run();}catch(RuntimeException error){status.setText(error.getMessage());}});
     moreMenu.add(matchTraffic);moreMenu.add(compareVersions);moreMenu.addSeparator();
     more.putClientProperty("wb.js.more.menu",moreMenu);
     JMenuItem retryItem = new JMenuItem("분석 처리·재시도");
@@ -287,6 +289,7 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     menu(moreMenu, "URL 목록 복사", copy);
     menu(moreMenu, "가림 결과 복사", report);
     menu(moreMenu, "분석 초기화", clear);
+    moreMenu.addSeparator();moreMenu.add(aiItem);
     tools.addActionListener(e -> toolMenu.show(tools, 0, tools.getHeight()));
     more.addActionListener(e -> moreMenu.show(more, 0, more.getHeight()));
     JButton target = targetSettings.button();
@@ -1494,16 +1497,35 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
     String key = currentSource;
     long token = epoch.get();
     PreviewContext owner = previewContext();
+    JsAnalysis.Result original = cache.result(key);
+    if (original == null || original != current) return;
+    String project = WorkspaceResume.projectIdentity(api);
+    final List<String> candidates;
+    try {
+      candidates = JsMiner.mapCandidates(key, original.miner().maps()).stream()
+          .filter(url -> WorkbenchScope.contains(api, HttpRequest.httpRequestFromUrl(url))).toList();
+    } catch (RuntimeException invalid) { status.setText("소스맵 탐색 대상 URL·SCOPE를 확인하세요."); return; }
+    if (candidates.isEmpty()) { status.setText("현재 SCOPE 안의 소스맵 요청 후보가 없습니다."); return; }
+    String requestPlan = "선택 출처: " + JsMiner.safeUrl(key) + "\n"
+        + "SCOPE 안·같은 Origin의 소스맵 GET " + candidates.size() + "회 이하(상한 10회).\n"
+        + "동시 요청 1개·순차 전송, 별도 지연 없음, 요청별 제한 5초, 응답 본문 최대 2 MiB.\n"
+        + "발견 참조와 .js.map/.map 추정 경로를 요청합니다. 리다이렉트·자동 재시도는 하지 않습니다.\n"
+        + "취소 후 다시 실행할 때는 새로 확인합니다.";
+    if (!ActiveRequestApproval.confirm(this, "JS 소스맵 탐색", candidates, requestPlan)) {
+      status.setText("소스맵 탐색 취소 · 추가 요청과 작업 대기열을 시작하지 않았습니다."); return;
+    }
+    if (!activeSnapshotCurrent(key, original, token, project) || !currentSource.equals(key)) {
+      status.setText("선택 원본·프로젝트가 변경되었습니다. 다시 선택해 실행을 확인하세요."); return;
+    }
     enqueue(
         () -> {
           try {
-            JsAnalysis.Result original = cache.result(key);
-            if (original == null) return;
+            if (!activeSnapshotCurrent(key, original, token, project)) return;
             var m = original.miner();
             var maps = new ArrayList<>(m.maps());
             var recovered = new ArrayList<>(m.recovered());
-            for (String url : JsMiner.mapCandidates(key, m.maps())) {
-              if (closed.get() || token != epoch.get()) return;
+            for (String url : candidates) {
+              if (!activeSnapshotCurrent(key, original, token, project)) return;
               try {
                 var reply = fetch(url, true, owner);
                 String state = "HTTP " + reply.status();
@@ -1549,20 +1571,53 @@ public final class JsAnalysisPanel extends JPanel implements AutoCloseable {
         true);
   }
 
+  private boolean activeSnapshotCurrent(String key, JsAnalysis.Result original, long token, String project) {
+    return !closed.get() && !Thread.currentThread().isInterrupted() && token == epoch.get()
+        && cache.result(key) == original && project.equals(WorkspaceResume.projectIdentity(api));
+  }
+
   void checkRegistry() {
     if (current == null || api == null) return;
     String key = currentSource, root = registry.getText().strip();
     long token = epoch.get();
     PreviewContext owner = previewContext();
+    JsAnalysis.Result original = cache.result(key);
+    if (original == null || original != current) return;
+    String project = WorkspaceResume.projectIdentity(api);
+    var dependencies = List.copyOf(original.miner().dependencies());
+    if (dependencies.isEmpty()) { status.setText("조회할 NPM 패키지 후보가 없습니다."); return; }
+    if (dependencies.size() > 100) { status.setText("NPM 조회는 한 번에 패키지 100개까지 가능합니다."); return; }
+    final List<String> targets;
+    try {
+      URI registryRoot = URI.create(root);
+      if (!Set.of("http", "https").contains(registryRoot.getScheme()) || registryRoot.getHost() == null
+          || registryRoot.getUserInfo() != null || registryRoot.getQuery() != null || registryRoot.getFragment() != null)
+        throw new IllegalArgumentException();
+      targets = dependencies.stream().map(dependency -> root.replaceAll("/+$", "") + "/"
+          + java.net.URLEncoder.encode(dependency.name(), java.nio.charset.StandardCharsets.UTF_8).replace("+", "%20")).toList();
+    } catch (RuntimeException invalid) { status.setText("NPM 레지스트리 HTTP(S) 주소를 확인하세요."); return; }
+    String requestPlan = "선택 출처: " + JsMiner.safeUrl(key) + "\n레지스트리: " + JsMiner.safeUrl(root) + "\n"
+        + "패키지 존재 조회 GET " + dependencies.size() + "회 이하(상한 100회). 패키지 이름을 레지스트리에 전송합니다.\n"
+        + "레지스트리는 대상 SCOPE와 별도인 외부 조회입니다. 동시 요청 1개·순차 전송, 별도 지연 없음.\n"
+        + "요청별 제한 5초·응답 본문 최대 2 MiB·리다이렉트/자동 재시도 없음. 취소 후 다시 실행할 때 새로 확인합니다.";
+    if (!ActiveRequestApproval.confirm(this, "NPM 패키지 존재 조회", targets, requestPlan)) {
+      status.setText("NPM 조회 취소 · 추가 요청과 작업 대기열을 시작하지 않았습니다."); return;
+    }
+    if (!activeSnapshotCurrent(key, original, token, project) || !currentSource.equals(key)
+        || !registry.getText().strip().equals(root)) {
+      status.setText("원본·레지스트리·프로젝트가 변경되었습니다. 다시 선택해 실행을 확인하세요."); return;
+    }
     enqueue(
         () -> {
-          JsAnalysis.Result original = cache.result(key);
-          if (original == null) return;
+          if (!activeSnapshotCurrent(key, original, token, project)) return;
           var m = original.miner();
           var checked = new ArrayList<JsMiner.Dependency>();
-          for (var d : m.dependencies()) {
-            if (closed.get() || token != epoch.get()) return;
-            checked.add(JsMiner.checkDependency(d, root, url -> fetch(url, false, owner)));
+          for (var dependency : dependencies) {
+            if (!activeSnapshotCurrent(key, original, token, project)) return;
+            checked.add(JsMiner.checkDependency(dependency, root, url -> {
+              if (!activeSnapshotCurrent(key, original, token, project)) throw new CancellationException();
+              return fetch(url, false, owner);
+            }));
           }
           applyMiner(
               key,

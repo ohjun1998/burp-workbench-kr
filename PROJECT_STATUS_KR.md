@@ -1,3 +1,7 @@
+# Simple 1.4.13 · 기존 Strix 로컬/구독 진단 연동 후보
+
+사용자가 Simple에서 기존 Strix 실행·중지·로그·보고서를연결하는범위를명시승인했고, Halogen/Qwen3.8과Strix ChatGPT구독선택 및단계별HTML가이드를요청했습니다. 새후보는1.4.13이며기존Strix설치와Next는수정하지않습니다. 집중6그룹271개·실제Strix패널합성28뷰배치위반0을로컬에서확인했고전체CI/배포검증은진행예정입니다. 실제사용자Burp/모델진단을검증한것은아닙니다. 작업브랜치 account-a/simple-strix-local, 결과·가이드 docs/reports/2026-11-16-simple-strix-local/.
+
 # Next 0.54.1 · AI 통합 후보 마무리
 
 로컬 전체 기능5,195개·Mapper Java134/Node15·전체576뷰·AI28뷰·패키징7개를 통과했습니다. 실제 M5 모델 추론과 native Burp GUI는 별도 미검증입니다.

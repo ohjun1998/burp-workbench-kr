@@ -1,3 +1,7 @@
+# Workbench Simple 1.4.13 · Strix 진단 연동 후보
+
+선택한 관측 자료를 기존 Strix의 진단 입력으로 준비하고, **Halogen + Qwen 3.8 / Strix ChatGPT 구독** 중 실행 경로를 선택합니다. 실행 전 확인·중지·제한된 로그·해당 실행 보고서 미리보기를 제공합니다. 실제 요청 수나 가용성 무영향을 강제 보장하는 네트워크 게이트는 아닙니다. [사용법](docs/RELEASE_SIMPLE_1.4.13_KR.md) · [설치](downloads/1.4.13/) · [검증과 그림 가이드](https://github.com/ohjun1998/burp-workbench-kr/tree/account-a/simple-strix-local/docs/reports/2026-11-16-simple-strix-local). 아래는 이전 배포 기록입니다.
+
 # Workbench Simple 1.4.12
 
 승인한 13개 화면의 버튼 배치를 적용했습니다. 실행·중지를 인접 배치하고 선택 작업을 목록/상세 옆으로 옮겼으며 16개 Guide 예시도 갱신했습니다. [설치 JAR](downloads/1.4.12/burp-workbench-simple-1.4.12.jar) · [변경 안내](docs/RELEASE_SIMPLE_1.4.12_KR.md) · [실제 화면·검증](https://github.com/ohjun1998/burp-workbench-kr/blob/main/docs/reports/2026-10-31-contextual-button-layout/README.md).

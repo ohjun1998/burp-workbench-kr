@@ -1,0 +1,28 @@
+{
+  "testedAtUtc": "2026-11-16T13:25:48.773244+00:00",
+  "readOnlyInspection": true,
+  "scanPlansPrepared": 0,
+  "scanExecutions": 0,
+  "modelRequests": 0,
+  "targetRequests": 0,
+  "dockerRequests": 0,
+  "credentialsStored": false,
+  "rawAuthOutputStored": false,
+  "nativeBurpGuiVerified": false,
+  "releaseJarSha256": "a61e81a4f4131f4226a8057d3b7974678c4941856370fdf1b79dbe470d374fd2",
+  "releaseVersion": "1.4.13",
+  "releaseIntegrityVerified": true,
+  "local": {
+    "inspectionSucceeded": true,
+    "model": "openai/halogen-qwen3.8-flash-next",
+    "baseUrl": "http://127.0.0.1:8731/v1",
+    "apiType": "chat_completions"
+  },
+  "subscription": {
+    "inspectionSucceeded": true,
+    "signedIn": false,
+    "model": "chatgpt/gpt-5.4",
+    "apiType": "native-chatgpt"
+  },
+  "result": "completed-read-only-inspection"
+}

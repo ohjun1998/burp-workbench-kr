@@ -1,0 +1,50 @@
+{
+  "version": "1.4.13",
+  "sourceHead": "609c252a9543f0e5ef8db800f28e09f147efe62d",
+  "artifactCommit": "0656650bd7e9304babb909846d2b325fc0eb3bc4",
+  "ciRun": 43874202784,
+  "ciConclusion": "success",
+  "simpleChecks": 7162,
+  "newStrixChecksIncluded": 89,
+  "katanaChecksSeparate": 102,
+  "existingUiScreens": {
+    "simple": 84,
+    "scope": 68
+  },
+  "finalPublishedJar": {
+    "sha256": "a61e81a4f4131f4226a8057d3b7974678c4941856370fdf1b79dbe470d374fd2",
+    "bytes": 9038952,
+    "newChecksRepeated": 89,
+    "uiScreensRepeated": 28,
+    "uiViolations": 0
+  },
+  "preservation": {
+    "nextManifestInputsCompared": 399,
+    "nextDifferences": 0,
+    "locallyPresentSimpleReleaseInputsCompared": 505,
+    "simpleDifferences": 0,
+    "historicalSimpleInputsNotMaterializedLocally": 1683,
+    "fullSimplePackagingAndVerify": "completed in GitHub Actions full checkout"
+  },
+  "guide": {
+    "steps": 7,
+    "productionPanel": true,
+    "syntheticFixtures": true,
+    "nativeBurpCapture": false,
+    "actualScanInCaptures": false,
+    "packageEvidence": "guide-package-check.json"
+  },
+  "readOnlyLocalInspection": "local-preflight.json",
+  "publishedJarRegressionEvidence": "published-jar-tests.json",
+  "nativeBurpGuiVerified": false,
+  "actualModelInference": false,
+  "actualStrixScan": false,
+  "targetRequestsByStrixTests": 0,
+  "dockerRequestsByIntegration": 0,
+  "limits": [
+    "max-turns is per-agent turns, not an HTTP request budget",
+    "SCOPE preflight and prompt instructions do not enforce per-request network isolation",
+    "Docker cleanup remains unverified",
+    "Native Strix ChatGPT OAuth is separate from Codex CLI and not an OpenAI-supported subscription API"
+  ]
+}

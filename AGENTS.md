@@ -1,3 +1,10 @@
+# Simple 1.4.13 Strix integration
+
+- The user explicitly approved the Simple-to-existing-Strix execution interface and then requested Halogen/Qwen3.8 versus native Strix ChatGPT-subscription selection, plus a step-by-step illustrated HTML guide. This task supersedes historical Next-only scope notes for the new Simple files. Existing ~/.strix launcher/monitor/config, Next and prior artifacts remain untouched.
+- Keep the eight Simple routes and Guide16 contract. Run starts only after a per-run default-cancel confirmation. Preserve immutable source IDs, project/store/SCOPE checks, provider snapshot and no automatic fallback. max-turns is per-agent turns, not an HTTP request budget; do not claim network isolation or guaranteed availability. Stop controls only owned processes; Docker cleanup can remain unverified.
+- Native Strix auth login chatgpt is separate from Codex CLI login. Use its native status only, never read/copy OAuth tokens. Do not call this an OpenAI-official subscription API. Preserve local operational limits through validated run-scoped config; remove inherited provider overrides. No automatic raw packet/credential transfer.
+- New tests are SimpleStrixClientTest and SimpleStrixIntegrationTest. Render the exact release JAR with simple/tools/render_strix.py, synthetic fixtures only. Final guide/captures/evidence live under docs/reports/2026-11-16-simple-strix-local outside immutable Simple source inputs.
+
 # Next 0.54.1 completion
 
 - Continues the authorized Next hybrid-AI candidate PR #110 (`6334ac1962caf42c7685c544bde61c327db47560`) on `account-a/next-0541-completion`. Version 0.54.1 preserves the immutable 0.54.0 candidate and all prior/Simple releases. Guide: `docs/RELEASE_0.54.1_NEXT_KR.md`; current evidence: `docs/VERIFICATION_0.54.1.json`.

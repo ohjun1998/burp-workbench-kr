@@ -1,0 +1,408 @@
+{
+  "scope": "Actual Chromium reading the standalone guide in a fresh context. file:// is attempted first; a managed-policy block is recorded separately and the identical bytes are served over isolated loopback HTTP with non-loopback requests denied. No policy modification, Burp GUI, native extension, Katana, or target-site test.",
+  "htmlSha256": "f486b7401681e3ad4409c0cf94bd8ee16e4fe2a6e91630eabadb8f88d3b7d7a7",
+  "checks": [
+    {
+      "name": "33-screen-steps-and-nav",
+      "result": "passed",
+      "cards": 33,
+      "markers": 95,
+      "actionRows": 95,
+      "nav": 33,
+      "lang": "ko",
+      "ids": [
+        "progress",
+        "theme",
+        "search",
+        "search-count",
+        "main",
+        "overview",
+        "prepare",
+        "empty",
+        "reset-search",
+        "step-01",
+        "arrow-01",
+        "arrow-01-z",
+        "step-02",
+        "arrow-02",
+        "arrow-02-z",
+        "step-03",
+        "arrow-03",
+        "arrow-03-z",
+        "step-04",
+        "arrow-04",
+        "arrow-04-z",
+        "step-05",
+        "arrow-05",
+        "arrow-05-z",
+        "step-06",
+        "arrow-06",
+        "arrow-06-z",
+        "step-07",
+        "arrow-07",
+        "arrow-07-z",
+        "step-08",
+        "arrow-08",
+        "arrow-08-z",
+        "step-09",
+        "arrow-09",
+        "arrow-09-z",
+        "step-10",
+        "arrow-10",
+        "arrow-10-z",
+        "step-11",
+        "arrow-11",
+        "arrow-11-z",
+        "step-12",
+        "arrow-12",
+        "arrow-12-z",
+        "step-13",
+        "arrow-13",
+        "arrow-13-z",
+        "step-14",
+        "arrow-14",
+        "arrow-14-z",
+        "step-15",
+        "arrow-15",
+        "arrow-15-z",
+        "step-16",
+        "arrow-16",
+        "arrow-16-z",
+        "step-17",
+        "arrow-17",
+        "arrow-17-z",
+        "step-18",
+        "arrow-18",
+        "arrow-18-z",
+        "step-19",
+        "arrow-19",
+        "arrow-19-z",
+        "step-20",
+        "arrow-20",
+        "arrow-20-z",
+        "step-21",
+        "arrow-21",
+        "arrow-21-z",
+        "step-22",
+        "arrow-22",
+        "arrow-22-z",
+        "step-23",
+        "arrow-23",
+        "arrow-23-z",
+        "step-24",
+        "arrow-24",
+        "arrow-24-z",
+        "step-25",
+        "arrow-25",
+        "arrow-25-z",
+        "step-26",
+        "arrow-26",
+        "arrow-26-z",
+        "step-27",
+        "arrow-27",
+        "arrow-27-z",
+        "step-28",
+        "arrow-28",
+        "arrow-28-z",
+        "step-29",
+        "arrow-29",
+        "arrow-29-z",
+        "step-30",
+        "arrow-30",
+        "arrow-30-z",
+        "step-31",
+        "arrow-31",
+        "arrow-31-z",
+        "step-32",
+        "arrow-32",
+        "arrow-32-z",
+        "step-33",
+        "arrow-33",
+        "arrow-33-z",
+        "report",
+        "troubleshooting",
+        "sources",
+        "zoom-dialog",
+        "zoom-title",
+        "zoom-plus",
+        "zoom-reset",
+        "zoom-close",
+        "zoom-content"
+      ],
+      "unlabelledButtons": 0,
+      "unlabelledInputs": 0
+    },
+    {
+      "name": "95-markers-match-95-action-rows",
+      "result": "passed",
+      "markers": 95,
+      "actions": 95
+    },
+    {
+      "name": "korean-language-and-unique-ids",
+      "result": "passed",
+      "lang": "ko",
+      "idCount": 117
+    },
+    {
+      "name": "buttons-and-inputs-have-accessible-labels",
+      "result": "passed",
+      "buttons": 0,
+      "inputs": 0
+    },
+    {
+      "name": "all-33-embedded-screenshots-decode-at-source-size",
+      "result": "passed",
+      "count": 33,
+      "invalid": []
+    },
+    {
+      "name": "viewport-1440-no-horizontal-overflow",
+      "result": "passed",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "name": "viewport-1440-all-captures-and-font",
+      "result": "passed",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "name": "search-filters-body-and-navigation",
+      "result": "passed",
+      "visible": [
+        "step-04",
+        "step-08"
+      ],
+      "nav": [
+        "step-04",
+        "step-08"
+      ]
+    },
+    {
+      "name": "filtered-next-follows-visible-step",
+      "result": "passed",
+      "hash": "#step-08",
+      "expected": "step-08"
+    },
+    {
+      "name": "filtered-previous-follows-visible-step",
+      "result": "passed",
+      "hash": "#step-04",
+      "expected": "step-04"
+    },
+    {
+      "name": "filtered-last-next-does-not-enter-hidden-step",
+      "result": "passed",
+      "hash": "#troubleshooting",
+      "allowed": [
+        "step-08",
+        "troubleshooting"
+      ]
+    },
+    {
+      "name": "filtered-first-previous-does-not-enter-hidden-step",
+      "result": "passed",
+      "hash": "#overview",
+      "allowed": [
+        "step-04",
+        "overview"
+      ]
+    },
+    {
+      "name": "zero-results-state-visible",
+      "result": "passed"
+    },
+    {
+      "name": "reset-search-restores-all-steps",
+      "result": "passed"
+    },
+    {
+      "name": "dark-mode-applied",
+      "result": "passed"
+    },
+    {
+      "name": "dark-mode-persists-after-reload",
+      "result": "passed"
+    },
+    {
+      "name": "checklist-progress-and-limits",
+      "result": "passed"
+    },
+    {
+      "name": "checklist-persists-after-reload",
+      "result": "passed"
+    },
+    {
+      "name": "zoom-modal-source-ratio-and-focus",
+      "result": "passed",
+      "width": 1280,
+      "height": 800,
+      "ratio": 1.6,
+      "sourceRatio": 1.6,
+      "focus": "zoom-close",
+      "uniqueIds": true
+    },
+    {
+      "name": "zoom-plus-increases-size",
+      "result": "passed",
+      "before": 1280,
+      "after": 1600
+    },
+    {
+      "name": "zoom-reset-restores-native-width",
+      "result": "passed",
+      "before": 1280,
+      "after": 1280
+    },
+    {
+      "name": "escape-closes-and-restores-focus",
+      "result": "passed"
+    },
+    {
+      "name": "viewport-768-no-horizontal-overflow",
+      "result": "passed",
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "bodyWidth": 768,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "name": "viewport-768-all-captures-and-font",
+      "result": "passed",
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "bodyWidth": 768,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "name": "viewport-390-no-horizontal-overflow",
+      "result": "passed",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "bodyWidth": 390,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "name": "viewport-390-all-captures-and-font",
+      "result": "passed",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "bodyWidth": 390,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "name": "important-region-expands",
+      "result": "passed"
+    },
+    {
+      "name": "mobile-detail-has-no-document-overflow",
+      "result": "passed",
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    {
+      "name": "all-internal-links-resolve",
+      "result": "passed",
+      "missing": []
+    },
+    {
+      "name": "javascript-disabled-body-still-readable",
+      "result": "passed"
+    },
+    {
+      "name": "no-external-network-attempts",
+      "result": "passed",
+      "count": 0
+    },
+    {
+      "name": "no-console-or-script-errors",
+      "result": "passed",
+      "console": [],
+      "page": []
+    },
+    {
+      "name": "checked-html-unchanged-during-run",
+      "result": "passed"
+    }
+  ],
+  "screenshots": [
+    "qa/browser/desktop-overview.png",
+    "qa/browser/desktop-dark-filter-step.png",
+    "qa/browser/desktop-zoom-modal.png",
+    "qa/browser/tablet-overview.png",
+    "qa/browser/mobile-overview.png",
+    "qa/browser/mobile-recheck-step.png"
+  ],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "externalRequests": [],
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000,
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "bodyWidth": 768,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "bodyWidth": 390,
+      "brokenImages": 0,
+      "zeroCaptures": 0,
+      "fontReady": true,
+      "cards": 33
+    }
+  ],
+  "browserExecutable": "/usr/bin/chromium",
+  "fileProtocol": {
+    "result": "blocked",
+    "reason": "ERR_BLOCKED_BY_ADMINISTRATOR",
+    "policyChanged": false
+  },
+  "transport": "same-byte-loopback-http-external-requests-denied",
+  "passed": 33,
+  "failed": 0,
+  "result": "passed"
+}

@@ -1,0 +1,391 @@
+{
+  "result": "passed",
+  "pdfSha256": "443eda3860bf4d685d96e0611bc47be5a5a6e167bc2c1d08ab6eb0ae9492dc20",
+  "bytes": 2802383,
+  "pages": 40,
+  "visualReviewComplete": true,
+  "outsideTextCount": 0,
+  "scope": "All 40 final PDF pages rerendered and visually reviewed. Document layout and annotations only; not native Burp or a new target-site test.",
+  "priorCandidateSha256": "81c4818acbfba0938da38ec4498c8be4b224717efe8446daed17d1ea398e842c",
+  "corrections": [
+    "Moved the three account callout markers into the empty right margin.",
+    "Clipped magnifiers to their exact selected source rectangle, including letterbox margins.",
+    "Replaced one unsupported ellipsis glyph with the words more-view button; final text contains no NUL or unsupported glyphs."
+  ],
+  "reviewMethod": {
+    "all40Pages": "Re-rendered all40 at1.25x and compared pixel-for-pixel with prior passed81c4818a review.39 pages identical; only page24 action2 phrase changed within one16px-high text line.",
+    "detailedPagesThisRevision": [
+      24
+    ],
+    "previousFullReview": "/workspace/simple-guide-conversation-20261029/pdf-review-archive-81c4818a/pdf-review.json",
+    "sourceTargets": "Prior33source/95target full visual mapping remains applicable because all screenshot and vector pixels are identical."
+  },
+  "findings": [],
+  "pageChecks": [
+    {
+      "page": 1,
+      "textCharacters": 655,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 0,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 2,
+      "textCharacters": 1040,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 0,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 3,
+      "textCharacters": 941,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 0,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 4,
+      "textCharacters": 636,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 0,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 5,
+      "textCharacters": 595,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 6,
+      "textCharacters": 622,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 7,
+      "textCharacters": 641,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 8,
+      "textCharacters": 710,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 9,
+      "textCharacters": 704,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 10,
+      "textCharacters": 694,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 11,
+      "textCharacters": 669,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 12,
+      "textCharacters": 631,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 13,
+      "textCharacters": 583,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 14,
+      "textCharacters": 572,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 15,
+      "textCharacters": 633,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 16,
+      "textCharacters": 593,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 17,
+      "textCharacters": 571,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 18,
+      "textCharacters": 601,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 19,
+      "textCharacters": 601,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 20,
+      "textCharacters": 668,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 21,
+      "textCharacters": 595,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 22,
+      "textCharacters": 591,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 23,
+      "textCharacters": 628,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 24,
+      "textCharacters": 668,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": [
+        605,
+        906,
+        837,
+        922
+      ],
+      "changedPixels": 2135
+    },
+    {
+      "page": 25,
+      "textCharacters": 641,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 26,
+      "textCharacters": 586,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 27,
+      "textCharacters": 621,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 28,
+      "textCharacters": 556,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 29,
+      "textCharacters": 620,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 30,
+      "textCharacters": 566,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 31,
+      "textCharacters": 561,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 32,
+      "textCharacters": 588,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 33,
+      "textCharacters": 604,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 34,
+      "textCharacters": 639,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 35,
+      "textCharacters": 592,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 36,
+      "textCharacters": 585,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 37,
+      "textCharacters": 594,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 1,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 38,
+      "textCharacters": 940,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 0,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 39,
+      "textCharacters": 984,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 0,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    },
+    {
+      "page": 40,
+      "textCharacters": 797,
+      "nulCount": 0,
+      "outsideText": [],
+      "images": 0,
+      "previousPixelDiffBBox": null,
+      "changedPixels": 0
+    }
+  ]
+}

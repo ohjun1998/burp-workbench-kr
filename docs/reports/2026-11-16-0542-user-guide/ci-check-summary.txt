@@ -1,0 +1,42 @@
+# Public GitHub Actions job log excerpts
+# Run: https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43855690764
+# Job: 133259240633; check; conclusion=success
+# Extracted summaries only; full log is available from GitHub.
+2026-11-16T11:14:17.4532365Z PASS initial group is collapsed
+2026-11-16T11:15:41.5027616Z PASS traffic requests and responses side by side below list
+2026-11-16T11:16:36.0607427Z PASS selected response remains visible below results at 1024
+2026-11-16T11:16:36.0608312Z PASS selected response remains visible below results at 1280
+2026-11-16T11:17:16.2361797Z WORKBENCH_CHECK_SUMMARY {"version": "0.54.2", "regressionGroups": 133, "regressionChecks": 4695, "payloadHttpChecks": 136, "allFeaturesHttpChecks": 102, "bountyHttpChecks": 266, "totalChecks": 5199, "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt", "result": "passed"}
+2026-11-16T11:17:30.0930191Z HTTP authentication checks passed: 420
+2026-11-16T11:18:53.5077901Z HTTP authentication checks passed: 2800
+2026-11-16T11:24:55.6892452Z 8154 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:24:55.6893282Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:24:55.6894405Z 246 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:25:09.1193241Z 28 PNGs; 0 layout violations; report: /home/runner/work/burp-workbench-kr/burp-workbench-kr/tmp/ui-ai-ci/report.json
+2026-11-16T11:25:24.7395981Z 344 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:25:24.7397008Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:25:24.7398689Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:25:38.7301093Z 156 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:25:38.7301465Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:25:38.7302162Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:25:51.2444081Z 24 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:25:51.2444461Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:25:51.2445189Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:26:07.8880657Z 608 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:26:07.8881028Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:26:07.8952527Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:26:25.3117741Z 1292 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:26:25.3118138Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:26:25.3118860Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:26:37.7794729Z 96 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:26:37.7795567Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:26:37.7797589Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:26:54.3294611Z 972 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:26:54.3295099Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:26:54.3295834Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:27:08.1182722Z 224 controls measured; 0 clipped outside scrollable containers.
+2026-11-16T11:27:08.1183206Z 0 collapsed key work areas; 0 controls below 24px.
+2026-11-16T11:27:08.1183967Z 0 synthetic workflow state assertions; 0 missing or failed.
+2026-11-16T11:27:09.1251698Z Ran 7 tests in 0.011s
+2026-11-16T11:27:09.2330082Z Versioned download hashes and source fingerprints verified.
+

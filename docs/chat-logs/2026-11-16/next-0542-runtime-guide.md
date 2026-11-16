@@ -37,3 +37,12 @@ python3 ~/workbench-next-0542/tools/check_next_0542_runtime.py --live --provider
 
 설치·가이드: `docs/RELEASE_0.54.2_NEXT_KR.md`, `docs/guides/next-0.54.2/index.html`.
 상세 근거: `docs/reports/2026-11-16-0542-user-guide/README_KR.md`.
+
+## 후속 진행 요약
+
+- GitHub PR #112에 0.54.2 수정본과 가이드를 업로드했다. 검증한 운영 소스 head는 `44d267489864a3bd8f0d12f653d804bd52d2b7eb`이다.
+- 전체5,199개·화면·패키징 및 Windows/Linux 내구성의 세 CI 작업이 모두 통과했다.
+- 단일 제공자 점검의 상태 검사도 선택 경로만 검사하도록 보완하고6개 확인을 통과했다.
+- 이미지7장·9단계의 단일 HTML, 설치 ZIP, 사용자 문서 폴더 복사본을 만들었다.
+- 실제 사용자 Burp와 모델 응답은 데스크톱·파일·포트 접근 제한으로 미확인이다. 사용자 일반 터미널에서 새0.54.2 점검 도구를 실행할 수 있도록 준비했다.
+- 이후 기록·가이드·도구 갱신은 배포 JAR/소스 ZIP 및399개 소스 지문을 변경하지 않는다.

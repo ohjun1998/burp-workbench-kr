@@ -66,29 +66,33 @@ public final class Next0542RuntimeProof {
     out.put("syntheticInputOnly", true);
     out.put("responseBodiesStored", false);
     out.put("nativeBurpGuiVerified", false);
-    if (mode.equals("status")) {
-      try (CodexSubscriptionClient client = new CodexSubscriptionClient()) {
-        out.put("subscriptionLogin", check(() -> {
-          client.status(codex, timeout);
-          return Map.of("chatgptAuthentication", true, "apiKeyFallback", false);
+    if (Set.of("status", "local-status", "subscription-status").contains(mode)) {
+      if (!mode.equals("local-status")) {
+        try (CodexSubscriptionClient client = new CodexSubscriptionClient()) {
+          out.put("subscriptionLogin", check(() -> {
+            client.status(codex, timeout);
+            return Map.of("chatgptAuthentication", true, "apiKeyFallback", false);
+          }));
+        }
+      }
+      if (!mode.equals("subscription-status")) {
+        out.put("health", check(() -> {
+          try (LocalLlmClient client = new LocalLlmClient()) {
+            LocalLlmConfig config = new LocalLlmConfig(endpoint, model,
+                Objects.toString(System.getenv("WORKBENCH_HALOGEN_API_KEY"), ""), timeout, maxTokens, reasoning);
+            String body = client.health(config);
+            return Map.of("jsonResponseValidated", true, "responseCharacters", body.length(), "responseSha256", sha(body));
+          }
+        }));
+        out.put("models", check(() -> {
+          try (LocalLlmClient client = new LocalLlmClient()) {
+            LocalLlmConfig config = new LocalLlmConfig(endpoint, model,
+                Objects.toString(System.getenv("WORKBENCH_HALOGEN_API_KEY"), ""), timeout, maxTokens, reasoning);
+            List<String> names = client.models(config);
+            return Map.of("modelCount", names.size(), "configuredModelListed", names.contains(model));
+          }
         }));
       }
-      out.put("health", check(() -> {
-        try (LocalLlmClient client = new LocalLlmClient()) {
-          LocalLlmConfig config = new LocalLlmConfig(endpoint, model,
-              Objects.toString(System.getenv("WORKBENCH_HALOGEN_API_KEY"), ""), timeout, maxTokens, reasoning);
-          String body = client.health(config);
-          return Map.of("jsonResponseValidated", true, "responseCharacters", body.length(), "responseSha256", sha(body));
-        }
-      }));
-      out.put("models", check(() -> {
-        try (LocalLlmClient client = new LocalLlmClient()) {
-          LocalLlmConfig config = new LocalLlmConfig(endpoint, model,
-              Objects.toString(System.getenv("WORKBENCH_HALOGEN_API_KEY"), ""), timeout, maxTokens, reasoning);
-          List<String> names = client.models(config);
-          return Map.of("modelCount", names.size(), "configuredModelListed", names.contains(model));
-        }
-      }));
     } else if (mode.equals("local")) {
       out.put("inferenceAttempts", 1);
       out.put("localInference", check(() -> {

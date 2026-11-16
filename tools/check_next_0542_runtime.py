@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check the exact Next 0.54.2 release and its real provider clients.
 
-Default: integrity, tools, ChatGPT login status, and local health/models GETs.
+Default: integrity, tools, and selected providers' status (both by default).
 --offline: integrity and compilation only, no service or login check.
 --live: additionally make ONE synthetic inference per selected provider.
 No test-target HTTP requests, Burp settings changes, or raw provider outputs.
@@ -73,7 +73,8 @@ def main() -> int:
     parser.add_argument('--reasoning', choices=['', 'none', 'low', 'medium', 'high', 'xhigh'], default='low')
     parser.add_argument('--offline', action='store_true')
     parser.add_argument('--live', action='store_true')
-    parser.add_argument('--provider', choices=['local', 'subscription', 'both'], default='both')
+    parser.add_argument('--provider', choices=['local', 'subscription', 'both'], default='both',
+                        help='Check only these providers, including status; default both')
     parser.add_argument('--out', type=Path, default=ROOT/'build/next-0542-runtime/result.json')
     args = parser.parse_args()
     if not 1 <= args.timeout <= 180: parser.error('--timeout must be 1..180')
@@ -87,6 +88,7 @@ def main() -> int:
     report = {'testedAtUtc': datetime.now(timezone.utc).isoformat(), 'targetHttpRequests': 0,
               'syntheticInputOnly': True, 'rawProviderOutputsStored': False,
               'nativeBurpGuiVerified': False, 'liveRequested': args.live,
+              'providerSelection': args.provider,
               'limitations': ['This is a release-client check, not native Burp GUI validation.',
                               'A valid AI response is not evidence of vulnerability-detection accuracy.']}
     try:
@@ -112,7 +114,7 @@ def main() -> int:
             report['proofCompilation'] = {'status': 'passed' if compiled.returncode == 0 else 'failed'}
             if compiled.returncode: raise RuntimeError('proof-compilation')
             if not args.offline:
-                modes = ['status']
+                modes = ['status' if args.provider == 'both' else args.provider+'-status']
                 if args.live: modes += ['local', 'subscription'] if args.provider == 'both' else [args.provider]
                 report['operations'] = []
                 for mode in modes:
@@ -121,7 +123,8 @@ def main() -> int:
                         args.endpoint, args.model, args.codex, args.subscription_model,
                         str(args.timeout), str(args.max_tokens), args.reasoning]
                     try:
-                        run = proof_process(command, (3 if mode == 'status' else 1)*args.timeout+10)
+                        checks = {'status': 3, 'local-status': 2, 'subscription-status': 1}.get(mode, 1)
+                        run = proof_process(command, checks*args.timeout+10)
                         if run.returncode: raise RuntimeError('proof-process')
                         operation = json.loads(run.stdout)
                         report['operations'].append({'mode': mode, **operation})

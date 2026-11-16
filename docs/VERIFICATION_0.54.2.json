@@ -28,12 +28,54 @@
     "nativeBurpGui": "unavailable"
   },
   "fullCi": {
-    "status": "pending",
-    "sourceHead": null
+    "status": "passed",
+    "sourceHead": "44d267489864a3bd8f0d12f653d804bd52d2b7eb",
+    "buildRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43855690764",
+    "durabilityRun": "https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43855690748",
+    "allThreeJobsPassed": true,
+    "totalChecks": 5199,
+    "regressionGroups": 133,
+    "regressionChecks": 4695,
+    "httpChecks": [
+      136,
+      102,
+      266
+    ],
+    "mapperJavaChecks": 134,
+    "mapperNodeChecks": 15,
+    "uiControls": 8154,
+    "uiLabels": 5280,
+    "uiStates": 246,
+    "uiLayoutViolations": 0,
+    "aiPngCount": 28,
+    "focusedModes": 9,
+    "packagingChecks": 7,
+    "sourceFingerprintsVerified": 399
   },
   "limitations": [
     "A full Workbench UI fixture cannot start its Mapper loopback server in this environment. The isolated guide harness renders production AI panels only.",
     "Browser HTML visual rendering failed with EPERM; HTML links/assets and JavaScript are checked statically.",
     "Native Burp load and actual model responses remain unverified."
-  ]
+  ],
+  "helperChecks": {
+    "selectedProviderStatusAssertions": 6,
+    "passed": true,
+    "evidence": "reports/2026-11-16-0542-user-guide/helper-single-provider.json"
+  },
+  "supportedCliFeatureCheck": {
+    "cli": "0.169.0",
+    "view_image": "recognized stable feature",
+    "productionOverride": "features.view_image=false"
+  },
+  "durability": {
+    "linuxEnospcChecks": 15,
+    "linuxCaptureSeconds": 180,
+    "linuxAccepted": 3624,
+    "windowsCaptureSeconds": 180,
+    "windowsAccepted": 3647,
+    "drops": 0,
+    "processingErrors": 0,
+    "nativeBurpGuiVerified": false
+  },
+  "finalization": "Subsequent guide/helper changes do not change the 399 release input fingerprints; selected-provider helper has six separate assertions."
 }

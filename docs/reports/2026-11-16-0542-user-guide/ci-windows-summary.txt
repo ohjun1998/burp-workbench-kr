@@ -1,0 +1,27 @@
+# Public GitHub Actions job log excerpts
+# Run: https://github.com/ohjun1998/burp-workbench-kr/actions/runs/43855690748
+# Job: 133259240532; windows; conclusion=success
+# Extracted summaries only; full log is available from GitHub.
+2026-11-16T11:19:37.8309296Z JsRepeaterWindowTest: 6 checks passed (native Swing frame; no Burp or HTTP)
+2026-11-16T11:22:28.3654660Z STORAGE_REPEAT 10/10
+2026-11-16T11:22:28.3666820Z {"result": "passed", "version": "0.54.2", "iterations": 10, "groups": ["CapturePipelineTest", "TrafficCaptureRecoveryTest"], "executions": 20, "note": "Repeated executions are not additional unique check counts."}
+2026-11-16T11:22:36.7366659Z MapperTest: 134 checks passed
+2026-11-16T11:25:42.4480412Z {"host":"Montoya adapter; production callback, Swing timer and disk store","nativeBurp":false,"nativeGuiClicks":false,"os":"Windows Server 2025","java":"17.0.21","mode":"soak","received":3647,"drops":0,"processingErrors":0,"errorStages":[],"acceptedResponses":3647,"retainedRows":3647,"diskBytes":15729331,"heapBeforeBytes":1612160,"heapAfterBytes":43706768,"elapsedSeconds":182.4386386,"requestedSeconds":180,"intervalMillis":50,"result":"passed","checks":8,"passedChecks":["collection exceeds the former 250-row limit","every accepted packet remains in disk and UI","all response callbacks complete with zero drops and processing errors","real Swing collection timer remains active","retained packet restores exact request and response bytes","retained packet restores exact request and response bytes","retained packet restores exact request and response bytes","unload deletes the active private traffic store"]}
+2026-11-16T11:25:42.5787086Z ##[endgroup]
+2026-11-16T11:25:46.6231049Z {
+2026-11-16T11:25:46.6232454Z     "result":  "passed",
+2026-11-16T11:25:46.6233018Z     "checks":  6,
+2026-11-16T11:25:46.6234569Z     "powershell":  "5.1.26100.33648",
+2026-11-16T11:25:46.6235459Z     "os":  "Microsoft Windows NT 10.0.26100.0",
+2026-11-16T11:25:46.6236607Z     "dockerBackendExecuted":  false,
+2026-11-16T11:25:46.6238323Z     "browserLaunched":  false,
+2026-11-16T11:25:46.6238842Z     "passedChecks":  [
+2026-11-16T11:25:46.6239992Z                          "Windows PowerShell parsed start.ps1",
+2026-11-16T11:25:46.6240693Z                          "Windows PowerShell parsed verify-stack.ps1",
+2026-11-16T11:25:46.6242330Z                          "start.ps1 invoked the expected Compose command through a controlled command adapter",
+2026-11-16T11:25:46.6243170Z                          "start.ps1 requested the loopback browser URL after successful command completion",
+2026-11-16T11:25:46.6244300Z                          "start.ps1 rejects a nonzero Docker exit",
+2026-11-16T11:25:46.6245555Z                          "start.ps1 does not request a browser after failed startup"
+2026-11-16T11:25:46.6246109Z                      ]
+2026-11-16T11:25:46.6247780Z }
+

@@ -1,6 +1,6 @@
 # Workbench Next 0.54.2 · 구독 CLI 호환성 수정과 이미지 가이드
 
-현재 상태는 **수정 후보·전체 CI 검증 중**입니다. main 병합 완료를 뜻하지 않습니다. 작업 브랜치는 `account-a/next-0542-runtime-guide`이며, 최종 원격 검증 결과를 확인한 뒤 배포 상태를 갱신합니다.
+현재 상태는 **전체 CI 검증 완료·PR 검토 대기**입니다. [PR #112](https://github.com/ohjun1998/burp-workbench-kr/pull/112)의 운영 소스 `44d267489864a3bd8f0d12f653d804bd52d2b7eb`에서 전체 5,199개 검사·화면·패키징 및 Windows/Linux 내구성 검사가 통과했습니다. main 병합을 뜻하지 않습니다. 이후 가이드·점검 도구 정리는 배포 입력 소스 399개를 바꾸지 않습니다.
 
 0.54.1의 실제 연결 검사에서 Codex CLI 0.169.0이 `tools.view_image=false`를 인식하지 않아 strict-config 설정 로딩 단계에서 구독 분석이 중단되는 문제를 발견했습니다. 0.54.2는 해당 미지원 옵션을 제거합니다. 기존 `features.view_image=false`와 명령·브라우저·연결 도구 비활성화, 구독 로그인 확인, 읽기 전용·비영구 세션, 원본 ID·SCOPE·가림·취소 및 자동 전송 확인을 유지합니다.
 

@@ -1,0 +1,34 @@
+{
+  "release": "0.54.2",
+  "targetHttpRequests": 0,
+  "rawLogsStored": false,
+  "exitCode": 1,
+  "safeDiagnosticTerms": [
+    "read-only"
+  ],
+  "mentionedKnownOverrideKeys": [],
+  "operatingSystemDiagnosis": {
+    "exitCode": 1,
+    "osErrorNumbers": [
+      "30"
+    ],
+    "errorLinePresent": true,
+    "readOnlyFilesystemError": true,
+    "terms": [
+      "file system",
+      "initialize",
+      "read-only file system"
+    ],
+    "rawLogsStored": false
+  },
+  "releaseJarSha256": "d6332965eb841b839feae2053c76d140bd9fee7f7f2691a5a47711ca958551af",
+  "codexCliVersion": "0.169.0",
+  "chatgptLoginStatusViaProductionClient": "passed",
+  "unknownConfigurationFailureObserved": false,
+  "unsupportedOverridePresentInProductionClient": false,
+  "cliInitializationReadOnlyFilesystemError": true,
+  "conclusion": "The previous tools.view_image strict-config error no longer occurs. The exact corrected CLI command reaches initialization and fails with read-only filesystem OS error 30 in this managed environment. No model response was obtained.",
+  "protectionSettingsChanged": false,
+  "credentialsStored": false,
+  "nativeBurpGuiVerified": false
+}

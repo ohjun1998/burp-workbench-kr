@@ -49,6 +49,14 @@ public final class CodexSubscriptionClientTest {
     Files.setPosixFilePermissions(executable, PosixFilePermissions.fromString("rwx------"));
     try (var client = new CodexSubscriptionClient()) {
       setting(settings, "chatgpt", "ok", 0, 0);
+      Process unsupported = new ProcessBuilder(executable.toString(), "exec", "--strict-config",
+          "-c", "tools.view_image=false").redirectErrorStream(true).start();
+      try {
+        check(unsupported.waitFor(5, TimeUnit.SECONDS), "strict-config fixture rejects legacy override promptly");
+        check(unsupported.exitValue() == 2
+            && new String(unsupported.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
+                .contains("unknown field `view_image`"), "legacy tools.view_image reproduces configuration-load failure");
+      } finally { unsupported.destroyForcibly(); }
       check(client.status(executable.toString(), 5).equals(CodexSubscriptionClient.AUTH_OK), "ChatGPT status is sanitized");
       var result = client.complete(executable.toString(), "fixture-model", 5, "system-value", "packet-json-value");
       check(result.text().contains("fixture-1") && result.finishReason().equals("stop"), "final JSON returned");
@@ -62,9 +70,11 @@ public final class CodexSubscriptionClientTest {
       check(!arguments.contains("--ignore-rules") && arguments.stream().noneMatch(a -> a.toString().contains("dangerously")), "policy rules and sandbox stay active");
       for (String config : List.of("model_provider=\"openai\"", "forced_login_method=\"chatgpt\"",
           "features.shell_tool=false", "features.apps=false", "features.hooks=false", "features.plugins=false",
-          "features.browser_use=false", "features.computer_use=false", "features.multi_agent=false",
+          "features.browser_use=false", "features.computer_use=false", "features.view_image=false", "features.multi_agent=false",
           "web_search=\"disabled\"", "mcp_servers={}", "project_doc_max_bytes=0"))
         check(arguments.contains(config), "tools/config isolation supplied");
+      check(arguments.stream().noneMatch(a -> a.toString().startsWith("tools.view_image=")),
+          "unsupported legacy image-tool override is absent under strict-config");
       check(arguments.get(arguments.size() - 1).equals("-") && exec.get("stdin").toString().contains("system-value")
           && exec.get("stdin").toString().contains("packet-json-value")
           && arguments.stream().noneMatch(a -> a.toString().contains("packet-json-value")), "prompt only goes to stdin");
@@ -162,6 +172,8 @@ if entry['phase'] == 'login':
     if cfg['auth'] == 'mixed': print('Logged in using ChatGPT\\nAPI key sensitive-secret'); sys.exit(0)
     if cfg['auth'] == 'none': print('private login failure sensitive-secret'); sys.exit(1)
     print('Logged in using ChatGPT', file=sys.stderr); sys.exit(0)
+if '--strict-config' in args and any(value.startswith('tools.view_image=') for value in args):
+    print('Error loading configuration: unknown field `view_image` in `tools`', file=sys.stderr); sys.exit(2)
 entry['stdin'] = sys.stdin.read()
 schema = pathlib.Path(args[args.index('--output-schema') + 1])
 output = pathlib.Path(args[args.index('--output-last-message') + 1])

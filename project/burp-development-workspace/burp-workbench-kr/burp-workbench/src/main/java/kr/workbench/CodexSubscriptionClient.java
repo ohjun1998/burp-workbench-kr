@@ -67,7 +67,7 @@ final class CodexSubscriptionClient implements AutoCloseable {
           "features.hooks=false", "features.plugins=false", "features.browser_use=false",
           "features.browser_use_external=false", "features.browser_use_full_cdp_access=false",
           "features.computer_use=false", "features.in_app_browser=false", "features.image_generation=false",
-          "features.view_image=false", "tools.view_image=false", "features.multi_agent=false",
+          "features.view_image=false", "features.multi_agent=false",
           "features.multi_agent_v2=false", "features.code_mode=false", "features.code_mode_host=false",
           "features.memories=false", "web_search=\"disabled\"", "mcp_servers={}", "project_doc_max_bytes=0")) {
         command.add("-c"); command.add(config);

@@ -1,0 +1,4 @@
+Exception in thread "main" java.io.IOException: ChatGPT 구독 실행 실패 · Codex CLI 버전·로그인·구독 사용 한도와 모델 지원을 확인하세요. 다른 인증으로 재시도하지 않았습니다.
+	at kr.workbench.CodexSubscriptionClient.complete(CodexSubscriptionClient.java:77)
+	at kr.workbench.CodexSubscriptionClientTest.fakeExecutable(CodexSubscriptionClientTest.java:61)
+	at kr.workbench.CodexSubscriptionClientTest.main(CodexSubscriptionClientTest.java:24)

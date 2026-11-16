@@ -1,0 +1,39 @@
+{
+  "release": "0.54.2",
+  "baseMain": "1f3534e55d4dd99536b8e5e9a80b4e88e3863ab9",
+  "testedAtUtc": "2026-11-16T11:10:24.749446+00:00",
+  "files": {
+    "burp-workbench-kr-0.54.2.jar": "d6332965eb841b839feae2053c76d140bd9fee7f7f2691a5a47711ca958551af",
+    "burp-workbench-kr-0.54.2-source.zip": "4584e345b683e1ffd4f68ef3d1f580f217debd911f8a85691e5d4206ab7eb305"
+  },
+  "sourceFingerprints": 399,
+  "fix": "Remove unsupported tools.view_image override; retain features.view_image=false and strict config",
+  "localTests": {
+    "CodexSubscriptionClientTest": 98,
+    "ActiveRequestApprovalTest": 53,
+    "old0541FailureReproduced": true
+  },
+  "ui": {
+    "productionPanelOnly": true,
+    "nativeBurpGuiVerified": false,
+    "pngCount": 28,
+    "layoutViolations": 0,
+    "modelActions": 0,
+    "targetRequests": 0
+  },
+  "liveStatus": {
+    "chatgptLogin": "passed",
+    "halogen": "blocked by socket permission",
+    "subscriptionInference": "blocked by CLI initialization read-only filesystem; previous configuration error absent",
+    "nativeBurpGui": "unavailable"
+  },
+  "fullCi": {
+    "status": "pending",
+    "sourceHead": null
+  },
+  "limitations": [
+    "A full Workbench UI fixture cannot start its Mapper loopback server in this environment. The isolated guide harness renders production AI panels only.",
+    "Browser HTML visual rendering failed with EPERM; HTML links/assets and JavaScript are checked statically.",
+    "Native Burp load and actual model responses remain unverified."
+  ]
+}

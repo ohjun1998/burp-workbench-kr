@@ -1,0 +1,54 @@
+PASS worker approval prompt receives owner on EDT
+PASS explicit allow approves this run
+PASS review captures concrete operation and request budget
+PASS worker approval prompt receives owner on EDT
+PASS identical repeated run creates fresh plan and fresh confirmation
+PASS denial returns false after previous approval
+PASS require converts denial into cancellation
+PASS require returns only after explicit approval
+PASS prompt error fails closed
+PASS missing decision handler fails closed
+PASS EDT caller is reviewed directly on EDT
+PASS EDT caller completes without invokeAndWait deadlock
+PASS safe URL strips credentials query and fragment without changing escaped path
+PASS plan owns an immutable target snapshot
+PASS displayed review contains no removed URL credentials
+PASS HTTP HTTPS empty paths and IPv6 are represented safely
+PASS data-only text remains literal rather than rendered HTML
+PASS empty operation rejected before review
+PASS empty request plan rejected before review
+PASS null targets rejected before review
+PASS empty targets rejected before review
+PASS overlong operation rejected
+PASS overlong request summary rejected
+PASS unbounded target count rejected
+PASS overlong displayed URL rejected
+PASS oversized raw URL rejected before parsing
+PASS total reviewed target text is bounded
+PASS malformed or non-HTTP target fails closed
+PASS malformed or non-HTTP target fails closed
+PASS malformed or non-HTTP target fails closed
+PASS malformed or non-HTTP target fails closed
+PASS malformed or non-HTTP target fails closed
+PASS malformed or non-HTTP target fails closed
+PASS malformed or non-HTTP target fails closed
+PASS multiline operation rejected
+PASS directional text spoofing rejected
+PASS raw request packet excluded from confirmation metadata
+PASS authorization value excluded from confirmation metadata
+PASS cookie value excluded from confirmation metadata
+PASS generic token value excluded from confirmation metadata
+PASS quoted credential assignment excluded from confirmation metadata
+PASS malformed plans never reach an approval handler
+PASS native confirmation presents explicit execution and defaults to cancel
+PASS closed dialog and every cancellation value deny execution
+PASS only explicit execution option permits execution
+PASS review explains availability budget interval and cancellation consequences
+PASS review identifies the exact approval rule version
+PASS headless production default never autoapproves
+PASS interrupted worker fails closed without opening a prompt and preserves cancellation
+PASS worker approval arrives on event thread before mutation
+PASS reviewed targets remain the original immutable snapshot during modal review
+PASS cancellable worker reaches pending manual review
+PASS worker interruption during review cannot be approved by a late dialog response
+ActiveRequestApprovalTest: 53 checks passed

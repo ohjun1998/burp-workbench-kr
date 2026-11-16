@@ -1,0 +1,27 @@
+PASS this adapter test never opens a native approval window
+PASS preparing originals performs no runner, provider or process action
+PASS selection IDs survive changes to the caller's list
+PASS selected path prepares the explicit origin without silently extending Scope
+PASS source metadata does not expose the synthetic credential
+PASS authentication and raw bodies are explicitly excluded from automatic transfer
+PASS unselected subscription model and absent report remain disabled
+PASS default headless confirmation cancels without an approved launch
+PASS new execution uses the fresh selected provider/model in one immutable plan
+PASS execution retains the prepared originals rather than a later traffic selection
+PASS report location is per run and unverified container cleanup is visible
+PASS report action validates the owned report before invoking a text-preview opener
+PASS approval is discarded after a concurrent scope change
+PASS approval is discarded after a concurrent project change
+PASS approval is discarded after a concurrent other-job change
+PASS approval is discarded after a concurrent provider change
+PASS approval is discarded after a concurrent target change
+PASS subscription plan failure does not retry through the local provider
+PASS provider failure remains a visible failure
+PASS running state disables a second launch and keeps Stop adjacent and available
+PASS programmatic duplicate start is also rejected
+PASS visible runner log remains bounded
+PASS a changed running project requests cancellation
+PASS reset clears originals/reports and ignores stale log callbacks
+PASS close is idempotent, owns runner cleanup and rejects later callbacks
+PASS an unowned report cannot reach a browser or text-preview opener
+SimpleStrixIntegrationTest: 26 checks passed (actual UI, injected runner, no process/model/target)

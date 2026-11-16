@@ -16,3 +16,5 @@ Simple에서 기존 Strix를 실행하고 중지·로그·보고서를 연결하
 - 집중 회귀 6그룹271개와 지정JAR의 합성UI28화면/배치위반0을 통과했다. 실제 Strix·모델·대상은 실행하지 않은 검증이다. 전체 검사·패키징은 CI에서 이어간다.
 
 最終default-run-root 검토에서 stable Workbench와 분리해 ~/.burp-workbench-simple/strix-runs에 저장하도록 수정하고, 기본 경로를 사용하는 fake 실행 회귀를 추가했다. 해당 코어63개가 통과했으며 실제 Strix는 실행하지 않았다. 배포 파일 생성 전에 전체 후보 검증을 다시 시작한다.
+
+CI에서 전체 Simple 검사와 UI·Katana를 통과한 경우에만 1.4.13 배포 파일을 생성한다. Strix 실제 진단·모델 추론은 수행하지 않는다.

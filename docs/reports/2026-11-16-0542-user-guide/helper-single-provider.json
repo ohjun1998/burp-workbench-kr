@@ -1,0 +1,169 @@
+{
+  "description": "Selected-provider status checks against the exact immutable 0.54.2 release; no inference was requested.",
+  "releaseJarSha256": "d6332965eb841b839feae2053c76d140bd9fee7f7f2691a5a47711ca958551af",
+  "assertions": {
+    "offlineIntegrityAndCompilationPassed": true,
+    "subscriptionStatusPassedWithoutLocalServer": true,
+    "subscriptionStatusDidNotRunLocalChecks": true,
+    "localStatusDidNotRunSubscriptionLogin": true,
+    "localFailureOnlyListsLocalChecks": true,
+    "noInferenceOrTargetRequests": true
+  },
+  "result": "passed",
+  "offline": {
+    "testedAtUtc": "2026-11-16T11:16:41.457267+00:00",
+    "targetHttpRequests": 0,
+    "syntheticInputOnly": true,
+    "rawProviderOutputsStored": false,
+    "nativeBurpGuiVerified": false,
+    "liveRequested": false,
+    "providerSelection": "both",
+    "limitations": [
+      "This is a release-client check, not native Burp GUI validation.",
+      "A valid AI response is not evidence of vulnerability-detection accuracy."
+    ],
+    "releaseIntegrity": {
+      "status": "passed",
+      "sha256": "d6332965eb841b839feae2053c76d140bd9fee7f7f2691a5a47711ca958551af",
+      "version": "0.54.2",
+      "zipCrcValid": true
+    },
+    "java": {
+      "status": "passed",
+      "version": "17.0.21.0.3"
+    },
+    "javac": {
+      "status": "passed",
+      "version": "17.0.21.0.3"
+    },
+    "codex": {
+      "status": "passed",
+      "version": "0.169.0"
+    },
+    "proofCompilation": {
+      "status": "passed"
+    },
+    "result": "passed",
+    "failedChecks": [],
+    "serviceChecks": "not-run-offline"
+  },
+  "subscriptionOnly": {
+    "testedAtUtc": "2026-11-16T11:16:49.929492+00:00",
+    "targetHttpRequests": 0,
+    "syntheticInputOnly": true,
+    "rawProviderOutputsStored": false,
+    "nativeBurpGuiVerified": false,
+    "liveRequested": false,
+    "providerSelection": "subscription",
+    "limitations": [
+      "This is a release-client check, not native Burp GUI validation.",
+      "A valid AI response is not evidence of vulnerability-detection accuracy."
+    ],
+    "releaseIntegrity": {
+      "status": "passed",
+      "sha256": "d6332965eb841b839feae2053c76d140bd9fee7f7f2691a5a47711ca958551af",
+      "version": "0.54.2",
+      "zipCrcValid": true
+    },
+    "java": {
+      "status": "passed",
+      "version": "17.0.21.0.3"
+    },
+    "javac": {
+      "status": "passed",
+      "version": "17.0.21.0.3"
+    },
+    "codex": {
+      "status": "passed",
+      "version": "0.169.0"
+    },
+    "proofCompilation": {
+      "status": "passed"
+    },
+    "operations": [
+      {
+        "mode": "subscription-status",
+        "targetHttpRequests": 0,
+        "syntheticInputOnly": true,
+        "responseBodiesStored": false,
+        "nativeBurpGuiVerified": false,
+        "subscriptionLogin": {
+          "apiKeyFallback": false,
+          "chatgptAuthentication": true,
+          "status": "passed",
+          "elapsedMillis": 38
+        }
+      }
+    ],
+    "result": "passed",
+    "failedChecks": []
+  },
+  "localOnly": {
+    "testedAtUtc": "2026-11-16T11:16:49.929495+00:00",
+    "targetHttpRequests": 0,
+    "syntheticInputOnly": true,
+    "rawProviderOutputsStored": false,
+    "nativeBurpGuiVerified": false,
+    "liveRequested": false,
+    "providerSelection": "local",
+    "limitations": [
+      "This is a release-client check, not native Burp GUI validation.",
+      "A valid AI response is not evidence of vulnerability-detection accuracy."
+    ],
+    "releaseIntegrity": {
+      "status": "passed",
+      "sha256": "d6332965eb841b839feae2053c76d140bd9fee7f7f2691a5a47711ca958551af",
+      "version": "0.54.2",
+      "zipCrcValid": true
+    },
+    "java": {
+      "status": "passed",
+      "version": "17.0.21.0.3"
+    },
+    "javac": {
+      "status": "passed",
+      "version": "17.0.21.0.3"
+    },
+    "codex": {
+      "status": "passed",
+      "version": "0.169.0"
+    },
+    "proofCompilation": {
+      "status": "passed"
+    },
+    "operations": [
+      {
+        "mode": "local-status",
+        "targetHttpRequests": 0,
+        "syntheticInputOnly": true,
+        "responseBodiesStored": false,
+        "nativeBurpGuiVerified": false,
+        "health": {
+          "status": "failed",
+          "errorType": "IOException",
+          "safeProductionErrorCode": "client-error",
+          "failureCategory": "connection-or-response",
+          "elapsedMillis": 109
+        },
+        "models": {
+          "status": "failed",
+          "errorType": "IOException",
+          "safeProductionErrorCode": "client-error",
+          "failureCategory": "connection-or-response",
+          "elapsedMillis": 0
+        }
+      }
+    ],
+    "result": "incomplete",
+    "failedChecks": [
+      "local-status:health",
+      "local-status:models"
+    ]
+  },
+  "helperSha256": {
+    "tools/check_next_0542_runtime.py": "d35ccb15cacfb4008755d5db0acdb1136c596a62e81905810281129683b19598",
+    "tools/Next0542RuntimeProof.java": "6f616028df4de93d0d2aee4a415db06fed06f9bb761bd6e4ace924208d53b432"
+  },
+  "priorRuntimeEvidenceOverwritten": false,
+  "productionJarModified": false
+}

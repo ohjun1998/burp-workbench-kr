@@ -1,0 +1,99 @@
+{
+  "testedAtUtc": "2026-11-16T11:07:17.336227+00:00",
+  "targetHttpRequests": 0,
+  "syntheticInputOnly": true,
+  "rawProviderOutputsStored": false,
+  "nativeBurpGuiVerified": false,
+  "liveRequested": true,
+  "limitations": [
+    "This is a release-client check, not native Burp GUI validation.",
+    "A valid AI response is not evidence of vulnerability-detection accuracy."
+  ],
+  "releaseIntegrity": {
+    "status": "passed",
+    "sha256": "d6332965eb841b839feae2053c76d140bd9fee7f7f2691a5a47711ca958551af",
+    "version": "0.54.2",
+    "zipCrcValid": true
+  },
+  "java": {
+    "status": "passed",
+    "version": "17.0.21.0.3"
+  },
+  "javac": {
+    "status": "passed",
+    "version": "17.0.21.0.3"
+  },
+  "codex": {
+    "status": "passed",
+    "version": "0.169.0"
+  },
+  "proofCompilation": {
+    "status": "passed"
+  },
+  "operations": [
+    {
+      "mode": "status",
+      "targetHttpRequests": 0,
+      "syntheticInputOnly": true,
+      "responseBodiesStored": false,
+      "nativeBurpGuiVerified": false,
+      "subscriptionLogin": {
+        "chatgptAuthentication": true,
+        "apiKeyFallback": false,
+        "status": "passed",
+        "elapsedMillis": 41
+      },
+      "health": {
+        "status": "failed",
+        "errorType": "IOException",
+        "safeProductionErrorCode": "client-error",
+        "failureCategory": "connection-or-response",
+        "elapsedMillis": 99
+      },
+      "models": {
+        "status": "failed",
+        "errorType": "IOException",
+        "safeProductionErrorCode": "client-error",
+        "failureCategory": "connection-or-response",
+        "elapsedMillis": 1
+      }
+    },
+    {
+      "mode": "local",
+      "targetHttpRequests": 0,
+      "syntheticInputOnly": true,
+      "responseBodiesStored": false,
+      "nativeBurpGuiVerified": false,
+      "inferenceAttempts": 1,
+      "localInference": {
+        "status": "failed",
+        "errorType": "IOException",
+        "safeProductionErrorCode": "client-error",
+        "failureCategory": "connection-or-response",
+        "elapsedMillis": 125
+      }
+    },
+    {
+      "mode": "subscription",
+      "targetHttpRequests": 0,
+      "syntheticInputOnly": true,
+      "responseBodiesStored": false,
+      "nativeBurpGuiVerified": false,
+      "inferenceAttempts": 1,
+      "subscriptionInference": {
+        "status": "failed",
+        "errorType": "IOException",
+        "safeProductionErrorCode": "codex-execution-failed",
+        "failureCategory": "connection-or-response",
+        "elapsedMillis": 138
+      }
+    }
+  ],
+  "result": "incomplete",
+  "failedChecks": [
+    "status:health",
+    "status:models",
+    "local:localInference",
+    "subscription:subscriptionInference"
+  ]
+}

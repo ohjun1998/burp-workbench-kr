@@ -1,6 +1,6 @@
-# Workbench Next 0.54.0 개발 브랜치
+# Workbench Next 0.54.1
 
-Next 0.53.4에 ChatGPT 구독/Codex CLI와 Halogen을 작업별로 배정하는 AI 검토·기능별 패킷 분류·계정 비교 해설·JS/API 맥락 분석·증거 보고서 초안을 추가합니다. 분석은 명시적으로 실행하며 원본 ID와 기존 판정을 보존합니다. [사용법](docs/RELEASE_0.54.0_NEXT_KR.md) · [검증](docs/VERIFICATION_0.54.0.json). 이 변경은 별도 PR이며 main 병합 상태는 PR을 확인하세요.
+Next 0.53.4에 ChatGPT 구독/Codex CLI와 Halogen을 작업별로 배정하는 AI 검토·기능별 패킷 분류·계정 비교 해설·JS/API 맥락 분석·증거 보고서 초안을 추가합니다. 0.54.0 후보의 작은 창·150% 글자 크기에서 증거 작성 공간이 줄어드는 문제를 수정합니다. 자동 요청은 실행마다 기본 취소인 확인창을 거치며, 원본 ID와 기존 판정을 보존합니다. [설치 JAR](downloads/extensions/0.54.1/burp-workbench-kr-0.54.1.jar) · [사용법](docs/RELEASE_0.54.1_NEXT_KR.md) · [검증](docs/VERIFICATION_0.54.1.json). 병합·검증 상태는 해당 PR과 검증 기록을 확인하세요. 아래 이전 버전 안내는 보존 이력입니다.
 
 # Burp Workbench KR
 
@@ -50,7 +50,7 @@ Next 0.53.4에 ChatGPT 구독/Codex CLI와 Halogen을 작업별로 배정하는 
 
 Simple 자동 검사5,184개·실제 Katana102개와112뷰 배치 검사를 통과한 파일 트리가 main 병합 결과와 일치합니다. 실제 Burp GUI·native MV3/DNR은 미검증이며, 실제 사이트의 미확인·부분 범위와 별도 직접 대조는 [검증 기록](simple/docs/VERIFICATION_SIMPLE_1.3.2.json)에 구분합니다.
 
-기존 **Workbench Next 계열의 main 배포는 0.53.4 사용자 편의성 안정화판**입니다. 0.53.3 main `e0b40e3dae3fcca21d3cd9441260e3edae65d159`을 기준으로 개발하고 [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)로 main에 병합했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 0.53.3 배포·0.53.2 보존 후보판과 이전 모든 버전의 파일·검증 기록을 보존합니다.
+아래는 이전 **Workbench Next 0.53.4 사용자 편의성 안정화판**의 main 배포 이력입니다. 0.53.3 main `e0b40e3dae3fcca21d3cd9441260e3edae65d159`을 기준으로 개발하고 [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)로 main에 병합했습니다. 내장 Feature Mapper **0.3.5**와 실습 사이트 **3.10.0**을 유지합니다. 0.53.3 배포·0.53.2 보존 후보판과 이전 모든 버전의 파일·검증 기록을 보존합니다.
 
 **0.53.4 안정화는 고정한 개선 초안 복원·다단계 편집 복구·목록 고정·일괄 중요 표시·화면 개인화·키보드·비동기 비교·증거 작성 지원 8개를 모두 구현했습니다.** 소스 `937c42defbc4d76187f1d189b36b84f4272dd76a`의 [최종 CI](https://github.com/ohjun1998/burp-workbench-kr/actions/runs/40451792261)에서 Linux·Windows 각각 회귀 123개 그룹·4,270개와 페이로드 HTTP 136개·전체 기능 HTTP 102개·모의 진단 HTTP 266개, 총 **4,774개**를 통과했습니다. 플랫폼별 반복 실행은 고유 검사 수로 합산하지 않습니다. 전체 화면 **576뷰·8,088개 컨트롤·246개 상태**와 집중 화면 **414뷰·4,308개 컨트롤·246개 상태**의 배치 게이트를 모두 통과했습니다. 전체·집중 검사는 겹치므로 합산하지 않습니다. 검사 JAR와 배포 JAR의 SHA-256 `795e6566bcc1f5f7d059383b82d60e3efeb00d873310681c896b45eeddacef9d`가 일치하며, 소스 ZIP 382개 항목의 CRC·소스 지문도 확인했습니다. [PR #94](https://github.com/ohjun1998/burp-workbench-kr/pull/94)을 **2026-10-27 14:19:48 (한국 시간)**에 main에 병합했습니다. 병합 커밋은 `56b56e961d0d73e777228e60fdfc1a1e544496fd`, 최종 PR head는 `64cc557bab399ae27d239ea928c266e810daf85d`입니다. 실제 Burp GUI·Windows DPI/IME·브라우저 수동 조작·Docker·외부 AI/OAST/BApp 서비스는 이번 검증에서 실행하지 않았습니다.
 

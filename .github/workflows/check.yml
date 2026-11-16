@@ -47,6 +47,8 @@ jobs:
         run: node --test tools/test_community_login.mjs
       - name: Verify responsive Swing layouts
         run: python tools/render_ui_layout.py --check --out tmp/ui-layout-ci
+      - name: Verify AI review and request confirmation layouts
+        run: python tools/render_local_llm_ui.py --check --out tmp/ui-ai-ci
       - name: Verify traffic list and compact search settings
         run: python tools/render_ui_layout.py --traffic-only --sizes 1024x720 1280x800 --check --out tmp/ui-traffic-ci
       - name: Verify beginner guidance at default and minimum window sizes
@@ -104,6 +106,7 @@ jobs:
             tmp/ui-layout-ci/content.csv
             tmp/ui-layout-ci/layout-report.json
             tmp/ui-layout-ci/text.csv
+            tmp/ui-ai-ci/report.json
             tmp/ui-traffic-ci/layout-report.json
             tmp/ui-traffic-ci/controls.csv
             tmp/ui-traffic-ci/content.csv

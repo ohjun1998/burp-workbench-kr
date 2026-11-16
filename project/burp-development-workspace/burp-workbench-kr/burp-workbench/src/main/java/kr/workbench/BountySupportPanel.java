@@ -528,7 +528,12 @@ public final class BountySupportPanel extends JPanel implements AutoCloseable {
       menu.addSeparator(); evidenceMenuItem(menu, "증거 비우기", evidenceClear.isEnabled(), this::clearEvidence);
       return menu;
     });
-    JButton aiDraft=action("AI 보고서 초안",()->aiReview.run());aiDraft.setName("wb.bounty.ai.report");
+    // Keep the action row on one line at 1024px/150% so the impact and
+    // reproduction editors retain their usable height. The full purpose remains
+    // available to assistive technologies and on hover.
+    JButton aiDraft=action("AI 초안",()->aiReview.run());aiDraft.setName("wb.bounty.ai.report");
+    aiDraft.getAccessibleContext().setAccessibleName("AI 보고서 초안");
+    aiDraft.setToolTipText("연결된 증거 원본으로 AI 보고서 초안을 준비합니다.");
     top.add(WorkbenchUi.row(addEvidence, evidencePreview, evidenceSave, aiDraft, moreEvidence));
     evidenceTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     evidenceTable.setToolTipText("Ctrl/Shift로 여러 증거 선택 · 화면 순서대로 ZIP에 저장합니다.");

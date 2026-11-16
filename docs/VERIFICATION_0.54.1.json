@@ -1,0 +1,357 @@
+{
+  "version": "0.54.1",
+  "dateAsiaSeoul": "2026-11-16",
+  "branch": "account-a/next-0541-completion",
+  "baseMain": "222aef191a34f7d6cd1014e941ecc7152341f640",
+  "predecessor": {
+    "version": "0.54.0",
+    "pr": 110,
+    "commit": "6334ac1962caf42c7685c544bde61c327db47560",
+    "ciRun": 43722226347,
+    "result": "failed responsive layout gate; subsequent packaging steps skipped"
+  },
+  "localResult": "passed",
+  "toolchain": "Temurin OpenJDK17.0.21+9, Python3.12.14, Linux x86_64",
+  "commands": [
+    {
+      "command": "python dev.py release --java <Temurin17>/bin/java --javac <Temurin17>/bin/javac",
+      "exitCode": 0
+    },
+    {
+      "command": "python tools/package_downloads.py --verify",
+      "exitCode": 0
+    },
+    {
+      "command": "python -m unittest discover -s tools -p 'test_*.py' -v",
+      "exitCode": 0,
+      "tests": 7
+    },
+    {
+      "command": "python tools/render_ui_layout.py --java <Temurin17>/bin/java --check --out tmp/0541-layout-final",
+      "exitCode": 0
+    },
+    {
+      "command": "python tools/render_local_llm_ui.py --java <Temurin17>/bin/java --check --out tmp/0541-ai-ui",
+      "exitCode": 0
+    }
+  ],
+  "workbenchChecks": {
+    "version": "0.54.1",
+    "groups": {
+      "ActiveRequestApprovalTest": 53,
+      "AuthActiveApprovalTest": 11,
+      "ActiveBatchApprovalTest": 15,
+      "JsActiveApprovalTest": 11,
+      "kr.payloadrunner.PayloadApprovalTest": 31,
+      "CodexSubscriptionClientTest": 94,
+      "LocalLlmClientTest": 57,
+      "LocalLlmTasksTest": 49,
+      "LocalLlmPanelTest": 53,
+      "NextLocalLlmIntegrationTest": 46,
+      "EvidenceDraftsTest": 53,
+      "EditHistoryTest": 29,
+      "Appearance0534Test": 63,
+      "WorkspaceAppearanceProjectIsolationTest": 10,
+      "ComparisonResponsiveness0534Test": 21,
+      "JobMonitorResponsiveness0534Test": 14,
+      "TrafficStabilization0534Test": 21,
+      "NavigationLifecycle0534Test": 7,
+      "EvidenceStabilizationTest": 49,
+      "StabilizationIntegration0534Test": 29,
+      "BuildInfoTest": 3,
+      "TrafficUsability0532Test": 46,
+      "EvidenceEditingTest": 59,
+      "AuthInlineValidationTest": 52,
+      "Navigation0532Test": 43,
+      "ResponseDifferenceTest": 49,
+      "ResponseDifferenceUiTest": 21,
+      "BackgroundJobsTest": 37,
+      "GettingStartedPanelTest": 9,
+      "UsabilityIntegration0532Test": 19,
+      "BundleChangeSummaryTest": 26,
+      "RemainingWorkUsabilityTest": 20,
+      "AuthUsability0531Test": 26,
+      "TrafficSearchPresetsTest": 148,
+      "TrafficSearchConditionsUiTest": 23,
+      "WorkspaceResumeTest": 32,
+      "OriginalRequestIdsTest": 5,
+      "JsArchivePagingTest": 52,
+      "AuthSetupWorkflowTest": 47,
+      "AuthSetupBundlesTest": 64,
+      "ExecutionLink052Test": 30,
+      "RemainingChecks053Test": 33,
+      "MapperTaskDraft052Test": 21,
+      "TrafficIncrementalSearchTest": 33,
+      "TrafficSearchLifecycleTest": 48,
+      "ResponseViewUpdateTest": 15,
+      "ResponseBudgetTest": 28,
+      "NextIsolationTest": 10,
+      "TrafficCancellationTest": 9,
+      "RuntimeMetricsTest": 19,
+      "WorkContextTest": 22,
+      "AuthSetupSuggestionsTest": 26,
+      "AnalysisRetryTest": 33,
+      "CompletionEvidenceNextTest": 22,
+      "PassiveProvenanceTest": 27,
+      "CaptureProvenanceTest": 13,
+      "JsBatchContextTest": 58,
+      "EvidenceHardeningTest": 50,
+      "ResponseHardeningTest": 90,
+      "ResponseAnalysisLimitsTest": 9,
+      "LargeResponseJsonTest": 17,
+      "AssessmentHardeningTest": 45,
+      "MapperIntegrationTest": 36,
+      "BankUpgradeTest": 54,
+      "OssLogicUpgradeTest": 52,
+      "JsUpgradeTest": 36,
+      "TrafficSearchUpgradeTest": 23,
+      "JsCompactUpgradeTest": 23,
+      "JsArchiveWorkflowTest": 8,
+      "IncrementalCoverageTest": 33,
+      "CapturePipelineTest": 33,
+      "EvidenceStorageTest": 33,
+      "JsMemoryBudgetTest": 52,
+      "StructuredCompareTest": 16,
+      "WorkbenchTest": 23,
+      "EnvironmentTest": 27,
+      "EnvironmentPanelTest": 6,
+      "EnvironmentBatchTest": 23,
+      "EnvironmentDiscoveryTest": 30,
+      "EnvironmentFeedbackTest": 5,
+      "EnvironmentUpgradeTest": 72,
+      "TextEncodingTest": 14,
+      "DisplayWorkflowTest": 13,
+      "PacketUiTest": 29,
+      "PacketInspectorTest": 42,
+      "RenderAuthUiTest": 28,
+      "PassiveScanTest": 31,
+      "LayoutPassiveWorkflowTest": 16,
+      "JsAnalysisTest": 31,
+      "JsDraftMappingTest": 19,
+      "JsDetailsWorkflowTest": 26,
+      "PacketStyleTest": 30,
+      "TextAnalysisTest": 23,
+      "JsResponseWorkflowTest": 51,
+      "JsRepeaterWorkflowTest": 95,
+      "JsAnalysisPanelTest": 11,
+      "JsNavigationTest": 14,
+      "JsHistoryTest": 22,
+      "PayloadIntegrationTest": 14,
+      "UiLayoutTest": 56,
+      "AuthRecordTest": 37,
+      "AuthWorkspaceTest": 21,
+      "AuthLayoutFitTest": 106,
+      "AuthRunSummaryTest": 23,
+      "AuthResponseWorkflowTest": 47,
+      "AuthAccuracyWorkflowTest": 44,
+      "AuthResponseRefinementTest": 39,
+      "CookieSessionProbeTest": 50,
+      "UiCleanupTest": 37,
+      "ActivityReconTest": 49,
+      "TrafficScopeTest": 32,
+      "TrafficScopeModesTest": 54,
+      "TrafficCaptureRecoveryTest": 43,
+      "PopupWorkflowTest": 21,
+      "TargetCleanupTest": 24,
+      "ReviewWorkflowTest": 48,
+      "OtherImprovementsTest": 56,
+      "AuditRepairsTest": 63,
+      "BountyFeaturesTest": 67,
+      "CompletenessTest": 38,
+      "IntegrationEdgesTest": 11,
+      "AccountTasksTest": 57,
+      "ReviewConditionsTest": 43,
+      "StoredFlowStagesTest": 47,
+      "EvidenceLinkTest": 31,
+      "EvidencePreviewTest": 27,
+      "AssessmentUiOptimizationTest": 21,
+      "UiPanelsOptimizationTest": 29,
+      "JsUiOptimizationTest": 27,
+      "FeatureGuideWorkflowTest": 102,
+      "FolderNavigationTest": 44,
+      "DiagnosticsWorkflowTest": 26,
+      "AppearanceWorkflowTest": 22
+    },
+    "regressionGroups": 133,
+    "regressionChecks": 4691,
+    "payloadHttpChecks": 136,
+    "allFeaturesHttpChecks": 102,
+    "bountyHttpChecks": 266,
+    "totalChecks": 5195,
+    "mapper": "Java and browser-helper regressions passed; see feature-mapper/build/test-results.txt",
+    "result": "passed"
+  },
+  "mapperAdditionalChecks": {
+    "java": 134,
+    "browserHelperNode": 15,
+    "includedInWorkbenchTotal": false
+  },
+  "focusedNewChecks": {
+    "ai": 299,
+    "activeRequestApproval": 121,
+    "includedInWorkbenchTotal": true
+  },
+  "layout": {
+    "releaseJarSha256": "3c8639b8e0cfccf365f636e5f89ce3022ba9bde1e2290d9027261520d16c40f8",
+    "renderedViews": 576,
+    "controlsMeasured": 8154,
+    "tabAndHeadingLabelsMeasured": 5280,
+    "scenariosChecked": 246,
+    "clippedControlsOutsideScrollers": 0,
+    "smallControls": 0,
+    "collapsedRequiredWorkAreas": 0,
+    "clippedSelectedTabOrHeadingLabels": 0
+  },
+  "focusedLayouts": {
+    "next": {
+      "renderedViews": 414,
+      "controlsMeasured": 4344,
+      "scenariosChecked": 246,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "traffic": {
+      "renderedViews": 16,
+      "controlsMeasured": 344,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "guide": {
+      "renderedViews": 52,
+      "controlsMeasured": 156,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "scope": {
+      "renderedViews": 4,
+      "controlsMeasured": 24,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "packet": {
+      "renderedViews": 16,
+      "controlsMeasured": 608,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "js": {
+      "renderedViews": 76,
+      "controlsMeasured": 1292,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "session": {
+      "renderedViews": 8,
+      "controlsMeasured": 96,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "auth": {
+      "renderedViews": 60,
+      "controlsMeasured": 972,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    },
+    "environment": {
+      "renderedViews": 32,
+      "controlsMeasured": 224,
+      "scenariosChecked": 0,
+      "collapsedRequiredWorkAreas": 0,
+      "clippedControlsOutsideScrollers": 0,
+      "smallControls": 0,
+      "clippedSelectedTabOrHeadingLabels": 0
+    }
+  },
+  "aiLayout": {
+    "pngCount": 28,
+    "targetRequests": 0,
+    "inferenceActionsInvoked": 0,
+    "violationCount": 0,
+    "releaseJarSha256": "3c8639b8e0cfccf365f636e5f89ce3022ba9bde1e2290d9027261520d16c40f8"
+  },
+  "beforeAfter": {
+    "runtime": "same Temurin17.0.21+9",
+    "size": [
+      1024,
+      720
+    ],
+    "fontScalePercent": 150,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "fields": [
+      "impact",
+      "reproduction"
+    ],
+    "minimumHeightPx": 70,
+    "beforeHeightPx": 61,
+    "afterHeightPx": 86,
+    "beforeFailures": 4,
+    "afterFailures": 0,
+    "baselinePublishedJarSha256": "91519dcb2cb5e84c99e12abf45d2e7df9889281aa44bd0f1968f6f7a297793a8"
+  },
+  "artifacts": {
+    "SHA256SUMS": {
+      "path": "downloads/extensions/0.54.1/SHA256SUMS",
+      "bytes": 197,
+      "sha256": "2703b55e1d641d3d5bdbc2c779da256c2a3b45060de5957953b18430d6357412"
+    },
+    "burp-workbench-kr-0.54.1-source.zip": {
+      "path": "downloads/extensions/0.54.1/burp-workbench-kr-0.54.1-source.zip",
+      "bytes": 4752421,
+      "sha256": "982b696128a876141ab7b6585430e88b05e3b31fb3567ae142103b8420152ee2"
+    },
+    "burp-workbench-kr-0.54.1.jar": {
+      "path": "downloads/extensions/0.54.1/burp-workbench-kr-0.54.1.jar",
+      "bytes": 4381092,
+      "sha256": "3c8639b8e0cfccf365f636e5f89ce3022ba9bde1e2290d9027261520d16c40f8"
+    },
+    "manifest.json": {
+      "path": "downloads/extensions/0.54.1/manifest.json",
+      "bytes": 73873,
+      "sha256": "07cd7862acdf28ea99ead9ca03e1c4769981676853b5ae7031380f5e3f3c5004"
+    }
+  },
+  "archiveChecks": {
+    "crc": "passed",
+    "sourceFingerprint": "verified",
+    "versionManifest": "0.54.1",
+    "testClassesInProductionJar": false,
+    "previousVersionsAndSimple": "unchanged"
+  },
+  "iterationNotes": [
+    "Published0.54.0 JAR reproduced all4 original layout failures on the same Java17 used for final verification; unchanged70px minimum.",
+    "One concurrent final-layout attempt stopped at an existing synthetic JSON-candidate10s fixture timeout after5 theme/size previews. Its trace is preserved; cause not established. A separate sequential complete6-preview run passed without changing any deadline, scenario or assertion."
+  ],
+  "notExecuted": [
+    "User M5 ChatGPT subscription login or real Halogen/Qwen inference quality/latency",
+    "Native Burp GUI, Windows DPI/IME, Firefox user profile",
+    "External bug bounty targets, Docker full stack, external OAST/BApps"
+  ],
+  "remoteAndMergeStatus": "Use the completion PR actual checks and merge state; this JSON records the local run, not future remote results.",
+  "evidenceDirectory": "docs/reports/2026-11-16-next-0541"
+}

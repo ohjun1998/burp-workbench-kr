@@ -1,0 +1,39 @@
+Command: python tools/render_ui_layout.py --java /tmp/workbench-jdk17/jdk-17.0.21+9/bin/java --check --out tmp/0541-layout-after --sizes 1024x720 1280x800 1440x920
+Observed result: first five theme/size previews completed; final dark 1440x920 process failed during synthetic JSON candidate preparation. This run has no completed aggregate layout-report.json and is not a pass. Root cause is not established. Concurrent validation was running. No timing or assertion threshold was changed.
+
+Layout previews rendered: dark 1280x800; synthetic data, no Burp GUI or HTTP execution.
+java.lang.reflect.InvocationTargetException
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1371)
+	at java.desktop/java.awt.EventQueue.invokeAndWait(EventQueue.java:1346)
+	at java.desktop/javax.swing.SwingUtilities.invokeAndWait(SwingUtilities.java:1480)
+	at kr.workbench.WorkbenchTest.edt(WorkbenchTest.java:80)
+	at kr.workbench.UiLayoutPreview.main(UiLayoutPreview.java:983)
+Caused by: java.lang.RuntimeException: java.lang.IllegalStateException: Preview fixture timeout: JSON candidates
+	at kr.workbench.UiLayoutPreview.lambda$main$97(UiLayoutPreview.java:1081)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: java.lang.IllegalStateException: Preview fixture timeout: JSON candidates
+	at kr.workbench.UiLayoutPreview.awaitUi(UiLayoutPreview.java:231)
+	at kr.workbench.UiLayoutPreview.renderNext(UiLayoutPreview.java:321)
+	at kr.workbench.UiLayoutPreview.lambda$main$97(UiLayoutPreview.java:1080)
+	... 13 more
+Traceback (most recent call last):
+  File "/workspace/scratch/99098e3a081b/workbench/tools/render_ui_layout.py", line 260, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/99098e3a081b/workbench/tools/render_ui_layout.py", line 59, in main
+    subprocess.run([args.java,f'-Duser.home={(out/"host-home").resolve()}','-Djava.awt.headless=true','-Dfile.encoding=UTF-8','-cp',cp+os.pathsep+str(classes),'kr.workbench.UiLayoutPreview',str(out),str(WB/'src/main/resources/fonts/NanumGothic-Regular.ttf'),theme,w,h]+(['next'] if args.next_only else ['guide'] if args.guide_only else ['scope'] if args.scope_only else ['packet'] if args.packet_only else ['js'] if args.js_only else ['traffic'] if args.traffic_only else ['environment'] if args.environment_only else ['auth'] if args.auth_only else ['session'] if args.session_only else []),check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/tmp/workbench-jdk17/jdk-17.0.21+9/bin/java', '-Duser.home=/workspace/scratch/99098e3a081b/workbench/tmp/0541-layout-after/dark/1440x920/host-home', '-Djava.awt.headless=true', '-Dfile.encoding=UTF-8', '-cp', '/workspace/scratch/99098e3a081b/workbench/project/burp-development-workspace/burp-workbench-kr/burp-workbench/dist/burp-workbench-kr-0.54.1.jar:/workspace/scratch/99098e3a081b/workbench/project/burp-development-workspace/burp-workbench-kr/burp-workbench/deps/montoya-2026.jar:/workspace/scratch/99098e3a081b/workbench/project/burp-development-workspace/burp-workbench-kr/burp-workbench/deps/legacy-api.jar:/workspace/scratch/99098e3a081b/workbench/project/burp-development-workspace/burp-workbench-kr/burp-workbench/deps/rhino.jar:/workspace/scratch/99098e3a081b/workbench/project/burp-development-workspace/burp-workbench-kr/burp-workbench/build/tests:tmp/0541-layout-after/classes', 'kr.workbench.UiLayoutPreview', 'tmp/0541-layout-after/dark/1440x920', '/workspace/scratch/99098e3a081b/workbench/project/burp-development-workspace/burp-workbench-kr/burp-workbench/src/main/resources/fonts/NanumGothic-Regular.ttf', 'dark', '1440', '920']' returned non-zero exit status 1.

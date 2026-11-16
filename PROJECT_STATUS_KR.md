@@ -1,4 +1,12 @@
-# Next 0.54.0 · ChatGPT 구독·로컬 LLM 검토 개발 브랜치
+# Next 0.54.1 · AI 통합 후보 마무리
+
+로컬 전체 기능5,195개·Mapper Java134/Node15·전체576뷰·AI28뷰·패키징7개를 통과했습니다. 실제 M5 모델 추론과 native Burp GUI는 별도 미검증입니다.
+
+0.54.0 후보 PR #110의 `6334ac1962caf42c7685c544bde61c327db47560`을 이어받아 `account-a/next-0541-completion`에서 검증합니다. ChatGPT 구독·Halogen 분석과 자동 요청 실행별 확인을 유지하고, 증거 작성 화면의 1024×720·150% 글자 크기에서 영향·재현 영역이 줄어드는 문제를 수정합니다. 이전 후보와 Simple은 보존합니다.
+
+[설치·사용법](docs/RELEASE_0.54.1_NEXT_KR.md) · [현재 검증](docs/VERIFICATION_0.54.1.json) · [전후 근거](docs/reports/2026-11-16-next-0541/) · [날짜별 대화](docs/chat-logs/2026-11-16/next-0541-completion.md). 병합 여부는 해당 PR의 실제 상태를 기준으로 확인합니다. 아래 0.54.0/0.53.4 기록은 당시 상태이며 새 버전의 검증 결과로 합산하지 않습니다.
+
+# Next 0.54.0 · ChatGPT 구독·로컬 LLM 검토 개발 브랜치 (이전 후보)
 
 사용자 요청에 따라 기존 Next의 main `222aef191a34f7d6cd1014e941ecc7152341f640`에서 `account-a/next-local-llm`로 분리했습니다. 기능별 패킷 분류·보고서 초안은 공식 Codex CLI의 ChatGPT 구독 인증을 기본으로 사용하고, 응답 보안·계정 비교·업무 로직·JS 검토는 Halogen을 기본으로 사용합니다. 실행 전 가림 미리보기와 전송 대상을 표시하며 수동 재배정만 허용합니다. 원본 ID·계정 맥락·기존 판정·Mapper 교정 규칙을 보존합니다.
 

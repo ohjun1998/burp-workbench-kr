@@ -1,4 +1,9 @@
-# Next 0.54.0 local LLM task branch
+# Next 0.54.1 completion
+
+- Continues the authorized Next hybrid-AI candidate PR #110 (`6334ac1962caf42c7685c544bde61c327db47560`) on `account-a/next-0541-completion`. Version 0.54.1 preserves the immutable 0.54.0 candidate and all prior/Simple releases. Guide: `docs/RELEASE_0.54.1_NEXT_KR.md`; current evidence: `docs/VERIFICATION_0.54.1.json`.
+- Preserve the evidence toolbar's compact `AI 초안` caption with its full accessible name/tooltip. At 1024x720 and 150% font scaling, the longer caption wrapped the toolbar and reduced both impact/reproduction editors to 61px; the unchanged 70px layout gate reproduces this in both themes. Keep the real workflow/layout checks and thresholds, subscription/local routing, original-ID guards and per-run default-cancel request confirmation.
+
+# Next 0.54.0 local LLM task branch (historical candidate)
 
 - User explicitly requested implementing LLM integration in original Next, not Simple. Current task branch bumps Next to0.54.0; previous0.53.4 artifacts and Simple sources remain immutable. Do not treat historical Simple-only or completed0.53.4 scope notes below as blocking this new authorized Next task.
 - LocalLlmConfig/Client/Tasks/Panel and NextLlmBridge provide manual, session-only AI review; CodexSubscriptionClient provides official ChatGPT-subscription CLI runs for FUNCTIONS/REPORT by default, local Halogen for other tasks. Never switch providers on refusal automatically or use API-key authentication for subscription jobs. Preserve immutable source IDs/current Scope, redacted previews, bounded single worker/cancellation, no tool execution or target sends, exact originals for Repeater/evidence, and stale project/report guards. AI group suggestions must never call Mapper.move automatically.

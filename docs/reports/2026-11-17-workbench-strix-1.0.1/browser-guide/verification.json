@@ -1,0 +1,173 @@
+{
+  "product": "Workbench Strix",
+  "version": "1.0.1",
+  "input": "/workspace/burp-workbench-kr/downloads/guides/strix-1.0.1/Workbench-Strix-1.0.1-사용가이드.html",
+  "htmlSha256": "bda29e5e228aacd4fdfa2dd69ab45204418aebb9eb51704d70f3bb6c18a5ccc9",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "product-and-offline-assets",
+      "result": "passed"
+    },
+    {
+      "name": "simple-1.4.21-layout-provenance",
+      "result": "passed"
+    },
+    {
+      "name": "navigation-and-public-links",
+      "result": "passed"
+    },
+    {
+      "name": "seven-step-progress",
+      "result": "passed"
+    },
+    {
+      "name": "all-image-zoom-and-close",
+      "result": "passed"
+    },
+    {
+      "name": "copy-command-and-print-action",
+      "result": "passed"
+    },
+    {
+      "name": "viewport-390",
+      "result": "passed"
+    },
+    {
+      "name": "viewport-1024",
+      "result": "passed"
+    },
+    {
+      "name": "viewport-1280",
+      "result": "passed"
+    },
+    {
+      "name": "no-script-errors-or-runtime-http",
+      "result": "passed"
+    }
+  ],
+  "errors": [],
+  "externalRuntimeRequests": [],
+  "loopbackRequests": [
+    {
+      "method": "GET",
+      "path": "/guide.html"
+    }
+  ],
+  "layouts": [
+    {
+      "width": 390,
+      "viewport": 390,
+      "documentWidth": 390,
+      "images": [
+        {
+          "width": 328,
+          "complete": true
+        },
+        {
+          "width": 328,
+          "complete": true
+        },
+        {
+          "width": 328,
+          "complete": true
+        },
+        {
+          "width": 328,
+          "complete": true
+        },
+        {
+          "width": 328,
+          "complete": true
+        },
+        {
+          "width": 328,
+          "complete": true
+        },
+        {
+          "width": 328,
+          "complete": true
+        }
+      ],
+      "badControls": []
+    },
+    {
+      "width": 1024,
+      "viewport": 1024,
+      "documentWidth": 1024,
+      "images": [
+        {
+          "width": 687,
+          "complete": true
+        },
+        {
+          "width": 687,
+          "complete": true
+        },
+        {
+          "width": 687,
+          "complete": true
+        },
+        {
+          "width": 687,
+          "complete": true
+        },
+        {
+          "width": 687,
+          "complete": true
+        },
+        {
+          "width": 687,
+          "complete": true
+        },
+        {
+          "width": 687,
+          "complete": true
+        }
+      ],
+      "badControls": []
+    },
+    {
+      "width": 1280,
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "images": [
+        {
+          "width": 822,
+          "complete": true
+        },
+        {
+          "width": 822,
+          "complete": true
+        },
+        {
+          "width": 822,
+          "complete": true
+        },
+        {
+          "width": 822,
+          "complete": true
+        },
+        {
+          "width": 822,
+          "complete": true
+        },
+        {
+          "width": 822,
+          "complete": true
+        },
+        {
+          "width": 822,
+          "complete": true
+        }
+      ],
+      "badControls": []
+    }
+  ],
+  "guideColorMode": "fixed light; product screenshot theme light",
+  "notRun": [
+    "Native user Burp",
+    "Real Strix CLI/model/target requests",
+    "Actual print dialog or OS download UI"
+  ]
+}

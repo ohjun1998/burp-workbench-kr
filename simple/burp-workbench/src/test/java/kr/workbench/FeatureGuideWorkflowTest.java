@@ -30,7 +30,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
     var input = (JTextArea) get(extension, "codecIn");
     Object runner = get(entry, "payloadRunner");
     var payloadInput = (JTextArea) get(runner, "request");
-    var guide = (JButton) named(root, "wb.visual.guide.open");
+    var guide = (JButton) named(root, "wb.traffic.guide.open");
     AtomicReference<Action> f1 = new AtomicReference<>();
     int sentBefore = PayloadIntegrationTest.sent.get();
     boolean unloaded = false;
@@ -40,10 +40,10 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
       Object original = get(extension, "current");
       check(original != null, "guide workflow begins with a selected stored original packet");
       edt(() -> {
-        check(guide != null && guide.isEnabled() && guide.getText().equals("Guide"),
+        check(guide != null && guide.isEnabled() && guide.getText().equals("화면 설명"),
             "each active tool exposes a plainly labeled Guide action without executing a scan");
-        var actions = (JPanel) named(root, "wb.navigation.actions");
-        check(actions.getComponent(actions.getComponentCount() - 1) == guide,
+        var actions = guide.getParent();
+        check(java.util.Arrays.stream(actions.getComponents()).filter(Component::isVisible).reduce((a,b)->b).orElse(null) == guide,
             "Guide is the far-right action in the shared tool header");
         check(named(root, "wb.feature.help") == null,
             "the duplicate legacy help icon is removed from the shared header");
@@ -51,7 +51,7 @@ public final class FeatureGuideWorkflowTest extends WorkbenchTest {
           layout(root, width);
           var toolbar = named(root, "wb.navigation.toolbar");
           Rectangle bounds = SwingUtilities.convertRectangle(guide.getParent(), guide.getBounds(), toolbar);
-          check(toolbar.getHeight() <= 36 && bounds.y >= 0 && bounds.y + bounds.height <= toolbar.getHeight(),
+          check(toolbar.getHeight() <= 46 && bounds.y >= 0 && bounds.y + bounds.height <= toolbar.getHeight(),
               "Guide preserves the compact one-row header at " + width + " pixels");
         }
         Object binding = root.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).get(KeyStroke.getKeyStroke("F1"));

@@ -61,7 +61,7 @@ public final class AuthUsability0531Test extends WorkbenchTest {
         candidate.setSelectedIndex(0); check(panel.slots[0] == null, "account chooser explicitly clears slot");
         var disconnected = panel.preparationAccountChoices();
         JComboBox<?> anonymous = (JComboBox<?>) named(disconnected, "wb.auth.preparation.account.3");
-        check(anonymous.getItemAt(1).toString().contains("example.test") && candidate.getItemCount() == 2,
+        check(((AuthComparePanel.CandidateChoice) anonymous.getItemAt(1)).candidate().origin().startsWith("https://example.test:") && candidate.getItemCount() == 2,
             "staged original restricts account choices and anonymous Origin despite earlier foreign credentials");
         candidate.setSelectedIndex(1); check(panel.slots[0] != null, "account chooser reconnects retained candidate without network");
         panel.preparationTabs = new JTabbedPane();

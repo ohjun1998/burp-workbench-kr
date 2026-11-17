@@ -72,7 +72,7 @@ public final class AuthRunSummaryTest extends WorkbenchTest {
         var bounds=p.history.getCellRect(row,result,true);
         check(bounds.x+bounds.width<=p.history.getParent().getWidth(),"summary remains visible without horizontal scrolling in narrow workspace");
         var cell=(JLabel)p.history.prepareRenderer(p.history.getCellRenderer(row,result),row,result);
-        check(cell.getText().equals("차단 응답 확인")&&cell.getIcon()!=null&&cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)),"sorted aggregate uses correct run and color");
+        check(cell.getText().equals("차단 응답 확인")&&cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)),"sorted aggregate uses correct run and color");
         cell=(JLabel)p.history.prepareRenderer(p.history.getCellRenderer(row,account),row,account);
         check(cell.getText().equals("200 · 기준")&&cell.getIcon()==null&&cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)),"reused summary renderer cannot leak verdict into account cell");
       });

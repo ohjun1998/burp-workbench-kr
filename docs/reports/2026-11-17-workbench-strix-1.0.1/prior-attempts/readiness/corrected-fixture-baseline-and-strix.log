@@ -1,0 +1,44 @@
+TARGET baseline21
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS the controlled preparation gate still shows the previous original result
+PASS one blocked preparation interval yields zero false-idle observations across 1000 cross-thread reads
+PASS preparation continues without an EDT exception
+PASS queued worker execution is also reported as active
+PASS ready search selects the intended immutable original rather than a prior view index
+PASS invalid regex stops cleanly without leaving preparation busy
+PASS query-error recovery keeps the exact stored original
+PASS a synchronous identity lookup failure reports a recoverable idle error
+PASS preparation failure preserves the previous completed view
+PASS a queued search stays active before explicit cancellation
+PASS explicit cancellation clears logical pending work
+PASS cancelled search keeps the previous completed original view
+PASS frozen view retains its published boundary while the new original is stored
+PASS unfreezing publishes the same newly retained original
+PASS project change clears the old query without leaving preparation pending
+PASS synchronous full-list publication notifies listeners only when its view is ready
+PASS closed browser rejects preparation and leaves no active worker
+PASS readiness, validation, retry, cancellation, frozen view and project transitions send no HTTP
+SimpleTrafficReadinessTest: 18 checks passed
+TARGET strix101
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS the controlled preparation gate still shows the previous original result
+PASS one blocked preparation interval yields zero false-idle observations across 1000 cross-thread reads
+PASS preparation continues without an EDT exception
+PASS queued worker execution is also reported as active
+PASS ready search selects the intended immutable original rather than a prior view index
+PASS invalid regex stops cleanly without leaving preparation busy
+PASS query-error recovery keeps the exact stored original
+PASS a synchronous identity lookup failure reports a recoverable idle error
+PASS preparation failure preserves the previous completed view
+PASS a queued search stays active before explicit cancellation
+PASS explicit cancellation clears logical pending work
+PASS cancelled search keeps the previous completed original view
+PASS frozen view retains its published boundary while the new original is stored
+PASS unfreezing publishes the same newly retained original
+PASS project change clears the old query without leaving preparation pending
+PASS synchronous full-list publication notifies listeners only when its view is ready
+PASS closed browser rejects preparation and leaves no active worker
+PASS readiness, validation, retry, cancellation, frozen view and project transitions send no HTTP
+SimpleTrafficReadinessTest: 18 checks passed

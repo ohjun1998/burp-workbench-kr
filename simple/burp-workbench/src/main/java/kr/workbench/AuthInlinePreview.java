@@ -1,6 +1,7 @@
 package kr.workbench;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import javax.swing.*;
 
 /** Selection-driven comparison reader, independent of the existing enlarged window. */
@@ -15,19 +16,29 @@ final class AuthInlinePreview extends JPanel implements AutoCloseable {
   final JTextArea differences=new JTextArea();
   final JLabel summary = new JLabel("비교 기록에서 항목을 선택하세요.");
   AuthComparePanel.Run selected;
-  boolean updating;
+  boolean updating,approvedHeaders;
 
   AuthInlinePreview() {
     super(new BorderLayout(0, 4)); setName("wb.auth.inline");
+    setBorder(kr.packetui.VisualTheme.border(1, 1, 1, 1));
     account.setName("wb.auth.inline.account");account.setPreferredSize(new java.awt.Dimension(200,32));
     for (int i = 0; i < 4; i++) account.addItem(i == 3 ? "비로그인" : "비교 계정 " + (i + 1));
-    selectedRequest.putClientProperty("wb.font.heading",true);selectedRequest.putClientProperty("wb.font.size",16);add(CompactWorkbenchUi.toolbar(selectedRequest,WorkbenchUi.row(new JLabel("비교 계정"),account,summary)),BorderLayout.NORTH);
+    selectedRequest.putClientProperty("wb.font.heading",true);selectedRequest.putClientProperty("wb.font.size",13);
+    selectedRequest.setName("wb.auth.inline.selected");
+    JPanel title = CompactWorkbenchUi.toolbar(selectedRequest, WorkbenchUi.row(summary));
+    title.setBorder(BorderFactory.createEmptyBorder(7, 12, 7, 12));
+    title.setName("wb.auth.inline.heading");
+    add(title,BorderLayout.NORTH);
     JTabbedPane tabs = new JTabbedPane(); tabs.setName("wb.auth.inline.tabs");
     tabs.addTab("응답 비교", WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,
         WorkbenchUi.card("기준 응답", baseline), WorkbenchUi.card("계정 응답", response), .5));
     differences.setEditable(false);differences.setLineWrap(true);differences.setWrapStyleWord(true);differences.putClientProperty("wb.prose",true);differences.setName("wb.auth.inline.differences");JPanel comparison=new JPanel(new BorderLayout());comparison.add(WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT,WorkbenchUi.card("기준 응답",differenceBaseline),WorkbenchUi.card("선택 계정 응답",differenceResponse),.5));JButton facts=new JButton("차이 항목 보기");facts.addActionListener(e->WorkbenchUi.settingsWindow(this,"계정 간 차이 · 상세 항목",new JScrollPane(differences),false,null));comparison.add(WorkbenchUi.row(facts),BorderLayout.SOUTH);tabs.addTab("계정 간 차이",comparison);
     tabs.addTab("선택 계정 요청", request); tabs.addTab("판정 근거", evidence);
-    add(tabs);
+    JPanel readers = new JPanel(new BorderLayout(0, 4));
+    JPanel accountActions = WorkbenchUi.row(new JLabel("비교 계정"), account);
+    accountActions.setName("wb.auth.inline.account.actions");
+    accountActions.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+    readers.add(accountActions, BorderLayout.NORTH); readers.add(tabs); add(readers);
     account.addActionListener(e -> { if (!updating) render(); });
     differenceBaseline.displayDecoration=this::decorateDifferences;differenceResponse.displayDecoration=this::decorateDifferences;
   }
@@ -42,7 +53,7 @@ final class AuthInlinePreview extends JPanel implements AutoCloseable {
   }
 
   private void render() {
-    var run = selected; int slot = Math.max(0, account.getSelectedIndex());selectedRequest.setText(run==null?"선택한 요청 상세":"선택한 요청 상세  "+run.original.method()+" "+run.original.url());selectedRequest.setToolTipText(selectedRequest.getText());
+    var run = selected; int slot = Math.max(0, account.getSelectedIndex());selectedRequest.setText(run==null?"선택한 요청 상세":run.original.method()+" "+ApprovedUi.path(run.original.url()));selectedRequest.setToolTipText(selectedRequest.getText());
     summary.setText(run == null ? "비교 기록에서 항목을 선택하세요." : AuthRunSummary.of(run).label());
     summary.setToolTipText(run == null ? null : AuthRunSummary.of(run).reason());
     AuthComparePanel.loadInspector(baseline, null, run == null ? null : run.baseline());
@@ -58,7 +69,19 @@ final class AuthInlinePreview extends JPanel implements AutoCloseable {
       for(var item:diff.items())text.append(item.category()).append(" · ").append(item.path()).append(" · ").append(item.change()).append("\n기준: ").append(item.left()).append("\n선택 계정: ").append(item.right()).append("\n\n");
       if(diff.items().isEmpty())text.append("표시 가능한 상태·헤더·JSON 항목 차이 없음\n");text.append(diff.note());differences.setText(text.toString());
     }
-    differences.setCaretPosition(0);evidence.showRun(run);
+    differences.setCaretPosition(0);evidence.showRun(run);refreshApprovedHeaders();
+  }
+
+  void refreshApprovedHeaders(){
+    if(!approvedHeaders)return;PacketInspector[] pair={baseline,response};int selectedSlot=Math.max(0,account.getSelectedIndex());
+    for(int i=0;i<2;i++){
+      if(!(pair[i].getParent() instanceof JPanel card))continue;Component c=((BorderLayout)card.getLayout()).getLayoutComponent(BorderLayout.NORTH);if(!(c instanceof JPanel head)||!(head.getLayout() instanceof BorderLayout layout))continue;
+      head.setPreferredSize(new java.awt.Dimension(0,39));Component center=layout.getLayoutComponent(BorderLayout.CENTER);int slot=i==0?0:selectedSlot;
+      if(center instanceof JLabel label){label.putClientProperty("html.disable",true);String name=selected==null?(i==0?"기준 계정":"비교 계정"):selected.context.labels()[slot];String role=selected==null?"":selected.context.roles()[slot];label.setText(name+(role.isBlank()?"":" · "+role));}
+      JComponent tools=(JComponent)pair[i].titleActions();if(tools.getParent()==head){head.remove(tools);JPanel retained=new JPanel();retained.setVisible(false);retained.add(tools);head.add(retained,BorderLayout.SOUTH);}
+      JLabel badge=head.getClientProperty("wb.approved.account.badge") instanceof JLabel b?b:new JLabel();if(badge.getParent()!=head){head.putClientProperty("wb.approved.account.badge",badge);head.add(badge,BorderLayout.EAST);badge.setBorder(BorderFactory.createEmptyBorder(0,0,0,12));}
+      var packet=selected==null?null:i==0?selected.baseline():selected.packets[slot].response;String status=packet==null?"응답 없음":Integer.toString(packet.statusCode());badge.setIcon(ApprovedIdentityDesign.accountStatus((slot==3?"비로그인":"계정 "+(slot+1))+" · "+status,slot));
+    }
   }
 
   private final java.util.List<Object> leftMarks=new java.util.ArrayList<>(),rightMarks=new java.util.ArrayList<>();

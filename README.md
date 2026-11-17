@@ -1,3 +1,11 @@
+# Workbench Strix 1.0.1 · Simple 1.4.21 디자인 유지
+
+Simple 1.4.21의 기존 디자인·레이아웃을 기준으로 Strix 진단 기능을 별도 창으로 연결합니다. 상단 메뉴·통합 점검/대시보드 강조형·입력칸·카드·원문·13개 도구를 유지합니다.
+
+[설치 JAR](simple/downloads/strix/1.0.1/burp-workbench-strix-1.0.1.jar) · [소스 ZIP](simple/downloads/strix/1.0.1/burp-workbench-strix-1.0.1-source.zip) · [사용 가이드](docs/reports/2026-11-17-workbench-strix-1.0.1/guide/index.html) · [실행 캡처·검증](docs/reports/2026-11-17-workbench-strix-1.0.1/README_KR.md)
+
+아래 이전 배포 기록은 보존합니다.
+
 # Workbench Strix 1.0.0 · Strix 진단 연동판
 
 Strix 연동 Simple 1.4.13 후보를 **Workbench Strix**로 구분합니다. 일반 Simple과 별도 이름·버전·파일명으로 배포하며 A 그룹형 Simple 1.4.22와 통합된 버전은 아닙니다. 기존 Strix 실행 경로와 설정·원본·실행 승인·중지 동작을 유지합니다.

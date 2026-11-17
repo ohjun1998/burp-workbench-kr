@@ -1,0 +1,399 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/burp-workbench-kr/simple/burp-workbench/build_all.py --java /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java --test --test-group BuildInfoTest --test-group SimpleStrixClientTest --test-group SimpleStrixIntegrationTest --test-group SimpleCompactPrimaryNavigationTest --test-group SimpleCompactNavigationTest --test-group SimpleWorkflowTest --test-group SimpleApprovedWorkflowTest --test-group SimpleAppearanceUpgradeTest --skip-payload
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.0.1.jar 9288154 bytes
+Note: /workspace/burp-workbench-kr/simple/burp-workbench/src/test/java/kr/workbench/MapperIntegrationTest.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+BuildInfoTest: 4 checks passed
+PASS local model metadata only
+PASS OPENAI_BASE_URL fallback validated
+PASS selected credentials removed from instructions
+PASS plan summary excludes credentials
+PASS default-cancel result
+PASS approval rejection starts zero fake processes and creates no run
+PASS missing approval cancels
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject direct libexec bypass
+PASS reject arbitrary scan mode
+PASS bound agent turns
+PASS bound elapsed timeout
+PASS reject public model endpoint
+PASS reject unexpected local model
+PASS reject wrong local API type
+PASS revalidate frozen config after approval
+PASS failed preparation releases busy state
+PASS approved wrapper process completes
+PASS argv contains no key or captured credential
+PASS private runtime config/instructions/workdir permissions
+PASS provider environment aliases cleared
+PASS preserve boolean operational settings
+PASS preserve numeric and string operational limits
+PASS exclude extra headers/body and dedupe provider config
+PASS private instructions remain redacted
+PASS redact known credentials across output chunks
+PASS operational token count is not mistaken for credential
+PASS delete per-run sensitive inputs on completion
+PASS native persistence leaves global config unchanged
+PASS discover only owned regular report files
+PASS final Markdown precedes vulnerability JSON/CSV and intermediate metadata in stable report order
+PASS report preview credentials redacted
+PASS reject unrelated prior report path
+PASS reject report replaced with symlink
+PASS bound stdout tail while draining full process output
+PASS never claim Docker residual cleanup
+PASS unsigned native subscription unavailable
+PASS unsigned subscription blocks scan
+PASS native subscription status accepted without exposing account output
+PASS signed native subscription uses same wrapper
+PASS subscription run config contains no local key/base/type
+PASS subscription selection does not change global model
+PASS subscription can run without Halogen global config
+PASS one active wrapper process tracked
+PASS reject concurrent scans
+PASS cancel reports cancelled rather than failed
+PASS cancel preserves unrelated process
+PASS cancel releases active state
+PASS SIGTERM-ignoring owned wrapper is running before cancel
+PASS cancel waits for forced owned-wrapper termination
+PASS no owned process remains alive before allowing another start
+PASS new scan starts only after prior forced termination confirmed
+PASS elapsed deadline terminates owned wrapper
+PASS timeout removes private config
+PASS clear provider/extra/dedupe/network aliases without repurposing HOME or PATH
+PASS default runs remain inside the Simple storage namespace
+SimpleStrixClientTest: 63 checks passed (fake wrapper only; no Strix/model/target calls)
+PASS this adapter test never opens a native approval window
+PASS preparing originals performs no runner, provider or process action
+PASS selection IDs survive changes to the caller's list
+PASS selected path prepares the explicit origin without silently extending Scope
+PASS source metadata does not expose the synthetic credential
+PASS authentication and raw bodies are explicitly excluded from automatic transfer
+PASS unselected subscription model and absent report remain disabled
+PASS default headless confirmation cancels without an approved launch
+PASS new execution uses the fresh selected provider/model in one immutable plan
+PASS execution retains the prepared originals rather than a later traffic selection
+PASS report location is per run and unverified container cleanup is visible
+PASS report action validates the owned report before invoking a text-preview opener
+PASS approval is discarded after a concurrent scope change
+PASS approval is discarded after a concurrent project change
+PASS approval is discarded after a concurrent other-job change
+PASS approval is discarded after a concurrent provider change
+PASS approval is discarded after a concurrent target change
+PASS subscription plan failure does not retry through the local provider
+PASS provider failure remains a visible failure
+PASS running state disables a second launch and keeps Stop adjacent and available
+PASS programmatic duplicate start is also rejected
+PASS visible runner log remains bounded
+PASS a changed running project requests cancellation
+PASS reset clears originals/reports and ignores stale log callbacks
+PASS close is idempotent, owns runner cleanup and rejects later callbacks
+PASS an unowned report cannot reach a browser or text-preview opener
+SimpleStrixIntegrationTest: 26 checks passed (actual UI, injected runner, no process/model/target)
+Fontconfig error: No writable cache directories
+PASS two promoted controls retain their approved readable captions
+PASS presentation buttons keep their own models and delegate explicit actions to the source controllers
+PASS a real promoted inspection click delegates exactly once
+PASS source availability immediately disables its promoted action
+PASS disabled promoted actions cannot dispatch through mouse or Enter
+PASS source re-enablement restores its promoted action
+PASS the actual Enter binding delegates to the original preparation controller once
+PASS re-clicking a source that keeps its current route selected never leaves the promoted toggle deselected
+PASS programmatic source selection changes update the promoted toggle
+PASS source model replacement retains live selection synchronization
+PASS closing promoted presentation disables its own controls without disabling the original sources
+PASS disposed promoted actions remain inert after explicit calls and later source changes
+PASS exactly two promoted actions occupy the existing sidebar column header
+PASS sidebar promotion preserves the existing tree viewport and both page-split component identities
+PASS the promoted dashboard has no duplicate lower-folder leaf
+PASS promotion itself does not construct or start inspection
+PASS the actual promoted inspection action opens the retained preparation panel without either runner
+PASS inspection preparation preserves the active page, folder selection and route history
+PASS repeated preparation reuses the same target-window controller and panel with authored target input intact
+PASS the actual promoted dashboard reuses its existing page and retains selection on repeated clicks
+PASS the dashboard breadcrumb describes its promoted inspection context
+PASS Back restores the retained traffic page, selected original and its folder highlight
+PASS Forward restores the promoted dashboard selection without a synthetic folder node
+PASS opening another retained tool clears promoted selection and selects its actual leaf
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/100/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/100/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/100/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/150/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/150/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/150/false
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/100/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/100/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/100/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1024/150/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1280/150/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS both real compact primary rows retain42px geometry inside the sidebar at 1600/150/true
+PASS theme and display scaling preserve the promoted models and readable captions
+PASS hiding the menu also hides its promoted rows
+PASS reopening the sidebar restores both actions and the original scrollable tree
+PASS navigation, preparations, themes and menu visibility preserve exact source models, documents and selected original
+PASS all promoted preparation/navigation actions send zero target HTTP and never start a scan
+PASS closed production navigation disables promoted actions and leaves pages, dialogs and HTTP untouched
+SimpleCompactPrimaryNavigationTest: 75 checks passed (retained controllers, compact actual geometry, zero HTTP)
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS approved PDF header includes the compact Workbench wordmark once
+PASS approved PDF header remains one 46px row at 1024 pixels
+PASS header actions stay inside the same row at 1024
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS approved PDF header remains one 46px row at 1280 pixels
+PASS header actions stay inside the same row at 1280
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS approved PDF header remains one 46px row at 1600 pixels
+PASS header actions stay inside the same row at 1600
+PASS compact action keeps the requested Guide caption and other visible icons: wb.simple.dashboard.open
+PASS compact action retains an accessible name and tooltip: wb.simple.dashboard.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.scope.inspection.open
+PASS compact action retains an accessible name and tooltip: wb.scope.inspection.open
+PASS compact action keeps the requested Guide caption and other visible icons: wb.window.fullscreen
+PASS compact action retains an accessible name and tooltip: wb.window.fullscreen
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.settings
+PASS compact action retains an accessible name and tooltip: wb.navigation.settings
+PASS compact action keeps the requested Guide caption and other visible icons: wb.navigation.logs
+PASS compact action retains an accessible name and tooltip: wb.navigation.logs
+PASS compact action keeps the requested Guide caption and other visible icons: wb.visual.guide.open
+PASS compact action retains an accessible name and tooltip: wb.visual.guide.open
+PASS the actual shared header popup has no blank action row: wb.simple.dashboard.open
+PASS the actual header menu restores the compact source caption and icon: wb.simple.dashboard.open
+PASS the actual shared header popup has no blank action row: wb.scope.inspection.open
+PASS the actual header menu restores the compact source caption and icon: wb.scope.inspection.open
+PASS the actual shared header popup has no blank action row: wb.window.fullscreen
+PASS the actual header menu restores the compact source caption and icon: wb.window.fullscreen
+PASS the actual shared header popup has no blank action row: wb.navigation.settings
+PASS the actual header menu restores the compact source caption and icon: wb.navigation.settings
+PASS the actual shared header popup has no blank action row: wb.navigation.logs
+PASS the actual header menu restores the compact source caption and icon: wb.navigation.logs
+PASS the actual shared header popup has no blank action row: wb.visual.guide.open
+PASS the header popup has one readable row for every retained shortcut
+PASS fullscreen exit state updates accessibility without widening the PDF toolbar
+PASS the assembled header popup follows fullscreen state after the compact source clears its text
+PASS an accessible-only fullscreen update replaces the assembled menu caption immediately
+PASS the visible header dashboard menu opens the retained page and reflects its selected state
+PASS leaving the dashboard clears the actual header menu state through its retained model
+PASS the actual header Guide row opens the current tool documentation controller
+PASS compact primary navigation retains five folders and eleven tools without a duplicate dashboard leaf
+PASS the production sidebar promotes inspection preparation and the retained dashboard into two actual controls
+PASS all folder rows remain inside the full scrollable tree content below the fixed primary header
+PASS scrolling the actual last folder leaf exposes its full row in the remaining viewport
+PASS both primary actions remain fixed and fully visible while the folder list scrolls: first=java.awt.Rectangle[x=9,y=12,width=146,height=42] -> java.awt.Rectangle[x=9,y=12,width=146,height=42], second=java.awt.Rectangle[x=9,y=60,width=146,height=42] -> java.awt.Rectangle[x=9,y=60,width=146,height=42], visible=java.awt.Rectangle[x=0,y=0,width=174,height=654]
+PASS hover paints a visible background beyond the text without a timer
+PASS leaving the sidebar clears the hover decoration
+PASS compact sidebar selection opens the existing JS route
+PASS selected tool uses the approved full-row blue selection fill
+PASS tool hover exposes the actual feature explanation
+PASS folder collapse remains available in the compact tree
+PASS compact navigation retains auth and CVE engine instances
+PASS compact menu selection hover and fullscreen labels send zero target requests
+SimpleCompactNavigationTest: 74 checks passed (production Swing controls; zero HTTP)
+Fontconfig error: No writable cache directories
+PASS Strix identity is visible in extension and suite tab
+PASS Simple uses its own disk and persistence namespaces
+PASS Simple settings write only their own key
+PASS existing setting preserved: next.wb.layout.reference.v1
+PASS existing setting preserved: next.wb.layout.horizontal
+PASS existing setting preserved: wb.layout.horizontal
+PASS classic folder navigation is attached to production workspace
+PASS saved-filter management is absent from the running list
+PASS empty unfiltered list omits meaningless recovery controls
+PASS saved-filter management remains available in actual search settings
+PASS search settings do not restore saved-filter clutter in the main list
+PASS next-request actions explain disabled state before selecting an original
+PASS folder navigation exposes retained traffic tool
+PASS direct navigation opens retained traffic engine
+PASS folder navigation exposes retained mapper tool
+PASS direct navigation opens retained mapper engine
+PASS folder navigation exposes retained auth tool
+PASS direct navigation opens retained auth engine
+PASS folder navigation exposes retained js tool
+PASS direct navigation opens retained js engine
+PASS folder navigation exposes retained environment tool
+PASS direct navigation opens retained environment engine
+PASS folder navigation exposes retained response.recon tool
+PASS direct navigation opens retained response.recon engine
+PASS folder navigation exposes retained payload tool
+PASS direct navigation opens retained payload engine
+PASS folder navigation exposes retained bounty tool
+PASS direct navigation opens retained bounty engine
+PASS all eight existing major tools remain available together
+PASS replay/evidence tool starts on fixed evidence route index 3
+PASS manual request replay is a visible core function at stable index 1
+PASS evidence mode remains directly accessible at stable index 3
+PASS auxiliary replay/evidence slot 0 cannot open an empty helper
+PASS auxiliary replay/evidence slot 2 cannot open an empty helper
+PASS auxiliary replay/evidence slot 4 cannot open an empty helper
+PASS navigation retains the same traffic engine instance
+PASS navigation retains the same mapper engine instance
+PASS navigation retains the same auth engine instance
+PASS navigation retains the same js engine instance
+PASS navigation retains the same environment engine instance
+PASS navigation retains the same response.recon engine instance
+PASS navigation retains the same payload engine instance
+PASS navigation retains the same bounty engine instance
+PASS switching tools preserves JS and payload engine input
+PASS input testing keeps direct settings control
+PASS input testing keeps direct start control
+PASS input testing keeps direct stop control
+PASS input testing keeps direct evidence control
+PASS input-testing evidence remains disabled without completed results
+PASS JS tools retain observed source packet inspection
+PASS JS auxiliary network discovery is absent from the running tools menu
+PASS explicit comparison remains available
+PASS automatic retransmission control is removed from visible Simple flow
+PASS Simple starts without automatic retransmission
+PASS classic folders replace the large Simple header without an extra context strip
+PASS compact top bar exposes help, appearance and diagnostics
+PASS current-tool numbered Guide is reachable from the actual top bar
+PASS F1 opens the same retained numbered guidance
+PASS consolidated utility opens a modeless Strix window
+PASS appearance settings remain reachable from the top bar
+PASS consolidated utility opens a modeless Strix window
+PASS collection and error diagnostics remain reachable from the top bar
+PASS opening utilities preserves the current tool and unsaved input
+PASS Simple collector starts OFF
+PASS History import does not collect while OFF
+PASS SCOPE mode imports the approved original
+PASS SCOPE mode rejects an outside original
+PASS turning capture OFF prevents another History import
+PASS manual replay appends the exact selected request without rewriting its source
+PASS replay preparation retains target origin and waits for explicit execution
+PASS returning to replay preserves prepared request and mode
+PASS traffic evidence action opens the retained replay/evidence tool
+PASS selected captured original is added to evidence after tool navigation
+PASS private evidence retains exact original request bytes
+PASS submission preview redacts captured session secret
+PASS preview and ZIP actions activate for retained evidence
+PASS tool navigation preserves selected original row
+PASS loading, navigating, preparing and previewing Simple sends zero HTTP
+SimpleWorkflowTest: 78 checks passed
+Fontconfig error: No writable cache directories
+PASS one visible grouped entry retains both real menu actions
+PASS an entirely unavailable action group cannot be opened
+PASS original controllers remain owned by their context, with their original names
+PASS secondary source buttons are not duplicated beside their grouped entry
+PASS disabled original is disabled in the actual menu
+PASS disabled menu action cannot invoke a retained handler
+PASS selection availability is reflected in both menu and entry immediately
+PASS menu caption follows the same original controller
+PASS menu invokes the original action command
+PASS explicit menu use invokes exactly one handler for the immutable original ID
+PASS grouping and handoff leave authored text unchanged
+PASS toggle settings remain stateful menu choices
+PASS programmatic setting changes update the menu state
+PASS menu selection changes the retained toggle once, without a parallel setting
+PASS cleared selection disables the grouped action without stale availability
+PASS label, selection and layout changes invoke no extra original action
+PASS existing popup actions become a real nested menu rather than a hidden-anchor click
+PASS nested menu delegates once and keeps the original popup model intact
+PASS nested actions track original selection availability
+PASS an icon-only controller produces a readable caption and its real icon in a menu
+PASS a state change published only through accessibility updates an already-built menu caption
+PASS an already-built menu follows replacement of the retained controller icon
+PASS a disabled icon-only controller cannot be invoked through its menu representation
+PASS an icon-only menu action forwards through the exact retained controller
+PASS explicit use of an enabled icon-only menu invokes its retained handler exactly once
+PASS an authored visible caption takes precedence over a different accessible description
+PASS returning to icon-only presentation restores its latest accessible caption
+PASS caption, accessibility, icon and availability synchronization never invokes an action
+PASS packet header keeps Pretty and Raw direct while advanced modes share the real tools menu
+PASS packet search starts folded to preserve reader height
+PASS actual advanced-mode menu uses the retained Hex controller and exact wire bytes
+PASS actual tools search entry reveals the existing query editor without changing Raw content
+PASS Escape folds packet search through its retained keyboard action
+PASS Ctrl+F restores the same search editor and keeps original packet bytes intact
+PASS building, regrouping and explicitly exercising local controller fixtures send zero target HTTP
+SimpleApprovedWorkflowTest: 35 checks passed
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS the pre-upgrade hierarchy actually persists a custom333px column
+PASS the actual Mapper wrapper occupies its old slot without shifting the right table subtree
+PASS the actual Mapper wrapper retains its original panel and tree model
+PASS Mapper retains its pre-upgrade persistence key
+PASS Mapper restores old custom widths and column order after construction values were reset
+PASS Mapper theme changes preserve the exact original model and restored columns
+PASS Mapper theme changes preserve the exact original model and restored columns
+PASS Mapper wrapping and restoration preserve the selected original row
+PASS the pre-upgrade hierarchy actually persists a custom333px column
+PASS the actual rounded layer replaces the old card in its original sibling slot
+PASS Rounded card retains its pre-upgrade persistence key
+PASS Rounded card restores old custom widths and column order after construction values were reset
+PASS Rounded card theme changes preserve the exact original model and restored columns
+PASS Rounded card theme changes preserve the exact original model and restored columns
+PASS the pre-upgrade hierarchy actually persists a custom333px column
+PASS the actual response header replaces the old search slot without shifting its table subtree
+PASS Response findings retains its pre-upgrade persistence key
+PASS Response findings restores old custom widths and column order after construction values were reset
+PASS Response findings theme changes preserve the exact original model and restored columns
+PASS Response findings theme changes preserve the exact original model and restored columns
+PASS response header replacement and themes preserve the original search document and selection
+PASS appearance upgrade, restored columns and theme changes send zero target HTTP
+SimpleAppearanceUpgradeTest: 22 checks passed (pre-upgrade profiles, actual presentation helpers, zero HTTP)
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+SIMPLE_CHECK_SUMMARY {"version": "1.0.1", "toolchainMode": "strict-release17", "javaRuntimeVersion": "17.0.21", "java17ApiCompatibilityVerified": true, "groups": {"BuildInfoTest": 4, "SimpleStrixClientTest": 63, "SimpleStrixIntegrationTest": 26, "SimpleCompactPrimaryNavigationTest": 75, "SimpleCompactNavigationTest": 74, "SimpleWorkflowTest": 78, "SimpleApprovedWorkflowTest": 35, "SimpleAppearanceUpgradeTest": 22}, "regressionGroups": 8, "regressionChecks": 377, "payloadHttpChecks": 0, "excludedGroups": {"UiCleanupTest": "Asserts removed WorkContext header, exact 15-item auxiliary menu and absence of direct next-step buttons; replaced by SimpleWorkflowTest and Simple layout rendering", "AppearanceWorkflowTest": "Requires the original auxiliary/settings page contract; current folder styling and retained Simple inputs are checked by SimpleClassicLayoutTest, FolderNavigationTest and SimpleAppearanceTest"}, "adaptedGroups": {"TrafficScopeModesTest": "Count actual visible traffic controls and verify retained freeze/apply proxies in collection settings; retain capture/SCOPE/persistence guards", "SimpleDashboardRevealTest": "Retain initial overview and zero scroll while allowing compact results to be visible; open real chart disclosure for chart actions and preserve reveal/ID/lifecycle/no-HTTP assertions", "Appearance0534Test": "Open the approved folded packet search through Ctrl+F and scale the approved 13px field/32px compact row; retain narrow-search, native-editor isolation and exact-byte checks", "UiLayoutTest": "Validate approved fixed horizontal environment master-detail with response/request/evidence tabs and retained models/no-HTTP contracts", "JsUiOptimizationTest": "Validate fixed result/source split and explicitly opened bounded disclosures under both packet preferences; retain original reader and worker checks", "JsCompactUpgradeTest": "Validate direct three analysis types plus real extra-type menu; preserve seven underlying models and source/filter checks", "JsRepeaterWorkflowTest": "Select advanced analysis via its actual menu and test scrolling only when needed; preserve exact request, SCOPE and HTTP contracts", "BuildInfoTest": "Assert Simple artifact filename while retaining packaged JAR manifest/runtime consistency checks", "PacketUiTest": "Validate actual selected-path popup actions and retained payload controllers; retain shared packet preview, native-editor, raw-byte and syntax assertions", "NextIsolationTest": "Assert Simple display and storage namespace; preserve both stable and Next preference/archive fixtures", "FeatureGuideWorkflowTest": "Use the approved visible screen-guide proxy and F1, retaining its source action, far-right placement, routing/input/no-HTTP assertions", "DiagnosticsWorkflowTest": "Use the approved header menu for retained log/settings/help controllers; retain bounded concurrency, redaction, error selection/clear, lifecycle and no-HTTP checks", "FolderNavigationTest": "Restore the 0.39.2-style five folders with Simple identity and nested-tool aliases; retain actual tree selection, input, width, hide/restore and no-HTTP contracts", "RenderAuthUiTest": "Match the requested 0.39.2 ASCII fixed-width/Korean fallback fonts instead of requiring one UI/packet font; retain HTML sanitization, exact bytes, no-network and auth contracts", "UiPanelsOptimizationTest": "Restore original core manual-replay editor/result viewport assertions and verify route index 1; retain comparison, evidence, response, worker and image-state checks", "AuditRepairsTest": "Use the same original community JS fixture copied into Simple test resources, so regressions run independently of the original directory layout", "AuthSetupBundlesTest": "Assert exact BuildInfo.storageKey project UUID key instead of the historical Next prefix; retain bundle exchange, disk integrity, capacity and project-isolation checks", "AuthLayoutFitTest": "Validate direct detection and account-policy menu with actual settings/repair/candidate proxies; retain all responsive widths, table sizing, wrapping and account-detail checks", "LayoutPassiveWorkflowTest": "Use retained explicit passive route and the fixed approved traffic geometry; preserve passive shared-layout selection, collection fixture, target/packet isolation, capacity and unload checks", "TrafficScopeTest": "Use actual primary SCOPE button/editor instead of removed duplicate context submenu; preserve scope-rule operations and verify coverage/environment through admitted SCOPE traffic rather than removed selected-packet backfill", "AuthRunSummaryTest": "Approved rectangular chips replace icon badges; retain correct sorted run, summary text, semantic verdict color and source evidence", "AuthResponseWorkflowTest": "Approved rectangular chips replace icon badges; retain HTTP-200 logical-denial rules, semantic color, exact requests and no-HTTP contracts", "TargetCleanupTest": "Keep JS/URL target dialogs and current SCOPE choices while asserting daily environment origin/account selectors stay on the main page; preserve no-HTTP preparation, unapplied-draft isolation, exact owning target and unload checks"}, "failedGroups": [], "result": "passed", "subset": true}

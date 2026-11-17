@@ -1,0 +1,7 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/tools/burp-workbench/strix-1.0.1/independent-source-final/burp-workbench/build_all.py --java /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/tools/burp-workbench/strix-1.0.1/independent-source-final/burp-workbench/dist/burp-workbench-strix-1.0.1.jar 9288154 bytes
+{"result": "passed", "sourceZipSha256": "2d591375e680a106283fa1bf105fbfde496dd8493e0168e1470eba98401ea025", "rebuiltJarSha256": "1d2bf029b5ea50f91a25459afed4d06acaeff2d8fd4f7e2a43b8feb595a645cf", "identicalToRelease": true, "scope": "Independent final source ZIP build with JDK17; no actual Strix/model/target execution"}

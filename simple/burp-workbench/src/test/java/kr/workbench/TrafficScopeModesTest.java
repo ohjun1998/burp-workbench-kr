@@ -75,7 +75,22 @@ public final class TrafficScopeModesTest extends WorkbenchTest {
         try(Fixture f=new Fixture()) {
             check(f.table().getRowCount()==1&&f.table().getValueAt(0,2).equals("https://burp.test/api/"),"existing Burp Scope loaded without waiting for traffic");
             check(Boolean.TRUE.equals(f.table().getValueAt(0,0)),"new native Scope starts checked");
-            edt(()->{var root=(JPanel)unchecked(f.ext,"root");check(PacketUiTest.buttons(((JTabbedPane)unchecked(f.ext,"tabs")).getComponentAt(0)).stream().noneMatch(b->Set.of("Scope만","SCOPE만","검색","검색 초기화","목록 비우기","내보내기","수집 ON").contains(b)),"traffic controls replaced by one mode button and live search");});
+            edt(()->{
+                var root=(JPanel)unchecked(f.ext,"root");
+                var page=((JTabbedPane)unchecked(f.ext,"tabs")).getComponentAt(0);
+                check(SimpleWorkflowTest.visibleComponents(page).stream().filter(c->c instanceof JButton)
+                    .map(c->((JButton)c).getText()).noneMatch(b->Set.of("Scope만","SCOPE만","검색","검색 초기화","목록 비우기","내보내기","수집 ON").contains(b))
+                    &&UiLayoutTest.named(page,"wb.traffic.search") instanceof JTextField,
+                    "traffic uses one mode button and live search without duplicate visible legacy controls");
+                JPopupMenu collection=((JComponent)UiLayoutTest.named(root,"wb.traffic.settings")).getComponentPopupMenu();
+                for(String name:List.of("wb.traffic.view.freeze","wb.traffic.view.apply")){
+                    var source=(AbstractButton)UiLayoutTest.named(root,name);
+                    JMenuItem item=ApprovedWorkflowTestSupport.item(collection,name+".menu");
+                    check(item!=null&&item.isEnabled()==source.isEnabled()
+                        &&!ApprovedWorkflowTestSupport.visible(source,page),
+                        "collection settings retain the real view operation without a duplicated button: "+name);
+                }
+            });
             check(Arrays.equals(WorkbenchExtension.CaptureMode.values(),new WorkbenchExtension.CaptureMode[]{WorkbenchExtension.CaptureMode.OFF,WorkbenchExtension.CaptureMode.SCOPE}),"only OFF and SCOPE exist");
             f.send("https://outside.test/a");f.send("https://burp.test/api/a");check(f.queued()==0&&f.mode().getText().equals("OFF"),"default OFF rejects native and outside packets");
             check(((DiskTrafficStore)unchecked(f.ext,"trafficStore")).size()==0,"OFF writes no traffic to disk");

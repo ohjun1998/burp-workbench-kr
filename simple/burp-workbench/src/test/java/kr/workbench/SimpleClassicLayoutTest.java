@@ -69,8 +69,9 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
   }
 
   private static void inside(JPanel root, String name, String context) {
-    Component action = SimpleWorkflowTest.named(root, name);
-    check(action instanceof AbstractButton && visible(root, name), context + " exposes " + name);
+    Component source = SimpleWorkflowTest.named(root, name);
+    Component action = source==null?null:ApprovedWorkflowTestSupport.representation(source,root);
+    check(source instanceof AbstractButton && action!=null, context + " exposes original controller directly or through its visible menu: " + name);
     Point point = SwingUtilities.convertPoint(action, 0, 0, root);
     check(action.getWidth() > 0 && action.getHeight() > 0 && point.x >= 0 && point.y >= 0
             && point.x + action.getWidth() <= root.getWidth()
@@ -104,8 +105,8 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
         check(Math.abs(WorkbenchUi.font().getSize2D() - 14f * scale / 100f) < .01f
                 && WorkbenchUi.font().getPSName().equals(reference.getPSName()),
             "classic UI font retains its resource identity and requested " + scale + "% scale");
-        check(Math.abs(WorkbenchUi.textFont(ascii).getSize2D() - 14f * scale / 100f) < .01f,
-            "ASCII packet typography follows the same " + scale + "% display scale");
+        check(Math.abs(WorkbenchUi.textFont(ascii).getSize2D() - 12f * scale / 100f) < .01f,
+            "PDF 12px ASCII packet typography follows the same " + scale + "% display scale");
       }
     } finally { WorkbenchUi.setAppearance(previousScale, compact); }
   }
@@ -205,16 +206,18 @@ public final class SimpleClassicLayoutTest extends WorkbenchTest {
             "primary and alias routes preserve the selected original and authored input");
         navigation.navigate("dashboard");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath()==null,
-            "dashboard folder entry selects the production page and its own tree leaf");
+                && tree.getSelectionPath()==null
+                &&((AbstractButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard")).isSelected(),
+            "dashboard navigation selects its promoted control and clears the previous folder leaf");
         var current = (JLabel) SimpleWorkflowTest.named(root, "wb.navigation.current");
         check(current.getText().contains(FeatureGuide.title("dashboard")),
             "compact breadcrumb describes the dashboard instead of the previously selected tool");
         select(tree, "auth");
         SimpleWorkflowTest.click(root, "wb.simple.dashboard.open");
         check(pages.getSelectedComponent() == value(extension, "scopeDashboard")
-                && tree.getSelectionPath()==null,
-            "compact dashboard action synchronizes the same page and folder selection");
+                && tree.getSelectionPath()==null
+                &&((AbstractButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard")).isSelected(),
+            "the retained compact dashboard source synchronizes its same page and promoted selection");
       });
 
       var opened = new AtomicReference<Component>();

@@ -41,6 +41,15 @@ public final class TrafficSearchUpgradeTest extends WorkbenchTest {
         edt(()->browser.toggleStar(1));idle(browser);check(browser.marks.get(disk.ref(1).id()).star(),"important flag attaches to the original packet");
         edt(()->browser.note(1,"권한 확인"));idle(browser);check(browser.marks.get(disk.ref(1).id()).note().equals("권한 확인"),"note is retained independently from row order");
         check(disk.size()==3&&disk.ref(1).response().statusCode()==403,"all view changes preserve original packet bytes and count");
+        edt(()->browser.search.setText(""));idle(browser);
+        edt(()->{
+          browser.table.setUpdateSelectionOnSort(false);browser.table.setRowSelectionInterval(2,2);
+          try{var preserve=TrafficBrowser.class.getDeclaredMethod("preserveTablePosition",Runnable.class);preserve.setAccessible(true);
+            preserve.invoke(browser,(Runnable)()->((javax.swing.table.TableRowSorter<?>)browser.table.getRowSorter()).setRowFilter(new RowFilter<javax.swing.table.TableModel,Integer>(){public boolean include(Entry<? extends javax.swing.table.TableModel,? extends Integer> e){return e.getIdentifier()==0;}}));
+          }catch(ReflectiveOperationException error){throw new AssertionError(error);}
+          check(browser.table.getRowCount()==1&&browser.table.getSelectedRow()==-1,"filter publication clears an out-of-range stale selection without remapping its original");
+          ((javax.swing.table.TableRowSorter<?>)browser.table.getRowSorter()).setRowFilter(null);browser.table.setUpdateSelectionOnSort(true);
+        });
         edt(()->{browser.search.setText("pending");browser.cancel.doClick();check(browser.idle(),"cancel also stops a pending debounced search");});
         edt(()->{var content=browser.content();check(UiLayoutTest.named(content,"wb.traffic.search.advanced")!=null&&!browser.advanced.isVisible(),"basic settings hide advanced controls by default");});
       }finally{edt(browser::close);}

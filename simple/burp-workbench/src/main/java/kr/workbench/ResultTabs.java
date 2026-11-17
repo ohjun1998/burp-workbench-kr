@@ -85,20 +85,16 @@ final class ResultTabs extends JPanel {
   private static final class Title extends JToggleButton {
     Title(String text) { super(text);putClientProperty("wb.compact.button",true); }
     @Override public Dimension getPreferredSize() {
-      return new Dimension(getFontMetrics(WorkbenchUi.font()).stringWidth(getText())+38,40);
+      return new Dimension(getFontMetrics(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(12f))).stringWidth(caption())+20,30);
     }
     @Override public Dimension getMaximumSize() { return getPreferredSize(); }
+    String caption(){return getText().replaceFirst("^주요 경로", "경로").replace("민감한 정보","민감정보");}
     @Override protected void paintComponent(Graphics graphics) {
       Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);
-      g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());
-      java.util.regex.Matcher match=java.util.regex.Pattern.compile("^(.*) ([0-9]+)$").matcher(getText());boolean counted=match.matches();String title=counted?match.group(1):getText();
-      g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN));g.setColor(isSelected()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
-      FontMetrics fm=g.getFontMetrics();int baseline=(getHeight()-fm.getHeight())/2+fm.getAscent();g.drawString(title,12,baseline);
-      if(counted){String count=match.group(2);int x=20+fm.stringWidth(title),width=Math.max(28,fm.stringWidth(count)+16);g.setColor(isSelected()?WorkbenchUi.selected():WorkbenchUi.raised());g.fillRoundRect(x,(getHeight()-24)/2,width,24,24,24);g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(count,x+(width-fm.stringWidth(count))/2,baseline);}
-      g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.line());
-      g.fillRect(0,getHeight()-(isSelected()?2:1),getWidth(),isSelected()?2:1);
-      if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}
-      g.dispose();
+      g.setColor(isSelected()?WorkbenchUi.selected():WorkbenchUi.background());g.fillRoundRect(0,0,getWidth(),getHeight(),7,7);
+      g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN,WorkbenchUi.displaySize(12f)));g.setColor(isSelected()?WorkbenchUi.accent():kr.packetui.VisualTheme.muted());
+      FontMetrics fm=g.getFontMetrics();g.drawString(caption(),10,(getHeight()-fm.getHeight())/2+fm.getAscent());
+      if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(1,1,getWidth()-3,getHeight()-3,7,7);}g.dispose();
     }
   }
 

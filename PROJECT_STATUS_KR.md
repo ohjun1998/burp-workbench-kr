@@ -1,3 +1,9 @@
+# Workbench Strix 1.0.1 · Simple1.4.21 기준 업데이트
+
+- 브랜치 `account-a/strix-simple-1.4.21`, 기존 Strix1.0.0에서 사용자 지시에 따라 Simple1.4.21 배포 소스로 디자인/레이아웃 기준을 갱신.
+- Simple 기준 커밋 `03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d`; 기존 디자인 보존 + Strix 별도 창/선택 진입점만 추가.
+- 실제 검증/배포 상태: [보고서](docs/reports/2026-11-17-workbench-strix-1.0.1/README_KR.md). main 병합 완료를 뜻하지 않음.
+
 # Workbench Strix 이름 분리 작업 · 2026-11-17
 
 - 브랜치: `account-a/workbench-strix-identity`, 출발: Strix 연동 브랜치 `d46c32a8103c2a020d21ec602a843e87a8436399`.

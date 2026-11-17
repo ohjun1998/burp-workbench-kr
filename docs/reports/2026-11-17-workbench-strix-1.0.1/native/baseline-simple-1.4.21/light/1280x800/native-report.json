@@ -1,0 +1,1086 @@
+{
+  "edition": "baseline-simple-1.4.21",
+  "theme": "light",
+  "version": "1.4.21",
+  "displayName": "Burp Workbench Simple KR · 웹 보안 점검 (1.4.21)",
+  "jar": "/workspace/tools/burp-workbench/completion-1.4.21/public-downloads/03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d/0-burp-workbench-simple-1.4.21.jar",
+  "jarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "frameWidth": 1280,
+  "frameHeight": 800,
+  "nativeSwing": true,
+  "nativeBurp": false,
+  "syntheticHostAndPackets": true,
+  "headless": false,
+  "targetRequests": 0,
+  "strixExecutions": 0,
+  "modelCalls": 0,
+  "capture": "Robot.createScreenCapture of live Xorg/xfwm4 windows, no printAll or image editing",
+  "views": [
+    {
+      "title": "Workbench Simple · 1.4.21",
+      "x": 80,
+      "y": 50,
+      "width": 1280,
+      "png": "01-main.png",
+      "controls": [
+        {
+          "key": "wb.root#1",
+          "name": "wb.root",
+          "class": "javax.swing.JPanel",
+          "x": 0,
+          "y": 0,
+          "width": 1270,
+          "height": 766
+        },
+        {
+          "key": "wb.navigation#1",
+          "name": "wb.navigation",
+          "class": "kr.workbench.FolderNavigation",
+          "x": 0,
+          "y": 0,
+          "width": 1270,
+          "height": 766
+        },
+        {
+          "key": "wb.navigation.toolbar#1",
+          "name": "wb.navigation.toolbar",
+          "class": "kr.workbench.FolderNavigation$ResponsiveToolbar",
+          "x": 0,
+          "y": 0,
+          "width": 1270,
+          "height": 46
+        },
+        {
+          "key": "wb.navigation.toolbar.line#1",
+          "name": "wb.navigation.toolbar.line",
+          "class": "javax.swing.JPanel",
+          "x": 5,
+          "y": 0,
+          "width": 1259,
+          "height": 45
+        },
+        {
+          "key": "wb.navigation.toggle#1",
+          "name": "wb.navigation.toggle",
+          "class": "javax.swing.JButton",
+          "x": 10,
+          "y": 7,
+          "width": 30,
+          "height": 30
+        },
+        {
+          "key": "wb.navigation.brand#1",
+          "name": "wb.navigation.brand",
+          "class": "javax.swing.JLabel",
+          "x": 47,
+          "y": 11,
+          "width": 107,
+          "height": 23
+        },
+        {
+          "key": "wb.navigation.location#1",
+          "name": "wb.navigation.location",
+          "class": "javax.swing.JPanel",
+          "x": 194,
+          "y": 0,
+          "width": 799,
+          "height": 45
+        },
+        {
+          "key": "wb.navigation.breadcrumb#1",
+          "name": "wb.navigation.breadcrumb",
+          "class": "javax.swing.JLabel",
+          "x": 194,
+          "y": 0,
+          "width": 45,
+          "height": 45
+        },
+        {
+          "key": "wb.navigation.current#1",
+          "name": "wb.navigation.current",
+          "class": "javax.swing.JLabel",
+          "x": 239,
+          "y": 0,
+          "width": 754,
+          "height": 45
+        },
+        {
+          "key": "wb.traffic.header.tools#1",
+          "name": "wb.traffic.header.tools",
+          "class": "javax.swing.JButton",
+          "x": 1117,
+          "y": 7,
+          "width": 28,
+          "height": 28
+        },
+        {
+          "key": "wb.navigation.tools.open#1",
+          "name": "wb.navigation.tools.open",
+          "class": "javax.swing.JButton",
+          "x": 1153,
+          "y": 7,
+          "width": 28,
+          "height": 28
+        },
+        {
+          "key": "wb.traffic.guide.open#1",
+          "name": "wb.traffic.guide.open",
+          "class": "javax.swing.JButton",
+          "x": 1189,
+          "y": 5,
+          "width": 67,
+          "height": 32
+        },
+        {
+          "key": "wb.navigation.split#1",
+          "name": "wb.navigation.split",
+          "class": "javax.swing.JSplitPane",
+          "x": 0,
+          "y": 46,
+          "width": 1270,
+          "height": 700
+        },
+        {
+          "key": "wb.navigation.sidebar#1",
+          "name": "wb.navigation.sidebar",
+          "class": "javax.swing.JScrollPane",
+          "x": 0,
+          "y": 46,
+          "width": 174,
+          "height": 700
+        },
+        {
+          "key": "wb.navigation.tree#1",
+          "name": "wb.navigation.tree",
+          "class": "kr.workbench.FolderNavigation$NavigationTree",
+          "x": 0,
+          "y": 160,
+          "width": 164,
+          "height": 597
+        },
+        {
+          "key": "wb.navigation.primary.viewport#1",
+          "name": "wb.navigation.primary.viewport",
+          "class": "javax.swing.JViewport",
+          "x": 0,
+          "y": 46,
+          "width": 164,
+          "height": 114
+        },
+        {
+          "key": "wb.navigation.primary#1",
+          "name": "wb.navigation.primary",
+          "class": "kr.workbench.CompactPrimaryNavigation",
+          "x": 0,
+          "y": 46,
+          "width": 164,
+          "height": 114
+        },
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.pages#1",
+          "name": "wb.navigation.pages",
+          "class": "kr.workbench.WorkbenchExtension$6",
+          "x": 174,
+          "y": 46,
+          "width": 1096,
+          "height": 700
+        },
+        {
+          "key": "wb.traffic.tools#1",
+          "name": "wb.traffic.tools",
+          "class": "kr.workbench.FolderNavigation$Pages",
+          "x": 174,
+          "y": 46,
+          "width": 1096,
+          "height": 700
+        },
+        {
+          "key": "wb.traffic#1",
+          "name": "wb.traffic",
+          "class": "kr.workbench.ApprovedTrafficPanel",
+          "x": 174,
+          "y": 46,
+          "width": 1096,
+          "height": 700
+        },
+        {
+          "key": "wb.traffic.controls#1",
+          "name": "wb.traffic.controls",
+          "class": "javax.swing.JPanel",
+          "x": 190,
+          "y": 60,
+          "width": 1064,
+          "height": 78
+        },
+        {
+          "key": "wb.actions.traffic.context#1",
+          "name": "wb.actions.traffic.context",
+          "class": "kr.workbench.WorkbenchUi$2",
+          "x": 190,
+          "y": 60,
+          "width": 600,
+          "height": 34
+        },
+        {
+          "key": "wb.traffic.target#1",
+          "name": "wb.traffic.target",
+          "class": "javax.swing.JComboBox",
+          "x": 219,
+          "y": 62,
+          "width": 180,
+          "height": 31
+        },
+        {
+          "key": "wb.traffic.account#1",
+          "name": "wb.traffic.account",
+          "class": "javax.swing.JComboBox",
+          "x": 436,
+          "y": 62,
+          "width": 180,
+          "height": 31
+        },
+        {
+          "key": "wb.traffic.capture.mode#1",
+          "name": "wb.traffic.capture.mode",
+          "class": "javax.swing.JButton",
+          "x": 624,
+          "y": 66,
+          "width": 94,
+          "height": 22
+        },
+        {
+          "key": "wb.actions.traffic.settings#1",
+          "name": "wb.actions.traffic.settings",
+          "class": "kr.workbench.WorkbenchUi$2",
+          "x": 1162,
+          "y": 60,
+          "width": 92,
+          "height": 34
+        },
+        {
+          "key": "wb.traffic.settings#1",
+          "name": "wb.traffic.settings",
+          "class": "javax.swing.JButton",
+          "x": 1162,
+          "y": 62,
+          "width": 91,
+          "height": 31
+        },
+        {
+          "key": "wb.actions.traffic.search#1",
+          "name": "wb.actions.traffic.search",
+          "class": "javax.swing.JPanel",
+          "x": 190,
+          "y": 104,
+          "width": 1064,
+          "height": 34
+        },
+        {
+          "key": "wb.traffic.search#1",
+          "name": "wb.traffic.search",
+          "class": "kr.workbench.WorkbenchSkin$SearchField",
+          "x": 190,
+          "y": 104,
+          "width": 869,
+          "height": 34
+        },
+        {
+          "key": "wb.traffic.quick.전체#1",
+          "name": "wb.traffic.quick.전체",
+          "class": "javax.swing.JToggleButton",
+          "x": 1072,
+          "y": 106,
+          "width": 45,
+          "height": 30
+        },
+        {
+          "key": "wb.traffic.quick.GET#1",
+          "name": "wb.traffic.quick.GET",
+          "class": "javax.swing.JToggleButton",
+          "x": 1117,
+          "y": 106,
+          "width": 45,
+          "height": 30
+        },
+        {
+          "key": "wb.traffic.quick.POST#1",
+          "name": "wb.traffic.quick.POST",
+          "class": "javax.swing.JToggleButton",
+          "x": 1162,
+          "y": 106,
+          "width": 45,
+          "height": 30
+        },
+        {
+          "key": "wb.traffic.quick.오류#1",
+          "name": "wb.traffic.quick.오류",
+          "class": "javax.swing.JToggleButton",
+          "x": 1207,
+          "y": 106,
+          "width": 45,
+          "height": 30
+        },
+        {
+          "key": "wb.traffic.workspace#1",
+          "name": "wb.traffic.workspace",
+          "class": "javax.swing.JSplitPane",
+          "x": 190,
+          "y": 148,
+          "width": 1064,
+          "height": 557
+        },
+        {
+          "key": "wb.placement.traffic.list#1",
+          "name": "wb.placement.traffic.list",
+          "class": "javax.swing.JPanel",
+          "x": 190,
+          "y": 148,
+          "width": 1064,
+          "height": 272
+        },
+        {
+          "key": "wb.traffic.history#1",
+          "name": "wb.traffic.history",
+          "class": "kr.workbench.WorkbenchExtension$17",
+          "x": 190,
+          "y": 179,
+          "width": 1064,
+          "height": 187
+        },
+        {
+          "key": "wb.placement.traffic.selection#1",
+          "name": "wb.placement.traffic.selection",
+          "class": "kr.workbench.CompactWorkbenchUi$2",
+          "x": 190,
+          "y": 366,
+          "width": 1064,
+          "height": 54
+        },
+        {
+          "key": "wb.simple.traffic.selection#1",
+          "name": "wb.simple.traffic.selection",
+          "class": "javax.swing.JLabel",
+          "x": 190,
+          "y": 378,
+          "width": 849,
+          "height": 31
+        },
+        {
+          "key": "wb.actions.traffic.selection#1",
+          "name": "wb.actions.traffic.selection",
+          "class": "kr.workbench.WorkbenchUi$2",
+          "x": 1058,
+          "y": 378,
+          "width": 196,
+          "height": 31
+        },
+        {
+          "key": "wb.workflow.traffic.use#1",
+          "name": "wb.workflow.traffic.use",
+          "class": "javax.swing.JPanel",
+          "x": 1058,
+          "y": 378,
+          "width": 89,
+          "height": 31
+        },
+        {
+          "key": "wb.workflow.traffic.use.open#1",
+          "name": "wb.workflow.traffic.use.open",
+          "class": "javax.swing.JButton",
+          "x": 1058,
+          "y": 378,
+          "width": 89,
+          "height": 31
+        },
+        {
+          "key": "wb.simple.traffic.repeater#1",
+          "name": "wb.simple.traffic.repeater",
+          "class": "javax.swing.JButton",
+          "x": 1155,
+          "y": 378,
+          "width": 98,
+          "height": 31
+        },
+        {
+          "key": "wb.traffic.messages#1",
+          "name": "wb.traffic.messages",
+          "class": "javax.swing.JSplitPane",
+          "x": 190,
+          "y": 420,
+          "width": 1064,
+          "height": 285
+        },
+        {
+          "key": "wb.card.요청#1",
+          "name": "wb.card.요청",
+          "class": "kr.workbench.ApprovedTrafficPanel$2",
+          "x": 190,
+          "y": 420,
+          "width": 526,
+          "height": 285
+        },
+        {
+          "key": "wb.traffic.request.pretty#1",
+          "name": "wb.traffic.request.pretty",
+          "class": "kr.workbench.PacketInspector$Tab",
+          "x": 503,
+          "y": 425,
+          "width": 58,
+          "height": 35
+        },
+        {
+          "key": "wb.traffic.request.raw#1",
+          "name": "wb.traffic.request.raw",
+          "class": "kr.workbench.PacketInspector$Tab",
+          "x": 561,
+          "y": 425,
+          "width": 44,
+          "height": 35
+        },
+        {
+          "key": "wb.traffic.request.tools#1",
+          "name": "wb.traffic.request.tools",
+          "class": "javax.swing.JPanel",
+          "x": 612,
+          "y": 427,
+          "width": 91,
+          "height": 31
+        },
+        {
+          "key": "wb.traffic.request.tools.open#1",
+          "name": "wb.traffic.request.tools.open",
+          "class": "javax.swing.JButton",
+          "x": 612,
+          "y": 427,
+          "width": 91,
+          "height": 31
+        },
+        {
+          "key": "wb.traffic.request#1",
+          "name": "wb.traffic.request",
+          "class": "kr.workbench.PacketInspector",
+          "x": 191,
+          "y": 464,
+          "width": 524,
+          "height": 240
+        },
+        {
+          "key": "wb.traffic.request.text#1",
+          "name": "wb.traffic.request.text",
+          "class": "kr.workbench.PacketInspector$2",
+          "x": 233,
+          "y": 464,
+          "width": 482,
+          "height": 240
+        },
+        {
+          "key": "wb.card.응답#1",
+          "name": "wb.card.응답",
+          "class": "kr.workbench.ApprovedTrafficPanel$2",
+          "x": 728,
+          "y": 420,
+          "width": 526,
+          "height": 285
+        },
+        {
+          "key": "wb.traffic.response.pretty#1",
+          "name": "wb.traffic.response.pretty",
+          "class": "kr.workbench.PacketInspector$Tab",
+          "x": 1041,
+          "y": 425,
+          "width": 58,
+          "height": 35
+        },
+        {
+          "key": "wb.traffic.response.raw#1",
+          "name": "wb.traffic.response.raw",
+          "class": "kr.workbench.PacketInspector$Tab",
+          "x": 1099,
+          "y": 425,
+          "width": 44,
+          "height": 35
+        },
+        {
+          "key": "wb.traffic.response.tools#1",
+          "name": "wb.traffic.response.tools",
+          "class": "javax.swing.JPanel",
+          "x": 1150,
+          "y": 427,
+          "width": 91,
+          "height": 31
+        },
+        {
+          "key": "wb.traffic.response.tools.open#1",
+          "name": "wb.traffic.response.tools.open",
+          "class": "javax.swing.JButton",
+          "x": 1150,
+          "y": 427,
+          "width": 91,
+          "height": 31
+        },
+        {
+          "key": "wb.traffic.response#1",
+          "name": "wb.traffic.response",
+          "class": "kr.workbench.PacketInspector",
+          "x": 729,
+          "y": 464,
+          "width": 524,
+          "height": 240
+        },
+        {
+          "key": "wb.traffic.response.text#1",
+          "name": "wb.traffic.response.text",
+          "class": "kr.workbench.PacketInspector$2",
+          "x": 771,
+          "y": 464,
+          "width": 482,
+          "height": 240
+        },
+        {
+          "key": "wb.traffic.reference.counts#1",
+          "name": "wb.traffic.reference.counts",
+          "class": "javax.swing.JLabel",
+          "x": 190,
+          "y": 716,
+          "width": 532,
+          "height": 22
+        },
+        {
+          "key": "wb.traffic.reference.notice#1",
+          "name": "wb.traffic.reference.notice",
+          "class": "javax.swing.JLabel",
+          "x": 935,
+          "y": 716,
+          "width": 319,
+          "height": 22
+        },
+        {
+          "key": "wb.traffic.conditions.feedback#1",
+          "name": "wb.traffic.conditions.feedback",
+          "class": "javax.swing.JLabel",
+          "x": 190,
+          "y": 691,
+          "width": 48,
+          "height": 20
+        }
+      ],
+      "height": 800,
+      "sha256": "d275c9fae37df9e038307abc33c7ad15050916fb446f94126943ff9f18b618ef"
+    },
+    {
+      "title": "Workbench Simple · 1.4.21",
+      "x": 80,
+      "y": 50,
+      "width": 1280,
+      "png": "02-dashboard.png",
+      "controls": [
+        {
+          "key": "wb.root#1",
+          "name": "wb.root",
+          "class": "javax.swing.JPanel",
+          "x": 0,
+          "y": 0,
+          "width": 1270,
+          "height": 766
+        },
+        {
+          "key": "wb.navigation#1",
+          "name": "wb.navigation",
+          "class": "kr.workbench.FolderNavigation",
+          "x": 0,
+          "y": 0,
+          "width": 1270,
+          "height": 766
+        },
+        {
+          "key": "wb.navigation.toolbar#1",
+          "name": "wb.navigation.toolbar",
+          "class": "kr.workbench.FolderNavigation$ResponsiveToolbar",
+          "x": 0,
+          "y": 0,
+          "width": 1270,
+          "height": 46
+        },
+        {
+          "key": "wb.navigation.toolbar.line#1",
+          "name": "wb.navigation.toolbar.line",
+          "class": "javax.swing.JPanel",
+          "x": 5,
+          "y": 0,
+          "width": 1259,
+          "height": 45
+        },
+        {
+          "key": "wb.navigation.toggle#1",
+          "name": "wb.navigation.toggle",
+          "class": "javax.swing.JButton",
+          "x": 10,
+          "y": 7,
+          "width": 30,
+          "height": 30
+        },
+        {
+          "key": "wb.navigation.brand#1",
+          "name": "wb.navigation.brand",
+          "class": "javax.swing.JLabel",
+          "x": 47,
+          "y": 11,
+          "width": 107,
+          "height": 23
+        },
+        {
+          "key": "wb.navigation.location#1",
+          "name": "wb.navigation.location",
+          "class": "javax.swing.JPanel",
+          "x": 194,
+          "y": 0,
+          "width": 799,
+          "height": 45
+        },
+        {
+          "key": "wb.navigation.breadcrumb#1",
+          "name": "wb.navigation.breadcrumb",
+          "class": "javax.swing.JLabel",
+          "x": 194,
+          "y": 0,
+          "width": 59,
+          "height": 45
+        },
+        {
+          "key": "wb.navigation.current#1",
+          "name": "wb.navigation.current",
+          "class": "javax.swing.JLabel",
+          "x": 253,
+          "y": 0,
+          "width": 740,
+          "height": 45
+        },
+        {
+          "key": "wb.traffic.header.tools#1",
+          "name": "wb.traffic.header.tools",
+          "class": "javax.swing.JButton",
+          "x": 1117,
+          "y": 7,
+          "width": 28,
+          "height": 28
+        },
+        {
+          "key": "wb.navigation.tools.open#1",
+          "name": "wb.navigation.tools.open",
+          "class": "javax.swing.JButton",
+          "x": 1153,
+          "y": 7,
+          "width": 28,
+          "height": 28
+        },
+        {
+          "key": "wb.traffic.guide.open#1",
+          "name": "wb.traffic.guide.open",
+          "class": "javax.swing.JButton",
+          "x": 1189,
+          "y": 5,
+          "width": 67,
+          "height": 32
+        },
+        {
+          "key": "wb.navigation.split#1",
+          "name": "wb.navigation.split",
+          "class": "javax.swing.JSplitPane",
+          "x": 0,
+          "y": 46,
+          "width": 1270,
+          "height": 700
+        },
+        {
+          "key": "wb.navigation.sidebar#1",
+          "name": "wb.navigation.sidebar",
+          "class": "javax.swing.JScrollPane",
+          "x": 0,
+          "y": 46,
+          "width": 174,
+          "height": 700
+        },
+        {
+          "key": "wb.navigation.tree#1",
+          "name": "wb.navigation.tree",
+          "class": "kr.workbench.FolderNavigation$NavigationTree",
+          "x": 0,
+          "y": 160,
+          "width": 164,
+          "height": 597
+        },
+        {
+          "key": "wb.navigation.primary.viewport#1",
+          "name": "wb.navigation.primary.viewport",
+          "class": "javax.swing.JViewport",
+          "x": 0,
+          "y": 46,
+          "width": 164,
+          "height": 114
+        },
+        {
+          "key": "wb.navigation.primary#1",
+          "name": "wb.navigation.primary",
+          "class": "kr.workbench.CompactPrimaryNavigation",
+          "x": 0,
+          "y": 46,
+          "width": 164,
+          "height": 114
+        },
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.pages#1",
+          "name": "wb.navigation.pages",
+          "class": "kr.workbench.WorkbenchExtension$6",
+          "x": 174,
+          "y": 46,
+          "width": 1096,
+          "height": 700
+        },
+        {
+          "key": "wb.scope.dashboard.root#1",
+          "name": "wb.scope.dashboard.root",
+          "class": "kr.workbench.ScopeDashboardPanel",
+          "x": 174,
+          "y": 46,
+          "width": 1096,
+          "height": 700
+        },
+        {
+          "key": "wb.scope.dashboard.scroll#1",
+          "name": "wb.scope.dashboard.scroll",
+          "class": "javax.swing.JScrollPane",
+          "x": 190,
+          "y": 60,
+          "width": 1064,
+          "height": 672
+        },
+        {
+          "key": "wb.scope.dashboard.content#1",
+          "name": "wb.scope.dashboard.content",
+          "class": "kr.workbench.ScopeDashboardPanel$ScrollContent",
+          "x": 190,
+          "y": 60,
+          "width": 1054,
+          "height": 938
+        },
+        {
+          "key": "wb.actions.dashboard.context#1",
+          "name": "wb.actions.dashboard.context",
+          "class": "kr.workbench.CompactWorkbenchUi$2",
+          "x": 190,
+          "y": 60,
+          "width": 1054,
+          "height": 34
+        },
+        {
+          "key": "wb.scope.dashboard.inspect#1",
+          "name": "wb.scope.dashboard.inspect",
+          "class": "javax.swing.JButton",
+          "x": 1146,
+          "y": 62,
+          "width": 92,
+          "height": 32
+        },
+        {
+          "key": "wb.scope.dashboard.cards#1",
+          "name": "wb.scope.dashboard.cards",
+          "class": "javax.swing.JPanel",
+          "x": 190,
+          "y": 106,
+          "width": 1054,
+          "height": 176
+        },
+        {
+          "key": "wb.scope.dashboard.card.paths#1",
+          "name": "wb.scope.dashboard.card.paths",
+          "class": "kr.workbench.ScopeDashboardPanel$MetricButton",
+          "x": 190,
+          "y": 106,
+          "width": 346,
+          "height": 85
+        },
+        {
+          "key": "wb.scope.dashboard.card.api#1",
+          "name": "wb.scope.dashboard.card.api",
+          "class": "kr.workbench.ScopeDashboardPanel$MetricButton",
+          "x": 544,
+          "y": 106,
+          "width": 346,
+          "height": 85
+        },
+        {
+          "key": "wb.scope.dashboard.card.environment#1",
+          "name": "wb.scope.dashboard.card.environment",
+          "class": "kr.workbench.ScopeDashboardPanel$MetricButton",
+          "x": 898,
+          "y": 106,
+          "width": 346,
+          "height": 85
+        },
+        {
+          "key": "wb.scope.dashboard.card.secrets#1",
+          "name": "wb.scope.dashboard.card.secrets",
+          "class": "kr.workbench.ScopeDashboardPanel$MetricButton",
+          "x": 190,
+          "y": 197,
+          "width": 346,
+          "height": 85
+        },
+        {
+          "key": "wb.scope.dashboard.card.access#1",
+          "name": "wb.scope.dashboard.card.access",
+          "class": "kr.workbench.ScopeDashboardPanel$MetricButton",
+          "x": 544,
+          "y": 197,
+          "width": 346,
+          "height": 85
+        },
+        {
+          "key": "wb.scope.dashboard.card.coverage#1",
+          "name": "wb.scope.dashboard.card.coverage",
+          "class": "kr.workbench.ScopeDashboardPanel$MetricButton",
+          "x": 898,
+          "y": 197,
+          "width": 346,
+          "height": 85
+        },
+        {
+          "key": "wb.actions.dashboard.filters#1",
+          "name": "wb.actions.dashboard.filters",
+          "class": "kr.workbench.WorkbenchUi$2",
+          "x": 190,
+          "y": 294,
+          "width": 1054,
+          "height": 34
+        },
+        {
+          "key": "wb.scope.dashboard.account#1",
+          "name": "wb.scope.dashboard.account",
+          "class": "javax.swing.JComboBox",
+          "x": 219,
+          "y": 296,
+          "width": 180,
+          "height": 31
+        },
+        {
+          "key": "wb.scope.dashboard.importance#1",
+          "name": "wb.scope.dashboard.importance",
+          "class": "javax.swing.JComboBox",
+          "x": 447,
+          "y": 296,
+          "width": 180,
+          "height": 31
+        },
+        {
+          "key": "wb.scope.dashboard.reset#1",
+          "name": "wb.scope.dashboard.reset",
+          "class": "javax.swing.JButton",
+          "x": 1174,
+          "y": 296,
+          "width": 70,
+          "height": 31
+        },
+        {
+          "key": "wb.scope.dashboard.results.area#1",
+          "name": "wb.scope.dashboard.results.area",
+          "class": "javax.swing.JPanel",
+          "x": 190,
+          "y": 340,
+          "width": 1054,
+          "height": 610
+        },
+        {
+          "key": "wb.scope.dashboard.results.split#1",
+          "name": "wb.scope.dashboard.results.split",
+          "class": "javax.swing.JSplitPane",
+          "x": 190,
+          "y": 340,
+          "width": 1054,
+          "height": 610
+        },
+        {
+          "key": "wb.card.해당 결과 목록#1",
+          "name": "wb.card.해당 결과 목록",
+          "class": "kr.workbench.ApprovedUi$2",
+          "x": 190,
+          "y": 340,
+          "width": 676,
+          "height": 610
+        },
+        {
+          "key": "wb.approved.card.header#1",
+          "name": "wb.approved.card.header",
+          "class": "kr.workbench.ApprovedUi$3",
+          "x": 191,
+          "y": 341,
+          "width": 674,
+          "height": 39
+        },
+        {
+          "key": "wb.scope.dashboard.results#1",
+          "name": "wb.scope.dashboard.results",
+          "class": "kr.workbench.ScopeDashboardPanel$LiteralTable",
+          "x": 191,
+          "y": 411,
+          "width": 674,
+          "height": 538
+        },
+        {
+          "key": "wb.card.선택 항목 근거#1",
+          "name": "wb.card.선택 항목 근거",
+          "class": "kr.workbench.ApprovedUi$2",
+          "x": 878,
+          "y": 340,
+          "width": 366,
+          "height": 610
+        },
+        {
+          "key": "wb.reference.header#1",
+          "name": "wb.reference.header",
+          "class": "kr.workbench.ReferenceUi$2",
+          "x": 879,
+          "y": 341,
+          "width": 364,
+          "height": 44
+        },
+        {
+          "key": "wb.actions.dashboard.selection#1",
+          "name": "wb.actions.dashboard.selection",
+          "class": "kr.workbench.CompactWorkbenchUi$2",
+          "x": 879,
+          "y": 341,
+          "width": 364,
+          "height": 44
+        },
+        {
+          "key": "wb.scope.dashboard.original#1",
+          "name": "wb.scope.dashboard.original",
+          "class": "javax.swing.JButton",
+          "x": 1041,
+          "y": 347,
+          "width": 90,
+          "height": 31
+        },
+        {
+          "key": "wb.flow.dashboard.further#1",
+          "name": "wb.flow.dashboard.further",
+          "class": "javax.swing.JPanel",
+          "x": 1139,
+          "y": 347,
+          "width": 90,
+          "height": 31
+        },
+        {
+          "key": "wb.flow.dashboard.further.open#1",
+          "name": "wb.flow.dashboard.further.open",
+          "class": "javax.swing.JButton",
+          "x": 1139,
+          "y": 347,
+          "width": 90,
+          "height": 31
+        },
+        {
+          "key": "wb.approved.dashboard.detail.column#1",
+          "name": "wb.approved.dashboard.detail.column",
+          "class": "kr.workbench.ApprovedResearchDesign$DashboardColumn",
+          "x": 879,
+          "y": 385,
+          "width": 364,
+          "height": 564
+        },
+        {
+          "key": "wb.scope.dashboard.detail.title#1",
+          "name": "wb.scope.dashboard.detail.title",
+          "class": "kr.workbench.ScopeDashboardPanel$LiteralLabel",
+          "x": 893,
+          "y": 428,
+          "width": 336,
+          "height": 21
+        },
+        {
+          "key": "wb.scope.dashboard.detail.summary#1",
+          "name": "wb.scope.dashboard.detail.summary",
+          "class": "javax.swing.JTextArea",
+          "x": 893,
+          "y": 663,
+          "width": 336,
+          "height": 147
+        },
+        {
+          "key": "wb.scope.dashboard.detail.provenance#1",
+          "name": "wb.scope.dashboard.detail.provenance",
+          "class": "javax.swing.JPanel",
+          "x": 893,
+          "y": 858,
+          "width": 336,
+          "height": 40
+        },
+        {
+          "key": "wb.scope.dashboard.detail.provenance.toggle#1",
+          "name": "wb.scope.dashboard.detail.provenance.toggle",
+          "class": "javax.swing.JToggleButton",
+          "x": 893,
+          "y": 858,
+          "width": 336,
+          "height": 36
+        },
+        {
+          "key": "wb.flow.dashboard.distribution#1",
+          "name": "wb.flow.dashboard.distribution",
+          "class": "javax.swing.JPanel",
+          "x": 190,
+          "y": 962,
+          "width": 1054,
+          "height": 36
+        },
+        {
+          "key": "wb.flow.dashboard.distribution.toggle#1",
+          "name": "wb.flow.dashboard.distribution.toggle",
+          "class": "javax.swing.JToggleButton",
+          "x": 190,
+          "y": 962,
+          "width": 1054,
+          "height": 32
+        }
+      ],
+      "height": 800,
+      "sha256": "03f3b77c47bd1c055f58a1f26e25fa8376aae81a50d7368d652170cf49c9ab46"
+    }
+  ]
+}

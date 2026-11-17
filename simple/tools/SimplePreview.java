@@ -21,6 +21,11 @@ public final class SimplePreview extends WorkbenchTest {
   static String theme;
   static int width, height;
   static Path out;
+  static final Map<Container,JFrame> nativeWindows=new IdentityHashMap<>();
+  static JDialog connectorAtUnload;
+  static JRootPane connectorUnloadOwner;
+  static Component connectorUnloadGlass;
+  static boolean connectorUnloadGlassVisible;
   static final List<String> controls = new ArrayList<>();
   static final List<String> anchors = new ArrayList<>();
   static final List<String> content = new ArrayList<>();
@@ -42,7 +47,7 @@ public final class SimplePreview extends WorkbenchTest {
         String body="<html>\n  <body>\n    <p>"+payloads[i].replace("<","&lt;").replace(">","&gt;")+"</p>\n  </body>\n</html>";
         byte[] wire=("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n"+body).getBytes(StandardCharsets.UTF_8);
         var response=new kr.payloadrunner.Engine.Response(200,wire.length,"text/html",body,false,wire,true);
-        var row=new kr.payloadrunner.Engine.Row(i+1,payloads[i],22+i,response,i==0?"기준 응답":"반사 관찰","화면 검증용 합성 데이터 · 브라우저 실행 미확인",request);
+        var row=new kr.payloadrunner.Engine.Row(i+1,payloads[i],22+i,response,i==0?"기준 응답":i==3?"대조 응답":"반사 관찰","화면 검증용 합성 데이터 · 브라우저 실행 미확인",request);
         entries.add(constructor.newInstance(row,proxy(burp.IHttpService.class,(p,m,a)->switch(m.getName()){case "getHost"->"simple.example.test";case "getPort"->443;case "getProtocol"->"https";default->def(m);})));model.addRow(new Object[]{row.index(),row.payload(),200,wire.length,row.millis(),row.verdict(),row.evidence()});
       }
       ((JTable)value(runner,"table")).setRowSelectionInterval(2,2);
@@ -70,6 +75,9 @@ public final class SimplePreview extends WorkbenchTest {
   static void capture(Container root, String name, int w, int h) { capture(root,name,w,h,()->{}); }
   static void capture(Container root, String name, int w, int h, Runnable beforePaint) {
     try {
+      if(Boolean.getBoolean("wb.preview.native")){
+        JFrame window=nativeWindows.get(root);if(window==null){window=new JFrame("Workbench · synthetic production capture");window.setUndecorated(true);window.setContentPane(root);nativeWindows.put(root,window);}window.setSize(w,h);window.setLocation(20,40);window.setVisible(true);window.validate();
+      }
       headers(root); root.setSize(w, h); root.setVisible(true);
       for (int pass = 0; pass < 6; pass++) {
         layout(root);
@@ -77,11 +85,24 @@ public final class SimplePreview extends WorkbenchTest {
         SwingUtilities.invokeLater(loop::exit); loop.enter();
       }
       beforePaint.run();
-      var picture = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-      var graphics = picture.createGraphics(); root.paint(graphics); graphics.dispose();
+      if(nativeCapture()&&"wb.root".equals(root.getName())&&!name.equals("04-auth-connections.png"))scenario("Native screen has no unexpected account overlay: "+name,Arrays.stream(Window.getWindows()).noneMatch(window->window instanceof JDialog dialog&&dialog.isShowing()&&"wb.auth.connections".equals(dialog.getContentPane().getName())));
+      BufferedImage picture;
+      if(Boolean.getBoolean("wb.preview.native")){
+        root.repaint();var loop=Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();var timer=new javax.swing.Timer(100,e->loop.exit());timer.setRepeats(false);timer.start();loop.enter();Toolkit.getDefaultToolkit().sync();Point location=root.getLocationOnScreen();picture=new Robot().createScreenCapture(new Rectangle(location.x,location.y,w,h));
+      }else{picture=new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);var graphics=picture.createGraphics();root.paint(graphics);graphics.dispose();}
       ImageIO.write(picture, "png", out.resolve(name).toFile());
       inspect(root, root, name, w, h);
+      if(name.equals("04-auth-connections.png")&&Boolean.getBoolean("wb.preview.native"))for(Window window:Window.getWindows())if(window instanceof JDialog dialog&&dialog.isShowing()&&"wb.auth.connections".equals(dialog.getContentPane().getName()))inspect(root,dialog.getContentPane(),name,w,h);
+      if(Boolean.getBoolean("wb.approved.geometry")){var tree=new ArrayList<Map<String,Object>>();dump(root,root,"",tree);if(name.equals("04-auth-connections.png")&&Boolean.getBoolean("wb.preview.native"))for(Window window:Window.getWindows())if(window instanceof JDialog dialog&&dialog.isShowing()&&"wb.auth.connections".equals(dialog.getContentPane().getName()))dump(root,dialog.getContentPane(),"/dialog",tree);Files.writeString(out.resolve(name+".json"),MetadataExport.json(tree));}
+      if(Boolean.getBoolean("wb.preview.native")&&!name.equals("04-auth-connections.png"))nativeWindows.get(root).setVisible(false);
     } catch (Exception error) { throw new IllegalStateException("Capture failed: " + name, error); }
+  }
+  static void dump(Container root,Component c,String parent,List<Map<String,Object>> result){
+    if(!c.isVisible())return;String id=parent+"/"+(c.getParent()==null?0:java.util.Arrays.asList(c.getParent().getComponents()).indexOf(c));
+    Rectangle b=c==root?new Rectangle(0,0,root.getWidth(),root.getHeight()):SwingUtilities.convertRectangle(c.getParent(),c.getBounds(),root);
+    String text=c instanceof JLabel l?l.getText():c instanceof AbstractButton a?a.getText():c instanceof javax.swing.text.JTextComponent t?t.getText():"";
+    var row=new LinkedHashMap<String,Object>();row.put("id",id);row.put("parent",parent);row.put("name",Objects.toString(c.getName(),""));row.put("type",c.getClass().getName());row.put("layout",c instanceof Container p&&p.getLayout()!=null?p.getLayout().getClass().getName():"");row.put("text",text==null?"":text.substring(0,Math.min(130,text.length())));row.put("rect",List.of(b.x,b.y,b.width,b.height));result.add(row);
+    if(c instanceof Container p)for(Component child:p.getComponents())dump(root,child,id,result);
   }
   static void capture(Container root, String name) { capture(root, name, width, height); }
   static String csv(String value) { return "\"" + Objects.toString(value, "").replace("\"", "\"\"") + "\""; }
@@ -97,13 +118,75 @@ public final class SimplePreview extends WorkbenchTest {
     scenarios.add(csv(name) + "," + passed);
     if (!passed) throw new AssertionError(name);
   }
+  static boolean nativeCapture(){return Boolean.getBoolean("wb.preview.native");}
+  static void nativeReady(Container root){JFrame frame=nativeWindows.get(root);frame.setVisible(true);frame.toFront();frame.requestFocus();for(int pass=0;pass<6;pass++){frame.validate();layout(root);var loop=Toolkit.getDefaultToolkit().getSystemEventQueue().createSecondaryLoop();SwingUtilities.invokeLater(loop::exit);loop.enter();}awaitUi(frame::isActive,"native capture window focus");}
+  static void nativeClick(Component control){try{if(control==null||!control.isShowing())throw new AssertionError("Native control is not showing");Point point=control.getLocationOnScreen();Robot robot=new Robot();robot.mouseMove(point.x+control.getWidth()/2,point.y+control.getHeight()/2);robot.mousePress(java.awt.event.InputEvent.BUTTON1_DOWN_MASK);robot.mouseRelease(java.awt.event.InputEvent.BUTTON1_DOWN_MASK);}catch(AWTException e){throw new IllegalStateException(e);}}
+  /** A model resize can finish before Xorg/WM configure events and Swing revalidation settle. */
+  static void nativeConnectorClick(Component control){
+    Window window=control==null?null:SwingUtilities.getWindowAncestor(control);
+    if(window==null)throw new AssertionError("Native connector control has no window");
+    window.toFront();window.requestFocus();window.validate();
+    Rectangle[] previous={null,null};long[] stableSince={0};
+    try{
+      awaitUi(()->{
+        Toolkit.getDefaultToolkit().sync();
+        if(!window.isActive()||!window.isValid()||!control.isShowing()||!control.isEnabled()){
+          stableSince[0]=0;return false;
+        }
+        Rectangle frame=new Rectangle(window.getLocationOnScreen(),window.getSize());
+        Rectangle target=new Rectangle(control.getLocationOnScreen(),control.getSize());
+        if(stableSince[0]==0||!frame.equals(previous[0])||!target.equals(previous[1])){
+          previous[0]=frame;previous[1]=target;stableSince[0]=System.nanoTime();return false;
+        }
+        return stableSince[0]!=0&&System.nanoTime()-stableSince[0]>=java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(150);
+      },"native connector control has stable active screen bounds");
+    }catch(IllegalStateException failure){throw new IllegalStateException(failure.getMessage()+" · "+nativeControlState(control),failure);}
+    nativeClick(control);
+  }
+  static String nativeControlState(Component control){
+    Window window=control==null?null:SwingUtilities.getWindowAncestor(control);
+    return "selected="+(control instanceof AbstractButton button?button.isSelected():"n/a")
+        +", window="+(window==null?"none":window.getBounds())+", active="+(window!=null&&window.isActive())
+        +", control="+(control==null?"none":control.getBounds())+", showing="+(control!=null&&control.isShowing());
+  }
+  static void awaitConnectorState(java.util.function.BooleanSupplier ready,Component control,String reason){
+    try{awaitUi(ready,reason);}catch(IllegalStateException failure){throw new IllegalStateException(failure.getMessage()+" · "+nativeControlState(control),failure);}
+  }
+  static void nativeEscape(){try{Robot robot=new Robot();robot.keyPress(java.awt.event.KeyEvent.VK_ESCAPE);robot.keyRelease(java.awt.event.KeyEvent.VK_ESCAPE);robot.mouseMove(1800,1100);}catch(AWTException e){throw new IllegalStateException(e);}}
+  static JDialog nativeConnector(){for(Window window:Window.getWindows())if(window instanceof JDialog dialog&&dialog.isShowing()&&"wb.auth.connections".equals(dialog.getContentPane().getName()))return dialog;return null;}
+  static boolean sameGlass(JRootPane owner,Component glass,boolean visible){return owner.getGlassPane()==glass&&glass.isVisible()==visible;}
+  static void nativeConnectorReentry(Container root,AuthComparePanel auth,JRootPane owner,Component originalGlass,boolean originalVisible){
+    scenario("Native connector close immediately restores the original owner glass",sameGlass(owner,originalGlass,originalVisible));
+    auth.openAccountConnections();JDialog first=nativeConnector();
+    auth.openAccountConnections();JDialog replacement=nativeConnector();
+    scenario("Native same-EDT connector replacement disposes the first window",first!=null&&replacement!=null&&first!=replacement&&!first.isDisplayable());
+    auth.closeReadiness();
+    scenario("Native same-EDT replacement close restores the original glass and visibility",!replacement.isDisplayable()&&sameGlass(owner,originalGlass,originalVisible));
+    nativeReady(root);nativeClick(SimpleWorkflowTest.named(root,"wb.auth.account.card.0"));awaitUi(()->nativeConnector()!=null,"native normal account connector reopening after replacement");JDialog reopened=nativeConnector();
+    scenario("Native queued close callbacks retain the reopened connector controller",value(value(auth,"accountConnections"),"window")==reopened);
+    reopened.toFront();reopened.requestFocus();awaitUi(reopened::isActive,"native reopened connector focus before Escape");
+    nativeEscape();awaitUi(()->!reopened.isDisplayable(),"native reopened connector Escape");
+    scenario("Native normal connector Escape restores the original glass after replacement",sameGlass(owner,originalGlass,originalVisible));
+    auth.closeReadiness();
+    nativeReady(root);auth.openAccountConnections();JDialog hidden=nativeConnector();JFrame host=nativeWindows.get(root);
+    host.setVisible(false);auth.closeReadiness();host.setVisible(true);nativeReady(root);
+    scenario("Native owner reshow cannot resurrect a connector disposed while hidden",hidden!=null&&!hidden.isDisplayable()&&nativeConnector()==null&&sameGlass(owner,originalGlass,originalVisible));
+    auth.openAccountConnections();JDialog retained=nativeConnector();host.setVisible(false);host.setVisible(true);
+    awaitUi(()->retained!=null&&retained.isShowing(),"native owner reshow retains a connector that was only hidden");
+    scenario("Native owner hide and reshow preserve the same live connector",nativeConnector()==retained&&retained.isDisplayable());
+    auth.closeReadiness();
+    scenario("Native retained connector close restores the original glass",sameGlass(owner,originalGlass,originalVisible));
+  }
   static void dashboardBounds(Container root) {
     for (String card : List.of("paths", "api", "environment", "secrets", "access", "coverage"))
       dashboardArea(root, "card." + card, 110, 76);
+    var distribution = (AbstractButton) SimpleWorkflowTest.named(root, "wb.flow.dashboard.distribution.toggle");
+    scenario("Dashboard keeps optional charts in an explicit disclosure", distribution != null && !distribution.isSelected());
+    scenario("Dashboard importance filter stays directly available", SimpleWorkflowTest.named(root, "wb.scope.dashboard.importance") != null);
     for (String bar : List.of("paths", "api", "environment", "secrets", "access", "coverage", "observations"))
-      dashboardArea(root, "bar." + bar, 160, 16);
+      scenario("Optional dashboard chart retains its original controller: " + bar, SimpleWorkflowTest.named(root, "wb.scope.dashboard.bar." + bar) != null);
     for (String severity : List.of("high", "medium", "low", "info"))
-      dashboardArea(root, "severity." + severity, 120, 16);
+      scenario("Optional importance chart retains its original controller: " + severity, SimpleWorkflowTest.named(root, "wb.scope.dashboard.severity." + severity) != null);
   }
   static void dashboardResults(Container root) {
     var scroll = (JScrollPane) SimpleWorkflowTest.named(root, "wb.scope.dashboard.scroll");
@@ -114,7 +197,7 @@ public final class SimplePreview extends WorkbenchTest {
   }
   static void dashboardRevealed(Container root, boolean empty) {
     Component list = SimpleWorkflowTest.named(root, empty ? "wb.scope.dashboard.empty" : "wb.scope.dashboard.results");
-    Component detail = SimpleWorkflowTest.named(root, "wb.scope.dashboard.detail");
+    Component detail = SimpleWorkflowTest.named(root, "wb.scope.dashboard.detail.summary");
     Rectangle listBounds = SwingUtilities.convertRectangle(list.getParent(), list.getBounds(), root);
     Rectangle detailBounds = SwingUtilities.convertRectangle(detail.getParent(), detail.getBounds(), root);
     Rectangle listShown = visible(root, list, listBounds, root.getWidth(), root.getHeight());
@@ -177,6 +260,11 @@ public final class SimplePreview extends WorkbenchTest {
         anchors.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()+".selected"),
             ""+selected.x, ""+selected.y, ""+selected.width, ""+selected.height,
             ""+(selected.width>0&&selected.height>0&&selectedShown.contains(selected))));
+        // An off-screen table row can be wider than its viewport. Keep the full-row
+        // diagnostic above and separately expose its visible part for guide markers.
+        anchors.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()+".selected.visible"),
+            ""+selectedShown.x, ""+selectedShown.y, ""+selectedShown.width, ""+selectedShown.height,
+            ""+(selectedShown.width>0&&selectedShown.height>0)));
       }
     }
     boolean control = component instanceof AbstractButton button && button.getText()!=null && !button.getText().isBlank()
@@ -191,7 +279,9 @@ public final class SimplePreview extends WorkbenchTest {
       controls.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(label), csv(component.getName()),
           ""+bounds.width, ""+bounds.height, ""+fullyVisible, ""+scrollable));
     }
-    if (component instanceof JTable || component instanceof javax.swing.text.JTextComponent) {
+    if (component instanceof JTable || component instanceof javax.swing.text.JTextComponent
+        || "wb.pdf.exposure.cve.facts".equals(component.getName())
+        || "wb.pdf.exposure.discovery.facts".equals(component.getName())) {
       var bounds = SwingUtilities.convertRectangle(component.getParent(), component.getBounds(), root);
       var clipping = visible(root, component, bounds, w, h);
       content.add(String.join(",", csv(theme), ""+w, ""+h, csv(view), csv(component.getName()), ""+Math.max(0,clipping.width), ""+Math.max(0,clipping.height)));
@@ -255,7 +345,38 @@ public final class SimplePreview extends WorkbenchTest {
         ((JButton) value(extension,"captureButton")).doClick(0);
       });
       seedTraffic(extension,request(origin+"/assets/app.js","GET",true,List.of(header("Accept","application/javascript"))),
-          response(200,"fetch('/api/documents/101');\nfetch('/api/users/me');"));
+          response(200,"""
+              // app.js · 합성 문서 조회 예시
+              // 실행하거나 외부 서버에 전송하지 않는 캡처 전용 소스
+
+              const API_BASE = "/api";
+
+              export async function getDocument(documentId) {
+                const endpoint =
+                  API_BASE + "/documents/" + documentId;
+
+                const response = await fetch('/api/documents/101', {
+                  method: "GET",
+                  credentials: "include",
+                  headers: {
+                    "Accept": "application/json"
+                  }
+                });
+
+                if (!response.ok) {
+                  throw new Error("Document request failed");
+                }
+
+                return response.json();
+              }
+
+              export async function updateDocument(id, data) {
+                return fetch('/api/users/me', {
+                  method: "GET",
+                  headers: { "Accept": "application/json" }
+                });
+              }
+              """));
       seedTraffic(extension,request(origin+"/api/documents/101","GET",true,List.of(header("Cookie","SID=ALICE_DEMO_SECRET"), header("Accept","application/json"))),
           response(200,"{\"id\":101,\"title\":\"권한 점검용 문서\",\"ownerId\":\"alice\"}"));
       seedTraffic(extension,request(origin+"/api/users/me","GET",true,List.of(header("Cookie","SID=BOB_DEMO_SECRET"))),
@@ -284,7 +405,10 @@ public final class SimplePreview extends WorkbenchTest {
         awaitUi(()->{var current=(JsAnalysis.Result)value(js,"current");return current!=null&&!current.endpoints().isEmpty();},"selected original JS analysis");
         scenario("JS analysis retains the selected HTTP source",js.sourceUrl.getText().startsWith(origin+"/assets/app.js")&&js.input.getText().contains("fetch("));
         if(js.urlTable.getRowCount()>0)js.urlTable.setRowSelectionInterval(0,0);
-        capture(root,"10-js.png");var details=(JPanel)SimpleWorkflowTest.named(root,"wb.js.inline.detail");scenario("Selected JS detail starts at the first labeled value",((JScrollPane)details.getComponent(0)).getViewport().getViewPosition().y==0);table.setRowSelectionInterval(1,1);
+        if(nativeCapture()){
+          nativeReady(root);JButton types=(JButton)SimpleWorkflowTest.named(root,"wb.workflow.js.types");nativeClick(types);awaitUi(()->types.getComponentPopupMenu().isVisible(),"native JS analysis menu");nativeClick(SimpleWorkflowTest.named(types.getComponentPopupMenu(),"wb.js.filter.menu"));awaitUi(()->js.resultView.popup.isVisible(),"native JS retained filter controls");nativeClick(SimpleWorkflowTest.named(js.resultView.popup,"wb.js.filter.reset"));awaitUi(()->js.resultView.call.getSelectedIndex()==0,"native JS filter reset");scenario("Native JS filter is reachable from the visible analysis menu",js.resultView.popup.isVisible());nativeEscape();
+        }
+        capture(root,"10-js.png");scenario("Approved JS reader retains the selected source with a separate detail disclosure",SimpleWorkflowTest.named(root,"wb.js.inline.detail")!=null&&js.input.getText().contains("fetch("));table.setRowSelectionInterval(1,1);
         click(root,"wb.simple.tool.mapper");
         var mapper=(kr.featuremapper.FeatureMapperWorkspace)value(extension,"featureMapper");
         mapper.observeCaptured(System.currentTimeMillis(),"합성 UI 검증",request(origin+"/api/documents/101","GET",true,List.of()),response(200,"{\"id\":101,\"title\":\"문서 예시\"}"));invoke(mapper,"refresh");
@@ -292,15 +416,36 @@ public final class SimplePreview extends WorkbenchTest {
         var featureNodes=((javax.swing.tree.DefaultMutableTreeNode)featureTree.getModel().getRoot()).depthFirstEnumeration();
         while(featureNodes.hasMoreElements()){
           var node=(javax.swing.tree.DefaultMutableTreeNode)featureNodes.nextElement();
-          if(node.getUserObject()!=null&&node.getUserObject().getClass().getSimpleName().equals("FeatureNode")){
+          if(node.getUserObject()!=null&&node.getUserObject().getClass().getSimpleName().equals("FeatureNode")&&node.toString().contains("documents")){
             featureTree.setSelectionPath(new javax.swing.tree.TreePath(node.getPath()));break;
           }
         }
         scenario("Mapper guide selects an actual feature before presenting local edit/link actions",
             ((AbstractButton)SimpleWorkflowTest.named(root,"fm.feature.edit")).isEnabled());
         JTable mapperTable=(JTable)value(mapper,"table");if(mapperTable.getRowCount()>0)mapperTable.setRowSelectionInterval(0,0);
+        if(nativeCapture()){
+          nativeReady(root);PacketInspector packet=(PacketInspector)SimpleWorkflowTest.named(root,"wb.mapper.response");awaitUi(()->packet.previewBytes().length>0,"native selected Mapper source bytes");byte[] retained=packet.previewBytes();nativeClick(SimpleWorkflowTest.named(root,"wb.mapper.response.raw"));awaitUi(()->packet.mode()==PacketInspector.Mode.RAW,"native Mapper Raw");scenario("Native Mapper modes preserve selected source bytes",Arrays.equals(retained,packet.previewBytes()));nativeClick(SimpleWorkflowTest.named(root,"wb.mapper.response.pretty"));awaitUi(()->packet.mode()==PacketInspector.Mode.PRETTY,"native Mapper Pretty");nativeEscape();
+        }
         capture(root,"08-mapper.png");
-        click(root,"wb.simple.tool.environment"); capture(root,"09-environment.png");
+        click(root,"wb.simple.tool.environment");
+        // Harness-only selected reading example from an already captured,
+        // unauthenticated synthetic request/response. Never execute a GET here.
+        var environment=(EnvironmentPanel)value(extension,"environments");
+        var environmentOriginal=((DiskTrafficStore)value(extension,"trafficStore")).ref(3);
+        String environmentUrl=environmentOriginal.url();
+        var environmentSite=environment.catalog.sites.get(origin);
+        environmentSite.discovered.put(environmentUrl,new EnvironmentCatalog.Candidate(environmentUrl,"수집된 요청 원본","합성 원문 읽기",100,"화면 검증 fixture · 추가 전송 없음"));
+        String environmentRequest=new String(environmentOriginal.request().toByteArray().getBytes(),StandardCharsets.UTF_8);
+        String environmentResponse=new String(environmentOriginal.response().toByteArray().getBytes(),StandardCharsets.UTF_8);
+        environment.packets.put(environmentUrl,new EnvironmentPanel.Packet(environmentUrl,environmentRequest,environmentResponse,"HTTP "+environmentOriginal.response().statusCode()+" · 합성 관찰 응답 · GET 확인 미실행",environmentResponse));
+        environment.packetAccounts.put(environmentUrl,environment.accountKey());environment.refresh();
+        for(int model=0;model<environment.paths.getRowCount();model++)if(environmentUrl.equals(environment.paths.getValueAt(model,0))){int view=environment.pathTable.convertRowIndexToView(model);environment.pathTable.setRowSelectionInterval(view,view);break;}
+        environment.showSelected();
+        scenario("Environment selected reader uses an already observed original response without performing a GET",environmentUrl.equals(environment.selectedUrl())&&environment.currentPacket(environmentUrl).response().equals(environmentResponse)&&environment.responseView.getText().contains("items"));
+        if(nativeCapture()){
+          nativeReady(root);JButton tools=(JButton)SimpleWorkflowTest.named(root,"wb.approved.environment.packet.open");nativeClick(tools);awaitUi(()->tools.getComponentPopupMenu().isVisible(),"native environment packet tools");nativeClick(SimpleWorkflowTest.named(tools.getComponentPopupMenu(),"wb.environment.packet.raw.menu"));awaitUi(()->!environment.formatted.isSelected(),"native environment Raw mode");nativeClick(tools);awaitUi(()->tools.getComponentPopupMenu().isVisible(),"native environment tools reopen");nativeClick(SimpleWorkflowTest.named(tools.getComponentPopupMenu(),"wb.environment.packet.pretty.menu"));awaitUi(()->environment.formatted.isSelected(),"native environment formatted mode");scenario("Native environment packet menu invokes the original format model",environment.formatted.isSelected());nativeEscape();
+        }
+        capture(root,"09-environment.png");
         extension.openFeature("exposure");
         var research=(ExposureResearchPanel)value(extension,"exposureResearch");
         research.target.setText("simple.example.test");
@@ -318,7 +463,13 @@ public final class SimplePreview extends WorkbenchTest {
         research.display(new ExposureResearch.Batch(examples,Set.of("CVE-2099-10001"),Map.of("CVE-2099-10001",.234,"CVE-2099-10002",.042),java.time.Instant.parse("2026-10-30T12:00:00Z"),"최신 조회 완료","최신 조회 완료",false),technology,false);
         research.tabs.setSelectedIndex(1);research.cveTable.setRowSelectionInterval(0,0);
         research.status.setText("화면 검증용 가상 CVE · 실제 취약점/조회 결과 아님 · 외부 API 호출 0건");
+        if(nativeCapture()){
+          nativeReady(root);JToggleButton filter=(JToggleButton)SimpleWorkflowTest.named(root,"wb.flow.exposure.cve.filters.toggle");nativeClick(filter);awaitUi(()->filter.isSelected(),"native CVE filter expansion");scenario("Native CVE filter exposes the actual minimum score input",research.minimum.isShowing());nativeClick(filter);awaitUi(()->!filter.isSelected(),"native CVE filter folds");nativeEscape();
+        }
         capture(root,"13-exposure-cve.png");
+        research.cveDetailTabs.setSelectedIndex(1);capture(root,"13-exposure-cve-evidence.png");
+        scenario("CVE evidence tab retains exact synthetic original metadata without a provider request",research.evidence.getText().contains("SYNTHETIC-UI:101"));
+        research.cveDetailTabs.setSelectedIndex(0);
         scenario("Research has two tabs and separate observed/affected/fixed details",research.tabs.getTabCount()==2&&research.evidence.getText().contains("SYNTHETIC-UI:101")&&research.fixedDetail.getText().contains("공지 확인"));
 
         click(root,"wb.simple.tool.auth"); click(root,"wb.simple.tool.payload"); payloadFixture(value(entry,"payloadRunner"));capture(root,"07-payload.png");
@@ -336,7 +487,30 @@ public final class SimplePreview extends WorkbenchTest {
         auth.mapCandidate(credentials.get(0),new AuthAccount("Alice","alice","101","문서 소유자","alice@example.test"));
         auth.mapCandidate(credentials.get(1),new AuthAccount("Bob","bob","102","다른 사용자","bob@example.test"));
         auth.assign(0,credentials.get(0)); auth.assign(1,credentials.get(1)); auth.anonymous(3);
-        capture(WorkbenchUi.settingsBody(auth.preparationAccountChoices(),()->{}),"04-auth-accounts.png",Math.min(width,1000),300);
+        JTabbedPane preparationTabs=auth.preparationContent();
+        preparationTabs.setSelectedIndex(1);
+        JPanel accountChoicesBody=WorkbenchUi.settingsBody(preparationTabs,()->{});
+        for(Component child:((Container)((BorderLayout)accountChoicesBody.getLayout()).getLayoutComponent(BorderLayout.SOUTH)).getComponents())
+          if(child instanceof JButton close)close.setName("wb.auth.preparation.close");
+        capture(accountChoicesBody,"04-auth-accounts.png",Math.min(width,1000),Math.min(height,760));
+        String[] preparationCaptures={"overview","accounts","policy"};
+        for(int tab=0;tab<preparationTabs.getTabCount();tab++) {
+          preparationTabs.setSelectedIndex(tab);
+          int selectedPreparationTab=tab;
+          if(preparationTabs.getSelectedComponent() instanceof JScrollPane pageScroll)
+            pageScroll.getViewport().setViewPosition(new Point(0,0));
+          capture(accountChoicesBody,"04-auth-accounts-full-"+preparationCaptures[tab]+".png",Math.min(width,1000),Math.min(height,760),()->{
+            if(preparationTabs.getSelectedComponent() instanceof JScrollPane pageScroll)
+              pageScroll.getViewport().setViewPosition(new Point(0,0));
+            Rectangle tabBounds=SwingUtilities.convertRectangle(preparationTabs,preparationTabs.getBoundsAt(selectedPreparationTab),accountChoicesBody);
+            scenario("Complete authentication preparation keeps tab "+selectedPreparationTab+" visible above its own scrolling page",
+                tabBounds.y>=0&&tabBounds.height>0&&tabBounds.y+tabBounds.height<=accountChoicesBody.getHeight());
+            if(selectedPreparationTab==0){
+              JTable readiness=(JTable)SimpleWorkflowTest.named(preparationTabs.getSelectedComponent(),"wb.auth.readiness.table");
+              scenario("Complete authentication overview contains actual selected-request readiness rows",readiness!=null&&readiness.getRowCount()>0);
+            }
+          });
+        }
         var baseline = response(200,"{\"id\":101,\"title\":\"권한 점검용 문서\",\"ownerId\":\"alice\"}");
         var run = new AuthComparePanel.Run(1,alice,baseline,auth.context());
         run.baselineState=AuthComparePanel.Run.Baseline.VALID;
@@ -351,12 +525,61 @@ public final class SimplePreview extends WorkbenchTest {
         auth.refresh(run); auth.history.setRowSelectionInterval(0,0); auth.show(run);
         auth.inlinePreview.account.setSelectedIndex(1);
         capture(root,"04-auth-results.png");
+        JSplitPane authPackets=(JSplitPane)((JTabbedPane)SimpleWorkflowTest.named(root,"wb.auth.inline.tabs")).getComponentAt(0);scenario("Approved authentication readers keep their10px gap across theme restoration",authPackets.getDividerSize()==10);
+        if(Boolean.getBoolean("wb.preview.native")){
+          nativeWindows.get(root).setVisible(true);
+          JRootPane connectorOwner=SwingUtilities.getRootPane(root);Component originalGlass=connectorOwner.getGlassPane();boolean originalGlassVisible=originalGlass.isVisible();
+          auth.openAccountConnections();final JDialog connected=nativeConnector();
+          scenario("Native compact account connector opens its actual retained role models",connected!=null);
+          JToggleButton extra=(JToggleButton)SimpleWorkflowTest.named(connected.getContentPane(),"wb.auth.preparation.extra.toggle");nativeConnectorClick(extra);
+          awaitConnectorState(()->extra.isSelected()&&connected.getHeight()==517,extra,"native optional third role expands its window");
+          scenario("Native optional third role remains reachable",SimpleWorkflowTest.named(connected.getContentPane(),"wb.auth.preparation.account.2").isShowing());
+          nativeConnectorClick(extra);awaitConnectorState(()->!extra.isSelected()&&connected.getHeight()==447,extra,"native optional role folds");
+          capture(root,"04-auth-connections.png");auth.closeReadiness();
+          nativeConnectorReentry(root,auth,connectorOwner,originalGlass,originalGlassVisible);
+        }else capture(auth.accountConnectionsContent(),"04-auth-connections.png",900,447);
         click(root,"wb.simple.tool.bounty"); click(root,"wb.simple.bounty.replay");
         SimpleWorkflowTest.clickText(evidence,"선택 요청 추가");
         scenario("Manual replay prepares the selected request without running",evidence.pages.getSelectedIndex()==1&&evidence.workflow.getText().contains("GET /api/documents/101")&&!evidence.running&&evidence.flowModel.getRowCount()==0);
         evidence.workflow.setName("wb.simple.replay.request");
         evidence.workflowDetail.setName("wb.simple.replay.result");
-        capture(root,"11-replay.png");
+        capture(root,"11-replay-empty.png");
+        // Harness-only completed examples use the already retained synthetic traffic originals.
+        // No production result is invented and no BountyWorkflow transport/run call is made.
+        var replayStore=(DiskTrafficStore)value(extension,"trafficStore");
+        var replayOriginals=List.of(replayStore.ref(1),replayStore.ref(2),replayStore.ref(3));
+        evidence.workflow.setText(String.join("\n===STEP===\n",replayOriginals.stream().map(original->new String(original.request().toByteArray().getBytes(),StandardCharsets.UTF_8)).toList()));
+        // This preview factory already owns the retained request objects. Construct the
+        // real immutable plan model without requesting a second Montoya parser factory.
+        var replaySteps=replayOriginals.stream().map(original->new BountyWorkflow.Step(new String(original.request().toByteArray().getBytes(),StandardCharsets.UTF_8))).toList();
+        var replayPlan=new BountyWorkflow.Plan(evidence.flowOrigin.getText(),replaySteps,List.of(),
+            evidence.flowWrites.isSelected(),(Integer)evidence.flowTimeout.getValue(),(Integer)evidence.flowBudget.getValue());
+        scenario("Synthetic replay preparation retains three exact original request steps without transport",
+            replayPlan.steps().size()==3&&replayPlan.steps().get(0).raw().equals(new String(replayOriginals.get(0).request().toByteArray().getBytes(),StandardCharsets.UTF_8))&&!evidence.running);
+        for(int step=0;step<replayOriginals.size();step++){
+          var original=replayOriginals.get(step);var packet=original.packet();
+          var result=new BountyWorkflow.Result(step+1,packet.request(),packet.response(),"합성 완료 · 실제 HTTP 전송 0건 · 관측 예시");
+          evidence.flowResults.add(result);
+          evidence.flowModel.addRow(new Object[]{result.step(),result.request().method(),Core.safeUrl(result.request().url()),
+              result.response()==null?"없음":result.response().statusCode(),result.state()});
+        }
+        evidence.refreshActions();evidence.flowTable.setRowSelectionInterval(1,1);
+        int replaySelected=evidence.flowTable.convertRowIndexToModel(evidence.flowTable.getSelectedRow());
+        var replayResult=evidence.flowResults.get(replaySelected);
+        var replayReader=(JTabbedPane)SimpleWorkflowTest.named(root,"wb.bounty.flow.packet.tabs");replayReader.setSelectedIndex(0);
+        scenario("Completed synthetic replay uses the actual selected result and exact retained request/response bytes",
+            replayResult.step()==2&&Arrays.equals(replayResult.request().toByteArray().getBytes(),replayOriginals.get(replaySelected).request().toByteArray().getBytes())
+            &&Arrays.equals(replayResult.response().toByteArray().getBytes(),replayOriginals.get(replaySelected).response().toByteArray().getBytes())
+            &&evidence.workflowDetail.getText().equals(replayResult.response().toString())&&evidence.workflowRequestDetail.getText().equals(replayResult.request().toString()));
+        scenario("Synthetic replay results enable evidence handoff while leaving execution idle and target HTTP at zero",
+            evidence.flowResults.size()==3&&evidence.flowCapture.isEnabled()&&!evidence.running&&PayloadIntegrationTest.sent.get()==0);
+        evidence.state.setText("화면 검증용 합성 재현 결과 3개 · 실제 HTTP 전송 0건 · 취약점 확인 아님");
+        evidence.workflow.setCaretPosition(0);evidence.workflowDetail.setCaretPosition(0);
+        capture(root,"11-replay.png",width,height,()->{
+          var reader=(JViewport)SwingUtilities.getAncestorOfClass(JViewport.class,evidence.workflowDetail);
+          scenario("Selected completed replay response remains readable in the actual visible reader",
+              reader!=null&&reader.getWidth()>=200&&reader.getHeight()>=65&&replayReader.getSelectedIndex()==0&&!evidence.workflowDetail.getText().isBlank());
+        });
         click(root,"wb.simple.bounty.evidence"); evidence.captureAuth();
         evidence.evidenceTitle.setText("문서 접근 권한 비교 · 작성 예시");
         evidence.impact.setText("다른 사용자와 비로그인 응답을 확인하고 접근 정책과 대조했습니다.\n이 가이드 화면의 패킷과 결과는 합성 데이터입니다.");
@@ -377,8 +600,18 @@ public final class SimplePreview extends WorkbenchTest {
         var progressPanel=(ActivityPanel)value(extension,"activity");
         progressPanel.tracker.observe(request(origin+"/api/documents/101?view=summary","GET",true,List.of()),"화면 검증용 합성 요청");
         progressPanel.tracker.observe(request(origin+"/api/projects","POST",true,List.of()),"화면 검증용 합성 요청");
-        progressPanel.refresh();if(progressPanel.table.getRowCount()>0)progressPanel.table.setRowSelectionInterval(0,0);
-        scenario("Progress capture derives rows from the real tracker using synthetic requests",progressPanel.table.getRowCount()>=2);capture(root,"15-progress.png");
+        progressPanel.refresh();
+        int progressSelection=-1;
+        for(int view=0;view<progressPanel.table.getRowCount();view++){
+          int model=progressPanel.table.convertRowIndexToModel(view);
+          String url=String.valueOf(progressPanel.model.getValueAt(model,1));
+          if(url.contains("/api/documents/101")&&progressPanel.model.getValueAt(model,5) instanceof Number remaining&&remaining.intValue()>=2){progressSelection=view;break;}
+        }
+        if(progressSelection>=0){progressPanel.table.setRowSelectionInterval(progressSelection,progressSelection);progressPanel.showParameters();if(progressPanel.parameterTable.getRowCount()>0)progressPanel.parameterTable.setRowSelectionInterval(0,0);}
+        scenario("Progress capture derives rows and a selected endpoint with real parameter inputs from the synthetic tracker",
+            progressPanel.table.getRowCount()>=2&&progressSelection>=0&&progressPanel.selected()!=null
+                &&progressPanel.selected().url().contains("/api/documents/101")&&progressPanel.parameterTable.getRowCount()>=2&&progressPanel.finishParam.isEnabled());
+        capture(root,"15-progress.png");
         extension.openFeature("dashboard");
         var dashboard=(ScopeDashboardPanel)value(extension,"scopeDashboard");
         var exampleOriginal=((DiskTrafficStore)value(extension,"trafficStore")).ref(1);
@@ -407,7 +640,23 @@ public final class SimplePreview extends WorkbenchTest {
         });
       });
       scenario("Guide navigation sends zero HTTP",PayloadIntegrationTest.sent.get()==0);
-    } finally { SimpleWorkflowTest.unload(); }
+      if(nativeCapture())edt(()->{
+        click(root,"wb.simple.tool.auth");JFrame host=nativeWindows.get(root);host.setVisible(true);host.validate();layout(root);
+        connectorUnloadOwner=SwingUtilities.getRootPane(root);connectorUnloadGlass=connectorUnloadOwner.getGlassPane();connectorUnloadGlassVisible=connectorUnloadGlass.isVisible();
+        auth.openAccountConnections();connectorAtUnload=nativeConnector();
+        scenario("Native unload fixture keeps a real compact connector open",connectorAtUnload!=null);
+      });
+    } finally {
+      try{SimpleWorkflowTest.unload();}
+      finally{edt(()->{try{
+        if(connectorAtUnload!=null){
+          scenario("Native unload disposes the open compact connector",!connectorAtUnload.isDisplayable());
+          scenario("Native unload restores original owner glass and visibility",sameGlass(connectorUnloadOwner,connectorUnloadGlass,connectorUnloadGlassVisible));
+          scenario("Native connector lifecycle sends zero HTTP",PayloadIntegrationTest.sent.get()==0);
+        }
+      }finally{for(JFrame window:nativeWindows.values())window.dispose();}});}
+    }
+
     anchors.add(0,"theme,width,height,view,name,x,y,anchorWidth,anchorHeight,fullyVisible");
     Files.write(out.resolve("anchors.csv"),anchors,StandardCharsets.UTF_8);
     controls.add(0,"theme,width,height,view,label,name,controlWidth,controlHeight,fullyVisible,scrollable");

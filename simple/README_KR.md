@@ -1,3 +1,15 @@
+# Workbench Strix 1.0.1 · Simple 1.4.21 화면 기준
+
+**Simple 1.4.21의 배포 소스**를 기준으로 기존 디자인·레이아웃·버튼·테마·메뉴와 내장 Mapper를 유지하고 Strix 진단 기능을 별도 창으로 연결했습니다. Workbench Strix 1.0.0의 예전 Simple 1.4.13 레이아웃을 사용하지 않습니다. Simple 1.4.22 A 그룹형이나 기능 중심 HTML 시안은 추가하지 않았습니다.
+
+[설치 JAR](downloads/strix/1.0.1/burp-workbench-strix-1.0.1.jar) · [소스 ZIP](downloads/strix/1.0.1/burp-workbench-strix-1.0.1-source.zip) · [체크섬](downloads/strix/1.0.1/SHA256SUMS) · [사용 가이드](../docs/reports/2026-11-17-workbench-strix-1.0.1/guide/index.html) · [변경 안내](docs/RELEASE_STRIX_1.0.1_KR.md) · [비교·실행 캡처](../docs/reports/2026-11-17-workbench-strix-1.0.1/README_KR.md)
+
+기존 1.4.21의 왼쪽 통합 점검·대시보드 컴팩트 강조형과 기존 13개 도구 화면을 유지합니다. Strix는 선택 원본의 우클릭 메뉴와 공통 설정에서 별도 창을 엽니다. 선택·준비만으로 진단을 실행하지 않습니다. Halogen/Qwen과 Strix 자체 ChatGPT 구독 경로, 실행계획 확인·중지·원본 ID·SCOPE·프로젝트 검증을 유지합니다.
+
+기존 Strix 설정과 기록의 호환을 위해 `simple.*`와 `.burp-workbench-simple` 저장 위치를 유지합니다. 이전 Simple/Strix 확장을 언로드한 후 새 JAR를 로드하며 CLI·전역 인증·모델 설정은 바꾸지 않습니다.
+
+이 폴더에서 `python dev.py release`와 `python dev.py verify`를 사용합니다. 기본 컴파일은 `--release 17`입니다. 새 불변 배포는 `downloads/strix/1.0.1/`에 생성합니다. 아래는 이전 배포 안내입니다.
+
 # Workbench Strix 1.0.0
 
 Strix 진단 에이전트를 연동한 판을 **Workbench Strix**로 분리해 이름을 바꿨습니다. 이전 이름은 Simple 1.4.13 · Strix 진단 연동 후보입니다. 일반 Workbench Simple 및 A 그룹형 Simple 1.4.22와 별도 제품 계열이며, 1.4.22 기능을 병합한 버전은 아닙니다.

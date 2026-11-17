@@ -1,0 +1,279 @@
+{
+  "result": "passed",
+  "pngCount": 34,
+  "candidateJarStillMatches": true,
+  "images": [
+    {
+      "path": "baseline-simple-1.4.21/light/1280x800/01-main.png",
+      "sha256": "d275c9fae37df9e038307abc33c7ad15050916fb446f94126943ff9f18b618ef",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "baseline-simple-1.4.21/light/1280x800/02-dashboard.png",
+      "sha256": "03f3b77c47bd1c055f58a1f26e25fa8376aae81a50d7368d652170cf49c9ab46",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "baseline-simple-1.4.21/light/1600x1000/01-main.png",
+      "sha256": "81e574955ecc23df9893a2d243d5ce7edfc0d0d2baf44971c548d5db2a0989d9",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "baseline-simple-1.4.21/light/1600x1000/02-dashboard.png",
+      "sha256": "c57ef15297c02a03fa047e9777fbba7757736432c9a9baf87d266aeafc771995",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "baseline-simple-1.4.21/dark/1280x800/01-main.png",
+      "sha256": "5ff357df4b085abb4ad8f92ae79050f0045bbcc490dd0aadb19a85fd7128b427",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "baseline-simple-1.4.21/dark/1280x800/02-dashboard.png",
+      "sha256": "26695e764fca59decc2b7632d64f782cd879bd6f870db83ef48e22845bda62d7",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "baseline-simple-1.4.21/dark/1600x1000/01-main.png",
+      "sha256": "f3aff2d6db25ac376bd3282e8abc0f35235ddeda2765a2300fcf3087a31292ee",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "baseline-simple-1.4.21/dark/1600x1000/02-dashboard.png",
+      "sha256": "3857281179abd5c991d6fdfd561eb53f5009f359cae293ec4d6191b924da15b7",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "popup-flow/strix/dark/1600x1000/03-strix-prepare.png",
+      "sha256": "f5d170e3d22643ef4c0d2d76addacbf9ec765fcc6392ef4d502f0aa124818874",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "popup-flow/strix/dark/1600x1000/01-main.png",
+      "sha256": "8ee9375a8605ec7330f3eab75475e81c628032d1cd901ac1eab2eecd4f75817b",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "popup-flow/strix/dark/1600x1000/06-strix-popup.png",
+      "sha256": "fb150911740445c0966b4dfb17e4ffd8032a129e776745e9328c54b8a70608ff",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "popup-flow/strix/dark/1600x1000/04-strix-model.png",
+      "sha256": "2715d78764fac1d12b17cf5e7a2fa4efada3dea729b039d1bdee789e644bd1da",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "popup-flow/strix/dark/1600x1000/05-strix-chatgpt.png",
+      "sha256": "2715d78764fac1d12b17cf5e7a2fa4efada3dea729b039d1bdee789e644bd1da",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "popup-flow/strix/dark/1600x1000/02-dashboard.png",
+      "sha256": "de3f5e5bd8691851f889e15677a51f27b8e3844d1d6539effbc0cb71a9bd014c",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "strix/light/1280x800/03-strix-prepare.png",
+      "sha256": "d8a0d9bff73d7e61cb88d2f580479b0421aeae4c6d2bb63c1b26dfb1d96ff3ac",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/light/1280x800/01-main.png",
+      "sha256": "56c9f060d79cab834fbd09254782585f8495b7919220861e3ed0471341a1a8aa",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "strix/light/1280x800/04-strix-model.png",
+      "sha256": "ec504dab0453929160479a8ec0601d3973bbeed6e99bc0f23ce10729d1cc3e40",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/light/1280x800/05-strix-chatgpt.png",
+      "sha256": "ec504dab0453929160479a8ec0601d3973bbeed6e99bc0f23ce10729d1cc3e40",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/light/1280x800/02-dashboard.png",
+      "sha256": "656189c515276c8b2265c2326e65a1bb4acefd9dd6a80a5f8dcb324d947f1438",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "strix/light/1600x1000/03-strix-prepare.png",
+      "sha256": "60eed32f96012c5cecba7de4cf8605ab3b29be9a00dd82da9cb7687b739a02a1",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/light/1600x1000/01-main.png",
+      "sha256": "41d100ce8b923cd816d18aa108e6531f249558f81ca09eb4305b60ad0ef65eae",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "strix/light/1600x1000/04-strix-model.png",
+      "sha256": "c1d103782adbec5ae1be376aa91819b296ffb2b3433af643a7a5cb641523e680",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/light/1600x1000/05-strix-chatgpt.png",
+      "sha256": "c1d103782adbec5ae1be376aa91819b296ffb2b3433af643a7a5cb641523e680",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/light/1600x1000/02-dashboard.png",
+      "sha256": "5077607a4e2b956e0bc762af24f3e987ea4d908fae5773fd4315c7d8bccb44c3",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "strix/dark/1280x800/03-strix-prepare.png",
+      "sha256": "d5fa3b78006c275e95b1dc40ff84ceb4d83bb162a18723d83310fc820d139714",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/dark/1280x800/01-main.png",
+      "sha256": "72bd8518861cf69113cadf07173c3ce402f7a1b9270cf2ce76a33f373ae53f9b",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "strix/dark/1280x800/04-strix-model.png",
+      "sha256": "449003bb37e99b6f4873e611a5496d523e4b863cbe5ff14b34ca17ed6cbaa08a",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/dark/1280x800/05-strix-chatgpt.png",
+      "sha256": "449003bb37e99b6f4873e611a5496d523e4b863cbe5ff14b34ca17ed6cbaa08a",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/dark/1280x800/02-dashboard.png",
+      "sha256": "a91fcbb3f7972ce21001e63737f88a51a86a3b6598d15e3794289a3ffeabf511",
+      "size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "path": "strix/dark/1600x1000/03-strix-prepare.png",
+      "sha256": "f5d170e3d22643ef4c0d2d76addacbf9ec765fcc6392ef4d502f0aa124818874",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/dark/1600x1000/01-main.png",
+      "sha256": "b133a1c9c5a80e4c26ee7a4f575209cbc30872a4f35cda1e50042b71b9f5b6ee",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "path": "strix/dark/1600x1000/04-strix-model.png",
+      "sha256": "2715d78764fac1d12b17cf5e7a2fa4efada3dea729b039d1bdee789e644bd1da",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/dark/1600x1000/05-strix-chatgpt.png",
+      "sha256": "2715d78764fac1d12b17cf5e7a2fa4efada3dea729b039d1bdee789e644bd1da",
+      "size": [
+        1260,
+        960
+      ]
+    },
+    {
+      "path": "strix/dark/1600x1000/02-dashboard.png",
+      "sha256": "de3f5e5bd8691851f889e15677a51f27b8e3844d1d6539effbc0cb71a9bd014c",
+      "size": [
+        1600,
+        1000
+      ]
+    }
+  ]
+}

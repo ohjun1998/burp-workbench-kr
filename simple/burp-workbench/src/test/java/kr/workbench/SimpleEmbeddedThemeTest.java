@@ -3,6 +3,8 @@ package kr.workbench;
 import burp.BurpExtender;
 import burp.IBurpExtenderCallbacks;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
@@ -13,6 +15,11 @@ import javax.swing.plaf.basic.BasicButtonUI;
 public final class SimpleEmbeddedThemeTest extends WorkbenchTest {
   private static void flush() throws Exception {
     for (int pass = 0; pass < 6; pass++) edt(() -> {});
+  }
+
+  private static void mapperStyle(Component component){
+    try{var method=Class.forName("kr.featuremapper.MapperUi").getDeclaredMethod("style",Component.class);method.setAccessible(true);method.invoke(null,component);}
+    catch(ReflectiveOperationException error){throw new IllegalStateException(error);}
   }
 
   private static void await(BooleanSupplier condition, String reason) throws Exception {
@@ -119,6 +126,42 @@ public final class SimpleEmbeddedThemeTest extends WorkbenchTest {
           "restored embedded UI does not oscillate between host and Mapper delegates");
       check(PayloadIntegrationTest.sent.get() == sent,
           "theme restoration and delegate checks send zero target HTTP requests");
+      edt(()->{
+        var runs=(JComboBox<?>)getUnchecked(mapper,"runs");
+        var runsUi=runs.getUI();var runsRenderer=runs.getRenderer();var runsModel=runs.getModel();Object run=runs.getSelectedItem();
+        var editable=new JComboBox<>(new String[]{"원본 선택"});editable.setEditable(true);
+        var customRenderer=new DefaultListCellRenderer(){public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean selected,boolean focus){super.getListCellRendererComponent(list,value,index,selected,focus);setText("계정 · "+value);return this;}};
+        editable.setRenderer(customRenderer);mapperStyle(editable);
+        var editor=(JTextField)editable.getEditor().getEditorComponent();var document=editor.getDocument();editor.setText("작성 중 초안");editor.setCaretPosition(3);
+        var scrollbar=new JScrollBar(JScrollBar.HORIZONTAL,50,10,0,100);mapperStyle(scrollbar);var scrollbarUi=scrollbar.getUI();
+        var moon=(JButton)SimpleWorkflowTest.named(root,"wb.traffic.header.tools");boolean initialTheme=WorkbenchUi.dark();
+        for(boolean dark:new boolean[]{!initialTheme,initialTheme}){
+          moon.doClick(0);mapperStyle(editable);mapperStyle(scrollbar);
+          check(runs.getUI()==runsUi&&runs.getRenderer()==runsRenderer&&runs.getModel()==runsModel&&java.util.Objects.equals(runs.getSelectedItem(),run),
+              "a manual theme toggle retains the real Mapper run filter UI, renderer, model and selection in "+dark);
+          for(JComboBox<?> combo:new JComboBox<?>[]{runs,editable}){
+            combo.setSize(180,32);combo.doLayout();var image=new BufferedImage(180,32,BufferedImage.TYPE_INT_RGB);
+            var graphics=image.createGraphics();combo.paint(graphics);graphics.dispose();
+            check(image.getRGB(75,5)==WorkbenchUi.surface().getRGB(),"the actual Mapper combo surface follows the chosen palette in "+dark);
+            var popup=(javax.swing.plaf.basic.BasicComboPopup)combo.getUI().getAccessibleChild(combo,0);var list=popup.getList();
+            Component plain=list.getCellRenderer().getListCellRendererComponent(list,combo.getItemAt(0),0,false,false);
+            check(plain.getBackground().equals(WorkbenchUi.surface())&&plain.getForeground().equals(WorkbenchUi.ink()),
+                "Mapper popup rows follow the local normal palette in "+dark);
+            Component selected=list.getCellRenderer().getListCellRendererComponent(list,combo.getItemAt(0),0,true,false);
+            check(selected.getBackground().equals(WorkbenchUi.selected())&&selected.getForeground().equals(WorkbenchUi.ink()),
+                "Mapper popup rows follow the local selected palette in "+dark);
+          }
+          check(editable.getRenderer()==customRenderer&&editable.getEditor().getEditorComponent()==editor&&editor.getDocument()==document
+                  &&editor.getText().equals("작성 중 초안")&&editor.getCaretPosition()==3&&editor.getBackground().equals(WorkbenchUi.surface())
+                  &&editor.getForeground().equals(WorkbenchUi.ink()),
+              "Mapper local styling retains custom renderers and an unfinished editable choice with its caret in "+dark);
+          scrollbar.setSize(180,10);scrollbar.doLayout();var track=new BufferedImage(180,10,BufferedImage.TYPE_INT_RGB);
+          var graphics=track.createGraphics();scrollbar.paint(graphics);graphics.dispose();
+          check(scrollbar.getUI()==scrollbarUi&&track.getRGB(3,5)==WorkbenchUi.background().getRGB(),
+              "the retained Mapper scrollbar paints its new track palette in "+dark);
+        }
+        check(PayloadIntegrationTest.sent.get()==sent,"manual themes and Mapper display updates send zero target HTTP");
+      });
     } finally { SimpleWorkflowTest.unload(); }
     System.out.println("SimpleEmbeddedThemeTest: " + checks + " checks passed (styling settles, host restoration retained)");
   }

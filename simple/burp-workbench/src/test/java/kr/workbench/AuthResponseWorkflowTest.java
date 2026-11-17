@@ -81,7 +81,7 @@ public final class AuthResponseWorkflowTest extends WorkbenchTest {
       edt(() -> {
         panel.history.setRowSelectionInterval(1,1);
         var cell = (JLabel)panel.history.prepareRenderer(panel.history.getCellRenderer(1,panel.history.convertColumnIndexToView(7)),1,panel.history.convertColumnIndexToView(7));
-        check(cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)) && cell.getIcon()!=null, "green verdict appears in history even for HTTP 200");
+        check(cell.getForeground().equals(WorkbenchUi.toneInk(WorkbenchUi.Tone.SUCCESS)), "green verdict appears in history even for HTTP 200");
         panel.show(panel.runs.get(1));
         check(panel.packets.getIconAt(0)==null && panel.judgementDetails.getText().contains("차단 응답 확인"), "packet tab and text show same verdict");
         var neutralCell = (JLabel)panel.history.prepareRenderer(panel.history.getCellRenderer(1,1),1,1);

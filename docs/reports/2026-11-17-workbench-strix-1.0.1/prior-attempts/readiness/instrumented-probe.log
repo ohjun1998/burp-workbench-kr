@@ -1,0 +1,25 @@
+GATE_STACK [java.base/java.lang.Thread.getStackTrace(Thread.java:1619), kr.workbench.SimpleTrafficReadinessTest.lambda$main$7(SimpleTrafficReadinessTest.java:45), kr.workbench.TrafficBrowser.begin(TrafficBrowser.java:156), java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method), java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77), java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43), java.base/java.lang.reflect.Method.invoke(Method.java:569), kr.workbench.SimpleTrafficReadinessTest.begin(SimpleTrafficReadinessTest.java:20), kr.workbench.SimpleTrafficReadinessTest.lambda$main$8(SimpleTrafficReadinessTest.java:46), java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318), java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773), java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720), java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714), java.base/java.security.AccessController.doPrivileged(AccessController.java:399), java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86), java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742), java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203), java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124), java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113), java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109), java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101), java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)]
+GATE_PREPARING true
+PASS the controlled preparation gate still shows the previous original result
+PASS one blocked preparation interval yields zero false-idle observations across 1000 cross-thread reads
+PASS preparation continues without an EDT exception
+PASS queued worker execution is also reported as active
+PASS ready search selects the intended immutable original rather than a prior view index
+PASS invalid regex stops cleanly without leaving preparation busy
+PASS query-error recovery keeps the exact stored original
+PASS a synchronous identity lookup failure reports a recoverable idle error
+PASS preparation failure preserves the previous completed view
+PASS a queued search stays active before explicit cancellation
+PASS explicit cancellation clears logical pending work
+PASS cancelled search keeps the previous completed original view
+PASS frozen view retains its published boundary while the new original is stored
+PASS unfreezing publishes the same newly retained original
+PASS project change clears the old query without leaving preparation pending
+PASS synchronous full-list publication notifies listeners only when its view is ready
+PASS closed browser rejects preparation and leaves no active worker
+PASS readiness, validation, retry, cancellation, frozen view and project transitions send no HTTP
+SimpleTrafficReadinessTest: 18 checks passed
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+
+EXIT 0

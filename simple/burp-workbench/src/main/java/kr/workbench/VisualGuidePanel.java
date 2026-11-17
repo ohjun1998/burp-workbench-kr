@@ -92,6 +92,14 @@ final class VisualGuidePanel extends JPanel implements AutoCloseable {
     if (!VisualGuideCatalog.all().isEmpty()) select(VisualGuideCatalog.all().get(0).id());
   }
 
+  void refreshTheme() {
+    if (closed) return;
+    int step=selectedStep;
+    select(selectedId);
+    if(step>0)selectStep(step);
+    WorkbenchUi.style(this);
+  }
+
   void select(String id) {
     if (!SwingUtilities.isEventDispatchThread()) { SwingUtilities.invokeLater(() -> select(id)); return; }
     if (closed) return;

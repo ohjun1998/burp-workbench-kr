@@ -2,10 +2,12 @@ package kr.workbench;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.DefaultHighlighter;
 
 /** Real tab, byte, formatting, search/navigation and cancellation regressions on the EDT. */
 public final class PacketInspectorTest extends WorkbenchTest {
@@ -19,6 +21,11 @@ public final class PacketInspectorTest extends WorkbenchTest {
   }
   static void query(PacketInspector p,String q)throws Exception {edt(()->p.search.setText(q));idle(p);}
   static void mode(PacketInspector p,int index)throws Exception {edt(()->p.tabs.get(index).doClick(0));idle(p);}
+  static int pixels(BufferedImage image,Color color) {
+    int count=0;
+    for(int y=0;y<image.getHeight();y++)for(int x=0;x<image.getWidth();x++)if(image.getRGB(x,y)==color.getRGB())count++;
+    return count;
+  }
   public static void main(String[] args)throws Exception {
     PacketInspector[] ref=new PacketInspector[2];edt(()->{ref[0]=new PacketInspector("test.request");ref[1]=new PacketInspector("test.response");});
     PacketInspector p=ref[0],other=ref[1];
@@ -85,6 +92,33 @@ public final class PacketInspectorTest extends WorkbenchTest {
       edt(()->{UIManager.put("Panel.background",new Color(25,25,25));WorkbenchUi.style(p);});
       check(p.search.getText().equals("userId")&&p.matches().size()==1&&p.mode()==PacketInspector.Mode.RAW,"theme update preserves mode query and matches");
       edt(()->UIManager.put("Panel.background",old));
+      edt(()->{p.setPacket("needle rest needle".getBytes(StandardCharsets.UTF_8),null);p.search.setText("needle");});idle(p);
+      edt(()->{
+        var marks=p.text.getHighlighter().getHighlights();
+        var spans=p.matches();var document=p.text.getDocument();
+        int current=p.currentMatch(),caret=p.text.getCaretPosition();
+        try {
+          for(boolean dark:new boolean[]{true,false}){
+            UIManager.put("Panel.background",dark?new Color(25,25,25):Color.WHITE);WorkbenchUi.style(p);
+            p.setSize(800,400);for(int pass=0;pass<5;pass++)UiLayoutTest.layout(p);
+            var retained=p.text.getHighlighter().getHighlights();
+            check(Arrays.equals(marks,retained)&&p.matches()==spans&&p.currentMatch()==current
+                    &&p.text.getDocument()==document&&p.text.getCaretPosition()==caret,
+                "a palette switch preserves existing search tags, offsets, selected match and caret: "+dark);
+            Color ordinary=((DefaultHighlighter.DefaultHighlightPainter)retained[0].getPainter()).getColor();
+            Color active=((DefaultHighlighter.DefaultHighlightPainter)retained[retained.length-1].getPainter()).getColor();
+            check(!ordinary.equals(active)&&(ordinary.getRed()<200)==dark&&(active.getRed()<200)==dark,
+                "existing ordinary and current search highlights use the selected light/dark palette: "+dark);
+            var image=new BufferedImage(p.text.getWidth(),p.text.getHeight(),BufferedImage.TYPE_INT_RGB);
+            var graphics=image.createGraphics();p.text.paint(graphics);graphics.dispose();
+            check(pixels(image,ordinary)>10,
+                "the real packet reader paints retained matches in the selected palette after a switch: "+dark);
+          }
+          p.next.doClick(0);
+          check(p.currentMatch()==1&&p.text.getCaretPosition()==spans.get(1).start(),
+              "search navigation retains exact offsets after light/dark roundtrip");
+        } finally {UIManager.put("Panel.background",old);WorkbenchUi.style(p);}
+      });
       edt(()->{p.search.setText("demo");p.close();});idle(p);
       check(!p.syntaxDebounce.isRunning()&&p.closed()&&p.text.getText().isEmpty()&&p.matches().isEmpty()&&p.previewBytes().length==0,"unload cancels work and clears retained preview and search content");
       edt(()->p.setPacket(copy,null));check(p.text.getText().isEmpty(),"closed inspector ignores later packet updates");

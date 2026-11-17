@@ -17,14 +17,14 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 WB = ROOT / 'burp-workbench'
 CAPTURES = ['00-scope-editor.png', '00-start.png', '01-capture.png', '02-request.png',
-            '03-analysis.png', '04-auth-accounts.png', '04-auth-results.png',
+            '03-analysis.png', '04-auth-accounts.png', '04-auth-connections.png', '04-auth-results.png',
             '05-evidence.png', '06-redaction.png', '07-payload.png', '07-payload-results.png', '08-mapper.png',
-            '09-environment.png', '10-js.png', '11-replay.png', '26-dashboard-empty.png', '12-exposure-search.png', '13-exposure-cve.png', '14-data.png', '15-progress.png', '16-dashboard.png']
+            '09-environment.png', '10-js.png', '11-replay.png', '26-dashboard-empty.png', '12-exposure-search.png', '13-exposure-cve.png', '13-exposure-cve-evidence.png', '14-data.png', '15-progress.png', '16-dashboard.png', '04-auth-accounts-full-overview.png', '04-auth-accounts-full-accounts.png', '04-auth-accounts-full-policy.png']
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--out', type=Path, help='Default: docs/images/strix/<current version>; older capture sets remain unchanged')
+    parser.add_argument('--out', type=Path, help='Default: docs/images/<current version>; older capture sets remain unchanged')
     parser.add_argument('--java', default='java')
     parser.add_argument('--themes', nargs='+', choices=['light', 'dark'], default=['light', 'dark'])
     parser.add_argument('--sizes', nargs='+', default=['1024x720', '1280x800'])
@@ -40,6 +40,8 @@ def main() -> int:
     if not jar.exists() or not (WB / 'build/tests').exists():
         parser.error('Build Simple and test adapters first: python simple/dev.py test')
     args.out = (args.out if args.out else ROOT / 'docs/images/strix' / version).resolve()
+    # An interrupted run must not leave a prior successful report looking current.
+    (args.out / 'layout-report.json').unlink(missing_ok=True)
     classes = args.out / '.classes'
     classes.mkdir(parents=True, exist_ok=True)
     classpath = os.pathsep.join(map(str, [jar, *sorted((WB / 'deps').glob('*.jar')), WB / 'build/tests']))
@@ -77,9 +79,9 @@ def main() -> int:
     failed = [row for row in all_scenarios if row['passed'] != 'true']
     # Verify the principal reader and evidence writing areas retain usable height.
     required = {
-        ('13-exposure-cve.png', 'wb.exposure.conditions'): 85,
-        ('13-exposure-cve.png', 'wb.exposure.evidence'): 85,
-        ('12-exposure-search.png', 'wb.exposure.discovery'): 85,
+        ('13-exposure-cve.png', 'wb.pdf.exposure.cve.facts'): 85,
+        ('13-exposure-cve-evidence.png', 'wb.exposure.evidence'): 85,
+        ('12-exposure-search.png', 'wb.pdf.exposure.discovery.facts'): 85,
         ('02-request.png', 'wb.traffic.request.text'): 65,
         ('02-request.png', 'wb.traffic.response.text'): 65,
         ('05-evidence.png', 'wb.bounty.evidence.packet'): 65,

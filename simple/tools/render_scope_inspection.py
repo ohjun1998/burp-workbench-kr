@@ -27,12 +27,13 @@ CAPTURES = [
     '23-katana-settings.png', '24-katana-results.png',
     '25-inspection-report.png',
     '27-dashboard.png', '28-dashboard-detail.png', '29-dashboard-empty-filter.png',
+    '30-dashboard-distribution.png',
 ]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--out', type=Path, help='Default: docs/images/strix/<current version>; preserves previous versions')
+    parser.add_argument('--out', type=Path, help='Default: docs/images/<current version>; preserves previous versions')
     parser.add_argument('--java', default='java')
     parser.add_argument('--themes', nargs='+', choices=['light', 'dark'], default=['light', 'dark'])
     parser.add_argument('--sizes', nargs='+', default=['1024x720', '1280x800'])
@@ -46,6 +47,8 @@ def main() -> int:
     if not jar.is_file() or not (WB / 'build/tests').exists():
         parser.error('Build the current Simple JAR and test adapters first.')
     args.out.mkdir(parents=True, exist_ok=True)
+    # An interrupted run must not leave a prior successful report looking current.
+    (args.out / 'scope-layout-report.json').unlink(missing_ok=True)
     classes = args.out / '.classes'
     classes.mkdir(exist_ok=True)
     cp = os.pathsep.join(map(str, [jar, *sorted((WB / 'deps').glob('*.jar')), WB / 'build/tests']))
@@ -95,9 +98,9 @@ def main() -> int:
         ('22-inspection-original.png', 'wb.scope.inspection.original.response.text'): 100,
         ('24-katana-results.png', 'wb.scope.inspection.katana'): 100,
         ('28-dashboard-detail.png', 'wb.scope.dashboard.results'): 100,
-        ('28-dashboard-detail.png', 'wb.scope.dashboard.detail'): 80,
+        ('28-dashboard-detail.png', 'wb.scope.dashboard.detail.summary'): 80,
         ('29-dashboard-empty-filter.png', 'wb.scope.dashboard.empty'): 60,
-        ('29-dashboard-empty-filter.png', 'wb.scope.dashboard.detail'): 80,
+        ('29-dashboard-empty-filter.png', 'wb.scope.dashboard.detail.summary'): 80,
     }
     for (view, name), minimum in required.items():
         found = [r for r in content if r['view'] == view and r['name'] == name]
@@ -105,6 +108,15 @@ def main() -> int:
             collapsed.append({'view': view, 'name': name, 'reason': 'missing'})
         else:
             collapsed.extend(r for r in found if int(r['visibleHeight']) < minimum or int(r['visibleWidth']) < 200)
+    for part in [*(f'bar.{key}' for key in ['paths', 'api', 'environment', 'secrets', 'access', 'coverage', 'observations']),
+                 *(f'severity.{key}' for key in ['high', 'medium', 'low', 'info'])]:
+        name = f'wb.scope.dashboard.{part}'
+        found = [r for r in controls if r['view'] == '30-dashboard-distribution.png' and r['name'] == name]
+        if not found:
+            collapsed.append({'view': '30-dashboard-distribution.png', 'name': name, 'reason': 'missing'})
+        else:
+            collapsed.extend(r for r in found if r['fullyVisible'] != 'true'
+                             or int(r['controlWidth']) < 200 or int(r['controlHeight']) < 20)
     for name, rows in [('controls', controls), ('content', content), ('scenarios', scenarios)]:
         if rows:
             with (args.out / f'scope-{name}.csv').open('w', encoding='utf-8', newline='') as target:
@@ -118,6 +130,7 @@ def main() -> int:
         'java17ApiCompatibilityVerified': not args.source_target,
         'renderedViews': views, 'controls': len(controls), 'scenarios': len(scenarios),
         'captureFiles': CAPTURES,
+        'dashboardViews': {'default': '27-dashboard.png', 'expandedDistribution': '30-dashboard-distribution.png'},
         'clippedControls': clipped, 'collapsedAreas': collapsed, 'failedScenarios': failed, 'missingCaptures': missing,
         'scope': 'Production Scope inspection components with synthetic wire packets and browser observations; zero target HTTP. Not native Burp GUI, live browser DOM or a live target assessment.',
         'result': 'passed' if not clipped and not collapsed and not failed and not missing else 'failed',

@@ -174,6 +174,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private Component payloadPage;
   private final JButton visualGuide = new JButton("Guide");
   private VisualGuideWindow visualGuideWindow;
+  private WorkbenchTheme theme;
   private final Diagnostics diagnostics = new Diagnostics();
   private final JButton logButton = new JButton("로그");
   private JPanel logContent;
@@ -212,6 +213,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private TargetWindow strixWindow;
 
   public void addPayloadRunnerPage(Component page) {
+    if(page instanceof JPanel panel){ApprovedLayouts.payload(panel);ApprovedLayouts.decorate(panel);ApprovedPayloadDesign.install(panel);}
     WorkbenchUi.style(page);
     Diagnostics.bind(page, diagnostics);
     payloadPage = page;
@@ -273,6 +275,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       jsIn = area("", 10),
       jsOut = area("", 10);
   private HttpRequestEditor requestView;
+  private final PacketInspector mapperRequestPacket=new PacketInspector("wb.mapper.request"),mapperResponsePacket=new PacketInspector("wb.mapper.response");
   private final PacketInspector requestPacket = new PacketInspector("wb.traffic.request"),
       responsePacket = new PacketInspector("wb.traffic.response");
   private HttpResponseEditor responseView;
@@ -404,6 +407,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     if (responseNativeWindow != null) responseNativeWindow.dispose();
                     requestPacket.close();
                     responsePacket.close();
+                    mapperRequestPacket.close();mapperResponsePacket.close();
                     if (timer != null) timer.stop();
                     if (root != null) root.putClientProperty("wb.skin.closed", true);
                     if (structuredCompare != null) structuredCompare.close();
@@ -419,6 +423,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     }
                     if (passiveScan != null) passiveScan.close();
                     if (activity != null) activity.close();
+                    if (theme != null) theme.close();
                     WorkbenchScope.release(api);
                   });
             });
@@ -440,6 +445,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       api.logging()
           .logToOutput(BuildInfo.PRODUCT_NAME + " loaded. SCOPE 수집과 선택한 요청의 직접 실행을 사용하세요.");
     } catch (Exception e) {
+      if (theme != null) theme.close();
       if (captureObservations != null) captureObservations.close();
       if (featureMapper != null) featureMapper.close();
       captureStage("초기화 실패 저장소 정리", trafficStore::close);
@@ -499,6 +505,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void buildUi() {
+    theme = new WorkbenchTheme(api);
     root = new JPanel(new BorderLayout());
     root.setName("wb.root");
     tabs =
@@ -626,6 +633,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           public boolean supportsAssessmentTasks() { return true; }
           public Map<String,Object> inspectionCommand(String origin) { return scopeInspectionPanel==null?Map.of():scopeInspectionPanel.browserCommand(origin); }
           public void inspectionEvent(Map<String,Object> event) { if(scopeInspectionPanel!=null)scopeInspectionPanel.browserEvent(event); }
+          public void selectedPacket(byte[] request,int requestLength,byte[] response,int responseLength){if(!unloaded.get()){mapperRequestPacket.setPacket(request,null,requestLength);mapperResponsePacket.setPacket(response,null,responseLength);}}
           public boolean allowsAssessmentUrl(String url) {
             return !unloaded.get() && localScope.matchesTraffic(url);
           }
@@ -637,6 +645,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             mapperTools.setSelectedComponent(activity);
           }
         });
+    mapperPage.putClientProperty("wb.mapper.request.inspector",mapperRequestPacket);mapperPage.putClientProperty("wb.mapper.response.inspector",mapperResponsePacket);
     mapperTools = new FolderNavigation.Pages();
     mapperTools.setName("wb.mapper.tools");
     mapperTools.addTab("기능 분류·실행", mapperPage);
@@ -684,7 +693,9 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     workbenchWindow = new WorkbenchWindow(root);
     navigation = new FolderNavigation(api, tabs, this::openSettings, null, logButton,
         true, dashboard, inspect, workbenchWindow.fullScreenButton, visualGuide);
+    navigation.setThemeAction(theme::toggle);
     root.add(navigation);
+    ApprovedLayouts.install(root);
     trafficTools.addChangeListener(e -> updateFeatureHelp());
     explorationTools.addChangeListener(e -> updateFeatureHelp());
     mapperTools.addChangeListener(e -> updateFeatureHelp());
@@ -696,6 +707,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     WorkbenchUi.style(root);
     navigation.restoreLayout();
     WorkbenchUi.style(workbenchWindow.launcher);
+    theme.bind(root, () -> {
+      navigation.restoreAppearance();
+      WorkbenchUi.style(workbenchWindow.launcher);
+      if (commonSettingsContent != null) WorkbenchUi.style(commonSettingsContent);
+      if (visualGuideWindow != null) visualGuideWindow.panel.refreshTheme();
+    });
     api.userInterface().registerSuiteTab(FeatureGuide.SUITE_TAB, workbenchWindow.launcher);
     WorkbenchSkin.install(root, navigation::restoreLayout);
     workspaceResume = WorkspaceResume.forApi(api);
@@ -738,7 +755,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               public void actionPerformed(java.awt.event.ActionEvent e) {
                 try {
                   selectedTraffic()
-                      .forEach(t -> api.repeater().sendToRepeater(t.request(), BuildInfo.PRODUCT_NAME));
+                      .forEach(t -> api.repeater().sendToRepeater(t.request(), "Workbench"));
                 } catch (Exception ex) {
                   error(ex);
                 }
@@ -1473,10 +1490,14 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         "클릭: OFF ↔ SCOPE · OFF 수집 중지 / SCOPE 목록에서 체크한 Burp Scope·수동 URL 수집");
     logTable =
         new JTable(logModel) {
+          // The final row has no extra outer separator, matching the approved table edge.
+          @Override public Dimension getPreferredSize(){Dimension d=super.getPreferredSize();if(getRowCount()>0)d.height=Math.max(0,d.height-1);return d;}
           @Override public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer,int row,int column){
             Component component=super.prepareRenderer(renderer,row,column);
             if(component instanceof JLabel label&&convertColumnIndexToModel(column)==2&&trafficBrowser!=null){
-              int raw=convertRowIndexToModel(row);label.setText(trafficBrowser.displayUrl(raw,Objects.toString(logModel.getValueAt(raw,2),"")));
+              int raw=convertRowIndexToModel(row);String url=Objects.toString(logModel.getValueAt(raw,2),"");
+              try{var uri=java.net.URI.create(url);url=uri.getRawPath()+(uri.getRawQuery()==null?"":"?"+uri.getRawQuery());}catch(IllegalArgumentException ignored){}
+              label.setText(trafficBrowser.displayUrl(raw,url));
             }
             return component;
           }
@@ -1518,7 +1539,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             "Repeater에 요청 준비",
             () ->
                 selectedTraffic()
-                    .forEach(t -> api.repeater().sendToRepeater(t.request(), BuildInfo.PRODUCT_NAME))));
+                    .forEach(t -> api.repeater().sendToRepeater(t.request(), "Workbench"))));
     trafficMenu.add(trafficAction("입력값 검사에 요청 연결", this::selectedPayload));
     trafficMenu.add(
         trafficAction(
@@ -1529,8 +1550,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             }));
     trafficMenu.add(trafficAction("선택 요청 JWT 확인", this::selectedJwt));
     trafficMenu.add(trafficAction("선택 응답에서 API 찾기", this::selectedJs));
-    JMenuItem strix = trafficAction("선택 원본으로 Strix 진단 준비", this::prepareSelectedStrix);
-    strix.setName("wb.simple.strix.prepare"); trafficMenu.add(strix);
     trafficMenu.add(
         trafficAction(
             "선택 요청 변환하기",
@@ -1617,6 +1636,8 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     trafficMenu.add(trafficAction("Repeater에 요청 준비", this::prepareSimpleRepeater));
     trafficMenu.add(trafficAction("입력값 검사에 요청 연결", this::selectedPayload));
     trafficMenu.add(trafficAction("선택 응답에서 API 찾기", this::selectedJs));
+    JMenuItem strix = trafficAction("선택 원본으로 Strix 진단 준비", this::prepareSelectedStrix);
+    strix.setName("wb.simple.strix.prepare"); trafficMenu.add(strix);
     trafficMenu.addSeparator();
     trafficMenu.add(trafficAction("선택 원본을 증거에 추가", this::addSimpleEvidence));
     logTable.setToolTipText("요청 선택 → 비교 준비 또는 증거에 추가 · Shift+F10 행 메뉴 · Ctrl+R Repeater 준비");
@@ -1630,14 +1651,16 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             });
     scopeListButton = button("SCOPE 목록", this::showScopeList);
     scopeListButton.setName("wb.traffic.scope.list");
-    JPanel req = WorkbenchUi.card("요청", requestPacket),
-        res = WorkbenchUi.card("응답", responsePacket);
+    JPanel req = ApprovedTrafficPanel.packetCard("요청", requestPacket),
+        res = ApprovedTrafficPanel.packetCard("응답", responsePacket);
     JSplitPane viewers = WorkbenchUi.split(JSplitPane.VERTICAL_SPLIT, req, res, .5);
     viewers.setName("wb.traffic.messages");
     JPanel messages = new JPanel(new BorderLayout(0, 6));
     messages.add(viewers);
+    JPanel trafficList = new JPanel(new BorderLayout());
+    trafficList.setName("wb.placement.traffic.list"); trafficList.add(trafficListPanel());
     JSplitPane body =
-        WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficListPanel(), messages, .30);
+        WorkbenchUi.split(JSplitPane.HORIZONTAL_SPLIT, trafficList, messages, .30);
     body.setName("wb.traffic.workspace");
     JPanel controls = new JPanel(new BorderLayout(0, 5));
     controls.setName("wb.traffic.controls");
@@ -1651,7 +1674,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     accountChoice.addPopupMenuListener(new javax.swing.event.PopupMenuListener(){public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent e){for(var identity:trafficBrowser.identities.get())if(((DefaultComboBoxModel<String>)accountChoice.getModel()).getIndexOf(identity.label())<0)accountChoice.addItem(identity.label());}public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent e){}public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e){}});
     accountChoice.addActionListener(e->{if(syncingQuick[0])return;try{trafficBrowser.quickFilter(null,null,Objects.toString(accountChoice.getSelectedItem(),"전체").replaceFirst("^전체$",""));}catch(RuntimeException invalid){trafficBrowser.feedback.setText(invalid.getMessage());}});
     scopeListButton.setText("수집 설정");scopeListButton.setIcon(WorkspaceIcons.of("gear"));
-    JButton trafficSettings=new JButton("설정 ▾");
+    JButton trafficSettings=new JButton("수집 설정 ▾");
     trafficSettings.setIcon(WorkspaceIcons.of("gear"));trafficSettings.setName("wb.traffic.settings");
     trafficSettings.setToolTipText("수집 설정 · 검색·목록 설정");
     trafficSettings.getAccessibleContext().setAccessibleName("수집 설정 · 검색·목록 설정");
@@ -1664,7 +1687,12 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     trafficSettings.addActionListener(e->trafficSettingsMenu.show(trafficSettings,0,trafficSettings.getHeight()));
     JPanel trafficContext=row(new JLabel("대상"),targetChoice,new JLabel("계정"),accountChoice,captureButton);
     trafficContext.setName("wb.actions.traffic.context");
+    trafficSettingsMenu.addSeparator();
+    trafficSettingsMenu.add(WorkflowUi.proxy(trafficBrowser.freezeView));
+    trafficSettingsMenu.add(WorkflowUi.proxy(trafficBrowser.newTraffic));
     JPanel trafficConfiguration=row(trafficSettings);trafficConfiguration.setName("wb.actions.traffic.settings");
+    JPanel listControllers=row(trafficBrowser.freezeView,trafficBrowser.newTraffic);listControllers.setVisible(false);
+    trafficConfiguration.add(listControllers);
     controls.add(CompactWorkbenchUi.toolbar(trafficContext,trafficConfiguration), BorderLayout.NORTH);
     JButton compareSelected = button("계정 비교 준비", this::prepareSimpleComparison);
     JButton repeatSelected = button("Repeater", this::prepareSimpleRepeater);
@@ -1672,16 +1700,30 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     compareSelected.setName("wb.simple.traffic.compare");
     repeatSelected.setName("wb.simple.traffic.repeater");
     evidenceSelected.setName("wb.simple.traffic.evidence");
-    WorkbenchUi.primary(compareSelected);
+    compareSelected.setText("계정 비교 준비");repeatSelected.setText("Repeater 준비");
+    JButton payloadSelected=button("입력값 검사 준비",this::selectedPayload);payloadSelected.setName("wb.simple.traffic.payload");
+    JButton jsSelected=button("응답에서 API 찾기",this::selectedJs);jsSelected.setName("wb.simple.traffic.js");
+    WorkflowUi.secondary(compareSelected);WorkbenchUi.primary(repeatSelected);
     JLabel selectionInfo = new JLabel("요청을 선택하면 다음 작업을 진행할 수 있습니다.");
     selectionInfo.setName("wb.simple.traffic.selection");
     Runnable selectedState = () -> {
       int count = logTable.getSelectedRowCount();
-      for (JButton action : new JButton[] {compareSelected, repeatSelected, evidenceSelected}) {
+      selectionInfo.putClientProperty("wb.traffic.selection.parts",null);
+      for (JButton action : new JButton[] {compareSelected, repeatSelected, evidenceSelected, payloadSelected, jsSelected}) {
         action.setEnabled(count > 0);
         action.setToolTipText(count > 0 ? "선택 원본 " + count + "건 · 대상 요청은 자동 전송하지 않습니다." : "먼저 목록에서 요청을 선택하세요.");
       }
-      selectionInfo.setText(count > 0 ? "선택 " + count + "건" : "요청을 선택하세요.");
+      String selectionText = count > 0 ? "선택 " + count + "건" : "요청을 선택하세요.";
+      if(count==1)try{
+        Traffic selected=selectedTraffic().get(0);
+        int modelRow=logTable.convertRowIndexToModel(logTable.getSelectedRow());
+        String identity=Objects.toString(trafficBrowser.extra(modelRow,8),"미매핑");
+        String status=selected.packet().responseStatus();
+        selectionInfo.putClientProperty("wb.traffic.selection.parts",new String[]{selected.packet().method()+" "+java.net.URI.create(selected.packet().url()).getRawPath(),status,identity,selected.time()});
+        selectionText=selected.packet().method()+" "+java.net.URI.create(selected.packet().url()).getRawPath()
+            +" · "+(status==null||status.isBlank()?"응답 없음":status)+" · "+identity+" · "+selected.time()+" · "+selectionText;
+      }catch(RuntimeException ignored){}
+      selectionInfo.setText(selectionText);selectionInfo.setToolTipText(selectionText);selectionInfo.setMinimumSize(new Dimension(140,28));
     };
     logTable.getSelectionModel().addListSelectionListener(e -> selectedState.run());
     selectedState.run();
@@ -1692,13 +1734,16 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     trafficBrowser.quickStateChanged=()->{syncingQuick[0]=true;try{var q=trafficBrowser.query;methodGroup.clearSelection();for(JToggleButton b:quickMethods)b.setSelected(b.getText().equals("오류")?q.status().equals("오류"):q.status().equals("전체")&&b.getText().equals(q.method()));accountChoice.setSelectedItem(q.account().isEmpty()?"전체":q.account());}finally{syncingQuick[0]=false;}};trafficBrowser.quickStateChanged.run();
     queryRow.add(methods,BorderLayout.EAST);
     compareSelected.setIcon(WorkspaceIcons.of("traffic"));repeatSelected.setIcon(WorkspaceIcons.of("mapper"));evidenceSelected.setIcon(WorkspaceIcons.of("bounty"));
-    JPanel selectedActions=row(selectionInfo,repeatSelected,evidenceSelected,compareSelected);selectedActions.setName("wb.actions.traffic.selection");
-    JPanel searchActions=CompactWorkbenchUi.toolbar(queryRow,selectedActions);
-    JPanel footer=new JPanel(new BorderLayout());footer.add(trafficBrowser.conditionBar());footer.add(row(trafficBrowser.freezeView,trafficBrowser.newTraffic),BorderLayout.EAST);messages.add(footer,BorderLayout.SOUTH);
-    controls.add(searchActions, BorderLayout.SOUTH);
-    JPanel main = page(controls, body);
-    main.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));
+    JPanel requestUse=WorkflowUi.menu("wb.workflow.traffic.use","요청 활용",compareSelected,payloadSelected,jsSelected,evidenceSelected);
+    JPanel selectedActions=row(requestUse,repeatSelected);selectedActions.setName("wb.actions.traffic.selection");
+    JPanel selectionBar=CompactWorkbenchUi.toolbar(selectionInfo,selectedActions);
+    selectionBar.setName("wb.placement.traffic.selection");
+    trafficList.add(ReferenceUi.header(selectionBar,null),BorderLayout.SOUTH);
+    controls.add(queryRow, BorderLayout.SOUTH);
+    JPanel main = new ApprovedTrafficPanel(controls, body, viewers, logTable, selectionBar, selectionInfo, targetChoice, accountChoice, captureButton, filter, trafficSettings, repeatSelected, requestUse, requestPacket, responsePacket, trafficBrowser);
     main.setName("wb.traffic");
+    // Search recovery remains available from the retained search/settings controllers.
+    ((ApprovedTrafficPanel)main).setFeedback(trafficBrowser.conditionBar());
     trafficTools = new FolderNavigation.Pages();
     trafficTools.setName("wb.traffic.tools");
     trafficTools.addTab("요청·응답", main);
@@ -2271,21 +2316,30 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     convert.setName("wb.data.codec.convert");WorkbenchUi.primary(convert);
     JButton reuse=button("출력 → 입력",()->codecIn.setText(codecOut.getText()));reuse.setName("wb.data.codec.reuse");
     JButton copyOutput=button("복사",()->copy(codecOut.getText()));copyOutput.setName("wb.data.codec.copy");
-    JPanel inputActions=row(operation,convert);inputActions.setName("wb.actions.data.codec.input");
-    JPanel outputActions=row(reuse,copyOutput);outputActions.setName("wb.actions.data.codec.output");
+    JPanel inputActions=row(new JLabel("변환 방식"),operation,convert);inputActions.setName("wb.actions.data.codec.input");
+    JPanel outputActions=row(copyOutput,WorkflowUi.menu("wb.workflow.data.codec.reuse","출력 작업",reuse));outputActions.setName("wb.actions.data.codec.output");
     JPanel input=new JPanel(new BorderLayout());input.setName("wb.codec.input");
-    input.add(CompactWorkbenchUi.toolbar(new JLabel("입력 (UTF-8 텍스트)"),inputActions),BorderLayout.NORTH);
     input.add(new JScrollPane(codecIn));
+    input.add(new JLabel("UTF-8 텍스트"),BorderLayout.SOUTH);
     JPanel output=new JPanel(new BorderLayout());output.setName("wb.codec.output");
-    output.add(CompactWorkbenchUi.toolbar(new JLabel("출력"),outputActions),BorderLayout.NORTH);
     output.add(new JScrollPane(codecOut));
+    output.add(new JLabel("출력 결과"),BorderLayout.SOUTH);
+    JPanel inputCard=WorkbenchUi.card("입력",input);
+    JPanel outputCard=WorkbenchUi.card("출력",output);
+    outputCard.remove(((BorderLayout)outputCard.getLayout()).getLayoutComponent(BorderLayout.NORTH));
+    outputCard.add(ReferenceUi.header(new JLabel("출력"),outputActions),BorderLayout.NORTH);
     JSplitPane editors =
         split(
             JSplitPane.HORIZONTAL_SPLIT,
-            input,
-            output);
+            inputCard,
+            outputCard);
     editors.setName("wb.codec.messages");
-    JPanel panel=new JPanel(new BorderLayout());panel.add(editors);return panel;
+    JPanel panel=new JPanel(new BorderLayout(0,8));
+    panel.add(CompactWorkbenchUi.toolbar(inputActions,new JLabel("로컬 변환 · 요청 전송 없음")),BorderLayout.NORTH);
+    panel.add(editors);
+    JLabel preservation=new JLabel("입력과 출력은 각각 보존합니다. 출력 재사용은 직접 선택할 때만 입력에 반영합니다.");
+    preservation.putClientProperty("wb.secondary",true);preservation.putClientProperty("wb.font.size",11);
+    panel.add(preservation,BorderLayout.SOUTH);return panel;
   }
 
   private JPanel jwtPanel() {
@@ -2609,7 +2663,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         x ->
             picked.stream()
                 .limit(20)
-                .forEach(rr -> api.repeater().sendToRepeater(rr.request(), BuildInfo.PRODUCT_NAME)));
+                .forEach(rr -> api.repeater().sendToRepeater(rr.request(), "Workbench")));
     menu.add(repeater);
     return List.of(menu);
   }

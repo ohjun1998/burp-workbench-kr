@@ -21,15 +21,15 @@ final class WorkbenchSkin {
     SearchField(int columns) { this(columns,"URL, 메서드, 상태 코드 검색"); }
     SearchField() { this(0); }
     SearchField(int columns,String placeholder) { super(columns); this.placeholder=placeholder; }
-    @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(34,d.height)); }
+    @Override public Dimension getPreferredSize() { Dimension d=super.getPreferredSize();return new Dimension(d.width, Math.max(32,d.height)); }
     @Override protected void paintComponent(Graphics graphics) {
       super.paintComponent(graphics);
-      Graphics2D iconGraphics=(Graphics2D)graphics.create();iconGraphics.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));WorkspaceIcons.of("search").paintIcon(this,iconGraphics,9,(getHeight()-16)/2);iconGraphics.dispose();
+      Graphics2D iconGraphics=(Graphics2D)graphics.create();iconGraphics.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));if(getClientProperty("wb.search.placeholder")!=null){Graphics2D small=(Graphics2D)iconGraphics.create();small.translate(10,(getHeight()-9)/2);small.scale(.5,.5);new ApprovedTrafficIcon("exposure",WorkbenchUi.ink()).paintIcon(this,small,0,0);small.dispose();}else WorkspaceIcons.of("search").paintIcon(this,iconGraphics,9,(getHeight()-16)/2);iconGraphics.dispose();
       if (getText().isEmpty() && !hasFocus()) {
         Graphics2D g=(Graphics2D)graphics.create();antialias(g);
         g.setColor(WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));
-        g.setFont(WorkbenchUi.font());
-        String text=placeholder;
+        g.setFont(getFont());
+        String text=getClientProperty("wb.search.placeholder") instanceof String custom?custom:placeholder;
         FontMetrics fm=g.getFontMetrics();
         Shape old=g.getClip();g.clipRect(30,0,Math.max(0,getWidth()-40),getHeight());
         g.drawString(text,30,(getHeight()-fm.getHeight())/2+fm.getAscent());g.setClip(old);g.dispose();
@@ -42,17 +42,20 @@ final class WorkbenchSkin {
     button.setOpaque(false);
     button.setContentAreaFilled(false);
     button.setRolloverEnabled(true);
-    String label=button.getText()==null?"":button.getText();if(button.getIcon()==null&&!label.startsWith("<html")&&!(button instanceof JToggleButton)&&!Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"))){String kind=label.contains("설정")?"gear":label.contains("Repeater")?"play":label.equals("중지")?"stop":label.contains("증거")&&label.contains("추가")?"plus":null;if(kind!=null)button.setIcon(WorkspaceIcons.of(kind));}
+    String label=button.getText()==null?"":button.getText();if(button.getIcon()==null&&!label.startsWith("<html")&&!(button instanceof JToggleButton)&&!Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"))&&!Boolean.TRUE.equals(button.getClientProperty("wb.no.auto.icon"))){String kind=label.contains("설정")?"gear":label.contains("Repeater")?"play":label.equals("중지")?"stop":label.contains("증거")&&label.contains("추가")?"plus":null;if(kind!=null)button.setIcon(WorkspaceIcons.of(kind));}
     button.setBorder(Boolean.TRUE.equals(button.getClientProperty("wb.compact.button"))
         ? BorderFactory.createEmptyBorder(5, 9, 5, 9)
-        : BorderFactory.createEmptyBorder(7, 12, 7, 12));
+        : BorderFactory.createEmptyBorder(4, 10, 4, 10));
+    if(button.getClientProperty("wb.approved.button.insets") instanceof Insets insets)button.setBorder(BorderFactory.createEmptyBorder(insets.top,insets.left,insets.bottom,insets.right));
   }
 
   private static final class ButtonUi extends BasicButtonUI {
     @Override public void update(Graphics graphics, JComponent component) { paint(graphics, component); }
     @Override public Dimension getPreferredSize(JComponent component) {
+      if(Boolean.TRUE.equals(component.getClientProperty("wb.approved.disclosure"))){Dimension size=super.getPreferredSize(component);return new Dimension(size.width+12,36);}
       if (Boolean.TRUE.equals(component.getClientProperty("wb.capture")))
         return new Dimension(132, 34);
+      if(Boolean.TRUE.equals(component.getClientProperty("wb.approved.analysis")))return new Dimension("wb.auth.detect".equals(component.getName())?96:56,22);
       if (Boolean.TRUE.equals(component.getClientProperty("wb.analysis.lamp")))
         return new Dimension(132, 34);
       Dimension size = super.getPreferredSize(component);
@@ -62,7 +65,9 @@ final class WorkbenchSkin {
       AbstractButton button = (AbstractButton) component;
       Graphics2D g = (Graphics2D) graphics.create();
       antialias(g);
-      if (Boolean.TRUE.equals(button.getClientProperty("wb.capture"))) {
+      if(Boolean.TRUE.equals(button.getClientProperty("wb.approved.analysis"))){
+        boolean on=button.isSelected();g.setColor(on?(WorkbenchUi.dark()?new Color(32,60,51):new Color(233,247,240)):WorkbenchUi.raised());g.fillRoundRect(0,0,button.getWidth(),button.getHeight(),5,5);g.setColor(on?(WorkbenchUi.dark()?new Color(103,213,164):new Color(11,119,82)):kr.packetui.VisualTheme.muted());g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(11f)));String caption="wb.auth.detect".equals(button.getName())?(on?"인증 후보 수집 중":"인증 후보 수집 꺼짐"):(on?"분석 ON":"분석 OFF");g.drawString(caption,8,(button.getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());
+      } else if (Boolean.TRUE.equals(button.getClientProperty("wb.capture"))) {
         capture(g, (JButton)button);
       } else if (Boolean.TRUE.equals(button.getClientProperty("wb.analysis.lamp"))) {
         lamp(g, button, button.getText(), button.isSelected()
@@ -75,42 +80,80 @@ final class WorkbenchSkin {
           if(button.getModel().isRollover() || button.getModel().isPressed())fill=fill.brighter();
         } else {
           if (!primary && button.isEnabled() && (button.getModel().isRollover() || button.isSelected())) fill = WorkbenchUi.selected();
-          if (button.getModel().isPressed()) fill = primary?WorkbenchUi.accent().darker():WorkbenchUi.selected();
+          if (button.getModel().isPressed()) fill = primary?kr.packetui.VisualTheme.primary().darker():WorkbenchUi.selected();
         }
         boolean segment=Boolean.TRUE.equals(button.getClientProperty("wb.segment.button"));
-        if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.surface():WorkbenchUi.raised());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.isSelected()||button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
+        if(Boolean.TRUE.equals(button.getClientProperty("wb.approved.disclosure"))){
+          g.setColor(WorkbenchUi.surface());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,14,14);
+          g.setColor(button.hasFocus()?WorkbenchUi.accent():WorkbenchUi.line());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,14,14);
+          g.setColor(kr.packetui.VisualTheme.muted());Object pointSize=button.getClientProperty("wb.font.size");g.setFont(WorkbenchUi.font().deriveFont(WorkbenchUi.displaySize(pointSize instanceof Number n?n.floatValue():11f)));
+          String caption=button.getText()==null?"":button.getText().replaceFirst("^[▸▾▶▼]\\s*","").replaceFirst("\\s*[▾▸⌄⌃]$","");
+          Shape clip=g.getClip();g.clipRect(12,0,Math.max(0,button.getWidth()-35),button.getHeight());g.drawString(caption,12,(button.getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());g.setClip(clip);
+          int x=button.getWidth()-16,y=button.getHeight()/2;g.setStroke(new BasicStroke(1.2f,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));g.drawPolyline(new int[]{x-3,x,x+3},button.isSelected()?new int[]{y+1,y-2,y+1}:new int[]{y-1,y+2,y-1},3);g.dispose();return;
+        }
+        if(Boolean.TRUE.equals(button.getClientProperty("wb.filter.segment"))){g.setColor(button.isSelected()?WorkbenchUi.selected():Boolean.TRUE.equals(button.getClientProperty("wb.approved.filter.surface"))?WorkbenchUi.surface():button.getParent()==null?WorkbenchUi.background():button.getParent().getBackground());g.fillRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);if(button.hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRoundRect(0,0,button.getWidth()-1,button.getHeight()-1,6,6);}super.paint(g,component);g.dispose();return;}
         if(!segment||button.getModel().isRollover()||button.getModel().isPressed()) {
-          g.setPaint(primary&&!button.getModel().isPressed()?new GradientPaint(0,0,new Color(255,126,61),0,button.getHeight(),WorkbenchUi.accent()):new GradientPaint(0,0,fill,0,button.getHeight(),fill));
+          g.setPaint(primary&&!button.getModel().isPressed()?new GradientPaint(0,0,kr.packetui.VisualTheme.primary(),0,button.getHeight(),kr.packetui.VisualTheme.primary()):new GradientPaint(0,0,fill,0,button.getHeight(),fill));
           g.fillRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
         }
         if(!segment||button.hasFocus()) {
-          g.setColor(button.hasFocus() || primary ? WorkbenchUi.accent() : WorkbenchUi.line());
+          g.setColor(button.hasFocus() ? WorkbenchUi.accent() : primary ? kr.packetui.VisualTheme.primary() : WorkbenchUi.line());
           g.drawRoundRect(0, 0, button.getWidth()-1, button.getHeight()-1, 8, 8);
         }
         super.paint(g, component);
       }
       g.dispose();
     }
+    @Override protected void paintText(Graphics graphics,AbstractButton button,Rectangle bounds,String text){
+      Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setFont(button.getFont());g.setColor(button.isEnabled()?button.getForeground():kr.packetui.VisualTheme.muted());
+      BasicGraphicsUtils.drawStringUnderlineCharAt(g,text,button.getDisplayedMnemonicIndex(),bounds.x,bounds.y+g.getFontMetrics().getAscent());g.dispose();
+    }
     @Override protected void paintFocus(Graphics g, AbstractButton b, Rectangle view, Rectangle text, Rectangle icon) {}
   }
 
   static void combo(JComboBox<?> combo) {
     if(!(combo.getUI() instanceof ComboUi))combo.setUI(new ComboUi());
+    ((ComboUi)combo.getUI()).refreshPalette();
   }
-  private static final class ComboUi extends BasicComboBoxUI {
-    @Override public Dimension getPreferredSize(JComponent component){Dimension size=super.getPreferredSize(component);return new Dimension(size.width,Math.max(32,size.height));}
+  /** Keeps the detached popup list and editable child on the local palette as well as the outer box. */
+  static class ComboUi extends BasicComboBoxUI {
+    @Override protected void installDefaults(){super.installDefaults();squareButton=false;padding=new Insets(0,0,0,0);}
+    void refreshPalette(){
+      if(listBox!=null){listBox.setBackground(WorkbenchUi.surface());listBox.setForeground(WorkbenchUi.ink());listBox.setSelectionBackground(WorkbenchUi.selected());listBox.setSelectionForeground(WorkbenchUi.ink());}
+      if(arrowButton!=null)arrowButton.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());
+      if(editor!=null){editor.setBackground(WorkbenchUi.surface());editor.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());if(editor instanceof JTextField field)ApprovedInputs.text(field);if(editor instanceof javax.swing.text.JTextComponent text){text.setCaretColor(WorkbenchUi.ink());text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());}}
+    }
+    @Override protected void configureEditor(){super.configureEditor();refreshPalette();}
+    @Override protected ComboPopup createPopup(){return new BasicComboPopup(comboBox){@Override public void show(){refreshPalette();super.show();}};}
+    @Override public void paint(Graphics graphics,JComponent component){refreshPalette();super.paint(graphics,component);}
+    @Override public void paintCurrentValueBackground(Graphics graphics,Rectangle bounds,boolean focus){graphics.setColor(comboBox.getBackground());graphics.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);}
+    @Override public void paintCurrentValue(Graphics graphics,Rectangle bounds,boolean focus){
+      refreshPalette();boolean selected=focus&&!isPopupVisible(comboBox);
+      Component value=comboBox.getRenderer().getListCellRendererComponent(listBox,comboBox.getSelectedItem(),-1,selected,false);
+      value.setFont(comboBox.getFont());value.setForeground(comboBox.isEnabled()?WorkbenchUi.ink():kr.packetui.VisualTheme.muted());value.setBackground(selected?WorkbenchUi.selected():comboBox.getBackground());
+      Insets in=padding==null?new Insets(0,0,0,0):padding;
+      if(value instanceof JComponent component)component.setBorder(ApprovedInputs.INNER);
+      currentValuePane.paintComponent(graphics,value,comboBox,bounds.x+in.left,bounds.y+in.top,Math.max(0,bounds.width-in.left-in.right),Math.max(0,bounds.height-in.top-in.bottom),value instanceof JPanel);
+    }
+    @Override public Dimension getPreferredSize(JComponent component){Dimension size=super.getPreferredSize(component);return new Dimension(size.width,Math.max(31,size.height));}
     @Override protected JButton createArrowButton(){JButton arrow=new JButton(){protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setColor(WorkbenchUi.ink());g.setStroke(new BasicStroke(1.3f));int x=getWidth()/2,y=getHeight()/2;g.drawPolyline(new int[]{x-4,x,x+4},new int[]{y-2,y+2,y-2},3);g.dispose();}};arrow.putClientProperty("wb.nativeEditor",true);arrow.setBorder(null);arrow.setPreferredSize(new Dimension(25,30));return arrow;}
   }
   static void scroll(JScrollBar bar) {
     if(!(bar.getUI() instanceof ScrollUi))bar.setUI(new ScrollUi());
     bar.setUnitIncrement(18);bar.setPreferredSize(bar.getOrientation()==JScrollBar.VERTICAL?new Dimension(10,0):new Dimension(0,10));
   }
+  static void separator(JSeparator separator){if(!(separator.getUI() instanceof SeparatorUi))separator.setUI(new SeparatorUi());separator.setOpaque(false);}
+  private static final class SeparatorUi extends BasicSeparatorUI {
+    @Override public void paint(Graphics graphics,JComponent component){graphics.setColor(WorkbenchUi.line());if(((JSeparator)component).getOrientation()==SwingConstants.VERTICAL)graphics.drawLine(0,0,0,component.getHeight()-1);else graphics.drawLine(0,0,component.getWidth()-1,0);}
+    @Override public Dimension getPreferredSize(JComponent component){return ((JSeparator)component).getOrientation()==SwingConstants.VERTICAL?new Dimension(1,0):new Dimension(0,1);}
+  }
   private static final class ScrollUi extends BasicScrollBarUI {
-    @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=WorkbenchUi.line();}
+    @Override protected void configureScrollBarColors(){trackColor=WorkbenchUi.background();thumbColor=kr.packetui.VisualTheme.thumb();}
+    @Override protected void paintTrack(Graphics graphics,JComponent component,Rectangle bounds){graphics.setColor(WorkbenchUi.background());graphics.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);}
     @Override protected JButton createDecreaseButton(int direction){return arrow(direction);}
     @Override protected JButton createIncreaseButton(int direction){return arrow(direction);}
     private JButton arrow(int direction){return new BasicArrowButton(direction,WorkbenchUi.background(),WorkbenchUi.line(),WorkbenchUi.ink(),WorkbenchUi.line()){@Override public Dimension getPreferredSize(){return new Dimension(0,0);}};}
-    @Override protected void paintThumb(Graphics graphics,JComponent component,Rectangle bounds){if(bounds.isEmpty()||!scrollbar.isEnabled())return;Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(isThumbRollover()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRoundRect(bounds.x+2,bounds.y+2,Math.max(2,bounds.width-4),Math.max(2,bounds.height-4),7,7);g.dispose();}
+    @Override protected void paintThumb(Graphics graphics,JComponent component,Rectangle bounds){if(bounds.isEmpty()||!scrollbar.isEnabled())return;Graphics2D g=(Graphics2D)graphics.create();antialias(g);g.setColor(isThumbRollover()?WorkbenchUi.accent():kr.packetui.VisualTheme.thumb());g.fillRoundRect(bounds.x+2,bounds.y+2,Math.max(2,bounds.width-4),Math.max(2,bounds.height-4),7,7);g.dispose();}
   }
 
   static Color captureColor(String mode) {
@@ -152,7 +195,8 @@ final class WorkbenchSkin {
       BasicSplitPaneDivider divider = new BasicSplitPaneDivider(this) {
         @Override public void paint(Graphics graphics) {
           Graphics2D g = (Graphics2D) graphics.create();
-          g.setColor(WorkbenchUi.background()); g.fillRect(0, 0, getWidth(), getHeight());
+          g.setColor(Boolean.TRUE.equals(splitPane.getClientProperty("wb.approved.surface.divider"))?WorkbenchUi.surface():WorkbenchUi.background()); g.fillRect(0, 0, getWidth(), getHeight());
+          if(Boolean.TRUE.equals(splitPane.getClientProperty("wb.workflow.fixedLayout"))){g.dispose();return;}
           g.setColor(WorkbenchUi.line());
           if (splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT)
             g.drawLine(getWidth()/2, getHeight()/2-14, getWidth()/2, getHeight()/2+14);
@@ -208,18 +252,17 @@ final class WorkbenchSkin {
   }
 
   private static final class TabsUi extends BasicTabbedPaneUI {
-    protected Insets getTabInsets(int placement,int index){return new Insets(10,18,10,18);}
+    @Override protected void paintTab(Graphics graphics,int placement,Rectangle[] rectangles,int index,Rectangle icon,Rectangle text){Rectangle bounds=rectangles[index];graphics.setColor(index==tabPane.getSelectedIndex()?WorkbenchUi.selected():WorkbenchUi.surface());graphics.fillRoundRect(bounds.x+2,bounds.y+2,bounds.width-4,bounds.height-4,7,7);super.paintTab(graphics,placement,rectangles,index,icon,text);}
+    protected Insets getTabInsets(int placement,int index){return new Insets(6,10,6,10);}
     protected void paintText(Graphics g,int placement,Font font,FontMetrics metrics,int index,String title,Rectangle rect,boolean selected){g.setFont(font.deriveFont(selected?Font.BOLD:Font.PLAIN));g.setColor(selected?WorkbenchUi.accent():WorkbenchUi.ink());g.drawString(title,rect.x,rect.y+metrics.getAscent());}
     protected Insets getContentBorderInsets(int placement){return new Insets(1,0,0,0);}
     @Override public void uninstallUI(JComponent component) {
       detachTabViewport((JTabbedPane)component);
       super.uninstallUI(component);
     }
-    @Override protected void paintTabBackground(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
-      graphics.setColor(WorkbenchUi.surface());graphics.fillRect(x,y,width,height);
-    }
+    @Override protected void paintTabBackground(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {}
     @Override protected void paintTabBorder(Graphics graphics,int placement,int index,int x,int y,int width,int height,boolean selected) {
-      graphics.setColor(selected?WorkbenchUi.accent():WorkbenchUi.line());graphics.fillRect(x,y+height-(selected?2:1),width,selected?2:1);
+      if(tabPane.hasFocus()&&selected){graphics.setColor(WorkbenchUi.accent());graphics.drawRoundRect(x+2,y+2,width-5,height-5,7,7);}
     }
     @Override protected void paintContentBorder(Graphics graphics,int placement,int selected) {}
   }
@@ -234,7 +277,7 @@ final class WorkbenchSkin {
       @Override public Component getTableCellRendererComponent(JTable owner, Object value, boolean selected, boolean focus, int row, int column) {
         super.getTableCellRendererComponent(owner, value, selected, focus, row, column);
         boolean compact=Boolean.TRUE.equals(owner.getClientProperty("wb.table.compact"));
-        setFont(WorkbenchUi.font().deriveFont(compact?Font.PLAIN:Font.BOLD,WorkbenchUi.displaySize(13f))); setForeground(WorkbenchUi.ink());
+        setFont(WorkbenchUi.font().deriveFont(Font.PLAIN,WorkbenchUi.displaySize(11f))); setForeground(kr.packetui.VisualTheme.muted());
         setBackground(WorkbenchUi.raised());
         setIcon(null);
         if(owner.getRowSorter()!=null && !owner.getRowSorter().getSortKeys().isEmpty()) {

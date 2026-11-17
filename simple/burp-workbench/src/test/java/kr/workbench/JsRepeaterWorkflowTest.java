@@ -136,13 +136,17 @@ public final class JsRepeaterWorkflowTest {
         verify(!Boolean.TRUE.equals(panel.status.getClientProperty("wb.status")),"analysis messages no longer occupy a large colored footer");
         verify(!panel.resultTabs.previous.isVisible()&&!panel.resultTabs.next.isVisible(),"tab-scroll arrows are replaced by wheel navigation");
         panel.setSize(1000,780);for(int i=0;i<5;i++)UiLayoutTest.layout(panel);
-        panel.resultTabs.scrollPixels(120);verify(panel.resultTabs.viewport.getViewPosition().x>0,"wheel scroll moves the result titles");
+        int titleLimit=Math.max(0,panel.resultTabs.strip.getPreferredSize().width-panel.resultTabs.viewport.getExtentSize().width);
+        panel.resultTabs.scrollPixels(120);verify(panel.resultTabs.viewport.getViewPosition().x==Math.min(120,titleLimit),"wheel scroll stays within the three direct result captions, including when they fit");
         panel.resultTabs.scrollPixels(-9999);verify(panel.resultTabs.viewport.getViewPosition().x==0,"reverse wheel scroll returns to the first result titles");
-        panel.results.setSelectedIndex(6);
+        JButton types=(JButton)UiLayoutTest.named(panel,"wb.workflow.js.types");
+        JPopupMenu typeMenu=types.getComponentPopupMenu();
+        JMenuItem recovered=(JMenuItem)typeMenu.getComponent(3);
+        verify("wb.workflow.js.type.6".equals(recovered.getName()),"secondary recovered-source model has an actual named menu entry");recovered.doClick(0);
       });edt(()->{});
       edt(()->{
-        Rectangle selected=panel.resultTabs.titles.get(6).getBounds();int x=panel.resultTabs.viewport.getViewPosition().x;
-        verify(selected.x>=x&&selected.x+selected.width<=x+panel.resultTabs.viewport.getWidth(),"programmatic and keyboard tab selection reveals the selected caption");
+        JButton types=(JButton)UiLayoutTest.named(panel,"wb.workflow.js.types");
+        verify(panel.results.getSelectedIndex()==6&&panel.results.getSelectedComponent()==panel.results.getComponentAt(6)&&types.getText().contains(panel.results.getTitleAt(6))&&!panel.resultTabs.titles.get(6).isVisible(),"secondary menu opens the retained recovered-source model and names it without a crowded direct tab");
         panel.results.setSelectedIndex(0);panel.urlTable.setRowSelectionInterval(0,0);panel.prepareRepeater();
       });var session=panel.repeater.sessions.get(0);
       edt(()->{

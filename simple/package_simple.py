@@ -153,7 +153,7 @@ def main():
     checksums = {p.name: sha(p) for p in artifacts}
     (staging / 'SHA256SUMS').write_text(''.join(f'{digest}  {name}\n' for name, digest in checksums.items()), encoding='utf-8')
     (staging / 'manifest.json').write_text(json.dumps({
-        'name': PRODUCT_NAME, 'edition': EDITION, 'version': VERSION, 'basedOnSimpleStrixVersion': '1.4.13', 'baseExtensionVersion': '0.53.4',
+        'name': PRODUCT_NAME, 'edition': EDITION, 'version': VERSION, 'baseSimpleVersion': '1.4.21', 'baseSimpleCommit': '03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d', 'previousStrixVersion': '1.0.0', 'baseExtensionVersion': '0.53.4',
         'embeddedMapperVersion': mapper_version, 'browserHelperVersion': browser_version,
         'browserHelperSources': {name: hashlib.sha256(data).hexdigest() for name, data in helper.items()},
         'artifacts': checksums,

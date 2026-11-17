@@ -28,6 +28,7 @@ final class JsResultsView extends JPanel {
   private boolean refreshing;
   JsResultsView(JsAnalysisPanel owner,ResultTabs tabs){
     super(new BorderLayout(0,2));this.owner=owner;setName("wb.js.list.workspace");
+    summary.putClientProperty("html.disable",Boolean.TRUE);
     detail.setName("wb.js.inline.detail");inputDetail.setName("wb.js.inline.inputs");
     for(JTextArea area:List.of(detail,inputDetail)){area.setEditable(false);area.setLineWrap(true);area.setWrapStyleWord(true);area.putClientProperty("wb.prose",true);}
     JPanel information=new JPanel(new GridLayout(1,2,12,0));JPanel detailView=ReferenceUi.facts(detail);detailView.setName("wb.js.inline.detail");information.add(detailView);information.add(ReferenceUi.facts(inputDetail));
@@ -57,8 +58,10 @@ final class JsResultsView extends JPanel {
   static JPanel tablePanel(DefaultTableModel model,String text){JPanel p=new JPanel(new BorderLayout(0,6));JLabel hint=new JLabel(text);hint.setToolTipText(text);p.add(hint,BorderLayout.NORTH);JTable table=new JTable(model);table.setAutoCreateRowSorter(true);table.setRowHeight(26);JScrollPane scroll=new JScrollPane(table);scroll.setColumnHeaderView(table.getTableHeader());p.add(scroll);for(int i=0;i<table.getColumnCount();i++){String name=table.getColumnName(i);table.getColumnModel().getColumn(i).setPreferredWidth(name.contains("경로")?430:name.contains("추천")||name.contains("차이")?260:110);}p.setPreferredSize(new Dimension(850,430));WorkbenchUi.style(p);return p;}
   void configureTable(){
     JTable t=owner.urlTable;t.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
-    for(int view=t.getColumnCount()-1;view>=0;view--){int model=t.convertColumnIndexToModel(view);if(model>=2&&model<=6)t.removeColumn(t.getColumnModel().getColumn(view));}
-    int[] widths={260,72,145,85};for(int i=0;i<t.getColumnCount();i++){var c=t.getColumnModel().getColumn(i);c.setPreferredWidth(widths[i]);c.setMinWidth(i==1?60:i==3?65:90);}
+    for(int view=t.getColumnCount()-1;view>=0;view--){int model=t.convertColumnIndexToModel(view);if(model>=2&&model<=5||model==8)t.removeColumn(t.getColumnModel().getColumn(view));}
+    t.moveColumn(t.convertColumnIndexToView(1),0);t.moveColumn(t.convertColumnIndexToView(7),2);
+    int[] widths={72,280,145,125};String[] headers={"메서드","발견 경로","확인 상태","호출 위치"};
+    for(int i=0;i<t.getColumnCount();i++){var c=t.getColumnModel().getColumn(i);c.setHeaderValue(headers[i]);c.setPreferredWidth(widths[i]);c.setMinWidth(i==0?55:i==1?110:90);}
   }
   String callState(JsAnalysis.Endpoint endpoint,Map<String,Set<String>> observed){
     var fact=owner.trafficIndex.get(endpoint.url());if(fact==null){String safe=ActivityTracker.safeUrl(endpoint.url());Set<String> methods=safe==null?null:observed.get(safe);if(methods!=null&&!methods.isEmpty())fact=new JsTrafficIndex.Entry(methods,Set.of(),Set.of(),1);}
@@ -86,14 +89,16 @@ final class JsResultsView extends JPanel {
     boolean active=call.getSelectedIndex()>0||priority.isSelected()||fresh.isSelected();filter.putClientProperty("wb.icon.active",active);filter.setBorder(BorderFactory.createLineBorder(active?WorkbenchUi.accent():WorkbenchUi.line()));
     filter.setToolTipText("목록 필터 · "+count.getText()+(active?" · 조건 적용 중":""));selection();owner.refreshActions();
   }
-  void selection(){var r=owner.currentResult();int row=owner.urlTable.getSelectedRow();if(r==null||row<0||owner.results.getSelectedIndex()!=0){summary.setText("경로를 선택하세요");summary.setToolTipText(null);detail.setText("");inputDetail.setText("");return;}
+  void selection(){var r=owner.currentResult();int row=owner.urlTable.getSelectedRow();if(r==null||row<0||owner.results.getSelectedIndex()!=0){summary.setText("경로를 선택하세요");summary.setToolTipText(null);owner.sourceCallLocation.setText("호출 위치를 확인하려면 경로를 선택하세요");detail.setText("");inputDetail.setText("");return;}
     var e=r.endpoints().get(owner.urlTable.convertRowIndexToModel(row));List<String> reasons=JsTrafficIndex.reasons(e,owner.trafficIndex.get(e.url()));String reason=reasons.isEmpty()?"일반 검토":compactReason(e,reasons.get(0));
     String source=JsVersions.base(owner.currentSourceKey());int slash=source.lastIndexOf('/');String shortSource=slash>=0?source.substring(slash+1):source;
-    String line=reason+" · "+Objects.toString(owner.endpoints.getValueAt(owner.urlTable.convertRowIndexToModel(row),7),"").replace("JS에서만 발견","미호출")+" | "+shortSource+":"+e.line();summary.setText(line);
-    String description="경로   "+e.url()+"\n\n메서드   "+e.method()+"\n\n호출 위치   "+shortSource+":"+e.line()+"\n\n상태   "+owner.endpoints.getValueAt(owner.urlTable.convertRowIndexToModel(row),7)+"\n\n분석 근거\n"+JsFindingGroups.evidence(r,e);
+    owner.sourceCallLocation.setText(shortSource+":"+e.line()+" · 호출 위치 확인");
+    owner.sourceCallLocation.setToolTipText((javax.swing.plaf.basic.BasicHTML.isHTMLString(source)?"출처: ":"")+source+":"+e.line());
+    String line=(e.method().isBlank()?"메서드 미확정":e.method())+" "+e.url();summary.setText(line);
+    String description="경로   "+e.url()+"\n\n메서드   "+e.method()+"\n\n호출 위치   "+shortSource+":"+e.line()+"\n\n상태   "+owner.endpoints.getValueAt(owner.urlTable.convertRowIndexToModel(row),7)+"\n\n변경   "+owner.endpoints.getValueAt(owner.urlTable.convertRowIndexToModel(row),8)+"\n\n분석 근거\n"+JsFindingGroups.evidence(r,e);
     String inputs="발견한 입력 이름\n\n파라미터   "+e.parameters()+"\n\n헤더   "+e.headers()+"\n\n본문 항목   "+e.bodyKeys()+"\n\n"+String.join("\n",reasons);
     if(!detail.getText().equals(description)){detail.setText(description);detail.setCaretPosition(0);}if(!inputDetail.getText().equals(inputs)){inputDetail.setText(inputs);inputDetail.setCaretPosition(0);}
-    summary.setToolTipText(JsFindingGroups.evidence(r,e)+"\n"+String.join(" · ",reasons));
+    summary.setToolTipText(reason+" · "+shortSource+":"+e.line()+"\n"+JsFindingGroups.evidence(r,e)+"\n"+String.join(" · ",reasons));
   }
   static String compactReason(JsAnalysis.Endpoint e,String full){String url=e.url().toLowerCase(Locale.ROOT);if(url.matches(".*(?:admin|role|permission).*"))return "권한 관련 경로";if(url.matches(".*(?:upload|download|file).*"))return "파일 관련 경로";if(url.matches(".*(?:export|import).*"))return "데이터 입출력 경로";if(full.startsWith("응답 민감"))return "응답 민감 필드";if(full.contains("객체/계정"))return "객체·계정 식별자";return full.length()>18?full.substring(0,17)+"…":full;}
   void openTraffic(){refresh();traffic.setRowCount(0);var r=owner.currentResult();if(r!=null)for(int i=0;i<r.endpoints().size();i++){var e=r.endpoints().get(i);var fact=owner.trafficIndex.get(e.url());traffic.addRow(new Object[]{e.url(),e.method(),fact==null?"미관측":String.join(", ",fact.methods()),owner.endpoints.getValueAt(i,7),String.join(" · ",JsTrafficIndex.reasons(e,fact))});}comparison.closeWindow();comparison.open();}

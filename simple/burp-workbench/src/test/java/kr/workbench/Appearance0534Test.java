@@ -52,8 +52,10 @@ public final class Appearance0534Test extends WorkbenchTest {
       first.root.add(packet,BorderLayout.SOUTH);packet.setPacket("HTTP/1.1 200 OK\r\n\r\n{\"value\":1}".getBytes(java.nio.charset.StandardCharsets.UTF_8),null);
       byte[] wire=packet.previewBytes();
       appearance.display(150,true,true);
-      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==21,"actual styled packet characters scale to 21px");
+      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==18,"PDF 12px styled packet characters scale to 18px at 150 percent");
       check(Arrays.equals(wire,packet.previewBytes()),"display preference preserves exact packet preview bytes");
+      check(!ApprovedWorkflowTestSupport.visible(packet.search,packet),"packet search starts folded at the selected display scale");
+      packet.getActionMap().get("find").actionPerformed(new java.awt.event.ActionEvent(packet,0,"find"));
       packet.setSize(280,210);for(int pass=0;pass<5;pass++)UiLayoutTest.layout(packet);
       check(packet.modePicker.getParent()!=null,"narrow reader exposes every display mode in accessible picker");
       check(packet.searchOptions.getParent()!=null,"narrow reader exposes optional search toggles in menu");
@@ -62,10 +64,10 @@ public final class Appearance0534Test extends WorkbenchTest {
       packet.modePicker.setSelectedIndex(1);
       check(packet.mode()==PacketInspector.Mode.RAW&&Arrays.equals(wire,packet.previewBytes()),"compact mode picker changes view without changing wire");
       appearance.display(100,false,true);
-      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==14,"changing preference updates already loaded styled packet");
+      check(javax.swing.text.StyleConstants.getFontSize(packet.text.getStyledDocument().getCharacterElement(0).getAttributes())==12,"changing preference restores the PDF 12px styled packet");
       appearance.display(150,true,true);packet.close();first.root.remove(packet);
-      check(first.text.getFont().getSize2D()==21f,"150 percent uses actual 21px editor font");
-      check(first.table.getFont().getSize2D()==19.5f&&first.table.getRowHeight()==36,"compact table scales font and row height together");
+      check(first.text.getFont().getSize2D()==19.5f,"150 percent scales the approved 13px text field to 19.5px");
+      check(first.table.getFont().getSize2D()==16.5f&&first.table.getRowHeight()==48,"compact table scales the approved 32px row and font together");
       check(first.nativeEditor.getFont().getSize()==11,"native editor subtree remains untouched");
       first.table.moveColumn(2,0);first.table.getColumnModel().getColumn(0).setWidth(231);
       first.table.getColumnModel().getColumn(1).setWidth(145);
@@ -84,7 +86,7 @@ public final class Appearance0534Test extends WorkbenchTest {
       check(second.table.convertColumnIndexToModel(0)==0,"project switch does not inherit previous column order");
       check(memory.saved.get(A).equals(saved)&&!memory.saved.containsKey(B),"switch alone never writes old state into new project");
       restored.display(125,false,false);
-      check(second.text.getFont().getSize2D()==17.5f&&second.table.getRowHeight()==40,"125 percent and comfortable rows applied together");
+      check(second.text.getFont().getSize2D()==16.25f&&second.table.getRowHeight()==44,"125 percent and comfortable rows applied together");
       memory.project=A;restored.refreshProject();
       check(restored.state().scale()==150&&second.table.convertColumnIndexToModel(0)==2,"returning to project restores original profile");
       restored.resetSurfaces();
@@ -93,7 +95,7 @@ public final class Appearance0534Test extends WorkbenchTest {
       restored.resetAll();
       check(restored.state().scale()==100&&!restored.state().compact(),"display reset restores 100 percent and comfortable density");
       JTable forcedCompact=new JTable(1,1);forcedCompact.putClientProperty("wb.table.compact",true);WorkbenchUi.table(forcedCompact);
-      check(forcedCompact.getRowHeight()==24,"explicit compact critical tables stay compact in comfortable mode");
+      check(forcedCompact.getRowHeight()==32,"explicit compact critical tables retain the approved 32px rows in comfortable mode");
       memory.fail=true;restored.display(125,false,true);
       check(!restored.problem().isBlank()&&restored.state().scale()==125,"write failure is visible while display setting still applies locally");
       memory.fail=false;memory.discard=true;restored.display(150,false,true);

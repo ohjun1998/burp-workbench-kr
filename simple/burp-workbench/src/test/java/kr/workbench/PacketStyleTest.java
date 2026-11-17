@@ -1,6 +1,7 @@
 package kr.workbench;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.geom.Point2D;
 import javax.swing.*;
 import javax.swing.text.*;
 import kr.packetui.PacketStyle;
@@ -12,8 +13,31 @@ public final class PacketStyleTest extends WorkbenchTest {
   var scroll=(JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class,area);
   check(scroll!=null&&scroll.getRowHeader()!=null&&scroll.getRowHeader().getView()!=null,"packet/source area has logical line numbers");
  }
+ static void verifyApprovedLineAdvance(){
+  // Approved prototype style.css: .code has 12px font-size and line-height:1.78.
+  String raw="GET /space HTTP/1.1\nHost: example.test\n\nbody";
+  for(int size:new int[]{12,15,18}){
+   JTextArea area=new JTextArea(raw);area.putClientProperty("wb.packet.syntax",true);area.putClientProperty("wb.approved.packet",true);area.setFont(new Font(Font.MONOSPACED,Font.PLAIN,size));
+   JScrollPane scroll=new JScrollPane(area);PacketStyle.install(area);scroll.setSize(540,170);for(int pass=0;pass<4;pass++)UiLayoutTest.layout(scroll);
+   Document document=area.getDocument();int host=raw.indexOf("Host:");area.setCaretPosition(host);
+   try{
+    area.getHighlighter().addHighlight(host,host+4,new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW));
+    var first=area.modelToView2D(0);var second=area.modelToView2D(host);int expected=Math.max(area.getFontMetrics(area.getFont()).getHeight(),Math.round(size*1.78f));
+    check(first!=null&&second!=null&&Math.round(second.getY()-first.getY())==expected,"approved code line advance follows the reference 1.78 ratio at "+size+"px");
+    int hit=area.viewToModel2D(new Point2D.Double(second.getX()+1,second.getY()+second.getHeight()/2));
+    check(hit==host,"line hit-testing still resolves the exact original source offset at "+size+"px");
+    paint(scroll);
+    check(area.getDocument()==document&&area.getText().equals(raw)&&area.getCaretPosition()==host&&!area.getLineWrap(),"approved line spacing preserves source, document, caret and nonwrapped mode at "+size+"px");
+    var highlights=area.getHighlighter().getHighlights();check(highlights.length==1&&highlights[0].getStartOffset()==host&&highlights[0].getEndOffset()==host+4,"approved line spacing preserves retained finding spans at "+size+"px");
+    Component gutter=scroll.getRowHeader().getView();area.putClientProperty("wb.approved.firstline.gutter",true);BufferedImage marked=new BufferedImage(gutter.getWidth(),gutter.getHeight(),BufferedImage.TYPE_INT_RGB);Graphics2D mg=marked.createGraphics();gutter.paint(mg);mg.dispose();int rowY=(int)first.getY()+2;
+    check(marked.getRGB(3,rowY)==kr.packetui.VisualTheme.selected().getRGB()&&marked.getRGB(0,rowY)==kr.packetui.VisualTheme.accent().getRGB(),"the optional preparation highlight includes its logical-line gutter and outer accent at "+size+"px");
+    area.putClientProperty("wb.approved.firstline.gutter",false);BufferedImage normal=new BufferedImage(gutter.getWidth(),gutter.getHeight(),BufferedImage.TYPE_INT_RGB);Graphics2D ng=normal.createGraphics();gutter.paint(ng);ng.dispose();check(normal.getRGB(3,rowY)==area.getBackground().getRGB(),"ordinary reader gutters keep their normal background when the preparation-only flag is absent at "+size+"px");
+   }catch(BadLocationException error){throw new IllegalStateException(error);}
+  }
+ }
  public static void main(String[] args)throws Exception{
   edt(()->{
+   verifyApprovedLineAdvance();
    String raw="const api = '/users';\nfetch(api, {method: 'POST'});\n{\"count\":2,\"enabled\":true}\n<node id=\"x\">text</node>\n";
    JTextArea area=new JTextArea(raw);area.setName("style.fixture");area.putClientProperty("wb.packet.syntax",true);JScrollPane scroll=new JScrollPane(area);WorkbenchUi.style(scroll);
    Document document=area.getDocument();try{area.getHighlighter().addHighlight(6,9,new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW));}catch(BadLocationException e){throw new RuntimeException(e);}

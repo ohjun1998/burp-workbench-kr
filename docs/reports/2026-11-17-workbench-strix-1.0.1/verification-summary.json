@@ -1,0 +1,14 @@
+{
+  "product": "Workbench Strix",
+  "version": "1.0.1",
+  "baseSimpleVersion": "1.4.21",
+  "baseCommit": "03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d",
+  "jarSha256": "1d2bf029b5ea50f91a25459afed4d06acaeff2d8fd4f7e2a43b8feb595a645cf",
+  "automatedChecks": 8191,
+  "nativeGeometryChecks": 464,
+  "nativeGeometryDifferences": 0,
+  "nativePngs": 34,
+  "result": "passed",
+  "actualBurpOrModelRun": false,
+  "mainMerged": false
+}

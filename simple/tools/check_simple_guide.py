@@ -21,7 +21,7 @@ def sha(path: Path) -> str:
 
 def main() -> int:
     if runpy.run_path(str(ROOT / 'burp-workbench/release_info.py')).get('EDITION') == 'strix':
-        raise SystemExit('This is the preserved Simple guide tool. Workbench Strix uses tools/package_workbench_strix_guide.py from the repository root; see README_KR.md.')
+        raise SystemExit('Historical Simple guide generator: use the repository root tools/package_workbench_strix_1_0_1_guide.py for Workbench Strix.')
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--images', type=Path, default=ROOT/f'docs/images/{VERSION}/light/1280x800')
     parser.add_argument('--contact-sheet', type=Path, help='Optional local preview of all PDF pages; not an application screenshot')

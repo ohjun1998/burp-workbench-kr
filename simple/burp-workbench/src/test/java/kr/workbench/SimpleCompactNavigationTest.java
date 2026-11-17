@@ -28,10 +28,10 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
     int sent=PayloadIntegrationTest.sent.get();
     try {
       edt(()->{
-        check(SimpleWorkflowTest.named(root,"wb.navigation.brand")==null,"compact header omits the repeated large Workbench brand");
+        check(SimpleWorkflowTest.named(root,"wb.navigation.brand") instanceof JLabel brand && brand.getText().equals("Workbench"),"approved PDF header includes the compact Workbench wordmark once");
         for(int width:new int[]{1024,1280,1600}){
           layout(root,width);
-          check(toolbar.getHeight()>=32&&toolbar.getHeight()<=36,"header remains one compact row at "+width+" pixels");
+          check(toolbar.getHeight()==46,"approved PDF header remains one 46px row at "+width+" pixels");
           Rectangle line=SwingUtilities.convertRectangle(actions.getParent(),actions.getBounds(),toolbar);
           check(line.y>=0&&line.y+line.height<=toolbar.getHeight(),"header actions stay inside the same row at "+width);
           for(Component c:actions.getComponents())if(c instanceof AbstractButton button){
@@ -39,15 +39,68 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
             check(button.getAccessibleContext().getAccessibleName()!=null&&!button.getAccessibleContext().getAccessibleName().isBlank()&&button.getToolTipText()!=null,"compact action retains an accessible name and tooltip: "+button.getName());
           }
         }
+        var tools=(JButton)SimpleWorkflowTest.named(root,"wb.navigation.tools.open");
+        JPopupMenu toolsMenu=tools.getComponentPopupMenu();
+        int sourceCount=0;
+        for(Component c:actions.getComponents())if(c instanceof AbstractButton source){
+          sourceCount++;
+          var menu=(JMenuItem)SimpleWorkflowTest.named(toolsMenu,source.getName()+".menu");
+          check(menu!=null && menu.getText()!=null && !menu.getText().isBlank(),
+              "the actual shared header popup has no blank action row: "+source.getName());
+          if(source.getText().isBlank()){
+            check(menu.getText().equals(source.getAccessibleContext().getAccessibleName())
+                    && menu.getIcon()==source.getIcon() && menu.getIcon()!=null,
+                "the actual header menu restores the compact source caption and icon: "+source.getName());
+          }
+        }
+        check(sourceCount==toolsMenu.getComponentCount(),
+            "the header popup has one readable row for every retained shortcut");
         window.fullScreenButton.setText("전체화면 해제");layout(root,1024);
-        check(window.fullScreenButton.getText().isEmpty()&&window.fullScreenButton.getAccessibleContext().getAccessibleName().contains("해제")&&toolbar.getHeight()<=36,"fullscreen exit state updates accessibility without widening the toolbar");
+        check(window.fullScreenButton.getText().isEmpty()&&window.fullScreenButton.getAccessibleContext().getAccessibleName().contains("해제")&&toolbar.getHeight()==46,"fullscreen exit state updates accessibility without widening the PDF toolbar");
+        var fullScreenMenu=(JMenuItem)SimpleWorkflowTest.named(toolsMenu,"wb.window.fullscreen.menu");
+        check("전체화면 해제".equals(fullScreenMenu.getText()),
+            "the assembled header popup follows fullscreen state after the compact source clears its text");
+        window.fullScreenButton.getAccessibleContext().setAccessibleName("전체화면");
+        check("전체화면".equals(fullScreenMenu.getText()),
+            "an accessible-only fullscreen update replaces the assembled menu caption immediately");
+        var dashboardMenu=(JCheckBoxMenuItem)SimpleWorkflowTest.named(toolsMenu,"wb.simple.dashboard.open.menu");
+        dashboardMenu.doClick(0);
+        check(dashboardMenu.isSelected()&&pages.getSelectedComponent()==value(extension,"scopeDashboard"),
+            "the visible header dashboard menu opens the retained page and reflects its selected state");
+        extension.openFeature("traffic");
+        check(!dashboardMenu.isSelected(),
+            "leaving the dashboard clears the actual header menu state through its retained model");
+        ((JMenuItem)SimpleWorkflowTest.named(toolsMenu,"wb.visual.guide.open.menu")).doClick(0);
+        var visualGuide=(VisualGuideWindow)value(extension,"visualGuideWindow");
+        check(visualGuide!=null&&"traffic".equals(visualGuide.panel.selectedId()),
+            "the actual header Guide row opens the current tool documentation controller");
         var modelRoot=(DefaultMutableTreeNode)tree.getModel().getRoot();int leaves=0;
         for(int i=0;i<modelRoot.getChildCount();i++)leaves+=modelRoot.getChildAt(i).getChildCount();
-        check(modelRoot.getChildCount()==5&&leaves==11,"compact sidebar retains all five folders and eleven actual tool leaves");
+        check(modelRoot.getChildCount()==5&&leaves==11,"compact primary navigation retains five folders and eleven tools without a duplicate dashboard leaf");
+        check(SimpleWorkflowTest.named(root,"wb.navigation.primary.inspect") instanceof JButton
+                &&SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard") instanceof JToggleButton,
+            "the production sidebar promotes inspection preparation and the retained dashboard into two actual controls");
         for(int row=0;row<tree.getRowCount();row++)tree.expandRow(row);
         layout(root,1024);Rectangle last=tree.getRowBounds(tree.getRowCount()-1);
-        check(last.y+last.height<=570,"all sidebar rows fit vertically without the former permanent group gaps");
+        JViewport viewport=(JViewport)tree.getParent();
+        check(last!=null&&last.height>0&&last.y+last.height<=tree.getHeight(),
+            "all folder rows remain inside the full scrollable tree content below the fixed primary header");
+        var sidebar=(JScrollPane)SimpleWorkflowTest.named(root,"wb.navigation.sidebar");
+        var inspect=(JButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.inspect");
+        var dashboard=(JToggleButton)SimpleWorkflowTest.named(root,"wb.navigation.primary.dashboard");
+        Rectangle fixedInspect=SwingUtilities.convertRectangle(inspect.getParent(),inspect.getBounds(),sidebar);
+        Rectangle fixedDashboard=SwingUtilities.convertRectangle(dashboard.getParent(),dashboard.getBounds(),sidebar);
+        tree.scrollPathToVisible(tree.getPathForRow(tree.getRowCount()-1));Rectangle shown=viewport.getViewRect();
+        check(last.y>=shown.y&&last.y+last.height<=shown.y+shown.height,
+            "scrolling the actual last folder leaf exposes its full row in the remaining viewport");
+        check(fixedInspect.equals(SwingUtilities.convertRectangle(inspect.getParent(),inspect.getBounds(),sidebar))
+                &&fixedDashboard.equals(SwingUtilities.convertRectangle(dashboard.getParent(),dashboard.getBounds(),sidebar))
+                &&sidebar.getVisibleRect().contains(fixedInspect)&&sidebar.getVisibleRect().contains(fixedDashboard),
+            "both primary actions remain fixed and fully visible while the folder list scrolls: first="+fixedInspect
+                +" -> "+SwingUtilities.convertRectangle(inspect.getParent(),inspect.getBounds(),sidebar)+", second="+fixedDashboard
+                +" -> "+SwingUtilities.convertRectangle(dashboard.getParent(),dashboard.getBounds(),sidebar)+", visible="+sidebar.getVisibleRect());
         TreePath discovery=SimpleWorkflowTest.toolPath(root,"js");Rectangle hovered=tree.getPathBounds(discovery);
+        tree.scrollPathToVisible(discovery);
         int x=tree.getWidth()-12,y=hovered.y+hovered.height/2;int before=pixel(tree,x,y);
         tree.dispatchEvent(new MouseEvent(tree,MouseEvent.MOUSE_MOVED,System.currentTimeMillis(),0,x,y,0,false));
         check(pixel(tree,x,y)!=before,"hover paints a visible background beyond the text without a timer");
@@ -56,7 +109,7 @@ public final class SimpleCompactNavigationTest extends WorkbenchTest {
         tree.setSelectionPath(discovery);layout(root,1024);
         check(pages.getSelectedComponent()==value(extension,"jsAnalysis")||SimpleWorkflowTest.selectedFeature(pages).equals("js"),"compact sidebar selection opens the existing JS route");
         Rectangle selected=tree.getPathBounds(discovery);
-        check(pixel(tree,5,selected.y+6)==WorkbenchUi.accent().getRGB(),"selected tool has a strong full-row accent marker");
+        check(pixel(tree,12,selected.y+selected.height/2)==WorkbenchUi.selected().getRGB(),"selected tool uses the approved full-row blue selection fill");
         MouseEvent tipEvent=new MouseEvent(tree,MouseEvent.MOUSE_MOVED,System.currentTimeMillis(),0,40,selected.y+selected.height/2,0,false);
         check(tree.getToolTipText(tipEvent).equals(FeatureGuide.feature("js").summary()),"tool hover exposes the actual feature explanation");
         var group=(DefaultMutableTreeNode)modelRoot.getChildAt(1);TreePath groupPath=new TreePath(group.getPath());tree.collapsePath(groupPath);

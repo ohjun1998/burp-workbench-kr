@@ -42,8 +42,13 @@ public final class SimpleTrafficReadinessTest extends WorkbenchTest {
         waitEdt(()->browser.idle()&&browser.table.convertRowIndexToView(0)>=0&&browser.table.convertRowIndexToView(1)<0,"old original search published");
         browser.worker.submit(()->{workerEntered.countDown();try{workerRelease.await(8,TimeUnit.SECONDS);}catch(InterruptedException error){Thread.currentThread().interrupt();}});await(workerEntered,"worker held independently of search");
         var first=new AtomicBoolean(true);
-        browser.identities=()->{if(first.compareAndSet(true,false)){entered.countDown();try{if(!release.await(8,TimeUnit.SECONDS))throw new IllegalStateException("Preparation latch deadline");}catch(InterruptedException error){Thread.currentThread().interrupt();throw new IllegalStateException(error);}}return List.of();};
-        SwingUtilities.invokeLater(()->{try{browser.search.setText(NEXT);begin(browser);}catch(Throwable error){failure.set(error);}finally{prepared.countDown();}});
+        SwingUtilities.invokeLater(()->{try{
+          browser.search.setText(NEXT);
+          // Text-change observers may read identities too. Arm the preparation gate
+          // on the EDT immediately before begin(), after those observers return.
+          browser.identities=()->{if(first.compareAndSet(true,false)){entered.countDown();try{if(!release.await(8,TimeUnit.SECONDS))throw new IllegalStateException("Preparation latch deadline");}catch(InterruptedException error){Thread.currentThread().interrupt();throw new IllegalStateException(error);}}return List.of();};
+          begin(browser);
+        }catch(Throwable error){failure.set(error);}finally{prepared.countDown();}});
         await(entered,"search identity preparation entered");
         check(browser.view!=null&&browser.view.rows().get(0)&&!browser.view.rows().get(1),"the controlled preparation gate still shows the previous original result");
         check(idleReads(browser)==0,"one blocked preparation interval yields zero false-idle observations across 1000 cross-thread reads");

@@ -2,7 +2,7 @@ name: Workbench Strix
 
 on:
   push:
-    branches: ['account-a/workbench-strix-identity', 'account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana', 'account-a/simple-retest-values', 'account-a/simple-navigation-retest']
+    branches: ['account-a/strix-simple-1.4.21', 'account-a/workbench-strix-identity', 'account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana', 'account-a/simple-retest-values', 'account-a/simple-navigation-retest']
     paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', '.github/workflows/workbench-simple.yml']
   pull_request:
     paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', '.github/workflows/workbench-simple.yml']

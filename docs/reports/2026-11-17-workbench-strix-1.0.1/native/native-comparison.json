@@ -1,0 +1,250 @@
+{
+  "result": "passed",
+  "baselineJarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "candidateJarSha256": "1d2bf029b5ea50f91a25459afed4d06acaeff2d8fd4f7e2a43b8feb595a645cf",
+  "baselineVersion": "1.4.21",
+  "candidateVersion": "1.0.1",
+  "captureMode": "Native Linux Xorg/xfwm4 windows captured with Robot",
+  "nativeBurp": false,
+  "syntheticHostAndPackets": true,
+  "targetRequests": 0,
+  "strixExecutions": 0,
+  "modelCalls": 0,
+  "screenshots": 28,
+  "comparisons": [
+    {
+      "theme": "light",
+      "size": "1600x1000",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1600x1000",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1600x1000",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1600x1000",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    }
+  ],
+  "differentComparisons": 0,
+  "note": "Exact component-rectangle comparison of the existing main/dashboard views. This is not pixel equality or real Burp/model verification."
+}

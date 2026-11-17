@@ -1,0 +1,63 @@
+scenario,passed
+"All eight retained primary tools are visible in the classic folders",true
+"Scope editor opens exact production body",true
+"Main dashboard opens the production appended page without starting inspection",true
+"Empty dashboard has no manufactured result rows",true
+"Dashboard named visual exists: card.paths",true
+"Dashboard visual keeps readable visible bounds: card.paths",true
+"Dashboard metric caption and number retain their painted width: card.paths",true
+"Dashboard named visual exists: card.api",true
+"Dashboard visual keeps readable visible bounds: card.api",true
+"Dashboard metric caption and number retain their painted width: card.api",true
+"Dashboard named visual exists: card.environment",true
+"Dashboard visual keeps readable visible bounds: card.environment",true
+"Dashboard metric caption and number retain their painted width: card.environment",true
+"Dashboard named visual exists: card.secrets",true
+"Dashboard visual keeps readable visible bounds: card.secrets",true
+"Dashboard metric caption and number retain their painted width: card.secrets",true
+"Dashboard named visual exists: card.access",true
+"Dashboard visual keeps readable visible bounds: card.access",true
+"Dashboard metric caption and number retain their painted width: card.access",true
+"Dashboard named visual exists: card.coverage",true
+"Dashboard visual keeps readable visible bounds: card.coverage",true
+"Dashboard metric caption and number retain their painted width: card.coverage",true
+"Dashboard keeps optional charts in an explicit disclosure",true
+"Dashboard importance filter stays directly available",true
+"Optional dashboard chart retains its original controller: paths",true
+"Optional dashboard chart retains its original controller: api",true
+"Optional dashboard chart retains its original controller: environment",true
+"Optional dashboard chart retains its original controller: secrets",true
+"Optional dashboard chart retains its original controller: access",true
+"Optional dashboard chart retains its original controller: coverage",true
+"Optional dashboard chart retains its original controller: observations",true
+"Optional importance chart retains its original controller: high",true
+"Optional importance chart retains its original controller: medium",true
+"Optional importance chart retains its original controller: low",true
+"Optional importance chart retains its original controller: info",true
+"Traffic feedback and visible originals share a settled snapshot",true
+"Production response analysis displays a synthetic observation",true
+"JS analysis retains the selected HTTP source",true
+"Approved JS reader retains the selected source with a separate detail disclosure",true
+"Mapper guide selects an actual feature before presenting local edit/link actions",true
+"Environment selected reader uses an already observed original response without performing a GET",true
+"CVE evidence tab retains exact synthetic original metadata without a provider request",true
+"Research has two tabs and separate observed/affected/fixed details",true
+"Payload results phase opens without starting inspection",true
+"Synthetic account candidates are retained",true
+"Complete authentication preparation keeps tab 0 visible above its own scrolling page",true
+"Complete authentication overview contains actual selected-request readiness rows",true
+"Complete authentication preparation keeps tab 1 visible above its own scrolling page",true
+"Complete authentication preparation keeps tab 2 visible above its own scrolling page",true
+"Approved authentication readers keep their10px gap across theme restoration",true
+"Manual replay prepares the selected request without running",true
+"Synthetic replay preparation retains three exact original request steps without transport",true
+"Completed synthetic replay uses the actual selected result and exact retained request/response bytes",true
+"Synthetic replay results enable evidence handoff while leaving execution idle and target HTTP at zero",true
+"Selected completed replay response remains readable in the actual visible reader",true
+"Original and comparison packets are captured together",true
+"Data tool capture uses the real local conversion action",true
+"Progress capture derives rows and a selected endpoint with real parameter inputs from the synthetic tracker",true
+"Dashboard guide actions retain a real synthetic stored original",true
+"Production preview excludes synthetic session values",true
+"Production redaction preview contains a masked Cookie example",true
+"Guide navigation sends zero HTTP",true

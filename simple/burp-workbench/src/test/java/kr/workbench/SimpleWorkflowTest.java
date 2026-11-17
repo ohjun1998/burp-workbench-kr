@@ -118,7 +118,7 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
   }
 
   public static void main(String[] args) throws Exception {
-    check(BuildInfo.DISPLAY_NAME.startsWith(BuildInfo.IMPLEMENTATION_TITLE) && FeatureGuide.SUITE_TAB.equals(BuildInfo.PRODUCT_NAME), "Workbench Strix identity is visible in extension and suite tab");
+    check(BuildInfo.DISPLAY_NAME.startsWith(BuildInfo.IMPLEMENTATION_TITLE) && FeatureGuide.SUITE_TAB.equals(BuildInfo.PRODUCT_NAME), "Strix identity is visible in extension and suite tab");
     check(BuildInfo.STORAGE_DIRECTORY.equals(".burp-workbench-simple") && BuildInfo.storageKey("x").equals("simple.x"), "Simple uses its own disk and persistence namespaces");
     Map<String, Object> saved = new HashMap<>();
     saved.put("next.wb.layout.horizontal", false);
@@ -206,7 +206,7 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
         var input = (JTextArea) unchecked(extension, "codecIn"); input.setText("SIMPLE_PENDING_LOCAL_INPUT");
         var dialog = new AtomicReference<Component>();
         extension.dialogOpener = (owner, title, body, modal, closed) -> {
-          check(!modal && title.contains(BuildInfo.PRODUCT_NAME), "consolidated utility opens a modeless Workbench Strix window");
+          check(!modal && title.contains(BuildInfo.PRODUCT_NAME), "consolidated utility opens a modeless Strix window");
           dialog.set(body); return null;
         };
         check(named(root, "wb.visual.guide.open") instanceof AbstractButton

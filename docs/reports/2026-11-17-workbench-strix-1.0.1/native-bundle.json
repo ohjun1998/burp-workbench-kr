@@ -1,0 +1,8 @@
+{
+  "file": "downloads/guides/strix-1.0.1/Workbench-Strix-1.0.1-실제창캡처.zip",
+  "bytes": 2382664,
+  "sha256": "020e587b95ba8eaf5fc5f479bfbe644b53ba260ddbe6f1e394ae3210ef4d35d2",
+  "pngCount": 34,
+  "nativeBurp": false,
+  "capture": "Actual Xorg/xfwm4 frames with production UI and synthetic host API; zero Strix/model/target calls"
+}

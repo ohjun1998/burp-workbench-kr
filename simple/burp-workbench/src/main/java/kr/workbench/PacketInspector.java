@@ -11,9 +11,12 @@ import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
+import javax.swing.plaf.basic.BasicTextPaneUI;
 
 /** Read-only packet views. Formatting and search never modify retained HTTP bytes. */
 final class PacketInspector extends JPanel implements AutoCloseable {
+  /** The packet surface is Workbench-owned; a host painter must not fill it with a cached color. */
+  private static final class PacketTextUi extends BasicTextPaneUI {}
   enum Mode { PRETTY, RAW, HEX, RENDER }
   static final int PREVIEW_BYTES = 65536, MAX_MATCHES = 2000;
   final JTextPane text;
@@ -37,7 +40,9 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private final JPanel searchControls = new JPanel();
   final JButton searchOptions = new ToolButton("검색 옵션", "more");
   final JComboBox<String> modePicker = new JComboBox<>(new String[]{"Pretty", "Raw", "Hex", "Render"});
-  private boolean compactSearch;
+  private boolean compactSearch, searchExpanded, headerMerged;
+  private final JPanel modeTabs = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 0, 0));
+  private final JButton findButton = new JButton("검색");
   final JPanel trafficContextBar = new JPanel(new BorderLayout(4, 2));
   final JLabel trafficContextNotice = new JLabel();
   final JButton trafficPrevious = new JButton("이전 일치"), trafficNext = new JButton("다음 일치"), trafficReturn = new JButton("앞부분 보기");
@@ -68,6 +73,17 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   record Span(int start, int end) {}
   record SearchResult(List<Span> spans, boolean capped, String error) {}
 
+  /** Existing highlights keep their offsets and tags when the local palette changes. */
+  private static final class SearchPainter extends DefaultHighlighter.DefaultHighlightPainter {
+    private final boolean active;
+    SearchPainter(boolean active) { super(null); this.active=active; }
+    @Override public Color getColor() {
+      return WorkbenchUi.dark()
+          ? active ? new Color(154,100,34) : new Color(112,94,30)
+          : active ? new Color(255,190,92) : new Color(255,233,144);
+    }
+  }
+
   PacketInspector(String name) {
     this(name, false);
   }
@@ -78,6 +94,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     if(editable)mode=Mode.RAW;
     setName(name);
     text = new JTextPane() {
+      @Override public void updateUI(){if(!(getUI() instanceof PacketTextUi))setUI(new PacketTextUi());}
       @Override public void setText(String value) {
         Document document=getDocument();
         if(document==null){super.setText(value);return;}
@@ -94,11 +111,16 @@ final class PacketInspector extends JPanel implements AutoCloseable {
         return mode != Mode.HEX && wrap.isSelected() || getParent() != null && getUI().getPreferredSize(this).width <= getParent().getWidth();
       }
     };
+    // Non-resource caret/highlighter survive a host UI replacement with their offsets and tags.
+    Caret previousCaret=text.getCaret();DefaultCaret localCaret=new DefaultCaret();
+    if(previousCaret!=null)localCaret.setBlinkRate(previousCaret.getBlinkRate());
+    if(previousCaret instanceof DefaultCaret previous)localCaret.setUpdatePolicy(previous.getUpdatePolicy());
+    text.setCaret(localCaret);text.setHighlighter(new DefaultHighlighter());
     rendered.setName(name+".render");rendered.getAccessibleContext().setAccessibleName("받은 HTML 본문 정적 Render");
     text.setName(name + ".text");text.setEditable(false);
     text.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty,"\n");
     text.getAccessibleContext().setAccessibleName("읽기 전용 요청·응답 패킷");
-    JPanel choices = new JPanel(new WorkbenchUi.WrapLayout(FlowLayout.LEFT, 0, 0));
+    JPanel choices = modeTabs;
     for (Mode value : Mode.values()) {
       String title = switch (value) { case PRETTY -> "Pretty"; case RAW -> "Raw"; case HEX -> "Hex"; case RENDER -> "Render"; };
       JToggleButton tab = new Tab(title);tab.setName(name + "." + title.toLowerCase());
@@ -131,6 +153,9 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     searchControls.setLayout(new BoxLayout(searchControls,BoxLayout.X_AXIS));
     rebuildSearchControls(false);
     searchBar.add(searchControls, BorderLayout.EAST);add(searchBar, BorderLayout.SOUTH);
+    searchBar.setVisible(false);
+    findButton.setName(name + ".search.open");
+    findButton.addActionListener(e -> showSearch());
     JPopupMenu searchMenu=new JPopupMenu();JCheckBoxMenuItem caseChoice=new JCheckBoxMenuItem("대소문자 구분"),regexChoice=new JCheckBoxMenuItem("정규식 검색");
     caseChoice.addActionListener(event->caseSensitive.doClick());regexChoice.addActionListener(event->regex.doClick());
     searchMenu.add(caseChoice);searchMenu.add(regexChoice);searchOptions.setName(name+".search.options");
@@ -152,8 +177,8 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     caseSensitive.addActionListener(e -> scheduleSearch());regex.addActionListener(e -> scheduleSearch());
     previous.addActionListener(e -> navigate(-1));next.addActionListener(e -> navigate(1));clear.addActionListener(e -> search.setText(""));
     bind(search, "ENTER", "next", () -> navigate(1));bind(search, "shift ENTER", "previous", () -> navigate(-1));
-    bind(search, "ESCAPE", "clear", () -> search.setText(""));
-    bind(this, "ctrl F", "find", () -> { search.requestFocusInWindow();search.selectAll(); });
+    bind(search, "ESCAPE", "clear", () -> { search.setText(""); searchExpanded=false; searchBar.setVisible(false); revalidate(); });
+    bind(this, "ctrl F", "find", this::showSearch);
     bind(this, "F3", "next", () -> navigate(1));bind(this, "shift F3", "previous", () -> navigate(-1));
     text.addComponentListener(new ComponentAdapter() { public void componentResized(ComponentEvent e) { lines.revalidate();lines.repaint(); } });
     if(editable)text.getDocument().addDocumentListener(new DocumentListener() {
@@ -171,7 +196,41 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     owner.getActionMap().put(name, new AbstractAction() { public void actionPerformed(ActionEvent e) { action.run(); } });
   }
 
-  Component titleActions(){return headerActions;}
+  private boolean approvedTraffic;
+  void approvedTrafficPresentation() {
+    if(approvedTraffic)return;
+    approvedTraffic=true;
+    headerActions.setPreferredSize(new Dimension(212,43));
+    headerActions.setLayout(new java.awt.LayoutManager(){
+      public void addLayoutComponent(String n,Component c){} public void removeLayoutComponent(Component c){}
+      public Dimension preferredLayoutSize(Container p){return new Dimension(212,43);}
+      public Dimension minimumLayoutSize(Container p){return new Dimension(150,35);}
+      public void layoutContainer(Container p){modeTabs.setBounds(0,4,102,35);if(p.getComponentCount()>1)p.getComponent(1).setBounds(109,6,91,31);}
+    });
+    modeTabs.setLayout(new java.awt.LayoutManager(){
+      public void addLayoutComponent(String n,Component c){} public void removeLayoutComponent(Component c){}
+      public Dimension preferredLayoutSize(Container p){return new Dimension(102,35);}public Dimension minimumLayoutSize(Container p){return preferredLayoutSize(p);}
+      public void layoutContainer(Container p){if(p.getComponentCount()>0)p.getComponent(0).setBounds(0,0,58,35);if(p.getComponentCount()>1)p.getComponent(1).setBounds(58,0,44,35);}
+    });
+    Component tools=headerActions.getComponent(1);
+    if(tools instanceof Container group)for(Component c:group.getComponents())if(c instanceof JButton b)ApprovedTrafficPanel.dropdown(b,"원문 도구");
+    applyTheme();
+  }
+
+  Component titleActions(){
+    if (!headerMerged) {
+      headerMerged=true; headerActions.removeAll();
+      JPanel tools=WorkflowUi.menu(getName()+".tools", "원문 도구", tabs.get(2),tabs.get(3),copy,wrap,findButton,more);
+      headerActions.add(modeTabs); headerActions.add(tools); toolbar.putClientProperty("wb.workflow.merged",true); toolbar.setVisible(false);
+    }
+    return headerActions;
+  }
+
+  private void showSearch() {
+    if (!search.isEnabled()) return;
+    searchExpanded=true; searchBar.setVisible(true); revalidate();
+    search.requestFocusInWindow(); search.selectAll();
+  }
 
   void setNativeAction(Runnable action) { nativeAction = action;more.setEnabled(action != null); }
   Mode mode() { return mode; }
@@ -292,11 +351,11 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     rendering = true;try { text.setText(page.text());text.setEditable(false); } finally { rendering = false; }
     text.getHighlighter().removeAllHighlights();matches = List.of();current = -1;currentHighlight = null;
     SimpleAttributeSet normal = new SimpleAttributeSet();StyleConstants.setForeground(normal, WorkbenchUi.ink());
-    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(text.getText()).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(14));
+    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(text.getText()).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(12));
     text.getStyledDocument().setCharacterAttributes(0, text.getDocument().getLength(), normal, true);
     try {
       if (page.end() > page.start()) text.getHighlighter().addHighlight(page.start(), page.end(),
-          new DefaultHighlighter.DefaultHighlightPainter(WorkbenchUi.dark() ? new Color(154,100,34) : new Color(255,190,92)));
+          new SearchPainter(true));
     } catch (BadLocationException error) { throw new IllegalStateException(error); }
     text.setCaretPosition(Math.min(page.start(), text.getDocument().getLength()));
     String label = "목록 검색 문맥 · " + page.location() + " · 일치 " + (trafficPage + 1) + "/" + trafficContext.pages().size()
@@ -328,7 +387,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     boolean html=mode==Mode.RENDER;
     remove(html?scroll:renderPanel);add(html?renderPanel:scroll,BorderLayout.CENTER);
     for(JComponent control:new JComponent[]{search,caseSensitive,regex,clear})control.setEnabled(!html);
-    searchBar.setVisible(!html);copy.setEnabled(!html);wrap.setEnabled(mode != Mode.HEX && !html);
+    searchBar.setVisible(!html && (searchExpanded || !search.getText().isEmpty()));findButton.setEnabled(!html);copy.setEnabled(!html);wrap.setEnabled(mode != Mode.HEX && !html);
     if(html){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
     revalidate();repaint();
     wrap.setToolTipText(mode == Mode.HEX ? "Hex는 바이트 열을 고정하고 가로 스크롤로 표시합니다." : "긴 줄 자동 줄바꿈");
@@ -346,6 +405,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   }
 
   void applyTheme() {
+    if(!(text.getUI() instanceof PacketTextUi))text.setUI(new PacketTextUi());
     setBackground(WorkbenchUi.surface());
     WorkbenchUi.style(toolbar);WorkbenchUi.style(headerActions);WorkbenchUi.style(modePicker);WorkbenchUi.style(searchBar);WorkbenchUi.style(scroll);
     for(AbstractButton b : new AbstractButton[]{previous,next,clear,caseSensitive,regex,wrap,more,searchOptions,copy}) {
@@ -360,28 +420,29 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     text.setSelectionColor(WorkbenchUi.selected());text.setSelectedTextColor(WorkbenchUi.ink());
     WorkbenchUi.style(renderPanel);rendered.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES,true);
     if(mode==Mode.RENDER){rendered.setText(PacketRender.document(renderSource,truncated));rendered.setCaretPosition(0);}
+    if(approvedTraffic){text.setMargin(new Insets(0,0,0,0));text.setBorder(BorderFactory.createEmptyBorder(19,8,14,14));}
     colorize();lines.repaint();toolbar.revalidate();toolbar.repaint();searchBar.revalidate();displayDecoration.run();
   }
 
   private void colorize() {
     StyledDocument doc=text.getStyledDocument();String value=text.getText();
     SimpleAttributeSet normal=new SimpleAttributeSet();StyleConstants.setForeground(normal,WorkbenchUi.ink());
-    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(14));
+    StyleConstants.setFontFamily(normal,WorkbenchUi.textFont(value).getFamily());StyleConstants.setFontSize(normal,WorkbenchUi.displayPixels(12));
     doc.setCharacterAttributes(0,doc.getLength(),normal,true);
-    SimpleAttributeSet spacing=new SimpleAttributeSet();StyleConstants.setLineSpacing(spacing,.20f);doc.setParagraphAttributes(0,doc.getLength(),spacing,false);
+    SimpleAttributeSet spacing=new SimpleAttributeSet();StyleConstants.setLineSpacing(spacing,approvedTraffic?.34f:.20f);doc.setParagraphAttributes(0,doc.getLength(),spacing,false);
     if(mode==Mode.HEX)return;
-    Color blue=WorkbenchUi.dark()?new Color(161,188,239):new Color(31,91,235);
+    Color blue=WorkbenchUi.dark()?new Color(161,188,239):approvedTraffic?new Color(37,93,167):new Color(31,91,235);
     Color green=WorkbenchUi.dark()?new Color(155,209,113):new Color(28,141,48);
     Color orange=WorkbenchUi.dark()?new Color(245,159,79):new Color(189,91,25);
     int head=value.indexOf("\n\n");if(head<0)head=value.indexOf("\r\n\r\n");if(head<0)head=value.length();
     int line=0;
-    while(line<head) { int end=value.indexOf('\n',line);if(end<0||end>head)end=head;int colon=value.indexOf(':',line);paint(line,line==0?end:colon>=line&&colon<end?colon+1:line,blue);line=end+1; }
+    while(line<head) { int end=value.indexOf('\n',line);if(end<0||end>head)end=head;int colon=value.indexOf(':',line);paint(line,line==0?end:colon>=line&&colon<end?colon+1:line,approvedTraffic&&line==0?(value.startsWith("HTTP/")?(WorkbenchUi.dark()?new Color(103,213,164):new Color(11,119,82)):WorkbenchUi.ink()):blue);line=end+1; }
     int tokens=0;
     for(int i=head;i<value.length()&&tokens<4000;) {
       char c=value.charAt(i);int start=i;
-      if(c=='"'||c=='\'') { char quote=c;boolean escape=false;i++;while(i<value.length()){char next=value.charAt(i++);if(escape)escape=false;else if(next=='\\')escape=true;else if(next==quote)break;}int after=i;while(after<value.length()&&Character.isWhitespace(value.charAt(after)))after++;paint(start,i,after<value.length()&&value.charAt(after)==':'?blue:green);tokens++; }
-      else if(Character.isDigit(c)||c=='-'&&i+1<value.length()&&Character.isDigit(value.charAt(i+1))) { i++;while(i<value.length()&&"0123456789.eE+-".indexOf(value.charAt(i))>=0)i++;paint(start,i,orange);tokens++; }
-      else if(Character.isJavaIdentifierStart(c)) { i++;while(i<value.length()&&Character.isJavaIdentifierPart(value.charAt(i)))i++;if(List.of("true","false","null","var","let","const","function","return").contains(value.substring(start,i)))paint(start,i,orange);tokens++; }
+      if(c=='"'||c=='\'') { char quote=c;boolean escape=false;i++;while(i<value.length()){char next=value.charAt(i++);if(escape)escape=false;else if(next=='\\')escape=true;else if(next==quote)break;}int after=i;while(after<value.length()&&Character.isWhitespace(value.charAt(after)))after++;paint(start,i,after<value.length()&&value.charAt(after)==':'?blue:approvedTraffic?WorkbenchUi.ink():green);tokens++; }
+      else if(Character.isDigit(c)||c=='-'&&i+1<value.length()&&Character.isDigit(value.charAt(i+1))) { i++;while(i<value.length()&&"0123456789.eE+-".indexOf(value.charAt(i))>=0)i++;paint(start,i,approvedTraffic?WorkbenchUi.ink():orange);tokens++; }
+      else if(Character.isJavaIdentifierStart(c)) { i++;while(i<value.length()&&Character.isJavaIdentifierPart(value.charAt(i)))i++;if(List.of("true","false","null","var","let","const","function","return").contains(value.substring(start,i)))paint(start,i,approvedTraffic?WorkbenchUi.ink():orange);tokens++; }
       else i++;
     }
   }
@@ -465,7 +526,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   private void showMatches(SearchResult result) {
     matches=result.spans();current=-1;
     if(result.error()!=null){count.setText(result.error().contains("오류")?"오류":"제한");count.setToolTipText(result.error()+" · 검색식 또는 검색어를 줄여 주세요.");count.setForeground(WorkbenchUi.toneInk(WorkbenchUi.Tone.ERROR));return;}
-    Highlighter.HighlightPainter painter=new DefaultHighlighter.DefaultHighlightPainter(WorkbenchUi.dark()?new Color(112,94,30):new Color(255,233,144));
+    Highlighter.HighlightPainter painter=new SearchPainter(false);
     try{for(Span span:matches)text.getHighlighter().addHighlight(span.start(),span.end(),painter);}catch(BadLocationException ex){throw new IllegalStateException(ex);}
     count.setToolTipText(result.capped()?"앞 "+MAX_MATCHES+"개 일치 결과만 강조·이동합니다.":null);
     previous.setEnabled(!matches.isEmpty());next.setEnabled(!matches.isEmpty());
@@ -476,7 +537,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     if(matches.isEmpty())return;
     current=current<0?(delta>0?0:matches.size()-1):Math.floorMod(current+delta,matches.size());
     Span span=matches.get(current);Highlighter h=text.getHighlighter();if(currentHighlight!=null)h.removeHighlight(currentHighlight);
-    try{currentHighlight=h.addHighlight(span.start(),span.end(),new DefaultHighlighter.DefaultHighlightPainter(WorkbenchUi.dark()?new Color(154,100,34):new Color(255,190,92)));text.setCaretPosition(span.start());Rectangle box=text.modelToView2D(span.start())==null?null:text.modelToView2D(span.start()).getBounds();if(box!=null)text.scrollRectToVisible(box);}catch(BadLocationException ex){throw new IllegalStateException(ex);}
+    try{currentHighlight=h.addHighlight(span.start(),span.end(),new SearchPainter(true));text.setCaretPosition(span.start());Rectangle box=text.modelToView2D(span.start())==null?null:text.modelToView2D(span.start()).getBounds();if(box!=null)text.scrollRectToVisible(box);}catch(BadLocationException ex){throw new IllegalStateException(ex);}
     count.setText((current+1)+" / "+matches.size()+(count.getToolTipText()!=null?"+":""));
   }
 
@@ -518,7 +579,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
     private final JPanel choices,actions;private final JComboBox<String> picker;private boolean compact;
     ResponsivePacketToolbar(JPanel choices,JComboBox<String> picker,JPanel actions){super(new BorderLayout(4,0));this.choices=choices;this.picker=picker;this.actions=actions;add(choices,BorderLayout.WEST);add(actions,BorderLayout.EAST);}
     private void adapt(){
-      if(getWidth()<=0)return;int intrinsic=0;for(Component choice:choices.getComponents())if(choice.isVisible())intrinsic+=choice.getPreferredSize().width;
+      if(Boolean.TRUE.equals(getClientProperty("wb.workflow.merged"))||getWidth()<=0)return;int intrinsic=0;for(Component choice:choices.getComponents())if(choice.isVisible())intrinsic+=choice.getPreferredSize().width;
       boolean next=getWidth()<intrinsic+(actions.getParent()==this?actions.getPreferredSize().width:0)+4;
       if(next==compact)return;compact=next;remove(next?choices:picker);add(next?picker:choices,BorderLayout.WEST);
     }
@@ -529,7 +590,7 @@ final class PacketInspector extends JPanel implements AutoCloseable {
   static final class Tab extends JToggleButton {
     Tab(String title){super(title);}
     @Override public Dimension getPreferredSize(){return new Dimension(Math.max(66,getFontMetrics(WorkbenchUi.font()).stringWidth(getText())+16),Math.max(34,getFontMetrics(WorkbenchUi.font()).getHeight()+8));}
-    @Override protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN));g.setColor(isSelected()?WorkbenchUi.ink():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(getText(),(getWidth()-g.getFontMetrics().stringWidth(getText()))/2,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.line());g.fillRect(0,getHeight()-(isSelected()?3:1),getWidth(),isSelected()?3:1);if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}g.dispose();}
+    @Override protected void paintComponent(Graphics graphics){Graphics2D g=(Graphics2D)graphics.create();WorkbenchSkin.antialias(g);g.setColor(WorkbenchUi.surface());g.fillRect(0,0,getWidth(),getHeight());if(isSelected()){g.setColor(WorkbenchUi.selected());g.fillRoundRect(2,3,getWidth()-4,getHeight()-6,7,7);}g.setFont(WorkbenchUi.font().deriveFont(isSelected()?Font.BOLD:Font.PLAIN,WorkbenchUi.displaySize(12f)));g.setColor(isSelected()?WorkbenchUi.accent():WorkbenchUi.toneInk(WorkbenchUi.Tone.NEUTRAL));g.drawString(getText(),(getWidth()-g.getFontMetrics().stringWidth(getText()))/2,(getHeight()-g.getFontMetrics().getHeight())/2+g.getFontMetrics().getAscent());if(hasFocus()){g.setColor(WorkbenchUi.accent());g.drawRect(2,2,getWidth()-5,getHeight()-5);}g.dispose();}
   }
 
   private static void paintTool(AbstractButton button,Graphics graphics,String kind) {

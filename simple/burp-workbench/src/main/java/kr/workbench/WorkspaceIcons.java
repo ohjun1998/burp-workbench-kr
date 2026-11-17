@@ -18,6 +18,9 @@ final class WorkspaceIcons {
       else if(kind.equals("fullscreen")){g.drawPolyline(new int[]{1,1,6},new int[]{6,1,1},3);g.drawPolyline(new int[]{10,15,15},new int[]{1,1,6},3);g.drawPolyline(new int[]{1,1,6},new int[]{10,15,15},3);g.drawPolyline(new int[]{10,15,15},new int[]{15,15,10},3);}
       else if(kind.equals("dashboard")){g.drawRoundRect(1,1,14,14,2,2);g.drawLine(1,6,15,6);g.drawLine(6,6,6,15);}
       else if(kind.equals("help")){g.drawOval(1,1,14,14);g.drawArc(5,4,6,5,0,180);g.drawLine(8,8,8,10);g.fillOval(7,12,2,2);}
+      else if(kind.equals("info")){g.drawOval(2,2,12,12);g.fillOval(7,4,2,2);g.drawLine(8,7,8,12);}
+      else if(kind.equals("download")){g.drawLine(8,1,8,11);g.drawPolyline(new int[]{4,8,12},new int[]{7,11,7},3);g.drawPolyline(new int[]{2,2,14,14},new int[]{11,15,15,11},4);}
+      else if(kind.equals("eye")){g.drawOval(1,4,14,8);g.drawOval(6,6,4,4);}
       else if(kind.equals("logs")){g.drawRoundRect(2,1,12,14,2,2);g.drawLine(5,5,11,5);g.drawLine(5,8,11,8);g.drawLine(5,11,9,11);}
       else if(kind.equals("filter")){g.drawPolyline(new int[]{1,15,10,10,6,6,1},new int[]{2,2,8,14,12,8,2},7);}
       else if(kind.equals("gear")){g.drawOval(3,3,10,10);g.drawOval(6,6,4,4);for(int i=0;i<8;i++){double a=i*Math.PI/4;g.drawLine(8+(int)(5*Math.cos(a)),8+(int)(5*Math.sin(a)),8+(int)(7*Math.cos(a)),8+(int)(7*Math.sin(a)));}}

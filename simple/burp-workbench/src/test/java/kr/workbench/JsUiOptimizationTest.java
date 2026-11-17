@@ -9,6 +9,9 @@ public final class JsUiOptimizationTest {
  static void check(boolean ok,String message){if(!ok)throw new AssertionError(message);checks++;System.out.println("PASS "+message);}
  static void edt(Runnable job)throws Exception{SwingUtilities.invokeAndWait(job);}
  static void settle(JsAnalysisPanel panel,int width,int height)throws Exception{edt(()->panel.setSize(width,height));for(int i=0;i<6;i++)edt(()->UiLayoutTest.layout(panel));}
+ static boolean displayed(Component component,Container root){
+  for(Component current=component;current!=null;current=current.getParent()){if(!current.isVisible())return false;if(current==root)return true;}return false;
+ }
  static Rectangle visible(Component component,Container root){
   Rectangle bounds=SwingUtilities.convertRectangle(component.getParent(),component.getBounds(),root);
   for(Container parent=component.getParent();parent!=null&&parent!=root;parent=parent.getParent())bounds=bounds.intersection(SwingUtilities.convertRectangle(parent,new Rectangle(0,0,parent.getWidth(),parent.getHeight()),root));
@@ -25,9 +28,21 @@ public final class JsUiOptimizationTest {
      settle(panel,size[0],size[1]);edt(()->{
       Rectangle source=visible(panel.input,panel);
       check(source.width>=300&&source.height>=80,"editable JS source remains visible in "+mode+" at "+size[0]+"x"+size[1]+" ("+source.width+"x"+source.height+")");
-      check(visible(panel.sources,panel).height==panel.sources.getHeight()&&visible(panel.navigator.previous,panel).height==panel.navigator.previous.getHeight(),"analysis list and navigation controls stay visible in "+mode+" at "+size[0]);
+      check(displayed(panel.sources,panel)&&visible(panel.sources,panel).height==panel.sources.getHeight(),"source selector remains visible in "+mode+" at "+size[0]);
       Rectangle findings=visible(panel.results,panel);
-      check(findings.width>=450&&findings.height>=140&&visible(UiLayoutTest.named(panel,"wb.js.inline.detail"),panel).height>=100&&!SwingUtilities.isDescendingFrom(panel.requestPacket,panel),"findings and inline details share the released packet area in "+mode+" at "+size[0]);
+      check(findings.width>=450&&findings.height>=140&&source.x>findings.x+findings.width/2&&!SwingUtilities.isDescendingFrom(panel.requestPacket,panel),"approved paths-left/source-right readers retain useful areas in "+mode+" at "+size[0]);
+      JToggleButton navigation=(JToggleButton)UiLayoutTest.named(panel,"wb.workflow.js.navigation.toggle");
+      check(!navigation.isSelected()&&!displayed(panel.navigator.previous,panel),"secondary source navigation starts folded at "+size[0]);
+      navigation.doClick(0);for(int pass=0;pass<5;pass++)UiLayoutTest.layout(panel);
+      Rectangle previous=visible(panel.navigator.previous,panel);
+      check(displayed(panel.navigator.previous,panel)&&previous.width==panel.navigator.previous.getWidth()&&previous.height>=24,"expanded source navigation remains readable and reachable at "+size[0]);
+      navigation.doClick(0);
+      JToggleButton evidence=(JToggleButton)UiLayoutTest.named(panel,"wb.workflow.js.evidence.toggle");
+      Component detail=UiLayoutTest.named(panel,"wb.js.inline.detail");
+      check(!evidence.isSelected()&&!displayed(detail,panel),"repeated detail facts start folded at "+size[0]);
+      evidence.doClick(0);for(int pass=0;pass<5;pass++)UiLayoutTest.layout(panel);
+      check(displayed(detail,panel)&&visible(detail,panel).height>=100&&visible(panel.input,panel).height>=80,"expanded analysis facts remain readable without consuming source reader at "+size[0]);
+      evidence.doClick(0);
      });
     }
    }

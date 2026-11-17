@@ -1,3 +1,9 @@
+# Workbench Strix 1.0.1: exact Simple1.4.21 design base
+
+- User explicitly requires Simple1.4.21 design/layout retained and only Strix diagnostic agent added. Base source commit03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d. Preserve approved controls/fonts/cards/header/sidebar/42px compact primary navigation/all13views and original engines/IDs/storage. Do not bring A-grouped1.4.22 or functional HTML mockup changes.
+- New product version1.0.1, artifacts simple/downloads/strix/1.0.1. Preserve Strix1.0.0 and historical artifacts. Integrate Strix only via retained popup/settings action and separate window; retain explicit approval/source-hash/project/SCOPE/provider/cancel guards.
+- Compare baseline/current actual native windows with identical synthetic adapters and record named-control geometry; captures are native Swing, NOT native Burp or actual live diagnosis. Evidence docs/reports/2026-11-17-workbench-strix-1.0.1. Use full release/check and immutable verify before publishing. Existing Linux PID1 test fixture may require external subreaper, not product behavior changes.
+
 # Workbench Strix 1.0.0 identity split
 
 - User requested a distinct product name for the Strix-integrated Simple branch. Runtime PRODUCT_NAME/IMPLEMENTATION_TITLE/ARTIFACT_ID are centralized in BuildInfo; VERSION1.0.0 is a new product series, not a Simple downgrade or a merge of A-grouped Simple1.4.22.

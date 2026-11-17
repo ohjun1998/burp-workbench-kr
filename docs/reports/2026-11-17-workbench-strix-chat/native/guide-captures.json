@@ -1,0 +1,36 @@
+{
+  "releaseJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "nativeBurpValidation": false,
+  "syntheticConversation": true,
+  "modelCalls": 0,
+  "targetRequests": 0,
+  "captures": [
+    {
+      "id": "chat-ready",
+      "title": "진단 대화 준비 · 연결 전",
+      "path": "chat/dark/1600x1000/01-chat-ready.png",
+      "sha256": "513ec89a29d97a57606f7ecbd8bb9a59d09f691f1db109495131c770a4fb1d2b"
+    },
+    {
+      "id": "chat-conversation",
+      "title": "같은 진단 세션 대화 · 합성 대화 예시",
+      "path": "chat/dark/1600x1000/02-chat-conversation.png",
+      "sha256": "5150dc989bbf00539a4df6ff2a342b3a360f6b30a4971d0b914e6d42a5b4cbf9"
+    },
+    {
+      "id": "chat-subagent",
+      "title": "하위 에이전트 대화 선택 · 합성 예시",
+      "path": "chat/dark/1600x1000/03-chat-subagent.png",
+      "sha256": "b55da95c91285431e3a3d82eae7d0baaa2c968ead26ad94f622c5dc8371975a0"
+    },
+    {
+      "id": "chat-confirm",
+      "title": "질문 전송 전 확인 · 취소가 기본 선택",
+      "path": "chat/dark/1600x1000/04-chat-confirm.png",
+      "sha256": "48691367ed850af90c3b9d24131313202489244330f4c68bc6f41367ded213a8"
+    }
+  ],
+  "captureLoadedJarPath": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.1.0.jar",
+  "immutableReleaseJarPath": "/workspace/burp-workbench-kr/simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0.jar",
+  "immutableReleaseByteIdenticalVerified": true
+}

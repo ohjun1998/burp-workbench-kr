@@ -1,0 +1,326 @@
+{
+  "releaseJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "version": "1.1.0",
+  "theme": "light",
+  "nativeSwing": true,
+  "nativeBurpValidation": false,
+  "syntheticConversation": true,
+  "modelCalls": 0,
+  "targetRequests": 0,
+  "strixExecutions": 0,
+  "capture": "Robot.createScreenCapture on live Xorg/xfwm4 windows",
+  "views": [
+    {
+      "controls": [
+        {
+          "name": "wb.simple.strix.target",
+          "clipped": false,
+          "width": 378,
+          "y": 50,
+          "x": 173,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "name": "wb.simple.strix.mode",
+          "clipped": false,
+          "width": 96,
+          "y": 91,
+          "x": 77,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "name": "wb.simple.strix.interactive",
+          "clipped": false,
+          "width": 287,
+          "y": 92,
+          "x": 498,
+          "kind": "control",
+          "height": 28
+        },
+        {
+          "name": "wb.simple.strix.chat.agent",
+          "clipped": false,
+          "width": 48,
+          "y": 199,
+          "x": 77,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "width": 1248,
+          "minimumHeight": 80,
+          "kind": "content-viewport",
+          "clipped": false,
+          "name": "wb.simple.strix.chat.history",
+          "y": 242,
+          "x": 11,
+          "height": 185
+        },
+        {
+          "width": 1248,
+          "minimumHeight": 50,
+          "kind": "content-viewport",
+          "clipped": false,
+          "name": "wb.simple.strix.chat.draft",
+          "y": 481,
+          "x": 11,
+          "height": 61
+        },
+        {
+          "name": "wb.simple.strix.chat.attach",
+          "clipped": false,
+          "width": 185,
+          "y": 554,
+          "x": 18,
+          "kind": "control",
+          "height": 28
+        },
+        {
+          "name": "wb.simple.strix.chat.send",
+          "clipped": false,
+          "width": 96,
+          "y": 552,
+          "x": 211,
+          "kind": "control",
+          "height": 32
+        },
+        {
+          "name": "wb.simple.strix.start",
+          "clipped": false,
+          "width": 146,
+          "y": 719,
+          "x": 18,
+          "kind": "control",
+          "height": 32
+        },
+        {
+          "name": "wb.simple.strix.stop",
+          "clipped": false,
+          "width": 62,
+          "y": 719,
+          "x": 172,
+          "kind": "control",
+          "height": 32
+        }
+      ],
+      "height": 800,
+      "title": "진단 대화 준비 · 연결 전",
+      "png": "01-chat-ready.png",
+      "width": 1280,
+      "sha256": "a4eac49a4f667e2b51837119d0dfa44622a2b43dbdb078ba4d2df38606a629c5"
+    },
+    {
+      "controls": [
+        {
+          "name": "wb.simple.strix.target",
+          "clipped": false,
+          "width": 378,
+          "y": 50,
+          "x": 173,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "name": "wb.simple.strix.mode",
+          "clipped": false,
+          "width": 96,
+          "y": 91,
+          "x": 77,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "name": "wb.simple.strix.interactive",
+          "clipped": false,
+          "width": 287,
+          "y": 92,
+          "x": 498,
+          "kind": "control",
+          "height": 28
+        },
+        {
+          "name": "wb.simple.strix.chat.agent",
+          "clipped": false,
+          "width": 263,
+          "y": 199,
+          "x": 77,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "width": 1238,
+          "minimumHeight": 80,
+          "kind": "content-viewport",
+          "clipped": false,
+          "name": "wb.simple.strix.chat.history",
+          "y": 242,
+          "x": 11,
+          "height": 185
+        },
+        {
+          "width": 1248,
+          "minimumHeight": 50,
+          "kind": "content-viewport",
+          "clipped": false,
+          "name": "wb.simple.strix.chat.draft",
+          "y": 481,
+          "x": 11,
+          "height": 61
+        },
+        {
+          "name": "wb.simple.strix.chat.attach",
+          "clipped": false,
+          "width": 185,
+          "y": 554,
+          "x": 18,
+          "kind": "control",
+          "height": 28
+        },
+        {
+          "name": "wb.simple.strix.chat.send",
+          "clipped": false,
+          "width": 96,
+          "y": 552,
+          "x": 211,
+          "kind": "control",
+          "height": 32
+        },
+        {
+          "name": "wb.simple.strix.start",
+          "clipped": false,
+          "width": 146,
+          "y": 719,
+          "x": 18,
+          "kind": "control",
+          "height": 32
+        },
+        {
+          "name": "wb.simple.strix.stop",
+          "clipped": false,
+          "width": 62,
+          "y": 719,
+          "x": 172,
+          "kind": "control",
+          "height": 32
+        }
+      ],
+      "height": 800,
+      "title": "같은 진단 세션 대화 · 합성 대화 예시",
+      "png": "02-chat-conversation.png",
+      "width": 1280,
+      "sha256": "24032614058a5d37ff2edf84acb555397e0ce9ec38d2e4e138fbd801b3759739"
+    },
+    {
+      "controls": [
+        {
+          "name": "wb.simple.strix.target",
+          "clipped": false,
+          "width": 378,
+          "y": 50,
+          "x": 173,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "name": "wb.simple.strix.mode",
+          "clipped": false,
+          "width": 96,
+          "y": 91,
+          "x": 77,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "name": "wb.simple.strix.interactive",
+          "clipped": false,
+          "width": 287,
+          "y": 92,
+          "x": 498,
+          "kind": "control",
+          "height": 28
+        },
+        {
+          "name": "wb.simple.strix.chat.agent",
+          "clipped": false,
+          "width": 263,
+          "y": 199,
+          "x": 77,
+          "kind": "control",
+          "height": 31
+        },
+        {
+          "width": 1248,
+          "minimumHeight": 80,
+          "kind": "content-viewport",
+          "clipped": false,
+          "name": "wb.simple.strix.chat.history",
+          "y": 242,
+          "x": 11,
+          "height": 185
+        },
+        {
+          "width": 1248,
+          "minimumHeight": 50,
+          "kind": "content-viewport",
+          "clipped": false,
+          "name": "wb.simple.strix.chat.draft",
+          "y": 481,
+          "x": 11,
+          "height": 61
+        },
+        {
+          "name": "wb.simple.strix.chat.attach",
+          "clipped": false,
+          "width": 185,
+          "y": 554,
+          "x": 18,
+          "kind": "control",
+          "height": 28
+        },
+        {
+          "name": "wb.simple.strix.chat.send",
+          "clipped": false,
+          "width": 96,
+          "y": 552,
+          "x": 211,
+          "kind": "control",
+          "height": 32
+        },
+        {
+          "name": "wb.simple.strix.start",
+          "clipped": false,
+          "width": 146,
+          "y": 719,
+          "x": 18,
+          "kind": "control",
+          "height": 32
+        },
+        {
+          "name": "wb.simple.strix.stop",
+          "clipped": false,
+          "width": 62,
+          "y": 719,
+          "x": 172,
+          "kind": "control",
+          "height": 32
+        }
+      ],
+      "height": 800,
+      "title": "하위 에이전트 대화 선택 · 합성 예시",
+      "png": "03-chat-subagent.png",
+      "width": 1280,
+      "sha256": "caf3ee569ef888ebc91f37a28be37aeadfa315394c010552326a8fdba0d569fd"
+    },
+    {
+      "controls": [],
+      "height": 414,
+      "title": "질문 전송 전 확인 · 취소가 기본 선택",
+      "png": "04-chat-confirm.png",
+      "width": 470,
+      "sha256": "e41d24f7831436a8d41ccd798335c8b26470aa5780228058c05596baa8cf351b"
+    }
+  ],
+  "layoutViolations": []
+}

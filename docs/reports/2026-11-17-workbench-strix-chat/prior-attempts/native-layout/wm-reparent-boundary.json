@@ -1,0 +1,607 @@
+{
+  "result": "review_required",
+  "baselineJarSha256": "9d3d20af946add3498da79a021be31fafe8d84e046352463c4a559616187301c",
+  "candidateJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "baselineVersion": "1.4.21",
+  "candidateVersion": "1.1.0",
+  "captureMode": "Native Linux Xorg/xfwm4 windows captured with Robot",
+  "nativeBurp": false,
+  "syntheticHostAndPackets": true,
+  "targetRequests": 0,
+  "strixExecutions": 0,
+  "modelCalls": 0,
+  "screenshots": 28,
+  "comparisons": [
+    {
+      "theme": "light",
+      "size": "1600x1000",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [
+        {
+          "key": "wb.actions.traffic.selection#1",
+          "field": "y",
+          "baseline": 458,
+          "candidate": 457
+        },
+        {
+          "key": "wb.card.요청#1",
+          "field": "y",
+          "baseline": 500,
+          "candidate": 499
+        },
+        {
+          "key": "wb.card.요청#1",
+          "field": "height",
+          "baseline": 409,
+          "candidate": 406
+        },
+        {
+          "key": "wb.card.응답#1",
+          "field": "y",
+          "baseline": 500,
+          "candidate": 499
+        },
+        {
+          "key": "wb.card.응답#1",
+          "field": "height",
+          "baseline": 409,
+          "candidate": 406
+        },
+        {
+          "key": "wb.navigation#1",
+          "field": "height",
+          "baseline": 970,
+          "candidate": 966
+        },
+        {
+          "key": "wb.navigation.pages#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.navigation.sidebar#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.navigation.split#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.navigation.tree#1",
+          "field": "height",
+          "baseline": 790,
+          "candidate": 786
+        },
+        {
+          "key": "wb.placement.traffic.list#1",
+          "field": "height",
+          "baseline": 352,
+          "candidate": 351
+        },
+        {
+          "key": "wb.placement.traffic.selection#1",
+          "field": "y",
+          "baseline": 446,
+          "candidate": 445
+        },
+        {
+          "key": "wb.root#1",
+          "field": "height",
+          "baseline": 970,
+          "candidate": 966
+        },
+        {
+          "key": "wb.simple.traffic.repeater#1",
+          "field": "y",
+          "baseline": 458,
+          "candidate": 457
+        },
+        {
+          "key": "wb.simple.traffic.selection#1",
+          "field": "y",
+          "baseline": 458,
+          "candidate": 457
+        },
+        {
+          "key": "wb.traffic#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.traffic.conditions.feedback#1",
+          "field": "y",
+          "baseline": 895,
+          "candidate": 891
+        },
+        {
+          "key": "wb.traffic.history#1",
+          "field": "height",
+          "baseline": 267,
+          "candidate": 266
+        },
+        {
+          "key": "wb.traffic.messages#1",
+          "field": "y",
+          "baseline": 500,
+          "candidate": 499
+        },
+        {
+          "key": "wb.traffic.messages#1",
+          "field": "height",
+          "baseline": 409,
+          "candidate": 406
+        },
+        {
+          "key": "wb.traffic.reference.counts#1",
+          "field": "y",
+          "baseline": 920,
+          "candidate": 916
+        },
+        {
+          "key": "wb.traffic.reference.notice#1",
+          "field": "y",
+          "baseline": 920,
+          "candidate": 916
+        },
+        {
+          "key": "wb.traffic.request#1",
+          "field": "y",
+          "baseline": 544,
+          "candidate": 543
+        },
+        {
+          "key": "wb.traffic.request#1",
+          "field": "height",
+          "baseline": 364,
+          "candidate": 361
+        },
+        {
+          "key": "wb.traffic.request.pretty#1",
+          "field": "y",
+          "baseline": 505,
+          "candidate": 504
+        },
+        {
+          "key": "wb.traffic.request.raw#1",
+          "field": "y",
+          "baseline": 505,
+          "candidate": 504
+        },
+        {
+          "key": "wb.traffic.request.text#1",
+          "field": "y",
+          "baseline": 544,
+          "candidate": 543
+        },
+        {
+          "key": "wb.traffic.request.text#1",
+          "field": "height",
+          "baseline": 364,
+          "candidate": 361
+        },
+        {
+          "key": "wb.traffic.request.tools#1",
+          "field": "y",
+          "baseline": 507,
+          "candidate": 506
+        },
+        {
+          "key": "wb.traffic.request.tools.open#1",
+          "field": "y",
+          "baseline": 507,
+          "candidate": 506
+        },
+        {
+          "key": "wb.traffic.response#1",
+          "field": "y",
+          "baseline": 544,
+          "candidate": 543
+        },
+        {
+          "key": "wb.traffic.response#1",
+          "field": "height",
+          "baseline": 364,
+          "candidate": 361
+        },
+        {
+          "key": "wb.traffic.response.pretty#1",
+          "field": "y",
+          "baseline": 505,
+          "candidate": 504
+        },
+        {
+          "key": "wb.traffic.response.raw#1",
+          "field": "y",
+          "baseline": 505,
+          "candidate": 504
+        },
+        {
+          "key": "wb.traffic.response.text#1",
+          "field": "y",
+          "baseline": 544,
+          "candidate": 543
+        },
+        {
+          "key": "wb.traffic.response.text#1",
+          "field": "height",
+          "baseline": 364,
+          "candidate": 361
+        },
+        {
+          "key": "wb.traffic.response.tools#1",
+          "field": "y",
+          "baseline": 507,
+          "candidate": 506
+        },
+        {
+          "key": "wb.traffic.response.tools.open#1",
+          "field": "y",
+          "baseline": 507,
+          "candidate": 506
+        },
+        {
+          "key": "wb.traffic.tools#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.traffic.workspace#1",
+          "field": "height",
+          "baseline": 761,
+          "candidate": 757
+        },
+        {
+          "key": "wb.workflow.traffic.use#1",
+          "field": "y",
+          "baseline": 458,
+          "candidate": 457
+        },
+        {
+          "key": "wb.workflow.traffic.use.open#1",
+          "field": "y",
+          "baseline": 458,
+          "candidate": 457
+        }
+      ],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1600x1000",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [
+        {
+          "key": "wb.approved.dashboard.detail.column#1",
+          "field": "height",
+          "baseline": 590,
+          "candidate": 586
+        },
+        {
+          "key": "wb.card.선택 항목 근거#1",
+          "field": "height",
+          "baseline": 636,
+          "candidate": 632
+        },
+        {
+          "key": "wb.card.해당 결과 목록#1",
+          "field": "height",
+          "baseline": 636,
+          "candidate": 632
+        },
+        {
+          "key": "wb.flow.dashboard.distribution#1",
+          "field": "y",
+          "baseline": 900,
+          "candidate": 896
+        },
+        {
+          "key": "wb.flow.dashboard.distribution.toggle#1",
+          "field": "y",
+          "baseline": 900,
+          "candidate": 896
+        },
+        {
+          "key": "wb.navigation#1",
+          "field": "height",
+          "baseline": 970,
+          "candidate": 966
+        },
+        {
+          "key": "wb.navigation.pages#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.navigation.sidebar#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.navigation.split#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.navigation.tree#1",
+          "field": "height",
+          "baseline": 790,
+          "candidate": 786
+        },
+        {
+          "key": "wb.root#1",
+          "field": "height",
+          "baseline": 970,
+          "candidate": 966
+        },
+        {
+          "key": "wb.scope.dashboard.content#1",
+          "field": "height",
+          "baseline": 876,
+          "candidate": 872
+        },
+        {
+          "key": "wb.scope.dashboard.results#1",
+          "field": "height",
+          "baseline": 564,
+          "candidate": 560
+        },
+        {
+          "key": "wb.scope.dashboard.results.area#1",
+          "field": "height",
+          "baseline": 636,
+          "candidate": 632
+        },
+        {
+          "key": "wb.scope.dashboard.results.split#1",
+          "field": "height",
+          "baseline": 636,
+          "candidate": 632
+        },
+        {
+          "key": "wb.scope.dashboard.root#1",
+          "field": "height",
+          "baseline": 904,
+          "candidate": 900
+        },
+        {
+          "key": "wb.scope.dashboard.scroll#1",
+          "field": "height",
+          "baseline": 876,
+          "candidate": 872
+        }
+      ],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "size": "1280x800",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1600x1000",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1600x1000",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 172,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 172,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "view": "01-main.png",
+      "commonNamedComponents": 62,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "size": "1280x800",
+      "view": "02-dashboard.png",
+      "commonNamedComponents": 54,
+      "missing": [],
+      "added": [],
+      "rectangleDifferences": [],
+      "primaryRows": [
+        {
+          "key": "wb.navigation.primary.inspect#1",
+          "name": "wb.navigation.primary.inspect",
+          "class": "kr.workbench.CompactPrimaryNavigation$InspectionButton",
+          "x": 9,
+          "y": 58,
+          "width": 146,
+          "height": 42
+        },
+        {
+          "key": "wb.navigation.primary.dashboard#1",
+          "name": "wb.navigation.primary.dashboard",
+          "class": "kr.workbench.CompactPrimaryNavigation$DashboardButton",
+          "x": 9,
+          "y": 106,
+          "width": 146,
+          "height": 42
+        }
+      ]
+    }
+  ],
+  "differentComparisons": 2,
+  "note": "Exact component-rectangle comparison of the existing main/dashboard views. This is not pixel equality or real Burp/model verification.",
+  "purpose": "Unsuccessful harness attempt: WM reparent changed baseline window height from requested1000 to actual1004. No product geometry threshold was relaxed; harness now enforces requested native frame bounds."
+}

@@ -1,0 +1,37 @@
+PASS adapter chat tests never show an actual approval or contact a target
+PASS new runs offer chat while retaining an explicit ordinary-run option
+PASS preparing sources performs no native-session connection or process start
+PASS root agent is selected independently of native array order
+PASS conversation displays the selected agent's committed history
+PASS default-cancel question confirmation delivers zero messages and retains the draft
+PASS question is sent to the frozen native session and chosen agent
+PASS optional attachment keeps source identity and redacts credentials before transfer
+PASS confirmation shows the exact redacted payload and possible native tool execution
+PASS accepted native delivery clears only the submitted draft
+PASS delivery acknowledgment does not fabricate a committed user turn or assistant answer
+PASS agent switch isolates the displayed conversation
+PASS polling retains a manually selected subagent
+PASS native answer renders as literal text and redacts credential lines
+PASS question validates current source/project both around confirmation and before native dispatch
+PASS blank question is blocked before confirmation
+PASS overlong question is blocked before confirmation
+PASS question limit includes the full optional metadata attachment
+PASS invalid payloads neither request approval nor reach the native agent
+PASS 4000 Unicode characters are accepted without counting surrogate pairs twice
+PASS transport failure preserves the draft and persistent delivery error
+PASS failed transport does not claim an accepted native message
+PASS question is blocked when scope changes during confirmation
+PASS changed scope reaches no native dispatch
+PASS question is blocked when project changes during confirmation
+PASS changed project reaches no native dispatch
+PASS question is blocked when other-job changes during confirmation
+PASS changed other-job reaches no native dispatch
+PASS native send is held while panel remains responsive
+PASS duplicate send is blocked during an in-flight native request
+PASS acknowledgment cannot erase a newer user draft
+PASS native snapshot held across project reset
+PASS late native snapshot cannot repopulate a reset project's conversation
+PASS close owns chat/run cleanup exactly once
+PASS native snapshot held across ordinary run completion
+PASS late native snapshot cannot revive chat or overwrite a normally completed session's status
+SimpleStrixChatPanelTest: 36 checks passed (production panel, synthetic native session, no target/model/auth)

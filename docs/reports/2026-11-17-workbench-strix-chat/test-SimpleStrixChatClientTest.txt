@@ -1,0 +1,74 @@
+PASS native capability URL accepts only an explicit literal-loopback port
+PASS reject ambiguous or non-native viewer capability URL
+PASS reject ambiguous or non-native viewer capability URL
+PASS reject ambiguous or non-native viewer capability URL
+PASS reject ambiguous or non-native viewer capability URL
+PASS reject ambiguous or non-native viewer capability URL
+PASS reject ambiguous or non-native viewer capability URL
+PASS reject ambiguous or non-native viewer capability URL
+PASS capability bootstrap cannot add a foreign run query
+PASS capability bootstrap cannot add a fragment
+PASS interactive approval cancellation starts zero native processes
+PASS no chat session is invented before an approved run
+PASS approved interactive executable starts in owned PTY
+PASS native root and child agents are read from authenticated transcript
+PASS committed real assistant text is displayed and tool events are excluded
+PASS official executable receives a TTY and supported interactive CLI arguments
+PASS interactive bridge preserves provider isolation and private run config
+PASS owned native TUI skips interactive update prompts without changing global config
+PASS known credential crossing the 16 KiB display boundary is masked before truncation without leaking its prefix
+PASS stale generation cannot send into another diagnostic session
+PASS unknown agent is rejected before native HTTP send
+PASS blank followup is rejected
+PASS native followup character bound is enforced before dispatch
+PASS invalid or stale followups emit zero native steering requests
+PASS accepted native steering preserves selected agent and exact question
+PASS followup response comes from the same authenticated run transcript
+PASS native chat ignores JVM-global application cookies and external proxy selectors
+PASS native 4000-character limit counts Unicode characters rather than UTF-16 units
+PASS supplementary Unicode characters cannot exceed the native followup limit
+PASS HTTP 200 with ok:false is reported as an undelivered message
+PASS owned interactive process and HTTP viewer stop on cancel
+PASS cancel invalidates native chat capability immediately
+PASS a completed owned process rejects late chat sends
+PASS private native viewer URL and provider credentials never appear in public terminal output
+PASS start isolated remote viewer fixture
+PASS refuse remote viewer attachment without claiming a native chat connection
+PASS unavailable remote chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel remote native fixture independently
+PASS start isolated userinfo viewer fixture
+PASS refuse userinfo viewer attachment without claiming a native chat connection
+PASS unavailable userinfo chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel userinfo native fixture independently
+PASS start isolated extra-query viewer fixture
+PASS refuse extra-query viewer attachment without claiming a native chat connection
+PASS unavailable extra-query chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel extra-query native fixture independently
+PASS start isolated bad-path viewer fixture
+PASS refuse bad-path viewer attachment without claiming a native chat connection
+PASS unavailable bad-path chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel bad-path native fixture independently
+PASS start isolated ipv6 viewer fixture
+PASS refuse ipv6 viewer attachment without claiming a native chat connection
+PASS unavailable ipv6 chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel ipv6 native fixture independently
+PASS start isolated unavailable viewer fixture
+PASS refuse unavailable viewer attachment without claiming a native chat connection
+PASS unavailable unavailable chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel unavailable native fixture independently
+PASS start isolated redirect viewer fixture
+PASS refuse redirect viewer attachment without claiming a native chat connection
+PASS unavailable redirect chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel redirect native fixture independently
+PASS start isolated wrong-target viewer fixture
+PASS refuse wrong-target viewer attachment without claiming a native chat connection
+PASS unavailable wrong-target chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel wrong-target native fixture independently
+PASS start isolated wrong-run viewer fixture
+PASS refuse wrong-run viewer attachment without claiming a native chat connection
+PASS unavailable wrong-run chat neither sends target work nor silently stops the owned diagnosis
+PASS cancel wrong-run native fixture independently
+PASS a new owned run receives a fresh chat generation
+PASS previous diagnostic generation cannot steer a new run
+PASS all viewer authentication, reads and sends keep JVM-global HTTP state untouched
+SimpleStrixChatClientTest: 73 checks passed (synthetic native PTY/HTTP only; no Strix/model/auth/target calls)

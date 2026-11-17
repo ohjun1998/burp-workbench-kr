@@ -1,0 +1,137 @@
+{
+  "product": "Workbench Strix",
+  "version": "1.1.0",
+  "input": "/workspace/burp-workbench-kr/downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-사용가이드.html",
+  "htmlSha256": "aa1816c7f368f93a9d3832315c2b4afe328c8833b01863b73cad9c95b8381d62",
+  "releaseJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "product-version-and-current-session-guidance",
+      "result": "passed"
+    },
+    {
+      "name": "all-capture-bytes-match-final-jar-manifest",
+      "result": "passed"
+    },
+    {
+      "name": "actual-size-image-toggle",
+      "result": "passed"
+    },
+    {
+      "name": "no-external-assets-or-scripts",
+      "result": "passed"
+    },
+    {
+      "name": "anchors-and-download-destinations",
+      "result": "passed"
+    },
+    {
+      "name": "responsive-offline-390",
+      "result": "passed"
+    },
+    {
+      "name": "responsive-offline-768",
+      "result": "passed"
+    },
+    {
+      "name": "responsive-offline-1280",
+      "result": "passed"
+    },
+    {
+      "name": "no-page-errors-or-network",
+      "result": "passed"
+    }
+  ],
+  "errors": [],
+  "externalRuntimeRequests": [],
+  "loopbackRequests": [
+    {
+      "method": "GET",
+      "path": "/guide.html"
+    }
+  ],
+  "offlineAfterDocumentLoad": true,
+  "offlineFile": false,
+  "layouts": [
+    {
+      "width": 390,
+      "viewport": 390,
+      "documentWidth": 390,
+      "images": [
+        {
+          "width": 348,
+          "complete": true
+        },
+        {
+          "width": 348,
+          "complete": true
+        },
+        {
+          "width": 348,
+          "complete": true
+        },
+        {
+          "width": 348,
+          "complete": true
+        }
+      ],
+      "badLinks": []
+    },
+    {
+      "width": 768,
+      "viewport": 768,
+      "documentWidth": 768,
+      "images": [
+        {
+          "width": 694,
+          "complete": true
+        },
+        {
+          "width": 694,
+          "complete": true
+        },
+        {
+          "width": 694,
+          "complete": true
+        },
+        {
+          "width": 694,
+          "complete": true
+        }
+      ],
+      "badLinks": []
+    },
+    {
+      "width": 1280,
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "images": [
+        {
+          "width": 1046,
+          "complete": true
+        },
+        {
+          "width": 1046,
+          "complete": true
+        },
+        {
+          "width": 1046,
+          "complete": true
+        },
+        {
+          "width": 1046,
+          "complete": true
+        }
+      ],
+      "badLinks": []
+    }
+  ],
+  "nativeBurpValidation": false,
+  "syntheticConversation": true,
+  "notRun": [
+    "Actual user Burp",
+    "Actual Strix/model/target requests",
+    "OS download/save UI"
+  ]
+}

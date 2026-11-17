@@ -87,8 +87,12 @@ public final class SimpleStrixIntegrationTest extends WorkbenchTest {
   }
   static SimpleStrixPanel panel(FakeRunner runner, AtomicBoolean inScope, AtomicBoolean external) throws Exception {
     AtomicReference<SimpleStrixPanel> value = new AtomicReference<>();
-    edt(() -> value.set(new SimpleStrixPanel(runner,
-        url -> inScope.get() && url.startsWith("https://allowed.test/"), external::get)));
+    edt(() -> {
+      value.set(new SimpleStrixPanel(runner,
+          url -> inScope.get() && url.startsWith("https://allowed.test/"), external::get));
+      // These existing run/provider/report checks deliberately exercise the retained headless path.
+      value.get().interactive.setSelected(false);
+    });
     return value.get();
   }
   static void prepare(SimpleStrixPanel panel) throws Exception {

@@ -1,0 +1,13 @@
+{
+  "captureLoadedJarPath": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.1.0.jar",
+  "captureLoadedJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "immutableReleaseJarPath": "/workspace/burp-workbench-kr/simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0.jar",
+  "immutableReleaseJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "byteIdentical": true,
+  "verifiedAtUtc": "2026-11-17T14:41:38.299956+00:00",
+  "nativeBurpValidation": false,
+  "syntheticConversation": true,
+  "modelCalls": 0,
+  "targetRequests": 0,
+  "note": "Captures loaded the production DIST JAR. The immutable release artifact was verified byte-identical after packaging; loaded classpath paths in original capture reports were preserved."
+}

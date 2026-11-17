@@ -60,8 +60,13 @@ public final class SimpleStrixClient implements AutoCloseable {
   private final Set<Process> owned = ConcurrentHashMap.newKeySet();
   private final Map<Process,Set<ProcessHandle>> ownedChildren = new ConcurrentHashMap<>();
   private final Map<Path,List<String>> ownedReports = new ConcurrentHashMap<>();
-  private boolean busy, cancelled, closed;
-  private Process active;
+  private boolean busy;
+  private volatile boolean cancelled, closed;
+  private volatile Process active;
+  private volatile long chatGeneration;
+  private volatile SimpleStrixChatClient chatClient;
+  private final Set<Process> interactiveProcesses=ConcurrentHashMap.newKeySet();
+  private final Set<Process> interactiveQuitRequested=ConcurrentHashMap.newKeySet();
   private static final Pattern HEADER = Pattern.compile("(?im)^(\\s*(?:Authorization|Proxy-Authorization|Cookie|Set-Cookie|X-Api-Key|Api-Key|X-Auth-Token)\\s*:)\\s*([^\\r\\n]*)");
   private static final Pattern ASSIGNMENT = Pattern.compile("(?i)([\\\"']?(?:[A-Za-z0-9_-]*(?:password|passwd|token|secret|api[_-]?key|credential|session|cookie))[\\\"']?\\s*[:=]\\s*)([\\\"'])(.*?)\\2");
   private static final Pattern BARE = Pattern.compile("(?i)((?:password|passwd|token|secret|api[_-]?key|credential|session)\\s*[:=]\\s*)([^\\s&;,<>\\\"']+)");
@@ -110,11 +115,31 @@ public final class SimpleStrixClient implements AutoCloseable {
 
   /** Synchronous worker entry point. A missing approval always cancels without starting a process. */
   public Result execute(Plan plan,BooleanSupplier approval,Consumer<Snapshot> listener) throws IOException {
+    return executeInternal(plan,approval,listener,false);
+  }
+  /** Own the real native TUI so followups reach its existing provider, agent and history. */
+  public Result executeInteractive(Plan plan,BooleanSupplier approval,Consumer<Snapshot> listener) throws IOException {
+    if(System.getProperty("os.name","").toLowerCase(Locale.ROOT).startsWith("windows")||!FileSystems.getDefault().supportedFileAttributeViews().contains("posix"))
+      throw new IOException("실시간 Strix 대화는 현재 POSIX PTY와 Python 3가 필요합니다. 대화 없이 진단을 선택하세요.");
+    return executeInternal(plan,approval,listener,true);
+  }
+  public SimpleStrixChatClient.Snapshot chatSnapshot() throws IOException {
+    SimpleStrixChatClient current=chatClient;
+    return current==null?SimpleStrixChatClient.disconnected(chatGeneration,"실시간 대화를 지원하는 Strix 진단을 시작하면 자동 연결됩니다."):current.snapshot();
+  }
+  public void sendChat(long generation,String agentId,String message) throws IOException {
+    SimpleStrixChatClient current=chatClient;
+    if(current==null)throw new IOException("이번 실행의 Strix 대화에 연결되지 않았습니다.");
+    current.send(generation,agentId,message);
+  }
+  private Result executeInternal(Plan plan,BooleanSupplier approval,Consumer<Snapshot> listener,boolean interactive) throws IOException {
     Objects.requireNonNull(plan);
     synchronized(lock){if(closed||busy||ownedAlive())throw new IOException("Strix 연결이 종료됐거나 이전 작업이 실행 중입니다.");busy=true;cancelled=false;}
+    SimpleStrixChatClient previous=chatClient;chatClient=null;if(previous!=null)previous.close();
     long started=System.nanoTime(); Path directory=null; Process process=null; Thread reader=null;
     Tail tail=new Tail(plan.redactions);
     String status="failed"; int exit=-1; Path runConfig=null, instruction=null;
+    List<Path> bridgeFiles=new ArrayList<>();
     try{
       requireWrapper(plan.executable);
       Config initial=readConfig(plan.provider==Provider.HALOGEN_LOCAL);
@@ -140,17 +165,27 @@ public final class SimpleStrixClient implements AutoCloseable {
         String key=first(current.env,"LLM_API_KEY","OPENAI_API_KEY"); if(!key.isEmpty())env.put("LLM_API_KEY",key);
       }
       writePrivate(runConfig,environmentJson(env));
-      ProcessBuilder builder=new ProcessBuilder(plan.executable.toString(),"--config",runConfig.toString(),"--target",plan.target.toASCIIString(),
-          "--instruction-file",instruction.toString(),"--non-interactive","--scan-mode",plan.mode,"--max-turns",Integer.toString(plan.maxTurns));
+      List<String> command=new ArrayList<>(List.of(plan.executable.toString(),"--config",runConfig.toString(),"--target",plan.target.toASCIIString(),
+          "--instruction-file",instruction.toString()));
+      if(!interactive)command.add("--non-interactive");
+      command.addAll(List.of("--scan-mode",plan.mode,"--max-turns",Integer.toString(plan.maxTurns)));
+      ProcessBuilder builder=new ProcessBuilder(interactive?interactiveCommand(directory,command,bridgeFiles):command);
       builder.directory(directory.toFile()).redirectErrorStream(true);
       clearProviderEnvironment(builder.environment());
+      if(interactive){clearInteractiveEnvironment(builder.environment());builder.environment().put("STRIX_NO_UPDATE_CHECK","1");}
       synchronized(lock){if(cancelled||closed)return new Result("cancelled",-1,directory,List.of(),"",elapsed(started),false);process=builder.start();active=process;owned.add(process);}
       final Process child=process; final Tail output=tail;
+      if(interactive){
+        interactiveProcesses.add(child);long generation=++chatGeneration;
+        chatClient=new SimpleStrixChatClient(generation,directory,plan.target,
+            ()->child.isAlive()&&active==child&&!cancelled&&!closed,merge(plan.redactions,current.secrets));
+      }
       reader=new Thread(()->{try(var stream=new InputStreamReader(child.getInputStream(),StandardCharsets.UTF_8)){char[] chunk=new char[2048];for(int n;(n=stream.read(chunk))>=0;)output.append(new String(chunk,0,n));}catch(IOException ignored){}finally{output.finish();}},"Workbench-Strix-log");
       reader.setDaemon(true);reader.start();
       long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(plan.timeoutSeconds);
       status="running";
       while(!process.waitFor(200,TimeUnit.MILLISECONDS)){
+        if(interactive)ownedChildren.computeIfAbsent(process,ignored->ConcurrentHashMap.newKeySet()).addAll(process.descendants().toList());
         notify(listener,new Snapshot("running",tail.text(),elapsed(started)));
         synchronized(lock){if(cancelled||closed){status="cancelled";break;}}
         if(System.nanoTime()>=deadline){status="timed_out";break;}
@@ -172,9 +207,12 @@ public final class SimpleStrixClient implements AutoCloseable {
       if(process!=null&&!processStopped(process))stopOwned(process);
       boolean terminated=process==null||processStopped(process);
       if(terminated){
-        if(process!=null){owned.remove(process);ownedChildren.remove(process);}
-        for(Path sensitive:new Path[]{instruction,runConfig})if(sensitive!=null)try{Files.deleteIfExists(sensitive);}catch(IOException ignored){notify(listener,new Snapshot("cleanup_incomplete","비공개 임시 입력 파일 정리를 확인하세요.",elapsed(started)));}
+        if(process!=null){owned.remove(process);ownedChildren.remove(process);interactiveProcesses.remove(process);interactiveQuitRequested.remove(process);}
+        List<Path> sensitiveFiles=new ArrayList<>(bridgeFiles);sensitiveFiles.add(instruction);sensitiveFiles.add(runConfig);
+        if(directory!=null&&interactive)sensitiveFiles.add(directory.resolve("viewer-session.json"));
+        for(Path sensitive:sensitiveFiles)if(sensitive!=null)try{Files.deleteIfExists(sensitive);}catch(IOException ignored){notify(listener,new Snapshot("cleanup_incomplete","비공개 임시 입력 파일 정리를 확인하세요.",elapsed(started)));}
       }else notify(listener,new Snapshot("cleanup_incomplete","프로세스 종료 미확인 · 비공개 임시 입력을 유지하며 새 실행을 차단합니다.",elapsed(started)));
+      SimpleStrixChatClient current=chatClient;if(current!=null)current.close();
       synchronized(lock){if(terminated&&active==process)active=null;busy=false;}
     }
   }
@@ -294,6 +332,13 @@ public final class SimpleStrixClient implements AutoCloseable {
   private boolean stopOwned(Process process){
     Set<ProcessHandle> descendants=ownedChildren.computeIfAbsent(process,ignored->ConcurrentHashMap.newKeySet());
     descendants.addAll(process.descendants().toList());
+    if(interactiveProcesses.contains(process)){
+      if(interactiveQuitRequested.add(process))try{process.getOutputStream().write("QUIT\n".getBytes(StandardCharsets.US_ASCII));process.getOutputStream().flush();}catch(IOException ignored){}
+      // Native Ctrl+Q defaults to cancel. The owned bridge confirms quit and
+      // owns a process-group fallback; give it time to reap its children first.
+      awaitStopped(process,6000);
+      if(processStopped(process))return true;
+    }
     for(ProcessHandle child:List.copyOf(descendants))if(child.isAlive())child.destroy();if(process.isAlive())process.destroy();
     awaitStopped(process,1500);
     if(!processStopped(process)){
@@ -339,13 +384,33 @@ public final class SimpleStrixClient implements AutoCloseable {
     if(name.endsWith(".csv"))return 6;
     return 7;
   }
-  private static void requireNoLinks(Path root,Path path) throws IOException {
+  static void requireNoLinks(Path root,Path path) throws IOException {
     Path base=root.toAbsolutePath().normalize(),target=path.toAbsolutePath().normalize();if(!target.startsWith(base))throw new IOException("허용된 파일 경로가 아닙니다.");
     Path current=base;if(Files.isSymbolicLink(current))throw new IOException("심볼릭 링크 경로는 지원하지 않습니다.");
     for(Path part:base.relativize(target)){current=current.resolve(part);if(Files.isSymbolicLink(current))throw new IOException("심볼릭 링크 경로는 지원하지 않습니다.");}
   }
   private static void privateDirectories(Path root) throws IOException {requireNoLinks(root.getRoot(),root);Files.createDirectories(root);Files.setPosixFilePermissions(root,PosixFilePermissions.fromString("rwx------"));}
   private static void writePrivate(Path path,String text) throws IOException {Files.createFile(path,PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));Files.writeString(path,text,StandardCharsets.UTF_8,StandardOpenOption.WRITE);}
+  private static List<String> interactiveCommand(Path directory,List<String> command,List<Path> privateFiles) throws IOException {
+    if(System.getProperty("os.name","").toLowerCase(Locale.ROOT).startsWith("windows"))throw new IOException("실시간 Strix 대화는 현재 POSIX PTY와 Python 3가 필요합니다. 대화 없이 진단을 선택하세요.");
+    Path python=null;
+    for(String candidate:List.of("/opt/homebrew/bin/python3","/usr/local/bin/python3","/usr/bin/python3"))if(Files.isRegularFile(Path.of(candidate))&&Files.isExecutable(Path.of(candidate))){python=Path.of(candidate);break;}
+    if(python==null)throw new IOException("실시간 Strix 대화에 필요한 Python 3를 찾지 못했습니다. 대화 없이 진단을 선택하세요.");
+    for(String name:List.of("pty_bridge.py","browser_capture.py")){
+      Path output=directory.resolve(name);
+      try(var resource=SimpleStrixClient.class.getResourceAsStream("/strix/"+name)){
+        if(resource==null)throw new IOException("Strix 대화 연결 도구가 패키지에 없습니다.");
+        writePrivate(output,new String(resource.readAllBytes(),StandardCharsets.UTF_8));privateFiles.add(output);
+      }
+    }
+    Path commandFile=directory.resolve("bridge-command.json");StringJoiner args=new StringJoiner(",","[","]\n");command.forEach(value->args.add(quote(value)));
+    writePrivate(commandFile,args.toString());privateFiles.add(commandFile);
+    return List.of(python.toString(),"-I",directory.resolve("pty_bridge.py").toString(),commandFile.toString());
+  }
+  private static void clearInteractiveEnvironment(Map<String,String> env){
+    env.keySet().removeIf(key->{String upper=key.toUpperCase(Locale.ROOT);return upper.startsWith("PYTHON")||upper.startsWith("STRIX_TUI_")||upper.equals("BROWSER")||upper.equals("LD_PRELOAD")||upper.equals("LD_LIBRARY_PATH")||upper.startsWith("DYLD_")||credentialKey(upper);});
+  }
+  static String cleanChat(String text,List<String> secrets,int limit) throws IOException {return sanitize(text,secrets,limit).text;}
   private static String string(Object value){return value instanceof String text?text:"";}
   private static String first(Map<String,Object> env,String...keys){for(String key:keys){String value=string(env.get(key));if(!value.isBlank())return value;}return "";}
   private static String environmentJson(Map<String,Object> env){StringJoiner join=new StringJoiner(",","{\"env\":{","}}\n");env.forEach((k,v)->join.add(quote(k)+":"+(v instanceof String?quote((String)v):v.toString())));return join.toString();}

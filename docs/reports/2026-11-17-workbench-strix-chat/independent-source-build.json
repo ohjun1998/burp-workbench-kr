@@ -1,0 +1,12 @@
+{
+  "result": "passed",
+  "sourceZip": "/workspace/burp-workbench-kr/simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0-source.zip",
+  "sourceZipSha256": "541ffeb8d68c31ed6029223b20daa82cd6095946999d6f5e0f3489a985ef3a58",
+  "releasedJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "rebuiltJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "byteIdentical": true,
+  "independentWorkspace": "/workspace/tools/burp-workbench/strix-chat-independent-bjv8rpl2",
+  "javaVersion": "17.0.21",
+  "sourceBuildOnly": true,
+  "actualModelOrBurpRun": false
+}

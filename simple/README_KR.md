@@ -1,3 +1,13 @@
+# Workbench Strix 1.1.0 · 진단 중 대화
+
+기존 Simple1.4.21의 메인 디자인과13개 도구를 유지하면서 별도 Strix 창에 **현재 진단 에이전트와의 대화**를 추가합니다. 질문마다 새 진단이나 별도 LLM을 만들지 않고, 이번 실행의 인증된 Strix live viewer를 통해 같은 세션으로 질문을 전달합니다.
+
+[설치 JAR](downloads/strix/1.1.0/burp-workbench-strix-1.1.0.jar) · [소스 ZIP](downloads/strix/1.1.0/burp-workbench-strix-1.1.0-source.zip) · [체크섬](downloads/strix/1.1.0/SHA256SUMS) · [변경·사용 안내](docs/RELEASE_STRIX_1.1.0_KR.md) · [검증·화면](../docs/reports/2026-11-17-workbench-strix-chat/README_KR.md)
+
+대화 연결은 Linux/macOS의 Python3와 호환 Strix CLI가 필요합니다. 기존 비대화형 진단도 유지합니다. 질문에 따라 에이전트가 도구·대상 요청을 수행할 수 있어 매번 대상·내용을 확인한 뒤 전송합니다. 기존 로컬 Halogen/Qwen 및 Strix 자체 ChatGPT 구독 인증, 원본·SCOPE·프로젝트 검증과 중지는 유지합니다.
+
+새 불변 배포는 `downloads/strix/1.1.0/`에 생성합니다. 빌드·검증은 이 폴더에서 `python dev.py release`와 `python dev.py verify`입니다. 아래는 보존한 이전 배포 안내입니다.
+
 # Workbench Strix 1.0.1 · Simple 1.4.21 화면 기준
 
 **Simple 1.4.21의 배포 소스**를 기준으로 기존 디자인·레이아웃·버튼·테마·메뉴와 내장 Mapper를 유지하고 Strix 진단 기능을 별도 창으로 연결했습니다. Workbench Strix 1.0.0의 예전 Simple 1.4.13 레이아웃을 사용하지 않습니다. Simple 1.4.22 A 그룹형이나 기능 중심 HTML 시안은 추가하지 않았습니다.

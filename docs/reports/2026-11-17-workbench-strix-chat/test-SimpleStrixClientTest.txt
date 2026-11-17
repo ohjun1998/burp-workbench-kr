@@ -1,0 +1,64 @@
+PASS local model metadata only
+PASS OPENAI_BASE_URL fallback validated
+PASS selected credentials removed from instructions
+PASS plan summary excludes credentials
+PASS default-cancel result
+PASS approval rejection starts zero fake processes and creates no run
+PASS missing approval cancels
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject ambiguous/outside-origin target
+PASS reject direct libexec bypass
+PASS reject arbitrary scan mode
+PASS bound agent turns
+PASS bound elapsed timeout
+PASS reject public model endpoint
+PASS reject unexpected local model
+PASS reject wrong local API type
+PASS revalidate frozen config after approval
+PASS failed preparation releases busy state
+PASS approved wrapper process completes
+PASS argv contains no key or captured credential
+PASS private runtime config/instructions/workdir permissions
+PASS provider environment aliases cleared
+PASS preserve boolean operational settings
+PASS preserve numeric and string operational limits
+PASS exclude extra headers/body and dedupe provider config
+PASS private instructions remain redacted
+PASS redact known credentials across output chunks
+PASS operational token count is not mistaken for credential
+PASS delete per-run sensitive inputs on completion
+PASS native persistence leaves global config unchanged
+PASS discover only owned regular report files
+PASS final Markdown precedes vulnerability JSON/CSV and intermediate metadata in stable report order
+PASS report preview credentials redacted
+PASS reject unrelated prior report path
+PASS reject report replaced with symlink
+PASS bound stdout tail while draining full process output
+PASS never claim Docker residual cleanup
+PASS unsigned native subscription unavailable
+PASS unsigned subscription blocks scan
+PASS native subscription status accepted without exposing account output
+PASS signed native subscription uses same wrapper
+PASS subscription run config contains no local key/base/type
+PASS subscription selection does not change global model
+PASS subscription can run without Halogen global config
+PASS one active wrapper process tracked
+PASS reject concurrent scans
+PASS cancel reports cancelled rather than failed
+PASS cancel preserves unrelated process
+PASS cancel releases active state
+PASS SIGTERM-ignoring owned wrapper is running before cancel
+PASS cancel waits for forced owned-wrapper termination
+PASS no owned process remains alive before allowing another start
+PASS new scan starts only after prior forced termination confirmed
+PASS elapsed deadline terminates owned wrapper
+PASS timeout removes private config
+PASS clear provider/extra/dedupe/network aliases without repurposing HOME or PATH
+PASS default runs remain inside the Simple storage namespace
+SimpleStrixClientTest: 63 checks passed (fake wrapper only; no Strix/model/target calls)

@@ -1,3 +1,11 @@
+# Workbench Strix 1.1.0: same-session diagnosis chat
+
+- User requested implementing conversation with the Strix diagnosis agent. Preserve the Simple1.4.21 main design/layout and all existing13 tools; add chat only within the retained separate Strix window. Previous Strix1.0.1 remains immutable.
+- Interactive chat uses the existing official ~/.strix/bin/strix wrapper in an owned POSIX PTY and its native authenticated live viewer. The bundled Python3 helper is a session bridge, not a separate model client. Never invent CLI chat/web flags, extract OAuth, connect arbitrary viewer URLs, or silently fall back to a separate scan/model/provider.
+- Every native agent message can invoke tools/target requests. Keep per-message default-cancel confirmation and current source/project/SCOPE/run validation. Reject stale/late messages and invalidate transport on stop/reset/unload; report delivery only after native ok:true. Native transcript is committed history, not streaming text.
+- Python3 and a compatible interactive Strix live viewer are required on Linux/macOS; show unavailable connection states accurately. Optional existing noninteractive diagnosis remains available. max-turns is not an HTTP budget, source/SCOPE checks are not agent network isolation, and process shutdown does not prove Docker cleanup.
+- New version1.1.0 artifacts belong to simple/downloads/strix/1.1.0. Keep old artifacts/captures and storage keys unchanged. Record current tests, synthetic/native Swing captures, and remaining actual Strix/model/Burp limitations under docs/reports/2026-11-17-workbench-strix-chat. Freeze packaged inputs before immutable release/verify.
+
 # Workbench Strix 1.0.1: exact Simple1.4.21 design base
 
 - User explicitly requires Simple1.4.21 design/layout retained and only Strix diagnostic agent added. Base source commit03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d. Preserve approved controls/fonts/cards/header/sidebar/42px compact primary navigation/all13views and original engines/IDs/storage. Do not bring A-grouped1.4.22 or functional HTML mockup changes.

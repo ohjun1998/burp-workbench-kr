@@ -1,0 +1,323 @@
+{
+  "releaseJarSha256": "a6f12d5a3d80c6e7a38ce6a474221c010d3f8c93a47c7353dcd231e2bd4bf8c0",
+  "version": "1.1.0",
+  "theme": "dark",
+  "nativeSwing": true,
+  "nativeBurpValidation": false,
+  "syntheticConversation": true,
+  "modelCalls": 0,
+  "targetRequests": 0,
+  "strixExecutions": 0,
+  "capture": "Robot.createScreenCapture on live Xorg/xfwm4 windows",
+  "views": [
+    {
+      "png": "01-chat-ready.png",
+      "width": 940,
+      "height": 720,
+      "controls": [
+        {
+          "y": 50,
+          "x": 173,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.target",
+          "clipped": false,
+          "width": 378
+        },
+        {
+          "y": 91,
+          "x": 77,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.mode",
+          "clipped": false,
+          "width": 96
+        },
+        {
+          "y": 132,
+          "x": 18,
+          "kind": "control",
+          "height": 28,
+          "name": "wb.simple.strix.interactive",
+          "clipped": false,
+          "width": 287
+        },
+        {
+          "y": 237,
+          "x": 77,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.chat.agent",
+          "clipped": false,
+          "width": 48
+        },
+        {
+          "name": "wb.simple.strix.chat.history",
+          "y": 280,
+          "x": 11,
+          "height": 67,
+          "width": 898,
+          "minimumHeight": 80,
+          "kind": "content-viewport",
+          "clipped": true
+        },
+        {
+          "name": "wb.simple.strix.chat.draft",
+          "y": 401,
+          "x": 11,
+          "height": 61,
+          "width": 908,
+          "minimumHeight": 50,
+          "kind": "content-viewport",
+          "clipped": false
+        },
+        {
+          "y": 474,
+          "x": 18,
+          "kind": "control",
+          "height": 28,
+          "name": "wb.simple.strix.chat.attach",
+          "clipped": false,
+          "width": 185
+        },
+        {
+          "y": 472,
+          "x": 211,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.chat.send",
+          "clipped": false,
+          "width": 96
+        },
+        {
+          "y": 639,
+          "x": 18,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.start",
+          "clipped": false,
+          "width": 146
+        },
+        {
+          "y": 639,
+          "x": 172,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.stop",
+          "clipped": false,
+          "width": 62
+        }
+      ]
+    },
+    {
+      "png": "02-chat-conversation.png",
+      "width": 940,
+      "height": 720,
+      "controls": [
+        {
+          "y": 50,
+          "x": 173,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.target",
+          "clipped": false,
+          "width": 378
+        },
+        {
+          "y": 91,
+          "x": 77,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.mode",
+          "clipped": false,
+          "width": 96
+        },
+        {
+          "y": 132,
+          "x": 18,
+          "kind": "control",
+          "height": 28,
+          "name": "wb.simple.strix.interactive",
+          "clipped": false,
+          "width": 287
+        },
+        {
+          "y": 237,
+          "x": 77,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.chat.agent",
+          "clipped": false,
+          "width": 263
+        },
+        {
+          "name": "wb.simple.strix.chat.history",
+          "y": 280,
+          "x": 11,
+          "height": 67,
+          "width": 898,
+          "minimumHeight": 80,
+          "kind": "content-viewport",
+          "clipped": true
+        },
+        {
+          "name": "wb.simple.strix.chat.draft",
+          "y": 401,
+          "x": 11,
+          "height": 61,
+          "width": 908,
+          "minimumHeight": 50,
+          "kind": "content-viewport",
+          "clipped": false
+        },
+        {
+          "y": 474,
+          "x": 18,
+          "kind": "control",
+          "height": 28,
+          "name": "wb.simple.strix.chat.attach",
+          "clipped": false,
+          "width": 185
+        },
+        {
+          "y": 472,
+          "x": 211,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.chat.send",
+          "clipped": false,
+          "width": 96
+        },
+        {
+          "y": 639,
+          "x": 18,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.start",
+          "clipped": false,
+          "width": 146
+        },
+        {
+          "y": 639,
+          "x": 172,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.stop",
+          "clipped": false,
+          "width": 62
+        }
+      ]
+    },
+    {
+      "png": "03-chat-subagent.png",
+      "width": 940,
+      "height": 720,
+      "controls": [
+        {
+          "y": 50,
+          "x": 173,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.target",
+          "clipped": false,
+          "width": 378
+        },
+        {
+          "y": 91,
+          "x": 77,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.mode",
+          "clipped": false,
+          "width": 96
+        },
+        {
+          "y": 132,
+          "x": 18,
+          "kind": "control",
+          "height": 28,
+          "name": "wb.simple.strix.interactive",
+          "clipped": false,
+          "width": 287
+        },
+        {
+          "y": 237,
+          "x": 77,
+          "kind": "control",
+          "height": 31,
+          "name": "wb.simple.strix.chat.agent",
+          "clipped": false,
+          "width": 263
+        },
+        {
+          "name": "wb.simple.strix.chat.history",
+          "y": 280,
+          "x": 11,
+          "height": 67,
+          "width": 898,
+          "minimumHeight": 80,
+          "kind": "content-viewport",
+          "clipped": true
+        },
+        {
+          "name": "wb.simple.strix.chat.draft",
+          "y": 401,
+          "x": 11,
+          "height": 61,
+          "width": 908,
+          "minimumHeight": 50,
+          "kind": "content-viewport",
+          "clipped": false
+        },
+        {
+          "y": 474,
+          "x": 18,
+          "kind": "control",
+          "height": 28,
+          "name": "wb.simple.strix.chat.attach",
+          "clipped": false,
+          "width": 185
+        },
+        {
+          "y": 472,
+          "x": 211,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.chat.send",
+          "clipped": false,
+          "width": 96
+        },
+        {
+          "y": 639,
+          "x": 18,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.start",
+          "clipped": false,
+          "width": 146
+        },
+        {
+          "y": 639,
+          "x": 172,
+          "kind": "control",
+          "height": 32,
+          "name": "wb.simple.strix.stop",
+          "clipped": false,
+          "width": 62
+        }
+      ]
+    },
+    {
+      "png": "04-chat-confirm.png",
+      "width": 470,
+      "height": 414,
+      "controls": []
+    }
+  ],
+  "layoutViolations": [
+    "01-chat-ready.png: wb.simple.strix.chat.history viewport java.awt.Rectangle[x=11,y=280,width=898,height=67] minimumHeight=80",
+    "02-chat-conversation.png: wb.simple.strix.chat.history viewport java.awt.Rectangle[x=11,y=280,width=898,height=67] minimumHeight=80",
+    "03-chat-subagent.png: wb.simple.strix.chat.history viewport java.awt.Rectangle[x=11,y=280,width=898,height=67] minimumHeight=80"
+  ],
+  "purpose": "Preserved unsuccessful native layout attempt; not final release evidence"
+}

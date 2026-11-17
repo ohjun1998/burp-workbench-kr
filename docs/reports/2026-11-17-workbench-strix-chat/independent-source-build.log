@@ -1,0 +1,6 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/tools/burp-workbench/strix-chat-independent-bjv8rpl2/burp-workbench/build_all.py --java /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/tools/burp-workbench/strix-chat-independent-bjv8rpl2/burp-workbench/dist/burp-workbench-strix-1.1.0.jar 9315380 bytes

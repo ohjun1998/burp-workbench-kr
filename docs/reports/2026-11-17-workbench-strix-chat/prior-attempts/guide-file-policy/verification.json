@@ -1,0 +1,21 @@
+{
+  "product": "Workbench Strix",
+  "version": "1.1.0",
+  "input": "/workspace/burp-workbench-kr/downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-사용가이드.html",
+  "htmlSha256": "aa1816c7f368f93a9d3832315c2b4afe328c8833b01863b73cad9c95b8381d62",
+  "releaseJarSha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+  "result": "failed",
+  "checks": [],
+  "errors": [],
+  "externalRuntimeRequests": [],
+  "offlineFile": true,
+  "layouts": [],
+  "nativeBurpValidation": false,
+  "syntheticConversation": true,
+  "notRun": [
+    "Actual user Burp",
+    "Actual Strix/model/target requests",
+    "OS download/save UI"
+  ],
+  "failure": "page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///workspace/burp-workbench-kr/downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-%EC%82%AC%EC%9A%A9%EA%B0%80%EC%9D%B4%EB%93%9C.html\nCall log:\n\u001b[2m  - navigating to \"file:///workspace/burp-workbench-kr/downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-%EC%82%AC%EC%9A%A9%EA%B0%80%EC%9D%B4%EB%93%9C.html\", waiting until \"load\"\u001b[22m\n"
+}

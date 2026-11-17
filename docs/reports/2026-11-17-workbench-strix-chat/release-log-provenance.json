@@ -1,0 +1,6 @@
+{
+  "normalization": "Only trailing spaces/tabs removed from release.log for repository whitespace checks; original bytes preserved in release-original.log.gz",
+  "originalSha256": "2f916701e8dac053199a1850fe2e194a87fa99fd7a6d74597cb2098f5c287b37",
+  "normalizedSha256": "02a403fb9904d4a91f2c83f6862a26483ce1a2728913e349893fb33145492cd4",
+  "gzipRestoresOriginal": true
+}

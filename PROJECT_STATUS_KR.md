@@ -1,3 +1,14 @@
+# Workbench Strix 1.1.0 · 진단 중 대화 추가
+
+- 브랜치 `account-a/strix-chat`에서1.0.1의 별도 Strix 창에 현재 진단 에이전트와의 대화를 추가합니다. main에는 아직 병합하지 않았습니다.
+- Simple1.4.21 메인 디자인·13개 도구·기존 저장 호환을 유지합니다. 별도 Strix 창에서 대화·로그·보고서·원본·테스트 정책을 선택합니다.
+- 이번 실행이 소유한 공식 Strix interactive 세션과 인증된 live viewer를 사용합니다. 질문마다 새 진단·다른 LLM을 만들거나 OAuth 인증값을 추출하지 않습니다. 추가 도구·대상 요청이 가능한 후속 질문은 기본 취소인 전송 확인을 거칩니다.
+- 실제 검사·배포 상태와 합성/실제 실행의 경계: [검증 기록](docs/reports/2026-11-17-workbench-strix-chat/README_KR.md). 이전 버전 검사 수를 이번 결과로 합산하지 않습니다.
+
+[설치 JAR](simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0.jar) · [소스 ZIP](simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0-source.zip) · [변경·사용 안내](simple/docs/RELEASE_STRIX_1.1.0_KR.md) · [단일 HTML 가이드](downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-사용가이드.html)
+
+아래는 보존한 이전 프로젝트 기록입니다.
+
 # Workbench Strix 1.0.1 · Simple1.4.21 기준 업데이트
 
 - 브랜치 `account-a/strix-simple-1.4.21`, 기존 Strix1.0.0에서 사용자 지시에 따라 Simple1.4.21 배포 소스로 디자인/레이아웃 기준을 갱신.

@@ -1,3 +1,11 @@
+# Workbench Strix 1.1.0 · 진단 에이전트와 대화
+
+진단 중 특정 결과를 **같은 Strix 에이전트에게 질문하고 후속 대화를 이어가는 기능**을 추가합니다. 기존 Simple1.4.21 메인 디자인·메뉴·13개 도구는 유지하고 별도 Strix 창의 대화·로그·보고서·원본·테스트 정책 화면을 사용합니다. 질문 전에는 현재 대상과 전달 내용을 확인하며, 기존 로컬 Halogen/Qwen 또는 Strix 자체 ChatGPT 구독 인증을 이어 사용합니다.
+
+[설치 JAR](simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0.jar) · [소스 ZIP](simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0-source.zip) · [변경·사용 안내](simple/docs/RELEASE_STRIX_1.1.0_KR.md) · [검증·화면](docs/reports/2026-11-17-workbench-strix-chat/README_KR.md) · [단일 HTML 가이드](downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-사용가이드.html)
+
+작업 브랜치는 `account-a/strix-chat`이며 이 안내는 main 병합 완료를 뜻하지 않습니다. 실제 검사·캡처의 범위와 미검증 항목은 이번 버전의 검증 기록에서 확인합니다. 아래 이전 배포 기록은 보존합니다.
+
 # Workbench Strix 1.0.1 · Simple 1.4.21 디자인 유지
 
 Simple 1.4.21의 기존 디자인·레이아웃을 기준으로 Strix 진단 기능을 별도 창으로 연결합니다. 상단 메뉴·통합 점검/대시보드 강조형·입력칸·카드·원문·13개 도구를 유지합니다.

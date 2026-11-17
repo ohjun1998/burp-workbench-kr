@@ -1,0 +1,61 @@
+{
+  "result": "passed",
+  "commit": "d9d815811ff4827a84dff7bf16fabf402989c494",
+  "verification": "Full public HTTP bodies downloaded; SHA-256/size match committed local files; ZIP/JAR CRC checked",
+  "files": [
+    {
+      "path": "simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0.jar",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/d9d815811ff4827a84dff7bf16fabf402989c494/simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0.jar",
+      "status": 200,
+      "bytes": 9315380,
+      "sha256": "1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b",
+      "matchesLocal": true,
+      "zipCrc": "passed"
+    },
+    {
+      "path": "simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0-source.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/d9d815811ff4827a84dff7bf16fabf402989c494/simple/downloads/strix/1.1.0/burp-workbench-strix-1.1.0-source.zip",
+      "status": 200,
+      "bytes": 100078181,
+      "sha256": "541ffeb8d68c31ed6029223b20daa82cd6095946999d6f5e0f3489a985ef3a58",
+      "matchesLocal": true,
+      "zipCrc": "passed"
+    },
+    {
+      "path": "downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-사용가이드.html",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/d9d815811ff4827a84dff7bf16fabf402989c494/downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-%EC%82%AC%EC%9A%A9%EA%B0%80%EC%9D%B4%EB%93%9C.html",
+      "status": 200,
+      "bytes": 376501,
+      "sha256": "aa1816c7f368f93a9d3832315c2b4afe328c8833b01863b73cad9c95b8381d62",
+      "matchesLocal": true,
+      "zipCrc": null
+    },
+    {
+      "path": "downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-설치와가이드.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/d9d815811ff4827a84dff7bf16fabf402989c494/downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-%EC%84%A4%EC%B9%98%EC%99%80%EA%B0%80%EC%9D%B4%EB%93%9C.zip",
+      "status": 200,
+      "bytes": 9324047,
+      "sha256": "fca5b64fad242f62cbc3d0d61469e6d54efdf4fb2c198b21f8ef2ec4e45b366f",
+      "matchesLocal": true,
+      "zipCrc": "passed"
+    },
+    {
+      "path": "downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-화면이미지.zip",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/d9d815811ff4827a84dff7bf16fabf402989c494/downloads/guides/strix-1.1.0/Workbench-Strix-1.1.0-%ED%99%94%EB%A9%B4%EC%9D%B4%EB%AF%B8%EC%A7%80.zip",
+      "status": 200,
+      "bytes": 249989,
+      "sha256": "59d5f94fda60cb04b21228caca60f0b94badfe48770b66674d0aba0b9f7ce7e6",
+      "matchesLocal": true,
+      "zipCrc": "passed"
+    },
+    {
+      "path": "docs/reports/2026-11-17-workbench-strix-chat/native/chat/dark/1600x1000/02-chat-conversation.png",
+      "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/d9d815811ff4827a84dff7bf16fabf402989c494/docs/reports/2026-11-17-workbench-strix-chat/native/chat/dark/1600x1000/02-chat-conversation.png",
+      "status": 200,
+      "bytes": 104672,
+      "sha256": "5150dc989bbf00539a4df6ff2a342b3a360f6b30a4971d0b914e6d42a5b4cbf9",
+      "matchesLocal": true,
+      "zipCrc": null
+    }
+  ]
+}

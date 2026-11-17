@@ -66,3 +66,7 @@ JAR SHA-256: `1984ee6014de648a6308ae8e0b0ee4d8a55c3ae38ddc4d5830beb0fdd5175f5b` 
 현재 환경에는 실제 Strix CLI·Burp 본체·모델이 설치되어 있지 않습니다. 따라서 이 기록의 가짜 PTY·loopback HTTP·production Swing 성공을 실제 모델 추론·대상 진단·사용자 Burp 검증으로 합산하지 않습니다. Linux/macOS의 Python3와 호환 Strix가 필요하며 macOS 실사용·Windows·DPI/IME는 이번 검증에 포함하지 않았습니다.
 
 에이전트는 질문을 받으면 도구·대상 요청을 실행할 수 있습니다. 매 전송의 확인과 SCOPE 검사는 Strix 전체 네트워크 격리나 가용성 무영향을 보장하지 않습니다. 최대 턴·시간은 HTTP 요청 예산이 아니며 중지 후 별도 Docker 작업 정리는 미확인일 수 있습니다. 이 작업 브랜치의 배포·검증은 main 병합 완료 선언이 아닙니다.
+
+## 저장소 배포
+
+[공개 다운로드 확인](PUBLICATION_KR.md) · [전체 HTTP 본문·체크섬 검증](public-download-verification.json). 배포 브랜치는 `account-a/strix-chat`이며 GitHub API Forbidden으로 PR 생성은 완료하지 못했습니다.

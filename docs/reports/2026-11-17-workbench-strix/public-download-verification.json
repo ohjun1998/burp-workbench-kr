@@ -1,0 +1,20 @@
+[
+  {
+    "file": "simple/downloads/strix/1.0.0/burp-workbench-strix-1.0.0.jar",
+    "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/2c031952ff0569d8d282bee4777db89e39d53e9c/simple/downloads/strix/1.0.0/burp-workbench-strix-1.0.0.jar",
+    "status": 200,
+    "contentType": "application/octet-stream",
+    "bytes": 9039074,
+    "sha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+    "crc": "passed"
+  },
+  {
+    "file": "downloads/guides/strix-1.0.0/Workbench-Strix-1.0.0-설치와가이드.zip",
+    "url": "https://raw.githubusercontent.com/ohjun1998/burp-workbench-kr/2c031952ff0569d8d282bee4777db89e39d53e9c/downloads/guides/strix-1.0.0/Workbench-Strix-1.0.0-%EC%84%A4%EC%B9%98%EC%99%80%EA%B0%80%EC%9D%B4%EB%93%9C.zip",
+    "status": 200,
+    "contentType": "application/zip",
+    "bytes": 9353873,
+    "sha256": "043d950d540c1b9e9e4749777fa36378daf3d10e967637c8b3383cd56be6b5f9",
+    "crc": "passed"
+  }
+]

@@ -357,6 +357,8 @@ def write_readme() -> Path:
 
 
 def main():
+    if runpy.run_path(str(ROOT / 'burp-workbench/release_info.py')).get('EDITION') == 'strix':
+        raise SystemExit('This is the preserved Simple guide tool. Workbench Strix uses tools/package_workbench_strix_guide.py from the repository root; see README_KR.md.')
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--images',type=Path,default=ROOT/f'docs/images/{VERSION}/light/1280x800')
     args=parser.parse_args();args.images=args.images.resolve()

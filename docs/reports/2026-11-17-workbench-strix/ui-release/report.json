@@ -1,0 +1,1992 @@
+{
+  "description": "Actual release-JAR Simple Strix panel; synthetic runner and source metadata",
+  "releaseJar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.0.0.jar",
+  "releaseJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+  "nativeBurpValidation": false,
+  "strixCliExecutions": 0,
+  "modelCalls": 0,
+  "targetRequests": 0,
+  "previewSources": {
+    "simple/tools/render_strix.py": "4887c61e5ec8ed951fa72f24761081f3fe733f189c644ff12cdc33f63c06b056",
+    "simple/tools/StrixPanelPreview.java": "1839e53a96c1c77aa5a69bc29c4cda85d5ff156584fbab82e9424aef0d7a8fda",
+    "simple/burp-workbench/src/test/java/kr/workbench/SimpleStrixIntegrationTest.java": "59602fbe609e4cceca4981695401e8d0dfe669afa45f14731e24f450b700b376"
+  },
+  "pngCount": 28,
+  "minimumContentViewportHeight": 50,
+  "violationCount": 0,
+  "violations": [],
+  "missing": [],
+  "processFailures": [],
+  "runs": [
+    {
+      "limitations": [
+        "No real Strix CLI, model, OAuth or target execution",
+        "Approval body only; no live modal confirmation"
+      ],
+      "nativeBurpValidation": false,
+      "theme": "light",
+      "views": [
+        {
+          "modelCalls": 0,
+          "png": "light/1024x720/01-prepared.png",
+          "title": "원본 준비와 진단 입력 미리보기",
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 411,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 170
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "sha256": "d1e1e65af198bf7f72c2db5e9848d37bc2cc900e9b845948b0723a99b9381ac0"
+        },
+        {
+          "modelCalls": 0,
+          "png": "light/1024x720/02-halogen.png",
+          "title": "Halogen 로컬 모델 설정 확인 · 합성 설정",
+          "controls": [
+            {
+              "name": "wb.simple.strix.provider",
+              "clipped": false,
+              "y": 62,
+              "x": 110,
+              "height": 32,
+              "width": 221
+            },
+            {
+              "name": "wb.simple.strix.inspect",
+              "clipped": false,
+              "y": 61,
+              "x": 339,
+              "height": 35,
+              "width": 157
+            },
+            {
+              "name": "wb.simple.strix.subscriptionModel",
+              "clipped": false,
+              "y": 106,
+              "x": 113,
+              "height": 33,
+              "width": 332
+            },
+            {
+              "name": "wb.simple.strix.model",
+              "clipped": false,
+              "width": 992,
+              "y": 191,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 74
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 346,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 76
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 477,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 104
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "sha256": "f4587ae854455c0229a40b945e9bb09ec3f20ff92d60d1d65329e14586b9882c"
+        },
+        {
+          "modelCalls": 0,
+          "png": "light/1024x720/03-chatgpt-auth.png",
+          "title": "Strix 자체 ChatGPT 인증 · 합성 미로그인 상태",
+          "controls": [
+            {
+              "name": "wb.simple.strix.provider",
+              "clipped": false,
+              "y": 62,
+              "x": 110,
+              "height": 32,
+              "width": 221
+            },
+            {
+              "name": "wb.simple.strix.inspect",
+              "clipped": false,
+              "y": 61,
+              "x": 339,
+              "height": 35,
+              "width": 173
+            },
+            {
+              "name": "wb.simple.strix.subscriptionModel",
+              "clipped": false,
+              "y": 106,
+              "x": 113,
+              "height": 33,
+              "width": 332
+            },
+            {
+              "name": "wb.simple.strix.model",
+              "clipped": false,
+              "width": 992,
+              "y": 191,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 74
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 346,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 76
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 477,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 104
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "sha256": "ff0b0ac5309b4407bfa01f485f71c469c3ffaa480467242cfb9fc8b26b5de6a8"
+        },
+        {
+          "modelCalls": 0,
+          "png": "light/1024x720/04-execution-plan.png",
+          "title": "실행 전 확인 내용 · 실제 승인/실행 없음",
+          "controls": [],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "sha256": "c7e4993a938274bb36fe659a1d6aa7cdcd6b4ce28b56c269754767b3ca23f936"
+        },
+        {
+          "modelCalls": 0,
+          "png": "light/1024x720/05-running-log.png",
+          "title": "진행 로그 · 가짜 Runner 상태",
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 411,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 170
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "sha256": "7344fdb61e13d5ca6916ba0ed869c4bd99176839f159b11d11303ae393ab9cfb"
+        },
+        {
+          "modelCalls": 0,
+          "png": "light/1024x720/06-stopped.png",
+          "title": "중지 요청 후 상태 · 실제 프로세스 없음",
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 411,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 170
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "sha256": "431520a721e41235b5dd69338da5ce036155cfc271158aad250f2f58a63e5f2a"
+        },
+        {
+          "modelCalls": 0,
+          "png": "light/1024x720/07-reports.png",
+          "title": "실행별 보고서 경로 · 합성 결과, 실제 파일 없음",
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "name": "wb.simple.strix.openReport",
+              "clipped": false,
+              "y": 410,
+              "x": 10,
+              "height": 35,
+              "width": 1004
+            },
+            {
+              "name": "wb.simple.strix.reports",
+              "clipped": false,
+              "width": 1002,
+              "y": 450,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 131
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "sha256": "e8342129c0d149c5a75c43c6f5cfa8a5dffd2ee5dc47c202b17a05ddad0ea424"
+        }
+      ],
+      "violations": [],
+      "releaseJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+      "width": 1024,
+      "releaseJar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.0.0.jar",
+      "description": "Actual release-JAR Simple Strix panel with synthetic runner data",
+      "height": 720
+    },
+    {
+      "views": [
+        {
+          "controls": [
+            {
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182
+            },
+            {
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81
+            },
+            {
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287
+            },
+            {
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 165,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "clipped": false,
+              "width": 1258,
+              "y": 447,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 214,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 750,
+              "x": 18
+            },
+            {
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 750,
+              "x": 197
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "png": "light/1280x800/01-prepared.png",
+          "title": "원본 준비와 진단 입력 미리보기",
+          "sha256": "b31884560bbb1337cabc9868127ff0a7924593d219b73192dd85c22344aa5b37"
+        },
+        {
+          "controls": [
+            {
+              "height": 32,
+              "width": 221,
+              "name": "wb.simple.strix.provider",
+              "clipped": false,
+              "y": 62,
+              "x": 110
+            },
+            {
+              "height": 35,
+              "width": 157,
+              "name": "wb.simple.strix.inspect",
+              "clipped": false,
+              "y": 61,
+              "x": 339
+            },
+            {
+              "height": 33,
+              "width": 332,
+              "name": "wb.simple.strix.subscriptionModel",
+              "clipped": false,
+              "y": 106,
+              "x": 113
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 191,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 74,
+              "name": "wb.simple.strix.model"
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 346,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 112,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 513,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 148,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 750,
+              "x": 18
+            },
+            {
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 750,
+              "x": 197
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "png": "light/1280x800/02-halogen.png",
+          "title": "Halogen 로컬 모델 설정 확인 · 합성 설정",
+          "sha256": "2cf29286ab5cbafbafe26818a0ebfbba4dfb4baa49827fcde09f124055a471d7"
+        },
+        {
+          "controls": [
+            {
+              "height": 32,
+              "width": 221,
+              "name": "wb.simple.strix.provider",
+              "clipped": false,
+              "y": 62,
+              "x": 110
+            },
+            {
+              "height": 35,
+              "width": 173,
+              "name": "wb.simple.strix.inspect",
+              "clipped": false,
+              "y": 61,
+              "x": 339
+            },
+            {
+              "height": 33,
+              "width": 332,
+              "name": "wb.simple.strix.subscriptionModel",
+              "clipped": false,
+              "y": 106,
+              "x": 113
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 191,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 74,
+              "name": "wb.simple.strix.model"
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 346,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 112,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 513,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 148,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 750,
+              "x": 18
+            },
+            {
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 750,
+              "x": 197
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "png": "light/1280x800/03-chatgpt-auth.png",
+          "title": "Strix 자체 ChatGPT 인증 · 합성 미로그인 상태",
+          "sha256": "020a97167e75a631f107e72a1cdf48d388a529c04735e5a555ebbbbef11686a1"
+        },
+        {
+          "controls": [],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "png": "light/1280x800/04-execution-plan.png",
+          "title": "실행 전 확인 내용 · 실제 승인/실행 없음",
+          "sha256": "ac5a156041e769f25bde2ef47fbe70d6c6a2d4e97d290f8b4488a5343061ee92"
+        },
+        {
+          "controls": [
+            {
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182
+            },
+            {
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81
+            },
+            {
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287
+            },
+            {
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 165,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "clipped": false,
+              "width": 1258,
+              "y": 447,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 214,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 750,
+              "x": 18
+            },
+            {
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 750,
+              "x": 197
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "png": "light/1280x800/05-running-log.png",
+          "title": "진행 로그 · 가짜 Runner 상태",
+          "sha256": "9f99f691751a1d1ab46128455b920ad2f9c6cdfa97e4c1891e9556e8b0ba2017"
+        },
+        {
+          "controls": [
+            {
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182
+            },
+            {
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81
+            },
+            {
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287
+            },
+            {
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 165,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "clipped": false,
+              "width": 1258,
+              "y": 447,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 214,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 750,
+              "x": 18
+            },
+            {
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 750,
+              "x": 197
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "png": "light/1280x800/06-stopped.png",
+          "title": "중지 요청 후 상태 · 실제 프로세스 없음",
+          "sha256": "1b8ba419d30bb67e7136e2dd54181f124db02696e0ecffa6545cb16d44aa0dbc"
+        },
+        {
+          "controls": [
+            {
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false,
+              "y": 61,
+              "x": 182
+            },
+            {
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false,
+              "y": 107,
+              "x": 81
+            },
+            {
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false,
+              "y": 104,
+              "x": 287
+            },
+            {
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false,
+              "y": 104,
+              "x": 460
+            },
+            {
+              "clipped": false,
+              "width": 1248,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 165,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "height": 35,
+              "width": 1260,
+              "name": "wb.simple.strix.openReport",
+              "clipped": false,
+              "y": 446,
+              "x": 10
+            },
+            {
+              "clipped": false,
+              "width": 1258,
+              "y": 486,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 175,
+              "name": "wb.simple.strix.reports"
+            },
+            {
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false,
+              "y": 750,
+              "x": 18
+            },
+            {
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false,
+              "y": 750,
+              "x": 197
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "png": "light/1280x800/07-reports.png",
+          "title": "실행별 보고서 경로 · 합성 결과, 실제 파일 없음",
+          "sha256": "665b153b9cf1eea45388989dfcec399c7e7ef2bc009285c0ba4fc9f9daf4e152"
+        }
+      ],
+      "violations": [],
+      "releaseJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+      "width": 1280,
+      "releaseJar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.0.0.jar",
+      "description": "Actual release-JAR Simple Strix panel with synthetic runner data",
+      "height": 800,
+      "limitations": [
+        "No real Strix CLI, model, OAuth or target execution",
+        "Approval body only; no live modal confirmation"
+      ],
+      "nativeBurpValidation": false,
+      "theme": "light"
+    },
+    {
+      "theme": "dark",
+      "views": [
+        {
+          "png": "dark/1024x720/01-prepared.png",
+          "title": "원본 준비와 진단 입력 미리보기",
+          "controls": [
+            {
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false
+            },
+            {
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 411,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 170
+            },
+            {
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false
+            },
+            {
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "sha256": "9dafac22dd4321338e773a226625d71310da126c6cb85270be1840239b9b54f0"
+        },
+        {
+          "png": "dark/1024x720/02-halogen.png",
+          "title": "Halogen 로컬 모델 설정 확인 · 합성 설정",
+          "controls": [
+            {
+              "y": 62,
+              "x": 110,
+              "height": 32,
+              "width": 221,
+              "name": "wb.simple.strix.provider",
+              "clipped": false
+            },
+            {
+              "y": 61,
+              "x": 339,
+              "height": 35,
+              "width": 157,
+              "name": "wb.simple.strix.inspect",
+              "clipped": false
+            },
+            {
+              "y": 106,
+              "x": 113,
+              "height": 33,
+              "width": 332,
+              "name": "wb.simple.strix.subscriptionModel",
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.model",
+              "clipped": false,
+              "width": 992,
+              "y": 191,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 74
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 346,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 76
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 477,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 104
+            },
+            {
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false
+            },
+            {
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "sha256": "82a600fa05b956c054602b9659cbf94517f05006ef6bbb5ab94ebf98d2b1b98e"
+        },
+        {
+          "png": "dark/1024x720/03-chatgpt-auth.png",
+          "title": "Strix 자체 ChatGPT 인증 · 합성 미로그인 상태",
+          "controls": [
+            {
+              "y": 62,
+              "x": 110,
+              "height": 32,
+              "width": 221,
+              "name": "wb.simple.strix.provider",
+              "clipped": false
+            },
+            {
+              "y": 61,
+              "x": 339,
+              "height": 35,
+              "width": 173,
+              "name": "wb.simple.strix.inspect",
+              "clipped": false
+            },
+            {
+              "y": 106,
+              "x": 113,
+              "height": 33,
+              "width": 332,
+              "name": "wb.simple.strix.subscriptionModel",
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.model",
+              "clipped": false,
+              "width": 992,
+              "y": 191,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 74
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 346,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 76
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 477,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 104
+            },
+            {
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false
+            },
+            {
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "sha256": "26f9d370a77bd5426525eff887ac820b370af4ac4f4d88b65c68ccb73be7d1e7"
+        },
+        {
+          "png": "dark/1024x720/04-execution-plan.png",
+          "title": "실행 전 확인 내용 · 실제 승인/실행 없음",
+          "controls": [],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "sha256": "e49295cce8bc3a52327b60e3c7d1dc0387122403388ee2823758701b7ba9a329"
+        },
+        {
+          "png": "dark/1024x720/05-running-log.png",
+          "title": "진행 로그 · 가짜 Runner 상태",
+          "controls": [
+            {
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false
+            },
+            {
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 411,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 170
+            },
+            {
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false
+            },
+            {
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "sha256": "541939a3220fe1a03e3183ab0941e67528dcfc284fc7d98c330d07e78585713f"
+        },
+        {
+          "png": "dark/1024x720/06-stopped.png",
+          "title": "중지 요청 후 상태 · 실제 프로세스 없음",
+          "controls": [
+            {
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false
+            },
+            {
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "name": "wb.simple.strix.log",
+              "clipped": false,
+              "width": 992,
+              "y": 411,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 170
+            },
+            {
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false
+            },
+            {
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "sha256": "ac575268fa291e4ff21aee0a2f089aef0b2d93be0cc2e50f24d059450077aa78"
+        },
+        {
+          "png": "dark/1024x720/07-reports.png",
+          "title": "실행별 보고서 경로 · 합성 결과, 실제 파일 없음",
+          "controls": [
+            {
+              "y": 61,
+              "x": 182,
+              "height": 33,
+              "width": 410,
+              "name": "wb.simple.strix.target",
+              "clipped": false
+            },
+            {
+              "y": 107,
+              "x": 81,
+              "height": 32,
+              "width": 93,
+              "name": "wb.simple.strix.mode",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 287,
+              "height": 38,
+              "width": 79,
+              "name": "wb.simple.strix.maxTurns",
+              "clipped": false
+            },
+            {
+              "y": 104,
+              "x": 460,
+              "height": 38,
+              "width": 105,
+              "name": "wb.simple.strix.timeout",
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.preview",
+              "clipped": false,
+              "width": 992,
+              "y": 227,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 129
+            },
+            {
+              "y": 410,
+              "x": 10,
+              "height": 35,
+              "width": 1004,
+              "name": "wb.simple.strix.openReport",
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.reports",
+              "clipped": false,
+              "width": 1002,
+              "y": 450,
+              "x": 11,
+              "kind": "content-viewport",
+              "height": 131
+            },
+            {
+              "y": 670,
+              "x": 18,
+              "height": 35,
+              "width": 171,
+              "name": "wb.simple.strix.start",
+              "clipped": false
+            },
+            {
+              "y": 670,
+              "x": 197,
+              "height": 35,
+              "width": 70,
+              "name": "wb.simple.strix.stop",
+              "clipped": false
+            }
+          ],
+          "syntheticFixture": true,
+          "targetRequests": 0,
+          "modelCalls": 0,
+          "sha256": "9199e09e50028469566b7f021eebe85c05f85a6d07e190f34fb8d0c29c61936b"
+        }
+      ],
+      "violations": [],
+      "releaseJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+      "width": 1024,
+      "releaseJar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.0.0.jar",
+      "description": "Actual release-JAR Simple Strix panel with synthetic runner data",
+      "height": 720,
+      "limitations": [
+        "No real Strix CLI, model, OAuth or target execution",
+        "Approval body only; no live modal confirmation"
+      ],
+      "nativeBurpValidation": false
+    },
+    {
+      "nativeBurpValidation": false,
+      "limitations": [
+        "No real Strix CLI, model, OAuth or target execution",
+        "Approval body only; no live modal confirmation"
+      ],
+      "height": 800,
+      "description": "Actual release-JAR Simple Strix panel with synthetic runner data",
+      "releaseJar": "/workspace/burp-workbench-kr/simple/burp-workbench/dist/burp-workbench-strix-1.0.0.jar",
+      "width": 1280,
+      "releaseJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+      "violations": [],
+      "views": [
+        {
+          "targetRequests": 0,
+          "syntheticFixture": true,
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "width": 410,
+              "height": 33,
+              "x": 182,
+              "y": 61,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "width": 93,
+              "height": 32,
+              "x": 81,
+              "y": 107,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "width": 79,
+              "height": 38,
+              "x": 287,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "width": 105,
+              "height": 38,
+              "x": 460,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "height": 165,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 227,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "height": 214,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 447,
+              "width": 1258,
+              "clipped": false,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "width": 171,
+              "height": 35,
+              "x": 18,
+              "y": 750,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "width": 70,
+              "height": 35,
+              "x": 197,
+              "y": 750,
+              "clipped": false
+            }
+          ],
+          "title": "원본 준비와 진단 입력 미리보기",
+          "png": "dark/1280x800/01-prepared.png",
+          "modelCalls": 0,
+          "sha256": "7f9487e05f8dc982b432b4f983d64d055a15fb72f3c83cc069a7381d21898129"
+        },
+        {
+          "targetRequests": 0,
+          "syntheticFixture": true,
+          "controls": [
+            {
+              "name": "wb.simple.strix.provider",
+              "width": 221,
+              "height": 32,
+              "x": 110,
+              "y": 62,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.inspect",
+              "width": 157,
+              "height": 35,
+              "x": 339,
+              "y": 61,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.subscriptionModel",
+              "width": 332,
+              "height": 33,
+              "x": 113,
+              "y": 106,
+              "clipped": false
+            },
+            {
+              "height": 74,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 191,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.model"
+            },
+            {
+              "height": 112,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 346,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "height": 148,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 513,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "width": 171,
+              "height": 35,
+              "x": 18,
+              "y": 750,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "width": 70,
+              "height": 35,
+              "x": 197,
+              "y": 750,
+              "clipped": false
+            }
+          ],
+          "title": "Halogen 로컬 모델 설정 확인 · 합성 설정",
+          "png": "dark/1280x800/02-halogen.png",
+          "modelCalls": 0,
+          "sha256": "318799b028bacfc7a7c78eb5c3f78b09dcbf2c29c3a0f2c15cd2a633e08ab8ea"
+        },
+        {
+          "targetRequests": 0,
+          "syntheticFixture": true,
+          "controls": [
+            {
+              "name": "wb.simple.strix.provider",
+              "width": 221,
+              "height": 32,
+              "x": 110,
+              "y": 62,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.inspect",
+              "width": 173,
+              "height": 35,
+              "x": 339,
+              "y": 61,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.subscriptionModel",
+              "width": 332,
+              "height": 33,
+              "x": 113,
+              "y": 106,
+              "clipped": false
+            },
+            {
+              "height": 74,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 191,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.model"
+            },
+            {
+              "height": 112,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 346,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "height": 148,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 513,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "width": 171,
+              "height": 35,
+              "x": 18,
+              "y": 750,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "width": 70,
+              "height": 35,
+              "x": 197,
+              "y": 750,
+              "clipped": false
+            }
+          ],
+          "title": "Strix 자체 ChatGPT 인증 · 합성 미로그인 상태",
+          "png": "dark/1280x800/03-chatgpt-auth.png",
+          "modelCalls": 0,
+          "sha256": "ec3f65838999619a40eaa1014bfb63daa75c4cbd82e3d0b94cf6d50dbd42f54f"
+        },
+        {
+          "targetRequests": 0,
+          "syntheticFixture": true,
+          "controls": [],
+          "title": "실행 전 확인 내용 · 실제 승인/실행 없음",
+          "png": "dark/1280x800/04-execution-plan.png",
+          "modelCalls": 0,
+          "sha256": "06deef0c7984f7f4294a237691bbe33ac55307e87a13775841950a72058e5315"
+        },
+        {
+          "targetRequests": 0,
+          "syntheticFixture": true,
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "width": 410,
+              "height": 33,
+              "x": 182,
+              "y": 61,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "width": 93,
+              "height": 32,
+              "x": 81,
+              "y": 107,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "width": 79,
+              "height": 38,
+              "x": 287,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "width": 105,
+              "height": 38,
+              "x": 460,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "height": 165,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 227,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "height": 214,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 447,
+              "width": 1258,
+              "clipped": false,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "width": 171,
+              "height": 35,
+              "x": 18,
+              "y": 750,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "width": 70,
+              "height": 35,
+              "x": 197,
+              "y": 750,
+              "clipped": false
+            }
+          ],
+          "title": "진행 로그 · 가짜 Runner 상태",
+          "png": "dark/1280x800/05-running-log.png",
+          "modelCalls": 0,
+          "sha256": "afdf1da3c9daea58a3df1bd644f5636f8492fa15cfb268df6fcc280cdce8746b"
+        },
+        {
+          "targetRequests": 0,
+          "syntheticFixture": true,
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "width": 410,
+              "height": 33,
+              "x": 182,
+              "y": 61,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "width": 93,
+              "height": 32,
+              "x": 81,
+              "y": 107,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "width": 79,
+              "height": 38,
+              "x": 287,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "width": 105,
+              "height": 38,
+              "x": 460,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "height": 165,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 227,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "height": 214,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 447,
+              "width": 1258,
+              "clipped": false,
+              "name": "wb.simple.strix.log"
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "width": 171,
+              "height": 35,
+              "x": 18,
+              "y": 750,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "width": 70,
+              "height": 35,
+              "x": 197,
+              "y": 750,
+              "clipped": false
+            }
+          ],
+          "title": "중지 요청 후 상태 · 실제 프로세스 없음",
+          "png": "dark/1280x800/06-stopped.png",
+          "modelCalls": 0,
+          "sha256": "1e68d4a77f48e02054c19c2e59a7998f545c36824ec49b814ae04caa82a2abc8"
+        },
+        {
+          "targetRequests": 0,
+          "syntheticFixture": true,
+          "controls": [
+            {
+              "name": "wb.simple.strix.target",
+              "width": 410,
+              "height": 33,
+              "x": 182,
+              "y": 61,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.mode",
+              "width": 93,
+              "height": 32,
+              "x": 81,
+              "y": 107,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.maxTurns",
+              "width": 79,
+              "height": 38,
+              "x": 287,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.timeout",
+              "width": 105,
+              "height": 38,
+              "x": 460,
+              "y": 104,
+              "clipped": false
+            },
+            {
+              "height": 165,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 227,
+              "width": 1248,
+              "clipped": false,
+              "name": "wb.simple.strix.preview"
+            },
+            {
+              "name": "wb.simple.strix.openReport",
+              "width": 1260,
+              "height": 35,
+              "x": 10,
+              "y": 446,
+              "clipped": false
+            },
+            {
+              "height": 175,
+              "kind": "content-viewport",
+              "x": 11,
+              "y": 486,
+              "width": 1258,
+              "clipped": false,
+              "name": "wb.simple.strix.reports"
+            },
+            {
+              "name": "wb.simple.strix.start",
+              "width": 171,
+              "height": 35,
+              "x": 18,
+              "y": 750,
+              "clipped": false
+            },
+            {
+              "name": "wb.simple.strix.stop",
+              "width": 70,
+              "height": 35,
+              "x": 197,
+              "y": 750,
+              "clipped": false
+            }
+          ],
+          "title": "실행별 보고서 경로 · 합성 결과, 실제 파일 없음",
+          "png": "dark/1280x800/07-reports.png",
+          "modelCalls": 0,
+          "sha256": "41b3755022c04f54fb134f17dc0e30be2582f186db2e1edc8bf64b1bfc480401"
+        }
+      ],
+      "theme": "dark"
+    }
+  ],
+  "limitations": [
+    "Not a native user Burp screenshot or model/OAuth test",
+    "Running/report/auth states come from the injected synthetic runner",
+    "Approval content rendered without a modal decision or real process launch",
+    "Measured named control bounds and content viewports; not every native theme/DPI/IME combination"
+  ]
+}

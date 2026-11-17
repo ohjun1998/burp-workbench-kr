@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "output": "/workspace/burp-workbench-kr/downloads/guides/strix-1.0.0",
+  "copy": null,
+  "releaseJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+  "capture": "light · 1280×800",
+  "zipCrcValid": true,
+  "inlineImages": 7,
+  "externalRuntimeResources": 0,
+  "networkRequests": 0,
+  "files": {
+    "Workbench-Strix-1.0.0-사용가이드.html": {
+      "bytes": 789582,
+      "sha256": "e178786e37ac854c8c4dbf15f088f327725ad85d3414af26dd894f5dee7b57ca"
+    },
+    "Workbench-Strix-1.0.0-설치와가이드.zip": {
+      "bytes": 9353873,
+      "sha256": "043d950d540c1b9e9e4749777fa36378daf3d10e967637c8b3383cd56be6b5f9"
+    },
+    "Workbench-Strix-1.0.0-화면이미지.zip": {
+      "bytes": 519184,
+      "sha256": "227538d9b8994f0d4fbce68cc1a2323746ad1afd3dac9ed61472a23d52253252"
+    }
+  }
+}

@@ -251,7 +251,7 @@ final class SimpleStrixPanel extends JPanel implements AutoCloseable {
   private String instructions() {
     String policy = context.getText();
     if (policy.length() > CONTEXT_LIMIT) throw new IllegalArgumentException("테스트 정책은 32Ki자 이하로 작성하세요.");
-    StringBuilder out = new StringBuilder("Workbench Simple에서 사용자가 승인한 제한 진단입니다.\n"
+    StringBuilder out = new StringBuilder(BuildInfo.PRODUCT_NAME + "에서 사용자가 승인한 제한 진단입니다.\n"
         + "명시된 대상과 허용 범위 안에서만 검사하세요. 계정 자격값은 자동 제공하지 않습니다.\n"
         + "서비스 중단·과부하·대량 반복·삭제·비가역 변경 등 가용성에 영향을 줄 검사는 실행하지 마세요. 필요하면 작업을 중단하고 사용자 확인을 요청하세요.\n"
         + "모드와 최대 턴은 전체 HTTP 요청 예산이 아닙니다. 추측으로 검증 완료를 선언하지 마세요.\n"

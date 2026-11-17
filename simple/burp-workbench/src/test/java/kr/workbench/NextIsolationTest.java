@@ -44,7 +44,7 @@ public final class NextIsolationTest extends WorkbenchTest {
     check(archive!=null&&archive.directory.toString().contains(BuildInfo.STORAGE_DIRECTORY),"Simple history uses a separate disk directory");
     check(!archive.directory.getFileName().toString().equals(stable.get("js-analysis-archive-project-v1")),"Simple generates a separate project archive identity");
     for(var entry:stable.entrySet())check(Objects.equals(saved.get(entry.getKey()),entry.getValue()),"stable value preserved: "+entry.getKey());
-    check(BuildInfo.DISPLAY_NAME.contains("Simple")&&FeatureGuide.SUITE_TAB.contains("Simple"),"runtime identity visibly distinguishes Simple from stable and Next");
+    check(BuildInfo.DISPLAY_NAME.startsWith(BuildInfo.IMPLEMENTATION_TITLE)&&FeatureGuide.SUITE_TAB.equals(BuildInfo.PRODUCT_NAME),"runtime identity visibly distinguishes Workbench Strix from Simple, stable and Next");
     System.out.println("NextIsolationTest: "+checks+" checks passed");
   }
 }

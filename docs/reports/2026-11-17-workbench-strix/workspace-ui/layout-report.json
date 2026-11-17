@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "artifact": "burp-workbench/dist/burp-workbench-strix-1.0.0.jar",
+  "toolchainMode": "strict-release17",
+  "java17ApiCompatibilityVerified": true,
+  "compilerNote": "Compiled with --release 17.",
+  "jarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+  "renderedViews": 84,
+  "controls": 1456,
+  "scenarios": 284,
+  "retainedPrimaryTools": [
+    "traffic",
+    "mapper",
+    "auth",
+    "js",
+    "environment",
+    "response.recon",
+    "payload",
+    "bounty"
+  ],
+  "replayEvidenceModes": [
+    "manual-request-replay",
+    "evidence-editor"
+  ],
+  "clippedControls": [],
+  "collapsedAreas": [],
+  "failedScenarios": [],
+  "missingCaptures": [],
+  "scope": "Production Swing component captures with synthetic packet/API adapters; zero HTTP. Not actual Burp GUI, Windows DPI/IME or browser validation.",
+  "result": "passed"
+}

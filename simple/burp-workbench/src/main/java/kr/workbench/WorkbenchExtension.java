@@ -438,7 +438,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
       api.http().registerHttpHandler(this);
       api.userInterface().registerContextMenuItemsProvider(this);
       api.logging()
-          .logToOutput("Workbench Simple loaded. SCOPE 수집과 선택한 요청의 직접 실행을 사용하세요.");
+          .logToOutput(BuildInfo.PRODUCT_NAME + " loaded. SCOPE 수집과 선택한 요청의 직접 실행을 사용하세요.");
     } catch (Exception e) {
       if (captureObservations != null) captureObservations.close();
       if (featureMapper != null) featureMapper.close();
@@ -738,7 +738,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
               public void actionPerformed(java.awt.event.ActionEvent e) {
                 try {
                   selectedTraffic()
-                      .forEach(t -> api.repeater().sendToRepeater(t.request(), "Workbench"));
+                      .forEach(t -> api.repeater().sendToRepeater(t.request(), BuildInfo.PRODUCT_NAME));
                 } catch (Exception ex) {
                   error(ex);
                 }
@@ -844,7 +844,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
           rememberWorkspace();
           status.setText("현재 작업 위치 저장을 시작했습니다. 요청 실행은 직접 선택하세요.");
         });
-    resumeWorkWindow = dialogOpener.open(root, "Workbench Simple · 작업 이어가기", panel, false, () -> resumeWorkWindow = null);
+    resumeWorkWindow = dialogOpener.open(root, BuildInfo.PRODUCT_NAME + " · 작업 이어가기", panel, false, () -> resumeWorkWindow = null);
   }
 
   private void restoreWorkspace(WorkspaceResume.Snapshot snapshot) {
@@ -1135,7 +1135,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     logContent = diagnostics.panel(this::captureDiagnostics);
     WorkbenchUi.style(logContent);
     if (logWindow != null && logWindow.isDisplayable()) { logWindow.toFront(); return; }
-    logWindow = dialogOpener.open(root, "Workbench Simple · 로그", logContent, false, () -> logWindow = null);
+    logWindow = dialogOpener.open(root, BuildInfo.PRODUCT_NAME + " · 로그", logContent, false, () -> logWindow = null);
     if (logWindow != null) logWindow.setMinimumSize(new Dimension(680,420));
   }
 
@@ -1171,7 +1171,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     commonSettingsWindow =
         dialogOpener.open(
             root,
-            "Workbench Simple · 화면 설정",
+            BuildInfo.PRODUCT_NAME + " · 화면 설정",
             commonSettingsContent,
             false,
             () -> commonSettingsWindow = null);
@@ -1181,7 +1181,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   SimpleStrixPanel strixPanel() {
     if (strixPanel == null) {
       strixPanel = new SimpleStrixPanel(url -> !unloaded.get() && WorkbenchScope.contains(api, url), this::strixOtherWorkBusy);
-      strixWindow = new TargetWindow(root, "Workbench Simple · Strix 진단", () -> strixPanel);
+      strixWindow = new TargetWindow(root, BuildInfo.PRODUCT_NAME + " · Strix 진단", () -> strixPanel);
       strixWindow.opener = (owner, title, content, modal, closed) -> {
         JDialog window = dialogOpener.open(owner, title, content, false, () -> {
           if (strixPanel != null) strixPanel.stop("Strix 창 닫음 · 진단 중지 요청. 이미 시작한 서버 작업은 별도 확인하세요.");
@@ -1518,7 +1518,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             "Repeater에 요청 준비",
             () ->
                 selectedTraffic()
-                    .forEach(t -> api.repeater().sendToRepeater(t.request(), "Workbench"))));
+                    .forEach(t -> api.repeater().sendToRepeater(t.request(), BuildInfo.PRODUCT_NAME))));
     trafficMenu.add(trafficAction("입력값 검사에 요청 연결", this::selectedPayload));
     trafficMenu.add(
         trafficAction(
@@ -1717,7 +1717,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void prepareSimpleRepeater() {
-    selectedTraffic().forEach(t -> api.repeater().sendToRepeater(t.request(), "Workbench Simple"));
+    selectedTraffic().forEach(t -> api.repeater().sendToRepeater(t.request(), BuildInfo.PRODUCT_NAME));
   }
 
   private void addSimpleEvidence() {
@@ -2549,7 +2549,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         if (rr.request() != null) rememberScopeCandidate(rr.request().url());
       } catch (RuntimeException ignored) {
       }
-    JMenu menu = new JMenu("Workbench Simple");
+    JMenu menu = new JMenu(BuildInfo.PRODUCT_NAME);
     JMenuItem bring = new JMenuItem("요청·응답 목록에 가져오기");
     bring.addActionListener(
         x ->
@@ -2609,7 +2609,7 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         x ->
             picked.stream()
                 .limit(20)
-                .forEach(rr -> api.repeater().sendToRepeater(rr.request(), "Workbench")));
+                .forEach(rr -> api.repeater().sendToRepeater(rr.request(), BuildInfo.PRODUCT_NAME)));
     menu.add(repeater);
     return List.of(menu);
   }

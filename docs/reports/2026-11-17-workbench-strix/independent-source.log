@@ -1,0 +1,7 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/tools/burp-workbench/strix-independent-source-final/burp-workbench/build_all.py --java /workspace/tools/burp-workbench/jdk-17.0.21+9/bin/java
+Note: /workspace/tools/burp-workbench/strix-independent-source-final/burp-workbench/src/main/java/kr/packetui/PacketStyle.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Built /workspace/tools/burp-workbench/strix-independent-source-final/burp-workbench/dist/burp-workbench-strix-1.0.0.jar 9039074 bytes
+{"result": "passed", "sourceZipSha256": "0d47549d1891a12263a2932419f4cf5aa6bee244dda95b93f9bbdad46d4a9fff", "rebuiltJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96", "identicalToRelease": true, "scope": "Independent final source ZIP build with JDK17, no external model/target execution"}

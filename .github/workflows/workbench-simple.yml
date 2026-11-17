@@ -1,8 +1,8 @@
-name: Workbench Simple
+name: Workbench Strix
 
 on:
   push:
-    branches: ['account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana', 'account-a/simple-retest-values', 'account-a/simple-navigation-retest']
+    branches: ['account-a/workbench-strix-identity', 'account-a/workbench-simple', 'account-a/simple-scope-inspection', 'account-a/simple-katana', 'account-a/simple-retest-values', 'account-a/simple-navigation-retest']
     paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', '.github/workflows/workbench-simple.yml']
   pull_request:
     paths: ['simple/**', 'audit/simple-retest/**', 'audit/simple-navigation-retest/**', '.github/workflows/workbench-simple.yml']
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: simple-${{ github.ref }}
+  group: strix-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -54,11 +54,11 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: simple-verification-${{ github.sha }}
+          name: strix-verification-${{ github.sha }}
           path: |
             simple/burp-workbench/build/*summary.json
             simple/burp-workbench/build/test-*.txt
-            simple/burp-workbench/dist/burp-workbench-simple-*.jar
+            simple/burp-workbench/dist/burp-workbench-strix-*.jar
             simple/feature-mapper/build/*results.txt
             simple/feature-mapper/build/test-*.txt
             tmp/simple-layout/**/*.png

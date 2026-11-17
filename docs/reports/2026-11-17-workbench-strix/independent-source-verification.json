@@ -1,0 +1,7 @@
+{
+  "result": "passed",
+  "sourceZipSha256": "0d47549d1891a12263a2932419f4cf5aa6bee244dda95b93f9bbdad46d4a9fff",
+  "rebuiltJarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+  "identicalToRelease": true,
+  "scope": "Independent final source ZIP build with JDK17, no external model/target execution"
+}

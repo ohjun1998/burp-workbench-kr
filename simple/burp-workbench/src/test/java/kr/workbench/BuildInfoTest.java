@@ -13,11 +13,14 @@ public final class BuildInfoTest {
         try (JarFile jar = new JarFile(artifact.toFile())) {
             String version = jar.getManifest().getMainAttributes().getValue("Implementation-Version");
             if (!BuildInfo.VERSION.equals(version)) throw new AssertionError("Runtime/manifest version mismatch");
-            if (!artifact.getFileName().toString().equals("burp-workbench-simple-" + version + ".jar")) {
+            if (!artifact.getFileName().toString().equals(BuildInfo.ARTIFACT_ID + "-" + version + ".jar")) {
                 throw new AssertionError("Artifact filename/manifest version mismatch");
+            }
+            if (!BuildInfo.IMPLEMENTATION_TITLE.equals(jar.getManifest().getMainAttributes().getValue("Implementation-Title"))) {
+                throw new AssertionError("Runtime/manifest product title mismatch");
             }
             if (!FeatureGuide.EXTENSION_NAME.equals(BuildInfo.DISPLAY_NAME)) throw new AssertionError("Display identity mismatch");
         }
-        System.out.println("BuildInfoTest: 3 checks passed");
+        System.out.println("BuildInfoTest: 4 checks passed");
     }
 }

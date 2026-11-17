@@ -1,3 +1,11 @@
+# Workbench Strix 1.0.0 · Strix 진단 연동판
+
+Strix 연동 Simple 1.4.13 후보를 **Workbench Strix**로 구분합니다. 일반 Simple과 별도 이름·버전·파일명으로 배포하며 A 그룹형 Simple 1.4.22와 통합된 버전은 아닙니다. 기존 Strix 실행 경로와 설정·원본·실행 승인·중지 동작을 유지합니다.
+
+[설치 JAR](simple/downloads/strix/1.0.0/burp-workbench-strix-1.0.0.jar) · [소스 ZIP](simple/downloads/strix/1.0.0/burp-workbench-strix-1.0.0-source.zip) · [사용 가이드](docs/reports/2026-11-17-workbench-strix/guide/index.html) · [변경·검증 기록](docs/reports/2026-11-17-workbench-strix/README_KR.md)
+
+이 브랜치는 이름 분리 작업이며 main 병합 상태는 PR에서 확인합니다. 아래는 보존한 Next·Simple 안내입니다.
+
 # Workbench Next 0.54.1
 
 Next 0.53.4에 ChatGPT 구독/Codex CLI와 Halogen을 작업별로 배정하는 AI 검토·기능별 패킷 분류·계정 비교 해설·JS/API 맥락 분석·증거 보고서 초안을 추가합니다. 0.54.0 후보의 작은 창·150% 글자 크기에서 증거 작성 공간이 줄어드는 문제를 수정합니다. 자동 요청은 실행마다 기본 취소인 확인창을 거치며, 원본 ID와 기존 판정을 보존합니다. [설치 JAR](downloads/extensions/0.54.1/burp-workbench-kr-0.54.1.jar) · [사용법](docs/RELEASE_0.54.1_NEXT_KR.md) · [검증](docs/VERIFICATION_0.54.1.json). 병합·검증 상태는 해당 PR과 검증 기록을 확인하세요. 아래 이전 버전 안내는 보존 이력입니다.

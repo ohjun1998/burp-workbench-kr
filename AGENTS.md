@@ -1,3 +1,10 @@
+# Workbench Strix 1.0.0 identity split
+
+- User requested a distinct product name for the Strix-integrated Simple branch. Runtime PRODUCT_NAME/IMPLEMENTATION_TITLE/ARTIFACT_ID are centralized in BuildInfo; VERSION1.0.0 is a new product series, not a Simple downgrade or a merge of A-grouped Simple1.4.22.
+- Build from simple/ with `python dev.py release` and `python dev.py verify`; new immutable artifacts are under simple/downloads/strix/1.0.0 with burp-workbench-strix prefix. Preserve old Simple/Strix/Next artifacts and evidence.
+- Keep simple.* and .burp-workbench-simple storage for existing Strix user compatibility; do not silently migrate/delete data or claim concurrent namespace isolation from Simple. Strix CLI/auth/global config remains untouched.
+- Strix approval/provider/SCOPE/source/cancel contracts below remain. New exact-JAR captures and standalone illustrated guide belong under docs/reports/2026-11-17-workbench-strix and downloads/guides/strix-1.0.0. General Simple guide generators are historical and must not overwrite Simple1.0.0 artifacts.
+
 # Simple 1.4.13 Strix integration
 
 - The user explicitly approved the Simple-to-existing-Strix execution interface and then requested Halogen/Qwen3.8 versus native Strix ChatGPT-subscription selection, plus a step-by-step illustrated HTML guide. This task supersedes historical Next-only scope notes for the new Simple files. Existing ~/.strix launcher/monitor/config, Next and prior artifacts remain untouched.

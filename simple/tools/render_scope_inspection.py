@@ -32,7 +32,7 @@ CAPTURES = [
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--out', type=Path, help='Default: docs/images/<current version>; preserves previous versions')
+    parser.add_argument('--out', type=Path, help='Default: docs/images/strix/<current version>; preserves previous versions')
     parser.add_argument('--java', default='java')
     parser.add_argument('--themes', nargs='+', choices=['light', 'dark'], default=['light', 'dark'])
     parser.add_argument('--sizes', nargs='+', default=['1024x720', '1280x800'])
@@ -40,8 +40,9 @@ def main() -> int:
     parser.add_argument('--source-target', action='store_true', help='Explicit source/target 17 mode; Java 17 platform APIs are not verified')
     args = parser.parse_args()
     version = runpy.run_path(str(WB / 'release_info.py'))['VERSION']
-    args.out = (args.out or ROOT / 'docs/images' / version).resolve()
-    jar = WB / f'dist/burp-workbench-simple-{version}.jar'
+    artifact_id = runpy.run_path(str(WB / "release_info.py"))["ARTIFACT_ID"]
+    args.out = (args.out or ROOT / 'docs/images/strix' / version).resolve()
+    jar = WB / f'dist/{artifact_id}-{version}.jar'
     if not jar.is_file() or not (WB / 'build/tests').exists():
         parser.error('Build the current Simple JAR and test adapters first.')
     args.out.mkdir(parents=True, exist_ok=True)

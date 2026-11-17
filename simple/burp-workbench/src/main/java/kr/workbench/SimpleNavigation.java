@@ -42,10 +42,10 @@ final class SimpleNavigation extends JPanel {
     header.setName("wb.simple.header");
     header.setBorder(BorderFactory.createEmptyBorder(10, 16, 0, 16));
     JPanel titleRow = new JPanel(new BorderLayout(8, 0));
-    JLabel title = new JLabel("Workbench Simple · 8개 도구");
+    JLabel title = new JLabel(BuildInfo.PRODUCT_NAME + " · 8개 도구");
     title.setName("wb.simple.brand");
     title.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, 17f));
-    title.setToolTipText("Simple " + BuildInfo.VERSION + " · 기존 Workbench와 별도 설정을 사용합니다.");
+    title.setToolTipText(BuildInfo.PRODUCT_NAME + " " + BuildInfo.VERSION + " · 기존 Simple-Strix 설정과 작업을 이어서 사용합니다.");
     titleRow.add(title, BorderLayout.WEST);
     JButton options = new JButton("도움말·설정");
     options.setName("wb.simple.options");

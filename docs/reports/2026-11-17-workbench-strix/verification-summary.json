@@ -1,0 +1,14 @@
+{
+  "product": "Workbench Strix",
+  "version": "1.0.0",
+  "sourceBase": "d46c32a8103c2a020d21ec602a843e87a8436399",
+  "jarSha256": "a50f961d5b558d46d2c34ba0d60e03f1189f1d9f52e149289ba6507c5ea84f96",
+  "automatedChecks": 7163,
+  "result": "passed",
+  "storageCompatibility": {
+    "keys": "simple.*",
+    "directory": ".burp-workbench-simple"
+  },
+  "actualBurpOrModelRun": false,
+  "mainMerged": false
+}

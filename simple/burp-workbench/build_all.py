@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build the isolated Workbench Simple; integrated engines are preserved."""
+"""Build Workbench Strix; integrated engines are preserved."""
 from shade_rhino import relocate, rename
-from release_info import VERSION
+from release_info import VERSION, PRODUCT_NAME, IMPLEMENTATION_TITLE, ARTIFACT_ID, EDITION
 import argparse, pathlib, os, hashlib, json, re, subprocess, shutil, zipfile, urllib.request, sys
 if hasattr(sys.stdout,"reconfigure"):sys.stdout.reconfigure(encoding="utf-8")
 root=pathlib.Path(__file__).resolve().parent
@@ -45,7 +45,7 @@ if a.compiler and a.source_target:raise SystemExit('--source-target requires the
 compiler=[a.java,'-jar',str(a.compiler.resolve()),'-17','-warn:none']if a.compiler else ([a.javac or shutil.which('javac')]+source_options if a.javac or shutil.which('javac') else [a.java,'com.sun.tools.javac.Main']+source_options)
 cp=os.pathsep.join(map(str,[api,legacy,rhino,brotli]))
 subprocess.run(compiler+['-encoding','UTF-8','-cp',cp,'-d',str(classes)]+[str(p)for p in sorted((root/'src/main/java').rglob('*.java'))]+[str(p)for p in mapper_sources],check=True)
-output=root/f'dist/burp-workbench-simple-{VERSION}.jar';output.parent.mkdir(exist_ok=True)
+output=root/f'dist/{ARTIFACT_ID}-{VERSION}.jar';output.parent.mkdir(exist_ok=True)
 temporary_output=output.with_suffix('.building')
 class ReleaseZip(zipfile.ZipFile):
  def writestr(self,name,data,*args,**kwargs):
@@ -53,7 +53,7 @@ class ReleaseZip(zipfile.ZipFile):
   return super().writestr(info,data)
  def write(self,path,name):self.writestr(str(name),pathlib.Path(path).read_bytes())
 with ReleaseZip(temporary_output,'w',zipfile.ZIP_DEFLATED)as z:
- z.writestr('META-INF/MANIFEST.MF',f'Manifest-Version: 1.0\r\nImplementation-Title: Burp Workbench Simple KR\r\nImplementation-Version: {VERSION}\r\n\r\n')
+ z.writestr('META-INF/MANIFEST.MF',f'Manifest-Version: 1.0\r\nImplementation-Title: {IMPLEMENTATION_TITLE}\r\nImplementation-Version: {VERSION}\r\n\r\n')
  inputs=[*sorted((root/'src/main/java').rglob('*.java')),*mapper_sources]
  inputs += [p for p in (root/'src/main/resources').rglob('*') if p.is_file() and 'engines' not in p.relative_to(root/'src/main/resources').parts]
  inputs += [root/name for name in ['build_all.py','release_info.py','shade_rhino.py','engine-lock.json','LICENSE','THIRD_PARTY_NOTICES.md']]

@@ -24,7 +24,7 @@ CAPTURES = ['00-scope-editor.png', '00-start.png', '01-capture.png', '02-request
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--out', type=Path, help='Default: docs/images/<current version>; older capture sets remain unchanged')
+    parser.add_argument('--out', type=Path, help='Default: docs/images/strix/<current version>; older capture sets remain unchanged')
     parser.add_argument('--java', default='java')
     parser.add_argument('--themes', nargs='+', choices=['light', 'dark'], default=['light', 'dark'])
     parser.add_argument('--sizes', nargs='+', default=['1024x720', '1280x800'])
@@ -35,10 +35,11 @@ def main() -> int:
     if args.source_target:
         print('WARNING: Explicit --source-target compilation uses Java 21 source/target 17 here; Java 17 platform API compatibility is NOT verified. Strict --release 17 remains the default.', flush=True)
     version = runpy.run_path(str(WB / 'release_info.py'))['VERSION']
-    jar = WB / f'dist/burp-workbench-simple-{version}.jar'
+    artifact_id = runpy.run_path(str(WB / "release_info.py"))["ARTIFACT_ID"]
+    jar = WB / f'dist/{artifact_id}-{version}.jar'
     if not jar.exists() or not (WB / 'build/tests').exists():
         parser.error('Build Simple and test adapters first: python simple/dev.py test')
-    args.out = (args.out if args.out else ROOT / 'docs/images' / version).resolve()
+    args.out = (args.out if args.out else ROOT / 'docs/images/strix' / version).resolve()
     classes = args.out / '.classes'
     classes.mkdir(parents=True, exist_ok=True)
     classpath = os.pathsep.join(map(str, [jar, *sorted((WB / 'deps').glob('*.jar')), WB / 'build/tests']))

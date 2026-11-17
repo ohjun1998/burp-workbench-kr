@@ -37,7 +37,8 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="Fail on clipped named controls or content viewport below 50px")
     args = parser.parse_args()
     version = runpy.run_path(str(WB / "release_info.py"))["VERSION"]
-    jar = (args.jar or WB / f"dist/burp-workbench-simple-{version}.jar").resolve()
+    artifact_id = runpy.run_path(str(WB / "release_info.py"))["ARTIFACT_ID"]
+    jar = (args.jar or WB / f"dist/{artifact_id}-{version}.jar").resolve()
     test_classes = args.test_classes.resolve()
     if not jar.is_file() or not (test_classes / "kr/workbench/SimpleStrixIntegrationTest.class").is_file():
         parser.error("Build the release and test adapters first: python simple/dev.py test")

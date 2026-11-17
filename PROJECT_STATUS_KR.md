@@ -1,3 +1,13 @@
+# Workbench Strix 이름 분리 작업 · 2026-11-17
+
+- 브랜치: `account-a/workbench-strix-identity`, 출발: Strix 연동 브랜치 `d46c32a8103c2a020d21ec602a843e87a8436399`.
+- 제품명: Workbench Strix 1.0.0. 일반 Simple 1.4.22와 별도 계열이며 해당 변경을 병합하지 않음.
+- 새 배포 위치: `simple/downloads/strix/1.0.0/`. 기존 Simple/Next 배포 보존.
+- 설정·진단 기록 호환: 기존 `simple.*`와 `.burp-workbench-simple` 유지. CLI·인증·외부 모델 설정은 변경하지 않음.
+- 실제 수행한 검사와 잔여 범위: [보고서](docs/reports/2026-11-17-workbench-strix/README_KR.md). 이 항목은 main 병합 완료 선언이 아님.
+
+아래는 기존 프로젝트 기록입니다.
+
 # Simple 1.4.13 · Strix 로컬/구독 진단 연결 후보
 
 Simple에서 기존 Strix CLI의 시작·중지·로그·이번 실행 보고서를 연결하고, Halogen/Qwen 3.8 또는 Strix 자체 ChatGPT 구독 인증을 선택합니다. 사용자에게 범위를 설명하고 명시 승인을 받은 Simple 측 변경이며 기존 Strix 설치·래퍼·모니터는 수정하지 않았습니다.

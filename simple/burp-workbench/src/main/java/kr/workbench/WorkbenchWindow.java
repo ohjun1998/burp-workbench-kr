@@ -9,9 +9,9 @@ import javax.swing.*;
 final class WorkbenchWindow implements AutoCloseable {
   final JPanel workspace;
   final JPanel launcher = new JPanel(new GridBagLayout());
-  final JButton openButton = new JButton("Workbench 열기");
+  final JButton openButton = new JButton(BuildInfo.PRODUCT_NAME + " 열기");
   final JButton fullScreenButton = new JButton("전체화면");
-  final JLabel status = new JLabel("Workbench 탭을 선택하면 별도 창으로 열립니다.");
+  final JLabel status = new JLabel(BuildInfo.PRODUCT_NAME + " 탭을 선택하면 별도 창으로 열립니다.");
   private final Set<JTabbedPane> tabParents = Collections.newSetFromMap(new IdentityHashMap<>());
   private final HierarchyListener hierarchyListener = this::hierarchyChanged;
   private final MouseAdapter tabMouseListener = new MouseAdapter() {
@@ -39,7 +39,7 @@ final class WorkbenchWindow implements AutoCloseable {
     fullScreenButton.setToolTipText("전체화면 전환 · F11 / Esc로 복원");
     fullScreenButton.addActionListener(e->toggleFullScreen());
     JPanel content=new JPanel();content.setLayout(new BoxLayout(content,BoxLayout.Y_AXIS));
-    for(Component row:new Component[]{new JLabel("Workbench"),Box.createVerticalStrut(12),status,
+    for(Component row:new Component[]{new JLabel(BuildInfo.PRODUCT_NAME),Box.createVerticalStrut(12),status,
         Box.createVerticalStrut(16),openButton,Box.createVerticalStrut(12),
         new JLabel("창 최대화 · F11 전체화면 · 닫아도 작업 내용 유지")}) {
       if(row instanceof JComponent component)component.setAlignmentX(Component.CENTER_ALIGNMENT);content.add(row);
@@ -89,13 +89,13 @@ final class WorkbenchWindow implements AutoCloseable {
     if(!SwingUtilities.isEventDispatchThread()){SwingUtilities.invokeLater(this::open);return;}
     if(closed)return;
     if(GraphicsEnvironment.isHeadless()){
-      status.setText("그래픽 환경에서 Workbench 별도 창을 열 수 있습니다.");return;
+      status.setText("그래픽 환경에서 " + BuildInfo.PRODUCT_NAME + " 별도 창을 열 수 있습니다.");return;
     }
     if(window==null){
       Window burpWindow=SwingUtilities.getWindowAncestor(launcher);
       GraphicsConfiguration configuration=burpWindow==null?null:burpWindow.getGraphicsConfiguration();
-      window=configuration==null?new JFrame("Workbench Simple · "+BuildInfo.VERSION)
-          :new JFrame("Workbench Simple · "+BuildInfo.VERSION,configuration);
+      window=configuration==null?new JFrame(BuildInfo.PRODUCT_NAME+" · "+BuildInfo.VERSION)
+          :new JFrame(BuildInfo.PRODUCT_NAME+" · "+BuildInfo.VERSION,configuration);
       window.setName("wb.window.frame");
       window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
       window.addWindowListener(new WindowAdapter(){@Override public void windowClosing(WindowEvent event){hide();}});
@@ -115,7 +115,7 @@ final class WorkbenchWindow implements AutoCloseable {
     if(fullScreen){GraphicsDevice current=currentDevice();if(fullScreenDevice!=null&&fullScreenDevice!=current&&fullScreenDevice.getFullScreenWindow()==window)fullScreenDevice.setFullScreenWindow(null);fullScreenDevice=current;fullScreenDevice.setFullScreenWindow(window);}
     for(Dialog dialog:new ArrayList<>(hiddenDialogs))if(dialog.isDisplayable())dialog.setVisible(true);
     hiddenDialogs.clear();window.toFront();window.requestFocus();
-    status.setText("Workbench가 별도 창에서 열려 있습니다. 다시 누르면 앞으로 가져옵니다.");
+    status.setText(BuildInfo.PRODUCT_NAME + "가 별도 창에서 열려 있습니다. 다시 누르면 앞으로 가져옵니다.");
   }
 
   void hide() {
@@ -125,7 +125,7 @@ final class WorkbenchWindow implements AutoCloseable {
     for(Dialog dialog:hiddenDialogs)dialog.setVisible(false);
     if(fullScreenDevice!=null&&fullScreenDevice.getFullScreenWindow()==window)fullScreenDevice.setFullScreenWindow(null);
     window.setVisible(false);
-    status.setText("작업 내용이 유지됩니다. Workbench 열기로 계속하세요.");
+    status.setText("작업 내용이 유지됩니다. " + BuildInfo.PRODUCT_NAME + " 열기로 계속하세요.");
   }
 
   void toggleFullScreen() {

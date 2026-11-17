@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Workbench Simple standalone build, regression and immutable packaging commands."""
+"""Workbench Strix standalone build, regression and immutable packaging commands."""
 from pathlib import Path
 import argparse
 import json
@@ -71,13 +71,13 @@ def counted_java_groups(mapper):
 def mapper_test(runtime, source_target=False):
     """Exercise the same Mapper classes that are packaged in the Simple JAR."""
     sys.path.insert(0, str(WB))
-    from release_info import VERSION
+    from release_info import VERSION, PRODUCT_NAME, IMPLEMENTATION_TITLE, ARTIFACT_ID, EDITION
     mapper = ROOT / 'feature-mapper'
     tests = mapper / 'build/tests'
     shutil.rmtree(tests, ignore_errors=True)
     tests.mkdir(parents=True)
     cp = os.pathsep.join(map(str, [WB / 'deps/montoya-2026.jar',
-                                  WB / f'dist/burp-workbench-simple-{VERSION}.jar']))
+                                  WB / f'dist/{ARTIFACT_ID}-{VERSION}.jar']))
     source_options = ['-source', '17', '-target', '17'] if source_target else ['--release', '17']
     run([runtime, 'com.sun.tools.javac.Main', *source_options, '-encoding', 'UTF-8',
          '-cp', cp, '-d', tests] + sorted((mapper / 'src/test/java').rglob('*.java')))

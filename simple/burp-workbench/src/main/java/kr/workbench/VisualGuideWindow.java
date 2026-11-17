@@ -26,7 +26,7 @@ final class VisualGuideWindow implements AutoCloseable {
     if(GraphicsEnvironment.isHeadless())return;
     if(window==null){
       Window parent=SwingUtilities.getWindowAncestor(owner);
-      window=new JDialog(parent,"Workbench Guide",Dialog.ModalityType.MODELESS);window.setName("wb.visual.guide.window");
+      window=new JDialog(parent,BuildInfo.PRODUCT_NAME + " Guide",Dialog.ModalityType.MODELESS);window.setName("wb.visual.guide.window");
       window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);window.setResizable(true);window.setContentPane(panel);
       Rectangle bounds=WorkbenchWindow.usableBounds(window.getGraphicsConfiguration());
       int width=Math.min(1440,bounds.width),height=Math.min(900,bounds.height);

@@ -52,13 +52,14 @@ def main() -> int:
     parser.add_argument('--source-target', action='store_true', help='Explicit source/target 17 fallback; Java 17 platform APIs are not verified')
     args = parser.parse_args()
     version = runpy.run_path(str(WB / 'release_info.py'))['VERSION']
+    artifact_id = runpy.run_path(str(WB / "release_info.py"))["ARTIFACT_ID"]
     binary = args.katana.expanduser().resolve()
     if not binary.is_file() or not os.access(binary, os.X_OK):
         parser.error('The explicit Katana path must be an executable regular file.')
     actual_sha = digest(binary)
     if actual_sha != BINARY_SHA256:
         parser.error('Katana binary SHA-256 does not match the pinned official 1.8.0 linux_amd64 extraction.')
-    jar = WB / f'dist/burp-workbench-simple-{version}.jar'
+    jar = WB / f'dist/{artifact_id}-{version}.jar'
     adapters = WB / 'build/tests'
     required_adapters = ('WorkbenchTest.class', 'SimpleWorkflowTest.class', 'ScopeInspectionFixture.class')
     if not jar.is_file() or any(not (adapters / 'kr/workbench' / name).is_file() for name in required_adapters):

@@ -1,3 +1,15 @@
+# Workbench Strix 1.0.0
+
+Strix 진단 에이전트를 연동한 판을 **Workbench Strix**로 분리해 이름을 바꿨습니다. 이전 이름은 Simple 1.4.13 · Strix 진단 연동 후보입니다. 일반 Workbench Simple 및 A 그룹형 Simple 1.4.22와 별도 제품 계열이며, 1.4.22 기능을 병합한 버전은 아닙니다.
+
+[설치 JAR](downloads/strix/1.0.0/burp-workbench-strix-1.0.0.jar) · [독립 소스 ZIP](downloads/strix/1.0.0/burp-workbench-strix-1.0.0-source.zip) · [체크섬](downloads/strix/1.0.0/SHA256SUMS) · [변경 안내](docs/RELEASE_STRIX_1.0.0_KR.md) · [단계별 사용 가이드](../docs/reports/2026-11-17-workbench-strix/guide/index.html)
+
+Burp 확장 이름·탭·우클릭 메뉴·창 제목·로그·Guide에 Workbench Strix가 표시됩니다. 기존 8개 도구와 Strix의 Halogen/Qwen 또는 자체 ChatGPT 구독 인증 경로, 실행 전 확인과 중지를 유지합니다. 실제 모델 추론·사용자 Burp 검증과 자동 회귀 검증은 구분합니다.
+
+기존 Strix 연동판에서 이름을 바꾸는 업데이트이므로 저장 폴더 `.burp-workbench-simple`과 설정 키 `simple.*`를 유지합니다. 이전 Strix 기록을 옮기거나 삭제하지 않습니다. 같은 저장 공간을 사용하므로 이전 Simple/Strix 확장을 언로드한 뒤 새 JAR를 로드합니다. Strix CLI 설치·래퍼·전역 인증 파일은 바꾸지 않습니다.
+
+개발은 이 폴더에서 `python dev.py check`, `python dev.py release`, `python dev.py verify`를 사용합니다. 빌드 결과는 `burp-workbench/dist/burp-workbench-strix-1.0.0.jar`, 불변 배포는 `downloads/strix/1.0.0/`에 생성됩니다. `tools/render_strix.py`로 실제 패널을 합성 입력과 함께 렌더링합니다. 루트의 `tools/package_workbench_strix_guide.py`는 저장소 전체에서 그림 가이드를 생성하는 도구이며 독립 소스 ZIP에는 포함되지 않습니다. 아래는 보존한 이전 Simple 연동판 안내입니다.
+
 # Workbench Simple 1.4.13 · Strix 진단 연동 후보
 
 선택한 관측 자료를 기존 Strix의 진단 입력으로 준비하고, **Halogen + Qwen 3.8 / Strix ChatGPT 구독** 중 실행 경로를 선택합니다. 실행 전 확인·중지·제한된 로그·해당 실행 보고서 미리보기를 제공합니다. 실제 요청 수나 가용성 무영향을 강제 보장하는 네트워크 게이트는 아닙니다. [사용법](docs/RELEASE_SIMPLE_1.4.13_KR.md) · [설치](downloads/1.4.13/) · [검증과 그림 가이드](https://github.com/ohjun1998/burp-workbench-kr/tree/account-a/simple-strix-local/docs/reports/2026-11-16-simple-strix-local). 아래는 이전 배포 기록입니다.

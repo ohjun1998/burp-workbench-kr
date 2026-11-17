@@ -1,0 +1,2 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/burp-workbench-kr/simple/package_simple.py --verify
+Workbench Strix package verified: /workspace/burp-workbench-kr/simple/downloads/strix/1.0.0

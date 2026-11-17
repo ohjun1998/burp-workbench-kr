@@ -1,0 +1,10 @@
+{
+  "oldStrixArtifacts": {
+    "burp-workbench-simple-1.4.13.jar": true,
+    "burp-workbench-simple-1.4.13-source.zip": true,
+    "feature-mapper-browser-helper-0.4.1.zip": true
+  },
+  "modifiedHistoricalOrNextFiles": [],
+  "comparisonBase": "d46c32a8103c2a020d21ec602a843e87a8436399",
+  "simple1_4_22": "Preserved on original account-a/bank-simple-1.4.21-results branch; not merged into Strix"
+}

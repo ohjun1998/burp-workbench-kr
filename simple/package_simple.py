@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package Workbench Simple without changing any existing release artifact."""
+"""Package Workbench Strix without changing any existing release artifact."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -12,7 +12,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parent
 WB = ROOT / 'burp-workbench'
 sys.path.insert(0, str(WB))
-from release_info import VERSION
+from release_info import VERSION, PRODUCT_NAME, IMPLEMENTATION_TITLE, ARTIFACT_ID, EDITION
 
 
 def sha(path):
@@ -92,7 +92,7 @@ def verify_archive(path, expected):
 
 def verify(destination, sources):
     manifest = json.loads((destination / 'manifest.json').read_text(encoding='utf-8'))
-    if manifest['version'] != VERSION:
+    if manifest['version'] != VERSION or manifest.get('name') != PRODUCT_NAME or manifest.get('edition') != EDITION:
         raise RuntimeError('Release version differs')
     current = {p.relative_to(ROOT).as_posix(): sha(p) for p in sources}
     if current != manifest['sources']:
@@ -100,7 +100,7 @@ def verify(destination, sources):
     for name, expected in manifest['artifacts'].items():
         if sha(destination / name) != expected:
             raise RuntimeError('Artifact hash differs: ' + name)
-    verify_archive(destination / f'burp-workbench-simple-{VERSION}-source.zip', current)
+    verify_archive(destination / f'{ARTIFACT_ID}-{VERSION}-source.zip', current)
     mapper_version, browser_version = companion_versions()
     if manifest.get('embeddedMapperVersion') != mapper_version or manifest.get('browserHelperVersion') != browser_version:
         raise RuntimeError('Companion version differs')
@@ -112,14 +112,14 @@ def verify(destination, sources):
     if helper_name not in manifest['artifacts']:
         raise RuntimeError('Installable browser helper archive is missing')
     verify_archive(destination / helper_name, helper_sources)
-    print('Simple package verified:', destination)
+    print('Workbench Strix package verified:', destination)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--verify', action='store_true')
     args = parser.parse_args()
-    destination = ROOT / 'downloads' / VERSION
+    destination = ROOT / 'downloads' / EDITION / VERSION
     sources = source_files()
     if args.verify:
         verify(destination, sources)
@@ -128,12 +128,12 @@ def main():
         # Never rewrite a published version: an identical package is an idempotent success.
         verify(destination, sources)
         return
-    jar = WB / f'dist/burp-workbench-simple-{VERSION}.jar'
+    jar = WB / f'dist/{ARTIFACT_ID}-{VERSION}.jar'
     if not jar.exists():
         raise RuntimeError('Build first: python simple/dev.py build')
     with zipfile.ZipFile(jar) as packaged:
         text = packaged.read('META-INF/MANIFEST.MF').decode()
-        if 'Implementation-Title: Burp Workbench Simple KR' not in text or f'Implementation-Version: {VERSION}\r\n' not in text:
+        if f'Implementation-Title: {IMPLEMENTATION_TITLE}' not in text or f'Implementation-Version: {VERSION}\r\n' not in text:
             raise RuntimeError('JAR identity differs')
         build_inputs = json.loads(packaged.read('META-INF/simple-source.json'))
         toolchain = json.loads(packaged.read('META-INF/simple-build.json'))
@@ -143,7 +143,7 @@ def main():
     staging = destination.with_name(destination.name + '.building')
     staging.mkdir(parents=True, exist_ok=False)
     shutil.copy2(jar, staging / jar.name)
-    source_zip = staging / f'burp-workbench-simple-{VERSION}-source.zip'
+    source_zip = staging / f'{ARTIFACT_ID}-{VERSION}-source.zip'
     archive(source_zip, {p.relative_to(ROOT).as_posix(): p.read_bytes() for p in sources})
     mapper_version, browser_version = companion_versions()
     helper = browser_files()
@@ -153,7 +153,7 @@ def main():
     checksums = {p.name: sha(p) for p in artifacts}
     (staging / 'SHA256SUMS').write_text(''.join(f'{digest}  {name}\n' for name, digest in checksums.items()), encoding='utf-8')
     (staging / 'manifest.json').write_text(json.dumps({
-        'name': 'Workbench Simple', 'version': VERSION, 'baseExtensionVersion': '0.53.4',
+        'name': PRODUCT_NAME, 'edition': EDITION, 'version': VERSION, 'basedOnSimpleStrixVersion': '1.4.13', 'baseExtensionVersion': '0.53.4',
         'embeddedMapperVersion': mapper_version, 'browserHelperVersion': browser_version,
         'browserHelperSources': {name: hashlib.sha256(data).hexdigest() for name, data in helper.items()},
         'artifacts': checksums,
@@ -163,7 +163,7 @@ def main():
     }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     verify(staging, sources)
     staging.replace(destination)
-    print('Simple release created:', destination)
+    print('Workbench Strix release created:', destination)
 
 
 if __name__ == '__main__':

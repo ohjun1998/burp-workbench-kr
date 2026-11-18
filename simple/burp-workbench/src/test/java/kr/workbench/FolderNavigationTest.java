@@ -120,7 +120,7 @@ public final class FolderNavigationTest extends WorkbenchTest {
             "all classic routes preserve selected traffic and unsaved editor work");
         check(UiLayoutTest.named(panel, "wb.next.version") == null
                 && FeatureGuide.SUITE_TAB.equals(BuildInfo.PRODUCT_NAME) && BuildInfo.DISPLAY_NAME.startsWith(BuildInfo.IMPLEMENTATION_TITLE),
-            "classic layout keeps Strix extension identity without a Next version badge");
+            "classic layout keeps Simple extension identity without a Next version badge");
         extension.openFeature("data");
         check(pages.getSelectedIndex() == pages.indexOfTab("요청·응답 목록") && trafficTools.getSelectedIndex() == 1
                 && codec.getText().equals("UNSAVED_FOLDER_INPUT"),

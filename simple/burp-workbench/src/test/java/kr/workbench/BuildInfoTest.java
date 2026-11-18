@@ -20,7 +20,10 @@ public final class BuildInfoTest {
                 throw new AssertionError("Runtime/manifest product title mismatch");
             }
             if (!FeatureGuide.EXTENSION_NAME.equals(BuildInfo.DISPLAY_NAME)) throw new AssertionError("Display identity mismatch");
+            if (jar.stream().map(entry -> entry.getName()).anyMatch(name -> name.startsWith("kr/workbench/SimpleStrix") || name.startsWith("strix/"))) {
+                throw new AssertionError("Removed Strix classes or runtime resources remain in the Simple JAR");
+            }
         }
-        System.out.println("BuildInfoTest: 4 checks passed");
+        System.out.println("BuildInfoTest: 5 checks passed");
     }
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package Workbench Strix without changing any existing release artifact."""
+"""Package Workbench Simple without changing any existing release artifact."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -112,14 +112,14 @@ def verify(destination, sources):
     if helper_name not in manifest['artifacts']:
         raise RuntimeError('Installable browser helper archive is missing')
     verify_archive(destination / helper_name, helper_sources)
-    print('Workbench Strix package verified:', destination)
+    print(f'{PRODUCT_NAME} package verified:', destination)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--verify', action='store_true')
     args = parser.parse_args()
-    destination = ROOT / 'downloads' / EDITION / VERSION
+    destination = ROOT / 'downloads' / VERSION
     sources = source_files()
     if args.verify:
         verify(destination, sources)
@@ -153,7 +153,9 @@ def main():
     checksums = {p.name: sha(p) for p in artifacts}
     (staging / 'SHA256SUMS').write_text(''.join(f'{digest}  {name}\n' for name, digest in checksums.items()), encoding='utf-8')
     (staging / 'manifest.json').write_text(json.dumps({
-        'name': PRODUCT_NAME, 'edition': EDITION, 'version': VERSION, 'baseSimpleVersion': '1.4.21', 'baseSimpleCommit': '03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d', 'previousStrixVersion': '1.0.1', 'baseExtensionVersion': '0.53.4',
+        'name': PRODUCT_NAME, 'edition': EDITION, 'version': VERSION,
+        'baseSimpleVersion': '1.4.21', 'baseSimpleCommit': '03c6204747ef4a0a0052e4d7fe86c1f65ff9bc6d',
+        'baseExtensionVersion': '0.53.4',
         'embeddedMapperVersion': mapper_version, 'browserHelperVersion': browser_version,
         'browserHelperSources': {name: hashlib.sha256(data).hexdigest() for name, data in helper.items()},
         'artifacts': checksums,
@@ -163,7 +165,7 @@ def main():
     }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     verify(staging, sources)
     staging.replace(destination)
-    print('Workbench Strix release created:', destination)
+    print(f'{PRODUCT_NAME} release created:', destination)
 
 
 if __name__ == '__main__':

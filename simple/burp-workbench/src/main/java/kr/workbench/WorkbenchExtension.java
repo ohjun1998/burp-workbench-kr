@@ -209,8 +209,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   private LayoutSettings commonSettings;
   private JPanel commonSettingsContent;
   private JDialog commonSettingsWindow;
-  private SimpleStrixPanel strixPanel;
-  private TargetWindow strixWindow;
 
   public void addPayloadRunnerPage(Component page) {
     if(page instanceof JPanel panel){ApprovedLayouts.payload(panel);ApprovedLayouts.decorate(panel);ApprovedPayloadDesign.install(panel);}
@@ -340,7 +338,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
   }
 
   private void clearStoredTraffic() {
-    if (strixPanel != null) strixPanel.reset("원본 목록 초기화 · Strix 중지 요청 및 선택 해제");
     synchronized (captureLock) {
       DiskTrafficStore replacement = new DiskTrafficStore();
       if (captureObservations != null) captureObservations.close();
@@ -400,8 +397,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
                     diagnostics.close();
                     if (commonSettingsWindow != null) commonSettingsWindow.dispose();
                     if (commonSettings != null) commonSettings.close();
-                    if (strixPanel != null) strixPanel.close();
-                    if (strixWindow != null) strixWindow.close();
                     if (scopeWindow != null) scopeWindow.dispose();
                     if (requestNativeWindow != null) requestNativeWindow.dispose();
                     if (responseNativeWindow != null) responseNativeWindow.dispose();
@@ -807,7 +802,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
         if(authCompare!=null)authCompare.resetChecklistProject();
         if(jsAnalysis!=null)jsAnalysis.resetBackgroundProject();
         if(exposureResearch!=null)exposureResearch.resetProject();
-        if(strixPanel!=null)strixPanel.reset("프로젝트 변경 · Strix 중지 요청 및 원본·정책 해제");
         checklistTrafficBaselineStore=trafficStore;
         checklistTrafficBaseline=trafficStore==null?0:trafficStore.size();
         if (logTable != null) logTable.clearSelection();
@@ -1165,10 +1159,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     commonSettingsContent.setLayout(new BoxLayout(commonSettingsContent, BoxLayout.Y_AXIS));
     commonSettingsContent.add(WorkbenchUi.card("화면 배치", commonSettings));
     commonSettingsContent.add(WorkbenchUi.row(new JLabel("모든 도구에 공통 적용 · 데이터 도구는 입력 / 출력 방향에 적용")));
-    JButton strix = button("Strix 진단 열기", this::openStrix);
-    strix.setName("wb.simple.strix.open");
-    commonSettingsContent.add(WorkbenchUi.card("Strix 진단", WorkbenchUi.row(strix,
-        new JLabel("로컬 Halogen/Qwen 또는 Strix ChatGPT 구독 · 실행 계획을 확인한 뒤 진단"))));
     JButton open = button("설정 창 열기", this::openSettings);
     open.setName("wb.common.settings.open");
     WorkbenchUi.primary(open);
@@ -1192,95 +1182,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
             commonSettingsContent,
             false,
             () -> commonSettingsWindow = null);
-  }
-
-  /** A separate retained window preserves the eight tool routes and existing Guide pages. */
-  SimpleStrixPanel strixPanel() {
-    if (strixPanel == null) {
-      strixPanel = new SimpleStrixPanel(url -> !unloaded.get() && WorkbenchScope.contains(api, url), this::strixOtherWorkBusy);
-      strixWindow = new TargetWindow(root, BuildInfo.PRODUCT_NAME + " · Strix 진단", () -> strixPanel);
-      strixWindow.opener = (owner, title, content, modal, closed) -> {
-        JDialog window = dialogOpener.open(owner, title, content, false, () -> {
-          if (strixPanel != null) strixPanel.stop("Strix 창 닫음 · 진단 중지 요청. 이미 시작한 서버 작업은 별도 확인하세요.");
-          closed.run();
-        });
-        if (window != null) { window.setSize(1120, 860); window.setMinimumSize(new Dimension(940, 720)); }
-        return window;
-      };
-    }
-    return strixPanel;
-  }
-
-  private void openStrix() {
-    if (unloaded.get()) return;
-    strixPanel(); strixWindow.open();
-  }
-
-  private boolean strixOtherWorkBusy() {
-    if (authCompare != null && (authCompare.record.isSelected() || authCompare.worker.getActiveCount() > 0
-        || !authCompare.worker.getQueue().isEmpty() || authCompare.cookieSessions.busy)) return true;
-    if (bountySupport != null && bountySupport.running) return true;
-    if (environments != null && (environments.job != null || environments.scan != null || environments.ioBusy)) return true;
-    if (scopeInspectionPanel != null && (scopeInspectionPanel.current.state() == ScopeInspection.State.RUNNING
-        || scopeInspectionPanel.current.state() == ScopeInspection.State.PAUSED)) return true;
-    return backgroundJobs.snapshot().stream().anyMatch(job -> job.state() == BackgroundJobs.State.RUNNING
-        || job.state() == BackgroundJobs.State.CANCEL_REQUESTED);
-  }
-
-  private record StrixOriginal(long sequence, String id, String method, String url, String requestHash, String responseHash) {}
-
-  void prepareSelectedStrix() {
-    if (unloaded.get()) throw new IllegalArgumentException("확장이 종료되었습니다.");
-    if (strixPanel != null && strixPanel.busy()) throw new IllegalArgumentException("이전 Strix 작업이 끝난 뒤 원본을 준비하세요.");
-    int[] selected = logTable.getSelectedRows();
-    if (selected.length < 1 || selected.length > SimpleStrixPanel.SOURCE_LIMIT)
-      throw new IllegalArgumentException("Strix 진단 원본은 1~24개를 선택하세요.");
-    DiskTrafficStore store = trafficStore;
-    String project = WorkspaceResume.projectIdentity(api), scopeVersion = localScope.inspectionFingerprint();
-    List<StrixOriginal> identities = new ArrayList<>();
-    List<SimpleStrixPanel.Source> previews = new ArrayList<>();
-    long total = 0;
-    for (int view : selected) {
-      int row = logTable.convertRowIndexToModel(view);
-      DiskTrafficStore.PacketRef ref = store.ref(row);
-      if (!WorkbenchScope.contains(api, ref.url())) throw new IllegalArgumentException("현재 SCOPE 밖 원본은 Strix에 준비할 수 없습니다.");
-      total += (long) ref.requestLength() + ref.responseLength();
-      if (ref.requestLength() > 2 * 1024 * 1024 || ref.responseLength() > 2 * 1024 * 1024 || total > 8L * 1024 * 1024)
-        throw new IllegalArgumentException("진단 준비 원본 크기 한도 초과 · 원본을 작게 나누어 선택하세요.");
-      var request = ref.request(); var response = ref.response();
-      identities.add(new StrixOriginal(ref.sequence(), ref.id(), ref.method(), ref.url(),
-          Core.hash(request.toByteArray().getBytes()), response == null ? "" : Core.hash(response.toByteArray().getBytes())));
-      String safeUrl = ActivityTracker.safeUrl(ref.url());
-      String metadata = "응답 상태: " + (response == null ? "응답 없음" : response.statusCode())
-          + "\n요청 바이트: " + ref.requestLength() + " · 응답 바이트: " + ref.responseLength()
-          + "\n원본 헤더·본문·쿼리 값은 Strix에 자동 전달하지 않습니다.";
-      previews.add(new SimpleStrixPanel.Source(ref.id(), ref.method(), safeUrl, metadata));
-    }
-    List<StrixOriginal> immutable = List.copyOf(identities);
-    Runnable ongoing = () -> {
-      if (unloaded.get() || trafficStore != store || !project.equals(WorkspaceResume.projectIdentity(api)))
-        throw new IllegalArgumentException("프로젝트나 원본 목록이 변경되었습니다. Strix 원본을 다시 준비하세요.");
-      if (!scopeVersion.equals(localScope.inspectionFingerprint()))
-        throw new IllegalArgumentException("SCOPE 설정이 변경되었습니다. Strix 원본과 실행 계획을 다시 준비하세요.");
-      for (StrixOriginal original : immutable) {
-        DiskTrafficStore.PacketRef ref = store.ref(original.sequence());
-        if (!original.id().equals(ref.id()) || !original.method().equals(ref.method()) || !original.url().equals(ref.url())
-            || !WorkbenchScope.contains(api, ref.url())) throw new IllegalArgumentException("Strix 연결 원본이 만료되었거나 SCOPE 밖입니다.");
-      }
-    };
-    Runnable current = () -> {
-      ongoing.run();
-      for (StrixOriginal original : immutable) {
-        DiskTrafficStore.PacketRef ref = store.ref(original.sequence());
-        var request = ref.request(); var response = ref.response();
-        if (!original.requestHash().equals(Core.hash(request.toByteArray().getBytes()))
-            || !original.responseHash().equals(response == null ? "" : Core.hash(response.toByteArray().getBytes())))
-          throw new IllegalArgumentException("Strix 연결 원본이 변경되었습니다. 동일 URL의 다른 요청으로 대체하지 않습니다.");
-      }
-    };
-    current.run();
-    strixPanel().prepare(previews, project, current, ongoing);
-    strixWindow.open();
   }
 
   private void openScopeInspection() {
@@ -1636,8 +1537,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     trafficMenu.add(trafficAction("Repeater에 요청 준비", this::prepareSimpleRepeater));
     trafficMenu.add(trafficAction("입력값 검사에 요청 연결", this::selectedPayload));
     trafficMenu.add(trafficAction("선택 응답에서 API 찾기", this::selectedJs));
-    JMenuItem strix = trafficAction("선택 원본으로 Strix 진단 준비", this::prepareSelectedStrix);
-    strix.setName("wb.simple.strix.prepare"); trafficMenu.add(strix);
     trafficMenu.addSeparator();
     trafficMenu.add(trafficAction("선택 원본을 증거에 추가", this::addSimpleEvidence));
     logTable.setToolTipText("요청 선택 → 비교 준비 또는 증거에 추가 · Shift+F10 행 메뉴 · Ctrl+R Repeater 준비");
@@ -2567,7 +2466,6 @@ public final class WorkbenchExtension implements HttpHandler, ContextMenuItemsPr
     if(trafficBrowser!=null){trafficBrowser.publishCommittedRows();trafficBrowser.refresh();}
     else logModel.publish(Math.toIntExact(trafficStore.size()));
     rememberWorkspace();
-    if (strixPanel != null) strixPanel.verifyRunCurrent();
     stats.setText(
         "수신 "
             + received.get()

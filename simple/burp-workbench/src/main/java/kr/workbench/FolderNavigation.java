@@ -191,11 +191,11 @@ final class FolderNavigation extends JPanel implements AutoCloseable {
     settings.setName("wb.navigation.settings");
     settings.setToolTipText(BuildInfo.PRODUCT_NAME + " " + BuildInfo.VERSION + " · 화면 설정");
     settings.addActionListener(event -> openSettings.run());
-    JLabel version = new JLabel("STRIX " + BuildInfo.VERSION);
+    JLabel version = new JLabel("SIMPLE " + BuildInfo.VERSION);
     version.setName("wb.next.version");
     version.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, WorkbenchUi.displaySize(13f)));
     version.setForeground(WorkbenchUi.accent());
-    version.setToolTipText(BuildInfo.PRODUCT_NAME + " · Strix 진단 연동판 · 일반 Simple과 별도 배포");
+    version.setToolTipText(BuildInfo.PRODUCT_NAME + " " + BuildInfo.VERSION);
     JPanel navigationLine = new JPanel(new BorderLayout(8, 0));
     navigationLine.setName("wb.navigation.toolbar.line");
     navigationLine.putClientProperty("wb.surface", classic);

@@ -118,7 +118,8 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
   }
 
   public static void main(String[] args) throws Exception {
-    check(BuildInfo.DISPLAY_NAME.startsWith(BuildInfo.IMPLEMENTATION_TITLE) && FeatureGuide.SUITE_TAB.equals(BuildInfo.PRODUCT_NAME), "Strix identity is visible in extension and suite tab");
+    check(BuildInfo.DISPLAY_NAME.startsWith("Burp Workbench Simple KR") && FeatureGuide.SUITE_TAB.equals("Workbench Simple"),
+        "Simple identity is visible in the extension and suite tab");
     check(BuildInfo.STORAGE_DIRECTORY.equals(".burp-workbench-simple") && BuildInfo.storageKey("x").equals("simple.x"), "Simple uses its own disk and persistence namespaces");
     Map<String, Object> saved = new HashMap<>();
     saved.put("next.wb.layout.horizontal", false);
@@ -206,7 +207,7 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
         var input = (JTextArea) unchecked(extension, "codecIn"); input.setText("SIMPLE_PENDING_LOCAL_INPUT");
         var dialog = new AtomicReference<Component>();
         extension.dialogOpener = (owner, title, body, modal, closed) -> {
-          check(!modal && title.contains(BuildInfo.PRODUCT_NAME), "consolidated utility opens a modeless Strix window");
+          check(!modal && title.contains(BuildInfo.PRODUCT_NAME), "consolidated utility opens a modeless Simple window");
           dialog.set(body); return null;
         };
         check(named(root, "wb.visual.guide.open") instanceof AbstractButton
@@ -220,6 +221,7 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
         check(unchecked(extension,"visualGuideWindow")==guide&&guide.panel.selectedId().equals("auth"),"F1 opens the same retained numbered guidance");
         click(root, "wb.navigation.settings");
         check(named(dialog.get(), "wb.settings.layout.common") != null, "appearance settings remain reachable from the top bar");
+        check(named(dialog.get(), "wb.simple.strix.open") == null, "appearance settings no longer expose the Strix launcher");
         click(root, "wb.navigation.logs");
         check(named(dialog.get(), "diagnostics.table") != null, "collection and error diagnostics remain reachable from the top bar");
         check(input.getText().equals("SIMPLE_PENDING_LOCAL_INPUT") && selectedFeature(tabs).equals("auth"), "opening utilities preserves the current tool and unsaved input");
@@ -245,6 +247,10 @@ public final class SimpleWorkflowTest extends WorkbenchTest {
         click(root, "wb.simple.tool.traffic");
         var table = (JTable) unchecked(extension, "logTable");
         table.setRowSelectionInterval(0, 0);
+        var trafficMenu = (JPopupMenu) table.getClientProperty("wb.traffic.popup");
+        check(trafficMenu != null && Arrays.stream(trafficMenu.getComponents())
+            .noneMatch(item -> "wb.simple.strix.prepare".equals(item.getName())),
+            "selected traffic no longer exposes Strix preparation");
         click(root,"wb.simple.tool.bounty"); click(root,"wb.simple.bounty.replay");
         clickText(evidence,"선택 요청 추가");
         check(evidence.workflow.getText().equals(original.toString()), "manual replay appends the exact selected request without rewriting its source");

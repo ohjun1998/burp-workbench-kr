@@ -1,3 +1,11 @@
+# Workbench Simple 1.4.23
+
+Workbench에 포함됐던 Strix 메뉴·대화창·실행 연결을 제거했습니다. Simple 1.4.21 화면과 요청·응답 도구를 사용하며, 기존 Simple 프로젝트와 설정을 같은 위치에서 읽습니다.
+
+[설치 JAR](simple/downloads/1.4.23/burp-workbench-simple-1.4.23.jar) · [소스 ZIP](simple/downloads/1.4.23/burp-workbench-simple-1.4.23-source.zip) · [변경 및 설치 안내](simple/docs/RELEASE_SIMPLE_1.4.23_KR.md)
+
+아래는 이전 배포 기록입니다.
+
 # Workbench Strix 1.1.0 · 진단 에이전트와 대화
 
 진단 중 특정 결과를 **같은 Strix 에이전트에게 질문하고 후속 대화를 이어가는 기능**을 추가합니다. 기존 Simple1.4.21 메인 디자인·메뉴·13개 도구는 유지하고 별도 Strix 창의 대화·로그·보고서·원본·테스트 정책 화면을 사용합니다. 질문 전에는 현재 대상과 전달 내용을 확인하며, 기존 로컬 Halogen/Qwen 또는 Strix 자체 ChatGPT 구독 인증을 이어 사용합니다.

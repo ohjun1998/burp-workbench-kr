@@ -45,7 +45,7 @@ final class SimpleNavigation extends JPanel {
     JLabel title = new JLabel(BuildInfo.PRODUCT_NAME + " · 8개 도구");
     title.setName("wb.simple.brand");
     title.setFont(WorkbenchUi.font().deriveFont(Font.BOLD, 17f));
-    title.setToolTipText(BuildInfo.PRODUCT_NAME + " " + BuildInfo.VERSION + " · 이전 Strix 연동판의 설정을 유지합니다.");
+    title.setToolTipText(BuildInfo.PRODUCT_NAME + " " + BuildInfo.VERSION + " · 기존 Workbench와 별도 설정을 사용합니다.");
     titleRow.add(title, BorderLayout.WEST);
     JButton options = new JButton("도움말·설정");
     options.setName("wb.simple.options");

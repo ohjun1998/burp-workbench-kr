@@ -2,15 +2,15 @@ package kr.workbench;
 
 /** Release identity shared by the runtime, standalone build, tests and packager. */
 public final class BuildInfo {
-  public static final String VERSION = "1.1.0";
-  public static final String PRODUCT_NAME = "Workbench Strix";
-  public static final String IMPLEMENTATION_TITLE = "Burp Workbench Strix KR";
-  public static final String ARTIFACT_ID = "burp-workbench-strix";
-  public static final String DISPLAY_NAME = IMPLEMENTATION_TITLE + " · Strix 진단 연동 (" + VERSION + ")";
+  public static final String VERSION = "1.4.23";
+  public static final String PRODUCT_NAME = "Workbench Simple";
+  public static final String IMPLEMENTATION_TITLE = "Burp Workbench Simple KR";
+  public static final String ARTIFACT_ID = "burp-workbench-simple";
+  public static final String DISPLAY_NAME = IMPLEMENTATION_TITLE + " · 웹 보안 점검 (" + VERSION + ")";
   // Evidence format evolves independently from the extension release.
   public static final String EVIDENCE_SCHEMA_VERSION = "2";
 
-  /** Keep the former Simple-Strix storage for upgrades; this rename does not migrate user data. */
+  /** Simple keeps settings and disk history separate from stable and Next extensions. */
   public static final String STORAGE_DIRECTORY = ".burp-workbench-simple";
   public static String storageKey(String key) { return "simple." + key; }
 

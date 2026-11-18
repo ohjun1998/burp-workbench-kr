@@ -1,3 +1,11 @@
+# Workbench Simple 1.4.23
+
+Workbench의 Strix 메뉴·대화창·CLI 실행 연동을 제거했습니다. 기존 Simple 1.4.21 화면과 저장 위치를 사용합니다. Burp의 `Proxy → HTTP history`와 Simple의 요청·응답 목록에서 각각 기록을 볼 수 있습니다.
+
+[설치 JAR](downloads/1.4.23/burp-workbench-simple-1.4.23.jar) · [독립 소스 ZIP](downloads/1.4.23/burp-workbench-simple-1.4.23-source.zip) · [체크섬](downloads/1.4.23/SHA256SUMS) · [변경 및 설치 안내](docs/RELEASE_SIMPLE_1.4.23_KR.md)
+
+아래는 이전 배포 기록입니다.
+
 # Workbench Strix 1.1.0 · 진단 중 대화
 
 기존 Simple1.4.21의 메인 디자인과13개 도구를 유지하면서 별도 Strix 창에 **현재 진단 에이전트와의 대화**를 추가합니다. 질문마다 새 진단이나 별도 LLM을 만들지 않고, 이번 실행의 인증된 Strix live viewer를 통해 같은 세션으로 질문을 전달합니다.

@@ -27,4 +27,4 @@ def read_identity(name):
 PRODUCT_NAME = read_identity('PRODUCT_NAME')
 IMPLEMENTATION_TITLE = read_identity('IMPLEMENTATION_TITLE')
 ARTIFACT_ID = read_identity('ARTIFACT_ID')
-EDITION = 'strix'
+EDITION = 'simple'

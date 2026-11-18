@@ -1,3 +1,8 @@
+# Workbench Simple 1.4.23
+
+- The user requested removal of the Workbench Strix integration. The current Simple build uses the approved 1.4.21 layout and existing Simple storage. The Strix window, popup actions, settings, runners, and terminal helpers belong to historical releases.
+- Keep the published Strix artifacts and old source ZIPs intact. Build and verify the new Simple artifact in `simple/downloads/1.4.23/`.
+
 # Workbench Strix 1.1.0: same-session diagnosis chat
 
 - User requested implementing conversation with the Strix diagnosis agent. Preserve the Simple1.4.21 main design/layout and all existing13 tools; add chat only within the retained separate Strix window. Previous Strix1.0.1 remains immutable.

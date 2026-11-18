@@ -1,3 +1,9 @@
+# Workbench Simple 1.4.23 · Workbench 내 Strix 제거
+
+작업 브랜치 `account-a/simple-remove-strix`에서 Strix 실행·대화 진입점을 제거했습니다. Simple 1.4.21 배치와 기존 프로젝트·트래픽 저장 호환을 기준으로 했습니다. 독립 Strix의 Burp 실시간 조회 연결은 적용되지 않았습니다.
+
+[변경 및 설치 안내](simple/docs/RELEASE_SIMPLE_1.4.23_KR.md)
+
 # Workbench Strix 1.1.0 · 진단 중 대화 추가
 
 - 브랜치 `account-a/strix-chat`에서1.0.1의 별도 Strix 창에 현재 진단 에이전트와의 대화를 추가합니다. main에는 아직 병합하지 않았습니다.

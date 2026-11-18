@@ -21,7 +21,7 @@ public final class FeatureGuide {
           + "2. 환경·DB, 경로·응답, API·명세 대조, 키·민감정보, 계정 차이와 커버리지를 확인합니다. SPA 메뉴 탐색은 배포한 브라우저 도우미를 연결하고 허용한 뒤 사용합니다.\n"
           + "3. 결과에서 원본·본문 위치를 확인하고 Repeater·계정 비교·입력값 검사로 연결합니다. 키의 유효성과 취약점은 수동 검증하며 발견한 키를 자동 사용하지 않습니다.\n"
           + "4. ‘증거에 추가’ 후 왼쪽 ‘점검 관리·증거 → 재현·증거 정리’를 열고 증거 정리에서 제목·재현·영향을 작성합니다. 가림 미리보기 → ZIP 저장으로 마칩니다.",
-          "화면 이동과 Repeater 준비는 대상 요청을 보내지 않습니다. 비교·GET 확인·검사 시작·Send는 요청을 전송합니다. 기존 Workbench/Next와 설정·저장 공간은 분리되며 이전 Strix 연동판과는 호환됩니다."),
+          "화면 이동과 Repeater 준비는 대상 요청을 보내지 않습니다. 비교·GET 확인·검사 시작·Send는 요청을 전송합니다. 기존 Workbench와 Simple의 설정·저장 공간은 분리됩니다."),
       new Feature("traffic", "요청·응답 목록", "SCOPE를 정하고 수집한 요청·응답 원본을 선택합니다.",
           "1. 왼쪽 ‘트래픽 → 요청·응답 목록’을 엽니다. SCOPE 목록 → URL 추가 → 수집할 범위 체크 → OFF를 SCOPE로 전환합니다.\n"
           + "2. 사이트를 이용하거나 Burp History 우클릭 → " + BuildInfo.PRODUCT_NAME + " → 요청·응답 목록에 가져오기를 선택합니다.\n"
@@ -79,7 +79,7 @@ public final class FeatureGuide {
           "제품 식별자만 NVD에 전송합니다. Google 열기는 대상 도메인을 Google에 전달합니다. 대상 자동 검사는 없습니다. 최대 100건, 세션 캐시이며 조건 일치는 취약점 확정이 아닙니다."),
       new Feature("settings", "설정", "화면 크기와 목록·패킷 배치를 조정합니다.",
           "1. 상단 ‘설정’ 버튼을 누릅니다.\n2. 글자 크기·목록 간격·요청·응답 배치를 선택합니다.\n3. 필요하면 배치·화면 설정을 초기화합니다.",
-          "화면 설정만 바꾸며 대상 요청을 전송하지 않습니다. " + BuildInfo.PRODUCT_NAME + " 설정은 기존 Workbench/Next와 분리되며 이전 Strix 설정을 유지합니다."));
+          "화면 설정만 바꾸며 대상 요청을 전송하지 않습니다. " + BuildInfo.PRODUCT_NAME + " 설정은 기존 Workbench와 분리됩니다."));
   private FeatureGuide() {}
   public static List<Feature> all() { return FEATURES; }
   public static Feature feature(String id) {
